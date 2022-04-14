@@ -1,28 +1,28 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E283234
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:46:49 +0000 (UTC)
-Date: Thu, 14 Apr 2022 22:46:39 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7113234
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 22:47:02 +0000 (UTC)
+Date: Thu, 14 Apr 2022 22:46:54 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail2; t=1649976407;
-	bh=gD40bE7CA3nEbFCC4RvOWqz3pW6a2RcS6zm8BhERlxo=;
+	s=protonmail2; t=1649976420;
+	bh=PEDAO2gdSiFRYDFQPzekiNHelP6dYcLV8W7h2o7bylk=;
 	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
 	 References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID;
-	b=C1aVC6ihmrjtj8lQuyquB9RBqnf8GaT44/TGR+XaxR8nMZ6x6GWtkAvp8QODJgNz8
-	 vAJmQjrWys4Iqn092ieJH35uZoJF5SgB4ShAOb5Wk/eHnQ3gyj9uwuyxK2+Oyygvkt
-	 DtJvm1Cscy0q8/NH2foPjX32AXJIIN+clYH+TL/n4wLU6NUng5qdiKwFFVhmrhlxDE
-	 YzrkoThbgG/wTXEJm6NoxJ7B6CVsgDl9P8LXzlU8dmjKuD6TXAPVgPFPiwdrtcp/kO
-	 7RPD+732T0+G/q+rw91CjFDWYvqbPLM80ceEDcuL/Qm2Yw8HUVPPmYEb6WnbcwPiyI
-	 RmmdX98keMNzA==
+	b=QHoSlbFjf/Kt42k1QML0xtJ8oejvL8X+tAEFv/nsHe8Ff3PQZtHTi++9Iq/59YmQS
+	 1hDTnY12ldGaBakqr4D2UDRXQF7k6Z2xQC1OKyyExd2OINI7yc3czb+qPnHfpc/y1K
+	 jtMmDIyGRHjNUjk0UCdJQWl5TbEQ66u8D48Y585iGQ7ub2ue37KezYbyTwTYxyoYOb
+	 Dtj8qPuqHXVW6bsioTlJMuxWbUdxSIo6kyKln9JaBA4i/A9nuvFLOty4a/IpeUxrfG
+	 YuIroPBF0Jn9brL75ErSOdvivLhH2gHzVDyXFJSg/4vUUufqjTWCGOcgT6PE4Eb1Qw
+	 Xg8wGvE7ccFzg==
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
 From: Alexander Lobakin <alobakin@pm.me>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Alexander Lobakin <alobakin@pm.me>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo
 	Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH bpf-next 08/11] samples: bpf: fix shifting unsigned long by 32 positions
-Message-ID: <20220414223704.341028-9-alobakin@pm.me>
+Subject: [PATCH bpf-next 09/11] samples: bpf: fix include order for non-Glibc environments
+Message-ID: <20220414223704.341028-10-alobakin@pm.me>
 In-Reply-To: <20220414223704.341028-1-alobakin@pm.me>
 References: <20220414223704.341028-1-alobakin@pm.me>
 Precedence: bulk
@@ -34,69 +34,63 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On 32 bit systems, shifting an unsigned long by 32 positions
-yields the following warning:
+Some standard C library implementations, e.g. Musl, ship the UAPI
+definitions themselves to not be dependent on the UAPI headers and
+their versions. Their kernel UAPI counterparts are usually guarded
+with some definitions which the formers set in order to avoid
+duplicate definitions.
+In such cases, include order matters. Change it in two samples: in
+the first, kernel UAPI ioctl definitions should go before the libc
+ones, and the opposite story with the second, where the kernel
+includes should go later to avoid struct redefinitions.
 
-samples/bpf/tracex2_kern.c:60:23: warning: shift count >=3D width of type [=
--Wshift-count-overflow]
-        unsigned int hi =3D v >> 32;
-                            ^  ~~
-
-The usual way to avoid this is to shift by 16 two times (see
-upper_32_bits() macro in the kernel). Use it across the BPF sample
-code as well.
-
-Fixes: d822a1926849 ("samples/bpf: Add counting example for kfree_skb() fun=
-ction calls and the write() syscall")
-Fixes: 0fb1170ee68a ("bpf: BPF based latency tracing")
-Fixes: f74599f7c530 ("bpf: Add tests and samples for LWT-BPF")
+Fixes: b4b8faa1ded7 ("samples/bpf: sample application and documentation for=
+ AF_XDP sockets")
+Fixes: e55190f26f92 ("samples/bpf: Fix build for task_fd_query_user.c")
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 ---
- samples/bpf/lathist_kern.c      | 2 +-
- samples/bpf/lwt_len_hist_kern.c | 2 +-
- samples/bpf/tracex2_kern.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ samples/bpf/task_fd_query_user.c | 2 +-
+ samples/bpf/xdpsock_user.c       | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/samples/bpf/lathist_kern.c b/samples/bpf/lathist_kern.c
-index 4adfcbbe6ef4..9744ed547abe 100644
---- a/samples/bpf/lathist_kern.c
-+++ b/samples/bpf/lathist_kern.c
-@@ -53,7 +53,7 @@ static unsigned int log2(unsigned int v)
+diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_u=
+ser.c
+index 424718c0872c..5d3a60547f9f 100644
+--- a/samples/bpf/task_fd_query_user.c
++++ b/samples/bpf/task_fd_query_user.c
+@@ -9,10 +9,10 @@
+ #include <stdint.h>
+ #include <fcntl.h>
+ #include <linux/bpf.h>
++#include <linux/perf_event.h>
+ #include <sys/ioctl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <linux/perf_event.h>
 
- static unsigned int log2l(unsigned long v)
- {
--=09unsigned int hi =3D v >> 32;
-+=09unsigned int hi =3D (v >> 16) >> 16;
-
- =09if (hi)
- =09=09return log2(hi) + 32;
-diff --git a/samples/bpf/lwt_len_hist_kern.c b/samples/bpf/lwt_len_hist_ker=
-n.c
-index 1fa14c54963a..bf32fa04c91f 100644
---- a/samples/bpf/lwt_len_hist_kern.c
-+++ b/samples/bpf/lwt_len_hist_kern.c
-@@ -49,7 +49,7 @@ static unsigned int log2(unsigned int v)
-
- static unsigned int log2l(unsigned long v)
- {
--=09unsigned int hi =3D v >> 32;
-+=09unsigned int hi =3D (v >> 16) >> 16;
- =09if (hi)
- =09=09return log2(hi) + 32;
- =09else
-diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2_kern.c
-index 5bc696bac27d..6bf22056ff95 100644
---- a/samples/bpf/tracex2_kern.c
-+++ b/samples/bpf/tracex2_kern.c
-@@ -57,7 +57,7 @@ static unsigned int log2(unsigned int v)
-
- static unsigned int log2l(unsigned long v)
- {
--=09unsigned int hi =3D v >> 32;
-+=09unsigned int hi =3D (v >> 16) >> 16;
- =09if (hi)
- =09=09return log2(hi) + 32;
- =09else
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index be7d2572e3e6..399b999fcec2 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -7,14 +7,15 @@
+ #include <linux/bpf.h>
+ #include <linux/if_link.h>
+ #include <linux/if_xdp.h>
+-#include <linux/if_ether.h>
+ #include <linux/ip.h>
+ #include <linux/limits.h>
++#include <linux/net.h>
+ #include <linux/udp.h>
+ #include <arpa/inet.h>
+ #include <locale.h>
+ #include <net/ethernet.h>
+ #include <netinet/ether.h>
++#include <linux/if_ether.h>
+ #include <net/if.h>
+ #include <poll.h>
+ #include <pthread.h>
 --
 2.35.2
 
