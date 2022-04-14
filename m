@@ -1,60 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322BE3219
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 20:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5B0C385A1;
-	Thu, 14 Apr 2022 20:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649968187;
-	bh=UK4HRG23mKXLkm6rpA/BwBKA58oQpPcAKodZxTGowVc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=SLWFsfBhjUDrZOeseBKhf86OMoxqGwYiiHp9g46ZfdfQi294OzElbzNP00dxuxja7
-	 3SybmIJhXwaR9bHKdI75mKsHYIOT2Sy4Ls3E8SJ1AorOo5goOnpU88HDwgQM0ya4cE
-	 /q6eDpNc8nFgn3bm+xQNnVASm3nhuFznag0ndeaWZ+8el+ptENcLyRiAoz8X8pLUHx
-	 pUsgCpQD/wYbp+K1qz4LNcy2xnnqO/dy8AsIiRmXOXricEiyC65NuV2r3Cby8WbVxa
-	 BkVjFzO1DY+o3qwKN7DgegWHbxkOBUdrtRwxDiDXwdqKAHSrCCjPVTkCYugawbts++
-	 U+JkRVQaMNYkQ==
-Date: Thu, 14 Apr 2022 13:29:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-btrfs@vger.kernel.org
-Subject: btrfs warning fixes for 5.15 and 5.17
-Message-ID: <YliEOSL8z3/s7DGG@dev-arch.thelio-3990X>
+Received: from mail.aichi-hito.jp (www.aichi-hito.jp [153.126.146.179])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E9033225
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 21:17:43 +0000 (UTC)
+Received: by mail.aichi-hito.jp (Postfix, from userid 48)
+	id A9879801076; Fri, 15 Apr 2022 06:09:44 +0900 (JST)
+To: =?ISO-2022-JP?B?PyBIYXZlIHlvdSBldmVyIHRyaWVkIHRoaXMgc2V4IGdhbWUgYmVmb3Jl?=
+ =?ISO-2022-JP?B?PyBHSVZFIElUIEEgVFJZOiBodHRwczovL2N1dHQudXMvSDNETGw/MWZ5?=
+ =?ISO-2022-JP?B?ID8bJEIhIRsoQnJoYWF3YxskQk1NGyhC?=<llvm@lists.linux.dev>
+Subject: =?ISO-2022-JP?B?GyRCIVokUiRIMGklSiVTISYkIiQkJEEhWzRwQUM+cEpzJE5FUE8/GyhC?=  =?ISO-2022-JP?B?GyRCJCw/PUBBJDUkbCReJDckPxsoQg==?=
+X-PHP-Originating-Script: 501:Mail.php
+From: =?ISO-2022-JP?B?GyRCJFIkSDBpJUolUyEmJCIkJCRBO3ZMMzZJGyhC?=<info@aichi-hito.jp>
+Content-Type: text/plain; charset=ISO-2022-JP
+Message-Id: <20220414210944.A9879801076@mail.aichi-hito.jp>
+Date: Fri, 15 Apr 2022 06:09:44 +0900 (JST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi Greg and Sasha,
+--------------------------------------------------------
+　? Have you ever tried this sex game before? GIVE IT A TRY: https://cutt.us/H3DLl?1fy ?
+　rhaawc　様
+--------------------------------------------------------
+2022年04月15日
 
-Please apply
+このたびは、愛知県産業人材育成支援センター「ひと育ナビ・あいち」への
+登録申請をいただきまして、ありがとうございます。
 
-ad3fc7946b18 ("btrfs: remove no longer used counter when reading data page")
-6d4a6b515c39 ("btrfs: remove unused variable in btrfs_{start,write}_dirty_block_groups()")
+申請いただいた情報は、管理者にて内容を確認させていただきますので、
+承認までに1週間程度かかる場合がございます。
+承認が完了しましたら、改めて事務局からメールで御連絡差し上げますのでしばらくお待ちください。
 
-to 5.15 and 5.17 and
+//----------------------------------------------------------
+//　愛知県産業人材育成支援センター
+//　（知県労働局産業人材育成課内）　
+//　sangyo-jinzaisien@pref.aichi.lg.jp
+//
+//　電話:052-954-6365
+//　ＦＡＸ：052-954-6978
+//----------------------------------------------------------
 
-cd9255be6980 ("btrfs: remove unused parameter nr_pages in add_ra_bio_pages()")
-
-to 5.15 (it landed in 5.16), as they all resolve build errors with
-CONFIG_WERROR=y and tip of tree clang, which recently added support for
-unary operations in -Wunused-but-set-variable. They all apply cleanly
-and I do not see any additional build warnings and errors.
-
-Commit 6d4a6b515c39 was specifically tagged for stable back to 5.4,
-which should be fine, but it really only needs to go back to 5.12+, as
-btrfs turned on W=1 (which includes this warning) for itself in commit
-e9aa7c285d20 ("btrfs: enable W=1 checks for btrfs"), which landed in
-5.12-rc1. Prior that that change, none of these warnings will be
-visible under a normal build.
-
-Cheers,
-Nathan
