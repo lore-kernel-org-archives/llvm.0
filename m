@@ -1,149 +1,278 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FC728F5
-	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 13:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649943245; x=1681479245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UNppWNaeAIa10Dki/dKqomPYngkMUhRRYFw1rQFeEto=;
-  b=MKcN6L23TZ6mswotDEagbiJBQfYc2utbLGv1nTT3KDM3YouY70w5vuxg
-   f8M+gOhwdfxC1FgEtLxx7NoZnaqQTFfl9ta2GmK4VxSb5B+iwE/FFl5Bv
-   EskT4S/XDfI63AlGhPFT0zXGmOubrw3E/ctBstiWg5VG5N3q+1/I0gYdm
-   YC/6BMYSDTfroKH4MLbFv0VT/ZMaqtuIZv6emOA6gqXlrYnvxyHAhoTQA
-   WD16GfoOloa9yOgEuvOsdbEyHu3OVOxjWFeHMzQhovujQA4XyMLmZ9bSj
-   yIYnRE7dfp/agVKT6b/MdiK3TPxUhMU8oMtVaN9ewtUSDAIdOjjCHyZl1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="260525468"
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="260525468"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:34:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="508406979"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2022 06:34:03 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nezbm-0000zx-Cz;
-	Thu, 14 Apr 2022 13:34:02 +0000
-Date: Thu, 14 Apr 2022 21:33:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [axboe-block:sock-nolock.2 5/5] net/mptcp/subflow.c:1796:20: error:
- too few arguments to function call, expected 2, have 1
-Message-ID: <202204142114.rOCzHB7d-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD90F28F5
+	for <llvm@lists.linux.dev>; Thu, 14 Apr 2022 14:01:15 +0000 (UTC)
+Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.57])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KfLFW1Dt7zgYjT;
+	Thu, 14 Apr 2022 21:40:47 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 14 Apr 2022 21:42:37 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 14 Apr 2022 21:42:36 +0800
+From: Yang Jihong <yangjihong1@huawei.com>
+To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+	<mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+	<jolsa@kernel.org>, <namhyung@kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
+	<songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+	<kpsingh@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+	<trix@redhat.com>, <ak@linux.intel.com>, <adrian.hunter@intel.com>,
+	<james.clark@arm.com>, <linux-perf-users@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <llvm@lists.linux.dev>
+CC: <yangjihong1@huawei.com>
+Subject: [PATCH] perf llvm: Fix compile bpf failed to cope with latest llvm
+Date: Thu, 14 Apr 2022 21:41:34 +0800
+Message-ID: <20220414134134.247912-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git sock-nolock.2
-head:   95f2e3bd27b30244f79deacbc1aac49d294bd854
-commit: 95f2e3bd27b30244f79deacbc1aac49d294bd854 [5/5] net: allow sk_prot->release_cb() without sock lock held
-config: hexagon-randconfig-r041-20220414 (https://download.01.org/0day-ci/archive/20220414/202204142114.rOCzHB7d-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=95f2e3bd27b30244f79deacbc1aac49d294bd854
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block sock-nolock.2
-        git checkout 95f2e3bd27b30244f79deacbc1aac49d294bd854
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/
+Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
+If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
+                              -e ./perf_bpf_test.c/map:channel.event=evt/ ls
+ [SNIP]
+ /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
+                          : "="REG_OUT (res)
+                           ^
+ /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
+                          : "="REG_OUT (res)
+                           ^
+ In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
+ In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
+ In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
+ In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
+ In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
+ In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
+ In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
+ /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
+         asm ("mulq %2; divq %3" : "=a" (q)
+ [SNIP]
+ # cat /root/projects/perf-bpf/perf_bpf_test.c
+ /************************ BEGIN **************************/
+ #include <uapi/linux/bpf.h>
+ #include <linux/ptrace.h>
+ #include <linux/types.h>
+ #define SEC(NAME) __attribute__((section(NAME), used))
 
-All errors (new ones prefixed by >>):
+ struct bpf_map_def {
+         unsigned int type;
+         unsigned int key_size;
+         unsigned int value_size;
+         unsigned int max_entries;
+ };
 
->> net/mptcp/subflow.c:1796:20: error: too few arguments to function call, expected 2, have 1
-           tcp_release_cb(ssk);
-           ~~~~~~~~~~~~~~    ^
-   include/net/tcp.h:337:6: note: 'tcp_release_cb' declared here
-   void tcp_release_cb(struct sock *sk, bool locked);
-        ^
->> net/mptcp/subflow.c:1841:31: error: incompatible function pointer types assigning to 'void (*)(struct sock *, bool)' (aka 'void (*)(struct sock *, _Bool)') from 'void (struct sock *)' [-Werror,-Wincompatible-function-pointer-types]
-           tcp_prot_override.release_cb = tcp_release_cb_override;
-                                        ^ ~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+ static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
+     unsigned long) = (void *)BPF_FUNC_perf_event_output;
 
+ struct bpf_map_def SEC("maps") channel = {
+         .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+         .key_size = sizeof(int),
+         .value_size = sizeof(__u32),
+         .max_entries = __NR_CPUS__,
+ };
 
-vim +1796 net/mptcp/subflow.c
+ #define MIN_BYTES 1024
 
-cec37a6e41aae7 Peter Krystad    2020-01-21  1788  
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1789  static void tcp_release_cb_override(struct sock *ssk)
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1790  {
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1791  	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1792  
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1793  	if (mptcp_subflow_has_delegated_action(subflow))
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1794  		mptcp_subflow_process_delegated(ssk);
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1795  
-b19bc2945b40b9 Paolo Abeni      2021-01-20 @1796  	tcp_release_cb(ssk);
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1797  }
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1798  
-2303f994b3e187 Peter Krystad    2020-01-21  1799  static struct tcp_ulp_ops subflow_ulp_ops __read_mostly = {
-2303f994b3e187 Peter Krystad    2020-01-21  1800  	.name		= "mptcp",
-2303f994b3e187 Peter Krystad    2020-01-21  1801  	.owner		= THIS_MODULE,
-2303f994b3e187 Peter Krystad    2020-01-21  1802  	.init		= subflow_ulp_init,
-2303f994b3e187 Peter Krystad    2020-01-21  1803  	.release	= subflow_ulp_release,
-cec37a6e41aae7 Peter Krystad    2020-01-21  1804  	.clone		= subflow_ulp_clone,
-2303f994b3e187 Peter Krystad    2020-01-21  1805  };
-2303f994b3e187 Peter Krystad    2020-01-21  1806  
-cec37a6e41aae7 Peter Krystad    2020-01-21  1807  static int subflow_ops_init(struct request_sock_ops *subflow_ops)
-cec37a6e41aae7 Peter Krystad    2020-01-21  1808  {
-cec37a6e41aae7 Peter Krystad    2020-01-21  1809  	subflow_ops->obj_size = sizeof(struct mptcp_subflow_request_sock);
-cec37a6e41aae7 Peter Krystad    2020-01-21  1810  	subflow_ops->slab_name = "request_sock_subflow";
-cec37a6e41aae7 Peter Krystad    2020-01-21  1811  
-cec37a6e41aae7 Peter Krystad    2020-01-21  1812  	subflow_ops->slab = kmem_cache_create(subflow_ops->slab_name,
-cec37a6e41aae7 Peter Krystad    2020-01-21  1813  					      subflow_ops->obj_size, 0,
-cec37a6e41aae7 Peter Krystad    2020-01-21  1814  					      SLAB_ACCOUNT |
-cec37a6e41aae7 Peter Krystad    2020-01-21  1815  					      SLAB_TYPESAFE_BY_RCU,
-cec37a6e41aae7 Peter Krystad    2020-01-21  1816  					      NULL);
-cec37a6e41aae7 Peter Krystad    2020-01-21  1817  	if (!subflow_ops->slab)
-cec37a6e41aae7 Peter Krystad    2020-01-21  1818  		return -ENOMEM;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1819  
-79c0949e9a09f6 Peter Krystad    2020-01-21  1820  	subflow_ops->destructor = subflow_req_destructor;
-79c0949e9a09f6 Peter Krystad    2020-01-21  1821  
-cec37a6e41aae7 Peter Krystad    2020-01-21  1822  	return 0;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1823  }
-cec37a6e41aae7 Peter Krystad    2020-01-21  1824  
-d39dceca388ad0 Paolo Abeni      2020-06-26  1825  void __init mptcp_subflow_init(void)
-2303f994b3e187 Peter Krystad    2020-01-21  1826  {
-08b8d080982fec Florian Westphal 2020-07-30  1827  	mptcp_subflow_request_sock_ops = tcp_request_sock_ops;
-08b8d080982fec Florian Westphal 2020-07-30  1828  	if (subflow_ops_init(&mptcp_subflow_request_sock_ops) != 0)
-cec37a6e41aae7 Peter Krystad    2020-01-21  1829  		panic("MPTCP: failed to init subflow request sock ops\n");
-cec37a6e41aae7 Peter Krystad    2020-01-21  1830  
-cec37a6e41aae7 Peter Krystad    2020-01-21  1831  	subflow_request_sock_ipv4_ops = tcp_request_sock_ipv4_ops;
-7ea851d19b2359 Florian Westphal 2020-11-30  1832  	subflow_request_sock_ipv4_ops.route_req = subflow_v4_route_req;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1833  
-cec37a6e41aae7 Peter Krystad    2020-01-21  1834  	subflow_specific = ipv4_specific;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1835  	subflow_specific.conn_request = subflow_v4_conn_request;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1836  	subflow_specific.syn_recv_sock = subflow_syn_recv_sock;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1837  	subflow_specific.sk_rx_dst_set = subflow_finish_connect;
-4cf86ae84c7183 Paolo Abeni      2022-03-07  1838  	subflow_specific.rebuild_header = subflow_rebuild_header;
-cec37a6e41aae7 Peter Krystad    2020-01-21  1839  
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1840  	tcp_prot_override = tcp_prot;
-b19bc2945b40b9 Paolo Abeni      2021-01-20 @1841  	tcp_prot_override.release_cb = tcp_release_cb_override;
-b19bc2945b40b9 Paolo Abeni      2021-01-20  1842  
+ SEC("func=vfs_read")
+ int bpf_myprog(struct pt_regs *ctx)
+ {
+         long bytes = ctx->dx;
+         if (bytes >= MIN_BYTES) {
+                 perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
+                                   &bytes, sizeof(bytes));
+         }
 
-:::::: The code at line 1796 was first introduced by commit
-:::::: b19bc2945b40b9fd38e835700907ffe8534ef0de mptcp: implement delegated actions
+         return 0;
+ }
 
-:::::: TO: Paolo Abeni <pabeni@redhat.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+char _license[] SEC("license") = "GPL";
+int _version SEC("version") = LINUX_VERSION_CODE;
+/************************* END ***************************/
 
+Compilation command is modified to be the same as that in samples/bpf/Makefile,
+use clang | opt | llvm-dis | llc chain of commands to solve the problem.
+see the comment in samples/bpf/Makefile.
+
+Modifications:
+1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
+2. Delete "CLANG_EMIT_LLVM" and "LLVM_OPTIONS_PIPE" macros from the compilation
+   command because the two macros are not defined and the content is empty.
+3. Add options llvm.llvm-opt-path, llvm.llvm-dis-path, and llvm.llc-path to
+   perf config for user-defined settings, which are similar to llvm.clang-path.
+4. Add "-Wno-address-of-packed-member" to resolve the compilation warning of
+   "/lib/modules/5.17/build/./arch/x86/include/asm/processor.h:552:17: \
+    warning: taking address of packed member 'sp0' of class or structure \
+    'x86_hw_tss' may result in an unaligned pointer value [-Waddress-of-packed-member]
+        this_cpu_write(cpu_tss_rw.x86_tss.sp0, sp0);
+                       ^~~~~~~~~~~~~~~~~~~~~~
+   /lib/modules/5.17/build/./include/linux/percpu-defs.h:508:68: note: \
+   expanded from macro 'this_cpu_write' \
+    #define this_cpu_write(pcp, val)        __pcpu_size_call(this_cpu_write_, pcp, val)",
+   which is similar to that of sample/bpf/Makefile.
+
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ tools/perf/Documentation/perf-config.txt | 16 ++++++++++-
+ tools/perf/util/llvm-utils.c             | 35 ++++++++++++++++++------
+ tools/perf/util/llvm-utils.h             |  4 +++
+ 3 files changed, 45 insertions(+), 10 deletions(-)
+
+diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
+index 0420e71698ee..48f12bd6ca9a 100644
+--- a/tools/perf/Documentation/perf-config.txt
++++ b/tools/perf/Documentation/perf-config.txt
+@@ -655,6 +655,15 @@ llvm.*::
+ 	llvm.clang-path::
+ 		Path to clang. If omit, search it from $PATH.
+ 
++	llvm.llvm-opt-path::
++		Path to llvm opt. If omit, search it from $PATH.
++
++	llvm.llvm-dis-path::
++		Path to llvm-dis. If omit, search it from $PATH.
++
++	llvm.llc-path::
++		Path to llc. If omit, search it from $PATH.
++
+ 	llvm.clang-bpf-cmd-template::
+ 		Cmdline template. Below lines show its default value. Environment
+ 		variable is used to pass options.
+@@ -662,8 +671,13 @@ llvm.*::
+ 		"-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "	\
+ 		"$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+ 		"-Wno-unused-value -Wno-pointer-sign "		\
++		"-Wno-address-of-packed-member "                \
+ 		"-working-directory $WORKING_DIR "		\
+-		"-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
++		"-c \"$CLANG_SOURCE\" "                               \
++		"-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
++		"$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
++		"$LLVM_DIS_EXEC | "                                   \
++		"$LLC_EXEC -march=bpf -filetype=obj -o -"
+ 
+ 	llvm.clang-opt::
+ 		Options passed to clang.
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 96c8ef60f4f8..c939681dfafb 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -24,11 +24,18 @@
+ 		"-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "	\
+ 		"$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
+ 		"-Wno-unused-value -Wno-pointer-sign "		\
++		"-Wno-address-of-packed-member "		\
+ 		"-working-directory $WORKING_DIR "		\
+-		"-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
++		"-c \"$CLANG_SOURCE\" "				      \
++		"-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
++		"$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "	      \
++		"$LLVM_DIS_EXEC | "				      \
++		"$LLC_EXEC -march=bpf -filetype=obj -o -"
+ 
+ struct llvm_param llvm_param = {
+ 	.clang_path = "clang",
++	.llvm_opt_path = "opt",
++	.llvm_dis_path = "llvm-dis",
+ 	.llc_path = "llc",
+ 	.clang_bpf_cmd_template = CLANG_BPF_CMD_DEFAULT_TEMPLATE,
+ 	.clang_opt = NULL,
+@@ -48,6 +55,12 @@ int perf_llvm_config(const char *var, const char *value)
+ 
+ 	if (!strcmp(var, "clang-path"))
+ 		llvm_param.clang_path = strdup(value);
++	else if (!strcmp(var, "llvm-opt-path"))
++		llvm_param.llvm_opt_path = strdup(value);
++	else if (!strcmp(var, "llvm-dis-path"))
++		llvm_param.llvm_dis_path = strdup(value);
++	else if (!strcmp(var, "llc-path"))
++		llvm_param.llc_path = strdup(value);
+ 	else if (!strcmp(var, "clang-bpf-cmd-template"))
+ 		llvm_param.clang_bpf_cmd_template = strdup(value);
+ 	else if (!strcmp(var, "clang-opt"))
+@@ -456,6 +469,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 	char linux_version_code_str[64];
+ 	const char *clang_opt = llvm_param.clang_opt;
+ 	char clang_path[PATH_MAX], llc_path[PATH_MAX], abspath[PATH_MAX], nr_cpus_avail_str[64];
++	char llvm_opt_path[PATH_MAX], llvm_dis_path[PATH_MAX];
+ 	char serr[STRERR_BUFSIZE];
+ 	char *kbuild_dir = NULL, *kbuild_include_opts = NULL,
+ 	     *perf_bpf_include_opts = NULL;
+@@ -475,9 +489,10 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 	if (!template)
+ 		template = CLANG_BPF_CMD_DEFAULT_TEMPLATE;
+ 
+-	err = search_program_and_warn(llvm_param.clang_path,
+-			     "clang", clang_path);
+-	if (err)
++	if (search_program_and_warn(llvm_param.clang_path, "clang", clang_path) ||
++	    search_program_and_warn(llvm_param.llvm_opt_path, "opt", llvm_opt_path) ||
++	    search_program_and_warn(llvm_param.llvm_dis_path, "llvm-dis", llvm_dis_path) ||
++	    search_program_and_warn(llvm_param.llc_path, "llc", llc_path))
+ 		return -ENOENT;
+ 
+ 	/*
+@@ -495,21 +510,23 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 
+ 	snprintf(linux_version_code_str, sizeof(linux_version_code_str),
+ 		 "0x%x", kernel_version);
+-	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
++	if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0) {
++		err = -ENOMEM;
+ 		goto errout;
++	}
++
+ 	force_set_env("NR_CPUS", nr_cpus_avail_str);
+ 	force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
+ 	force_set_env("CLANG_EXEC", clang_path);
++	force_set_env("LLVM_OPT_EXEC", llvm_opt_path);
++	force_set_env("LLVM_DIS_EXEC", llvm_dis_path);
++	force_set_env("LLC_EXEC", llc_path);
+ 	force_set_env("CLANG_OPTIONS", clang_opt);
+ 	force_set_env("KERNEL_INC_OPTIONS", kbuild_include_opts);
+ 	force_set_env("PERF_BPF_INC_OPTIONS", perf_bpf_include_opts);
+ 	force_set_env("WORKING_DIR", kbuild_dir ? : ".");
+ 
+ 	if (opts) {
+-		err = search_program_and_warn(llvm_param.llc_path, "llc", llc_path);
+-		if (err)
+-			goto errout;
+-
+ 		err = -ENOMEM;
+ 		if (asprintf(&pipe_template, "%s -emit-llvm | %s -march=bpf %s -filetype=obj -o -",
+ 			      template, llc_path, opts) < 0) {
+diff --git a/tools/perf/util/llvm-utils.h b/tools/perf/util/llvm-utils.h
+index 7878a0e3fa98..e276d10f85b4 100644
+--- a/tools/perf/util/llvm-utils.h
++++ b/tools/perf/util/llvm-utils.h
+@@ -11,6 +11,10 @@
+ struct llvm_param {
+ 	/* Path of clang executable */
+ 	const char *clang_path;
++	/* Path of llvm opt executable */
++	const char *llvm_opt_path;
++	/* Path of llvm-dis executable */
++	const char *llvm_dis_path;
+ 	/* Path of llc executable */
+ 	const char *llc_path;
+ 	/*
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.GIT
+
