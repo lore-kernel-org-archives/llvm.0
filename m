@@ -1,31 +1,44 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436907A
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 22:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=RTy/XhFfjbfRDd109gg9EIJraOMtOqiIkjkCpzcfEgc=; b=Glu8o13q4TMSd1rjIzANrpVTWb
-	2jNx5xL8yQJyDN6T2HY8wPdECWpORg3qMBsd86l1hsaLXqXWZhUFPIEY3M/GwWoCrldvb0KqhpWUf
-	SOsMLqgPvQnNFXjupktJn/j6Ue6fhrTH4wsuqQoMcMKAPjhzXv1DDI/NMa4yqidrshpopERqstDji
-	Ij044gEhrFKFlbRW4oYijylwVEXNKziGvqXGl4AUlUBBMu36+kGGM8mk5uA/IvdKGGMM+fGpB9/Ip
-	JjumCNJeFtJBRq22dEiEmireHlDO3RDZaLorQ/iYs6O035TCpTMx2pfCGIR5AEhF1WAWa5YgmmyE4
-	zuVNrxXg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nfUAT-00BXGO-2K; Fri, 15 Apr 2022 22:11:53 +0000
-Date: Fri, 15 Apr 2022 15:11:53 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: zhanglianjie <zhanglianjie@uniontech.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [mcgrof:sysctl-testing 12/18] mm/page-writeback.c:93:28:
- warning: unused variable 'dirty_bytes_min'
-Message-ID: <YlntqSsx17+PReMW@bombadil.infradead.org>
-References: <202204081510.D41wQr6m-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1E133F4
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 22:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650063220; x=1681599220;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gFyW0/ZZDPgi0UTTVcHqFksjg80YxpQcFCjVLq9SG7o=;
+  b=Izzfe7IY1FxXEz10/v/8VxtTfsJrLlGnBexZdvu6tIaB3UBf3205cWLy
+   VME4bHIWyuXhRWx4UafUVwupEKXhWxV+dK4lFicS/F1Jx/3uuvjuPvJGM
+   HHnPGwkg8rHROu3hefcpHRAVt0PGgYUmmOgdq3ASy0BWe0GTNbXKCn/Ow
+   K8dxWQntGxvb08ovCM12vLK5DUj1Y6SY887GDWovgPRb/LmHRhAXExGPm
+   6wVonsB1XgDKd9Vr7twYFdTiM6ao/Yssxp4r0Mz2rrBflb6GdJebKaZ/Q
+   nXpVTbQBuDOHl5dAdF28CwfuVJV69YRZeU3L4AZ2Se++/iaQ2cEEJ7nXi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="323684227"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="323684227"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 15:53:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="509097329"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 15:53:37 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfUor-0002VH-27;
+	Fri, 15 Apr 2022 22:53:37 +0000
+Date: Sat, 16 Apr 2022 06:52:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nava kishore Manne <nava.manne@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15 93/1093] ld.lld: error: undefined
+ symbol: dma_buf_attach
+Message-ID: <202204160622.G1L7lg8J-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,33 +47,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202204081510.D41wQr6m-lkp@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 08, 2022 at 03:38:53PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
-> head:   7cde53da38a3ea00d75ef6a6ab06fa85b80bcf87
-> commit: 87125d15aa3c4046e902758a39062f213b3664ad [12/18] mm: move page-writeback sysctls to their own file
-> config: s390-randconfig-r034-20220406 (https://download.01.org/0day-ci/archive/20220408/202204081510.D41wQr6m-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=87125d15aa3c4046e902758a39062f213b3664ad
->         git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
->         git fetch --no-tags mcgrof sysctl-testing
->         git checkout 87125d15aa3c4046e902758a39062f213b3664ad
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+Hi Nava,
 
-I'll post a fix.
+FYI, the error/warning still remains.
 
- Luis
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
+head:   b1635a7683e2274f21d795783e4c9db7e518267a
+commit: 895021fc75c22703678f683052e95247269caf44 [93/1093] fpga: support loading from a pre-allocated buffer
+config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220416/202204160622.G1L7lg8J-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/Xilinx/linux-xlnx/commit/895021fc75c22703678f683052e95247269caf44
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15
+        git checkout 895021fc75c22703678f683052e95247269caf44
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: dma_buf_attach
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_mgr_load) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_map_attachment
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_mgr_load) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_unmap_attachment
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_mgr_load) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_detach
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_mgr_load) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_put
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_mgr_load) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_get
+   >>> referenced by fpga-mgr.c
+   >>> fpga/fpga-mgr.o:(fpga_device_ioctl) in archive drivers/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
