@@ -1,440 +1,384 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E362F50
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650020220; x=1681556220;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1rSEaFs52riQEZr/O43plHmv+od+6nt0XQoAvOMczKQ=;
-  b=lxYaEZwyIm476SO63IS7zOP9xA1F7aYVhmZKkaG6CR/7zaJ8RkEPS5rM
-   JqRprYpKr5DqH3jm86nH1+UCuvU0oPhOLKZkBYtzF4antVbk5glCqeTwb
-   leYqvHdV3fpmJ7H+r5Ls+cwHN6WO90tRls+ud3xIbJtRfqv+r4CjkRND2
-   6KQ7hyZ/369la+eBUcFflu2K/6gTeknntYAm1jKCD16xAZEMJhoSDyuS7
-   ISpvLf9aya9/MxU7vWWvU62/qXUmqxfocAoLy21qcMMESA/OnsuBM/uWF
-   +4tsGV5ezQ3xQ08bMRMVQZyVk0A+ta277ATDRs+JZPpVdgPd1sTGwsNNe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="261981803"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="261981803"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:56:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="508910256"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 03:56:58 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfJdJ-0001s8-9h;
-	Fri, 15 Apr 2022 10:56:57 +0000
-Date: Fri, 15 Apr 2022 18:56:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chanwoo Choi <cw00.choi@samsung.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [chanwoo:devfreq-testing 5/5] drivers/devfreq/devfreq.c:937:2:
- error: use of undeclared identifier 'ret'
-Message-ID: <202204151853.3HdXmtTr-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD66C320E
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 11:35:25 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id g18so10341357wrb.10
+        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 04:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:cc:message-id:subject:mime-version:list-id;
+        bh=hyM5VmTreUctOEFR4hlC/IIeuhadASPebWSZ2wKzIe0=;
+        b=jHpq06oXA3lbaCe6p6e4WitxKa+EhIEx2a78dnCvWdOu+yFTWz8hRd757APqozDq0d
+         WhTJEzyaHUWjlkYKfwU2lNjIINDEt+U+/Hv6mX3KXXmbqcWmweXci8d2lCZDcOVp5v6+
+         P0qVeivTIKfvrHmjRus0sI+V2tvRp1eucQi6qRGTzpKSwYBdTir8hqyNPKg4dNtakMDn
+         upFmEKkvvEG0hEywfOSZTarcVU+gCy77TcCn7e8c3ANuZUEjSbj3dqDcOu/HxE7ibTXl
+         TpnDgOBIriS9j9wt/xX/g6PhwayYOH1na0MnhQU1c1K9VVODmD53u6NZ3JqCflV2Z6Bn
+         EuWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
+         :list-id;
+        bh=hyM5VmTreUctOEFR4hlC/IIeuhadASPebWSZ2wKzIe0=;
+        b=6Q3FLdfK5o42YjPRJjTvVbp+oOu05ONgADmMuWCaxjV5k4a37C4yJILgIyxoavQ+nA
+         5vNfbMRVELeqTdY6LWanMzTidNZ3nyGbRwsGs4x4nra8AKnY5+wdj6i2FlwvwGKPZCiV
+         hpVQ7KWMROGtYIDk/QvNz2yLU48qcbwScBi7dpYz5vRfQspnJkPnf7Ilxuc2sURpmIeh
+         Aci2PGsAe350xy4dCSYd03l38OanQauWN7RSTMln9neoH4suY80Gms3jyz3QL8faGAZd
+         cNVNNsCyhlXpiu54xVIeeSZw6lxi/c7RYfKzozYwC/MfJs5MABOix3kyKtTwIwtxXHWP
+         VD7g==
+X-Gm-Message-State: AOAM531GYt3rZqQ/581q9yrnTki6zR0Vl07mE7qQ4oa+A43a+VGbSo+4
+	scpxKvcX70SPvvAdwWQx8NN78Q==
+X-Google-Smtp-Source: ABdhPJzQG791OuHXcb2nCjDcVn9BqyohprwOyaFbzhgDuXaucbS/ZKYzahRaO5GJzJ3DB/VuKjeXEA==
+X-Received: by 2002:adf:ee92:0:b0:207:ac81:58ca with SMTP id b18-20020adfee92000000b00207ac8158camr5392112wro.576.1650022523794;
+        Fri, 15 Apr 2022 04:35:23 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d6785000000b0020a792848eesm2316918wru.82.2022.04.15.04.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 04:35:22 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Fri, 15 Apr 2022 11:35:22 +0000 (UTC)
+To: Eli Friedman <efriedma@quicinc.com>
+Cc: llvm@lists.linux.dev
+Message-ID: <906914372.14298.1650022522881@jenkins.jenkins>
+Subject: [TCWG CI] Regression caused by llvm: Allow flexible array
+ initialization in C++.
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_14297_1475532597.1650022522252"
+X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-arm-next-defconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-head:   c758fc873c71a3466266f84a9bd8ccbebb0e7d68
-commit: c758fc873c71a3466266f84a9bd8ccbebb0e7d68 [5/5] PM / devfreq: Add devfreq_set_governor_data
-config: arm-randconfig-c002-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151853.3HdXmtTr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?id=c758fc873c71a3466266f84a9bd8ccbebb0e7d68
-        git remote add chanwoo https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
-        git fetch --no-tags chanwoo devfreq-testing
-        git checkout c758fc873c71a3466266f84a9bd8ccbebb0e7d68
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+------=_Part_14297_1475532597.1650022522252
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[TCWG CI] Regression caused by llvm: Allow flexible array initialization in C++.:
+commit 5955a0f9375a8c0b134eeb4a8de5155dcce7c94f
+Author: Eli Friedman <efriedma@quicinc.com>
 
-All errors (new ones prefixed by >>):
+    Allow flexible array initialization in C++.
 
-   In file included from drivers/devfreq/devfreq.c:31:
-   drivers/devfreq/governor.h:64:31: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [DEVFREQ_GOV_USERSPACE_ID] = {
-                                        ^
-   drivers/devfreq/governor.h:60:31: note: previous initialization is here
-           [DEVFREQ_GOV_USERSPACE_ID] = {
-                                        ^
->> drivers/devfreq/devfreq.c:937:2: error: use of undeclared identifier 'ret'
-           ret = devfreq_set_governor_data(devfreq, governor_name, data)
-           ^
->> drivers/devfreq/devfreq.c:1443:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1447:8: error: use of undeclared identifier 'name_show'
-   static DEVICE_ATTR_RO(name);
-          ^
-   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
-           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-                                                      ^
-   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
-           .show   = _name##_show,                                         \
-                     ^
-   <scratch space>:62:1: note: expanded from here
-   name_show
-   ^
-   drivers/devfreq/devfreq.c:1451:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/devfreq/devfreq.c:1462:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1538:8: error: use of undeclared identifier 'governor_show'
-   static DEVICE_ATTR_RW(governor);
-          ^
-   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
-           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-                                                      ^
-   include/linux/sysfs.h:138:46: note: expanded from macro '__ATTR_RW'
-   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
-                                                ^
-   <scratch space>:71:1: note: expanded from here
-   governor_show
-   ^
->> drivers/devfreq/devfreq.c:1538:8: error: use of undeclared identifier 'governor_store'; did you mean 'governor_name'?
-   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
-           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-                                                      ^
-   include/linux/sysfs.h:138:60: note: expanded from macro '__ATTR_RW'
-   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
-                                                              ^
-   <scratch space>:72:1: note: expanded from here
-   governor_store
-   ^
-   drivers/devfreq/devfreq.c:1414:16: note: 'governor_name' declared here
-                           const char *governor_name, void *data)
-                                       ^
-   drivers/devfreq/devfreq.c:1543:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1584:8: error: use of undeclared identifier 'available_governors_show'
-   static DEVICE_ATTR_RO(available_governors);
-          ^
-   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
-           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-                                                      ^
-   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
-           .show   = _name##_show,                                         \
-                     ^
-   <scratch space>:84:1: note: expanded from here
-   available_governors_show
-   ^
-   drivers/devfreq/devfreq.c:1588:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1601:8: error: use of undeclared identifier 'cur_freq_show'; did you mean 'chrdev_show'?
-   static DEVICE_ATTR_RO(cur_freq);
-          ^
-   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
-           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-                                                      ^
-   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
-           .show   = _name##_show,                                         \
-                     ^
-   <scratch space>:88:1: note: expanded from here
-   cur_freq_show
-   ^
-   include/linux/fs.h:2687:13: note: 'chrdev_show' declared here
-   extern void chrdev_show(struct seq_file *,off_t);
-               ^
->> drivers/devfreq/devfreq.c:1601:8: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'int (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'void (struct seq_file *, off_t)' (aka 'void (struct seq_file *, long)') [-Werror,-Wincompatible-function-pointer-types]
-   static DEVICE_ATTR_RO(cur_freq);
-          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
-           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-                                                      ^~~~~~~~~~~~~~~~
-   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
-           .show   = _name##_show,                                         \
-                     ^~~~~~~~~~~~
-   <scratch space>:88:1: note: expanded from here
-   cur_freq_show
-   ^~~~~~~~~~~~~
-   drivers/devfreq/devfreq.c:1605:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1610:8: error: use of undeclared identifier 'target_freq_show'
-   static DEVICE_ATTR_RO(target_freq);
-          ^
-   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
-           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-                                                      ^
-   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
-           .show   = _name##_show,                                         \
-                     ^
-   <scratch space>:92:1: note: expanded from here
-   target_freq_show
-   ^
-   drivers/devfreq/devfreq.c:1614:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/devfreq/devfreq.c:1641:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/devfreq/devfreq.c:1651:8: error: use of undeclared identifier 'min_freq_show'
-   static DEVICE_ATTR_RW(min_freq);
-          ^
-   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
-           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-                                                      ^
-   include/linux/sysfs.h:138:46: note: expanded from macro '__ATTR_RW'
-   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
-                                                ^
-   <scratch space>:96:1: note: expanded from here
-   min_freq_show
-   ^
->> drivers/devfreq/devfreq.c:1651:8: error: use of undeclared identifier 'min_freq_store'
-   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
-           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-                                                      ^
-   include/linux/sysfs.h:138:60: note: expanded from macro '__ATTR_RW'
-   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
-                                                              ^
-   <scratch space>:97:1: note: expanded from here
-   min_freq_store
-   ^
-   drivers/devfreq/devfreq.c:1655:1: error: function definition is not allowed here
-   {
-   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+Results regressed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+6464
+# First few build errors in logs:
+# 00:03:47 clang-15: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:03:47 make[2]: *** [scripts/Makefile.build:286: kernel/cgroup/cgroup.o] Error 134
+# 00:03:50 make[1]: *** [scripts/Makefile.build:593: kernel/cgroup] Error 2
+# 00:04:52 clang-15: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:04:53 make[1]: *** [scripts/Makefile.build:286: mm/init-mm.o] Error 134
+# 00:05:20 make: *** [Makefile:1994: mm] Error 2
+# 00:05:36 make: *** [Makefile:1994: kernel] Error 2
+# 00:05:40 clang-15: error: clang frontend command failed with exit code 134 (use -v to see invocation)
+# 00:05:41 make[3]: *** [scripts/Makefile.build:286: drivers/clk/bcm/clk-bcm281xx.o] Error 134
+# 00:05:58 make[2]: *** [scripts/Makefile.build:593: drivers/clk/bcm] Error 2
 
+from
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+7276
+# linux build successful:
+all
+# linux boot successful:
+boot
 
-vim +/ret +937 drivers/devfreq/devfreq.c
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
-   768	
-   769	static void create_sysfs_files(struct devfreq *devfreq,
-   770					const struct devfreq_governor *gov);
-   771	static void remove_sysfs_files(struct devfreq *devfreq,
-   772					const struct devfreq_governor *gov);
-   773	
-   774	/**
-   775	 * devfreq_add_device() - Add devfreq feature to the device
-   776	 * @dev:	the device to add devfreq feature.
-   777	 * @profile:	device-specific profile to run devfreq.
-   778	 * @governor_name:	name of the policy to choose frequency.
-   779	 * @data:	private data for the governor. The devfreq framework does not
-   780	 *		touch this value.
-   781	 */
-   782	struct devfreq *devfreq_add_device(struct device *dev,
-   783					   struct devfreq_dev_profile *profile,
-   784					   const char *governor_name,
-   785					   void *data)
-   786	{
-   787		struct devfreq *devfreq;
-   788		struct devfreq_governor *governor;
-   789		unsigned long min_freq, max_freq;
-   790		int err = 0;
-   791	
-   792		if (!dev || !profile || !governor_name) {
-   793			dev_err(dev, "%s: Invalid parameters.\n", __func__);
-   794			return ERR_PTR(-EINVAL);
-   795		}
-   796	
-   797		mutex_lock(&devfreq_list_lock);
-   798		devfreq = find_device_devfreq(dev);
-   799		mutex_unlock(&devfreq_list_lock);
-   800		if (!IS_ERR(devfreq)) {
-   801			dev_err(dev, "%s: devfreq device already exists!\n",
-   802				__func__);
-   803			err = -EINVAL;
-   804			goto err_out;
-   805		}
-   806	
-   807		devfreq = kzalloc(sizeof(struct devfreq), GFP_KERNEL);
-   808		if (!devfreq) {
-   809			err = -ENOMEM;
-   810			goto err_out;
-   811		}
-   812	
-   813		devfreq->data = kzalloc(sizeof(void *) * DEVFREQ_GOV_NUM, GFP_KERNEL);
-   814		if (!devfreq->data) {
-   815			err = -ENOMEM;
-   816			goto err_dev;
-   817		}
-   818	
-   819		mutex_init(&devfreq->lock);
-   820		mutex_lock(&devfreq->lock);
-   821		devfreq->dev.parent = dev;
-   822		devfreq->dev.class = devfreq_class;
-   823		devfreq->dev.release = devfreq_dev_release;
-   824		INIT_LIST_HEAD(&devfreq->node);
-   825		devfreq->profile = profile;
-   826		devfreq->previous_freq = profile->initial_freq;
-   827		devfreq->last_status.current_frequency = profile->initial_freq;
-   828		devfreq->nb.notifier_call = devfreq_notifier_call;
-   829	
-   830		if (devfreq->profile->timer < 0
-   831			|| devfreq->profile->timer >= DEVFREQ_TIMER_NUM) {
-   832			mutex_unlock(&devfreq->lock);
-   833			err = -EINVAL;
-   834			goto err_dev;
-   835		}
-   836	
-   837		if (!devfreq->profile->max_state || !devfreq->profile->freq_table) {
-   838			mutex_unlock(&devfreq->lock);
-   839			err = set_freq_table(devfreq);
-   840			if (err < 0)
-   841				goto err_dev;
-   842			mutex_lock(&devfreq->lock);
-   843		}
-   844	
-   845		devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-   846		if (!devfreq->scaling_min_freq) {
-   847			mutex_unlock(&devfreq->lock);
-   848			err = -EINVAL;
-   849			goto err_dev;
-   850		}
-   851	
-   852		devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-   853		if (!devfreq->scaling_max_freq) {
-   854			mutex_unlock(&devfreq->lock);
-   855			err = -EINVAL;
-   856			goto err_dev;
-   857		}
-   858	
-   859		devfreq_get_freq_range(devfreq, &min_freq, &max_freq);
-   860	
-   861		devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-   862		devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
-   863		if (IS_ERR(devfreq->opp_table))
-   864			devfreq->opp_table = NULL;
-   865	
-   866		atomic_set(&devfreq->suspend_count, 0);
-   867	
-   868		dev_set_name(&devfreq->dev, "%s", dev_name(dev));
-   869		err = device_register(&devfreq->dev);
-   870		if (err) {
-   871			mutex_unlock(&devfreq->lock);
-   872			put_device(&devfreq->dev);
-   873			goto err_out;
-   874		}
-   875	
-   876		devfreq->stats.trans_table = devm_kzalloc(&devfreq->dev,
-   877				array3_size(sizeof(unsigned int),
-   878					    devfreq->profile->max_state,
-   879					    devfreq->profile->max_state),
-   880				GFP_KERNEL);
-   881		if (!devfreq->stats.trans_table) {
-   882			mutex_unlock(&devfreq->lock);
-   883			err = -ENOMEM;
-   884			goto err_devfreq;
-   885		}
-   886	
-   887		devfreq->stats.time_in_state = devm_kcalloc(&devfreq->dev,
-   888				devfreq->profile->max_state,
-   889				sizeof(*devfreq->stats.time_in_state),
-   890				GFP_KERNEL);
-   891		if (!devfreq->stats.time_in_state) {
-   892			mutex_unlock(&devfreq->lock);
-   893			err = -ENOMEM;
-   894			goto err_devfreq;
-   895		}
-   896	
-   897		devfreq->stats.total_trans = 0;
-   898		devfreq->stats.last_update = get_jiffies_64();
-   899	
-   900		srcu_init_notifier_head(&devfreq->transition_notifier_list);
-   901	
-   902		mutex_unlock(&devfreq->lock);
-   903	
-   904		err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
-   905					     DEV_PM_QOS_MIN_FREQUENCY, 0);
-   906		if (err < 0)
-   907			goto err_devfreq;
-   908		err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
-   909					     DEV_PM_QOS_MAX_FREQUENCY,
-   910					     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-   911		if (err < 0)
-   912			goto err_devfreq;
-   913	
-   914		devfreq->nb_min.notifier_call = qos_min_notifier_call;
-   915		err = dev_pm_qos_add_notifier(dev, &devfreq->nb_min,
-   916					      DEV_PM_QOS_MIN_FREQUENCY);
-   917		if (err)
-   918			goto err_devfreq;
-   919	
-   920		devfreq->nb_max.notifier_call = qos_max_notifier_call;
-   921		err = dev_pm_qos_add_notifier(dev, &devfreq->nb_max,
-   922					      DEV_PM_QOS_MAX_FREQUENCY);
-   923		if (err)
-   924			goto err_devfreq;
-   925	
-   926		mutex_lock(&devfreq_list_lock);
-   927	
-   928		governor = try_then_request_governor(governor_name);
-   929		if (IS_ERR(governor)) {
-   930			dev_err(dev, "%s: Unable to find governor for the device\n",
-   931				__func__);
-   932			err = PTR_ERR(governor);
-   933			goto err_init;
-   934		}
-   935		devfreq->governor = governor;
-   936	
- > 937		ret = devfreq_set_governor_data(devfreq, governor_name, data)
-   938		if (ret < 0) {
-   939			dev_err(dev, "%s: Unable to set data for governor(%s)\n",
-   940				__func__, governor_name);
-   941			return ret;
-   942		}
-   943	
-   944		err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
-   945							NULL);
-   946		if (err) {
-   947			dev_err(dev, "%s: Unable to start governor for the device\n",
-   948				__func__);
-   949			goto err_init;
-   950		}
-   951		create_sysfs_files(devfreq, devfreq->governor);
-   952	
-   953		list_add(&devfreq->node, &devfreq_list);
-   954	
-   955		mutex_unlock(&devfreq_list_lock);
-   956	
-   957		if (devfreq->profile->is_cooling_device) {
-   958			devfreq->cdev = devfreq_cooling_em_register(devfreq, NULL);
-   959			if (IS_ERR(devfreq->cdev))
-   960				devfreq->cdev = NULL;
-   961		}
-   962	
-   963		return devfreq;
-   964	
-   965	err_init:
-   966		mutex_unlock(&devfreq_list_lock);
-   967	err_devfreq:
-   968		devfreq_remove_device(devfreq);
-   969		devfreq = NULL;
-   970	err_dev:
-   971		if (*devfreq->data != NULL)
-   972			kfree(devfreq->data);
-   973		kfree(devfreq);
-   974	err_out:
-   975		return ERR_PTR(err);
-   976	}
-   977	EXPORT_SYMBOL(devfreq_add_device);
-   978	
+This commit has regressed these CI configurations:
+ - tcwg_kernel/llvm-master-arm-next-defconfig
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/build-5955a0f9375a8c0b134eeb4a8de5155dcce7c94f/
+Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/build-234678fbf9cf05c232221bb8253ed658507f3b49/
+Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/build-baseline/
+Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/
+
+Reproduce builds:
+<cut>
+mkdir investigate-llvm-5955a0f9375a8c0b134eeb4a8de5155dcce7c94f
+cd investigate-llvm-5955a0f9375a8c0b134eeb4a8de5155dcce7c94f
+
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests and test.sh script
+mkdir -p artifacts/manifests
+curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/manifests/build-baseline.sh --fail
+curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/manifests/build-parameters.sh --fail
+curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-defconfig/7/artifact/artifacts/test.sh --fail
+chmod +x artifacts/test.sh
+
+# Reproduce the baseline build (build all pre-requisites)
+./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+
+# Save baseline build state (which is then restored in artifacts/test.sh)
+mkdir -p ./bisect
+rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+
+cd llvm
+
+# Reproduce first_bad build
+git checkout --detach 5955a0f9375a8c0b134eeb4a8de5155dcce7c94f
+../artifacts/test.sh
+
+# Reproduce last_good build
+git checkout --detach 234678fbf9cf05c232221bb8253ed658507f3b49
+../artifacts/test.sh
+
+cd ..
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 5955a0f9375a8c0b134eeb4a8de5155dcce7c94f
+Author: Eli Friedman <efriedma@quicinc.com>
+Date:   Thu Apr 14 11:56:40 2022 -0700
+
+    Allow flexible array initialization in C++.
+    
+    Flexible array initialization is a C/C++ extension implemented in many
+    compilers to allow initializing the flexible array tail of a struct type
+    that contains a flexible array. In clang, this is currently restricted
+    to C. But this construct is used in the Microsoft SDK headers, so I'd
+    like to extend it to C++.
+    
+    For now, this doesn't handle dynamic initialization; probably not hard
+    to implement, but it's extra code, and I don't think it's necessary for
+    the expected uses.  And we explicitly fail out of constant evaluation.
+    
+    I've added some additional code to assert that initializers have the
+    correct size, with or without flexible array init. This might catch
+    issues unrelated to flexible array init.
+    
+    Differential Revision: https://reviews.llvm.org/D123649
+---
+ clang/include/clang/AST/Decl.h                   |  8 ++++++++
+ clang/include/clang/Basic/DiagnosticASTKinds.td  |  2 ++
+ clang/lib/AST/Decl.cpp                           | 15 +++++++++++++++
+ clang/lib/AST/ExprConstant.cpp                   | 11 +++++++++++
+ clang/lib/CodeGen/CGDecl.cpp                     | 10 ++++++++++
+ clang/lib/CodeGen/CodeGenModule.cpp              | 10 ++++++++++
+ clang/lib/Sema/SemaInit.cpp                      |  4 ----
+ clang/test/CodeGenCXX/flexible-array-init.cpp    | 20 ++++++++++++++++++++
+ clang/test/SemaCXX/constant-expression-cxx11.cpp |  8 +++++---
+ 9 files changed, 81 insertions(+), 7 deletions(-)
+
+diff --git a/clang/include/clang/AST/Decl.h b/clang/include/clang/AST/Decl.h
+index 21a854592038..5816a91bd0c2 100644
+--- a/clang/include/clang/AST/Decl.h
++++ b/clang/include/clang/AST/Decl.h
+@@ -1591,6 +1591,14 @@ public:
+   /// kind?
+   QualType::DestructionKind needsDestruction(const ASTContext &Ctx) const;
+ 
++  /// If this variable declares a struct with a flexible array member, and
++  /// the flexible array member is initialized with one or more elements,
++  /// compute the number of bytes necessary to store those elements.
++  ///
++  /// (The standard doesn't allow initializing flexible array members; this is
++  /// a gcc/msvc extension.)
++  CharUnits getFlexibleArrayInitChars(const ASTContext &Ctx) const;
++
+   // Implement isa/cast/dyncast/etc.
+   static bool classof(const Decl *D) { return classofKind(D->getKind()); }
+   static bool classofKind(Kind K) { return K >= firstVar && K <= lastVar; }
+diff --git a/clang/include/clang/Basic/DiagnosticASTKinds.td b/clang/include/clang/Basic/DiagnosticASTKinds.td
+index 930264a49549..5e694c6ad07b 100644
+--- a/clang/include/clang/Basic/DiagnosticASTKinds.td
++++ b/clang/include/clang/Basic/DiagnosticASTKinds.td
+@@ -364,6 +364,8 @@ def note_constexpr_memory_leak : Note<
+   "%plural{0:|: (along with %0 other memory leak%s0)}0">;
+ def note_constexpr_unsupported_layout : Note<
+   "type %0 has unexpected layout">;
++def note_constexpr_unsupported_flexible_array : Note<
++  "flexible array initialization is not yet supported">;
+ def err_experimental_clang_interp_failed : Error<
+   "the experimental clang interpreter failed to evaluate an expression">;
+ 
+diff --git a/clang/lib/AST/Decl.cpp b/clang/lib/AST/Decl.cpp
+index c651fa22a035..915d8db10aca 100644
+--- a/clang/lib/AST/Decl.cpp
++++ b/clang/lib/AST/Decl.cpp
+@@ -2722,6 +2722,21 @@ VarDecl::needsDestruction(const ASTContext &Ctx) const {
+   return getType().isDestructedType();
+ }
+ 
++CharUnits VarDecl::getFlexibleArrayInitChars(const ASTContext &Ctx) const {
++  assert(hasInit() && "Expect initializer to check for flexible array init");
++  auto *Ty = getType()->getAs<RecordType>();
++  if (!Ty || !Ty->getDecl()->hasFlexibleArrayMember())
++    return CharUnits::Zero();
++  auto *List = dyn_cast<InitListExpr>(getInit()->IgnoreParens());
++  if (!List)
++    return CharUnits::Zero();
++  auto FlexibleInit = List->getInit(List->getNumInits() - 1);
++  auto InitTy = Ctx.getAsConstantArrayType(FlexibleInit->getType());
++  if (!InitTy)
++    return CharUnits::Zero();
++  return Ctx.getTypeSizeInChars(InitTy);
++}
++
+ MemberSpecializationInfo *VarDecl::getMemberSpecializationInfo() const {
+   if (isStaticDataMember())
+     // FIXME: Remove ?
+diff --git a/clang/lib/AST/ExprConstant.cpp b/clang/lib/AST/ExprConstant.cpp
+index 50d6340ed31f..6fe5d77a33fe 100644
+--- a/clang/lib/AST/ExprConstant.cpp
++++ b/clang/lib/AST/ExprConstant.cpp
+@@ -9980,6 +9980,17 @@ bool RecordExprEvaluator::VisitInitListExpr(const InitListExpr *E) {
+     ImplicitValueInitExpr VIE(HaveInit ? Info.Ctx.IntTy : Field->getType());
+     const Expr *Init = HaveInit ? E->getInit(ElementNo++) : &VIE;
+ 
++    if (Field->getType()->isIncompleteArrayType()) {
++      if (auto *CAT = Info.Ctx.getAsConstantArrayType(Init->getType())) {
++        if (!CAT->getSize().isZero()) {
++          // Bail out for now. This might sort of "work", but the rest of the
++          // code isn't really prepared to handle it.
++          Info.FFDiag(Init, diag::note_constexpr_unsupported_flexible_array);
++          return false;
++        }
++      }
++    }
++
+     // Temporarily override This, in case there's a CXXDefaultInitExpr in here.
+     ThisOverrideRAII ThisOverride(*Info.CurrentCall, &This,
+                                   isa<CXXDefaultInitExpr>(Init));
+diff --git a/clang/lib/CodeGen/CGDecl.cpp b/clang/lib/CodeGen/CGDecl.cpp
+index 1f5bdec384db..a95042514d8c 100644
+--- a/clang/lib/CodeGen/CGDecl.cpp
++++ b/clang/lib/CodeGen/CGDecl.cpp
+@@ -342,6 +342,8 @@ CodeGenFunction::AddInitializerToStaticVarDecl(const VarDecl &D,
+   if (!Init) {
+     if (!getLangOpts().CPlusPlus)
+       CGM.ErrorUnsupported(D.getInit(), "constant l-value expression");
++    else if (!D.getFlexibleArrayInitChars(getContext()).isZero())
++      CGM.ErrorUnsupported(D.getInit(), "flexible array initializer");
+     else if (HaveInsertPoint()) {
+       // Since we have a static initializer, this global variable can't
+       // be constant.
+@@ -352,6 +354,14 @@ CodeGenFunction::AddInitializerToStaticVarDecl(const VarDecl &D,
+     return GV;
+   }
+ 
++#ifndef NDEBUG
++  CharUnits VarSize = CGM.getContext().getTypeSizeInChars(D.getType()) +
++                      D.getFlexibleArrayInitChars(getContext());
++  CharUnits CstSize = CharUnits::fromQuantity(
++      CGM.getDataLayout().getTypeAllocSize(Init->getType()));
++  assert(VarSize == CstSize && "Emitted constant has unexpected size");
++#endif
++
+   // The initializer may differ in type from the global. Rewrite
+   // the global to match the initializer.  (We have to do this
+   // because some types, like unions, can't be completely represented
+diff --git a/clang/lib/CodeGen/CodeGenModule.cpp b/clang/lib/CodeGen/CodeGenModule.cpp
+index 76094c73a927..dbbbf7fd554b 100644
+--- a/clang/lib/CodeGen/CodeGenModule.cpp
++++ b/clang/lib/CodeGen/CodeGenModule.cpp
+@@ -4615,6 +4615,8 @@ void CodeGenModule::EmitGlobalVarDefinition(const VarDecl *D,
+         T = D->getType();
+ 
+       if (getLangOpts().CPlusPlus) {
++        if (!InitDecl->getFlexibleArrayInitChars(getContext()).isZero())
++          ErrorUnsupported(D, "flexible array initializer");
+         Init = EmitNullConstant(T);
+         NeedsGlobalCtor = true;
+       } else {
+@@ -4628,6 +4630,14 @@ void CodeGenModule::EmitGlobalVarDefinition(const VarDecl *D,
+       // also don't need to register a destructor.
+       if (getLangOpts().CPlusPlus && !NeedsGlobalDtor)
+         DelayedCXXInitPosition.erase(D);
++
++#ifndef NDEBUG
++      CharUnits VarSize = getContext().getTypeSizeInChars(ASTTy) +
++                          InitDecl->getFlexibleArrayInitChars(getContext());
++      CharUnits CstSize = CharUnits::fromQuantity(
++          getDataLayout().getTypeAllocSize(Init->getType()));
++      assert(VarSize == CstSize && "Emitted constant has unexpected size");
++#endif
+     }
+   }
+ 
+diff --git a/clang/lib/Sema/SemaInit.cpp b/clang/lib/Sema/SemaInit.cpp
+index 119a90deb9c2..c3bbefbaaed1 100644
+--- a/clang/lib/Sema/SemaInit.cpp
++++ b/clang/lib/Sema/SemaInit.cpp
+@@ -2004,10 +2004,6 @@ bool InitListChecker::CheckFlexibleArrayInit(const InitializedEntity &Entity,
+       cast<InitListExpr>(InitExpr)->getNumInits() == 0) {
+     // Empty flexible array init always allowed as an extension
+     FlexArrayDiag = diag::ext_flexible_array_init;
+-  } else if (SemaRef.getLangOpts().CPlusPlus) {
+-    // Disallow flexible array init in C++; it is not required for gcc
+-    // compatibility, and it needs work to IRGen correctly in general.
+-    FlexArrayDiag = diag::err_flexible_array_init;
+   } else if (!TopLevelObject) {
+     // Disallow flexible array init on non-top-level object
+     FlexArrayDiag = diag::err_flexible_array_init;
+diff --git a/clang/test/CodeGenCXX/flexible-array-init.cpp b/clang/test/CodeGenCXX/flexible-array-init.cpp
+new file mode 100644
+index 000000000000..af8486d9d3b5
+--- /dev/null
++++ b/clang/test/CodeGenCXX/flexible-array-init.cpp
+@@ -0,0 +1,20 @@
++// RUN: %clang_cc1 -triple i386-unknown-unknown -emit-llvm -o - %s | FileCheck %s
++// RUN: %clang_cc1 -triple i386-unknown-unknown -emit-llvm-only -verify -DFAIL1 %s
++// RUN: %clang_cc1 -triple i386-unknown-unknown -emit-llvm-only -verify -DFAIL2 %s
++
++struct A { int x; int y[]; };
++A a = { 1, 7, 11 };
++// CHECK: @a ={{.*}} global { i32, [2 x i32] } { i32 1, [2 x i32] [i32 7, i32 11] }
++
++A b = { 1, { 13, 15 } };
++// CHECK: @b ={{.*}} global { i32, [2 x i32] } { i32 1, [2 x i32] [i32 13, i32 15] }
++
++int f();
++#ifdef FAIL1
++A c = { f(), { f(), f() } }; // expected-error {{cannot compile this flexible array initializer yet}}
++#endif
++#ifdef FAIL2
++void g() {
++  static A d = { f(), { f(), f() } }; // expected-error {{cannot compile this flexible array initializer yet}}
++}
++#endif
+diff --git a/clang/test/SemaCXX/constant-expression-cxx11.cpp b/clang/test/SemaCXX/constant-expression-cxx11.cpp
+index 680b2d5307be..733653af6369 100644
+--- a/clang/test/SemaCXX/constant-expression-cxx11.cpp
++++ b/clang/test/SemaCXX/constant-expression-cxx11.cpp
+@@ -2383,9 +2383,11 @@ namespace flexible_array {
+   static_assert(b[2].x == 3, "");
+   static_assert(b[2].arr[0], ""); // expected-error {{constant expression}} expected-note {{array member without known bound}}
+ 
+-  // If we ever start to accept this, we'll need to ensure we can
+-  // constant-evaluate it properly.
+-  constexpr A c = {1, 2, 3}; // expected-error {{initialization of flexible array member}}
++  // Flexible array initialization is currently not supported by constant
++  // evaluation. Make sure we emit an error message, for now.
++  constexpr A c = {1, 2, 3}; // expected-error {{constexpr variable 'c' must be initialized by a constant expression}}
++  // expected-note@-1 {{flexible array initialization is not yet supported}}
++  // expected-warning@-2 {{flexible array initialization is a GNU extension}}
+ }
+ 
+ void local_constexpr_var() {
+</cut>
+------=_Part_14297_1475532597.1650022522252--
