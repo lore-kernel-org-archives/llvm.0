@@ -1,42 +1,80 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852CD7E
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 13:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650028890; x=1681564890;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J5IdjM4bTiGgHDJNdfSgOfYbVJ4mpNxn9qhhWj7kVfU=;
-  b=QM4zbcJeTDFsIt/BhhDQT7Dqso5iVaGvNCpx+IZNJpLOQggx3b/EWo4b
-   Ua/QNe6fnTfc1QZ/vjLhO8hEoA6MWUmgepjbTRDUBKzfJyknGHcTIeFI/
-   USAI99y2V/OWjcE054vM74YiR/FMq6VI0nVrlSGu0eWZF2y4dzVYyogEH
-   d2d5uVJd5XeTrxwIdUytOQ5mNR90cWGrEB6dn3glNefL7aF5E+aRoR3+u
-   J1npK2d/o+afuVLRovlUhx3zd7WkqDqugT29g04JI6zn21tI8l5l4PgP3
-   pSq4ySBTCgrfCFY2JcCbJnNotgQrzK+n0D+epd10z3vEu5P6vzr+7SQvm
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="261996516"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="261996516"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:21:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="662085064"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 06:21:28 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfLt9-0001yL-Gb;
-	Fri, 15 Apr 2022 13:21:27 +0000
-Date: Fri, 15 Apr 2022 21:21:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morimoto:r4-2022-04-15-v2 15/24]
- drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
-Message-ID: <202204152116.8xUwPO61-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DEDA7E
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 13:38:37 +0000 (UTC)
+Received: by mail-pl1-f196.google.com with SMTP id j8so7126961pll.11
+        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 06:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M9rx3SpLFg0yQGkL9rFlw3lXIc0eurp55pdhU3Cwimk=;
+        b=RGBADwoDDLTNmBXMbPPibrgnThWpZsdF4Cg8GMAch+oDuOUbSPOHihCnEyOCg+oy/Y
+         DkhRQVGkJcFdrCPm09lm8TOAZNvcZGQkPX4n8dBT06wr1vADFyC21HiPtFn2hTL1HnES
+         abU1Ko956Xlvvz9jLdsPEtbJ/SU6jX1dh6iKCFyTdrIs3v/HbNKH+cFPIRSf2zZRa24O
+         ZEfC4RMNurOZGJb/r/+ef84a2La0Q+s2Np/TlM4/0hlOntv4+bmeRSBOoEM3ETbm2fwW
+         mZjkgkhHM2P2XWPVo0pqdgJD5xLGEApWRtVrzKbTNkND31RQKuCO8ulQZxqR698yl0a3
+         N29w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M9rx3SpLFg0yQGkL9rFlw3lXIc0eurp55pdhU3Cwimk=;
+        b=WqdO5VrDT7pFEGf9deCUZUi82jPXuWb+LUcjjpczX0qMqFL3FCLMhXu0gObR9lPfWO
+         IF+aoCTR2tVnIN6lhpp0K2JKF2tcmkuuVbIM4lnLRBWJ2n3O9DBFvipyhSqIp0zfUz+z
+         k08fBEvmgYtCShr+mlL4azY6ZxHgZtOo0336aDq4HeMcTTF3TBhyO9xuXIUj5R52sTTQ
+         uZ1EdqrLk9NHOQmYIdtG+LYHZb3cl812cMCmRqiuzf961N8fjAiDxMRRlLwRvQGv2zbU
+         SpMxG3xUt+lk5vu72I200M6kHiC0PRdaWLe8csYdEizn49ZfnqQ3UOiV8ljQQEAllG2M
+         KL8g==
+X-Gm-Message-State: AOAM533CM6/DXtIS7HMK3tTaiepP+hPWaJzBDmAECTOfS0e9JeTEbneB
+	gBZiqVLqrKliBHAHOr1zqcg=
+X-Google-Smtp-Source: ABdhPJxC2ecEADuDf7c9/EcF1MlqYrpbH2/Erq7cnCc7MBmBa0VIRIFj/M+p8QKuksJh7sWmOZCQQA==
+X-Received: by 2002:a17:902:7298:b0:158:3a08:3163 with SMTP id d24-20020a170902729800b001583a083163mr30186108pll.133.1650029916593;
+        Fri, 15 Apr 2022 06:38:36 -0700 (PDT)
+Received: from localhost ([112.79.142.104])
+        by smtp.gmail.com with ESMTPSA id 35-20020a631763000000b0039d93f8c2f0sm4541611pgx.24.2022.04.15.06.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 06:38:36 -0700 (PDT)
+Date: Fri, 15 Apr 2022 19:08:39 +0530
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dmitrii Dolgov <9erthalion6@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Chenbo Feng <fengc@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Daniel Wagner <daniel.wagner@bmw-carit.de>,
+	Thomas Graf <tgraf@suug.ch>,
+	Ong Boon Leong <boon.leong.ong@intel.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next 05/11] samples: bpf: use host bpftool to
+ generate vmlinux.h, not target
+Message-ID: <20220415133839.y6tjf3ymbvbrntx4@apollo.legion>
+References: <20220414223704.341028-1-alobakin@pm.me>
+ <20220414223704.341028-6-alobakin@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,110 +83,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220414223704.341028-6-alobakin@pm.me>
 
-tree:   https://github.com/morimoto/linux r4-2022-04-15-v2
-head:   88d865b299bcaa6c0a206a60dbf20e4e13130568
-commit: 680cb6c79b44aacc594165e88b4af5d4acfa9f7c [15/24] i2c: rcar: use flags instead of atomic_xfer
-config: arm64-randconfig-r022-20220414 (https://download.01.org/0day-ci/archive/20220415/202204152116.8xUwPO61-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/morimoto/linux/commit/680cb6c79b44aacc594165e88b4af5d4acfa9f7c
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto r4-2022-04-15-v2
-        git checkout 680cb6c79b44aacc594165e88b4af5d4acfa9f7c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, Apr 15, 2022 at 04:15:50AM IST, Alexander Lobakin wrote:
+> Use the host build of bpftool (bootstrap) instead of the target one
+> to generate vmlinux.h/skeletons for the BPF samples. Otherwise, when
+> host != target, samples compilation fails with:
+>
+> /bin/sh: line 1: samples/bpf/bpftool/bpftool: failed to exec: Exec
+> format error
+>
+> Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-All errors (new ones prefixed by >>):
+>  samples/bpf/Makefile | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 97203c0de252..02f999a8ef84 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -291,12 +291,13 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+>
+>  BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
+>  BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
+> -BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
+> +BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
+>  $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
+>  	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
+>  		OUTPUT=$(BPFTOOL_OUTPUT)/ \
+>  		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
+> -		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
+> +		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/ \
+> +		bootstrap
+>
+>  $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+>  	$(call msg,MKDIR,$@)
+> --
+> 2.35.2
+>
+>
 
->> drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
-           priv->flags &= ~ID_P_ATOMIC
-                                      ^
-                                      ;
-   drivers/i2c/busses/i2c-rcar.c:1041:18: warning: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +806 drivers/i2c/busses/i2c-rcar.c
-
-   796	
-   797	static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
-   798					struct i2c_msg *msgs,
-   799					int num)
-   800	{
-   801		struct rcar_i2c_priv *priv = i2c_get_adapdata(adap);
-   802		struct device *dev = rcar_i2c_priv_to_dev(priv);
-   803		int i, ret;
-   804		long time_left;
-   805	
- > 806		priv->flags &= ~ID_P_ATOMIC
-   807	
-   808		pm_runtime_get_sync(dev);
-   809	
-   810		/* Check bus state before init otherwise bus busy info will be lost */
-   811		ret = rcar_i2c_bus_barrier(priv);
-   812		if (ret < 0)
-   813			goto out;
-   814	
-   815		/* Gen3 needs a reset before allowing RXDMA once */
-   816		if (priv->devtype == I2C_RCAR_GEN3) {
-   817			priv->flags |= ID_P_NO_RXDMA;
-   818			if (!IS_ERR(priv->rstc)) {
-   819				ret = rcar_i2c_do_reset(priv);
-   820				if (ret == 0)
-   821					priv->flags &= ~ID_P_NO_RXDMA;
-   822			}
-   823		}
-   824	
-   825		rcar_i2c_init(priv);
-   826	
-   827		for (i = 0; i < num; i++)
-   828			rcar_i2c_request_dma(priv, msgs + i);
-   829	
-   830		/* init first message */
-   831		priv->msg = msgs;
-   832		priv->msgs_left = num;
-   833		priv->flags = (priv->flags & ID_P_MASK) | ID_FIRST_MSG;
-   834		rcar_i2c_prepare_msg(priv);
-   835	
-   836		time_left = wait_event_timeout(priv->wait, priv->flags & ID_DONE,
-   837					     num * adap->timeout);
-   838	
-   839		/* cleanup DMA if it couldn't complete properly due to an error */
-   840		if (priv->dma_direction != DMA_NONE)
-   841			rcar_i2c_cleanup_dma(priv, true);
-   842	
-   843		if (!time_left) {
-   844			rcar_i2c_init(priv);
-   845			ret = -ETIMEDOUT;
-   846		} else if (priv->flags & ID_NACK) {
-   847			ret = -ENXIO;
-   848		} else if (priv->flags & ID_ARBLOST) {
-   849			ret = -EAGAIN;
-   850		} else {
-   851			ret = num - priv->msgs_left; /* The number of transfer */
-   852		}
-   853	out:
-   854		pm_runtime_put(dev);
-   855	
-   856		if (ret < 0 && ret != -ENXIO)
-   857			dev_err(dev, "error %d : %x\n", ret, priv->flags);
-   858	
-   859		return ret;
-   860	}
-   861	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+Kartikeya
