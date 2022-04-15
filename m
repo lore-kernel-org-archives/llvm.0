@@ -1,45 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3E5184
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E362F50
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:57:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650018999; x=1681554999;
+  t=1650020220; x=1681556220;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pTU6WGQxA5wtymtGv3FJfm0xuishAo5Rj/AK64c1ahs=;
-  b=ecQIujYogBazBeafXe62YDjIgP9YH+/4tS9EcbJUPtI9VhTj/Ph43H/U
-   3/f9uS0YVNFVs0/wqQtQR8agnajdGZ9Rl9p7l6d/Dxjo/d5hajjbidswv
-   JTaKJr4USUWhgOAUa1IWNiAlUieAGeuSz3v8/SchKo2J157vGz3f6nQc2
-   DKQYgzzRj+GPtRNrN+vX9mXFbqyz8W8V3o82gXOfFvV6Z3jDW7Dws8YZb
-   ZP+pEjWrHSuzda8YnsjEoFi3CMLV8IMc+3RB4O9z70gJORnINMn1HDj3b
-   bUwW2T4GimTBQmHpWkFelHd8LELhmeIChSRAfJ/XZM09qymRoNaQZh1tJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243067212"
+  bh=1rSEaFs52riQEZr/O43plHmv+od+6nt0XQoAvOMczKQ=;
+  b=lxYaEZwyIm476SO63IS7zOP9xA1F7aYVhmZKkaG6CR/7zaJ8RkEPS5rM
+   JqRprYpKr5DqH3jm86nH1+UCuvU0oPhOLKZkBYtzF4antVbk5glCqeTwb
+   leYqvHdV3fpmJ7H+r5Ls+cwHN6WO90tRls+ud3xIbJtRfqv+r4CjkRND2
+   6KQ7hyZ/369la+eBUcFflu2K/6gTeknntYAm1jKCD16xAZEMJhoSDyuS7
+   ISpvLf9aya9/MxU7vWWvU62/qXUmqxfocAoLy21qcMMESA/OnsuBM/uWF
+   +4tsGV5ezQ3xQ08bMRMVQZyVk0A+ta277ATDRs+JZPpVdgPd1sTGwsNNe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="261981803"
 X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="243067212"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:36:39 -0700
+   d="scan'208";a="261981803"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:56:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="591595964"
+   d="scan'208";a="508910256"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 15 Apr 2022 03:36:36 -0700
+  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 03:56:58 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nfJJc-0001rF-87;
-	Fri, 15 Apr 2022 10:36:36 +0000
-Date: Fri, 15 Apr 2022 18:36:12 +0800
+	id 1nfJdJ-0001s8-9h;
+	Fri, 15 Apr 2022 10:56:57 +0000
+Date: Fri, 15 Apr 2022 18:56:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guo Ren <guoren@linux.alibaba.com>
+To: Chanwoo Choi <cw00.choi@samsung.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
- arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for
- function 'compat_setup_rt_frame'
-Message-ID: <202204151803.TXKhZhma-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [chanwoo:devfreq-testing 5/5] drivers/devfreq/devfreq.c:937:2:
+ error: use of undeclared identifier 'ret'
+Message-ID: <202204151853.3HdXmtTr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,85 +47,393 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
-head:   d84810b12dce65023c222aea22d30e2b22e3016a
-commit: d84810b12dce65023c222aea22d30e2b22e3016a [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-randconfig-r015-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151803.TXKhZhma-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+head:   c758fc873c71a3466266f84a9bd8ccbebb0e7d68
+commit: c758fc873c71a3466266f84a9bd8ccbebb0e7d68 [5/5] PM / devfreq: Add devfreq_set_governor_data
+config: arm-randconfig-c002-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151853.3HdXmtTr-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/d84810b12dce65023c222aea22d30e2b22e3016a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
-        git checkout d84810b12dce65023c222aea22d30e2b22e3016a
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?id=c758fc873c71a3466266f84a9bd8ccbebb0e7d68
+        git remote add chanwoo https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+        git fetch --no-tags chanwoo devfreq-testing
+        git checkout c758fc873c71a3466266f84a9bd8ccbebb0e7d68
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-       ^
-   arch/riscv/kernel/compat_signal.c:198:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+   In file included from drivers/devfreq/devfreq.c:31:
+   drivers/devfreq/governor.h:64:31: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [DEVFREQ_GOV_USERSPACE_ID] = {
+                                        ^
+   drivers/devfreq/governor.h:60:31: note: previous initialization is here
+           [DEVFREQ_GOV_USERSPACE_ID] = {
+                                        ^
+>> drivers/devfreq/devfreq.c:937:2: error: use of undeclared identifier 'ret'
+           ret = devfreq_set_governor_data(devfreq, governor_name, data)
+           ^
+>> drivers/devfreq/devfreq.c:1443:1: error: function definition is not allowed here
+   {
    ^
-   static 
-   1 warning generated.
+>> drivers/devfreq/devfreq.c:1447:8: error: use of undeclared identifier 'name_show'
+   static DEVICE_ATTR_RO(name);
+          ^
+   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                                      ^
+   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
+           .show   = _name##_show,                                         \
+                     ^
+   <scratch space>:62:1: note: expanded from here
+   name_show
+   ^
+   drivers/devfreq/devfreq.c:1451:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/devfreq/devfreq.c:1462:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/devfreq/devfreq.c:1538:8: error: use of undeclared identifier 'governor_show'
+   static DEVICE_ATTR_RW(governor);
+          ^
+   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
+           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+                                                      ^
+   include/linux/sysfs.h:138:46: note: expanded from macro '__ATTR_RW'
+   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
+                                                ^
+   <scratch space>:71:1: note: expanded from here
+   governor_show
+   ^
+>> drivers/devfreq/devfreq.c:1538:8: error: use of undeclared identifier 'governor_store'; did you mean 'governor_name'?
+   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
+           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+                                                      ^
+   include/linux/sysfs.h:138:60: note: expanded from macro '__ATTR_RW'
+   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
+                                                              ^
+   <scratch space>:72:1: note: expanded from here
+   governor_store
+   ^
+   drivers/devfreq/devfreq.c:1414:16: note: 'governor_name' declared here
+                           const char *governor_name, void *data)
+                                       ^
+   drivers/devfreq/devfreq.c:1543:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/devfreq/devfreq.c:1584:8: error: use of undeclared identifier 'available_governors_show'
+   static DEVICE_ATTR_RO(available_governors);
+          ^
+   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                                      ^
+   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
+           .show   = _name##_show,                                         \
+                     ^
+   <scratch space>:84:1: note: expanded from here
+   available_governors_show
+   ^
+   drivers/devfreq/devfreq.c:1588:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/devfreq/devfreq.c:1601:8: error: use of undeclared identifier 'cur_freq_show'; did you mean 'chrdev_show'?
+   static DEVICE_ATTR_RO(cur_freq);
+          ^
+   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                                      ^
+   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
+           .show   = _name##_show,                                         \
+                     ^
+   <scratch space>:88:1: note: expanded from here
+   cur_freq_show
+   ^
+   include/linux/fs.h:2687:13: note: 'chrdev_show' declared here
+   extern void chrdev_show(struct seq_file *,off_t);
+               ^
+>> drivers/devfreq/devfreq.c:1601:8: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'int (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'void (struct seq_file *, off_t)' (aka 'void (struct seq_file *, long)') [-Werror,-Wincompatible-function-pointer-types]
+   static DEVICE_ATTR_RO(cur_freq);
+          ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                                      ^~~~~~~~~~~~~~~~
+   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
+           .show   = _name##_show,                                         \
+                     ^~~~~~~~~~~~
+   <scratch space>:88:1: note: expanded from here
+   cur_freq_show
+   ^~~~~~~~~~~~~
+   drivers/devfreq/devfreq.c:1605:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/devfreq/devfreq.c:1610:8: error: use of undeclared identifier 'target_freq_show'
+   static DEVICE_ATTR_RO(target_freq);
+          ^
+   include/linux/device.h:136:45: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                                      ^
+   include/linux/sysfs.h:117:10: note: expanded from macro '__ATTR_RO'
+           .show   = _name##_show,                                         \
+                     ^
+   <scratch space>:92:1: note: expanded from here
+   target_freq_show
+   ^
+   drivers/devfreq/devfreq.c:1614:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/devfreq/devfreq.c:1641:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/devfreq/devfreq.c:1651:8: error: use of undeclared identifier 'min_freq_show'
+   static DEVICE_ATTR_RW(min_freq);
+          ^
+   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
+           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+                                                      ^
+   include/linux/sysfs.h:138:46: note: expanded from macro '__ATTR_RW'
+   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
+                                                ^
+   <scratch space>:96:1: note: expanded from here
+   min_freq_show
+   ^
+>> drivers/devfreq/devfreq.c:1651:8: error: use of undeclared identifier 'min_freq_store'
+   include/linux/device.h:132:45: note: expanded from macro 'DEVICE_ATTR_RW'
+           struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+                                                      ^
+   include/linux/sysfs.h:138:60: note: expanded from macro '__ATTR_RW'
+   #define __ATTR_RW(_name) __ATTR(_name, 0644, _name##_show, _name##_store)
+                                                              ^
+   <scratch space>:97:1: note: expanded from here
+   min_freq_store
+   ^
+   drivers/devfreq/devfreq.c:1655:1: error: function definition is not allowed here
+   {
+   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
 
-vim +/compat_setup_rt_frame +198 arch/riscv/kernel/compat_signal.c
+vim +/ret +937 drivers/devfreq/devfreq.c
 
-7b07d6662e1218 Guo Ren 2022-04-05  197  
-7b07d6662e1218 Guo Ren 2022-04-05 @198  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-7b07d6662e1218 Guo Ren 2022-04-05  199  	struct pt_regs *regs)
-7b07d6662e1218 Guo Ren 2022-04-05  200  {
-7b07d6662e1218 Guo Ren 2022-04-05  201  	struct compat_rt_sigframe __user *frame;
-7b07d6662e1218 Guo Ren 2022-04-05  202  	long err = 0;
-7b07d6662e1218 Guo Ren 2022-04-05  203  
-7b07d6662e1218 Guo Ren 2022-04-05  204  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
-7b07d6662e1218 Guo Ren 2022-04-05  205  	if (!access_ok(frame, sizeof(*frame)))
-7b07d6662e1218 Guo Ren 2022-04-05  206  		return -EFAULT;
-7b07d6662e1218 Guo Ren 2022-04-05  207  
-7b07d6662e1218 Guo Ren 2022-04-05  208  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
-7b07d6662e1218 Guo Ren 2022-04-05  209  
-7b07d6662e1218 Guo Ren 2022-04-05  210  	/* Create the ucontext. */
-7b07d6662e1218 Guo Ren 2022-04-05  211  	err |= __put_user(0, &frame->uc.uc_flags);
-7b07d6662e1218 Guo Ren 2022-04-05  212  	err |= __put_user(NULL, &frame->uc.uc_link);
-7b07d6662e1218 Guo Ren 2022-04-05  213  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
-7b07d6662e1218 Guo Ren 2022-04-05  214  	err |= compat_setup_sigcontext(frame, regs);
-7b07d6662e1218 Guo Ren 2022-04-05  215  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-7b07d6662e1218 Guo Ren 2022-04-05  216  	if (err)
-7b07d6662e1218 Guo Ren 2022-04-05  217  		return -EFAULT;
-7b07d6662e1218 Guo Ren 2022-04-05  218  
-7b07d6662e1218 Guo Ren 2022-04-05  219  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-7b07d6662e1218 Guo Ren 2022-04-05  220  			current->mm->context.vdso, rt_sigreturn);
-7b07d6662e1218 Guo Ren 2022-04-05  221  
-7b07d6662e1218 Guo Ren 2022-04-05  222  	/*
-7b07d6662e1218 Guo Ren 2022-04-05  223  	 * Set up registers for signal handler.
-7b07d6662e1218 Guo Ren 2022-04-05  224  	 * Registers that we don't modify keep the value they had from
-7b07d6662e1218 Guo Ren 2022-04-05  225  	 * user-space at the time we took the signal.
-7b07d6662e1218 Guo Ren 2022-04-05  226  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-7b07d6662e1218 Guo Ren 2022-04-05  227  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-7b07d6662e1218 Guo Ren 2022-04-05  228  	 */
-7b07d6662e1218 Guo Ren 2022-04-05  229  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-7b07d6662e1218 Guo Ren 2022-04-05  230  	regs->sp = (unsigned long)frame;
-7b07d6662e1218 Guo Ren 2022-04-05  231  	regs->a0 = ksig->sig;                     /* a0: signal number */
-7b07d6662e1218 Guo Ren 2022-04-05  232  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-7b07d6662e1218 Guo Ren 2022-04-05  233  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-7b07d6662e1218 Guo Ren 2022-04-05  234  
-
-:::::: The code at line 198 was first introduced by commit
-:::::: 7b07d6662e1218841c2b618ab9a9255440ccee85 riscv: compat: signal: Add rt_frame implementation
-
-:::::: TO: Guo Ren <guoren@linux.alibaba.com>
-:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+   768	
+   769	static void create_sysfs_files(struct devfreq *devfreq,
+   770					const struct devfreq_governor *gov);
+   771	static void remove_sysfs_files(struct devfreq *devfreq,
+   772					const struct devfreq_governor *gov);
+   773	
+   774	/**
+   775	 * devfreq_add_device() - Add devfreq feature to the device
+   776	 * @dev:	the device to add devfreq feature.
+   777	 * @profile:	device-specific profile to run devfreq.
+   778	 * @governor_name:	name of the policy to choose frequency.
+   779	 * @data:	private data for the governor. The devfreq framework does not
+   780	 *		touch this value.
+   781	 */
+   782	struct devfreq *devfreq_add_device(struct device *dev,
+   783					   struct devfreq_dev_profile *profile,
+   784					   const char *governor_name,
+   785					   void *data)
+   786	{
+   787		struct devfreq *devfreq;
+   788		struct devfreq_governor *governor;
+   789		unsigned long min_freq, max_freq;
+   790		int err = 0;
+   791	
+   792		if (!dev || !profile || !governor_name) {
+   793			dev_err(dev, "%s: Invalid parameters.\n", __func__);
+   794			return ERR_PTR(-EINVAL);
+   795		}
+   796	
+   797		mutex_lock(&devfreq_list_lock);
+   798		devfreq = find_device_devfreq(dev);
+   799		mutex_unlock(&devfreq_list_lock);
+   800		if (!IS_ERR(devfreq)) {
+   801			dev_err(dev, "%s: devfreq device already exists!\n",
+   802				__func__);
+   803			err = -EINVAL;
+   804			goto err_out;
+   805		}
+   806	
+   807		devfreq = kzalloc(sizeof(struct devfreq), GFP_KERNEL);
+   808		if (!devfreq) {
+   809			err = -ENOMEM;
+   810			goto err_out;
+   811		}
+   812	
+   813		devfreq->data = kzalloc(sizeof(void *) * DEVFREQ_GOV_NUM, GFP_KERNEL);
+   814		if (!devfreq->data) {
+   815			err = -ENOMEM;
+   816			goto err_dev;
+   817		}
+   818	
+   819		mutex_init(&devfreq->lock);
+   820		mutex_lock(&devfreq->lock);
+   821		devfreq->dev.parent = dev;
+   822		devfreq->dev.class = devfreq_class;
+   823		devfreq->dev.release = devfreq_dev_release;
+   824		INIT_LIST_HEAD(&devfreq->node);
+   825		devfreq->profile = profile;
+   826		devfreq->previous_freq = profile->initial_freq;
+   827		devfreq->last_status.current_frequency = profile->initial_freq;
+   828		devfreq->nb.notifier_call = devfreq_notifier_call;
+   829	
+   830		if (devfreq->profile->timer < 0
+   831			|| devfreq->profile->timer >= DEVFREQ_TIMER_NUM) {
+   832			mutex_unlock(&devfreq->lock);
+   833			err = -EINVAL;
+   834			goto err_dev;
+   835		}
+   836	
+   837		if (!devfreq->profile->max_state || !devfreq->profile->freq_table) {
+   838			mutex_unlock(&devfreq->lock);
+   839			err = set_freq_table(devfreq);
+   840			if (err < 0)
+   841				goto err_dev;
+   842			mutex_lock(&devfreq->lock);
+   843		}
+   844	
+   845		devfreq->scaling_min_freq = find_available_min_freq(devfreq);
+   846		if (!devfreq->scaling_min_freq) {
+   847			mutex_unlock(&devfreq->lock);
+   848			err = -EINVAL;
+   849			goto err_dev;
+   850		}
+   851	
+   852		devfreq->scaling_max_freq = find_available_max_freq(devfreq);
+   853		if (!devfreq->scaling_max_freq) {
+   854			mutex_unlock(&devfreq->lock);
+   855			err = -EINVAL;
+   856			goto err_dev;
+   857		}
+   858	
+   859		devfreq_get_freq_range(devfreq, &min_freq, &max_freq);
+   860	
+   861		devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+   862		devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
+   863		if (IS_ERR(devfreq->opp_table))
+   864			devfreq->opp_table = NULL;
+   865	
+   866		atomic_set(&devfreq->suspend_count, 0);
+   867	
+   868		dev_set_name(&devfreq->dev, "%s", dev_name(dev));
+   869		err = device_register(&devfreq->dev);
+   870		if (err) {
+   871			mutex_unlock(&devfreq->lock);
+   872			put_device(&devfreq->dev);
+   873			goto err_out;
+   874		}
+   875	
+   876		devfreq->stats.trans_table = devm_kzalloc(&devfreq->dev,
+   877				array3_size(sizeof(unsigned int),
+   878					    devfreq->profile->max_state,
+   879					    devfreq->profile->max_state),
+   880				GFP_KERNEL);
+   881		if (!devfreq->stats.trans_table) {
+   882			mutex_unlock(&devfreq->lock);
+   883			err = -ENOMEM;
+   884			goto err_devfreq;
+   885		}
+   886	
+   887		devfreq->stats.time_in_state = devm_kcalloc(&devfreq->dev,
+   888				devfreq->profile->max_state,
+   889				sizeof(*devfreq->stats.time_in_state),
+   890				GFP_KERNEL);
+   891		if (!devfreq->stats.time_in_state) {
+   892			mutex_unlock(&devfreq->lock);
+   893			err = -ENOMEM;
+   894			goto err_devfreq;
+   895		}
+   896	
+   897		devfreq->stats.total_trans = 0;
+   898		devfreq->stats.last_update = get_jiffies_64();
+   899	
+   900		srcu_init_notifier_head(&devfreq->transition_notifier_list);
+   901	
+   902		mutex_unlock(&devfreq->lock);
+   903	
+   904		err = dev_pm_qos_add_request(dev, &devfreq->user_min_freq_req,
+   905					     DEV_PM_QOS_MIN_FREQUENCY, 0);
+   906		if (err < 0)
+   907			goto err_devfreq;
+   908		err = dev_pm_qos_add_request(dev, &devfreq->user_max_freq_req,
+   909					     DEV_PM_QOS_MAX_FREQUENCY,
+   910					     PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
+   911		if (err < 0)
+   912			goto err_devfreq;
+   913	
+   914		devfreq->nb_min.notifier_call = qos_min_notifier_call;
+   915		err = dev_pm_qos_add_notifier(dev, &devfreq->nb_min,
+   916					      DEV_PM_QOS_MIN_FREQUENCY);
+   917		if (err)
+   918			goto err_devfreq;
+   919	
+   920		devfreq->nb_max.notifier_call = qos_max_notifier_call;
+   921		err = dev_pm_qos_add_notifier(dev, &devfreq->nb_max,
+   922					      DEV_PM_QOS_MAX_FREQUENCY);
+   923		if (err)
+   924			goto err_devfreq;
+   925	
+   926		mutex_lock(&devfreq_list_lock);
+   927	
+   928		governor = try_then_request_governor(governor_name);
+   929		if (IS_ERR(governor)) {
+   930			dev_err(dev, "%s: Unable to find governor for the device\n",
+   931				__func__);
+   932			err = PTR_ERR(governor);
+   933			goto err_init;
+   934		}
+   935		devfreq->governor = governor;
+   936	
+ > 937		ret = devfreq_set_governor_data(devfreq, governor_name, data)
+   938		if (ret < 0) {
+   939			dev_err(dev, "%s: Unable to set data for governor(%s)\n",
+   940				__func__, governor_name);
+   941			return ret;
+   942		}
+   943	
+   944		err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
+   945							NULL);
+   946		if (err) {
+   947			dev_err(dev, "%s: Unable to start governor for the device\n",
+   948				__func__);
+   949			goto err_init;
+   950		}
+   951		create_sysfs_files(devfreq, devfreq->governor);
+   952	
+   953		list_add(&devfreq->node, &devfreq_list);
+   954	
+   955		mutex_unlock(&devfreq_list_lock);
+   956	
+   957		if (devfreq->profile->is_cooling_device) {
+   958			devfreq->cdev = devfreq_cooling_em_register(devfreq, NULL);
+   959			if (IS_ERR(devfreq->cdev))
+   960				devfreq->cdev = NULL;
+   961		}
+   962	
+   963		return devfreq;
+   964	
+   965	err_init:
+   966		mutex_unlock(&devfreq_list_lock);
+   967	err_devfreq:
+   968		devfreq_remove_device(devfreq);
+   969		devfreq = NULL;
+   970	err_dev:
+   971		if (*devfreq->data != NULL)
+   972			kfree(devfreq->data);
+   973		kfree(devfreq);
+   974	err_out:
+   975		return ERR_PTR(err);
+   976	}
+   977	EXPORT_SYMBOL(devfreq_add_device);
+   978	
 
 -- 
 0-DAY CI Kernel Test Service
