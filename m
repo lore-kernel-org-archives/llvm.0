@@ -1,187 +1,332 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134D319E
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 06:32:58 +0000 (UTC)
-X-UUID: 037575d748144b85a8b83871af7e718a-20220415
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:3eab5806-633f-4f1d-9991-14a74b903715,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:27,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:27
-X-CID-INFO: VERSION:1.1.4,REQID:3eab5806-633f-4f1d-9991-14a74b903715,OB:0,LOB:
-	0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:27,FILE:0,RULE:Release_UHam,ACTI
-	ON:release,TS:27
-X-CID-META: VersionHash:faefae9,CLOUDID:6a1a3ba9-d103-4e36-82b9-b0e86991b3df,C
-	OID:IGNORED,Recheck:0,SF:13|15|28|100|16|18|48|101,TC:nil,Content:0,EDM:-3
-	,File:nil,QS:0,BEC:nil
-X-UUID: 037575d748144b85a8b83871af7e718a-20220415
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-	(envelope-from <jason-jh.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 297101346; Fri, 15 Apr 2022 14:27:46 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Apr 2022 14:27:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Apr
- 2022 14:27:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 14:27:44 +0800
-Message-ID: <48380a5b06ce48c4538e6c89bc6399ba1f425718.camel@mediatek.com>
-Subject: Re: [PATCH v18 07/10] drm/mediatek: add mediatek-drm of vdosys0
- support for mt8195
-From: Jason-JH Lin <jason-jh.lin@mediatek.com>
-To: kernel test robot <lkp@intel.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-CC: <devicetree@vger.kernel.org>, <moudy.ho@mediatek.com>,
-	<kbuild-all@lists.01.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	"David Airlie" <airlied@linux.ie>, <singo.chang@mediatek.com>,
-	<llvm@lists.linux.dev>, <roy-cw.yeh@mediatek.com>,
-	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Fabien Parent
-	<fparent@baylibre.com>, <nancy.lin@mediatek.com>,
-	<linux-mediatek@lists.infradead.org>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>, Rex-BC Chen
-	<rex-bc.chen@mediatek.com>, <linux-stm32@st-md-mailman.stormreply.com>,
-	<linux-arm-kernel@lists.infradead.org>
-Date: Fri, 15 Apr 2022 14:27:44 +0800
-In-Reply-To: <202204142333.qXgcGMI1-lkp@intel.com>
-References: <20220412103114.19922-8-jason-jh.lin@mediatek.com>
-	 <202204142333.qXgcGMI1-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2307317E6
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 06:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650004989; x=1681540989;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3wYDi8gOtSLszzx2cpMJSzuhWjZ002JXdJ813ftshcc=;
+  b=UEAPTyiWO1U4e7PVDYOsRpyBXlJV+W/BxVz3TDjCtOC/aauXsG0TVmrP
+   VetEfw2FFlmKMMQrU0maRzLMiObtRltVh+GAWpA1uJ/Edr9Uu6cIElxY9
+   JUAN/UnFY/Xk3AU1s8q3HwmX5cV7a5I6Ab21IKb5Gj+bUUmjw83UxbvK3
+   QGn+m561L9K3hs1ybZ2z/97OiFCR7Y6Fxa/VsUZMVKpdTjoHD0OSrr61u
+   +dr0E7YgfKPp69PKQF282ZcE7GofAJsLs8NRV5/+9LEJA2tfQAnjp/4kA
+   DY8qsSb7NA7A+j62XjRFOdRbtMODXPEw/G8x0BWCYaNsH74L4JYy5qhL2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262549002"
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="262549002"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 23:43:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="574210329"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 14 Apr 2022 23:43:05 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfFfd-0001fN-Ad;
+	Fri, 15 Apr 2022 06:43:05 +0000
+Date: Fri, 15 Apr 2022 14:42:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>, Wei Fu <wefu@redhat.com>,
+	Liu Shaohua <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
+	Philipp Tomsich <philipp.tomsich@vrull.eu>
+Subject: [esmil:visionfive-nc 9/28] <inline asm>:27:6: error: expected
+ assembly-time absolute expression
+Message-ID: <202204151455.LXfFw7ik-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi "kernel test robot",
+tree:   https://github.com/esmil/linux visionfive-nc
+head:   b0b9e814967f0f06d0baca439d5e0d7a71201cf1
+commit: 2c47ef8bb308963658bc94e8a2074bf4ec12c612 [9/28] riscv: add RISC-V Svpbmt extension support
+config: riscv-randconfig-c006-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151455.LXfFw7ik-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/2c47ef8bb308963658bc94e8a2074bf4ec12c612
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive-nc
+        git checkout 2c47ef8bb308963658bc94e8a2074bf4ec12c612
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Thanks for the reviews.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Thu, 2022-04-14 at 23:31 +0800, kernel test robot wrote:
-> Hi "jason-jh.lin",
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on drm/drm-next]
-> [also build test WARNING on robh/for-next krzk/for-next linus/master
-> v5.18-rc2 next-20220414]
-> [If your patch is applied to the wrong git tree, kindly drop us a
-> note.
-> And when submitting patch, we suggest to use '--base' as documented
-> in
-> 
-https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaGS9DHJM$
->  ]
-> 
-> url:    
-> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/jason-jh-lin/Add-Mediatek-Soc-DRM-vdosys0-support-for-mt8195/20220412-183359__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaP5NY9rw$
->  
-> base:   git://anongit.freedesktop.org/drm/drm drm-next
-> config: arm64-buildonly-randconfig-r001-20220413 (
-> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220414/202204142333.qXgcGMI1-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaMatHhNq$
->  )
-> compiler: clang version 15.0.0 (
-> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaED4pz5K$
-> $  6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-> reproduce (this is a W=1 build):
->         wget 
-> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaGF0WqUy$
->   -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # 
-> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/7c175317aa80bbc885609a730214448147a46b47__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaN_w7rr0$
->  
->         git remote add linux-review 
-> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!1fp3H7fjidBzBzfT64rjyCv4-HN-czQi_52IEZTo18hsph4srdLAEfrGamKBaMen_Lno$
->  
->         git fetch --no-tags linux-review jason-jh-lin/Add-Mediatek-
-> Soc-DRM-vdosys0-support-for-mt8195/20220412-183359
->         git checkout 7c175317aa80bbc885609a730214448147a46b47
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
-> W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/mediatek/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/gpu/drm/mediatek/mtk_drm_drv.c:707:15: warning: cast to
-> smaller integer type 'enum mtk_ddp_comp_type' from 'const void *' [-
-> Wvoid-pointer-to-enum-cast]
->                    comp_type = (enum mtk_ddp_comp_type)of_id->data;
->                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-I can't reproduce this build warning in my platform, but I'd found the 
-same warning fixed patch: 20210928154620.11181-4-cgzones@googlemail.com
+All errors (new ones prefixed by >>):
 
-It should not be fixed at this series. So I'll fixed this warning in
-another fixed patch.
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from drivers/uio/uio_sercos3.c:29:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:93:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_MTMASK);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:27:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from drivers/uio/uio_sercos3.c:29:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:93:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_MTMASK);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:28:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from drivers/uio/uio_sercos3.c:29:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:109:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_IO);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:27:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+--
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   12 errors generated.
+--
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+>> <inline asm>:27:6: error: expected assembly-time absolute expression
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   <inline asm>:28:6: error: expected assembly-time absolute expression
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from drivers/pci/pci.c:18:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:93:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_MTMASK);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:27:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
+           ^
+   In file included from drivers/pci/pci.c:18:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:93:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_MTMASK);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+            ^
+   <inline asm>:28:6: note: instantiated into assembly here
+   .org    . - (889b - 888b) + (887b - 886b)
+           ^
+   In file included from drivers/pci/pci.c:18:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:15:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:114:
+   arch/riscv/include/asm/pgtable-64.h:109:2: error: expected assembly-time absolute expression
+           ALT_SVPBMT(val, _PAGE_IO);
+           ^
+   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
+   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
+       ^
+   arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+           ^
+   arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+           ^
+   arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
+           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+            ^
+   <inline asm>:27:6: note: instantiated into assembly here
+   .org    . - (887b - 886b) + (889b - 888b)
 
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:203:42: warning: unused
-> > > variable 'mt2701_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt2701_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:218:42: warning: unused
-> > > variable 'mt7623_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt7623_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:234:42: warning: unused
-> > > variable 'mt2712_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt2712_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:246:42: warning: unused
-> > > variable 'mt8167_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt8167_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:260:42: warning: unused
-> > > variable 'mt8173_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt8173_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:274:42: warning: unused
-> > > variable 'mt8183_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt8183_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:288:42: warning: unused
-> > > variable 'mt8192_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt8192_mmsys_match_data =
-> {
->                                             ^
-> > > drivers/gpu/drm/mediatek/mtk_drm_drv.c:305:42: warning: unused
-> > > variable 'mt8195_mmsys_match_data' [-Wunused-const-variable]
-> 
->    static const struct mtk_mmsys_match_data mt8195_mmsys_match_data =
-> {
-
-Oh, I forgot to replace the driver_data to match_data in mtk_drm_of_ids
-table. I'll fix them at the next version.
-
-Regards,
-Jason-JH.Lin
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
