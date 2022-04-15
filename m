@@ -1,117 +1,40 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B487A
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 21:55:23 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id c25-20020a5d9399000000b00652e2b23358so1126470iol.6
-        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 14:55:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=O/xeVfd2f1I1IgGwEz7f3eVMwFcu7BEtTzoITl6hbMY=;
-        b=ES1JEVbbu51pfWKv8xtLBxDN2wem1lEQIVX+iURFvlXK1z2jGylS4jaJJmuu0BVn5n
-         MhN23AAdIyc+lQxWhnM6aOQMhBNd52szByJs+xc6+HLD45u1br2A67hFCpSaNokSJKBw
-         Gwca1TVTxRP55n6s3lFym5pdCNmppXUJMZfWzMfmVp6dch7iFwQrWBmFuix6HrKOVC9C
-         /AOxzmZm2dz0gBc4jzXjDJvZGWDJs7vTn6eq6yN06YRtZDm1n54Al7Wkh59XTPMg3H8O
-         FojgJC2TZP666pbtXri5GV59r4IP4djcvNMB6a8TS+NAnH1uT8p+abslNKQ7wyK1y6gT
-         Dbrw==
-X-Gm-Message-State: AOAM530hhF4vw0jbkQ+XYd+OZjuHQRMLPNREsjkByOYi92sOq9mtbILD
-	K/UQ61kAkFB8JzTinFoqA0TFTGD72pXTgVOlwlV2Gw1QNe0m
-X-Google-Smtp-Source: ABdhPJw4Gl0ghdwhE3obk3Z+DVgDyRqoCs+sALjlpXy1jA5TwjhXCn4TNMa9OgAxEmPkW926JVtTZQ9OsFTdfWjCCPcsVRbQI1H+
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C857A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 21:58:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=c1FZCxRnGrJRubQTHg0gxw7lJJkUpVb13+tAV+wVPp4=; b=F4bXuotjQ+ssHvTmcX+QOYUpg0
+	cyl53WDqm5KTR6JDiqEIysmuDYH/KRRqoIp8EGMXxmPcHpDbHNvu+IRsmG53sGvLDIM4GistcD8+6
+	aqfa895ezHtgwMzfI8ODX7WIXiSntzmzef4tMIZL5FneyaWt714rUo4psi0y8Qz+WJFxXDDcvfhNM
+	sI15VUVnkSB1UZJ9GJ2oHF3hf2fKW5ZKPyMRTrTGsuBY4TWM4Jn5Wvki1zTOkc8o+uIiz8PA+H1g8
+	2iYs1BFEdyy2r+dRAivrHpVGp7TcNGCKCKO/CkgkBh3SBgE2T1uctDUPF+E3RqPcR71M/VuoSDHxv
+	3MIDepXA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nfTxQ-00BRsE-Kj; Fri, 15 Apr 2022 21:58:24 +0000
+Date: Fri, 15 Apr 2022 14:58:24 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Wei Xiao <xiaowei66@huawei.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mcgrof:sysctl-testing 18/18] kernel/trace/ftrace.c:3068:13:
+ warning: unused function 'ftrace_startup_sysctl'
+Message-ID: <YlnqgBmtLhrgTlR/@bombadil.infradead.org>
+References: <202204160113.5Pvywod8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a92:cb4f:0:b0:2cb:fde0:b5c2 with SMTP id
- f15-20020a92cb4f000000b002cbfde0b5c2mr291007ilq.274.1650059722464; Fri, 15
- Apr 2022 14:55:22 -0700 (PDT)
-Date: Fri, 15 Apr 2022 14:55:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009da4c705dcb87735@google.com>
-Subject: [syzbot] WARNING in check_map_prog_compatibility
-From: syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, netdev@vger.kernel.org, songliubraving@fb.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204160113.5Pvywod8-lkp@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Hello,
+I just posted a fix fo this.
 
-syzbot found the following issue on:
-
-HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c55ab7700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9ac56d6828346c4e
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14960370f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1412ff0f700000
-
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12ef7940f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11ef7940f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16ef7940f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-trace type BPF program uses run-time allocation
-WARNING: CPU: 0 PID: 3596 at kernel/bpf/verifier.c:11998 check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
-Modules linked in:
-CPU: 0 PID: 3596 Comm: syz-executor252 Not tainted 5.18.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
-Code: c7 fc ff ff e8 86 4f ee ff 31 db e9 bb fc ff ff e8 7a 4f ee ff c6 05 b2 40 35 0c 01 48 c7 c7 a0 3b 74 8a 31 c0 e8 85 e4 b7 ff <0f> 0b e9 23 fb ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c c0 f8 ff
-RSP: 0018:ffffc90003aaf1e8 EFLAGS: 00010246
-RAX: c7d869b5def1f000 RBX: 0000000000000001 RCX: ffff88801d293a00
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffff88801f6ea030 R08: ffffffff816acc92 R09: ffffed1017384f24
-R10: ffffed1017384f24 R11: 1ffff11017384f23 R12: ffff88801f6ea000
-R13: dffffc0000000000 R14: ffff88807c438000 R15: 0000000000000011
-FS:  00005555566d0300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056023649dd90 CR3: 0000000024387000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- resolve_pseudo_ldimm64+0x67f/0x1270 kernel/bpf/verifier.c:12171
- bpf_check+0x2606/0x13ab0 kernel/bpf/verifier.c:14462
- bpf_prog_load+0x1288/0x1b80 kernel/bpf/syscall.c:2351
- __sys_bpf+0x373/0x660 kernel/bpf/syscall.c:4663
- __do_sys_bpf kernel/bpf/syscall.c:4767 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4765 [inline]
- __x64_sys_bpf+0x78/0x90 kernel/bpf/syscall.c:4765
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f86914c6239
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd0a865f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f86914c6239
-RDX: 0000000000000080 RSI: 00000000200004c0 RDI: 0000000000000005
-RBP: 00007f869148a220 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000072 R11: 0000000000000246 R12: 00007f869148a2b0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+  Luis
