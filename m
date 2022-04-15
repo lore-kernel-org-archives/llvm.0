@@ -1,94 +1,77 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DD27B
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 17:34:00 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id md4so8089109pjb.4
-        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Cj4lHoJbdVe7/yfpNvTK/X4gKN0yimHzFNu70ixPoFc=;
-        b=bQ9Uoq6f8ua+HQMVChR2hvHq9zh8N2X02Qsfy6gnUjzbOW0BA5UUuqextBMPbux0x6
-         LOllMaVWds3+HMLb7Njk5gRa3V59cOgxRtCYiPPwq9aU5piIU38CeW9cTiMt81t+h2+Q
-         s1tGV4SSdieISroNVa6qnTONweMP4/miOMFfA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Cj4lHoJbdVe7/yfpNvTK/X4gKN0yimHzFNu70ixPoFc=;
-        b=dDR/Bom22WxIngteHArcv/HBlXev8F9q3su8/uebBQDtIJdFid6J9fj8KDE43t0kC1
-         pjp+Ht7ib/OP7EhkO2t89r5PZA+1fiim3cgGSeJxh1RCtnYYmLmyR/N4G7vXEzAa4ltw
-         KhSNw5Q+HuIugezz7FbyG4PB+NhGNcZKM/TUOsQwBojCj035yBU1+rGovwGFLTZkHgms
-         aUodl7vArImCS925HXDIGPvgwSrVunV/j1+TIkODGYPYesfXY9kQ9eus/xEtreknQFnw
-         DDLxv2mQdWJmnhc7y3L64agnT1cA++Q04CmxI5UtiUfFgVJM3x15nswLs8hazBbi0usi
-         jdqQ==
-X-Gm-Message-State: AOAM531sodeIUK9FoZnWNTtT86yYespaLJuMSUiItxdWZxEoTiZ3JWkK
-	NnXvIFX6XtNx+95XiERsg12nWQ==
-X-Google-Smtp-Source: ABdhPJwGOIhdA72t4m1dL+juRKEBgpxoxbvjv/BaxNXuLioe9WQxNbkB2mNutNprB9Fue+CuZ/dZsQ==
-X-Received: by 2002:a17:903:2052:b0:158:c6aa:b96 with SMTP id q18-20020a170903205200b00158c6aa0b96mr206943pla.140.1650044039760;
-        Fri, 15 Apr 2022 10:33:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f771b48736sm3571711pfj.194.2022.04.15.10.33.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 10:33:59 -0700 (PDT)
-Date: Fri, 15 Apr 2022 10:33:58 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Qing Zhao <qing.zhao@oracle.com>, Bill Wendling <morbo@google.com>,
-	"Moreira, Joao" <joao.moreira@intel.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"Jose E. Marchesi" <jemarch@gnu.org>
-Subject: Re: toolchain mitigations plumbers session
-Message-ID: <202204151024.DFDBF9DD6@keescook>
-References: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
- <3DE35A81-1FC6-4EC7-8F3A-B395B576644D@oracle.com>
- <CAKwvOd=CqOfd=zprWQPYoddgnGPJMb_sdk2Eut9DZNJq_fFJ-w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58E87B
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 17:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650044127; x=1681580127;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=hYOvfoVpCGfvX7cZJ9MmAWIRsId58LZtNvFTiX6H/lI=;
+  b=de9O0pZZfpFEa8T84m0EU+gNWhR0QWob2jvwG0SizmlN+nPJZeXuDKwt
+   GkfQwgx9zsbjCIArtwt1a/KVEmSxkDo8z6HvM+KEoeNhQ3blzS01khztY
+   0WP7LPWBXHYbxkNk+8bCyRyTnmIL5jK98oNB7+qTYYDxQId5Co+0aJGvp
+   /OFaZKYr2aF4Q2bTyNUDjrXx/4YBFcJZQL//iQsB0ZqK7mzP9iKiMdOkQ
+   9PKG7gqdyI+bhbdt4Zcs6pflVqpDSmwkB+4yOoKYENJcqKAIPs7/ycj0Q
+   EMTzQpPYSdN2ie02vXE+YNBsKnM92E6RZr+P8/l5wWPdEuvfxDfvwjhX3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243781104"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="243781104"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 10:35:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="553241560"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 15 Apr 2022 10:35:26 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfPqv-0002EL-D1;
+	Fri, 15 Apr 2022 17:35:25 +0000
+Date: Sat, 16 Apr 2022 01:35:15 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [jpoimboe:objtool-run 19/35] fs/reiserfs/do_balan.o: warning:
+ objtool: balance_leaf+0x7406: stack state mismatch: cfa1=4+344 cfa2=4+336
+Message-ID: <202204160126.GotNznAW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=CqOfd=zprWQPYoddgnGPJMb_sdk2Eut9DZNJq_fFJ-w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 15, 2022 at 10:17:46AM -0700, Nick Desaulniers wrote:
-> On Fri, Apr 15, 2022 at 7:50 AM Qing Zhao <qing.zhao@oracle.com> wrote:
-> >
-> > Hi, Nick,
-> >
-> > > On Apr 14, 2022, at 4:30 PM, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > Hi Qing, Kees, and Bill,
-> > > Jose and I are currently in the planning process to put together a
-> > > Kernel+Toolchain microconference track at Linux Plumbers Conference
-> > > this year (Sept 12-14) in Dublin, Ireland.
-> > >
-> > > Would you all be interested in leading another session on
-> > > kernel+toolchain collaboration for mitigations? Do you plan to attend
-> > > plumbers this year which will be in person?
-> >
-> > I’d love to attend  plumbers this year to meet people in person!
-> > But not sure whether there will be enough new, big stuff to report this year since mostly bunch of bug fixes and minor
-> > Improvements to the previous work.
-> 
-> No worries; it doesn't need to be a presentation, or just one person
-> presenting.  I think a quick review of newly developed features from
-> various authors, then a discussion with consumers (kernel developers)
-> would be beneficial.
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Josh Poimboeuf <jpoimboe@redhat.com>
 
-Yeah, this kind of overview is what I've been doing the last few years
-(with Qing last year):
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
+head:   b8646d8664875281b48db7752d3dc7880b7561e1
+commit: f2bec70312f62ef4f1ea21c134d9def627182ad3 [19/35] objtool: Don't print parentheses in function addresses
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220416/202204160126.GotNznAW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=f2bec70312f62ef4f1ea21c134d9def627182ad3
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool-run
+        git checkout f2bec70312f62ef4f1ea21c134d9def627182ad3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-https://outflux.net/slides/2021/lpc/compiler-security-features.pdf
-https://outflux.net/slides/2020/lpc/gcc-and-clang-security-feature-parity.pdf
-https://outflux.net/slides/2019/lpc/gcc-and-clang.pdf
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/reiserfs/do_balan.o: warning: objtool: balance_leaf+0x7406: stack state mismatch: cfa1=4+344 cfa2=4+336
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
