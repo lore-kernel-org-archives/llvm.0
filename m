@@ -1,36 +1,36 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1687B
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 17:48:26 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id o16so10215198ljp.3
-        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:48:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B34E7B
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 17:54:29 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id o2so14992301lfu.13
+        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 10:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=pxlOZRBuJWC6Ej+jZ14mKMuVx9qkJWEg3X0ZwZTkhPc=;
-        b=AGjh7x15wO41Vm7WZk3zze/8MHMZTgYGS5S5m/PUK7NM0u25WdnmOMU5S7AYGh+Yhu
-         qDAG4TaukWed4uzSQH6i5BnUIT5PQHU/O/6gsCCN77seEqq/adMEjId2KSQq2ozkwymU
-         bY5pqHKLvU4229uoaKMBL0Cg3oAEGl/tazNw2kNNB4d/V54Vr0FLf7533qnm/JP7jHVX
-         tghwr3seWFTq32gAp/B7rx9QmN+5xMLaezd0VHafXZpHs//2CSIYl7S1/POTMDNz8j+M
-         A6kxHYpmSV8JsNmpZ3CJDOVaoEKdIRmv2RWV2Uudy6pCbBmemj+X/5ZAZx5fyR3FaAvs
-         hejw==
+        bh=8j6DQTUcAh42nRu9idTCLduRhccqwL4NXaCCnAwTthM=;
+        b=oWPmvl9fxuCMQG9XsarKTzhaPQfBl2x8QDf38KEL0Khe362XcbTxH081PHmImLaGI4
+         btjHzeqNsrERfoHY/Sup7Uo7pjj/VZpyEtDh8frqUyL+gkA5ny+kij8BMUD37DGzxzaq
+         8QX3QLhCzDYG4UIRCE9OLzCtVN3uY1QUcaYlNbn2Y5MQULTMluhDPrsS3TScul5aQi2K
+         xPyBCGDcAxf7fVqCLwHU43kAZSiiJgHyW3piL+revWNbM1kmdqthvdIjCfBIiS4d5eks
+         PE2MksLBdRy8TAzh7FjucgX53K0uI+qbNU5yL37U1piKMkJQDPC1yhEhlGpulxf2cUDe
+         InTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=pxlOZRBuJWC6Ej+jZ14mKMuVx9qkJWEg3X0ZwZTkhPc=;
-        b=oZkL65B/q3VXoUgQX7YZKtSlNjMfsJc0w5efqrzV8xRY2rhSsPuXFlHJIju4RD+g4b
-         x+tCw4lzyGN6u1AWQItfI1S6xktYCLi0KDORz8VVR4tqCSsPzGt0FIvmPsxcd3n1HJNV
-         kC+4Fi2W00QHY0ZPcLyqNZ/JedT7nZ792PsMpUtNV2I2MIwqQ9ahHlC+HSCeNGiusvfc
-         /u41CRj67WzJAWtDnpMYlgVl6xK5kD4dvnXxaXbxcDioteg2/C+jG4yYpn0a9hNmZbXe
-         q9Q52xJoJU3TqkvEKwskPSS9yGCyUCuDi9cHkKM86AirveldQgUwghB333og7cYh5BYG
-         p0ww==
-X-Gm-Message-State: AOAM5331v9+Mox6kdUggqP+TX6IwNCiotoEClYgOzmg2UioL3weRVylw
-	k2frksuW6gfmWieRnrd+t2G2wvE6s78CF0YZmxD2Dg==
-X-Google-Smtp-Source: ABdhPJw/s+OvUlN+j11st5pHaviz8KqPPDcqLqJIqRUZcwXRtBQNT3E9aXGVOY5+ri72dswWY94BRsMwknx3r3fvgS4=
-X-Received: by 2002:a2e:8650:0:b0:24b:5309:352f with SMTP id
- i16-20020a2e8650000000b0024b5309352fmr137955ljj.472.1650044904482; Fri, 15
- Apr 2022 10:48:24 -0700 (PDT)
+        bh=8j6DQTUcAh42nRu9idTCLduRhccqwL4NXaCCnAwTthM=;
+        b=nlN2Tx0XoRW7X5Pk8s7Tgsh/KuuBay6eQiAzQWDjN4ATVUgZbF+X+SIuG5B9337xNH
+         NxcA4MT6+KM1aF6pqUMFTO1rO76RR1o5Jl31u3ox7Qry8B2u9uHnbCv6sYEWTL+9rbwE
+         ZUh1Ee/D07gI++hbqkcdkK85tkKWTKaZ22f4xI+gPemaLpuLz+EhL5wkG3nm2us6PDfa
+         wPMRz1KAuvE6liUvBD+MlicedMO39SD9LsfYjvd1yjxXXrDxZ4Hr8FGXXEcrCbH5AABc
+         i5nGL62javQYr+8JBR0cWVeziQqE7ubFLq3f8ljzpO4/HAI/Gm/iDJSFU4rvvSCnZ8Jz
+         E6jQ==
+X-Gm-Message-State: AOAM532WWp6S2KuboyMfa0Gc9A/DP+rwfvSnvVVgAo1UnCxQ9pO7ODX6
+	kHuEBYOfVYoblqeJTl2+jmjbMPyUAMR8AIePDYld4nFTx1RYEA==
+X-Google-Smtp-Source: ABdhPJyt3eudvFkY6pMoGXVCyEl0Gf3r1kJue9lHNus9xlzo/im5d5X5WrcDcT/khUq9Df5+fAFg+wYBBlomBOrPkqc=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr104526lfv.626.1650045267276; Fri, 15
+ Apr 2022 10:54:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,27 +38,28 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 15 Apr 2022 10:48:13 -0700
-Message-ID: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
-Subject: plumbers session on syscall wrapping and kernel header libc circular depdence?
-To: Florian Weimer <fweimer@redhat.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, linux-toolchains@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>
+Date: Fri, 15 Apr 2022 10:54:15 -0700
+Message-ID: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+Subject: plumbers session on profiling?
+To: Sami Tolvanen <samitolvanen@google.com>, Bill Wendling <morbo@google.com>, 
+	"Jose E. Marchesi" <jemarch@gnu.org>, vladimir.mesentzev@oracle.com
+Cc: clang-built-linux <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>, 
+	Yonghong Song <yhs@fb.com>, Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>, 
+	Ingo Molnar <mingo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Florian, Arnd, and Masahiro,
+Hi Sami, Bill, Jose, and Vladamir,
 Jose and I are currently in the planning process to put together a
 Kernel+Toolchain microconference track at Linux Plumbers Conference
 this year (Sept 12-14) in Dublin, Ireland.
 
-Would you all be interested in a session (if you're planning on
-attending) discussing syscall wrapping for libc's and UAPI circular
-dependency on the libc?
+Would you all be interested in leading a session discussing various
+profiling related topics such as:
+* gprofng
+* PGO
+* AutoFDO
 
-Masahiro and I were recently discussing the feasibility of building
-the kernel UAPI header tests with -nostdinc, but there are some
-interesting complications perhaps worth sharing with others?
+Would others find such a discussion useful?
 -- 
 Thanks,
 ~Nick Desaulniers
