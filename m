@@ -1,125 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EB57B
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 18:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1650047022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kFsiuj5rFIIU65pz1ntOCgYscQgFC6WoW8AEcQc8/tY=;
-	b=G3gVYeebNLztEoOSjgWTknkXcFvrckA7dBYR+5NKwRba8zjCRItDoWtsIJde2m7xgbYmjR
-	ztWDFWh96hFQBD84o2e0CiLdJRwN2hedeoKI935xH1h1hZC3pCKBXcVwwtWCggIBSz1uDh
-	ZOoU2ZjJGbqIRnqv44WbzPP9WD+m0oI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-519-bcn7UikcONqE4-xpao6eUg-1; Fri, 15 Apr 2022 14:23:41 -0400
-X-MC-Unique: bcn7UikcONqE4-xpao6eUg-1
-Received: by mail-qv1-f70.google.com with SMTP id a13-20020a0562140c2d00b00443dc12c9ebso7432483qvd.1
-        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 11:23:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kFsiuj5rFIIU65pz1ntOCgYscQgFC6WoW8AEcQc8/tY=;
-        b=E8eKeiJL0+dTt63uoP2nMtdUKP6nVcmqOXxf/+g0IL801nufDyBqgLT9QC2dzL7oMm
-         8zvnGrmoZOBMm7yFuxQaKip7fhD5ykrEemrTsyYztU5Ae5RFPU5M1tv29t3bh7fmn5mw
-         2GCjWHZlYftp6s43romQfsuu+LNrPxc1QNOzmTGvsUpdIaToBo1BxX5jbJG55JCQQVLX
-         YnUpBZ8QCRK2WQUZupIT03rfVH0EPWaKltYlXpQp1A6DUK3tKhMKFAtSIC/4Q6OT7cwf
-         7gwzYxt8Q4g1MAS6ySpRZXS6BHVMMGxnN8/AT9xlkIM8mdH2RI1zCxKvX9qjKyEDOv9u
-         Ix5Q==
-X-Gm-Message-State: AOAM531ayC7iGFXXwAGQ0ml5igGK4MRfvh4vpaTEJa0SgGrfD///YYSf
-	uPEkRjcZzPAUf0H0+E1IfDKrp0MnLXAhrYDI2yU+6pOYb8Ha1W2v9gzXL8h41ilupjCMC9PPX5V
-	vajfnP1f+SKsHSA==
-X-Received: by 2002:a37:67d8:0:b0:69b:eae2:50e7 with SMTP id b207-20020a3767d8000000b0069beae250e7mr137971qkc.739.1650047021260;
-        Fri, 15 Apr 2022 11:23:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHTjKhYgPS32F5b55x/cqBLiVDD9MmJIba/xgfgG46VdzmqMhshD5nlI0BgEA/ZK72EWB/Dg==
-X-Received: by 2002:a37:67d8:0:b0:69b:eae2:50e7 with SMTP id b207-20020a3767d8000000b0069beae250e7mr137963qkc.739.1650047021016;
-        Fri, 15 Apr 2022 11:23:41 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id b206-20020a3767d7000000b0069be71815b8sm2845193qkc.42.2022.04.15.11.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 11:23:40 -0700 (PDT)
-Date: Fri, 15 Apr 2022 11:23:37 -0700
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	hjl.tools@gmail.com, mbenes@suse.cz, rostedt@goodmis.org,
-	linux-toolchains@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: The trouble with __weak and objtool got worse
-Message-ID: <20220415182337.v4dcxyfokimfsnj4@treble>
-References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
- <20220415152633.GA2731@worktop.programming.kicks-ass.net>
- <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
- <20220415182130.iltk2uxnubeaa4nk@treble>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB8E7B
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 18:26:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650047189; x=1681583189;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=P6b+GTgmvRPBYx7h8RNJV1ZoHv4xAXQXJXPgIyI9a50=;
+  b=GNWUnerquwVlLezKxPn8/TJZ0KIoGwXbyWBVdqsuota/x3ma/4Ad/DuI
+   W8Z2FZMc10TJU4cNBivuGJxJ+xXTaZx41yZcSvsNSuYByCTtS9p12pdOS
+   BTLZ+2J9Q2jMtcW+P6GckBt2gJMzxl+Usm8n1MwufiN2Vhxgnz4dRkNRz
+   kY/6gOXU09OOww1LE0xpXaxUS1jgj+lRFhK8070nIkxMaJM+DRgAgOHVs
+   gx2Cdu0rplhs3Hr/LEsSLA0xl+jPs4WtbYMr9v0VgW59gDwqODuyqplie
+   fn2B+Ab8UBfwGzyN1/4Sfa1/JPTLxSFdQ2tRC7gSbhlMSy20+oEVW9iq1
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="245092437"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="245092437"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 11:26:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="662259943"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 11:26:27 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfQeI-0002GW-UF;
+	Fri, 15 Apr 2022 18:26:26 +0000
+Date: Sat, 16 Apr 2022 02:26:05 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:queue/5.10 9981/9999] fs/ocfs2/cluster/heartbeat.o:
+ warning: objtool: o2hb_setup_one_bio() falls through to next function
+ o2hb_bio_end_io()
+Message-ID: <202204160247.UyxzNdFW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220415182130.iltk2uxnubeaa4nk@treble>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 15, 2022 at 11:21:34AM -0700, Josh Poimboeuf wrote:
-> On Fri, Apr 15, 2022 at 10:40:22AM -0700, Nick Desaulniers wrote:
-> > On Fri, Apr 15, 2022 at 8:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Fri, Apr 15, 2022 at 01:19:04PM +0200, Peter Zijlstra wrote:
-> > > > Alternatively:
-> > > >
-> > > >   https://sourceware.org/pipermail/binutils/2020-December/114671.html
-> > > >
-> > > > seems to suggest: -Wa,--generate-unused-section-symbols=yes, ought to
-> > > > work, except I'm getting:
-> > > >
-> > > > $ gcc -O2 -fcf-protection=none -fno-asynchronous-unwind-tables -Wa,--generate-unused-section-symbols=yes -c foo*.c
-> > > > as: unrecognized option '--generate-unused-section-symbols=yes'
-> > > > as: unrecognized option '--generate-unused-section-symbols=yes'
-> > >
-> > > Reading so hard...
-> > >
-> > >  $ gcc -O2 -fcf-protection=none -fno-asynchronous-unwind-tables -Wa,-generate-unused-section-symbols=yes -c foo*.c
-> > >
-> > > seems to actually work.
-> > 
-> > $ clang hello.c -Wa,-generate-unused-section-symbols=yes
-> > clang-15: error: unsupported argument
-> > '-generate-unused-section-symbols=yes' to option '-Wa,'
-> > 
-> > :)
-> > 
-> > I recall LLVM not emitting STT_SECTION symbols being problematic for
-> > objtool in the past.
-> > Old pre-lore archive:
-> > https://groups.google.com/g/clang-built-linux/c/1C6YoJKBsQQ/m/a8IS1NjGAgAJ
-> > via https://github.com/ClangBuiltLinux/linux/issues/1209.
-> > (It doesn't look too bad for me to implement)
-> 
-> Right, and that objtool "fix" -- silently falling back to
-> non-section-symbol relocations instead of erroring out -- is causing
-> this issue, when it's done for weak symbols.
-> 
-> If LLVM assembler doesn't support this option then we may have to go
-> with something like this?  I can't seem to recreate so I'm not able to
-> test.
-> 
-> We'd also need some objtool checks to make sure the non-section-symbol
-> fallback isn't being done for a weak symbol.  Or just remove the
-> fallback altogether and force section symbols whereever they're needed,
-> similar to the below (untested).
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Kees Cook <keescook@chromium.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Marco Elver <elver@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
+CC: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-(If the patch works, we could hopefully come up with something better,
-using asm goto, that doesn't involve actual instructions)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   fd52dd72478ce6c2ec00847b959b153328b5faaa
+commit: 58823a9b097cf36dd59c4d463396e15a5ec4efb7 [9981/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220416/202204160247.UyxzNdFW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=58823a9b097cf36dd59c4d463396e15a5ec4efb7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout 58823a9b097cf36dd59c4d463396e15a5ec4efb7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ocfs2/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ocfs2/cluster/heartbeat.o: warning: objtool: o2hb_setup_one_bio() falls through to next function o2hb_bio_end_io()
 
 -- 
-Josh
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
