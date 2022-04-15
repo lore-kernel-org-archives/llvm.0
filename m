@@ -1,35 +1,35 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210157A
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 05:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F9C7A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 05:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650001876; x=1681537876;
+  t=1650001945; x=1681537945;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=33vxnHab5WzokZ+vZHp5UAIHJKFj53j56xmXMENnAAk=;
-  b=b1mlu5w+Vkq7FHm8Rbz0Om0rmWamE8Rb7BDr6Xpiq37hbFo/SUzzuI9G
-   iSmVh3oJDiQEfJhtbATBSKEGXy8AzSAwIjYNJo66FD7MIXzcUnJrW0YUO
-   2oPhiPyLB2FLoL24KCUQ4cGysDIDVb+Kt9H9zBdswBoHIgS/cUpyMd5Po
-   t37QF72swaRjf3Q+bmEDmCUKBUBrrRpmxURVt/nVPGppK+EAWMKZAyOVe
-   6y1BkoKl41Bu3/Q3o+xDyAts0hm3GdqyjIwyGp7u5X6LdMvQdjEHT+i1r
-   IfE5+IRczllTkX0SEzcb2Z8gR5d07UhLaSvdTT9fHd0TfyoGpaCy2Bv+U
+  bh=jf8KqANgd4gggg0XPljowAJmG/3j+mtyAqvVnanxg30=;
+  b=T2WxvF6i6MV1Wr4VJiPSdtPgQTNVUK2nGbWPmZv1abIvtkIzJ0rGbMgm
+   2M3nfxN6CBjMWbSQbOR/0Kc/RWzA6Ix1x89X6dI3KpWqzdf9uLyPo2bD5
+   gI9PPAgCJ1vydpWK3pJk+UI+hOVy039Hl4EqLys89CYXfKOCDyF9LWnOj
+   YqPxULYiAy1bIZyampODBuCxGM6vT9H3sEG/vNcFFb0v+wJLcIOfTE6B0
+   Nfln8IH/ZWjG/ij39Mc0SfS1iOcuSwrmHAgQ7wR0SsVVhVK6+ZCJgrYg0
+   DKUhtTu/a41ywYWPx/x0qCMLJpPTlFJtqEE3SiQJHfcZuw41Es3jJmVYn
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349534472"
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243031106"
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="349534472"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 22:51:15 -0700
+   d="scan'208";a="243031106"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 22:52:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="527180012"
+   d="scan'208";a="527703659"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 22:51:12 -0700
+  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2022 22:52:22 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nfErP-0001bm-Il;
-	Fri, 15 Apr 2022 05:51:11 +0000
-Date: Fri, 15 Apr 2022 13:51:08 +0800
+	id 1nfEsX-0001c8-AI;
+	Fri, 15 Apr 2022 05:52:21 +0000
+Date: Fri, 15 Apr 2022 13:51:12 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dan Williams <dan.j.williams@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
@@ -42,7 +42,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	"Rafael J. Wysocki" <rjw@rjwysocki.net>
 Subject: [cxl:pending 20/22] drivers/cxl/core/suspend.c:8:6: warning: no
  previous prototype for function 'cxl_mem_active'
-Message-ID: <202204151330.tjVHw5dN-lkp@intel.com>
+Message-ID: <202204151342.h9mvfwgG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,7 +56,7 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
 head:   4f497e0dd3530981f8c897d5d47ee880b62baefb
 commit: fcf0b70f7e80f49f323cc21b8a497a24151d9c28 [20/22] PM: CXL: Disable suspend
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220415/202204151330.tjVHw5dN-lkp@intel.com/config)
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220415/202204151342.h9mvfwgG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -67,7 +67,7 @@ reproduce (this is a W=1 build):
         git checkout fcf0b70f7e80f49f323cc21b8a497a24151d9c28
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cxl/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
