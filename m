@@ -1,26 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8B77A
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 04:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63D2C385A6;
-	Fri, 15 Apr 2022 04:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1649998632;
-	bh=sdf3KNK2bCPLRKBu/jbG05O+vAvWO2dlRW++18iqkWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yvgRgIJ/EZ6dXfJiAClGq2iKMGVu4cGaeM/SFONhtbI5bvkcjb/7i7oKBSmmQa9cv
-	 +NjKml8zX249PhAmTJ5Jnc87fv5ivODJ4zVVpPFR9DNgmRnTYOzlEuiyrvCVCbrOu7
-	 YHfKOZXN69H6QJQ9ETNNlzsaLOO12ASlRFtY7OHk=
-Date: Fri, 15 Apr 2022 06:57:09 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	linux-btrfs@vger.kernel.org
-Subject: Re: btrfs warning fixes for 5.15 and 5.17
-Message-ID: <Ylj7JclrqzHx2gpQ@kroah.com>
-References: <YliEOSL8z3/s7DGG@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210157A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 05:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650001876; x=1681537876;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=33vxnHab5WzokZ+vZHp5UAIHJKFj53j56xmXMENnAAk=;
+  b=b1mlu5w+Vkq7FHm8Rbz0Om0rmWamE8Rb7BDr6Xpiq37hbFo/SUzzuI9G
+   iSmVh3oJDiQEfJhtbATBSKEGXy8AzSAwIjYNJo66FD7MIXzcUnJrW0YUO
+   2oPhiPyLB2FLoL24KCUQ4cGysDIDVb+Kt9H9zBdswBoHIgS/cUpyMd5Po
+   t37QF72swaRjf3Q+bmEDmCUKBUBrrRpmxURVt/nVPGppK+EAWMKZAyOVe
+   6y1BkoKl41Bu3/Q3o+xDyAts0hm3GdqyjIwyGp7u5X6LdMvQdjEHT+i1r
+   IfE5+IRczllTkX0SEzcb2Z8gR5d07UhLaSvdTT9fHd0TfyoGpaCy2Bv+U
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349534472"
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="349534472"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 22:51:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="527180012"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 22:51:12 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfErP-0001bm-Il;
+	Fri, 15 Apr 2022 05:51:11 +0000
+Date: Fri, 15 Apr 2022 13:51:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [cxl:pending 20/22] drivers/cxl/core/suspend.c:8:6: warning: no
+ previous prototype for function 'cxl_mem_active'
+Message-ID: <202204151330.tjVHw5dN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,32 +51,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YliEOSL8z3/s7DGG@dev-arch.thelio-3990X>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Apr 14, 2022 at 01:29:45PM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
-> 
-> Please apply
-> 
-> ad3fc7946b18 ("btrfs: remove no longer used counter when reading data page")
-> 6d4a6b515c39 ("btrfs: remove unused variable in btrfs_{start,write}_dirty_block_groups()")
-> 
-> to 5.15 and 5.17 and
-> 
-> cd9255be6980 ("btrfs: remove unused parameter nr_pages in add_ra_bio_pages()")
-> 
-> to 5.15 (it landed in 5.16), as they all resolve build errors with
-> CONFIG_WERROR=y and tip of tree clang, which recently added support for
-> unary operations in -Wunused-but-set-variable. They all apply cleanly
-> and I do not see any additional build warnings and errors.
-> 
-> Commit 6d4a6b515c39 was specifically tagged for stable back to 5.4,
-> which should be fine, but it really only needs to go back to 5.12+, as
-> btrfs turned on W=1 (which includes this warning) for itself in commit
-> e9aa7c285d20 ("btrfs: enable W=1 checks for btrfs"), which landed in
-> 5.12-rc1. Prior that that change, none of these warnings will be
-> visible under a normal build.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
+head:   4f497e0dd3530981f8c897d5d47ee880b62baefb
+commit: fcf0b70f7e80f49f323cc21b8a497a24151d9c28 [20/22] PM: CXL: Disable suspend
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220415/202204151330.tjVHw5dN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=fcf0b70f7e80f49f323cc21b8a497a24151d9c28
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl pending
+        git checkout fcf0b70f7e80f49f323cc21b8a497a24151d9c28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
-Now queued up, thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-greg k-h
+All warnings (new ones prefixed by >>):
+
+>> drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for function 'cxl_mem_active' [-Wmissing-prototypes]
+   bool cxl_mem_active(void)
+        ^
+   drivers/cxl/core/suspend.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool cxl_mem_active(void)
+   ^
+   static 
+>> drivers/cxl/core/suspend.c:13:6: warning: no previous prototype for function 'cxl_mem_active_inc' [-Wmissing-prototypes]
+   void cxl_mem_active_inc(void)
+        ^
+   drivers/cxl/core/suspend.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cxl_mem_active_inc(void)
+   ^
+   static 
+>> drivers/cxl/core/suspend.c:19:6: warning: no previous prototype for function 'cxl_mem_active_dec' [-Wmissing-prototypes]
+   void cxl_mem_active_dec(void)
+        ^
+   drivers/cxl/core/suspend.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cxl_mem_active_dec(void)
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/cxl_mem_active +8 drivers/cxl/core/suspend.c
+
+     7	
+   > 8	bool cxl_mem_active(void)
+     9	{
+    10		return atomic_read(&mem_active) != 0;
+    11	}
+    12	
+  > 13	void cxl_mem_active_inc(void)
+    14	{
+    15		atomic_inc(&mem_active);
+    16	}
+    17	EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, CXL);
+    18	
+  > 19	void cxl_mem_active_dec(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
