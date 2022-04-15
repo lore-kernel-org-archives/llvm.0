@@ -1,124 +1,117 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907FB7A
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 21:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650058898; x=1681594898;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EiE7+WLdmrls3N6fRhJV8VbuBkpIj55ZCw32IOgRz78=;
-  b=Li1SooxiVGG9F34QtPUk9WF31mT3YgsQF3kWMAer73L2am3CazST4w0W
-   AEwTUlNB7v4/4fePrubg5EzM9Nu3rL305JkjJTRKZP/J3bEsoItO+Qt04
-   tVgfVbn6N1lYX/lghyaouEJIPVru/vU27PgNHnXi4nwtXU22mqF98Ta97
-   rKGckwTkNIMc7Lp6VzJFvRU5M3IYkpLnmDrNW9lL4sgkYRuVCA9QFCj4j
-   nK4RTwOBcdiiKNQYXiEG8lAxs2ZeFc1e35UDPkhkL+h1uhig+VpEN4phl
-   vEbqLpy8fYFB0olROD37CIZD6GmpB48yAo+GgDesDEIcc7tTWC/yvJst+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243165532"
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="243165532"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:41:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="646192303"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Apr 2022 14:41:35 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfTh9-0002S5-3w;
-	Fri, 15 Apr 2022 21:41:35 +0000
-Date: Sat, 16 Apr 2022 05:41:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in
- reference from the function binderfs_binder_device_create() to the function
- .init.text:set_reset_devices()
-Message-ID: <202204160549.K8MMhRsg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B487A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 21:55:23 +0000 (UTC)
+Received: by mail-io1-f72.google.com with SMTP id c25-20020a5d9399000000b00652e2b23358so1126470iol.6
+        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 14:55:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=O/xeVfd2f1I1IgGwEz7f3eVMwFcu7BEtTzoITl6hbMY=;
+        b=ES1JEVbbu51pfWKv8xtLBxDN2wem1lEQIVX+iURFvlXK1z2jGylS4jaJJmuu0BVn5n
+         MhN23AAdIyc+lQxWhnM6aOQMhBNd52szByJs+xc6+HLD45u1br2A67hFCpSaNokSJKBw
+         Gwca1TVTxRP55n6s3lFym5pdCNmppXUJMZfWzMfmVp6dch7iFwQrWBmFuix6HrKOVC9C
+         /AOxzmZm2dz0gBc4jzXjDJvZGWDJs7vTn6eq6yN06YRtZDm1n54Al7Wkh59XTPMg3H8O
+         FojgJC2TZP666pbtXri5GV59r4IP4djcvNMB6a8TS+NAnH1uT8p+abslNKQ7wyK1y6gT
+         Dbrw==
+X-Gm-Message-State: AOAM530hhF4vw0jbkQ+XYd+OZjuHQRMLPNREsjkByOYi92sOq9mtbILD
+	K/UQ61kAkFB8JzTinFoqA0TFTGD72pXTgVOlwlV2Gw1QNe0m
+X-Google-Smtp-Source: ABdhPJw4Gl0ghdwhE3obk3Z+DVgDyRqoCs+sALjlpXy1jA5TwjhXCn4TNMa9OgAxEmPkW926JVtTZQ9OsFTdfWjCCPcsVRbQI1H+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a92:cb4f:0:b0:2cb:fde0:b5c2 with SMTP id
+ f15-20020a92cb4f000000b002cbfde0b5c2mr291007ilq.274.1650059722464; Fri, 15
+ Apr 2022 14:55:22 -0700 (PDT)
+Date: Fri, 15 Apr 2022 14:55:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009da4c705dcb87735@google.com>
+Subject: [syzbot] WARNING in check_map_prog_compatibility
+From: syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, songliubraving@fb.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   028192fea1de083f4f12bfb1eb7c4d7beb5c8ecd
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   3 weeks ago
-config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220416/202204160549.K8MMhRsg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c55ab7700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9ac56d6828346c4e
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14960370f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1412ff0f700000
 
->> WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in reference from the function binderfs_binder_device_create() to the function .init.text:set_reset_devices()
-The function binderfs_binder_device_create() references
-the function __init set_reset_devices().
-This is often because binderfs_binder_device_create lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x178fa2e): Section mismatch in reference from the function binder_alloc_free_page() to the function .init.text:set_reset_devices()
-The function binder_alloc_free_page() references
-the function __init set_reset_devices().
-This is often because binder_alloc_free_page lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1875f90): Section mismatch in reference from the function ethnl_default_dumpit() to the function .init.text:set_reset_devices()
-The function ethnl_default_dumpit() references
-the function __init set_reset_devices().
-This is often because ethnl_default_dumpit lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x187ed7e): Section mismatch in reference from the function tsinfo_reply_size() to the function .init.text:set_reset_devices()
-The function tsinfo_reply_size() references
-the function __init set_reset_devices().
-This is often because tsinfo_reply_size lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x191d390): Section mismatch in reference from the function ieee802154_llsec_fill_key_id() to the function .init.text:set_reset_devices()
-The function ieee802154_llsec_fill_key_id() references
-the function __init set_reset_devices().
-This is often because ieee802154_llsec_fill_key_id lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x8844c8): Section mismatch in reference from the function vduse_init() to the function .init.text:set_reset_devices()
-The function vduse_init() references
-the function __init set_reset_devices().
-This is often because vduse_init lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x8850c6): Section mismatch in reference from the function vduse_create_dev() to the function .init.text:set_reset_devices()
-The function vduse_create_dev() references
-the function __init set_reset_devices().
-This is often because vduse_create_dev lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12ef7940f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11ef7940f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ef7940f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+trace type BPF program uses run-time allocation
+WARNING: CPU: 0 PID: 3596 at kernel/bpf/verifier.c:11998 check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
+Modules linked in:
+CPU: 0 PID: 3596 Comm: syz-executor252 Not tainted 5.18.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
+Code: c7 fc ff ff e8 86 4f ee ff 31 db e9 bb fc ff ff e8 7a 4f ee ff c6 05 b2 40 35 0c 01 48 c7 c7 a0 3b 74 8a 31 c0 e8 85 e4 b7 ff <0f> 0b e9 23 fb ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c c0 f8 ff
+RSP: 0018:ffffc90003aaf1e8 EFLAGS: 00010246
+RAX: c7d869b5def1f000 RBX: 0000000000000001 RCX: ffff88801d293a00
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffff88801f6ea030 R08: ffffffff816acc92 R09: ffffed1017384f24
+R10: ffffed1017384f24 R11: 1ffff11017384f23 R12: ffff88801f6ea000
+R13: dffffc0000000000 R14: ffff88807c438000 R15: 0000000000000011
+FS:  00005555566d0300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056023649dd90 CR3: 0000000024387000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ resolve_pseudo_ldimm64+0x67f/0x1270 kernel/bpf/verifier.c:12171
+ bpf_check+0x2606/0x13ab0 kernel/bpf/verifier.c:14462
+ bpf_prog_load+0x1288/0x1b80 kernel/bpf/syscall.c:2351
+ __sys_bpf+0x373/0x660 kernel/bpf/syscall.c:4663
+ __do_sys_bpf kernel/bpf/syscall.c:4767 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4765 [inline]
+ __x64_sys_bpf+0x78/0x90 kernel/bpf/syscall.c:4765
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f86914c6239
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcd0a865f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f86914c6239
+RDX: 0000000000000080 RSI: 00000000200004c0 RDI: 0000000000000005
+RBP: 00007f869148a220 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000072 R11: 0000000000000246 R12: 00007f869148a2b0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
