@@ -1,77 +1,110 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B988633D6
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 19:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650052111; x=1681588111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2ybWQ9vXTjXyctd0VE3AvZjUJhWeYRenZUC7U2hsPbQ=;
-  b=IhWm4V17b1oC6VD59zwrMXKgRdRnbJxhGZeq8YQeUeq/syRJoCGtlE/k
-   NJT93cOjp4EEeelzci1dqB/xZheJHhxWEO278FOfFUAq72CpHtI2cId7e
-   vjfaSpbjeY7qQaWpJUpYy47MrS4cOlCFcpHDroITQ4JHJsETeNTBcWoTt
-   IZ45vwEDyuT2kTas8zvlEqcGW4asRPJ028iwT32RrS6pJo15vNSusxcKG
-   8f5uMoApz/4x5aUwVWOraOOEcCf+xfWHBr1EHyoN51qC9l/0EHgi3xb0F
-   2qbXaJwszU6YutydEXEOzZRlO3yEiuOocRVOt0D42PIUyl2ME3+waz3SR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262974795"
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="262974795"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 12:48:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="591737485"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 15 Apr 2022 12:48:30 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfRvh-0002KX-AV;
-	Fri, 15 Apr 2022 19:48:29 +0000
-Date: Sat, 16 Apr 2022 03:47:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm:cex7 151/154] ERROR: Input tree has errors, aborting (use -f to
- force output)
-Message-ID: <202204160340.3VtMHUZ9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E6A7A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 20:36:26 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id k5so15549394lfg.9
+        for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 13:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iML8Mie/Nqg8Eomsb3XE4GR9y61geIeA+48E13l7q/U=;
+        b=c1afuenBbtQ0z/0Q9oKLfXT0N4IwC/1BJsqGRXLcviWYSuXEjYQfAevoaVByrfGiBl
+         aNxpDqetB0Q+BfaCtC+SOcv+6fbEq/1JJpcnjHdsLf8sidATEQx0NazYeN+wWm4nHOOV
+         U7yCDX/VgZ1hx/Gj3ah5XSB72tZbTv+5BOpDwsfKC8wiz1Wes2vBCGCOsggLONGttZVG
+         pARO7UUb6a7SSLEms42sfZtWExpAKS6GD+CabQI2oG1Goz3qcBEBq/I75Yg/QOly+vHo
+         RTmhqf2GVyHmasaokpGT4J8X/IVi/z9d/kDaPWsXVikyKShjR0TqaeM1PiEegRUdFf7u
+         F29w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iML8Mie/Nqg8Eomsb3XE4GR9y61geIeA+48E13l7q/U=;
+        b=4GFfevf0e9KfsZ4/Fb404dia4G0B8uRE5GP+u0r3dK57hibyocRRgz+nc8IUFKIu1p
+         qizIJTd+6m1INSO8YanhznVptJLShD6vD+hrbvt2RMBhPK+vkRT4qdQXJjW/xKNnp7KK
+         Ra8yWJL41EYPvYNlVrOF9G1WOyOkwtMqPV600xI9v4tUdP7YfCb9lFnWjkNaOUxJl4oU
+         DgzWOKPhZh7YJP9JFliwQ55ixa2S0K7jODfrPo9siHgWWkNF1eEQxm8b1Cqr63XX+W24
+         FzlYBlXJ0tt6YwjmQ/YxhJjms8lLW2BZnCEDr+xDpUdPSFFxgxh6z0ErDfkOiXudbXWI
+         rESQ==
+X-Gm-Message-State: AOAM532rpP00KQhyOw9x842vuLKafY6HLzsbt6m1FF6rCDwfSlOwDFll
+	Bv7AkUhcOhySMvh8p5ezx2r0ltGdcFb7wS9NZZTRZQ==
+X-Google-Smtp-Source: ABdhPJwVnP16uLBu7hJE8jMuOoPikF48adhxwO2GSmNoGfZgOckqnrHfTd3QR8eLanL4p3kBVNj+OtT+i1oYTmuRN5c=
+X-Received: by 2002:ac2:5313:0:b0:46d:ef7:c2db with SMTP id
+ c19-20020ac25313000000b0046d0ef7c2dbmr452615lfh.392.1650054984211; Fri, 15
+ Apr 2022 13:36:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
+ <20220415152633.GA2731@worktop.programming.kicks-ass.net> <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
+ <20220415182130.iltk2uxnubeaa4nk@treble>
+In-Reply-To: <20220415182130.iltk2uxnubeaa4nk@treble>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 15 Apr 2022 13:36:12 -0700
+Message-ID: <CAKwvOdkn-JMRzYhgEP=sQK9oqL7SJmdo_Dp+-5ZthQv6m1=jcA@mail.gmail.com>
+Subject: Re: The trouble with __weak and objtool got worse
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, hjl.tools@gmail.com, 
+	mbenes@suse.cz, rostedt@goodmis.org, linux-toolchains@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Fangrui Song <maskray@google.com>, 
+	Segher Boessenkool <segher@kernel.crashing.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm.git cex7
-head:   ceb9c4a67bf5af34dd9e4809b3fc581562772f2a
-commit: 6ed5eed0063857d895c002a4a0f6753ad30fd801 [151/154] arm64: dts: lx2160a: add optee support             [*experimental*]
-config: arm64-randconfig-r035-20220415 (https://download.01.org/0day-ci/archive/20220416/202204160340.3VtMHUZ9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add arm git://git.armlinux.org.uk/~rmk/linux-arm.git
-        git fetch --no-tags arm cex7
-        git checkout 6ed5eed0063857d895c002a4a0f6753ad30fd801
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, Apr 15, 2022 at 11:21 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Fri, Apr 15, 2022 at 10:40:22AM -0700, Nick Desaulniers wrote:
+> > On Fri, Apr 15, 2022 at 8:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Fri, Apr 15, 2022 at 01:19:04PM +0200, Peter Zijlstra wrote:
+> > > > Alternatively:
+> > > >
+> > > >   https://sourceware.org/pipermail/binutils/2020-December/114671.html
+> > > >
+> > > > seems to suggest: -Wa,--generate-unused-section-symbols=yes, ought to
+> > > > work, except I'm getting:
+> > > >
+> > > > $ gcc -O2 -fcf-protection=none -fno-asynchronous-unwind-tables -Wa,--generate-unused-section-symbols=yes -c foo*.c
+> > > > as: unrecognized option '--generate-unused-section-symbols=yes'
+> > > > as: unrecognized option '--generate-unused-section-symbols=yes'
+> > >
+> > > Reading so hard...
+> > >
+> > >  $ gcc -O2 -fcf-protection=none -fno-asynchronous-unwind-tables -Wa,-generate-unused-section-symbols=yes -c foo*.c
+> > >
+> > > seems to actually work.
+> >
+> > $ clang hello.c -Wa,-generate-unused-section-symbols=yes
+> > clang-15: error: unsupported argument
+> > '-generate-unused-section-symbols=yes' to option '-Wa,'
+> >
+> > :)
+> >
+> > I recall LLVM not emitting STT_SECTION symbols being problematic for
+> > objtool in the past.
+> > Old pre-lore archive:
+> > https://groups.google.com/g/clang-built-linux/c/1C6YoJKBsQQ/m/a8IS1NjGAgAJ
+> > via https://github.com/ClangBuiltLinux/linux/issues/1209.
+> > (It doesn't look too bad for me to implement)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+https://reviews.llvm.org/D123874
 
-All errors (new ones prefixed by >>):
+>
+> Right, and that objtool "fix" -- silently falling back to
+> non-section-symbol relocations instead of erroring out -- is causing
+> this issue, when it's done for weak symbols.
+>
+> If LLVM assembler doesn't support this option then we may have to go
+> with something like this?  I can't seem to recreate so I'm not able to
+> test.
 
-   arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1765.11-1771.4: ERROR (duplicate_node_names): /firmware: Duplicate node name
->> ERROR: Input tree has errors, aborting (use -f to force output)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+FWIW, I found this note that retaining STT_SECTION will have adverse
+binary size effects for LTO.
+https://reviews.llvm.org/D93783#2470728
+Perhaps food for thought here.
+--
+Thanks,
+~Nick Desaulniers
