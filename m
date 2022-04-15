@@ -1,163 +1,60 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF25B15BE
-	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 03:53:56 +0000 (UTC)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kfj9154GvzfYsy;
-	Fri, 15 Apr 2022 11:53:09 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Apr 2022 11:53:47 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Apr 2022 11:53:47 +0800
-Subject: Re: [PATCH] perf llvm: Fix compile bpf failed to cope with latest
- llvm
-To: Nick Desaulniers <ndesaulniers@google.com>
-CC: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-	<mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-	<jolsa@kernel.org>, <namhyung@kernel.org>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
-	<songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
-	<kpsingh@kernel.org>, <nathan@kernel.org>, <trix@redhat.com>,
-	<ak@linux.intel.com>, <adrian.hunter@intel.com>, <james.clark@arm.com>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20220414134134.247912-1-yangjihong1@huawei.com>
- <CAKwvOdmZCS784R5myuA=MgSnxQfS6sPUsBKbbax_QN1fSMNzbQ@mail.gmail.com>
-From: Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <6d7635be-e694-0132-e2b2-e6816c34aa72@huawei.com>
-Date: Fri, 15 Apr 2022 11:53:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8B77A
+	for <llvm@lists.linux.dev>; Fri, 15 Apr 2022 04:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63D2C385A6;
+	Fri, 15 Apr 2022 04:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1649998632;
+	bh=sdf3KNK2bCPLRKBu/jbG05O+vAvWO2dlRW++18iqkWk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yvgRgIJ/EZ6dXfJiAClGq2iKMGVu4cGaeM/SFONhtbI5bvkcjb/7i7oKBSmmQa9cv
+	 +NjKml8zX249PhAmTJ5Jnc87fv5ivODJ4zVVpPFR9DNgmRnTYOzlEuiyrvCVCbrOu7
+	 YHfKOZXN69H6QJQ9ETNNlzsaLOO12ASlRFtY7OHk=
+Date: Fri, 15 Apr 2022 06:57:09 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+	linux-btrfs@vger.kernel.org
+Subject: Re: btrfs warning fixes for 5.15 and 5.17
+Message-ID: <Ylj7JclrqzHx2gpQ@kroah.com>
+References: <YliEOSL8z3/s7DGG@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdmZCS784R5myuA=MgSnxQfS6sPUsBKbbax_QN1fSMNzbQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YliEOSL8z3/s7DGG@dev-arch.thelio-3990X>
 
-On 2022/4/14 23:57, Nick Desaulniers wrote:
-> On Thu, Apr 14, 2022 at 6:42 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
+On Thu, Apr 14, 2022 at 01:29:45PM -0700, Nathan Chancellor wrote:
+> Hi Greg and Sasha,
 > 
-> With "latest" llvm makes it sound like LLVM has regressed. Has it? Or
-> have the headers changed in a way where now inline asm from a
-> different target (x86) than what's being targeted (BPF)? Perhaps
-> fixing that is simpler?
+> Please apply
 > 
-> Clang will validate inline asm before LLVM drops unreferenced static
-> inline functions; this was a headache getting i386 building with
-> clang, but not insurmountable.
+> ad3fc7946b18 ("btrfs: remove no longer used counter when reading data page")
+> 6d4a6b515c39 ("btrfs: remove unused variable in btrfs_{start,write}_dirty_block_groups()")
 > 
-According to the notes of samples/bpf/Makefile:
-"The reason is due to llvm change https://reviews.llvm.org/D87153
-where the CORE relocation global generation is moved from the beginning
-of target dependent optimization (llc) to the beginning
-of target independent optimization (opt).
-
-Since samples/bpf programs did not use vmlinux.h and its clang compilation
-uses native architecture, we need to adjust arch triple at opt level
-to do CORE relocation global generation properly. Otherwise, the above
-error will appear."
-I think opt and llvm-dis are introduced to solve another problem, that 
-is, the incompatibility of native architecture.
-
->> If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
->>
->>   # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
->>                                -e ./perf_bpf_test.c/map:channel.event=evt/ ls
->>   [SNIP]
->>   /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
->>                            : "="REG_OUT (res)
->>                             ^
->>   /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
->>                            : "="REG_OUT (res)
->>                             ^
->>   In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
->>   In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
->>   In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
->>   In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
->>   In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
->>   In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
->>   In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
->>   /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
->>           asm ("mulq %2; divq %3" : "=a" (q)
->>   [SNIP]
->>   # cat /root/projects/perf-bpf/perf_bpf_test.c
->>   /************************ BEGIN **************************/
->>   #include <uapi/linux/bpf.h>
->>   #include <linux/ptrace.h>
->>   #include <linux/types.h>
->>   #define SEC(NAME) __attribute__((section(NAME), used))
->>
->>   struct bpf_map_def {
->>           unsigned int type;
->>           unsigned int key_size;
->>           unsigned int value_size;
->>           unsigned int max_entries;
->>   };
->>
->>   static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
->>       unsigned long) = (void *)BPF_FUNC_perf_event_output;
->>
->>   struct bpf_map_def SEC("maps") channel = {
->>           .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
->>           .key_size = sizeof(int),
->>           .value_size = sizeof(__u32),
->>           .max_entries = __NR_CPUS__,
->>   };
->>
->>   #define MIN_BYTES 1024
->>
->>   SEC("func=vfs_read")
->>   int bpf_myprog(struct pt_regs *ctx)
->>   {
->>           long bytes = ctx->dx;
->>           if (bytes >= MIN_BYTES) {
->>                   perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
->>                                     &bytes, sizeof(bytes));
->>           }
->>
->>           return 0;
->>   }
->>
->> char _license[] SEC("license") = "GPL";
->> int _version SEC("version") = LINUX_VERSION_CODE;
->> /************************* END ***************************/
->>
->> Compilation command is modified to be the same as that in samples/bpf/Makefile,
->> use clang | opt | llvm-dis | llc chain of commands to solve the problem.
->> see the comment in samples/bpf/Makefile.
->>
->> Modifications:
->> 1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
+> to 5.15 and 5.17 and
 > 
-> This will drop the --target flag. That will mess up the default target
-> triple, and can affect command line option feature detection.
+> cd9255be6980 ("btrfs: remove unused parameter nr_pages in add_ra_bio_pages()")
 > 
-opt add -mtriple=bpf-pc-linux flag,
-The complete command is as follows:
-clang -O2 -emit-llvm -Xclang -disable-llvm-passes -c $< -o - |
-opt -O2 -mtriple=bpf-pc-linux | $(LLVM_DIS) | \
-llc -march=bpf $(LLC_FLAGS) -filetype=obj -o $@
+> to 5.15 (it landed in 5.16), as they all resolve build errors with
+> CONFIG_WERROR=y and tip of tree clang, which recently added support for
+> unary operations in -Wunused-but-set-variable. They all apply cleanly
+> and I do not see any additional build warnings and errors.
+> 
+> Commit 6d4a6b515c39 was specifically tagged for stable back to 5.4,
+> which should be fine, but it really only needs to go back to 5.12+, as
+> btrfs turned on W=1 (which includes this warning) for itself in commit
+> e9aa7c285d20 ("btrfs: enable W=1 checks for btrfs"), which landed in
+> 5.12-rc1. Prior that that change, none of these warnings will be
+> visible under a normal build.
 
-This may be a problem. Currently, no simple method is found. Therefore, 
-refer to the processing method of samles/bpf/Makefile.
+Now queued up, thanks.
 
--- 
-Thanks,
-Jihong
-
+greg k-h
