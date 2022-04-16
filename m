@@ -1,112 +1,102 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1345D7B
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 16:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1650125268;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ygFHjusU5vVIgxwTuSPuzqVHkbPskMoNhTMRJVlo0kc=;
-	b=g8tfN/TuW78ajNDBN5ePYACSytL6sjdVXSHyMqNW5xBU7Ru8mYeeBP8DRise2G5fk02H1K
-	JSXOid2J0CoPYbooTWhAq/BuAdKSB8vw51OtzaueNhkBZqu3iPxUc6M+lG8CZggCsuZtQC
-	62wLttLdENIqT3RSURi02+jfgaqSJZk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-rg4j4VB-Ni2n62QEULvSiA-1; Sat, 16 Apr 2022 12:07:47 -0400
-X-MC-Unique: rg4j4VB-Ni2n62QEULvSiA-1
-Received: by mail-qv1-f70.google.com with SMTP id t12-20020a0cea2c000000b004443d7585f0so8894222qvp.19
-        for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 09:07:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F86F2100
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 16:33:26 +0000 (UTC)
+Received: by mail-pg1-f180.google.com with SMTP id q19so11444286pgm.6
+        for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 09:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bXAjmlQH108j2yJVfly5XEzHc4w2ZtC5LgwURAgR384=;
+        b=IJ4MYAY+QoHmeLmSBnHXQa/r9o6nOYb8ctLbNSkxmQDOPwRV4JefeyPccbTw414ZOK
+         YVGIn5f5Co1baZkZjM5XDTGfkgyWC5TYO+3jdbz3S7NH33Vp2sh71INdRmnJ+OP5ZPRb
+         DddI/hA7GGtQIMGgWE0a3SuINcbizxM9eBtJwFJ57f+ZH7nqejKyu3S8m5WGXP0lJTho
+         78gLNkrXeoicxDZ4PWvtojbWP0V/g9U3cNWMvIxNVwcsBJQto7X1J7hQHEfljaWWtgVq
+         HgvmE5EtjWObBhRAsNuOqAxC009IbJ1pp7U/HZefuIFnEEa4iJonkYLK6Jj2lAP2fkwt
+         LG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ygFHjusU5vVIgxwTuSPuzqVHkbPskMoNhTMRJVlo0kc=;
-        b=FRRjwq1RTAGN3s2gNrJAzpOCbA0IsrT7/Beuk/Xmz7p9rUeIXAzjZtVRNVs5aUDbSY
-         R6L4XDKrH0jOCCdSVoxI/Nobz0ZJpHlx7nVp2I6NxnLN0VQWPEaAMWtwVKojJnYr+Ue9
-         cDfozoqkjbTcaLIf7YdbniKFQMBiwYHKVCZubOEfxXUcflhJcEB0WXZvw9RznaxF2C2M
-         wpDQBfotNiSo0dNlCD78iY+kVHKqJ1zCC5J2xgZIgZ2GTEX3Y4cusXcDQBTYByg00gFu
-         y8FLJFMC9UqI9kdJ7YCvplr7/evlmrQ4ammUHK8BQry81riAXPKUDKjvmPOUJivT8xdJ
-         Aqqg==
-X-Gm-Message-State: AOAM533TiWet6HXT7BAijKu1lAKboQkVcP6QywTkYRc3eFMKIlQIvLPH
-	alHzKlssW0oeLMY6IJ31ubjd6/jtAWCFLvHA/9gGMkcIzUdFhqhls4oUA71kvAuhtwhVp4QowT8
-	Qi79aUZ4+B2mfHg==
-X-Received: by 2002:a37:657:0:b0:69e:7b77:3973 with SMTP id 84-20020a370657000000b0069e7b773973mr1159711qkg.298.1650125266821;
-        Sat, 16 Apr 2022 09:07:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzghEJU1kF01A712yCjgkafh8IeNuahjzXNfG/n5mhzThe/gAiUQ40HYF9Gb3gbt4JTzVg5+w==
-X-Received: by 2002:a37:657:0:b0:69e:7b77:3973 with SMTP id 84-20020a370657000000b0069e7b773973mr1159701qkg.298.1650125266570;
-        Sat, 16 Apr 2022 09:07:46 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id c136-20020a379a8e000000b0069e5df9d953sm1999991qke.34.2022.04.16.09.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 09:07:45 -0700 (PDT)
-Date: Sat, 16 Apr 2022 09:07:42 -0700
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
-	hjl.tools@gmail.com, mbenes@suse.cz, rostedt@goodmis.org,
-	linux-toolchains@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: The trouble with __weak and objtool got worse
-Message-ID: <20220416160742.6g4nejji4xyrgpvp@treble>
-References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
- <20220415152633.GA2731@worktop.programming.kicks-ass.net>
- <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
- <20220415182130.iltk2uxnubeaa4nk@treble>
- <20220416104809.GC2731@worktop.programming.kicks-ass.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bXAjmlQH108j2yJVfly5XEzHc4w2ZtC5LgwURAgR384=;
+        b=4pHYdWl0TGQ+OWMwfmDo+sLx+vVtAC95frjWDGCI+gG63hg6E9WOb2WnOC/hUVuQ7b
+         lZynTq/gb4vZGtAXWkzWDt5IdlQII5ncR4Ujhq9As7q0TPPHVykgLqH4Iea6Za8yLheo
+         PkREYep2y625cf2yyzr1VWMWLgyD1BBvDfAlLDRbKkJINcf+ZcGya9TbrHtS9UG0Ptmo
+         cufHM+e3hRMIKPaEvTVrFOztGr07FeXxIpzsAnPcdJQaf38mogE+4F1bI/kTDCR0Xary
+         Ta0osPBlZxjrsmgPzY+zDpDRJRygqdDvHuOHowF8I7MLCGV8b2mXcJXWRkUMSlM3F+Ee
+         sBFg==
+X-Gm-Message-State: AOAM532IyPH14pDCqw2d3KLJDNqEn/MrBSNh4olnPu4tSr5OS4D4zNHO
+	yz+uKN4U7pE/RaWXta/k9UIqbV+2/zwOxWhDtno=
+X-Google-Smtp-Source: ABdhPJzLzRVQ8AcmY5dX0l4Joh9hZIxAPQ88mAu5a8eckjTHhK2kBRbgfeZdKnsbCrno3XSHmk+qDf6oAKyq31Ss77Q=
+X-Received: by 2002:aa7:8888:0:b0:505:a3e1:d246 with SMTP id
+ z8-20020aa78888000000b00505a3e1d246mr4184746pfe.76.1650126805939; Sat, 16 Apr
+ 2022 09:33:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220416104809.GC2731@worktop.programming.kicks-ass.net>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jpoimboe@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
+ <20220415152633.GA2731@worktop.programming.kicks-ass.net> <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
+ <20220415182130.iltk2uxnubeaa4nk@treble> <20220416104809.GC2731@worktop.programming.kicks-ass.net>
+ <20220416160742.6g4nejji4xyrgpvp@treble>
+In-Reply-To: <20220416160742.6g4nejji4xyrgpvp@treble>
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Sat, 16 Apr 2022 09:32:50 -0700
+Message-ID: <CAMe9rOqt-XE4+0nBtQcfhycCEqE7nK6GxCH0LNdpD=Jy41TnMw@mail.gmail.com>
+Subject: Re: The trouble with __weak and objtool got worse
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	"the arch/x86 maintainers" <x86@kernel.org>, Miroslav Benes <mbenes@suse.cz>, rostedt@goodmis.org, 
+	linux-toolchains@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 16, 2022 at 12:48:09PM +0200, Peter Zijlstra wrote:
-> This *might* work for static_call. But what about things like
-> .retpoline_sites?
-> 
-> If we get an indirect inside the weak function and at
-> a different place inside the non-weak function, then we end up with two
-> patch sites in the non-weak function.
-> 
-> And since all of that is compiler generated, we don't have anything to
-> stick anything in to alleviate trouble.
-> 
-> (in fact, I didn't observe this with static_call, I just picked it for
-> the example because it was somewhat easier)
+On Sat, Apr 16, 2022 at 9:07 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Sat, Apr 16, 2022 at 12:48:09PM +0200, Peter Zijlstra wrote:
+> > This *might* work for static_call. But what about things like
+> > .retpoline_sites?
+> >
+> > If we get an indirect inside the weak function and at
+> > a different place inside the non-weak function, then we end up with two
+> > patch sites in the non-weak function.
+> >
+> > And since all of that is compiler generated, we don't have anything to
+> > stick anything in to alleviate trouble.
+> >
+> > (in fact, I didn't observe this with static_call, I just picked it for
+> > the example because it was somewhat easier)
+>
+> Ok, right.  And ORC entries will be broken.  I found the ones below by
+> disabling CONFIG_DEBUG_INFO and looking for "sym->bind == STB_WEAK" in
+> the elf_add_reloc_to_insn() fallback.
+>
+> I guess objtool will need to bite the bullet and create section symbols.
+>
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x8: missing section symbol for reference to weak function text
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0xc: missing section symbol for reference to weak function text
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
+>   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
+>   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
+>   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
+>   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
+>   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x18: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x1c: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x20: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x24: missing section symbol for reference to weak function text
+>   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x28: missing section symbol for reference to weak function text
 
-Ok, right.  And ORC entries will be broken.  I found the ones below by
-disabling CONFIG_DEBUG_INFO and looking for "sym->bind == STB_WEAK" in
-the elf_add_reloc_to_insn() fallback.
-
-I guess objtool will need to bite the bullet and create section symbols.
-
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x8: missing section symbol for reference to weak function text
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0xc: missing section symbol for reference to weak function text
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
-  lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
-  lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
-  lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
-  lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
-  lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x18: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x1c: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x20: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x24: missing section symbol for reference to weak function text
-  lib/crc32.o: warning: objtool: .orc_unwind_ip+0x28: missing section symbol for reference to weak function text
+STB_WEAK is meaningful when deciding if a symbol definition should
+be ignored only when there is no STB_GLOBAL at link-time.   Tools
+must keep the section index of a weak symbol definition if there is no
+non-weak definition.
 
 -- 
-Josh
-
+H.J.
