@@ -1,44 +1,29 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65F87B
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 22:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650148582; x=1681684582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EvB/DZ5vH4mKbhMj8E9XI5tRXkv/uBKrhCIDsrfx7cs=;
-  b=nMOs9907KCn5GlPNm83sw+f5UQ8kNGDLZmlEaMqCqw/5+pxwBrAjIsLl
-   1x+Kg2ckmAbmkia0Zj/ziWxkoXH2U56OJMVxIr5Qbs8C5eOJ/VC3CYq3f
-   i0rsBv+AIGFmFyQtHbmc+Kmb+S4hefFpGKQxpoc3G1g8d+OB7Q9H6OPOM
-   8YOzcuK0hFS+JjydLjAUmg6mzEVjrxsCQXJzbVy4hp6eDqqJs739PN8l7
-   L6uAV2yy1dRJYqy1UBL6Hq5RzJiD/bD9JD5QyIen8bLuxVNyupxsp0JIS
-   si5d3exTX79/HJ9Zqb1GYmMC8MKSbGDOdVHXAuPszigsu/U9oE+4KQyYz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="250641538"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="250641538"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 15:36:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="726196454"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2022 15:36:20 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfr1f-0003XR-T8;
-	Sat, 16 Apr 2022 22:36:19 +0000
-Date: Sun, 17 Apr 2022 06:35:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc1-net-next-c45 30/44]
- drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting
- prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for
- ixgbe_mii_bus_read_generic_c45() instead
-Message-ID: <202204170653.yXcEwhTK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882127B
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 23:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF475C385A1;
+	Sat, 16 Apr 2022 23:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650150359;
+	bh=HpJTWn8rxtUvc2Uu9L51I1bEMCgj7T0IW46gNpnpj7I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IdOc9VUw2V0PUM/e7qmNJi+t1Xi/1kWnT5NM9AglczIaO/xqg31+Vfljl4TQCpPTu
+	 SkxOfizLJ27x+afCUtRE66UBenFyFwIf7oA8B5Bl51ngB9i3gTTQauqxvxT0tU7Llj
+	 zAlZ63LrjIfgz0rVGZx01ZsjmDFL+bjODaAHpwcz65qB6BOEk0kMkqoFbb9kI3SfaH
+	 ChW9U5o4UCSID+Sykc4JI0W3tj+ZNkM2PlSQqRW50Ntx0X3eqEhNfRRESngMKJyLyr
+	 i9EQieKUV34lhbCaFICG9CfAPPKGsqBfbWJuT3h9Qti/ul9XV9a2V5K+IJdmo97360
+	 jd+SDSgkiCsLQ==
+Date: Sat, 16 Apr 2022 16:05:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: broonie@kernel.org, ndesaulniers@google.com,
+	paul.kocialkowski@bootlin.com, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] spi: initialize status to success
+Message-ID: <YltL1RXdeO82s/bR@dev-arch.thelio-3990X>
+References: <20220416205132.295779-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,142 +32,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220416205132.295779-1-trix@redhat.com>
 
-tree:   https://github.com/lunn/linux.git v5.18-rc1-net-next-c45
-head:   a6ca6875280b5cf6ee1d8466840b71bf6ffb7bfd
-commit: 3667548ba293c93e5a8ca7be2778b460c40ade4f [30/44] net: ethernet: intel: ixgdb: Separate C22 and C45 transactions for xgmac
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220417/202204170653.yXcEwhTK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/3667548ba293c93e5a8ca7be2778b460c40ade4f
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc1-net-next-c45
-        git checkout 3667548ba293c93e5a8ca7be2778b460c40ade4f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/ drivers/net/ethernet/intel/ixgbe/
+On Sat, Apr 16, 2022 at 04:51:32PM -0400, Tom Rix wrote:
+> Clang static analysis reports this issue
+> spi.c:3583:2: warning: 2nd function call argument
+>   is an uninitialized value
+>   trace_spi_setup(spi, status);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> It is possible that status is never set because
+> its function level setting was removed by the
+> commit listed in the Fixes: tag.
+> 
+> Assume that setting 8 bits-per-word is ok and
+> initialize the status to 0.
+> 
+> Fixes: b3fe2e516741 ("spi: core: Only check bits_per_word validity when explicitly provided")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I am very surprised that -Wsometimes-uninitialized does not trigger
+here, as this instance does not require interprocedural analysis, right?
+status is not passed by reference as far as I can tell and it is only
+initialized in if statements now but it is unconditionally used at the
+end of the function. Maybe it does not matter too much, given that
+auto-initialization is turned on by default when supported.
 
-All warnings (new ones prefixed by >>):
+Regardless, this fix looks fine. I do not really like initializing
+variables at the top of the function as it can hide error codes but it
+is always a maintainer preference anyways so:
 
->> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for ixgbe_mii_bus_read_generic_c45() instead
->> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:795: warning: expecting prototype for ixgbe_mii_bus_write_generic_45(). Prototype was for ixgbe_mii_bus_write_generic_c45() instead
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-
-vim +725 drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c
-
-   714	
-   715	/**
-   716	 *  ixgbe_mii_bus_read_generic_45 - Read a clause 45 register with gssr flags
-   717	 *  @hw: pointer to hardware structure
-   718	 *  @addr: address
-   719	 *  @devad: device address to read
-   720	 *  @regnum: register number
-   721	 *  @gssr: semaphore flags to acquire
-   722	 **/
-   723	static s32 ixgbe_mii_bus_read_generic_c45(struct ixgbe_hw *hw, int addr,
-   724						  int devad, int regnum, u32 gssr)
- > 725	{
-   726		u32 hwaddr, cmd;
-   727		s32 data;
-   728	
-   729		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   730			return -EBUSY;
-   731	
-   732		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   733		hwaddr |= devad << 16 | regnum;
-   734		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
-   735	
-   736		data = ixgbe_msca_cmd(hw, cmd);
-   737		if (data < 0)
-   738			goto mii_bus_read_done;
-   739	
-   740		cmd = hwaddr | IXGBE_MSCA_READ | IXGBE_MSCA_MDI_COMMAND;
-   741		data = ixgbe_msca_cmd(hw, cmd);
-   742		if (data < 0)
-   743			goto mii_bus_read_done;
-   744	
-   745		data = IXGBE_READ_REG(hw, IXGBE_MSRWD);
-   746		data = (data >> IXGBE_MSRWD_READ_DATA_SHIFT) & GENMASK(16, 0);
-   747	
-   748	mii_bus_read_done:
-   749		hw->mac.ops.release_swfw_sync(hw, gssr);
-   750		return data;
-   751	}
-   752	
-   753	/**
-   754	 *  ixgbe_mii_bus_write_generic_c22 - Write a clause 22 register with gssr flags
-   755	 *  @hw: pointer to hardware structure
-   756	 *  @addr: address
-   757	 *  @regnum: register number
-   758	 *  @val: value to write
-   759	 *  @gssr: semaphore flags to acquire
-   760	 **/
-   761	static s32 ixgbe_mii_bus_write_generic_c22(struct ixgbe_hw *hw, int addr,
-   762						   int regnum, u16 val, u32 gssr)
-   763	{
-   764		u32 hwaddr, cmd;
-   765		s32 err;
-   766	
-   767		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   768			return -EBUSY;
-   769	
-   770		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
-   771	
-   772		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   773		hwaddr |= (regnum & GENMASK(5, 0)) << IXGBE_MSCA_DEV_TYPE_SHIFT;
-   774		cmd = hwaddr | IXGBE_MSCA_OLD_PROTOCOL | IXGBE_MSCA_WRITE |
-   775			IXGBE_MSCA_MDI_COMMAND;
-   776	
-   777		err = ixgbe_msca_cmd(hw, cmd);
-   778	
-   779		hw->mac.ops.release_swfw_sync(hw, gssr);
-   780		return err;
-   781	}
-   782	
-   783	/**
-   784	 *  ixgbe_mii_bus_write_generic_45 - Write a clause 45 register with gssr flags
-   785	 *  @hw: pointer to hardware structure
-   786	 *  @addr: address
-   787	 *  @devad: device address to read
-   788	 *  @regnum: register number
-   789	 *  @val: value to write
-   790	 *  @gssr: semaphore flags to acquire
-   791	 **/
-   792	static s32 ixgbe_mii_bus_write_generic_c45(struct ixgbe_hw *hw, int addr,
-   793						   int devad, int regnum, u16 val,
-   794						   u32 gssr)
- > 795	{
-   796		u32 hwaddr, cmd;
-   797		s32 err;
-   798	
-   799		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   800			return -EBUSY;
-   801	
-   802		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
-   803	
-   804		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   805		hwaddr |= devad << 16 | regnum;
-   806		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
-   807	
-   808		err = ixgbe_msca_cmd(hw, cmd);
-   809		if (err < 0)
-   810			goto mii_bus_write_done;
-   811	
-   812		cmd = hwaddr | IXGBE_MSCA_WRITE | IXGBE_MSCA_MDI_COMMAND;
-   813		err = ixgbe_msca_cmd(hw, cmd);
-   814	
-   815	mii_bus_write_done:
-   816		hw->mac.ops.release_swfw_sync(hw, gssr);
-   817		return err;
-   818	}
-   819	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/spi/spi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 563a56ce34a0..890ff46c784a 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -3475,7 +3475,7 @@ static int __spi_validate_bits_per_word(struct spi_controller *ctlr,
+>  int spi_setup(struct spi_device *spi)
+>  {
+>  	unsigned	bad_bits, ugly_bits;
+> -	int		status;
+> +	int		status = 0;
+>  
+>  	/*
+>  	 * Check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
+> -- 
+> 2.27.0
+> 
