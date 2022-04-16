@@ -1,48 +1,44 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521B029AA
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 20:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65F87B
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 22:36:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650142521; x=1681678521;
+  t=1650148582; x=1681684582;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YqggBscwBR8kECPE8sV7GZRQg0PKKtnXg81Oh6vwzgQ=;
-  b=DN2GVcCkTuh4O95lmxlJnBVUf6SWMVtsaUlNOYd2SAODmqjYfcUrSE/s
-   Zs74pEzXKnSCf0J6p/6JI3khhkGxl5sckyQs6eEvNHGbkutSuQVWyd498
-   yhPYrbZTmBIV0IqL+J1Sk3KJvS6W1Kig7vGjnY00NhtVoM5CKxU42aLx6
-   d3pXjQQFKtw0pzQS7MVRBU7ax9tYRgNfXgd4KrBOsOc0sv78eRGpO20U4
-   J9ScJwnVWQYrCDzxYWhugn0B2Mc2BQjKE/jn35vGOpBnQZEOjgoT+hix/
-   AgYn9SsNYEs1RwOXxcuI8bUBqZ0HCSj0gAsdPR1ykMXR4oFvf8oZgQ3SL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="250637132"
+  bh=EvB/DZ5vH4mKbhMj8E9XI5tRXkv/uBKrhCIDsrfx7cs=;
+  b=nMOs9907KCn5GlPNm83sw+f5UQ8kNGDLZmlEaMqCqw/5+pxwBrAjIsLl
+   1x+Kg2ckmAbmkia0Zj/ziWxkoXH2U56OJMVxIr5Qbs8C5eOJ/VC3CYq3f
+   i0rsBv+AIGFmFyQtHbmc+Kmb+S4hefFpGKQxpoc3G1g8d+OB7Q9H6OPOM
+   8YOzcuK0hFS+JjydLjAUmg6mzEVjrxsCQXJzbVy4hp6eDqqJs739PN8l7
+   L6uAV2yy1dRJYqy1UBL6Hq5RzJiD/bD9JD5QyIen8bLuxVNyupxsp0JIS
+   si5d3exTX79/HJ9Zqb1GYmMC8MKSbGDOdVHXAuPszigsu/U9oE+4KQyYz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="250641538"
 X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="250637132"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 13:55:20 -0700
+   d="scan'208";a="250641538"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 15:36:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="646434100"
+   d="scan'208";a="726196454"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Apr 2022 13:55:18 -0700
+  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2022 15:36:20 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nfpRt-0003UF-NH;
-	Sat, 16 Apr 2022 20:55:17 +0000
-Date: Sun, 17 Apr 2022 04:54:25 +0800
+	id 1nfr1f-0003XR-T8;
+	Sat, 16 Apr 2022 22:36:19 +0000
+Date: Sun, 17 Apr 2022 06:35:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Andrew Lunn <andrew@lunn.ch>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in
- reference from the function bmi160_i2c_probe() to the function
- .init.text:set_reset_devices()
-Message-ID: <202204170429.sEZb8tjA-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [lunn:v5.18-rc1-net-next-c45 30/44]
+ drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting
+ prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for
+ ixgbe_mii_bus_read_generic_c45() instead
+Message-ID: <202204170653.yXcEwhTK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,96 +49,139 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   3 weeks ago
-config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220417/202204170429.sEZb8tjA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+tree:   https://github.com/lunn/linux.git v5.18-rc1-net-next-c45
+head:   a6ca6875280b5cf6ee1d8466840b71bf6ffb7bfd
+commit: 3667548ba293c93e5a8ca7be2778b460c40ade4f [30/44] net: ethernet: intel: ixgdb: Separate C22 and C45 transactions for xgmac
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220417/202204170653.yXcEwhTK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
+        # https://github.com/lunn/linux/commit/3667548ba293c93e5a8ca7be2778b460c40ade4f
+        git remote add lunn https://github.com/lunn/linux.git
+        git fetch --no-tags lunn v5.18-rc1-net-next-c45
+        git checkout 3667548ba293c93e5a8ca7be2778b460c40ade4f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/ drivers/net/ethernet/intel/ixgbe/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in reference from the function bmi160_i2c_probe() to the function .init.text:set_reset_devices()
-The function bmi160_i2c_probe() references
-the function __init set_reset_devices().
-This is often because bmi160_i2c_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x172619c): Section mismatch in reference from the function st_lsm6dsx_probe() to the function .init.text:set_reset_devices()
-The function st_lsm6dsx_probe() references
-the function __init set_reset_devices().
-This is often because st_lsm6dsx_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x175c62e): Section mismatch in reference from the function mb1232_probe() to the function .init.text:set_reset_devices()
-The function mb1232_probe() references
-the function __init set_reset_devices().
-This is often because mb1232_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179066c): Section mismatch in reference from the function binder_update_page_range() to the function .init.text:set_reset_devices()
-The function binder_update_page_range() references
-the function __init set_reset_devices().
-This is often because binder_update_page_range lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179c6b4): Section mismatch in reference from the function altera_cvp_probe() to the function .init.text:set_reset_devices()
-The function altera_cvp_probe() references
-the function __init set_reset_devices().
-This is often because altera_cvp_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179c8e2): Section mismatch in reference from the function altera_cvp_remove() to the function .init.text:set_reset_devices()
-The function altera_cvp_remove() references
-the function __init set_reset_devices().
-This is often because altera_cvp_remove lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x18738e8): Section mismatch in reference from the function ethtool_rxnfc_copy_from_user() to the function .init.text:set_reset_devices()
-The function ethtool_rxnfc_copy_from_user() references
-the function __init set_reset_devices().
-This is often because ethtool_rxnfc_copy_from_user lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1873c7c): Section mismatch in reference from the function ethtool_copy_validate_indir() to the function .init.text:set_reset_devices()
-The function ethtool_copy_validate_indir() references
-the function __init set_reset_devices().
-This is often because ethtool_copy_validate_indir lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1879d9a): Section mismatch in reference from the function ethnl_set_linkmodes() to the function .init.text:set_reset_devices()
-The function ethnl_set_linkmodes() references
-the function __init set_reset_devices().
-This is often because ethnl_set_linkmodes lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x187ebf6): Section mismatch in reference from the function tsinfo_prepare_data() to the function .init.text:set_reset_devices()
-The function tsinfo_prepare_data() references
-the function __init set_reset_devices().
-This is often because tsinfo_prepare_data lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x191c146): Section mismatch in reference from the function ieee802154_start_req() to the function .init.text:set_reset_devices()
-The function ieee802154_start_req() references
-the function __init set_reset_devices().
-This is often because ieee802154_start_req lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
-..
+>> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for ixgbe_mii_bus_read_generic_c45() instead
+>> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:795: warning: expecting prototype for ixgbe_mii_bus_write_generic_45(). Prototype was for ixgbe_mii_bus_write_generic_c45() instead
+
+
+vim +725 drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c
+
+   714	
+   715	/**
+   716	 *  ixgbe_mii_bus_read_generic_45 - Read a clause 45 register with gssr flags
+   717	 *  @hw: pointer to hardware structure
+   718	 *  @addr: address
+   719	 *  @devad: device address to read
+   720	 *  @regnum: register number
+   721	 *  @gssr: semaphore flags to acquire
+   722	 **/
+   723	static s32 ixgbe_mii_bus_read_generic_c45(struct ixgbe_hw *hw, int addr,
+   724						  int devad, int regnum, u32 gssr)
+ > 725	{
+   726		u32 hwaddr, cmd;
+   727		s32 data;
+   728	
+   729		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
+   730			return -EBUSY;
+   731	
+   732		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
+   733		hwaddr |= devad << 16 | regnum;
+   734		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
+   735	
+   736		data = ixgbe_msca_cmd(hw, cmd);
+   737		if (data < 0)
+   738			goto mii_bus_read_done;
+   739	
+   740		cmd = hwaddr | IXGBE_MSCA_READ | IXGBE_MSCA_MDI_COMMAND;
+   741		data = ixgbe_msca_cmd(hw, cmd);
+   742		if (data < 0)
+   743			goto mii_bus_read_done;
+   744	
+   745		data = IXGBE_READ_REG(hw, IXGBE_MSRWD);
+   746		data = (data >> IXGBE_MSRWD_READ_DATA_SHIFT) & GENMASK(16, 0);
+   747	
+   748	mii_bus_read_done:
+   749		hw->mac.ops.release_swfw_sync(hw, gssr);
+   750		return data;
+   751	}
+   752	
+   753	/**
+   754	 *  ixgbe_mii_bus_write_generic_c22 - Write a clause 22 register with gssr flags
+   755	 *  @hw: pointer to hardware structure
+   756	 *  @addr: address
+   757	 *  @regnum: register number
+   758	 *  @val: value to write
+   759	 *  @gssr: semaphore flags to acquire
+   760	 **/
+   761	static s32 ixgbe_mii_bus_write_generic_c22(struct ixgbe_hw *hw, int addr,
+   762						   int regnum, u16 val, u32 gssr)
+   763	{
+   764		u32 hwaddr, cmd;
+   765		s32 err;
+   766	
+   767		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
+   768			return -EBUSY;
+   769	
+   770		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
+   771	
+   772		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
+   773		hwaddr |= (regnum & GENMASK(5, 0)) << IXGBE_MSCA_DEV_TYPE_SHIFT;
+   774		cmd = hwaddr | IXGBE_MSCA_OLD_PROTOCOL | IXGBE_MSCA_WRITE |
+   775			IXGBE_MSCA_MDI_COMMAND;
+   776	
+   777		err = ixgbe_msca_cmd(hw, cmd);
+   778	
+   779		hw->mac.ops.release_swfw_sync(hw, gssr);
+   780		return err;
+   781	}
+   782	
+   783	/**
+   784	 *  ixgbe_mii_bus_write_generic_45 - Write a clause 45 register with gssr flags
+   785	 *  @hw: pointer to hardware structure
+   786	 *  @addr: address
+   787	 *  @devad: device address to read
+   788	 *  @regnum: register number
+   789	 *  @val: value to write
+   790	 *  @gssr: semaphore flags to acquire
+   791	 **/
+   792	static s32 ixgbe_mii_bus_write_generic_c45(struct ixgbe_hw *hw, int addr,
+   793						   int devad, int regnum, u16 val,
+   794						   u32 gssr)
+ > 795	{
+   796		u32 hwaddr, cmd;
+   797		s32 err;
+   798	
+   799		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
+   800			return -EBUSY;
+   801	
+   802		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
+   803	
+   804		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
+   805		hwaddr |= devad << 16 | regnum;
+   806		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
+   807	
+   808		err = ixgbe_msca_cmd(hw, cmd);
+   809		if (err < 0)
+   810			goto mii_bus_write_done;
+   811	
+   812		cmd = hwaddr | IXGBE_MSCA_WRITE | IXGBE_MSCA_MDI_COMMAND;
+   813		err = ixgbe_msca_cmd(hw, cmd);
+   814	
+   815	mii_bus_write_done:
+   816		hw->mac.ops.release_swfw_sync(hw, gssr);
+   817		return err;
+   818	}
+   819	
 
 -- 
 0-DAY CI Kernel Test Service
