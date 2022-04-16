@@ -1,78 +1,120 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406C917C9
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 01:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650073665; x=1681609665;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tnWW8RHrYAEi7ZmsFv26NaD1X/SNeXSnVLg9q3uTZX0=;
-  b=EpENtPj/hy38NF9dAFM6zJWF+yWE6R8ZI9/SZhgSKgbZtAggzgwp/DDK
-   LPQ4rH27vrpYSOTnYYR/hwBu3iFarBu86b4LIB+tr8HJpAJi1Dv5YbhZl
-   367qZ/BV1xa54VlGDd0QjEIrBlKTV6GlbcS50YV5ItdHaU14wJz5F/KJK
-   4WmT8GvNbUFWz6eypewlTVNJjBWut2k3U6d3mIv4oAWOw/FZopu8tZO9B
-   GzjwK+h6qAe6Q9op9FpDuEO+az6jXwS2ZEX3hAu5NsyjI81DDhGutAzsA
-   kD8ZotMEIKmvkaz9nPn0bII3uL4RTk/oV8zeaN5XVn+PXZ9T5OtOpClnQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243841138"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="243841138"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 18:47:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="701239795"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Apr 2022 18:47:43 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nfXXK-0002e6-Mh;
-	Sat, 16 Apr 2022 01:47:42 +0000
-Date: Sat, 16 Apr 2022 09:47:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [bvanassche:scsi-gap-zone 8/8] ERROR: modpost: "__umoddi3"
- [drivers/scsi/scsi_debug.ko] undefined!
-Message-ID: <202204160900.KLzxt1Xe-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04CD20E0
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 02:07:59 +0000 (UTC)
+X-UUID: f5df4576acf544b09ada50cb2aea61c8-20220416
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:972a7770-4d00-4547-8e30-6387bdc8bb2a,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:-30,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+	CTION:release,TS:73
+X-CID-INFO: VERSION:1.1.4,REQID:972a7770-4d00-4547-8e30-6387bdc8bb2a,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:-30,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+	CTION:quarantine,TS:73
+X-CID-META: VersionHash:faefae9,CLOUDID:feed12ef-06b0-4305-bfbf-554bfc9d151a,C
+	OID:9c0fb55b2ebb,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:2,Fil
+	e:nil,QS:0,BEC:nil
+X-UUID: f5df4576acf544b09ada50cb2aea61c8-20220416
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 179665560; Sat, 16 Apr 2022 10:07:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 16 Apr 2022 10:07:55 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 16 Apr 2022 10:07:54 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>, <srv_heupstream@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v17 12/21] drm/mediatek: add display merge mute/unmute support for MT8195
+Date: Sat, 16 Apr 2022 10:07:40 +0800
+Message-ID: <20220416020749.29010-13-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220416020749.29010-1-nancy.lin@mediatek.com>
+References: <20220416020749.29010-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-MTK: N
 
-tree:   https://github.com/bvanassche/linux scsi-gap-zone
-head:   5531f96720bc0e475e669eb56b7094401c53f928
-commit: 5531f96720bc0e475e669eb56b7094401c53f928 [8/8] scsi_debug: Add gap zone support
-config: riscv-randconfig-r042-20220414 (https://download.01.org/0day-ci/archive/20220416/202204160900.KLzxt1Xe-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/bvanassche/linux/commit/5531f96720bc0e475e669eb56b7094401c53f928
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-gap-zone
-        git checkout 5531f96720bc0e475e669eb56b7094401c53f928
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Add merge mute/unmute setting for MT8195.
+MT8195 Vdosys1 merge1~merge4 support HW mute function.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__umoddi3" [drivers/scsi/scsi_debug.ko] undefined!
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+index c0d9b43b2a66..9dca145cfb71 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+@@ -58,12 +58,15 @@
+ #define FLD_PREULTRA_TH_LOW			GENMASK(15, 0)
+ #define FLD_PREULTRA_TH_HIGH			GENMASK(31, 16)
+ 
++#define DISP_REG_MERGE_MUTE_0		0xf00
++
+ struct mtk_disp_merge {
+ 	void __iomem			*regs;
+ 	struct clk			*clk;
+ 	struct clk			*async_clk;
+ 	struct cmdq_client_reg		cmdq_reg;
+ 	bool				fifo_en;
++	bool				mute_support;
+ };
+ 
+ void mtk_merge_start(struct device *dev)
+@@ -82,6 +85,10 @@ void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+ 
++	if (priv->mute_support)
++		mtk_ddp_write(cmdq_pkt, 0x0, &priv->cmdq_reg, priv->regs,
++			      DISP_REG_MERGE_MUTE_0);
++
+ 	mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
+ 		      DISP_REG_MERGE_CTRL);
+ }
+@@ -90,6 +97,10 @@ void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+ 
++	if (priv->mute_support)
++		mtk_ddp_write(cmdq_pkt, 0x1, &priv->cmdq_reg, priv->regs,
++			      DISP_REG_MERGE_MUTE_0);
++
+ 	mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
+ 		      DISP_REG_MERGE_CTRL);
+ }
+@@ -264,6 +275,8 @@ static int mtk_disp_merge_probe(struct platform_device *pdev)
+ 	priv->fifo_en = of_property_read_bool(dev->of_node,
+ 					      "mediatek,merge-fifo-en");
+ 
++	priv->mute_support = of_property_read_bool(dev->of_node,
++						   "mediatek,merge-mute");
+ 	platform_set_drvdata(pdev, priv);
+ 
+ 	ret = component_add(dev, &mtk_disp_merge_component_ops);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+
