@@ -1,102 +1,83 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F86F2100
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 16:33:26 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id q19so11444286pgm.6
-        for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 09:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bXAjmlQH108j2yJVfly5XEzHc4w2ZtC5LgwURAgR384=;
-        b=IJ4MYAY+QoHmeLmSBnHXQa/r9o6nOYb8ctLbNSkxmQDOPwRV4JefeyPccbTw414ZOK
-         YVGIn5f5Co1baZkZjM5XDTGfkgyWC5TYO+3jdbz3S7NH33Vp2sh71INdRmnJ+OP5ZPRb
-         DddI/hA7GGtQIMGgWE0a3SuINcbizxM9eBtJwFJ57f+ZH7nqejKyu3S8m5WGXP0lJTho
-         78gLNkrXeoicxDZ4PWvtojbWP0V/g9U3cNWMvIxNVwcsBJQto7X1J7hQHEfljaWWtgVq
-         HgvmE5EtjWObBhRAsNuOqAxC009IbJ1pp7U/HZefuIFnEEa4iJonkYLK6Jj2lAP2fkwt
-         LG0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bXAjmlQH108j2yJVfly5XEzHc4w2ZtC5LgwURAgR384=;
-        b=4pHYdWl0TGQ+OWMwfmDo+sLx+vVtAC95frjWDGCI+gG63hg6E9WOb2WnOC/hUVuQ7b
-         lZynTq/gb4vZGtAXWkzWDt5IdlQII5ncR4Ujhq9As7q0TPPHVykgLqH4Iea6Za8yLheo
-         PkREYep2y625cf2yyzr1VWMWLgyD1BBvDfAlLDRbKkJINcf+ZcGya9TbrHtS9UG0Ptmo
-         cufHM+e3hRMIKPaEvTVrFOztGr07FeXxIpzsAnPcdJQaf38mogE+4F1bI/kTDCR0Xary
-         Ta0osPBlZxjrsmgPzY+zDpDRJRygqdDvHuOHowF8I7MLCGV8b2mXcJXWRkUMSlM3F+Ee
-         sBFg==
-X-Gm-Message-State: AOAM532IyPH14pDCqw2d3KLJDNqEn/MrBSNh4olnPu4tSr5OS4D4zNHO
-	yz+uKN4U7pE/RaWXta/k9UIqbV+2/zwOxWhDtno=
-X-Google-Smtp-Source: ABdhPJzLzRVQ8AcmY5dX0l4Joh9hZIxAPQ88mAu5a8eckjTHhK2kBRbgfeZdKnsbCrno3XSHmk+qDf6oAKyq31Ss77Q=
-X-Received: by 2002:aa7:8888:0:b0:505:a3e1:d246 with SMTP id
- z8-20020aa78888000000b00505a3e1d246mr4184746pfe.76.1650126805939; Sat, 16 Apr
- 2022 09:33:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703DF2580
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 17:50:52 +0000 (UTC)
+Date: Sat, 16 Apr 2022 17:50:39 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail2; t=1650131444;
+	bh=dUBVYxJ9KjFGdWAPZ3BpuTxFmDw0xhV4VjL0SW5G2Cs=;
+	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+	 References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID;
+	b=amXLMAutJGPxMzbDaeGMyXFJX9zlX6dkXXT2t9TYkA46iUHC/JG9DfVb84E1JOr3v
+	 5i7k7LSd6DCTZ9xQKZwi5NNgJfHv/MWn3SPTSbUKs5djHd6HpB83Jpha6uCFBEKI2S
+	 ooJYv4Nu0+mGX154G/bDnvnCNY35Fs70h23GR1G3Q9iqkEV/9dfNmBjoz+J4sVs0EG
+	 R3cAIWN/RYxouBCKNFFiV+kSnSqMug8na3JtHvmg/YEO5OSMTeVOeAAiKi/TnqiBIW
+	 0lZthWkwvsFWIICVz4tefCNwyM0eB0/EOg5Tzqc/tR+5qvYDOiUyacvmPEMLFeeF5Q
+	 1/fmwoe9vwpLw==
+To: Song Liu <song@kernel.org>
+From: Alexander Lobakin <alobakin@pm.me>
+Cc: Alexander Lobakin <alobakin@pm.me>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet
+	<quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next 02/11] bpf: always emit struct bpf_perf_link BTF
+Message-ID: <20220416174330.195496-1-alobakin@pm.me>
+In-Reply-To: <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-3-alobakin@pm.me> <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
- <20220415152633.GA2731@worktop.programming.kicks-ass.net> <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
- <20220415182130.iltk2uxnubeaa4nk@treble> <20220416104809.GC2731@worktop.programming.kicks-ass.net>
- <20220416160742.6g4nejji4xyrgpvp@treble>
-In-Reply-To: <20220416160742.6g4nejji4xyrgpvp@treble>
-From: "H.J. Lu" <hjl.tools@gmail.com>
-Date: Sat, 16 Apr 2022 09:32:50 -0700
-Message-ID: <CAMe9rOqt-XE4+0nBtQcfhycCEqE7nK6GxCH0LNdpD=Jy41TnMw@mail.gmail.com>
-Subject: Re: The trouble with __weak and objtool got worse
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	"the arch/x86 maintainers" <x86@kernel.org>, Miroslav Benes <mbenes@suse.cz>, rostedt@goodmis.org, 
-	linux-toolchains@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 16, 2022 at 9:07 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->
-> On Sat, Apr 16, 2022 at 12:48:09PM +0200, Peter Zijlstra wrote:
-> > This *might* work for static_call. But what about things like
-> > .retpoline_sites?
-> >
-> > If we get an indirect inside the weak function and at
-> > a different place inside the non-weak function, then we end up with two
-> > patch sites in the non-weak function.
-> >
-> > And since all of that is compiler generated, we don't have anything to
-> > stick anything in to alleviate trouble.
-> >
-> > (in fact, I didn't observe this with static_call, I just picked it for
-> > the example because it was somewhat easier)
->
-> Ok, right.  And ORC entries will be broken.  I found the ones below by
-> disabling CONFIG_DEBUG_INFO and looking for "sym->bind == STB_WEAK" in
-> the elf_add_reloc_to_insn() fallback.
->
-> I guess objtool will need to bite the bullet and create section symbols.
->
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x8: missing section symbol for reference to weak function text
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0xc: missing section symbol for reference to weak function text
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
->   lib/clz_ctz.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
->   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x0: missing section symbol for reference to weak function text
->   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x4: missing section symbol for reference to weak function text
->   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x10: missing section symbol for reference to weak function text
->   lib/iomap_copy.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x14: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x18: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x1c: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x20: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x24: missing section symbol for reference to weak function text
->   lib/crc32.o: warning: objtool: .orc_unwind_ip+0x28: missing section symbol for reference to weak function text
+From: Song Liu <song@kernel.org>
+Date: Fri, 15 Apr 2022 16:24:41 -0700
 
-STB_WEAK is meaningful when deciding if a symbol definition should
-be ignored only when there is no STB_GLOBAL at link-time.   Tools
-must keep the section index of a weak symbol definition if there is no
-non-weak definition.
+> On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
+> >
+> > When building bpftool with !CONFIG_PERF_EVENTS:
+> >
+> > skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'st=
+ruct bpf_perf_link'
+> >         perf_link =3D container_of(link, struct bpf_perf_link, link);
+> >                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: not=
+e: expanded from macro 'container_of'
+> >                 ((type *)(__mptr - offsetof(type, member)));    \
+> >                                    ^~~~~~~~~~~~~~~~~~~~~~
+> > tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: not=
+e: expanded from macro 'offsetof'
+> >  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
+> >                                                   ~~~~~~~~~~~^
+> > skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_=
+perf_link'
+> >         struct bpf_perf_link *perf_link;
+> >                ^
+> >
+> > &bpf_perf_link is being defined and used only under the ifdef.
+> > Move it out of the block and explicitly emit a BTF to fix
+> > compilation.
+> >
+> > Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+>
+> Similar to v1, this fix is weird to me. I hope we have can fix it in user
+> space.
 
--- 
-H.J.
+I've been thinking on this, but userspace is not provided with any
+autoconf.h definitions (only selftests have them), so its code must
+be sort of universal.
+Both this and 01/11 are compile time and due to imcomplete and/or
+absent BTF struct declarations. I'm not familiar with
+bpf_core_field_exists(), and it might be that it's able to solve
+01/11, but not this one. &bpf_perf_link must be present
+unconditionally, otherwise it won't be defined in the generated
+vmlinux.h at all.
+
+Thanks,
+Al
+
