@@ -1,352 +1,136 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC2017C9
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 01:13:35 +0000 (UTC)
-X-UUID: de4de3525bd241e2b4fe4fa9a535cb2e-20220416
-X-UUID: de4de3525bd241e2b4fe4fa9a535cb2e-20220416
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1849473385; Sat, 16 Apr 2022 09:08:22 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 16 Apr 2022 09:08:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 16 Apr 2022 09:08:19 +0800
-Message-ID: <58db725a3609bfed1a90954fcd84fbbaaafc2e89.camel@mediatek.com>
-Subject: Re: [PATCH v16 04/22] soc: mediatek: add mtk-mmsys support for
- mt8195 vdosys1
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	<linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <srv_heupstream@mediatek.com>, David Airlie
-	<airlied@linux.ie>, "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	<singo.chang@mediatek.com>, <llvm@lists.linux.dev>, Nick Desaulniers
-	<ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, Nathan Chancellor <nathan@kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-Date: Sat, 16 Apr 2022 09:08:19 +0800
-In-Reply-To: <b391cb9ab341ed83f8d640867c8dbba856a7c454.camel@mediatek.com>
-References: <20220318142009.2796-1-nancy.lin@mediatek.com>
-	 <20220318142009.2796-5-nancy.lin@mediatek.com>
-	 <b391cb9ab341ed83f8d640867c8dbba856a7c454.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C97B17C9
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 01:16:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650071804; x=1681607804;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ees7IPH/fyK16FrtXahx0Ir31jrszHICg9rnHdHeWO0=;
+  b=enVHVCHGmHR78DCwbMQgXv4VdfD33uzyWCewEVbAjPpXYhcEjuOdonUC
+   Hf7OSDbuIpFDYAPRHUXGnQKhFgXmvpY3RtjmbxGkgkBhLMm8NuCpE26eC
+   Noj03fRlmOpMcpU7MnwGthL2ClUmKFB0cx6jPK7SPW/KzZotuE7ZS/uAQ
+   tccEgxd1cq02oy9nJG2TMPiZBIV8hzZmnocHEURflYMyN9UnP/QGltWAk
+   tmdkOsC5lw3u4FFlKcx2X8cAU0AvbU5XYouA2zc8mKFXKx1JLd2imuzSf
+   OcAopH889hl/C46pLQg7tLd3oMWWTBuKh1QPJwVCxgOv9fqSvcl6clMAx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243187571"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="243187571"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 18:16:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="624704073"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Apr 2022 18:16:42 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfX3J-0002cP-GT;
+	Sat, 16 Apr 2022 01:16:41 +0000
+Date: Sat, 16 Apr 2022 09:16:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, arm@kernel.org
+Subject: [soc:omap1-multiplatform-5.18 18/33]
+ arch/arm/mach-omap1/timer32k.c:215:12: warning: no previous prototype for
+ function 'omap_init_clocksource_32k'
+Message-ID: <202204160929.WuBwkKEz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi CK,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git omap1-multiplatform-5.18
+head:   fab2b1f2488cb81853e5e8c7d37d58963b8462bc
+commit: 2f4dfef6e4950959786c965fefbb6aee6e4f0c67 [18/33] ARM: omap1: move 32k counter from plat-omap to mach-omap1
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220416/202204160929.WuBwkKEz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=2f4dfef6e4950959786c965fefbb6aee6e4f0c67
+        git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+        git fetch --no-tags soc omap1-multiplatform-5.18
+        git checkout 2f4dfef6e4950959786c965fefbb6aee6e4f0c67
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks for the review.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue, 2022-03-22 at 11:31 +0800, CK Hu wrote:
-> Hi, Nancy:
-> 
-> On Fri, 2022-03-18 at 22:19 +0800, Nancy.Lin wrote:
-> > Add mt8195 vdosys1 clock driver name and routing table to
-> > the driver data of mtk-mmsys.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/soc/mediatek/mt8195-mmsys.h    | 136
-> > +++++++++++++++++++++++++
-> >  drivers/soc/mediatek/mtk-mmsys.c       |  10 ++
-> >  include/linux/soc/mediatek/mtk-mmsys.h |   2 +
-> >  3 files changed, 148 insertions(+)
-> > 
-> > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
-> > b/drivers/soc/mediatek/mt8195-mmsys.h
-> > index 24a3afe23bc8..369fb0aab56d 100644
-> > --- a/drivers/soc/mediatek/mt8195-mmsys.h
-> > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> > @@ -75,6 +75,70 @@
-> >  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 <<
-> > 16)
-> >  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			
-> > (3 << 16)
-> >  
-> > +#define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
-> > +#define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			
-> > 1
-> > +
-> > +#define MT8195_VDO1_VPP_MERGE0_P1_SEL_IN			0xf08
-> > +#define MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1			
-> > 1
-> > +
-> > +#define MT8195_VDO1_DISP_DPI1_SEL_IN				
-> > 0xf10
-> > +#define MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT		
-> > 	
-> > 0
-> > +
-> > +#define MT8195_VDO1_DISP_DP_INTF0_SEL_IN			0xf14
-> > +#define MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT		
-> > 0
-> > +
-> > +#define MT8195_VDO1_MERGE4_SOUT_SEL				
-> > 0xf18
-> > +#define MT8195_MERGE4_SOUT_TO_DPI1_SEL				
-> > 	2
-> > +#define MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL				
-> > 3
-> > +
-> > +#define MT8195_VDO1_MIXER_IN1_SEL_IN				
-> > 0xf24
-> > +#define MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT		
-> > 	1
-> > +
-> > +#define MT8195_VDO1_MIXER_IN2_SEL_IN				
-> > 0xf28
-> > +#define MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT		
-> > 	1
-> > +
-> > +#define MT8195_VDO1_MIXER_IN3_SEL_IN				
-> > 0xf2c
-> > +#define MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT		
-> > 	1
-> > +
-> > +#define MT8195_VDO1_MIXER_IN4_SEL_IN				
-> > 0xf30
-> > +#define MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT		
-> > 	1
-> > +
-> > +#define MT8195_VDO1_MIXER_OUT_SOUT_SEL				
-> > 0xf34
-> > +#define MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL			
-> > 	1
-> > +
-> > +#define MT8195_VDO1_VPP_MERGE1_P0_SEL_IN			0xf3c
-> > +#define MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2			
-> > 1
-> > +
-> > +#define MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL			0xf40
-> > +#define MT8195_SOUT_TO_MIXER_IN1_SEL				
-> > 	
-> > 1
-> > +
-> > +#define MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL			0xf44
-> > +#define MT8195_SOUT_TO_MIXER_IN2_SEL				
-> > 	
-> > 1
-> > +
-> > +#define MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL			0xf48
-> > +#define MT8195_SOUT_TO_MIXER_IN3_SEL				
-> > 	
-> > 1
-> > +
-> > +#define MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL			0xf4c
-> > +#define MT8195_SOUT_TO_MIXER_IN4_SEL				
-> > 	
-> > 1
-> > +
-> > +#define MT8195_VDO1_MERGE4_ASYNC_SEL_IN				
-> > 0xf50
-> > +#define MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT		
-> > 	1
-> > +
-> > +#define MT8195_VDO1_MIXER_IN1_SOUT_SEL				
-> > 0xf58
-> > +#define MT8195_MIXER_IN1_SOUT_TO_DISP_MIXER			
-> > 	
-> > 0
-> > +
-> > +#define MT8195_VDO1_MIXER_IN2_SOUT_SEL				
-> > 0xf5c
-> > +#define MT8195_MIXER_IN2_SOUT_TO_DISP_MIXER			
-> > 	
-> > 0
-> > +
-> > +#define MT8195_VDO1_MIXER_IN3_SOUT_SEL				
-> > 0xf60
-> > +#define MT8195_MIXER_IN3_SOUT_TO_DISP_MIXER			
-> > 	
-> > 0
-> > +
-> > +#define MT8195_VDO1_MIXER_IN4_SOUT_SEL				
-> > 0xf64
-> > +#define MT8195_MIXER_IN4_SOUT_TO_DISP_MIXER			
-> > 	
-> > 0
-> > +
-> > +#define MT8195_VDO1_MIXER_SOUT_SEL_IN				
-> > 0xf68
-> > +#define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
-> > 0
-> > +
-> >  static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[]
-> > =
-> > {
-> >  	{
-> >  		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
-> > @@ -124,6 +188,78 @@ static const struct mtk_mmsys_routes
-> > mmsys_mt8195_routing_table[] = {
-> >  		DDP_COMPONENT_MERGE0, DDP_COMPONENT_DP_INTF0,
-> >  		MT8195_VDO0_SEL_OUT, MT8195_SOUT_VPP_MERGE_TO_MASK,
-> >  		MT8195_SOUT_VPP_MERGE_TO_DP_INTF0
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_VPP_MERGE0_P0_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_VPP_MERGE0_P1_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_VPP_MERGE1_P0_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_SOUT_TO_MIXER_IN1_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_SOUT_TO_MIXER_IN2_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_SOUT_TO_MIXER_IN3_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_SOUT_TO_MIXER_IN4_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_OUT_SOUT_SEL, GENMASK(0, 0),
-> > +		MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_IN1_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_IN2_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_IN3_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_IN4_SEL_IN, GENMASK(0, 0),
-> > +		MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MIXER_SOUT_SEL_IN, GENMASK(2, 0),
-> > +		MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER
-> > +	}, {
-> > +		DDP_COMPONENT_OVL_ADAPTOR, DDP_COMPONENT_MERGE5,
-> > +		MT8195_VDO1_MERGE4_ASYNC_SEL_IN, GENMASK(2, 0),
-> > +		MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT
-> 
-> I would like to expose each mod instead of ovl adaptor. ovl adaptor
-> is
-> an application that combine these mod to achieve ovl function, maybe
-> another application would combine part of these mod to achieve
-> another
-> function. Let application to decide the combination.
-> 
-> Regards,
-> CK
-> 
-OK. I will separate ovl adaptor compoent in the next revision.
+All warnings (new ones prefixed by >>):
 
-Regards,
-Nancy
+>> arch/arm/mach-omap1/timer32k.c:215:12: warning: no previous prototype for function 'omap_init_clocksource_32k' [-Wmissing-prototypes]
+   int __init omap_init_clocksource_32k(void __iomem *vbase)
+              ^
+   arch/arm/mach-omap1/timer32k.c:215:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init omap_init_clocksource_32k(void __iomem *vbase)
+   ^
+   static 
+   1 warning generated.
 
-> > +	}, {
-> > +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-> > +		MT8195_VDO1_DISP_DPI1_SEL_IN, GENMASK(1, 0),
-> > +		MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT
-> > +	}, {
-> > +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
-> > +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_MERGE4_SOUT_TO_DPI1_SEL
-> > +	}, {
-> > +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-> > +		MT8195_VDO1_DISP_DP_INTF0_SEL_IN, GENMASK(1, 0),
-> > +		MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT
-> > +	}, {
-> > +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
-> > +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
-> > +		MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL
-> >  	}
-> >  };
-> >  
-> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> > b/drivers/soc/mediatek/mtk-mmsys.c
-> > index dc5c51f0ccc8..0b77624cf6ca 100644
-> > --- a/drivers/soc/mediatek/mtk-mmsys.c
-> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> > @@ -79,6 +79,12 @@ static const struct mtk_mmsys_driver_data
-> > mt8195_vdosys0_driver_data = {
-> >  	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> >  };
-> >  
-> > +static const struct mtk_mmsys_driver_data
-> > mt8195_vdosys1_driver_data
-> > = {
-> > +	.clk_driver = "clk-mt8195-vdo1",
-> > +	.routes = mmsys_mt8195_routing_table,
-> > +	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> > +};
-> > +
-> >  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data
-> > =
-> > {
-> >  	.clk_driver = "clk-mt8365-mm",
-> >  	.routes = mt8365_mmsys_routing_table,
-> > @@ -271,6 +277,10 @@ static const struct of_device_id
-> > of_match_mtk_mmsys[] = {
-> >  		.compatible = "mediatek,mt8195-vdosys0",
-> >  		.data = &mt8195_vdosys0_driver_data,
-> >  	},
-> > +	{
-> > +		.compatible = "mediatek,mt8195-vdosys1",
-> > +		.data = &mt8195_vdosys1_driver_data,
-> > +	},
-> >  	{
-> >  		.compatible = "mediatek,mt8365-mmsys",
-> >  		.data = &mt8365_mmsys_driver_data,
-> > diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
-> > b/include/linux/soc/mediatek/mtk-mmsys.h
-> > index 64c77c4a6c56..eaf7f7345519 100644
-> > --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> > @@ -18,6 +18,7 @@ enum mtk_ddp_comp_id {
-> >  	DDP_COMPONENT_COLOR1,
-> >  	DDP_COMPONENT_DITHER,
-> >  	DDP_COMPONENT_DP_INTF0,
-> > +	DDP_COMPONENT_DP_INTF1,
-> >  	DDP_COMPONENT_DPI0,
-> >  	DDP_COMPONENT_DPI1,
-> >  	DDP_COMPONENT_DSC0,
-> > @@ -39,6 +40,7 @@ enum mtk_ddp_comp_id {
-> >  	DDP_COMPONENT_OVL_2L0,
-> >  	DDP_COMPONENT_OVL_2L1,
-> >  	DDP_COMPONENT_OVL_2L2,
-> > +	DDP_COMPONENT_OVL_ADAPTOR,
-> >  	DDP_COMPONENT_OVL1,
-> >  	DDP_COMPONENT_POSTMASK0,
-> >  	DDP_COMPONENT_PWM0,
-> 
-> 
 
+vim +/omap_init_clocksource_32k +215 arch/arm/mach-omap1/timer32k.c
+
+   205	
+   206	/**
+   207	 * omap_init_clocksource_32k - setup and register counter 32k as a
+   208	 * kernel clocksource
+   209	 * @pbase: base addr of counter_32k module
+   210	 * @size: size of counter_32k to map
+   211	 *
+   212	 * Returns 0 upon success or negative error code upon failure.
+   213	 *
+   214	 */
+ > 215	int __init omap_init_clocksource_32k(void __iomem *vbase)
+   216	{
+   217		int ret;
+   218	
+   219		/*
+   220		 * 32k sync Counter IP register offsets vary between the
+   221		 * highlander version and the legacy ones.
+   222		 * The 'SCHEME' bits(30-31) of the revision register is used
+   223		 * to identify the version.
+   224		 */
+   225		if (readl_relaxed(vbase + OMAP2_32KSYNCNT_REV_OFF) &
+   226							OMAP2_32KSYNCNT_REV_SCHEME)
+   227			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_HIGH;
+   228		else
+   229			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_LOW;
+   230	
+   231		/*
+   232		 * 120000 rough estimate from the calculations in
+   233		 * __clocksource_update_freq_scale.
+   234		 */
+   235		clocks_calc_mult_shift(&persistent_mult, &persistent_shift,
+   236				32768, NSEC_PER_SEC, 120000);
+   237	
+   238		ret = clocksource_mmio_init(sync32k_cnt_reg, "32k_counter", 32768,
+   239					250, 32, clocksource_mmio_readl_up);
+   240		if (ret) {
+   241			pr_err("32k_counter: can't register clocksource\n");
+   242			return ret;
+   243		}
+   244	
+   245		sched_clock_register(omap_32k_read_sched_clock, 32, 32768);
+   246		register_persistent_clock(omap_read_persistent_clock64);
+   247		pr_info("OMAP clocksource: 32k_counter at 32768 Hz\n");
+   248	
+   249		return 0;
+   250	}
+   251	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
