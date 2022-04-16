@@ -1,62 +1,143 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818932580
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 17:55:28 +0000 (UTC)
-Date: Sat, 16 Apr 2022 17:55:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail2; t=1650131721;
-	bh=hUYlD7EnN76aLL3sNghNfcRfJYl0D3zXzjY2HxeciRE=;
-	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-	 References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID;
-	b=p02unh3uNBwOhKDm96RTOSIcRDFBTNulK2v43wYugdd3yEd6K42QNMgN/XkI0xFYP
-	 6M++ziLek6uiEisFq9RKvX6ywCoHcVNa5R0Ge6zU/R7b952ybwqu5ZFcFLKhYhjQXj
-	 MsvNyMT6Lb0FhIkAz54KleAy3JB3byftO2qZ+KTe3ukyf1oUksxP3fWinySvrcGs2s
-	 3Zp9MqMeiRkVrAbem36pS0LyabmgAVNxNwuO3578YQN53lwc9OrMyt9jbxTFHb28g2
-	 m+/Xej+4j0H/TYSTJVi3qUsMS+1vuHwygS3eWkV0670qCkKJ89SLXa45fXKW1Z3mRJ
-	 iOTT99LK9aXMA==
-To: Song Liu <song@kernel.org>
-From: Alexander Lobakin <alobakin@pm.me>
-Cc: Alexander Lobakin <alobakin@pm.me>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet
-	<quentin@isovalent.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Chenbo Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Thomas Graf <tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>, linux-perf-users@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
-Message-ID: <20220416174816.198651-1-alobakin@pm.me>
-In-Reply-To: <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-8-alobakin@pm.me> <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CA22590
+	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 19:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650137659; x=1681673659;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DLw5sMk/8YLgsSma+9RI2UiByFzUvoda3xHj9azaK8A=;
+  b=VzsIy2aRl3FJA3d4cLfZRSVtRKayP9Wp9dPLsn3aPSKh7Yr7XRmRMXrf
+   zQ0aamvUk7hPWs3JQz5qLyYfFVlMT6SPUm0sSnJpvmhqBt7PuzQgztnRo
+   dqKzYBCt/LSltRYBJl0OyVo/vXm5bRNa6h2TeN/2usSJgH2WbSPzMaW72
+   4QSQiOp/KTb4YqZY2n0hl4AzqeILON8cgHiKRqupYMJs3+aampfnxxpnR
+   LtXG4uO56hUCSNixnvO4Qp0RdYny7pmKpTwoZwkmbZpE4IyZk0uPjHvyS
+   rfaztRQg4+1cymQ+QNpCVKEsb6xiELNpBhT+KNjziiS5KxGKyctm4VnnS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263509344"
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="263509344"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 12:34:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="591975633"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2022 12:34:16 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nfoBU-0003Rt-5L;
+	Sat, 16 Apr 2022 19:34:16 +0000
+Date: Sun, 17 Apr 2022 03:33:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: kernel/time/hrtimer.c:276:20: warning: unused function
+ 'is_migration_base'
+Message-ID: <202204170303.xbPwzQpB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-From: Song Liu <song@kernel.org>
-Date: Fri, 15 Apr 2022 16:52:13 -0700
+Hi Marcelo,
 
-> On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
-> >
-> > There's a couple places where uin64_t is being passed as an %ld
-> > format argument, which is incorrect (should be %lld). Fix them.
->
-> This will cause some warning on some 64-bit compiler, no?
+FYI, the error/warning still remains.
 
-Oh wait, I accidentially mentioned %ld and %lld although in fact I
-changed %lu to %llu. So there won't be any compiler warnings. I'll
-fix the commit message in v2.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
+commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
+date:   8 months ago
+config: mips-randconfig-c004-20220417 (https://download.01.org/0day-ci/archive/20220417/202204170303.xbPwzQpB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ext4/ kernel/time/
 
->
-> Song
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---- 8< ---
+All warnings (new ones prefixed by >>):
 
-> > --
-> > 2.35.2
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:1816:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 64c045e25b8471bbb572bd29159c294a82a86a25)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-64c045e25b/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch fs include kernel mm nr_bisected scripts source usr
 
-Thanks,
-Al
 
+vim +/is_migration_base +276 kernel/time/hrtimer.c
+
+c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+
+:::::: The code at line 276 was first introduced by commit
+:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
