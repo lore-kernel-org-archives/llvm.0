@@ -1,39 +1,45 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C7C7A
-	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 15:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5jUwVyYZeE/z5B4prb0O6qAaF0gWafo0tpkOKRfzLr4=; b=ekqSQozQXoLeeG9W7WCIVfHtZY
-	WAQUuUMacvt2rRDBqYkIBLfpjUydU9UR+4NgO07IKgo+3/LQJc5DYDrwHHR1x/hc8P5D50D77rS7K
-	Or3xOsf9uwGe2FgbHmwOGZ1hxepN+VC4QB+BYQalOlquXxlEzlsVpiKWR7k4B+9d92E3bHfjFMfTZ
-	Yrm+LTjR5vg6wPqy0IL9NbhBe9JwTjlo9JPVrimE/+cA59PX0AKvF6DIqEcFR8W/BnF6xzz/nkw8K
-	v+7EpsMasIRGFqn4aR9deBNfMmLDizLdZ2KVKV4yHtKDdHyePbp28+AQagi7/qtBAOY7ZHtKt5f//
-	HnvioYCw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ng76H-001Rsg-KF; Sun, 17 Apr 2022 15:46:09 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 184059861C1; Sun, 17 Apr 2022 17:46:09 +0200 (CEST)
-Date: Sun, 17 Apr 2022 17:46:09 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
-	hjl.tools@gmail.com, mbenes@suse.cz, rostedt@goodmis.org,
-	linux-toolchains@vger.kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: The trouble with __weak and objtool got worse
-Message-ID: <20220417154609.GD2762@worktop.programming.kicks-ass.net>
-References: <YllUqPK4CWZeHku8@hirez.programming.kicks-ass.net>
- <20220415152633.GA2731@worktop.programming.kicks-ass.net>
- <CAKwvOdn1JVxxithobr=15hkumoQ51CjnPSbrq8hYBRm=A3L5kQ@mail.gmail.com>
- <20220415182130.iltk2uxnubeaa4nk@treble>
- <20220416104809.GC2731@worktop.programming.kicks-ass.net>
- <20220416160742.6g4nejji4xyrgpvp@treble>
- <20220417154422.GH2731@worktop.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F37D2567
+	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 18:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650218518; x=1681754518;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x/m+JhS2MQX+M3FW9Pzi/1wZPuLIiA4cNo0RmjfwG9g=;
+  b=iUsyShtTySHe7F6xdr5pHWblhOe/U8StsCcSi6nH1tUcLI+6P2UPhaTI
+   MrKvHn5+DsklnUhMkW++IIKiikCZNTd9gTCpOgtCIYy3Zd0SuVvCbzNHd
+   btTohU5+r0ehsj8a276dZ7o6rGaoGX4tjgOQmxgulLMTPkfvMB5ze8go4
+   fivO3iFMSZgoUcx2aiu3NlZvQ7LrW6/l1ydq4t8VXPOFYBS1ytHrhzuLS
+   /mne1hkZWsY+2oPGtXoASeU6wMxZZQ1IFdNbBmokFQB/CRJK55E5pUl7l
+   zSUowD3RwuDoPoEt6tLDSjMgRhrSMOLouPtUkoe1yBDfWbu3mIPOMVjXr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="243987041"
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="243987041"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 11:01:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="613368059"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Apr 2022 11:01:55 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ng9De-00044j-OU;
+	Sun, 17 Apr 2022 18:01:54 +0000
+Date: Mon, 18 Apr 2022 02:00:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: WARNING: modpost: vmlinux.o(.text+0x1719f9c): Section mismatch in
+ reference from the function fxos8700_core_probe() to the function
+ .init.text:set_reset_devices()
+Message-ID: <202204180155.7WFnHuLm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,98 +48,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220417154422.GH2731@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sun, Apr 17, 2022 at 05:44:22PM +0200, Peter Zijlstra wrote:
-> On Sat, Apr 16, 2022 at 09:07:42AM -0700, Josh Poimboeuf wrote:
-> 
-> > I guess objtool will need to bite the bullet and create section symbols.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a2c29ccd9477861b16ddc02c411a6c9665250558
+commit: d83ce027a54068fabb70d2c252e1ce2da86784a4 ubsan: no need to unset panic_on_warn in ubsan_epilogue()
+date:   4 weeks ago
+config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220418/202204180155.7WFnHuLm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d83ce027a54068fabb70d2c252e1ce2da86784a4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d83ce027a54068fabb70d2c252e1ce2da86784a4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Which then led to..
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'll properly post the patches on Tue, once this easter thing has run
-it's course and we're actually working again, ha!
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
----
-Subject: objtool: Fix type of reloc::addend
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Sun Apr 17 17:03:40 CEST 2022
+>> WARNING: modpost: vmlinux.o(.text+0x1719f9c): Section mismatch in reference from the function fxos8700_core_probe() to the function .init.text:set_reset_devices()
+The function fxos8700_core_probe() references
+the function __init set_reset_devices().
+This is often because fxos8700_core_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x172ef66): Section mismatch in reference from the function al3320a_probe() to the function .init.text:set_reset_devices()
+The function al3320a_probe() references
+the function __init set_reset_devices().
+This is often because al3320a_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x174bf64): Section mismatch in reference from the function bmc150_magn_probe() to the function .init.text:set_reset_devices()
+The function bmc150_magn_probe() references
+the function __init set_reset_devices().
+This is often because bmc150_magn_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1751f2c): Section mismatch in reference from the function mux_probe() to the function .init.text:set_reset_devices()
+The function mux_probe() references
+the function __init set_reset_devices().
+This is often because mux_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1764a86): Section mismatch in reference from the function mlx90632_probe() to the function .init.text:set_reset_devices()
+The function mlx90632_probe() references
+the function __init set_reset_devices().
+This is often because mlx90632_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1766fd4): Section mismatch in reference from the function tmp006_probe() to the function .init.text:set_reset_devices()
+The function tmp006_probe() references
+the function __init set_reset_devices().
+This is often because tmp006_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
 
-Elf{32,64}_Rela::r_addend is of type: Elf{32,64}_Sword, that means
-that out reloc::addend needs to be long or face tuncation issues when
-we do elf_rebuild_rel_reloc_sections():
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x43f08a): Section mismatch in reference from the function chksum_update() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x43f0cc): Section mismatch in reference from the function chksum_finup() to the function .exit.text:cryptomgr_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x440f76): Section mismatch in reference from the function lzorle_decompress() to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.text+0x8080ba): Section mismatch in reference from the function ccu_mux_enable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778818): Section mismatch in reference from the function mcb_lpc_probe() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080d8): Section mismatch in reference from the function ccu_mux_disable() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1778fc6): Section mismatch in reference from the function binderfs_fill_super() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x8080f6): Section mismatch in reference from the function ccu_mux_is_enabled() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x177ff94): Section mismatch in reference from the function print_binder_transaction_ilocked() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x808148): Section mismatch in reference from the function ccu_mux_set_parent() to the function .init.text:set_reset_devices()
 
-  - 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt+0x80000067
-  + 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt-0x7fffff99
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- tools/objtool/check.c               |    8 ++++----
- tools/objtool/elf.c                 |    2 +-
- tools/objtool/include/objtool/elf.h |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
-
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -560,12 +560,12 @@ static int add_dead_ends(struct objtool_
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find unreachable insn at %s+0x%x",
-+				WARN("can't find unreachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find unreachable insn at %s+0x%x",
-+			WARN("can't find unreachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-@@ -595,12 +595,12 @@ static int add_dead_ends(struct objtool_
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find reachable insn at %s+0x%x",
-+				WARN("can't find reachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find reachable insn at %s+0x%x",
-+			WARN("can't find reachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -546,7 +546,7 @@ static struct section *elf_create_reloc_
- 						int reltype);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend)
-+		  unsigned int type, struct symbol *sym, long addend)
- {
- 	struct reloc *reloc;
- 
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -73,7 +73,7 @@ struct reloc {
- 	struct symbol *sym;
- 	unsigned long offset;
- 	unsigned int type;
--	int addend;
-+	long addend;
- 	int idx;
- 	bool jump_table_start;
- };
-@@ -135,7 +135,7 @@ struct elf *elf_open_read(const char *na
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend);
-+		  unsigned int type, struct symbol *sym, long addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off);
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
