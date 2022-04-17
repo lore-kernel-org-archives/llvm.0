@@ -1,67 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1222594
-	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 19:37:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6BDC385A4;
-	Sun, 17 Apr 2022 19:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650224270;
-	bh=d493NgaHWpGeOOrg1HPPk4wwspwcEi67zAXBZYQCvzc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kCBcl470QWmMIDQHkr8+YOi7Ny1iJQZe7021EemkvZYgWh6+en6SI4n5RKKFvloPR
-	 pBcYJPi3C4V/3F7Yg3nesfuHqM+6CrHh8t6gIA841Y5WsvHeYe3pNEvNADRC49MYOh
-	 uBvB12JBaXrg3uqbvbsu/hzZXOgjY6FT4vinPepQJlX0ye2l7or+gIRaGKUMRmXoUr
-	 3sG9bFqV5hiGifWafuSaRi7ktENvLgNcviy4BYkOvnhY+F+Vq+Oqk/0RWP+qscfBxl
-	 uX8c9d3/kn2X3VtpHAI/6B8eQhlh033qqD5dweXp3Upd3sKBMfTlmSBmh9zMSRu+Mk
-	 lMxGmV2r9Lr0w==
-Date: Sun, 17 Apr 2022 20:37:45 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Tom Rix <trix@redhat.com>
-Cc: nathan@kernel.org, ndesaulniers@google.com,
-	paul.kocialkowski@bootlin.com, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] spi: initialize status to success
-Message-ID: <YlxsiQL4ZnGTGQfF@sirena.org.uk>
-References: <20220416205132.295779-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B1E2C9D
+	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 21:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=rPTmCZvcSQL+3vYCd36QLzQTiYFQAiItxsUtQqNbrEc=; b=KcZ3HYLTJjS2uVK13+NOtjb1q2
+	eMKZ5VEyktIvfZtYTgtZ+RnCIt+0mgLvHpx+ff1g0GXgtMTBBYqjk87qiN86Hl4mQhhlIRQhaB7ib
+	5eKR22v288mt9EIRYRmZFojqsWjcsmFDMJS+AxdvTXZdzwbSahS7jhCdXMZr04/ld5Mg19TXvlrQ8
+	JTgRYjVb0KizzOTLUPddaDBFGV4AHVl5Bwj1bMzwu+F0m6911+77jEgsaORKVZyW1sJ0Ys8lQOVxP
+	oXz+F7tgHZE1UCtqi5l0apg+BVMhFTbpHenlngFsrln1IDfUAMBREnLPx7aG0uIN96+HD8wnoJA0K
+	ITzirYEA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1ngCZ0-001bKq-2c; Sun, 17 Apr 2022 21:36:10 +0000
+Message-ID: <b5223400-c27e-166a-54a7-f01516dbf68b@infradead.org>
+Date: Sun, 17 Apr 2022 14:36:06 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wOgWwyIImvA/vFHa"
-Content-Disposition: inline
-In-Reply-To: <20220416205132.295779-1-trix@redhat.com>
-X-Cookie: Stay on the trail.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format
+ specifies type 'long' but the argument has type 'int'
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Anup Patel <anup.patel@wdc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+References: <202204161152.YXsVu0jD-lkp@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202204161152.YXsVu0jD-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---wOgWwyIImvA/vFHa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 16, 2022 at 04:51:32PM -0400, Tom Rix wrote:
-> Clang static analysis reports this issue
-> spi.c:3583:2: warning: 2nd function call argument
+On 4/15/22 20:09, kernel test robot wrote:
+> Hi Anup,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
+> commit: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
+> date:   5 weeks ago
+> config: riscv-randconfig-r026-20220416 (https://download.01.org/0day-ci/archive/20220416/202204161152.YXsVu0jD-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-The same patch was sent and applied several days ago? =20
-73f93db5c49b9f52c902e5dc6c750bf9832e0450
+Fixed here:
 
---wOgWwyIImvA/vFHa
-Content-Type: application/pgp-signature; name="signature.asc"
+https://lore.kernel.org/linux-riscv/20220403031355.20894-1-rdunlap@infradead.org/
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJcbIkACgkQJNaLcl1U
-h9DA/Af/exlZOq0myZjy4rldyHuk0wIzcRzo2U/s2eFa+LEi8F6SFTVTFS3AJ9NV
-Z2x7iFQqO8eD2eroIQc0oDJmRhNwcdLgG/f+pDf3BQ0kEcyUXr3j8/81N3g8xSck
-nUB4yC1xLnpssHK5lWpCIW+Thp9nbQ2dr7/gbvNUSaQVeAzdFh9huUWvUWhkJbXl
-XBoKLIS2nK0N30tIBTvb2BOerFWHDxOl+ie6TiE4FAT8jGQdVDqwcSpw5dvP16x4
-1ufAr/F+6g6rHcDMJz21axLrOyHmdPW/vsVZhYxyR5ibHuPrsUNmuyk3ibyYzkaO
-XIu9ZxYDh+GjVimtSaVIuiXTxHxDZA==
-=5fpU
------END PGP SIGNATURE-----
-
---wOgWwyIImvA/vFHa--
+-- 
+~Randy
