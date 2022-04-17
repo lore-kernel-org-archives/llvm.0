@@ -1,42 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9298939C
-	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 18:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB8B29A7
+	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 19:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650220318; x=1681756318;
+  t=1650222779; x=1681758779;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=03tWKc4tGSNlrP2AZkNUi1dPEIZp6mwmNGkTwQG7Otk=;
-  b=QMtgOPr5n0Euf4nFeP996ZMyYEudIdmUmPhJ6//MnyL/pznJdzTrHCbG
-   tl27/y+y9vQU0NVAZcJ9hF+CSJqgMm33WODjIWIaY8LlfjrYu8nfabT8w
-   2GP5c4XOakDeHRXGMKL35h9DPPbniYB4F/bLFZJ6TsPUypL1mHs1600PU
-   fgkBm6fQRnrB4mV+dsFedYRfSsuI9ACYYFlagVTA1tE54opAEU79kQQwN
-   RgashA1XDJV6H0lir8lW2W9M3o/dI2Ky8nr518ouayjywc2b8JyiqXZRu
-   pNHuHdnt+IHNQ1NTncM9jxtTXDJorLXSMh+mtoWvtaRo5ntyEIXDIiyWV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="261006978"
+  bh=xtrEpLh6UiTV+1kZ95TE+8V5ZKjZ00SsRHrAgKeFScA=;
+  b=X1qXk2Tw4MJdFPlV3Z9HGEpEhZBa4ZUg1QdwNeeMZSzb4HQ2jvzwE0BD
+   efA+rnEuhnQm4YwdHcAprEG0CD+FA/vV5CuW5jiezYQvN5rI3hCBPMbKR
+   HH+fqyw3SNlSBpA4SKVAr2XaiIgyegHgQueeyeiCsEgatrStLwSSj37TO
+   KLi+XsvgRGDZWi+mxjtI2Jtpge3oWKYebqUqlj4B3PhpBf3Wh94IV3FAS
+   rW2XQuUmiOyhPiREWPztmneLzabLqTfPzdqpSn3Ttc5yqns/iGjZe0nxH
+   0Jz/h7m5qBTXiWKSYt4W0BmAUrDBDD0t2g2JGGnxVYJOKaIfYxg8hfi6Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="288491707"
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="261006978"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 11:31:57 -0700
+   d="scan'208";a="288491707"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 12:12:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="592171763"
+   d="scan'208";a="726399032"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Apr 2022 11:31:56 -0700
+  by orsmga005.jf.intel.com with ESMTP; 17 Apr 2022 12:12:57 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ng9gh-00045o-KC;
-	Sun, 17 Apr 2022 18:31:55 +0000
-Date: Mon, 18 Apr 2022 02:31:31 +0800
+	id 1ngAKO-00046X-8y;
+	Sun, 17 Apr 2022 19:12:56 +0000
+Date: Mon, 18 Apr 2022 03:12:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kees Cook <keescook@chromium.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [kees:for-next/randstruct 5/5] include/linux/cred.h:254:17: error:
- no member named 'non_rcu' in 'struct cred'
-Message-ID: <202204180214.X2Y1kbZ6-lkp@intel.com>
+Subject: [kees:for-next/randstruct 5/5]
+ arch/x86/include/asm/cpufeature.h:194:54: error: no member named
+ 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+Message-ID: <202204180303.a8GY7xNF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,20 +51,18 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/randstruct
 head:   0f9614862c554c424c7b099d2cf84a3ecd755357
 commit: 0f9614862c554c424c7b099d2cf84a3ecd755357 [5/5] randstruct: Enable Clang support
-config: powerpc64-allmodconfig (https://download.01.org/0day-ci/archive/20220418/202204180214.X2Y1kbZ6-lkp@intel.com/config)
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220418/202204180303.a8GY7xNF-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ef94609d6ebe981767788e6877b0b3b731d425af)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64-linux-gnu
         # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=0f9614862c554c424c7b099d2cf84a3ecd755357
         git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
         git fetch --no-tags kees for-next/randstruct
         git checkout 0f9614862c554c424c7b099d2cf84a3ecd755357
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
@@ -73,116 +72,439 @@ All errors (new ones prefixed by >>):
    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
    scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:20:
+   In file included from include/linux/slab.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+>> arch/x86/include/asm/cpufeature.h:194:54: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+                        [cap_byte] "i" (&((const char *)boot_cpu_data.x86_capability)[bit >> 3])
+                                                                      ^~~~~~~~~~~~~~
+                                                                      vmx_capability
+   include/linux/compiler_types.h:283:42: note: expanded from macro 'asm_volatile_goto'
+   #define asm_volatile_goto(x...) asm goto(x)
+                                            ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+--
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:27: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
    In file included from include/linux/fs.h:33:
    In file included from include/linux/percpu-rwsem.h:7:
    In file included from include/linux/rcuwait.h:6:
    In file included from include/linux/sched/signal.h:10:
->> include/linux/cred.h:254:17: error: no member named 'non_rcu' in 'struct cred'
+   include/linux/cred.h:254:17: error: no member named 'non_rcu' in 'struct cred'
            nonconst_cred->non_rcu = 0;
            ~~~~~~~~~~~~~  ^
    include/linux/cred.h:266:17: error: no member named 'non_rcu' in 'struct cred'
            nonconst_cred->non_rcu = 0;
            ~~~~~~~~~~~~~  ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
->> include/linux/fs.h:2896:17: error: no member named 'i_nlink' in 'struct inode'
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   include/linux/fs.h:2896:17: error: no member named 'i_nlink' in 'struct inode'
            return !inode->i_nlink || inode_unhashed(inode);
                    ~~~~~  ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:424:22: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                               ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:424:10: warning: array index 7 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:424:42: warning: array index 6 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:424:53: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-                                                              ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:426:22: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                               ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:426:10: warning: array index 5 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:426:42: warning: array index 4 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:426:53: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-                                                              ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:428:22: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                               ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/compat.h:428:10: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:428:42: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                                                   ^     ~
-   include/linux/compat.h:131:2: note: array 'sig' declared here
-           compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
-           ^
-   include/linux/compat.h:428:53: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-           case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-                                                              ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:19:
-   include/linux/mman.h:157:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   14 warnings and 3 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/powerpc/kernel/asm-offsets.s] Error 1
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+>> arch/x86/include/asm/pkru.h:37:6: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (cpu_feature_enabled(X86_FEATURE_OSPKE))
+               ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:204:23: note: expanded from macro 'static_cpu_has'
+           __builtin_constant_p(boot_cpu_has(bit)) ?               \
+                                ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+>> arch/x86/include/asm/pkru.h:37:6: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (cpu_feature_enabled(X86_FEATURE_OSPKE))
+               ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:205:3: note: expanded from macro 'static_cpu_has'
+                   boot_cpu_has(bit) :                             \
+                   ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+   arch/x86/include/asm/pkru.h:44:7: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
+                ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:204:23: note: expanded from macro 'static_cpu_has'
+           __builtin_constant_p(boot_cpu_has(bit)) ?               \
+                                ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+   arch/x86/include/asm/pkru.h:44:7: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
+                ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:205:3: note: expanded from macro 'static_cpu_has'
+                   boot_cpu_has(bit) :                             \
+                   ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+   arch/x86/include/asm/pkru.h:56:7: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
+                ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:204:23: note: expanded from macro 'static_cpu_has'
+           __builtin_constant_p(boot_cpu_has(bit)) ?               \
+                                ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/x86/include/asm/pgtable.h:21:
+   arch/x86/include/asm/pkru.h:56:7: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           if (!cpu_feature_enabled(X86_FEATURE_OSPKE))
+                ^
+   arch/x86/include/asm/cpufeature.h:139:65: note: expanded from macro 'cpu_feature_enabled'
+           (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+                                                                          ^
+   arch/x86/include/asm/cpufeature.h:205:3: note: expanded from macro 'static_cpu_has'
+                   boot_cpu_has(bit) :                             \
+                   ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:249:9: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           return boot_cpu_has(X86_FEATURE_PSE);
+                  ^
+   arch/x86/include/asm/cpufeature.h:141:27: note: expanded from macro 'boot_cpu_has'
+   #define boot_cpu_has(bit)       cpu_has(&boot_cpu_data, bit)
+                                   ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1424:9: error: no member named 'x86_capability' in 'struct cpuinfo_x86'; did you mean 'vmx_capability'?
+           return boot_cpu_has_bug(X86_BUG_L1TF);
+                  ^
+   arch/x86/include/asm/cpufeature.h:215:32: note: expanded from macro 'boot_cpu_has_bug'
+   #define boot_cpu_has_bug(bit)           cpu_has_bug(&boot_cpu_data, (bit))
+                                           ^
+   arch/x86/include/asm/cpufeature.h:210:30: note: expanded from macro 'cpu_has_bug'
+   #define cpu_has_bug(c, bit)             cpu_has(c, (bit))
+                                           ^
+   arch/x86/include/asm/cpufeature.h:123:3: note: expanded from macro 'cpu_has'
+            test_cpu_cap(c, bit))
+            ^
+   arch/x86/include/asm/cpufeature.h:54:40: note: expanded from macro 'test_cpu_cap'
+            test_bit(bit, (unsigned long *)((c)->x86_capability))
+                                                 ^
+   arch/x86/include/asm/processor.h:91:10: note: 'vmx_capability' declared here
+           __u32                   vmx_capability[NVMXINTS];
+                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:27:
+>> arch/x86/kernel/asm-offsets_32.c:20:2: error: no member named 'x86_capability' in 'cpuinfo_x86'
+           OFFSET(CPUINFO_x86_capability, cpuinfo_x86, x86_capability);
+           ^                                           ~~~~~~~~~~~~~~
+   include/linux/kbuild.h:11:14: note: expanded from macro 'OFFSET'
+           DEFINE(sym, offsetof(struct str, mem))
+                       ^                    ~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+                                   ^                        ~~~~~~
+   include/linux/kbuild.h:6:62: note: expanded from macro 'DEFINE'
+           asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
+                                                                       ^~~
+   28 warnings and 13 errors generated.
+   make[2]: *** [scripts/Makefile.build:120: arch/x86/kernel/asm-offsets.s] Error 1
    make[2]: Target '__build' not remade because of errors.
    make[1]: *** [Makefile:1195: prepare0] Error 2
    make[1]: Target 'prepare' not remade because of errors.
@@ -190,38 +512,48 @@ All errors (new ones prefixed by >>):
    make: Target 'prepare' not remade because of errors.
 
 
-vim +254 include/linux/cred.h
+vim +194 arch/x86/include/asm/cpufeature.h
 
-f1752eec6145c9 David Howells  2008-11-14  234  
-f1752eec6145c9 David Howells  2008-11-14  235  /**
-f1752eec6145c9 David Howells  2008-11-14  236   * get_cred - Get a reference on a set of credentials
-f1752eec6145c9 David Howells  2008-11-14  237   * @cred: The credentials to reference
-f1752eec6145c9 David Howells  2008-11-14  238   *
-f1752eec6145c9 David Howells  2008-11-14  239   * Get a reference on the specified set of credentials.  The caller must
-f06bc03339ad4c NeilBrown      2018-12-03  240   * release the reference.  If %NULL is passed, it is returned with no action.
-98870ab0a5a3f1 David Howells  2008-11-14  241   *
-98870ab0a5a3f1 David Howells  2008-11-14  242   * This is used to deal with a committed set of credentials.  Although the
-98870ab0a5a3f1 David Howells  2008-11-14  243   * pointer is const, this will temporarily discard the const and increment the
-98870ab0a5a3f1 David Howells  2008-11-14  244   * usage count.  The purpose of this is to attempt to catch at compile time the
-98870ab0a5a3f1 David Howells  2008-11-14  245   * accidental alteration of a set of credentials that should be considered
-98870ab0a5a3f1 David Howells  2008-11-14  246   * immutable.
-f1752eec6145c9 David Howells  2008-11-14  247   */
-d84f4f992cbd76 David Howells  2008-11-14  248  static inline const struct cred *get_cred(const struct cred *cred)
-f1752eec6145c9 David Howells  2008-11-14  249  {
-1c388ad054fb1e Paul Menage    2009-07-17  250  	struct cred *nonconst_cred = (struct cred *) cred;
-f06bc03339ad4c NeilBrown      2018-12-03  251  	if (!cred)
-f06bc03339ad4c NeilBrown      2018-12-03  252  		return cred;
-e0e817392b9acf David Howells  2009-09-02  253  	validate_creds(cred);
-d7852fbd0f0423 Linus Torvalds 2019-07-11 @254  	nonconst_cred->non_rcu = 0;
-1c388ad054fb1e Paul Menage    2009-07-17  255  	return get_new_cred(nonconst_cred);
-f1752eec6145c9 David Howells  2008-11-14  256  }
-f1752eec6145c9 David Howells  2008-11-14  257  
+b1ae32dbab50ed Alexei Starovoitov 2018-05-13  168  
+a3c8acd04376d6 H. Peter Anvin     2010-05-11  169  /*
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  170   * Static testing of CPU features. Used the same as boot_cpu_has(). It
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  171   * statically patches the target code for additional performance. Use
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  172   * static_cpu_has() only in fast paths, where every cycle counts. Which
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  173   * means that the boot_cpu_has() variant is already fast enough for the
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  174   * majority of cases and you should stick to using it as it is generally
+bfdd5a67c8cb02 Borislav Petkov    2019-03-29  175   * only two instructions: a RIP-relative MOV and a TEST.
+0507503671f9b1 H. Peter Anvin     2021-09-10  176   *
+0507503671f9b1 H. Peter Anvin     2021-09-10  177   * Do not use an "m" constraint for [cap_byte] here: gcc doesn't know
+0507503671f9b1 H. Peter Anvin     2021-09-10  178   * that this is only used on a fallback path and will sometimes cause
+0507503671f9b1 H. Peter Anvin     2021-09-10  179   * it to manifest the address of boot_cpu_data in a register, fouling
+0507503671f9b1 H. Peter Anvin     2021-09-10  180   * the mainline (post-initialization) code.
+a3c8acd04376d6 H. Peter Anvin     2010-05-11  181   */
+ae37a8cd9b0ad3 Borislav Petkov    2019-03-07  182  static __always_inline bool _static_cpu_has(u16 bit)
+4a90a99c4f8002 Borislav Petkov    2013-06-09  183  {
+2fe2a2c7a97c9b Juergen Gross      2021-03-11  184  	asm_volatile_goto(
+2fe2a2c7a97c9b Juergen Gross      2021-03-11  185  		ALTERNATIVE_TERNARY("jmp 6f", %P[feature], "", "jmp %l[t_no]")
+0507503671f9b1 H. Peter Anvin     2021-09-10  186  		".pushsection .altinstr_aux,\"ax\"\n"
+c3462ba9868372 Ingo Molnar        2018-12-19  187  		"6:\n"
+0507503671f9b1 H. Peter Anvin     2021-09-10  188  		" testb %[bitnum]," _ASM_RIP(%P[cap_byte]) "\n"
+c3462ba9868372 Ingo Molnar        2018-12-19  189  		" jnz %l[t_yes]\n"
+c3462ba9868372 Ingo Molnar        2018-12-19  190  		" jmp %l[t_no]\n"
+0507503671f9b1 H. Peter Anvin     2021-09-10  191  		".popsection\n"
+3197b04bb39b59 Peter Zijlstra     2018-01-16  192  		 : : [feature]  "i" (bit),
+2476f2fa20568b Brian Gerst        2016-01-27  193  		     [bitnum]   "i" (1 << (bit & 7)),
+0507503671f9b1 H. Peter Anvin     2021-09-10 @194  		     [cap_byte] "i" (&((const char *)boot_cpu_data.x86_capability)[bit >> 3])
+2476f2fa20568b Brian Gerst        2016-01-27  195  		 : : t_yes, t_no);
+2476f2fa20568b Brian Gerst        2016-01-27  196  t_yes:
+4a90a99c4f8002 Borislav Petkov    2013-06-09  197  	return true;
+4a90a99c4f8002 Borislav Petkov    2013-06-09  198  t_no:
+4a90a99c4f8002 Borislav Petkov    2013-06-09  199  	return false;
+4a90a99c4f8002 Borislav Petkov    2013-06-09  200  }
+4a90a99c4f8002 Borislav Petkov    2013-06-09  201  
 
-:::::: The code at line 254 was first introduced by commit
-:::::: d7852fbd0f0423937fa287a598bfde188bb68c22 access: avoid the RCU grace period for the temporary subjective credentials
+:::::: The code at line 194 was first introduced by commit
+:::::: 0507503671f9b1c867e889cbec0f43abf904f23c x86/asm: Avoid adding register pressure for the init case in static_cpu_has()
 
-:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: TO: H. Peter Anvin <hpa@zytor.com>
+:::::: CC: Borislav Petkov <bp@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
