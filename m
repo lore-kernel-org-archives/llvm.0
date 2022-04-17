@@ -1,43 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571217B
-	for <llvm@lists.linux.dev>; Sat, 16 Apr 2022 23:06:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A677A
+	for <llvm@lists.linux.dev>; Sun, 17 Apr 2022 08:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650150383; x=1681686383;
+  t=1650185745; x=1681721745;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wELl+SyaLPB/ly7xW2SzJaUB89/IRsuP9PxBJjpL30Y=;
-  b=TUFNkBqNi5Mn81CWUtiYaqxKKyiYhHcsYda/S07viXufvVRJxIZuLQ6h
-   hreA8G7n/jVxIF/4j1Z37FINnBLY3lbU4vHh3i6DoZ8oM0ofh3lXoxqKG
-   h/fme30DGR12H39WbmDJQYeXyBNdX2ncFBudpfykIwIDYbBuvfd5a+IsQ
-   jVEfMTSQNO6HfnAIFlOpb4ZifK9IMvAiQo4KM9/RyMce0fkZ9+xn2Ywt9
-   m75BiFTrFhJOTilsDihkdygbiJSY2HR435TOIV7J9ElGGe/qFgjUmJE8L
-   ueKnNoIDzmua0ckCygh+Qg0dbQa0p5jS1TYlSrCSWvRSmPAzX4IY8NdtE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263100850"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="263100850"
+  bh=QWVnNNHAXypuLupBwBfNHFlyMGqpOdlkWIqhCvdiCUE=;
+  b=B72WNjkALLHtr49Uq9Gbcsg786uxU1CXkRssGAMDj6LMPyMilMq5uSVL
+   lWjfmqB6KeTwe7hvnTvjK/sVyHxk7C903KSI/RTq1K9/GAQSKqW2VsdLr
+   9C+kSRK3+ObFoVx0X2AC7i77sloQ5hp4DcJVkvQR8XPROA5ye597XxMKL
+   R/CH5eHcEEtJRMLBxa+emVHOjhiHn20yWfzZ6NWReDhlpJuyuTApfogxx
+   5GkYJRIvau8du499gY9XCiwZl43cIZ7aV4HxXuwcLaUU/fTD9vDtaSvOS
+   hjZ8HwZYsOgqjrHN3rkExotBS8GoAJKbB5ds+2YSHywaTwwbiFKjG3hV6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="250672030"
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="250672030"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 16:06:22 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 01:55:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="509341458"
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="509428228"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 Apr 2022 16:06:21 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Apr 2022 01:55:43 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nfrUi-0003YH-L6;
-	Sat, 16 Apr 2022 23:06:20 +0000
-Date: Sun, 17 Apr 2022 07:06:08 +0800
+	id 1ng0h4-0003oP-Le;
+	Sun, 17 Apr 2022 08:55:42 +0000
+Date: Sun, 17 Apr 2022 16:55:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
+To: Thomas Gleixner <tglx@linutronix.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc1-net-next-c45 38/44]
- drivers/net/dsa/sja1105/sja1105_mdio.c:190:9: warning: variable 'tmp' is
- uninitialized when used here
-Message-ID: <202204170750.Ftg38eOr-lkp@intel.com>
+Subject: kernel/time/hrtimer.c:650:19: warning: unused function
+ 'hrtimer_hres_active'
+Message-ID: <202204171614.pxPdcp17-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,70 +47,99 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/lunn/linux.git v5.18-rc1-net-next-c45
-head:   a6ca6875280b5cf6ee1d8466840b71bf6ffb7bfd
-commit: 47aade045321c64f7486052fb1cee153d0f6cbdc [38/44] net: dsa: sja1105: Separate C22 and C45 transactions for T1 MDIO bus
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220417/202204170750.Ftg38eOr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
+Hi Thomas,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a2c29ccd9477861b16ddc02c411a6c9665250558
+commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
+date:   8 months ago
+config: mips-randconfig-r013-20220417 (https://download.01.org/0day-ci/archive/20220417/202204171614.pxPdcp17-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6fdb1de47bd5f26868838c37fa9e8cc1ac484bf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/47aade045321c64f7486052fb1cee153d0f6cbdc
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc1-net-next-c45
-        git checkout 47aade045321c64f7486052fb1cee153d0f6cbdc
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ kernel/time/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/sja1105/sja1105_mdio.c:190:9: warning: variable 'tmp' is uninitialized when used here [-Wuninitialized]
-           return tmp & 0xffff;
-                  ^~~
-   drivers/net/dsa/sja1105/sja1105_mdio.c:175:9: note: initialize the variable 'tmp' to silence this warning
-           u32 tmp;
-                  ^
-                   = 0
-   1 warning generated.
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
+   static inline int hrtimer_hres_active(void)
+   ^
+   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project c6fdb1de47bd5f26868838c37fa9e8cc1ac484bf)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-c6fdb1de47/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm net nr_bisected scripts source usr
 
 
-vim +/tmp +190 drivers/net/dsa/sja1105/sja1105_mdio.c
+vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
 
-5a8f09748ee79f Vladimir Oltean 2021-06-08  168  
-47aade045321c6 Andrew Lunn     2022-04-01  169  static int sja1105_base_t1_mdio_read_c45(struct mii_bus *bus, int phy,
-47aade045321c6 Andrew Lunn     2022-04-01  170  					 int mmd, int reg)
-47aade045321c6 Andrew Lunn     2022-04-01  171  {
-47aade045321c6 Andrew Lunn     2022-04-01  172  	struct sja1105_mdio_private *mdio_priv = bus->priv;
-47aade045321c6 Andrew Lunn     2022-04-01  173  	struct sja1105_private *priv = mdio_priv->priv;
-47aade045321c6 Andrew Lunn     2022-04-01  174  	u64 addr;
-47aade045321c6 Andrew Lunn     2022-04-01  175  	u32 tmp;
-47aade045321c6 Andrew Lunn     2022-04-01  176  	int rc;
-5a8f09748ee79f Vladimir Oltean 2021-06-08  177  
-47aade045321c6 Andrew Lunn     2022-04-01  178  	addr = sja1105_base_t1_encode_addr(priv, phy, SJA1105_C45_ADDR, mmd);
-47aade045321c6 Andrew Lunn     2022-04-01  179  
-47aade045321c6 Andrew Lunn     2022-04-01  180  	rc = sja1105_xfer_u32(priv, SPI_WRITE, addr, &reg, NULL);
-47aade045321c6 Andrew Lunn     2022-04-01  181  	if (rc < 0)
-47aade045321c6 Andrew Lunn     2022-04-01  182  		return rc;
-47aade045321c6 Andrew Lunn     2022-04-01  183  
-47aade045321c6 Andrew Lunn     2022-04-01  184  	addr = sja1105_base_t1_encode_addr(priv, phy, SJA1105_C45_DATA, mmd);
-47aade045321c6 Andrew Lunn     2022-04-01  185  
-47aade045321c6 Andrew Lunn     2022-04-01  186  	rc = sja1105_xfer_u32(priv, SPI_READ, addr, &reg, NULL);
-5a8f09748ee79f Vladimir Oltean 2021-06-08  187  	if (rc < 0)
-5a8f09748ee79f Vladimir Oltean 2021-06-08  188  		return rc;
-5a8f09748ee79f Vladimir Oltean 2021-06-08  189  
-5a8f09748ee79f Vladimir Oltean 2021-06-08 @190  	return tmp & 0xffff;
-5a8f09748ee79f Vladimir Oltean 2021-06-08  191  }
-5a8f09748ee79f Vladimir Oltean 2021-06-08  192  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
 
-:::::: The code at line 190 was first introduced by commit
-:::::: 5a8f09748ee79f2ef28e560bd095587a0e204b3d net: dsa: sja1105: register the MDIO buses for 100base-T1 and 100base-TX
+:::::: The code at line 650 was first introduced by commit
+:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
 
-:::::: TO: Vladimir Oltean <vladimir.oltean@nxp.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
