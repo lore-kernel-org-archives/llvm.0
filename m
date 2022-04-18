@@ -1,44 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D81621
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 10:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF50801
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 11:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650278723; x=1681814723;
+  t=1650280525; x=1681816525;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=744tLKIExCR72Ev5c6z5jZdyZeGFpl/1RFTBjyh3hTg=;
-  b=RuD0mkr4rNl0xDrCI79OcjKsjrAUiNg8x8HEZB3xaYhgoASOJWW26CiC
-   TjvHiFsRNmuYFcY325/HS0Daz+qp0ZTrC7fEZ4pr7IYjC3FMyOyGjWccK
-   va7ENwcLjiam4Hu39kGDaTubjjYH3LNPbZnttlf94he7fF42dLTXrd+Vs
-   mFB4MVt4Nwwbo0StLM2E2XLMSTnOpFkpLBxXjtpkFcsVN0opkPOHtU8cG
-   /j2gJ2qH8G2NzUnYSVTviPdF8mkbrOBT9dCbGm141JkLp9zAlmJUtd6Ss
-   WKvTpjxYU85n/W8lqabR/xrcViuixe0Ta4x/ZvFtp+ylYZewCJzAYq6Zl
+  bh=iwYeDUipsL3WkSiQx0BhM9s9MmnWhBi5t77mWD8jF44=;
+  b=HnTw44fvfYVh6CHJZmtoHisFqcsEk72r+Ez+9QvnUyWRVvefgYyKGd2i
+   yJu+2CAvxRGB+X6kF3qk+pi87WLh9oQ2BqiH37mAOpVAzyhFGEJESd4/9
+   +iurnA9Kq9WnMu8GQmIberltRKXox3795l/8IsETrPtYqiX5hOe53mh3P
+   TO1kk+tEQkSepStvnhD7YLV23cSZlbDmQQqPfiMWfsEjzVXAHnjj2UDav
+   K6kKRExfmlzZtAufRk1NiKtqd6cFK4eDTMWJlH31YSat3NtAsBHXuRjB2
+   R/xUpHyeQ/cJW3VRbexhCbOz/ZncLkDhaM75g2DIHD6i5eB0+GGe6Ke3Y
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262956721"
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="245389508"
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="262956721"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:45:23 -0700
+   d="scan'208";a="245389508"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 04:15:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="726599788"
+   d="scan'208";a="509708570"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 03:45:22 -0700
+  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 04:15:23 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngOsj-0004YZ-Fw;
-	Mon, 18 Apr 2022 10:45:21 +0000
-Date: Mon, 18 Apr 2022 18:44:20 +0800
+	id 1ngPLn-0004Zf-2T;
+	Mon, 18 Apr 2022 11:15:23 +0000
+Date: Mon, 18 Apr 2022 19:15:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [norov:bitmap 45/47] include/linux/bitmap.h:615:32: warning:
- incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long
- long') to parameter of type 'const u64 *' (aka 'const unsigned long long
- *'); take the address with &
-Message-ID: <202204181828.5E4IAlMk-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 1112/4328]
+ arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype
+ for function 'mmc_status'
+Message-ID: <202204181931.klAC6fWo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,75 +48,65 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/norov/linux bitmap
-head:   45a9e3feb171ccf077979b7ff6a0c6a732cfc17b
-commit: 1a21df17d726b4f3c19a148e10d09ec632603f1c [45/47] lib: add bitmap_{from,to}_arr64
-config: powerpc-mvme5100_defconfig (https://download.01.org/0day-ci/archive/20220418/202204181828.5E4IAlMk-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+Hi Arnd,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   40354149f4d738dc3492d9998e45b3f02950369a
+commit: d7445676e86900f8dc363825033ff62416c216e0 [1112/4328] ARM: versatile: move integrator/realview/vexpress to versatile
+config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220418/202204181931.klAC6fWo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b27430f9f46b88bcd54d992debc8d72e131e1bd0)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/norov/linux/commit/1a21df17d726b4f3c19a148e10d09ec632603f1c
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bitmap
-        git checkout 1a21df17d726b4f3c19a148e10d09ec632603f1c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d7445676e86900f8dc363825033ff62416c216e0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:62:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:13:
-   In file included from include/linux/cpumask.h:12:
->> include/linux/bitmap.h:615:32: warning: incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long long') to parameter of type 'const u64 *' (aka 'const unsigned long long *'); take the address with & [-Wint-conversion]
-           return bitmap_from_arr64(dst, mask, 64);
-                                         ^~~~
-                                         &
-   include/linux/bitmap.h:300:58: note: passing argument to parameter 'buf' here
-   void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
-                                                            ^
+>> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
+   unsigned int mmc_status(struct device *dev)
+                ^
+   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int mmc_status(struct device *dev)
+   ^
+   static 
    1 warning generated.
-   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
-   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
-   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
-   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:65: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
 
-vim +615 include/linux/bitmap.h
+vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
 
-   602	
-   603	/**
-   604	 * bitmap_from_u64 - Check and swap words within u64.
-   605	 *  @mask: source bitmap
-   606	 *  @dst:  destination bitmap
-   607	 *
-   608	 * In 32-bit Big Endian kernel, when using ``(u32 *)(&val)[*]``
-   609	 * to read u64 mask, we will get the wrong word.
-   610	 * That is ``(u32 *)(&val)[0]`` gets the upper 32 bits,
-   611	 * but we expect the lower 32-bits of u64.
-   612	 */
-   613	static inline void bitmap_from_u64(unsigned long *dst, u64 mask)
-   614	{
- > 615		return bitmap_from_arr64(dst, mask, 64);
-   616	}
-   617	
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
+a70967892111934 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
+
+:::::: The code at line 56 was first introduced by commit
+:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
+
+:::::: TO: Rob Herring <robh@kernel.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
 0-DAY CI Kernel Test Service
