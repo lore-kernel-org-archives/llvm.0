@@ -1,45 +1,49 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AD4804
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 18:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A35A41
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 19:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650307428; x=1681843428;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N3A1POqgDp1mxQ9V0+SRZJCWPyA+HR3Nuje9R/F7YSA=;
-  b=HtnQxa2qXILYqDidq5EoU+zuuh8iSCXPbFsrep289jX6Pv4vv62/xiRd
-   EfnI8DYF0BFfJITtcr0lu8ru5hiQmzOsAze/gMgYQEPqxNV7XomdgQxLy
-   wTI/5xNLREBtffSeUqeyHrEjOZ4pZSatlxzcyX8P1outGF4OhPiPVmPG/
-   1bE2j1ai0U3wZw2IJmJGuDKeEivP8QdAHEbUsTAb4nR9Y+y7sfDdVoOxE
-   8E4vw5uhQISNIpvHeLvkE/A5OuZ5TQmqbAdAhr5BahG+oM5W7ZzAYdxlR
-   usjLpUmYJO8CJVB9L3Cne2xGhQLrhBMPl3uYQxwbcxDnU6NAetzUpK0A5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350037368"
+  t=1650311695; x=1681847695;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h6Wq2KUNZXLjKWIzIbgs5E6BmURH6qZiyFlSB+GJJJI=;
+  b=ldr+lhtkimWsfiCS+jwGcDZf3i+Ymu3mcdmmIQsKAb9agCbFnJYK0rtT
+   bUjWzaMhZSoey1C7PnsPtvseH612ygeW/DaeB8UxI2pn6Ct09gDwfngjD
+   91RHndKTeYvZ6Y9hQf2n7+9QHRARcmKtnC10F9lx64tRKLiwTT4Tzu0nZ
+   D78D6R2vD2N4svMvESXFp++64sD9YP3I+Iua+8fIHR3LJS0Ro+y5R7gnU
+   Bb4CQfzp4UKNmv5rnaSr3zbGAre3gnbREOEJCje6K8prFlTVqM9tRSyyd
+   Nzp3RlBnYYpU+vqTFXLPEDxg0qlPA9bk4tb+bM9Iv74Z2nNkWN69s0Uqz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="324040855"
 X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="350037368"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 11:43:47 -0700
+   d="scan'208";a="324040855"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 12:54:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="646960579"
+   d="scan'208";a="561448219"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2022 11:43:45 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2022 12:54:52 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngWLh-0004sg-0E;
-	Mon, 18 Apr 2022 18:43:45 +0000
-Date: Tue, 19 Apr 2022 02:43:02 +0800
+	id 1ngXSV-0004vF-Rw;
+	Mon, 18 Apr 2022 19:54:51 +0000
+Date: Tue, 19 Apr 2022 03:54:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
+To: Kevin Hao <haokexin@gmail.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dmitry Osipenko <digetx@gmail.com>
-Subject: arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5:
- warning: no previous prototype for function
- 'LZ4_decompress_safe_forceExtDict'
-Message-ID: <202204190231.jAoAYNgP-lkp@intel.com>
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Dejin Zheng <zhengdejin5@gmail.com>
+Subject: Re: [PATCH] net: stmmac: Use readl_poll_timeout_atomic() in atomic
+ state
+Message-ID: <202204190334.b0rutoIE-lkp@intel.com>
+References: <20220418090500.3393423-1-haokexin@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,118 +52,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220418090500.3393423-1-haokexin@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Krzysztof,
+Hi Kevin,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 84a0124a9d715d844675c8cfbe5bbc9147121f73 MIPS: ralink: define stubs for clk_set_parent to fix compile testing
-date:   1 year, 1 month ago
-config: mips-buildonly-randconfig-r002-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190231.jAoAYNgP-lkp@intel.com/config)
+[auto build test ERROR on net/master]
+[also build test ERROR on net-next/master horms-ipvs/master linus/master v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kevin-Hao/net-stmmac-Use-readl_poll_timeout_atomic-in-atomic-state/20220418-170945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 49aefd131739df552f83c566d0665744c30b1d70
+config: arm-spear13xx_defconfig (https://download.01.org/0day-ci/archive/20220419/202204190334.b0rutoIE-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=84a0124a9d715d844675c8cfbe5bbc9147121f73
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 84a0124a9d715d844675c8cfbe5bbc9147121f73
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/2a443e2b58e8910075a2d972e0e52b1d070654af
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kevin-Hao/net-stmmac-Use-readl_poll_timeout_atomic-in-atomic-state/20220418-170945
+        git checkout 2a443e2b58e8910075a2d972e0e52b1d070654af
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   arch/mips/boot/compressed/decompress.c:40:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
-   void error(char *x)
-        ^
-   arch/mips/boot/compressed/decompress.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void error(char *x)
-   ^
-   static 
-   In file included from arch/mips/boot/compressed/decompress.c:62:
-   In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
-   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:484:5: warning: no previous prototype for function 'LZ4_decompress_safe_withPrefix64k' [-Wmissing-prototypes]
-   int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
-       ^
-   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:484:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
-   ^
-   static 
->> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
-   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
-       ^
-   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
-   ^
-   static 
-   arch/mips/boot/compressed/decompress.c:83:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
-   void __stack_chk_fail(void)
-        ^
-   arch/mips/boot/compressed/decompress.c:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __stack_chk_fail(void)
-   ^
-   static 
-   arch/mips/boot/compressed/decompress.c:88:6: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
-   void decompress_kernel(unsigned long boot_heap_start)
-        ^
-   arch/mips/boot/compressed/decompress.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void decompress_kernel(unsigned long boot_heap_start)
-   ^
-   static 
-   5 warnings generated.
-
-
-vim +/LZ4_decompress_safe_forceExtDict +506 arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c
-
-2209fda323e2fd Gao Xiang    2018-10-30  483  
-2209fda323e2fd Gao Xiang    2018-10-30 @484  int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
-2209fda323e2fd Gao Xiang    2018-10-30  485  				      int compressedSize, int maxOutputSize)
-2209fda323e2fd Gao Xiang    2018-10-30  486  {
-2209fda323e2fd Gao Xiang    2018-10-30  487  	return LZ4_decompress_generic(source, dest,
-2209fda323e2fd Gao Xiang    2018-10-30  488  				      compressedSize, maxOutputSize,
-2209fda323e2fd Gao Xiang    2018-10-30  489  				      endOnInputSize, decode_full_block,
-2209fda323e2fd Gao Xiang    2018-10-30  490  				      withPrefix64k,
-2209fda323e2fd Gao Xiang    2018-10-30  491  				      (BYTE *)dest - 64 * KB, NULL, 0);
-2209fda323e2fd Gao Xiang    2018-10-30  492  }
-2209fda323e2fd Gao Xiang    2018-10-30  493  
-2209fda323e2fd Gao Xiang    2018-10-30  494  static int LZ4_decompress_safe_withSmallPrefix(const char *source, char *dest,
-2209fda323e2fd Gao Xiang    2018-10-30  495  					       int compressedSize,
-2209fda323e2fd Gao Xiang    2018-10-30  496  					       int maxOutputSize,
-2209fda323e2fd Gao Xiang    2018-10-30  497  					       size_t prefixSize)
-2209fda323e2fd Gao Xiang    2018-10-30  498  {
-2209fda323e2fd Gao Xiang    2018-10-30  499  	return LZ4_decompress_generic(source, dest,
-2209fda323e2fd Gao Xiang    2018-10-30  500  				      compressedSize, maxOutputSize,
-2209fda323e2fd Gao Xiang    2018-10-30  501  				      endOnInputSize, decode_full_block,
-2209fda323e2fd Gao Xiang    2018-10-30  502  				      noDict,
-2209fda323e2fd Gao Xiang    2018-10-30  503  				      (BYTE *)dest - prefixSize, NULL, 0);
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  504  }
-cffb78b0e0b3a3 Kyungsik Lee 2013-07-08  505  
-2209fda323e2fd Gao Xiang    2018-10-30 @506  int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
-2209fda323e2fd Gao Xiang    2018-10-30  507  				     int compressedSize, int maxOutputSize,
-2209fda323e2fd Gao Xiang    2018-10-30  508  				     const void *dictStart, size_t dictSize)
-2209fda323e2fd Gao Xiang    2018-10-30  509  {
-2209fda323e2fd Gao Xiang    2018-10-30  510  	return LZ4_decompress_generic(source, dest,
-2209fda323e2fd Gao Xiang    2018-10-30  511  				      compressedSize, maxOutputSize,
-2209fda323e2fd Gao Xiang    2018-10-30  512  				      endOnInputSize, decode_full_block,
-2209fda323e2fd Gao Xiang    2018-10-30  513  				      usingExtDict, (BYTE *)dest,
-2209fda323e2fd Gao Xiang    2018-10-30  514  				      (const BYTE *)dictStart, dictSize);
-2209fda323e2fd Gao Xiang    2018-10-30  515  }
-2209fda323e2fd Gao Xiang    2018-10-30  516  
-
-:::::: The code at line 506 was first introduced by commit
-:::::: 2209fda323e2fd2a2d0885595fd5097717f8d2aa lib/lz4: update LZ4 decompressor module
-
-:::::: TO: Gao Xiang <gaoxiang25@huawei.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> ld.lld: error: undefined symbol: __bad_udelay
+   >>> referenced by stmmac_hwtstamp.c
+   >>>               net/ethernet/stmicro/stmmac/stmmac_hwtstamp.o:(init_systime) in archive drivers/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service
