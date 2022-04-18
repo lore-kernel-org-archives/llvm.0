@@ -1,162 +1,95 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB258819
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:49:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650293374; x=1681829374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O8jCNttKfcTOfPhW6/iydPjwJI9EDwBsW/ipQu39Hh0=;
-  b=B3Ao3sc6+PxBjMfoK3jUdgpb7fM2h+csTYk87o/RJVwdsKk7xgdCf5cf
-   hGB/eewh7RjIh2MtIihtzkuwcKgUsKSJ9sKfdb0KQhGooTJ7732vkeUoi
-   nURGQFWPguFNJ6shpWU1Xb0G7HacLX3aglOKHQGsQ+D/tJY9mLOEDtrbl
-   vYXfYxGSkKYBT8FQUSzUbMaZAdmJVsRXZQiy/zR5nfm2IfgRCZDyxZrVc
-   IToP47/RfdqEvF5gZrdDbLg9xghCCYSOtRtJW4mnezaBkCgOWSmF0yRhT
-   KxkvdWtf3nvT3ghSp5+M5pXc4LV2U+YkjLpMRvPfn+TpizDthyefWAU6U
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="323974124"
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="323974124"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 07:49:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="726666030"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 07:49:31 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ngSh0-0004iB-J8;
-	Mon, 18 Apr 2022 14:49:30 +0000
-Date: Mon, 18 Apr 2022 22:49:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aswath Govindraju <a-govindraju@ti.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers: mmc: sdhci_am654: Add the quirk to set
- TESTCD bit
-Message-ID: <202204182202.yPPV6YZI-lkp@intel.com>
-References: <20220418102040.4993-3-a-govindraju@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBD87A
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:58:45 +0000 (UTC)
+Received: by mail-wr1-f48.google.com with SMTP id i20so18828902wrb.13
+        for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 07:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CX/IUq1aN3lYpmTZrmux2ZoNqle4gaskLWMK3nNShGw=;
+        b=JdNM/niE5cXM0TtsJv+AiQG6UfTArLkryCgK8z4GIkdoaRaCxwAIIidvmgZ+mkVEt8
+         /4jGxK4C9/KlzaR+i6YfxG/XjIY5r2P9vF282wKEN702SZOJiIU3ZrGMdpzVnrdW3caj
+         Z71tHHaOsQ6+ELTgAjQa/y/4XCfZMxeIyWXd0dGoGNj+dzoLH/hQoP/8rNOvNPFoKbBQ
+         /LT6wmL2EybaqGXORDRUZN1ep0jeDcqhAxazDCKHQbMT4bzOI+a3ANSvoV4eqQzMqIze
+         YZat7aMSXjylpz2cBZMUzb4WPYOo1i9LKSmhmlPBY1hBJNZaTJ+WGiCRqDYST9xZcYL4
+         HYww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CX/IUq1aN3lYpmTZrmux2ZoNqle4gaskLWMK3nNShGw=;
+        b=R9XgEvZPQDgfTcQc60tefVcJbPJhI4v6iOgT6DtNQ6MvGIpGPGkE53QJOPjV/6+WRp
+         XdZYSijvC+2gHS9B/0zU+YiIUv0OqQFMqi8vqjNDWEPSWl8Qq+hhltcdcZZtcSVGtbzF
+         rL28gUiiWOdGbWv+OC72EZcal6906vmocKH9kwi3sRgta5Bzlm2L5onpbKaIal/Aq0KY
+         srnaOZb8pgg0kew0bOLt2T3qSa4hlDfjMd/yMeWgY/DAg56p+i3pjmNDLYDBav8J08KE
+         YxjwVEiqd0ewU8Qo8s7GnJzXntXnKJh5c/UGWWybeHBup3vNo1HeCQQVTByy04C3HZkT
+         x3JQ==
+X-Gm-Message-State: AOAM533zdJlkX3uScuuSV3Ea8My+4HeoZ5RBMOzHOQJIynL1Asuvc2Q1
+	b5NDVzYsrbO3zU4noIEaqkA=
+X-Google-Smtp-Source: ABdhPJzzsluWxj0VaudxL34jveGy6/JC2BIiCB0OvhXZF9RY9e4P8n4nrql3SI+RbCDjUd+6EDMyGA==
+X-Received: by 2002:a5d:6c68:0:b0:20a:8d5f:681a with SMTP id r8-20020a5d6c68000000b0020a8d5f681amr6931611wrz.470.1650293923638;
+        Mon, 18 Apr 2022 07:58:43 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h2-20020a05600c414200b0038ec7a4f07esm16740652wmm.33.2022.04.18.07.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 07:58:43 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Matt Porter <mporter@kernel.crashing.org>,
+	Alexandre Bounine <alex.bou9@gmail.com>,
+	linux-kernel@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] rapidio: Remove redundant variable tmp
+Date: Mon, 18 Apr 2022 15:58:42 +0100
+Message-Id: <20220418145842.87154-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418102040.4993-3-a-govindraju@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Aswath,
+Variable tmp is being assigned a value that is never read, the variable
+is redundant and can be removed.
 
-I love your patch! Perhaps something to improve:
+Cleans up clang scan build warning:
+drivers/rapidio/rio-scan.c:561:10: warning: Although the value stored
+to 'tmp' is used in the enclosing expression, the value is never actually
+read from 'tmp' [deadcode.DeadStores]
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master ulf-hansson-mmc-mirror/next v5.18-rc3 next-20220414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/rapidio/rio-scan.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aswath-Govindraju/MMC-Add-quirk-to-set-the-TESTCD-bit/20220418-182325
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: riscv-randconfig-r016-20220418 (https://download.01.org/0day-ci/archive/20220418/202204182202.yPPV6YZI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a7d917691f55e240b1ab0abf36b0b39d1194a323
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aswath-Govindraju/MMC-Add-quirk-to-set-the-TESTCD-bit/20220418-182325
-        git checkout a7d917691f55e240b1ab0abf36b0b39d1194a323
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/mmc/host/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/mmc/host/sdhci_am654.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/mmc/host/sdhci_am654.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/mmc/host/sdhci_am654.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/mmc/host/sdhci_am654.c:375:6: warning: no previous prototype for function 'sdhci_am654_reset' [-Wmissing-prototypes]
-   void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
-        ^
-   drivers/mmc/host/sdhci_am654.c:375:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
-   ^
-   static 
-   8 warnings generated.
-
-
-vim +/sdhci_am654_reset +375 drivers/mmc/host/sdhci_am654.c
-
-   374	
- > 375	void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
-   376	{
-   377		u8 ctrl;
-   378		struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-   379		struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
-   380	
-   381		sdhci_reset(host, mask);
-   382	
-   383		if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
-   384			ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
-   385			ctrl |= SDHCI_CTRL_CDTEST_INS | SDHCI_CTRL_CDTEST_EN;
-   386			sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
-   387		}
-   388	}
-   389	
-
+diff --git a/drivers/rapidio/rio-scan.c b/drivers/rapidio/rio-scan.c
+index 19b0c33f4a62..5256e76ab29c 100644
+--- a/drivers/rapidio/rio-scan.c
++++ b/drivers/rapidio/rio-scan.c
+@@ -524,7 +524,6 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
+ {
+ 	struct rio_dev *rdev;
+ 	u32 regval;
+-	int tmp;
+ 
+ 	if (rio_mport_chk_dev_access(port,
+ 			RIO_ANY_DESTID(port->sys_size), hopcount)) {
+@@ -558,8 +557,7 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
+ 	rio_mport_write_config_32(port, RIO_ANY_DESTID(port->sys_size),
+ 				  hopcount,
+ 				  RIO_HOST_DID_LOCK_CSR, port->host_deviceid);
+-	while ((tmp = rio_get_host_deviceid_lock(port, hopcount))
+-	       < port->host_deviceid) {
++	while (rio_get_host_deviceid_lock(port, hopcount) < port->host_deviceid) {
+ 		/* Delay a bit */
+ 		mdelay(1);
+ 		/* Attempt to acquire device lock again */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
