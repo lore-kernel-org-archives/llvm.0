@@ -1,71 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68725A56
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2538EC385A8
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650316876;
-	bh=KAav+VCFSYr91LEhdYGTPh0+hHoGFkG2lJeNL06UyDs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qeqbaJuAD+RFOY8cE/lIYy/P4cy7ZmPjKqgvDxKSiajfesnctZFuC99HiJ8TUqLF7
-	 cwaTqCxi5qNdoLluehUu9gPAFFWUUoSn+NWOmhsyhr0bbxwH26MWYKM0wfq/nX9oWZ
-	 dvjfxuOKeYJhK/wd9UrIwes34158zGoN4V+7DsNtsSiDtWxxnT/vNGemhHMFOnm8M9
-	 bpeyfhDMzr2GNr6CQRT6b1UIl3ArxUuAgPR4yq9a/2b3Wg4v82UrWAIOeZ/0Zu0zDl
-	 RYvDD69q6w7VUlXtzoVwoR7MCMhTfUi4fhTgqEtC2gaWC1NpYeAPF6fZbY8CrtCuL7
-	 5PCtNSXapgeoQ==
-Received: by mail-wr1-f49.google.com with SMTP id bv16so2807298wrb.9
-        for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:21:16 -0700 (PDT)
-X-Gm-Message-State: AOAM531qkylC5ki+awjlKO68FCk35yoW5tyBHcHNnxM4a1KKDQSFY26o
-	iDHjSVRVx6p3TKStsPd+X7WXWBHQoHFLAZHAsMY=
-X-Google-Smtp-Source: ABdhPJxkncmo4ORlw7zomxpWYmpYkP0uGqq0sLEjKNrhhFTmoEv/ShhDQl+AGPgqziemJBJ2yBx/M531Aq661utXpH8=
-X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
- m3-20020a5d64a3000000b0020a79315b84mr9825822wrp.407.1650316874305; Mon, 18
- Apr 2022 14:21:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7F3A56
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:52:27 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso485097pjj.3
+        for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5EloPRaMAEvo1BFocPUg4BfBZ1iEVJmMWJsQxi5bcMM=;
+        b=YVmlcx5sXVXgzhOvtNXNtNAkcmWX3wxfxu84QX8EIpr8heLKB5rxNy/PHU4gQiNksP
+         Nl05EfDdHLQO6X+ieo8hsfYFPduWzcKaHEXh44GBVkDSCnxZhkapPOLpfjvmZMUZIvZh
+         /Jx0z/vO6S4i685sTPpbOfzj63SA8nGReAIY4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5EloPRaMAEvo1BFocPUg4BfBZ1iEVJmMWJsQxi5bcMM=;
+        b=3XUeLWgManxil5HZd0dHUa/WFUorNDlVCoYyPYOZboMfyVkxnVSCxmzfzd3t+P3mjH
+         S0a9Cpiai1nKyz01Kz64S/dtVHj7PPWPaAWqS5jlj3wks52EJPVNUDf4T1f6A+UarlAE
+         eEt0XaU2z6JTkYcEzD3iAtlsFNJbKWs0O7ebyGpGCiN/2YKt2zWhF09qJm7huhVeVBRy
+         xaWxjti6K8AfeHzX5kujfH3JVbBp0nlvH/DYr+syNtjN1L9myMSyDnq0D9Fot3K+Rhek
+         avZXkQjWtc2o04QUnEQTFgN4Am6ikRDA1CuxwEdcQWLxKdGKj0DC0bApQ31MiD/URNwk
+         svNQ==
+X-Gm-Message-State: AOAM533dOp1/gMlrhJFyF/tBsdw8NlwTwlB++JFIvrtc9gGnMUqLVXn/
+	5ko9GRN/8EfGt8SY7hfVIgn4Gw==
+X-Google-Smtp-Source: ABdhPJyIIy7Mu/4/cYuLkLDArRZG98DXBS95aUkzsSxNZ1kkHNh/R2HFtJ2oWipnr/f65XUDX5MU2A==
+X-Received: by 2002:a17:902:e743:b0:159:40a:a156 with SMTP id p3-20020a170902e74300b00159040aa156mr5598299plf.89.1650318746580;
+        Mon, 18 Apr 2022 14:52:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r8-20020a17090a0ac800b001c9e35d3a3asm13984922pje.24.2022.04.18.14.52.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 14:52:26 -0700 (PDT)
+Date: Mon, 18 Apr 2022 14:52:25 -0700
+From: Kees Cook <keescook@chromium.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [kees:for-next/randstruct 5/5] include/linux/cred.h:254:17:
+ error: no member named 'non_rcu' in 'struct cred'
+Message-ID: <202204181451.006918DB0F@keescook>
+References: <202204180214.X2Y1kbZ6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Mon, 18 Apr 2022 23:20:58 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
-Subject: Re: kernel.org binaries and sysroots
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Saleem Abdulrasool <compnerd@compnerd.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204180214.X2Y1kbZ6-lkp@intel.com>
 
-On Thu, Apr 14, 2022 at 11:44 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Hi Arnd,
-> Jose and I are currently in the planning process to put together a
-> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> this year (Sept 12-14) in Dublin, Ireland.
->
-> I was curious if you (or others) would find it worthwhile to carve out
-> time to discuss further kernel.org binaries (and potentially even
-> sysroots) at such a Kernel+Toolchain MC?
+On Mon, Apr 18, 2022 at 02:31:31AM +0800, kernel test robot wrote:
+> >> include/linux/cred.h:254:17: error: no member named 'non_rcu' in 'struct cred'
+>            nonconst_cred->non_rcu = 0;
+>            ~~~~~~~~~~~~~  ^
 
-I'm still undecided about attending Plumbers myself. If that topic ends up
-on the list and I'm in Dublin, I would obviously attend, but there might not
-actually be that much to discuss other than who would do the work.
+Thanks! This is being worked on:
+https://github.com/KSPP/linux/issues/185
 
-I inherited the scripts from Tony Breeds who did it before. If you or someone
-else wants to add clang binaries, I can help you get it onto the kernel.org
-server as well, same for building more complete toolchains.
-
-My build environment at the moment is on my old workstation running
-an older Ubuntu 16.04 chroot, to allow building binaries for a large variety
-of distros. As I'm moving to working purely on an arm64 workstation that
-doesn't have this yet, I will likely have to revisit the way I'm building these
-anyway for future releases.
-
-      Arnd
+-- 
+Kees Cook
