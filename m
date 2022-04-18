@@ -1,46 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2A47EC
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 10:24:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D81621
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 10:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650277486; x=1681813486;
+  t=1650278723; x=1681814723;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aciEQzyL1MqhGQqKm7QoCGDt+R4s3XKB/DFtDwxqTgM=;
-  b=k6uE6km60iaY2t/A5Qx1p9vOVyMcodV/wyG9Ldmt6yvSdG+e0ikrovvQ
-   4JxUOX02vPiAOQLT8gwa0lssPjx6gTJmwTHh0nH4vFpQiVxeV6EpebHK6
-   gHXmIt64hnIFXo8ozI9hw2SsDUY4WDwhyfmq1yEKnaD8heEE13mcpJb31
-   hwIk6IAKIWRnjkz9ym+zCw95X0qAUAIVUw4XkHPRCiK9SSYnBERIi+HQ2
-   xv2KjRbTW0CO/MO+lczkXpsqEmS2OrtAHzHyK2H4c+GSwLPdUIOjiphFs
-   6G7/pWs9xaSip+u+PeFkVogZVGPumoklXLJ/ZrZquXwsla8i7iMCy7Kd9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="349942697"
+  bh=744tLKIExCR72Ev5c6z5jZdyZeGFpl/1RFTBjyh3hTg=;
+  b=RuD0mkr4rNl0xDrCI79OcjKsjrAUiNg8x8HEZB3xaYhgoASOJWW26CiC
+   TjvHiFsRNmuYFcY325/HS0Daz+qp0ZTrC7fEZ4pr7IYjC3FMyOyGjWccK
+   va7ENwcLjiam4Hu39kGDaTubjjYH3LNPbZnttlf94he7fF42dLTXrd+Vs
+   mFB4MVt4Nwwbo0StLM2E2XLMSTnOpFkpLBxXjtpkFcsVN0opkPOHtU8cG
+   /j2gJ2qH8G2NzUnYSVTviPdF8mkbrOBT9dCbGm141JkLp9zAlmJUtd6Ss
+   WKvTpjxYU85n/W8lqabR/xrcViuixe0Ta4x/ZvFtp+ylYZewCJzAYq6Zl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262956721"
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="349942697"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:24:24 -0700
+   d="scan'208";a="262956721"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:45:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="529465431"
+   d="scan'208";a="726599788"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 03:24:21 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 03:45:22 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngOYO-0004Xh-Nv;
-	Mon, 18 Apr 2022 10:24:20 +0000
-Date: Mon, 18 Apr 2022 18:23:36 +0800
+	id 1ngOsj-0004YZ-Fw;
+	Mon, 18 Apr 2022 10:45:21 +0000
+Date: Mon, 18 Apr 2022 18:44:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mauro Lima <mauro.lima@eclypsium.com>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix
- selected. No NOR chip support can work.
-Message-ID: <202204181831.mZ5R0kZ8-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [norov:bitmap 45/47] include/linux/bitmap.h:615:32: warning:
+ incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long
+ long') to parameter of type 'const u64 *' (aka 'const unsigned long long
+ *'); take the address with &
+Message-ID: <202204181828.5E4IAlMk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,54 +49,75 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: e23e5a05d1fd9479586c40ffbcc056b3e34ef816 mtd: spi-nor: intel-spi: Convert to SPI MEM
-date:   9 weeks ago
-config: x86_64-randconfig-a014-20220418 (https://download.01.org/0day-ci/archive/20220418/202204181831.mZ5R0kZ8-lkp@intel.com/config)
+tree:   https://github.com/norov/linux bitmap
+head:   45a9e3feb171ccf077979b7ff6a0c6a732cfc17b
+commit: 1a21df17d726b4f3c19a148e10d09ec632603f1c [45/47] lib: add bitmap_{from,to}_arr64
+config: powerpc-mvme5100_defconfig (https://download.01.org/0day-ci/archive/20220418/202204181828.5E4IAlMk-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e23e5a05d1fd9479586c40ffbcc056b3e34ef816
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e23e5a05d1fd9479586c40ffbcc056b3e34ef816
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/norov/linux/commit/1a21df17d726b4f3c19a148e10d09ec632603f1c
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap
+        git checkout 1a21df17d726b4f3c19a148e10d09ec632603f1c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/spi/spi-intel.c:13:
-   In file included from include/linux/mtd/spi-nor.h:10:
->> include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-W#warnings]
-   #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
-    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:12:
+>> include/linux/bitmap.h:615:32: warning: incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long long') to parameter of type 'const u64 *' (aka 'const unsigned long long *'); take the address with & [-Wint-conversion]
+           return bitmap_from_arr64(dst, mask, 64);
+                                         ^~~~
+                                         &
+   include/linux/bitmap.h:300:58: note: passing argument to parameter 'buf' here
+   void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+                                                            ^
    1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:65: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +62 include/linux/mtd/cfi.h
+vim +615 include/linux/bitmap.h
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  60  
-241651d04d672f David Woodhouse 2007-09-06  61  #ifndef cfi_interleave
-241651d04d672f David Woodhouse 2007-09-06 @62  #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
-241651d04d672f David Woodhouse 2007-09-06  63  static inline int cfi_interleave(void *cfi)
-241651d04d672f David Woodhouse 2007-09-06  64  {
-241651d04d672f David Woodhouse 2007-09-06  65  	BUG();
-241651d04d672f David Woodhouse 2007-09-06  66  	return 0;
-241651d04d672f David Woodhouse 2007-09-06  67  }
-241651d04d672f David Woodhouse 2007-09-06  68  #endif
-241651d04d672f David Woodhouse 2007-09-06  69  
-
-:::::: The code at line 62 was first introduced by commit
-:::::: 241651d04d672fb685b2874707016cbbf95931e5 [MTD] Fix CFI build error when no map width or interleave supported
-
-:::::: TO: David Woodhouse <dwmw2@infradead.org>
-:::::: CC: David Woodhouse <dwmw2@infradead.org>
+   602	
+   603	/**
+   604	 * bitmap_from_u64 - Check and swap words within u64.
+   605	 *  @mask: source bitmap
+   606	 *  @dst:  destination bitmap
+   607	 *
+   608	 * In 32-bit Big Endian kernel, when using ``(u32 *)(&val)[*]``
+   609	 * to read u64 mask, we will get the wrong word.
+   610	 * That is ``(u32 *)(&val)[0]`` gets the upper 32 bits,
+   611	 * but we expect the lower 32-bits of u64.
+   612	 */
+   613	static inline void bitmap_from_u64(unsigned long *dst, u64 mask)
+   614	{
+ > 615		return bitmap_from_arr64(dst, mask, 64);
+   616	}
+   617	
 
 -- 
 0-DAY CI Kernel Test Service
