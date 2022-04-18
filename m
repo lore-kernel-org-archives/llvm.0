@@ -1,95 +1,99 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBD87A
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:58:45 +0000 (UTC)
-Received: by mail-wr1-f48.google.com with SMTP id i20so18828902wrb.13
-        for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 07:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CX/IUq1aN3lYpmTZrmux2ZoNqle4gaskLWMK3nNShGw=;
-        b=JdNM/niE5cXM0TtsJv+AiQG6UfTArLkryCgK8z4GIkdoaRaCxwAIIidvmgZ+mkVEt8
-         /4jGxK4C9/KlzaR+i6YfxG/XjIY5r2P9vF282wKEN702SZOJiIU3ZrGMdpzVnrdW3caj
-         Z71tHHaOsQ6+ELTgAjQa/y/4XCfZMxeIyWXd0dGoGNj+dzoLH/hQoP/8rNOvNPFoKbBQ
-         /LT6wmL2EybaqGXORDRUZN1ep0jeDcqhAxazDCKHQbMT4bzOI+a3ANSvoV4eqQzMqIze
-         YZat7aMSXjylpz2cBZMUzb4WPYOo1i9LKSmhmlPBY1hBJNZaTJ+WGiCRqDYST9xZcYL4
-         HYww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CX/IUq1aN3lYpmTZrmux2ZoNqle4gaskLWMK3nNShGw=;
-        b=R9XgEvZPQDgfTcQc60tefVcJbPJhI4v6iOgT6DtNQ6MvGIpGPGkE53QJOPjV/6+WRp
-         XdZYSijvC+2gHS9B/0zU+YiIUv0OqQFMqi8vqjNDWEPSWl8Qq+hhltcdcZZtcSVGtbzF
-         rL28gUiiWOdGbWv+OC72EZcal6906vmocKH9kwi3sRgta5Bzlm2L5onpbKaIal/Aq0KY
-         srnaOZb8pgg0kew0bOLt2T3qSa4hlDfjMd/yMeWgY/DAg56p+i3pjmNDLYDBav8J08KE
-         YxjwVEiqd0ewU8Qo8s7GnJzXntXnKJh5c/UGWWybeHBup3vNo1HeCQQVTByy04C3HZkT
-         x3JQ==
-X-Gm-Message-State: AOAM533zdJlkX3uScuuSV3Ea8My+4HeoZ5RBMOzHOQJIynL1Asuvc2Q1
-	b5NDVzYsrbO3zU4noIEaqkA=
-X-Google-Smtp-Source: ABdhPJzzsluWxj0VaudxL34jveGy6/JC2BIiCB0OvhXZF9RY9e4P8n4nrql3SI+RbCDjUd+6EDMyGA==
-X-Received: by 2002:a5d:6c68:0:b0:20a:8d5f:681a with SMTP id r8-20020a5d6c68000000b0020a8d5f681amr6931611wrz.470.1650293923638;
-        Mon, 18 Apr 2022 07:58:43 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h2-20020a05600c414200b0038ec7a4f07esm16740652wmm.33.2022.04.18.07.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 07:58:43 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Matt Porter <mporter@kernel.crashing.org>,
-	Alexandre Bounine <alex.bou9@gmail.com>,
-	linux-kernel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] rapidio: Remove redundant variable tmp
-Date: Mon, 18 Apr 2022 15:58:42 +0100
-Message-Id: <20220418145842.87154-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCDA7A
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 15:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650294035; x=1681830035;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TmpEicF6mLIJYC1EAlp85kgc9gJy1CgAeiplxYFpnXk=;
+  b=DYwZ9M/oxbGE1VdDw31kyXJpDcvgCkaf3TfGjOEEYA1DqfVOCgY8a+Om
+   O7caIYheqTYBe743AYjMPGAlpG8bL4Iw9bWySZpK8tLD3ShuK3O9cgAea
+   bTbj8NmY1Q8bk/rlms0OMOMKq1M/cPsthG9k2reQbpYh2nozC4d7crGAW
+   WsDuTsQS7TfqQhiBCeH6XMun0H5bRnYi9cs+W8wNA1pG2YlGla+IcsiK9
+   kH1NOBVEqxPe/GGuelPj48KiGvCtCi7FNe0Jpb9OFxrbxudOrdeoZuK9u
+   ivX/z7P6HKGikOGPiH2uN7EwotSN1SkPKs2rR9FTRHyje4vEI07vcZcTT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263708215"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="263708215"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 08:00:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="509763648"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 08:00:31 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ngSrf-0004im-18;
+	Mon, 18 Apr 2022 15:00:31 +0000
+Date: Mon, 18 Apr 2022 22:59:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhu Ning <zhuning0077@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] ASoC: codecs: add support for ES8326
+Message-ID: <202204182258.j7khWQWC-lkp@intel.com>
+References: <20220405131220.1149-1-zhuning0077@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405131220.1149-1-zhuning0077@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Variable tmp is being assigned a value that is never read, the variable
-is redundant and can be removed.
+Hi Zhu,
 
-Cleans up clang scan build warning:
-drivers/rapidio/rio-scan.c:561:10: warning: Although the value stored
-to 'tmp' is used in the enclosing expression, the value is never actually
-read from 'tmp' [deadcode.DeadStores]
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/rapidio/rio-scan.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/rapidio/rio-scan.c b/drivers/rapidio/rio-scan.c
-index 19b0c33f4a62..5256e76ab29c 100644
---- a/drivers/rapidio/rio-scan.c
-+++ b/drivers/rapidio/rio-scan.c
-@@ -524,7 +524,6 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
- {
- 	struct rio_dev *rdev;
- 	u32 regval;
--	int tmp;
- 
- 	if (rio_mport_chk_dev_access(port,
- 			RIO_ANY_DESTID(port->sys_size), hopcount)) {
-@@ -558,8 +557,7 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
- 	rio_mport_write_config_32(port, RIO_ANY_DESTID(port->sys_size),
- 				  hopcount,
- 				  RIO_HOST_DID_LOCK_CSR, port->host_deviceid);
--	while ((tmp = rio_get_host_deviceid_lock(port, hopcount))
--	       < port->host_deviceid) {
-+	while (rio_get_host_deviceid_lock(port, hopcount) < port->host_deviceid) {
- 		/* Delay a bit */
- 		mdelay(1);
- 		/* Attempt to acquire device lock again */
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhu-Ning/ASoC-codecs-add-support-for-ES8326/20220408-155312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: hexagon-randconfig-r012-20220418 (https://download.01.org/0day-ci/archive/20220418/202204182258.j7khWQWC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a03666fc9b47aca9c81a796145c3d31fa718a49e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhu-Ning/ASoC-codecs-add-support-for-ES8326/20220408-155312
+        git checkout a03666fc9b47aca9c81a796145c3d31fa718a49e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/es8326.c:734:34: warning: unused variable 'es8326_of_match' [-Wunused-const-variable]
+   static const struct of_device_id es8326_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/es8326_of_match +734 sound/soc/codecs/es8326.c
+
+   733	
+ > 734	static const struct of_device_id es8326_of_match[] = {
+   735		{ .compatible = "everest, es8326", },
+   736		{}
+   737	};
+   738	MODULE_DEVICE_TABLE(of, es8326_of_match);
+   739	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
