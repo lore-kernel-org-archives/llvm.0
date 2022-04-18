@@ -1,101 +1,71 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD7DA56
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650316017; x=1681852017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=baJl18VyK9FhvLeoiPvBcknGOOkP/h2gpRs1hguq1Qc=;
-  b=kSJQXnlbMSWY52MicCcQ+FrTLpKJQV9NjHkrLbtq5a3MoHDt7Ex1E/uF
-   B/cxh9uD6kBRGF6+zdm40C4zxFlAb72eALoCEzwnRUb/1BqvkZfhq4Va0
-   4kjPBsQkji4cy3rqyd/QeK/908dbCyKxy1tzRNTYJbaTD6Ylu4tgy90wH
-   La3wp/i2uopLZ2KAGIGwKrkFVReDFyNKwZ/xoEiDUwSToGKOum7IPqsS3
-   EE7iasPfxNL6AupFhzbjwc3ObjO/dN5i52D4zhJ6YiEiUUKiiWxe64XUn
-   rYAoNkfxEUTop1a6WDRQH+LfKwpJBJ7Ua+7KqP0u04CS+5tLx0Hl+uSPQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="288704793"
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="288704793"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:06:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="701953798"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 14:06:56 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ngYaF-0004yq-BO;
-	Mon, 18 Apr 2022 21:06:55 +0000
-Date: Tue, 19 Apr 2022 05:06:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Huckleberry <nhuck@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v4 7/8] crypto: arm64/polyval: Add PMULL accelerated
- implementation of POLYVAL
-Message-ID: <202204190447.5PXNH4Km-lkp@intel.com>
-References: <20220412172816.917723-8-nhuck@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68725A56
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2538EC385A8
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650316876;
+	bh=KAav+VCFSYr91LEhdYGTPh0+hHoGFkG2lJeNL06UyDs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qeqbaJuAD+RFOY8cE/lIYy/P4cy7ZmPjKqgvDxKSiajfesnctZFuC99HiJ8TUqLF7
+	 cwaTqCxi5qNdoLluehUu9gPAFFWUUoSn+NWOmhsyhr0bbxwH26MWYKM0wfq/nX9oWZ
+	 dvjfxuOKeYJhK/wd9UrIwes34158zGoN4V+7DsNtsSiDtWxxnT/vNGemhHMFOnm8M9
+	 bpeyfhDMzr2GNr6CQRT6b1UIl3ArxUuAgPR4yq9a/2b3Wg4v82UrWAIOeZ/0Zu0zDl
+	 RYvDD69q6w7VUlXtzoVwoR7MCMhTfUi4fhTgqEtC2gaWC1NpYeAPF6fZbY8CrtCuL7
+	 5PCtNSXapgeoQ==
+Received: by mail-wr1-f49.google.com with SMTP id bv16so2807298wrb.9
+        for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 14:21:16 -0700 (PDT)
+X-Gm-Message-State: AOAM531qkylC5ki+awjlKO68FCk35yoW5tyBHcHNnxM4a1KKDQSFY26o
+	iDHjSVRVx6p3TKStsPd+X7WXWBHQoHFLAZHAsMY=
+X-Google-Smtp-Source: ABdhPJxkncmo4ORlw7zomxpWYmpYkP0uGqq0sLEjKNrhhFTmoEv/ShhDQl+AGPgqziemJBJ2yBx/M531Aq661utXpH8=
+X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
+ m3-20020a5d64a3000000b0020a79315b84mr9825822wrp.407.1650316874305; Mon, 18
+ Apr 2022 14:21:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412172816.917723-8-nhuck@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Mon, 18 Apr 2022 23:20:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
+Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
+Subject: Re: kernel.org binaries and sysroots
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Saleem Abdulrasool <compnerd@compnerd.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nathan,
+On Thu, Apr 14, 2022 at 11:44 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Arnd,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
+>
+> I was curious if you (or others) would find it worthwhile to carve out
+> time to discuss further kernel.org binaries (and potentially even
+> sysroots) at such a Kernel+Toolchain MC?
 
-Thank you for the patch! Perhaps something to improve:
+I'm still undecided about attending Plumbers myself. If that topic ends up
+on the list and I'm in Dublin, I would obviously attend, but there might not
+actually be that much to discuss other than who would do the work.
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master linus/master v5.18-rc3 next-20220414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I inherited the scripts from Tony Breeds who did it before. If you or someone
+else wants to add clang binaries, I can help you get it onto the kernel.org
+server as well, same for building more complete toolchains.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Huckleberry/crypto-HCTR2-support/20220413-013255
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220419/202204190447.5PXNH4Km-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/014203529f7aef5a93602c31f9fee3ba9843619c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nathan-Huckleberry/crypto-HCTR2-support/20220413-013255
-        git checkout 014203529f7aef5a93602c31f9fee3ba9843619c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/crypto/
+My build environment at the moment is on my old workstation running
+an older Ubuntu 16.04 chroot, to allow building binaries for a large variety
+of distros. As I'm moving to working purely on an arm64 workstation that
+doesn't have this yet, I will likely have to revisit the way I'm building these
+anyway for future releases.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/crypto/polyval-ce-glue.c:229:33: warning: unused variable 'polyval_cpu_feature' [-Wunused-const-variable]
-   static const struct cpu_feature polyval_cpu_feature[] = {
-                                   ^
-   1 warning generated.
-
-
-vim +/polyval_cpu_feature +229 arch/arm64/crypto/polyval-ce-glue.c
-
-   228	
- > 229	static const struct cpu_feature polyval_cpu_feature[] = {
-   230		{ cpu_feature(PMULL) }, { }
-   231	};
-   232	MODULE_DEVICE_TABLE(cpu, polyval_cpu_feature);
-   233	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+      Arnd
