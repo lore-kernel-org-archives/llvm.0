@@ -1,42 +1,46 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F67EC
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 10:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2A47EC
+	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 10:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650276802; x=1681812802;
+  t=1650277486; x=1681813486;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nQF2jtCGMD/mT3g9u1gUk0MtABVPEyW0OYjrIfpl5gs=;
-  b=BDWCoJ+XRg8Ewa2DTlwGqFfcxaztvb5cWYUyQun52ixZrb/ziEu6laYj
-   ttc0OtfmTqGxUc89xSnigDnU9R26xKO3Tv0zPQa1kE7B4ibKg0Gg0xgl2
-   I3sL7DpQaFWsga7vWBKpRwhkblzSAbu3UUKg6FgxeAlzWJ3BSpCXaO9vQ
-   ztwGUNyAUOYpJkphbDiRgw0nxkvk+CJh1OJjYT7ZrarcDh/8pEvPZYLRY
-   SYHkYsyEkXhwMAfzZkj8YmGGYMUrMfoddVRha8t2y3bufxHF2NRwTnrqe
-   DFULlLVJeVu0mN+Pek5mbDLCycO6HuwnT01hLG3teL0FJhlic2Y2jmBso
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="326393423"
+  bh=aciEQzyL1MqhGQqKm7QoCGDt+R4s3XKB/DFtDwxqTgM=;
+  b=k6uE6km60iaY2t/A5Qx1p9vOVyMcodV/wyG9Ldmt6yvSdG+e0ikrovvQ
+   4JxUOX02vPiAOQLT8gwa0lssPjx6gTJmwTHh0nH4vFpQiVxeV6EpebHK6
+   gHXmIt64hnIFXo8ozI9hw2SsDUY4WDwhyfmq1yEKnaD8heEE13mcpJb31
+   hwIk6IAKIWRnjkz9ym+zCw95X0qAUAIVUw4XkHPRCiK9SSYnBERIi+HQ2
+   xv2KjRbTW0CO/MO+lczkXpsqEmS2OrtAHzHyK2H4c+GSwLPdUIOjiphFs
+   6G7/pWs9xaSip+u+PeFkVogZVGPumoklXLJ/ZrZquXwsla8i7iMCy7Kd9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="349942697"
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="326393423"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:13:22 -0700
+   d="scan'208";a="349942697"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:24:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="726592930"
+   d="scan'208";a="529465431"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 03:13:20 -0700
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 03:24:21 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngONk-0004Wp-15;
-	Mon, 18 Apr 2022 10:13:20 +0000
-Date: Mon, 18 Apr 2022 18:13:16 +0800
+	id 1ngOYO-0004Xh-Nv;
+	Mon, 18 Apr 2022 10:24:20 +0000
+Date: Mon, 18 Apr 2022 18:23:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peng Fan <peng.fan@nxp.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
- 'imx93_clk_of_match'
-Message-ID: <202204181828.VNB1sR4E-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mauro Lima <mauro.lima@eclypsium.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix
+ selected. No NOR chip support can work.
+Message-ID: <202204181831.mZ5R0kZ8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,47 +51,54 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Peng,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
-date:   6 weeks ago
-config: hexagon-randconfig-r045-20220417 (https://download.01.org/0day-ci/archive/20220418/202204181828.VNB1sR4E-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b27430f9f46b88bcd54d992debc8d72e131e1bd0)
+commit: e23e5a05d1fd9479586c40ffbcc056b3e34ef816 mtd: spi-nor: intel-spi: Convert to SPI MEM
+date:   9 weeks ago
+config: x86_64-randconfig-a014-20220418 (https://download.01.org/0day-ci/archive/20220418/202204181831.mZ5R0kZ8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e23e5a05d1fd9479586c40ffbcc056b3e34ef816
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 24defbe194b650218680fcd9dec8cd103537b531
+        git checkout e23e5a05d1fd9479586c40ffbcc056b3e34ef816
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
-   static const struct of_device_id imx93_clk_of_match[] = {
-                                    ^
+   In file included from drivers/spi/spi-intel.c:13:
+   In file included from include/linux/mtd/spi-nor.h:10:
+>> include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-W#warnings]
+   #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
+    ^
    1 warning generated.
 
 
-vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
+vim +62 include/linux/mtd/cfi.h
 
-   323	
- > 324	static const struct of_device_id imx93_clk_of_match[] = {
-   325		{ .compatible = "fsl,imx93-ccm" },
-   326		{ /* Sentinel */ },
-   327	};
-   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
-   329	
+^1da177e4c3f41 Linus Torvalds  2005-04-16  60  
+241651d04d672f David Woodhouse 2007-09-06  61  #ifndef cfi_interleave
+241651d04d672f David Woodhouse 2007-09-06 @62  #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
+241651d04d672f David Woodhouse 2007-09-06  63  static inline int cfi_interleave(void *cfi)
+241651d04d672f David Woodhouse 2007-09-06  64  {
+241651d04d672f David Woodhouse 2007-09-06  65  	BUG();
+241651d04d672f David Woodhouse 2007-09-06  66  	return 0;
+241651d04d672f David Woodhouse 2007-09-06  67  }
+241651d04d672f David Woodhouse 2007-09-06  68  #endif
+241651d04d672f David Woodhouse 2007-09-06  69  
+
+:::::: The code at line 62 was first introduced by commit
+:::::: 241651d04d672fb685b2874707016cbbf95931e5 [MTD] Fix CFI build error when no map width or interleave supported
+
+:::::: TO: David Woodhouse <dwmw2@infradead.org>
+:::::: CC: David Woodhouse <dwmw2@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
