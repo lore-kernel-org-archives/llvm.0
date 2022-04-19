@@ -1,44 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF353D61
-	for <llvm@lists.linux.dev>; Mon, 18 Apr 2022 23:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B187FC
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 00:11:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650325808; x=1681861808;
+  t=1650327070; x=1681863070;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6RxZzSIjsW4RweQfrvtr93HGHfTde4zYCBJbBjvFDtQ=;
-  b=GhqKDqzCLhRUZooS8gNJGzUxk6Kdhj+yMgKk3shahEXkvDgwhFc85rdD
-   Ww4qCk8vP5UK0fXWC/enfDxhwDvDnHfSGdCk0SdSDw3c4XJS5NWqZGB3z
-   3+AO+OAfW9O0EaJ0Zp9TAgEhfEEDkwVo6rXqrMZsdB/gdXOUmnAIsmK0G
-   bSH83l4u3cVuCOACEkr7o6YInUZyDNtAMeMl4dx4utdYB8EtyuCzCjABI
-   NgelM8Sbl49CSFXacActm51Fo8Ua1Nbl2fJryXnBbFNYpldFLnq/7TCkM
-   5UwW9niso77pok1rY53xuR7jB4HkdYLHM8NNHOD0m4/ZsCBFHnP6YHqPn
+  bh=UewArZ+Ooa2YI69aAP9Gz6Djow2AUNwlruRAFuHwc2E=;
+  b=cuSA/WQ7y8ljcoFEU7rBn6rNDTh1QEWoz/1h2sUbyQXq1B7YQSczslVE
+   NrgJw4Qq5N8foDxd3fnu/8EVzrQrT+guJG95OcCOfDANySEsBm8M5o3IV
+   +23IJRk2Tomz1tsUS6ClflT2dgU/hrvg+Wj2kFchf8P5yCcA6d9ipR9m/
+   IpVAY7BaD1+J45VvCNr/L5QF4Rma7LdTB1AL5DOUwgkoMh9locZq+l2jb
+   hWZrspGeje5oxW/6/X5yx8uZXmdqanrKUUWI91TDvY+5VOC9CSg0723iM
+   NjxUYHvTuM2/aKaeqGfIPoeMkgSTRZSDFypxcROIcJpRUsfTMqaDFtDW+
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350084330"
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="324079976"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="350084330"
+   d="scan'208";a="324079976"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 16:50:07 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:11:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665580717"
+   d="scan'208";a="665587586"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 16:50:06 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 17:11:07 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngb89-000562-Gl;
-	Mon, 18 Apr 2022 23:50:05 +0000
-Date: Tue, 19 Apr 2022 07:49:38 +0800
+	id 1ngbSV-00057I-6p;
+	Tue, 19 Apr 2022 00:11:07 +0000
+Date: Tue, 19 Apr 2022 08:10:14 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1541/2356]
- drivers/hwmon/pmbus/pli1209bc.c:60:14: warning: incompatible integer to
- pointer conversion initializing 'const char *' with an expression of type
- 'int'
-Message-ID: <202204190731.vTjUPdxY-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1769/2356]
+ drivers/bluetooth/btmtksdio.c:1393:21: warning: incompatible integer to
+ pointer conversion assigning to 'struct device_node *' from 'int'
+Message-ID: <202204190814.1ZbNhqrX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,140 +50,133 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 63245bf3e0db1d416f39a3ccb1311f94f37697f5 [1541/2356] headers/deps: i2c: Optimize <linux/i2c.h> header dependencies
-config: i386-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190731.vTjUPdxY-lkp@intel.com/config)
+commit: 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc [1769/2356] headers/deps: of: Optimize <linux/of.h> dependencies, remove <linux/of_api.h>
+config: i386-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190814.1ZbNhqrX-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=63245bf3e0db1d416f39a3ccb1311f94f37697f5
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 63245bf3e0db1d416f39a3ccb1311f94f37697f5
+        git checkout 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/panel/ drivers/hwmon/ drivers/iio/afe/ drivers/iio/proximity/ drivers/input/touchscreen/ drivers/mtd/nand/ drivers/phy/cadence/ drivers/pinctrl/ drivers/platform/chrome/ mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/misc/ drivers/net/bonding/ drivers/net/ethernet/marvell/prestera/ drivers/net/ethernet/microchip/lan966x/ drivers/net/netdevsim/ drivers/net/phy/ drivers/power/supply/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/hwmon/pmbus/pli1209bc.c:60:14: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           .of_match = of_match_ptr("vout2"),
-                       ^
->> drivers/hwmon/pmbus/pli1209bc.c:60:14: warning: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-           .of_match = of_match_ptr("vout2"),
-                       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pli1209bc.c:61:21: warning: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
-           .regulators_node = of_match_ptr("regulators"),
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pli1209bc.c:60:14: error: initializer element is not a compile-time constant
-           .of_match = of_match_ptr("vout2"),
-                       ^~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/pmbus/pli1209bc.c:135:24: warning: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
-                      .of_match_table = of_match_ptr(pli1209bc_of_match),
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pli1209bc.c:135:24: error: initializer element is not a compile-time constant
-                      .of_match_table = of_match_ptr(pli1209bc_of_match),
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings and 3 errors generated.
+   drivers/bluetooth/btmtksdio.c:1393:23: error: implicit declaration of function 'of_find_compatible_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
+                                ^
+>> drivers/bluetooth/btmtksdio.c:1393:21: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+           bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
+                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +60 drivers/hwmon/pmbus/pli1209bc.c
+vim +1393 drivers/bluetooth/btmtksdio.c
 
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   55  
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   56  #if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   57  static const struct regulator_desc pli1209bc_reg_desc = {
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   58  	.name = "vout2",
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   59  	.id = 1,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21  @60  	.of_match = of_match_ptr("vout2"),
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   61  	.regulators_node = of_match_ptr("regulators"),
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   62  	.ops = &pmbus_regulator_ops,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   63  	.type = REGULATOR_VOLTAGE,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   64  	.owner = THIS_MODULE,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   65  };
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   66  #endif
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21   67  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   68  static struct pmbus_driver_info pli1209bc_info = {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   69  	.pages = 2,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   70  	.format[PSC_VOLTAGE_IN] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   71  	.format[PSC_VOLTAGE_OUT] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   72  	.format[PSC_CURRENT_IN] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   73  	.format[PSC_CURRENT_OUT] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   74  	.format[PSC_POWER] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   75  	.format[PSC_TEMPERATURE] = direct,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   76  	.m[PSC_VOLTAGE_IN] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   77  	.b[PSC_VOLTAGE_IN] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   78  	.R[PSC_VOLTAGE_IN] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   79  	.m[PSC_VOLTAGE_OUT] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   80  	.b[PSC_VOLTAGE_OUT] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   81  	.R[PSC_VOLTAGE_OUT] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   82  	.m[PSC_CURRENT_IN] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   83  	.b[PSC_CURRENT_IN] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   84  	.R[PSC_CURRENT_IN] = 3,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   85  	.m[PSC_CURRENT_OUT] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   86  	.b[PSC_CURRENT_OUT] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   87  	.R[PSC_CURRENT_OUT] = 2,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   88  	.m[PSC_POWER] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   89  	.b[PSC_POWER] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   90  	.R[PSC_POWER] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   91  	.m[PSC_TEMPERATURE] = 1,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   92  	.b[PSC_TEMPERATURE] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   93  	.R[PSC_TEMPERATURE] = 0,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   94  	/*
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   95  	 * Page 0 sums up all attributes except voltage readings.
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   96  	 * The pli1209 digital supervisor only contains a single BCM, making
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   97  	 * page 0 redundant.
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   98  	 */
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21   99  	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  100  	    | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  101  	    | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  102  	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  103  	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  104  	.read_word_data = pli1209bc_read_word_data,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21  105  #if IS_ENABLED(CONFIG_SENSORS_PLI1209BC_REGULATOR)
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21  106  	.num_regulators = 1,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21  107  	.reg_desc = &pli1209bc_reg_desc,
-ba1d263af1c034 Marcello Sylvester Bauer 2022-02-21  108  #endif
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  109  };
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  110  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  111  static int pli1209bc_probe(struct i2c_client *client)
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  112  {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  113  	client->dev.platform_data = &pli1209bc_plat_data;
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  114  	return pmbus_do_probe(client, &pli1209bc_info);
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  115  }
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  116  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  117  static const struct i2c_device_id pli1209bc_id[] = {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  118  	{"pli1209bc", 0},
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  119  	{}
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  120  };
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  121  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  122  MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  123  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  124  #ifdef CONFIG_OF
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  125  static const struct of_device_id pli1209bc_of_match[] = {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  126  	{ .compatible = "vicor,pli1209bc" },
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  127  	{ },
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  128  };
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  129  MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  130  #endif
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  131  
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  132  static struct i2c_driver pli1209bc_driver = {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  133  	.driver = {
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  134  		   .name = "pli1209bc",
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21 @135  		   .of_match_table = of_match_ptr(pli1209bc_of_match),
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  136  		   },
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  137  	.probe_new = pli1209bc_probe,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  138  	.id_table = pli1209bc_id,
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  139  };
-d0cd978513f2e3 Marcello Sylvester Bauer 2022-02-21  140  
+ce64b3e9491957 Mark Chen        2022-01-10  1312  
+9aebfd4a2200ab Sean Wang        2019-03-08  1313  static int btmtksdio_probe(struct sdio_func *func,
+9aebfd4a2200ab Sean Wang        2019-03-08  1314  			   const struct sdio_device_id *id)
+9aebfd4a2200ab Sean Wang        2019-03-08  1315  {
+9aebfd4a2200ab Sean Wang        2019-03-08  1316  	struct btmtksdio_dev *bdev;
+9aebfd4a2200ab Sean Wang        2019-03-08  1317  	struct hci_dev *hdev;
+9aebfd4a2200ab Sean Wang        2019-03-08  1318  	int err;
+9aebfd4a2200ab Sean Wang        2019-03-08  1319  
+9aebfd4a2200ab Sean Wang        2019-03-08  1320  	bdev = devm_kzalloc(&func->dev, sizeof(*bdev), GFP_KERNEL);
+9aebfd4a2200ab Sean Wang        2019-03-08  1321  	if (!bdev)
+9aebfd4a2200ab Sean Wang        2019-03-08  1322  		return -ENOMEM;
+9aebfd4a2200ab Sean Wang        2019-03-08  1323  
+9aebfd4a2200ab Sean Wang        2019-03-08  1324  	bdev->data = (void *)id->driver_data;
+9aebfd4a2200ab Sean Wang        2019-03-08  1325  	if (!bdev->data)
+9aebfd4a2200ab Sean Wang        2019-03-08  1326  		return -ENODEV;
+9aebfd4a2200ab Sean Wang        2019-03-08  1327  
+7f3c563c575e73 Sean Wang        2019-04-18  1328  	bdev->dev = &func->dev;
+9aebfd4a2200ab Sean Wang        2019-03-08  1329  	bdev->func = func;
+9aebfd4a2200ab Sean Wang        2019-03-08  1330  
+26270bc189ea4b Sean Wang        2021-10-19  1331  	INIT_WORK(&bdev->txrx_work, btmtksdio_txrx_work);
+9aebfd4a2200ab Sean Wang        2019-03-08  1332  	skb_queue_head_init(&bdev->txq);
+9aebfd4a2200ab Sean Wang        2019-03-08  1333  
+9aebfd4a2200ab Sean Wang        2019-03-08  1334  	/* Initialize and register HCI device */
+9aebfd4a2200ab Sean Wang        2019-03-08  1335  	hdev = hci_alloc_dev();
+9aebfd4a2200ab Sean Wang        2019-03-08  1336  	if (!hdev) {
+9aebfd4a2200ab Sean Wang        2019-03-08  1337  		dev_err(&func->dev, "Can't allocate HCI device\n");
+9aebfd4a2200ab Sean Wang        2019-03-08  1338  		return -ENOMEM;
+9aebfd4a2200ab Sean Wang        2019-03-08  1339  	}
+9aebfd4a2200ab Sean Wang        2019-03-08  1340  
+9aebfd4a2200ab Sean Wang        2019-03-08  1341  	bdev->hdev = hdev;
+9aebfd4a2200ab Sean Wang        2019-03-08  1342  
+9aebfd4a2200ab Sean Wang        2019-03-08  1343  	hdev->bus = HCI_SDIO;
+9aebfd4a2200ab Sean Wang        2019-03-08  1344  	hci_set_drvdata(hdev, bdev);
+9aebfd4a2200ab Sean Wang        2019-03-08  1345  
+9aebfd4a2200ab Sean Wang        2019-03-08  1346  	hdev->open     = btmtksdio_open;
+9aebfd4a2200ab Sean Wang        2019-03-08  1347  	hdev->close    = btmtksdio_close;
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1348  	hdev->cmd_timeout = btmtksdio_cmd_timeout;
+9aebfd4a2200ab Sean Wang        2019-03-08  1349  	hdev->flush    = btmtksdio_flush;
+9aebfd4a2200ab Sean Wang        2019-03-08  1350  	hdev->setup    = btmtksdio_setup;
+9aebfd4a2200ab Sean Wang        2019-03-08  1351  	hdev->shutdown = btmtksdio_shutdown;
+9aebfd4a2200ab Sean Wang        2019-03-08  1352  	hdev->send     = btmtksdio_send_frame;
+ce64b3e9491957 Mark Chen        2022-01-10  1353  	hdev->wakeup   = btmtksdio_sdio_wakeup;
+877ec9e1d07b63 Sean Wang        2021-10-19  1354  	hdev->set_bdaddr = btmtk_set_bdaddr;
+877ec9e1d07b63 Sean Wang        2021-10-19  1355  
+9aebfd4a2200ab Sean Wang        2019-03-08  1356  	SET_HCIDEV_DEV(hdev, &func->dev);
+9aebfd4a2200ab Sean Wang        2019-03-08  1357  
+9aebfd4a2200ab Sean Wang        2019-03-08  1358  	hdev->manufacturer = 70;
+9aebfd4a2200ab Sean Wang        2019-03-08  1359  	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
+9aebfd4a2200ab Sean Wang        2019-03-08  1360  
+b062a0b9c1dc1f Yake Yang        2022-03-17  1361  	sdio_set_drvdata(func, bdev);
+b062a0b9c1dc1f Yake Yang        2022-03-17  1362  
+9aebfd4a2200ab Sean Wang        2019-03-08  1363  	err = hci_register_dev(hdev);
+9aebfd4a2200ab Sean Wang        2019-03-08  1364  	if (err < 0) {
+9aebfd4a2200ab Sean Wang        2019-03-08  1365  		dev_err(&func->dev, "Can't register HCI device\n");
+9aebfd4a2200ab Sean Wang        2019-03-08  1366  		hci_free_dev(hdev);
+9aebfd4a2200ab Sean Wang        2019-03-08  1367  		return err;
+9aebfd4a2200ab Sean Wang        2019-03-08  1368  	}
+9aebfd4a2200ab Sean Wang        2019-03-08  1369  
+7f3c563c575e73 Sean Wang        2019-04-18  1370  	/* pm_runtime_enable would be done after the firmware is being
+7f3c563c575e73 Sean Wang        2019-04-18  1371  	 * downloaded because the core layer probably already enables
+7f3c563c575e73 Sean Wang        2019-04-18  1372  	 * runtime PM for this func such as the case host->caps &
+7f3c563c575e73 Sean Wang        2019-04-18  1373  	 * MMC_CAP_POWER_OFF_CARD.
+7f3c563c575e73 Sean Wang        2019-04-18  1374  	 */
+7f3c563c575e73 Sean Wang        2019-04-18  1375  	if (pm_runtime_enabled(bdev->dev))
+7f3c563c575e73 Sean Wang        2019-04-18  1376  		pm_runtime_disable(bdev->dev);
+7f3c563c575e73 Sean Wang        2019-04-18  1377  
+7f3c563c575e73 Sean Wang        2019-04-18  1378  	/* As explaination in drivers/mmc/core/sdio_bus.c tells us:
+7f3c563c575e73 Sean Wang        2019-04-18  1379  	 * Unbound SDIO functions are always suspended.
+7f3c563c575e73 Sean Wang        2019-04-18  1380  	 * During probe, the function is set active and the usage count
+7f3c563c575e73 Sean Wang        2019-04-18  1381  	 * is incremented.  If the driver supports runtime PM,
+7f3c563c575e73 Sean Wang        2019-04-18  1382  	 * it should call pm_runtime_put_noidle() in its probe routine and
+7f3c563c575e73 Sean Wang        2019-04-18  1383  	 * pm_runtime_get_noresume() in its remove routine.
+7f3c563c575e73 Sean Wang        2019-04-18  1384  	 *
+7f3c563c575e73 Sean Wang        2019-04-18  1385  	 * So, put a pm_runtime_put_noidle here !
+7f3c563c575e73 Sean Wang        2019-04-18  1386  	 */
+7f3c563c575e73 Sean Wang        2019-04-18  1387  	pm_runtime_put_noidle(bdev->dev);
+7f3c563c575e73 Sean Wang        2019-04-18  1388  
+ce64b3e9491957 Mark Chen        2022-01-10  1389  	err = device_init_wakeup(bdev->dev, true);
+ce64b3e9491957 Mark Chen        2022-01-10  1390  	if (err)
+ce64b3e9491957 Mark Chen        2022-01-10  1391  		bt_dev_err(hdev, "failed to initialize device wakeup");
+ce64b3e9491957 Mark Chen        2022-01-10  1392  
+8fafe702253d50 Chih-Ying Chiang 2022-02-09 @1393  	bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1394  						     "mediatek,mt7921s-bluetooth");
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1395  	bdev->reset = devm_gpiod_get_optional(bdev->dev, "reset",
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1396  					      GPIOD_OUT_LOW);
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1397  	if (IS_ERR(bdev->reset))
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1398  		err = PTR_ERR(bdev->reset);
+8fafe702253d50 Chih-Ying Chiang 2022-02-09  1399  
+ce64b3e9491957 Mark Chen        2022-01-10  1400  	return err;
+9aebfd4a2200ab Sean Wang        2019-03-08  1401  }
+9aebfd4a2200ab Sean Wang        2019-03-08  1402  
 
-:::::: The code at line 60 was first introduced by commit
-:::::: ba1d263af1c034baf479bca14d6f715b713214b1 hwmon: (pmbus/pli1209bc) Add regulator support
+:::::: The code at line 1393 was first introduced by commit
+:::::: 8fafe702253d50bf90daf324ae86b5ad5ac8a5e1 Bluetooth: mt7921s: support bluetooth reset mechanism
 
-:::::: TO: Marcello Sylvester Bauer <sylv@sylv.io>
-:::::: CC: Guenter Roeck <linux@roeck-us.net>
+:::::: TO: Chih-Ying Chiang <chih-yin.chiang@mediatek.com>
+:::::: CC: Marcel Holtmann <marcel@holtmann.org>
 
 -- 
 0-DAY CI Kernel Test Service
