@@ -1,123 +1,80 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A19ECA
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 09:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=tJv95mQg9EXcrt3p8ZvGMQTsakmmfw1AaQTwIhE1nnE=; b=Ib42ZfuGQhQogTNLh41qU+s7rN
-	BRAbnqQc1YebQu2SE8eJycbwM5rnxrVzV01lhWWogtc7YfXe/fFYOOfKul6INZN27AAxhe9cF4b6Y
-	kxe7Cp27gTncTOlOpfatmhDKqOzrjoG3bUGTaMJhWsb8S9YtpZbHjlOtOGIGoXOry9C6n83iBpSg6
-	sZV0VjTQqYvJg7uxZkk0kWg0ifqjNnMHZFF4jfCJ5RF4KXfuvH8Y9l7waFzBdNLDaqLfKytxkGozo
-	OIzVudh0DufesV21MGJcSWu6hmhsMtoQmfa3Fc0BVR5Bg0eFxc6+wJrPo03zB3mULzxQslLelWcjt
-	UrbiTiEQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ngjmA-006mQV-2G; Tue, 19 Apr 2022 09:03:58 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7D15998618A; Tue, 19 Apr 2022 11:03:55 +0200 (CEST)
-Date: Tue, 19 Apr 2022 11:03:55 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexander Lobakin <alobakin@pm.me>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Dmitrii Dolgov <9erthalion6@gmail.com>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Chenbo Feng <fengc@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Daniel Wagner <daniel.wagner@bmw-carit.de>,
-	Thomas Graf <tgraf@suug.ch>,
-	Ong Boon Leong <boon.leong.ong@intel.com>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with
- !CONFIG_PERF_EVENTS
-Message-ID: <20220419090355.GP2731@worktop.programming.kicks-ass.net>
-References: <20220414223704.341028-1-alobakin@pm.me>
- <20220414223704.341028-2-alobakin@pm.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0C3ED4
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 10:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1650365217;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yxcu5ys80sCInub3Ls6SKzWV5PF7R9p2WfloWLeuP3g=;
+	b=g1WUCGgLn0bsJsjNKPynZ3ibq54Cj7dgiYVhVezI6U1zBbdW+dtuaHh2NI+UG8+IKWTf73
+	KqF7Hnn2zYMtcFEaSj3oDABSlTU8nNDvBIEcpL7kKt+NE+JyXIgbBvA2vLPnBRthpWjbHr
+	uF6rcqIEF+x5GFFKqUP33SP7duaOEDA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-218-6rTzjl52ORuwoIN_FxXKgw-1; Tue, 19 Apr 2022 06:46:53 -0400
+X-MC-Unique: 6rTzjl52ORuwoIN_FxXKgw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B8B28EF6C1;
+	Tue, 19 Apr 2022 10:46:52 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.187])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 40C9F4104961;
+	Tue, 19 Apr 2022 10:46:50 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ "Jose E. Marchesi" <jemarch@gnu.org>,
+ linux-toolchains@vger.kernel.org,
+ clang-built-linux <llvm@lists.linux.dev>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Carlos O'Donell <carlos@redhat.com>
+Subject: Re: plumbers session on syscall wrapping and kernel header libc
+ circular depdence?
+References: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+Date: Tue, 19 Apr 2022 12:46:48 +0200
+In-Reply-To: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+	(Nick Desaulniers's message of "Fri, 15 Apr 2022 10:48:13 -0700")
+Message-ID: <87lew14ag7.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414223704.341028-2-alobakin@pm.me>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 
-On Thu, Apr 14, 2022 at 10:44:48PM +0000, Alexander Lobakin wrote:
-> When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
-> However, the structure is being used by bpftool indirectly via BTF.
-> This leads to:
-> 
-> skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
->         return BPF_CORE_READ(event, bpf_cookie);
->                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-> 
-> ...
-> 
-> skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
->         return BPF_CORE_READ(event, bpf_cookie);
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Tools and samples can't use any CONFIG_ definitions, so the fields
-> used there should always be present.
-> Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
-> to make it available unconditionally.
+* Nick Desaulniers:
 
-Urgh, this is nasty.. did you verify nothing relies on that structure
-actually being empty?
+> Hi Florian, Arnd, and Masahiro,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
 
-Also, why are we changing kernel headers to fix some daft userspace
-issue?
+I'm not sure if I will be able to travel by that time.
 
-> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->  include/linux/perf_event.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index af97dd427501..b1d5715b8b34 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -762,12 +762,14 @@ struct perf_event {
->  	u64				(*clock)(void);
->  	perf_overflow_handler_t		overflow_handler;
->  	void				*overflow_handler_context;
-> +#endif /* CONFIG_PERF_EVENTS */
->  #ifdef CONFIG_BPF_SYSCALL
->  	perf_overflow_handler_t		orig_overflow_handler;
->  	struct bpf_prog			*prog;
->  	u64				bpf_cookie;
->  #endif
-> 
-> +#ifdef CONFIG_PERF_EVENTS
->  #ifdef CONFIG_EVENT_TRACING
->  	struct trace_event_call		*tp_event;
->  	struct event_filter		*filter;
-> --
-> 2.35.2
-> 
-> 
+> Would you all be interested in a session (if you're planning on
+> attending) discussing syscall wrapping for libc's and UAPI circular
+> dependency on the libc?
+>
+> Masahiro and I were recently discussing the feasibility of building
+> the kernel UAPI header tests with -nostdinc, but there are some
+> interesting complications perhaps worth sharing with others?
+
+To be honest, that doesn't seem to be a good use of a session slot.
+Surely we can figure out a way to solve this issue offline (and if it's
+a problem worth solving)?
+
+(I expect that using -nostdinc makes it more difficult to support
+compilers which are not GCC-compatible.)
+
+Thanks,
+Florian
+
