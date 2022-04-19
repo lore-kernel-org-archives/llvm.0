@@ -1,84 +1,108 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABBF7A
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 08:07:54 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-127-e4KWbpF-O9CJiTd9liyVDw-1; Tue, 19 Apr 2022 09:07:51 +0100
-X-MC-Unique: e4KWbpF-O9CJiTd9liyVDw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 19 Apr 2022 09:07:50 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 19 Apr 2022 09:07:50 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Alexander Lobakin' <alobakin@pm.me>, Song Liu <song@kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, "Arnaldo Carvalho de
- Melo" <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Alexander
- Shishkin" <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu
-	<songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, "David S. Miller"
-	<davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?=
-	<bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, "Jonathan
- Lemon" <jonathan.lemon@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-	"Nick Desaulniers" <ndesaulniers@google.com>, Dmitrii Dolgov
-	<9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, Tiezhu Yang
-	<yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, "Chenbo
- Feng" <fengc@google.com>, Willem de Bruijn <willemb@google.com>, Thomas Graf
-	<tgraf@suug.ch>, Ong Boon Leong <boon.leong.ong@intel.com>,
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>, "open
- list" <linux-kernel@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
-Thread-Topic: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
-Thread-Index: AQHYUbspso42ifnDw02kovtD5V7S26z25T3g
-Date: Tue, 19 Apr 2022 08:07:50 +0000
-Message-ID: <9465da05497746b3b70d7c841a585d5b@AcuMS.aculab.com>
-References: <20220414223704.341028-1-alobakin@pm.me>
- <20220414223704.341028-8-alobakin@pm.me>
- <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
- <20220416174816.198651-1-alobakin@pm.me>
-In-Reply-To: <20220416174816.198651-1-alobakin@pm.me>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0805A28
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 08:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650358125; x=1681894125;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kegNEX0ChIhmD7NdNa7wFO+eFscT2RC4rHC8Bs7PAC8=;
+  b=hOB8MDCnFNXImQDSO6NikhXT0U4ge+Qt7PZrmyRUt1ClpUqX2fGRE44g
+   pqoiGoKfBQm32ss8/0SyyjK/6+xEhykEPMZn0q7QlnOoLJRzl43fnkbPI
+   ERVI77zlsbFjPn++Sat6d7Ryjb+y5zlZ09X1gT2TD+2aaPiCFr3jh/Xs3
+   1soC2aZ44bRqAOeEtDVc6cb1NqVleZU9BjvfOO+z/S8O8pZZDztow99y7
+   AryE56l27yCwl2feC67D5KNveYlMirZU9MeYklat/0rhXKBrfYkd06aU+
+   pzvxuCDxOxdaPF2818SIOKKTtpJE2ri3rrfM5DXrVu7q/PmQkCSZlAvgS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261318023"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="261318023"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 01:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="530037373"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2022 01:48:42 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ngjXO-0005Z6-6W;
+	Tue, 19 Apr 2022 08:48:42 +0000
+Date: Tue, 19 Apr 2022 16:48:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
+ variable 'pxa_camera_of_match'
+Message-ID: <202204191631.zjUg442L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-RnJvbTogQWxleGFuZGVyIExvYmFraW4NCj4gU2VudDogMTYgQXByaWwgMjAyMiAxODo1NQ0KPiBU
-bzogU29uZyBMaXUgPHNvbmdAa2VybmVsLm9yZz4NCj4gDQo+IEZyb206IFNvbmcgTGl1IDxzb25n
-QGtlcm5lbC5vcmc+DQo+IERhdGU6IEZyaSwgMTUgQXByIDIwMjIgMTY6NTI6MTMgLTA3MDANCj4g
-DQo+ID4gT24gVGh1LCBBcHIgMTQsIDIwMjIgYXQgMzo0NiBQTSBBbGV4YW5kZXIgTG9iYWtpbiA8
-YWxvYmFraW5AcG0ubWU+IHdyb3RlOg0KPiA+ID4NCj4gPiA+IFRoZXJlJ3MgYSBjb3VwbGUgcGxh
-Y2VzIHdoZXJlIHVpbjY0X3QgaXMgYmVpbmcgcGFzc2VkIGFzIGFuICVsZA0KPiA+ID4gZm9ybWF0
-IGFyZ3VtZW50LCB3aGljaCBpcyBpbmNvcnJlY3QgKHNob3VsZCBiZSAlbGxkKS4gRml4IHRoZW0u
-DQo+ID4NCj4gPiBUaGlzIHdpbGwgY2F1c2Ugc29tZSB3YXJuaW5nIG9uIHNvbWUgNjQtYml0IGNv
-bXBpbGVyLCBubz8NCj4gDQo+IE9oIHdhaXQsIEkgYWNjaWRlbnRpYWxseSBtZW50aW9uZWQgJWxk
-IGFuZCAlbGxkIGFsdGhvdWdoIGluIGZhY3QgSQ0KPiBjaGFuZ2VkICVsdSB0byAlbGx1LiBTbyB0
-aGVyZSB3b24ndCBiZSBhbnkgY29tcGlsZXIgd2FybmluZ3MuIEknbGwNCj4gZml4IHRoZSBjb21t
-aXQgbWVzc2FnZSBpbiB2Mi4NCg0KVGhhdCB3b24ndCBtYWtlIGFueSBkaWZmZXJlbmNlLg0KVGhl
-IGNvcnJlY3Qgd2F5IHRvIHByaW50IHVpbnQ2NF90IGlzIHVzaW5nIFBSSXU2NC4NCg0KCURhdmlk
-DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
-YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
-IChXYWxlcykNCg==
+Hi Mauro,
 
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
+date:   5 weeks ago
+config: mips-randconfig-r025-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191631.zjUg442L-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/intel/ lib/lz4/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
+   static const struct of_device_id pxa_camera_of_match[] = {
+                                    ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SSB_EMBEDDED
+   Depends on SSB && SSB_DRIVER_MIPS && SSB_PCICORE_HOSTMODE
+   Selected by
+   - BCM47XX_SSB && BCM47XX
+
+
+vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
+
+7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
+
+:::::: The code at line 2449 was first introduced by commit
+:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
+
+:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
