@@ -1,44 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EA7A35
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 01:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFFDA2A
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 01:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650330731; x=1681866731;
+  t=1650331992; x=1681867992;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c+5pP6ms2AI/MslPa1DFe2iZIwSwe0a7F3q89IjGaQY=;
-  b=Vxoj3E24wq4KYsDNJcTa3nsLllGYesB4bTneTwkV0p0mLyrBnutdkcy0
-   k/DE/OWh6HXwWmuzBj7xoOaNmkjHoCKdIlfnaOMkuc/0w/t/6PW3J2Gab
-   JFvzjFlFeKFqNm6OR3q2DlPkmFuEXnY9+64ab8YPVnxXO6Q6bmDBF0DNM
-   kxRI7iEAEw5CJiBHFpBN60Fbm9yd9h3URs8V2ZiLTPRCLYgmu6PE/2FIe
-   ttX+ZZ4R4uc6TA95xaPwCobW3CBvbP0jxYu7fcLkLrWrWtL6OjJaEQ5gi
-   3Kfw8JmehAkZnr+Mmj03FgN8Y3005wyzbOihLgrVTtkVxNoIkBKZXM2lw
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243578339"
+  bh=hoMj3UjH0T+82jSYD+xlE5pPs568f7YF1XmJsBKbDJ0=;
+  b=YBSg/TdxeioeGQ0QCshLz0z7BRjZoH8fJVyEbdISUyA+b+3UEP9ZGWYV
+   zAmo+wfpMqLA0l0AFFt56IPsUfU0t4oweoIlhAIEivlfb3hc3KpaeP1z9
+   pi/EGfCC9s3rty9innVoiTVzpG+2Yw5NMu7+3zKVExj9NUC2+Uq894lLk
+   teQElI7cefNs6werIGfNuJprUuKHTm6K0OrMG+2p6ObQuQ9WDWQAb11Cm
+   0r46V93uVwdKhK0VSeoLjeYF7YzgczQqwXwcRuNYmWxIJBMsJHYqgzgIS
+   VvZClzs3urUGYoTvVqNKnD2PAbwaAX3AXv/l2fOKOvyO7s8lot/hIJtEa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350097634"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="243578339"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:12:11 -0700
+   d="scan'208";a="350097634"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:33:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="726858734"
+   d="scan'208";a="592595956"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 18:12:09 -0700
+  by orsmga001.jf.intel.com with ESMTP; 18 Apr 2022 18:33:10 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngcPY-00059M-Ot;
-	Tue, 19 Apr 2022 01:12:08 +0000
-Date: Tue, 19 Apr 2022 09:11:55 +0800
+	id 1ngcjt-0005AS-Nu;
+	Tue, 19 Apr 2022 01:33:09 +0000
+Date: Tue, 19 Apr 2022 09:32:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1541/2356]
- drivers/input/touchscreen/imagis.c:358:21: warning: incompatible integer to
- pointer conversion initializing 'const struct of_device_id *' with an
- expression of type 'int'
-Message-ID: <202204190945.vfrBnN8A-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 627/2356]
+ include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
+ file not found
+Message-ID: <202204190905.l6YtOTKW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,55 +50,51 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 63245bf3e0db1d416f39a3ccb1311f94f37697f5 [1541/2356] headers/deps: i2c: Optimize <linux/i2c.h> header dependencies
-config: i386-randconfig-a015-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190945.vfrBnN8A-lkp@intel.com/config)
+commit: 8f4012659d7f54036074d08da273cb686c819191 [627/2356] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
+config: hexagon-randconfig-r026-20220417 (https://download.01.org/0day-ci/archive/20220419/202204190905.l6YtOTKW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=63245bf3e0db1d416f39a3ccb1311f94f37697f5
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=8f4012659d7f54036074d08da273cb686c819191
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 63245bf3e0db1d416f39a3ccb1311f94f37697f5
+        git checkout 8f4012659d7f54036074d08da273cb686c819191
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/block/ drivers/clk/ drivers/iio/accel/ drivers/infiniband/core/ drivers/infiniband/ulp/ipoib/ drivers/input/touchscreen/ drivers/mmc/host/ drivers/net/dsa/ drivers/nvdimm/ drivers/powercap/ drivers/usb/typec/ init/ mm/damon/ net/dsa/ net/smc/ sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/input/touchscreen/imagis.c:358:21: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   .of_match_table = of_match_ptr(imagis_of_match),
-                                     ^
->> drivers/input/touchscreen/imagis.c:358:21: warning: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
-                   .of_match_table = of_match_ptr(imagis_of_match),
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:358:21: error: initializer element is not a compile-time constant
-                   .of_match_table = of_match_ptr(imagis_of_match),
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+   In file included from kernel/bounds.c:13:
+   In file included from include/linux/log2.h:12:
+   In file included from include/linux/bitops.h:28:
+   In file included from arch/hexagon/include/asm/bitops.h:13:
+   In file included from arch/hexagon/include/asm/atomic.h:13:
+   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
+>> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
+   #include <asm/vdso/processor.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:120: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +358 drivers/input/touchscreen/imagis.c
+vim +16 include/asm-generic/barrier.h
 
-a23ba3c043db9a Markuss Broks 2022-03-14  353  
-a23ba3c043db9a Markuss Broks 2022-03-14  354  static struct i2c_driver imagis_ts_driver = {
-a23ba3c043db9a Markuss Broks 2022-03-14  355  	.driver = {
-a23ba3c043db9a Markuss Broks 2022-03-14  356  		.name = "imagis-touchscreen",
-a23ba3c043db9a Markuss Broks 2022-03-14  357  		.pm = &imagis_pm_ops,
-a23ba3c043db9a Markuss Broks 2022-03-14 @358  		.of_match_table = of_match_ptr(imagis_of_match),
-a23ba3c043db9a Markuss Broks 2022-03-14  359  	},
-a23ba3c043db9a Markuss Broks 2022-03-14  360  	.probe_new = imagis_probe,
-a23ba3c043db9a Markuss Broks 2022-03-14  361  };
-a23ba3c043db9a Markuss Broks 2022-03-14  362  
-
-:::::: The code at line 358 was first introduced by commit
-:::::: a23ba3c043db9a2e8c967a3ff66dcedc5725afdf Input: add Imagis touchscreen driver
-
-:::::: TO: Markuss Broks <markuss.broks@gmail.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+    15	
+  > 16	#include <asm/vdso/processor.h>
+    17	#include <linux/compiler.h>
+    18	#include <linux/kcsan-checks.h>
+    19	#include <asm/rwonce.h>
+    20	
 
 -- 
 0-DAY CI Kernel Test Service
