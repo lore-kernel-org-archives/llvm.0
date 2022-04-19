@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B187FC
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 00:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A35A2A
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 00:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650327070; x=1681863070;
+  t=1650328275; x=1681864275;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UewArZ+Ooa2YI69aAP9Gz6Djow2AUNwlruRAFuHwc2E=;
-  b=cuSA/WQ7y8ljcoFEU7rBn6rNDTh1QEWoz/1h2sUbyQXq1B7YQSczslVE
-   NrgJw4Qq5N8foDxd3fnu/8EVzrQrT+guJG95OcCOfDANySEsBm8M5o3IV
-   +23IJRk2Tomz1tsUS6ClflT2dgU/hrvg+Wj2kFchf8P5yCcA6d9ipR9m/
-   IpVAY7BaD1+J45VvCNr/L5QF4Rma7LdTB1AL5DOUwgkoMh9locZq+l2jb
-   hWZrspGeje5oxW/6/X5yx8uZXmdqanrKUUWI91TDvY+5VOC9CSg0723iM
-   NjxUYHvTuM2/aKaeqGfIPoeMkgSTRZSDFypxcROIcJpRUsfTMqaDFtDW+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="324079976"
+  bh=nws54ezawM9bqSqbX5zehME3Uk2VbZrkK2PxaNuWODY=;
+  b=KpS7BU2+mZGRLnNs8u5/MTXoExF1D2heonRRlvnuBIeE/Wj/PI9VJenW
+   GyJOfcq59odQ9YOOdZ5kQwxPvSm0MfuMAAuNWEqSyAu4VNjyzIP7FHYdq
+   wmp39lSfhz/q8WRJLEwbPntp7pASYeUc+4iEBS+Rs3EkAYVxIlCYPZm+v
+   ODQbrFNH9wIxPTM3a4CGDIO89QLVhSgbq+C63KvEGeJANKpXm7RVgAjuZ
+   TrI6e3um8ev0f0MMVZVqsJ3SuiJ9+7Y/xicUjEVHWXU36YjoAVYj/gN8I
+   z5qzv355OSwL+6fXHvkqJxgHlNVPPHxO2yUrrco25O9lBq6cyQh07Mg/I
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350089844"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="324079976"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:11:09 -0700
+   d="scan'208";a="350089844"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:31:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665587586"
+   d="scan'208";a="702001891"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 17:11:07 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 17:31:08 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngbSV-00057I-6p;
-	Tue, 19 Apr 2022 00:11:07 +0000
-Date: Tue, 19 Apr 2022 08:10:14 +0800
+	id 1ngblr-00057s-O7;
+	Tue, 19 Apr 2022 00:31:07 +0000
+Date: Tue, 19 Apr 2022 08:30:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1769/2356]
- drivers/bluetooth/btmtksdio.c:1393:21: warning: incompatible integer to
- pointer conversion assigning to 'struct device_node *' from 'int'
-Message-ID: <202204190814.1ZbNhqrX-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1591/2356]
+ drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:10: warning: incompatible integer to
+ pointer conversion assigning to 'struct dp_aux_ep_device *' from 'int'
+Message-ID: <202204190823.7G1aai7b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,133 +50,128 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc [1769/2356] headers/deps: of: Optimize <linux/of.h> dependencies, remove <linux/of_api.h>
-config: i386-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190814.1ZbNhqrX-lkp@intel.com/config)
+commit: 97285b3fe2fe8e0e139fea227831531395c3007d [1591/2356] headers/deps: ftrace: Optimize the <linux/ftrace.h> header dependencies
+config: i386-randconfig-a011-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190823.7G1aai7b-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=97285b3fe2fe8e0e139fea227831531395c3007d
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
+        git checkout 97285b3fe2fe8e0e139fea227831531395c3007d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/misc/ drivers/net/bonding/ drivers/net/ethernet/marvell/prestera/ drivers/net/ethernet/microchip/lan966x/ drivers/net/netdevsim/ drivers/net/phy/ drivers/power/supply/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bus/mhi/host/ drivers/gpu/drm/bridge/ drivers/gpu/drm/dp/ drivers/md/bcache/ drivers/media/tuners/ drivers/peci/ drivers/power/supply/ drivers/regulator/ drivers/rpmsg/ fs/pstore/ fs/ubifs/ fs/xfs/ net/bpf/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/bluetooth/btmtksdio.c:1393:23: error: implicit declaration of function 'of_find_compatible_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
-                                ^
->> drivers/bluetooth/btmtksdio.c:1393:21: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-           bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
-                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+   drivers/gpu/drm/dp/drm_dp_aux_bus.c:128:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           kfree(to_dp_aux_ep_dev(dev));
+           ^
+   drivers/gpu/drm/dp/drm_dp_aux_bus.c:128:2: note: did you mean 'kvfree'?
+   include/linux/rcutiny.h:41:13: note: 'kvfree' declared here
+   extern void kvfree(const void *addr);
+               ^
+   drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:12: error: implicit declaration of function 'kzalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
+                            ^
+>> drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:10: warning: incompatible integer to pointer conversion assigning to 'struct dp_aux_ep_device *' from 'int' [-Wint-conversion]
+                   aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
+                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +1393 drivers/bluetooth/btmtksdio.c
+vim +224 drivers/gpu/drm/dp/drm_dp_aux_bus.c
 
-ce64b3e9491957 Mark Chen        2022-01-10  1312  
-9aebfd4a2200ab Sean Wang        2019-03-08  1313  static int btmtksdio_probe(struct sdio_func *func,
-9aebfd4a2200ab Sean Wang        2019-03-08  1314  			   const struct sdio_device_id *id)
-9aebfd4a2200ab Sean Wang        2019-03-08  1315  {
-9aebfd4a2200ab Sean Wang        2019-03-08  1316  	struct btmtksdio_dev *bdev;
-9aebfd4a2200ab Sean Wang        2019-03-08  1317  	struct hci_dev *hdev;
-9aebfd4a2200ab Sean Wang        2019-03-08  1318  	int err;
-9aebfd4a2200ab Sean Wang        2019-03-08  1319  
-9aebfd4a2200ab Sean Wang        2019-03-08  1320  	bdev = devm_kzalloc(&func->dev, sizeof(*bdev), GFP_KERNEL);
-9aebfd4a2200ab Sean Wang        2019-03-08  1321  	if (!bdev)
-9aebfd4a2200ab Sean Wang        2019-03-08  1322  		return -ENOMEM;
-9aebfd4a2200ab Sean Wang        2019-03-08  1323  
-9aebfd4a2200ab Sean Wang        2019-03-08  1324  	bdev->data = (void *)id->driver_data;
-9aebfd4a2200ab Sean Wang        2019-03-08  1325  	if (!bdev->data)
-9aebfd4a2200ab Sean Wang        2019-03-08  1326  		return -ENODEV;
-9aebfd4a2200ab Sean Wang        2019-03-08  1327  
-7f3c563c575e73 Sean Wang        2019-04-18  1328  	bdev->dev = &func->dev;
-9aebfd4a2200ab Sean Wang        2019-03-08  1329  	bdev->func = func;
-9aebfd4a2200ab Sean Wang        2019-03-08  1330  
-26270bc189ea4b Sean Wang        2021-10-19  1331  	INIT_WORK(&bdev->txrx_work, btmtksdio_txrx_work);
-9aebfd4a2200ab Sean Wang        2019-03-08  1332  	skb_queue_head_init(&bdev->txq);
-9aebfd4a2200ab Sean Wang        2019-03-08  1333  
-9aebfd4a2200ab Sean Wang        2019-03-08  1334  	/* Initialize and register HCI device */
-9aebfd4a2200ab Sean Wang        2019-03-08  1335  	hdev = hci_alloc_dev();
-9aebfd4a2200ab Sean Wang        2019-03-08  1336  	if (!hdev) {
-9aebfd4a2200ab Sean Wang        2019-03-08  1337  		dev_err(&func->dev, "Can't allocate HCI device\n");
-9aebfd4a2200ab Sean Wang        2019-03-08  1338  		return -ENOMEM;
-9aebfd4a2200ab Sean Wang        2019-03-08  1339  	}
-9aebfd4a2200ab Sean Wang        2019-03-08  1340  
-9aebfd4a2200ab Sean Wang        2019-03-08  1341  	bdev->hdev = hdev;
-9aebfd4a2200ab Sean Wang        2019-03-08  1342  
-9aebfd4a2200ab Sean Wang        2019-03-08  1343  	hdev->bus = HCI_SDIO;
-9aebfd4a2200ab Sean Wang        2019-03-08  1344  	hci_set_drvdata(hdev, bdev);
-9aebfd4a2200ab Sean Wang        2019-03-08  1345  
-9aebfd4a2200ab Sean Wang        2019-03-08  1346  	hdev->open     = btmtksdio_open;
-9aebfd4a2200ab Sean Wang        2019-03-08  1347  	hdev->close    = btmtksdio_close;
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1348  	hdev->cmd_timeout = btmtksdio_cmd_timeout;
-9aebfd4a2200ab Sean Wang        2019-03-08  1349  	hdev->flush    = btmtksdio_flush;
-9aebfd4a2200ab Sean Wang        2019-03-08  1350  	hdev->setup    = btmtksdio_setup;
-9aebfd4a2200ab Sean Wang        2019-03-08  1351  	hdev->shutdown = btmtksdio_shutdown;
-9aebfd4a2200ab Sean Wang        2019-03-08  1352  	hdev->send     = btmtksdio_send_frame;
-ce64b3e9491957 Mark Chen        2022-01-10  1353  	hdev->wakeup   = btmtksdio_sdio_wakeup;
-877ec9e1d07b63 Sean Wang        2021-10-19  1354  	hdev->set_bdaddr = btmtk_set_bdaddr;
-877ec9e1d07b63 Sean Wang        2021-10-19  1355  
-9aebfd4a2200ab Sean Wang        2019-03-08  1356  	SET_HCIDEV_DEV(hdev, &func->dev);
-9aebfd4a2200ab Sean Wang        2019-03-08  1357  
-9aebfd4a2200ab Sean Wang        2019-03-08  1358  	hdev->manufacturer = 70;
-9aebfd4a2200ab Sean Wang        2019-03-08  1359  	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
-9aebfd4a2200ab Sean Wang        2019-03-08  1360  
-b062a0b9c1dc1f Yake Yang        2022-03-17  1361  	sdio_set_drvdata(func, bdev);
-b062a0b9c1dc1f Yake Yang        2022-03-17  1362  
-9aebfd4a2200ab Sean Wang        2019-03-08  1363  	err = hci_register_dev(hdev);
-9aebfd4a2200ab Sean Wang        2019-03-08  1364  	if (err < 0) {
-9aebfd4a2200ab Sean Wang        2019-03-08  1365  		dev_err(&func->dev, "Can't register HCI device\n");
-9aebfd4a2200ab Sean Wang        2019-03-08  1366  		hci_free_dev(hdev);
-9aebfd4a2200ab Sean Wang        2019-03-08  1367  		return err;
-9aebfd4a2200ab Sean Wang        2019-03-08  1368  	}
-9aebfd4a2200ab Sean Wang        2019-03-08  1369  
-7f3c563c575e73 Sean Wang        2019-04-18  1370  	/* pm_runtime_enable would be done after the firmware is being
-7f3c563c575e73 Sean Wang        2019-04-18  1371  	 * downloaded because the core layer probably already enables
-7f3c563c575e73 Sean Wang        2019-04-18  1372  	 * runtime PM for this func such as the case host->caps &
-7f3c563c575e73 Sean Wang        2019-04-18  1373  	 * MMC_CAP_POWER_OFF_CARD.
-7f3c563c575e73 Sean Wang        2019-04-18  1374  	 */
-7f3c563c575e73 Sean Wang        2019-04-18  1375  	if (pm_runtime_enabled(bdev->dev))
-7f3c563c575e73 Sean Wang        2019-04-18  1376  		pm_runtime_disable(bdev->dev);
-7f3c563c575e73 Sean Wang        2019-04-18  1377  
-7f3c563c575e73 Sean Wang        2019-04-18  1378  	/* As explaination in drivers/mmc/core/sdio_bus.c tells us:
-7f3c563c575e73 Sean Wang        2019-04-18  1379  	 * Unbound SDIO functions are always suspended.
-7f3c563c575e73 Sean Wang        2019-04-18  1380  	 * During probe, the function is set active and the usage count
-7f3c563c575e73 Sean Wang        2019-04-18  1381  	 * is incremented.  If the driver supports runtime PM,
-7f3c563c575e73 Sean Wang        2019-04-18  1382  	 * it should call pm_runtime_put_noidle() in its probe routine and
-7f3c563c575e73 Sean Wang        2019-04-18  1383  	 * pm_runtime_get_noresume() in its remove routine.
-7f3c563c575e73 Sean Wang        2019-04-18  1384  	 *
-7f3c563c575e73 Sean Wang        2019-04-18  1385  	 * So, put a pm_runtime_put_noidle here !
-7f3c563c575e73 Sean Wang        2019-04-18  1386  	 */
-7f3c563c575e73 Sean Wang        2019-04-18  1387  	pm_runtime_put_noidle(bdev->dev);
-7f3c563c575e73 Sean Wang        2019-04-18  1388  
-ce64b3e9491957 Mark Chen        2022-01-10  1389  	err = device_init_wakeup(bdev->dev, true);
-ce64b3e9491957 Mark Chen        2022-01-10  1390  	if (err)
-ce64b3e9491957 Mark Chen        2022-01-10  1391  		bt_dev_err(hdev, "failed to initialize device wakeup");
-ce64b3e9491957 Mark Chen        2022-01-10  1392  
-8fafe702253d50 Chih-Ying Chiang 2022-02-09 @1393  	bdev->dev->of_node = of_find_compatible_node(NULL, NULL,
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1394  						     "mediatek,mt7921s-bluetooth");
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1395  	bdev->reset = devm_gpiod_get_optional(bdev->dev, "reset",
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1396  					      GPIOD_OUT_LOW);
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1397  	if (IS_ERR(bdev->reset))
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1398  		err = PTR_ERR(bdev->reset);
-8fafe702253d50 Chih-Ying Chiang 2022-02-09  1399  
-ce64b3e9491957 Mark Chen        2022-01-10  1400  	return err;
-9aebfd4a2200ab Sean Wang        2019-03-08  1401  }
-9aebfd4a2200ab Sean Wang        2019-03-08  1402  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  181  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  182  /**
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  183   * of_dp_aux_populate_ep_devices() - Populate the endpoint devices on the DP AUX
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  184   * @aux: The AUX channel whose devices we want to populate. It is required that
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  185   *       drm_dp_aux_init() has already been called for this AUX channel.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  186   *
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  187   * This will populate all the devices under the "aux-bus" node of the device
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  188   * providing the AUX channel (AKA aux->dev).
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  189   *
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  190   * When this function finishes, it is _possible_ (but not guaranteed) that
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  191   * our sub-devices will have finished probing. It should be noted that if our
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  192   * sub-devices return -EPROBE_DEFER that we will not return any error codes
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  193   * ourselves but our sub-devices will _not_ have actually probed successfully
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  194   * yet. There may be other cases (maybe added in the future?) where sub-devices
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  195   * won't have been probed yet when this function returns, so it's best not to
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  196   * rely on that.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  197   *
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  198   * If this function succeeds you should later make sure you call
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  199   * of_dp_aux_depopulate_ep_devices() to undo it, or just use the devm version
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  200   * of this function.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  201   *
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  202   * Return: 0 if no error or negative error code.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  203   */
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  204  int of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  205  {
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  206  	struct device_node *bus, *np;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  207  	struct dp_aux_ep_device *aux_ep;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  208  	int ret;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  209  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  210  	/* drm_dp_aux_init() should have been called already; warn if not */
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  211  	WARN_ON_ONCE(!aux->ddc.algo);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  212  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  213  	if (!aux->dev->of_node)
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  214  		return 0;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  215  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  216  	bus = of_get_child_by_name(aux->dev->of_node, "aux-bus");
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  217  	if (!bus)
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  218  		return 0;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  219  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  220  	for_each_available_child_of_node(bus, np) {
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  221  		if (of_node_test_and_set_flag(np, OF_POPULATED))
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  222  			continue;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  223  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11 @224  		aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  225  		if (!aux_ep)
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  226  			continue;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  227  		aux_ep->aux = aux;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  228  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  229  		aux_ep->dev.parent = aux->dev;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  230  		aux_ep->dev.bus = &dp_aux_bus_type;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  231  		aux_ep->dev.type = &dp_aux_device_type_type;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  232  		aux_ep->dev.of_node = of_node_get(np);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  233  		dev_set_name(&aux_ep->dev, "aux-%s", dev_name(aux->dev));
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  234  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  235  		ret = device_register(&aux_ep->dev);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  236  		if (ret) {
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  237  			dev_err(aux->dev, "Failed to create AUX EP for %pOF: %d\n", np, ret);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  238  			of_node_clear_flag(np, OF_POPULATED);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  239  			of_node_put(np);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  240  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  241  			/*
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  242  			 * As per docs of device_register(), call this instead
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  243  			 * of kfree() directly for error cases.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  244  			 */
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  245  			put_device(&aux_ep->dev);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  246  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  247  			/*
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  248  			 * Following in the footsteps of of_i2c_register_devices(),
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  249  			 * we won't fail the whole function here--we'll just
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  250  			 * continue registering any other devices we find.
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  251  			 */
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  252  		}
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  253  	}
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  254  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  255  	of_node_put(bus);
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  256  
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  257  	return 0;
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  258  }
+aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  259  
 
-:::::: The code at line 1393 was first introduced by commit
-:::::: 8fafe702253d50bf90daf324ae86b5ad5ac8a5e1 Bluetooth: mt7921s: support bluetooth reset mechanism
+:::::: The code at line 224 was first introduced by commit
+:::::: aeb33699fc2c97994de0e9acb74d0fd319380614 drm: Introduce the DP AUX bus
 
-:::::: TO: Chih-Ying Chiang <chih-yin.chiang@mediatek.com>
-:::::: CC: Marcel Holtmann <marcel@holtmann.org>
+:::::: TO: Douglas Anderson <dianders@chromium.org>
+:::::: CC: Douglas Anderson <dianders@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service
