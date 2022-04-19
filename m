@@ -1,43 +1,32 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E282DA23
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 02:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650336916; x=1681872916;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qsv9b4NZJX/flvzAMh6aKCoGU6ZZlcR8myASj0fJAV4=;
-  b=lEoBEslwZ+/0axRpE8NDQihxjSD6pFhpF7C98FL/sRfoo3PtF+USVj0d
-   ICcL+rINi9eScq4wj0hZvqxvi0EV3RyFk3nS5LM29MzPIXb00doZOM6Bj
-   SPsY3OWL/r8XIUIY0fG018WT/M/4gz3WiUqpbnPGIylFqVrRctehKp4ly
-   oIhlRHjv4KM8hPZAUI3ZhG47EPxUI2Iyy5vr0doZDZraYXspJYb2L6DGM
-   M4fxpTvXx2zCLYomYC/DZI22+LXve/gtaZVQ2ydWQowrsgjzonw+XAaQR
-   oo96eNb3w0eE1VZR/ZO3W+EfpVOWnQaXIBnHHN6QWLRC2H7BwZMKsf2Hp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261262860"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="261262860"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 19:55:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="702033378"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 19:55:15 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nge1K-0005Eo-Fm;
-	Tue, 19 Apr 2022 02:55:14 +0000
-Date: Tue, 19 Apr 2022 10:55:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 84/2356]
- include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h'
- file not found
-Message-ID: <202204191032.OSML9oKj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F2BA23
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 03:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CB4C385A7;
+	Tue, 19 Apr 2022 03:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650338716;
+	bh=UqM/hgA6B6cqEi+M+jUJMPG4V76AYj2j0wMKZiopQOg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=LB9fyQ+OHrqA7VjF743yv3RzNvIPzcMTam0jPDklbcUGINGnAT/LCK/p78Hzlzmb8
+	 ZkjxCdfYIL4LxLagL6DTIf4NO45BYhLwevb4alcHA/txnOtQ6r0q5uwY+k738YuoPF
+	 4MSS+byJ7hQBN8R7fcYdHKYbyqsBtdFljFZsK4kR0S61oS+C6V443rMyG1dchX1YtX
+	 Qvf28B1LK+DIoCrsNhBTk/AyB/gEvo8UA2RtGd6li5tZWHnrrSURpvgMFpJ1wt+FWa
+	 ghXzVizESuZSdf3zsBlYVDeQbZecrVhXumtAvxQsVyCSwrVNqDUSTCSdrL5QDFemQj
+	 Rm/ZBEUCbxlew==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id D1BF85C0A23; Mon, 18 Apr 2022 20:25:15 -0700 (PDT)
+Date: Mon, 18 Apr 2022 20:25:15 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH rcu 08/11] srcu: Drop needless initialization of sdp in
+ srcu_gp_start()
+Message-ID: <20220419032515.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220418225359.3945217-8-paulmck@kernel.org>
+ <202204191057.dy5dzVNo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,59 +35,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <202204191057.dy5dzVNo-lkp@intel.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: dcac6390a2220f99834d2d14650fb82f2da9136b [84/2356] headers/deps: per_task: Add the per_task infrastructure for x86, arm64, sparc and MIPS
-config: s390-randconfig-r044-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191032.OSML9oKj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dcac6390a2220f99834d2d14650fb82f2da9136b
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout dcac6390a2220f99834d2d14650fb82f2da9136b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+On Tue, Apr 19, 2022 at 10:03:17AM +0800, kernel test robot wrote:
+> Hi "Paul,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on linux/master v5.18-rc3]
+> [cannot apply to paulmck-rcu/dev paulmck-rcu/rcu/next next-20220414]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I recently updated my patch-generation scripts, and they apparently
+need help.  Please ignore this patch.  The 21/21 variant is the correct
+version.
 
-All errors (new ones prefixed by >>):
+							Thanx, Paul
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:12:
->> include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +48 include/linux/sched/per_task.h
-
-    42	
-    43	#ifndef __PER_TASK_GEN
-    44	/*
-    45	 * These offsets get generated via the scripts/gen-pertask.sh script,
-    46	 * and the pertask rules in the top level Kbuild file:
-    47	 */
-  > 48	# include <generated/asm-offsets.h>
-    49	#endif
-    50	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> url:    https://github.com/intel-lab-lkp/linux/commits/Paul-E-McKenney/Miscellaneous-fixes-for-v5-19/20220419-065730
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b2d229d4ddb17db541098b83524d901257e93845
+> config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220419/202204191057.dy5dzVNo-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/375cc5ddcf9646bfab6ec257cfa297439ed15273
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Paul-E-McKenney/Miscellaneous-fixes-for-v5-19/20220419-065730
+>         git checkout 375cc5ddcf9646bfab6ec257cfa297439ed15273
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/rcu/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/rcu/srcutree.c:443:25: warning: variable 'sdp' is uninitialized when used here [-Wuninitialized]
+>            rcu_segcblist_advance(&sdp->srcu_cblist,
+>                                   ^~~
+>    kernel/rcu/srcutree.c:437:23: note: initialize the variable 'sdp' to silence this warning
+>            struct srcu_data *sdp;
+>                                 ^
+>                                  = NULL
+>    1 warning generated.
+> 
+> 
+> vim +/sdp +443 kernel/rcu/srcutree.c
+> 
+> dad81a2026841b Paul E. McKenney 2017-03-25  431  
+> dad81a2026841b Paul E. McKenney 2017-03-25  432  /*
+> dad81a2026841b Paul E. McKenney 2017-03-25  433   * Start an SRCU grace period.
+> dad81a2026841b Paul E. McKenney 2017-03-25  434   */
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  435  static void srcu_gp_start(struct srcu_struct *ssp)
+> dad81a2026841b Paul E. McKenney 2017-03-25  436  {
+> 375cc5ddcf9646 Lukas Bulwahn    2022-04-18  437  	struct srcu_data *sdp;
+> dad81a2026841b Paul E. McKenney 2017-03-25  438  	int state;
+> dad81a2026841b Paul E. McKenney 2017-03-25  439  
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  440  	lockdep_assert_held(&ACCESS_PRIVATE(ssp, lock));
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  441  	WARN_ON_ONCE(ULONG_CMP_GE(ssp->srcu_gp_seq, ssp->srcu_gp_seq_needed));
+> eb4c2382272ae7 Dennis Krein     2018-10-26  442  	spin_lock_rcu_node(sdp);  /* Interrupts already disabled. */
+> da915ad5cf25b5 Paul E. McKenney 2017-04-05 @443  	rcu_segcblist_advance(&sdp->srcu_cblist,
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  444  			      rcu_seq_current(&ssp->srcu_gp_seq));
+> da915ad5cf25b5 Paul E. McKenney 2017-04-05  445  	(void)rcu_segcblist_accelerate(&sdp->srcu_cblist,
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  446  				       rcu_seq_snap(&ssp->srcu_gp_seq));
+> eb4c2382272ae7 Dennis Krein     2018-10-26  447  	spin_unlock_rcu_node(sdp);  /* Interrupts remain disabled. */
+> 2da4b2a7fd8de5 Paul E. McKenney 2017-04-25  448  	smp_mb(); /* Order prior store to ->srcu_gp_seq_needed vs. GP start. */
+> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  449  	rcu_seq_start(&ssp->srcu_gp_seq);
+> 710426068dc60f Paul E. McKenney 2020-01-03  450  	state = rcu_seq_state(ssp->srcu_gp_seq);
+> dad81a2026841b Paul E. McKenney 2017-03-25  451  	WARN_ON_ONCE(state != SRCU_STATE_SCAN1);
+> dad81a2026841b Paul E. McKenney 2017-03-25  452  }
+> dad81a2026841b Paul E. McKenney 2017-03-25  453  
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
