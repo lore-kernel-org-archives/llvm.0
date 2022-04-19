@@ -1,119 +1,134 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AF2A29
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 04:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77211EA2
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 04:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342806; x=1681878806;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O0McZ/ikjxVmcmblckwMmw9PFxKOUrV//NGzehRM8aE=;
-  b=nWfydA5DYXeiLXT5vkb4MPrPpLQQlS75T9takhvIi/GD12WyZBFr/grz
-   +I5QdCrwZMybDHsN238KQjRrtcR2gSpzJGTY/0xV3KdM1/i1OFwAXfRAs
-   ZJrRHStTDRUVIzFSWYiFVm5G7a6ejRxZRgJG5zJGPJhv37bhCnpRH1okJ
-   GdjkfHG/kCmEzPb3xEbTJQTvdFIPUPfFT4qCmkIFNdlriUuT4htlmRnJo
-   SIi44js+NDEz2ZJsbOtAFNXN9KStk3V/mRJz3Bl1M8qiKxTngEEOIK5mO
-   i9et5fcneW8W5cIE39t6wTd3I1zyATDnr8hsJbIph5MbnVCDoaGualsEb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263133838"
+  t=1650342808; x=1681878808;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3WQ96fk4qp35tKfaZUm43O+5DsFp25/ZxLI7z4orMHY=;
+  b=jBWAecruNT5I13VOCTlvWK4PRccRVFbbmk4f8jwR0/v5OJyMgW9QmB7I
+   J+404MoaZJT3H8PibluAXdb46NpjHpje2M3GcX6kifiGm1M/BTDRVj1JI
+   RJ/NnWIrlUGA3s2iiXCxFleX4KSrjLMXLZoY72jUEDL+1pxiZNQc7fV3L
+   IY9tSMdslUuPBBrTNhbwHxpL7qkQ/Xw+sE+4n3E7oR6K4VFziW2E0Tk2C
+   AZ7wOFsji7LahSFltP2wL4Nq5wIVEHCuEyiAWeC2lxiwLswasBJuW3peW
+   EUcR1uWpyUaD+eTCMXg7hlASOHggygcFelVE6DvIQ35AwvD9Z/ydqpVUH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263133841"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263133838"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
+   d="scan'208";a="263133841"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="554549289"
+   d="scan'208";a="665771761"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngfYK-0005Ln-2U;
+	id 1ngfYK-0005Lq-3B;
 	Tue, 19 Apr 2022 04:33:24 +0000
-Date: Tue, 19 Apr 2022 12:32:58 +0800
+Date: Tue, 19 Apr 2022 12:32:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2012/2356]
- arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level
- declarator
-Message-ID: <202204191258.clDxeh51-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1770/2356]
+ drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer
+ conversion passing 'int' to parameter of type 'struct device_node *'
+Message-ID: <202204191213.e2qAQvKm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 73e8295a34e49141903dc467f10daf2d31e2a411 [2012/2356] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
-config: s390-buildonly-randconfig-r005-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191258.clDxeh51-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
+commit: 323ab388e14d9548f526543e901e7feb2459c442 [1770/2356] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
+config: x86_64-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191213.e2qAQvKm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=73e8295a34e49141903dc467f10daf2d31e2a411
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=323ab388e14d9548f526543e901e7feb2459c442
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 73e8295a34e49141903dc467f10daf2d31e2a411
+        git checkout 323ab388e14d9548f526543e901e7feb2459c442
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/block/aoe/ drivers/bus/mhi/host/ drivers/gpu/drm/i915/ drivers/gpu/drm/tiny/ drivers/hwmon/ drivers/iio/dac/ drivers/misc/ drivers/platform/x86/ drivers/power/supply/ drivers/spi/ drivers/thermal/intel/ lib/crypto/ net/mctp/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:23:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
->> arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level declarator
-   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-                                ^
-                                ;
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hashtable_api.h:16:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:35:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   drivers/iio/dac/ltc2688.c:711:47: error: implicit declaration of function 'to_of_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
+                                                        ^
+   drivers/iio/dac/ltc2688.c:711:47: note: did you mean 'dev_of_node'?
+   include/linux/device_api.h:423:35: note: 'dev_of_node' declared here
+   static inline struct device_node *dev_of_node(struct device *dev)
+                                     ^
+>> drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct device_node *' [-Wint-conversion]
+           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
+                                                        ^~~~~~~~~~~~~~~~
+   include/linux/clk.h:489:29: note: passing argument to parameter 'np' here
+                                       struct device_node *np, const char *con_id);
+                                                           ^
+   1 warning and 1 error generated.
 
 
-vim +19 arch/s390/include/asm/smp.h
+vim +711 drivers/iio/dac/ltc2688.c
 
-^1da177e4c3f41 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  15  
-dbd70fb499952d include/asm-s390/smp.h      Heiko Carstens     2008-04-17  16  extern struct mutex smp_cpu_state_mutex;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  17  extern unsigned int smp_cpu_mt_shift;
-10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mtid;
-1a36a39e225d35 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @19  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-a052096bdd6809 arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  20  extern cpumask_t cpu_setup_mask;
-8b646bd759086f arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  21  
+832cb9eeb9312d Nuno Sá 2022-02-25  702  
+832cb9eeb9312d Nuno Sá 2022-02-25  703  static int ltc2688_tgp_clk_setup(struct ltc2688_state *st,
+832cb9eeb9312d Nuno Sá 2022-02-25  704  				 struct ltc2688_chan *chan,
+832cb9eeb9312d Nuno Sá 2022-02-25  705  				 struct fwnode_handle *node, int tgp)
+832cb9eeb9312d Nuno Sá 2022-02-25  706  {
+832cb9eeb9312d Nuno Sá 2022-02-25  707  	unsigned long rate;
+832cb9eeb9312d Nuno Sá 2022-02-25  708  	struct clk *clk;
+832cb9eeb9312d Nuno Sá 2022-02-25  709  	int ret, f;
+832cb9eeb9312d Nuno Sá 2022-02-25  710  
+832cb9eeb9312d Nuno Sá 2022-02-25 @711  	clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
+832cb9eeb9312d Nuno Sá 2022-02-25  712  	if (IS_ERR(clk))
+832cb9eeb9312d Nuno Sá 2022-02-25  713  		return dev_err_probe(&st->spi->dev, PTR_ERR(clk),
+832cb9eeb9312d Nuno Sá 2022-02-25  714  				     "failed to get tgp clk.\n");
+832cb9eeb9312d Nuno Sá 2022-02-25  715  
+832cb9eeb9312d Nuno Sá 2022-02-25  716  	ret = clk_prepare_enable(clk);
+832cb9eeb9312d Nuno Sá 2022-02-25  717  	if (ret)
+832cb9eeb9312d Nuno Sá 2022-02-25  718  		return dev_err_probe(&st->spi->dev, ret,
+832cb9eeb9312d Nuno Sá 2022-02-25  719  				     "failed to enable tgp clk.\n");
+832cb9eeb9312d Nuno Sá 2022-02-25  720  
+832cb9eeb9312d Nuno Sá 2022-02-25  721  	ret = devm_add_action_or_reset(&st->spi->dev, ltc2688_clk_disable, clk);
+832cb9eeb9312d Nuno Sá 2022-02-25  722  	if (ret)
+832cb9eeb9312d Nuno Sá 2022-02-25  723  		return ret;
+832cb9eeb9312d Nuno Sá 2022-02-25  724  
+832cb9eeb9312d Nuno Sá 2022-02-25  725  	if (chan->toggle_chan)
+832cb9eeb9312d Nuno Sá 2022-02-25  726  		return 0;
+832cb9eeb9312d Nuno Sá 2022-02-25  727  
+832cb9eeb9312d Nuno Sá 2022-02-25  728  	/* calculate available dither frequencies */
+832cb9eeb9312d Nuno Sá 2022-02-25  729  	rate = clk_get_rate(clk);
+832cb9eeb9312d Nuno Sá 2022-02-25  730  	for (f = 0; f < ARRAY_SIZE(chan->dither_frequency); f++)
+832cb9eeb9312d Nuno Sá 2022-02-25  731  		chan->dither_frequency[f] = DIV_ROUND_CLOSEST(rate, ltc2688_period[f]);
+832cb9eeb9312d Nuno Sá 2022-02-25  732  
+832cb9eeb9312d Nuno Sá 2022-02-25  733  	return 0;
+832cb9eeb9312d Nuno Sá 2022-02-25  734  }
+832cb9eeb9312d Nuno Sá 2022-02-25  735  
 
-:::::: The code at line 19 was first introduced by commit
-:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
+:::::: The code at line 711 was first introduced by commit
+:::::: 832cb9eeb9312dd2e14133681d3920b773ef1eac iio: dac: add support for ltc2688
 
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: TO: Nuno Sá <nuno.sa@analog.com>
+:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 -- 
 0-DAY CI Kernel Test Service
