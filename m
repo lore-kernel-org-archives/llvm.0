@@ -1,42 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775DBA23
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 02:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E282DA23
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 02:55:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650335716; x=1681871716;
+  t=1650336916; x=1681872916;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/dj95LQS+m9Y5Z6+lCt7fVFVp2F0MwsWR2VKegZkPm0=;
-  b=M5XovRJyJ3bRbwF/qHS/MnuZyLc+345oj824tTZ62oD/vjW6x/FRhHm2
-   mJflFQBEUtWYYxjWz0AcCmu10QyU5D2hG2KV6oATo9wmdfY9lQq49ughn
-   t91LtNv6XRZHjD9T8Fm9a6jo7fBVqhFPcyIxIjWrTDaV07E327ZllNHOV
-   LPSjE7ATBJbO9Q0zE9S8Atf4AVYo/XawRfF6FT5gEfxurxTbQQh7ffRtt
-   bupXwFavj/8Bvn1o4NTEfoNKZ69u95qS26NQP6QQKiTaHMtKo1N30F/S2
-   BpzqGtjSsjy6g32QQYwHDWX2ip8+ZdwMw9cwNlorBzxbV+qQNy/mxaDqX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243590046"
+  bh=qsv9b4NZJX/flvzAMh6aKCoGU6ZZlcR8myASj0fJAV4=;
+  b=lEoBEslwZ+/0axRpE8NDQihxjSD6pFhpF7C98FL/sRfoo3PtF+USVj0d
+   ICcL+rINi9eScq4wj0hZvqxvi0EV3RyFk3nS5LM29MzPIXb00doZOM6Bj
+   SPsY3OWL/r8XIUIY0fG018WT/M/4gz3WiUqpbnPGIylFqVrRctehKp4ly
+   oIhlRHjv4KM8hPZAUI3ZhG47EPxUI2Iyy5vr0doZDZraYXspJYb2L6DGM
+   M4fxpTvXx2zCLYomYC/DZI22+LXve/gtaZVQ2ydWQowrsgjzonw+XAaQR
+   oo96eNb3w0eE1VZR/ZO3W+EfpVOWnQaXIBnHHN6QWLRC2H7BwZMKsf2Hp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261262860"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="243590046"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 19:35:15 -0700
+   d="scan'208";a="261262860"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 19:55:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="860421227"
+   d="scan'208";a="702033378"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Apr 2022 19:35:14 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 19:55:15 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngdhx-0005Dg-Ms;
-	Tue, 19 Apr 2022 02:35:13 +0000
-Date: Tue, 19 Apr 2022 10:34:16 +0800
+	id 1nge1K-0005Eo-Fm;
+	Tue, 19 Apr 2022 02:55:14 +0000
+Date: Tue, 19 Apr 2022 10:55:07 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1637/2356] kernel/entry/kvm.c:15:4: error:
- implicit declaration of function 'clear_notify_signal' is invalid in C99
-Message-ID: <202204191041.z5pcMgFP-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 84/2356]
+ include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h'
+ file not found
+Message-ID: <202204191032.OSML9oKj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,71 +50,54 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 7056b88fee812761b8c015f328951fa1f7522a75 [1637/2356] headers/deps: syscalls: Optimize <linux/syscalls.h> dependencies
-config: x86_64-randconfig-a014-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191041.z5pcMgFP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+commit: dcac6390a2220f99834d2d14650fb82f2da9136b [84/2356] headers/deps: per_task: Add the per_task infrastructure for x86, arm64, sparc and MIPS
+config: s390-randconfig-r044-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191032.OSML9oKj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=7056b88fee812761b8c015f328951fa1f7522a75
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dcac6390a2220f99834d2d14650fb82f2da9136b
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 7056b88fee812761b8c015f328951fa1f7522a75
+        git checkout dcac6390a2220f99834d2d14650fb82f2da9136b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/entry/kvm.c:15:4: error: implicit declaration of function 'clear_notify_signal' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           clear_notify_signal();
-                           ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:9:
+   In file included from include/linux/sched.h:12:
+>> include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
    1 error generated.
+   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/clear_notify_signal +15 kernel/entry/kvm.c
+vim +48 include/linux/sched/per_task.h
 
-935ace2fb5cc49 Thomas Gleixner   2020-07-22   8  
-935ace2fb5cc49 Thomas Gleixner   2020-07-22   9  static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  10  {
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  11  	do {
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  12  		int ret;
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  13  
-7c5d8fa6fbb12a Eric W. Biederman 2022-02-09  14  		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
-7c5d8fa6fbb12a Eric W. Biederman 2022-02-09 @15  			clear_notify_signal();
-7c5d8fa6fbb12a Eric W. Biederman 2022-02-09  16  			if (task_work_pending(current))
-7c5d8fa6fbb12a Eric W. Biederman 2022-02-09  17  				task_work_run();
-7c5d8fa6fbb12a Eric W. Biederman 2022-02-09  18  		}
-12db8b690010cc Jens Axboe        2020-10-26  19  
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  20  		if (ti_work & _TIF_SIGPENDING) {
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  21  			kvm_handle_signal_exit(vcpu);
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  22  			return -EINTR;
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  23  		}
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  24  
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  25  		if (ti_work & _TIF_NEED_RESCHED)
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  26  			schedule();
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  27  
-3c532798ec96b6 Jens Axboe        2020-10-03  28  		if (ti_work & _TIF_NOTIFY_RESUME)
-03248addadf1a5 Eric W. Biederman 2022-02-09  29  			resume_user_mode_work(NULL);
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  30  
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  31  		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  32  		if (ret)
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  33  			return ret;
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  34  
-6ce895128b3bff Mark Rutland      2021-11-29  35  		ti_work = read_thread_flags();
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  36  	} while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched());
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  37  	return 0;
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  38  }
-935ace2fb5cc49 Thomas Gleixner   2020-07-22  39  
-
-:::::: The code at line 15 was first introduced by commit
-:::::: 7c5d8fa6fbb12a3f0eefe8762bfede508e147cb3 task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
-
-:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
-:::::: CC: Eric W. Biederman <ebiederm@xmission.com>
+    42	
+    43	#ifndef __PER_TASK_GEN
+    44	/*
+    45	 * These offsets get generated via the scripts/gen-pertask.sh script,
+    46	 * and the pertask rules in the top level Kbuild file:
+    47	 */
+  > 48	# include <generated/asm-offsets.h>
+    49	#endif
+    50	
 
 -- 
 0-DAY CI Kernel Test Service
