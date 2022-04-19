@@ -1,43 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C65A52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF32A23
 	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 03:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650339443; x=1681875443;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n6YrESoq96z5iX+5zZF1IyGyg7F2BPI4Bi6Ga8iHLSU=;
-  b=jxZZtv1BaIGj1qBAM0dDLexqCP0B7yawTkAYTpjZqO+mVLq4RKvy7wvd
-   YHNnhDPeT50hNCbN8dlrmjsssaq5vDaM1a18IVeC5uVSJuXhXymvQDqYH
-   mq5MHC+dROeaPcmIVQrjPMcNu7hP7Q/+yMINGFJB42l02840X3xCChsY5
-   NIyJyn8pliAUCjNxaDZDqxRcS1EvL0cSXcQp5QnzKykEup5FvAkDi2eiI
-   GMs9AcWD+ZmJs3lgfPBYMtwRcmiX2FDFZuAA8XU77LddWzjSg3Sernmfc
-   EzbL9Gz20VQyX24WBbPozuhuz1HkB6ig6bj+418jttlWGmtKFmBz1pkYt
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350114667"
+  bh=J/G2QZDGh8sjb3ZQF69dyulE/K9NIO0fCCRcHcgaSBc=;
+  b=W//hwL3l4IAOJ9GV+di8bwCKtcp7E8YYhautSGTR0DqFtB3OdWp26Rla
+   As8H9WnCYqLmRT9iiIbQb7oCXn6wajpJKPKD+BUnvsCC+HRA1p9pG8Wfg
+   Vvntsu6iMDDtVh39QAOooCqrgP6q1f4Utrx4Wkxi1B0ZiYtI53DTBj0d5
+   uJETp6Yz2AYrkLUSSAJDyOWe10S6LddathQ1FTvq8df87oYsvVnYWi7+4
+   U8BrDkiO0oitkFg27aBHvqlAZI10GWxexOg3ShHOdbw55dlGzXTbuf0yn
+   OGbdELuMzs7s4zUJiovI7TsdOawgD6ymLPZ89EL3FAWoiHesRuU/E8sHn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245557445"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="350114667"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:37:23 -0700
+   d="scan'208";a="245557445"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:37:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="529867443"
+   d="scan'208";a="860438115"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 20:37:21 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 18 Apr 2022 20:37:21 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngeg4-0005Ia-OO;
+	id 1ngeg4-0005Id-P4;
 	Tue, 19 Apr 2022 03:37:20 +0000
-Date: Tue, 19 Apr 2022 11:36:27 +0800
+Date: Tue, 19 Apr 2022 11:36:24 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2140/2356]
- drivers/net/bonding/bond_alb.c:1299:6: warning: incompatible integer to
- pointer conversion assigning to 'struct icmp6hdr *' from 'int'
-Message-ID: <202204191122.amoOMw5g-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1729/2356] mm/damon/ops-common.c:24:15:
+ warning: incompatible integer to pointer conversion initializing 'struct
+ page *' with an expression of type 'int'
+Message-ID: <202204191122.Mc8zEXBp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,70 +50,64 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 3ca2f09b7faf17b5e78cb699d3315e5accbe0216 [2140/2356] headers/deps: net: Optimize <net/ndisc.h> dependencies, remove <net/ndisc_api.h> inclusion
-config: i386-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191122.amoOMw5g-lkp@intel.com/config)
+commit: 7eedc6a3354abcdcb3fbec4de62d4df0fa11c55d [1729/2356] headers/deps: mm/mmzone: Optimize <linux/mmzone.h> dependencies, remove <linux/memory_hotplug.h> inclusion
+config: i386-randconfig-a015-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191122.Mc8zEXBp-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=3ca2f09b7faf17b5e78cb699d3315e5accbe0216
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=7eedc6a3354abcdcb3fbec4de62d4df0fa11c55d
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 3ca2f09b7faf17b5e78cb699d3315e5accbe0216
+        git checkout 7eedc6a3354abcdcb3fbec4de62d4df0fa11c55d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/misc/ drivers/net/bonding/ drivers/net/ethernet/marvell/prestera/ drivers/net/ethernet/microchip/lan966x/ drivers/net/netdevsim/ drivers/net/phy/ drivers/power/supply/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/block/ drivers/clk/ drivers/iio/accel/ drivers/infiniband/core/ drivers/infiniband/ulp/ipoib/ drivers/input/touchscreen/ drivers/mmc/host/ drivers/net/dsa/ drivers/nvdimm/ drivers/powercap/ drivers/usb/typec/ mm/damon/ net/dsa/ net/smc/ sound/soc/codecs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/net/bonding/bond_alb.c:1299:8: error: implicit declaration of function 'icmp6_hdr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           hdr = icmp6_hdr(skb);
-                 ^
->> drivers/net/bonding/bond_alb.c:1299:6: warning: incompatible integer to pointer conversion assigning to 'struct icmp6hdr *' from 'int' [-Wint-conversion]
-           hdr = icmp6_hdr(skb);
-               ^ ~~~~~~~~~~~~~~
-   drivers/net/bonding/bond_alb.c:1300:28: error: use of undeclared identifier 'NDISC_NEIGHBOUR_ADVERTISEMENT'
-           return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-                                     ^
-   drivers/net/bonding/bond_alb.c:1301:22: error: use of undeclared identifier 'NDISC_NEIGHBOUR_SOLICITATION'
-                   hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
-                                      ^
-   1 warning and 3 errors generated.
+   mm/damon/ops-common.c:24:22: error: implicit declaration of function 'pfn_to_online_page' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           struct page *page = pfn_to_online_page(pfn);
+                               ^
+>> mm/damon/ops-common.c:24:15: warning: incompatible integer to pointer conversion initializing 'struct page *' with an expression of type 'int' [-Wint-conversion]
+           struct page *page = pfn_to_online_page(pfn);
+                        ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +1299 drivers/net/bonding/bond_alb.c
+vim +24 mm/damon/ops-common.c
 
-^1da177e4c3f415 Linus Torvalds 2005-04-16  1282  
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1283  /* determine if the packet is NA or NS */
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1284  static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1285  {
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1286  	struct ipv6hdr *ip6hdr;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1287  	struct icmp6hdr *hdr;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1288  
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1289  	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1290  		return true;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1291  
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1292  	ip6hdr = ipv6_hdr(skb);
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1293  	if (ip6hdr->nexthdr != IPPROTO_ICMPV6)
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1294  		return false;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1295  
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1296  	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1297  		return true;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1298  
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28 @1299  	hdr = icmp6_hdr(skb);
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1300  	return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1301  		hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1302  }
-0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1303  
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  14  
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  15  /*
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  16   * Get an online page for a pfn if it's in the LRU list.  Otherwise, returns
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  17   * NULL.
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  18   *
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  19   * The body of this function is stolen from the 'page_idle_get_page()'.  We
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  20   * steal rather than reuse it because the code is quite simple.
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  21   */
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  22  struct page *damon_get_page(unsigned long pfn)
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  23  {
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05 @24  	struct page *page = pfn_to_online_page(pfn);
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  25  
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  26  	if (!page || !PageLRU(page) || !get_page_unless_zero(page))
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  27  		return NULL;
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  28  
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  29  	if (unlikely(!PageLRU(page))) {
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  30  		put_page(page);
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  31  		page = NULL;
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  32  	}
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  33  	return page;
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  34  }
+46c3a0accdc48c mm/damon/prmtv-common.c SeongJae Park 2021-11-05  35  
 
-:::::: The code at line 1299 was first introduced by commit
-:::::: 0da8aa00bfcfeb3f4e6537dd8e2001e0727ba549 net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+:::::: The code at line 24 was first introduced by commit
+:::::: 46c3a0accdc48c86928157fd073e66807f338485 mm/damon/vaddr: separate commonly usable functions
 
-:::::: TO: Sun Shouxin <sunshouxin@chinatelecom.cn>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: SeongJae Park <sj@kernel.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
