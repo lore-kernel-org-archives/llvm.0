@@ -1,44 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C796A23
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 03:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C65A52
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 03:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650338783; x=1681874783;
+  t=1650339443; x=1681875443;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r+QISWs4fMwsMVKIBPuBSRZ9kMAUjuYmYVVU7WsKJDw=;
-  b=GPqjBiqcPh6pU6wnwN9zaIaFbQkfuZNcsA4G4lRo+RdzwFt3loDYQK7R
-   x65SYnST+GzoEaq37asDc5zqcPbsaRlRA4o2IJKaZrqXW7KjrJzZxH4uN
-   yDSQ56+40DNJw/P6JSvDOY6Mx5MnMxmonfQzzIeNB5hSLkEWpiN7CvH/U
-   ZvSUPMiAOlp5FH/5civcYfOmZcJanP4kVfM6ctZ0K6929zbIg5Kgr3R4c
-   agUT5x60w/4GPwhH3bqiJMgDLcFW9Og71nL68MMpQj2DaF2qYVqg8OtCi
-   4UgwM79Fr3e5GcaueXinki6wj+HjbLTSW68McQeZ6rB+AxCpd54MShXhZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263125977"
+  bh=n6YrESoq96z5iX+5zZF1IyGyg7F2BPI4Bi6Ga8iHLSU=;
+  b=jxZZtv1BaIGj1qBAM0dDLexqCP0B7yawTkAYTpjZqO+mVLq4RKvy7wvd
+   YHNnhDPeT50hNCbN8dlrmjsssaq5vDaM1a18IVeC5uVSJuXhXymvQDqYH
+   mq5MHC+dROeaPcmIVQrjPMcNu7hP7Q/+yMINGFJB42l02840X3xCChsY5
+   NIyJyn8pliAUCjNxaDZDqxRcS1EvL0cSXcQp5QnzKykEup5FvAkDi2eiI
+   GMs9AcWD+ZmJs3lgfPBYMtwRcmiX2FDFZuAA8XU77LddWzjSg3Sernmfc
+   EzbL9Gz20VQyX24WBbPozuhuz1HkB6ig6bj+418jttlWGmtKFmBz1pkYt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350114667"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263125977"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:26:22 -0700
+   d="scan'208";a="350114667"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 20:37:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="561559520"
+   d="scan'208";a="529867443"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2022 20:26:21 -0700
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 20:37:21 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngeVQ-0005Hv-AF;
-	Tue, 19 Apr 2022 03:26:20 +0000
-Date: Tue, 19 Apr 2022 11:26:06 +0800
+	id 1ngeg4-0005Ia-OO;
+	Tue, 19 Apr 2022 03:37:20 +0000
+Date: Tue, 19 Apr 2022 11:36:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1662/2356]
- include/linux/bpf-cgroup-api.h:99:17: warning: incompatible integer to
- pointer conversion initializing 'struct cgroup *' with an expression of type
- 'int'
-Message-ID: <202204191109.jMo5t4hA-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2140/2356]
+ drivers/net/bonding/bond_alb.c:1299:6: warning: incompatible integer to
+ pointer conversion assigning to 'struct icmp6hdr *' from 'int'
+Message-ID: <202204191122.amoOMw5g-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,70 +50,70 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 946f6b0a519a1210d974a40c8400726c341e0bd6 [1662/2356] headers/deps: cgroup: Split <linux/bpf-cgroup.h> into <linux/bpf-cgroup-types.h> and <linux/bpf-cgroup-api.h>
-config: x86_64-randconfig-a013-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191109.jMo5t4hA-lkp@intel.com/config)
+commit: 3ca2f09b7faf17b5e78cb699d3315e5accbe0216 [2140/2356] headers/deps: net: Optimize <net/ndisc.h> dependencies, remove <net/ndisc_api.h> inclusion
+config: i386-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191122.amoOMw5g-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=946f6b0a519a1210d974a40c8400726c341e0bd6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=3ca2f09b7faf17b5e78cb699d3315e5accbe0216
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 946f6b0a519a1210d974a40c8400726c341e0bd6
+        git checkout 3ca2f09b7faf17b5e78cb699d3315e5accbe0216
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/ mm/ net/ipv4/ sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/misc/ drivers/net/bonding/ drivers/net/ethernet/marvell/prestera/ drivers/net/ethernet/microchip/lan966x/ drivers/net/netdevsim/ drivers/net/phy/ drivers/power/supply/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/bpf/cgroup.c:17:
-   include/linux/bpf-cgroup-api.h:99:24: error: implicit declaration of function 'sock_cgroup_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-                                 ^
->> include/linux/bpf-cgroup-api.h:99:17: warning: incompatible integer to pointer conversion initializing 'struct cgroup *' with an expression of type 'int' [-Wint-conversion]
-           struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/bpf/cgroup.c:31:
-   In file included from kernel/bpf/../cgroup/cgroup-internal.h:7:
-   include/linux/cgroup_api.h:875:30: error: static declaration of 'sock_cgroup_ptr' follows non-static declaration
-   static inline struct cgroup *sock_cgroup_ptr(struct sock_cgroup_data *skcd)
-                                ^
-   include/linux/bpf-cgroup-api.h:99:24: note: previous implicit declaration is here
-           struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-                                 ^
-   1 warning and 2 errors generated.
---
-   In file included from net/ipv4/udp.c:103:
-   include/linux/bpf-cgroup-api.h:99:24: error: implicit declaration of function 'sock_cgroup_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-                                 ^
->> include/linux/bpf-cgroup-api.h:99:17: warning: incompatible integer to pointer conversion initializing 'struct cgroup *' with an expression of type 'int' [-Wint-conversion]
-           struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+   drivers/net/bonding/bond_alb.c:1299:8: error: implicit declaration of function 'icmp6_hdr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           hdr = icmp6_hdr(skb);
+                 ^
+>> drivers/net/bonding/bond_alb.c:1299:6: warning: incompatible integer to pointer conversion assigning to 'struct icmp6hdr *' from 'int' [-Wint-conversion]
+           hdr = icmp6_hdr(skb);
+               ^ ~~~~~~~~~~~~~~
+   drivers/net/bonding/bond_alb.c:1300:28: error: use of undeclared identifier 'NDISC_NEIGHBOUR_ADVERTISEMENT'
+           return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+                                     ^
+   drivers/net/bonding/bond_alb.c:1301:22: error: use of undeclared identifier 'NDISC_NEIGHBOUR_SOLICITATION'
+                   hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
+                                      ^
+   1 warning and 3 errors generated.
 
 
-vim +99 include/linux/bpf-cgroup-api.h
+vim +1299 drivers/net/bonding/bond_alb.c
 
-    90	
-    91	int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
-    92	int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
-    93					     void *value, u64 flags);
-    94	
-    95	/* Opportunistic check to see whether we have any BPF program attached*/
-    96	static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
-    97						   enum cgroup_bpf_attach_type type)
-    98	{
-  > 99		struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-   100		struct bpf_prog_array *array;
-   101	
-   102		array = rcu_access_pointer(cgrp->bpf.effective[type]);
-   103		return array != &bpf_empty_prog_array.hdr;
-   104	}
-   105	
+^1da177e4c3f415 Linus Torvalds 2005-04-16  1282  
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1283  /* determine if the packet is NA or NS */
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1284  static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1285  {
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1286  	struct ipv6hdr *ip6hdr;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1287  	struct icmp6hdr *hdr;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1288  
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1289  	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1290  		return true;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1291  
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1292  	ip6hdr = ipv6_hdr(skb);
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1293  	if (ip6hdr->nexthdr != IPPROTO_ICMPV6)
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1294  		return false;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1295  
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1296  	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1297  		return true;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1298  
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28 @1299  	hdr = icmp6_hdr(skb);
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1300  	return hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1301  		hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION;
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1302  }
+0da8aa00bfcfeb3 Sun Shouxin    2022-01-28  1303  
+
+:::::: The code at line 1299 was first introduced by commit
+:::::: 0da8aa00bfcfeb3f4e6537dd8e2001e0727ba549 net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+
+:::::: TO: Sun Shouxin <sunshouxin@chinatelecom.cn>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
