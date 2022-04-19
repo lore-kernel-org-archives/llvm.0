@@ -1,42 +1,61 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0805A28
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 08:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650358125; x=1681894125;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kegNEX0ChIhmD7NdNa7wFO+eFscT2RC4rHC8Bs7PAC8=;
-  b=hOB8MDCnFNXImQDSO6NikhXT0U4ge+Qt7PZrmyRUt1ClpUqX2fGRE44g
-   pqoiGoKfBQm32ss8/0SyyjK/6+xEhykEPMZn0q7QlnOoLJRzl43fnkbPI
-   ERVI77zlsbFjPn++Sat6d7Ryjb+y5zlZ09X1gT2TD+2aaPiCFr3jh/Xs3
-   1soC2aZ44bRqAOeEtDVc6cb1NqVleZU9BjvfOO+z/S8O8pZZDztow99y7
-   AryE56l27yCwl2feC67D5KNveYlMirZU9MeYklat/0rhXKBrfYkd06aU+
-   pzvxuCDxOxdaPF2818SIOKKTtpJE2ri3rrfM5DXrVu7q/PmQkCSZlAvgS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261318023"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="261318023"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 01:48:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="530037373"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2022 01:48:42 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ngjXO-0005Z6-6W;
-	Tue, 19 Apr 2022 08:48:42 +0000
-Date: Tue, 19 Apr 2022 16:48:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
- variable 'pxa_camera_of_match'
-Message-ID: <202204191631.zjUg442L-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A19ECA
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 09:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tJv95mQg9EXcrt3p8ZvGMQTsakmmfw1AaQTwIhE1nnE=; b=Ib42ZfuGQhQogTNLh41qU+s7rN
+	BRAbnqQc1YebQu2SE8eJycbwM5rnxrVzV01lhWWogtc7YfXe/fFYOOfKul6INZN27AAxhe9cF4b6Y
+	kxe7Cp27gTncTOlOpfatmhDKqOzrjoG3bUGTaMJhWsb8S9YtpZbHjlOtOGIGoXOry9C6n83iBpSg6
+	sZV0VjTQqYvJg7uxZkk0kWg0ifqjNnMHZFF4jfCJ5RF4KXfuvH8Y9l7waFzBdNLDaqLfKytxkGozo
+	OIzVudh0DufesV21MGJcSWu6hmhsMtoQmfa3Fc0BVR5Bg0eFxc6+wJrPo03zB3mULzxQslLelWcjt
+	UrbiTiEQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1ngjmA-006mQV-2G; Tue, 19 Apr 2022 09:03:58 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7D15998618A; Tue, 19 Apr 2022 11:03:55 +0200 (CEST)
+Date: Tue, 19 Apr 2022 11:03:55 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dmitrii Dolgov <9erthalion6@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Chenbo Feng <fengc@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Daniel Wagner <daniel.wagner@bmw-carit.de>,
+	Thomas Graf <tgraf@suug.ch>,
+	Ong Boon Leong <boon.leong.ong@intel.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with
+ !CONFIG_PERF_EVENTS
+Message-ID: <20220419090355.GP2731@worktop.programming.kicks-ass.net>
+References: <20220414223704.341028-1-alobakin@pm.me>
+ <20220414223704.341028-2-alobakin@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,64 +64,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220414223704.341028-2-alobakin@pm.me>
 
-Hi Mauro,
+On Thu, Apr 14, 2022 at 10:44:48PM +0000, Alexander Lobakin wrote:
+> When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
+> However, the structure is being used by bpftool indirectly via BTF.
+> This leads to:
+> 
+> skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
+>         return BPF_CORE_READ(event, bpf_cookie);
+>                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> 
+> ...
+> 
+> skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
+>         return BPF_CORE_READ(event, bpf_cookie);
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Tools and samples can't use any CONFIG_ definitions, so the fields
+> used there should always be present.
+> Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
+> to make it available unconditionally.
 
-First bad commit (maybe != root cause):
+Urgh, this is nasty.. did you verify nothing relies on that structure
+actually being empty?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
-date:   5 weeks ago
-config: mips-randconfig-r025-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191631.zjUg442L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/intel/ lib/lz4/
+Also, why are we changing kernel headers to fix some daft userspace
+issue?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
-   static const struct of_device_id pxa_camera_of_match[] = {
-                                    ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SSB_EMBEDDED
-   Depends on SSB && SSB_DRIVER_MIPS && SSB_PCICORE_HOSTMODE
-   Selected by
-   - BCM47XX_SSB && BCM47XX
-
-
-vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
-
-7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
-
-:::::: The code at line 2449 was first introduced by commit
-:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
-
-:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>  include/linux/perf_event.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index af97dd427501..b1d5715b8b34 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -762,12 +762,14 @@ struct perf_event {
+>  	u64				(*clock)(void);
+>  	perf_overflow_handler_t		overflow_handler;
+>  	void				*overflow_handler_context;
+> +#endif /* CONFIG_PERF_EVENTS */
+>  #ifdef CONFIG_BPF_SYSCALL
+>  	perf_overflow_handler_t		orig_overflow_handler;
+>  	struct bpf_prog			*prog;
+>  	u64				bpf_cookie;
+>  #endif
+> 
+> +#ifdef CONFIG_PERF_EVENTS
+>  #ifdef CONFIG_EVENT_TRACING
+>  	struct trace_event_call		*tp_event;
+>  	struct event_filter		*filter;
+> --
+> 2.35.2
+> 
+> 
