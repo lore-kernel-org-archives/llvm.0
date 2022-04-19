@@ -1,43 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C497EA1
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 04:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF5EEA1
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 05:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650344008; x=1681880008;
+  t=1650345269; x=1681881269;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YOl2EzPGzw/IizuCevuRs1XuNziS2ZPq8q3LmGikynU=;
-  b=Db9nkttOHez4tfyEfRikIHlCbcJePRHAt6l2NxaYRGetaCUEhPgwlaL6
-   Ub2BKv7fWGz3e+yN3kM4eEgr93WapCCNLp05qAFxROucGAN5NdSogjKmD
-   +ozpO11BPUCPvaBsm024nJvTdtUuufqd+1zZHmiuxyxq74HQ2rWZXqCdY
-   GQn+QI0087i4LLw7H2hM3STPxhceqLOYR2eDBXfbGdJOckQMqRhP7/0pJ
-   p8/7o3r6v7IyvDqVs1lmkN+JaCWxIjGO+nXAdJnsVtPUzWfXmqUZf8zUq
-   RdhnNOVljcmR8aLLUh5JXoRExQNJRn3a1C3fz250t0ChNNaqTdtx6Li/D
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245566615"
+  bh=hSD7SJIELGz4Evj1pZxdc6zYsnOdfNuk7mM9BNZzZHU=;
+  b=kgg3hRA+xlm0+B0kliLWFmc0NkbdLpnHz5azKoBLpJ6E49JHSAKEXo8Y
+   G49PGZGnoygABYHzG5sgKe122MUEUXxGHYFyF1wU+mxCImYvleE0Ko5oL
+   r+xsb1q1QdMK4TRBTjyTuzz9jnW0qumfr/HJkGExwciX4HuAuOhvjw5nY
+   bZ9A23OA+Er0yOkS9+45vIxI+icq+/K2MSgDBwEOPFDCIi/Ssu9XGJ6ZF
+   mA5U/PNUiO8191SDf7uAl41KR0R+pCyxQvYDXxYittSgz9iatVwTDGnWf
+   1fdFrwsu0y2hIYTsKo34zgdC4IfXTQohMl67rSeL/tI5uny1aF5GDENUR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="244262115"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="245566615"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:53:27 -0700
+   d="scan'208";a="244262115"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 22:14:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="625529272"
+   d="scan'208";a="726918588"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Apr 2022 21:53:26 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 22:14:27 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngfrh-0005Mv-Hs;
-	Tue, 19 Apr 2022 04:53:25 +0000
-Date: Tue, 19 Apr 2022 12:53:19 +0800
+	id 1nggC2-0005Nm-Gh;
+	Tue, 19 Apr 2022 05:14:26 +0000
+Date: Tue, 19 Apr 2022 13:14:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	ceph-devel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-	Xiubo Li <xiubli@redhat.com>
-Subject: [ceph-client:wip-fscrypt 62/69] fs/ceph/inode.c:196:7: error: no
- member named 'fscrypt_auth' in 'struct ceph_inode_info'
-Message-ID: <202204191205.iIZ9bszj-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1541/2356]
+ drivers/input/touchscreen/imagis.c:358:34: error: use of undeclared
+ identifier 'imagis_of_match'
+Message-ID: <202204191348.SKAmnWmG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,120 +48,79 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/ceph/ceph-client.git wip-fscrypt
-head:   4ff01fe87e581e76289ec6d1b0c03fc9c4f2f851
-commit: fd1aab0d215fa1b9a84a42ec93f09f0283bb8071 [62/69] ceph: add support for encrypted snapshot names
-config: hexagon-randconfig-r041-20220417 (https://download.01.org/0day-ci/archive/20220419/202204191205.iIZ9bszj-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   af93551cf39027d176f30b9beafc60a4c130998a
+commit: 63245bf3e0db1d416f39a3ccb1311f94f37697f5 [1541/2356] headers/deps: i2c: Optimize <linux/i2c.h> header dependencies
+config: x86_64-randconfig-a011-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191348.SKAmnWmG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ceph/ceph-client/commit/fd1aab0d215fa1b9a84a42ec93f09f0283bb8071
-        git remote add ceph-client https://github.com/ceph/ceph-client.git
-        git fetch --no-tags ceph-client wip-fscrypt
-        git checkout fd1aab0d215fa1b9a84a42ec93f09f0283bb8071
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=63245bf3e0db1d416f39a3ccb1311f94f37697f5
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 63245bf3e0db1d416f39a3ccb1311f94f37697f5
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/ drivers/ sound/soc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/ceph/inode.c:196:7: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
-                   ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
-                   ~~  ^
-   fs/ceph/inode.c:196:35: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
-                   ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
-                                              ~~~  ^
->> fs/ceph/inode.c:197:14: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
-                                              pci->fscrypt_auth_len,
-                                              ~~~  ^
-   fs/ceph/inode.c:199:11: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
-                   if (ci->fscrypt_auth) {
-                       ~~  ^
-   fs/ceph/inode.c:201:8: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
-                           ci->fscrypt_auth_len = pci->fscrypt_auth_len;
-                           ~~  ^
-   fs/ceph/inode.c:201:32: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
-                           ci->fscrypt_auth_len = pci->fscrypt_auth_len;
-                                                  ~~~  ^
-   6 errors generated.
+   drivers/input/touchscreen/imagis.c:79:8: error: unknown type name 'irqreturn_t'
+   static irqreturn_t imagis_interrupt(int irq, void *dev_id)
+          ^
+   drivers/input/touchscreen/imagis.c:133:9: error: use of undeclared identifier 'IRQ_HANDLED'
+           return IRQ_HANDLED;
+                  ^
+   drivers/input/touchscreen/imagis.c:164:2: error: implicit declaration of function 'enable_irq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           enable_irq(ts->client->irq);
+           ^
+   drivers/input/touchscreen/imagis.c:171:2: error: implicit declaration of function 'disable_irq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           disable_irq(ts->client->irq);
+           ^
+   drivers/input/touchscreen/imagis.c:171:2: note: did you mean 'disable_TSC'?
+   arch/x86/include/asm/tsc.h:20:13: note: 'disable_TSC' declared here
+   extern void disable_TSC(void);
+               ^
+   drivers/input/touchscreen/imagis.c:295:10: error: implicit declaration of function 'devm_request_threaded_irq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           error = devm_request_threaded_irq(dev, i2c->irq,
+                   ^
+   drivers/input/touchscreen/imagis.c:297:8: error: use of undeclared identifier 'IRQF_ONESHOT'
+                                             IRQF_ONESHOT | IRQF_NO_AUTOEN,
+                                             ^
+   drivers/input/touchscreen/imagis.c:297:23: error: use of undeclared identifier 'IRQF_NO_AUTOEN'
+                                             IRQF_ONESHOT | IRQF_NO_AUTOEN,
+                                                            ^
+   drivers/input/touchscreen/imagis.c:358:21: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   .of_match_table = of_match_ptr(imagis_of_match),
+                                     ^
+>> drivers/input/touchscreen/imagis.c:358:34: error: use of undeclared identifier 'imagis_of_match'
+                   .of_match_table = of_match_ptr(imagis_of_match),
+                                                  ^
+   9 errors generated.
 
 
-vim +196 fs/ceph/inode.c
+vim +/imagis_of_match +358 drivers/input/touchscreen/imagis.c
 
-   154	
-   155	/*
-   156	 * get/constuct snapdir inode for a given directory
-   157	 */
-   158	struct inode *ceph_get_snapdir(struct inode *parent)
-   159	{
-   160		struct ceph_vino vino = {
-   161			.ino = ceph_ino(parent),
-   162			.snap = CEPH_SNAPDIR,
-   163		};
-   164		struct inode *inode = ceph_get_inode(parent->i_sb, vino, NULL);
-   165		struct ceph_inode_info *ci = ceph_inode(inode);
-   166		int ret = -ENOTDIR;
-   167	
-   168		if (IS_ERR(inode))
-   169			return inode;
-   170	
-   171		if (!S_ISDIR(parent->i_mode)) {
-   172			pr_warn_once("bad snapdir parent type (mode=0%o)\n",
-   173				     parent->i_mode);
-   174			goto err;
-   175		}
-   176	
-   177		if (!(inode->i_state & I_NEW) && !S_ISDIR(inode->i_mode)) {
-   178			pr_warn_once("bad snapdir inode type (mode=0%o)\n",
-   179				     inode->i_mode);
-   180			goto err;
-   181		}
-   182	
-   183		inode->i_mode = parent->i_mode;
-   184		inode->i_uid = parent->i_uid;
-   185		inode->i_gid = parent->i_gid;
-   186		inode->i_mtime = parent->i_mtime;
-   187		inode->i_ctime = parent->i_ctime;
-   188		inode->i_atime = parent->i_atime;
-   189		ci->i_rbytes = 0;
-   190		ci->i_btime = ceph_inode(parent)->i_btime;
-   191	
-   192		/* if encrypted, just borrow fscrypt_auth from parent */
-   193		if (IS_ENCRYPTED(parent)) {
-   194			struct ceph_inode_info *pci = ceph_inode(parent);
-   195	
- > 196			ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
- > 197						   pci->fscrypt_auth_len,
-   198						   GFP_KERNEL);
-   199			if (ci->fscrypt_auth) {
-   200				inode->i_flags |= S_ENCRYPTED;
-   201				ci->fscrypt_auth_len = pci->fscrypt_auth_len;
-   202			} else {
-   203				dout("Failed to alloc snapdir fscrypt_auth\n");
-   204				ret = -ENOMEM;
-   205				goto err;
-   206			}
-   207		}
-   208		if (inode->i_state & I_NEW) {
-   209			inode->i_op = &ceph_snapdir_iops;
-   210			inode->i_fop = &ceph_snapdir_fops;
-   211			ci->i_snap_caps = CEPH_CAP_PIN; /* so we can open */
-   212			unlock_new_inode(inode);
-   213		}
-   214	
-   215		return inode;
-   216	err:
-   217		if ((inode->i_state & I_NEW))
-   218			discard_new_inode(inode);
-   219		else
-   220			iput(inode);
-   221		return ERR_PTR(ret);
-   222	}
-   223	
+a23ba3c043db9a Markuss Broks 2022-03-14  353  
+a23ba3c043db9a Markuss Broks 2022-03-14  354  static struct i2c_driver imagis_ts_driver = {
+a23ba3c043db9a Markuss Broks 2022-03-14  355  	.driver = {
+a23ba3c043db9a Markuss Broks 2022-03-14  356  		.name = "imagis-touchscreen",
+a23ba3c043db9a Markuss Broks 2022-03-14  357  		.pm = &imagis_pm_ops,
+a23ba3c043db9a Markuss Broks 2022-03-14 @358  		.of_match_table = of_match_ptr(imagis_of_match),
+a23ba3c043db9a Markuss Broks 2022-03-14  359  	},
+a23ba3c043db9a Markuss Broks 2022-03-14  360  	.probe_new = imagis_probe,
+a23ba3c043db9a Markuss Broks 2022-03-14  361  };
+a23ba3c043db9a Markuss Broks 2022-03-14  362  
+
+:::::: The code at line 358 was first introduced by commit
+:::::: a23ba3c043db9a2e8c967a3ff66dcedc5725afdf Input: add Imagis touchscreen driver
+
+:::::: TO: Markuss Broks <markuss.broks@gmail.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
