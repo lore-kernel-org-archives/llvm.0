@@ -1,44 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54CAA2A
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 01:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6803A2A
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 01:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650332593; x=1681868593;
+  t=1650333210; x=1681869210;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=khBNnzuB+/3JZumgTZaDVpsLBrDQyn0KmbZTfUCR/8Q=;
-  b=dPGbny38A8bEuDhER7yQrbzM+1Gi2TNMqZtFwBIkUk56DAPBaCHvBqPx
-   P8Fc5LysKSVzB4qP+kq4oM5LeFSbDu1F/12lz5G4yKS4u6plgGV0xtrMA
-   qEYGSlNL9yOCNSB/TmDe6vfwFcciqhe23uP8WqV3DfqsjsuqrlW7Su5tx
-   P5mYN7U0J5+TCc6U/aYEmI/jLuxW8ojtg9spJCDnrqUK2Oh7v5MH5C4af
-   yW4nsLcvjyrGRDq4SkUvfXAJrJ48Oa8QM4UCZDGloGiV+sAQT6GiyDye5
-   cl55S1R+WVhQDhxvZD0/oJj3OxioYYetEqDu3JiJyOVSRO4Y5JyIeFLmK
+  bh=onaBKRMk1DhTJ8zWoTq8KheY5mYtnuJ8MW026J5UGO0=;
+  b=EtRZPiLH9jKIdwchRiX4n5fNlzLd0kYQqJrPb4aYcP3KWJBGSwkJu3gK
+   WYucXk3uSVPmW9ADtAeWiNF1j5DYoyWZqd/j0zepsD+Qq0vTw4HxXneZg
+   kXBhhjqxGX1QKqqnfdBc+VlyykTWbsalR628Uqugu9bcDZ+d8zHe9Z0x4
+   amUj+u0pCHIJ+E3kQxdSo8fN+UecyRHwiJTNeGnPi4O5jED/vmyWd7g6W
+   k3B+B0fpqdcsbLqleMWUgVqVzEER8zx0yA5XUpjPmJHzhBdrf99aL+3Z5
+   yTIkpQs4EBB/7Gi3TPXX/PlQzOZyR+8jy5c5pYZ4+uEpd8Lmy9lHGBJxh
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350098814"
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262511658"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="350098814"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:43:12 -0700
+   d="scan'208";a="262511658"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:53:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="726866606"
+   d="scan'208";a="509953429"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 18:43:11 -0700
+  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 18:53:11 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngcta-0005Aq-9p;
-	Tue, 19 Apr 2022 01:43:10 +0000
-Date: Tue, 19 Apr 2022 09:42:33 +0800
+	id 1ngd3H-0005BM-60;
+	Tue, 19 Apr 2022 01:53:11 +0000
+Date: Tue, 19 Apr 2022 09:53:01 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2137/2356]
- drivers/net/ethernet/marvell/prestera/prestera_router.c:58:45: warning:
- declaration of 'struct fib_entry_notifier_info' will not be visible outside
- of this function
-Message-ID: <202204190943.X9eY78sK-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1645/2356]
+ drivers/thermal/intel/intel_hfi.c:401:25: warning: incompatible integer to
+ pointer conversion assigning to 'void *' from 'int'
+Message-ID: <202204190947.AY5XKXTY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,147 +50,158 @@ User-Agent: Mutt/1.10.1 (2018-07-13)
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: a543fd04d10eb15cb62b4163c8495b88fee40856 [2137/2356] headers/deps: net: Optimize <net/ip_fib.h> dependencies, remove <net/ip_fib_api.h> inclusion
-config: i386-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190943.X9eY78sK-lkp@intel.com/config)
+commit: 96618ccf069eedafdb527ebc33c48b30b348a406 [1645/2356] headers/deps: mm: Remove the <linux/gfp_api.h> header from <linux/gfp.h>
+config: x86_64-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190947.AY5XKXTY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a543fd04d10eb15cb62b4163c8495b88fee40856
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=96618ccf069eedafdb527ebc33c48b30b348a406
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout a543fd04d10eb15cb62b4163c8495b88fee40856
+        git checkout 96618ccf069eedafdb527ebc33c48b30b348a406
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/misc/ drivers/net/bonding/ drivers/net/ethernet/marvell/prestera/ drivers/net/ethernet/microchip/lan966x/ drivers/net/netdevsim/ drivers/net/phy/ drivers/power/supply/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/block/aoe/ drivers/bus/mhi/host/ drivers/gpu/drm/i915/gvt/ drivers/gpu/drm/tiny/ drivers/hwmon/ drivers/iio/dac/ drivers/misc/ drivers/platform/x86/ drivers/power/supply/ drivers/spi/ drivers/thermal/intel/ lib/crypto/ net/mctp/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/marvell/prestera/prestera_router.c:58:45: warning: declaration of 'struct fib_entry_notifier_info' will not be visible outside of this function [-Wvisibility]
-   prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-                                               ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:62:41: error: incomplete definition of type 'struct fib_entry_notifier_info'
-           key->addr.u.ipv4 = cpu_to_be32(fen_info->dst);
-                                          ~~~~~~~~^
-   include/linux/byteorder/generic.h:94:21: note: expanded from macro 'cpu_to_be32'
-   #define cpu_to_be32 __cpu_to_be32
-                       ^
-   include/uapi/linux/byteorder/little_endian.h:40:53: note: expanded from macro '__cpu_to_be32'
-   #define __cpu_to_be32(x) ((__force __be32)__swab32((x)))
-                                                       ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:58:45: note: forward declaration of 'struct fib_entry_notifier_info'
-   prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-                                               ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:63:28: error: incomplete definition of type 'struct fib_entry_notifier_info'
-           key->prefix_len = fen_info->dst_len;
-                             ~~~~~~~~^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:58:45: note: forward declaration of 'struct fib_entry_notifier_info'
-   prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-                                               ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:64:28: error: incomplete definition of type 'struct fib_entry_notifier_info'
-           key->kern_tb_id = fen_info->tb_id;
-                             ~~~~~~~~^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:58:45: note: forward declaration of 'struct fib_entry_notifier_info'
-   prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-                                               ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:83:2: error: implicit declaration of function 'fib_info_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           fib_info_put(fib_cache->fi);
+   drivers/thermal/intel/intel_hfi.c:401:27: error: implicit declaration of function 'alloc_pages_exact' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
+                                    ^
+>> drivers/thermal/intel/intel_hfi.c:401:25: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
+                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/intel/intel_hfi.c:448:2: error: implicit declaration of function 'free_pages_exact' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
            ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:83:2: note: did you mean 'fib_rule_put'?
-   include/net/fib_rules.h:110:20: note: 'fib_rule_put' declared here
-   static inline void fib_rule_put(struct fib_rule *rule)
-                      ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:106:2: error: implicit declaration of function 'fib_info_hold' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           fib_info_hold(fi);
-           ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:120:2: error: implicit declaration of function 'fib_info_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           fib_info_put(fi);
-           ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:131:21: error: variable has incomplete type 'struct fib_rt_info'
-           struct fib_rt_info fri;
-                              ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:131:9: note: forward declaration of 'struct fib_rt_info'
-           struct fib_rt_info fri;
-                  ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:147:2: error: implicit declaration of function 'fib_alias_hw_flags_set' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           fib_alias_hw_flags_set(&init_net, &fri);
-           ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:281:17: warning: declaration of 'struct fib_entry_notifier_info' will not be visible outside of this function [-Wvisibility]
-                          struct fib_entry_notifier_info *fen_info)
-                                 ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:288:39: error: incompatible pointer types passing 'struct fib_entry_notifier_info *' to parameter of type 'struct fib_entry_notifier_info *' [-Werror,-Wincompatible-pointer-types]
-           prestera_util_fen_info2fib_cache_key(fen_info, &fc_key);
-                                                ^~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:58:70: note: passing argument to parameter 'fen_info' here
-   prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-                                                                        ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:312:19: error: incomplete definition of type 'struct fib_entry_notifier_info'
-                                                              fen_info->fi,
-                                                              ~~~~~~~~^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:281:17: note: forward declaration of 'struct fib_entry_notifier_info'
-                          struct fib_entry_notifier_info *fen_info)
-                                 ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:313:19: error: incomplete definition of type 'struct fib_entry_notifier_info'
-                                                              fen_info->tos,
-                                                              ~~~~~~~~^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:281:17: note: forward declaration of 'struct fib_entry_notifier_info'
-                          struct fib_entry_notifier_info *fen_info)
-                                 ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:314:19: error: incomplete definition of type 'struct fib_entry_notifier_info'
-                                                              fen_info->type);
-                                                              ~~~~~~~~^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:281:17: note: forward declaration of 'struct fib_entry_notifier_info'
-                          struct fib_entry_notifier_info *fen_info)
-                                 ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:461:33: error: field has incomplete type 'struct fib_entry_notifier_info'
-           struct fib_entry_notifier_info fen_info;
-                                          ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:461:9: note: forward declaration of 'struct fib_entry_notifier_info'
-           struct fib_entry_notifier_info fen_info;
-                  ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:496:2: error: implicit declaration of function 'fib_info_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           fib_info_put(fib_work->fen_info.fi);
-           ^
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:518:14: error: incomplete definition of type 'struct fib_entry_notifier_info'
-                   fen_info = container_of(info, struct fib_entry_notifier_info,
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:19:47: note: expanded from macro 'container_of'
-           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:74: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                            ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   drivers/thermal/intel/intel_hfi.c:448:2: note: did you mean 'alloc_pages_exact'?
+   drivers/thermal/intel/intel_hfi.c:401:27: note: 'alloc_pages_exact' declared here
+           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
+                                    ^
+   1 warning and 2 errors generated.
 
 
-vim +58 drivers/net/ethernet/marvell/prestera/prestera_router.c
+vim +401 drivers/thermal/intel/intel_hfi.c
 
-15fa9e8c5ffbe0 Yevhen Orlov 2021-12-27  56  
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  57  static void
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16 @58  prestera_util_fen_info2fib_cache_key(struct fib_entry_notifier_info *fen_info,
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  59  				     struct prestera_kern_fib_cache_key *key)
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  60  {
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  61  	memset(key, 0, sizeof(*key));
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  62  	key->addr.u.ipv4 = cpu_to_be32(fen_info->dst);
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  63  	key->prefix_len = fen_info->dst_len;
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  64  	key->kern_tb_id = fen_info->tb_id;
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  65  }
-4394fbcb78cfe1 Yevhen Orlov 2022-02-16  66  
+2d74e6319abe27 Ricardo Neri 2022-01-27  343  
+2d74e6319abe27 Ricardo Neri 2022-01-27  344  /**
+2d74e6319abe27 Ricardo Neri 2022-01-27  345   * intel_hfi_online() - Enable HFI on @cpu
+2d74e6319abe27 Ricardo Neri 2022-01-27  346   * @cpu:	CPU in which the HFI will be enabled
+2d74e6319abe27 Ricardo Neri 2022-01-27  347   *
+2d74e6319abe27 Ricardo Neri 2022-01-27  348   * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
+2d74e6319abe27 Ricardo Neri 2022-01-27  349   * level. The first CPU in the die/package to come online does the full HFI
+2d74e6319abe27 Ricardo Neri 2022-01-27  350   * initialization. Subsequent CPUs will just link themselves to the HFI
+2d74e6319abe27 Ricardo Neri 2022-01-27  351   * instance of their die/package.
+2d74e6319abe27 Ricardo Neri 2022-01-27  352   *
+2d74e6319abe27 Ricardo Neri 2022-01-27  353   * This function is called before enabling the thermal vector in the local APIC
+2d74e6319abe27 Ricardo Neri 2022-01-27  354   * in order to ensure that @cpu has an associated HFI instance when it receives
+2d74e6319abe27 Ricardo Neri 2022-01-27  355   * an HFI event.
+2d74e6319abe27 Ricardo Neri 2022-01-27  356   */
+2d74e6319abe27 Ricardo Neri 2022-01-27  357  void intel_hfi_online(unsigned int cpu)
+2d74e6319abe27 Ricardo Neri 2022-01-27  358  {
+2d74e6319abe27 Ricardo Neri 2022-01-27  359  	struct hfi_instance *hfi_instance;
+2d74e6319abe27 Ricardo Neri 2022-01-27  360  	struct hfi_cpu_info *info;
+2d74e6319abe27 Ricardo Neri 2022-01-27  361  	phys_addr_t hw_table_pa;
+2d74e6319abe27 Ricardo Neri 2022-01-27  362  	u64 msr_val;
+2d74e6319abe27 Ricardo Neri 2022-01-27  363  	u16 die_id;
+2d74e6319abe27 Ricardo Neri 2022-01-27  364  
+2d74e6319abe27 Ricardo Neri 2022-01-27  365  	/* Nothing to do if hfi_instances are missing. */
+2d74e6319abe27 Ricardo Neri 2022-01-27  366  	if (!hfi_instances)
+2d74e6319abe27 Ricardo Neri 2022-01-27  367  		return;
+2d74e6319abe27 Ricardo Neri 2022-01-27  368  
+2d74e6319abe27 Ricardo Neri 2022-01-27  369  	/*
+2d74e6319abe27 Ricardo Neri 2022-01-27  370  	 * Link @cpu to the HFI instance of its package/die. It does not
+2d74e6319abe27 Ricardo Neri 2022-01-27  371  	 * matter whether the instance has been initialized.
+2d74e6319abe27 Ricardo Neri 2022-01-27  372  	 */
+2d74e6319abe27 Ricardo Neri 2022-01-27  373  	info = &per_cpu(hfi_cpu_info, cpu);
+2d74e6319abe27 Ricardo Neri 2022-01-27  374  	die_id = topology_logical_die_id(cpu);
+2d74e6319abe27 Ricardo Neri 2022-01-27  375  	hfi_instance = info->hfi_instance;
+2d74e6319abe27 Ricardo Neri 2022-01-27  376  	if (!hfi_instance) {
+2d74e6319abe27 Ricardo Neri 2022-01-27  377  		if (die_id < 0 || die_id >= max_hfi_instances)
+2d74e6319abe27 Ricardo Neri 2022-01-27  378  			return;
+2d74e6319abe27 Ricardo Neri 2022-01-27  379  
+2d74e6319abe27 Ricardo Neri 2022-01-27  380  		hfi_instance = &hfi_instances[die_id];
+2d74e6319abe27 Ricardo Neri 2022-01-27  381  		info->hfi_instance = hfi_instance;
+2d74e6319abe27 Ricardo Neri 2022-01-27  382  	}
+2d74e6319abe27 Ricardo Neri 2022-01-27  383  
+2d74e6319abe27 Ricardo Neri 2022-01-27  384  	init_hfi_cpu_index(info);
+2d74e6319abe27 Ricardo Neri 2022-01-27  385  
+2d74e6319abe27 Ricardo Neri 2022-01-27  386  	/*
+2d74e6319abe27 Ricardo Neri 2022-01-27  387  	 * Now check if the HFI instance of the package/die of @cpu has been
+2d74e6319abe27 Ricardo Neri 2022-01-27  388  	 * initialized (by checking its header). In such case, all we have to
+2d74e6319abe27 Ricardo Neri 2022-01-27  389  	 * do is to add @cpu to this instance's cpumask.
+2d74e6319abe27 Ricardo Neri 2022-01-27  390  	 */
+2d74e6319abe27 Ricardo Neri 2022-01-27  391  	mutex_lock(&hfi_instance_lock);
+2d74e6319abe27 Ricardo Neri 2022-01-27  392  	if (hfi_instance->hdr) {
+2d74e6319abe27 Ricardo Neri 2022-01-27  393  		cpumask_set_cpu(cpu, hfi_instance->cpus);
+2d74e6319abe27 Ricardo Neri 2022-01-27  394  		goto unlock;
+2d74e6319abe27 Ricardo Neri 2022-01-27  395  	}
+2d74e6319abe27 Ricardo Neri 2022-01-27  396  
+2d74e6319abe27 Ricardo Neri 2022-01-27  397  	/*
+2d74e6319abe27 Ricardo Neri 2022-01-27  398  	 * Hardware is programmed with the physical address of the first page
+2d74e6319abe27 Ricardo Neri 2022-01-27  399  	 * frame of the table. Hence, the allocated memory must be page-aligned.
+2d74e6319abe27 Ricardo Neri 2022-01-27  400  	 */
+2d74e6319abe27 Ricardo Neri 2022-01-27 @401  	hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
+2d74e6319abe27 Ricardo Neri 2022-01-27  402  						   GFP_KERNEL | __GFP_ZERO);
+2d74e6319abe27 Ricardo Neri 2022-01-27  403  	if (!hfi_instance->hw_table)
+2d74e6319abe27 Ricardo Neri 2022-01-27  404  		goto unlock;
+2d74e6319abe27 Ricardo Neri 2022-01-27  405  
+2d74e6319abe27 Ricardo Neri 2022-01-27  406  	hw_table_pa = virt_to_phys(hfi_instance->hw_table);
+2d74e6319abe27 Ricardo Neri 2022-01-27  407  
+2d74e6319abe27 Ricardo Neri 2022-01-27  408  	/*
+2d74e6319abe27 Ricardo Neri 2022-01-27  409  	 * Allocate memory to keep a local copy of the table that
+2d74e6319abe27 Ricardo Neri 2022-01-27  410  	 * hardware generates.
+2d74e6319abe27 Ricardo Neri 2022-01-27  411  	 */
+2d74e6319abe27 Ricardo Neri 2022-01-27  412  	hfi_instance->local_table = kzalloc(hfi_features.nr_table_pages << PAGE_SHIFT,
+2d74e6319abe27 Ricardo Neri 2022-01-27  413  					    GFP_KERNEL);
+2d74e6319abe27 Ricardo Neri 2022-01-27  414  	if (!hfi_instance->local_table)
+2d74e6319abe27 Ricardo Neri 2022-01-27  415  		goto free_hw_table;
+2d74e6319abe27 Ricardo Neri 2022-01-27  416  
+2d74e6319abe27 Ricardo Neri 2022-01-27  417  	/*
+2d74e6319abe27 Ricardo Neri 2022-01-27  418  	 * Program the address of the feedback table of this die/package. On
+2d74e6319abe27 Ricardo Neri 2022-01-27  419  	 * some processors, hardware remembers the old address of the HFI table
+2d74e6319abe27 Ricardo Neri 2022-01-27  420  	 * even after having been reprogrammed and re-enabled. Thus, do not free
+2d74e6319abe27 Ricardo Neri 2022-01-27  421  	 * the pages allocated for the table or reprogram the hardware with a
+2d74e6319abe27 Ricardo Neri 2022-01-27  422  	 * new base address. Namely, program the hardware only once.
+2d74e6319abe27 Ricardo Neri 2022-01-27  423  	 */
+2d74e6319abe27 Ricardo Neri 2022-01-27  424  	msr_val = hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
+2d74e6319abe27 Ricardo Neri 2022-01-27  425  	wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
+2d74e6319abe27 Ricardo Neri 2022-01-27  426  
+2d74e6319abe27 Ricardo Neri 2022-01-27  427  	init_hfi_instance(hfi_instance);
+2d74e6319abe27 Ricardo Neri 2022-01-27  428  
+ab09b0744a9944 Ricardo Neri 2022-01-27  429  	INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn);
+ab09b0744a9944 Ricardo Neri 2022-01-27  430  	raw_spin_lock_init(&hfi_instance->table_lock);
+ab09b0744a9944 Ricardo Neri 2022-01-27  431  	raw_spin_lock_init(&hfi_instance->event_lock);
+ab09b0744a9944 Ricardo Neri 2022-01-27  432  
+2d74e6319abe27 Ricardo Neri 2022-01-27  433  	cpumask_set_cpu(cpu, hfi_instance->cpus);
+2d74e6319abe27 Ricardo Neri 2022-01-27  434  
+ab09b0744a9944 Ricardo Neri 2022-01-27  435  	/*
+ab09b0744a9944 Ricardo Neri 2022-01-27  436  	 * Enable the hardware feedback interface and never disable it. See
+ab09b0744a9944 Ricardo Neri 2022-01-27  437  	 * comment on programming the address of the table.
+ab09b0744a9944 Ricardo Neri 2022-01-27  438  	 */
+ab09b0744a9944 Ricardo Neri 2022-01-27  439  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+ab09b0744a9944 Ricardo Neri 2022-01-27  440  	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
+ab09b0744a9944 Ricardo Neri 2022-01-27  441  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+ab09b0744a9944 Ricardo Neri 2022-01-27  442  
+2d74e6319abe27 Ricardo Neri 2022-01-27  443  unlock:
+2d74e6319abe27 Ricardo Neri 2022-01-27  444  	mutex_unlock(&hfi_instance_lock);
+2d74e6319abe27 Ricardo Neri 2022-01-27  445  	return;
+2d74e6319abe27 Ricardo Neri 2022-01-27  446  
+2d74e6319abe27 Ricardo Neri 2022-01-27  447  free_hw_table:
+2d74e6319abe27 Ricardo Neri 2022-01-27  448  	free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
+2d74e6319abe27 Ricardo Neri 2022-01-27  449  	goto unlock;
+2d74e6319abe27 Ricardo Neri 2022-01-27  450  }
+2d74e6319abe27 Ricardo Neri 2022-01-27  451  
 
-:::::: The code at line 58 was first introduced by commit
-:::::: 4394fbcb78cfe190988d2c1beaaaccc97dcf8c5f net: marvell: prestera: handle fib notifications
+:::::: The code at line 401 was first introduced by commit
+:::::: 2d74e6319abe278981e79166b6c2d0c3ed39b1ae thermal: intel: hfi: Handle CPU hotplug events
 
-:::::: TO: Yevhen Orlov <yevhen.orlov@plvision.eu>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
