@@ -1,43 +1,42 @@
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246AF1364
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 15:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79661385
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 19:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650383106; x=1681919106;
+  t=1650396441; x=1681932441;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=goZhZYJnHZgkuOSCSMHvvNP6QQJ/z1kYcKpHaLYnoeA=;
-  b=J0sKk9YNIfwLSFY1GOxY7jitz4OKbkfIIaoyQPHwe6JsuViEnTXb2XsO
-   bAVKWY+gOfHP0O9pMGjpIC/H+bEWNwKayWCleSHi+lf1Yi4PP1/UmStwk
-   9YfDKvIXF8PUrlgxr6xDbUX0g7AUCWRlSwM7/mcbPxf8OjNx0Pa/z2ZKH
-   2bWReroCwjUmOfc9U/aFmxdfiAwfDtP2d5WnMQUCqbnDUahSkiGj0NtIm
-   7jq1xVTbfvHBa8baLDw6IauYLHLizk9LwTTveOXDaqtSAMn/j32BSZtSv
-   xwXS684ePJGfMmIRj8bWP2WoBx7H/cfkyO2BU1fhx3nYWkGcXphJlWOI4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245689176"
+  bh=AWV0nFDudSa8k5CXl+StQ2rO2zSr5AFYSyncP3znOPs=;
+  b=mWzAWFuCm0huAVQogbnuXC7X1W2BMHrgmbo2P0UnBJ+LOvVrNoNfJ7Wn
+   WSKGOGTqtQiNoY8QzPTvMnYE+l28yfqK/olKCsgI2cUYbCaSBG1LvHgqw
+   BesGpsqhbw/8LQWDBy7oWMHRzoyEMXBaGBiZzKS45+rHvkCuoUffeLEMc
+   saMSK6qJG+QMKhyMcO8rcM1gug+3wF235APx9nH91PBboevNxpnPGBSAJ
+   cPL/hVe5nN5TTYvjfPqiO2mGHgNEpGp8roP699UP2CLLTuNy4PvGrxp0G
+   3F9eFtvK558TjYX1o2MqPzwmmoTmT4FHwGJ+4pP41M3bzgGEGr/RrcGcg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="245744998"
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="245689176"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 08:45:05 -0700
+   d="scan'208";a="245744998"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 12:27:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="614044552"
+   d="scan'208";a="510252822"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2022 08:45:03 -0700
+  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2022 12:27:19 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngq2J-0005v4-Ap;
-	Tue, 19 Apr 2022 15:45:03 +0000
-Date: Tue, 19 Apr 2022 23:44:10 +0800
+	id 1ngtVO-00067I-S8;
+	Tue, 19 Apr 2022 19:27:18 +0000
+Date: Wed, 20 Apr 2022 03:26:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6:
- warning: no previous prototype for function
- 'fimc_isp_video_device_unregister'
-Message-ID: <202204192315.ZHbOex51-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:file4opaUI 20/24] drivers/spi/spi-intel.c:808:43: error:
+ too many arguments to function call, expected 3, have 4
+Message-ID: <202204200302.RR7dzxDb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,60 +47,58 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Mauro,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 238c84f71120f41c45301359902a912a19370f3d media: platform: rename exynos4-is/ to samsung/exynos4-is/
-date:   5 weeks ago
-config: mips-randconfig-c004-20220418 (https://download.01.org/0day-ci/archive/20220419/202204192315.ZHbOex51-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file4opaUI
+head:   64ef86292800d770fcd8916cf07b1bea58559680
+commit: 246bb4cbc6a55a247e5e0afd57c91e0dec0c77c3 [20/24] spi: intel: Implement dirmap hooks
+config: arm-randconfig-r025-20220419 (https://download.01.org/0day-ci/archive/20220420/202204200302.RR7dzxDb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=238c84f71120f41c45301359902a912a19370f3d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 238c84f71120f41c45301359902a912a19370f3d
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=246bb4cbc6a55a247e5e0afd57c91e0dec0c77c3
+        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
+        git fetch --no-tags broonie-ci file4opaUI
+        git checkout 246bb4cbc6a55a247e5e0afd57c91e0dec0c77c3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
->> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for function 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-        ^
-   drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-   ^
-   static 
-   1 warning generated.
+>> drivers/spi/spi-intel.c:808:43: error: too many arguments to function call, expected 3, have 4
+           ret = iop->exec_op(ispi, desc->mem, iop, &op);
+                 ~~~~~~~~~~~~                       ^~~
+   drivers/spi/spi-intel.c:824:43: error: too many arguments to function call, expected 3, have 4
+           ret = iop->exec_op(ispi, desc->mem, iop, &op);
+                 ~~~~~~~~~~~~                       ^~~
+   2 errors generated.
 
 
-vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
+vim +808 drivers/spi/spi-intel.c
 
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
-
-:::::: The code at line 35 was first introduced by commit
-:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
-
-:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+   794	
+   795	static ssize_t intel_spi_dirmap_read(struct spi_mem_dirmap_desc *desc, u64 offs,
+   796					     size_t len, void *buf)
+   797	{
+   798		struct intel_spi *ispi = spi_master_get_devdata(desc->mem->spi->master);
+   799		const struct intel_spi_mem_op *iop = desc->priv;
+   800		struct spi_mem_op op = desc->info.op_tmpl;
+   801		int ret;
+   802	
+   803		/* Fill in the gaps */
+   804		op.addr.val = offs;
+   805		op.data.nbytes = len;
+   806		op.data.buf.in = buf;
+   807	
+ > 808		ret = iop->exec_op(ispi, desc->mem, iop, &op);
+   809		return ret ? ret : len;
+   810	}
+   811	
 
 -- 
 0-DAY CI Kernel Test Service
