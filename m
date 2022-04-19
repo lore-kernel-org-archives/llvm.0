@@ -1,134 +1,167 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77211EA2
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 04:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C497EA1
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 04:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342808; x=1681878808;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3WQ96fk4qp35tKfaZUm43O+5DsFp25/ZxLI7z4orMHY=;
-  b=jBWAecruNT5I13VOCTlvWK4PRccRVFbbmk4f8jwR0/v5OJyMgW9QmB7I
-   J+404MoaZJT3H8PibluAXdb46NpjHpje2M3GcX6kifiGm1M/BTDRVj1JI
-   RJ/NnWIrlUGA3s2iiXCxFleX4KSrjLMXLZoY72jUEDL+1pxiZNQc7fV3L
-   IY9tSMdslUuPBBrTNhbwHxpL7qkQ/Xw+sE+4n3E7oR6K4VFziW2E0Tk2C
-   AZ7wOFsji7LahSFltP2wL4Nq5wIVEHCuEyiAWeC2lxiwLswasBJuW3peW
-   EUcR1uWpyUaD+eTCMXg7hlASOHggygcFelVE6DvIQ35AwvD9Z/ydqpVUH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263133841"
+  t=1650344008; x=1681880008;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YOl2EzPGzw/IizuCevuRs1XuNziS2ZPq8q3LmGikynU=;
+  b=Db9nkttOHez4tfyEfRikIHlCbcJePRHAt6l2NxaYRGetaCUEhPgwlaL6
+   Ub2BKv7fWGz3e+yN3kM4eEgr93WapCCNLp05qAFxROucGAN5NdSogjKmD
+   +ozpO11BPUCPvaBsm024nJvTdtUuufqd+1zZHmiuxyxq74HQ2rWZXqCdY
+   GQn+QI0087i4LLw7H2hM3STPxhceqLOYR2eDBXfbGdJOckQMqRhP7/0pJ
+   p8/7o3r6v7IyvDqVs1lmkN+JaCWxIjGO+nXAdJnsVtPUzWfXmqUZf8zUq
+   RdhnNOVljcmR8aLLUh5JXoRExQNJRn3a1C3fz250t0ChNNaqTdtx6Li/D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245566615"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263133841"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:33:26 -0700
+   d="scan'208";a="245566615"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:53:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665771761"
+   d="scan'208";a="625529272"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:33:24 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 18 Apr 2022 21:53:26 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngfYK-0005Lq-3B;
-	Tue, 19 Apr 2022 04:33:24 +0000
-Date: Tue, 19 Apr 2022 12:32:41 +0800
+	id 1ngfrh-0005Mv-Hs;
+	Tue, 19 Apr 2022 04:53:25 +0000
+Date: Tue, 19 Apr 2022 12:53:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1770/2356]
- drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer
- conversion passing 'int' to parameter of type 'struct device_node *'
-Message-ID: <202204191213.e2qAQvKm-lkp@intel.com>
+	ceph-devel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+	Xiubo Li <xiubli@redhat.com>
+Subject: [ceph-client:wip-fscrypt 62/69] fs/ceph/inode.c:196:7: error: no
+ member named 'fscrypt_auth' in 'struct ceph_inode_info'
+Message-ID: <202204191205.iIZ9bszj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 323ab388e14d9548f526543e901e7feb2459c442 [1770/2356] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
-config: x86_64-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191213.e2qAQvKm-lkp@intel.com/config)
+tree:   https://github.com/ceph/ceph-client.git wip-fscrypt
+head:   4ff01fe87e581e76289ec6d1b0c03fc9c4f2f851
+commit: fd1aab0d215fa1b9a84a42ec93f09f0283bb8071 [62/69] ceph: add support for encrypted snapshot names
+config: hexagon-randconfig-r041-20220417 (https://download.01.org/0day-ci/archive/20220419/202204191205.iIZ9bszj-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=323ab388e14d9548f526543e901e7feb2459c442
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 323ab388e14d9548f526543e901e7feb2459c442
+        # https://github.com/ceph/ceph-client/commit/fd1aab0d215fa1b9a84a42ec93f09f0283bb8071
+        git remote add ceph-client https://github.com/ceph/ceph-client.git
+        git fetch --no-tags ceph-client wip-fscrypt
+        git checkout fd1aab0d215fa1b9a84a42ec93f09f0283bb8071
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/block/aoe/ drivers/bus/mhi/host/ drivers/gpu/drm/i915/ drivers/gpu/drm/tiny/ drivers/hwmon/ drivers/iio/dac/ drivers/misc/ drivers/platform/x86/ drivers/power/supply/ drivers/spi/ drivers/thermal/intel/ lib/crypto/ net/mctp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/iio/dac/ltc2688.c:711:47: error: implicit declaration of function 'to_of_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-                                                        ^
-   drivers/iio/dac/ltc2688.c:711:47: note: did you mean 'dev_of_node'?
-   include/linux/device_api.h:423:35: note: 'dev_of_node' declared here
-   static inline struct device_node *dev_of_node(struct device *dev)
-                                     ^
->> drivers/iio/dac/ltc2688.c:711:47: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct device_node *' [-Wint-conversion]
-           clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-                                                        ^~~~~~~~~~~~~~~~
-   include/linux/clk.h:489:29: note: passing argument to parameter 'np' here
-                                       struct device_node *np, const char *con_id);
-                                                           ^
-   1 warning and 1 error generated.
+>> fs/ceph/inode.c:196:7: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
+                   ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
+                   ~~  ^
+   fs/ceph/inode.c:196:35: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
+                   ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
+                                              ~~~  ^
+>> fs/ceph/inode.c:197:14: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
+                                              pci->fscrypt_auth_len,
+                                              ~~~  ^
+   fs/ceph/inode.c:199:11: error: no member named 'fscrypt_auth' in 'struct ceph_inode_info'
+                   if (ci->fscrypt_auth) {
+                       ~~  ^
+   fs/ceph/inode.c:201:8: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
+                           ci->fscrypt_auth_len = pci->fscrypt_auth_len;
+                           ~~  ^
+   fs/ceph/inode.c:201:32: error: no member named 'fscrypt_auth_len' in 'struct ceph_inode_info'
+                           ci->fscrypt_auth_len = pci->fscrypt_auth_len;
+                                                  ~~~  ^
+   6 errors generated.
 
 
-vim +711 drivers/iio/dac/ltc2688.c
+vim +196 fs/ceph/inode.c
 
-832cb9eeb9312d Nuno Sá 2022-02-25  702  
-832cb9eeb9312d Nuno Sá 2022-02-25  703  static int ltc2688_tgp_clk_setup(struct ltc2688_state *st,
-832cb9eeb9312d Nuno Sá 2022-02-25  704  				 struct ltc2688_chan *chan,
-832cb9eeb9312d Nuno Sá 2022-02-25  705  				 struct fwnode_handle *node, int tgp)
-832cb9eeb9312d Nuno Sá 2022-02-25  706  {
-832cb9eeb9312d Nuno Sá 2022-02-25  707  	unsigned long rate;
-832cb9eeb9312d Nuno Sá 2022-02-25  708  	struct clk *clk;
-832cb9eeb9312d Nuno Sá 2022-02-25  709  	int ret, f;
-832cb9eeb9312d Nuno Sá 2022-02-25  710  
-832cb9eeb9312d Nuno Sá 2022-02-25 @711  	clk = devm_get_clk_from_child(&st->spi->dev, to_of_node(node), NULL);
-832cb9eeb9312d Nuno Sá 2022-02-25  712  	if (IS_ERR(clk))
-832cb9eeb9312d Nuno Sá 2022-02-25  713  		return dev_err_probe(&st->spi->dev, PTR_ERR(clk),
-832cb9eeb9312d Nuno Sá 2022-02-25  714  				     "failed to get tgp clk.\n");
-832cb9eeb9312d Nuno Sá 2022-02-25  715  
-832cb9eeb9312d Nuno Sá 2022-02-25  716  	ret = clk_prepare_enable(clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  717  	if (ret)
-832cb9eeb9312d Nuno Sá 2022-02-25  718  		return dev_err_probe(&st->spi->dev, ret,
-832cb9eeb9312d Nuno Sá 2022-02-25  719  				     "failed to enable tgp clk.\n");
-832cb9eeb9312d Nuno Sá 2022-02-25  720  
-832cb9eeb9312d Nuno Sá 2022-02-25  721  	ret = devm_add_action_or_reset(&st->spi->dev, ltc2688_clk_disable, clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  722  	if (ret)
-832cb9eeb9312d Nuno Sá 2022-02-25  723  		return ret;
-832cb9eeb9312d Nuno Sá 2022-02-25  724  
-832cb9eeb9312d Nuno Sá 2022-02-25  725  	if (chan->toggle_chan)
-832cb9eeb9312d Nuno Sá 2022-02-25  726  		return 0;
-832cb9eeb9312d Nuno Sá 2022-02-25  727  
-832cb9eeb9312d Nuno Sá 2022-02-25  728  	/* calculate available dither frequencies */
-832cb9eeb9312d Nuno Sá 2022-02-25  729  	rate = clk_get_rate(clk);
-832cb9eeb9312d Nuno Sá 2022-02-25  730  	for (f = 0; f < ARRAY_SIZE(chan->dither_frequency); f++)
-832cb9eeb9312d Nuno Sá 2022-02-25  731  		chan->dither_frequency[f] = DIV_ROUND_CLOSEST(rate, ltc2688_period[f]);
-832cb9eeb9312d Nuno Sá 2022-02-25  732  
-832cb9eeb9312d Nuno Sá 2022-02-25  733  	return 0;
-832cb9eeb9312d Nuno Sá 2022-02-25  734  }
-832cb9eeb9312d Nuno Sá 2022-02-25  735  
-
-:::::: The code at line 711 was first introduced by commit
-:::::: 832cb9eeb9312dd2e14133681d3920b773ef1eac iio: dac: add support for ltc2688
-
-:::::: TO: Nuno Sá <nuno.sa@analog.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+   154	
+   155	/*
+   156	 * get/constuct snapdir inode for a given directory
+   157	 */
+   158	struct inode *ceph_get_snapdir(struct inode *parent)
+   159	{
+   160		struct ceph_vino vino = {
+   161			.ino = ceph_ino(parent),
+   162			.snap = CEPH_SNAPDIR,
+   163		};
+   164		struct inode *inode = ceph_get_inode(parent->i_sb, vino, NULL);
+   165		struct ceph_inode_info *ci = ceph_inode(inode);
+   166		int ret = -ENOTDIR;
+   167	
+   168		if (IS_ERR(inode))
+   169			return inode;
+   170	
+   171		if (!S_ISDIR(parent->i_mode)) {
+   172			pr_warn_once("bad snapdir parent type (mode=0%o)\n",
+   173				     parent->i_mode);
+   174			goto err;
+   175		}
+   176	
+   177		if (!(inode->i_state & I_NEW) && !S_ISDIR(inode->i_mode)) {
+   178			pr_warn_once("bad snapdir inode type (mode=0%o)\n",
+   179				     inode->i_mode);
+   180			goto err;
+   181		}
+   182	
+   183		inode->i_mode = parent->i_mode;
+   184		inode->i_uid = parent->i_uid;
+   185		inode->i_gid = parent->i_gid;
+   186		inode->i_mtime = parent->i_mtime;
+   187		inode->i_ctime = parent->i_ctime;
+   188		inode->i_atime = parent->i_atime;
+   189		ci->i_rbytes = 0;
+   190		ci->i_btime = ceph_inode(parent)->i_btime;
+   191	
+   192		/* if encrypted, just borrow fscrypt_auth from parent */
+   193		if (IS_ENCRYPTED(parent)) {
+   194			struct ceph_inode_info *pci = ceph_inode(parent);
+   195	
+ > 196			ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
+ > 197						   pci->fscrypt_auth_len,
+   198						   GFP_KERNEL);
+   199			if (ci->fscrypt_auth) {
+   200				inode->i_flags |= S_ENCRYPTED;
+   201				ci->fscrypt_auth_len = pci->fscrypt_auth_len;
+   202			} else {
+   203				dout("Failed to alloc snapdir fscrypt_auth\n");
+   204				ret = -ENOMEM;
+   205				goto err;
+   206			}
+   207		}
+   208		if (inode->i_state & I_NEW) {
+   209			inode->i_op = &ceph_snapdir_iops;
+   210			inode->i_fop = &ceph_snapdir_fops;
+   211			ci->i_snap_caps = CEPH_CAP_PIN; /* so we can open */
+   212			unlock_new_inode(inode);
+   213		}
+   214	
+   215		return inode;
+   216	err:
+   217		if ((inode->i_state & I_NEW))
+   218			discard_new_inode(inode);
+   219		else
+   220			iput(inode);
+   221		return ERR_PTR(ret);
+   222	}
+   223	
 
 -- 
 0-DAY CI Kernel Test Service
