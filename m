@@ -1,43 +1,48 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A35A2A
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 00:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24FFA2A
+	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 00:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650328275; x=1681864275;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nws54ezawM9bqSqbX5zehME3Uk2VbZrkK2PxaNuWODY=;
-  b=KpS7BU2+mZGRLnNs8u5/MTXoExF1D2heonRRlvnuBIeE/Wj/PI9VJenW
-   GyJOfcq59odQ9YOOdZ5kQwxPvSm0MfuMAAuNWEqSyAu4VNjyzIP7FHYdq
-   wmp39lSfhz/q8WRJLEwbPntp7pASYeUc+4iEBS+Rs3EkAYVxIlCYPZm+v
-   ODQbrFNH9wIxPTM3a4CGDIO89QLVhSgbq+C63KvEGeJANKpXm7RVgAjuZ
-   TrI6e3um8ev0f0MMVZVqsJ3SuiJ9+7Y/xicUjEVHWXU36YjoAVYj/gN8I
-   z5qzv355OSwL+6fXHvkqJxgHlNVPPHxO2yUrrco25O9lBq6cyQh07Mg/I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="350089844"
+  t=1650328934; x=1681864934;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=frB5QOYxSqAyWSD2ynDwz+T5qJ31zUFLXfjyUiR6fns=;
+  b=O4J/O282UxBwkX3WaJ5OCPQH8OicPT96tcB9jLnRMWHg8U3BgAJVdpza
+   ixEm3EvF0ZNP7nD2StQMaxNIbYVYXAKO6s4GR7NZVDLI0hifEdxmdHaCx
+   RZzVEJKaZbFq26SPIWxWuDnYfLG+3CszQiub7hLeqSkXz+xfmG1o+qck1
+   aJiwRo9A+vf6EWDhOBkSn2aeCf0H8p54ZeP5Bo6GEQNtPlAQ2nXOtRXFc
+   zA5uGXwk25akLjTGldf6algOE6/AP13ZgLQPbd/DbG96P4enjKHtiGBDE
+   D8raMuE9IAWA64S5eLlgMAFGchMHzHNkl9fFOlLlEOEaSQA39nq1JJDdF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261244913"
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="350089844"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:31:14 -0700
+   d="scan'208";a="261244913"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:42:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="702001891"
+   d="scan'208";a="726849810"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 17:31:08 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 17:42:08 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngblr-00057s-O7;
-	Tue, 19 Apr 2022 00:31:07 +0000
-Date: Tue, 19 Apr 2022 08:30:36 +0800
+	id 1ngbwV-000588-Sj;
+	Tue, 19 Apr 2022 00:42:07 +0000
+Date: Tue, 19 Apr 2022 08:41:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1591/2356]
- drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:10: warning: incompatible integer to
- pointer conversion assigning to 'struct dp_aux_ep_device *' from 'int'
-Message-ID: <202204190823.7G1aai7b-lkp@intel.com>
+To: Casey Schaufler <casey@schaufler-ca.com>, casey.schaufler@intel.com,
+	jmorris@namei.org, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, casey@schaufler-ca.com,
+	linux-audit@redhat.com, keescook@chromium.org,
+	john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+	paul@paul-moore.com, stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v35 13/29] LSM: Use lsmblob in security_cred_getsecid
+Message-ID: <202204190850.dXILQlrb-lkp@intel.com>
+References: <20220418145945.38797-14-casey@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,132 +51,305 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220418145945.38797-14-casey@schaufler-ca.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 97285b3fe2fe8e0e139fea227831531395c3007d [1591/2356] headers/deps: ftrace: Optimize the <linux/ftrace.h> header dependencies
-config: i386-randconfig-a011-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190823.7G1aai7b-lkp@intel.com/config)
+Hi Casey,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v5.18-rc3 next-20220414]
+[cannot apply to pcmoore-audit/next jmorris-security/next-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220419-000109
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20220419/202204190850.dXILQlrb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=97285b3fe2fe8e0e139fea227831531395c3007d
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 97285b3fe2fe8e0e139fea227831531395c3007d
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/2fa01492487f9135e9ea9e59924289cc23a66576
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220419-000109
+        git checkout 2fa01492487f9135e9ea9e59924289cc23a66576
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bus/mhi/host/ drivers/gpu/drm/bridge/ drivers/gpu/drm/dp/ drivers/md/bcache/ drivers/media/tuners/ drivers/peci/ drivers/power/supply/ drivers/regulator/ drivers/rpmsg/ fs/pstore/ fs/ubifs/ fs/xfs/ net/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/gpu/drm/dp/drm_dp_aux_bus.c:128:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           kfree(to_dp_aux_ep_dev(dev));
-           ^
-   drivers/gpu/drm/dp/drm_dp_aux_bus.c:128:2: note: did you mean 'kvfree'?
-   include/linux/rcutiny.h:41:13: note: 'kvfree' declared here
-   extern void kvfree(const void *addr);
+   In file included from drivers/firmware/efi/efi.c:33:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   drivers/firmware/efi/efi.c:169:16: warning: no previous prototype for function 'efi_attr_is_visible' [-Wmissing-prototypes]
+   umode_t __weak efi_attr_is_visible(struct kobject *kobj, struct attribute *attr,
+                  ^
+   drivers/firmware/efi/efi.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   umode_t __weak efi_attr_is_visible(struct kobject *kobj, struct attribute *attr,
+   ^
+   static 
+   1 warning and 1 error generated.
+--
+   In file included from fs/iomap/trace.c:12:
+   In file included from fs/iomap/./trace.h:190:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:21:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   1 error generated.
+--
+   In file included from init/main.c:21:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   init/main.c:769:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+                      ^
+   init/main.c:769:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+   ^
+   static 
+   init/main.c:781:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:781:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+   init/main.c:783:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
+   void __init __weak poking_init(void) { }
+                      ^
+   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak poking_init(void) { }
+   ^
+   static 
+   3 warnings and 1 error generated.
+--
+   In file included from arch/arm/kernel/ptrace.c:17:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   arch/arm/kernel/ptrace.c:852:16: warning: no previous prototype for function 'syscall_trace_enter' [-Wmissing-prototypes]
+   asmlinkage int syscall_trace_enter(struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/ptrace.c:852:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int syscall_trace_enter(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/ptrace.c:880:17: warning: no previous prototype for function 'syscall_trace_exit' [-Wmissing-prototypes]
+   asmlinkage void syscall_trace_exit(struct pt_regs *regs)
+                   ^
+   arch/arm/kernel/ptrace.c:880:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void syscall_trace_exit(struct pt_regs *regs)
+              ^
+              static 
+   2 warnings and 1 error generated.
+--
+   In file included from arch/arm/kernel/signal.c:14:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   arch/arm/kernel/signal.c:186:16: warning: no previous prototype for function 'sys_sigreturn' [-Wmissing-prototypes]
+   asmlinkage int sys_sigreturn(struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/signal.c:186:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int sys_sigreturn(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/signal.c:216:16: warning: no previous prototype for function 'sys_rt_sigreturn' [-Wmissing-prototypes]
+   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/signal.c:216:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/signal.c:601:1: warning: no previous prototype for function 'do_work_pending' [-Wmissing-prototypes]
+   do_work_pending(struct pt_regs *regs, unsigned int thread_flags, int syscall)
+   ^
+   arch/arm/kernel/signal.c:600:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int
+              ^
+              static 
+   3 warnings and 1 error generated.
+--
+   In file included from arch/arm/kernel/sys_arm.c:20:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   In file included from arch/arm/kernel/sys_arm.c:21:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   arch/arm/kernel/sys_arm.c:32:17: warning: no previous prototype for function 'sys_arm_fadvise64_64' [-Wmissing-prototypes]
+   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
+                   ^
+   arch/arm/kernel/sys_arm.c:32:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
+              ^
+              static 
+   2 warnings and 1 error generated.
+--
+   In file included from arch/arm/kernel/smp.c:52:
+   In file included from include/trace/events/ipi.h:90:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:21:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   arch/arm/kernel/smp.c:582:6: warning: no previous prototype for function 'arch_irq_work_raise' [-Wmissing-prototypes]
+   void arch_irq_work_raise(void)
+        ^
+   arch/arm/kernel/smp.c:582:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void arch_irq_work_raise(void)
+   ^
+   static 
+   arch/arm/kernel/smp.c:793:5: warning: no previous prototype for function 'setup_profiling_timer' [-Wmissing-prototypes]
+   int setup_profiling_timer(unsigned int multiplier)
+       ^
+   arch/arm/kernel/smp.c:793:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int setup_profiling_timer(unsigned int multiplier)
+   ^
+   static 
+   2 warnings and 1 error generated.
+--
+   In file included from arch/arm/mm/fault.c:19:
+   In file included from include/linux/perf_event.h:61:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   arch/arm/mm/fault.c:535:1: warning: no previous prototype for function 'do_DataAbort' [-Wmissing-prototypes]
+   do_DataAbort(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
+   ^
+   arch/arm/mm/fault.c:534:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void
+              ^
+              static 
+   arch/arm/mm/fault.c:565:1: warning: no previous prototype for function 'do_PrefetchAbort' [-Wmissing-prototypes]
+   do_PrefetchAbort(unsigned long addr, unsigned int ifsr, struct pt_regs *regs)
+   ^
+   arch/arm/mm/fault.c:564:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void
+              ^
+              static 
+   2 warnings and 1 error generated.
+--
+   In file included from kernel/fork.c:51:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   kernel/fork.c:163:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
+   void __weak arch_release_task_struct(struct task_struct *tsk)
                ^
-   drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:12: error: implicit declaration of function 'kzalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
-                            ^
->> drivers/gpu/drm/dp/drm_dp_aux_bus.c:224:10: warning: incompatible integer to pointer conversion assigning to 'struct dp_aux_ep_device *' from 'int' [-Wint-conversion]
-                   aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+   kernel/fork.c:163:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak arch_release_task_struct(struct task_struct *tsk)
+   ^
+   static 
+   kernel/fork.c:853:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
+   void __init __weak arch_task_cache_init(void) { }
+                      ^
+   kernel/fork.c:853:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_task_cache_init(void) { }
+   ^
+   static 
+   kernel/fork.c:948:12: warning: no previous prototype for function 'arch_dup_task_struct' [-Wmissing-prototypes]
+   int __weak arch_dup_task_struct(struct task_struct *dst,
+              ^
+   kernel/fork.c:948:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak arch_dup_task_struct(struct task_struct *dst,
+   ^
+   static 
+   3 warnings and 1 error generated.
+--
+   In file included from kernel/signal.c:29:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   kernel/signal.c:137:37: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+           case 4: ready  = signal->sig[3] &~ blocked->sig[3];
+                                              ^            ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   kernel/signal.c:137:19: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+           case 4: ready  = signal->sig[3] &~ blocked->sig[3];
+                            ^           ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   kernel/signal.c:138:30: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   ready |= signal->sig[2] &~ blocked->sig[2];
+                                              ^            ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   kernel/signal.c:138:12: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   ready |= signal->sig[2] &~ blocked->sig[2];
+                            ^           ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   4 warnings and 1 error generated.
+--
+   In file included from kernel/kallsyms.c:25:
+   In file included from include/linux/filter.h:20:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:46:
+   In file included from include/uapi/linux/neighbour.h:6:
+   In file included from include/linux/netlink.h:9:
+   In file included from include/net/scm.h:8:
+>> include/linux/security.h:1147:3: error: use of undeclared identifier 'secid'
+           *secid = 0;
+            ^
+   kernel/kallsyms.c:591:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+              ^
+   kernel/kallsyms.c:591:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+   ^
+   static 
+   1 warning and 1 error generated.
+..
 
 
-vim +224 drivers/gpu/drm/dp/drm_dp_aux_bus.c
+vim +/secid +1147 include/linux/security.h
 
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  181  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  182  /**
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  183   * of_dp_aux_populate_ep_devices() - Populate the endpoint devices on the DP AUX
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  184   * @aux: The AUX channel whose devices we want to populate. It is required that
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  185   *       drm_dp_aux_init() has already been called for this AUX channel.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  186   *
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  187   * This will populate all the devices under the "aux-bus" node of the device
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  188   * providing the AUX channel (AKA aux->dev).
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  189   *
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  190   * When this function finishes, it is _possible_ (but not guaranteed) that
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  191   * our sub-devices will have finished probing. It should be noted that if our
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  192   * sub-devices return -EPROBE_DEFER that we will not return any error codes
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  193   * ourselves but our sub-devices will _not_ have actually probed successfully
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  194   * yet. There may be other cases (maybe added in the future?) where sub-devices
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  195   * won't have been probed yet when this function returns, so it's best not to
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  196   * rely on that.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  197   *
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  198   * If this function succeeds you should later make sure you call
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  199   * of_dp_aux_depopulate_ep_devices() to undo it, or just use the devm version
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  200   * of this function.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  201   *
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  202   * Return: 0 if no error or negative error code.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  203   */
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  204  int of_dp_aux_populate_ep_devices(struct drm_dp_aux *aux)
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  205  {
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  206  	struct device_node *bus, *np;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  207  	struct dp_aux_ep_device *aux_ep;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  208  	int ret;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  209  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  210  	/* drm_dp_aux_init() should have been called already; warn if not */
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  211  	WARN_ON_ONCE(!aux->ddc.algo);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  212  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  213  	if (!aux->dev->of_node)
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  214  		return 0;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  215  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  216  	bus = of_get_child_by_name(aux->dev->of_node, "aux-bus");
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  217  	if (!bus)
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  218  		return 0;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  219  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  220  	for_each_available_child_of_node(bus, np) {
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  221  		if (of_node_test_and_set_flag(np, OF_POPULATED))
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  222  			continue;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  223  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11 @224  		aux_ep = kzalloc(sizeof(*aux_ep), GFP_KERNEL);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  225  		if (!aux_ep)
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  226  			continue;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  227  		aux_ep->aux = aux;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  228  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  229  		aux_ep->dev.parent = aux->dev;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  230  		aux_ep->dev.bus = &dp_aux_bus_type;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  231  		aux_ep->dev.type = &dp_aux_device_type_type;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  232  		aux_ep->dev.of_node = of_node_get(np);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  233  		dev_set_name(&aux_ep->dev, "aux-%s", dev_name(aux->dev));
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  234  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  235  		ret = device_register(&aux_ep->dev);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  236  		if (ret) {
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  237  			dev_err(aux->dev, "Failed to create AUX EP for %pOF: %d\n", np, ret);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  238  			of_node_clear_flag(np, OF_POPULATED);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  239  			of_node_put(np);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  240  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  241  			/*
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  242  			 * As per docs of device_register(), call this instead
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  243  			 * of kfree() directly for error cases.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  244  			 */
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  245  			put_device(&aux_ep->dev);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  246  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  247  			/*
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  248  			 * Following in the footsteps of of_i2c_register_devices(),
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  249  			 * we won't fail the whole function here--we'll just
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  250  			 * continue registering any other devices we find.
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  251  			 */
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  252  		}
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  253  	}
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  254  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  255  	of_node_put(bus);
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  256  
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  257  	return 0;
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  258  }
-aeb33699fc2c97 drivers/gpu/drm/drm_dp_aux_bus.c Douglas Anderson 2021-06-11  259  
-
-:::::: The code at line 224 was first introduced by commit
-:::::: aeb33699fc2c97994de0e9acb74d0fd319380614 drm: Introduce the DP AUX bus
-
-:::::: TO: Douglas Anderson <dianders@chromium.org>
-:::::: CC: Douglas Anderson <dianders@chromium.org>
+ee18d64c1f6320 David Howells   2009-09-02  1143  
+2fa01492487f91 Casey Schaufler 2022-04-18  1144  static inline void security_cred_getsecid(const struct cred *c,
+2fa01492487f91 Casey Schaufler 2022-04-18  1145  					  struct lsmblob *blob)
+4d5b5539742d25 Todd Kjos       2021-10-12  1146  {
+4d5b5539742d25 Todd Kjos       2021-10-12 @1147  	*secid = 0;
+4d5b5539742d25 Todd Kjos       2021-10-12  1148  }
+4d5b5539742d25 Todd Kjos       2021-10-12  1149  
 
 -- 
 0-DAY CI Kernel Test Service
