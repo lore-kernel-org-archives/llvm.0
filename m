@@ -1,88 +1,114 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59BC10F3
-	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 16:39:45 +0000 (UTC)
-Received: by mail-io1-f45.google.com with SMTP id e194so2420761iof.11
-        for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 09:39:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630201867
+	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 17:12:13 +0000 (UTC)
+Received: by mail-vk1-f174.google.com with SMTP id 80so1116537vkw.0
+        for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 10:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JzS2G8lh8IFf105c1rGwkDws5NXApyWthp6AQcgQ72g=;
-        b=UycO/TOyAzaFWtYuRL1zPTZPpSLu8Q9LC3yn+mV/OIoI6GRnKAxyF2IjUBFBljxOY4
-         wFEzi5gvhlgDpWuBY4NPrIMekiM77ZYeMqB6FTZB8YTEnGgzMRJ858GPdAAWRc0PtJFt
-         nFK3q2c+zxqlstAQuiElymuS6Ej8lULYzydds=
+        bh=pYT8LiXPjG72JXyjXh0PA/0j6snOgjAInfuhdQQzK4A=;
+        b=ZiyMakZPe2qW167OmeXyl2TuWZG/d54+3LqcHKYeCbiytsFzupldZcNEbtc3woraMi
+         WuZQ+m7C4d9rEtCo8dS0y+0oipuQi3dRdUE78C8HHIGJOduFOGUFCTxyH/J+xxMObUeo
+         3fx2WciP5/4tsVV5rAi1F2Rjh5wBollI5V+EK2kAG90dGELPOYf3oi7PG7tVGwYw9Oqs
+         38Jjf6kXP8UYlQkmvWHW62Hj8xWG/XVyj/kAmay4gjQ4liV5GP258qHLLDahX87U4Zce
+         TRodUG0FEsekwpItF7t9i66GVhDI7kAzoaTbxbuxVpnEzRABk4BlKz0aQ1H7VVD+nloQ
+         4k0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JzS2G8lh8IFf105c1rGwkDws5NXApyWthp6AQcgQ72g=;
-        b=1yE6Rqc1ywR1V4lGkXQKu12CdIv3HxkoA6JhsVZbx6U6PUyraJYwvpdb5pliLgwFpC
-         uqNd8vo/nKG9TR4H5IAdrHg+46dqaOFETqgR3jqwYuIfbfn4hulDMJMXycWWlB1032oj
-         Wa6/UzzV2xIV72Z4UdbA+vnPqXRMXXUAWXxQfLS7UETgId+jD6Zvo/IxQQzyeMAzf7RG
-         od5RhNyWeefqxqCGcyG8A6It3qu/T45GjEaibOp0pXGDCf/KZT5mFa5MToOyZn88cn3D
-         vd3nwTHMIOtgMcMCsGx6R/t7MFuD9Z3qXSuaQa0E1fwQZGVCuueKfWXIttUZHQ9mUUQo
-         X7wA==
-X-Gm-Message-State: AOAM532XSeEZcDQf6oMxI018YhBGNUzmIvKkTJSaSrNOMnaZK7IlczPS
-	Ai4zcardeB9X/Yk7Vv4LS+GpCeqcEWzbKOcBa/Z23w==
-X-Google-Smtp-Source: ABdhPJx4/BAeX68qPJZ8pZ+6C2GHRTFtvqy+1dPqrhWNa8EYBtp9UJv+wakF3VTU3A4yo2dvIBzU9lU0Uw6s1mC9UrU=
-X-Received: by 2002:a02:2410:0:b0:323:fb30:183c with SMTP id
- f16-20020a022410000000b00323fb30183cmr10471216jaa.2.1650472784775; Wed, 20
- Apr 2022 09:39:44 -0700 (PDT)
+        bh=pYT8LiXPjG72JXyjXh0PA/0j6snOgjAInfuhdQQzK4A=;
+        b=bRvJwikw4PHXYtPXbmAZju/FzLc4DlMswYVOGus2mHWQvjhZ86xqsgEh8pF/awX2d0
+         1/EsPtOsc/aP7Ovxko0l46byu9SvMGdPYQlubAaWQ/p0d7KE/Iz/h/SrwgSCYasPbOO4
+         kFuMrjihrzVa13ydMbDqS4EXkJOaCNteEUTBxf6STqYSY3VDS2zUc1zpZQUr62fT5zGB
+         Ivj7xJkmLwnlPA6T85xmtYXJsaGuORyiRHaaUWJ9StQzjOE9dwsw+VxhTbZyRzdT8L3N
+         cN++5PBoA/c0ePsk/v4w+sBH68efrNsgkBrO2DDMj0znuZ3WDJ2Yh6BIIPgi4uYRBB3C
+         SrBQ==
+X-Gm-Message-State: AOAM533LQaz+OG0WODbZ5Dc32dUBSKt385k03kTD4vaVLyf7kJ1kJthD
+	CNQD0DewNYVQ5oen57UlpX+90mKwm/uOd5A0tQM=
+X-Google-Smtp-Source: ABdhPJxnS1xt53URfkC+Hi8iynVsfEwenj/2vAUetV4O4xWYXcnniqZonwmQezQoWp3xT03XpQs1W0FscQZQVDNUGLE=
+X-Received: by 2002:a1f:abc5:0:b0:343:20e4:890f with SMTP id
+ u188-20020a1fabc5000000b0034320e4890fmr6765514vke.20.1650474732358; Wed, 20
+ Apr 2022 10:12:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202204201732.oTzYh0Xo-lkp@intel.com> <20220420134918.GZ4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220420134918.GZ4285@paulmck-ThinkPad-P17-Gen-1>
-From: Joel Fernandes <joel@joelfernandes.org>
-Date: Wed, 20 Apr 2022 12:39:33 -0400
-Message-ID: <CAEXW_YSieVAKUushETvppRAsbKrt0rkFrfYo8qgTK96tXwkqYg@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 28/28]
- kernel/rcu/tree_nocb.h:1213:3: warning: misleading indentation; statement is
- not part of the previous 'if'
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	"GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"Uladzislau Rezki (Sony)" <urezki@gmail.com>, Kalesh Singh <kaleshsingh@google.com>
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-4-alobakin@pm.me>
+In-Reply-To: <20220414223704.341028-4-alobakin@pm.me>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 20 Apr 2022 10:12:01 -0700
+Message-ID: <CAEf4BzZiuD+bJ2zMikrb_W6KUHWjEqu6jwp5cNEgaHdSgRhUtA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 03/11] tools, bpf: fix bpftool build with !CONFIG_BPF_EVENTS
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Chenbo Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, 
+	Ong Boon Leong <boon.leong.ong@intel.com>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Apr 20, 2022 at 9:49 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
 >
-> On Wed, Apr 20, 2022 at 05:57:46PM +0800, kernel test robot wrote:
-> > tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> > head:   ad68d8bf085421e4f22731c8b64c0b774a154e06
-> > commit: ad68d8bf085421e4f22731c8b64c0b774a154e06 [28/28] rcu/nocb: Add an option to offload all CPUs on boot
-> > config: riscv-randconfig-r024-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201732.oTzYh0Xo-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv64-linux-gnu
-> >         # https://github.com/ammarfaizi2/linux-block/commit/ad68d8bf085421e4f22731c8b64c0b774a154e06
-> >         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-> >         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-> >         git checkout ad68d8bf085421e4f22731c8b64c0b774a154e06
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
+> Fix the following error when building bpftool:
 >
-> I am dropping this commit, and thank you for your testing efforts!
+>   CLANG   profiler.bpf.o
+>   CLANG   pid_iter.bpf.o
+> skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
+>         __uint(value_size, sizeof(struct bpf_perf_event_value));
+>                            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:13:39: note: expanded from macro '__uint'
+>                                       ^~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helper_defs.h:7:8: note: forward declaration of 'struct bpf_perf_event_value'
+> struct bpf_perf_event_value;
+>        ^
+>
+> struct bpf_perf_event_value is being used in the kernel only when
+> CONFIG_BPF_EVENTS is enabled, so it misses a BTF entry then.
+> Emit the type unconditionally to fix the problem.
+>
+> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>  kernel/bpf/syscall.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 34fdf27d14cf..dd8284a60a8e 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4286,6 +4286,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+>                 goto out;
+>         case BPF_PROG_TYPE_PERF_EVENT:
+>         case BPF_PROG_TYPE_TRACEPOINT:
+> +               BTF_TYPE_EMIT(struct bpf_perf_event_value);
 
-I discussed privately with Paul and things are a bit late for -next as
-other testing efforts are underway. So we'll revisit this patch in the
-future. Just wanted to clarify to the onlooker that Paul isn't
-dropping it because of a NAK or anything ;-)
+same as for previous two patches, if there are types that bpftool
+expects and might not be in vmlinux.h due to different kernel
+configurations, it's cleaner to just define their minimal local
+definitions with __attribute__((preserve_access_index))
 
- Thanks,
-
- - Joel
+>                 if (attr->link_create.attach_type != BPF_PERF_EVENT) {
+>                         ret = -EINVAL;
+>                         goto out;
+> --
+> 2.35.2
+>
+>
