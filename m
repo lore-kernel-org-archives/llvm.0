@@ -1,141 +1,120 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6AC7A
-	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 05:31:02 +0000 (UTC)
-Received: by mail-il1-f169.google.com with SMTP id b5so355671ile.0
-        for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 22:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nuxxapEs+M5yK26jsf4JOVoP3RaTp9CaYMXH3Qi7BnM=;
-        b=m6n3UDbwyYseWE0m3xwpSMxKMAQg7O+DYd9PY3jsVi5Vt8MdUMbWJ5BbMgjz0BLkQ1
-         6Osczxl3Rx/2WnIhaqf6d9NB5vc/zN8cbIgGWqTn3AEhUMtf7gayYr6k7Kz1HHAu+IDx
-         RryeOpN5H73JSax+jCknmY3/7vRPK+Dz/WFiARIiO5lNp9WGmRga4xIyGu5FbV0AYlrs
-         y+184FwL3curFzsFKWcKpxIWZG91jaRxAIL4HoWCbe0taLf3STJYeregu81oeOsa53GW
-         8YNXEdmBN9ENyp48LIRZ430fKDfP1u20700D9cvnx2hUbmxqf/2yb0g31yHtrM4o5TDI
-         QZBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nuxxapEs+M5yK26jsf4JOVoP3RaTp9CaYMXH3Qi7BnM=;
-        b=X4O1+bZ/sXhX31X5sGAiB5XsEsNgURMo4NI9Rg4hK2aftSDPX1samBQyX+/y0wgI6M
-         L6MdpXybQCQ32QyV9cVRjILD34AGxRK3HZx1FqlevOc268u5KmSuq/5V4ktU8wQUdu8D
-         gyeMXTtmgF6EkUsumoMKLzqaOV20aZQNMRZIeeVe8u1icLc3K+yvXuloy9Ve4oQuBNjI
-         UtsIX4ESmVpcBgW46yWSbYcM+pbSc0Jvwq1kJKcw8/3yVWgi/mxjao49mN9Rdz9sQv6S
-         OG4fxFXcWorbmekA3jQcNlSKeQLChNT2Y01X2stZFynjuMDmEAkdTa7spKyR0wxsF9Xz
-         F0Hg==
-X-Gm-Message-State: AOAM530uYHKxuaq8teGGQCARaaKYFEqW3JzIm/JHzGvBd63dLyzEaCs6
-	JE6f4eYbJMGngVFTcT4JsD2OdaqKAotMX1O2bds=
-X-Google-Smtp-Source: ABdhPJzzqRVICUIJZyiBou/6sakX22tJlgAFvBTlOQOgOFFGsk6sXr6KK0CLtFM+CVx9UoVb7o+5cVtuaFR3tpGT4Mg=
-X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
- y6-20020a926406000000b002bbf1dee13emr8064445ilb.305.1650432661257; Tue, 19
- Apr 2022 22:31:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788B07A
+	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 05:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650434228; x=1681970228;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dlOqVIZR/L6MtBohPXpS6Rrn6hDW2/Wi7App5uHPJEI=;
+  b=Oxb3odVxTSMJjbShVumltVmSMruoozJPPx4Q1elb8UIS46H2OdBtQBOD
+   H1QtDNLfVWruuNKw/Pi8yyZiiM0YKi/v4fUzD6SfXhhwsY4mteLvbOxNt
+   nNs8ouQPXj+RGHk5buRhWPDW3uquPKN2+BhQFsvIatdSlCOw6VKIvP1iQ
+   +WnVeLf/2l6EsKjksVBozUo62FsX01Hyzz6fxYsuccYqnjqTo6FLrhdCd
+   HnLrYyTG4rA/YJs/5zCss3xCCychuet+48AI7Sz5+bJfM1o78pQg4/tL2
+   ZfgDctZVUL1uvSKHQ+ENH2oCmdifaJN7xVmDinLE9mBMFkVpo67Yb5cxq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="289050791"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="289050791"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 22:57:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="727350038"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 19 Apr 2022 22:57:06 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nh3Kr-0006dC-K4;
+	Wed, 20 Apr 2022 05:57:05 +0000
+Date: Wed, 20 Apr 2022 13:56:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2152/2579]
+ arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level
+ declarator
+Message-ID: <202204201328.V8wP7bP6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-2-alobakin@pm.me>
- <20220419090355.GP2731@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220419090355.GP2731@worktop.programming.kicks-ass.net>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 19 Apr 2022 22:30:50 -0700
-Message-ID: <CAEf4Bza=Ver5J-PYCceEohjgLSFVTCoYKXUEnc=uNkUC3rrZ5Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with !CONFIG_PERF_EVENTS
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexander Lobakin <alobakin@pm.me>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Chenbo Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, 
-	Ong Boon Leong <boon.leong.ong@intel.com>, 
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Apr 19, 2022 at 2:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Apr 14, 2022 at 10:44:48PM +0000, Alexander Lobakin wrote:
-> > When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
-> > However, the structure is being used by bpftool indirectly via BTF.
-> > This leads to:
-> >
-> > skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
-> >         return BPF_CORE_READ(event, bpf_cookie);
-> >                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-> >
-> > ...
-> >
-> > skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
-> >         return BPF_CORE_READ(event, bpf_cookie);
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Tools and samples can't use any CONFIG_ definitions, so the fields
-> > used there should always be present.
-> > Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
-> > to make it available unconditionally.
->
-> Urgh, this is nasty.. did you verify nothing relies on that structure
-> actually being empty?
->
-> Also, why are we changing kernel headers to fix some daft userspace
-> issue?
->
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 87125f7f4d668eb2a4fc48a926799299c8774fdf [2152/2579] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
+config: s390-randconfig-r044-20220420 (https://download.01.org/0day-ci/archive/20220420/202204201328.V8wP7bP6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=87125f7f4d668eb2a4fc48a926799299c8774fdf
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 87125f7f4d668eb2a4fc48a926799299c8774fdf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
-I agree, this is quite ugly. And I think it's not necessary at all.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-BPF CO-RE, which bpftool relies on here, allows to have bpftool's own
-minimal definition of struct perf_event with bpf_cookie field and not
-rely on UAPI headers having full definition. Something like this:
+All errors (new ones prefixed by >>):
 
-struct perf_event___local {
-    u64 bpf_cookie;
-} __attribute__((preserve_access_index));
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hashtable_api.h:16:
+   In file included from include/linux/rculist.h:11:
+   In file included from include/linux/rcupdate.h:23:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+>> arch/s390/include/asm/smp.h:19:30: error: expected ';' after top level declarator
+   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+                                ^
+                                ;
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hashtable_api.h:16:
+   In file included from include/linux/rculist.h:11:
+   In file included from include/linux/rcupdate.h:35:
+   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Then use `struct perf_event___local` (note the three underscores, they
-are important) instead of struct perf_event in BPF code.
 
-And we'll have to do the same for struct bpf_perf_link, I presume?
+vim +19 arch/s390/include/asm/smp.h
 
-> > Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > ---
-> >  include/linux/perf_event.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> > index af97dd427501..b1d5715b8b34 100644
-> > --- a/include/linux/perf_event.h
-> > +++ b/include/linux/perf_event.h
-> > @@ -762,12 +762,14 @@ struct perf_event {
-> >       u64                             (*clock)(void);
-> >       perf_overflow_handler_t         overflow_handler;
-> >       void                            *overflow_handler_context;
-> > +#endif /* CONFIG_PERF_EVENTS */
-> >  #ifdef CONFIG_BPF_SYSCALL
-> >       perf_overflow_handler_t         orig_overflow_handler;
-> >       struct bpf_prog                 *prog;
-> >       u64                             bpf_cookie;
-> >  #endif
-> >
-> > +#ifdef CONFIG_PERF_EVENTS
-> >  #ifdef CONFIG_EVENT_TRACING
-> >       struct trace_event_call         *tp_event;
-> >       struct event_filter             *filter;
-> > --
-> > 2.35.2
-> >
-> >
+^1da177e4c3f415 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  15  
+dbd70fb499952d0 include/asm-s390/smp.h      Heiko Carstens     2008-04-17  16  extern struct mutex smp_cpu_state_mutex;
+10ad34bc76dfbc4 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  17  extern unsigned int smp_cpu_mt_shift;
+10ad34bc76dfbc4 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mtid;
+1a36a39e225d355 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @19  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+a052096bdd6809e arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  20  extern cpumask_t cpu_setup_mask;
+8b646bd759086f6 arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  21  
+
+:::::: The code at line 19 was first introduced by commit
+:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
+
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
