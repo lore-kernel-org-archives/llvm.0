@@ -1,92 +1,82 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6D61867;
-	Wed, 20 Apr 2022 17:40:04 +0000 (UTC)
-Received: by mail-lf1-f50.google.com with SMTP id y32so4282645lfa.6;
-        Wed, 20 Apr 2022 10:40:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49F41867
+	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 17:42:05 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id bu29so4346696lfb.0
+        for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 10:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fDm0hCeP1iuF9WL7RiqDe/J3rtlxPQX1zeA/vezHRa0=;
-        b=WA6ZRCaU3cdlumlpbvWHxfloi03BAMhbknENhqsaWPbHRTCv9SZOTLs6l5atjl/rNB
-         WhDgJgxuFoJ/Qjj/q6o0HjImWWNexAoe3iis41zRi8T7cp+cNxoIeLsaIrzGx7M+aP5f
-         yTAUWAt+k6SrK4lNorKyp7zkayVMzWGHtU826B3wT4VF+PqS8rhJhhQw+6nzVJOpHjPO
-         Z+fl0//75bOefoMVkqelSYCTT7/Fe7c10WZtohovtXDzsn3PyILek6foHM5/OQmQFSLW
-         u1+mJd34DWLpm19EGHWC0J1RcHPjVNnGwatLnAkk0E4lmNtGfNVpgiVhfCCchSqTE+cC
-         Tr+A==
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=TxBznE6nSlo9FQTKpBSoglJFLsDbahhvf/2w9QWD+Tc=;
+        b=n7k3B4XRBSICSMEODOuLiZB4tJqaQzb+aHdVz8WHfWxkDVmeVnTIHeFW1oqxUirvCL
+         1XrYnkpoewKSZgQaxm93FrQqdBgzY2pHRVLab5bbgI2fCklVY4spw0YbztEYcvrtrEnJ
+         Tu3+g1o/GX4yOzZRC2ImpWuV9JPQsp0vaeJbnCMMdNOdt2jUFuBd000EjGNjcvnL/Kc9
+         vDaxTdq7/V91OQlnoAOj7vb3wUQxZyGMUISDb2Dwzcla1hVnlvoQfh9mTQARn6H3Vyki
+         iGdMXBvfjFLyBYQVY6QuzoxXXXcwvaMzD9kDUmGzZWW3YzxQ12rgtpUXFmxrNgTH7Ehv
+         g4Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fDm0hCeP1iuF9WL7RiqDe/J3rtlxPQX1zeA/vezHRa0=;
-        b=WMEi57qSd9EkeFHulpYq+I8GI/7Dyrqw8rpQZMk5iPwa0aPWIAhDUAeVKlI7f4ydlm
-         qRoRQLKBFGfYjj2jXICSpJErIaiBa2OC7sGFwsLlEzaTq9Y0ff4T0HVn+uG2h41mzFuh
-         SiSTCqoyQCbadkYUSlEqv6V/cE0dJcb20ejmUr7YijtKJe5qBLlgniYYXqXIT4Q+pD8D
-         jdUCMH5/ku2X5e1EUaexF9QO1fZ1xMGom7Kza5pWfCFD2nKuFI3UxxlDhBErCE0nOclH
-         fyR52W9OiPSupTNPk5iABW6cEtXvNp4dZpOmIG6nAj5pJ3x9k7VuLC73T97MrvLXwUyL
-         fi/Q==
-X-Gm-Message-State: AOAM530v76bN5SEh3pN8le9pnJQNBsjkJaPyTm01vPme7/CWdhcI/bnd
-	yJNsgIFXH/jBYWWvqF8Yk9g=
-X-Google-Smtp-Source: ABdhPJxge8XTkpASmraJ0VjrGWjf9n/ju/ayI7pvlM3z8AJpfQOWU1Cqk3TRPVw0hpSrfMk+YQhJmQ==
-X-Received: by 2002:a05:6512:1504:b0:44b:36e:b50d with SMTP id bq4-20020a056512150400b0044b036eb50dmr15640332lfb.558.1650476402746;
-        Wed, 20 Apr 2022 10:40:02 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:9cae:8c00:9682:e720:334f:2fac? (dxw3k4yf2tnxwyp6sg02y-3.rev.dnainternet.fi. [2001:14ba:9cae:8c00:9682:e720:334f:2fac])
-        by smtp.gmail.com with ESMTPSA id s17-20020a195e11000000b0046eec768984sm1785063lfb.200.2022.04.20.10.40.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 10:40:02 -0700 (PDT)
-Message-ID: <90e11a93-4f3a-2209-2bc2-acfb791b8ac0@gmail.com>
-Date: Wed, 20 Apr 2022 20:40:08 +0300
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=TxBznE6nSlo9FQTKpBSoglJFLsDbahhvf/2w9QWD+Tc=;
+        b=GC+rWARV+bo1REArZxPxYoo3o7DuQvS53EEHfidCUdDyB9VWjdVJSdogDuoDewGGR1
+         UFhXdWcNS2uwTfem8YftyKvecShMe0xQjUy1q7RocIp1exMFCkva9OEpYufnmVzTIHsZ
+         g5Iud9LXmXqgk8t5VTpEfEWUljDbv/00U9YOo1antqTI0zIEl5ejb9vDBD+wUxVkK3Y6
+         bSC/d7GnV2ThqLqtLk6c19xJb/twSvTjpdi1pOSX3W/SwZiyfEbkXFfYHme8BJxmDU09
+         Z4RG13KDl9vGKVQb3pOBmwhp21kVUzrBSmoQpqayT0rrYobgF4TJYIZNp7sCVHXMWkgN
+         Io/A==
+X-Gm-Message-State: AOAM533q1oXmd5pQQ5aC2FIppgUBBAOOxCX5sAASG6uVhT4B/R/arnL2
+	kgIMzNrIj1C4Ny1/gxujezOnd7GFtHMfRFRpXVByMg==
+X-Google-Smtp-Source: ABdhPJxYpziaLTbpGi1eWUZrLZND/zisVkWbGPcI9pnuZ5NYNOhIcrguJbpJwrR3+ylY0ESgfkSxqZBNOzfXGqWkAVg=
+X-Received: by 2002:ac2:4188:0:b0:471:96f4:c1d4 with SMTP id
+ z8-20020ac24188000000b0047196f4c1d4mr10001305lfh.626.1650476523571; Wed, 20
+ Apr 2022 10:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable vcn
-Content-Language: en-US
-To: Colin Ian King <colin.i.king@gmail.com>,
- Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
- ntfs3@lists.linux.dev
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220418140038.82843-1-colin.i.king@gmail.com>
-From: Kari Argillander <kari.argillander@gmail.com>
-In-Reply-To: <20220418140038.82843-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 20 Apr 2022 10:41:52 -0700
+Message-ID: <CAKwvOdm08hr2p-ARqmPEGnCi6zZOtgmt5d45hYG2vo30mhyMrg@mail.gmail.com>
+Subject: Initial LLVM+BOLT measurements
+To: Maksim Panchenko <maks@fb.com>
+Cc: android-llvm-dev <android-llvm-dev@google.com>, 
+	android-kernel-team <android-kernel-team@google.com>, Yi Kong <yikong@google.com>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On 18.4.2022 17.00, Colin Ian King wrote:
-> Variable vcn is being assigned a value that is never read, it is
-> being re-assigned again in the initialization of a for-loop.  The
-> assignment is redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> fs/ntfs3/attrib.c:1176:7: warning: Value stored to 'vcn' during its
-> initialization is never read [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hi Maksim,
+Just letting you know that my teammate Yi just enabled the usage of
+BOLT on AOSP LLVM. [0] There are some speedups measured in building
+the Android platform.
 
-Reviewed-by: Kari Argillander <kari.argillander@gmail.com>
+I'm more interested in kernel builds; here's some rough (N=1) initial
+measurements to report:
 
-> ---
->   fs/ntfs3/attrib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-> index e8c00dda42ad..fc0623b029e6 100644
-> --- a/fs/ntfs3/attrib.c
-> +++ b/fs/ntfs3/attrib.c
-> @@ -1173,7 +1173,7 @@ int attr_load_runs_range(struct ntfs_inode *ni, enum ATTR_TYPE type,
->   {
->   	struct ntfs_sb_info *sbi = ni->mi.sbi;
->   	u8 cluster_bits = sbi->cluster_bits;
-> -	CLST vcn = from >> cluster_bits;
-> +	CLST vcn;
->   	CLST vcn_last = (to - 1) >> cluster_bits;
->   	CLST lcn, clen;
->   	int err;
+r450784b:
+$ LTO=none BUILD_CONFIG=common/build.config.gki.aarch64 /usr/bin/time
+-v ./build/build.sh
+...
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 1:58.58
+$ BUILD_CONFIG=common/build.config.gki.aarch64 /usr/bin/time -v ./build/build.sh
+...
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 16:50.04
+
+r450784c:
+$ $ LTO=none BUILD_CONFIG=common/build.config.gki.aarch64
+/usr/bin/time -v ./build/build.sh
+...
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 1:50.64
+$ BUILD_CONFIG=common/build.config.gki.aarch64 /usr/bin/time -v ./build/build.sh
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 16:06.56
+
+(We care more about the LTO (longer) config than non-LTO). So rough
+initial measurement shows improvement of ~6.6% (non-LTO) to ~4.3%
+(LTO). We'll take it! :)
+
+[0] https://android-review.googlesource.com/c/toolchain/llvm_android/+/2058849/
+-- 
+Thanks,
+~Nick Desaulniers
