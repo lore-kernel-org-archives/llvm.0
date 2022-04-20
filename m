@@ -1,48 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD98184E
-	for <llvm@lists.linux.dev>; Tue, 19 Apr 2022 23:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B01510F3
+	for <llvm@lists.linux.dev>; Wed, 20 Apr 2022 00:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650411649; x=1681947649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t4emDxanzGVvr52RH7coPRv08JQEzi0lhFYTHZLgntI=;
-  b=nSyso1t7uaP98la9NdbvtJm/yObj/iML1Oh0UczuHNrOTVZ5LTaSTtwG
-   C8KK1klmFeK35v1gyb5DxIqzX7Ub23KBHFK1irksNXmtaBJ45p65qaQ6j
-   COqIGfvSiSJRJ7ULttmqbiHOy2lFYRfBbiojUv4SOIQCOKlr/i7f1rP5J
-   FEAvIpJGaKAnv8AYCfLBIWQI2a6fLAI5dnpKDFqYoIntYidIA6QymWQoM
-   qokjBULkmfAZxruyt4cmxg4pAmmlWDxc8MU/dugOZY8/OEETazlaDnZC8
-   aW+3TfC9sPQdUsbv/o4DTrmFej12JcYzWOGAP4YcxtR19tZeFeOKllpAn
+  t=1650415912; x=1681951912;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XQ+7AA0/tIqOmGQEOFBUT/yZ2tkfE6PI9DR65t0c9Eo=;
+  b=QVKANinGP/TXyg9wOQP3RZPoQK76Mtilv9oZFGy3rDIa72s6zTXlt2Fk
+   MH0JUg3nn4KDtbTX4T1zTNHjF6P+1Lb1K425OUVbVo02c9kVWVfbSTznq
+   NBfhcyLztaMVz17+mEUl2348q+EsIFEN1IIfjDabiQ+A6DygaJ/pbIYja
+   uBnRkuTsoJfnqiCa2PzViDqh/vNE0bqDhaoj58Xzl0S41nQ+cWKHQa3pR
+   d+DDCDaYVvj1k9U7wQBoX9v9T1bIb2swZHvFBM3aZLOQzX0cRxJHBqI3P
+   Rw4gO87Frh/RSC2SK54/39llzAscWWfliDrzZwvY+dIXsBNtKIYdd2GyE
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326798337"
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350356211"
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="326798337"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 16:40:49 -0700
+   d="scan'208";a="350356211"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 17:51:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="647450802"
+   d="scan'208";a="862448768"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Apr 2022 16:40:43 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 19 Apr 2022 17:51:49 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ngxSc-0006Kg-No;
-	Tue, 19 Apr 2022 23:40:42 +0000
-Date: Wed, 20 Apr 2022 07:40:18 +0800
+	id 1ngyZR-0006Nc-7d;
+	Wed, 20 Apr 2022 00:51:49 +0000
+Date: Wed, 20 Apr 2022 08:51:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	alim.akhtar@samsung.com, avri.altman@wdc.com, robh+dt@kernel.org,
-	krzk+dt@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v3 4/7] scsi: ufs-renesas: Add support for Renesas R-Car
- UFS controller
-Message-ID: <202204200731.hTb71eG4-lkp@intel.com>
-References: <20220419120316.209151-5-yoshihiro.shimoda.uh@renesas.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-gap-zone 10/10] drivers/scsi/scsi_debug.c:5101:5:
+ warning: format specifies type 'unsigned int' but the argument has type
+ 'sector_t' (aka 'unsigned long long')
+Message-ID: <202204200815.OaESmWOl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,114 +46,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419120316.209151-5-yoshihiro.shimoda.uh@renesas.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Yoshihiro,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on geert-renesas-devel/next]
-[also build test WARNING on v5.18-rc3 next-20220419]
-[cannot apply to mkp-scsi/for-next jejb-scsi/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yoshihiro-Shimoda/treewide-scsi-ufs-Add-support-for-Renesas-R-Car-UFS-controller/20220419-201020
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220420/202204200731.hTb71eG4-lkp@intel.com/config)
+tree:   https://github.com/bvanassche/linux scsi-gap-zone
+head:   8a37a38282a57095a4a3ff6e6c68f2481234ad10
+commit: 8a37a38282a57095a4a3ff6e6c68f2481234ad10 [10/10] scsi-debug-dbg
+config: arm-randconfig-r025-20220419 (https://download.01.org/0day-ci/archive/20220420/202204200815.OaESmWOl-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3dca0de1a5ecda3be36402f3261cf286ce9dce64
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yoshihiro-Shimoda/treewide-scsi-ufs-Add-support-for-Renesas-R-Car-UFS-controller/20220419-201020
-        git checkout 3dca0de1a5ecda3be36402f3261cf286ce9dce64
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/bvanassche/linux/commit/8a37a38282a57095a4a3ff6e6c68f2481234ad10
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-gap-zone
+        git checkout 8a37a38282a57095a4a3ff6e6c68f2481234ad10
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/scsi/ufs/ufs-renesas.c:304:15: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-                            p->index, val);
-                                      ^~~
-   include/linux/printk.h:570:26: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-                                   ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
-                              pr_fmt(fmt), ##__VA_ARGS__)
-                                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                                 ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                   func(&id, ##__VA_ARGS__);               \
-                               ^~~~~~~~~~~
-   drivers/scsi/ufs/ufs-renesas.c:285:9: note: initialize the variable 'val' to silence this warning
-           u32 val;
-                  ^
-                   = 0
+>> drivers/scsi/scsi_debug.c:5101:5: warning: format specifies type 'unsigned int' but the argument has type 'sector_t' (aka 'unsigned long long') [-Wformat]
+                                   zsp->z_start, zsp->z_size);
+                                   ^~~~~~~~~~~~
+   include/linux/printk.h:519:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
    1 warning generated.
 
 
-vim +/val +304 drivers/scsi/ufs/ufs-renesas.c
+vim +5101 drivers/scsi/scsi_debug.c
 
-   279	
-   280	static void ufs_renesas_reg_control(struct ufs_hba *hba,
-   281					    const struct ufs_renesas_init_param *p)
-   282	{
-   283		static u32 save[MAX_INDEX];
-   284		int ret;
-   285		u32 val;
-   286	
-   287		pr_debug("%s: %d %04x %08x, %08x, %d\n", __func__, p->mode, p->reg,
-   288			 p->u.val, p->mask, p->index);
-   289	
-   290		WARN_ON(p->index >= MAX_INDEX);
-   291	
-   292		switch (p->mode) {
-   293		case MODE_RESTORE:
-   294			ufshcd_writel(hba, save[p->index], p->reg);
-   295			break;
-   296		case MODE_SET:
-   297			pr_debug("%s: %d %x %x\n", __func__, p->index, save[p->index],
-   298				 p->u.set);
-   299			save[p->index] |= p->u.set;
-   300			break;
-   301		case MODE_SAVE:
-   302			save[p->index] = ufshcd_readl(hba, p->reg) & p->mask;
-   303			pr_debug("%s: index = %d, val = %08x\n", __func__,
- > 304				 p->index, val);
-   305			break;
-   306		case MODE_POLL:
-   307			ret = readl_poll_timeout_atomic(hba->mmio_base + p->reg,
-   308							val,
-   309							(val & p->mask) == p->u.expected,
-   310							10, 1000);
-   311			if (ret)
-   312				pr_err("%s: poll failed %d (%08x, %08x, %08x)\n",
-   313				       __func__, ret, val, p->mask, p->u.expected);
-   314			break;
-   315		case MODE_WAIT:
-   316			if (p->u.delay_us > 1000)
-   317				mdelay(p->u.delay_us / 1000);
-   318			else
-   319				udelay(p->u.delay_us);
-   320			break;
-   321		case MODE_WRITE:
-   322			ufshcd_writel(hba, p->u.val, p->reg);
-   323			break;
-   324		default:
-   325			break;
-   326		}
-   327	}
-   328	
+  4995	
+  4996	static int sdebug_device_create_zones(struct sdebug_dev_info *devip)
+  4997	{
+  4998		struct sdeb_zone_state *zsp;
+  4999		sector_t capacity = get_sdebug_capacity();
+  5000		sector_t conv_capacity;
+  5001		sector_t zstart = 0;
+  5002		unsigned int i;
+  5003	
+  5004		/*
+  5005		 * Set the zone size: if sdeb_zbc_zone_size_mb is not set, figure out
+  5006		 * a zone size allowing for at least 4 zones on the device. Otherwise,
+  5007		 * use the specified zone size checking that at least 2 zones can be
+  5008		 * created for the device.
+  5009		 */
+  5010		if (!sdeb_zbc_zone_size_mb) {
+  5011			devip->zsize = (DEF_ZBC_ZONE_SIZE_MB * SZ_1M)
+  5012				>> ilog2(sdebug_sector_size);
+  5013			while (capacity < devip->zsize << 2 && devip->zsize >= 2)
+  5014				devip->zsize >>= 1;
+  5015			if (devip->zsize < 2) {
+  5016				pr_err("Device capacity too small\n");
+  5017				return -EINVAL;
+  5018			}
+  5019		} else {
+  5020			if (!is_power_of_2(sdeb_zbc_zone_size_mb)) {
+  5021				pr_err("Zone size is not a power of 2\n");
+  5022				return -EINVAL;
+  5023			}
+  5024			devip->zsize = (sdeb_zbc_zone_size_mb * SZ_1M)
+  5025				>> ilog2(sdebug_sector_size);
+  5026			if (devip->zsize >= capacity) {
+  5027				pr_err("Zone size too large for device capacity\n");
+  5028				return -EINVAL;
+  5029			}
+  5030		}
+  5031	
+  5032		devip->zsize_shift = ilog2(devip->zsize);
+  5033		devip->nr_zones = (capacity + devip->zsize - 1) >> devip->zsize_shift;
+  5034	
+  5035		if (sdeb_zbc_zone_cap_mb == 0) {
+  5036			devip->zcap = devip->zsize;
+  5037		} else {
+  5038			devip->zcap = (sdeb_zbc_zone_cap_mb * SZ_1M) >>
+  5039				      ilog2(sdebug_sector_size);
+  5040			if (devip->zcap > devip->zsize) {
+  5041				pr_err("Zone capacity too large\n");
+  5042				return -EINVAL;
+  5043			}
+  5044		}
+  5045	
+  5046		conv_capacity = (sector_t)sdeb_zbc_nr_conv << devip->zsize_shift;
+  5047		if (conv_capacity >= capacity) {
+  5048			pr_err("Number of conventional zones too large\n");
+  5049			return -EINVAL;
+  5050		}
+  5051		devip->nr_conv_zones = sdeb_zbc_nr_conv;
+  5052		devip->nr_seq_zones = ALIGN(capacity - conv_capacity, devip->zsize) >>
+  5053				      devip->zsize_shift;
+  5054		devip->nr_zones = devip->nr_conv_zones + devip->nr_seq_zones;
+  5055	
+  5056		/* Add gap zones if zone capacity is smaller than the zone size */
+  5057		pr_info("zcap = %u; zsize = %u\n", devip->zcap, devip->zsize);
+  5058		if (devip->zcap < devip->zsize)
+  5059			devip->nr_zones += devip->nr_seq_zones;
+  5060	
+  5061		if (devip->zmodel == BLK_ZONED_HM) {
+  5062			/* zbc_max_open_zones can be 0, meaning "not reported" */
+  5063			if (sdeb_zbc_max_open >= devip->nr_zones - 1)
+  5064				devip->max_open = (devip->nr_zones - 1) / 2;
+  5065			else
+  5066				devip->max_open = sdeb_zbc_max_open;
+  5067		}
+  5068	
+  5069		devip->zstate = kcalloc(devip->nr_zones,
+  5070					sizeof(struct sdeb_zone_state), GFP_KERNEL);
+  5071		if (!devip->zstate)
+  5072			return -ENOMEM;
+  5073	
+  5074		for (i = 0; i < devip->nr_zones; i++) {
+  5075			zsp = &devip->zstate[i];
+  5076	
+  5077			zsp->z_start = zstart;
+  5078	
+  5079			if (i < devip->nr_conv_zones) {
+  5080				zsp->z_type = ZBC_ZTYPE_CNV;
+  5081				zsp->z_cond = ZBC_NOT_WRITE_POINTER;
+  5082				zsp->z_wp = (sector_t)-1;
+  5083				zsp->z_size =
+  5084					min_t(u64, devip->zsize, capacity - zstart);
+  5085			} else if ((zstart & (devip->zsize - 1)) == 0) {
+  5086				if (devip->zmodel == BLK_ZONED_HM)
+  5087					zsp->z_type = ZBC_ZTYPE_SWR;
+  5088				else
+  5089					zsp->z_type = ZBC_ZTYPE_SWP;
+  5090				zsp->z_cond = ZC1_EMPTY;
+  5091				zsp->z_wp = zsp->z_start;
+  5092				zsp->z_size =
+  5093					min_t(u64, devip->zcap, capacity - zstart);
+  5094			} else {
+  5095				zsp->z_type = ZBC_ZTYPE_GAP;
+  5096				zsp->z_cond = ZBC_NOT_WRITE_POINTER;
+  5097				zsp->z_wp = (sector_t)-1;
+  5098				zsp->z_size = min_t(u64, devip->zsize - devip->zcap,
+  5099						    capacity - zstart);
+  5100				pr_info("adding a gap zone; start %u; size %u\n",
+> 5101					zsp->z_start, zsp->z_size);
+  5102			}
+  5103	
+  5104			WARN_ON_ONCE((int)zsp->z_size <= 0);
+  5105			zstart += zsp->z_size;
+  5106		}
+  5107	
+  5108		return 0;
+  5109	}
+  5110	
 
 -- 
 0-DAY CI Kernel Test Service
