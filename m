@@ -1,42 +1,43 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D511FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25951FA2
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523314; x=1682059314;
+  t=1650523313; x=1682059313;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zKZ9mXo/IsCsqWsSTAs5IdoMaOWSvfasXoUrG6/DhNw=;
-  b=GC5yh1UIZxSEg79HJHna0c8/3vjGV8mEHxsnxleWgDQOG/NoGa/elxHf
-   4TZslUYXuRewU+ZyptwI0HZqG4JGNDcfOhVNJLT9vR3tTsfIF9eYYGtwx
-   KBzG+gSyShaJ5JFdYu1fRjjHVumgVdLNPL0y9EddvpNb/nYYLg88FXnrQ
-   FpZdA7bzjZ9L1+6c8KzoqlgWmeuHIIWmezXrfEKZ5Uf/fVQ6fG0TwNDk5
-   XbO0j9WiJlJg8YdRy+6mM5C+cwoOEUTJ4v81Lp8/0PSbQDigwBfg+fupk
-   1KEyhD5BOOVxrkDByRSg6KkyhInrLCrCy7s6X1jtzS5YiCLmWXzImM72W
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324700182"
+  bh=T/AbSWd/WNZ+QCcuX7Hwn4M60OrqtSdcxcCHeWjiw8M=;
+  b=kw3D3Ae/dqeJ7OJrrtmxCzQaggq3bbjzTcFF84kKI0Xpa19A+nHCYxCa
+   DlTFLW3MKMoxRixRo5O/A5is9fR13G6DkT81ldiEGPIqPWf1iUbdNlsHI
+   K1820tNvCWH0tE5LOCEROpW/PYzhr1HhCNMiWGyCl1hd4pca4/PrbX7zc
+   jRTuv5VXVuAIDkMG4FvjmUtu/y+YIKCCSVMpfCqV4O7We7GZAY3U8WxVz
+   Pbg/5NF8C0E0oRRfGTF71k07mdOZUSn1ar2ZnxuBv+ef8q6ytsiz7+pci
+   djToXRq/UwQKNdoS55oY/o4kjcG91byBaeEXS09yMYomuwSgNidmgQe5d
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324700180"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="324700182"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+   d="scan'208";a="324700180"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:41:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="626387058"
+   d="scan'208";a="614756923"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Apr 2022 23:41:50 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2022 23:41:50 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQVi-0007yx-39;
+	id 1nhQVi-0007yv-2Z;
 	Thu, 21 Apr 2022 06:41:50 +0000
-Date: Thu, 21 Apr 2022 14:40:53 +0800
+Date: Thu, 21 Apr 2022 14:41:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202204202236.9C50njLR-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1760/2579] fs/afs/file.c:67:17: error: use
+ of undeclared identifier 'filemap_dirty_folio'; did you mean
+ 'filemap_get_folio'?
+Message-ID: <202204210054.xNeXuMQd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,53 +47,106 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mauro,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   559089e0a93d44280ec3ab478830af319c56dbe3
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   5 weeks ago
-config: hexagon-buildonly-randconfig-r001-20220420 (https://download.01.org/0day-ci/archive/20220420/202204202236.9C50njLR-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 5906052f724ace8783a32193d743f4db58a3bfee [1760/2579] headers/deps: writeback: Remove the <linux/writeback_api.h> header from <linux/writeback.h>
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204210054.xNeXuMQd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5906052f724ace8783a32193d743f4db58a3bfee
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5906052f724ace8783a32193d743f4db58a3bfee
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/marvell/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   1 warning generated.
+   In file included from fs/afs/file.c:31:
+   In file included from fs/afs/internal.h:29:
+   In file included from include/net/sock.h:49:
+   include/linux/netdevice.h:171:2: error: unknown type name 'local_t'
+           local_t         rx_dropped;
+           ^
+   include/linux/netdevice.h:172:2: error: unknown type name 'local_t'
+           local_t         tx_dropped;
+           ^
+   include/linux/netdevice.h:173:2: error: unknown type name 'local_t'
+           local_t         rx_nohandler;
+           ^
+   include/linux/netdevice.h:174:24: error: use of undeclared identifier 'local_t'
+   } __aligned(4 * sizeof(local_t));
+                          ^
+   In file included from fs/afs/file.c:31:
+   In file included from fs/afs/internal.h:29:
+   In file included from include/net/sock.h:66:
+   In file included from include/net/dst.h:21:
+   In file included from include/net/neighbour.h:7:
+   include/linux/netdevice_api.h:1810:1: error: implicit declaration of function 'local_inc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+   DEV_CORE_STATS_INC(rx_dropped)
+   ^
+   include/linux/netdevice_api.h:1807:3: note: expanded from macro 'DEV_CORE_STATS_INC'
+                   local_inc(&p->FIELD);                                           \
+                   ^
+   include/linux/netdevice_api.h:1811:1: error: implicit declaration of function 'local_inc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+   DEV_CORE_STATS_INC(tx_dropped)
+   ^
+   include/linux/netdevice_api.h:1807:3: note: expanded from macro 'DEV_CORE_STATS_INC'
+                   local_inc(&p->FIELD);                                           \
+                   ^
+   include/linux/netdevice_api.h:1812:1: error: implicit declaration of function 'local_inc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+   DEV_CORE_STATS_INC(rx_nohandler)
+   ^
+   include/linux/netdevice_api.h:1807:3: note: expanded from macro 'DEV_CORE_STATS_INC'
+                   local_inc(&p->FIELD);                                           \
+                   ^
+>> fs/afs/file.c:67:17: error: use of undeclared identifier 'filemap_dirty_folio'; did you mean 'filemap_get_folio'?
+           .dirty_folio    = afs_dirty_folio,
+                             ^~~~~~~~~~~~~~~
+                             filemap_get_folio
+   fs/afs/internal.h:1540:25: note: expanded from macro 'afs_dirty_folio'
+   #define afs_dirty_folio filemap_dirty_folio
+                           ^
+   include/linux/pagemap.h:525:29: note: 'filemap_get_folio' declared here
+   static inline struct folio *filemap_get_folio(struct address_space *mapping,
+                               ^
+>> fs/afs/file.c:67:17: error: incompatible function pointer types initializing 'bool (*)(struct address_space *, struct folio *)' (aka '_Bool (*)(struct address_space *, struct folio *)') with an expression of type 'struct folio *(struct address_space *, unsigned long)' [-Werror,-Wincompatible-function-pointer-types]
+           .dirty_folio    = afs_dirty_folio,
+                             ^~~~~~~~~~~~~~~
+   fs/afs/internal.h:1540:25: note: expanded from macro 'afs_dirty_folio'
+   #define afs_dirty_folio filemap_dirty_folio
+                           ^~~~~~~~~~~~~~~~~~~
+   9 errors generated.
 
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+vim +67 fs/afs/file.c
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  63  
+75bd228d5637b5 David Howells           2021-06-29  64  const struct address_space_operations afs_file_aops = {
+bc899ee1c898e5 David Howells           2021-06-29  65  	.readpage	= netfs_readpage,
+bc899ee1c898e5 David Howells           2021-06-29  66  	.readahead	= netfs_readahead,
+8fb72b4a76933a Matthew Wilcox (Oracle  2022-02-09 @67) 	.dirty_folio	= afs_dirty_folio,
+a42442dd736941 Matthew Wilcox (Oracle  2022-02-09  68) 	.launder_folio	= afs_launder_folio,
+416351f28d2b31 David Howells           2007-05-09  69  	.releasepage	= afs_releasepage,
+fcf227daed82a2 Matthew Wilcox (Oracle  2022-02-09  70) 	.invalidate_folio = afs_invalidate_folio,
+15b4650e55e06d Nicholas Piggin         2008-10-15  71  	.write_begin	= afs_write_begin,
+15b4650e55e06d Nicholas Piggin         2008-10-15  72  	.write_end	= afs_write_end,
+31143d5d515ece David Howells           2007-05-09  73  	.writepage	= afs_writepage,
+31143d5d515ece David Howells           2007-05-09  74  	.writepages	= afs_writepages,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  75  };
+^1da177e4c3f41 Linus Torvalds          2005-04-16  76  
 
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
+:::::: The code at line 67 was first introduced by commit
+:::::: 8fb72b4a76933ae6f86725cc8e4a8190ba84d755 fscache: Convert fscache_set_page_dirty() to fscache_dirty_folio()
 
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
+:::::: CC: Matthew Wilcox (Oracle) <willy@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
