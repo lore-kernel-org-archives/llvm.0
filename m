@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6831FC0
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 14:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C721FC0
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 15:03:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650551850; x=1682087850;
+  t=1650553403; x=1682089403;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hb/PwdhqxjwBx8LMrby4ubXd6WAreKf8NPHfhjKA0Gk=;
-  b=O5EfERk+DwZORPw0UJqnjpiuAR0y/OKIIYWyX1JFsV3Au5bb87879h0J
-   CmYKZU0LZOqPeRsZ3g/yQr08ufNc07bmbLfastpewSiLQDwh50TXkKLS1
-   GQBRSwt7ZYRIB8LXCicLZY81Ia+DYetGm2VbF5TSHSmvA26Uy+ndhWCkT
-   lCDKAOTCpZHdoQDh85eQOPIU4+Cpjj+5i/6Zx3fwx1u218EqZvt/QJlET
-   R1tMjJ3FR+da4rZ6KwPk2wiuNNktATSKbIcUHQaQAJ8gejXTo9OtGYiiE
-   q1xM6pfaxrBHAutcDxxbP3kyjJjb8iXGNfd56yeHnAtL2wJVHeai5V4ow
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289479863"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="289479863"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 07:37:22 -0700
+  bh=GJ+vd38TSZpFdzPd6Omy3jFNZdiMOj1T/XsQ3o7W5N8=;
+  b=QZn3eF3QjVPNteKVYuxfDwdBdNI+s6yZmkQ4qyt70UoJQ5D6Q6WUTvOn
+   NbZk8EiKoUOh8i8z8MrxrA49lLMDPIdMXyFxN+4jTU9fBTqUF5ZXDBF2s
+   /6tOAOzpi7Z9yf1xL6VH/rqdW9REV4wM//xUlXQEDbAmAX/znl4w5E7gp
+   Q+JGsYlvlGYY2fCj6uweGhgNXCrn1G/8LCAMgycDVA3tjPCNWWHkF8nni
+   ldE6v+dqpQOr273rswVk9nm+Onz4QoamhOD4n2swYuXfj8F0UL7tzOwB+
+   pOrcB3RfGqQW36lC+MvShHpvavsVtqrkVIZwwO4M8q3cy6b0DVwOroibH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="324818838"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="324818838"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:03:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="703106679"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="626544855"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 07:37:20 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 08:03:21 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhXvs-0008U8-4p;
-	Thu, 21 Apr 2022 14:37:20 +0000
-Date: Thu, 21 Apr 2022 22:37:08 +0800
+	id 1nhYL2-0008V7-Qv;
+	Thu, 21 Apr 2022 15:03:20 +0000
+Date: Thu, 21 Apr 2022 23:02:30 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2150/2579]
- kernel/trace/trace_hwlat.c:175:6: warning: no previous prototype for
- function 'trace_hwlat_callback'
-Message-ID: <202204212231.wBlI8L8G-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2453/2579]
+ drivers/media/tuners/xc2028.c:46:21: error: expected identifier
+Message-ID: <202204212259.kughfomJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,66 +48,124 @@ Content-Disposition: inline
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: b0a0ce86322929677661f28bec305c68815c387d [2150/2579] headers/deps: Remove <linux/hardirq.h> inclusions from headers that don't need it anymore
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220421/202204212231.wBlI8L8G-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+commit: 2038c03daa4310f7cee8937d18f4514749cb40ab [2453/2579] headers/deps: driver/core: Optimize <linux/device/driver.h> dependencies, remove <linux/module.h> inclusion
+config: mips-randconfig-r026-20220419 (https://download.01.org/0day-ci/archive/20220421/202204212259.kughfomJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b0a0ce86322929677661f28bec305c68815c387d
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2038c03daa4310f7cee8937d18f4514749cb40ab
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout b0a0ce86322929677661f28bec305c68815c387d
+        git checkout 2038c03daa4310f7cee8937d18f4514749cb40ab
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/crypto/ arch/x86/entry/vdso/ arch/x86/events/amd/ arch/x86/kernel/ arch/x86/pci/ kernel/bpf/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/tuners/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/trace/trace_hwlat.c:175:6: warning: no previous prototype for function 'trace_hwlat_callback' [-Wmissing-prototypes]
-   void trace_hwlat_callback(bool enter)
-        ^
-   kernel/trace/trace_hwlat.c:175:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void trace_hwlat_callback(bool enter)
+>> drivers/media/tuners/xc2028.c:46:21: error: expected identifier
+   module_param(debug, int, 0644);
+                       ^
+>> drivers/media/tuners/xc2028.c:46:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   module_param(debug, int, 0644);
    ^
-   static 
-   1 warning generated.
+>> drivers/media/tuners/xc2028.c:46:13: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   module_param(debug, int, 0644);
+               ^
+                                void
+   drivers/media/tuners/xc2028.c:47:25: error: expected identifier
+   MODULE_PARM_DESC(debug, "enable verbose debug messages");
+                           ^
+   drivers/media/tuners/xc2028.c:47:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   MODULE_PARM_DESC(debug, "enable verbose debug messages");
+   ^
+   drivers/media/tuners/xc2028.c:47:17: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   MODULE_PARM_DESC(debug, "enable verbose debug messages");
+                   ^
+                                                          void
+   drivers/media/tuners/xc2028.c:50:27: error: expected identifier
+   module_param(no_poweroff, int, 0644);
+                             ^
+   drivers/media/tuners/xc2028.c:50:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   module_param(no_poweroff, int, 0644);
+   ^
+   drivers/media/tuners/xc2028.c:50:13: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   module_param(no_poweroff, int, 0644);
+               ^
+                                      void
+   drivers/media/tuners/xc2028.c:51:31: error: expected identifier
+   MODULE_PARM_DESC(no_poweroff, "0 (default) powers device off when not used.\n"
+                                 ^
+   drivers/media/tuners/xc2028.c:51:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   MODULE_PARM_DESC(no_poweroff, "0 (default) powers device off when not used.\n"
+   ^
+   drivers/media/tuners/xc2028.c:51:17: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   MODULE_PARM_DESC(no_poweroff, "0 (default) powers device off when not used.\n"
+                   ^
+>> drivers/media/tuners/xc2028.c:56:32: error: redefinition of parameter 'audio_std'
+   module_param_string(audio_std, audio_std, sizeof(audio_std), 0);
+                                  ^
+   drivers/media/tuners/xc2028.c:56:43: error: expected identifier
+   module_param_string(audio_std, audio_std, sizeof(audio_std), 0);
+                                             ^
+   drivers/media/tuners/xc2028.c:56:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   module_param_string(audio_std, audio_std, sizeof(audio_std), 0);
+   ^
+   drivers/media/tuners/xc2028.c:56:20: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   module_param_string(audio_std, audio_std, sizeof(audio_std), 0);
+                      ^
+                                                                 void
+   drivers/media/tuners/xc2028.c:58:2: error: expected identifier
+           "Audio standard. XC3028 audio decoder explicitly needs to know what audio\n"
+           ^
+   drivers/media/tuners/xc2028.c:57:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   MODULE_PARM_DESC(audio_std,
+   ^
+   drivers/media/tuners/xc2028.c:57:17: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   MODULE_PARM_DESC(audio_std,
+                   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/trace_hwlat_callback +175 kernel/trace/trace_hwlat.c
+vim +46 drivers/media/tuners/xc2028.c
 
-e7c15cd8a11333 Steven Rostedt (Red Hat    2016-06-23  174) 
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04 @175) void trace_hwlat_callback(bool enter)
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  176) {
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  177  	struct hwlat_kthread_data *kdata = get_cpu_data();
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  178  
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  179  	if (!kdata->kthread)
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  180) 		return;
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  181) 
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  182) 	/*
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  183) 	 * Currently trace_clock_local() calls sched_clock() and the
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  184) 	 * generic version is not NMI safe.
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  185) 	 */
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  186) 	if (!IS_ENABLED(CONFIG_GENERIC_SCHED_CLOCK)) {
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  187) 		if (enter)
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  188  			kdata->nmi_ts_start = time_get();
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  189) 		else
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  190  			kdata->nmi_total_ts += time_get() - kdata->nmi_ts_start;
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  191) 	}
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  192) 
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  193) 	if (enter)
-f46b16520a087e Daniel Bristot de Oliveira 2021-06-22  194  		kdata->nmi_count++;
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  195) }
-7b2c86250122de Steven Rostedt (Red Hat    2016-08-04  196) 
+ef8c1888b32132 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-16  44  
+83fb340b318487 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  45  static int debug;
+83fb340b318487 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15 @46  module_param(debug, int, 0644);
+83fb340b318487 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  47  MODULE_PARM_DESC(debug, "enable verbose debug messages");
+83fb340b318487 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  48  
+74a89b2ae352ac drivers/media/common/tuners/tuner-xc2028.c Mauro Carvalho Chehab 2008-12-05  49  static int no_poweroff;
+74a89b2ae352ac drivers/media/common/tuners/tuner-xc2028.c Mauro Carvalho Chehab 2008-12-05  50  module_param(no_poweroff, int, 0644);
+4900877b7cdcb8 drivers/media/common/tuners/tuner-xc2028.c Devin Heitmueller     2009-04-28 @51  MODULE_PARM_DESC(no_poweroff, "0 (default) powers device off when not used.\n"
+74a89b2ae352ac drivers/media/common/tuners/tuner-xc2028.c Mauro Carvalho Chehab 2008-12-05  52  	"1 keep device energized and with tuner ready all the times.\n"
+74a89b2ae352ac drivers/media/common/tuners/tuner-xc2028.c Mauro Carvalho Chehab 2008-12-05  53  	"  Faster, but consumes more power and keeps the device hotter\n");
+74a89b2ae352ac drivers/media/common/tuners/tuner-xc2028.c Mauro Carvalho Chehab 2008-12-05  54  
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  55  static char audio_std[8];
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15 @56  module_param_string(audio_std, audio_std, sizeof(audio_std), 0);
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  57  MODULE_PARM_DESC(audio_std,
+2af3eb647e9b90 drivers/media/tuners/tuner-xc2028.c        Mauro Carvalho Chehab 2016-10-12  58  	"Audio standard. XC3028 audio decoder explicitly needs to know what audio\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  59  	"standard is needed for some video standards with audio A2 or NICAM.\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  60  	"The valid values are:\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  61  	"A2\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  62  	"A2/A\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  63  	"A2/B\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  64  	"NICAM\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  65  	"NICAM/A\n"
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  66  	"NICAM/B\n");
+a82200fb59e7d1 drivers/media/video/tuner-xc2028.c         Mauro Carvalho Chehab 2007-11-15  67  
 
-:::::: The code at line 175 was first introduced by commit
-:::::: 7b2c86250122de316cbab8754050622ead04af39 tracing: Add NMI tracing in hwlat detector
+:::::: The code at line 46 was first introduced by commit
+:::::: 83fb340b3184875a63564ea174350b1d1b081874 V4L/DVB (6595): Corrects printk lines
 
-:::::: TO: Steven Rostedt (Red Hat) <rostedt@goodmis.org>
-:::::: CC: Steven Rostedt <rostedt@goodmis.org>
+:::::: TO: Mauro Carvalho Chehab <mchehab@infradead.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
