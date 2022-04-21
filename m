@@ -1,46 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572611FA2
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FD51FAE
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523436; x=1682059436;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8tuzYD0kzCxwjDALEtiW/79HnfPkTWedPSRkSD6YBCc=;
-  b=Rfp15x59W1iWfViGMrSAtLaf5j1HT+83gDIRH0JVf3YR58rCKCO7R7jY
-   U/IOiG34fRCf8tml3BnJoSvxWpjoplrq5x5r3uuwOBuPTx0ERQjl2rFPo
-   jYAWCPkx1HgiOCIqgxdqKuQH1Dy+MoBy0Cflb65EHnx9BsqprgmOMf7AN
-   BgK5Xe/G35uWp/3Kx+L4iXjuQZ6iP2pSm7CDcaB2ZSDCsEYQZAOIVP6tb
-   4beSGKNh9LlpopqiSA3AZB2T3+UgiNmOIFAVQBeOEB2ohXf/gptnCXZWr
-   a57iEKVdxDLk2/BxrNGaP+e9z+n9qSws66vw/PWD/1zq7ADbsPK6ccAPQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244838651"
+  t=1650523437; x=1682059437;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7KXzTwUe1iXGr9kDF7hwATHlkcfdunw0lijaUMYydCU=;
+  b=O9WxP/zALeaU6EhFSMS+8nA7Ndj4dKsWcDxI1ah/hHU3OU/FZfQ+Jrvq
+   SCheo+P7dWmGg5F2rNqCkVO90VVbkl+ZCGhlxaYrWfvF8DiIm5kl750Bz
+   9SUDH4beJ4aUuOFQfjfBvrlzbpUlrEgx9dI7Ee0pfPUdpdnWiiikt9BZj
+   lgnxbyd3w2qEktfbRcbfG9nKybQAeFdpMA9sjqDuuwEKHp9bMy6wxPuWE
+   z3pynN2fVbWalszner96CVeReoUTFhGNatgWjVSkj1+u60smJqW8QcL1n
+   F/eUaztfaIUcfoPW3E49PWJR96BzFXHtR7tD6B4L/dwlTLqQjxWY6x3X8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261857566"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="244838651"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:55 -0700
+   d="scan'208";a="261857566"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="670049059"
+   d="scan'208";a="532792902"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
+  by orsmga002.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQXf-000811-5k;
+	id 1nhQXf-00080m-0P;
 	Thu, 21 Apr 2022 06:43:51 +0000
-Date: Thu, 21 Apr 2022 14:43:46 +0800
+Date: Thu, 21 Apr 2022 14:43:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cl@linux.com,
-	pmladek@suse.com, mbenes@suse.cz, christophe.leroy@csgroup.eu,
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, atomlin@atomlin.com,
-	ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com
-Subject: Re: [PATCH v3 2/2] module: Introduce module unload taint tracking
-Message-ID: <202204210819.DQQP836u-lkp@intel.com>
-References: <20220420115257.3498300-3-atomlin@redhat.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2441/2579] include/linux/fs_api.h:424:29:
+ error: static declaration of 'file_inode' follows non-static declaration
+Message-ID: <202204210634.Db7gTUaE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,136 +45,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420115257.3498300-3-atomlin@redhat.com>
 
-Hi Aaron,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on eeaec7801c421e17edda6e45a32d4a5596b633da]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
-base:   eeaec7801c421e17edda6e45a32d4a5596b633da
-config: hexagon-randconfig-r045-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210819.DQQP836u-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 5e5b9f1427ab55c511d68e2ee5471cbeabf50830 [2441/2579] headers/deps: mm: Optimize <linux/pagemap.h> dependencies
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204210634.Db7gTUaE-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
-        git checkout 523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5e5b9f1427ab55c511d68e2ee5471cbeabf50830
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5e5b9f1427ab55c511d68e2ee5471cbeabf50830
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ubifs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/module/main.c:3204:2: error: meaningless 'volatile' on asm outside function
-           preempt_enable();
+   In file included from fs/ubifs/budget.c:21:
+   In file included from fs/ubifs/ubifs.h:40:
+   include/linux/fscrypt.h:758:30: error: implicit declaration of function 'file_inode' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                                       ^
+   include/linux/fscrypt.h:758:30: note: did you mean 'folio_inode'?
+   include/linux/pagemap.h:375:29: note: 'folio_inode' declared here
+   static inline struct inode *folio_inode(struct folio *folio)
+                               ^
+   In file included from fs/ubifs/budget.c:21:
+   In file included from fs/ubifs/ubifs.h:40:
+   include/linux/fscrypt.h:758:22: warning: incompatible integer to pointer conversion initializing 'const struct inode *' with an expression of type 'int' [-Wint-conversion]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                               ^       ~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/ubifs/budget.c:22:
+   In file included from include/linux/writeback_api.h:16:
+   In file included from include/linux/backing-dev-api.h:16:
+>> include/linux/fs_api.h:424:29: error: static declaration of 'file_inode' follows non-static declaration
+   static inline struct inode *file_inode(const struct file *f)
+                               ^
+   include/linux/fscrypt.h:758:30: note: previous implicit declaration is here
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                                       ^
+   1 warning and 2 errors generated.
+--
+   In file included from fs/ubifs/file.c:40:
+   In file included from fs/ubifs/ubifs.h:40:
+   include/linux/fscrypt.h:758:30: error: implicit declaration of function 'file_inode' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                                       ^
+   include/linux/fscrypt.h:758:30: note: did you mean 'folio_inode'?
+   include/linux/pagemap.h:375:29: note: 'folio_inode' declared here
+   static inline struct inode *folio_inode(struct folio *folio)
+                               ^
+   In file included from fs/ubifs/file.c:40:
+   In file included from fs/ubifs/ubifs.h:40:
+   include/linux/fscrypt.h:758:22: warning: incompatible integer to pointer conversion initializing 'const struct inode *' with an expression of type 'int' [-Wint-conversion]
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                               ^       ~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/ubifs/file.c:42:
+   In file included from include/linux/writeback_api.h:16:
+   In file included from include/linux/backing-dev-api.h:16:
+>> include/linux/fs_api.h:424:29: error: static declaration of 'file_inode' follows non-static declaration
+   static inline struct inode *file_inode(const struct file *f)
+                               ^
+   include/linux/fscrypt.h:758:30: note: previous implicit declaration is here
+           const struct inode *inode = file_inode(iocb->ki_filp);
+                                       ^
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
-   #define preempt_enable()                        barrier()
-                                                   ^
-   include/linux/compiler.h:86:28: note: expanded from macro 'barrier'
-   # define barrier() __asm__ __volatile__("": : :"memory")
-                              ^
-   kernel/module/main.c:3204:2: error: expected ')'
-   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
-   #define preempt_enable()                        barrier()
-                                                   ^
-   include/linux/compiler.h:86:43: note: expanded from macro 'barrier'
-   # define barrier() __asm__ __volatile__("": : :"memory")
-                                             ^
-   kernel/module/main.c:3204:2: note: to match this '('
-   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
-   #define preempt_enable()                        barrier()
-                                                   ^
-   include/linux/compiler.h:86:40: note: expanded from macro 'barrier'
-   # define barrier() __asm__ __volatile__("": : :"memory")
-                                          ^
-   kernel/module/main.c:3205:2: error: expected identifier or '('
-           if (last_unloaded_module[0])
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   kernel/module/main.c:3207:2: error: expected identifier or '('
-           pr_cont("\n");
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/printk.h:446:26: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ^
-   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
-           ({                                                              \
-            ^
-   kernel/module/main.c:3207:2: error: expected ')'
-   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/printk.h:446:26: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ^
-   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
-           ({                                                              \
-            ^
-   kernel/module/main.c:3207:2: note: to match this '('
-   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   include/linux/printk.h:446:26: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ^
-   include/linux/printk.h:416:2: note: expanded from macro 'printk_index_wrap'
-           ({                                                              \
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+                        ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
            ^
-   kernel/module/main.c:3208:1: error: extraneous closing brace ('}')
-   }
-   ^
-   6 errors generated.
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+                                        ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+                   b3 = b->sig[3]; b2 = b->sig[2];                         \
+                        ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+                   b3 = b->sig[3]; b2 = b->sig[2];                         \
+                                        ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from fs/ubifs/file.c:44:
+   In file included from include/linux/syscalls_api.h:11:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
 
 
-vim +/volatile +3204 kernel/module/main.c
+vim +/file_inode +424 include/linux/fs_api.h
 
-e610499e2656e61 kernel/module.c      Rusty Russell  2009-03-31  3172  
-^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3173  /* Don't grab lock, we're oopsing. */
-^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3174  void print_modules(void)
-^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3175  {
-^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3176  	struct module *mod;
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3177  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3178  	struct mod_unload_taint *mod_taint;
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3179  #endif
-7fd8329ba502ef7 kernel/module.c      Petr Mladek    2016-09-21  3180  	char buf[MODULE_FLAGS_BUF_SIZE];
-^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3181  
-b231125af7811a2 kernel/module.c      Linus Torvalds 2009-06-16  3182  	printk(KERN_DEFAULT "Modules linked in:");
-d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3183  	/* Most callers should already have preempt disabled, but make sure */
-d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3184  	preempt_disable();
-0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3185  	list_for_each_entry_rcu(mod, &modules, list) {
-0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3186  		if (mod->state == MODULE_STATE_UNFORMED)
-0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3187  			continue;
-27bba4d6bb3779a kernel/module.c      Jiri Slaby     2014-02-03  3188  		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
-0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3189  	}
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3190  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3191  	if (!list_empty(&unloaded_tainted_modules)) {
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3192  		printk(KERN_DEFAULT "Unloaded tainted modules:");
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3193  		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3194  					list) {
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3195  			size_t l;
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3196  
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3197  			l = module_flags_taint(mod_taint->taints, buf);
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3198  			buf[l++] = '\0';
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3199  			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3200  				mod_taint->count);
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3201  		}
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3202  #endif
-523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3203  	}
-d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30 @3204  	preempt_enable();
+0f5d0a0fe62409 Ingo Molnar 2022-04-16  423  
+0f5d0a0fe62409 Ingo Molnar 2022-04-16 @424  static inline struct inode *file_inode(const struct file *f)
+0f5d0a0fe62409 Ingo Molnar 2022-04-16  425  {
+0f5d0a0fe62409 Ingo Molnar 2022-04-16  426  	return f->f_inode;
+0f5d0a0fe62409 Ingo Molnar 2022-04-16  427  }
+0f5d0a0fe62409 Ingo Molnar 2022-04-16  428  
+
+:::::: The code at line 424 was first introduced by commit
+:::::: 0f5d0a0fe6240979a116fdd86cc2997879173bff headers/deps: fs: Split <linux/fs.h> into <linux/fs_types.h> and <linux/fs_api.h>
+
+:::::: TO: Ingo Molnar <mingo@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
