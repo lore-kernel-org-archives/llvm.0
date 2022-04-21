@@ -1,44 +1,42 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BCD1FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47711FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523515; x=1682059515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NaDAyaqFVN3Q0DIBHztqleUCRttZ7Oxt3AQT71CDTCI=;
-  b=PV/J8i9a2ui2DHs2r9aTGZax3+IA/5srdrewSinZ9Ss4JXPxorPiqHYw
-   yJjXt6jr7na5ek7IgQmjB6Qe8cvw+SpjB3xal6f3Lp99fRGmBwqM+eE//
-   xSDKMqBLOTicf0q7HtfRtOz/smtPHbOucgKdR3CmfCooF3DuVHNmwSPen
-   Y4l2m6ZFqhCrW/xNvEhEnKtIkAEScftdwPNbjY5cQo/J4uVG1inDKXq1U
-   2Eeq9MpKfQgxB8wrFM34VhF1UQRykBw12LpoC0AOmpK1vzpMsCZsKRQKo
-   LU1U/ja1r/18X5LXLEoRe2gDR8TIyrCBPCPpStXUEZ7SNgY+5S3y5hwEb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263109625"
+  t=1650523517; x=1682059517;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SQWhxscqE35ux1O7ngRCdoW+bgjeGh5j+bEI2zqbiAA=;
+  b=ZcxoQ7HZHygv6FU+lMhwLy4yeqvlBuo5kxi8V9R/UqxSibFulwoiYSTg
+   XDM8z3XflbdUfqxENa7Guctm3yv3D22MCgzbWujGVfv62YdF/9tD9n3b4
+   avdUX5+y7IL1LsD8uRKI+CFNBFK+0dZLIXo5De+WzU9+9yRBCo24cM1ZP
+   qy3Pi8y4l+9cXk1rJlZajhAwJpFwFV0Lhy/sMEimJ7Gf1Md/77pHn5eeZ
+   Ml/etm9hAkigif0OC64Z0nmGiP0x2IIOETpqSUkJEH2Q133/WrYS7eXAS
+   rTGBbYMcZ+4VXobo8cWhF/vs0yBMh3EEjmIBvCMyaOpNrC/KfB/9EOqgC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263109626"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="263109625"
+   d="scan'208";a="263109626"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:44:53 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:44:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="510918950"
+   d="scan'208";a="510918951"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
   by orsmga003.jf.intel.com with ESMTP; 20 Apr 2022 23:44:52 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQYd-00081b-B3;
+	id 1nhQYd-000822-Gz;
 	Thu, 21 Apr 2022 06:44:51 +0000
-Date: Thu, 21 Apr 2022 14:43:51 +0800
+Date: Thu, 21 Apr 2022 14:43:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] Bluetooth: hci_event: Fix checking for invalid handle on
- error status
-Message-ID: <202204210838.G9CZnn9u-lkp@intel.com>
-References: <20220420221433.2933868-1-luiz.dentz@gmail.com>
+To: Eddie James <eajames@linux.ibm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Subject: drivers/leds/leds-pca955x.c:500:15: warning: cast to smaller integer
+ type 'enum pca955x_type' from 'const void *'
+Message-ID: <202204210933.kF7wJs8r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,185 +45,214 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420221433.2933868-1-luiz.dentz@gmail.com>
 
-Hi Luiz,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on linus/master v5.18-rc3 next-20220420]
-[cannot apply to bluetooth/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-hci_event-Fix-checking-for-invalid-handle-on-error-status/20220421-061600
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-config: riscv-randconfig-r042-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210838.G9CZnn9u-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: 239f32b4f161c1584cd4b386d6ab8766432a6ede leds: pca955x: Switch to i2c probe_new
+date:   8 months ago
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220421/202204210933.kF7wJs8r-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/91a252b91692543d5f9536ebdf10f20a413a858f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Luiz-Augusto-von-Dentz/Bluetooth-hci_event-Fix-checking-for-invalid-handle-on-error-status/20220421-061600
-        git checkout 91a252b91692543d5f9536ebdf10f20a413a858f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=239f32b4f161c1584cd4b386d6ab8766432a6ede
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 239f32b4f161c1584cd4b386d6ab8766432a6ede
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/bluetooth/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/leds/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/bluetooth/hci_event.c:3071:7: error: use of undeclared identifier 'status'
-           if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
-                ^
-   net/bluetooth/hci_event.c:4693:7: error: use of undeclared identifier 'status'
-           if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
-                ^
-   2 errors generated.
+>> drivers/leds/leds-pca955x.c:500:15: warning: cast to smaller integer type 'enum pca955x_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   chip_type = (enum pca955x_type)md;
+                               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/leds/leds-pca955x.c:492:6: warning: variable 'ngpios' set but not used [-Wunused-but-set-variable]
+           int ngpios = 0;
+               ^
+   drivers/leds/leds-pca955x.c:147:19: warning: unused function 'pca95xx_num_led_regs' [-Wunused-function]
+   static inline int pca95xx_num_led_regs(int bits)
+                     ^
+   3 warnings generated.
 
 
-vim +/status +3071 net/bluetooth/hci_event.c
+vim +500 drivers/leds/leds-pca955x.c
 
-  3064	
-  3065	static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
-  3066					  struct sk_buff *skb)
-  3067	{
-  3068		struct hci_ev_conn_complete *ev = data;
-  3069		struct hci_conn *conn;
-  3070	
-> 3071		if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
-  3072			bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for invalid handle");
-  3073			return;
-  3074		}
-  3075	
-  3076		bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
-  3077	
-  3078		hci_dev_lock(hdev);
-  3079	
-  3080		conn = hci_conn_hash_lookup_ba(hdev, ev->link_type, &ev->bdaddr);
-  3081		if (!conn) {
-  3082			/* Connection may not exist if auto-connected. Check the bredr
-  3083			 * allowlist to see if this device is allowed to auto connect.
-  3084			 * If link is an ACL type, create a connection class
-  3085			 * automatically.
-  3086			 *
-  3087			 * Auto-connect will only occur if the event filter is
-  3088			 * programmed with a given address. Right now, event filter is
-  3089			 * only used during suspend.
-  3090			 */
-  3091			if (ev->link_type == ACL_LINK &&
-  3092			    hci_bdaddr_list_lookup_with_flags(&hdev->accept_list,
-  3093							      &ev->bdaddr,
-  3094							      BDADDR_BREDR)) {
-  3095				conn = hci_conn_add(hdev, ev->link_type, &ev->bdaddr,
-  3096						    HCI_ROLE_SLAVE);
-  3097				if (!conn) {
-  3098					bt_dev_err(hdev, "no memory for new conn");
-  3099					goto unlock;
-  3100				}
-  3101			} else {
-  3102				if (ev->link_type != SCO_LINK)
-  3103					goto unlock;
-  3104	
-  3105				conn = hci_conn_hash_lookup_ba(hdev, ESCO_LINK,
-  3106							       &ev->bdaddr);
-  3107				if (!conn)
-  3108					goto unlock;
-  3109	
-  3110				conn->type = SCO_LINK;
-  3111			}
-  3112		}
-  3113	
-  3114		/* The HCI_Connection_Complete event is only sent once per connection.
-  3115		 * Processing it more than once per connection can corrupt kernel memory.
-  3116		 *
-  3117		 * As the connection handle is set here for the first time, it indicates
-  3118		 * whether the connection is already set up.
-  3119		 */
-  3120		if (conn->handle != HCI_CONN_HANDLE_UNSET) {
-  3121			bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
-  3122			goto unlock;
-  3123		}
-  3124	
-  3125		if (!ev->status) {
-  3126			conn->handle = __le16_to_cpu(ev->handle);
-  3127	
-  3128			if (conn->type == ACL_LINK) {
-  3129				conn->state = BT_CONFIG;
-  3130				hci_conn_hold(conn);
-  3131	
-  3132				if (!conn->out && !hci_conn_ssp_enabled(conn) &&
-  3133				    !hci_find_link_key(hdev, &ev->bdaddr))
-  3134					conn->disc_timeout = HCI_PAIRING_TIMEOUT;
-  3135				else
-  3136					conn->disc_timeout = HCI_DISCONN_TIMEOUT;
-  3137			} else
-  3138				conn->state = BT_CONNECTED;
-  3139	
-  3140			hci_debugfs_create_conn(conn);
-  3141			hci_conn_add_sysfs(conn);
-  3142	
-  3143			if (test_bit(HCI_AUTH, &hdev->flags))
-  3144				set_bit(HCI_CONN_AUTH, &conn->flags);
-  3145	
-  3146			if (test_bit(HCI_ENCRYPT, &hdev->flags))
-  3147				set_bit(HCI_CONN_ENCRYPT, &conn->flags);
-  3148	
-  3149			/* Get remote features */
-  3150			if (conn->type == ACL_LINK) {
-  3151				struct hci_cp_read_remote_features cp;
-  3152				cp.handle = ev->handle;
-  3153				hci_send_cmd(hdev, HCI_OP_READ_REMOTE_FEATURES,
-  3154					     sizeof(cp), &cp);
-  3155	
-  3156				hci_req_update_scan(hdev);
-  3157			}
-  3158	
-  3159			/* Set packet type for incoming connection */
-  3160			if (!conn->out && hdev->hci_ver < BLUETOOTH_VER_2_0) {
-  3161				struct hci_cp_change_conn_ptype cp;
-  3162				cp.handle = ev->handle;
-  3163				cp.pkt_type = cpu_to_le16(conn->pkt_type);
-  3164				hci_send_cmd(hdev, HCI_OP_CHANGE_CONN_PTYPE, sizeof(cp),
-  3165					     &cp);
-  3166			}
-  3167		} else {
-  3168			conn->state = BT_CLOSED;
-  3169			if (conn->type == ACL_LINK)
-  3170				mgmt_connect_failed(hdev, &conn->dst, conn->type,
-  3171						    conn->dst_type, ev->status);
-  3172		}
-  3173	
-  3174		if (conn->type == ACL_LINK)
-  3175			hci_sco_setup(conn, ev->status);
-  3176	
-  3177		if (ev->status) {
-  3178			hci_connect_cfm(conn, ev->status);
-  3179			hci_conn_del(conn);
-  3180		} else if (ev->link_type == SCO_LINK) {
-  3181			switch (conn->setting & SCO_AIRMODE_MASK) {
-  3182			case SCO_AIRMODE_CVSD:
-  3183				if (hdev->notify)
-  3184					hdev->notify(hdev, HCI_NOTIFY_ENABLE_SCO_CVSD);
-  3185				break;
-  3186			}
-  3187	
-  3188			hci_connect_cfm(conn, ev->status);
-  3189		}
-  3190	
-  3191	unlock:
-  3192		hci_dev_unlock(hdev);
-  3193	
-  3194		hci_conn_check_pending(hdev);
-  3195	}
-  3196	
+   481	
+   482	static int pca955x_probe(struct i2c_client *client)
+   483	{
+   484		struct pca955x *pca955x;
+   485		struct pca955x_led *pca955x_led;
+   486		struct pca955x_chipdef *chip;
+   487		struct led_classdev *led;
+   488		struct led_init_data init_data;
+   489		struct i2c_adapter *adapter;
+   490		int i, err;
+   491		struct pca955x_platform_data *pdata;
+   492		int ngpios = 0;
+   493		bool set_default_label = false;
+   494		bool keep_pwm = false;
+   495		char default_label[8];
+   496		enum pca955x_type chip_type;
+   497		const void *md = device_get_match_data(&client->dev);
+   498	
+   499		if (md) {
+ > 500			chip_type = (enum pca955x_type)md;
+   501		} else {
+   502			const struct i2c_device_id *id = i2c_match_id(pca955x_id,
+   503								      client);
+   504	
+   505			if (id) {
+   506				chip_type = (enum pca955x_type)id->driver_data;
+   507			} else {
+   508				dev_err(&client->dev, "unknown chip\n");
+   509				return -ENODEV;
+   510			}
+   511		}
+   512	
+   513		chip = &pca955x_chipdefs[chip_type];
+   514		adapter = client->adapter;
+   515		pdata = dev_get_platdata(&client->dev);
+   516		if (!pdata) {
+   517			pdata =	pca955x_get_pdata(client, chip);
+   518			if (IS_ERR(pdata))
+   519				return PTR_ERR(pdata);
+   520		}
+   521	
+   522		/* Make sure the slave address / chip type combo given is possible */
+   523		if ((client->addr & ~((1 << chip->slv_addr_shift) - 1)) !=
+   524		    chip->slv_addr) {
+   525			dev_err(&client->dev, "invalid slave address %02x\n",
+   526				client->addr);
+   527			return -ENODEV;
+   528		}
+   529	
+   530		dev_info(&client->dev, "leds-pca955x: Using %s %d-bit LED driver at "
+   531			 "slave address 0x%02x\n", client->name, chip->bits,
+   532			 client->addr);
+   533	
+   534		if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+   535			return -EIO;
+   536	
+   537		if (pdata->num_leds != chip->bits) {
+   538			dev_err(&client->dev,
+   539				"board info claims %d LEDs on a %d-bit chip\n",
+   540				pdata->num_leds, chip->bits);
+   541			return -ENODEV;
+   542		}
+   543	
+   544		pca955x = devm_kzalloc(&client->dev, sizeof(*pca955x), GFP_KERNEL);
+   545		if (!pca955x)
+   546			return -ENOMEM;
+   547	
+   548		pca955x->leds = devm_kcalloc(&client->dev, chip->bits,
+   549					     sizeof(*pca955x_led), GFP_KERNEL);
+   550		if (!pca955x->leds)
+   551			return -ENOMEM;
+   552	
+   553		i2c_set_clientdata(client, pca955x);
+   554	
+   555		mutex_init(&pca955x->lock);
+   556		pca955x->client = client;
+   557		pca955x->chipdef = chip;
+   558	
+   559		init_data.devname_mandatory = false;
+   560		init_data.devicename = "pca955x";
+   561	
+   562		for (i = 0; i < chip->bits; i++) {
+   563			pca955x_led = &pca955x->leds[i];
+   564			pca955x_led->led_num = i;
+   565			pca955x_led->pca955x = pca955x;
+   566			pca955x_led->type = pdata->leds[i].type;
+   567	
+   568			switch (pca955x_led->type) {
+   569			case PCA955X_TYPE_NONE:
+   570				break;
+   571			case PCA955X_TYPE_GPIO:
+   572				ngpios++;
+   573				break;
+   574			case PCA955X_TYPE_LED:
+   575				led = &pca955x_led->led_cdev;
+   576				led->brightness_set_blocking = pca955x_led_set;
+   577				led->brightness_get = pca955x_led_get;
+   578	
+   579				if (pdata->leds[i].default_state ==
+   580				    LEDS_GPIO_DEFSTATE_OFF) {
+   581					err = pca955x_led_set(led, LED_OFF);
+   582					if (err)
+   583						return err;
+   584				} else if (pdata->leds[i].default_state ==
+   585					   LEDS_GPIO_DEFSTATE_ON) {
+   586					err = pca955x_led_set(led, LED_FULL);
+   587					if (err)
+   588						return err;
+   589				}
+   590	
+   591				init_data.fwnode = pdata->leds[i].fwnode;
+   592	
+   593				if (is_of_node(init_data.fwnode)) {
+   594					if (to_of_node(init_data.fwnode)->name[0] ==
+   595					    '\0')
+   596						set_default_label = true;
+   597					else
+   598						set_default_label = false;
+   599				} else {
+   600					set_default_label = true;
+   601				}
+   602	
+   603				if (set_default_label) {
+   604					snprintf(default_label, sizeof(default_label),
+   605						 "%d", i);
+   606					init_data.default_label = default_label;
+   607				} else {
+   608					init_data.default_label = NULL;
+   609				}
+   610	
+   611				err = devm_led_classdev_register_ext(&client->dev, led,
+   612								     &init_data);
+   613				if (err)
+   614					return err;
+   615	
+   616				/*
+   617				 * For default-state == "keep", let the core update the
+   618				 * brightness from the hardware, then check the
+   619				 * brightness to see if it's using PWM1. If so, PWM1
+   620				 * should not be written below.
+   621				 */
+   622				if (pdata->leds[i].default_state ==
+   623				    LEDS_GPIO_DEFSTATE_KEEP) {
+   624					if (led->brightness != LED_FULL &&
+   625					    led->brightness != LED_OFF &&
+   626					    led->brightness != LED_HALF)
+   627						keep_pwm = true;
+   628				}
+   629			}
+   630		}
+   631	
+   632		/* PWM0 is used for half brightness or 50% duty cycle */
+   633		err = pca955x_write_pwm(client, 0, 255 - LED_HALF);
+   634		if (err)
+   635			return err;
+   636	
+   637		if (!keep_pwm) {
+   638			/* PWM1 is used for variable brightness, default to OFF */
+   639			err = pca955x_write_pwm(client, 1, 0);
+   640			if (err)
+   641				return err;
+   642		}
+   643	
+   644		/* Set to fast frequency so we do not see flashing */
+   645		err = pca955x_write_psc(client, 0, 0);
+   646		if (err)
+   647			return err;
+   648		err = pca955x_write_psc(client, 1, 0);
+   649		if (err)
+   650			return err;
+   651	
 
 -- 
 0-DAY CI Kernel Test Service
