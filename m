@@ -1,67 +1,99 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134E61FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 07:53:33 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkV4217nTz4xR9;
-	Thu, 21 Apr 2022 17:46:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1650527220;
-	bh=6Zuyw245iK0ZvmsIInOVF3tD0phZx7klr4ZSZDE0lfk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=gvMx8c1mKZEk9360t6GcgeT3JWfOTmnYz6GvFDessBmf39sJEx44Q0Z+x1hpFTrWy
-	 t4auQPIRwi6TLOC5KSsg8QKX3p9zEXuShyq0uHBYu1erlGHlaMvzSTd0+fj7RWiYgU
-	 tCzURkRfAPImrkXcC+sBl+rheKPkeC/rMcEJM3EKRQvK2lB4MuBgaPGGYpPPbVTHfA
-	 it8ioLrKDEww3YE+8lIiJlY2K/OnNQ2eKwRmuZIRJLwcYGC9rXuKHeESQprOyINdKY
-	 7lCkeruyA9hybz/N8O7uCdsQXVrHra8+jOKydxL26BYWOsvAHnHDfhh6wid+ljGafu
-	 32UOBCm0c47oQ==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Nathan Chancellor <nathan@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Paul Menzel <pmenzel@molgen.mpg.de>, stable@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
-Subject: Re: Apply d799769188529abc6cbf035a10087a51f7832b6b to 5.17 and 5.15?
-In-Reply-To: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
-References: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
-Date: Thu, 21 Apr 2022 17:46:52 +1000
-Message-ID: <877d7ig9oz.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E341876
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 08:16:27 +0000 (UTC)
+Received: by mail-il1-f198.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso2226369ilu.19
+        for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 01:16:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9ZLz1qP7iL5lnV6y3Ho8XIAP9zuovgE3aj5nUkzse0A=;
+        b=R5v5GERRtfMvgpysp1wWzqxlgeFC25XhrsEnM19RQMEgweFac5OJwZVH5gRXTLEfcn
+         lNvhV3yNfbB+G7+ytlt/jazTHhNnTYBPzai576Uv+CxmLjzvcJrznaAAP3S1CEN5cFKd
+         kSsoN4EGY4Ngpz3ie219srz0crjtGFk0rdpC4HgHkTdguX/vTHyhADKayDBw2oyqwE8l
+         BkCXqebG3hEdT3Zplw1dlNhJAJ50Eqv+l6XBnC7AnsA85yvkA7CZQzgAcl/EVilpiyEy
+         QhDrvknpU6PQ9+HGwcP8clr6BckEcqQ99rQyOS8Mgm8hNq/39qtkjrStgrirSFXY7GGu
+         1XtA==
+X-Gm-Message-State: AOAM5334PrrBSyWn4hBzSIKuykdhoY3VPACrjIIoailEtTOTDbxuAJSU
+	+mRp+4XlzMAlEQib0JMZiRns58RvzTj7/FDxS2RsN//KHxhN
+X-Google-Smtp-Source: ABdhPJzNLNw4U73UWgBgiCIA28SxHnfBZ+q+vueEGxr/sQELdY/DsyW013UqQq/x5bVFCeRphu0gJBQyS/bTp8+sdjW6DXewI2vO
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a05:6e02:1b81:b0:2ca:c4b1:9687 with SMTP id
+ h1-20020a056e021b8100b002cac4b19687mr10598354ili.293.1650528987164; Thu, 21
+ Apr 2022 01:16:27 -0700 (PDT)
+Date: Thu, 21 Apr 2022 01:16:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f8b5ef05dd25b963@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in ntfs_fill_super
+From: syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> Hi Greg, Sasha, and Michael,
->
-> Commit d79976918852 ("powerpc/64: Add UADDR64 relocation support") fixes
-> a boot failure with CONFIG_RELOCATABLE=y kernels linked with recent
-> versions of ld.lld [1]. Additionally, it resolves a separate boot
-> failure that Paul Menzel reported [2] with ld.lld 13.0.0. Is this a
-> reasonable backport for 5.17 and 5.15? It applies cleanly, resolves both
-> problems, and does not appear to cause any other issues in my testing
-> for both trees but I was curious what Michael's opinion was, as I am far
-> from a PowerPC expert.
->
-> This change does apply cleanly to 5.10 (I did not try earlier branches)
-> but there are other changes needed for ld.lld to link CONFIG_RELOCATABLE
-> kernels in that branch so to avoid any regressions, I think it is safe
-> to just focus on 5.15 and 5.17.
+Hello,
 
-I considered tagging it for stable, but I wanted it to get a bit of
-testing first, it's a reasonably big patch.
+syzbot found the following issue on:
 
-I think we're reasonably confident it doesn't introduce any new bugs,
-but more testing time is always good.
+HEAD commit:    b253435746d9 Merge tag 'xtensa-20220416' of https://github..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=144dd7f4f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff9f8140cbb3af7
+dashboard link: https://syzkaller.appspot.com/bug?extid=1631f09646bc214d2e76
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-So I guess I'd be inclined to wait another week or so before requesting
-a stable backport?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-cheers
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com
+
+loop3: detected capacity change from 0 to 8189
+================================================================================
+UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:673:16
+shift exponent -192 is negative
+CPU: 0 PID: 12945 Comm: syz-executor.3 Not tainted 5.18.0-rc3-syzkaller-00016-gb253435746d9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ ntfs_fill_super.cold+0x2bf/0x549 fs/ntfs/bitmap.c:84
+ get_tree_bdev+0x440/0x760 fs/super.c:1292
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f768c28a61a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f768d3dff88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f768c28a61a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f768d3dffe0
+RBP: 00007f768d3e0020 R08: 00007f768d3e0020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f768d3dffe0 R15: 000000002007aa80
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
