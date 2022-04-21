@@ -1,43 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72D11FDE
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 18:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A22C23A0
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 19:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650567275; x=1682103275;
+  t=1650570339; x=1682106339;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S1Y8jxeMLBIxfVkkKRPuDHDTsSNIZt3EKDqYI0fSa/c=;
-  b=fLxVQpsl6wgenHXQUX8qhSjXA2GV2QEXpmMFiY2IUJN1RjW8ol5bUBzW
-   BguigvsNUCm81loebsg7RZaZ1koMkoA9HUjtDY1/XJLS/Jm1MfP6t65Xl
-   EO2lTuESGJk9Op5v+XUvO85liekibdkfS9WoROzox7UoY0Xpj4DFh3UEC
-   UYm0uMIz56iM0EC4fL8CBQAeTl066Jy8O1iH6pm5FF1UHHUzCbX+cZoui
-   HecEMpmIn8d+/9lk4Hm1z/2Uylu2MBYFCSsL7bYJSTHSKpCOmOUa9bAhN
-   ZVxUK0jjrBzf+ZwJXFkXIhJDdQNO1NMw3+xG/PQq31yzo1fcEMVTKGaJ5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263916868"
+  bh=qUbnApxe0ifMuycVX45OPy6G9l25JluiNKetU6KZUyg=;
+  b=KaOxZfuwl1DZ9U1bNf+d0Lk/PZNbnRDG3QtY5czLqfQXvt9iL9TrlbQV
+   F/YT8QubioC7n6SWnuewBIlgKcEkzFvrckHM9lpPgVf+3Zgjwmfg7xx0b
+   msMWlb3A9RNX/UXAGWdhsEZtNPpJJ2As5HFfURicvGMiQXJvjDKr8+kJO
+   DfR7+gvkfbhHKgPSsJk0fj3AmNuU2o+oZ4HwSV80dGl1OoKnEpOW2Z0jX
+   MhXcyFFcio2lMQ1SWdxm+6QlgUn+OIVQc2MlwoWaqJuOcIHIXleldg71D
+   rKW3Q3NMsylisDvLYp8bi1Go5cL1Vk5vxX01Lp63bb0uAWkdNSRdIcyCw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244385552"
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="263916868"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 11:54:35 -0700
+   d="scan'208";a="244385552"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 12:45:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="671177374"
+   d="scan'208";a="533569869"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2022 11:54:33 -0700
+  by orsmga002.jf.intel.com with ESMTP; 21 Apr 2022 12:45:36 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhbwm-0008gB-Tv;
-	Thu, 21 Apr 2022 18:54:32 +0000
-Date: Fri, 22 Apr 2022 02:53:36 +0800
+	id 1nhckB-0008j5-RU;
+	Thu, 21 Apr 2022 19:45:35 +0000
+Date: Fri, 22 Apr 2022 03:44:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Fabio Estevam <festevam@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [dhowells-fs:rxrpc-ringless 10/21] net/rxrpc/local_object.c:172:24:
- warning: format specifies type 'unsigned short' but the argument has type
- 'int'
-Message-ID: <202204220213.WUyOhZZg-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Subject: drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller
+ integer type 'enum mxs_i2c_devtype' from 'const void *'
+Message-ID: <202204220355.TdCb2zsz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,142 +47,111 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git rxrpc-ringless
-head:   c388a8388ad238ffbe0cd204c3eacaf200055751
-commit: 3f63ce6fffedc9a4b84006b79835fda0d51fb12d [10/21] rxrpc: Don't use a ring buffer for call Tx queue
-config: hexagon-randconfig-r021-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220213.WUyOhZZg-lkp@intel.com/config)
+Hi Fabio,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: c32abd8b569144b20c9c9b6dd7232828c612452f i2c: mxs: Remove unneeded platform_device_id
+date:   1 year, 5 months ago
+config: arm64-randconfig-r034-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220355.TdCb2zsz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=3f63ce6fffedc9a4b84006b79835fda0d51fb12d
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs rxrpc-ringless
-        git checkout 3f63ce6fffedc9a4b84006b79835fda0d51fb12d
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c32abd8b569144b20c9c9b6dd7232828c612452f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c32abd8b569144b20c9c9b6dd7232828c612452f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                                     "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
-                                                ~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                %d
-   include/linux/kthread.h:54:48: note: expanded from macro 'kthread_run'
-                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
-                                                    ~~~~~~~     ^~~~~~~~~~~
-   include/linux/kthread.h:28:66: note: expanded from macro 'kthread_create'
-           kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
-                                                                ~~~~~~~    ^~~
-   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                    ^~~~~~~~~~~
-   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                       ^~~~~~~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
-           (__builtin_constant_p((__u16)(x)) ?     \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/local_object.c:246:23: warning: unused variable 'c' [-Wunused-variable]
-                   struct rxrpc_local *c = hlist_entry(cursor, struct rxrpc_local, link);
-                                       ^
-   2 warnings generated.
+>> drivers/i2c/busses/i2c-mxs.c:802:18: warning: cast to smaller integer type 'enum mxs_i2c_devtype' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +172 net/rxrpc/local_object.c
+vim +802 drivers/i2c/busses/i2c-mxs.c
 
-   105	
-   106	/*
-   107	 * create the local socket
-   108	 * - must be called with rxrpc_local_mutex locked
-   109	 */
-   110	static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
-   111	{
-   112		struct udp_tunnel_sock_cfg tuncfg = {NULL};
-   113		struct sockaddr_rxrpc *srx = &local->srx;
-   114		struct udp_port_cfg udp_conf = {0};
-   115		struct task_struct *transmitter;
-   116		struct sock *usk;
-   117		int ret;
-   118	
-   119		_enter("%p{%d,%d}",
-   120		       local, srx->transport_type, srx->transport.family);
-   121	
-   122		udp_conf.family = srx->transport.family;
-   123		if (udp_conf.family == AF_INET) {
-   124			udp_conf.local_ip = srx->transport.sin.sin_addr;
-   125			udp_conf.local_udp_port = srx->transport.sin.sin_port;
-   126	#if IS_ENABLED(CONFIG_AF_RXRPC_IPV6)
-   127		} else {
-   128			udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
-   129			udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
-   130	#endif
-   131		}
-   132		ret = udp_sock_create(net, &udp_conf, &local->socket);
-   133		if (ret < 0) {
-   134			_leave(" = %d [socket]", ret);
-   135			return ret;
-   136		}
-   137	
-   138		tuncfg.encap_type = UDP_ENCAP_RXRPC;
-   139		tuncfg.encap_rcv = rxrpc_input_packet;
-   140		tuncfg.sk_user_data = local;
-   141		setup_udp_tunnel_sock(net, local->socket, &tuncfg);
-   142	
-   143		/* set the socket up */
-   144		usk = local->socket->sk;
-   145		usk->sk_error_report = rxrpc_error_report;
-   146	
-   147		switch (srx->transport.family) {
-   148		case AF_INET6:
-   149			/* we want to receive ICMPv6 errors */
-   150			ip6_sock_set_recverr(usk);
-   151	
-   152			/* Fall through and set IPv4 options too otherwise we don't get
-   153			 * errors from IPv4 packets sent through the IPv6 socket.
-   154			 */
-   155			fallthrough;
-   156		case AF_INET:
-   157			/* we want to receive ICMP errors */
-   158			ip_sock_set_recverr(usk);
-   159	
-   160			/* we want to set the don't fragment bit */
-   161			ip_sock_set_mtu_discover(usk, IP_PMTUDISC_DO);
-   162	
-   163			/* We want receive timestamps. */
-   164			sock_enable_timestamps(usk);
-   165			break;
-   166	
-   167		default:
-   168			BUG();
-   169		}
-   170	
-   171		transmitter = kthread_run(rxrpc_transmitter, local,
- > 172					  "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
-   173		if (IS_ERR(transmitter)) {
-   174			ret = PTR_ERR(transmitter);
-   175			goto error_sock;
-   176		}
-   177	
-   178		local->transmitter = transmitter;
-   179		_leave(" = 0");
-   180		return 0;
-   181	
-   182	error_sock:
-   183		kernel_sock_shutdown(local->socket, SHUT_RDWR);
-   184		local->socket->sk->sk_user_data = NULL;
-   185		sock_release(local->socket);
-   186		local->socket = NULL;
-   187		return ret;
-   188	}
-   189	
+   790	
+   791	static int mxs_i2c_probe(struct platform_device *pdev)
+   792	{
+   793		struct device *dev = &pdev->dev;
+   794		struct mxs_i2c_dev *i2c;
+   795		struct i2c_adapter *adap;
+   796		int err, irq;
+   797	
+   798		i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+   799		if (!i2c)
+   800			return -ENOMEM;
+   801	
+ > 802		i2c->dev_type = (enum mxs_i2c_devtype)of_device_get_match_data(&pdev->dev);
+   803	
+   804		i2c->regs = devm_platform_ioremap_resource(pdev, 0);
+   805		if (IS_ERR(i2c->regs))
+   806			return PTR_ERR(i2c->regs);
+   807	
+   808		irq = platform_get_irq(pdev, 0);
+   809		if (irq < 0)
+   810			return irq;
+   811	
+   812		err = devm_request_irq(dev, irq, mxs_i2c_isr, 0, dev_name(dev), i2c);
+   813		if (err)
+   814			return err;
+   815	
+   816		i2c->dev = dev;
+   817	
+   818		init_completion(&i2c->cmd_complete);
+   819	
+   820		if (dev->of_node) {
+   821			err = mxs_i2c_get_ofdata(i2c);
+   822			if (err)
+   823				return err;
+   824		}
+   825	
+   826		/* Setup the DMA */
+   827		i2c->dmach = dma_request_chan(dev, "rx-tx");
+   828		if (IS_ERR(i2c->dmach)) {
+   829			dev_err(dev, "Failed to request dma\n");
+   830			return PTR_ERR(i2c->dmach);
+   831		}
+   832	
+   833		platform_set_drvdata(pdev, i2c);
+   834	
+   835		/* Do reset to enforce correct startup after pinmuxing */
+   836		err = mxs_i2c_reset(i2c);
+   837		if (err)
+   838			return err;
+   839	
+   840		adap = &i2c->adapter;
+   841		strlcpy(adap->name, "MXS I2C adapter", sizeof(adap->name));
+   842		adap->owner = THIS_MODULE;
+   843		adap->algo = &mxs_i2c_algo;
+   844		adap->quirks = &mxs_i2c_quirks;
+   845		adap->dev.parent = dev;
+   846		adap->nr = pdev->id;
+   847		adap->dev.of_node = pdev->dev.of_node;
+   848		i2c_set_adapdata(adap, i2c);
+   849		err = i2c_add_numbered_adapter(adap);
+   850		if (err) {
+   851			writel(MXS_I2C_CTRL0_SFTRST,
+   852					i2c->regs + MXS_I2C_CTRL0_SET);
+   853			return err;
+   854		}
+   855	
+   856		return 0;
+   857	}
+   858	
 
 -- 
 0-DAY CI Kernel Test Service
