@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8851FA6
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691971FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523373; x=1682059373;
+  t=1650523390; x=1682059390;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CEezHFZ8jbSAO8++FIRw/wHkdTizh/6PCQxkqG4AIcA=;
-  b=XV7QARLw6xhZW65R2dfE7wPoLzSlLVUpKnv1QhyoB5lb7kl60hp3z2gw
-   d+dzX2sUSOCH2QqbaNgNlaNS3okaFoawrQtLQt2xw9oF+jqO1Kyt1jyXy
-   +c2pHA9DCH+0CD8LeHjpq+Gnw/lfn3vpdwKV8froR5PlT4IjAehsJ77WL
-   VAuZn/UhSr0ZI1wWIQaZs2Igkw+QYPCqiW1BufBk600fiQF2OTvA3lvFT
-   gDrkA0LtlEfZ74vvpDqIYDtELo34QCXwgPWahDFO6HH6JTdT8xQlcZLfV
-   hr4T2VS4n3RbLp9EWegX9z9AJ8Fcg9W7OaMkOpWAtGJFGbOMWS3YuGBVT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324700362"
+  bh=IyqTtKl8pfWrORbTfBAnzI+EZwggZHYfLzrZbrWNmAw=;
+  b=EdtB2bqfJhyUwB2QVL1fu85iesLniI0dMQnF08FWfgQM4rcqvHNjleyV
+   +9ksSpY2q3T5jZTNEYpVKD8kV7e54oXZEKPoeZ7M/SKBJmzr9Z/tCZkAu
+   thq/o6YGp5PVUFR4oScWnLOqNmFKkzTJqJBqT5Setyi6WyK60h6XBifL/
+   aYE9tZysvf7Xlq1M5y+Mke3dTif3BmH2cRoW3VfXzeOzcgNPwwN5Z9feR
+   s2V0ggrkGx4QacPwrAQptmjb0rq+M+WNpYEq2lCfZnhGqfvSY9gvWfUGq
+   ZwSLM37nA9qigVbznKUHzR2wTy5XpSRp1KYS57EMi8jehXqQkHSC4TePh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251570116"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="324700362"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:52 -0700
+   d="scan'208";a="251570116"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="614757523"
+   d="scan'208";a="865402049"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2022 23:42:51 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 20 Apr 2022 23:42:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQWg-0007zt-Iv;
+	id 1nhQWg-000808-Ph;
 	Thu, 21 Apr 2022 06:42:50 +0000
-Date: Thu, 21 Apr 2022 14:42:30 +0800
+Date: Thu, 21 Apr 2022 14:41:51 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1926/2579]
- drivers/mfd/intel_soc_pmic_core.c:70:2: error: implicit declaration of
- function 'irq_domain_update_bus_token' is invalid in C99
-Message-ID: <202204210402.MWlYLHyS-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2360/2579] include/linux/signal.h:97:11:
+ error: array index 3 is past the end of the array (which contains 2
+ elements)
+Message-ID: <202204210229.ZtiUn30E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,99 +49,177 @@ Content-Disposition: inline
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 762e2c31017f8004327c678d499aa24693a9d465 [1926/2579] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204210402.MWlYLHyS-lkp@intel.com/config)
+commit: e43870d97c8fb5c656b4592457df87ac2ee05f7a [2360/2579] headers/deps: mm: Optimize <linux/mm_api.h> dependencies, remove <linux/mmzone_api.h> dependency
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220421/202204210229.ZtiUn30E-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=762e2c31017f8004327c678d499aa24693a9d465
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=e43870d97c8fb5c656b4592457df87ac2ee05f7a
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout 762e2c31017f8004327c678d499aa24693a9d465
+        git checkout e43870d97c8fb5c656b4592457df87ac2ee05f7a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/mfd/intel_soc_pmic_core.c:70:2: error: implicit declaration of function 'irq_domain_update_bus_token' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
-           ^
->> drivers/mfd/intel_soc_pmic_core.c:71:9: error: use of undeclared identifier 'DOMAIN_BUS_NEXUS'
-                                       DOMAIN_BUS_NEXUS);
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   In file included from include/linux/pgtable_api.h:15:
+   In file included from include/linux/mmzone_api.h:33:
+   In file included from arch/x86/include/asm/highmem.h:26:
+   In file included from arch/x86/include/asm/tlbflush.h:5:
+   In file included from include/linux/mm_api.h:393:
+   include/linux/huge_mm.h:207:10: error: implicit declaration of function 'pmd_none' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return !pmd_none(pmd) && !pmd_present(pmd);
+                   ^
+   include/linux/huge_mm.h:207:28: error: implicit declaration of function 'pmd_present' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return !pmd_none(pmd) && !pmd_present(pmd);
+                                     ^
+   include/linux/huge_mm.h:214:27: error: implicit declaration of function 'pmd_trans_huge' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
+                                    ^
+   include/linux/huge_mm.h:214:51: error: implicit declaration of function 'pmd_devmap' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
+                                                            ^
+   include/linux/huge_mm.h:222:6: error: implicit declaration of function 'pud_trans_huge' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (pud_trans_huge(*pud) || pud_devmap(*pud))
+               ^
+   include/linux/huge_mm.h:222:30: error: implicit declaration of function 'pud_devmap' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (pud_trans_huge(*pud) || pud_devmap(*pud))
                                        ^
-   2 errors generated.
+   include/linux/huge_mm.h:254:37: error: implicit declaration of function 'pmd_pfn' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
+                                              ^
+   include/linux/huge_mm.h:254:53: error: implicit declaration of function 'pmd_present' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
+                                                              ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   In file included from include/linux/pgtable_api.h:19:
+   arch/x86/include/asm/pgtable.h:209:29: error: static declaration of 'pmd_pfn' follows non-static declaration
+   static inline unsigned long pmd_pfn(pmd_t pmd)
+                               ^
+   include/linux/huge_mm.h:254:37: note: previous implicit declaration is here
+           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
+                                              ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   In file included from include/linux/pgtable_api.h:19:
+   arch/x86/include/asm/pgtable.h:250:19: error: static declaration of 'pmd_trans_huge' follows non-static declaration
+   static inline int pmd_trans_huge(pmd_t pmd)
+                     ^
+   include/linux/huge_mm.h:214:27: note: previous implicit declaration is here
+           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
+                                    ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   In file included from include/linux/pgtable_api.h:19:
+   arch/x86/include/asm/pgtable.h:744:19: error: static declaration of 'pmd_present' follows non-static declaration
+   static inline int pmd_present(pmd_t pmd)
+                     ^
+   include/linux/huge_mm.h:207:28: note: previous implicit declaration is here
+           return !pmd_none(pmd) && !pmd_present(pmd);
+                                     ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   In file included from include/linux/pgtable_api.h:19:
+   arch/x86/include/asm/pgtable.h:773:19: error: static declaration of 'pmd_none' follows non-static declaration
+   static inline int pmd_none(pmd_t pmd)
+                     ^
+   include/linux/huge_mm.h:207:10: note: previous implicit declaration is here
+           return !pmd_none(pmd) && !pmd_present(pmd);
+                   ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   include/linux/pgtable_api.h:1201:19: error: static declaration of 'pmd_devmap' follows non-static declaration
+   static inline int pmd_devmap(pmd_t pmd)
+                     ^
+   include/linux/huge_mm.h:214:51: note: previous implicit declaration is here
+           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
+                                                            ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   include/linux/pgtable_api.h:1205:19: error: static declaration of 'pud_devmap' follows non-static declaration
+   static inline int pud_devmap(pud_t pud)
+                     ^
+   include/linux/huge_mm.h:222:30: note: previous implicit declaration is here
+           if (pud_trans_huge(*pud) || pud_devmap(*pud))
+                                       ^
+   In file included from arch/x86/kvm/vmx/nested.c:9:
+   include/linux/pgtable_api.h:1218:19: error: static declaration of 'pud_trans_huge' follows non-static declaration
+   static inline int pud_trans_huge(pud_t pud)
+                     ^
+   include/linux/huge_mm.h:222:6: note: previous implicit declaration is here
+           if (pud_trans_huge(*pud) || pud_devmap(*pud))
+               ^
+   In file included from arch/x86/kvm/vmx/nested.c:25:
+   In file included from arch/x86/kvm/cpuid.h:5:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:17:
+>> include/linux/signal.h:97:11: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kvm/vmx/nested.c:25:
+   In file included from arch/x86/kvm/cpuid.h:5:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:17:
+   include/linux/signal.h:97:25: error: array index 2 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kvm/vmx/nested.c:25:
+   In file included from arch/x86/kvm/cpuid.h:5:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:17:
+   include/linux/signal.h:113:11: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/kvm/vmx/nested.c:25:
+   In file included from arch/x86/kvm/cpuid.h:5:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:17:
+   include/linux/signal.h:113:27: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/irq_domain_update_bus_token +70 drivers/mfd/intel_soc_pmic_core.c
+vim +97 include/linux/signal.h
 
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  29  
-5165238460068e Zhu, Lejun      2014-06-03  30  static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
-5165238460068e Zhu, Lejun      2014-06-03  31  				    const struct i2c_device_id *i2c_id)
-5165238460068e Zhu, Lejun      2014-06-03  32  {
-5165238460068e Zhu, Lejun      2014-06-03  33  	struct device *dev = &i2c->dev;
-5165238460068e Zhu, Lejun      2014-06-03  34  	struct intel_soc_pmic_config *config;
-5165238460068e Zhu, Lejun      2014-06-03  35  	struct intel_soc_pmic *pmic;
-5165238460068e Zhu, Lejun      2014-06-03  36  	int ret;
-5165238460068e Zhu, Lejun      2014-06-03  37  
-5b78223f55a0f5 Hans de Goede   2021-12-06  38  	if (soc_intel_is_byt())
-b01e9348e10654 Hans de Goede   2017-09-04  39  		config = &intel_soc_pmic_config_byt_crc;
-5b78223f55a0f5 Hans de Goede   2021-12-06  40  	else
-b01e9348e10654 Hans de Goede   2017-09-04  41  		config = &intel_soc_pmic_config_cht_crc;
-5165238460068e Zhu, Lejun      2014-06-03  42  
-5165238460068e Zhu, Lejun      2014-06-03  43  	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
-0a65fbf64dad89 Kiran Padwal    2015-02-11  44  	if (!pmic)
-0a65fbf64dad89 Kiran Padwal    2015-02-11  45  		return -ENOMEM;
-0a65fbf64dad89 Kiran Padwal    2015-02-11  46  
-5165238460068e Zhu, Lejun      2014-06-03  47  	dev_set_drvdata(dev, pmic);
-5165238460068e Zhu, Lejun      2014-06-03  48  
-5165238460068e Zhu, Lejun      2014-06-03  49  	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
-db43b8d04d7a9f Pan Bian        2017-04-23  50  	if (IS_ERR(pmic->regmap))
-db43b8d04d7a9f Pan Bian        2017-04-23  51  		return PTR_ERR(pmic->regmap);
-db43b8d04d7a9f Pan Bian        2017-04-23  52  
-159ee7578a7453 Andy Shevchenko 2017-02-21  53  	pmic->irq = i2c->irq;
-5165238460068e Zhu, Lejun      2014-06-03  54  
-5165238460068e Zhu, Lejun      2014-06-03  55  	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
-5165238460068e Zhu, Lejun      2014-06-03  56  				  config->irq_flags | IRQF_ONESHOT,
-5165238460068e Zhu, Lejun      2014-06-03  57  				  0, config->irq_chip,
-5165238460068e Zhu, Lejun      2014-06-03  58  				  &pmic->irq_chip_data);
-5165238460068e Zhu, Lejun      2014-06-03  59  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  60  		return ret;
-5165238460068e Zhu, Lejun      2014-06-03  61  
-5165238460068e Zhu, Lejun      2014-06-03  62  	ret = enable_irq_wake(pmic->irq);
-5165238460068e Zhu, Lejun      2014-06-03  63  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  64  		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
-5165238460068e Zhu, Lejun      2014-06-03  65  
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  66  	/* Add lookup table for crc-pwm */
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  67  	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
-a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  68  
-f49f43371b8a68 Hans de Goede   2021-12-25  69  	/* To distuingish this domain from the GPIO/charger's irqchip domains */
-f49f43371b8a68 Hans de Goede   2021-12-25 @70  	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
-f49f43371b8a68 Hans de Goede   2021-12-25 @71  				    DOMAIN_BUS_NEXUS);
-f49f43371b8a68 Hans de Goede   2021-12-25  72  
-5165238460068e Zhu, Lejun      2014-06-03  73  	ret = mfd_add_devices(dev, -1, config->cell_dev,
-5165238460068e Zhu, Lejun      2014-06-03  74  			      config->n_cell_devs, NULL, 0,
-5165238460068e Zhu, Lejun      2014-06-03  75  			      regmap_irq_get_domain(pmic->irq_chip_data));
-5165238460068e Zhu, Lejun      2014-06-03  76  	if (ret)
-5165238460068e Zhu, Lejun      2014-06-03  77  		goto err_del_irq_chip;
-5165238460068e Zhu, Lejun      2014-06-03  78  
-5165238460068e Zhu, Lejun      2014-06-03  79  	return 0;
-5165238460068e Zhu, Lejun      2014-06-03  80  
-5165238460068e Zhu, Lejun      2014-06-03  81  err_del_irq_chip:
-5165238460068e Zhu, Lejun      2014-06-03  82  	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
-5165238460068e Zhu, Lejun      2014-06-03  83  	return ret;
-5165238460068e Zhu, Lejun      2014-06-03  84  }
-5165238460068e Zhu, Lejun      2014-06-03  85  
+^1da177e4c3f41 Linus Torvalds  2005-04-16   92  
+71fabd5e483530 George Anzinger 2006-01-08   93  static inline int sigisemptyset(sigset_t *set)
+71fabd5e483530 George Anzinger 2006-01-08   94  {
+71fabd5e483530 George Anzinger 2006-01-08   95  	switch (_NSIG_WORDS) {
+71fabd5e483530 George Anzinger 2006-01-08   96  	case 4:
+71fabd5e483530 George Anzinger 2006-01-08  @97  		return (set->sig[3] | set->sig[2] |
+71fabd5e483530 George Anzinger 2006-01-08   98  			set->sig[1] | set->sig[0]) == 0;
+71fabd5e483530 George Anzinger 2006-01-08   99  	case 2:
+71fabd5e483530 George Anzinger 2006-01-08  100  		return (set->sig[1] | set->sig[0]) == 0;
+71fabd5e483530 George Anzinger 2006-01-08  101  	case 1:
+71fabd5e483530 George Anzinger 2006-01-08  102  		return set->sig[0] == 0;
+71fabd5e483530 George Anzinger 2006-01-08  103  	default:
+1c3bea0e71892e Oleg Nesterov   2014-10-13  104  		BUILD_BUG();
+71fabd5e483530 George Anzinger 2006-01-08  105  		return 0;
+71fabd5e483530 George Anzinger 2006-01-08  106  	}
+71fabd5e483530 George Anzinger 2006-01-08  107  }
+71fabd5e483530 George Anzinger 2006-01-08  108  
 
-:::::: The code at line 70 was first introduced by commit
-:::::: f49f43371b8a680c5972d052598d7c120f1a05d3 mfd: intel_soc_pmic_crc: Set main IRQ domain bus token to DOMAIN_BUS_NEXUS
+:::::: The code at line 97 was first introduced by commit
+:::::: 71fabd5e4835309b4feca6209122ce56c595c461 [PATCH] sigaction should clear all signals on SIG_IGN, not just < 32
 
-:::::: TO: Hans de Goede <hdegoede@redhat.com>
-:::::: CC: Lee Jones <lee.jones@linaro.org>
+:::::: TO: George Anzinger <george@mvista.com>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service
