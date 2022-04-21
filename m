@@ -1,45 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FA81FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC1246A5
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 07:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523557; x=1682059557;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7178CiCoImQ+f/EA4vdj+Vck0criqevbU3FVIO5GGOw=;
-  b=K8E+QDPVaequC4hldU2bXXjj2IAbKjAvkSaRymtGG1MLeIboXh8RFfek
-   b4J2LPJltGXSXpo3VcL940Lu7gPy/VZZliHk+Mdyn6UCJrr3ihS/fskqJ
-   BCSm2HpVUvs2WCGidPAaYoUUJo3x3Az/P9Dl9OLowfs0kCNuEKubTVpJv
-   Qh8DVEsQGhPMJXS834Zc7p/MS1ULvSv4XClQTQdLSdiVWrjQogrXWe7xL
-   Nb6y9nfCT+RcVz23bzPx6uNIrOaema19dvZgJqR/8wM/V7IGhOHuz5yRN
-   0nhXlQOuaTYuIaoNhiWuZgZ/6rmhQYToZsH92THbiMMcU97D7N+2LgWCs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327161591"
+  t=1650524815; x=1682060815;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WYxovo6fYu6pP21wbxbUzNXnneCANdbhHpH49GnDGis=;
+  b=BLGHEacNoBGHTAPEQElTqGfDtiF2/c+ONYlZKNwZqEVBt+72JZv2UUd4
+   8w3ILCo8C1GbpyalcYm4dyPsTUOlbRSb+KL61x/VYjfGRq8hQHtSvToFY
+   hGII8v/K7bQeJoABZGZWOtXXWm8pPvtCdgkY66AvR7N8tKpiy9xYroNI/
+   WwbrwY4742w6wEQlQ+of3JYznLOv+2mOY2/yMwy6mOySi7P1cltSHFtUs
+   vMr8gT7XSyLETq2JKmEdgBF4rotjDq4ueL5Arfz9CI3Fr7UjGEWVkLU0D
+   A9EMSgKhPxXnIgKK5l54+IbsbiA4FQkoMwsjiI7kr81fKzZf3H0UurlMo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="246156544"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="327161591"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:45:54 -0700
+   d="scan'208";a="246156544"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:06:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="530132418"
+   d="scan'208";a="510926204"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2022 23:45:52 -0700
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2022 00:06:53 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQZb-00082l-RB;
-	Thu, 21 Apr 2022 06:45:51 +0000
-Date: Thu, 21 Apr 2022 14:45:05 +0800
+	id 1nhQtw-00084H-Vk;
+	Thu, 21 Apr 2022 07:06:52 +0000
+Date: Thu, 21 Apr 2022 15:05:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
-	jic23@kernel.org, andy.shevchenko@gmail.com
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] iio: accel: bma400: Add support for activity and
- inactivity events
-Message-ID: <202204211211.febbJ6fy-lkp@intel.com>
-References: <20220420211105.14654-10-jagathjog1996@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1822/2579] kernel/signal.c:2990:2: error:
+ implicit declaration of function 'cgroup_threadgroup_change_begin' is
+ invalid in C99
+Message-ID: <202204211446.ajV6GlxA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,146 +46,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420211105.14654-10-jagathjog1996@gmail.com>
 
-Hi Jagath,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v5.18-rc3 next-20220420]
-[cannot apply to linux/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: mips-randconfig-r031-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211211.febbJ6fy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 5256e0b3a0d316629bf14a3e23258fc69496eee1 [1822/2579] headers/deps: cgroup: Move the cgroup_threadgroup_*() inline functions from <linux/cgroup_types.h> to <linux/cgroup_api.h>
+config: mips-randconfig-r026-20220419 (https://download.01.org/0day-ci/archive/20220421/202204211446.ajV6GlxA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
         # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
-        git checkout b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5256e0b3a0d316629bf14a3e23258fc69496eee1
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5256e0b3a0d316629bf14a3e23258fc69496eee1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/accel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iio/accel/bma400_core.c:1047:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-                   field_value = FIELD_PREP(msk, state);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/iio/accel/bma400_core.c:1053:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-                   field_value = FIELD_PREP(msk, state);
-                                 ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   2 warnings generated.
+   kernel/signal.c:190:6: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+               cgroup_task_frozen(t)) {
+               ^
+   kernel/signal.c:2325:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2328:3: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_leave_frozen(true);
+                   ^
+   kernel/signal.c:2328:3: note: did you mean 'cgroup_enter_frozen'?
+   kernel/signal.c:2325:3: note: 'cgroup_enter_frozen' declared here
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2516:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2595:2: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_enter_frozen();
+           ^
+   kernel/signal.c:2763:16: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (unlikely(cgroup_task_frozen(current))) {
+                                ^
+   kernel/signal.c:2765:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(false);
+                           ^
+   kernel/signal.c:2865:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(true);
+                           ^
+>> kernel/signal.c:2990:2: error: implicit declaration of function 'cgroup_threadgroup_change_begin' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_threadgroup_change_begin(tsk);
+           ^
+>> kernel/signal.c:2994:3: error: implicit declaration of function 'cgroup_threadgroup_change_end' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_threadgroup_change_end(tsk);
+                   ^
+   kernel/signal.c:2994:3: note: did you mean 'cgroup_threadgroup_change_begin'?
+   kernel/signal.c:2990:2: note: 'cgroup_threadgroup_change_begin' declared here
+           cgroup_threadgroup_change_begin(tsk);
+           ^
+   kernel/signal.c:3005:2: error: implicit declaration of function 'cgroup_threadgroup_change_end' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_threadgroup_change_end(tsk);
+           ^
+   11 errors generated.
 
 
-vim +1047 drivers/iio/accel/bma400_core.c
+vim +/cgroup_threadgroup_change_begin +2990 kernel/signal.c
 
-  1035	
-  1036	static int bma400_activity_event_en(struct bma400_data *data,
-  1037					    enum iio_event_direction dir,
-  1038					    int state)
-  1039	{
-  1040		int ret, reg, msk, value, field_value;
-  1041	
-  1042		switch (dir) {
-  1043		case IIO_EV_DIR_RISING:
-  1044			reg = BMA400_GEN1INT_CONFIG0;
-  1045			msk = BMA400_INT_GEN1_MSK;
-  1046			value = 2;
-> 1047			field_value = FIELD_PREP(msk, state);
-  1048			break;
-  1049		case IIO_EV_DIR_FALLING:
-  1050			reg = BMA400_GEN2INT_CONFIG0;
-  1051			msk = BMA400_INT_GEN2_MSK;
-  1052			value = 0;
-  1053			field_value = FIELD_PREP(msk, state);
-  1054			break;
-  1055		default:
-  1056			return -EINVAL;
-  1057		}
-  1058	
-  1059		/* Enabling all axis for interrupt evaluation */
-  1060		ret = regmap_write(data->regmap, reg, 0xF8);
-  1061		if (ret)
-  1062			return ret;
-  1063	
-  1064		/* OR combination of all axis for interrupt evaluation */
-  1065		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG1_OFF, value);
-  1066		if (ret)
-  1067			return ret;
-  1068	
-  1069		/* Initial value to avoid interrupts while enabling*/
-  1070		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF, 0x0A);
-  1071		if (ret)
-  1072			return ret;
-  1073	
-  1074		/* Initial duration value to avoid interrupts while enabling*/
-  1075		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG31_OFF, 0x0F);
-  1076		if (ret)
-  1077			return ret;
-  1078	
-  1079		ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG, msk,
-  1080					 field_value);
-  1081		if (ret)
-  1082			return ret;
-  1083	
-  1084		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG, msk,
-  1085					 field_value);
-  1086		if (ret)
-  1087			return ret;
-  1088	
-  1089		set_mask_bits(&data->generic_event_en, msk, field_value);
-  1090		return 0;
-  1091	}
-  1092	
+0edceb7bcd82802 Oleg Nesterov     2011-04-27  2980  
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2981  void exit_signals(struct task_struct *tsk)
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2982  {
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2983  	int group_stop = 0;
+f646e227b88a164 Oleg Nesterov     2011-04-27  2984  	sigset_t unblocked;
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2985  
+77e4ef99d1c596a Tejun Heo         2011-12-12  2986  	/*
+77e4ef99d1c596a Tejun Heo         2011-12-12  2987  	 * @tsk is about to have PF_EXITING set - lock out users which
+77e4ef99d1c596a Tejun Heo         2011-12-12  2988  	 * expect stable threadgroup.
+77e4ef99d1c596a Tejun Heo         2011-12-12  2989  	 */
+780de9dd2720deb Ingo Molnar       2017-02-02 @2990  	cgroup_threadgroup_change_begin(tsk);
+77e4ef99d1c596a Tejun Heo         2011-12-12  2991  
+49697335e0b441b Eric W. Biederman 2021-06-24  2992  	if (thread_group_empty(tsk) || (tsk->signal->flags & SIGNAL_GROUP_EXIT)) {
+b5b5c995e31d80e Ingo Molnar       2022-04-14  2993  		task_flags(tsk) |= PF_EXITING;
+780de9dd2720deb Ingo Molnar       2017-02-02 @2994  		cgroup_threadgroup_change_end(tsk);
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  2995  		return;
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2996  	}
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2997  
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  2998  	spin_lock_irq(&tsk->sighand->siglock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  2999  	/*
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3000  	 * From now this task is not visible for group-wide signals,
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3001  	 * see wants_signal(), do_signal_stop().
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3002  	 */
+b5b5c995e31d80e Ingo Molnar       2022-04-14  3003  	task_flags(tsk) |= PF_EXITING;
+77e4ef99d1c596a Tejun Heo         2011-12-12  3004  
+780de9dd2720deb Ingo Molnar       2017-02-02  3005  	cgroup_threadgroup_change_end(tsk);
+77e4ef99d1c596a Tejun Heo         2011-12-12  3006  
+5c251e9dc0e127b Jens Axboe        2020-10-26  3007  	if (!task_sigpending(tsk))
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3008  		goto out;
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3009  
+ec2f4babb822f72 Ingo Molnar       2022-01-28  3010  	unblocked = per_task(tsk, blocked);
+f646e227b88a164 Oleg Nesterov     2011-04-27  3011  	signotset(&unblocked);
+f646e227b88a164 Oleg Nesterov     2011-04-27  3012  	retarget_shared_pending(tsk, &unblocked);
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3013  
+a8f072c1d624a62 Tejun Heo         2011-06-02  3014  	if (unlikely(tsk->jobctl & JOBCTL_STOP_PENDING) &&
+e5c1902e9260a00 Tejun Heo         2011-03-23  3015  	    task_participate_group_stop(tsk))
+edf2ed153bcae52 Tejun Heo         2011-03-23  3016  		group_stop = CLD_STOPPED;
+5dee1707dfbfc55 Oleg Nesterov     2008-02-08  3017  out:
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3018  	spin_unlock_irq(&tsk->sighand->siglock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3019  
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3020  	/*
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3021  	 * If group stop has completed, deliver the notification.  This
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3022  	 * should always go to the real parent of the group leader.
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3023  	 */
+ae6d2ed7bb3877f Roland McGrath    2009-09-23  3024  	if (unlikely(group_stop)) {
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3025  		read_lock(&tasklist_lock);
+62bcf9d992ecc19 Tejun Heo         2011-03-23  3026  		do_notify_parent_cldstop(tsk, false, group_stop);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3027  		read_unlock(&tasklist_lock);
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3028  	}
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3029  }
+d12619b5ff56646 Oleg Nesterov     2008-02-08  3030  
+
+:::::: The code at line 2990 was first introduced by commit
+:::::: 780de9dd2720debc14c501dab4dc80d1f75ad50e sched/headers, cgroups: Remove the threadgroup_change_*() wrappery
+
+:::::: TO: Ingo Molnar <mingo@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
