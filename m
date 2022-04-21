@@ -1,45 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8387F1FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BCD1FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523494; x=1682059494;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kc6s8dd1+HLB+KL8Kkrto9nNijww6qnyOdaCsWjKnao=;
-  b=SihQndiqRo4GkB5etcvqXBqUWDeoM1dAUSd/MN58KTMvWo4qN0z69G1a
-   zWARCpNLIluhZTSlRyfgBptq9M22okmSmnGUh2kGP8iKla2mkzino3sXu
-   s7XzC+ewUj5gW4yFrVM30YLjLLPT4zUtwUEGxkWJIrxJmXJdOIMPCuIs9
-   KiQ/m4gCq+uMmaA02l/H5YglRzC2HROy31M6XNng0zS+ZhDT4O00aQwBO
-   l19CKssigH9bTlQvqwPdXuIPCgST6xFalo5UX9u2XazM6PT+cmhqa7xcX
-   NQyF7wyQXOiRgrKT0R0P89X4MrVUEqTMjAdsb7EMQlMNGtK9JrpQUN0Gc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251570617"
+  t=1650523515; x=1682059515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NaDAyaqFVN3Q0DIBHztqleUCRttZ7Oxt3AQT71CDTCI=;
+  b=PV/J8i9a2ui2DHs2r9aTGZax3+IA/5srdrewSinZ9Ss4JXPxorPiqHYw
+   yJjXt6jr7na5ek7IgQmjB6Qe8cvw+SpjB3xal6f3Lp99fRGmBwqM+eE//
+   xSDKMqBLOTicf0q7HtfRtOz/smtPHbOucgKdR3CmfCooF3DuVHNmwSPen
+   Y4l2m6ZFqhCrW/xNvEhEnKtIkAEScftdwPNbjY5cQo/J4uVG1inDKXq1U
+   2Eeq9MpKfQgxB8wrFM34VhF1UQRykBw12LpoC0AOmpK1vzpMsCZsKRQKo
+   LU1U/ja1r/18X5LXLEoRe2gDR8TIyrCBPCPpStXUEZ7SNgY+5S3y5hwEb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263109625"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="251570617"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:44:54 -0700
+   d="scan'208";a="263109625"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:44:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="626388019"
+   d="scan'208";a="510918950"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Apr 2022 23:44:52 -0700
+  by orsmga003.jf.intel.com with ESMTP; 20 Apr 2022 23:44:52 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQYd-00081h-CV;
+	id 1nhQYd-00081b-B3;
 	Thu, 21 Apr 2022 06:44:51 +0000
-Date: Thu, 21 Apr 2022 14:44:28 +0800
+Date: Thu, 21 Apr 2022 14:43:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.data+0x2577cc): Section mismatch in
- reference from the variable sensor_dev_attr_pwm1_auto_point1_pwm to the
- function .init.text:set_reset_devices()
-Message-ID: <202204211056.HP6rQw0u-lkp@intel.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	linux-bluetooth@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] Bluetooth: hci_event: Fix checking for invalid handle on
+ error status
+Message-ID: <202204210838.G9CZnn9u-lkp@intel.com>
+References: <20220420221433.2933868-1-luiz.dentz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,220 +47,185 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220420221433.2933868-1-luiz.dentz@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-commit: f334f5668bedf7307f6df1d98b14f55902931926 ilog2: force inlining of __ilog2_u32() and __ilog2_u64()
-date:   4 weeks ago
-config: riscv-randconfig-r015-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211056.HP6rQw0u-lkp@intel.com/config)
+Hi Luiz,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on bluetooth-next/master]
+[also build test ERROR on linus/master v5.18-rc3 next-20220420]
+[cannot apply to bluetooth/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-hci_event-Fix-checking-for-invalid-handle-on-error-status/20220421-061600
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+config: riscv-randconfig-r042-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210838.G9CZnn9u-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f334f5668bedf7307f6df1d98b14f55902931926
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f334f5668bedf7307f6df1d98b14f55902931926
+        # https://github.com/intel-lab-lkp/linux/commit/91a252b91692543d5f9536ebdf10f20a413a858f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Luiz-Augusto-von-Dentz/Bluetooth-hci_event-Fix-checking-for-invalid-handle-on-error-status/20220421-061600
+        git checkout 91a252b91692543d5f9536ebdf10f20a413a858f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/bluetooth/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> WARNING: modpost: vmlinux.o(.data+0x2577cc): Section mismatch in reference from the variable sensor_dev_attr_pwm1_auto_point1_pwm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_pwm1_auto_point1_pwm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+>> net/bluetooth/hci_event.c:3071:7: error: use of undeclared identifier 'status'
+           if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
+                ^
+   net/bluetooth/hci_event.c:4693:7: error: use of undeclared identifier 'status'
+           if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
+                ^
+   2 errors generated.
 
---
->> WARNING: modpost: vmlinux.o(.data+0x25782c): Section mismatch in reference from the variable sensor_dev_attr_pwm1_auto_point2_pwm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_pwm1_auto_point2_pwm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
 
---
->> WARNING: modpost: vmlinux.o(.data+0x25788c): Section mismatch in reference from the variable sensor_dev_attr_pwm1_auto_point3_pwm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_pwm1_auto_point3_pwm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+vim +/status +3071 net/bluetooth/hci_event.c
 
---
->> WARNING: modpost: vmlinux.o(.data+0x2578ec): Section mismatch in reference from the variable sensor_dev_attr_pwm1_auto_point4_pwm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_pwm1_auto_point4_pwm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x2a05dc): Section mismatch in reference from the variable dev_attr_active to the function .init.text:set_reset_devices()
-The variable dev_attr_active references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x2a80b8): Section mismatch in reference from the variable vlan_ioctl_mutex to the function .init.text:loglevel()
-The variable vlan_ioctl_mutex references
-the function __init loglevel()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x2a80c0): Section mismatch in reference from the variable vlan_ioctl_mutex to the function .init.text:set_reset_devices()
-The variable vlan_ioctl_mutex references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x24042c): Section mismatch in reference from the variable sensor_dev_attr_fan3_beep to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_fan3_beep references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x240488): Section mismatch in reference from the variable sensor_dev_attr_temp3_max_hyst to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_temp3_max_hyst references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x2404cc): Section mismatch in reference from the variable sensor_dev_attr_temp3_beep to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_temp3_beep references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x2407f8): Section mismatch in reference from the variable sensor_dev_attr_in2_beep to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in2_beep references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
-..
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
-<< WARNING: modpost: vmlinux.o(.data+0x21db7c): Section mismatch in reference from the variable sony_btf_mpx_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x225a30): Section mismatch in reference from the variable trace_event_fields_v4l2_event_class to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x24183c): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:loglevel()
-<< WARNING: modpost: vmlinux.o(.data+0x241844): Section mismatch in reference from the variable watchdog_data_mutex to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2447c0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB6_6
-<< WARNING: modpost: vmlinux.o(.data+0x2447e0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:init_reserve_notifier()
-<< WARNING: modpost: vmlinux.o(.data+0x244820): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_range()
-<< WARNING: modpost: vmlinux.o(.data+0x2449c0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_isolate_range()
-<< WARNING: modpost: vmlinux.o(.data+0x244ac0): Section mismatch in reference from the variable w83795_in to the function .meminit.text:memblock_remove_region()
-<< WARNING: modpost: vmlinux.o(.data+0x244de0): Section mismatch in reference from the variable w83795_in to the variable .meminit.text:.LBB9_3
+  3064	
+  3065	static void hci_conn_complete_evt(struct hci_dev *hdev, void *data,
+  3066					  struct sk_buff *skb)
+  3067	{
+  3068		struct hci_ev_conn_complete *ev = data;
+  3069		struct hci_conn *conn;
+  3070	
+> 3071		if (!status && __le16_to_cpu(ev->handle) > HCI_CONN_HANDLE_MAX) {
+  3072			bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for invalid handle");
+  3073			return;
+  3074		}
+  3075	
+  3076		bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+  3077	
+  3078		hci_dev_lock(hdev);
+  3079	
+  3080		conn = hci_conn_hash_lookup_ba(hdev, ev->link_type, &ev->bdaddr);
+  3081		if (!conn) {
+  3082			/* Connection may not exist if auto-connected. Check the bredr
+  3083			 * allowlist to see if this device is allowed to auto connect.
+  3084			 * If link is an ACL type, create a connection class
+  3085			 * automatically.
+  3086			 *
+  3087			 * Auto-connect will only occur if the event filter is
+  3088			 * programmed with a given address. Right now, event filter is
+  3089			 * only used during suspend.
+  3090			 */
+  3091			if (ev->link_type == ACL_LINK &&
+  3092			    hci_bdaddr_list_lookup_with_flags(&hdev->accept_list,
+  3093							      &ev->bdaddr,
+  3094							      BDADDR_BREDR)) {
+  3095				conn = hci_conn_add(hdev, ev->link_type, &ev->bdaddr,
+  3096						    HCI_ROLE_SLAVE);
+  3097				if (!conn) {
+  3098					bt_dev_err(hdev, "no memory for new conn");
+  3099					goto unlock;
+  3100				}
+  3101			} else {
+  3102				if (ev->link_type != SCO_LINK)
+  3103					goto unlock;
+  3104	
+  3105				conn = hci_conn_hash_lookup_ba(hdev, ESCO_LINK,
+  3106							       &ev->bdaddr);
+  3107				if (!conn)
+  3108					goto unlock;
+  3109	
+  3110				conn->type = SCO_LINK;
+  3111			}
+  3112		}
+  3113	
+  3114		/* The HCI_Connection_Complete event is only sent once per connection.
+  3115		 * Processing it more than once per connection can corrupt kernel memory.
+  3116		 *
+  3117		 * As the connection handle is set here for the first time, it indicates
+  3118		 * whether the connection is already set up.
+  3119		 */
+  3120		if (conn->handle != HCI_CONN_HANDLE_UNSET) {
+  3121			bt_dev_err(hdev, "Ignoring HCI_Connection_Complete for existing connection");
+  3122			goto unlock;
+  3123		}
+  3124	
+  3125		if (!ev->status) {
+  3126			conn->handle = __le16_to_cpu(ev->handle);
+  3127	
+  3128			if (conn->type == ACL_LINK) {
+  3129				conn->state = BT_CONFIG;
+  3130				hci_conn_hold(conn);
+  3131	
+  3132				if (!conn->out && !hci_conn_ssp_enabled(conn) &&
+  3133				    !hci_find_link_key(hdev, &ev->bdaddr))
+  3134					conn->disc_timeout = HCI_PAIRING_TIMEOUT;
+  3135				else
+  3136					conn->disc_timeout = HCI_DISCONN_TIMEOUT;
+  3137			} else
+  3138				conn->state = BT_CONNECTED;
+  3139	
+  3140			hci_debugfs_create_conn(conn);
+  3141			hci_conn_add_sysfs(conn);
+  3142	
+  3143			if (test_bit(HCI_AUTH, &hdev->flags))
+  3144				set_bit(HCI_CONN_AUTH, &conn->flags);
+  3145	
+  3146			if (test_bit(HCI_ENCRYPT, &hdev->flags))
+  3147				set_bit(HCI_CONN_ENCRYPT, &conn->flags);
+  3148	
+  3149			/* Get remote features */
+  3150			if (conn->type == ACL_LINK) {
+  3151				struct hci_cp_read_remote_features cp;
+  3152				cp.handle = ev->handle;
+  3153				hci_send_cmd(hdev, HCI_OP_READ_REMOTE_FEATURES,
+  3154					     sizeof(cp), &cp);
+  3155	
+  3156				hci_req_update_scan(hdev);
+  3157			}
+  3158	
+  3159			/* Set packet type for incoming connection */
+  3160			if (!conn->out && hdev->hci_ver < BLUETOOTH_VER_2_0) {
+  3161				struct hci_cp_change_conn_ptype cp;
+  3162				cp.handle = ev->handle;
+  3163				cp.pkt_type = cpu_to_le16(conn->pkt_type);
+  3164				hci_send_cmd(hdev, HCI_OP_CHANGE_CONN_PTYPE, sizeof(cp),
+  3165					     &cp);
+  3166			}
+  3167		} else {
+  3168			conn->state = BT_CLOSED;
+  3169			if (conn->type == ACL_LINK)
+  3170				mgmt_connect_failed(hdev, &conn->dst, conn->type,
+  3171						    conn->dst_type, ev->status);
+  3172		}
+  3173	
+  3174		if (conn->type == ACL_LINK)
+  3175			hci_sco_setup(conn, ev->status);
+  3176	
+  3177		if (ev->status) {
+  3178			hci_connect_cfm(conn, ev->status);
+  3179			hci_conn_del(conn);
+  3180		} else if (ev->link_type == SCO_LINK) {
+  3181			switch (conn->setting & SCO_AIRMODE_MASK) {
+  3182			case SCO_AIRMODE_CVSD:
+  3183				if (hdev->notify)
+  3184					hdev->notify(hdev, HCI_NOTIFY_ENABLE_SCO_CVSD);
+  3185				break;
+  3186			}
+  3187	
+  3188			hci_connect_cfm(conn, ev->status);
+  3189		}
+  3190	
+  3191	unlock:
+  3192		hci_dev_unlock(hdev);
+  3193	
+  3194		hci_conn_check_pending(hdev);
+  3195	}
+  3196	
 
 -- 
 0-DAY CI Kernel Test Service
