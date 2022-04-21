@@ -1,43 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11551FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FA81FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523553; x=1682059553;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ny/t573XxmBPMvgs6kdlkybOpMmWgeRx2GkUhaOPr/k=;
-  b=WWSyt0WSDPXEcniy/N8B8qjlmbmlIJ20HG5t77Hp3xU9nkn0XSAbj6gY
-   VuhfGwaP7IdVXpNc3w+kS8FORklYOcwQUn7Be2IF+tv7AqDAkDadpUFTf
-   dqPShnxerVs113knsw188mJkWR9fpraBCEU0qA8Q2OnBsgnonOwtVp/aL
-   m6nGtfPn1fP4+KVH+ltTdy0CXITcT5x3I3ep2JDOMZ8lVYdXP+y3YHljz
-   mm+HpoNVYSaXi2CcrkY9TxrwgifOgS6QQrNfyBafB42bP/x9ccUb+UDhI
-   FQ32qz9jN2kdcigrQrSVKM+THlk128LUks+Z4FOgd6j0thrbhE5TnP28Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251570910"
+  t=1650523557; x=1682059557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7178CiCoImQ+f/EA4vdj+Vck0criqevbU3FVIO5GGOw=;
+  b=K8E+QDPVaequC4hldU2bXXjj2IAbKjAvkSaRymtGG1MLeIboXh8RFfek
+   b4J2LPJltGXSXpo3VcL940Lu7gPy/VZZliHk+Mdyn6UCJrr3ihS/fskqJ
+   BCSm2HpVUvs2WCGidPAaYoUUJo3x3Az/P9Dl9OLowfs0kCNuEKubTVpJv
+   Qh8DVEsQGhPMJXS834Zc7p/MS1ULvSv4XClQTQdLSdiVWrjQogrXWe7xL
+   Nb6y9nfCT+RcVz23bzPx6uNIrOaema19dvZgJqR/8wM/V7IGhOHuz5yRN
+   0nhXlQOuaTYuIaoNhiWuZgZ/6rmhQYToZsH92THbiMMcU97D7N+2LgWCs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="327161591"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="251570910"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:45:53 -0700
+   d="scan'208";a="327161591"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:45:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="593513491"
+   d="scan'208";a="530132418"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Apr 2022 23:45:52 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2022 23:45:52 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQZb-00082T-Kk;
+	id 1nhQZb-00082l-RB;
 	Thu, 21 Apr 2022 06:45:51 +0000
-Date: Thu, 21 Apr 2022 14:45:10 +0800
+Date: Thu, 21 Apr 2022 14:45:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
+	jic23@kernel.org, andy.shevchenko@gmail.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1711/2579]
- usr/include/linux/netlink.h:5:10: fatal error: 'uapi/linux/types.h' file not
- found
-Message-ID: <202204211350.dqMcqQJM-lkp@intel.com>
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 9/9] iio: accel: bma400: Add support for activity and
+ inactivity events
+Message-ID: <202204211211.febbJ6fy-lkp@intel.com>
+References: <20220420211105.14654-10-jagathjog1996@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,33 +48,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220420211105.14654-10-jagathjog1996@gmail.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: d2d700a2eb67346fe31986e3915499c53959f5eb [1711/2579] headers/deps: net: Optimize <uapi/linux/netlink.h>
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220421/202204211350.dqMcqQJM-lkp@intel.com/config)
+Hi Jagath,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v5.18-rc3 next-20220420]
+[cannot apply to linux/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: mips-randconfig-r031-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211211.febbJ6fy-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=d2d700a2eb67346fe31986e3915499c53959f5eb
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout d2d700a2eb67346fe31986e3915499c53959f5eb
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
+        git checkout b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/crypto/ arch/x86/entry/ arch/x86/kernel/cpu/ arch/x86/pci/ kernel/bpf/ kernel/trace/ net/ipv6/ samples/connector/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/accel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from samples/connector/ucon.c:14:
->> usr/include/linux/netlink.h:5:10: fatal error: 'uapi/linux/types.h' file not found
-   #include <uapi/linux/types.h>
-            ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/iio/accel/bma400_core.c:1047:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+                   field_value = FIELD_PREP(msk, state);
+                                 ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/iio/accel/bma400_core.c:1053:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+                   field_value = FIELD_PREP(msk, state);
+                                 ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   2 warnings generated.
+
+
+vim +1047 drivers/iio/accel/bma400_core.c
+
+  1035	
+  1036	static int bma400_activity_event_en(struct bma400_data *data,
+  1037					    enum iio_event_direction dir,
+  1038					    int state)
+  1039	{
+  1040		int ret, reg, msk, value, field_value;
+  1041	
+  1042		switch (dir) {
+  1043		case IIO_EV_DIR_RISING:
+  1044			reg = BMA400_GEN1INT_CONFIG0;
+  1045			msk = BMA400_INT_GEN1_MSK;
+  1046			value = 2;
+> 1047			field_value = FIELD_PREP(msk, state);
+  1048			break;
+  1049		case IIO_EV_DIR_FALLING:
+  1050			reg = BMA400_GEN2INT_CONFIG0;
+  1051			msk = BMA400_INT_GEN2_MSK;
+  1052			value = 0;
+  1053			field_value = FIELD_PREP(msk, state);
+  1054			break;
+  1055		default:
+  1056			return -EINVAL;
+  1057		}
+  1058	
+  1059		/* Enabling all axis for interrupt evaluation */
+  1060		ret = regmap_write(data->regmap, reg, 0xF8);
+  1061		if (ret)
+  1062			return ret;
+  1063	
+  1064		/* OR combination of all axis for interrupt evaluation */
+  1065		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG1_OFF, value);
+  1066		if (ret)
+  1067			return ret;
+  1068	
+  1069		/* Initial value to avoid interrupts while enabling*/
+  1070		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF, 0x0A);
+  1071		if (ret)
+  1072			return ret;
+  1073	
+  1074		/* Initial duration value to avoid interrupts while enabling*/
+  1075		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG31_OFF, 0x0F);
+  1076		if (ret)
+  1077			return ret;
+  1078	
+  1079		ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG, msk,
+  1080					 field_value);
+  1081		if (ret)
+  1082			return ret;
+  1083	
+  1084		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG, msk,
+  1085					 field_value);
+  1086		if (ret)
+  1087			return ret;
+  1088	
+  1089		set_mask_bits(&data->generic_event_en, msk, field_value);
+  1090		return 0;
+  1091	}
+  1092	
 
 -- 
 0-DAY CI Kernel Test Service
