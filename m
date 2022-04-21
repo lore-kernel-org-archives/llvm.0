@@ -1,43 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691971FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EF91FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523390; x=1682059390;
+  t=1650523433; x=1682059433;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IyqTtKl8pfWrORbTfBAnzI+EZwggZHYfLzrZbrWNmAw=;
-  b=EdtB2bqfJhyUwB2QVL1fu85iesLniI0dMQnF08FWfgQM4rcqvHNjleyV
-   +9ksSpY2q3T5jZTNEYpVKD8kV7e54oXZEKPoeZ7M/SKBJmzr9Z/tCZkAu
-   thq/o6YGp5PVUFR4oScWnLOqNmFKkzTJqJBqT5Setyi6WyK60h6XBifL/
-   aYE9tZysvf7Xlq1M5y+Mke3dTif3BmH2cRoW3VfXzeOzcgNPwwN5Z9feR
-   s2V0ggrkGx4QacPwrAQptmjb0rq+M+WNpYEq2lCfZnhGqfvSY9gvWfUGq
-   ZwSLM37nA9qigVbznKUHzR2wTy5XpSRp1KYS57EMi8jehXqQkHSC4TePh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251570116"
+  bh=Iz05hkzh046AFXyvV17QUF1THEeOgPBiNmH1Mg45MDM=;
+  b=e4ExhK6Du7BjQFAscTTMCj8Yf/ltKSTGdLZ5z9DDD7VrCouwxfoDDFoH
+   AcFjJ598fyeHWAFhJgvfZjpHLIAD8+LKWfb5lnkLaAjTlj38nK/DF3SQJ
+   D5BzvDI8LDI4O5PbKDqz+5Cng8fD/WLJ6oFSuPeG0rmWSluUy71hxCP8n
+   YWLxC4DbP8/7VHHwZc/XmiNY5NianuqUWQrmc1kKp2/307VuJGi64wDJc
+   eQC4o1MiIXMICC7bbmsFnbkTpKuSCSCZshIfQ7cOhve3V1SwiZdbuMAQJ
+   SEmIF/bhqzG3XPJe/qn/xUkdJ9tzlczO9iHws4R7GtDIAwEtG11p0bRU7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="246151680"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="251570116"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:53 -0700
+   d="scan'208";a="246151680"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="865402049"
+   d="scan'208";a="805384268"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Apr 2022 23:42:51 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQWg-000808-Ph;
-	Thu, 21 Apr 2022 06:42:50 +0000
-Date: Thu, 21 Apr 2022 14:41:51 +0800
+	id 1nhQXe-00080d-Ue;
+	Thu, 21 Apr 2022 06:43:50 +0000
+Date: Thu, 21 Apr 2022 14:43:06 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2360/2579] include/linux/signal.h:97:11:
- error: array index 3 is past the end of the array (which contains 2
- elements)
-Message-ID: <202204210229.ZtiUn30E-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1820/2579] kernel/signal.c:190:6: error:
+ implicit declaration of function 'cgroup_task_frozen' is invalid in C99
+Message-ID: <202204210613.DeyJT7kn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,177 +48,85 @@ Content-Disposition: inline
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: e43870d97c8fb5c656b4592457df87ac2ee05f7a [2360/2579] headers/deps: mm: Optimize <linux/mm_api.h> dependencies, remove <linux/mmzone_api.h> dependency
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220421/202204210229.ZtiUn30E-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+commit: ec8ca2d8ef76b4edd4dc7e12899b5ff5e64657a5 [1820/2579] headers/deps: cgroups: Remove the <linux/cgroup_api.h> header from the default <linux/cgroup.h> header
+config: mips-randconfig-r026-20220419 (https://download.01.org/0day-ci/archive/20220421/202204210613.DeyJT7kn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=e43870d97c8fb5c656b4592457df87ac2ee05f7a
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=ec8ca2d8ef76b4edd4dc7e12899b5ff5e64657a5
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout e43870d97c8fb5c656b4592457df87ac2ee05f7a
+        git checkout ec8ca2d8ef76b4edd4dc7e12899b5ff5e64657a5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   In file included from include/linux/pgtable_api.h:15:
-   In file included from include/linux/mmzone_api.h:33:
-   In file included from arch/x86/include/asm/highmem.h:26:
-   In file included from arch/x86/include/asm/tlbflush.h:5:
-   In file included from include/linux/mm_api.h:393:
-   include/linux/huge_mm.h:207:10: error: implicit declaration of function 'pmd_none' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return !pmd_none(pmd) && !pmd_present(pmd);
-                   ^
-   include/linux/huge_mm.h:207:28: error: implicit declaration of function 'pmd_present' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return !pmd_none(pmd) && !pmd_present(pmd);
-                                     ^
-   include/linux/huge_mm.h:214:27: error: implicit declaration of function 'pmd_trans_huge' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
-                                    ^
-   include/linux/huge_mm.h:214:51: error: implicit declaration of function 'pmd_devmap' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
-                                                            ^
-   include/linux/huge_mm.h:222:6: error: implicit declaration of function 'pud_trans_huge' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (pud_trans_huge(*pud) || pud_devmap(*pud))
+>> kernel/signal.c:190:6: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+               cgroup_task_frozen(t)) {
                ^
-   include/linux/huge_mm.h:222:30: error: implicit declaration of function 'pud_devmap' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (pud_trans_huge(*pud) || pud_devmap(*pud))
-                                       ^
-   include/linux/huge_mm.h:254:37: error: implicit declaration of function 'pmd_pfn' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
-                                              ^
-   include/linux/huge_mm.h:254:53: error: implicit declaration of function 'pmd_present' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
-                                                              ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   In file included from include/linux/pgtable_api.h:19:
-   arch/x86/include/asm/pgtable.h:209:29: error: static declaration of 'pmd_pfn' follows non-static declaration
-   static inline unsigned long pmd_pfn(pmd_t pmd)
-                               ^
-   include/linux/huge_mm.h:254:37: note: previous implicit declaration is here
-           return READ_ONCE(huge_zero_pfn) == pmd_pfn(pmd) && pmd_present(pmd);
-                                              ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   In file included from include/linux/pgtable_api.h:19:
-   arch/x86/include/asm/pgtable.h:250:19: error: static declaration of 'pmd_trans_huge' follows non-static declaration
-   static inline int pmd_trans_huge(pmd_t pmd)
-                     ^
-   include/linux/huge_mm.h:214:27: note: previous implicit declaration is here
-           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
-                                    ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   In file included from include/linux/pgtable_api.h:19:
-   arch/x86/include/asm/pgtable.h:744:19: error: static declaration of 'pmd_present' follows non-static declaration
-   static inline int pmd_present(pmd_t pmd)
-                     ^
-   include/linux/huge_mm.h:207:28: note: previous implicit declaration is here
-           return !pmd_none(pmd) && !pmd_present(pmd);
-                                     ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   In file included from include/linux/pgtable_api.h:19:
-   arch/x86/include/asm/pgtable.h:773:19: error: static declaration of 'pmd_none' follows non-static declaration
-   static inline int pmd_none(pmd_t pmd)
-                     ^
-   include/linux/huge_mm.h:207:10: note: previous implicit declaration is here
-           return !pmd_none(pmd) && !pmd_present(pmd);
+>> kernel/signal.c:2325:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
                    ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   include/linux/pgtable_api.h:1201:19: error: static declaration of 'pmd_devmap' follows non-static declaration
-   static inline int pmd_devmap(pmd_t pmd)
-                     ^
-   include/linux/huge_mm.h:214:51: note: previous implicit declaration is here
-           if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pmd))
-                                                            ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   include/linux/pgtable_api.h:1205:19: error: static declaration of 'pud_devmap' follows non-static declaration
-   static inline int pud_devmap(pud_t pud)
-                     ^
-   include/linux/huge_mm.h:222:30: note: previous implicit declaration is here
-           if (pud_trans_huge(*pud) || pud_devmap(*pud))
-                                       ^
-   In file included from arch/x86/kvm/vmx/nested.c:9:
-   include/linux/pgtable_api.h:1218:19: error: static declaration of 'pud_trans_huge' follows non-static declaration
-   static inline int pud_trans_huge(pud_t pud)
-                     ^
-   include/linux/huge_mm.h:222:6: note: previous implicit declaration is here
-           if (pud_trans_huge(*pud) || pud_devmap(*pud))
-               ^
-   In file included from arch/x86/kvm/vmx/nested.c:25:
-   In file included from arch/x86/kvm/cpuid.h:5:
-   In file included from arch/x86/kvm/x86.h:5:
-   In file included from include/linux/kvm_host.h:17:
->> include/linux/signal.h:97:11: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
+>> kernel/signal.c:2328:3: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_leave_frozen(true);
+                   ^
+   kernel/signal.c:2328:3: note: did you mean 'cgroup_enter_frozen'?
+   kernel/signal.c:2325:3: note: 'cgroup_enter_frozen' declared here
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2516:3: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   cgroup_enter_frozen();
+                   ^
+   kernel/signal.c:2595:2: error: implicit declaration of function 'cgroup_enter_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           cgroup_enter_frozen();
            ^
-   In file included from arch/x86/kvm/vmx/nested.c:25:
-   In file included from arch/x86/kvm/cpuid.h:5:
-   In file included from arch/x86/kvm/x86.h:5:
-   In file included from include/linux/kvm_host.h:17:
-   include/linux/signal.h:97:25: error: array index 2 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kvm/vmx/nested.c:25:
-   In file included from arch/x86/kvm/cpuid.h:5:
-   In file included from arch/x86/kvm/x86.h:5:
-   In file included from include/linux/kvm_host.h:17:
-   include/linux/signal.h:113:11: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kvm/vmx/nested.c:25:
-   In file included from arch/x86/kvm/cpuid.h:5:
-   In file included from arch/x86/kvm/x86.h:5:
-   In file included from include/linux/kvm_host.h:17:
-   include/linux/signal.h:113:27: error: array index 3 is past the end of the array (which contains 2 elements) [-Werror,-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+   kernel/signal.c:2763:16: error: implicit declaration of function 'cgroup_task_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (unlikely(cgroup_task_frozen(current))) {
+                                ^
+   kernel/signal.c:2765:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(false);
+                           ^
+   kernel/signal.c:2865:4: error: implicit declaration of function 'cgroup_leave_frozen' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           cgroup_leave_frozen(true);
+                           ^
+   8 errors generated.
 
 
-vim +97 include/linux/signal.h
+vim +/cgroup_task_frozen +190 kernel/signal.c
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16   92  
-71fabd5e483530 George Anzinger 2006-01-08   93  static inline int sigisemptyset(sigset_t *set)
-71fabd5e483530 George Anzinger 2006-01-08   94  {
-71fabd5e483530 George Anzinger 2006-01-08   95  	switch (_NSIG_WORDS) {
-71fabd5e483530 George Anzinger 2006-01-08   96  	case 4:
-71fabd5e483530 George Anzinger 2006-01-08  @97  		return (set->sig[3] | set->sig[2] |
-71fabd5e483530 George Anzinger 2006-01-08   98  			set->sig[1] | set->sig[0]) == 0;
-71fabd5e483530 George Anzinger 2006-01-08   99  	case 2:
-71fabd5e483530 George Anzinger 2006-01-08  100  		return (set->sig[1] | set->sig[0]) == 0;
-71fabd5e483530 George Anzinger 2006-01-08  101  	case 1:
-71fabd5e483530 George Anzinger 2006-01-08  102  		return set->sig[0] == 0;
-71fabd5e483530 George Anzinger 2006-01-08  103  	default:
-1c3bea0e71892e Oleg Nesterov   2014-10-13  104  		BUILD_BUG();
-71fabd5e483530 George Anzinger 2006-01-08  105  		return 0;
-71fabd5e483530 George Anzinger 2006-01-08  106  	}
-71fabd5e483530 George Anzinger 2006-01-08  107  }
-71fabd5e483530 George Anzinger 2006-01-08  108  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  184  
+09ae854edb2d27 Christian Brauner 2018-08-21  185  static bool recalc_sigpending_tsk(struct task_struct *t)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  186  {
+76f969e8948d82 Roman Gushchin    2019-04-19  187  	if ((t->jobctl & (JOBCTL_PENDING_MASK | JOBCTL_TRAP_FREEZE)) ||
+6616e4593f1b57 Ingo Molnar       2022-01-28  188  	    PENDING(&per_task(t, pending), &per_task(t, blocked)) ||
+ec2f4babb822f7 Ingo Molnar       2022-01-28  189  	    PENDING(&t->signal->shared_pending, &per_task(t, blocked)) ||
+76f969e8948d82 Roman Gushchin    2019-04-19 @190  	    cgroup_task_frozen(t)) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  191  		set_tsk_thread_flag(t, TIF_SIGPENDING);
+09ae854edb2d27 Christian Brauner 2018-08-21  192  		return true;
+7bb44adef39ad3 Roland McGrath    2007-05-23  193  	}
+09ae854edb2d27 Christian Brauner 2018-08-21  194  
+b74d0deb968e1f Roland McGrath    2007-06-06  195  	/*
+b74d0deb968e1f Roland McGrath    2007-06-06  196  	 * We must never clear the flag in another thread, or in current
+b74d0deb968e1f Roland McGrath    2007-06-06  197  	 * when it's possible the current syscall is returning -ERESTART*.
+b74d0deb968e1f Roland McGrath    2007-06-06  198  	 * So we don't clear it here, and only callers who know they should do.
+b74d0deb968e1f Roland McGrath    2007-06-06  199  	 */
+09ae854edb2d27 Christian Brauner 2018-08-21  200  	return false;
+7bb44adef39ad3 Roland McGrath    2007-05-23  201  }
+7bb44adef39ad3 Roland McGrath    2007-05-23  202  
 
-:::::: The code at line 97 was first introduced by commit
-:::::: 71fabd5e4835309b4feca6209122ce56c595c461 [PATCH] sigaction should clear all signals on SIG_IGN, not just < 32
+:::::: The code at line 190 was first introduced by commit
+:::::: 76f969e8948d82e78e1bc4beb6b9465908e74873 cgroup: cgroup v2 freezer
 
-:::::: TO: George Anzinger <george@mvista.com>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+:::::: TO: Roman Gushchin <guro@fb.com>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
