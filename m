@@ -1,42 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF401FA6
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433F51FAD
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523433; x=1682059433;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=xApRxELnYuo8iQK2p9nNURZ//WTIcMRJot26uzKbzKQ=;
-  b=PPVqmGUCP+YGgjaZzdIcjQuJUpVP9j/GOWC/lWc3AvGhmSIXCyoWxiry
-   RPKspAbuwYtMr322BBvTeNgsLO0jhr0liIcWhH93AoYkd7LKeSPTmvvCr
-   CaS++VvNYWVeU5UiqToDWSzy/QkRTAbTZlXnOEyZb+DK9Vj3mlxV32wAy
-   LBzyS2aOCxl7RfzHMug++0PRIc+eBcEXOBHSgouGvcLuOkkaWOkloWs6m
-   hmKxD7MFTlE8563y5BYQaknPcWE7upz3DhrUmrBJfnWoUMHwK6j+CPFxZ
-   FEFHuURT8I8JvSbNnQZJLqhh8CmLOOOpVBNINVgaQGCDqg6bIRMPVTECC
+  t=1650523434; x=1682059434;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8tWgVrG70LhrCzeC9sVCAwYoCUofkqWkWkOd3PY5Ui4=;
+  b=ZU7kYmLDKXzHBlRr1xkYuJO8/0lHljc4+6TudlvF+LbfQ1TqsrEqIeMH
+   chsIwrEpXP6Y2pDx5UVNzgeOF++IvadvpQeSkKiFptdWGLuaBp76FAPmo
+   IQAVn+e/oBnQujPQVnzEE7Xd/6R4bXGagNnsBizpDh8yns8JZdvEErru1
+   Pr8Zvx84VCpfOH4Pvy9jHzpw7JO0Qjj7PJGfgn3i0cDj01c9C1pVs3yik
+   Ixae/sOR73usD4UywqvZ7WlTIUqZeYAZFQpBit4I5UdNrujmpM/qfhWBk
+   MLpdHcG0P0p9Lw9uhsyH49Ei1Y8YkDAnijzvoIhW3LRnRHVJIEH32zVRb
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261857563"
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="263109417"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="261857563"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
+   d="scan'208";a="263109417"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="555609060"
+   d="scan'208";a="562448731"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQXf-000814-6U;
+	id 1nhQXf-00080q-29;
 	Thu, 21 Apr 2022 06:43:51 +0000
-Date: Thu, 21 Apr 2022 14:43:00 +0800
+Date: Thu, 21 Apr 2022 14:43:43 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 2926/4957] ld.lld: error:
- init/built-in.a(main.o):(function __traceiter_initcall_level: .text+0x12):
- relocation R_RISCV_HI20 out of range: 535591 is not in [-524288, 524287];
- references __tracepoint_initcall_level
-Message-ID: <202204210555.DNvfHvIb-lkp@intel.com>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+	Christoph Hellwig <hch@lst.de>
+Subject: fs/xfs/xfs_reflink.c:992:12: warning: variable 'qdelta' set but not
+ used
+Message-ID: <202204210738.BXsozdsV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,73 +47,218 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Lv Ruyi <lv.ruyi@zte.com.cn>
-CC: Paolo Abeni <pabeni@redhat.com>
+Hi Darrick,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f1244c81da13009dbf61cb807f45881501c44789
-commit: ac6bef064f716ba67ab81054d53856f285bec307 [2926/4957] sfc: Fix spelling mistake "writting" -> "writing"
-config: riscv-randconfig-r026-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210555.DNvfHvIb-lkp@intel.com/config)
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+commit: f273387b048543f2b8b2d809cc65fca28e7788a1 xfs: refactor reflink functions to use xfs_trans_alloc_inode
+date:   1 year, 2 months ago
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220421/202204210738.BXsozdsV-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ac6bef064f716ba67ab81054d53856f285bec307
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ac6bef064f716ba67ab81054d53856f285bec307
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f273387b048543f2b8b2d809cc65fca28e7788a1
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f273387b048543f2b8b2d809cc65fca28e7788a1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/gvt/ drivers/mfd/ fs/xfs/ init/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: init/built-in.a(main.o):(function __traceiter_initcall_level: .text+0x12): relocation R_RISCV_HI20 out of range: 535591 is not in [-524288, 524287]; references __tracepoint_initcall_level
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function __traceiter_initcall_level: .text+0x1c): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references __traceiter_initcall_level.__if_trace.1
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x1e0): relocation R_RISCV_HI20 out of range: 536806 is not in [-524288, 524287]; references .LCPI3_0
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x20c): relocation R_RISCV_HI20 out of range: 535663 is not in [-524288, 524287]; references trace_trigger_soft_disabled.______f.56
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x222): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references trace_trigger_soft_disabled.__if_trace.0
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x26c): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references trace_trigger_soft_disabled.__if_trace.59.0
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x2a2): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references trace_event_raw_event_initcall_level.__if_trace.1
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function __traceiter_initcall_start: .text+0xae): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references __traceiter_initcall_start.__if_trace.1
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function __traceiter_initcall_finish: .text+0x144): relocation R_RISCV_HI20 out of range: 536064 is not in [-524288, 524287]; references __traceiter_initcall_finish.__if_trace.1
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function trace_event_raw_event_initcall_level: .text+0x1ca): relocation R_RISCV_HI20 out of range: 536823 is not in [-524288, 524287]; references __stack_chk_guard
-   >>> referenced by main.c
-   >>> defined in arch/riscv/built-in.a(kernel/process.o)
+>> fs/xfs/xfs_reflink.c:992:12: warning: variable 'qdelta' set but not used [-Wunused-but-set-variable]
+           int64_t                 qdelta = 0;
+                                   ^
+   1 warning generated.
+
+
+vim +/qdelta +992 fs/xfs/xfs_reflink.c
+
+   977	
+   978	/*
+   979	 * Remap the given extent into the file.  The dmap blockcount will be set to
+   980	 * the number of blocks that were actually remapped.
+   981	 */
+   982	STATIC int
+   983	xfs_reflink_remap_extent(
+   984		struct xfs_inode	*ip,
+   985		struct xfs_bmbt_irec	*dmap,
+   986		xfs_off_t		new_isize)
+   987	{
+   988		struct xfs_bmbt_irec	smap;
+   989		struct xfs_mount	*mp = ip->i_mount;
+   990		struct xfs_trans	*tp;
+   991		xfs_off_t		newlen;
+ > 992		int64_t			qdelta = 0;
+   993		unsigned int		resblks;
+   994		bool			smap_real;
+   995		bool			dmap_written = xfs_bmap_is_written_extent(dmap);
+   996		int			iext_delta = 0;
+   997		int			nimaps;
+   998		int			error;
+   999	
+  1000		/*
+  1001		 * Start a rolling transaction to switch the mappings.
+  1002		 *
+  1003		 * Adding a written extent to the extent map can cause a bmbt split,
+  1004		 * and removing a mapped extent from the extent can cause a bmbt split.
+  1005		 * The two operations cannot both cause a split since they operate on
+  1006		 * the same index in the bmap btree, so we only need a reservation for
+  1007		 * one bmbt split if either thing is happening.  However, we haven't
+  1008		 * locked the inode yet, so we reserve assuming this is the case.
+  1009		 */
+  1010		resblks = XFS_EXTENTADD_SPACE_RES(mp, XFS_DATA_FORK);
+  1011		error = xfs_trans_alloc_inode(ip, &M_RES(mp)->tr_write, resblks, 0,
+  1012				false, &tp);
+  1013		if (error)
+  1014			goto out;
+  1015	
+  1016		/*
+  1017		 * Read what's currently mapped in the destination file into smap.
+  1018		 * If smap isn't a hole, we will have to remove it before we can add
+  1019		 * dmap to the destination file.
+  1020		 */
+  1021		nimaps = 1;
+  1022		error = xfs_bmapi_read(ip, dmap->br_startoff, dmap->br_blockcount,
+  1023				&smap, &nimaps, 0);
+  1024		if (error)
+  1025			goto out_cancel;
+  1026		ASSERT(nimaps == 1 && smap.br_startoff == dmap->br_startoff);
+  1027		smap_real = xfs_bmap_is_real_extent(&smap);
+  1028	
+  1029		/*
+  1030		 * We can only remap as many blocks as the smaller of the two extent
+  1031		 * maps, because we can only remap one extent at a time.
+  1032		 */
+  1033		dmap->br_blockcount = min(dmap->br_blockcount, smap.br_blockcount);
+  1034		ASSERT(dmap->br_blockcount == smap.br_blockcount);
+  1035	
+  1036		trace_xfs_reflink_remap_extent_dest(ip, &smap);
+  1037	
+  1038		/*
+  1039		 * Two extents mapped to the same physical block must not have
+  1040		 * different states; that's filesystem corruption.  Move on to the next
+  1041		 * extent if they're both holes or both the same physical extent.
+  1042		 */
+  1043		if (dmap->br_startblock == smap.br_startblock) {
+  1044			if (dmap->br_state != smap.br_state)
+  1045				error = -EFSCORRUPTED;
+  1046			goto out_cancel;
+  1047		}
+  1048	
+  1049		/* If both extents are unwritten, leave them alone. */
+  1050		if (dmap->br_state == XFS_EXT_UNWRITTEN &&
+  1051		    smap.br_state == XFS_EXT_UNWRITTEN)
+  1052			goto out_cancel;
+  1053	
+  1054		/* No reflinking if the AG of the dest mapping is low on space. */
+  1055		if (dmap_written) {
+  1056			error = xfs_reflink_ag_has_free_space(mp,
+  1057					XFS_FSB_TO_AGNO(mp, dmap->br_startblock));
+  1058			if (error)
+  1059				goto out_cancel;
+  1060		}
+  1061	
+  1062		/*
+  1063		 * Increase quota reservation if we think the quota block counter for
+  1064		 * this file could increase.
+  1065		 *
+  1066		 * If we are mapping a written extent into the file, we need to have
+  1067		 * enough quota block count reservation to handle the blocks in that
+  1068		 * extent.  We log only the delta to the quota block counts, so if the
+  1069		 * extent we're unmapping also has blocks allocated to it, we don't
+  1070		 * need a quota reservation for the extent itself.
+  1071		 *
+  1072		 * Note that if we're replacing a delalloc reservation with a written
+  1073		 * extent, we have to take the full quota reservation because removing
+  1074		 * the delalloc reservation gives the block count back to the quota
+  1075		 * count.  This is suboptimal, but the VFS flushed the dest range
+  1076		 * before we started.  That should have removed all the delalloc
+  1077		 * reservations, but we code defensively.
+  1078		 */
+  1079		if (!smap_real && dmap_written) {
+  1080			error = xfs_trans_reserve_quota_nblks(tp, ip,
+  1081					dmap->br_blockcount, 0, false);
+  1082			if (error)
+  1083				goto out_cancel;
+  1084		}
+  1085	
+  1086		if (smap_real)
+  1087			++iext_delta;
+  1088	
+  1089		if (dmap_written)
+  1090			++iext_delta;
+  1091	
+  1092		error = xfs_iext_count_may_overflow(ip, XFS_DATA_FORK, iext_delta);
+  1093		if (error)
+  1094			goto out_cancel;
+  1095	
+  1096		if (smap_real) {
+  1097			/*
+  1098			 * If the extent we're unmapping is backed by storage (written
+  1099			 * or not), unmap the extent and drop its refcount.
+  1100			 */
+  1101			xfs_bmap_unmap_extent(tp, ip, &smap);
+  1102			xfs_refcount_decrease_extent(tp, &smap);
+  1103			qdelta -= smap.br_blockcount;
+  1104		} else if (smap.br_startblock == DELAYSTARTBLOCK) {
+  1105			xfs_filblks_t	len = smap.br_blockcount;
+  1106	
+  1107			/*
+  1108			 * If the extent we're unmapping is a delalloc reservation,
+  1109			 * we can use the regular bunmapi function to release the
+  1110			 * incore state.  Dropping the delalloc reservation takes care
+  1111			 * of the quota reservation for us.
+  1112			 */
+  1113			error = __xfs_bunmapi(NULL, ip, smap.br_startoff, &len, 0, 1);
+  1114			if (error)
+  1115				goto out_cancel;
+  1116			ASSERT(len == 0);
+  1117		}
+  1118	
+  1119		/*
+  1120		 * If the extent we're sharing is backed by written storage, increase
+  1121		 * its refcount and map it into the file.
+  1122		 */
+  1123		if (dmap_written) {
+  1124			xfs_refcount_increase_extent(tp, dmap);
+  1125			xfs_bmap_map_extent(tp, ip, dmap);
+  1126			qdelta += dmap->br_blockcount;
+  1127		}
+  1128	
+  1129		xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_BCOUNT, qdelta);
+  1130	
+  1131		/* Update dest isize if needed. */
+  1132		newlen = XFS_FSB_TO_B(mp, dmap->br_startoff + dmap->br_blockcount);
+  1133		newlen = min_t(xfs_off_t, newlen, new_isize);
+  1134		if (newlen > i_size_read(VFS_I(ip))) {
+  1135			trace_xfs_reflink_update_inode_size(ip, newlen);
+  1136			i_size_write(VFS_I(ip), newlen);
+  1137			ip->i_d.di_size = newlen;
+  1138			xfs_trans_log_inode(tp, ip, XFS_ILOG_CORE);
+  1139		}
+  1140	
+  1141		/* Commit everything and unlock. */
+  1142		error = xfs_trans_commit(tp);
+  1143		goto out_unlock;
+  1144	
+  1145	out_cancel:
+  1146		xfs_trans_cancel(tp);
+  1147	out_unlock:
+  1148		xfs_iunlock(ip, XFS_ILOCK_EXCL);
+  1149	out:
+  1150		if (error)
+  1151			trace_xfs_reflink_remap_extent_error(ip, error, _RET_IP_);
+  1152		return error;
+  1153	}
+  1154	
 
 -- 
 0-DAY CI Kernel Test Service
