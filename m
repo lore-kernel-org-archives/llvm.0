@@ -1,143 +1,82 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585D21FA2
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 08:17:21 +0000 (UTC)
-Received: by mail-io1-f69.google.com with SMTP id q5-20020a0566022f0500b00654a56b1dfbso2817110iow.8
-        for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 01:17:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=yerC/94J0Sug/4iuxPVAUmoYEq2mrdNBYNdMxDbu4vg=;
-        b=uY09v2nsOION3FvZSGQ7E+BtZbBOyMcos+b3TZYuLoJ88yzTqhRTN83xJPrY5soHaM
-         RghVjXx2aEOFFC0pfr1qcbt7W2nv6srYSUyi1JxvDU8D5mIcjlYLWsgFMBbMWWZtRcS7
-         NijPYJJk1rjQegiN+VtaLHzjloISLg1xMgoYY4TLF2aKC18mOXgTghcHxnkWNRWp4CQC
-         7e8OT4N9JujJjXJ5VZW6YUlhO5O8PvpckMbng8SKnBijxwASNOvsWo3dqnlqQdmyszbI
-         UGWqVAp8YFqKo/j2lOe+RY0lm4To4YQUMMumq1JW8sD3raS4Wripkc+ocTGwwS6Hf2F6
-         ixHA==
-X-Gm-Message-State: AOAM530Fd+kvVS8nqEXTsEM6A70pUQVHZ3YIn9hJP3NvtioZ4kLorU1j
-	85NgdLLz9+lT2mtCrdjG6sQqWah9eeq+jdgWrbdexQDjg/QR
-X-Google-Smtp-Source: ABdhPJx0GYuV0M80kNgZm862teSLlR5qJ9bTDszSuYR7ZntsB+C0uXZDxDOxRpdnVm7zmeVEluSzg/uSWQY68AqHnQM693LqApze
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90771FA1
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 08:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F5BC385A5;
+	Thu, 21 Apr 2022 08:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650529306;
+	bh=NAqSDobntwkqjwaH/qn/17ndbF/l0boIVwfnhiCCuc4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=bGfqzJCqbJEw44bWcYwnWRbt+w6g8CkUtrfJwyL2e52pfLYkr0DtOSaOLEtLAn8KC
+	 3dagNFleFPJFO0RZ20OcooLXeS0WVS91BGQ0lBaWOVXF0k3fLYpd/G9Rcb1x2GKAIR
+	 x7mNdg4DiJfnOr6LkpDAM/U4beTd8Yhnah1KrM+WqGleGMZ1D63hHYkcUBRBHcJ7nJ
+	 aUzHXJYcfxIfqBOHrMRQP0ondAnQouU5W/8clBqmBToxduazM4Qz4gesHOL7kWkoRd
+	 ECy+X5zLCdCmwbk4Q9fRq1zgD6stN53+hylweY54IVXuZDqTRJQLW2mLkrzo6j1mYU
+	 qRn13geZzhX5A==
+Date: Thu, 21 Apr 2022 10:21:42 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: kernel test robot <lkp@intel.com>, 
+    "Daniel J. Ogorchock" <djogorchock@gmail.com>
+cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: drivers/hid/hid-nintendo.c:403:29: warning: unused variable
+ 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
+In-Reply-To: <202204211058.3UoweQuz-lkp@intel.com>
+Message-ID: <nycvar.YFH.7.76.2204211021050.30217@cbobk.fhfr.pm>
+References: <202204211058.3UoweQuz-lkp@intel.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3714:b0:328:8647:3457 with SMTP id
- k20-20020a056638371400b0032886473457mr8950345jav.299.1650529040220; Thu, 21
- Apr 2022 01:17:20 -0700 (PDT)
-Date: Thu, 21 Apr 2022 01:17:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000022487405dd25bd0d@google.com>
-Subject: [syzbot] general protection fault in ntfs_update_mftmirr
-From: syzbot <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-Hello,
+On Thu, 21 Apr 2022, kernel test robot wrote:
 
-syzbot found the following issue on:
+> Hi Daniel,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   b253435746d9a4a701b5f09211b9c14d3370d0da
+> commit: dad74e18f72a852ae40ad7b4246841a1b7e196b5 HID: nintendo: prevent needless queueing of the rumble worker
+> date:   6 months ago
+> config: s390-randconfig-c005-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211058.3UoweQuz-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install s390 cross compiling tool for clang build
+>         # apt-get install binutils-s390x-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dad74e18f72a852ae40ad7b4246841a1b7e196b5
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout dad74e18f72a852ae40ad7b4246841a1b7e196b5
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/dc/ drivers/hid/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>                    ^
+>    drivers/hid/hid-nintendo.c:51:17: warning: unused variable 'JC_SUBCMD_STATE' [-Wunused-const-variable]
+>    static const u8 JC_SUBCMD_STATE                 /*= 0x00*/;
 
-HEAD commit:    b253435746d9 Merge tag 'xtensa-20220416' of https://github..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11588ba2f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4cdc9619f45633df
-dashboard link: https://syzkaller.appspot.com/bug?extid=c95173762127ad76a824
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175b13c0f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1502f854f00000
+[ ... snip ... ]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
+Daniel, could you please send a patch that'd comment out the unused ones? 
+(i.e. keep them for documentation purposes, but avoid the warning).
 
-loop0: detected capacity change from 0 to 264192
-ntfs3: Unknown parameter 'iochvrset'
-general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-CPU: 1 PID: 3589 Comm: syz-executor210 Not tainted 5.18.0-rc3-syzkaller-00016-gb253435746d9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ntfs_update_mftmirr+0x51/0x6a0 fs/ntfs3/fsntfs.c:834
-Code: 48 c1 e8 03 80 3c 18 00 74 08 4c 89 f7 e8 47 d4 13 ff 49 8b 06 48 89 44 24 18 48 8d 68 18 48 89 e8 48 c1 e8 03 48 89 44 24 40 <80> 3c 18 00 74 08 48 89 ef e8 21 d4 13 ff 48 89 6c 24 10 48 8b 45
-RSP: 0018:ffffc90002dffc70 EFLAGS: 00010206
-RAX: 0000000000000003 RBX: dffffc0000000000 RCX: ffff888025543a00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807e250000
-RBP: 0000000000000018 R08: dffffc0000000000 R09: ffff88807e250290
-R10: ffffed100fc4a055 R11: 1ffff1100fc4a052 R12: ffff888079a4dc00
-R13: dffffc0000000000 R14: ffff88807e250000 R15: dffffc0000000000
-FS:  0000555556d79300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fffc47539c0 CR3: 000000001cabf000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- put_ntfs+0x1ed/0x2a0 fs/ntfs3/super.c:463
- ntfs_fs_free+0x6a/0xe0 fs/ntfs3/super.c:1363
- put_fs_context+0x119/0x7a0 fs/fs_context.c:469
- do_new_mount+0x2b4/0xad0 fs/namespace.c:3044
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fc64612025a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5eefed68 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd5eefedc0 RCX: 00007fc64612025a
-RDX: 0000000020001480 RSI: 00000000200014c0 RDI: 00007ffd5eefed80
-RBP: 00007ffd5eefed80 R08: 00007ffd5eefedc0 R09: 0000000800000015
-R10: 0000000000000008 R11: 0000000000000286 R12: 0000000000000008
-R13: 0000000020002a00 R14: 0000000000000004 R15: 0000000000000003
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ntfs_update_mftmirr+0x51/0x6a0 fs/ntfs3/fsntfs.c:834
-Code: 48 c1 e8 03 80 3c 18 00 74 08 4c 89 f7 e8 47 d4 13 ff 49 8b 06 48 89 44 24 18 48 8d 68 18 48 89 e8 48 c1 e8 03 48 89 44 24 40 <80> 3c 18 00 74 08 48 89 ef e8 21 d4 13 ff 48 89 6c 24 10 48 8b 45
-RSP: 0018:ffffc90002dffc70 EFLAGS: 00010206
-RAX: 0000000000000003 RBX: dffffc0000000000 RCX: ffff888025543a00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807e250000
-RBP: 0000000000000018 R08: dffffc0000000000 R09: ffff88807e250290
-R10: ffffed100fc4a055 R11: 1ffff1100fc4a052 R12: ffff888079a4dc00
-R13: dffffc0000000000 R14: ffff88807e250000 R15: dffffc0000000000
-FS:  0000555556d79300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fffc47539c0 CR3: 000000001cabf000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 c1 e8 03          	shr    $0x3,%rax
-   4:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1)
-   8:	74 08                	je     0x12
-   a:	4c 89 f7             	mov    %r14,%rdi
-   d:	e8 47 d4 13 ff       	callq  0xff13d459
-  12:	49 8b 06             	mov    (%r14),%rax
-  15:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
-  1a:	48 8d 68 18          	lea    0x18(%rax),%rbp
-  1e:	48 89 e8             	mov    %rbp,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-  25:	48 89 44 24 40       	mov    %rax,0x40(%rsp)
-* 2a:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	48 89 ef             	mov    %rbp,%rdi
-  33:	e8 21 d4 13 ff       	callq  0xff13d459
-  38:	48 89 6c 24 10       	mov    %rbp,0x10(%rsp)
-  3d:	48                   	rex.W
-  3e:	8b                   	.byte 0x8b
-  3f:	45                   	rex.RB
+Thanks,
 
+-- 
+Jiri Kosina
+SUSE Labs
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
