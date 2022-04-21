@@ -1,123 +1,199 @@
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0804133EA
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 22:22:39 +0000 (UTC)
-Received: by mail-io1-f43.google.com with SMTP id 79so6839784iou.7
-        for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 15:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VCgKHuj4/b4B8v/0JoTxDFA1GBH+X0m9XoDYHur1Z1I=;
-        b=EcevrwaUPNWImMw3RWVQB4TFY4NXjAOLyftfd3coTTN6aM3THXtL0y1iUPuxmKxJU8
-         jTy0SqsaBOsIHcc2sIxIJv4ybiqTGwnMt70Hu8TeT0mmvy+1i6+e+w4xSo5NJvPBJDUE
-         exXV0N2SehxTJod/6UO+gtRQi8aroZzLk/R19a0dPA0u1+GnZMrQJCB7yDz8nNTh1Ub5
-         Luqc9MGpzjff57hdPzVJBM4QbuiVff9nnH3bnR/vF36RxzY6L28XQeDMihSM9UTZd868
-         l/F/hcd3SpitgY+j+DC6yqMrXptueCdeWBqgRUERG+H2aHjJJoUcYja57RASAWxXDtDd
-         plZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VCgKHuj4/b4B8v/0JoTxDFA1GBH+X0m9XoDYHur1Z1I=;
-        b=JkxvPAmGbQqNn85SSqYpS1SJzuSWAB3Os55eCAIiRihT9yHgTMfVK+VzjazO9g6Xnl
-         WTsDI7JASiVQQp4qxAHJHlo7DWhrX7Ypif8XGrkrWM+l3qdBX6LRb1pSRMrUkEacvzoE
-         ibqu5v5EQ+if+zphX13oC3U1f0XSGuEX0oWVTAB19lVZ7XU48OEAYmjfoVYUItuOXZek
-         qdKjd4TOJg7z3DmjHJjYOLbm1KVwuyJvZ2kH58Vns2Qz7bYTGX/BEkavNtZiGCow2QPa
-         3kmf0mQTy/jQ6XSoCjtooH/gYq60ADQ5g6lvrqapk6ZmxZqePeor+cQTISkgGpZNCsIj
-         3udw==
-X-Gm-Message-State: AOAM532wEVeyF5W8too7dbP+VPQL6Cbx9tMt1pIwkvaZ1ElFaKg1NqqW
-	JYE9NqUB72HeSBJdX6wy4Q8f7+QjSTcYc1oVvU+XEw==
-X-Google-Smtp-Source: ABdhPJy63Y9jRqMNO0Jhy8kSsySEBI1w7ve2fovXz2pPwycwLT5xv1YlfvgYXF3ayo73vpCsj6OD30+WyFPHKC9qH3w=
-X-Received: by 2002:a05:6602:482:b0:614:b990:28c9 with SMTP id
- y2-20020a056602048200b00614b99028c9mr828356iov.6.1650579758741; Thu, 21 Apr
- 2022 15:22:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD841FBF
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 23:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650582419; x=1682118419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pQT9aEysMXXsjvzcG5V3WWcbMoPa0tWlFbbMxcv7ek4=;
+  b=JvaYFOhW8Elj6X1/afq0Wi2N9+AsiZKuopoCVaw3DChEfagnruN0UznE
+   2frTdcKtX6M4lYIAn/4LMo9SQmPXwWHPkaDDcdNpiVRB+MYRnP0HkMbTL
+   EOZ6E4/NBUQoN4Q27VAXq2pbqc5oCLddCA+XyyBGxGw0TzydKcjcv/klO
+   W5Y9kpY37ENSbAIkq6xXnI7G9imcgL5U4vurB4pRqUxlVpzYB+49OJXvB
+   RUnRIQdLISfAXjq3n2/ejxkc2BbPHxu3D+mx9lgm4bdN3JTOBjrhcPvDK
+   w0yM/RmQBRaF+/vg7H2sj85mn5vpXlqmDHciTFyTlBI9TJByVr6Mk++gQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263977104"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="263977104"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:06:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="615137201"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 16:06:57 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nhft2-0008s4-Eq;
+	Thu, 21 Apr 2022 23:06:56 +0000
+Date: Fri, 22 Apr 2022 07:06:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-block@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	yukuai <yukuai3@huawei.com>,
+	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Subject: Re: [PATCH] block: fix "Directory XXXXX with parent 'block' already
+ present!"
+Message-ID: <202204220614.mF9U5ks7-lkp@intel.com>
+References: <20220421083431.2917311-1-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202204212106.9R1ylUB7-lkp@intel.com> <20220421154806.52e1992b@xps13>
-In-Reply-To: <20220421154806.52e1992b@xps13>
-From: Jean-Marc Eurin <jmeurin@google.com>
-Date: Thu, 21 Apr 2022 15:22:26 -0700
-Message-ID: <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
-Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
- format specifies type 'long' but the argument has type 'unsigned int'
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421083431.2917311-1-ming.lei@redhat.com>
 
-On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.com> w=
-rote:
->
-> Hi Jean-Marc,
->
-> lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
->
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git m=
-td/next
-> > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
-> > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoops: =
-Create a header structure for the saved mtdoops.
-> > config: hexagon-randconfig-r045-20220420 (https://download.01.org/0day-=
-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ba=
-c6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git=
-/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
-> >         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/=
-git/mtd/linux.git
-> >         git fetch --no-tags mtd mtd/next
-> >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'long' =
-but the argument has type 'unsigned int' [-Wformat]
-> >                                   page * record_size, retlen, sizeof(hd=
-r), ret);
-> >                                                               ^~~~~~~~~=
-~~
-> >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
-> >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS=
-__)
-> >                                                        ~~~    ^~~~~~~~~=
-~~
-> >    include/linux/printk.h:418:19: note: expanded from macro 'printk_ind=
-ex_wrap'
-> >                    _p_func(_fmt, ##__VA_ARGS__);                       =
-    \
-> >                            ~~~~    ^~~~~~~~~~~
-> >    1 warning generated.
->
-> I've dropped the series for now. Please have a look at the reports and
-> propose a new version when this is fixed?
+Hi Ming,
 
-Sorry about that, I had made that change based on this suggestion
-https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-)
+Thank you for the patch! Yet something to improve:
 
-I'll send another set.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/block-fix-Directory-XXXXX-with-parent-block-already-present/20220421-163556
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: arm64-randconfig-r034-20220421 (https://download.01.org/0day-ci/archive/20220422/202204220614.mF9U5ks7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/746684a4668ee70b284126159a10f98ff7ebb319
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ming-Lei/block-fix-Directory-XXXXX-with-parent-block-already-present/20220421-163556
+        git checkout 746684a4668ee70b284126159a10f98ff7ebb319
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Jean-Marc
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Thanks,
-> Miqu=C3=A8l
+All errors (new ones prefixed by >>):
+
+>> block/blk-sysfs.c:841:22: error: passing 'const char *' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           blk_debugfs_root, kobject_name(q->kobj.parent));
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/debugfs.h:252:47: note: passing argument to parameter 'new_name' here
+                   struct dentry *new_dir, char *new_name)
+                                                 ^
+   1 error generated.
+
+
+vim +841 block/blk-sysfs.c
+
+   808	
+   809	/**
+   810	 * blk_register_queue - register a block layer queue with sysfs
+   811	 * @disk: Disk of which the request queue should be registered with sysfs.
+   812	 */
+   813	int blk_register_queue(struct gendisk *disk)
+   814	{
+   815		int ret;
+   816		struct device *dev = disk_to_dev(disk);
+   817		struct request_queue *q = disk->queue;
+   818	
+   819		ret = blk_trace_init_sysfs(dev);
+   820		if (ret)
+   821			return ret;
+   822	
+   823		mutex_lock(&q->sysfs_dir_lock);
+   824	
+   825		ret = kobject_add(&q->kobj, kobject_get(&dev->kobj), "%s", "queue");
+   826		if (ret < 0) {
+   827			blk_trace_remove_sysfs(dev);
+   828			goto unlock;
+   829		}
+   830	
+   831		ret = sysfs_create_group(&q->kobj, &queue_attr_group);
+   832		if (ret) {
+   833			blk_trace_remove_sysfs(dev);
+   834			kobject_del(&q->kobj);
+   835			kobject_put(&dev->kobj);
+   836			goto unlock;
+   837		}
+   838	
+   839		mutex_lock(&q->debugfs_mutex);
+   840		q->debugfs_dir = debugfs_rename(blk_debugfs_root, q->debugfs_dir,
+ > 841				blk_debugfs_root, kobject_name(q->kobj.parent));
+   842		mutex_unlock(&q->debugfs_mutex);
+   843	
+   844		if (queue_is_mq(q)) {
+   845			__blk_mq_register_dev(dev, q);
+   846			blk_mq_debugfs_register(q);
+   847		}
+   848	
+   849		mutex_lock(&q->sysfs_lock);
+   850	
+   851		ret = disk_register_independent_access_ranges(disk, NULL);
+   852		if (ret)
+   853			goto put_dev;
+   854	
+   855		if (q->elevator) {
+   856			ret = elv_register_queue(q, false);
+   857			if (ret)
+   858				goto put_dev;
+   859		}
+   860	
+   861		ret = blk_crypto_sysfs_register(q);
+   862		if (ret)
+   863			goto put_dev;
+   864	
+   865		blk_queue_flag_set(QUEUE_FLAG_REGISTERED, q);
+   866		wbt_enable_default(q);
+   867		blk_throtl_register_queue(q);
+   868	
+   869		/* Now everything is ready and send out KOBJ_ADD uevent */
+   870		kobject_uevent(&q->kobj, KOBJ_ADD);
+   871		if (q->elevator)
+   872			kobject_uevent(&q->elevator->kobj, KOBJ_ADD);
+   873		mutex_unlock(&q->sysfs_lock);
+   874	
+   875	unlock:
+   876		mutex_unlock(&q->sysfs_dir_lock);
+   877	
+   878		/*
+   879		 * SCSI probing may synchronously create and destroy a lot of
+   880		 * request_queues for non-existent devices.  Shutting down a fully
+   881		 * functional queue takes measureable wallclock time as RCU grace
+   882		 * periods are involved.  To avoid excessive latency in these
+   883		 * cases, a request_queue starts out in a degraded mode which is
+   884		 * faster to shut down and is made fully functional here as
+   885		 * request_queues for non-existent devices never get registered.
+   886		 */
+   887		if (!blk_queue_init_done(q)) {
+   888			blk_queue_flag_set(QUEUE_FLAG_INIT_DONE, q);
+   889			percpu_ref_switch_to_percpu(&q->q_usage_counter);
+   890		}
+   891	
+   892		return ret;
+   893	
+   894	put_dev:
+   895		elv_unregister_queue(q);
+   896		disk_unregister_independent_access_ranges(disk);
+   897		mutex_unlock(&q->sysfs_lock);
+   898		mutex_unlock(&q->sysfs_dir_lock);
+   899		kobject_del(&q->kobj);
+   900		blk_trace_remove_sysfs(dev);
+   901		kobject_put(&dev->kobj);
+   902	
+   903		return ret;
+   904	}
+   905	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
