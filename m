@@ -1,91 +1,100 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6564B1FA1
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 08:37:25 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id a17-20020a056602209100b006549a9cd480so2826668ioa.15
-        for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 01:37:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Z3COjImbkOiEoOAzeO8GIdxDewk8AQvlhTEHNm0MlOw=;
-        b=70OBRpRvPWK2/hjTP5NxqEMTMmUXzsbDprkD7XvAow2J2fh8JRYW5Fk6NasriQgt5C
-         svbn0Wlz6Y2CrMaZvwDaVdo8Y7KZXvOoLSWw+pX5lm37O8lp2I/jQ875MNnu414WM94P
-         Alry5kEpooPO9e2hmMYsCTixoI8phzg8saqocMhSPwEKpJMWrUsK+caDuYS9JfRmapxZ
-         SZBpMDFSXbcf/2gXhmWtPIZp4UPy7rJmYaBaJ+dZbU9ZrNqzQlp/P+jJDqOh5yN3qNfN
-         7Zky0itcJZeiBR0wbJ5Hu5xo4XQEb9PWk6SVd6/AExKfP+4pwIBTqpVI1PJsqi21cYd3
-         A9oA==
-X-Gm-Message-State: AOAM532rLkyAs9aXdidZ6AsR084dJxadIzm/FV5BqmYZPOHMXfXwMJBl
-	VqWOwLTRZtSe/lLZfv1uumyYiZQ2OxD0eH+5AqZQZAuHBvhF
-X-Google-Smtp-Source: ABdhPJwl3/XXfAKfEcos1SazqUljVxiPCxXMPwsY8wSp6dJPzIeZNsFQ2CEKPoASmEbz3qZzqC7Y3N4nsJfiwq7n40kifY7eBpdV
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAB41876
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 08:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650531153; x=1682067153;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3EC3KlKKZO/UYyJjPtajH9hjh9GX6FEadOKY32nXFaI=;
+  b=D48LfwKTg2ZBteUrP21LUpDXYizRS/xRDB2nOQ0uiFX1QokPgNW4QkqD
+   LquDxR1NEnA5YPFE0cojkfOGcTU5L6ZJYY3+ByXWwLJogmV34h29GMZUQ
+   n/nEjPjJUYH48OgmpXjOl1NM4x7bCXkJva4PirFHkq/hgtHpmrmgDuAZz
+   LjyC1uL1amOaRYbFw0gfVsvfeLoMjJtsPh9UCikpGS+pyAEc2Zatdrpgh
+   CMSJs3vlhgDCD1dedPAiXGD+LSu9JB+temY/i1uBjylUwwlwGH7n+jg7J
+   WzVsDcg8b/mSdc//Die/kFNEcGqD6fPgXmc6xTkWkyMsUlRU3B45VN21e
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264050015"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="264050015"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 01:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="703002903"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Apr 2022 01:52:16 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nhSXv-000893-S5;
+	Thu, 21 Apr 2022 08:52:15 +0000
+Date: Thu, 21 Apr 2022 16:51:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1987/2579]
+ arch/x86/entry/vdso/vdso32-setup.c:55:12: warning: no previous prototype for
+ function 'sysenter_setup'
+Message-ID: <202204211627.pSYrSUgt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bc7:b0:2cc:5965:ea80 with SMTP id
- x7-20020a056e021bc700b002cc5965ea80mr3176767ilv.221.1650530244546; Thu, 21
- Apr 2022 01:37:24 -0700 (PDT)
-Date: Thu, 21 Apr 2022 01:37:24 -0700
-In-Reply-To: <000000000000f8b5ef05dd25b963@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ead34405dd2604f0@google.com>
-Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in ntfs_fill_super
-From: syzbot <syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot has found a reproducer for the following issue on:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 3edbef1e72915c9356080e1e09b29bd64b1673ae [1987/2579] headers/deps: x86/elf: Optimize <asm/elf.h> dependencies, split out <asm/elf_api.h>
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220421/202204211627.pSYrSUgt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=3edbef1e72915c9356080e1e09b29bd64b1673ae
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 3edbef1e72915c9356080e1e09b29bd64b1673ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/crypto/ arch/x86/entry/ arch/x86/kernel/cpu/ arch/x86/pci/ kernel/bpf/ kernel/trace/ net/ipv6/
 
-HEAD commit:    b253435746d9 Merge tag 'xtensa-20220416' of https://github..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=177e30e8f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ff9f8140cbb3af7
-dashboard link: https://syzkaller.appspot.com/bug?extid=1631f09646bc214d2e76
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e13cfcf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=135e3008f00000
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com
+All warnings (new ones prefixed by >>):
 
-loop0: detected capacity change from 0 to 8189
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:673:16
-shift exponent -192 is negative
-CPU: 1 PID: 3587 Comm: syz-executor611 Not tainted 5.18.0-rc3-syzkaller-00016-gb253435746d9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- ntfs_fill_super.cold+0x2bf/0x549 fs/ntfs/bitmap.c:84
- get_tree_bdev+0x440/0x760 fs/super.c:1292
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fb8d7bcd7ea
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdfb6d7948 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffdfb6d79a0 RCX: 00007fb8d7bcd7ea
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffdfb6d7960
-RBP: 00007ffdfb6d7960 R08: 00007ffdfb6d79a0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020001b80
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000110
- </TASK>
-================================================================================
+>> arch/x86/entry/vdso/vdso32-setup.c:55:12: warning: no previous prototype for function 'sysenter_setup' [-Wmissing-prototypes]
+   int __init sysenter_setup(void)
+              ^
+   arch/x86/entry/vdso/vdso32-setup.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init sysenter_setup(void)
+   ^
+   static 
+   1 warning generated.
 
+
+vim +/sysenter_setup +55 arch/x86/entry/vdso/vdso32-setup.c
+
+^1da177e4c3f41 arch/i386/kernel/sysenter.c        Linus Torvalds      2005-04-16  54  
+a6c4e076ee4c1e arch/i386/kernel/sysenter.c        Jeremy Fitzhardinge 2007-05-02 @55  int __init sysenter_setup(void)
+^1da177e4c3f41 arch/i386/kernel/sysenter.c        Linus Torvalds      2005-04-16  56  {
+0a6d1fa0d2b48f arch/x86/entry/vdso/vdso32-setup.c Andy Lutomirski     2015-10-05  57  	init_vdso_image(&vdso_image_32);
+^1da177e4c3f41 arch/i386/kernel/sysenter.c        Linus Torvalds      2005-04-16  58  
+^1da177e4c3f41 arch/i386/kernel/sysenter.c        Linus Torvalds      2005-04-16  59  	return 0;
+^1da177e4c3f41 arch/i386/kernel/sysenter.c        Linus Torvalds      2005-04-16  60  }
+e6e5494cb23d19 arch/i386/kernel/sysenter.c        Ingo Molnar         2006-06-27  61  
+
+:::::: The code at line 55 was first introduced by commit
+:::::: a6c4e076ee4c1ea670e4faa55814e63dd08e3f29 [PATCH] i386: clean up identify_cpu
+
+:::::: TO: Jeremy Fitzhardinge <jeremy@goop.org>
+:::::: CC: Andi Kleen <andi@basil.nowhere.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
