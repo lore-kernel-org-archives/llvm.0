@@ -1,43 +1,46 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFF233FF
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 23:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A5F3D6D
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 23:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650583086; x=1682119086;
+  t=1650584246; x=1682120246;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3HDiJ8oX4H1fort48Tf+jIRSNYLDP5q421WmnpUv1+0=;
-  b=bT/m3clYtb57EOtssr7DX7whS3grn9hDreraqVRMy5rp6ZDZaj0h3QWk
-   jvaeTHl9IzwZlAg1VmbIbRCet1o43dy7cm4the8RdbzMP478EHIYPGPw0
-   1Sr9AzhoDRmefERAqbtmoFdKTyRHx89s8WlXo1B23zLq5D9BhoLWb3mXL
-   zmgAr/jEJP2riI6tFVYUK5F/WNktQRMNKFGZMPBpuRi46u4vAOaTMYif0
-   p6eFgkbX4j837NX0jPmk2R9nXqzTjcRcnXHqjlGIWa7GKaWcMZ1ekFLCr
-   7XMmPHrkxtrTfrS14jInStnRNhVgyua+zNMTxpZFrmwd8+ZZ4L2fvB59r
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244434122"
+  bh=hsiue63RkpFpSZcg8+e7rbdQ7Pu2T4IlMfL6usHCTU8=;
+  b=Z+4dHulkeiqna5M7nzspsHEcPIZVlp3CMlGNHFq0vJ89pQNmbUpx1fbC
+   K7SVyv1fd2q1+MQN1ToT5/p0HRuyJDTzWb5VonB2Qp6cLMi4lsd0hQqw1
+   9/NaqEoQpm9u1ox1PTC74sk58qLFBaSevYDlJ7QWZ/+FU1Cubnm+k4Lyg
+   /qXBpROEBwfzGNh0Kbm/Y27YhaTadMRjvJ2wDbkPaJQYQcpzdW1784+9I
+   +VXwNoO/gYQwt8+TaryCoiLoa7BfhQXrvG5vEQydlTk7TVoOOrKCxiuOM
+   fzpWu5Ai9TD7M4Zc/SGXm6EoAC4CBGjKYWkXsiElYiyDh2wmdDixoBR9P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="251834800"
 X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="244434122"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:18:05 -0700
+   d="scan'208";a="251834800"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:37:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="626726823"
+   d="scan'208";a="615150212"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 16:18:04 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 16:37:24 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhg3n-0008sY-S1;
-	Thu, 21 Apr 2022 23:18:03 +0000
-Date: Fri, 22 Apr 2022 07:16:56 +0800
+	id 1nhgMV-0008v8-SY;
+	Thu, 21 Apr 2022 23:37:23 +0000
+Date: Fri, 22 Apr 2022 07:37:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
+To: Mike Rapoport <rppt@linux.ibm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: drivers/watchdog/pic32-wdt.c:159:34: warning: unused variable
- 'pic32_wdt_dt_ids'
-Message-ID: <202204220754.nuORtA1j-lkp@intel.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: [stable:linux-5.10.y 2705/5321] WARNING: modpost:
+ vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function
+ __arm_ioremap_pfn_caller() to the function
+ .meminit.text:memblock_is_map_memory()
+Message-ID: <202204220723.zOZ7gZGT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,51 +50,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b253435746d9a4a701b5f09211b9c14d3370d0da
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   1 year, 7 months ago
-config: mips-randconfig-r005-20220422 (https://download.01.org/0day-ci/archive/20220422/202204220754.nuORtA1j-lkp@intel.com/config)
+Hi Mike,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   1052f9bce62982023737a95b7ff1ad26a5149af6
+commit: 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181 [2705/5321] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
+config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220723.zOZ7gZGT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.10.y
+        git checkout 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/media/hantro/ drivers/watchdog/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/watchdog/pic32-wdt.c:159:34: warning: unused variable 'pic32_wdt_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id pic32_wdt_dt_ids[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/pic32_wdt_dt_ids +159 drivers/watchdog/pic32-wdt.c
-
-8f91fc56bc439a Joshua Henderson 2016-02-26  158  
-8f91fc56bc439a Joshua Henderson 2016-02-26 @159  static const struct of_device_id pic32_wdt_dt_ids[] = {
-8f91fc56bc439a Joshua Henderson 2016-02-26  160  	{ .compatible = "microchip,pic32mzda-wdt", },
-8f91fc56bc439a Joshua Henderson 2016-02-26  161  	{ /* sentinel */ }
-8f91fc56bc439a Joshua Henderson 2016-02-26  162  };
-8f91fc56bc439a Joshua Henderson 2016-02-26  163  MODULE_DEVICE_TABLE(of, pic32_wdt_dt_ids);
-8f91fc56bc439a Joshua Henderson 2016-02-26  164  
-
-:::::: The code at line 159 was first introduced by commit
-:::::: 8f91fc56bc439a5baefae598040d263f48526596 watchdog: pic32-wdt: Add PIC32 watchdog driver
-
-:::::: TO: Joshua Henderson <joshua.henderson@microchip.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+>> WARNING: modpost: vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function __arm_ioremap_pfn_caller() to the function .meminit.text:memblock_is_map_memory()
+The function __arm_ioremap_pfn_caller() references
+the function __meminit memblock_is_map_memory().
+This is often because __arm_ioremap_pfn_caller lacks a __meminit
+annotation or the annotation of memblock_is_map_memory is wrong.
 
 -- 
 0-DAY CI Kernel Test Service
