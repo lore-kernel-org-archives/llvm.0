@@ -1,144 +1,97 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE14123A0;
-	Thu, 21 Apr 2022 20:26:09 +0000 (UTC)
-Received: by mail-lj1-f174.google.com with SMTP id v1so3742685ljv.3;
-        Thu, 21 Apr 2022 13:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to;
-        bh=bOCI3XFea2q/xxFJgKExCkX7ISgseBMqDiJ+lR8tNBc=;
-        b=B1Ms+gHdTdEV79mFnP5ybY6oNIXTUchZGfSeBG1qm3r2CQMpPRaeGr88MKrf+f4eh2
-         ctdEY3cNoHH+v6cmuM5ZXI0K6rERayhyr/QqYyiFADYHF1yFGNX2ft8YBSbJYsuiCHC6
-         3GILIbaVhFAO7QXzEjpPCqjDWWvKN9NOnKCvpQod5K/Vy1KoIy9+peGfx2ucnaGpuw3n
-         C/AfVUeSJEc33+8xE0ZN21US/UYc3d2pviPLtNFtv8pVI4sM6hJ4+HDEo1zdknJzz4KA
-         m25Tl8tFQ+SY/vEreqKDggj7twoIoAPMMVV19Z3jdbPz9h7LaR4181q5eJ2tm7R+rVWM
-         qp7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to;
-        bh=bOCI3XFea2q/xxFJgKExCkX7ISgseBMqDiJ+lR8tNBc=;
-        b=AmqKczobxpgTFEi9Xhx4hEkco7bqVqc5VqSi9Fkw+yce5KFwyVJiQPiQFA9JBA5Qey
-         0BPbVPN5OPvBawTRXcEgGZU7IGC0U54TdZJnR5OKXPij+Bh1XzTQ/UmGFBPBwNhx1DfI
-         6xOgT3xLSezMolup1hlSGImJtePTsRE3O2QNlgSf7NaODekJkfPkM3EFPihq0oUE2tUa
-         CTg+Mo9S//l8fWkZm3IjpM9nHHttg4QMFQrXFhkAxnzMpo29DYQ8QJ0u1ZRRcd3yrnso
-         Og0G9SlMM5dTNvQkIBEJRaWqD5ZaKxfk7OcYKssU8F2oAtwy+rYJvapPuldrW1cdJgmX
-         EuJw==
-X-Gm-Message-State: AOAM5306n5IlQeDLCtgWg+X7w+ZooqcYO2SiMRuewWs4FnzBEWt2u71a
-	IiQMzoVABtY042i9YUPZveI=
-X-Google-Smtp-Source: ABdhPJzyGhv1dqQJIx/WE8K+sydflcemDtAPR4C2BV+AVCJkoFz2RuZ/zunT/JwZe6tjlANYK2MHxA==
-X-Received: by 2002:a2e:a7ce:0:b0:24e:e213:ee14 with SMTP id x14-20020a2ea7ce000000b0024ee213ee14mr765087ljp.491.1650572767673;
-        Thu, 21 Apr 2022 13:26:07 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.17])
-        by smtp.gmail.com with ESMTPSA id v22-20020a2e9256000000b0024dbc6edecdsm1282919ljg.125.2022.04.21.13.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 13:26:07 -0700 (PDT)
-Message-ID: <83061bda-5a91-6123-a006-aaeb5458d5d7@gmail.com>
-Date: Thu, 21 Apr 2022 23:26:05 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F063723A0
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 20:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650572806; x=1682108806;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y8unbK9Ek6KCDiTDsxDHyypG4mp4nnlyjAuZ37/RS2g=;
+  b=lhLlDqrPW6MaEvPU7ExoxWP3epH/JusQG7ArSjQ4uUPo9HR97WbEhO6Q
+   v2gXkpV7RvPpgwVMm/wi9MhOyZjtjUX4cJnPaI5+taL/bBlcuif8pXM0g
+   wWPTE9wBUZyPmTEU+dSsUaFrZjsDUoASJUHLePxK5T+nLmGtVX/09YtKe
+   YMMtmbFBqxdz/HTV3Mnplbsz87Jx/PDpjsXMPvJEyBpbUHz1LOagZ6Utp
+   LZMOIEutQdQjsGA4Y2rWajxGDgbiaDQotzzbcfTcw/vMfMh8axu7XlChS
+   9nxenBeH9VXj4+R+if9BfUrODkTdWFa7NKCGTcTDPGOVwR82nPGqkKqLw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245045179"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="245045179"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 13:26:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="577452614"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 13:26:45 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nhdO0-0008l8-BL;
+	Thu, 21 Apr 2022 20:26:44 +0000
+Date: Fri, 22 Apr 2022 04:25:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [norov:bitmap 45/47] lib/bitmap.c:1570:17: error: initializing
+ 'unsigned long *' with an expression of type 'const unsigned long *'
+ discards qualifiers
+Message-ID: <202204220430.uHgyhQL9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] general protection fault in ntfs_update_mftmirr
-Content-Language: en-US
-To: syzbot <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>,
- almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
- ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-References: <00000000000022487405dd25bd0d@google.com>
-From: Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <00000000000022487405dd25bd0d@google.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------WYJmKsAde7MM8USQat5VktCr"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------WYJmKsAde7MM8USQat5VktCr
-Content-Type: multipart/mixed; boundary="------------dsXtaJ5yduLP6icDnkrHiATx";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: syzbot <syzbot+c95173762127ad76a824@syzkaller.appspotmail.com>,
- almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
- ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Message-ID: <83061bda-5a91-6123-a006-aaeb5458d5d7@gmail.com>
-Subject: Re: [syzbot] general protection fault in ntfs_update_mftmirr
-References: <00000000000022487405dd25bd0d@google.com>
-In-Reply-To: <00000000000022487405dd25bd0d@google.com>
+tree:   https://github.com/norov/linux bitmap
+head:   29f3046c8c2929f8dbe5e1cb4f25ebdd5366ebe7
+commit: f1cbd19c47bf73d532ff30571601c7ede57d5f82 [45/47] lib: add bitmap_{from,to}_arr64
+config: mips-allnoconfig (https://download.01.org/0day-ci/archive/20220422/202204220430.uHgyhQL9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/norov/linux/commit/f1cbd19c47bf73d532ff30571601c7ede57d5f82
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap
+        git checkout f1cbd19c47bf73d532ff30571601c7ede57d5f82
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
---------------dsXtaJ5yduLP6icDnkrHiATx
-Content-Type: multipart/mixed; boundary="------------ssQyUC9tA0KRqpE4gITNPWZ9"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---------------ssQyUC9tA0KRqpE4gITNPWZ9
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+All errors (new ones prefixed by >>):
 
-T24gNC8yMS8yMiAxMToxNywgc3l6Ym90IHdyb3RlOg0KPiBIZWxsbywNCj4gDQo+IHN5emJv
-dCBmb3VuZCB0aGUgZm9sbG93aW5nIGlzc3VlIG9uOg0KPiANCj4gSEVBRCBjb21taXQ6ICAg
-IGIyNTM0MzU3NDZkOSBNZXJnZSB0YWcgJ3h0ZW5zYS0yMDIyMDQxNicgb2YgaHR0cHM6Ly9n
-aXRodWIuLg0KPiBnaXQgdHJlZTogICAgICAgdXBzdHJlYW0NCj4gY29uc29sZSBvdXRwdXQ6
-IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3QuY29tL3gvbG9nLnR4dD94PTExNTg4YmEyZjAw
-MDAwDQo+IGtlcm5lbCBjb25maWc6ICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94
-Ly5jb25maWc/eD00Y2RjOTYxOWY0NTYzM2RmDQo+IGRhc2hib2FyZCBsaW5rOiBodHRwczov
-L3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9Yzk1MTczNzYyMTI3YWQ3NmE4MjQN
-Cj4gY29tcGlsZXI6ICAgICAgIERlYmlhbiBjbGFuZyB2ZXJzaW9uIDEzLjAuMS0rKzIwMjIw
-MTI2MDkyMDMzKzc1ZTMzZjcxYzJkYS0xfmV4cDF+MjAyMjAxMjYyMTIxMTIuNjMsIEdOVSBs
-ZCAoR05VIEJpbnV0aWxzIGZvciBEZWJpYW4pIDIuMzUuMg0KPiBzeXogcmVwcm86ICAgICAg
-aHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20veC9yZXByby5zeXo/eD0xNzViMTNjMGYw
-MDAwMA0KPiBDIHJlcHJvZHVjZXI6ICAgaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20v
-eC9yZXByby5jP3g9MTUwMmY4NTRmMDAwMDANCj4gDQo+IElNUE9SVEFOVDogaWYgeW91IGZp
-eCB0aGUgaXNzdWUsIHBsZWFzZSBhZGQgdGhlIGZvbGxvd2luZyB0YWcgdG8gdGhlIGNvbW1p
-dDoNCj4gUmVwb3J0ZWQtYnk6IHN5emJvdCtjOTUxNzM3NjIxMjdhZDc2YTgyNEBzeXprYWxs
-ZXIuYXBwc3BvdG1haWwuY29tDQo+IA0KDQpJZiBudGZzX2ZpbGxfc3VwZXIgd2Fzbid0IGNh
-bGxlZCB0aGVuIHNiaS0+c2IgaXMgTlVMTC4NCg0KI3N5eiB0ZXN0Og0KZ2l0Oi8vZ2l0Lmtl
-cm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdCBt
-YXN0ZXINCg0KDQoNCg0KDQpXaXRoIHJlZ2FyZHMsDQpQYXZlbCBTa3JpcGtpbg0K
---------------ssQyUC9tA0KRqpE4gITNPWZ9
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
+>> lib/bitmap.c:1570:17: error: initializing 'unsigned long *' with an expression of type 'const unsigned long *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
+                          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/bitmap.c:1575:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                           *buf |= *bitmap++ << 32;
+                                             ^  ~~
+   1 warning and 1 error generated.
 
-ZGlmZiAtLWdpdCBhL2ZzL250ZnMzL2ZzbnRmcy5jIGIvZnMvbnRmczMvZnNudGZzLmMKaW5k
-ZXggM2RlNTcwMGE5YjgzLi44OTExMjVjYTY4NDggMTAwNjQ0Ci0tLSBhL2ZzL250ZnMzL2Zz
-bnRmcy5jCisrKyBiL2ZzL250ZnMzL2ZzbnRmcy5jCkBAIC04MzEsMTAgKzgzMSwxNSBAQCBp
-bnQgbnRmc191cGRhdGVfbWZ0bWlycihzdHJ1Y3QgbnRmc19zYl9pbmZvICpzYmksIGludCB3
-YWl0KQogewogCWludCBlcnI7CiAJc3RydWN0IHN1cGVyX2Jsb2NrICpzYiA9IHNiaS0+c2I7
-Ci0JdTMyIGJsb2Nrc2l6ZSA9IHNiLT5zX2Jsb2Nrc2l6ZTsKKwl1MzIgYmxvY2tzaXplOwog
-CXNlY3Rvcl90IGJsb2NrMSwgYmxvY2syOwogCXUzMiBieXRlczsKIAorCWlmICghc2IpCisJ
-CXJldHVybiAtRUlOVkFMOworCisJYmxvY2tzaXplID0gc2ItPnNfYmxvY2tzaXplOworCiAJ
-aWYgKCEoc2JpLT5mbGFncyAmIE5URlNfRkxBR1NfTUZUTUlSUikpCiAJCXJldHVybiAwOwog
-Cg==
 
---------------ssQyUC9tA0KRqpE4gITNPWZ9--
+vim +1570 lib/bitmap.c
 
---------------dsXtaJ5yduLP6icDnkrHiATx--
+  1561	
+  1562	/**
+  1563	 * bitmap_to_arr64 - copy the contents of bitmap to a u64 array of bits
+  1564	 *	@buf: array of u64 (in host byte order), the dest bitmap
+  1565	 *	@bitmap: array of unsigned longs, the source bitmap
+  1566	 *	@nbits: number of bits in @bitmap
+  1567	 */
+  1568	void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits)
+  1569	{
+> 1570		unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
 
---------------WYJmKsAde7MM8USQat5VktCr
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJhvd0FAwAAAAAACgkQbk1w61LbBA3s
-7Q//fygiink/M03wffJG1qTJ2957UF3sTU0c5xlH5HHm9H/C0qxLX3HFj77JNCZE0GSTVpib0S08
-TZZH/1MlxG+oZUvB1HhPAaZ1f/6IpqkY4VEDgAgSlo+ALcQSIce9sGgHaFW3psiMvMJkWz7EP9kd
-ZODJK7vvgm26VyEFnMJ9VYeVopCO3rNjWsQ/JwlmlTU9zMABupGaR8oPWn0QDicO6fMNwqh1Uh0u
-Bgiv5ST9C7bh/qe9xZK9Ku7siEh3qt1yj2NzGAp5viKs5tQKPkO2FAj9LFww+FhrAqD7wbZJtIpu
-Vm/0P9b1uZAQEXZ3m+Ve2zq396z+kvZwLu/SE6aTlxKJaT0uHS5iKOJOdh3byIOah19fXpP5llQs
-a6BOWJUz9+JtQHKwNPbNUSlFauzS5Gv/sfs75TDPthkTdzllZrVSokpMruhPMPGu/9a4+9WmbPLa
-c4RQFBSsx9SYzD0Plxl/8gO8LhBeOTdmehjGM7kIjMQcrMKVjMOJJg9xG9T6NLrIytwellpmuEAt
-uCeHeOEeXkaHgIxl8f7L2fFzi7Lc8EjQp/nyQ43m2vyQj8nEjy2ZR6qGJvrOip+MFUB+1ghUIvbr
-rr+94RJsmXu1eG7Fd5NDOIPYN90cy8aM+khb0Y3CeEWRWW5qnd6CJSMSxDRKrLxyotOBv1ZmchZ9
-7jc=
-=u1KX
------END PGP SIGNATURE-----
-
---------------WYJmKsAde7MM8USQat5VktCr--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
