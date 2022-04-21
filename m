@@ -1,42 +1,42 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5557A
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 13:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC857A
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 13:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650546177; x=1682082177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=motXs5KVTHeBonIQQERqYU8O1E/gky/yojvQugo6wqo=;
-  b=l9ICraCXB1owjf5eOBoEM9Ay/G8brDKSc/BOurm4RhEUxtDWML9DXx7S
-   Z3loB8ILfmhWDqWjweQUlB3vQ5jCrQs2n7B/t1frv8uMf2WnELSBn3GpX
-   aixnDXEN2Dth7YNxaEW68CLUK3A/knKWNus77EiffCuX+44QyeYoab5Rv
-   5UfK1IgqiOYV++Azb1UP2lHbiuzUeNaSos1DGnaFkW0Of4h4BFhqGIBFP
-   KDp4mcX6E7B1OAudme5Ok2IDzTCIdgA7GqK+VreSYdQVdE27A4mEeHdyi
-   6NcRCeLahc3A3nK6YeMqSBar2UookZsEEjhHlHACu0X7hxUiBABiwFNui
+  t=1650546737; x=1682082737;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=O5QI/3Eq8dmrKt18v3w9QcSKIQgXPmi1foc7rqW8w9Q=;
+  b=TLS203uy3yYYJO+p12bgyBQXvrz5TzXI0l5yO69U1ENnpwSxBg/e+BsN
+   VgmD4pI1pIe82E38HshiDfKnqr6thH07E7B9L/vN+MtzXOeu6l63zwVpA
+   j7MuA3JD2anQZZzWuWQBOBBvK7QeVPXr5jcHPI+UOiPcs1J2DCp1+gtfK
+   5aEIuULDvxV728bywMfSpiw3/7GVi4m9uDC/D/tCbPNl+C6n8oq7K9NF+
+   KEhhcwbE7WEVOYIQOgLQFGlJtXZt7X5W2H/z0BoLBG11IbpZnFGBYFfPp
+   w0PXx1b6Rj2db19do6ETx0zGDHqVjP6cn0oMMG+iDW4r8pq7nGPif0o8/
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324786329"
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264114221"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="324786329"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 06:02:16 -0700
+   d="scan'208";a="264114221"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 06:12:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="648122772"
+   d="scan'208";a="626510254"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Apr 2022 06:02:15 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 21 Apr 2022 06:12:15 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhWRq-0008Q1-O0;
-	Thu, 21 Apr 2022 13:02:14 +0000
-Date: Thu, 21 Apr 2022 21:01:39 +0800
+	id 1nhWbX-0008Qb-5w;
+	Thu, 21 Apr 2022 13:12:15 +0000
+Date: Thu, 21 Apr 2022 21:11:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1933/2579] lib/memcat_p.c:10:8: warning: no
- previous prototype for function '__memcat_p'
-Message-ID: <202204212135.0nRWoKwW-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 1568/5346] ld.lld: error:
+ arch/riscv/built-in.a(kernel/stacktrace.o):(function walk_stackframe:
+ .text+0x32): relocation R_RISCV_HI20 out of range: 536065 is not in
+ [-524288, 524287]; references walk_stackframe.__if_trace.1
+Message-ID: <202204212150.kJ9VdVJ9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,54 +46,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: b17c57b9f326f544a10178f2be4c886c4b02b4f3 [1933/2579] headers/deps: smp: Optimize <linux/smp.h> dependencies, remove <linux/smp_api.h> inclusion
-config: mips-randconfig-r026-20220419 (https://download.01.org/0day-ci/archive/20220421/202204212135.0nRWoKwW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c1c49a356162b22554088d269f7689bdb044a9f1)
+BCC: lkp@intel.com
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   65eb92e4c9f0a962656f131521f4fbc0d24c9d4c
+commit: 0be0b70df6611205ac392d0e21f7e077f3230ee6 [1568/5346] pinctrl: alderlake: Fix register offsets for ADL-N variant
+config: riscv-randconfig-r026-20220420 (https://download.01.org/0day-ci/archive/20220421/202204212150.kJ9VdVJ9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b17c57b9f326f544a10178f2be4c886c4b02b4f3
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout b17c57b9f326f544a10178f2be4c886c4b02b4f3
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=0be0b70df6611205ac392d0e21f7e077f3230ee6
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 0be0b70df6611205ac392d0e21f7e077f3230ee6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the linux-next/master HEAD 65eb92e4c9f0a962656f131521f4fbc0d24c9d4c builds fine.
+      It may have been fixed somewhere.
 
->> lib/memcat_p.c:10:8: warning: no previous prototype for function '__memcat_p' [-Wmissing-prototypes]
-   void **__memcat_p(void **a, void **b)
-          ^
-   lib/memcat_p.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void **__memcat_p(void **a, void **b)
-   ^
-   static 
-   1 warning generated.
+All errors (new ones prefixed by >>):
 
-
-vim +/__memcat_p +10 lib/memcat_p.c
-
-93048c0944150b Alexander Shishkin 2018-10-16   4  
-93048c0944150b Alexander Shishkin 2018-10-16   5  /*
-93048c0944150b Alexander Shishkin 2018-10-16   6   * Merge two NULL-terminated pointer arrays into a newly allocated
-93048c0944150b Alexander Shishkin 2018-10-16   7   * array, which is also NULL-terminated. Nomenclature is inspired by
-93048c0944150b Alexander Shishkin 2018-10-16   8   * memset_p() and memcat() found elsewhere in the kernel source tree.
-93048c0944150b Alexander Shishkin 2018-10-16   9   */
-93048c0944150b Alexander Shishkin 2018-10-16 @10  void **__memcat_p(void **a, void **b)
-
-:::::: The code at line 10 was first introduced by commit
-:::::: 93048c0944150b316a15f92c41a4d626c8df37fd lib: Fix ia64 bootloader linkage
-
-:::::: TO: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ld.lld: error: arch/riscv/built-in.a(kernel/stacktrace.o):(function walk_stackframe: .text+0x32): relocation R_RISCV_HI20 out of range: 536065 is not in [-524288, 524287]; references walk_stackframe.__if_trace.1
+   >>> referenced by stacktrace.c
+   >>> defined in arch/riscv/built-in.a(kernel/stacktrace.o)
+--
+>> ld.lld: error: init/built-in.a(calibrate.o):(function calibrate_delay: .text+0x42): relocation R_RISCV_HI20 out of range: 536823 is not in [-524288, 524287]; references __stack_chk_guard
+   >>> referenced by calibrate.c
+   >>> defined in arch/riscv/built-in.a(kernel/process.o)
+--
+>> ld.lld: error: arch/riscv/built-in.a(kernel/signal.o):(function sys_rt_sigreturn: .text+0xc): relocation R_RISCV_HI20 out of range: 536823 is not in [-524288, 524287]; references __stack_chk_guard
+   >>> referenced by signal.c
+   >>> defined in arch/riscv/built-in.a(kernel/process.o)
 
 -- 
 0-DAY CI Kernel Test Service
