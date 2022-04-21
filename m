@@ -1,42 +1,46 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D4F1FA6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572611FA2
 	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523437; x=1682059437;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9+dxDIm0+feMgzZZmQKgNiv6PylkgIAbcs+ydU/3LBY=;
-  b=VoyRoQ1ycrBM+e7yGzXmqqcyuZtNYm7AgODeKal8yV262OV9fHqnnZ5r
-   6OFxbiqx9lVxagn/he7vXXKIWvHe5i/awLKMDP1TTcW71Tqdu5Hj2DL5f
-   +kjY/bXo7ZCF0Qh0F29RoeM8HFBSpFC4oBMaiRIDYzjJzzRJFUs9C7/HT
-   FE+HwRHfLdWFDFIHPT92IQkiUuJiBtQ7gj7MubjPPDDQPtsfQa3maX0js
-   O73cWCvSczK+gaFtd4f4/z9YDmBsb/vkB8mjYt8wdrlPmbdX1rz+JRhqG
-   SiQsvtiZgE03kVeaP6cXFfSEjXO4aYsxzhhORBucTSoTeWrKOhxcWnjkd
+  t=1650523436; x=1682059436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8tuzYD0kzCxwjDALEtiW/79HnfPkTWedPSRkSD6YBCc=;
+  b=Rfp15x59W1iWfViGMrSAtLaf5j1HT+83gDIRH0JVf3YR58rCKCO7R7jY
+   U/IOiG34fRCf8tml3BnJoSvxWpjoplrq5x5r3uuwOBuPTx0ERQjl2rFPo
+   jYAWCPkx1HgiOCIqgxdqKuQH1Dy+MoBy0Cflb65EHnx9BsqprgmOMf7AN
+   BgK5Xe/G35uWp/3Kx+L4iXjuQZ6iP2pSm7CDcaB2ZSDCsEYQZAOIVP6tb
+   4beSGKNh9LlpopqiSA3AZB2T3+UgiNmOIFAVQBeOEB2ohXf/gptnCXZWr
+   a57iEKVdxDLk2/BxrNGaP+e9z+n9qSws66vw/PWD/1zq7ADbsPK6ccAPQ
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261857565"
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="244838651"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="261857565"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:53 -0700
+   d="scan'208";a="244838651"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="555609059"
+   d="scan'208";a="670049059"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
+  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQXf-00080s-3F;
+	id 1nhQXf-000811-5k;
 	Thu, 21 Apr 2022 06:43:51 +0000
-Date: Thu, 21 Apr 2022 14:43:40 +0800
+Date: Thu, 21 Apr 2022 14:43:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2110/2579] include/linux/fscrypt.h:757:30:
- error: implicit declaration of function 'file_inode' is invalid in C99
-Message-ID: <202204210747.4hHN7nFz-lkp@intel.com>
+To: Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cl@linux.com,
+	pmladek@suse.com, mbenes@suse.cz, christophe.leroy@csgroup.eu,
+	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, atomlin@atomlin.com,
+	ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com
+Subject: Re: [PATCH v3 2/2] module: Introduce module unload taint tracking
+Message-ID: <202204210819.DQQP836u-lkp@intel.com>
+References: <20220420115257.3498300-3-atomlin@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,56 +49,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220420115257.3498300-3-atomlin@redhat.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
-commit: 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6 [2110/2579] headers/deps: fs: Optimize <linux/fs.h> dependencies, remove <linux/fs_api.h> inclusion
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220421/202204210747.4hHN7nFz-lkp@intel.com/config)
+Hi Aaron,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on eeaec7801c421e17edda6e45a32d4a5596b633da]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
+base:   eeaec7801c421e17edda6e45a32d4a5596b633da
+config: hexagon-randconfig-r045-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210819.DQQP836u-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 1cb1e496fc95fd250b11d4ae7bd593cbe22bb5f6
+        # https://github.com/intel-lab-lkp/linux/commit/523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
+        git checkout 523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/ fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/crypto/fname.c:23:
-   In file included from fs/crypto/fscrypt_private.h:14:
->> include/linux/fscrypt.h:757:30: error: implicit declaration of function 'file_inode' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           const struct inode *inode = file_inode(iocb->ki_filp);
-                                       ^
-   include/linux/fscrypt.h:757:22: warning: incompatible integer to pointer conversion initializing 'const struct inode *' with an expression of type 'int' [-Wint-conversion]
-           const struct inode *inode = file_inode(iocb->ki_filp);
-                               ^       ~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> kernel/module/main.c:3204:2: error: meaningless 'volatile' on asm outside function
+           preempt_enable();
+           ^
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:28: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                              ^
+   kernel/module/main.c:3204:2: error: expected ')'
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:43: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                                             ^
+   kernel/module/main.c:3204:2: note: to match this '('
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:40: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                                          ^
+   kernel/module/main.c:3205:2: error: expected identifier or '('
+           if (last_unloaded_module[0])
+           ^
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   kernel/module/main.c:3207:2: error: expected identifier or '('
+           pr_cont("\n");
+           ^
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+            ^
+   kernel/module/main.c:3207:2: error: expected ')'
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+            ^
+   kernel/module/main.c:3207:2: note: to match this '('
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:2: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+           ^
+   kernel/module/main.c:3208:1: error: extraneous closing brace ('}')
+   }
+   ^
+   6 errors generated.
 
 
-vim +/file_inode +757 include/linux/fscrypt.h
+vim +/volatile +3204 kernel/module/main.c
 
-c6c89783eba05a Eric Biggers 2022-01-28  753  
-c6c89783eba05a Eric Biggers 2022-01-28  754  static inline bool fscrypt_dio_supported(struct kiocb *iocb,
-c6c89783eba05a Eric Biggers 2022-01-28  755  					 struct iov_iter *iter)
-c6c89783eba05a Eric Biggers 2022-01-28  756  {
-c6c89783eba05a Eric Biggers 2022-01-28 @757  	const struct inode *inode = file_inode(iocb->ki_filp);
-c6c89783eba05a Eric Biggers 2022-01-28  758  
-c6c89783eba05a Eric Biggers 2022-01-28  759  	return !fscrypt_needs_contents_encryption(inode);
-c6c89783eba05a Eric Biggers 2022-01-28  760  }
-c6c89783eba05a Eric Biggers 2022-01-28  761  
-
-:::::: The code at line 757 was first introduced by commit
-:::::: c6c89783eba05a5e159b07cfd8c68d841cc5de42 fscrypt: add functions for direct I/O support
-
-:::::: TO: Eric Biggers <ebiggers@google.com>
-:::::: CC: Eric Biggers <ebiggers@google.com>
+e610499e2656e61 kernel/module.c      Rusty Russell  2009-03-31  3172  
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3173  /* Don't grab lock, we're oopsing. */
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3174  void print_modules(void)
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3175  {
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3176  	struct module *mod;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3177  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3178  	struct mod_unload_taint *mod_taint;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3179  #endif
+7fd8329ba502ef7 kernel/module.c      Petr Mladek    2016-09-21  3180  	char buf[MODULE_FLAGS_BUF_SIZE];
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3181  
+b231125af7811a2 kernel/module.c      Linus Torvalds 2009-06-16  3182  	printk(KERN_DEFAULT "Modules linked in:");
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3183  	/* Most callers should already have preempt disabled, but make sure */
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3184  	preempt_disable();
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3185  	list_for_each_entry_rcu(mod, &modules, list) {
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3186  		if (mod->state == MODULE_STATE_UNFORMED)
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3187  			continue;
+27bba4d6bb3779a kernel/module.c      Jiri Slaby     2014-02-03  3188  		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3189  	}
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3190  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3191  	if (!list_empty(&unloaded_tainted_modules)) {
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3192  		printk(KERN_DEFAULT "Unloaded tainted modules:");
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3193  		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3194  					list) {
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3195  			size_t l;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3196  
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3197  			l = module_flags_taint(mod_taint->taints, buf);
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3198  			buf[l++] = '\0';
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3199  			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3200  				mod_taint->count);
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3201  		}
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3202  #endif
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3203  	}
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30 @3204  	preempt_enable();
 
 -- 
 0-DAY CI Kernel Test Service
