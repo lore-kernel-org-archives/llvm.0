@@ -1,41 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065511FA2
-	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8851FA6
+	for <llvm@lists.linux.dev>; Thu, 21 Apr 2022 06:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650523373; x=1682059373;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=eX9tJNvYsH7FYls4laVtZcouWfkkw9qhHt5ZC3GKx2Q=;
-  b=m+RsERLtv4vVWG4HfP7/WWFC2AS6DsY6PIXq/UmnKZfSF6Pkm+O5lc4f
-   f8LoH0IFZAE5VEYJztSiQEXia5VsF3iBGiNWgTPUfsa44m64nt2riy81x
-   Pjv991kjOoRcK1QUqki4hWBeJ9iyxJuXFqollR9fOdP2f36YihEgm6V2t
-   AU+nsJKj9ItjsVnDm41MUM1xdkGeL4EDKVnvX1SP2XQFYr1N4S7dAgkgx
-   l9IDQbaT15rX5YPj43oecC3bKQor16AsxrGofYIs3XtOaWFyD8XHxTeZe
-   7mnn7YBCDiJt2IuLBbLKksQ7LYsj3sujLYbDmczJxMzG7ZwU/bglN3dcv
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CEezHFZ8jbSAO8++FIRw/wHkdTizh/6PCQxkqG4AIcA=;
+  b=XV7QARLw6xhZW65R2dfE7wPoLzSlLVUpKnv1QhyoB5lb7kl60hp3z2gw
+   d+dzX2sUSOCH2QqbaNgNlaNS3okaFoawrQtLQt2xw9oF+jqO1Kyt1jyXy
+   +c2pHA9DCH+0CD8LeHjpq+Gnw/lfn3vpdwKV8froR5PlT4IjAehsJ77WL
+   VAuZn/UhSr0ZI1wWIQaZs2Igkw+QYPCqiW1BufBk600fiQF2OTvA3lvFT
+   gDrkA0LtlEfZ74vvpDqIYDtELo34QCXwgPWahDFO6HH6JTdT8xQlcZLfV
+   hr4T2VS4n3RbLp9EWegX9z9AJ8Fcg9W7OaMkOpWAtGJFGbOMWS3YuGBVT
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="261857405"
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="324700362"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="261857405"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:52 -0700
+   d="scan'208";a="324700362"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:42:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="727846858"
+   d="scan'208";a="614757523"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Apr 2022 23:42:51 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2022 23:42:51 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhQWg-000802-Nv;
+	id 1nhQWg-0007zt-Iv;
 	Thu, 21 Apr 2022 06:42:50 +0000
-Date: Thu, 21 Apr 2022 14:41:50 +0800
+Date: Thu, 21 Apr 2022 14:42:30 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [jsarha:topic/chromeos-4.19-s0ix 9206/9999]
- kernel/gcov/clang.c:221:9: error: implicit declaration of function
- 'within_module'
-Message-ID: <202204210248.PacAcknN-lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1926/2579]
+ drivers/mfd/intel_soc_pmic_core.c:70:2: error: implicit declaration of
+ function 'irq_domain_update_bus_token' is invalid in C99
+Message-ID: <202204210402.MWlYLHyS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,111 +47,101 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Greg Hackmann <ghackmann@android.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Tri Vo <trong@android.com>
-CC: Peter Oberparleiter <oberpar@linux.ibm.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
-CC: Yu Zhao <yuzhao@google.com>
-CC: Sean Paul <seanpaul@chromium.org>
-
-Hi Greg,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 35be48648a6552869bd5d6c9a0d278102d23d46c [9206/9999] UPSTREAM: gcov: clang support
-config: mips-randconfig-r035-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210248.PacAcknN-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: 762e2c31017f8004327c678d499aa24693a9d465 [1926/2579] headers/deps: ACPI: Optimize <linux/acpi.h> dependencies, remove <linux/irqdomain.h> inclusion
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220421/202204210402.MWlYLHyS-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/jsarha/linux/commit/35be48648a6552869bd5d6c9a0d278102d23d46c
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout 35be48648a6552869bd5d6c9a0d278102d23d46c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=762e2c31017f8004327c678d499aa24693a9d465
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 762e2c31017f8004327c678d499aa24693a9d465
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash M=kernel/gcov
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   kernel/gcov/clang.c:85:6: warning: no previous prototype for function 'llvm_gcov_init' [-Wmissing-prototypes]
-   void llvm_gcov_init(llvm_gcov_callback writeout, llvm_gcov_callback flush)
-        ^
-   kernel/gcov/clang.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcov_init(llvm_gcov_callback writeout, llvm_gcov_callback flush)
-   ^
-   static 
-   kernel/gcov/clang.c:108:6: warning: no previous prototype for function 'llvm_gcda_start_file' [-Wmissing-prototypes]
-   void llvm_gcda_start_file(const char *orig_filename, const char version[4],
-        ^
-   kernel/gcov/clang.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcda_start_file(const char *orig_filename, const char version[4],
-   ^
-   static 
-   kernel/gcov/clang.c:117:6: warning: no previous prototype for function 'llvm_gcda_emit_function' [-Wmissing-prototypes]
-   void llvm_gcda_emit_function(u32 ident, const char *function_name,
-        ^
-   kernel/gcov/clang.c:117:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcda_emit_function(u32 ident, const char *function_name,
-   ^
-   static 
-   kernel/gcov/clang.c:137:6: warning: no previous prototype for function 'llvm_gcda_emit_arcs' [-Wmissing-prototypes]
-   void llvm_gcda_emit_arcs(u32 num_counters, u64 *counters)
-        ^
-   kernel/gcov/clang.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcda_emit_arcs(u32 num_counters, u64 *counters)
-   ^
-   static 
-   kernel/gcov/clang.c:147:6: warning: no previous prototype for function 'llvm_gcda_summary_info' [-Wmissing-prototypes]
-   void llvm_gcda_summary_info(void)
-        ^
-   kernel/gcov/clang.c:147:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcda_summary_info(void)
-   ^
-   static 
-   kernel/gcov/clang.c:152:6: warning: no previous prototype for function 'llvm_gcda_end_file' [-Wmissing-prototypes]
-   void llvm_gcda_end_file(void)
-        ^
-   kernel/gcov/clang.c:152:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void llvm_gcda_end_file(void)
-   ^
-   static 
->> kernel/gcov/clang.c:221:9: error: implicit declaration of function 'within_module' [-Werror,-Wimplicit-function-declaration]
-           return within_module((unsigned long)info->filename, mod);
-                  ^
-   kernel/gcov/clang.c:221:9: note: did you mean 'init_module'?
-   include/linux/module.h:75:12: note: 'init_module' declared here
-   extern int init_module(void);
-              ^
-   6 warnings and 1 error generated.
+>> drivers/mfd/intel_soc_pmic_core.c:70:2: error: implicit declaration of function 'irq_domain_update_bus_token' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
+           ^
+>> drivers/mfd/intel_soc_pmic_core.c:71:9: error: use of undeclared identifier 'DOMAIN_BUS_NEXUS'
+                                       DOMAIN_BUS_NEXUS);
+                                       ^
+   2 errors generated.
 
 
-vim +/within_module +221 kernel/gcov/clang.c
+vim +/irq_domain_update_bus_token +70 drivers/mfd/intel_soc_pmic_core.c
 
-   211	
-   212	/**
-   213	 * gcov_info_within_module - check if a profiling data set belongs to a module
-   214	 * @info: profiling data set
-   215	 * @mod: module
-   216	 *
-   217	 * Returns true if profiling data belongs module, false otherwise.
-   218	 */
-   219	bool gcov_info_within_module(struct gcov_info *info, struct module *mod)
-   220	{
- > 221		return within_module((unsigned long)info->filename, mod);
-   222	}
-   223	
+a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  29  
+5165238460068e Zhu, Lejun      2014-06-03  30  static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
+5165238460068e Zhu, Lejun      2014-06-03  31  				    const struct i2c_device_id *i2c_id)
+5165238460068e Zhu, Lejun      2014-06-03  32  {
+5165238460068e Zhu, Lejun      2014-06-03  33  	struct device *dev = &i2c->dev;
+5165238460068e Zhu, Lejun      2014-06-03  34  	struct intel_soc_pmic_config *config;
+5165238460068e Zhu, Lejun      2014-06-03  35  	struct intel_soc_pmic *pmic;
+5165238460068e Zhu, Lejun      2014-06-03  36  	int ret;
+5165238460068e Zhu, Lejun      2014-06-03  37  
+5b78223f55a0f5 Hans de Goede   2021-12-06  38  	if (soc_intel_is_byt())
+b01e9348e10654 Hans de Goede   2017-09-04  39  		config = &intel_soc_pmic_config_byt_crc;
+5b78223f55a0f5 Hans de Goede   2021-12-06  40  	else
+b01e9348e10654 Hans de Goede   2017-09-04  41  		config = &intel_soc_pmic_config_cht_crc;
+5165238460068e Zhu, Lejun      2014-06-03  42  
+5165238460068e Zhu, Lejun      2014-06-03  43  	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
+0a65fbf64dad89 Kiran Padwal    2015-02-11  44  	if (!pmic)
+0a65fbf64dad89 Kiran Padwal    2015-02-11  45  		return -ENOMEM;
+0a65fbf64dad89 Kiran Padwal    2015-02-11  46  
+5165238460068e Zhu, Lejun      2014-06-03  47  	dev_set_drvdata(dev, pmic);
+5165238460068e Zhu, Lejun      2014-06-03  48  
+5165238460068e Zhu, Lejun      2014-06-03  49  	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
+db43b8d04d7a9f Pan Bian        2017-04-23  50  	if (IS_ERR(pmic->regmap))
+db43b8d04d7a9f Pan Bian        2017-04-23  51  		return PTR_ERR(pmic->regmap);
+db43b8d04d7a9f Pan Bian        2017-04-23  52  
+159ee7578a7453 Andy Shevchenko 2017-02-21  53  	pmic->irq = i2c->irq;
+5165238460068e Zhu, Lejun      2014-06-03  54  
+5165238460068e Zhu, Lejun      2014-06-03  55  	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
+5165238460068e Zhu, Lejun      2014-06-03  56  				  config->irq_flags | IRQF_ONESHOT,
+5165238460068e Zhu, Lejun      2014-06-03  57  				  0, config->irq_chip,
+5165238460068e Zhu, Lejun      2014-06-03  58  				  &pmic->irq_chip_data);
+5165238460068e Zhu, Lejun      2014-06-03  59  	if (ret)
+5165238460068e Zhu, Lejun      2014-06-03  60  		return ret;
+5165238460068e Zhu, Lejun      2014-06-03  61  
+5165238460068e Zhu, Lejun      2014-06-03  62  	ret = enable_irq_wake(pmic->irq);
+5165238460068e Zhu, Lejun      2014-06-03  63  	if (ret)
+5165238460068e Zhu, Lejun      2014-06-03  64  		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
+5165238460068e Zhu, Lejun      2014-06-03  65  
+a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  66  	/* Add lookup table for crc-pwm */
+a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  67  	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
+a3aa9a93df9fc8 Shobhit Kumar   2015-06-26  68  
+f49f43371b8a68 Hans de Goede   2021-12-25  69  	/* To distuingish this domain from the GPIO/charger's irqchip domains */
+f49f43371b8a68 Hans de Goede   2021-12-25 @70  	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
+f49f43371b8a68 Hans de Goede   2021-12-25 @71  				    DOMAIN_BUS_NEXUS);
+f49f43371b8a68 Hans de Goede   2021-12-25  72  
+5165238460068e Zhu, Lejun      2014-06-03  73  	ret = mfd_add_devices(dev, -1, config->cell_dev,
+5165238460068e Zhu, Lejun      2014-06-03  74  			      config->n_cell_devs, NULL, 0,
+5165238460068e Zhu, Lejun      2014-06-03  75  			      regmap_irq_get_domain(pmic->irq_chip_data));
+5165238460068e Zhu, Lejun      2014-06-03  76  	if (ret)
+5165238460068e Zhu, Lejun      2014-06-03  77  		goto err_del_irq_chip;
+5165238460068e Zhu, Lejun      2014-06-03  78  
+5165238460068e Zhu, Lejun      2014-06-03  79  	return 0;
+5165238460068e Zhu, Lejun      2014-06-03  80  
+5165238460068e Zhu, Lejun      2014-06-03  81  err_del_irq_chip:
+5165238460068e Zhu, Lejun      2014-06-03  82  	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
+5165238460068e Zhu, Lejun      2014-06-03  83  	return ret;
+5165238460068e Zhu, Lejun      2014-06-03  84  }
+5165238460068e Zhu, Lejun      2014-06-03  85  
+
+:::::: The code at line 70 was first introduced by commit
+:::::: f49f43371b8a680c5972d052598d7c120f1a05d3 mfd: intel_soc_pmic_crc: Set main IRQ domain bus token to DOMAIN_BUS_NEXUS
+
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Lee Jones <lee.jones@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
