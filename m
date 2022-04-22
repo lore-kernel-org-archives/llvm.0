@@ -1,148 +1,122 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C1223A4
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 08:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650616600; x=1682152600;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oYswYbGhBvjXESRAHzaTDAvWjmzhQx+25B4YSVEtLWQ=;
-  b=F8Xk7QzJ5FlCrOb5NHP945R/Ra30QhQVihAEZEpjE6c6IIXwms7FhGW5
-   Ayo+Osh+nFA31ZyIPMB0IyhQmgYm13+9cLFA3XCTqwfWwx7gJpZ3n6TVW
-   lFL5ssmAkDIFNP7kuOldQ2RBhBvX8bXOfpGWqGYq0qxqJYe56Hn0GqCiw
-   mk6j30PXaiRyJ+BcBDUPTYC6bKw2qBZYZ3I0Rl1d1HHJESbWvj0kIifgt
-   VR073852Y4/adNgtOEq3Y2gGDjF8Cdf7l0S56uXF7a6wPikLKV1O9+CFl
-   FV1WgubPmZdWA0LgJghYYze4saxpYE0hvhMYs2FlbK+fEd0lvKoJXjxUG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264093036"
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264093036"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 01:36:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="626908927"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 01:36:36 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nhomK-0009vr-7q;
-	Fri, 22 Apr 2022 08:36:36 +0000
-Date: Fri, 22 Apr 2022 16:35:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nico Pache <npache@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-	Joel Savitz <jsavitz@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 12/291] WARNING: modpost: vmlinux.o(.data+0x23acb0):
- Section mismatch in reference from the variable rc_class to the function
- .init.text:set_reset_devices()
-Message-ID: <202204221628.Qw9iZP1o-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD4123A4
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 09:22:57 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 4CFD6C2FFA
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 09:18:06 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id CE9851BF210;
+	Fri, 22 Apr 2022 09:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1650619078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mggckCRdpCTXoS+dTfsucqDXNXyDRQ8YZv/6KdqwEIg=;
+	b=Kk8Iry75zaOxB17Jq27o7MNFhFlbkbHcrrqiZmQ/SUFEt/TK4mfpuDFelRuZ7zu8o3SzC1
+	ZDtjqR23mMttEFOH7FPmjcRjcO7GJOG4RdG0ULM8O5jkK1cvcoxR05IpdPFvPjhMrqGkxv
+	Qk4UEPBOIOg36422Turvr2z14jOiV86x4kU7T1NRCZMkvMuKWpgv7JEnvm0EVP09nuCrD1
+	dCm8El4vmBYYhhiblNqlCmXcF2I1bf4dVNfugSWmadC2dxX7s7+H+dImdKj7iIJRVXPF9t
+	ZLTj8okONZagu9gR6G4zebAnRiPRrOA8sRE0grdfP/nXZcY0VtLTHHI8X/eAQw==
+Date: Fri, 22 Apr 2022 11:17:55 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Jean-Marc Eurin <jmeurin@google.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
+ format specifies type 'long' but the argument has type 'unsigned int'
+Message-ID: <20220422111755.6b26ea9e@xps13>
+In-Reply-To: <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
+References: <202204212106.9R1ylUB7-lkp@intel.com>
+	<20220421154806.52e1992b@xps13>
+	<CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   ba42854fa9997614e0ffdbc35b082df3ba6e59da
-commit: 85dd63c3a11207bd98815d579b153c63a9efc96d [12/291] oom_kill.c: futex: delay the OOM reaper to allow time for proper futex cleanup
-config: riscv-randconfig-r015-20220420 (https://download.01.org/0day-ci/archive/20220422/202204221628.Qw9iZP1o-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/hnaz/linux-mm/commit/85dd63c3a11207bd98815d579b153c63a9efc96d
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout 85dd63c3a11207bd98815d579b153c63a9efc96d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi Jean-Marc,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+jmeurin@google.com wrote on Thu, 21 Apr 2022 15:22:26 -0700:
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.com>=
+ wrote:
+> >
+> > Hi Jean-Marc,
+> >
+> > lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
+> > =20
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git=
+ mtd/next
+> > > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
+> > > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoops=
+: Create a header structure for the saved mtdoops.
+> > > config: hexagon-randconfig-r045-20220420 (https://download.01.org/0da=
+y-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
+> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project =
+bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.g=
+it/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
+> > >         git remote add mtd https://git.kernel.org/pub/scm/linux/kerne=
+l/git/mtd/linux.git
+> > >         git fetch --no-tags mtd mtd/next
+> > >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
+> > >
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > > =20
+> > > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'long=
+' but the argument has type 'unsigned int' [-Wformat] =20
+> > >                                   page * record_size, retlen, sizeof(=
+hdr), ret);
+> > >                                                               ^~~~~~~=
+~~~~
+> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
+> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_AR=
+GS__)
+> > >                                                        ~~~    ^~~~~~~=
+~~~~
+> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_i=
+ndex_wrap'
+> > >                    _p_func(_fmt, ##__VA_ARGS__);                     =
+      \
+> > >                            ~~~~    ^~~~~~~~~~~
+> > >    1 warning generated. =20
+> >
+> > I've dropped the series for now. Please have a look at the reports and
+> > propose a new version when this is fixed? =20
+>=20
+> Sorry about that, I had made that change based on this suggestion
+> https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-)
 
->> WARNING: modpost: vmlinux.o(.data+0x23acb0): Section mismatch in reference from the variable rc_class to the function .init.text:set_reset_devices()
-The variable rc_class references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+Did you verify with
 
---
->> WARNING: modpost: vmlinux.o(.data+0x23ad08): Section mismatch in reference from the variable rc_ida to the function .init.text:set_reset_devices()
-The variable rc_ida references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
 
---
->> WARNING: modpost: vmlinux.o(.data+0x23ad30): Section mismatch in reference from the variable empty_map to the function .init.text:set_reset_devices()
-The variable empty_map references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+That the errors were actually gone? You seem to suggest that you didn't
+:)
 
---
->> WARNING: modpost: vmlinux.o(.data+0x2660e0): Section mismatch in reference from the variable dme1737_zone3_attr to the function .init.text:set_reset_devices()
-The variable dme1737_zone3_attr references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
-<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
-<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
-<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
-<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Miqu=C3=A8l
