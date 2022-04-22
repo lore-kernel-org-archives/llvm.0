@@ -1,45 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AF433C9
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 23:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4507F2F3B
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 23:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650671008; x=1682207008;
+  t=1650671609; x=1682207609;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dDU4iKhGOx8XIlt8ACnIqfCyaHJ/NN89i4SEVVCvsQc=;
-  b=CHtl2Z04Hik8BBYg4kfo/92ECnuZqSrPbTQoHAoMXQBYaU6FkmgZzJcp
-   vvH4+hbVKG79gAeerWUxBhyTUGx1+ch1RiMOxNQFXV7oXrwlEBtrJiD8Y
-   NfK43dRvVFC0yb7Gah9vZUVn0m9Iy9uJ5bF7cBt8cXWZljb7BU+g8YYbg
-   QnvsyWeEisWJ5Q376ydj5Rn2G/Fwp42ifUFWhJiUrcM+9eLFLPumDWCkH
-   CVg/FfXLfQKrM4WznKZYoUmSVImwi3mmkllTQU/Xh8evSi/OmYxz8WU3+
-   RRdIOXfATlIMf+5j1nHLWSF7STwUZYJX9y2N+hd/sK9OBmYTYdgu5jI19
+  bh=xfanVpJdC/UZMEnT2IP+wkQsamtqXmIteH+qcMhR0ls=;
+  b=NTKrxFxFi4doeNrS6M/roQg4JxoZdOaCpzvroKyKmfVwk11TITO1voGj
+   kYXdJZYGJ8UZKqVbU4YGlpVzr59kdx0aANJ3J8j6jBki9AgzcqI9hIP6Y
+   ZlJLw67f/zEStu8QYjZ06AIniCZeD0dyBNc+NZHXF55lCDs7vLfHEbgzT
+   M8257CdgjCHqz5fd/AEcukdblNWTWimAT+YFWH6zvZXxjuamcHUId5t2U
+   EECKKy09BpIR8attFVXi/6iS9JC44qmd4qIlTMQH4v5e7GbddEuSerPU5
+   lKwsOF/DXRJ5ydoTbmFiY+EHn2A3kjudyXBcVzmnduRiYh4ILcxW+llYL
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244741767"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246721733"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="244741767"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:43:28 -0700
+   d="scan'208";a="246721733"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:53:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="728738665"
+   d="scan'208";a="672754530"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Apr 2022 16:43:26 -0700
+  by orsmga004.jf.intel.com with ESMTP; 22 Apr 2022 16:53:27 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ni2vt-000Afr-SM;
-	Fri, 22 Apr 2022 23:43:25 +0000
-Date: Sat, 23 Apr 2022 07:42:36 +0800
+	id 1ni35a-000Agr-JG;
+	Fri, 22 Apr 2022 23:53:26 +0000
+Date: Sat, 23 Apr 2022 07:52:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Yuan Yao <yuan.yao@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 35/44]
- fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer
- types ('typeof (((1UL) << (12)) - offset) *' (aka 'unsigned long *') and
- 'typeof (size) *' (aka 'unsigned int *'))
-Message-ID: <202204230702.idwNNJoq-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 275/293]
+ arch/x86/kvm/vmx/tdx.c:2513:6: warning: variable 'intr_info' set but not
+ used
+Message-ID: <202204230704.f0zI8eIQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,133 +48,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: f343507aeda88b2f1a528a659b8fadaa9b6b0f79 [35/44] netfs: Implement buffered writes through netfs_file_write_iter()
-config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230702.idwNNJoq-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   d32e9a403c5c4f16dc577cbe92148e5b80f79d59
+commit: da013991b3b3b4a9e20f84f268dc69f139aa8bdb [275/293] KVM: TDX: Basic exception injection support for DEBUG TDX guest
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220423/202204230704.f0zI8eIQ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/f343507aeda88b2f1a528a659b8fadaa9b6b0f79
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout f343507aeda88b2f1a528a659b8fadaa9b6b0f79
+        # https://github.com/intel/tdx/commit/da013991b3b3b4a9e20f84f268dc69f139aa8bdb
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout da013991b3b3b4a9e20f84f268dc69f139aa8bdb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:94:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:254:36: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("e=%llx o=%lx l=%lx", end, offset, len);
-                            ~~~              ^~~~~~
-                            %zx
-   fs/netfs/internal.h:270:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/buffered_write.c:254:44: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("e=%llx o=%lx l=%lx", end, offset, len);
-                                  ~~~                ^~~
-                                  %zx
-   fs/netfs/internal.h:270:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   5 warnings generated.
+>> arch/x86/kvm/vmx/tdx.c:2513:6: warning: variable 'intr_info' set but not used [-Wunused-but-set-variable]
+           u32 intr_info;
+               ^
+   1 warning generated.
 
 
-vim +28 fs/netfs/buffered_write.c
+vim +/intr_info +2513 arch/x86/kvm/vmx/tdx.c
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
+  2498	
+  2499	void tdx_set_gdt(struct kvm_vcpu *vcpu, struct desc_ptr *dt)
+  2500	{
+  2501		if (!is_debug_td(vcpu))
+  2502			return;
+  2503	
+  2504		td_vmcs_write32(to_tdx(vcpu), GUEST_GDTR_LIMIT, dt->size);
+  2505		td_vmcs_write64(to_tdx(vcpu), GUEST_GDTR_BASE, dt->address);
+  2506	}
+  2507	void tdx_queue_exception(struct kvm_vcpu *vcpu)
+  2508	{
+  2509		struct vcpu_tdx *tdx;
+  2510		unsigned int nr;
+  2511		bool has_error_code;
+  2512		u32 error_code;
+> 2513		u32 intr_info;
+  2514	
+  2515		if (KVM_BUG_ON(!is_debug_td(vcpu), vcpu->kvm))
+  2516			return;
+  2517	
+  2518		tdx = to_tdx(vcpu);
+  2519		nr = vcpu->arch.exception.nr;
+  2520		has_error_code = vcpu->arch.exception.has_error_code;
+  2521		error_code = vcpu->arch.exception.error_code;
+  2522		intr_info = nr | INTR_INFO_VALID_MASK;
+  2523	
+  2524		kvm_deliver_exception_payload(vcpu);
+  2525	
+  2526		if (has_error_code) {
+  2527			td_vmcs_write32(tdx, VM_ENTRY_EXCEPTION_ERROR_CODE,
+  2528					error_code);
+  2529			intr_info |= INTR_INFO_DELIVER_CODE_MASK;
+  2530		}
+  2531	
+  2532		if (kvm_exception_is_soft(nr)) {
+  2533			td_vmcs_write32(tdx, VM_ENTRY_INSTRUCTION_LEN,
+  2534					vcpu->arch.event_exit_inst_len);
+  2535			intr_info |= INTR_TYPE_SOFT_EXCEPTION;
+  2536		} else {
+  2537			intr_info |= INTR_TYPE_HARD_EXCEPTION;
+  2538		}
+  2539	
+  2540		pr_warn_once("Exception injection is not supported by TDX.\n");
+  2541		/* td_vmcs_write32(tdx, VM_ENTRY_INTR_INFO_FIELD, intr_info);*/
+  2542	}
+  2543	
 
 -- 
 0-DAY CI Kernel Test Service
