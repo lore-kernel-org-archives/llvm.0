@@ -1,55 +1,57 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22AD290F
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 17:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D6F290F
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 17:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650648959; x=1682184959;
+  t=1650648961; x=1682184961;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZEpaktPAhBfcH1j+/z/T41kMvD8alIN8R86i3Pz3/1A=;
-  b=IUt1EkBTS6HT0+YhsqxwHzJhGP8PlRNVrlfoFchbqfEi1a3F3yB1QqXR
-   Iaiq/ID6uZrbBunxcFRSiHTl3z3+qb3S2BiNuulP9xJ+IHrCRPh877Xv3
-   pe8RzzvzKirbnKq+JaA/kdAHm3It1Oo/ujrQuDCCr4mu3WcsSQeGMeeSR
-   pq2AAg2lPH0fF4yxjjQ7FdyOiuIuxiWwRqcKHlhVZ0shZbtqGzOVAC1Fm
-   KZEGr1UdyB1IMYlMKoBXxVY21Y46esJ88MPmGYh6k2B97RX4sVN2w+mbX
-   5RAszGEbsnP6nMdBzwoJuh3dByWlszZe9Uf1e9XKevYS5nMOK0HhaiMQU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262333611"
+  bh=SOrSfq4soGt2N88z6hStkRBr6XcwAVoqR0AjhznAV8w=;
+  b=jLCld4AsizaCZjxM3y4wvx7pSJ4JvSf/gKyvwQLFMBwr0akjAbZaPAzG
+   c8WFW0bAqGsugXIGHh3nkU7xEL8TY8mDDmEEr+pKbRtPvkdueAY9GbeGQ
+   zQ0LHkg06m1rLE0M39hD/LlW7IAieHJ/eFaaFsODEuyqTupCBYl2X1YCs
+   Iw85HZTV5vcjpdv6F6+4zmLuFsgBhX82PwMjguw/t2ZrjyTNE32DDq0W8
+   M7vesWSYf09Dr5YtqicZmeW7yr1gsNvgun1XJID8mxgwfiPB8rwQ2GxTd
+   hDWDfODGxXrk4fLNHOuEq9LiUDakaEBQtLXmsnoHLVFuC+BXTM5/XbDxU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262333612"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="262333611"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:35:58 -0700
+   d="scan'208";a="262333612"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:35:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="627076900"
+   d="scan'208";a="563125697"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 10:35:54 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2022 10:35:54 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhxCD-000APG-LM;
+	id 1nhxCD-000AP8-Io;
 	Fri, 22 Apr 2022 17:35:53 +0000
-Date: Sat, 23 Apr 2022 01:35:32 +0800
+Date: Sat, 23 Apr 2022 01:35:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ong Boon Leong <boon.leong.ong@intel.com>,
-	Alexandre Torgue <alexandre.torgue@st.com>,
-	Jose Abreu <joabreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Ong Boon Leong <boon.leong.ong@intel.com>
-Subject: Re: [PATCH net-next 1/4] net: pcs: xpcs: add CL37 1000BASE-X AN
- support
-Message-ID: <202204230159.Tixm42oR-lkp@intel.com>
-References: <20220422073505.810084-2-boon.leong.ong@intel.com>
+To: Paul Elder <paul.elder@ideasonboard.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	"Paul J. Murphy" <paul.j.murphy@intel.com>,
+	Martina Krasteva <martinax.krasteva@intel.com>,
+	Shawn Tu <shawnx.tu@intel.com>, Arec Kao <arec.kao@intel.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Jimmy Su <jimmy.su@intel.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Daniel Scally <djrscally@gmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Jacopo Mondi <jacopo@jmondi.org>,
+	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH v4] media: ov5640: Use runtime PM
+Message-ID: <202204230149.9CdMTZ0P-lkp@intel.com>
+References: <20220422105327.1918427-1-paul.elder@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,185 +60,197 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422073505.810084-2-boon.leong.ong@intel.com>
+In-Reply-To: <20220422105327.1918427-1-paul.elder@ideasonboard.com>
 
-Hi Ong,
+Hi Paul,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.18-rc3 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ong-Boon-Leong/pcs-xpcs-stmmac-add-1000BASE-X-AN-for-network-switch/20220422-154446
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 9c8774e629a1950c24b44e3c8fb93d76fb644b49
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220423/202204230159.Tixm42oR-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Elder/media-ov5640-Use-runtime-PM/20220422-185657
+base:   git://linuxtv.org/media_tree.git master
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220423/202204230149.9CdMTZ0P-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dc88c5b7c183eeaff9db0e88d7b0d1d7f73e830b
+        # https://github.com/intel-lab-lkp/linux/commit/35b46d84ba0a6794350f826f2f70899e266a6064
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ong-Boon-Leong/pcs-xpcs-stmmac-add-1000BASE-X-AN-for-network-switch/20220422-154446
-        git checkout dc88c5b7c183eeaff9db0e88d7b0d1d7f73e830b
+        git fetch --no-tags linux-review Paul-Elder/media-ov5640-Use-runtime-PM/20220422-185657
+        git checkout 35b46d84ba0a6794350f826f2f70899e266a6064
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/i2c/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/sja1105/sja1105_main.c:2334:52: error: too few arguments to function call, expected 4, have 3
-                   rc = xpcs_do_config(xpcs, priv->phy_mode[i], mode);
-                        ~~~~~~~~~~~~~~                              ^
-   include/linux/pcs/pcs-xpcs.h:33:5: note: 'xpcs_do_config' declared here
-   int xpcs_do_config(struct dw_xpcs *xpcs, phy_interface_t interface,
-       ^
-   1 error generated.
+>> drivers/media/i2c/ov5640.c:3171:1: warning: unused label 'free_ctrls' [-Wunused-label]
+   free_ctrls:
+   ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +2334 drivers/net/dsa/sja1105/sja1105_main.c
+vim +/free_ctrls +3171 drivers/media/i2c/ov5640.c
 
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2224  
-6666cebc5e306f Vladimir Oltean 2019-05-02  2225  /* For situations where we need to change a setting at runtime that is only
-6666cebc5e306f Vladimir Oltean 2019-05-02  2226   * available through the static configuration, resetting the switch in order
-6666cebc5e306f Vladimir Oltean 2019-05-02  2227   * to upload the new static config is unavoidable. Back up the settings we
-6666cebc5e306f Vladimir Oltean 2019-05-02  2228   * modify at runtime (currently only MAC) and restore them after uploading,
-6666cebc5e306f Vladimir Oltean 2019-05-02  2229   * such that this operation is relatively seamless.
-6666cebc5e306f Vladimir Oltean 2019-05-02  2230   */
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2231  int sja1105_static_config_reload(struct sja1105_private *priv,
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2232  				 enum sja1105_reset_reason reason)
-6666cebc5e306f Vladimir Oltean 2019-05-02  2233  {
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2234  	struct ptp_system_timestamp ptp_sts_before;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2235  	struct ptp_system_timestamp ptp_sts_after;
-82760d7f2ea638 Vladimir Oltean 2021-05-24  2236  	int speed_mbps[SJA1105_MAX_NUM_PORTS];
-84db00f2c04338 Vladimir Oltean 2021-05-31  2237  	u16 bmcr[SJA1105_MAX_NUM_PORTS] = {0};
-6666cebc5e306f Vladimir Oltean 2019-05-02  2238  	struct sja1105_mac_config_entry *mac;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2239  	struct dsa_switch *ds = priv->ds;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2240  	s64 t1, t2, t3, t4;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2241  	s64 t12, t34;
-6666cebc5e306f Vladimir Oltean 2019-05-02  2242  	int rc, i;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2243  	s64 now;
-6666cebc5e306f Vladimir Oltean 2019-05-02  2244  
-af580ae2dcb250 Vladimir Oltean 2019-11-09  2245  	mutex_lock(&priv->mgmt_lock);
-af580ae2dcb250 Vladimir Oltean 2019-11-09  2246  
-6666cebc5e306f Vladimir Oltean 2019-05-02  2247  	mac = priv->static_config.tables[BLK_IDX_MAC_CONFIG].entries;
-6666cebc5e306f Vladimir Oltean 2019-05-02  2248  
-8400cff60b472c Vladimir Oltean 2019-06-08  2249  	/* Back up the dynamic link speed changed by sja1105_adjust_port_config
-8400cff60b472c Vladimir Oltean 2019-06-08  2250  	 * in order to temporarily restore it to SJA1105_SPEED_AUTO - which the
-8400cff60b472c Vladimir Oltean 2019-06-08  2251  	 * switch wants to see in the static config in order to allow us to
-8400cff60b472c Vladimir Oltean 2019-06-08  2252  	 * change it through the dynamic interface later.
-6666cebc5e306f Vladimir Oltean 2019-05-02  2253  	 */
-542043e91df452 Vladimir Oltean 2021-05-24  2254  	for (i = 0; i < ds->num_ports; i++) {
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2255  		u32 reg_addr = mdiobus_c45_addr(MDIO_MMD_VEND2, MDIO_CTRL1);
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2256  
-41fed17fdbe531 Vladimir Oltean 2021-05-31  2257  		speed_mbps[i] = sja1105_port_speed_to_ethtool(priv,
-41fed17fdbe531 Vladimir Oltean 2021-05-31  2258  							      mac[i].speed);
-41fed17fdbe531 Vladimir Oltean 2021-05-31  2259  		mac[i].speed = priv->info->port_speed[SJA1105_SPEED_AUTO];
-6666cebc5e306f Vladimir Oltean 2019-05-02  2260  
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2261  		if (priv->xpcs[i])
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2262  			bmcr[i] = mdiobus_read(priv->mdio_pcs, i, reg_addr);
-84db00f2c04338 Vladimir Oltean 2021-05-31  2263  	}
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2264  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2265  	/* No PTP operations can run right now */
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2266  	mutex_lock(&priv->ptp_data.lock);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2267  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2268  	rc = __sja1105_ptp_gettimex(ds, &now, &ptp_sts_before);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2269  	if (rc < 0) {
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2270  		mutex_unlock(&priv->ptp_data.lock);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2271  		goto out;
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2272  	}
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2273  
-6666cebc5e306f Vladimir Oltean 2019-05-02  2274  	/* Reset switch and send updated static configuration */
-6666cebc5e306f Vladimir Oltean 2019-05-02  2275  	rc = sja1105_static_config_upload(priv);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2276  	if (rc < 0) {
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2277  		mutex_unlock(&priv->ptp_data.lock);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2278  		goto out;
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2279  	}
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2280  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2281  	rc = __sja1105_ptp_settime(ds, 0, &ptp_sts_after);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2282  	if (rc < 0) {
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2283  		mutex_unlock(&priv->ptp_data.lock);
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2284  		goto out;
-61c77533b82ba8 Vladimir Oltean 2021-06-18  2285  	}
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2286  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2287  	t1 = timespec64_to_ns(&ptp_sts_before.pre_ts);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2288  	t2 = timespec64_to_ns(&ptp_sts_before.post_ts);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2289  	t3 = timespec64_to_ns(&ptp_sts_after.pre_ts);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2290  	t4 = timespec64_to_ns(&ptp_sts_after.post_ts);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2291  	/* Mid point, corresponds to pre-reset PTPCLKVAL */
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2292  	t12 = t1 + (t2 - t1) / 2;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2293  	/* Mid point, corresponds to post-reset PTPCLKVAL, aka 0 */
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2294  	t34 = t3 + (t4 - t3) / 2;
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2295  	/* Advance PTPCLKVAL by the time it took since its readout */
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2296  	now += (t34 - t12);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2297  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2298  	__sja1105_ptp_adjtime(ds, now);
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2299  
-6cf99c13ea07b5 Vladimir Oltean 2019-11-09  2300  	mutex_unlock(&priv->ptp_data.lock);
-6666cebc5e306f Vladimir Oltean 2019-05-02  2301  
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2302  	dev_info(priv->ds->dev,
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2303  		 "Reset switch and programmed static config. Reason: %s\n",
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2304  		 sja1105_reset_reasons[reason]);
-2eea1fa82f681b Vladimir Oltean 2019-11-12  2305  
-6666cebc5e306f Vladimir Oltean 2019-05-02  2306  	/* Configure the CGU (PLLs) for MII and RMII PHYs.
-6666cebc5e306f Vladimir Oltean 2019-05-02  2307  	 * For these interfaces there is no dynamic configuration
-6666cebc5e306f Vladimir Oltean 2019-05-02  2308  	 * needed, since PLLs have same settings at all speeds.
-6666cebc5e306f Vladimir Oltean 2019-05-02  2309  	 */
-cb5a82d2b9aaca Vladimir Oltean 2021-06-18  2310  	if (priv->info->clocking_setup) {
-c50376783f23ff Vladimir Oltean 2021-05-24  2311  		rc = priv->info->clocking_setup(priv);
-6666cebc5e306f Vladimir Oltean 2019-05-02  2312  		if (rc < 0)
-6666cebc5e306f Vladimir Oltean 2019-05-02  2313  			goto out;
-cb5a82d2b9aaca Vladimir Oltean 2021-06-18  2314  	}
-6666cebc5e306f Vladimir Oltean 2019-05-02  2315  
-542043e91df452 Vladimir Oltean 2021-05-24  2316  	for (i = 0; i < ds->num_ports; i++) {
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2317  		struct dw_xpcs *xpcs = priv->xpcs[i];
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2318  		unsigned int mode;
-84db00f2c04338 Vladimir Oltean 2021-05-31  2319  
-8400cff60b472c Vladimir Oltean 2019-06-08  2320  		rc = sja1105_adjust_port_config(priv, i, speed_mbps[i]);
-6666cebc5e306f Vladimir Oltean 2019-05-02  2321  		if (rc < 0)
-6666cebc5e306f Vladimir Oltean 2019-05-02  2322  			goto out;
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2323  
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2324  		if (!xpcs)
-84db00f2c04338 Vladimir Oltean 2021-05-31  2325  			continue;
-84db00f2c04338 Vladimir Oltean 2021-05-31  2326  
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2327  		if (bmcr[i] & BMCR_ANENABLE)
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2328  			mode = MLO_AN_INBAND;
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2329  		else if (priv->fixed_link[i])
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2330  			mode = MLO_AN_FIXED;
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2331  		else
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2332  			mode = MLO_AN_PHY;
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2333  
-3ad1d171548e85 Vladimir Oltean 2021-06-11 @2334  		rc = xpcs_do_config(xpcs, priv->phy_mode[i], mode);
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2335  		if (rc < 0)
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2336  			goto out;
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2337  
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2338  		if (!phylink_autoneg_inband(mode)) {
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2339  			int speed = SPEED_UNKNOWN;
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2340  
-56b63466333b25 Vladimir Oltean 2021-06-11  2341  			if (priv->phy_mode[i] == PHY_INTERFACE_MODE_2500BASEX)
-56b63466333b25 Vladimir Oltean 2021-06-11  2342  				speed = SPEED_2500;
-56b63466333b25 Vladimir Oltean 2021-06-11  2343  			else if (bmcr[i] & BMCR_SPEED1000)
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2344  				speed = SPEED_1000;
-84db00f2c04338 Vladimir Oltean 2021-05-31  2345  			else if (bmcr[i] & BMCR_SPEED100)
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2346  				speed = SPEED_100;
-053d8ad10d585a Vladimir Oltean 2021-03-04  2347  			else
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2348  				speed = SPEED_10;
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2349  
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2350  			xpcs_link_up(&xpcs->pcs, mode, priv->phy_mode[i],
-3ad1d171548e85 Vladimir Oltean 2021-06-11  2351  				     speed, DUPLEX_FULL);
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2352  		}
-ffe10e679cec9a Vladimir Oltean 2020-03-20  2353  	}
-4d7525085a9ba8 Vladimir Oltean 2020-05-28  2354  
-4d7525085a9ba8 Vladimir Oltean 2020-05-28  2355  	rc = sja1105_reload_cbs(priv);
-4d7525085a9ba8 Vladimir Oltean 2020-05-28  2356  	if (rc < 0)
-4d7525085a9ba8 Vladimir Oltean 2020-05-28  2357  		goto out;
-6666cebc5e306f Vladimir Oltean 2019-05-02  2358  out:
-af580ae2dcb250 Vladimir Oltean 2019-11-09  2359  	mutex_unlock(&priv->mgmt_lock);
-af580ae2dcb250 Vladimir Oltean 2019-11-09  2360  
-6666cebc5e306f Vladimir Oltean 2019-05-02  2361  	return rc;
-6666cebc5e306f Vladimir Oltean 2019-05-02  2362  }
-6666cebc5e306f Vladimir Oltean 2019-05-02  2363  
+0f7acb52911066 Hugues Fruchet      2018-01-03  3028  
+e671499303e4c0 Kieran Bingham      2019-07-10  3029  static int ov5640_probe(struct i2c_client *client)
+19a81c1426c185 Steve Longerbeam    2017-06-07  3030  {
+19a81c1426c185 Steve Longerbeam    2017-06-07  3031  	struct device *dev = &client->dev;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3032  	struct fwnode_handle *endpoint;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3033  	struct ov5640_dev *sensor;
+e6441fde848737 Hugues Fruchet      2018-03-06  3034  	struct v4l2_mbus_framefmt *fmt;
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3035  	u32 rotation;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3036  	int ret;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3037  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3038  	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3039  	if (!sensor)
+19a81c1426c185 Steve Longerbeam    2017-06-07  3040  		return -ENOMEM;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3041  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3042  	sensor->i2c_client = client;
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3043  
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3044  	/*
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3045  	 * default init sequence initialize sensor to
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3046  	 * YUV422 UYVY VGA@30fps
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3047  	 */
+e6441fde848737 Hugues Fruchet      2018-03-06  3048  	fmt = &sensor->fmt;
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3049  	fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
+fb98e29ff1ea5a Hugues Fruchet      2018-08-16  3050  	fmt->colorspace = V4L2_COLORSPACE_SRGB;
+e6441fde848737 Hugues Fruchet      2018-03-06  3051  	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
+e6441fde848737 Hugues Fruchet      2018-03-06  3052  	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+e6441fde848737 Hugues Fruchet      2018-03-06  3053  	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
+e6441fde848737 Hugues Fruchet      2018-03-06  3054  	fmt->width = 640;
+e6441fde848737 Hugues Fruchet      2018-03-06  3055  	fmt->height = 480;
+e6441fde848737 Hugues Fruchet      2018-03-06  3056  	fmt->field = V4L2_FIELD_NONE;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3057  	sensor->frame_interval.numerator = 1;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3058  	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
+19a81c1426c185 Steve Longerbeam    2017-06-07  3059  	sensor->current_fr = OV5640_30_FPS;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3060  	sensor->current_mode =
+086c25f8fef9ce Maxime Ripard       2018-12-03  3061  		&ov5640_mode_data[OV5640_MODE_VGA_640_480];
+985cdcb08a0488 Hugues Fruchet      2018-09-11  3062  	sensor->last_mode = sensor->current_mode;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3063  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3064  	sensor->ae_target = 52;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3065  
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3066  	/* optional indication of physical rotation of sensor */
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3067  	ret = fwnode_property_read_u32(dev_fwnode(&client->dev), "rotation",
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3068  				       &rotation);
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3069  	if (!ret) {
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3070  		switch (rotation) {
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3071  		case 180:
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3072  			sensor->upside_down = true;
+1771e9fb67e2d6 Gustavo A. R. Silva 2020-07-25  3073  			fallthrough;
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3074  		case 0:
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3075  			break;
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3076  		default:
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3077  			dev_warn(dev, "%u degrees rotation is not supported, ignoring...\n",
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3078  				 rotation);
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3079  		}
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3080  	}
+c3f3ba3e6f78ea Hugues Fruchet      2018-06-18  3081  
+ce96bcf5b4dbd9 Sakari Ailus        2018-04-24  3082  	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+ce96bcf5b4dbd9 Sakari Ailus        2018-04-24  3083  						  NULL);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3084  	if (!endpoint) {
+19a81c1426c185 Steve Longerbeam    2017-06-07  3085  		dev_err(dev, "endpoint node not found\n");
+19a81c1426c185 Steve Longerbeam    2017-06-07  3086  		return -EINVAL;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3087  	}
+19a81c1426c185 Steve Longerbeam    2017-06-07  3088  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3089  	ret = v4l2_fwnode_endpoint_parse(endpoint, &sensor->ep);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3090  	fwnode_handle_put(endpoint);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3091  	if (ret) {
+19a81c1426c185 Steve Longerbeam    2017-06-07  3092  		dev_err(dev, "Could not parse endpoint\n");
+19a81c1426c185 Steve Longerbeam    2017-06-07  3093  		return ret;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3094  	}
+19a81c1426c185 Steve Longerbeam    2017-06-07  3095  
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3096  	if (sensor->ep.bus_type != V4L2_MBUS_PARALLEL &&
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3097  	    sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY &&
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3098  	    sensor->ep.bus_type != V4L2_MBUS_BT656) {
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3099  		dev_err(dev, "Unsupported bus type %d\n", sensor->ep.bus_type);
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3100  		return -EINVAL;
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3101  	}
+2c61e48d0a19ef Lad Prabhakar       2020-09-04  3102  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3103  	/* get system clock (xclk) */
+19a81c1426c185 Steve Longerbeam    2017-06-07  3104  	sensor->xclk = devm_clk_get(dev, "xclk");
+19a81c1426c185 Steve Longerbeam    2017-06-07  3105  	if (IS_ERR(sensor->xclk)) {
+19a81c1426c185 Steve Longerbeam    2017-06-07  3106  		dev_err(dev, "failed to get xclk\n");
+19a81c1426c185 Steve Longerbeam    2017-06-07  3107  		return PTR_ERR(sensor->xclk);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3108  	}
+19a81c1426c185 Steve Longerbeam    2017-06-07  3109  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3110  	sensor->xclk_freq = clk_get_rate(sensor->xclk);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3111  	if (sensor->xclk_freq < OV5640_XCLK_MIN ||
+19a81c1426c185 Steve Longerbeam    2017-06-07  3112  	    sensor->xclk_freq > OV5640_XCLK_MAX) {
+19a81c1426c185 Steve Longerbeam    2017-06-07  3113  		dev_err(dev, "xclk frequency out of range: %d Hz\n",
+19a81c1426c185 Steve Longerbeam    2017-06-07  3114  			sensor->xclk_freq);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3115  		return -EINVAL;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3116  	}
+19a81c1426c185 Steve Longerbeam    2017-06-07  3117  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3118  	/* request optional power down pin */
+19a81c1426c185 Steve Longerbeam    2017-06-07  3119  	sensor->pwdn_gpio = devm_gpiod_get_optional(dev, "powerdown",
+19a81c1426c185 Steve Longerbeam    2017-06-07  3120  						    GPIOD_OUT_HIGH);
+8791a102ce5793 Fabio Estevam       2019-06-28  3121  	if (IS_ERR(sensor->pwdn_gpio))
+8791a102ce5793 Fabio Estevam       2019-06-28  3122  		return PTR_ERR(sensor->pwdn_gpio);
+8791a102ce5793 Fabio Estevam       2019-06-28  3123  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3124  	/* request optional reset pin */
+19a81c1426c185 Steve Longerbeam    2017-06-07  3125  	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+19a81c1426c185 Steve Longerbeam    2017-06-07  3126  						     GPIOD_OUT_HIGH);
+8791a102ce5793 Fabio Estevam       2019-06-28  3127  	if (IS_ERR(sensor->reset_gpio))
+8791a102ce5793 Fabio Estevam       2019-06-28  3128  		return PTR_ERR(sensor->reset_gpio);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3129  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3130  	v4l2_i2c_subdev_init(&sensor->sd, client, &ov5640_subdev_ops);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3131  
+2d18fbc5518f05 Akinobu Mita        2018-11-12  3132  	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+2d18fbc5518f05 Akinobu Mita        2018-11-12  3133  			    V4L2_SUBDEV_FL_HAS_EVENTS;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3134  	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3135  	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3136  	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3137  	if (ret)
+19a81c1426c185 Steve Longerbeam    2017-06-07  3138  		return ret;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3139  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3140  	ret = ov5640_get_regulators(sensor);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3141  	if (ret)
+19a81c1426c185 Steve Longerbeam    2017-06-07  3142  		return ret;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3143  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3144  	mutex_init(&sensor->lock);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3145  
+35b46d84ba0a67 Paul Elder          2022-04-22  3146  	ret = ov5640_init_controls(sensor);
+0f7acb52911066 Hugues Fruchet      2018-01-03  3147  	if (ret)
+0f7acb52911066 Hugues Fruchet      2018-01-03  3148  		goto entity_cleanup;
+0f7acb52911066 Hugues Fruchet      2018-01-03  3149  
+35b46d84ba0a67 Paul Elder          2022-04-22  3150  	pm_runtime_set_active(dev);
+35b46d84ba0a67 Paul Elder          2022-04-22  3151  	pm_runtime_enable(dev);
+35b46d84ba0a67 Paul Elder          2022-04-22  3152  	pm_runtime_get(dev);
+35b46d84ba0a67 Paul Elder          2022-04-22  3153  
+35b46d84ba0a67 Paul Elder          2022-04-22  3154  	ret = ov5640_check_chip_id(sensor);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3155  	if (ret)
+35b46d84ba0a67 Paul Elder          2022-04-22  3156  		goto err_pm_runtime;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3157  
+15786f7b564eff Sakari Ailus        2021-03-05  3158  	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3159  	if (ret)
+35b46d84ba0a67 Paul Elder          2022-04-22  3160  		goto err_pm_runtime;
+35b46d84ba0a67 Paul Elder          2022-04-22  3161  
+35b46d84ba0a67 Paul Elder          2022-04-22  3162  	pm_runtime_set_autosuspend_delay(dev, 1000);
+35b46d84ba0a67 Paul Elder          2022-04-22  3163  	pm_runtime_use_autosuspend(dev);
+35b46d84ba0a67 Paul Elder          2022-04-22  3164  	pm_runtime_put_autosuspend(dev);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3165  
+19a81c1426c185 Steve Longerbeam    2017-06-07  3166  	return 0;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3167  
+35b46d84ba0a67 Paul Elder          2022-04-22  3168  err_pm_runtime:
+35b46d84ba0a67 Paul Elder          2022-04-22  3169  	pm_runtime_disable(dev);
+35b46d84ba0a67 Paul Elder          2022-04-22  3170  	pm_runtime_put_autosuspend(dev);
+19a81c1426c185 Steve Longerbeam    2017-06-07 @3171  free_ctrls:
+19a81c1426c185 Steve Longerbeam    2017-06-07  3172  	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3173  entity_cleanup:
+19a81c1426c185 Steve Longerbeam    2017-06-07  3174  	media_entity_cleanup(&sensor->sd.entity);
+bfcba38d95a0ae Tomi Valkeinen      2020-03-25  3175  	mutex_destroy(&sensor->lock);
+19a81c1426c185 Steve Longerbeam    2017-06-07  3176  	return ret;
+19a81c1426c185 Steve Longerbeam    2017-06-07  3177  }
+19a81c1426c185 Steve Longerbeam    2017-06-07  3178  
 
 -- 
 0-DAY CI Kernel Test Service
