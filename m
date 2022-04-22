@@ -1,103 +1,192 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A0C28E6
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 11:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1650627399;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rfEjtIKSL4He+pHPZ91gOLL5Y9n9DhaWPlm2XzzRFok=;
-	b=ZzUM+QKTJ5WomG47FuJ7beAw/qy4JTyQqsPHlU7RvRfmDWLaogVn0fZ3E3JNXm9VJFgA/4
-	/m8/Jt2x9y93KThjOdUsiXeTeb20C+B/FCqxHd8CPdOKbWfYY0VUrIVOJGNqS5eaZlSnQJ
-	I+wwboVI1RdBf+c6Xr5c56ddE8OfUIY=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-52KP2XRmOHCDP8TAHtqviw-1; Fri, 22 Apr 2022 07:36:38 -0400
-X-MC-Unique: 52KP2XRmOHCDP8TAHtqviw-1
-Received: by mail-qt1-f199.google.com with SMTP id r16-20020ac87950000000b002f34f162c75so2500256qtt.9
-        for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 04:36:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354F228E6
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 11:37:24 +0000 (UTC)
+Received: by mail-ot1-f43.google.com with SMTP id i3-20020a056830010300b00605468119c3so5258442otp.11
+        for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 04:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vlZn9Fi0P9yMNdagcLbI/5cAQLpglB2hUiQX2NP/3po=;
+        b=dbRnPQc/4YlwjQpR8ScZhURvIB0BVu4D6r1Ole3iIW+Rl7K6NwzUj1fMkbdM2At171
+         4RQrKG/49dJa8fYe/iMpv6+zPUAv3dthIq3WDlvZfHfa5vipZ27OiXk8r1aNxGmJCNQG
+         XoY/ev+ecGAraZVYpooCw/N6O4OKDnsc0FUcGOjD/qLn5SOLILOyITzwktYY/SURC8XR
+         +OqTsK+3gJd6LbQhhEvjhnbccmr6Skl9EBHvEH8vhVpoZFi2J34MuWweg9cWADNr7mAa
+         vkWGih+wpUHBm44Fu18yU7hyVjASC7wyv9aoKtaWEIlf1J5+K2D7OJ19djyEq2b98VEJ
+         4EcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rfEjtIKSL4He+pHPZ91gOLL5Y9n9DhaWPlm2XzzRFok=;
-        b=1R5Gy9gSsAZ/ys0uNPEUI7wNaS5i95MAjzR01aMX9Ae8aEeQGmxLCH+4OfFEJ+P0m5
-         VjbOXLgTglt/VSyEjjtSwNy3VszF/ojPbls6GVAk2wR4LXJswdPL21yQ2iSZYvFb0E+u
-         Bv8aCO2/jwFbhsRbl5uSfuoLqUjTJTIP3Lf7ShiDKnQIohmGKAW+LjsDUxlpncHiYDtU
-         VJFkvf57EgdywfoM2aGwoq2fxLVtC9c5MJstB8mqtfg4KVOqfGeQa6M4tvRAyTU4SMmo
-         XJI2h52IA/i0A8Mfay8+m77kZfd0u/jcQXYFVyiHsL8kKQj1UpSWCoouxuQ5aERJAjCg
-         ydFw==
-X-Gm-Message-State: AOAM532BHVlip/PwCgkXByrE+71TjyKUzti6C2DLtbDowDVPKPFL/3t6
-	2s1hPb0B2LIMl2B3oAY0pzWDSissz8cQK2kYi4QzLsdM3xYDFZZmLNV/a6HB8f+NYu2MT0zoNov
-	QsNMYTh86quQz0hG4qBF/TUAjCMeaFEhEJ7o83McicjCrkswKVZl7he0hAevu
-X-Received: by 2002:a05:620a:1654:b0:69c:7035:b31f with SMTP id c20-20020a05620a165400b0069c7035b31fmr2297905qko.546.1650627397869;
-        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzGQvyIHXFTiMJN4w9uTECim1QktNe4yTDbMmuBGoP1GUhkjlyryqtd5m7Ebl2PkbUXwitfjA==
-X-Received: by 2002:a05:620a:1654:b0:69c:7035:b31f with SMTP id c20-20020a05620a165400b0069c7035b31fmr2297886qko.546.1650627397596;
-        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id h75-20020a379e4e000000b0069db8210ffbsm791750qke.12.2022.04.22.04.36.36
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vlZn9Fi0P9yMNdagcLbI/5cAQLpglB2hUiQX2NP/3po=;
+        b=fajtCVIJQOuIT+ONYm8zPSLnQsIdj90h63FProk8pbj+Z8bIH3QnokdN53PJHG0mDT
+         6GOCXJVWh6fsvEcWwin3GEP1a1dOJXrCODkK6mQlK1ZIQ+fCnbu5Z/RUZyqNbb97pP+a
+         o9Dd7DYH7E8HNKXsFG0pU8GvN8KDE2Yw/HMSTvQBI/JOnnPSDZ6qR8DO07XZDjYKNyHV
+         UcZlaulO7gslPYPmOBNsFyFWQYXFvXS/ARQpBjYkqSVcaoluPKysauVGXhF0gVUZ1YHT
+         O8+zQFSumxfBbrJ5+W35FCJNZAR/8+O0PKVo8hnpoUBzCcqFu2HP72tKd7OF3bZGeAlN
+         D7ug==
+X-Gm-Message-State: AOAM530kh8OxxwwYobHKCRPEBF2BdTE0P9sDZrUctt6XbSA/Y/cDew8V
+	Nem2te/JQ/cBZixdAeSaltk=
+X-Google-Smtp-Source: ABdhPJysVFALggRZYOphtxg3XKdkPQ43XCmhqa3I1LI785e3lXPB+h5jhVwcL6EFhDwJGqRhvXPcvw==
+X-Received: by 2002:a9d:4796:0:b0:601:94e2:ce0b with SMTP id b22-20020a9d4796000000b0060194e2ce0bmr1504913otf.197.1650627443160;
+        Fri, 22 Apr 2022 04:37:23 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id 6-20020aca0706000000b002f9d20b3134sm646148oih.7.2022.04.22.04.37.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Apr 2022 04:36:37 -0700 (PDT)
-Subject: Re: [PATCH] kernel/irq/matrix.c: remove redundant assignment to
- variable 'end'
-To: Colin Ian King <colin.i.king@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20220422110418.1264778-1-colin.i.king@gmail.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <8016b196-6a39-8808-b1ff-286aacb2c8ca@redhat.com>
-Date: Fri, 22 Apr 2022 04:36:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 22 Apr 2022 04:37:22 -0700 (PDT)
+Message-ID: <6e06f2a0-ee9b-4cf4-85a3-243ed3121c50@gmail.com>
+Date: Fri, 22 Apr 2022 13:37:17 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20220422110418.1264778-1-colin.i.king@gmail.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v17 07/21] soc: mediatek: mmsys: modify reset controller
+ for MT8195 vdosys1
 Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux@roeck-us.net
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com, srv_heupstream@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220416020749.29010-1-nancy.lin@mediatek.com>
+ <20220416020749.29010-8-nancy.lin@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220416020749.29010-8-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-On 4/22/22 4:04 AM, Colin Ian King wrote:
-> Variable end is being initialized with a value that is never read, it
-> is being re-assigned later with the same value. The initialization is
-> redundant and can be removed.
->
-> Cleans up clang scan build warning:
-> kernel/irq/matrix.c:289:25: warning: Value stored to 'end' during its
-> initialization is never read [deadcode.DeadStores]
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+
+On 16/04/2022 04:07, Nancy.Lin wrote:
+> MT8195 vdosys1 has more than 32 reset bits and a different reset base
+> than other chips. Modify mmsys for support 64 bit and different reset
+> base.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->   kernel/irq/matrix.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/irq/matrix.c b/kernel/irq/matrix.c
-> index bbfb26489aa1..1698e77645ac 100644
-> --- a/kernel/irq/matrix.c
-> +++ b/kernel/irq/matrix.c
-> @@ -286,7 +286,7 @@ void irq_matrix_remove_managed(struct irq_matrix *m, const struct cpumask *msk)
->   int irq_matrix_alloc_managed(struct irq_matrix *m, const struct cpumask *msk,
->   			     unsigned int *mapped_cpu)
->   {
-> -	unsigned int bit, cpu, end = m->alloc_end;
-> +	unsigned int bit, cpu, end;
-Reviewed-by: Tom Rix <trix@redhat.com>
->   	struct cpumap *cm;
+>   drivers/soc/mediatek/mt8195-mmsys.h |  1 +
+>   drivers/soc/mediatek/mtk-mmsys.c    | 39 ++++++++++++++++++-----------
+>   drivers/soc/mediatek/mtk-mmsys.h    |  1 +
+>   3 files changed, 27 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
+> index 5469073e3073..0a286fa5a824 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -139,6 +139,7 @@
+>   #define MT8195_VDO1_MIXER_SOUT_SEL_IN				0xf68
+>   #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			0
 >   
->   	if (cpumask_empty(msk))
+> +#define MT8195_VDO1_SW0_RST_B		0x1d0
+>   #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
+>   #define MT8195_VDO1_HDRBE_ASYNC_CFG_WD	0xe70
+>   #define MT8195_VDO1_HDR_TOP_CFG		0xd00
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index ea04aa2c3840..d7c806f9e494 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -20,6 +20,8 @@
+>   #include "mt8195-mmsys.h"
+>   #include "mt8365-mmsys.h"
+>   
+> +#define MMSYS_SW_RESET_PER_REG 32
+> +
+>   static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
+>   	.clk_driver = "clk-mt2701-mm",
+>   	.routes = mmsys_default_routing_table,
+> @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
+>   	.routes = mmsys_default_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+>   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data = {
+> @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
+>   	.routes = mmsys_mt8183_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+>   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data = {
+> @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
+>   	.routes = mmsys_mt8186_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+>   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> +	.num_resets = 32,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data = {
+> @@ -148,6 +153,8 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
+>   	.clk_driver = "clk-mt8195-vdo1",
+>   	.routes = mmsys_mt8195_routing_table,
+>   	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> +	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
+> +	.num_resets = 64,
+>   };
+>   
+>   static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
+> @@ -234,18 +241,22 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
+>   {
+>   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
+>   	unsigned long flags;
+> +	u32 offset;
+>   	u32 reg;
+>   
+> +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
+> +	id = id % MMSYS_SW_RESET_PER_REG;
+> +
+>   	spin_lock_irqsave(&mmsys->lock, flags);
+>   
+> -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> +	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset + offset);
+>   
+>   	if (assert)
+>   		reg &= ~BIT(id);
+>   	else
+>   		reg |= BIT(id);
+>   
+> -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> +	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset + offset);
+>   
+>   	spin_unlock_irqrestore(&mmsys->lock, flags);
+>   
+> @@ -360,18 +371,6 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> -	spin_lock_init(&mmsys->lock);
+> -
+> -	mmsys->rcdev.owner = THIS_MODULE;
+> -	mmsys->rcdev.nr_resets = 32;
+> -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> -	mmsys->rcdev.of_node = pdev->dev.of_node;
+> -	ret = devm_reset_controller_register(&pdev->dev, &mmsys->rcdev);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Couldn't register mmsys reset controller: %d\n", ret);
+> -		return ret;
+> -	}
+> -
 
+I'm not sure why you move that code block. It's not explained in the commit message.
+
+Regards,
+Matthias
