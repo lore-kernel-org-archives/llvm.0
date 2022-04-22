@@ -1,45 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD8A3203
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 23:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970F02F3B
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 23:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650669748; x=1682205748;
+  t=1650671008; x=1682207008;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JACMD5EWiaOfR7L52fRfPgQQApOCo17lhZOUZruR7fo=;
-  b=c2MJtTpjF7jvbaUnywlFfJ6r1jbiiDxGkrLaDuBPFFG8Al6KAtUSW4KQ
-   EVbJhOAFZh6PrDCJbbs131cjE5+auafiJQ7UPDaGM+2p0+kFr8CxuE0Nd
-   39T1A451R3rKvgfa1L3AW7O/X/qVIj6Z9gtuKbwykVVb+YdS8d921LpR6
-   ZDXEBiWokbT32+mJVuvDoABJ1XaPeLPBAlYkgBPEzMEIEWGOzqZRQFhk4
-   //rbThSWAQUkWA+876lq50fPStcJT/ry6C1a+XtLcv1FDjOnfoObYte9r
-   QDRfl6M8K6uxlv/GH1mHwe1nwTpy1SCUXhFP5VmXz/EJVQiaeKTX0ATCt
+  bh=zABS5wFkYW6CaRqAD+VBR8WOZmz+FfZuA2c+J9yGMcw=;
+  b=EcpVW4XBVq24+6VjTDnUsT1agmIVZAsoUFAvvO59oItsdpyQ1mQVUmgN
+   FI8x9WuDOGqQzMfNeUIgXmQkCm+xvJvT7mgYrSVnKQYzdz1D9u4limfrq
+   R30lxVsxAXlnSUm1bZwRpiTgpOmCy8mzyG5HesM7kY9cunTVzB1D1FItd
+   EbKOQpPQEHEkNxPSikj/SjkN7WKPuJVs5GSmuRwiSUpemGsFaF1YCpJDa
+   Dgv8HXp/3yAuEC5i4kS5kY9VTeOn+n6HV+T+FI0QKFCl7uHMSyjbzEWNB
+   kvKL1GzgezAnUNxU8s/W4guwhBZx0XENrn8ZsnDnSfOwI6Cp42Ibn5zK7
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351262749"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327729454"
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="351262749"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:22:25 -0700
+   d="scan'208";a="327729454"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 16:43:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="703743706"
+   d="scan'208";a="806202318"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 16:22:23 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2022 16:43:26 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ni2bX-000Aep-7R;
-	Fri, 22 Apr 2022 23:22:23 +0000
-Date: Sat, 23 Apr 2022 07:22:08 +0800
+	id 1ni2vt-000Afo-RV;
+	Fri, 22 Apr 2022 23:43:25 +0000
+Date: Sat, 23 Apr 2022 07:42:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Javier Martinez Canillas <javierm@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 28/44]
- fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types
- ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) -
- offset) *' (aka 'unsigned long *'))
-Message-ID: <202204230710.ewAqNDow-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [linux-next:master 4698/5845]
+ drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused variable
+ 'ssd130x_spi_table'
+Message-ID: <202204230717.gJP3yZ5j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,102 +48,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 777536e6af57becf14b8f4f34007ed3e3a95c911 [28/44] netfs: Perform content encryption
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220423/202204230710.ewAqNDow-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e7d6987e09a328d4a949701db40ef63fbb970670
+commit: 74373977d2ca26e5735377f8874be70bc2f030f5 [4698/5845] drm/solomon: Add SSD130x OLED displays SPI support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220423/202204230717.gJP3yZ5j-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/777536e6af57becf14b8f4f34007ed3e3a95c911
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 777536e6af57becf14b8f4f34007ed3e3a95c911
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=74373977d2ca26e5735377f8874be70bc2f030f5
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 74373977d2ca26e5735377f8874be70bc2f030f5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/solomon/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/crypto.c:76:10: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           seg = min(len, PAGE_SIZE - offset);
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused variable 'ssd130x_spi_table' [-Wunused-const-variable]
+   static const struct spi_device_id ssd130x_spi_table[] = {
+                                     ^
    1 warning generated.
 
 
-vim +76 fs/netfs/crypto.c
+vim +/ssd130x_spi_table +154 drivers/gpu/drm/solomon/ssd130x-spi.c
 
-    45	
-    46	/*
-    47	 * Populate a scatterlist from folios in an xarray.
-    48	 */
-    49	static int netfs_xarray_to_sglist(struct xarray *xa, loff_t pos, size_t len,
-    50					  struct scatterlist *sg, unsigned int n_sg)
-    51	{
-    52		struct scatterlist *p = sg;
-    53		struct folio *folio = NULL;
-    54		size_t seg, offset, skip = 0;
-    55		loff_t start = pos;
-    56		pgoff_t index = start >> PAGE_SHIFT;
-    57		int j;
-    58	
-    59		XA_STATE(xas, xa, index);
-    60	
-    61		sg_init_table(sg, n_sg);
-    62	
-    63		rcu_read_lock();
-    64	
-    65		xas_for_each(&xas, folio, ULONG_MAX) {
-    66			if (xas_retry(&xas, folio))
-    67				continue;
-    68			if (WARN_ON(xa_is_value(folio)) || WARN_ON(folio_test_hugetlb(folio)))
-    69				break;
-    70			for (j = (folio_index(folio) < index) ? index - folio_index(folio) : 0;
-    71			     j < folio_nr_pages(folio); j++
-    72			     ) {
-    73				struct page *subpage = folio_file_page(folio, j);
-    74	
-    75				offset = (pos + skip) & ~PAGE_MASK;
-  > 76				seg = min(len, PAGE_SIZE - offset);
-    77	
-    78				sg_set_page(p++, subpage, seg, offset);
-    79	
-    80				len -= seg;
-    81				skip += seg;
-    82				if (len == 0)
-    83					break;
-    84			}
-    85			if (len == 0)
-    86				break;
-    87		}
-    88	
-    89		rcu_read_unlock();
-    90		if (len > 0) {
-    91			kdebug("*** Insufficient source (%zx)", len);
-    92			//WARN_ON(len > 0);
-    93			return -EIO;
-    94		}
-    95	
-    96		sg_mark_end(p - 1);
-    97		return p - sg;
-    98	}
-    99	
+   145	
+   146	/*
+   147	 * The SPI core always reports a MODALIAS uevent of the form "spi:<dev>", even
+   148	 * if the device was registered via OF. This means that the module will not be
+   149	 * auto loaded, unless it contains an alias that matches the MODALIAS reported.
+   150	 *
+   151	 * To workaround this issue, add a SPI device ID table. Even when this should
+   152	 * not be needed for this driver to match the registered SPI devices.
+   153	 */
+ > 154	static const struct spi_device_id ssd130x_spi_table[] = {
+   155		{ "sh1106",  SH1106_ID },
+   156		{ "ssd1305", SSD1305_ID },
+   157		{ "ssd1306", SSD1306_ID },
+   158		{ "ssd1307", SSD1307_ID },
+   159		{ "ssd1309", SSD1309_ID },
+   160		{ /* sentinel */ }
+   161	};
+   162	MODULE_DEVICE_TABLE(spi, ssd130x_spi_table);
+   163	
 
 -- 
 0-DAY CI Kernel Test Service
