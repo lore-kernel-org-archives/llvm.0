@@ -1,51 +1,46 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338E723CD
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 07:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C1223A4
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 08:36:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650611219; x=1682147219;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K5K/9LP5qRdw+kAG2wypguFk5flX/j+CqMO4RT/vvxA=;
-  b=kXelw/wzOaRh/LIF0UmBSG/g+2d8r3X74W3/LVmQ9JQ/NLZTcGqtRPwy
-   UuyzXDQoHDlDOAMKQqaHYiVDRjoBbYjjfcfdEmqZAuh9WRZJN2/Xx+lED
-   rcbR8z86KxiQEAZ6qEhh1to9RFsdAG65pcCooF1Jjx/txez7dxiaKoYjA
-   1geoRA7KUyWvIrTYor0ZLWMyjDKruPM+P6GqtHbJaf9ljip2JY4//wF6h
-   ag3AQigB2e/7oCDWXLMRnL9Set9EdqK3f04q140kxZ2iKQLz0PyoZq4rA
-   xdURsFUkndRpJA2IUVpfIsF/BC1NRzTwpL05R0/3pN0icjkoRLkwUgubZ
+  t=1650616600; x=1682152600;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oYswYbGhBvjXESRAHzaTDAvWjmzhQx+25B4YSVEtLWQ=;
+  b=F8Xk7QzJ5FlCrOb5NHP945R/Ra30QhQVihAEZEpjE6c6IIXwms7FhGW5
+   Ayo+Osh+nFA31ZyIPMB0IyhQmgYm13+9cLFA3XCTqwfWwx7gJpZ3n6TVW
+   lFL5ssmAkDIFNP7kuOldQ2RBhBvX8bXOfpGWqGYq0qxqJYe56Hn0GqCiw
+   mk6j30PXaiRyJ+BcBDUPTYC6bKw2qBZYZ3I0Rl1d1HHJESbWvj0kIifgt
+   VR073852Y4/adNgtOEq3Y2gGDjF8Cdf7l0S56uXF7a6wPikLKV1O9+CFl
+   FV1WgubPmZdWA0LgJghYYze4saxpYE0hvhMYs2FlbK+fEd0lvKoJXjxUG
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264372950"
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264093036"
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="264372950"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 00:06:58 -0700
+   d="scan'208";a="264093036"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 01:36:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
-   d="scan'208";a="577715736"
+   d="scan'208";a="626908927"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Apr 2022 00:06:53 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 01:36:36 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nhnNU-0009M8-Fo;
-	Fri, 22 Apr 2022 07:06:52 +0000
-Date: Fri, 22 Apr 2022 15:06:01 +0800
+	id 1nhomK-0009vr-7q;
+	Fri, 22 Apr 2022 08:36:36 +0000
+Date: Fri, 22 Apr 2022 16:35:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ryan Lee <ryan.lee.analog@gmail.com>, lgirdwood@gmail.com,
-	broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-	perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-	ckeepax@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-	cy_huang@richtek.com, pierre-louis.bossart@linux.intel.com,
-	drhodes@opensource.cirrus.com, pbrobinson@gmail.com,
-	hdegoede@redhat.com, lukas.bulwahn@gmail.com, stephan@gerhold.net,
-	arnd@arndb.de, alsa-devel@alsa-project.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ryans.lee@analog.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH V2 2/2] ASoC: max98396: add amplifier driver
-Message-ID: <202204221550.phNeKLyn-lkp@intel.com>
-References: <20220421230253.823798-2-ryan.lee.analog@gmail.com>
+To: Nico Pache <npache@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+	Joel Savitz <jsavitz@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [hnaz-mm:master 12/291] WARNING: modpost: vmlinux.o(.data+0x23acb0):
+ Section mismatch in reference from the variable rc_class to the function
+ .init.text:set_reset_devices()
+Message-ID: <202204221628.Qw9iZP1o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,145 +49,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421230253.823798-2-ryan.lee.analog@gmail.com>
 
-Hi Ryan,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on v5.18-rc3 next-20220421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Lee/ASoC-dt-bindings-max98396-add-amplifier-driver/20220422-070610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: arm-buildonly-randconfig-r003-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221550.phNeKLyn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+tree:   https://github.com/hnaz/linux-mm master
+head:   ba42854fa9997614e0ffdbc35b082df3ba6e59da
+commit: 85dd63c3a11207bd98815d579b153c63a9efc96d [12/291] oom_kill.c: futex: delay the OOM reaper to allow time for proper futex cleanup
+config: riscv-randconfig-r015-20220420 (https://download.01.org/0day-ci/archive/20220422/202204221628.Qw9iZP1o-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/1acb9ac9acbd834a2e93c2127be6bdd1716dc6dd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ryan-Lee/ASoC-dt-bindings-max98396-add-amplifier-driver/20220422-070610
-        git checkout 1acb9ac9acbd834a2e93c2127be6bdd1716dc6dd
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/hnaz/linux-mm/commit/85dd63c3a11207bd98815d579b153c63a9efc96d
+        git remote add hnaz-mm https://github.com/hnaz/linux-mm
+        git fetch --no-tags hnaz-mm master
+        git checkout 85dd63c3a11207bd98815d579b153c63a9efc96d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> sound/soc/codecs/max98396.c:408:7: warning: variable 'update' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/codecs/max98396.c:411:7: note: uninitialized use occurs here
-                   if (update)
-                       ^~~~~~
-   sound/soc/codecs/max98396.c:408:3: note: remove the 'if' if its condition is always true
-                   if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/codecs/max98396.c:349:13: note: initialize the variable 'update' to silence this warning
-           bool update;
-                      ^
-                       = 0
-   1 warning generated.
+>> WARNING: modpost: vmlinux.o(.data+0x23acb0): Section mismatch in reference from the variable rc_class to the function .init.text:set_reset_devices()
+The variable rc_class references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: vmlinux.o(.data+0x23ad08): Section mismatch in reference from the variable rc_ida to the function .init.text:set_reset_devices()
+The variable rc_ida references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: vmlinux.o(.data+0x23ad30): Section mismatch in reference from the variable empty_map to the function .init.text:set_reset_devices()
+The variable empty_map references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+--
+>> WARNING: modpost: vmlinux.o(.data+0x2660e0): Section mismatch in reference from the variable dme1737_zone3_attr to the function .init.text:set_reset_devices()
+The variable dme1737_zone3_attr references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
 
 
-vim +408 sound/soc/codecs/max98396.c
-
-   339	
-   340	static int max98396_dai_set_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
-   341	{
-   342		struct snd_soc_component *component = codec_dai->component;
-   343		struct max98396_priv *max98396 = snd_soc_component_get_drvdata(component);
-   344		unsigned int format;
-   345		unsigned int bclk_pol = 0;
-   346		unsigned int fsync_pol = 0;
-   347		int ret, status;
-   348		int reg;
-   349		bool update;
-   350	
-   351		dev_dbg(component->dev, "%s: fmt 0x%08X\n", __func__, fmt);
-   352	
-   353		switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-   354		case SND_SOC_DAIFMT_NB_NF:
-   355			break;
-   356		case SND_SOC_DAIFMT_NB_IF:
-   357			fsync_pol = MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE;
-   358			break;
-   359		case SND_SOC_DAIFMT_IB_NF:
-   360			bclk_pol = MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE;
-   361			break;
-   362		case SND_SOC_DAIFMT_IB_IF:
-   363			bclk_pol = MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE;
-   364			fsync_pol = MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE;
-   365			break;
-   366	
-   367		default:
-   368			dev_err(component->dev, "DAI invert mode unsupported\n");
-   369			return -EINVAL;
-   370		}
-   371	
-   372		regmap_update_bits(max98396->regmap,
-   373				   MAX98396_R2041_PCM_MODE_CFG,
-   374				   MAX98396_PCM_MODE_CFG_PCM_LRCLKEDGE,
-   375				   fsync_pol);
-   376	
-   377		regmap_update_bits(max98396->regmap,
-   378				   MAX98396_R2042_PCM_CLK_SETUP,
-   379				   MAX98396_PCM_MODE_CFG_PCM_BCLKEDGE,
-   380				   bclk_pol);
-   381	
-   382		/* interface format */
-   383		switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
-   384		case SND_SOC_DAIFMT_I2S:
-   385			format = MAX98396_PCM_FORMAT_I2S;
-   386			break;
-   387		case SND_SOC_DAIFMT_LEFT_J:
-   388			format = MAX98396_PCM_FORMAT_LJ;
-   389			break;
-   390		case SND_SOC_DAIFMT_DSP_A:
-   391			format = MAX98396_PCM_FORMAT_TDM_MODE1;
-   392			break;
-   393		case SND_SOC_DAIFMT_DSP_B:
-   394			format = MAX98396_PCM_FORMAT_TDM_MODE0;
-   395			break;
-   396		default:
-   397			return -EINVAL;
-   398		}
-   399	
-   400		ret = regmap_read(max98396->regmap, MAX98396_R210F_GLOBAL_EN, &status);
-   401		if (ret < 0)
-   402			return -EINVAL;
-   403	
-   404		if (status) {
-   405			ret = regmap_read(max98396->regmap, MAX98396_R2041_PCM_MODE_CFG, &reg);
-   406			if (ret < 0)
-   407				return -EINVAL;
- > 408			if (format != (reg & MAX98396_PCM_MODE_CFG_FORMAT_MASK))
-   409				update = true;
-   410			/* GLOBAL_EN OFF prior to pcm mode change */
-   411			if (update)
-   412				max98396_global_enable_onoff(max98396->regmap, false);
-   413		}
-   414	
-   415		regmap_update_bits(max98396->regmap,
-   416				   MAX98396_R2041_PCM_MODE_CFG,
-   417				   MAX98396_PCM_MODE_CFG_FORMAT_MASK,
-   418				   format);
-   419	
-   420		if (status && update)
-   421			max98396_global_enable_onoff(max98396->regmap, true);
-   422	
-   423		return 0;
-   424	}
-   425	
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
+<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
+<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
+<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.text+0x1505de2): Section mismatch in reference from the function tb_debugfs_exit() to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2304c4): Section mismatch in reference from the variable ov6650_i2c_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2596cc): Section mismatch in reference from the variable w83781d_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de80): Section mismatch in reference from the variable sensor_dev_attr_in1_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25de9c): Section mismatch in reference from the variable sensor_dev_attr_in1_alarm to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25debc): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25dedc): Section mismatch in reference from the variable sensor_dev_attr_in2_max to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25defc): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the variable .init.text:.LBB120_29
+<< WARNING: modpost: vmlinux.o(.data+0x25df00): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x25df1c): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
 
 -- 
 0-DAY CI Kernel Test Service
