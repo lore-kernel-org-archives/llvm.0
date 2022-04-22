@@ -1,128 +1,130 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B1923B2
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 10:42:59 +0000 (UTC)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MAEJ1S010784;
-	Fri, 22 Apr 2022 10:42:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=vIeD8Z2V/2oCs6VkOdLN5CH5TWXYC4i53djqXydyCj8=;
- b=stJy4Z0H/OOGlDtzc6iyjZQKpqL/P4Cl5ZFG2yEPKdoOHDYLxJI9++/c7+Y7vj7YFMQ+
- w3gzGu5rnSI8wIu0SWJF4ua9RnlKpFV7/1TsQIifOZoI4Qr7IVH525MOldi9A8Q4TVPf
- oGEUBYuVkZDvp3zCQJAA1OpiPWIbTc3pJXNfA8sL8dl+sM0sr1J1qDRMIiXaQrjjOLrd
- BqIoPu3oU1HVi99lLrfWtLV8Fq6zq8q5LE0bkv+Rz/i9WyMIDchxzFsW3DMgYt3V68Mx
- q7w9DXXruvnNmT4MpZNDrDy1sOTot9l6Gal0W9pfaIcDz4k8PZy4RrAP6bQHw31Wthlc gA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-	by mx0a-001b2d01.pphosted.com with ESMTP id 3fjswfdprm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Apr 2022 10:42:49 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MAFJEg004256;
-	Fri, 22 Apr 2022 10:42:47 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma02fra.de.ibm.com with ESMTP id 3fgu6u5s0f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Apr 2022 10:42:47 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MAgiic38338920
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 Apr 2022 10:42:44 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CCB404C040;
-	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2EBCE4C046;
-	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.24.148])
-	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
-Date: Fri, 22 Apr 2022 13:42:42 +0300
-From: Mike Rapoport <rppt@linux.ibm.com>
-To: kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [stable:linux-5.10.y 2705/5321] WARNING: modpost:
- vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function
- __arm_ioremap_pfn_caller() to the function
- .meminit.text:memblock_is_map_memory()
-Message-ID: <YmKGohqgR21F1zpX@linux.ibm.com>
-References: <202204220723.zOZ7gZGT-lkp@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204220723.zOZ7gZGT-lkp@intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
-X-Proofpoint-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2107728E6
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 10:45:11 +0000 (UTC)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 7C0704C02B0;
+	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+	s=20220209; t=1650623749;
+	bh=bCNDShSNWamzrapZyCH2+MaOYLPQy3BG0jVzD+WNbD4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dT+Zo14Mw3Zm1XxiUb4lp1L+yp/xGGuTBLjGLo5o8N/e9+BZaFpaWXuulYOOhz6Ib
+	 oKaQ3sSQ9GiWnhU1giBGZwJQyLv9Vw/JKzbWwJ9gEXhuCT9ytBiie1yu2ib53kNJ3y
+	 aDsCRtWsWp3Y3882MQVZ5hPSYXSOdLwe+rRZIbEGTC8ckRolOWQEBB1O4l3bmLtjEe
+	 a7FHmnSmgjO2veh/5kLbGHVY7kJEs1CPL+daN7HoJ3DfEr0F2otg/uN3wwYHayQudm
+	 0UCgCPpAozOgr/clanEiNpP0eUk80HirH/bI5BSGD1xUqeFWuIcD7rXeBtIudnzkfp
+	 57ZbauIKayR0Q==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+	id 763FE6D8; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 41EF06D7;
+	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 3CF2D55F;
+	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+	id 1AEA74A037C; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+	by mail.in.tum.de (Postfix) with ESMTPSA id 496B74A01EC;
+	Fri, 22 Apr 2022 12:35:48 +0200 (CEST)
+	(Extended-Queue-bit xtech_eq@fff.in.tum.de)
+Date: Fri, 22 Apr 2022 12:35:41 +0200
+From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+	Martin Fink <martin.fink@in.tum.de>
+Subject: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-22_02,2022-04-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=813 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=0 adultscore=0 clxscore=1011 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204220046
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 22, 2022 at 07:37:19AM +0800, kernel test robot wrote:
-> Hi Mike,
+Hi all, 
+
+My dependency checker is flagging yet another broken dependency. For
+context, see [1].
+
+Thankfully, it is fairly straight-forward to explain this time.
+
+> stable_node = page_stable_node(page);
+
+Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
+call to "page_stable_node()", which can depend on a "READ_ONCE()", being
+assigned to "stable_node".
+
+> if (stable_node) {
+>         if (stable_node->head != &migrate_nodes &&
+>             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
+>             NUMA(stable_node->nid)) {
+>                 stable_node_dup_del(stable_node); ‣dup: stable_node
+>                 stable_node->head = &migrate_nodes;
+>                 list_add(&stable_node->list, stable_node->head);
+
+The dependency chain then runs into the two following if's, through an
+assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
+finally reaches a call to "list_add()" (line 2039) where
+"stable_node->head" gets passed as the second function argument. 
+
+>         }
+> }
 > 
-> FYI, the error/warning still remains.
+> static inline void list_add(struct list_head *new, struct list_head *head)
+> {
+>         __list_add(new, head, head->next);
+> }
 > 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-> head:   1052f9bce62982023737a95b7ff1ad26a5149af6
-> commit: 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181 [2705/5321] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
-> config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220723.zOZ7gZGT-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
->         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
->         git fetch --no-tags stable linux-5.10.y
->         git checkout 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> static inline void __list_add(struct list_head *new,
+>                               struct list_head *prev,
+>                               struct list_head *next)
+> {
+>         if (!__list_add_valid(new, prev, next))
+>                 return;
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> WARNING: modpost: vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function __arm_ioremap_pfn_caller() to the function .meminit.text:memblock_is_map_memory()
-> The function __arm_ioremap_pfn_caller() references
-> the function __meminit memblock_is_map_memory().
-> This is often because __arm_ioremap_pfn_caller lacks a __meminit
-> annotation or the annotation of memblock_is_map_memory is wrong.
+>         next->prev = new;
+>         new->next = next;
+>         new->prev = prev;
+>         WRITE_ONCE(prev->next, new);
+> }
 
-In 5.10 the hackkit defconfig does not select ARCH_KEEP_MEMBLOCK which is
-required for memblock_is_map_memory() to function after boot.
+By being passed into "list_add()" via "stable_node->head", the
+dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
+whose destination address, "stable_node->head->next", is part of the
+dependency chain and therefore carries an address dependency. 
 
-In upstream kernels ARCH_KEEP_MEMBLOCK is always selected by ARM after
-commit 5e545df3292f ("arm: remove CONFIG_ARCH_HAS_HOLES_MEMORYMODEL")
+However, as a result of the assignment in line 2038, Clang knows that
+"stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
+the dependency chain. 
 
-So the fix would be either to backport 5e545df3292f or unconditionally
-select ARCH_KEEP_MEMBLOCK on ARM in 5.10.
+What do you think?
 
-(the same applies to 5.4)
+Many thanks,
+Paul
 
-Greg, what is your preference?
- 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+--
+[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
 
--- 
-Sincerely yours,
-Mike.
