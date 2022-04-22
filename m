@@ -1,79 +1,126 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66787A
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 05:42:00 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kl3FG6wJZz4xLb;
-	Fri, 22 Apr 2022 15:41:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1650606118;
-	bh=CzpPNa6LNBRn4OqfkiDTKTk6MLwFbBssFLjPgmXcayA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=L88olYxweE+CygJgshK3C46w2LQk5l7diuD/dFnFg4+3GHhyY+kY+FU2SW5TlnLaK
-	 3Dolow5IPpMXLVPm2vPUE9+wz9sqeeTijdL+mJ4FpbULVyo0UdIGbB+XccsWC6ZaR+
-	 zGA1DueNmVxVA+eVoiXyCnvn2FYDsC0matiy6kzJ8So9JGfJYKful61C2Quc8tG3YA
-	 WkgSGCCJ7hwlzBM5/jRj9luUsoj997wiRC6/9B0Mi9GBxEr/XavSMphkwkG02lZFsT
-	 yW1R49oTvh0Kfz0ASaSiFVXVILBlPx9DVhYZ80MSKf21y/C9iuoRM7RfbQwNp3tz7t
-	 j7CyFBVdPftlA==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin
- <sashal@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
- stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev
-Subject: Re: Apply d799769188529abc6cbf035a10087a51f7832b6b to 5.17 and 5.15?
-In-Reply-To: <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
-References: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
- <877d7ig9oz.fsf@mpe.ellerman.id.au>
- <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
-Date: Fri, 22 Apr 2022 15:41:51 +1000
-Message-ID: <8735i5ad40.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1407A
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 05:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650606711; x=1682142711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d79wJp8dvPtbPBbi8XIPs+bkKxk950fFejn3HzUVIKw=;
+  b=cgz1W1B5RYQGm4f0i70KhZys1Kxmo0xCnEawSqOxpYwuj+Mw3anfl4ME
+   RP32DAXgRz+ZeTin6Z9oHdwm8lw3SRvqpOMiGZHCIGhGydhPqiRLPLFWv
+   zb+CtguhXkL/fMvlpAS3us2u0wn3Q6bUbPanQaqMe2+kWeE79XNBN4XE6
+   nnSGTmH/ntNqum6nVHN/PbBZJAJ/RBDsbEIS0Sasgw7/TypfJT9oyTmGL
+   7T9N915vKsco19hiJPJ4Hy0b6fPyI9Y/POev/q4R4cQpSHVcnDKZsZF12
+   SdbXPNC5Gp3qzExf/9MIpfoe9OXPTzoQ8cWV4Bu6DEa0H4raYBg1FBoQX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263433659"
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="263433659"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 22:51:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
+   d="scan'208";a="511429433"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2022 22:51:49 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nhmCq-0009Hi-Gl;
+	Fri, 22 Apr 2022 05:51:48 +0000
+Date: Fri, 22 Apr 2022 13:51:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: sound/soc/fsl/imx-audmux.c:301:16: warning: cast to smaller integer
+ type 'enum imx_audmux_type' from 'const void *'
+Message-ID: <202204221334.HsOqkl21-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> On Thu, Apr 21, 2022 at 05:46:52PM +1000, Michael Ellerman wrote:
->> Nathan Chancellor <nathan@kernel.org> writes:
->> > Hi Greg, Sasha, and Michael,
->> >
->> > Commit d79976918852 ("powerpc/64: Add UADDR64 relocation support") fixes
->> > a boot failure with CONFIG_RELOCATABLE=y kernels linked with recent
->> > versions of ld.lld [1]. Additionally, it resolves a separate boot
->> > failure that Paul Menzel reported [2] with ld.lld 13.0.0. Is this a
->> > reasonable backport for 5.17 and 5.15? It applies cleanly, resolves both
->> > problems, and does not appear to cause any other issues in my testing
->> > for both trees but I was curious what Michael's opinion was, as I am far
->> > from a PowerPC expert.
->> >
->> > This change does apply cleanly to 5.10 (I did not try earlier branches)
->> > but there are other changes needed for ld.lld to link CONFIG_RELOCATABLE
->> > kernels in that branch so to avoid any regressions, I think it is safe
->> > to just focus on 5.15 and 5.17.
->> 
->> I considered tagging it for stable, but I wanted it to get a bit of
->> testing first, it's a reasonably big patch.
->> 
->> I think we're reasonably confident it doesn't introduce any new bugs,
->> but more testing time is always good.
->> 
->> So I guess I'd be inclined to wait another week or so before requesting
->> a stable backport?
->
-> Sure, thanks for the response! I'll ping this thread on Monday, May 2nd,
-> so that we have two more RC releases to try and flush out any lingering
-> issues. If you do receive any reports of regressions, please let me
-> know.
+Hi Fabio,
 
-Sounds good, thanks.
+FYI, the error/warning still remains.
 
-cheers
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b05a5683eba6e2d40eadd5eeef53c4864149a4fe
+commit: 6a8b8b582db13a18235f3b0400f103a0573c7859 ASoC: imx-audmux: Remove unused .id_table
+date:   1 year, 5 months ago
+config: arm64-buildonly-randconfig-r002-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221334.HsOqkl21-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6a8b8b582db13a18235f3b0400f103a0573c7859
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6a8b8b582db13a18235f3b0400f103a0573c7859
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/tty/serial/ sound/soc/codecs/ sound/soc/fsl/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/fsl/imx-audmux.c:301:16: warning: cast to smaller integer type 'enum imx_audmux_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           audmux_type = (enum imx_audmux_type)of_device_get_match_data(&pdev->dev);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +301 sound/soc/fsl/imx-audmux.c
+
+   287	
+   288	static int imx_audmux_probe(struct platform_device *pdev)
+   289	{
+   290		audmux_base = devm_platform_ioremap_resource(pdev, 0);
+   291		if (IS_ERR(audmux_base))
+   292			return PTR_ERR(audmux_base);
+   293	
+   294		audmux_clk = devm_clk_get(&pdev->dev, "audmux");
+   295		if (IS_ERR(audmux_clk)) {
+   296			dev_dbg(&pdev->dev, "cannot get clock: %ld\n",
+   297					PTR_ERR(audmux_clk));
+   298			audmux_clk = NULL;
+   299		}
+   300	
+ > 301		audmux_type = (enum imx_audmux_type)of_device_get_match_data(&pdev->dev);
+   302	
+   303		switch (audmux_type) {
+   304		case IMX31_AUDMUX:
+   305			audmux_debugfs_init();
+   306			reg_max = 14;
+   307			break;
+   308		case IMX21_AUDMUX:
+   309			reg_max = 6;
+   310			break;
+   311		default:
+   312			dev_err(&pdev->dev, "unsupported version!\n");
+   313			return -EINVAL;
+   314		}
+   315	
+   316		regcache = devm_kzalloc(&pdev->dev, sizeof(u32) * reg_max, GFP_KERNEL);
+   317		if (!regcache)
+   318			return -ENOMEM;
+   319	
+   320		imx_audmux_parse_dt_defaults(pdev, pdev->dev.of_node);
+   321	
+   322		return 0;
+   323	}
+   324	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
