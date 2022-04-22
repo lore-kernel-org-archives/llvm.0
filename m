@@ -1,125 +1,79 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DB823B4
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 02:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650595900; x=1682131900;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/EP0iWdKOEiGzPNvILshoCXIoQqdE97BuNJKc07nAWo=;
-  b=T9m9RRwpv7jOjlFPtN/Yel1eUtEz/QlLobOL/dHeD85i8o4/YVado5sx
-   C49cD9wwII2JnioPQcGgdeA7Dh9txY4i6S03U+txwndueIJ1kRiV5h1MV
-   rkPaBYU+/vKP405knFROkIivJHrIe8k5PGynFgQf/0i/UUKdRr868MxLg
-   9igLo+PBqVX9dcJihBVC0lLn+B0mGIT5Vsj1R0aoSN80eRf/k1Mk1i041
-   TWrP9xmg0agzqGUdnUZORlcxUwuKsJ1+VDJoWmm+ub8V2GIPy7EueE0nd
-   xOucic83O4I+H+yJCnEVKY1MqWGffxeMHH2MObo24YJB+S3gJFTJsBnGl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264325188"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="264325188"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:51:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="562856314"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 19:51:36 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nhjOR-00098z-QD;
-	Fri, 22 Apr 2022 02:51:35 +0000
-Date: Fri, 22 Apr 2022 10:51:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yu Zhe <yuzhe@nfschina.com>, mareklindner@neomailbox.ch,
-	sw@simonwunderlich.de, a@unstable.cc, sven@narfation.org,
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-	kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
-Subject: Re: [PATCH] batman-adv: remove unnecessary type castings
-Message-ID: <202204221034.hfPA4RPW-lkp@intel.com>
-References: <20220421154829.9775-1-yuzhe@nfschina.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66787A
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 05:42:00 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kl3FG6wJZz4xLb;
+	Fri, 22 Apr 2022 15:41:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1650606118;
+	bh=CzpPNa6LNBRn4OqfkiDTKTk6MLwFbBssFLjPgmXcayA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=L88olYxweE+CygJgshK3C46w2LQk5l7diuD/dFnFg4+3GHhyY+kY+FU2SW5TlnLaK
+	 3Dolow5IPpMXLVPm2vPUE9+wz9sqeeTijdL+mJ4FpbULVyo0UdIGbB+XccsWC6ZaR+
+	 zGA1DueNmVxVA+eVoiXyCnvn2FYDsC0matiy6kzJ8So9JGfJYKful61C2Quc8tG3YA
+	 WkgSGCCJ7hwlzBM5/jRj9luUsoj997wiRC6/9B0Mi9GBxEr/XavSMphkwkG02lZFsT
+	 yW1R49oTvh0Kfz0ASaSiFVXVILBlPx9DVhYZ80MSKf21y/C9iuoRM7RfbQwNp3tz7t
+	 j7CyFBVdPftlA==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin
+ <sashal@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
+ stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ llvm@lists.linux.dev
+Subject: Re: Apply d799769188529abc6cbf035a10087a51f7832b6b to 5.17 and 5.15?
+In-Reply-To: <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
+References: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
+ <877d7ig9oz.fsf@mpe.ellerman.id.au>
+ <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
+Date: Fri, 22 Apr 2022 15:41:51 +1000
+Message-ID: <8735i5ad40.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421154829.9775-1-yuzhe@nfschina.com>
+Content-Type: text/plain
 
-Hi Yu,
+Nathan Chancellor <nathan@kernel.org> writes:
+> On Thu, Apr 21, 2022 at 05:46:52PM +1000, Michael Ellerman wrote:
+>> Nathan Chancellor <nathan@kernel.org> writes:
+>> > Hi Greg, Sasha, and Michael,
+>> >
+>> > Commit d79976918852 ("powerpc/64: Add UADDR64 relocation support") fixes
+>> > a boot failure with CONFIG_RELOCATABLE=y kernels linked with recent
+>> > versions of ld.lld [1]. Additionally, it resolves a separate boot
+>> > failure that Paul Menzel reported [2] with ld.lld 13.0.0. Is this a
+>> > reasonable backport for 5.17 and 5.15? It applies cleanly, resolves both
+>> > problems, and does not appear to cause any other issues in my testing
+>> > for both trees but I was curious what Michael's opinion was, as I am far
+>> > from a PowerPC expert.
+>> >
+>> > This change does apply cleanly to 5.10 (I did not try earlier branches)
+>> > but there are other changes needed for ld.lld to link CONFIG_RELOCATABLE
+>> > kernels in that branch so to avoid any regressions, I think it is safe
+>> > to just focus on 5.15 and 5.17.
+>> 
+>> I considered tagging it for stable, but I wanted it to get a bit of
+>> testing first, it's a reasonably big patch.
+>> 
+>> I think we're reasonably confident it doesn't introduce any new bugs,
+>> but more testing time is always good.
+>> 
+>> So I guess I'd be inclined to wait another week or so before requesting
+>> a stable backport?
+>
+> Sure, thanks for the response! I'll ping this thread on Monday, May 2nd,
+> so that we have two more RC releases to try and flush out any lingering
+> issues. If you do receive any reports of regressions, please let me
+> know.
 
-Thank you for the patch! Yet something to improve:
+Sounds good, thanks.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc3 next-20220421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220422/202204221034.hfPA4RPW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2474b41c585e849d3546e0aba8f3c862735a04ff
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yu-Zhe/batman-adv-remove-unnecessary-type-castings/20220421-235254
-        git checkout 2474b41c585e849d3546e0aba8f3c862735a04ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/batman-adv/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/batman-adv/bridge_loop_avoidance.c:68:27: error: initializing 'struct batadv_bla_claim *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           struct batadv_bla_claim *claim = data;
-                                    ^       ~~~~
-   1 error generated.
---
->> net/batman-adv/translation-table.c:109:5: error: assigning to 'struct batadv_tt_common_entry *' from 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           tt = data;
-              ^ ~~~~
-   1 error generated.
-
-
-vim +68 net/batman-adv/bridge_loop_avoidance.c
-
-    53	
-    54	static void batadv_bla_periodic_work(struct work_struct *work);
-    55	static void
-    56	batadv_bla_send_announce(struct batadv_priv *bat_priv,
-    57				 struct batadv_bla_backbone_gw *backbone_gw);
-    58	
-    59	/**
-    60	 * batadv_choose_claim() - choose the right bucket for a claim.
-    61	 * @data: data to hash
-    62	 * @size: size of the hash table
-    63	 *
-    64	 * Return: the hash index of the claim
-    65	 */
-    66	static inline u32 batadv_choose_claim(const void *data, u32 size)
-    67	{
-  > 68		struct batadv_bla_claim *claim = data;
-    69		u32 hash = 0;
-    70	
-    71		hash = jhash(&claim->addr, sizeof(claim->addr), hash);
-    72		hash = jhash(&claim->vid, sizeof(claim->vid), hash);
-    73	
-    74		return hash % size;
-    75	}
-    76	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+cheers
