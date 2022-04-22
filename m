@@ -1,115 +1,128 @@
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9306623B2
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 10:39:39 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 293454C046E;
-	Fri, 22 Apr 2022 12:39:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-	s=20220209; t=1650623977;
-	bh=OziXpZopIYxb3f1gE+uPznYxZhbuOzdu2g8U5ipdPbY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JhS15dFSGztpvzsMkJ6qayNPHMOkYoV7DK/EMamtJDzraoIvQ/98HH1s7aHKTgE+q
-	 hOf7aS9sYP2Vy3xhUMhbMp2SOrWpez7VIwkvqDOTwgHFNPLey1EqsGo7cKDz1bM3a0
-	 fIy7nyzGK7M8R9ZjDkPLwE7q4bwA44Q0Di5kNt6hEqWrFaYIlOKtquCINJsvT9VtIb
-	 Ok5QIXNXAK2GRBE4G3MzvgOBTen8VKRahCJ8KvJ882BqMLSD3TH57JMi1qcKqD+KLL
-	 KVuX+GaYr0hW4BACi63hugHoNubFG7Gjcw6zMvNe8of4gEUL4oOY0RcAIOrzEEy4tf
-	 LBpWNEvRodfZA==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id 23BA86D8; Fri, 22 Apr 2022 12:39:37 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id F24156D7;
-	Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id ECF6C55F;
-	Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id E7B524A037C; Fri, 22 Apr 2022 12:39:36 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 83A464A01EC;
-	Fri, 22 Apr 2022 12:39:35 +0200 (CEST)
-	(Extended-Queue-bit xtech_ad@fff.in.tum.de)
-Date: Fri, 22 Apr 2022 12:39:34 +0200
-From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	"Jose E. Marchesi" <jemarch@gnu.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-Message-ID: <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
- <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B1923B2
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 10:42:59 +0000 (UTC)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23MAEJ1S010784;
+	Fri, 22 Apr 2022 10:42:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=vIeD8Z2V/2oCs6VkOdLN5CH5TWXYC4i53djqXydyCj8=;
+ b=stJy4Z0H/OOGlDtzc6iyjZQKpqL/P4Cl5ZFG2yEPKdoOHDYLxJI9++/c7+Y7vj7YFMQ+
+ w3gzGu5rnSI8wIu0SWJF4ua9RnlKpFV7/1TsQIifOZoI4Qr7IVH525MOldi9A8Q4TVPf
+ oGEUBYuVkZDvp3zCQJAA1OpiPWIbTc3pJXNfA8sL8dl+sM0sr1J1qDRMIiXaQrjjOLrd
+ BqIoPu3oU1HVi99lLrfWtLV8Fq6zq8q5LE0bkv+Rz/i9WyMIDchxzFsW3DMgYt3V68Mx
+ q7w9DXXruvnNmT4MpZNDrDy1sOTot9l6Gal0W9pfaIcDz4k8PZy4RrAP6bQHw31Wthlc gA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+	by mx0a-001b2d01.pphosted.com with ESMTP id 3fjswfdprm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Apr 2022 10:42:49 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23MAFJEg004256;
+	Fri, 22 Apr 2022 10:42:47 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+	by ppma02fra.de.ibm.com with ESMTP id 3fgu6u5s0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Apr 2022 10:42:47 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23MAgiic38338920
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 22 Apr 2022 10:42:44 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CCB404C040;
+	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2EBCE4C046;
+	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.24.148])
+	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+	Fri, 22 Apr 2022 10:42:44 +0000 (GMT)
+Date: Fri, 22 Apr 2022 13:42:42 +0300
+From: Mike Rapoport <rppt@linux.ibm.com>
+To: kernel test robot <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [stable:linux-5.10.y 2705/5321] WARNING: modpost:
+ vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function
+ __arm_ioremap_pfn_caller() to the function
+ .meminit.text:memblock_is_map_memory()
+Message-ID: <YmKGohqgR21F1zpX@linux.ibm.com>
+References: <202204220723.zOZ7gZGT-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204220723.zOZ7gZGT-lkp@intel.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
+X-Proofpoint-GUID: RuD25pj2vcAE6UeM0Lhh0FpchBErkswj
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-22_02,2022-04-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=813 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ phishscore=0 suspectscore=0 adultscore=0 clxscore=1011 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204220046
 
-On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
-> On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekrüger
-> <paul.heidekrueger@in.tum.de> wrote:
-> >
-> > Hi all,
-> >
-> > work on my dependency checker tool is progressing nicely, and it is
-> > flagging, what I believe is, a harmful addr to ctrl dependency
-> > transformation. For context, see [1] and [2]. I'm using the Clang
-> > compiler.
-> > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+On Fri, Apr 22, 2022 at 07:37:19AM +0800, kernel test robot wrote:
+> Hi Mike,
 > 
-> Hi Paul,
-> Thanks for the report and your (and your team's) work on this tool.
-> Orthogonal to your report, Jose (cc'ed) and I are currently in the
-> planning process to put together a Kernel+Toolchain microconference
-> track at Linux Plumbers Conference [0] this year (Sept 12-14) in
-> Dublin, Ireland.  Would you or someone from your group be able and
-> interested in presenting more information about your work to an
-> audience of kernel and toolchain developers at such an event?
+> FYI, the error/warning still remains.
 > 
-> Would others be interested in such a topic? (What do they say in
-> Starship Troopers...?...Would you like to know more?)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+> head:   1052f9bce62982023737a95b7ff1ad26a5149af6
+> commit: 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181 [2705/5321] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
+> config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220422/202204220723.zOZ7gZGT-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
+>         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+>         git fetch --no-tags stable linux-5.10.y
+>         git checkout 8dd559d53b3b2de960ca1ec1359f5a9b4a12e181
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 > 
-> [0] https://lpc.events/event/16/
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> >> WARNING: modpost: vmlinux.o(.text+0x8cc4): Section mismatch in reference from the function __arm_ioremap_pfn_caller() to the function .meminit.text:memblock_is_map_memory()
+> The function __arm_ioremap_pfn_caller() references
+> the function __meminit memblock_is_map_memory().
+> This is often because __arm_ioremap_pfn_caller lacks a __meminit
+> annotation or the annotation of memblock_is_map_memory is wrong.
+
+In 5.10 the hackkit defconfig does not select ARCH_KEEP_MEMBLOCK which is
+required for memblock_is_map_memory() to function after boot.
+
+In upstream kernels ARCH_KEEP_MEMBLOCK is always selected by ARM after
+commit 5e545df3292f ("arm: remove CONFIG_ARCH_HAS_HOLES_MEMORYMODEL")
+
+So the fix would be either to backport 5e545df3292f or unconditionally
+select ARCH_KEEP_MEMBLOCK on ARM in 5.10.
+
+(the same applies to 5.4)
+
+Greg, what is your preference?
+ 
 > -- 
-> Thanks,
-> ~Nick Desaulniers
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-Hi Nick and Jose, 
-
-Many thanks for inviting us! I would love to do a talk at LPC! Hopefully
-in person too.
-
-Given that there have been several talks around this topic at LPC
-already, it seems very fitting, and we'll hopefully have more to share
-by then. Actually we have more to share already :-)
-
-https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/T/#u
-
-I assume we will have to submit an abstract soon? 
-
-Many thanks,
-Paul
-
+-- 
+Sincerely yours,
+Mike.
