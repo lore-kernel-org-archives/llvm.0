@@ -1,130 +1,86 @@
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [131.159.0.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2107728E6
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 10:45:11 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-	by mailout2.rbg.tum.de (Postfix) with ESMTPS id 7C0704C02B0;
-	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-	s=20220209; t=1650623749;
-	bh=bCNDShSNWamzrapZyCH2+MaOYLPQy3BG0jVzD+WNbD4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=dT+Zo14Mw3Zm1XxiUb4lp1L+yp/xGGuTBLjGLo5o8N/e9+BZaFpaWXuulYOOhz6Ib
-	 oKaQ3sSQ9GiWnhU1giBGZwJQyLv9Vw/JKzbWwJ9gEXhuCT9ytBiie1yu2ib53kNJ3y
-	 aDsCRtWsWp3Y3882MQVZ5hPSYXSOdLwe+rRZIbEGTC8ckRolOWQEBB1O4l3bmLtjEe
-	 a7FHmnSmgjO2veh/5kLbGHVY7kJEs1CPL+daN7HoJ3DfEr0F2otg/uN3wwYHayQudm
-	 0UCgCPpAozOgr/clanEiNpP0eUk80HirH/bI5BSGD1xUqeFWuIcD7rXeBtIudnzkfp
-	 57ZbauIKayR0Q==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id 763FE6D8; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 41EF06D7;
-	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 3CF2D55F;
-	Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 1AEA74A037C; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 496B74A01EC;
-	Fri, 22 Apr 2022 12:35:48 +0200 (CEST)
-	(Extended-Queue-bit xtech_eq@fff.in.tum.de)
-Date: Fri, 22 Apr 2022 12:35:41 +0200
-From: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A52528E6
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 11:04:22 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id k22so10542296wrd.2
+        for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 04:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aX+af2NbLYVavvKgA4KwWpvzLYIlHAkPkYV9LErzorg=;
+        b=RdHAhqBriPScMcrozEZlK7PFf9XAzS66rQDFLnBoBGAjWkJ7ciJZqrY/zzYe3YX17f
+         7AokDza8jYTO67wDtahYdd39QdhtAGMTR1Z+fChGeL5RQ5s3mu+dE5QXdr4g5D0Nn2Lv
+         r1eWsmVYpCq0eTUVG3+pS6mSWehXyAqz21wkoV6oiAyrwameuNpy3EwKEUu3AoZUmOWP
+         vCgIHjGKOo6FkYp2AJFq5XSstiG/kCcQZsSJfps3gVrh/BGFhQDjSsMNlwMU2dIfn2pi
+         ygilEu7iPO8Ej7VI6eX/jVxFCbTziPFMbs8as6KzKxodZMsgb5BvyaK4EmIn7wteA8Ry
+         ZC8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aX+af2NbLYVavvKgA4KwWpvzLYIlHAkPkYV9LErzorg=;
+        b=UJM8QLecbmyQgDelzhoaHrUi3GBSKxf62xIT8tmyFYgUjfrbndw1mt2FmHNZtRKREW
+         L46OHZoT6LERjGjxdof6F8HZEjRxGRZFxyMqm113WDkpmE1MQDGg8MO+h6veYormtGY+
+         6tuKYwLJvQN7t6kmhRZn/uFOsuRoghyXBJEu30Ho339XopTvZVg9ORnJW/j5spF3C+9I
+         UzmThT3fwdUNJjnozjH5TosukJp45pFjgA+WXIYUMkLEuzmv0LkmpEg+ZbqiogpDDiUt
+         Oles+4vmRr0iwtO4TfgHdcSTjzKP23pMRT6O8x3Mqfg62fYsOiz510UdN1UvrqaQkQs9
+         Dhfw==
+X-Gm-Message-State: AOAM530DCVr3k3fr9t4WPy/isd1RKnA69w1BteJYdqjMGMXMqf1KYv44
+	0m8IjJVJFjgv8RBUnraeDxE=
+X-Google-Smtp-Source: ABdhPJyaWqhcVGDLHxDxRf5Wk/P202UvjQHRnNHU8QKJ6oMsRDnKf4mr9mgXnEEACMXB/grE982s0A==
+X-Received: by 2002:adf:fb4d:0:b0:207:a376:7585 with SMTP id c13-20020adffb4d000000b00207a3767585mr3220431wrs.489.1650625460208;
+        Fri, 22 Apr 2022 04:04:20 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r5-20020adfa145000000b0020acc9de8c4sm705518wrr.38.2022.04.22.04.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 04:04:19 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-	Martin Fink <martin.fink@in.tum.de>
-Subject: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+Subject: [PATCH] kernel/irq/matrix.c: remove redundant assignment to variable 'end'
+Date: Fri, 22 Apr 2022 12:04:18 +0100
+Message-Id: <20220422110418.1264778-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Hi all, 
+Variable end is being initialized with a value that is never read, it
+is being re-assigned later with the same value. The initialization is
+redundant and can be removed.
 
-My dependency checker is flagging yet another broken dependency. For
-context, see [1].
+Cleans up clang scan build warning:
+kernel/irq/matrix.c:289:25: warning: Value stored to 'end' during its
+initialization is never read [deadcode.DeadStores]
 
-Thankfully, it is fairly straight-forward to explain this time.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ kernel/irq/matrix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> stable_node = page_stable_node(page);
-
-Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-assigned to "stable_node".
-
-> if (stable_node) {
->         if (stable_node->head != &migrate_nodes &&
->             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
->             NUMA(stable_node->nid)) {
->                 stable_node_dup_del(stable_node); ‣dup: stable_node
->                 stable_node->head = &migrate_nodes;
->                 list_add(&stable_node->list, stable_node->head);
-
-The dependency chain then runs into the two following if's, through an
-assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-finally reaches a call to "list_add()" (line 2039) where
-"stable_node->head" gets passed as the second function argument. 
-
->         }
-> }
-> 
-> static inline void list_add(struct list_head *new, struct list_head *head)
-> {
->         __list_add(new, head, head->next);
-> }
-> 
-> static inline void __list_add(struct list_head *new,
->                               struct list_head *prev,
->                               struct list_head *next)
-> {
->         if (!__list_add_valid(new, prev, next))
->                 return;
-> 
->         next->prev = new;
->         new->next = next;
->         new->prev = prev;
->         WRITE_ONCE(prev->next, new);
-> }
-
-By being passed into "list_add()" via "stable_node->head", the
-dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-whose destination address, "stable_node->head->next", is part of the
-dependency chain and therefore carries an address dependency. 
-
-However, as a result of the assignment in line 2038, Clang knows that
-"stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-the dependency chain. 
-
-What do you think?
-
-Many thanks,
-Paul
-
---
-[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
+diff --git a/kernel/irq/matrix.c b/kernel/irq/matrix.c
+index bbfb26489aa1..1698e77645ac 100644
+--- a/kernel/irq/matrix.c
++++ b/kernel/irq/matrix.c
+@@ -286,7 +286,7 @@ void irq_matrix_remove_managed(struct irq_matrix *m, const struct cpumask *msk)
+ int irq_matrix_alloc_managed(struct irq_matrix *m, const struct cpumask *msk,
+ 			     unsigned int *mapped_cpu)
+ {
+-	unsigned int bit, cpu, end = m->alloc_end;
++	unsigned int bit, cpu, end;
+ 	struct cpumap *cm;
+ 
+ 	if (cpumask_empty(msk))
+-- 
+2.35.1
 
