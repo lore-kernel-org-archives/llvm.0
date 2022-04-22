@@ -1,122 +1,108 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD4123A4
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 09:22:57 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 4CFD6C2FFA
-	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 09:18:06 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id CE9851BF210;
-	Fri, 22 Apr 2022 09:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1650619078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mggckCRdpCTXoS+dTfsucqDXNXyDRQ8YZv/6KdqwEIg=;
-	b=Kk8Iry75zaOxB17Jq27o7MNFhFlbkbHcrrqiZmQ/SUFEt/TK4mfpuDFelRuZ7zu8o3SzC1
-	ZDtjqR23mMttEFOH7FPmjcRjcO7GJOG4RdG0ULM8O5jkK1cvcoxR05IpdPFvPjhMrqGkxv
-	Qk4UEPBOIOg36422Turvr2z14jOiV86x4kU7T1NRCZMkvMuKWpgv7JEnvm0EVP09nuCrD1
-	dCm8El4vmBYYhhiblNqlCmXcF2I1bf4dVNfugSWmadC2dxX7s7+H+dImdKj7iIJRVXPF9t
-	ZLTj8okONZagu9gR6G4zebAnRiPRrOA8sRE0grdfP/nXZcY0VtLTHHI8X/eAQw==
-Date: Fri, 22 Apr 2022 11:17:55 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Jean-Marc Eurin <jmeurin@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
- format specifies type 'long' but the argument has type 'unsigned int'
-Message-ID: <20220422111755.6b26ea9e@xps13>
-In-Reply-To: <CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
-References: <202204212106.9R1ylUB7-lkp@intel.com>
-	<20220421154806.52e1992b@xps13>
-	<CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF0D23A4
+	for <llvm@lists.linux.dev>; Fri, 22 Apr 2022 09:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650619663; x=1682155663;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XP/Bq2pc0VZygbMNaDlk5rjG7Tyup7dHcAYPoZ9I3CM=;
+  b=lC4fGPelOhUwQDoSV4vQTwlr1fi6rWxUii1HIcWqD6rFmHcVLZzGSnSm
+   e06zRItbUbqdKovy0MqOUYDaiUaZBV4Cy0h5SPYihuQlh44erAwuFNVZ2
+   wHcLH38xCJEobbn3qHLPl9H4Z5zEwBVPmBb1sxxFt+T6WcVfNCYvCcI5x
+   sAuIqpkIBJilqlaCb7TSSQpCWUOUf3dSL5n/hiwDRL5GTj3Ec2dxnZJpd
+   cKc9Ic995XPrQPvDvVulK/wSlgZ28k4Xf2OpsVXEXasvXYJJPDziCAkGd
+   vc8f8eBLmM7FaVja6LJu/2j/Tr74h39sAXOLci/wz6LNnuYvY8RYoqdu8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="262228056"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="262228056"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 02:27:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="534069027"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Apr 2022 02:27:40 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nhpZj-0009yQ-G1;
+	Fri, 22 Apr 2022 09:27:39 +0000
+Date: Fri, 22 Apr 2022 17:27:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qing Wang <wangqing@vivo.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Wang Qing <wangqing@vivo.com>
+Subject: Re: [PATCH 1/2] arch_topology: support for describing cache topology
+ from DT
+Message-ID: <202204221720.cO70SkrD-lkp@intel.com>
+References: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650552960-60165-2-git-send-email-wangqing@vivo.com>
 
-Hi Jean-Marc,
+Hi Qing,
 
-jmeurin@google.com wrote on Thu, 21 Apr 2022 15:22:26 -0700:
+Thank you for the patch! Yet something to improve:
 
-> On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.com>=
- wrote:
-> >
-> > Hi Jean-Marc,
-> >
-> > lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
-> > =20
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git=
- mtd/next
-> > > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
-> > > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtdoops=
-: Create a header structure for the saved mtdoops.
-> > > config: hexagon-randconfig-r045-20220420 (https://download.01.org/0da=
-y-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project =
-bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > > reproduce (this is a W=3D1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.g=
-it/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > >         git remote add mtd https://git.kernel.org/pub/scm/linux/kerne=
-l/git/mtd/linux.git
-> > >         git fetch --no-tags mtd mtd/next
-> > >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
-> > >
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > > =20
-> > > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type 'long=
-' but the argument has type 'unsigned int' [-Wformat] =20
-> > >                                   page * record_size, retlen, sizeof(=
-hdr), ret);
-> > >                                                               ^~~~~~~=
-~~~~
-> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
-> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_AR=
-GS__)
-> > >                                                        ~~~    ^~~~~~~=
-~~~~
-> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_i=
-ndex_wrap'
-> > >                    _p_func(_fmt, ##__VA_ARGS__);                     =
-      \
-> > >                            ~~~~    ^~~~~~~~~~~
-> > >    1 warning generated. =20
-> >
-> > I've dropped the series for now. Please have a look at the reports and
-> > propose a new version when this is fixed? =20
->=20
-> Sorry about that, I had made that change based on this suggestion
-> https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-)
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on driver-core/driver-core-testing linus/master arm-perf/for-next/perf v5.18-rc3 next-20220421]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Did you verify with
+url:    https://github.com/intel-lab-lkp/linux/commits/Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: riscv-randconfig-c006-20220421 (https://download.01.org/0day-ci/archive/20220422/202204221720.cO70SkrD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qing-Wang/Add-complex-scheduler-level-for-arm64/20220421-225748
+        git checkout 854ee80a8c32ea98203c96ba25cae2e87eeb43b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/ drivers/
 
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-That the errors were actually gone? You seem to suggest that you didn't
-:)
+All errors (new ones prefixed by >>):
 
-Thanks,
-Miqu=C3=A8l
+>> drivers/base/arch_topology.c:617:1: error: unknown type name 'staic'; did you mean 'static'?
+   staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+   ^~~~~
+   static
+   1 error generated.
+
+
+vim +617 drivers/base/arch_topology.c
+
+   612	
+   613	/*
+   614	 * cpu cache topology table
+   615	 */
+   616	#define MAX_CACHE_LEVEL 7
+ > 617	staic struct device_node *cache_topology[NR_CPUS][MAX_CACHE_LEVEL];
+   618	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
