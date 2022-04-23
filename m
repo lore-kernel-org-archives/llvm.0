@@ -1,41 +1,41 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B731B7A
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 11:38:36 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id x33so18504281lfu.1
-        for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 04:38:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13F47A
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 11:38:38 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id w19so18478198lfu.11
+        for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 04:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xCiolmgN3BM/9hqURVQm8Fqd8GzWBSSZv9txkhzdRc4=;
-        b=kx8deysmbzOe6OBlcsMIejoPkxCsCvoTcg6r8W64zbqEoHAe/Mvx1oRuO/la7HWA3M
-         qOMXRMVv6coinGmI+AkdjC2z0ezlI4FZcWDGoEg1kiLbfxTnGgRtya9CMYa5fOvaFsoT
-         uCcWYO4eoNLt9T2/HiOOUa2Xx97NzuiSV65kru4NkhxYtO8k47kbeK66X86y2kBVO/9I
-         bkrAlEIMeTgHjFkpYiMRU6AL4WqSH064226SwlK3jRURfar1n3hX7uMpX2NnDCO/xedh
-         qT/O1rMHt82mAh4AjacfQlGZAodiTHUPcK/i4LTkCFoMusJv3ZOucTGaCU+LTnywWzQZ
-         KFxw==
+        bh=9EtoakrJrjTj5jLsYUp/T56xfz/HVSV91AzJtSvGSbU=;
+        b=ev8cW5F027Wz1YcEXnGq0ELeFmb4UCHkXCgEsAYVEiBrxkAB7jwgmt/g4Aha+6T7zI
+         ZJ4owIZ4ucBXZE13ovO2DNUkzVDEe2rP0ZoSrAeS+4JPEAVkRS5JeeAI+vmfHHxnX2Ua
+         0yZJdPn+xkjl8Ivzf3FQbjyXant/1MMvtFR+WSyd+T0Tb3UUdbd7uqxqm6K86hm64xmw
+         64iPp+joBvF2pkVC7pUvYLies6/2RgzfRk3qJcK7MYBcEMM9wMSdqEKp/e4sv54Ab9oP
+         yUf1xeKcm0IiGzbHADRlV3wwpmQo7MLpAd1BshvibnV1vHAphE2w5cYBYnYahDm5Na2i
+         7w0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xCiolmgN3BM/9hqURVQm8Fqd8GzWBSSZv9txkhzdRc4=;
-        b=BWtGDCtfMbxqapfNlFaP4/yApeERK+v3bEpi7Sx4vd+F1poazeKqmmwpKj/z5ENjmZ
-         rFEXn13EtCxcUyuwVjwe2ymMuSpJ14wl/ec9qEJZetsDGKdR5hs295AuQt0h7TSOKebS
-         vxDl/huZ+N7RMaJmMksH+FbdIBEB0YAf+WQuR0mcVp0MBFF8AtREC5vD2WBnF43D83FY
-         Ka7gCA28bpau9mwgo6QLtfY2xJyGmT9dvTFixqX1h2ZtuuvNQlqlwRKk1EwEG3WXBWWV
-         zrEzVYbJx865XLXrhQV4yVfQuwdG4vumr9OxxrqwPSp/41xKkzi7uQ7jaFN0fGQC5RwK
-         Oc6Q==
-X-Gm-Message-State: AOAM531ZUiVIeVMS6s9u807OIOl0086MzzpBW9DJSjf/4wOGbIUHYiRX
-	iQjo/GJtM92lkW/+mZPags8=
-X-Google-Smtp-Source: ABdhPJyRKbtRxftsMtdsT/P9kh3negEMeQhkrHNU5CWAZELcGfNHS8JQO7Edg7UKKSf+M9FvASw0lw==
-X-Received: by 2002:a05:6512:4017:b0:471:b3c3:481d with SMTP id br23-20020a056512401700b00471b3c3481dmr6234569lfb.541.1650713914723;
-        Sat, 23 Apr 2022 04:38:34 -0700 (PDT)
+        bh=9EtoakrJrjTj5jLsYUp/T56xfz/HVSV91AzJtSvGSbU=;
+        b=ghHCC2c0sGcK/81zu42G3O2zGzUiNClpdHq9vykQBZioIWaOiSb6uZmf+qRyYKBcd4
+         QPBFAGkmeZKdynnrPNTWK+K/0XJOw5xI4qbPQr05kG09xOLwLKjf5MWTf6siDvDK6y0U
+         DjIqSr2nykZD5PUz4++IZs3VnRrlDZaJhGVwq6cgBbVPojoI69LDWyGGjmeZomUK40vC
+         Zq0RJZACKPlI8AXBDBbmicnkUDUJjKb4NYqci9WUJ7BZn06UydRhtqq19gXcvtlYLlXA
+         ENet1nMNnzkrF9wEMTdbpwIW2WoxqgRHgCuVtcbzEvdcM0A4QvuCO2E5xsngFg1MXAy3
+         9/jQ==
+X-Gm-Message-State: AOAM5316HxnmwR5ghLDqEjPW2hhg17m+xkoptPZFoxLJXfIihg+TYod0
+	AIUCl1doZhD2QrlCxmW7KHI=
+X-Google-Smtp-Source: ABdhPJyGdsEWmvXaacxzf676KaE3MCBTRwd20XKcfWXUk4tDCchpQPddCr3RuNB1+je4VIOlUO1tAg==
+X-Received: by 2002:a05:6512:6d4:b0:470:f48d:44e2 with SMTP id u20-20020a05651206d400b00470f48d44e2mr6428203lff.542.1650713917064;
+        Sat, 23 Apr 2022 04:38:37 -0700 (PDT)
 Received: from morzel-asus.lan (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id g17-20020a2e9cd1000000b0024db538c2absm526411ljj.7.2022.04.23.04.38.33
+        by smtp.gmail.com with ESMTPSA id g17-20020a2e9cd1000000b0024db538c2absm526411ljj.7.2022.04.23.04.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 04:38:34 -0700 (PDT)
+        Sat, 23 Apr 2022 04:38:36 -0700 (PDT)
 From: Michal Orzel <michalorzel.eng@gmail.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Nathan Chancellor <nathan@kernel.org>,
@@ -45,9 +45,9 @@ Cc: Michal Orzel <michalorzel.eng@gmail.com>,
 	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH RESEND v2 2/5] block/blk-map: Remove redundant assignment
-Date: Sat, 23 Apr 2022 13:38:08 +0200
-Message-Id: <20220423113811.13335-2-michalorzel.eng@gmail.com>
+Subject: [PATCH RESEND v2 3/5] block/partitions/acorn: Remove redundant assignments
+Date: Sat, 23 Apr 2022 13:38:09 +0200
+Message-Id: <20220423113811.13335-3-michalorzel.eng@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220423113811.13335-1-michalorzel.eng@gmail.com>
 References: <20220423113811.13335-1-michalorzel.eng@gmail.com>
@@ -59,34 +59,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Get rid of redundant assignment to a variable ret from function
-bio_map_user_iov as it is being assigned a value that is never read.
-It is being re-assigned in the first instruction after the while loop
+Get rid of redundant assignments to a variable slot from function
+adfspart_check_ADFS. It is being assigned a value that is never read
+as we are breaking out from the switch case and the function ends.
 
 Reported by clang-tidy [deadcode.DeadStores]
 
 Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
 ---
- block/blk-map.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ block/partitions/acorn.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index c7f71d83eff1..fa72e63e18c2 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -260,10 +260,9 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+diff --git a/block/partitions/acorn.c b/block/partitions/acorn.c
+index 2c381c694c57..d2fc122d7426 100644
+--- a/block/partitions/acorn.c
++++ b/block/partitions/acorn.c
+@@ -282,13 +282,13 @@ int adfspart_check_ADFS(struct parsed_partitions *state)
+ #ifdef CONFIG_ACORN_PARTITION_RISCIX
+ 		case PARTITION_RISCIX_SCSI:
+ 		case PARTITION_RISCIX_MFM:
+-			slot = riscix_partition(state, start_sect, slot,
++			riscix_partition(state, start_sect, slot,
+ 						nr_sects);
+ 			break;
+ #endif
  
- 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
- 
--		if (unlikely(offs & queue_dma_alignment(rq->q))) {
--			ret = -EINVAL;
-+		if (unlikely(offs & queue_dma_alignment(rq->q)))
- 			j = 0;
--		} else {
-+		else {
- 			for (j = 0; j < npages; j++) {
- 				struct page *page = pages[j];
- 				unsigned int n = PAGE_SIZE - offs;
+ 		case PARTITION_LINUX:
+-			slot = linux_partition(state, start_sect, slot,
++			linux_partition(state, start_sect, slot,
+ 					       nr_sects);
+ 			break;
+ 		}
 -- 
 2.25.1
 
