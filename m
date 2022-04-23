@@ -1,48 +1,46 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D1F15D6
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 07:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB8B15D7
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 07:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650699053; x=1682235053;
+  t=1650700254; x=1682236254;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=C541v7PuNvIqabzwOaiOUIw9BmTNKpxThOwoOZGimcI=;
-  b=kZPUMeFAyYGqP1gTZ5ZUGNctViasRqylHcxPa1+ZG5DrxSH5jaP5SSbW
-   BT8POy8SCi7kntDLcl0DJivIMpbuc5IYgH1n1XBmI7/IJshdm6HsGYoeJ
-   TfDGp2v16FQUASZNTOXNfcYbrtyI2Bn0vGXwBgXwZYFIqo9eN+LSzyzGq
-   BjVJy2AOt7Zfi2s6TzF1abJVONEz3vLEVkgq0z9IaEK+YH1Qc3ZLR7YvY
-   Grp4Z6h+bKu8dOSsHmVxDrbMTljYyWpHb6H3CjKuTZSl2BSrA27n7SjlV
-   pZi2iBZ2LeUas1AAotxec4VpR7Gmc21n0WwcDlv21i4LSInr2idR9b3bf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244789728"
+  bh=nn2kN0+rGvFVYY3kzW0Ubp2gmmm+EgV0+u/9xFNQOkQ=;
+  b=dbjnopdJJiP9kbNuo4zGLLQIltbB/uxFNR6LK2FTaeh9ErmP6cLiUOkV
+   VQYT3CEZRRhAC/xUcHM3LJ4iWIG7Nv3C7Q72luVo492A8SnCCamFZUvOx
+   ZiSyMx0sbjy4MmVXY4ZsblceUK38ZQkD7B//dYAgG2zHAWxHUPZdMPSpB
+   e8rFhKeKSKDrUP4rPBYCHWfW+gKkCOfRaWHcJyRdXPdRCfthYjGT+4C2U
+   mdFJRbuBzfB7r0LcKCXIC8d+L1/oAvliJkCMWXsV7463oJwBgQAwBTszb
+   PdtaDGa3gEUipjIJCjgOF9kvuRtJm5rPLUeCGemcFP6scGO0X0wLlCQ1f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245435656"
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="244789728"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:30:52 -0700
+   d="scan'208";a="245435656"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 00:50:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="673433864"
+   d="scan'208";a="563360220"
 Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 Apr 2022 00:30:48 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 23 Apr 2022 00:50:51 -0700
 Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niAEB-00001P-Db;
-	Sat, 23 Apr 2022 07:30:47 +0000
-Date: Sat, 23 Apr 2022 15:30:17 +0800
+	id 1niAXa-000033-OQ;
+	Sat, 23 Apr 2022 07:50:50 +0000
+Date: Sat, 23 Apr 2022 15:50:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagdish Gediya <jvgediya@linux.ibm.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+To: Claudiu Beznea <claudiu.beznea@microchip.com>,
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+	linux@armlinux.org.uk
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-	ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
-	shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
-	dan.j.williams@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: Re: [PATCH v3 6/7] mm: demotion: expose per-node demotion targets
- via sysfs
-Message-ID: <202204231557.Jmw6QI8T-lkp@intel.com>
-References: <20220422195516.10769-7-jvgediya@linux.ibm.com>
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH v2 3/4] ARM: at91: pm: add quirks for pm
+Message-ID: <202204231525.D4VKBvJr-lkp@intel.com>
+References: <20220412153046.50014-4-claudiu.beznea@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,60 +49,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422195516.10769-7-jvgediya@linux.ibm.com>
+In-Reply-To: <20220412153046.50014-4-claudiu.beznea@microchip.com>
 
-Hi Jagdish,
+Hi Claudiu,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on linus/master linux/master v5.18-rc3]
-[cannot apply to hnaz-mm/master next-20220422]
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on v5.18-rc3 next-20220422]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagdish-Gediya/mm-demotion-Introduce-new-node-state-N_DEMOTION_TARGETS/20220423-035714
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 4e224719f5d9b92abf1e0edfb2a83053208f3026
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220423/202204231557.Jmw6QI8T-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu-Beznea/ARM-at91-pm-add-quirks-for-ethernet/20220412-233013
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm-randconfig-r004-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231525.D4VKBvJr-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0717e30f61ac83bd6ec65395bf46fdb5131cb83f
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/338e7bd157de47af9322de066375e240f453a0e3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jagdish-Gediya/mm-demotion-Introduce-new-node-state-N_DEMOTION_TARGETS/20220423-035714
-        git checkout 0717e30f61ac83bd6ec65395bf46fdb5131cb83f
+        git fetch --no-tags linux-review Claudiu-Beznea/ARM-at91-pm-add-quirks-for-ethernet/20220412-233013
+        git checkout 338e7bd157de47af9322de066375e240f453a0e3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/base/node.c:567:32: error: call to undeclared function 'node_get_demotion_targets'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
-                                         ^
->> drivers/base/node.c:567:13: error: initializing 'nodemask_t' with an expression of incompatible type 'int'
-           nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
-                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> arch/arm/mach-at91/pm.c:374:4: error: call to undeclared function 'wakeup_sources_walk_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           for_each_wakeup_source(ws) {
+                           ^
+   include/linux/pm_wakeup.h:67:14: note: expanded from macro 'for_each_wakeup_source'
+           for ((ws) = wakeup_sources_walk_start();        \
+                       ^
+   arch/arm/mach-at91/pm.c:374:4: note: did you mean 'wakeup_source_register'?
+   include/linux/pm_wakeup.h:67:14: note: expanded from macro 'for_each_wakeup_source'
+           for ((ws) = wakeup_sources_walk_start();        \
+                       ^
+   include/linux/pm_wakeup.h:144:37: note: 'wakeup_source_register' declared here
+   static inline struct wakeup_source *wakeup_source_register(struct device *dev,
+                                       ^
+>> arch/arm/mach-at91/pm.c:374:4: warning: incompatible integer to pointer conversion assigning to 'struct wakeup_source *' from 'int' [-Wint-conversion]
+                           for_each_wakeup_source(ws) {
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm_wakeup.h:67:12: note: expanded from macro 'for_each_wakeup_source'
+           for ((ws) = wakeup_sources_walk_start();        \
+                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm/mach-at91/pm.c:374:4: error: call to undeclared function 'wakeup_sources_walk_next'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   include/linux/pm_wakeup.h:69:14: note: expanded from macro 'for_each_wakeup_source'
+                (ws) = wakeup_sources_walk_next((ws)))
+                       ^
+>> arch/arm/mach-at91/pm.c:374:4: warning: incompatible integer to pointer conversion assigning to 'struct wakeup_source *' from 'int' [-Wint-conversion]
+                           for_each_wakeup_source(ws) {
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm_wakeup.h:69:12: note: expanded from macro 'for_each_wakeup_source'
+                (ws) = wakeup_sources_walk_next((ws)))
+                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 2 errors generated.
 
 
-vim +/node_get_demotion_targets +567 drivers/base/node.c
+vim +/wakeup_sources_walk_start +374 arch/arm/mach-at91/pm.c
 
-   563	
-   564	static ssize_t demotion_targets_show(struct device *dev,
-   565					     struct device_attribute *attr, char *buf)
-   566	{
- > 567		nodemask_t demotion_targets = node_get_demotion_targets(dev->id);
-   568	
-   569		return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&demotion_targets));
-   570	}
-   571	static DEVICE_ATTR_RO(demotion_targets);
-   572	
+   344	
+   345	static int at91_pm_config_quirks(bool suspend)
+   346	{
+   347		struct wakeup_source *ws;
+   348		int i, j, ret, tmp;
+   349	
+   350		/*
+   351		 * Ethernet IPs who's device_node pointers are stored into
+   352		 * soc_pm.quirks.eth[].np cannot handle WoL packets while in ULP0, ULP1
+   353		 * or both due to a hardware bug. If they receive WoL packets while in
+   354		 * ULP0 or ULP1 IPs could stop working or the whole system could stop
+   355		 * working. We cannot handle this scenario in the ethernet driver itself
+   356		 * as the driver is common to multiple vendors and also we only know
+   357		 * here, in this file, if we suspend to ULP0 or ULP1 mode. Thus handle
+   358		 * these scenarios here, as quirks.
+   359		 */
+   360		for (i = 0; i < AT91_PM_MAX_ETH; i++) {
+   361			if (!at91_pm_eth_quirk_is_valid(i))
+   362				continue;
+   363	
+   364			/*
+   365			 * For modes in dns_modes mask the system blocks if quirk is not
+   366			 * applied but if applied the interface doesn't act at WoL
+   367			 * events. Thus take care to avoid suspending if this interface
+   368			 * is the only configured wakeup source.
+   369			 */
+   370			if (suspend &&
+   371			    soc_pm.quirks.eth[i].dns_modes & BIT(soc_pm.data.mode)) {
+   372				int ws_count = 0;
+   373	
+ > 374				for_each_wakeup_source(ws) {
+   375					ws_count++;
+   376					if (ws_count > 1)
+   377						break;
+   378				}
+   379	
+   380				/*
+   381				 * Checking ws == 1 is good for all SAMA5 based platforms
+   382				 * even when both G_ETH and E_ETH are available as dsn_modes
+   383				 * is populated only on G_ETH interface.
+   384				 */
+   385				if (ws_count == 1) {
+   386					pr_err("AT91: PM: Ethernet cannot resume from WoL!");
+   387					ret = -EPERM;
+   388					goto clk_unconfigure;
+   389				}
+   390			}
+   391	
+   392			if (suspend) {
+   393				clk_bulk_disable_unprepare(AT91_PM_ETH_MAX_CLK,
+   394							   soc_pm.quirks.eth[i].clks);
+   395			} else {
+   396				ret = clk_bulk_prepare_enable(AT91_PM_ETH_MAX_CLK,
+   397							      soc_pm.quirks.eth[i].clks);
+   398				if (ret)
+   399					goto clk_unconfigure;
+   400			}
+   401		}
+   402	
+   403		return 0;
+   404	
+   405	clk_unconfigure:
+   406		/*
+   407		 * In case of resume we reach this point if clk_prepare_enable() failed.
+   408		 * we don't want to revert the previous clk_prepare_enable() for the
+   409		 * other IP.
+   410		 */
+   411		if (suspend) {
+   412			for (j = i - 1; j <= 0; j--) {
+   413				if (!at91_pm_eth_quirk_is_valid(i))
+   414					continue;
+   415	
+   416				tmp = clk_bulk_prepare_enable(AT91_PM_ETH_MAX_CLK,
+   417							      soc_pm.quirks.eth[i].clks);
+   418				if (tmp) {
+   419					pr_err("AT91: PM: failed to enable %s clock\n",
+   420						i == AT91_PM_ETH_PCLK ? "pclk" : "hclk");
+   421				}
+   422			}
+   423		}
+   424	
+   425		return ret;
+   426	}
+   427	
 
 -- 
 0-DAY CI Kernel Test Service
