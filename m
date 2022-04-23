@@ -1,47 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0119828E0
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 20:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390187C
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 21:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650746151; x=1682282151;
+  t=1650747959; x=1682283959;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B/+Y8+22IvCHWVRp75Ce96j8rR1OCBhwyXaly9Rfpl0=;
-  b=kKhl+qbI1RgzBAae9m3/BqJSt17qKHdF27trckJ2c/f3FnpaQIWMnxNt
-   NpYgDKR+wf2TtDHeaDGVU2I5DkQ5PcO7lgOP/fi8dGntiCvuXSYzUxEjz
-   Wpzzuy1MyzZ4+B3AgTbknAz5qAf4xerXr+sLAxFeRoRVEgQAy3X3oYqLa
-   Kpz1r6Ub6pgnn4q3ft7PVp/8nibfttkCiSF1l7fMmqZ349LzxuYsZdrRI
-   jUqM0quKc8iAQ/KQnTBUqJW9FE0Wi9iIHfeDC5PfwFd58QVHbFOLB0QLF
-   lMOmCmMyAn4ck7Aoic+XX+U7kWuEsWMs2oG7lagdeXSaXGxsXsiEhlYpC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252294418"
+  bh=L794azoPtxLpLtQ4yl9xWCR1tuXoZvf24hSkQ2o3Nnc=;
+  b=j56GdRGKJhyFrkq3aDDqzRQaVKTCG36JMSM/+5ltz1x7OOod4nIyHrYp
+   VlXi4HkyXvDFITd2Q5idna8LwpbZczmYATyn+OjP45AHW3sKb1e4FEjFp
+   0exVNJ+WUBPTW7mKlH/kxsCp+ZlblOP7w8Pd/pIzS5Er+/mroGrGACF/p
+   5K25IgC+xLyS1UGSOAx35oOPFDdvN6V6TzSiGOl8td9zHz4PU9h3UJGaK
+   TKbvH2MOHap6VE2IX1/NUo00uexwzYeeZ4/sc6pKiZKId9af6bdCc6sPr
+   BlhNwJcOxU/umcSCEy3TekkAAO1NNqq4M+3DDLbV7ySOQxr47COGlfUy/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="327874475"
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="252294418"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 13:35:51 -0700
+   d="scan'208";a="327874475"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:05:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="531420064"
+   d="scan'208";a="627468824"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Apr 2022 13:35:48 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 14:05:56 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niMTs-0000R8-0y;
-	Sat, 23 Apr 2022 20:35:48 +0000
-Date: Sun, 24 Apr 2022 04:34:49 +0800
+	id 1niMx1-0000Tk-U7;
+	Sat, 23 Apr 2022 21:05:55 +0000
+Date: Sun, 24 Apr 2022 05:05:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Eugen Hristev <eugen.hristev@microchip.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 19/44]
- lib/maple_tree.c:6539:6: warning: no previous prototype for function
- 'mt_dump_range'
-Message-ID: <202204240438.zNyBSBSi-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
+ unused variable 'microchip_xisc_of_match'
+Message-ID: <202204240539.2fONWAZh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,354 +48,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 6c45be03ed6456efda93c06956d586eecae0e51a [19/44] Maple Tree: add new data structure
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220424/202204240438.zNyBSBSi-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+Hi Eugen,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
+commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
+date:   11 months ago
+config: s390-randconfig-c005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240539.2fONWAZh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/6c45be03ed6456efda93c06956d586eecae0e51a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 6c45be03ed6456efda93c06956d586eecae0e51a
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/atmel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> lib/maple_tree.c:6539:6: warning: no previous prototype for function 'mt_dump_range' [-Wmissing-prototypes]
-   void mt_dump_range(unsigned long min, unsigned long max, unsigned int depth)
-        ^
-   lib/maple_tree.c:6539:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_dump_range(unsigned long min, unsigned long max, unsigned int depth)
-   ^
-   static 
->> lib/maple_tree.c:6549:6: warning: no previous prototype for function 'mt_dump_entry' [-Wmissing-prototypes]
-   void mt_dump_entry(void *entry, unsigned long min, unsigned long max,
-        ^
-   lib/maple_tree.c:6549:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_dump_entry(void *entry, unsigned long min, unsigned long max,
-   ^
-   static 
->> lib/maple_tree.c:6565:6: warning: no previous prototype for function 'mt_dump_range64' [-Wmissing-prototypes]
-   void mt_dump_range64(const struct maple_tree *mt, void *entry,
-        ^
-   lib/maple_tree.c:6565:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_dump_range64(const struct maple_tree *mt, void *entry,
-   ^
-   static 
->> lib/maple_tree.c:6604:6: warning: no previous prototype for function 'mt_dump_arange64' [-Wmissing-prototypes]
-   void mt_dump_arange64(const struct maple_tree *mt, void *entry,
-        ^
-   lib/maple_tree.c:6604:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_dump_arange64(const struct maple_tree *mt, void *entry,
-   ^
-   static 
->> lib/maple_tree.c:6696:6: warning: no previous prototype for function 'mas_validate_gaps' [-Wmissing-prototypes]
-   void mas_validate_gaps(struct ma_state *mas)
-        ^
-   lib/maple_tree.c:6696:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mas_validate_gaps(struct ma_state *mas)
-   ^
-   static 
->> lib/maple_tree.c:6781:6: warning: no previous prototype for function 'mas_validate_parent_slot' [-Wmissing-prototypes]
-   void mas_validate_parent_slot(struct ma_state *mas)
-        ^
-   lib/maple_tree.c:6781:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mas_validate_parent_slot(struct ma_state *mas)
-   ^
-   static 
->> lib/maple_tree.c:6814:6: warning: no previous prototype for function 'mas_validate_child_slot' [-Wmissing-prototypes]
-   void mas_validate_child_slot(struct ma_state *mas)
-        ^
-   lib/maple_tree.c:6814:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mas_validate_child_slot(struct ma_state *mas)
-   ^
-   static 
->> lib/maple_tree.c:6852:6: warning: no previous prototype for function 'mas_validate_limits' [-Wmissing-prototypes]
-   void mas_validate_limits(struct ma_state *mas)
-        ^
-   lib/maple_tree.c:6852:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mas_validate_limits(struct ma_state *mas)
-   ^
-   static 
->> lib/maple_tree.c:6902:6: warning: no previous prototype for function 'mt_validate_nulls' [-Wmissing-prototypes]
-   void mt_validate_nulls(struct maple_tree *mt)
-        ^
-   lib/maple_tree.c:6902:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_validate_nulls(struct maple_tree *mt)
-   ^
-   static 
->> lib/maple_tree.c:6943:6: warning: no previous prototype for function 'mt_validate' [-Wmissing-prototypes]
-   void mt_validate(struct maple_tree *mt)
-        ^
-   lib/maple_tree.c:6943:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mt_validate(struct maple_tree *mt)
-   ^
-   static 
-   lib/maple_tree.c:322:20: warning: unused function 'mte_set_full' [-Wunused-function]
-   static inline void mte_set_full(const struct maple_enode *node)
-                      ^
-   lib/maple_tree.c:327:20: warning: unused function 'mte_clear_full' [-Wunused-function]
-   static inline void mte_clear_full(const struct maple_enode *node)
-                      ^
-   12 warnings generated.
+   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
+   static const struct of_device_id microchip_xisc_of_match[] = {
+                                    ^
+   13 warnings generated.
 
 
-vim +/mt_dump_range +6539 lib/maple_tree.c
+vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
 
-  6535	
-  6536	/* Tree validations */
-  6537	void mt_dump_node(const struct maple_tree *mt, void *entry, unsigned long min,
-  6538			unsigned long max, unsigned int depth);
-> 6539	void mt_dump_range(unsigned long min, unsigned long max, unsigned int depth)
-  6540	{
-  6541		static const char spaces[] = "                                ";
-  6542	
-  6543		if (min == max)
-  6544			pr_info("%.*s%lu: ", depth * 2, spaces, min);
-  6545		else
-  6546			pr_info("%.*s%lu-%lu: ", depth * 2, spaces, min, max);
-  6547	}
-  6548	
-> 6549	void mt_dump_entry(void *entry, unsigned long min, unsigned long max,
-  6550			unsigned int depth)
-  6551	{
-  6552		mt_dump_range(min, max, depth);
-  6553	
-  6554		if (xa_is_value(entry))
-  6555			pr_cont("value %ld (0x%lx) ["MA_PTR"]\n", xa_to_value(entry),
-  6556					xa_to_value(entry), entry);
-  6557		else if (xa_is_zero(entry))
-  6558			pr_cont("zero (%ld)\n", xa_to_internal(entry));
-  6559		else if (mt_is_reserved(entry))
-  6560			pr_cont("UNKNOWN ENTRY ("MA_PTR")\n", entry);
-  6561		else
-  6562			pr_cont(""MA_PTR"\n", entry);
-  6563	}
-  6564	
-> 6565	void mt_dump_range64(const struct maple_tree *mt, void *entry,
-  6566			unsigned long min, unsigned long max, unsigned int depth)
-  6567	{
-  6568		struct maple_range_64 *node = &mte_to_node(entry)->mr64;
-  6569		bool leaf = mte_is_leaf(entry);
-  6570		unsigned long first = min;
-  6571		int i;
-  6572	
-  6573		pr_cont(" contents: ");
-  6574		for (i = 0; i < MAPLE_RANGE64_SLOTS - 1; i++)
-  6575			pr_cont(""MA_PTR" %lu ", node->slot[i], node->pivot[i]);
-  6576		pr_cont(""MA_PTR"\n", node->slot[i]);
-  6577		for (i = 0; i < MAPLE_RANGE64_SLOTS; i++) {
-  6578			unsigned long last = max;
-  6579	
-  6580			if (i < (MAPLE_RANGE64_SLOTS - 1))
-  6581				last = node->pivot[i];
-  6582			else if (!node->slot[i] && max != mt_max[mte_node_type(entry)])
-  6583				break;
-  6584			if (last == 0 && i > 0)
-  6585				break;
-  6586			if (leaf)
-  6587				mt_dump_entry(mt_slot(mt, node->slot, i),
-  6588						first, last, depth + 1);
-  6589			else if (node->slot[i])
-  6590				mt_dump_node(mt, mt_slot(mt, node->slot, i),
-  6591						first, last, depth + 1);
-  6592	
-  6593			if (last == max)
-  6594				break;
-  6595			if (last > max) {
-  6596				pr_err("node "MA_PTR" last (%lu) > max (%lu) at pivot %d!\n",
-  6597						node, last, max, i);
-  6598				break;
-  6599			}
-  6600			first = last + 1;
-  6601		}
-  6602	}
-  6603	
-> 6604	void mt_dump_arange64(const struct maple_tree *mt, void *entry,
-  6605			unsigned long min, unsigned long max, unsigned int depth)
-  6606	{
-  6607		struct maple_arange_64 *node = &mte_to_node(entry)->ma64;
-  6608		bool leaf = mte_is_leaf(entry);
-  6609		unsigned long first = min;
-  6610		int i;
-  6611	
-  6612		pr_cont(" contents: ");
-  6613		for (i = 0; i < MAPLE_ARANGE64_SLOTS; i++)
-  6614			pr_cont("%lu ", node->gap[i]);
-  6615		pr_cont("| %02X %02X| ", node->meta.end, node->meta.gap);
-  6616		for (i = 0; i < MAPLE_ARANGE64_SLOTS - 1; i++)
-  6617			pr_cont(MA_PTR" %lu ", node->slot[i], node->pivot[i]);
-  6618		pr_cont(MA_PTR"\n", node->slot[i]);
-  6619		for (i = 0; i < MAPLE_ARANGE64_SLOTS; i++) {
-  6620			unsigned long last = max;
-  6621	
-  6622			if (i < (MAPLE_ARANGE64_SLOTS - 1))
-  6623				last = node->pivot[i];
-  6624			else if (!node->slot[i])
-  6625				break;
-  6626			if (last == 0 && i > 0)
-  6627				break;
-  6628			if (leaf)
-  6629				mt_dump_entry(mt_slot(mt, node->slot, i),
-  6630						first, last, depth + 1);
-  6631			else if (node->slot[i])
-  6632				mt_dump_node(mt, mt_slot(mt, node->slot, i),
-  6633						first, last, depth + 1);
-  6634	
-  6635			if (last == max)
-  6636				break;
-  6637			if (last > max) {
-  6638				pr_err("node "MA_PTR" last (%lu) > max (%lu) at pivot %d!\n",
-  6639						node, last, max, i);
-  6640				break;
-  6641			}
-  6642			first = last + 1;
-  6643		}
-  6644	}
-  6645	
-  6646	void mt_dump_node(const struct maple_tree *mt, void *entry, unsigned long min,
-  6647			unsigned long max, unsigned int depth)
-  6648	{
-  6649		struct maple_node *node = mte_to_node(entry);
-  6650		unsigned int type = mte_node_type(entry);
-  6651		unsigned int i;
-  6652	
-  6653		mt_dump_range(min, max, depth);
-  6654	
-  6655		pr_cont("node "MA_PTR" depth %d type %d parent "MA_PTR, node, depth, type,
-  6656				node ? node->parent : NULL);
-  6657		switch (type) {
-  6658		case maple_dense:
-  6659			pr_cont("\n");
-  6660			for (i = 0; i < MAPLE_NODE_SLOTS; i++) {
-  6661				if (min + i > max)
-  6662					pr_cont("OUT OF RANGE: ");
-  6663				mt_dump_entry(mt_slot(mt, node->slot, i),
-  6664						min + i, min + i, depth);
-  6665			}
-  6666			break;
-  6667		case maple_leaf_64:
-  6668		case maple_range_64:
-  6669			mt_dump_range64(mt, entry, min, max, depth);
-  6670			break;
-  6671		case maple_arange_64:
-  6672			mt_dump_arange64(mt, entry, min, max, depth);
-  6673			break;
-  6674	
-  6675		default:
-  6676			pr_cont(" UNKNOWN TYPE\n");
-  6677		}
-  6678	}
-  6679	
-  6680	void mt_dump(const struct maple_tree *mt)
-  6681	{
-  6682		void *entry = rcu_dereference_check(mt->ma_root, mt_locked(mt));
-  6683	
-  6684		pr_info("maple_tree("MA_PTR") flags %X, height %u root "MA_PTR"\n",
-  6685			 mt, mt->ma_flags, mt_height(mt), entry);
-  6686		if (!xa_is_node(entry))
-  6687			mt_dump_entry(entry, 0, 0, 0);
-  6688		else if (entry)
-  6689			mt_dump_node(mt, entry, 0, mt_max[mte_node_type(entry)], 0);
-  6690	}
-  6691	
-  6692	/*
-  6693	 * Calculate the maximum gap in a node and check if that's what is reported in
-  6694	 * the parent (unless root).
-  6695	 */
-> 6696	void mas_validate_gaps(struct ma_state *mas)
-  6697	{
-  6698		struct maple_enode *mte = mas->node;
-  6699		struct maple_node *p_mn;
-  6700		unsigned long gap = 0, max_gap = 0;
-  6701		unsigned long p_end, p_start = mas->min;
-  6702		unsigned char p_slot;
-  6703		unsigned long *gaps = NULL;
-  6704		unsigned long *pivots = ma_pivots(mte_to_node(mte), mte_node_type(mte));
-  6705		int i;
-  6706	
-  6707		if (ma_is_dense(mte_node_type(mte))) {
-  6708			for (i = 0; i < mt_slot_count(mte); i++) {
-  6709				if (mas_get_slot(mas, i)) {
-  6710					if (gap > max_gap)
-  6711						max_gap = gap;
-  6712					gap = 0;
-  6713					continue;
-  6714				}
-  6715				gap++;
-  6716			}
-  6717			goto counted;
-  6718		}
-  6719	
-  6720		gaps = ma_gaps(mte_to_node(mte), mte_node_type(mte));
-  6721		for (i = 0; i < mt_slot_count(mte); i++) {
-  6722			p_end = mas_logical_pivot(mas, pivots, i, mte_node_type(mte));
-  6723	
-  6724			if (!gaps) {
-  6725				if (mas_get_slot(mas, i)) {
-  6726					gap = 0;
-  6727					goto not_empty;
-  6728				}
-  6729	
-  6730				gap += p_end - p_start + 1;
-  6731			} else {
-  6732				void *entry = mas_get_slot(mas, i);
-  6733	
-  6734				gap = gaps[i];
-  6735				if (!entry) {
-  6736					if (gap != p_end - p_start + 1) {
-  6737						pr_err(MA_PTR"[%u] -> "MA_PTR" %lu != %lu - %lu + 1\n",
-  6738							mas_mn(mas), i,
-  6739							mas_get_slot(mas, i), gap,
-  6740							p_end, p_start);
-  6741						mt_dump(mas->tree);
-  6742	
-  6743						MT_BUG_ON(mas->tree,
-  6744							gap != p_end - p_start + 1);
-  6745					}
-  6746				} else {
-  6747					if (gap > p_end - p_start + 1) {
-  6748						pr_err(MA_PTR"[%u] %lu >= %lu - %lu + 1 (%lu)\n",
-  6749						mas_mn(mas), i, gap, p_end, p_start,
-  6750						p_end - p_start + 1);
-  6751						MT_BUG_ON(mas->tree,
-  6752							gap > p_end - p_start + 1);
-  6753					}
-  6754				}
-  6755			}
-  6756	
-  6757			if (gap > max_gap)
-  6758				max_gap = gap;
-  6759	not_empty:
-  6760			p_start = p_end + 1;
-  6761			if (p_end >= mas->max)
-  6762				break;
-  6763		}
-  6764	
-  6765	counted:
-  6766		if (mte_is_root(mte))
-  6767			return;
-  6768	
-  6769		p_slot = mte_parent_slot(mas->node);
-  6770		p_mn = mte_parent(mte);
-  6771		MT_BUG_ON(mas->tree, max_gap > mas->max);
-  6772		if (ma_gaps(p_mn, mas_parent_enum(mas, mte))[p_slot] != max_gap) {
-  6773			pr_err("gap "MA_PTR"[%u] != %lu\n", p_mn, p_slot, max_gap);
-  6774			mt_dump(mas->tree);
-  6775		}
-  6776	
-  6777		MT_BUG_ON(mas->tree,
-  6778			  ma_gaps(p_mn, mas_parent_enum(mas, mte))[p_slot] != max_gap);
-  6779	}
-  6780	
+   609	
+ > 610	static const struct of_device_id microchip_xisc_of_match[] = {
+   611		{ .compatible = "microchip,sama7g5-isc" },
+   612		{ }
+   613	};
+   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
+   615	
 
 -- 
 0-DAY CI Kernel Test Service
