@@ -1,41 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A862D7C
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 21:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854A67C
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 22:07:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650748559; x=1682284559;
+  t=1650751656; x=1682287656;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ghR7zmzRRlZ8AQDiWjZSUUuq015qDScyozYGR7A57rE=;
-  b=IsfxPBocjBBlcOjQ/sEISpYoiZBMeiCLvJijFNIl762ond6jAnVXsdPt
-   CTff3tf1p+hSa43GViO8dcft4OKOw8mKUvKe38EME3RW8pCpI2Fl2XA2H
-   LblfDpMqtqe2BDpeVBQXoLF9uZZv4nl+KAiTEbD6/67OSTX0uz+9CFXNr
-   R+FjDVZw7TIcP+Epy3day+ttyFPSgPT6WQdWRJhoraGuEBTyX26dhIdQF
-   RPMmFouvW9j10Ir+Ifz51w39dYsFEbGRLwCw3xWAo4OTT0YJG31gQn/bm
-   0ZmLCkrRYH1+OvxzoBTzg+WBiJ+g5gIm4OToJugkR+bCVYQgMGV9PkLKA
+  bh=rkRGR22eEuv1oM9xxa6jnEemsvuLfCXgIIj+ORWpj+M=;
+  b=Q+XqYxjMIaqoZSSMXQV5xgn+bWl8B59YfI2HdZogy0pa7kClZVIS/AbT
+   rR5sCiFyHEZG0ggJ0IevJ8qVbGY1s8lhNkQikczhOegMx8Kn3ZVclkayx
+   RjPAuPzjrmduw3eBhEi/HHW0r7S5aRqDEZRAH8GAot2ZDLtO+jUHeDiDs
+   ThtKwft7dzcWM6zv+zTUFTisDJeY3txij0bjCKtWkjATmm5XcE1MTzbpY
+   ECsEXlcOkjTjY8pMe6UPzm8fqsfa73VOHECxrXkQJZRlrKT5GEdWoO4Cu
+   GjBE8vBaBpLpltM3Y6rqZmUn99ufWo8S3erZRnWkQqbCu2bmOHFkNlQ+w
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="290089026"
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="263807528"
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="290089026"
+   d="scan'208";a="263807528"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:15:59 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 15:07:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="649124969"
+   d="scan'208";a="649132721"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2022 14:15:57 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2022 15:07:34 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niN6i-0000U5-S0;
-	Sat, 23 Apr 2022 21:15:56 +0000
-Date: Sun, 24 Apr 2022 05:15:51 +0800
+	id 1niNuf-0000XN-Rx;
+	Sat, 23 Apr 2022 22:07:33 +0000
+Date: Sun, 24 Apr 2022 06:07:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Osipenko <digetx@gmail.com>
+To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: ld.lld: error: undefined symbol: cpu_sa110_suspend_size
-Message-ID: <202204240554.gz9y0hb8-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
+ function 'readq_ch'
+Message-ID: <202204240640.NsKCxxv9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,48 +46,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Gustavo,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   45ab9400e73f34103e73c18a73280c9aa1650e98
-commit: faae6c9f2e68e62687636a7d6e0517b3bf594add cpuidle: tegra: Enable compile testing
-date:   7 months ago
-config: arm-buildonly-randconfig-r006-20220423 (https://download.01.org/0day-ci/archive/20220424/202204240554.gz9y0hb8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
+commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
+date:   1 year, 1 month ago
+config: mips-randconfig-r032-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240640.NsKCxxv9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=faae6c9f2e68e62687636a7d6e0517b3bf594add
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout faae6c9f2e68e62687636a7d6e0517b3bf594add
+        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma/dw-edma/ drivers/usb/gadget/ fs/overlayfs/ kernel/bpf/ sound/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
->> ld.lld: error: undefined symbol: cpu_sa110_suspend_size
-   >>> referenced by kernel/sleep.o:(.text+0x68) in archive arch/arm/built-in.a
---
->> ld.lld: error: undefined symbol: cpu_sa110_do_suspend
-   >>> referenced by suspend.c
-   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
---
->> ld.lld: error: undefined symbol: cpu_sa110_do_resume
-   >>> referenced by suspend.c
-   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
+>> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
+   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+   Target: mips64el-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-1cddcfdc3c/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block drivers fs include kernel mm nr_bisected scripts sound source usr virt
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-   Depends on ARCH_SUSPEND_POSSIBLE
-   Selected by
-   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
+
+vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
+
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
+
+:::::: The code at line 192 was first introduced by commit
+:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+
+:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+:::::: CC: Vinod Koul <vkoul@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
