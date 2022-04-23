@@ -1,48 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80A215A4
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 02:01:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E902C385A0;
-	Sat, 23 Apr 2022 02:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650679285;
-	bh=mrOPhWLuAIUxSoj+v6MDLwHfuvPmqtwovzfv/A80gNE=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=JShmaSoog00ktcZWVyCeeeRXc4TOBoCUdltifsplVJo0hlLCA9mIiOeLvgLg832DC
-	 +bUn00nVuYccRZtaHS7g0lbrbFaM3ca8W3ic/i+r9IkOWUd6Q0YQvyriLMH4s0ACZQ
-	 JUHh16tpm/IxsVt+35u4o4NYWRRQq5ZfYnzAipBuVo/DzdBOcEIkD3BiqdvFNiKqsP
-	 79vQ5hISAzH6sF3k5cWm0wUDJaQeK8Q5BgtoYO1PyLQo+KnSF26e+MVxsZNUoU0kqe
-	 P4dGGqxD92++BGd6yoQI5vI0LAtEx/Mvh8CZqRmxSM9Jhcka8m5Wh0SfcVohJPwOAT
-	 Hg/JFcgj9eDWA==
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC4315A3
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 03:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650683622; x=1682219622;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+M/y3ZiwrUHCKNrEkV5MGO0xbR9T3K7uVqIPPNRdSK8=;
+  b=EEhS2lgGj5A8+1q77tzjLmOIKfNlOp368/Ez9IP6J2TPb0pMrJb6hYH1
+   UoLOV5doQaDD21cizESLtwhK+/Zu8JDp0B8n8665xJPaNvy+ekyhyO7t4
+   FG6OoVlUPw/TNn9FCW1KGdoM0+7upS24OgFG7xTVHew1rDVyKrtQtwYK7
+   MvI9h9M8/M70U8xBaJnQtiGn9XEuZchYbccTUGo13DnJt/esMkvkf7NDO
+   eV5DfUJ2PdaP9opAu8gxZX9Wy5XoHZuZmVEFsLxwqyYjkmuR/92BUX9TJ
+   jz4C/4+4uXtDfnlMUj9VajKOFRlLEzk2PPqq//vlnqK0iDc36mixKf6Ex
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264329475"
+X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
+   d="scan'208";a="264329475"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 20:13:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
+   d="scan'208";a="703804137"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Apr 2022 20:13:40 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ni6DL-000AwX-U1;
+	Sat, 23 Apr 2022 03:13:39 +0000
+Date: Sat, 23 Apr 2022 11:13:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 30/44]
+ fs/netfs/direct_read.c:198:3: error: expected expression
+Message-ID: <202204231010.5DHxVC96-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220418141537.83994-1-colin.i.king@gmail.com>
-References: <20220418141537.83994-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] clk: actions: remove redundant assignment after a mask operation
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-To: Andreas =?utf-8?q?F=C3=A4rber?= <afaerber@suse.de>, Colin Ian King <colin.i.king@gmail.com>, Manivannan Sadhasivam <mani@kernel.org>, Michael Turquette <mturquette@baylibre.com>, linux-actions@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Date: Fri, 22 Apr 2022 19:01:23 -0700
-User-Agent: alot/0.10
-Message-Id: <20220423020125.3E902C385A0@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Quoting Colin Ian King (2022-04-18 07:15:37)
-> The assignment operation after a & mask operation is redundant,
-> the &=3D operator can be replaced with just the & operator.
->=20
-> Cleans up a clang-scan warning:
-> drivers/clk/actions/owl-pll.c:28:9: warning: Although the value
-> stored to 'mul' is used in the enclosing expression, the value is
-> never actually read from 'mul' [deadcode.DeadStores]
->=20
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   931e50676c6598d0eda1954ead465519ff91874d
+commit: d1c47ebbbed8921181b4573ba5736595bc3b787c [30/44] netfs: Support decryption on DIO read
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220423/202204231010.5DHxVC96-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/d1c47ebbbed8921181b4573ba5736595bc3b787c
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout d1c47ebbbed8921181b4573ba5736595bc3b787c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
-Applied to clk-next
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> fs/netfs/direct_read.c:198:3: error: expected expression
+                   unsigned int min_bsize = 1ULL << ctx->min_bshift;
+                   ^
+>> fs/netfs/direct_read.c:199:54: error: use of undeclared identifier 'min_bsize'
+                   unsigned long long start = round_down(rreq->start, min_bsize);
+                                                                      ^
+   fs/netfs/direct_read.c:201:47: error: use of undeclared identifier 'min_bsize'
+                                                  round_up(rreq->start + rreq->len, min_bsize),
+                                                                                    ^
+   fs/netfs/direct_read.c:201:47: error: use of undeclared identifier 'min_bsize'
+   fs/netfs/direct_read.c:199:22: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                   unsigned long long start = round_down(rreq->start, min_bsize);
+                                      ^
+   1 warning and 4 errors generated.
+
+
+vim +198 fs/netfs/direct_read.c
+
+   116	
+   117	/**
+   118	 * netfs_direct_read_iter - Perform a direct I/O read
+   119	 * @iocb: The I/O control descriptor describing the read
+   120	 * @iter: The output buffer (also specifies read length)
+   121	 */
+   122	ssize_t netfs_direct_read_iter(struct kiocb *iocb, struct iov_iter *iter)
+   123	{
+   124		struct netfs_io_request *rreq;
+   125		struct netfs_i_context *ctx;
+   126		ssize_t n, ret;
+   127	
+   128		_enter("");
+   129	
+   130		rreq = netfs_alloc_request(iocb->ki_filp->f_mapping, iocb->ki_filp,
+   131					   iocb->ki_pos, iov_iter_count(iter),
+   132					   NETFS_DIO_READ);
+   133		if (IS_ERR(rreq))
+   134			return PTR_ERR(rreq);
+   135	
+   136		ctx = netfs_i_context(rreq->inode);
+   137		netfs_stat(&netfs_n_rh_dio_read);
+   138		trace_netfs_read(rreq, rreq->start, rreq->len, netfs_read_trace_dio_read);
+   139	
+   140		rreq->buffering = NETFS_DIRECT;
+   141		if (test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags)) {
+   142			static const enum netfs_buffering buffering[2][2] = {
+   143				/* [async][aligned] */
+   144				[false][false]	= NETFS_BOUNCE_DEC_COPY,
+   145				[false][true]	= NETFS_BOUNCE_DEC_TO_DIRECT,
+   146				[true ][false]	= NETFS_BOUNCE_DEC_COPY_BV,
+   147				[true ][true]	= NETFS_BOUNCE_DEC_TO_DIRECT_BV,
+   148			};
+   149			bool aligned = netfs_is_crypto_aligned(rreq, iter);
+   150			bool async = !is_sync_kiocb(iocb);
+   151	
+   152			rreq->buffering = buffering[async][aligned];
+   153		}
+   154	
+   155		kdebug("remote_i %llx %llx %llx",
+   156		       ctx->remote_i_size, rreq->i_size, i_size_read(netfs_inode(ctx)));
+   157	
+   158		/* If this is an async op, we have to keep track of the destination
+   159		 * buffer for ourselves as the caller's iterator will be trashed when
+   160		 * we return.
+   161		 *
+   162		 * In such a case, extract an iterator to represent as much of the the
+   163		 * output buffer as we can manage.  Note that the extraction might not
+   164		 * be able to allocate a sufficiently large bvec array and may shorten
+   165		 * the request.
+   166		 */
+   167		switch (rreq->buffering) {
+   168		case NETFS_DIRECT:
+   169		case NETFS_BOUNCE_DEC_TO_DIRECT:
+   170		case NETFS_BOUNCE_DEC_COPY:
+   171			rreq->direct_iter = *iter;
+   172			rreq->len = iov_iter_count(&rreq->direct_iter);
+   173			break;
+   174		case NETFS_DIRECT_BV:
+   175		case NETFS_BOUNCE_DEC_TO_DIRECT_BV:
+   176		case NETFS_BOUNCE_DEC_COPY_BV:
+   177			n = extract_iter_to_iter(iter, rreq->len, &rreq->direct_iter,
+   178						 &rreq->direct_bv);
+   179			if (n < 0) {
+   180				ret = n;
+   181				goto out;
+   182			}
+   183			rreq->direct_bv_count = n;
+   184			rreq->len = iov_iter_count(&rreq->direct_iter);
+   185			break;
+   186		default:
+   187			BUG();
+   188		}
+   189	
+   190		/* If we're going to use a bounce buffer, we need to set it up.  We
+   191		 * will then need to pad the request out to the minimum block size.
+   192		 */
+   193		switch (rreq->buffering) {
+   194		case NETFS_BOUNCE_DEC_TO_DIRECT:
+   195		case NETFS_BOUNCE_DEC_COPY:
+   196		case NETFS_BOUNCE_DEC_TO_DIRECT_BV:
+   197		case NETFS_BOUNCE_DEC_COPY_BV:
+ > 198			unsigned int min_bsize = 1ULL << ctx->min_bshift;
+ > 199			unsigned long long start = round_down(rreq->start, min_bsize);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
