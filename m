@@ -1,103 +1,48 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD8815A4
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 01:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650675934; x=1682211934;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+AKjTIy/D5/5a2Kn+Wb/Y7zUrIrc7ourKnOb1bcZPlQ=;
-  b=fTae+zWacL120WB6GB8T6Y070YjKW3SEoPgIuRdClF2ETaAuoxnqREn6
-   OTmgjs6ShkoCXzFWCiuReBFVD/1hwmApsQxWpK7Lw8mnNhBWj2fSUqxvQ
-   zLPM6/J8tsJeIthpaIq4iBN87Tu8o5x7IoykfOsBGG6Ra/sGWPAUaNmrl
-   PyIBMex69EIrsHmuFRSDEDsi5GMa77ETX1b2rNikdn9YckM73BP1H94WY
-   7KOJWDFA2C/6/uttRc9D2wFuXBEx0Tn7o/MQNo+pD268uuCHqNoTcLH3y
-   NoSH3ktorUkLzod301NCQ7A77BT+F7fDCnwx8zyBy3SZIQlCPy69Ws4oc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244754272"
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="244754272"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 18:05:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="806228214"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2022 18:05:31 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ni4DL-000Akb-6V;
-	Sat, 23 Apr 2022 01:05:31 +0000
-Date: Sat, 23 Apr 2022 09:04:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 19/44]
- lib/maple_tree.c:76:28: warning: unused variable 'mt_max'
-Message-ID: <202204230954.HDq6NK6c-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80A215A4
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 02:01:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E902C385A0;
+	Sat, 23 Apr 2022 02:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650679285;
+	bh=mrOPhWLuAIUxSoj+v6MDLwHfuvPmqtwovzfv/A80gNE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=JShmaSoog00ktcZWVyCeeeRXc4TOBoCUdltifsplVJo0hlLCA9mIiOeLvgLg832DC
+	 +bUn00nVuYccRZtaHS7g0lbrbFaM3ca8W3ic/i+r9IkOWUd6Q0YQvyriLMH4s0ACZQ
+	 JUHh16tpm/IxsVt+35u4o4NYWRRQq5ZfYnzAipBuVo/DzdBOcEIkD3BiqdvFNiKqsP
+	 79vQ5hISAzH6sF3k5cWm0wUDJaQeK8Q5BgtoYO1PyLQo+KnSF26e+MVxsZNUoU0kqe
+	 P4dGGqxD92++BGd6yoQI5vI0LAtEx/Mvh8CZqRmxSM9Jhcka8m5Wh0SfcVohJPwOAT
+	 Hg/JFcgj9eDWA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220418141537.83994-1-colin.i.king@gmail.com>
+References: <20220418141537.83994-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] clk: actions: remove redundant assignment after a mask operation
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+To: Andreas =?utf-8?q?F=C3=A4rber?= <afaerber@suse.de>, Colin Ian King <colin.i.king@gmail.com>, Manivannan Sadhasivam <mani@kernel.org>, Michael Turquette <mturquette@baylibre.com>, linux-actions@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Date: Fri, 22 Apr 2022 19:01:23 -0700
+User-Agent: alot/0.10
+Message-Id: <20220423020125.3E902C385A0@smtp.kernel.org>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   931e50676c6598d0eda1954ead465519ff91874d
-commit: 6c45be03ed6456efda93c06956d586eecae0e51a [19/44] Maple Tree: add new data structure
-config: hexagon-randconfig-r012-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230954.HDq6NK6c-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/6c45be03ed6456efda93c06956d586eecae0e51a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 6c45be03ed6456efda93c06956d586eecae0e51a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Quoting Colin Ian King (2022-04-18 07:15:37)
+> The assignment operation after a & mask operation is redundant,
+> the &=3D operator can be replaced with just the & operator.
+>=20
+> Cleans up a clang-scan warning:
+> drivers/clk/actions/owl-pll.c:28:9: warning: Although the value
+> stored to 'mul' is used in the enclosing expression, the value is
+> never actually read from 'mul' [deadcode.DeadStores]
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> lib/maple_tree.c:76:28: warning: unused variable 'mt_max' [-Wunused-const-variable]
-   static const unsigned long mt_max[] = {
-                              ^
-   lib/maple_tree.c:322:20: warning: unused function 'mte_set_full' [-Wunused-function]
-   static inline void mte_set_full(const struct maple_enode *node)
-                      ^
-   lib/maple_tree.c:327:20: warning: unused function 'mte_clear_full' [-Wunused-function]
-   static inline void mte_clear_full(const struct maple_enode *node)
-                      ^
->> lib/maple_tree.c:4199:20: warning: stack frame size (1096) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-   static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-                      ^
-   4 warnings generated.
-
-
-vim +/mt_max +76 lib/maple_tree.c
-
-    75	
-  > 76	static const unsigned long mt_max[] = {
-    77		[maple_dense]		= MAPLE_NODE_SLOTS,
-    78		[maple_leaf_64]		= ULONG_MAX,
-    79		[maple_range_64]	= ULONG_MAX,
-    80		[maple_arange_64]	= ULONG_MAX,
-    81	};
-    82	#define mt_node_max(x) mt_max[mte_node_type(x)]
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Applied to clk-next
