@@ -1,48 +1,52 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60437A
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 05:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE987C
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 06:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650693531; x=1682229531;
+  t=1650696592; x=1682232592;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OAXIXrUNWg62uanhPdyhxS+ibbfcv+PR/GWk9a6cA/A=;
-  b=Gyo2lEyu3hCvLENyAzzjxpM+0xnubP8faW7kSN8O822wZLf+Fl7Pbmm4
-   QI93t2VKNF9vOCfHvaXAn+Jpfv5JsbSO2ZakSvBXYusaNc3nXp9n8mrcG
-   bm6Zf/AIvi8Hy6yJLmje8/V0u7gymjwWMX6aVAXMo8PyNJv/XjE9mgVab
-   HUkTLCqJcd4yNQh6ClJeeWIjlXzQ9QF75O4M9MuHm6F0ZOd1LWqgpjSq4
-   JUDDh36ZskT5QkRM5cGX2Rr4EbRm6z37WrWoXGg7CZIkFXM1K7ZWn8lVz
-   4/H2cV0oLECmTlKC0WN4MFmap39w6rhhrzvUkJyrkVvmEeTyR6S6nb3L6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246764424"
-X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="246764424"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 22:58:50 -0700
+  bh=/TgZTP8Sb4P0FH9slFXu/lphspGv+TGMH48WzenOT9M=;
+  b=CgLv0cNokeVuUc3sPD/1E8DHwcNLhxdF2M9XMrt7IVRTWO2dfb+Nmmjz
+   jv/wumVJ8SHweS0qUGLrlzCcGONGTySvXdvDCr+4pH4ynzSsJg1sX1tNy
+   hURvwnyHX+hWdV+kSr3hBpixlKTLx4x6trrvW6X8fGImBI0RpXoCkclHf
+   O/UyiiRBtVzEPhyq5eO2jAaergFn3ylNyLITwvwsqDe5p95V4AWScoLuz
+   xS1HAcxD0X2BRt6ufjIfONpMeLLW1WyXwYLC191hiRcxQMR3aIOgsXJY4
+   nRdeOJu90R44M0s8Zmqd4wrIF0m5mMik3oD/Klqy69EBMztsRv249KDyv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289988856"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="289988856"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 23:49:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,283,1643702400"; 
-   d="scan'208";a="806292341"
+   d="scan'208";a="627297258"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2022 22:58:47 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2022 23:49:48 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ni8n8-000B4F-FD;
-	Sat, 23 Apr 2022 05:58:46 +0000
-Date: Sat, 23 Apr 2022 13:58:31 +0800
+	id 1ni9aW-000B6g-75;
+	Sat, 23 Apr 2022 06:49:48 +0000
+Date: Sat, 23 Apr 2022 14:49:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Donghai Qiao <dqiao@redhat.com>, akpm@linux-foundation.org,
-	sfr@canb.auug.org.au, arnd@arndb.de, peterz@infradead.org,
-	heying24@huawei.com, andriy.shevchenko@linux.intel.com,
-	axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
-	gor@linux.ibm.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, donghai.w.qiao@gmail.com,
-	linux-kernel@vger.kernel.org, Donghai Qiao <dqiao@redhat.com>
-Subject: Re: [PATCH v2 11/11] smp: modify up.c to adopt the same format of
- cross CPU call.
-Message-ID: <202204231305.905VHc1H-lkp@intel.com>
-References: <20220422200040.93813-12-dqiao@redhat.com>
+To: Miles Chen <miles.chen@mediatek.com>, Yong Wu <yong.wu@mediatek.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
+	iommu@lists.linux-foundation.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/mediatek: fix NULL pointer dereference when
+ printing dev_name
+Message-ID: <202204231446.IYKdZ674-lkp@intel.com>
+References: <20220422223549.4173-1-miles.chen@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,64 +55,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422200040.93813-12-dqiao@redhat.com>
+In-Reply-To: <20220422223549.4173-1-miles.chen@mediatek.com>
 
-Hi Donghai,
+Hi Miles,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on rafael-pm/linux-next linus/master v5.18-rc3]
-[cannot apply to tip/x86/core next-20220422]
+[auto build test WARNING on joro-iommu/next]
+[also build test WARNING on v5.18-rc3 next-20220422]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220423/202204231305.905VHc1H-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
+config: hexagon-randconfig-r041-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231446.IYKdZ674-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/655b898028ef1555f6bec036db8d4681b551aaa8
+        # https://github.com/intel-lab-lkp/linux/commit/85771767e503ca60069fe4e6ec2ddb80c7f9bafa
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
-        git checkout 655b898028ef1555f6bec036db8d4681b551aaa8
+        git fetch --no-tags linux-review Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
+        git checkout 85771767e503ca60069fe4e6ec2ddb80c7f9bafa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iommu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/up.c:50:11: error: use of undeclared identifier 'cpu'
-           smp_call(cpu, func, info, type);
-                    ^
-   kernel/up.c:80:12: error: use of undeclared identifier 'cpu'
-                   smp_call(cpu, func, info, type);
-                            ^
-   2 errors generated.
+>> drivers/iommu/mtk_iommu.c:605:6: warning: variable 'larbdev' is uninitialized when used here [-Wuninitialized]
+           if (larbdev) {
+               ^~~~~~~
+   drivers/iommu/mtk_iommu.c:597:24: note: initialize the variable 'larbdev' to silence this warning
+           struct device *larbdev;
+                                 ^
+                                  = NULL
+   1 warning generated.
 
 
-vim +/cpu +50 kernel/up.c
+vim +/larbdev +605 drivers/iommu/mtk_iommu.c
 
-    41	
-    42	void smp_call_mask(const struct cpumask *mask, smp_call_func_t func, void *info, unsigned int type)
-    43	{
-    44		unsigned long flags;
-    45	
-    46		if (!cpumask_test_cpu(0, mask))
-    47			return;
-    48	
-    49		preempt_disable();
-  > 50		smp_call(cpu, func, info, type);
-    51		preempt_enable();
-    52	}
-    53	EXPORT_SYMBOL(smp_call_mask);
-    54	
+   592	
+   593	static void mtk_iommu_release_device(struct device *dev)
+   594	{
+   595		struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+   596		struct mtk_iommu_data *data;
+   597		struct device *larbdev;
+   598		unsigned int larbid;
+   599	
+   600		if (!fwspec || fwspec->ops != &mtk_iommu_ops)
+   601			return;
+   602	
+   603		data = dev_iommu_priv_get(dev);
+   604		larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+ > 605		if (larbdev) {
+   606			larbdev = data->larb_imu[larbid].dev;
+   607			device_link_remove(dev, larbdev);
+   608		}
+   609	
+   610		iommu_fwspec_free(dev);
+   611	}
+   612	
 
 -- 
 0-DAY CI Kernel Test Service
