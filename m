@@ -1,42 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C3917C2
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 10:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EE87A
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 10:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650709338; x=1682245338;
+  t=1650709940; x=1682245940;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7R1DmnTTaWPWYNqsuNK1zc8jkQ7VVU9lIofBerYqtRI=;
-  b=Du47MqMpDT4cO5WoINQoq2JtzsFEtAisnalkHG8V60c/B/8ESgyiUdPe
-   yBTT8vI9ccl+fKSp0Fqj2+aURoG7K4lRaz9ffKfAw1wSL1AKPKSQ3Z/mw
-   jafE2Ov+BensZAnYof5AiJ8xhOu/wvivU11z11fc7+B8ohD+Q0c2p9f9C
-   9QW6UpjgXL3EV0l2ZbUSKH9hsQm0IgIsUfwvdTeUWglo667u9kRJJQzGN
-   Pe1DVOBeEmR+eUd/8uPYxGMKMfeos+Ro5CNU/B840QdjOyfko35VIdzbx
-   AQITZy0MIVevBBWFEabDzgPA0MD8WsTovc9Yrr121UDCAtQzNSONcBhJy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245449921"
+  bh=99EiatxEAzm7mLpblkfbmxHzYEHnM6shM4C4UTNQKG4=;
+  b=HGmkufJUVtu87LFHISY2KdrjMI5tIKZlksl+uqZoVNURvDJpyTH9DhFs
+   5kZKtCkr0vmVkAPsM4aFaPy6exMzgMOU8MM03ePLYb7ZDVYEuo8jXJcbZ
+   0up5iRiwzUmmb2OGlYfP/ig5ky8T/DmQoWtP++uamQNGUkRfJg8R9ScU+
+   3CGKYtj3gSwzkJhpNYFvvWrSzE/VPgpdDknFiJhjXtZwCTzq48E7O+ZdW
+   9Is+05cKi5T5xUZYfFCZGcr3TLKxfoUZtPVLQ+WV4xx9m1du7cTmmNPZ/
+   vAeJtDl3RGR0MQId8Qrnt9GA/jtaRTpc3jHyo9IojHbF9wDXqdEWxb4M1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="265048607"
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="245449921"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:22:18 -0700
+   d="scan'208";a="265048607"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:32:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="511913819"
+   d="scan'208";a="627338427"
 Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Apr 2022 03:22:16 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 03:32:16 -0700
 Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niCu7-0000A7-UO;
-	Sat, 23 Apr 2022 10:22:15 +0000
-Date: Sat, 23 Apr 2022 18:21:24 +0800
+	id 1niD3o-0000AT-7v;
+	Sat, 23 Apr 2022 10:32:16 +0000
+Date: Sat, 23 Apr 2022 18:31:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nava kishore Manne <nava.manne@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v5 1/5] fpga: zynq: Fix incorrect variable type
-Message-ID: <202204231832.eX31L2dR-lkp@intel.com>
-References: <20220421044744.3777983-2-nava.manne@xilinx.com>
+To: Vasily Averin <vvs@openvz.org>, Vlastimil Babka <vbabka@suse.cz>,
+	Shakeel Butt <shakeelb@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@openvz.org,
+	Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+	netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] net: set proper memcg for net_init hooks allocations
+Message-ID: <202204231806.8O86U791-lkp@intel.com>
+References: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,66 +51,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421044744.3777983-2-nava.manne@xilinx.com>
+In-Reply-To: <6f38e02b-9af3-4dcf-9000-1118a04b13c7@openvz.org>
 
-Hi Nava,
+Hi Vasily,
 
 Thank you for the patch! Perhaps something to improve:
 
 [auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc3]
-[cannot apply to xilinx-xlnx/master next-20220422]
+[also build test WARNING on v5.18-rc3 next-20220422]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nava-kishore-Manne/fpga-zynq-Fix-incorrect-variable-type/20220421-135249
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
-config: mips-randconfig-r005-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231832.eX31L2dR-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c00c5e1d157bec0ef0b0b59aa5482eb8dc7e8e49
+config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231806.8O86U791-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/14e1fd8955f47ca1dbb9b58fee3b0b94429fc5d5
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3b379e5391e36e13b9f36305aa6d233fb03d4e58
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nava-kishore-Manne/fpga-zynq-Fix-incorrect-variable-type/20220421-135249
-        git checkout 14e1fd8955f47ca1dbb9b58fee3b0b94429fc5d5
+        git fetch --no-tags linux-review Vasily-Averin/net-set-proper-memcg-for-net_init-hooks-allocations/20220423-160759
+        git checkout 3b379e5391e36e13b9f36305aa6d233fb03d4e58
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/fpga/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/exynos/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/fpga/zynq-fpga.c:246:14: warning: result of comparison of constant 170 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
-                       buf[3] == 0xaa)
-                       ~~~~~~ ^  ~~~~
-   drivers/fpga/zynq-fpga.c:245:50: warning: result of comparison of constant 153 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
-                   if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-                                                           ~~~~~~ ^  ~~~~
-   2 warnings generated.
+   In file included from drivers/gpu/drm/exynos/exynos_drm_dma.c:15:
+   In file included from drivers/gpu/drm/exynos/exynos_drm_drv.h:16:
+   In file included from include/drm/drm_crtc.h:28:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   include/linux/memcontrol.h:1773:21: error: call to undeclared function 'css_tryget'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           } while (memcg && !css_tryget(&memcg->css));
+                              ^
+   include/linux/memcontrol.h:1773:38: error: incomplete definition of type 'struct mem_cgroup'
+           } while (memcg && !css_tryget(&memcg->css));
+                                          ~~~~~^
+   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
+   struct mem_cgroup;
+          ^
+>> drivers/gpu/drm/exynos/exynos_drm_dma.c:55:35: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           dma_set_max_seg_size(subdrv_dev, DMA_BIT_MASK(32));
+           ~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   1 warning and 2 errors generated.
 
 
-vim +246 drivers/fpga/zynq-fpga.c
+vim +55 drivers/gpu/drm/exynos/exynos_drm_dma.c
 
-37784706bf9e3b Moritz Fischer     2015-10-16  237  
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  238  /* Sanity check the proposed bitstream. It must start with the sync word in
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  239   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  240   * file with every 32 bit quantity swapped.
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  241   */
-14e1fd8955f47c Nava kishore Manne 2022-04-21  242  static bool zynq_fpga_has_sync(const char *buf, size_t count)
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  243  {
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  244  	for (; count >= 4; buf += 4, count -= 4)
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  245  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-b496df86ac1bbe Jason Gunthorpe    2017-02-01 @246  		    buf[3] == 0xaa)
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  247  			return true;
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  248  	return false;
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  249  }
-b496df86ac1bbe Jason Gunthorpe    2017-02-01  250  
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  33  
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  34  /*
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  35   * drm_iommu_attach_device- attach device to iommu mapping
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  36   *
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  37   * @drm_dev: DRM device
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  38   * @subdrv_dev: device to be attach
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  39   *
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  40   * This function should be called by sub drivers to attach it to iommu
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  41   * mapping.
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  42   */
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  43  static int drm_iommu_attach_device(struct drm_device *drm_dev,
+07dc3678bacc2a Marek Szyprowski 2020-03-09  44  				struct device *subdrv_dev, void **dma_priv)
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  45  {
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  46  	struct exynos_drm_private *priv = drm_dev->dev_private;
+b9c633882de460 Marek Szyprowski 2020-06-01  47  	int ret = 0;
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  48  
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  49  	if (get_dma_ops(priv->dma_dev) != get_dma_ops(subdrv_dev)) {
+6f83d20838c099 Inki Dae         2019-04-15  50  		DRM_DEV_ERROR(subdrv_dev, "Device %s lacks support for IOMMU\n",
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  51  			  dev_name(subdrv_dev));
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  52  		return -EINVAL;
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  53  	}
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  54  
+ddfd4ab6bb0883 Marek Szyprowski 2020-07-07 @55  	dma_set_max_seg_size(subdrv_dev, DMA_BIT_MASK(32));
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  56  	if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)) {
+07dc3678bacc2a Marek Szyprowski 2020-03-09  57  		/*
+07dc3678bacc2a Marek Szyprowski 2020-03-09  58  		 * Keep the original DMA mapping of the sub-device and
+07dc3678bacc2a Marek Szyprowski 2020-03-09  59  		 * restore it on Exynos DRM detach, otherwise the DMA
+07dc3678bacc2a Marek Szyprowski 2020-03-09  60  		 * framework considers it as IOMMU-less during the next
+07dc3678bacc2a Marek Szyprowski 2020-03-09  61  		 * probe (in case of deferred probe or modular build)
+07dc3678bacc2a Marek Szyprowski 2020-03-09  62  		 */
+07dc3678bacc2a Marek Szyprowski 2020-03-09  63  		*dma_priv = to_dma_iommu_mapping(subdrv_dev);
+07dc3678bacc2a Marek Szyprowski 2020-03-09  64  		if (*dma_priv)
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  65  			arm_iommu_detach_device(subdrv_dev);
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  66  
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  67  		ret = arm_iommu_attach_device(subdrv_dev, priv->mapping);
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  68  	} else if (IS_ENABLED(CONFIG_IOMMU_DMA)) {
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  69  		ret = iommu_attach_device(priv->mapping, subdrv_dev);
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  70  	}
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  71  
+b9c633882de460 Marek Szyprowski 2020-06-01  72  	return ret;
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  73  }
+67fbf3a3ef8443 Andrzej Hajda    2018-10-12  74  
 
 -- 
 0-DAY CI Kernel Test Service
