@@ -1,44 +1,41 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390187C
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 21:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A862D7C
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 21:15:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650747959; x=1682283959;
+  t=1650748559; x=1682284559;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L794azoPtxLpLtQ4yl9xWCR1tuXoZvf24hSkQ2o3Nnc=;
-  b=j56GdRGKJhyFrkq3aDDqzRQaVKTCG36JMSM/+5ltz1x7OOod4nIyHrYp
-   VlXi4HkyXvDFITd2Q5idna8LwpbZczmYATyn+OjP45AHW3sKb1e4FEjFp
-   0exVNJ+WUBPTW7mKlH/kxsCp+ZlblOP7w8Pd/pIzS5Er+/mroGrGACF/p
-   5K25IgC+xLyS1UGSOAx35oOPFDdvN6V6TzSiGOl8td9zHz4PU9h3UJGaK
-   TKbvH2MOHap6VE2IX1/NUo00uexwzYeeZ4/sc6pKiZKId9af6bdCc6sPr
-   BlhNwJcOxU/umcSCEy3TekkAAO1NNqq4M+3DDLbV7ySOQxr47COGlfUy/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="327874475"
+  bh=ghR7zmzRRlZ8AQDiWjZSUUuq015qDScyozYGR7A57rE=;
+  b=IsfxPBocjBBlcOjQ/sEISpYoiZBMeiCLvJijFNIl762ond6jAnVXsdPt
+   CTff3tf1p+hSa43GViO8dcft4OKOw8mKUvKe38EME3RW8pCpI2Fl2XA2H
+   LblfDpMqtqe2BDpeVBQXoLF9uZZv4nl+KAiTEbD6/67OSTX0uz+9CFXNr
+   R+FjDVZw7TIcP+Epy3day+ttyFPSgPT6WQdWRJhoraGuEBTyX26dhIdQF
+   RPMmFouvW9j10Ir+Ifz51w39dYsFEbGRLwCw3xWAo4OTT0YJG31gQn/bm
+   0ZmLCkrRYH1+OvxzoBTzg+WBiJ+g5gIm4OToJugkR+bCVYQgMGV9PkLKA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="290089026"
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="327874475"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:05:58 -0700
+   d="scan'208";a="290089026"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 14:15:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="627468824"
+   d="scan'208";a="649124969"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Apr 2022 14:05:56 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2022 14:15:57 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niMx1-0000Tk-U7;
-	Sat, 23 Apr 2022 21:05:55 +0000
-Date: Sun, 24 Apr 2022 05:05:34 +0800
+	id 1niN6i-0000U5-S0;
+	Sat, 23 Apr 2022 21:15:56 +0000
+Date: Sun, 24 Apr 2022 05:15:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eugen Hristev <eugen.hristev@microchip.com>
+To: Dmitry Osipenko <digetx@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
- unused variable 'microchip_xisc_of_match'
-Message-ID: <202204240539.2fONWAZh-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: ld.lld: error: undefined symbol: cpu_sa110_suspend_size
+Message-ID: <202204240554.gz9y0hb8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,112 +45,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Eugen,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   13bc32bad7059d6c5671e9d037e6e3ed001cc0f4
-commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
-date:   11 months ago
-config: s390-randconfig-c005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204240539.2fONWAZh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+head:   45ab9400e73f34103e73c18a73280c9aa1650e98
+commit: faae6c9f2e68e62687636a7d6e0517b3bf594add cpuidle: tegra: Enable compile testing
+date:   7 months ago
+config: arm-buildonly-randconfig-r006-20220423 (https://download.01.org/0day-ci/archive/20220424/202204240554.gz9y0hb8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=faae6c9f2e68e62687636a7d6e0517b3bf594add
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        git checkout faae6c9f2e68e62687636a7d6e0517b3bf594add
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/atmel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/atmel/atmel-sama7g5-isc.c:40:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
-   static const struct of_device_id microchip_xisc_of_match[] = {
-                                    ^
-   13 warnings generated.
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: cpu_sa110_suspend_size
+   >>> referenced by kernel/sleep.o:(.text+0x68) in archive arch/arm/built-in.a
+--
+>> ld.lld: error: undefined symbol: cpu_sa110_do_suspend
+   >>> referenced by suspend.c
+   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
+--
+>> ld.lld: error: undefined symbol: cpu_sa110_do_resume
+   >>> referenced by suspend.c
+   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
 
-
-vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
-
-   609	
- > 610	static const struct of_device_id microchip_xisc_of_match[] = {
-   611		{ .compatible = "microchip,sama7g5-isc" },
-   612		{ }
-   613	};
-   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
-   615	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+   Depends on ARCH_SUSPEND_POSSIBLE
+   Selected by
+   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
 
 -- 
 0-DAY CI Kernel Test Service
