@@ -1,49 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245F217C2
-	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 09:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C3917C2
+	for <llvm@lists.linux.dev>; Sat, 23 Apr 2022 10:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650707480; x=1682243480;
+  t=1650709338; x=1682245338;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ApEeD5h/tW9BreK8Av0uhbhUoz5ZvVKRM9JtzTzDGXg=;
-  b=AATh6+VLWUu9+xn7saWUwhtKemmbG5Zv8UIhkTvs9/w+91Xvhqcc36KL
-   EeEi1uOQaCIIvSLSIAfQvmQcS80gjd65D3/Ed9HkpoicMnD1iJTWpSQ5/
-   gY+2rSj2Kx2T0IT2xb9BCtz3WYSlcNQ2gZKTXYZNrc59qHlnmRavwKKYr
-   qAm58za6/8iVDnxopw2O0/tRDJ82dKxkoZaMxqmv0MjLGkY6j3ANpeBcf
-   7Ba1oyRSb3XaHRoaQkSz5sXtPfMD7FiTb7wnLaLtJiIcmtAoYtVUn6Ht/
-   lbEIOOAsQR3lwR6s+hKOxP/T4nja115kVaR1VouaZQLn33ium5TOgCDhE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="246786016"
+  bh=7R1DmnTTaWPWYNqsuNK1zc8jkQ7VVU9lIofBerYqtRI=;
+  b=Du47MqMpDT4cO5WoINQoq2JtzsFEtAisnalkHG8V60c/B/8ESgyiUdPe
+   yBTT8vI9ccl+fKSp0Fqj2+aURoG7K4lRaz9ffKfAw1wSL1AKPKSQ3Z/mw
+   jafE2Ov+BensZAnYof5AiJ8xhOu/wvivU11z11fc7+B8ohD+Q0c2p9f9C
+   9QW6UpjgXL3EV0l2ZbUSKH9hsQm0IgIsUfwvdTeUWglo667u9kRJJQzGN
+   Pe1DVOBeEmR+eUd/8uPYxGMKMfeos+Ro5CNU/B840QdjOyfko35VIdzbx
+   AQITZy0MIVevBBWFEabDzgPA0MD8WsTovc9Yrr121UDCAtQzNSONcBhJy
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="245449921"
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="246786016"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 02:51:19 -0700
+   d="scan'208";a="245449921"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 03:22:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
-   d="scan'208";a="556799029"
+   d="scan'208";a="511913819"
 Received: from lkp-server01.sh.intel.com (HELO dd58949a6e39) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 23 Apr 2022 02:51:15 -0700
+  by orsmga003.jf.intel.com with ESMTP; 23 Apr 2022 03:22:16 -0700
 Received: from kbuild by dd58949a6e39 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niCQ6-00008Q-Et;
-	Sat, 23 Apr 2022 09:51:14 +0000
-Date: Sat, 23 Apr 2022 17:50:43 +0800
+	id 1niCu7-0000A7-UO;
+	Sat, 23 Apr 2022 10:22:15 +0000
+Date: Sat, 23 Apr 2022 18:21:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-	linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
-	iommu@lists.linux-foundation.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linuxarm@huawei.com,
-	lorenzo.pieralisi@arm.com, joro@8bytes.org, robin.murphy@arm.com,
-	will@kernel.org, wanghuiqiang@huawei.com, guohanjun@huawei.com,
-	steven.price@arm.com, Sami.Mujawar@arm.com, jon@solid-run.com,
-	eric.auger@redhat.com, laurentiu.tudor@nxp.com, hch@infradead.org
-Subject: Re: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
- reserved regions
-Message-ID: <202204231737.0jkKpxZk-lkp@intel.com>
-References: <20220422162907.1276-5-shameerali.kolothum.thodi@huawei.com>
+To: Nava kishore Manne <nava.manne@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v5 1/5] fpga: zynq: Fix incorrect variable type
+Message-ID: <202204231832.eX31L2dR-lkp@intel.com>
+References: <20220421044744.3777983-2-nava.manne@xilinx.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,112 +45,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422162907.1276-5-shameerali.kolothum.thodi@huawei.com>
+In-Reply-To: <20220421044744.3777983-2-nava.manne@xilinx.com>
 
-Hi Shameer,
+Hi Nava,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on joro-iommu/next]
-[also build test WARNING on rafael-pm/linux-next arm/for-next arm64/for-next/core soc/for-next linus/master v5.18-rc3 next-20220422]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc3]
+[cannot apply to xilinx-xlnx/master next-20220422]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shameer-Kolothum/ACPI-IORT-Support-for-IORT-RMR-node/20220423-003822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
-config: arm64-randconfig-r012-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231737.0jkKpxZk-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nava-kishore-Manne/fpga-zynq-Fix-incorrect-variable-type/20220421-135249
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b253435746d9a4a701b5f09211b9c14d3370d0da
+config: mips-randconfig-r005-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231832.eX31L2dR-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/5b73fd681a27e2ad450bac28f8a81f4b35fe4d68
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/14e1fd8955f47ca1dbb9b58fee3b0b94429fc5d5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shameer-Kolothum/ACPI-IORT-Support-for-IORT-RMR-node/20220423-003822
-        git checkout 5b73fd681a27e2ad450bac28f8a81f4b35fe4d68
+        git fetch --no-tags linux-review Nava-kishore-Manne/fpga-zynq-Fix-incorrect-variable-type/20220421-135249
+        git checkout 14e1fd8955f47ca1dbb9b58fee3b0b94429fc5d5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/acpi/arm64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/fpga/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/acpi/arm64/iort.c:801:29: warning: no previous prototype for function 'iort_rmr_alloc' [-Wmissing-prototypes]
-   struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc *rmr_desc,
-                               ^
-   drivers/acpi/arm64/iort.c:801:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc *rmr_desc,
-   ^
-   static 
-   drivers/acpi/arm64/iort.c:896:20: error: use of undeclared identifier 'ACPI_IORT_RMR_REMAP_PERMITTED'
-                   if (rmr->flags & ACPI_IORT_RMR_REMAP_PERMITTED)
-                                    ^
-   drivers/acpi/arm64/iort.c:901:20: error: use of undeclared identifier 'ACPI_IORT_RMR_ACCESS_PRIVILEGE'
-                   if (rmr->flags & ACPI_IORT_RMR_ACCESS_PRIVILEGE)
-                                    ^
-   drivers/acpi/arm64/iort.c:905:7: error: call to undeclared function 'ACPI_IORT_RMR_ACCESS_ATTRIBUTES'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   if (ACPI_IORT_RMR_ACCESS_ATTRIBUTES(rmr->flags) <=
-                       ^
-   drivers/acpi/arm64/iort.c:906:5: error: use of undeclared identifier 'ACPI_IORT_RMR_ATTR_DEVICE_GRE'
-                                   ACPI_IORT_RMR_ATTR_DEVICE_GRE)
-                                   ^
-   drivers/acpi/arm64/iort.c:909:5: error: use of undeclared identifier 'ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB'
-                                   ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB)
-                                   ^
-   1 warning and 5 errors generated.
+>> drivers/fpga/zynq-fpga.c:246:14: warning: result of comparison of constant 170 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                       buf[3] == 0xaa)
+                       ~~~~~~ ^  ~~~~
+   drivers/fpga/zynq-fpga.c:245:50: warning: result of comparison of constant 153 with expression of type 'const char' is always false [-Wtautological-constant-out-of-range-compare]
+                   if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
+                                                           ~~~~~~ ^  ~~~~
+   2 warnings generated.
 
 
-vim +/iort_rmr_alloc +801 drivers/acpi/arm64/iort.c
+vim +246 drivers/fpga/zynq-fpga.c
 
-   800	
- > 801	struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc *rmr_desc,
-   802						   int prot, enum iommu_resv_type type,
-   803						   u32 *sids, u32 num_sids)
-   804	{
-   805		struct iommu_iort_rmr_data *rmr_data;
-   806		struct iommu_resv_region *region;
-   807		u32 *sids_copy;
-   808		u64 addr = rmr_desc->base_address, size = rmr_desc->length;
-   809	
-   810		rmr_data = kmalloc(sizeof(*rmr_data), GFP_KERNEL);
-   811		if (!rmr_data)
-   812			return NULL;
-   813	
-   814		/* Create a copy of SIDs array to associate with this rmr_data */
-   815		sids_copy = kmemdup(sids, num_sids * sizeof(*sids), GFP_KERNEL);
-   816		if (!sids_copy) {
-   817			kfree(rmr_data);
-   818			return NULL;
-   819		}
-   820		rmr_data->sids = sids_copy;
-   821		rmr_data->num_sids = num_sids;
-   822	
-   823		if (!IS_ALIGNED(addr, SZ_64K) || !IS_ALIGNED(size, SZ_64K)) {
-   824			/* PAGE align base addr and size */
-   825			addr &= PAGE_MASK;
-   826			size = PAGE_ALIGN(size + offset_in_page(rmr_desc->base_address));
-   827	
-   828			pr_err(FW_BUG "RMR descriptor[0x%llx - 0x%llx] not aligned to 64K, continue with [0x%llx - 0x%llx]\n",
-   829			       rmr_desc->base_address,
-   830			       rmr_desc->base_address + rmr_desc->length - 1,
-   831			       addr, addr + size - 1);
-   832		}
-   833	
-   834		region = &rmr_data->rr;
-   835		INIT_LIST_HEAD(&region->list);
-   836		region->start = addr;
-   837		region->length = size;
-   838		region->prot = prot;
-   839		region->type = type;
-   840		region->free = iort_rmr_free;
-   841	
-   842		return rmr_data;
-   843	}
-   844	
+37784706bf9e3b Moritz Fischer     2015-10-16  237  
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  238  /* Sanity check the proposed bitstream. It must start with the sync word in
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  239   * the correct byte order, and be dword aligned. The input is a Xilinx .bin
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  240   * file with every 32 bit quantity swapped.
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  241   */
+14e1fd8955f47c Nava kishore Manne 2022-04-21  242  static bool zynq_fpga_has_sync(const char *buf, size_t count)
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  243  {
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  244  	for (; count >= 4; buf += 4, count -= 4)
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  245  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
+b496df86ac1bbe Jason Gunthorpe    2017-02-01 @246  		    buf[3] == 0xaa)
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  247  			return true;
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  248  	return false;
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  249  }
+b496df86ac1bbe Jason Gunthorpe    2017-02-01  250  
 
 -- 
 0-DAY CI Kernel Test Service
