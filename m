@@ -1,37 +1,37 @@
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E7D7C
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 19:16:22 +0000 (UTC)
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-10.nifty.com with ESMTP id 23OJAcRj029903
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:10:38 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FEC7C
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 19:18:05 +0000 (UTC)
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-05.nifty.com with ESMTP id 23OJA4sq020450
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:10:05 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-10.nifty.com with ESMTP id 23OJ8o5s019069;
-	Mon, 25 Apr 2022 04:08:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o5s019069
+	by conuserg-10.nifty.com with ESMTP id 23OJ8o6H019069;
+	Mon, 25 Apr 2022 04:09:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o6H019069
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1650827331;
-	bh=fS9R10vq4IlpfOs3RJ83vefXngPWoPRwppRrtnqmMAw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OtBPeJ7bd9EDe1GEJXgg5mHO9N9+21LPy/axxihlM7qtLYZspwwC588qjsoNybEGb
-	 S2cMP3SJDYch23nwJL6QtyhyMN/uioKiMLg4vVeMGd0OwFzP6Ho8yzKIeUPieX9OIi
-	 CT+NFXE6i3ZojxDWDPdfsIaxoqtSsPfoq6sHr/6pcRkr9CjNmOm14FYh5rzAi52zO2
-	 Bx9RSErmnXB5+FtQFXjK4jZyQqEztpW6iSjIeYQikpJy/2Y+INxl8tni057MElw3+z
-	 qOHUTAO89Wmux7gHa5shiMzWiq5zvKUGvQO3HiSFTStCHby50+eGgOvD424W4HQbdL
-	 BNhCUWoFR1lfw==
+	s=dec2015msa; t=1650827345;
+	bh=+yEXW56Av2KPDdnQt9MAFWt+h+ms9x9av68qeW9IT0E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=xjag+FWZ3e7U5HpF5rFliUAOCZoAUnVr1nHZF++WkIU2qPrYdx910ejilCrDfqOHq
+	 WY1RXzj9kCTYbc+/aX79KONu8j0bZHO2QX7KXFRkxI6fSkSrPLpa+Pa0pMv8ebUo/l
+	 ZtrcfdyjSxFfDFl41dhq/18ozV9/2QfEfX5iG0zNtsBFeMDSO9QoJV2IkL0j+6y71V
+	 4CqEfeFUEugHK3zrfMLVKbaTLftcSqT9XjRXwgKJ45zpmSDqogpPWFFAwUjbGq9b45
+	 Ak6q6CfoeM7hqXrdVgSZTs60zx0Uvrfl+Tj/LlPVLBLW21L8EP3CLSWslGd0NnJTzG
+	 AsNougBzyCmFA==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>, llvm@lists.linux.dev
-Subject: [PATCH 00/27] kbuild: yet another series of cleanups (modpost and LTO)
-Date: Mon, 25 Apr 2022 04:07:44 +0900
-Message-Id: <20220424190811.1678416-1-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: [PATCH 23/27] modpost: retrieve symbol versions by parsing *.cmd files
+Date: Mon, 25 Apr 2022 04:08:07 +0900
+Message-Id: <20220424190811.1678416-24-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220424190811.1678416-1-masahiroy@kernel.org>
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,61 +40,295 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is the third batch of cleanups in this development cycle.
+Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+versions into objects. Then, modpost parses the ELF objects to retrieve
+the version CRCs.
 
-This weekend, I wrote up the code I have been planning.
+See the current build flow below.
 
-After a bunch of modpost refactoring, I got rid of the ugly code
-in Makefiles.
+Current implementation
+======================
 
-With this, Kbuild will get back much simpler and cleaner.
+                  embed CRC        |---------|              |------------|
+       $(CC)        $(LD)          |         |              | final link |
+  *.c ------> *.o --------> *.o -->| modpost |-- *.o ------>| for        |
+                      /            |         |              | vmlinux    |
+     genksyms        /             |         |-- *.mod.c -->| or module  |
+  *.c ------> *.symversions        |---------|              |------------|
 
+Genksyms outputs the calculated CRCs in the form of linker script
+(*.symversions), which is used by $(LD) to update the object.
 
+If CONFIG_LTO_CLANG=y, the build process becomes much more complex.
+Embedding the CRCs is postponed until the LLVM bitcode is converted
+into ELF, creating another intermediate *.prelink.o.
 
-Masahiro Yamada (27):
-  modpost: use snprintf() instead of sprintf() for safety
-  modpost: do not write out any file when error occurred
-  modpost: remove stale comment about sym_add_exported()
-  modpost: add a separate error for exported symbols without definition
-  modpost: retrieve the module dependency and CRCs in check_exports()
-  modpost: use bool type where appropriate
-  modpost: import include/linux/list.h
-  modpost: traverse modules in order
-  modpost: add sym_add_unresolved() helper
-  modpost: traverse unresolved symbols in order
-  modpost: use doubly linked list for dump_lists
-  modpost: move struct namespace_list to modpost.c
-  modpost: traverse the namespace_list in order
-  modpost: dump Module.symvers in the same order of modules.order
-  modpost: move static EXPORT_SYMBOL check to check_exports()
-  modpost: make multiple export error
-  modpost: make sym_add_exported() always allocate a new symbol
-  modpost: make sym_add_exported() a void function
-  modpost: use hlist for hash table implementation
-  modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
-  kbuild: record symbol versions in *.cmd files
-  kbuild: generate a list of objects in vmlinux
-  modpost: retrieve symbol versions by parsing *.cmd files
-  modpost: generate linker script to collect symbol versions
-  kbuild: embed symbol versions at final link of vmlinux or modules
-  kbuild: stop generating *.symversions
-  kbuild: do not create *.prelink.o for Clang LTO or IBT
+However, this complexity is unneeded in the first place. There is no
+reason why we must embed version CRCs in objects so early.
 
- .gitignore                |   1 +
- Makefile                  |   1 +
- scripts/Kbuild.include    |   4 +
- scripts/Makefile.build    | 107 ++------
- scripts/Makefile.lib      |   7 -
- scripts/Makefile.modfinal |   6 +-
- scripts/Makefile.modpost  |   9 +-
- scripts/link-vmlinux.sh   |  38 ++-
- scripts/mod/file2alias.c  |   2 -
- scripts/mod/list.h        | 336 ++++++++++++++++++++++++
- scripts/mod/modpost.c     | 529 +++++++++++++++++++++++---------------
- scripts/mod/modpost.h     |  27 +-
- 12 files changed, 731 insertions(+), 336 deletions(-)
- create mode 100644 scripts/mod/list.h
+There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
+modules (scripts/Makefile.modfinal). We can embed CRCs at the very
+last moment.
 
+See the following figure, which explains what I want to do.
+
+New implementation
+==================
+
+       $(CC)           |---------|                    |------------|
+  *.c ------> *.o  --->|         |-- *.o ------------>| final link |
+                       | modpost |-- *.mod.c -------->| for        |
+      genksyms         |         |-- *.symver.lds --->| vmlinux    |
+  *.c ------> *.cmd -->|         |                    | or module  |
+                       |---------|                    |------------|
+
+We can pass the symbol versions to modpost as separate text data.
+(The previous commit output the versions in *.cmd files.)
+
+This commit changes modpost to retrieve CRCs from *.cmd files instead
+of from ELF objects.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ scripts/mod/modpost.c | 177 ++++++++++++++++++++++++++++++++----------
+ 1 file changed, 136 insertions(+), 41 deletions(-)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index fb50927cd241..43ab4f000ae3 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -246,6 +246,9 @@ static inline unsigned int tdb_hash(const char *name)
+ /* hash table of all exported symbols */
+ HASHTABLE_DECLARE(exported_symbols, 8192);
+ 
++/* hash table of CRCs */
++HASHTABLE_DECLARE(crc_symbols, 1024);
++
+ /**
+  * Allocate a new symbols for use in the hash of exported symbols or
+  * the list of unresolved symbols per module
+@@ -420,7 +423,27 @@ static void sym_add_exported(const char *name, struct module *mod,
+ 		      s->module->is_vmlinux ? "" : ".ko");
+ 	}
+ 
+-	s = alloc_symbol(name);
++	s = NULL;
++
++	if (modversions) {
++		struct hlist_node *n;
++
++		hash_for_matched_symbol_safe(s, n, crc_symbols, name) {
++			if (s->module == mod)
++				hash_del_symbol(s);
++			break;
++		}
++
++		if (!s)
++			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
++			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
++			     name, mod->name, mod->is_vmlinux ? "" : ".ko",
++			     name);
++	}
++
++	if (!s)
++		s = alloc_symbol(name);
++
+ 	s->module = mod;
+ 	s->is_static = !mod->from_dump;
+ 	s->export    = export;
+@@ -428,19 +451,116 @@ static void sym_add_exported(const char *name, struct module *mod,
+ 	hash_add_symbol(s, exported_symbols);
+ }
+ 
+-static void sym_set_crc(const char *name, unsigned int crc)
++static void sym_add_crc(const char *name, unsigned int crc, struct module *mod)
+ {
+-	struct symbol *s = find_symbol(name);
++	struct symbol *sym;
+ 
+-	/*
+-	 * Ignore stand-alone __crc_*, which might be auto-generated symbols
+-	 * such as __*_veneer in ARM ELF.
+-	 */
+-	if (!s)
++	sym = alloc_symbol(name);
++
++	sym->crc = crc;
++	sym->crc_valid = true;
++	sym->module = mod;
++
++	hash_add_symbol(sym, crc_symbols);
++}
++
++/*
++ * The CRCs are recorded in .*.cmd files in the form of:
++ * #__crc_<name>=<crc>
++ */
++static void retrieve_crcs_from_cmdfile(const char *object, struct module *mod)
++{
++	char cmd_file[PATH_MAX];
++	char *buf, *p;
++	const char *base;
++	int dirlen, ret;
++
++	base = strrchr(object, '/');
++	if (base) {
++		base++;
++		dirlen = base - object;
++	} else {
++		dirlen = 0;
++		base = object;
++	}
++
++	ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
++		       dirlen, object, base);
++	if (ret >= sizeof(cmd_file)) {
++		error("%s: too long path was truncated\n", cmd_file);
+ 		return;
++	}
++
++	buf = read_text_file(cmd_file);
++	p = buf;
++
++	while ((p = strstr(p, "\n#__crc_"))) {
++		char *name;
++		size_t namelen;
++		unsigned int crc;
++		char *end;
++
++		name = p + strlen("\n#__crc_");
++
++		p = strchr(name, '=');
++		if (!p) {
++			error("invalid\n");
++			goto out;
++		}
++
++		namelen = p - name;
++
++		p++;
+ 
+-	s->crc = crc;
+-	s->crc_valid = true;
++		if (!isdigit(*p)) {
++			error("invalid\n");
++			goto out;
++		}
++
++		crc = strtol(p, &end, 0);
++		p = end;
++
++		if (*p != '\n') {
++			error("invalid\n");
++			goto out;
++		}
++
++		name[namelen] = '\0';
++		sym_add_crc(name, crc, mod);
++	}
++
++out:
++	free(buf);
++}
++
++/*
++ * The symbol versions (CRC) are recorded in the .*.cmd files.
++ * Parse them to retrieve CRCs for the current module.
++ */
++static void retrieve_crcs(struct module *mod)
++{
++	char objlist[PATH_MAX];
++	char *buf, *p, *obj;
++	int ret;
++
++	if (mod->is_vmlinux) {
++		strcpy(objlist, ".vmlinux.objs");
++	} else {
++		/* objects for a module are listed in the *.mod file. */
++		ret = snprintf(objlist, sizeof(objlist), "%s.mod", mod->name);
++		if (ret >= sizeof(objlist)) {
++			error("%s: too long path was truncated\n", objlist);
++			return;
++		}
++	}
++
++	buf = read_text_file(objlist);
++	p = buf;
++
++	while ((obj = strsep(&p, "\n")) && obj[0])
++		retrieve_crcs_from_cmdfile(obj, mod);
++
++	free(buf);
+ }
+ 
+ static void *grab_file(const char *filename, size_t *size)
+@@ -663,33 +783,6 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
+ 	return 0;
+ }
+ 
+-static void handle_modversion(const struct module *mod,
+-			      const struct elf_info *info,
+-			      const Elf_Sym *sym, const char *symname)
+-{
+-	unsigned int crc;
+-
+-	if (sym->st_shndx == SHN_UNDEF) {
+-		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
+-		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
+-		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
+-		     symname);
+-
+-		return;
+-	}
+-
+-	if (sym->st_shndx == SHN_ABS) {
+-		crc = sym->st_value;
+-	} else {
+-		unsigned int *crcp;
+-
+-		/* symbol points to the CRC in the ELF object */
+-		crcp = sym_get_data(info, sym);
+-		crc = TO_NATIVE(*crcp);
+-	}
+-	sym_set_crc(symname, crc);
+-}
+-
+ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 			  const Elf_Sym *sym, const char *symname)
+ {
+@@ -2019,6 +2112,10 @@ static void read_symbols(const char *modname)
+ 		if (strends(tmp, ".prelink"))
+ 			tmp[strlen(tmp) - 8] = '\0';
+ 		mod = new_module(tmp);
++
++		if (modversions)
++			retrieve_crcs(mod);
++
+ 		free(tmp);
+ 	}
+ 
+@@ -2058,9 +2155,6 @@ static void read_symbols(const char *modname)
+ 		if (strstarts(symname, "__kstrtabns_"))
+ 			sym_update_namespace(symname + strlen("__kstrtabns_"),
+ 					     sym_get_data(&info, sym));
+-		if (strstarts(symname, "__crc_"))
+-			handle_modversion(mod, &info, sym,
+-					  symname + strlen("__crc_"));
+ 	}
+ 
+ 	// check for static EXPORT_SYMBOL_* functions && global vars
+@@ -2451,8 +2545,9 @@ static void read_dump(const char *fname)
+ 			mod = new_module(modname);
+ 			mod->from_dump = true;
+ 		}
++
++		sym_add_crc(symname, crc, mod);
+ 		sym_add_exported(symname, mod, export_no(export));
+-		sym_set_crc(symname, crc);
+ 		sym_update_namespace(symname, namespace);
+ 	}
+ 	free(buf);
 -- 
 2.32.0
 
