@@ -1,49 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBFB7C
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 11:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76A57C
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 12:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650800924; x=1682336924;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bK7lkwOx8GhEMs8AaNpbDNyDjZ4A4n5nPcVUeZeW2PE=;
-  b=iPBt1FTRXT0KT0ghZzvUb2GSzdo9ITQkmO4SDiqp3JTIojH5tBu8gTXY
-   EURAgONQkr8RIgarX+ONW7Au0GqqO3zcpL2QqzHbg6NWzE9Y8O0YhnflG
-   vFmDfPbFSla4BIPlBhTfQNSFHyegpOh9HaHQ1IYBYY/6IqMuqdd2npWzL
-   S9LwKJUuSOF+7ivaGF3ilGSAnP9M3RU58AlisA/RsXoSPZO5s8ktJH1En
-   35wRAEUyJncko0weg4bUBhBCTtBH88GUI0eMjQusnHe5BFKeSz6WaK+HW
-   gXOIbCbFAJWEXX3oQmI2ceZfTV2LdImy/PQ6YumTKSm33UVsIqPKZQA9Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="265201441"
+  t=1650802120; x=1682338120;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tICH0q8g8dbLJL8g4kbFNW/ZxZEvaqnutCmhpsehBNs=;
+  b=hSJ6QsqhjSbgI2VPB8nPN7qlbuHR99KkVIwCJa1Oe3S54/b+bLpBbmwd
+   oeTzeRuuRFbSGctNbUD/YsW26HHyoTfCEqWkns6orl4Ne29bXUVg7FnIE
+   dx7HDDOiy3113RoWcCDm8ivBMLSLoMWE+vop4nEZhaBvr2QZO02MtU4Qe
+   1bUoxmOJ3LPbv8PY6ZVu20k3A6NP8eOhLWkthCliH4pisZEegEHqcr7hN
+   WVKReeyb3whnFDMcKKhSDvstrb3xEAW06f6aeWpRXvs5AIKf3lizVacql
+   vN46duS9c53qUKIw7U0Kdm4yW9t0UDODNTM1trusDzsUTN7dPfIFBikHk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="244964961"
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="265201441"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 04:48:43 -0700
+   d="scan'208";a="244964961"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 05:08:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="594820063"
+   d="scan'208";a="531643418"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Apr 2022 04:48:38 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Apr 2022 05:08:38 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1niajF-0001PL-7Z;
-	Sun, 24 Apr 2022 11:48:37 +0000
-Date: Sun, 24 Apr 2022 19:47:54 +0800
+	id 1nib2b-0001Q3-Kf;
+	Sun, 24 Apr 2022 12:08:37 +0000
+Date: Sun, 24 Apr 2022 20:08:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: menglong8.dong@gmail.com, ast@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rostedt@goodmis.org,
-	mingo@redhat.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-	dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	benbjiang@tencent.com, flyingpeng@tencent.com,
-	imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-	talalahmad@google.com, keescook@chromium.org, mengensun@tencent.com,
-	dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH] bpf: init map_btf_id during compiling
-Message-ID: <202204241926.3xdM8EYM-lkp@intel.com>
-References: <20220424092613.863290-1-imagedong@tencent.com>
+To: Tom <support@vamrs.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 22/56] drivers/soc/sifive/sifive_l2_cache.c:152:3:
+ error: call to undeclared function 'writeq'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202204242055.S0sCOxzU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,58 +47,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220424092613.863290-1-imagedong@tencent.com>
 
-Hi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master net-next/master net/master linus/master v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/bpf-init-map_btf_id-during-compiling/20220424-172902
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220424/202204241926.3xdM8EYM-lkp@intel.com/config)
+tree:   https://github.com/esmil/linux visionfive
+head:   0729a282564fe3940277937536b1e67f98885c49
+commit: 82d19ba510f9a07c18a011731401222caaffdb4a [22/56] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-randconfig-r016-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242055.S0sCOxzU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a1d0d3f8a71cc20be0b95fe9506a3b3bd1b572b5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review menglong8-dong-gmail-com/bpf-init-map_btf_id-during-compiling/20220424-172902
-        git checkout a1d0d3f8a71cc20be0b95fe9506a3b3bd1b572b5
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/82d19ba510f9a07c18a011731401222caaffdb4a
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 82d19ba510f9a07c18a011731401222caaffdb4a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/ drivers/soc/sifive/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> kernel/bpf/btf.c:4823:41: warning: unused variable 'btf_vmlinux_map_ops' [-Wunused-const-variable]
-   static const struct bpf_map_ops * const btf_vmlinux_map_ops[] = {
-                                           ^
-   1 warning generated.
+>> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/btf_vmlinux_map_ops +4823 kernel/bpf/btf.c
+vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
 
-8580ac9404f624 Alexei Starovoitov 2019-10-15  4822  
-41c48f3a982317 Andrey Ignatov     2020-06-19 @4823  static const struct bpf_map_ops * const btf_vmlinux_map_ops[] = {
-41c48f3a982317 Andrey Ignatov     2020-06-19  4824  #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
-41c48f3a982317 Andrey Ignatov     2020-06-19  4825  #define BPF_LINK_TYPE(_id, _name)
-41c48f3a982317 Andrey Ignatov     2020-06-19  4826  #define BPF_MAP_TYPE(_id, _ops) \
-41c48f3a982317 Andrey Ignatov     2020-06-19  4827  	[_id] = &_ops,
-41c48f3a982317 Andrey Ignatov     2020-06-19  4828  #include <linux/bpf_types.h>
-41c48f3a982317 Andrey Ignatov     2020-06-19  4829  #undef BPF_PROG_TYPE
-41c48f3a982317 Andrey Ignatov     2020-06-19  4830  #undef BPF_LINK_TYPE
-41c48f3a982317 Andrey Ignatov     2020-06-19  4831  #undef BPF_MAP_TYPE
-41c48f3a982317 Andrey Ignatov     2020-06-19  4832  };
-41c48f3a982317 Andrey Ignatov     2020-06-19  4833  
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+ > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
 
 -- 
 0-DAY CI Kernel Test Service
