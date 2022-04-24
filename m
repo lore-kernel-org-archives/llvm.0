@@ -1,31 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDD733E9
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 22:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0BA4C385AC;
-	Sun, 24 Apr 2022 22:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB14C33E9
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 22:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72FF6C385A7;
+	Sun, 24 Apr 2022 22:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650837776;
-	bh=5BleyibySV7RqQo62uxx6d2t7D7doA7/HtcF/uwp0CQ=;
+	s=k20201202; t=1650837973;
+	bh=QM2gPpFhJMCw8SzHnaGDe9e/YubdMcUEfk/0Dsh1MUk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QEUA0poEQl5pO1NdlE/9i6f6p9KJ1Ok84Zz9FjNtBwJirfdqRRJlkb8MwG1aMCejk
-	 odFQG7lq7x5L5/xGZLA9wdGYKqtvcFaJ8XZa/3hMzUDxSshP2ZVLx8TudDUO0d5HPG
-	 RXVEeRHQf2kfT49JPhm6DAIczuffa+VMd2+65y6OKWYrszZXLr2lB80BLhWkaoSrs+
-	 nbVxyl/50vvmrucQEHOXqtV87IfCdbDaaNyBNqFDdZyWDkcHLmOsL//cHWJHoS8vfu
-	 x+wwUgrpswEWvzAQ18L6gW98qfmJttxc5cyx+C9J38VEi6OABcxULQ38XJYzheDjsx
-	 XOgGwjpLO7tIQ==
-Date: Sun, 24 Apr 2022 15:02:54 -0700
+	b=FWqe6TXYTGEcuyVkpJpgLVerPLsZSOIWG3kwtsnmtRW5advkYeKQBIEiymO6bAbIg
+	 mNoqik26VUorYfwzG4XpQTQ9nNbHEmFHj4NZNgTm5fvAAw5u3U6ZTq/aSS6KSNyQm9
+	 9Qu4zO51AjeJLmQa8RwYqQViFaOBKlx9ACioFEwMNbuAFSReA61DQnKyHsKqXCY7l5
+	 31hNf7QOFE9wm7i4+iQ6ffQp4NLk6aOcxVm4p0ZrDv0tF4wKR+bm3yxZXeQFWmO4Q9
+	 F65DCU0T2q2DvcGrEF61EKMU9HI2WKB/fLPjvyCPyMPrfWIE6cDLnTGszSA34IvGV5
+	 32tTs07X5Q/Ww==
+Date: Sun, 24 Apr 2022 15:06:10 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Daniel Starke <daniel.starke@siemens.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-serial@vger.kernel.org
-Subject: Re: [tty:tty-linus 23/26] drivers/tty/n_gsm.c:939:13: warning:
- variable 'size' is used uninitialized whenever 'if' condition is false
-Message-ID: <YmXJDmMWBKwDKSmf@dev-arch.thelio-3990X>
-References: <202204230704.5MxboEEo-lkp@intel.com>
- <YmO7C2dZTVxSNUQe@kroah.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Donghai Qiao <dqiao@redhat.com>, akpm@linux-foundation.org,
+	sfr@canb.auug.org.au, arnd@arndb.de, peterz@infradead.org,
+	heying24@huawei.com, andriy.shevchenko@linux.intel.com,
+	axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
+	gor@linux.ibm.com, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/11] smp: replace smp_call_function_single_async()
+ with  smp_call_private()
+Message-ID: <YmXJ0q24kaxtG1R5@dev-arch.thelio-3990X>
+References: <20220422200040.93813-6-dqiao@redhat.com>
+ <202204231532.nXbSK9Tk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,56 +37,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmO7C2dZTVxSNUQe@kroah.com>
+In-Reply-To: <202204231532.nXbSK9Tk-lkp@intel.com>
 
-On Sat, Apr 23, 2022 at 10:38:35AM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Apr 23, 2022 at 07:42:41AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
-> > head:   637674fa40059cddcc3ad2212728965072f62ea3
-> > commit: c19ffe00fed6bb423d81406d2a7e5793074c7d83 [23/26] tty: n_gsm: fix invalid use of MSC in advanced option
-> > config: hexagon-randconfig-r035-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230704.5MxboEEo-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=c19ffe00fed6bb423d81406d2a7e5793074c7d83
-> >         git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-> >         git fetch --no-tags tty tty-linus
-> >         git checkout c19ffe00fed6bb423d81406d2a7e5793074c7d83
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/tty/n_gsm.c:939:13: warning: variable 'size' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >            } else if (dlci->adaption == 2) {
-> >                       ^~~~~~~~~~~~~~~~~~~
-> >    drivers/tty/n_gsm.c:948:40: note: uninitialized use occurs here
-> >            msg = gsm_data_alloc(gsm, dlci->addr, size, gsm->ftype);
-> >                                                  ^~~~
-> >    drivers/tty/n_gsm.c:939:9: note: remove the 'if' if its condition is always true
-> >            } else if (dlci->adaption == 2) {
-> >                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/tty/n_gsm.c:934:10: note: initialize the variable 'size' to silence this warning
-> >            int size;
-> >                    ^
-> >                     = 0
-> >    1 warning generated.
-> > 
+On Sat, Apr 23, 2022 at 03:30:18PM +0800, kernel test robot wrote:
+> Hi Donghai,
 > 
-> It's not obvious, but this should be fine as adaption is only 1 or 2
-> from what I can tell.
+> Thank you for the patch! Perhaps something to improve:
 > 
-> To make the compiler understand this easier, this should probably be an
-> enum and use switch statements.  Daniel, want to make that change?
+> [auto build test WARNING on powerpc/next]
+> [also build test WARNING on rafael-pm/linux-next linus/master v5.18-rc3 next-20220422]
+> [cannot apply to tip/x86/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220423/202204231532.nXbSK9Tk-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/3b8a90029bebdb77e2d5c0cd16f371e83d8ed2e8
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
+>         git checkout 3b8a90029bebdb77e2d5c0cd16f371e83d8ed2e8
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> block/blk-mq.c:1065:39: warning: passing 4-byte aligned argument to 16-byte aligned parameter 2 of 'smp_call_private' may result in an unaligned pointer access [-Walign-mismatch]
+>                    smp_call_function_single_async(cpu, &rq->csd);
+>                                                        ^
+>    1 warning generated.
 
-Alternatively, 'return -EINVAL' or something similar in the 'else'
-branch of the first if statement? The error message makes it seem like
-the function shouldn't continue but it does.
+This warning was fixed by commit 1139aeb1c521 ("smp: Fix
+smp_call_function_single_async prototype"), which is undone by this
+proposed change, hence the warning.
 
 Cheers,
 Nathan
