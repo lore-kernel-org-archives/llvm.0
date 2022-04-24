@@ -1,174 +1,100 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE10E7A
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 18:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650823431; x=1682359431;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1JfL2buY68y4ymF82P3twiQr9v5MgJo65F2Iu6rMRAc=;
-  b=fUNIpjJzp+j7qtkdkPfEMUmCCX4rh1/XGBQgpPqBcPFIwBVoSKm3M+lb
-   SemU/PfiAvFphjryMR3aqj0Pz6mCn3OpwU7CqKcdN+eVq/1jSubjDQhjt
-   /FJ4/ea41NEergxThZvvUc4ipZTLX66Y/F+o8rW64MbBnCCQuitGhTVA/
-   XpYrhQBEeG1lQVWaPhLyQCCiP1J0cjw6WGemF5YOawPkd0bo9ZtHE++1y
-   EoVYmOlwa0gecn4lS/d2uJoB9F1SL/u0+rdxe72kgbhp/z0VgVcNwaIeB
-   rLL/qZAOakcaeFo925addxLQtX/6PQ36LrnmFAJvjTwDMmyQojwstPTTr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264862282"
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="264862282"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 11:03:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="512314083"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Apr 2022 11:03:49 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nigaK-0001f9-Sy;
-	Sun, 24 Apr 2022 18:03:48 +0000
-Date: Mon, 25 Apr 2022 02:03:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202204250140.voIrCzyh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E7D7C
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 19:16:22 +0000 (UTC)
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-10.nifty.com with ESMTP id 23OJAcRj029903
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:10:38 +0900
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+	by conuserg-10.nifty.com with ESMTP id 23OJ8o5s019069;
+	Mon, 25 Apr 2022 04:08:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 23OJ8o5s019069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1650827331;
+	bh=fS9R10vq4IlpfOs3RJ83vefXngPWoPRwppRrtnqmMAw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OtBPeJ7bd9EDe1GEJXgg5mHO9N9+21LPy/axxihlM7qtLYZspwwC588qjsoNybEGb
+	 S2cMP3SJDYch23nwJL6QtyhyMN/uioKiMLg4vVeMGd0OwFzP6Ho8yzKIeUPieX9OIi
+	 CT+NFXE6i3ZojxDWDPdfsIaxoqtSsPfoq6sHr/6pcRkr9CjNmOm14FYh5rzAi52zO2
+	 Bx9RSErmnXB5+FtQFXjK4jZyQqEztpW6iSjIeYQikpJy/2Y+INxl8tni057MElw3+z
+	 qOHUTAO89Wmux7gHa5shiMzWiq5zvKUGvQO3HiSFTStCHby50+eGgOvD424W4HQbdL
+	 BNhCUWoFR1lfw==
+X-Nifty-SrcIP: [133.32.177.133]
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>, llvm@lists.linux.dev
+Subject: [PATCH 00/27] kbuild: yet another series of cleanups (modpost and LTO)
+Date: Mon, 25 Apr 2022 04:07:44 +0900
+Message-Id: <20220424190811.1678416-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Hi Mauro,
+This is the third batch of cleanups in this development cycle.
 
-First bad commit (maybe != root cause):
+This weekend, I wrote up the code I have been planning.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   22da5264abf497a10a4ed629f07f4ba28a7ed5eb
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   5 weeks ago
-config: s390-randconfig-c005-20220424 (https://download.01.org/0day-ci/archive/20220425/202204250140.voIrCzyh-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+After a bunch of modpost refactoring, I got rid of the ugly code
+in Makefiles.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:15:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   13 warnings generated.
+With this, Kbuild will get back much simpler and cleaner.
 
 
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
 
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+Masahiro Yamada (27):
+  modpost: use snprintf() instead of sprintf() for safety
+  modpost: do not write out any file when error occurred
+  modpost: remove stale comment about sym_add_exported()
+  modpost: add a separate error for exported symbols without definition
+  modpost: retrieve the module dependency and CRCs in check_exports()
+  modpost: use bool type where appropriate
+  modpost: import include/linux/list.h
+  modpost: traverse modules in order
+  modpost: add sym_add_unresolved() helper
+  modpost: traverse unresolved symbols in order
+  modpost: use doubly linked list for dump_lists
+  modpost: move struct namespace_list to modpost.c
+  modpost: traverse the namespace_list in order
+  modpost: dump Module.symvers in the same order of modules.order
+  modpost: move static EXPORT_SYMBOL check to check_exports()
+  modpost: make multiple export error
+  modpost: make sym_add_exported() always allocate a new symbol
+  modpost: make sym_add_exported() a void function
+  modpost: use hlist for hash table implementation
+  modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
+  kbuild: record symbol versions in *.cmd files
+  kbuild: generate a list of objects in vmlinux
+  modpost: retrieve symbol versions by parsing *.cmd files
+  modpost: generate linker script to collect symbol versions
+  kbuild: embed symbol versions at final link of vmlinux or modules
+  kbuild: stop generating *.symversions
+  kbuild: do not create *.prelink.o for Clang LTO or IBT
 
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+ .gitignore                |   1 +
+ Makefile                  |   1 +
+ scripts/Kbuild.include    |   4 +
+ scripts/Makefile.build    | 107 ++------
+ scripts/Makefile.lib      |   7 -
+ scripts/Makefile.modfinal |   6 +-
+ scripts/Makefile.modpost  |   9 +-
+ scripts/link-vmlinux.sh   |  38 ++-
+ scripts/mod/file2alias.c  |   2 -
+ scripts/mod/list.h        | 336 ++++++++++++++++++++++++
+ scripts/mod/modpost.c     | 529 +++++++++++++++++++++++---------------
+ scripts/mod/modpost.h     |  27 +-
+ 12 files changed, 731 insertions(+), 336 deletions(-)
+ create mode 100644 scripts/mod/list.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+
