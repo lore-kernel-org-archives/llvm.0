@@ -1,44 +1,46 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDF917EA
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 14:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DD517EA;
+	Sun, 24 Apr 2022 14:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650810645; x=1682346645;
+  t=1650811305; x=1682347305;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1o4u4tcHj8GJHvMb2O8TmdCKH7Vu63K+AlpEAuoV8Qo=;
-  b=dX3ZPrMddvjlyxtRIn4RL1TnhgmocOI76Bowe0ur8d4hmlQnu41F+Cqi
-   6h3APTyuWnvaTrDOUYG0CPuEsUR9uAiGUP2Qt6MxHvcOvvjP6CsD64sgm
-   hjpHRvIFJLbYUpAB9jz32KqH7xZtT74erat1hAGOaxPoV32XFFwp4sCtX
-   LUSteJKp0hCd2PEqwbNe9kQx2cdmHhkK6I1fRpO6MCJIYCvshiB5FWc/D
-   /V6OzY76acURheW1rWc6G2f2uhyVo3MGom6GK0wRIND4uOIi1BH7HU+Rc
-   k3btTmG7wSXzKi0dedxn0DuK3anskffbgIKRKfVv50uh8Ouu6w3B3obWQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="252401550"
+  bh=3qakcHWEZbb/tE6ZLoH7UT+OIS/LUOLJ19s9X3V6mpY=;
+  b=chyphFfvpz3jGI5k+b4nN+ERECMEWjWpWeK54j5+hW0ioAe65C/gL8Hv
+   THuqWiPJaOl0gBV4WSzpECc5M5Ur6KAvJMlhgwCN96540K7VGwWKYeNcu
+   YYg0dkLF+XahRiyulOKunIrKJdA59PvbIS+n40RhgcHWwzgPC82ylbpEC
+   eOo24nDLafKLKWg140LtiMd4P+zkuEhqfMAsr8iqHSmz8zK0ergiOeYcY
+   dfw6PJ3PJEr5DCnq9guH8ktMzukSvPsEaA2jz81m0gosiuRlxuNmj0suW
+   UTwLrLIj+byyF3ZEZQbSWKRvnnC65LiIk4VMewG5I1ktecFaIuG8r3TH6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="263899695"
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="252401550"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 07:30:44 -0700
+   d="scan'208";a="263899695"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 07:41:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="594855437"
+   d="scan'208";a="704223679"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Apr 2022 07:30:42 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 07:41:42 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nidG6-0001WV-0m;
-	Sun, 24 Apr 2022 14:30:42 +0000
-Date: Sun, 24 Apr 2022 22:30:34 +0800
+	id 1nidQk-0001Wr-6u;
+	Sun, 24 Apr 2022 14:41:42 +0000
+Date: Sun, 24 Apr 2022 22:40:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hongnan Li <hongnan.li@linux.alibaba.com>, linux-erofs@lists.ozlabs.org,
-	xiang@kernel.org, chao@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] erofs: make filesystem exportable
-Message-ID: <202204242236.0aTl5THK-lkp@intel.com>
-References: <20220424130104.102365-1-hongnan.li@linux.alibaba.com>
+To: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+	Forest Bond <forest@alittletooquiet.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 4/5] staging: vt6655: Replace two VNSvInPortD with
+ ioread64_lo_hi
+Message-ID: <202204242226.Y6Amb3he-lkp@intel.com>
+References: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,63 +49,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220424130104.102365-1-hongnan.li@linux.alibaba.com>
+In-Reply-To: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
 
-Hi Hongnan,
+Hi Philipp,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on xiang-erofs/dev-test]
-[also build test WARNING on v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on staging/staging-testing]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongnan-Li/erofs-make-filesystem-exportable/20220424-211653
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-config: hexagon-buildonly-randconfig-r005-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242236.0aTl5THK-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 1efba7ef1d7da5944493728c5375fef5b2130de4
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220424/202204242226.Y6Amb3he-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c0fc15c5ccc4a5090cc32744ba63bde8ea558ac7
+        # https://github.com/intel-lab-lkp/linux/commit/6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hongnan-Li/erofs-make-filesystem-exportable/20220424-211653
-        git checkout c0fc15c5ccc4a5090cc32744ba63bde8ea558ac7
+        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
+        git checkout 6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/erofs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/vt6655/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/erofs/super.c:601:16: warning: no previous prototype for function 'erofs_get_parent' [-Wmissing-prototypes]
-   struct dentry *erofs_get_parent(struct dentry *child)
-                  ^
-   fs/erofs/super.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dentry *erofs_get_parent(struct dentry *child)
-   ^
-   static 
-   1 warning generated.
+>> drivers/staging/vt6655/card.c:757:16: error: call to undeclared function 'ioread64_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           *pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
+                         ^
+   1 error generated.
 
 
-vim +/erofs_get_parent +601 fs/erofs/super.c
+vim +/ioread64_lo_hi +757 drivers/staging/vt6655/card.c
 
-   600	
- > 601	struct dentry *erofs_get_parent(struct dentry *child)
-   602	{
-   603		erofs_nid_t nid;
-   604		unsigned int d_type;
-   605		int err;
-   606	
-   607		err = erofs_namei(d_inode(child), &dotdot_name, &nid, &d_type);
-   608		if (err)
-   609			return ERR_PTR(err);
-   610		return d_obtain_alias(erofs_iget(child->d_sb, nid, d_type == FT_DIR));
-   611	}
-   612	
+   730	
+   731	/*
+   732	 * Description: Read NIC TSF counter
+   733	 *              Get local TSF counter
+   734	 *
+   735	 * Parameters:
+   736	 *  In:
+   737	 *      priv         - The adapter to be read
+   738	 *  Out:
+   739	 *      qwCurrTSF       - Current TSF counter
+   740	 *
+   741	 * Return Value: true if success; otherwise false
+   742	 */
+   743	bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+   744	{
+   745		void __iomem *iobase = priv->port_offset;
+   746		unsigned short ww;
+   747		unsigned char data;
+   748	
+   749		MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
+   750		for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+   751			data = ioread8(iobase + MAC_REG_TFTCTL);
+   752			if (!(data & TFTCTL_TSFCNTRRD))
+   753				break;
+   754		}
+   755		if (ww == W_MAX_TIMEOUT)
+   756			return false;
+ > 757		*pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
+   758	
+   759		return true;
+   760	}
+   761	
 
 -- 
 0-DAY CI Kernel Test Service
