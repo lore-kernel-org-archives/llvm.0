@@ -1,34 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB14C33E9
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 22:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72FF6C385A7;
-	Sun, 24 Apr 2022 22:06:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A45733E9
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 22:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE35C385A7;
+	Sun, 24 Apr 2022 22:17:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650837973;
-	bh=QM2gPpFhJMCw8SzHnaGDe9e/YubdMcUEfk/0Dsh1MUk=;
+	s=k20201202; t=1650838667;
+	bh=aCUo1AIugUEcO35y/pU9+Q9FKJzq4qO/ICqLjl72B94=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FWqe6TXYTGEcuyVkpJpgLVerPLsZSOIWG3kwtsnmtRW5advkYeKQBIEiymO6bAbIg
-	 mNoqik26VUorYfwzG4XpQTQ9nNbHEmFHj4NZNgTm5fvAAw5u3U6ZTq/aSS6KSNyQm9
-	 9Qu4zO51AjeJLmQa8RwYqQViFaOBKlx9ACioFEwMNbuAFSReA61DQnKyHsKqXCY7l5
-	 31hNf7QOFE9wm7i4+iQ6ffQp4NLk6aOcxVm4p0ZrDv0tF4wKR+bm3yxZXeQFWmO4Q9
-	 F65DCU0T2q2DvcGrEF61EKMU9HI2WKB/fLPjvyCPyMPrfWIE6cDLnTGszSA34IvGV5
-	 32tTs07X5Q/Ww==
-Date: Sun, 24 Apr 2022 15:06:10 -0700
+	b=Sh+ivT3b3v1+G2ABXiYchKxVUsVkrcPie+pUNZayfM4CmKxby6BG2RTMeIX3KbK7o
+	 z50QWP+uNmdyWWTldFp0bXqiTPmRr10AeAyrFS2s8JWbZoSHUxZvpafQUW6nmzjtQT
+	 I6dxB/37tkvdssNaYbbc0Uce6LzDaolmcVbBCdBJA7uWa8t4L/dnPRBLthPVw2KusV
+	 q0WKWOPhHnRgSnevAJ8Kz5AtzRG8Bd+aVyF6YYQWzfm+ceuanapUzstzlI6W4agoXT
+	 a4rjvlrT7BVymkzgCA/7bLoxs+qDbG6NXIfk3q57JQXj/e1foE4VEtK/ltSzgEzetB
+	 OoViz9Uoin5mw==
+Date: Sun, 24 Apr 2022 15:17:45 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Donghai Qiao <dqiao@redhat.com>, akpm@linux-foundation.org,
-	sfr@canb.auug.org.au, arnd@arndb.de, peterz@infradead.org,
-	heying24@huawei.com, andriy.shevchenko@linux.intel.com,
-	axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
-	gor@linux.ibm.com, llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/11] smp: replace smp_call_function_single_async()
- with  smp_call_private()
-Message-ID: <YmXJ0q24kaxtG1R5@dev-arch.thelio-3990X>
-References: <20220422200040.93813-6-dqiao@redhat.com>
- <202204231532.nXbSK9Tk-lkp@intel.com>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Palmer Dabbelt <palmerdabbelt@google.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+Message-ID: <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,48 +33,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202204231532.nXbSK9Tk-lkp@intel.com>
+In-Reply-To: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
 
-On Sat, Apr 23, 2022 at 03:30:18PM +0800, kernel test robot wrote:
-> Hi Donghai,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on powerpc/next]
-> [also build test WARNING on rafael-pm/linux-next linus/master v5.18-rc3 next-20220422]
-> [cannot apply to tip/x86/core]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220423/202204231532.nXbSK9Tk-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/3b8a90029bebdb77e2d5c0cd16f371e83d8ed2e8
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Donghai-Qiao/smp-cross-CPU-call-interface/20220423-060436
->         git checkout 3b8a90029bebdb77e2d5c0cd16f371e83d8ed2e8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> block/blk-mq.c:1065:39: warning: passing 4-byte aligned argument to 16-byte aligned parameter 2 of 'smp_call_private' may result in an unaligned pointer access [-Walign-mismatch]
->                    smp_call_function_single_async(cpu, &rq->csd);
->                                                        ^
->    1 warning generated.
+Hi Vincent,
 
-This warning was fixed by commit 1139aeb1c521 ("smp: Fix
-smp_call_function_single_async prototype"), which is undone by this
-proposed change, hence the warning.
+On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
+> The macros defined in this file are for testing only and are purposely
+> not used. When compiled with W=2, both gcc and clang yield some
+> -Wunused-macros warnings. Ignore them.
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+The change itself looks fine but a couple of comments:
+
+1. Nick and I do not pick up patches, we rely on others to do so.
+   Additionally, this is not really something within our domain, despite
+   what get_maintainer.pl might say. This change should be sent to
+   either
+
+   Masahiro Yamada <masahiroy@kernel.org>
+   linux-kbuild@vger.kernel.org
+
+   or
+
+   Andrew Morton <akpm@linux-foundation.org>
+
+   so that it can be applied by one of them.
+
+2. I am not sure that silencing warnings from W=2 is that useful, as
+   they are unlikely to be real issues. Not to discourage you by any
+   means but it might be more useful to focus on cleaning up warnings
+   from W=1 and getting those promoted to regular build warnings.
 
 Cheers,
 Nathan
+
+> ---
+>  scripts/checksyscalls.sh | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> index 9dbab13329fa..cde15f22ec98 100755
+> --- a/scripts/checksyscalls.sh
+> +++ b/scripts/checksyscalls.sh
+> @@ -255,6 +255,7 @@ cat << EOF
+>  /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+>  #define __IGNORE_fstat64
+>  #define __IGNORE_fstatat64
+> +
+>  EOF
+>  }
+>  
+> @@ -268,4 +269,4 @@ syscall_list() {
+>  }
+>  
+>  (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
+> -$* -Wno-error -E -x c - > /dev/null
+> +$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
+> -- 
+> 2.35.1
+> 
