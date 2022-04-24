@@ -1,46 +1,58 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DD517EA;
-	Sun, 24 Apr 2022 14:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B7E2F2F
+	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 15:21:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650811305; x=1682347305;
+  t=1650813708; x=1682349708;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3qakcHWEZbb/tE6ZLoH7UT+OIS/LUOLJ19s9X3V6mpY=;
-  b=chyphFfvpz3jGI5k+b4nN+ERECMEWjWpWeK54j5+hW0ioAe65C/gL8Hv
-   THuqWiPJaOl0gBV4WSzpECc5M5Ur6KAvJMlhgwCN96540K7VGwWKYeNcu
-   YYg0dkLF+XahRiyulOKunIrKJdA59PvbIS+n40RhgcHWwzgPC82ylbpEC
-   eOo24nDLafKLKWg140LtiMd4P+zkuEhqfMAsr8iqHSmz8zK0ergiOeYcY
-   dfw6PJ3PJEr5DCnq9guH8ktMzukSvPsEaA2jz81m0gosiuRlxuNmj0suW
-   UTwLrLIj+byyF3ZEZQbSWKRvnnC65LiIk4VMewG5I1ktecFaIuG8r3TH6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="263899695"
+  bh=eIHnhfDbluDI+XDea6eH7Q41SXR8SjqhHXj2rb5GifQ=;
+  b=WUbwrZ49NnErsKBOnifotus72l0aaGaE4HqunF0B0lIfQQNHCvaXFgi5
+   alqZfkcT1vUetMVK8QrPXe/X6xr8UL42tewoTGdXo6fYiyFprMqcghyT4
+   ltQBnaoJqoHZlYnUC8C4B52eAdocI5SSl92M41fp9/BSxhok+n+cP/ZPF
+   D9+Wf56o9KZ0VLaVlVT32ZNTthSHA1L6nz+tNNIVA+11jjELYYQ9AJayM
+   MAGcPPuYbA6r7Hdb37uVJi7Qvq1Q8ZicRGyXu2TdAJulBSZmCfKR2+bOx
+   YiH5ZGMt8MJdmYiGKjHYlL1/4jgRI03AGlyWZgvr4vR4MTkkDsTm5Gu8X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="264844817"
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="263899695"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 07:41:44 -0700
+   d="scan'208";a="264844817"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 08:21:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,286,1643702400"; 
-   d="scan'208";a="704223679"
+   d="scan'208";a="616149527"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 07:41:42 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 24 Apr 2022 08:21:43 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nidQk-0001Wr-6u;
-	Sun, 24 Apr 2022 14:41:42 +0000
-Date: Sun, 24 Apr 2022 22:40:52 +0800
+	id 1nie3T-0001Yh-9I;
+	Sun, 24 Apr 2022 15:21:43 +0000
+Date: Sun, 24 Apr 2022 23:21:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-	Forest Bond <forest@alittletooquiet.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 4/5] staging: vt6655: Replace two VNSvInPortD with
- ioread64_lo_hi
-Message-ID: <202204242226.Y6Amb3he-lkp@intel.com>
-References: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
+To: David Matlack <dmatlack@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sean Christopherson <seanjc@google.com>,
+	Andrew Jones <drjones@redhat.com>, Ben Gardon <bgardon@google.com>,
+	Peter Xu <peterx@redhat.com>, maciej.szmigiero@oracle.com,
+	"moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" <kvmarm@lists.cs.columbia.edu>,
+	"open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" <linux-mips@vger.kernel.org>,
+	"open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" <kvm-riscv@lists.infradead.org>,
+	Peter Feiner <pfeiner@google.com>,
+	David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v4 19/20] KVM: Allow for different capacities in
+ kvm_mmu_memory_cache structs
+Message-ID: <202204242355.T1SzNT9S-lkp@intel.com>
+References: <20220422210546.458943-20-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,74 +61,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <db5ba681cea27de815b172f8b93a8fd1efa30e99.1650784817.git.philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220422210546.458943-20-dmatlack@google.com>
 
-Hi Philipp,
+Hi David,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on staging/staging-testing]
+[auto build test ERROR on 150866cd0ec871c765181d145aa0912628289c8a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 1efba7ef1d7da5944493728c5375fef5b2130de4
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220424/202204242226.Y6Amb3he-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
+base:   150866cd0ec871c765181d145aa0912628289c8a
+config: riscv-randconfig-r016-20220424 (https://download.01.org/0day-ci/archive/20220424/202204242355.T1SzNT9S-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/871c5afc76a6f414c03f433d06bacfd928910b1b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Philipp-Hortmann/staging-vt6655-Replace-macro-VNSvInPortW-D-with-ioread16-32/20220424-154730
-        git checkout 6e7e66f536e6d9d9eef8e7786de652b2702e1ee8
+        git fetch --no-tags linux-review David-Matlack/KVM-Extend-Eager-Page-Splitting-to-the-shadow-MMU/20220423-062108
+        git checkout 871c5afc76a6f414c03f433d06bacfd928910b1b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/vt6655/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/staging/vt6655/card.c:757:16: error: call to undeclared function 'ioread64_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           *pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
-                         ^
-   1 error generated.
+>> arch/riscv/kvm/mmu.c:364:43: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
+                   ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
+                                                     ~~~~~ ^
+   arch/riscv/kvm/mmu.c:369:39: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
+                   ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
+                                                 ~~~~~ ^
+   arch/riscv/kvm/mmu.c:378:35: error: no member named 'cache' in 'struct kvm_mmu_memory_cache'
+           kvm_mmu_free_memory_cache(&cache.cache);
+                                      ~~~~~ ^
+   3 errors generated.
 
 
-vim +/ioread64_lo_hi +757 drivers/staging/vt6655/card.c
+vim +364 arch/riscv/kvm/mmu.c
 
-   730	
-   731	/*
-   732	 * Description: Read NIC TSF counter
-   733	 *              Get local TSF counter
-   734	 *
-   735	 * Parameters:
-   736	 *  In:
-   737	 *      priv         - The adapter to be read
-   738	 *  Out:
-   739	 *      qwCurrTSF       - Current TSF counter
-   740	 *
-   741	 * Return Value: true if success; otherwise false
-   742	 */
-   743	bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
-   744	{
-   745		void __iomem *iobase = priv->port_offset;
-   746		unsigned short ww;
-   747		unsigned char data;
-   748	
-   749		MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
-   750		for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-   751			data = ioread8(iobase + MAC_REG_TFTCTL);
-   752			if (!(data & TFTCTL_TSFCNTRRD))
-   753				break;
-   754		}
-   755		if (ww == W_MAX_TIMEOUT)
-   756			return false;
- > 757		*pqwCurrTSF = ioread64_lo_hi(iobase + MAC_REG_TSFCNTR);
-   758	
-   759		return true;
-   760	}
-   761	
+   342	
+   343	static int stage2_ioremap(struct kvm *kvm, gpa_t gpa, phys_addr_t hpa,
+   344				  unsigned long size, bool writable)
+   345	{
+   346		pte_t pte;
+   347		int ret = 0;
+   348		unsigned long pfn;
+   349		phys_addr_t addr, end;
+   350		struct kvm_mmu_memory_cache cache = {
+   351			.capacity = KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE,
+   352			.gfp_zero = __GFP_ZERO,
+   353		};
+   354	
+   355		end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
+   356		pfn = __phys_to_pfn(hpa);
+   357	
+   358		for (addr = gpa; addr < end; addr += PAGE_SIZE) {
+   359			pte = pfn_pte(pfn, PAGE_KERNEL);
+   360	
+   361			if (!writable)
+   362				pte = pte_wrprotect(pte);
+   363	
+ > 364			ret = kvm_mmu_topup_memory_cache(&cache.cache, stage2_pgd_levels);
+   365			if (ret)
+   366				goto out;
+   367	
+   368			spin_lock(&kvm->mmu_lock);
+   369			ret = stage2_set_pte(kvm, 0, &cache.cache, addr, &pte);
+   370			spin_unlock(&kvm->mmu_lock);
+   371			if (ret)
+   372				goto out;
+   373	
+   374			pfn++;
+   375		}
+   376	
+   377	out:
+   378		kvm_mmu_free_memory_cache(&cache.cache);
+   379		return ret;
+   380	}
+   381	
 
 -- 
 0-DAY CI Kernel Test Service
