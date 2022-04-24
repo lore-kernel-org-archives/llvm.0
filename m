@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FE92F2F
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 16:11:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75579C385A9;
-	Sun, 24 Apr 2022 16:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A307A;
+	Sun, 24 Apr 2022 17:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DEA5C385A7;
+	Sun, 24 Apr 2022 17:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650816714;
-	bh=YiYXYzRSpHzJ4KkdlWiqMrx9Vbpw7WloumtFplX+OSk=;
+	s=k20201202; t=1650821494;
+	bh=jjxwm4sbDuaBN4rFT9BE+jraiy9tujTIunLpi1T1TEI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KTa3ffL6TnJHyN9dYx7EuobbIftflmIdF9QCKHAT534B/sZ6fKuErA69hNA8BP2Rv
-	 /FNS1d1g+FQqUagwKdWRbfNCOJ4oCsPV3WneMiWLhGnzvmDCYFAzIpEZ0F7aU6BwXp
-	 Q/FCE1oBaLnofD4R5CPbyO7N8fLoFRQaJ0VTgKEdop00ULF0aNUJmnYjbdI/9Essv+
-	 aXV2rGM0qfThuFjPUw8GSi5NdXPJJCB4yY3hpu3gvTL8PEw+Vw0x9zeunC9eP1934u
-	 ddNKWfjYFC08/vrlezNJ4Ooy6O43MIAmXff+xo3spDnmexITL8GZNSnaqgQuyFJN54
-	 +HjDccgLK9cpA==
-Date: Sun, 24 Apr 2022 17:20:02 +0100
+	b=bgGcfKBQJSA9ZTmvok+gWbgQBWcu8FBdj6HJ7gStN+DRw7spivYeG6PBklcWTaiSF
+	 XJcIqflG8yO9nabBJlZfoT23DGTVezq74ofTTQbWK/7oq24cyZ9X82IftHDg76WQuf
+	 9o2bCyLtV6Nti0ikA3P2/RlzeCMGfF/Hbl9fGDCtflaL3hGm1eGgEHUCPu/E/Ak2ml
+	 irUOx9E3zWAPLed9T3l2cnvouu0NT6glhQJxLcmWfC9EjPm/GTJlhKHG4T1Nz5YUxH
+	 f7bTrHsaXYymy1xORDRUE/7fsEmgd5D3Pc674vZHBqrIIWQctQf6S403EDync8Fwgu
+	 BsEu1G69WinVg==
+Date: Sun, 24 Apr 2022 18:39:40 +0100
 From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
- andy.shevchenko@gmail.com, llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] iio: accel: bma400: Add support for activity and
- inactivity events
-Message-ID: <20220424172002.7dd48dfa@jic23-huawei>
-In-Reply-To: <202204211211.febbJ6fy-lkp@intel.com>
-References: <20220420211105.14654-10-jagathjog1996@gmail.com>
-	<202204211211.febbJ6fy-lkp@intel.com>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-iio@vger.kernel.org,
+ linux-staging@lists.linux.dev, kernel-janitors@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] staging: iio: ad2s1210: remove redundant assignment to
+ variable negative
+Message-ID: <20220424183940.3b209ee5@jic23-huawei>
+In-Reply-To: <20220418134603.81336-1-colin.i.king@gmail.com>
+References: <20220418134603.81336-1-colin.i.king@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,152 +38,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 21 Apr 2022 14:45:05 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Mon, 18 Apr 2022 14:46:03 +0100
+Colin Ian King <colin.i.king@gmail.com> wrote:
 
-> Hi Jagath,
+> Variable negative is being assigned a value that is never read, it is
+> being re-assigned later. The assignment is redundant and can be removed.
 > 
-> Thank you for the patch! Perhaps something to improve:
+> Cleans up clang scan build warning:
+> drivers/staging/iio/resolver/ad2s1210.c:502:3: warning: Value stored
+> to 'negative' is never read [deadcode.DeadStores]
 > 
-> [auto build test WARNING on jic23-iio/togreg]
-> [also build test WARNING on linus/master v5.18-rc3 next-20220420]
-> [cannot apply to linux/master]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-> config: mips-randconfig-r031-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211211.febbJ6fy-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
->         git checkout b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/accel/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/iio/accel/bma400_core.c:1047:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]  
->                    field_value = FIELD_PREP(msk, state);
->                                  ^~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
->                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
->    include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
->                    if (!(condition))                                       \
->                          ^~~~~~~~~
->    drivers/iio/accel/bma400_core.c:1053:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->                    field_value = FIELD_PREP(msk, state);
->                                  ^~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
->                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
->                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
->    include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
->                    if (!(condition))                                       \
->                          ^~~~~~~~~
->    2 warnings generated.
-> 
-> 
-> vim +1047 drivers/iio/accel/bma400_core.c
-> 
->   1035	
->   1036	static int bma400_activity_event_en(struct bma400_data *data,
->   1037					    enum iio_event_direction dir,
->   1038					    int state)
->   1039	{
->   1040		int ret, reg, msk, value, field_value;
->   1041	
->   1042		switch (dir) {
->   1043		case IIO_EV_DIR_RISING:
->   1044			reg = BMA400_GEN1INT_CONFIG0;
->   1045			msk = BMA400_INT_GEN1_MSK;
->   1046			value = 2;
-> > 1047			field_value = FIELD_PREP(msk, state);
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Ah.  Will need to clamp state to 0/1
+Seems that someone decided to match again against the endian converted
+version so indeed this is pointless.
 
-				field_value = FIELD_PREP(msk, state ? 1 : 0);
-perhaps?
-  
->   1048			break;
->   1049		case IIO_EV_DIR_FALLING:
->   1050			reg = BMA400_GEN2INT_CONFIG0;
->   1051			msk = BMA400_INT_GEN2_MSK;
->   1052			value = 0;
->   1053			field_value = FIELD_PREP(msk, state);
->   1054			break;
->   1055		default:
->   1056			return -EINVAL;
->   1057		}
->   1058	
->   1059		/* Enabling all axis for interrupt evaluation */
->   1060		ret = regmap_write(data->regmap, reg, 0xF8);
->   1061		if (ret)
->   1062			return ret;
->   1063	
->   1064		/* OR combination of all axis for interrupt evaluation */
->   1065		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG1_OFF, value);
->   1066		if (ret)
->   1067			return ret;
->   1068	
->   1069		/* Initial value to avoid interrupts while enabling*/
->   1070		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF, 0x0A);
->   1071		if (ret)
->   1072			return ret;
->   1073	
->   1074		/* Initial duration value to avoid interrupts while enabling*/
->   1075		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG31_OFF, 0x0F);
->   1076		if (ret)
->   1077			return ret;
->   1078	
->   1079		ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG, msk,
->   1080					 field_value);
->   1081		if (ret)
->   1082			return ret;
->   1083	
->   1084		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG, msk,
->   1085					 field_value);
->   1086		if (ret)
->   1087			return ret;
->   1088	
->   1089		set_mask_bits(&data->generic_event_en, msk, field_value);
->   1090		return 0;
->   1091	}
->   1092	
+Applied to the togreg branch of iio.git and pushed out as testing for 0-day
+to see if it can find anything we missed.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/staging/iio/resolver/ad2s1210.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
+> diff --git a/drivers/staging/iio/resolver/ad2s1210.c b/drivers/staging/iio/resolver/ad2s1210.c
+> index 74adb82f37c3..c0b2716d0511 100644
+> --- a/drivers/staging/iio/resolver/ad2s1210.c
+> +++ b/drivers/staging/iio/resolver/ad2s1210.c
+> @@ -499,7 +499,6 @@ static int ad2s1210_read_raw(struct iio_dev *indio_dev,
+>  		ret = IIO_VAL_INT;
+>  		break;
+>  	case IIO_ANGL_VEL:
+> -		negative = st->rx[0] & 0x80;
+>  		vel = be16_to_cpup((__be16 *)st->rx);
+>  		vel >>= 16 - st->resolution;
+>  		if (vel & 0x8000) {
 
