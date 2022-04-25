@@ -1,142 +1,98 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FFD7C
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 08:18:22 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id D033460002;
-	Mon, 25 Apr 2022 08:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1650874695;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wUCFqZtEvrVs7Fx/crY2Dz8HfkvrR/d4IUi8U+8pLkU=;
-	b=O1J+Nn31pRNFQ7WJhWgfcJ2mPKDVdj6fsFZBhF8QQm4xkrzY7P3ocMlkW0ANhIlOZOy2Y1
-	4GrIqjQvnXYCGG7knPU6MjxOMlcf/4ID0tiSCfS7YJbSMUCHl51q4r/6oYiW/xP5Z060CC
-	VI2eG+vzC3stq1SlCe5dR4h+pf6r9CQd2snn+1miNiM8rX8YRwyrNwHw31UyamvsiyEDbP
-	KvMKiIirFI9VlDc/zLbR33fJO9LNNTUZDaMvah3FmhedaHi1RY0loUW7eGrjq86aI6Zqqj
-	FEpEEriuPamXsOevuRQ4jeIbMPwuLJfXtJb62Gkh4AU66YVnMAeY2TMCRb5+3g==
-Date: Mon, 25 Apr 2022 10:18:13 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Jean-Marc Eurin <jmeurin@google.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:mtd/next 10/11] drivers/mtd/mtdoops.c:244:39: warning:
- format specifies type 'long' but the argument has type 'unsigned int'
-Message-ID: <20220425101813.141844d7@xps13>
-In-Reply-To: <CAL3wywWoTkd927n7Uuc6KSxqUGcDZmx1+S+3cBEVXD6kdnFPUQ@mail.gmail.com>
-References: <202204212106.9R1ylUB7-lkp@intel.com>
-	<20220421154806.52e1992b@xps13>
-	<CAL3wywUBghrRqDgnPTe4g2XK8nkJkw+8H64f-NE6kNAwDC6JYw@mail.gmail.com>
-	<20220422111755.6b26ea9e@xps13>
-	<CAL3wywWoTkd927n7Uuc6KSxqUGcDZmx1+S+3cBEVXD6kdnFPUQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DDA7A
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 08:49:54 +0000 (UTC)
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1McIYO-1oJMAG3AUu-00chh7 for <llvm@lists.linux.dev>; Mon, 25 Apr 2022
+ 10:49:52 +0200
+Received: by mail-wm1-f51.google.com with SMTP id m15-20020a7bca4f000000b0038fdc1394b1so12029451wml.2
+        for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 01:49:52 -0700 (PDT)
+X-Gm-Message-State: AOAM532uYaCsCdCryKGaoCv1xvUD8Svb52Mf7wClC1EtJPgNgQBLYmWM
+	Kw5DgveBCgrb/3BQJjR5bDt2uTYOOQxmeAM7NPQ=
+X-Google-Smtp-Source: ABdhPJznBo55D1o0+WIRuh7wr97I06MCGT/Bj0IN0lqL0hSs0OuVvnsKvU+rzU5QmLcLYLe1/6Wmmx7p2/jDZLH/xxI=
+X-Received: by 2002:a05:600c:25c5:b0:38f:f0b9:4c8c with SMTP id
+ 5-20020a05600c25c500b0038ff0b94c8cmr16117479wml.20.1650876592353; Mon, 25 Apr
+ 2022 01:49:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
+ <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X> <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
+ <CAK8P3a31WAyh_vLqNwvv2GMcZ8SQp7gC=OV8c=Nc9pBtOSR8-g@mail.gmail.com> <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqL8G4uVn--Y5pBC+_c9Ex3Sjf8OJuVRwkVFFPwWd_ezLQ@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 25 Apr 2022 10:49:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+Message-ID: <CAK8P3a1_XoyjOPQ0ghku_QUjUL5V6BK9kSNUXoQj2RYaA=JxFg@mail.gmail.com>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Linux API <linux-api@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yxTvZ/99/RZX4b0Wi7TIWiv6OjD04lkBtYKoXSdWGqNEJKU0D//
+ LCq90gPng5yCsjdyXnPjVHtEdjbA5Aa2xjHnj0NyLlmP75NuIoAhcFAptdi+/B8JgXGRpXj
+ +i7CBIrGRDertMhtGMEYdFTFmr5dwFw2RIb2qsML7h4xw6gqW8CJSXjoIifxSPx8VHcQH2F
+ gOSG5LWRu/ceH5Zf5gR2g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JLeoHkG2KKg=:5+w1HjPKRbLrUTOEv4f9f9
+ jrnJN1WnPlbk6Tgife9smpwUlIoMTrKyIjxthxnL7iLMLX6e7sMKaPRljo5OL1LCqAW4I6GJ+
+ 2MBSHZqmgq0KcY2kc6XFrokV1CallcJWvFbw77mZRqV1w9O+2BfLKNWFBpxhs2Fy95IrDuP20
+ rhMjI83ZVT5FA0ZgVWZlYHjxufBgSuDSjkMQGxQFCyUFure9A+bgvNS5qjDOnFm5nkJY4Kz/w
+ V9GFEV7WQ74JefsG/rLQOruXDXdU39gfKv+0HXjsEAdNqsRa0cg1cAR4Z5wFP+tqm32op2G8f
+ sCkx+y6W5vH2/1FCgGxNPfBqOKQ2E/gjEiLr8QBlmZsX+IAebQStyRr/Yc5ohDCMZrs14q+1f
+ uyVOI5o1NOW0RVjpYLtEen0cGsc1FJrRhXqv0XZcOf4o+/vgSg9XAHj7nX7Yh1kDLcGBcgXD9
+ 5VMX4O+alKuCYZE65HthX3c/4ps08Q1VX2VFvdBlPiVgx36bhutH9HIU8VkUgzIs4U9K33YY9
+ BSVjZoYmZd9GznQae9M0i1ErrN0BG5RBQ5cNkerdom4oOrblIBAhkUbnac0SqEIADERy0ebNl
+ yjb4OFF7SbXnYmrWmBqegRL+v+QOO2NrdVbo7WVepTBYndYX/Q87t4dJ+M3IDCM8jKOPJidRU
+ 7RDQiXVtRVGn6ndoKpaV7+yPXFHEEXb3hxb/QVVdACAVHy8XUsxT+0Mkr/ouB8qzEJURQ6iR9
+ JNy3qZqVaZWMjeacGDFWfUTC0PSXImUmTRHyxF4jCR3nI068v34qEVCLP5eMoxvJTjHCG6wT7
+ 6jkix55yskiHkOE/aMdCMudbOEZyPmLBnplnHJv2+4hRSiu+kA=
 
-Hi Jean-Marc,
-
-jmeurin@google.com wrote on Fri, 22 Apr 2022 12:10:13 -0700:
-
-> Hi Miquel,
->=20
-> On Fri, Apr 22, 2022 at 2:17 AM Miquel Raynal <miquel.raynal@bootlin.com>=
- wrote:
-> >
-> > Hi Jean-Marc,
-> >
-> > jmeurin@google.com wrote on Thu, 21 Apr 2022 15:22:26 -0700:
-> > =20
-> > > On Thu, Apr 21, 2022 at 6:48 AM Miquel Raynal <miquel.raynal@bootlin.=
-com> wrote: =20
-> > > >
-> > > > Hi Jean-Marc,
-> > > >
-> > > > lkp@intel.com wrote on Thu, 21 Apr 2022 21:22:47 +0800:
-> > > > =20
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux=
-.git mtd/next
-> > > > > head:   f812679fab605b3d5b853ed24a81dabb222ea23a
-> > > > > commit: 0629fcef16d703d384f76cb2c2c3a119a9149a34 [10/11] mtd: mtd=
-oops: Create a header structure for the saved mtdoops.
-> > > > > config: hexagon-randconfig-r045-20220420 (https://download.01.org=
-/0day-ci/archive/20220421/202204212106.9R1ylUB7-lkp@intel.com/config)
-> > > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-proj=
-ect bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> > > > > reproduce (this is a W=3D1 build):
-> > > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/ma=
-ster/sbin/make.cross -O ~/bin/make.cross
-> > > > >         chmod +x ~/bin/make.cross
-> > > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/lin=
-ux.git/commit/?id=3D0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > > > >         git remote add mtd https://git.kernel.org/pub/scm/linux/k=
-ernel/git/mtd/linux.git
-> > > > >         git fetch --no-tags mtd mtd/next
-> > > > >         git checkout 0629fcef16d703d384f76cb2c2c3a119a9149a34
-> > > > >         # save the config file
-> > > > >         mkdir build_dir && cp config build_dir/.config
-> > > > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/
-> > > > >
-> > > > > If you fix the issue, kindly add following tag as appropriate
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > >
-> > > > > All warnings (new ones prefixed by >>):
-> > > > > =20
-> > > > > >> drivers/mtd/mtdoops.c:244:39: warning: format specifies type '=
-long' but the argument has type 'unsigned int' [-Wformat] =20
-> > > > >                                   page * record_size, retlen, siz=
-eof(hdr), ret);
-> > > > >                                                               ^~~=
-~~~~~~~~
-> > > > >    include/linux/printk.h:446:60: note: expanded from macro 'prin=
-tk'
-> > > > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__V=
-A_ARGS__)
-> > > > >                                                        ~~~    ^~~=
-~~~~~~~~
-> > > > >    include/linux/printk.h:418:19: note: expanded from macro 'prin=
-tk_index_wrap'
-> > > > >                    _p_func(_fmt, ##__VA_ARGS__);                 =
-          \
-> > > > >                            ~~~~    ^~~~~~~~~~~
-> > > > >    1 warning generated. =20
-> > > >
-> > > > I've dropped the series for now. Please have a look at the reports =
-and
-> > > > propose a new version when this is fixed? =20
+On Mon, Apr 25, 2022 at 9:42 AM Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Mon. 25 Apr 2022 at 15:50, Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Mon, Apr 25, 2022 at 8:17 AM Vincent MAILHOL> <mailhol.vincent@wanad=
+oo.fr> wrote:
+> > > When I run W=3D2, I want to only see the warnings of the file I am
+> > > working on. So I find it useful to fix the W=3D2 warnings which
+> > > show up when building other files to not get spammed by
+> > > irrelevant issues and to simplify the triage.
 > > >
-> > > Sorry about that, I had made that change based on this suggestion
-> > > https://lore.kernel.org/all/202203310648.it4f2xXD-lkp@intel.com/ :-) =
-=20
+> > > My initial message lacked the rationale. I will add additional
+> > > explanations in the v2 of this patch.
 > >
-> > Did you verify with
-> > =20
-> > > > >         # save the config file
-> > > > >         mkdir build_dir && cp config build_dir/.config
-> > > > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mtd/ =20
+> > I agree this is worth fixing if we want to make W=3D2 have any meaning =
+at all.
 > >
-> > That the errors were actually gone? You seem to suggest that you didn't
-> > :) =20
->=20
-> I did run it. I believe the issue is because the field is a size_t so
-> when building 64 bits like the first bot on v2, the %ld suggestion
-> compiled but then it failed the hexagon build (which I'm guessing is
-> 32 bit).  Using %zu in v4 builds both versions (ARCH=3Dx86_64 and
-> hexagon).  I should have double checked the bot suggestion and noticed
-> this was a sizeof / size_t field, sorry about that.
+> > Your approach is probably fine. We could try to improve this by compari=
+ng
+> > against the list from include/uapi/asm-generic/unistd.h instead of the =
+i386
+> > list. I suppose that would involve rewriting the script into a simpler =
+one,
+> > but I'm not sure if anyone has an interest in working on this.
+>
+> If someone wants to do it, great, but I do not have the
+> confidence to do it myself so I hope you will forgive me for
+> taking a pass here.
 
-No problem at all, it often happens to me as well.
+Sure, no worries.
 
-Thanks,
-Miqu=C3=A8l
+> Another alternative I considered was to only call
+> checksyscalls.sh when doing a 'make all'. This way, we keep the
+> warning but people won=E2=80=99t be spammed when building sub projects
+> because the script would not be executed.
+
+Right, I like that as well, one less thing to be done for every
+iterative make as well. The syscall table really doesn't change
+all that much that this needs to be run by most developers.
+
+      Arnd
