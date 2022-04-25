@@ -1,95 +1,72 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529DC3201
-	for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 23:28:57 +0000 (UTC)
-X-UUID: 00ee9c86a97c4fefb6413aecf8b0bc94-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:70be6383-2c7f-43e8-bd62-9674791f3e6c,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:70be6383-2c7f-43e8-bd62-9674791f3e6c,OB:0,LOB:
-	0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-	N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:e410efef-06b0-4305-bfbf-554bfc9d151a,C
-	OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:-5,EDM:-3,File:n
-	il,QS:0,BEC:nil
-X-UUID: 00ee9c86a97c4fefb6413aecf8b0bc94-20220425
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-	(envelope-from <miles.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 2081701411; Mon, 25 Apr 2022 07:28:47 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 25 Apr 2022 07:28:45 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 07:28:45 +0800
-From: Miles Chen <miles.chen@mediatek.com>
-To: <lkp@intel.com>
-CC: <angelogioacchino.delregno@collabora.com>, <hverkuil@xs4all.nl>,
-	<iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
-	<kbuild-all@lists.01.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
-	<matthias.bgg@gmail.com>, <mchehab@kernel.org>, <miles.chen@mediatek.com>,
-	<will@kernel.org>, <yong.wu@mediatek.com>
-Subject: Re: [PATCH] iommu/mediatek: fix NULL pointer dereference when printing dev_name
-Date: Mon, 25 Apr 2022 07:28:45 +0800
-Message-ID: <20220424232845.25277-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <202204231446.IYKdZ674-lkp@intel.com>
-References: <202204231446.IYKdZ674-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500E37A
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:02:00 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id i24so13653305pfa.7
+        for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 21:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
+        b=dRi+fDayDSsY4PNuZojPnc78erUng+iTE61/if5JtS9deSN5Kue2wbhrHWwIRwJsw0
+         uRKEZZq2d0oQzKHVnCMa+BOIAhpyczU4b1XENcA2or9LBLCAtYiCZYYq11m9+wW1Xih0
+         verUXesH6xwXZ5u2pAD6egcZgQusy+7jzrSrE7OoiMcDDzSwFe8aMcoRWHp4fjNmTRmA
+         IKNo5CcXN7Ns1IIHoBFMPFPtkda9PFAsAnyKWLvDR6Sf2qaRswCR4XdyNaJFEehVfSPE
+         TKsXlCXUT4IcnDYXQGMWIITz1O+Mz2yFdi7ymEn16nHtPjZf9g17a2rf4RX2LI777YXb
+         JXGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
+        b=tzEwp/DhfNw1FpxNckodC4NL5Rqt3Yxw2YRnd3pQZO83v99bedgU8WfwyG7agbrAwR
+         J2KLjaJ4MI9q+qbNE2EDHafT90QBJvogbhUqHbRys96yxePTOvBZbEq5wa2AnM1PMReQ
+         d3itQbyBIrPH53SkB1N3IHf0hMQhSk8F7tnXDTDOFwvD1he0kIAq1rHcblOSwBjdqEPM
+         10FfFore6csfim8wC2IHKJdN/9FQEsj+lApkbrHdFk2BFLQ5c+qbcVZPW/C8b2eaHEOT
+         Eq7uN9eeb5P+i3R/jrhYncpv9m3okykEaePlK1yACGNps8OehhODfK0o8+ZDbYoGQccA
+         VEgg==
+X-Gm-Message-State: AOAM530wvfabVwRRpQIIPWWgdUp6upwkEpzJDsvhrKpQDj4yaJb/l4hp
+	6Am3g+epSYFwNU1sFxr55Ms=
+X-Google-Smtp-Source: ABdhPJx3mcsUbCjgVIlR76wYqJ8xMmU4F0udievDmHkC2+5Ct4NkT4XlJe7M5Vsc+lyReFF2m1CQvA==
+X-Received: by 2002:a63:fc18:0:b0:39c:f431:8310 with SMTP id j24-20020a63fc18000000b0039cf4318310mr13368460pgi.433.1650859319693;
+        Sun, 24 Apr 2022 21:01:59 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
+        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm8004385pgg.81.2022.04.24.21.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 21:01:58 -0700 (PDT)
+Date: Sun, 24 Apr 2022 21:01:56 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] Input: aiptek - remove redundant assignment to variable
+ ret
+Message-ID: <YmYdNLCRKZtuZG6D@google.com>
+References: <20220418142457.84708-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418142457.84708-1-colin.i.king@gmail.com>
 
->Hi Miles,
->
->Thank you for the patch! Perhaps something to improve:
->
->[auto build test WARNING on joro-iommu/next]
->[also build test WARNING on v5.18-rc3 next-20220422]
->[If your patch is applied to the wrong git tree, kindly drop us a note.
->And when submitting patch, we suggest to use '--base' as documented in
->https://git-scm.com/docs/git-format-patch]
->
->url:    https://github.com/intel-lab-lkp/linux/commits/Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
->base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
->config: hexagon-randconfig-r041-20220422 (https://download.01.org/0day-ci/archive/20220423/202204231446.IYKdZ674-lkp@intel.com/config)
->compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
->reproduce (this is a W=1 build):
->        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->        chmod +x ~/bin/make.cross
->        # https://github.com/intel-lab-lkp/linux/commit/85771767e503ca60069fe4e6ec2ddb80c7f9bafa
->        git remote add linux-review https://github.com/intel-lab-lkp/linux
->        git fetch --no-tags linux-review Miles-Chen/iommu-mediatek-fix-NULL-pointer-dereference-when-printing-dev_name/20220423-070605
->        git checkout 85771767e503ca60069fe4e6ec2ddb80c7f9bafa
->        # save the config file
->        mkdir build_dir && cp config build_dir/.config
->        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iommu/
->
->If you fix the issue, kindly add following tag as appropriate
->Reported-by: kernel test robot <lkp@intel.com>
->
->All warnings (new ones prefixed by >>):
->
->>> drivers/iommu/mtk_iommu.c:605:6: warning: variable 'larbdev' is uninitialized when used here [-Wuninitialized]
->           if (larbdev) {
->               ^~~~~~~
->   drivers/iommu/mtk_iommu.c:597:24: note: initialize the variable 'larbdev' to silence this warning
->           struct device *larbdev;
->                                 ^
->                                  = NULL
->   1 warning generated.
+On Mon, Apr 18, 2022 at 03:24:57PM +0100, Colin Ian King wrote:
+> Variable ret is being assigned a value that is never read, it is
+> being re-assigned again in either path of the if statement. The
+> assignment is redundant and can be removed.
+> 
+> Cleans up clang scan build warning:
+> Although the value stored to 'ret' is used in the enclosing expression,
+> the value is never actually read from 'ret' [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Thanks for catching this, I will fix this in next version.
+Applied, thank you.
 
-thanks,
-Miles
+-- 
+Dmitry
