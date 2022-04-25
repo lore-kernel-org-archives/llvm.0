@@ -1,72 +1,85 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500E37A
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:02:00 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id i24so13653305pfa.7
-        for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 21:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
-        b=dRi+fDayDSsY4PNuZojPnc78erUng+iTE61/if5JtS9deSN5Kue2wbhrHWwIRwJsw0
-         uRKEZZq2d0oQzKHVnCMa+BOIAhpyczU4b1XENcA2or9LBLCAtYiCZYYq11m9+wW1Xih0
-         verUXesH6xwXZ5u2pAD6egcZgQusy+7jzrSrE7OoiMcDDzSwFe8aMcoRWHp4fjNmTRmA
-         IKNo5CcXN7Ns1IIHoBFMPFPtkda9PFAsAnyKWLvDR6Sf2qaRswCR4XdyNaJFEehVfSPE
-         TKsXlCXUT4IcnDYXQGMWIITz1O+Mz2yFdi7ymEn16nHtPjZf9g17a2rf4RX2LI777YXb
-         JXGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XpqXUKQnBMu16RDI3lug4RWsduF9+QynmSZQ3BCqjAg=;
-        b=tzEwp/DhfNw1FpxNckodC4NL5Rqt3Yxw2YRnd3pQZO83v99bedgU8WfwyG7agbrAwR
-         J2KLjaJ4MI9q+qbNE2EDHafT90QBJvogbhUqHbRys96yxePTOvBZbEq5wa2AnM1PMReQ
-         d3itQbyBIrPH53SkB1N3IHf0hMQhSk8F7tnXDTDOFwvD1he0kIAq1rHcblOSwBjdqEPM
-         10FfFore6csfim8wC2IHKJdN/9FQEsj+lApkbrHdFk2BFLQ5c+qbcVZPW/C8b2eaHEOT
-         Eq7uN9eeb5P+i3R/jrhYncpv9m3okykEaePlK1yACGNps8OehhODfK0o8+ZDbYoGQccA
-         VEgg==
-X-Gm-Message-State: AOAM530wvfabVwRRpQIIPWWgdUp6upwkEpzJDsvhrKpQDj4yaJb/l4hp
-	6Am3g+epSYFwNU1sFxr55Ms=
-X-Google-Smtp-Source: ABdhPJx3mcsUbCjgVIlR76wYqJ8xMmU4F0udievDmHkC2+5Ct4NkT4XlJe7M5Vsc+lyReFF2m1CQvA==
-X-Received: by 2002:a63:fc18:0:b0:39c:f431:8310 with SMTP id j24-20020a63fc18000000b0039cf4318310mr13368460pgi.433.1650859319693;
-        Sun, 24 Apr 2022 21:01:59 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
-        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm8004385pgg.81.2022.04.24.21.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 21:01:58 -0700 (PDT)
-Date: Sun, 24 Apr 2022 21:01:56 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] Input: aiptek - remove redundant assignment to variable
- ret
-Message-ID: <YmYdNLCRKZtuZG6D@google.com>
-References: <20220418142457.84708-1-colin.i.king@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94467E
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:51:53 +0000 (UTC)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-04.nifty.com with ESMTP id 23P4inH4032005
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 13:44:49 +0900
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 23P4iaxo013244
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 13:44:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23P4iaxo013244
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1650861877;
+	bh=eXtnkq15f32F+dq4gvLxxREDloNqTab17KTvabJawdY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=0PT6vvPiMccgBL21PVKDbkrYYrkHF6hvriHDGpu/bG84+d/gTqmkHSUbF43W8lTj3
+	 K5aTL8jEqohOicko2BOlQygdCTXwL/XAw/Ku8ka7Ei6b0UeQSLcNRoVLfIh9OTrybB
+	 +uksMZClTTM67WyRQKkUfa3z+pMvzn857QDxkJmkTsshR0L4OdJW7ljYn0TbHE7AJE
+	 O+Q6rn5N1RWn1NIj4LIJEfXtQNpPCBC9mj/Jq9bs+/FzDwUv/bIXL+C4hFN75PyuE9
+	 f9buAz7YrObWC2aGnyr4E5IMRSZa+5Kx4nuDhzvOddQ90X6GzulCC4qmnHRHiJg6PZ
+	 B1tjsZRKZdXOg==
+X-Nifty-SrcIP: [209.85.215.179]
+Received: by mail-pg1-f179.google.com with SMTP id i62so250902pgd.6
+        for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 21:44:37 -0700 (PDT)
+X-Gm-Message-State: AOAM533Yw0GRKXrLU4MI3xDG9T7065gMn2GvONv2rvLlwwZIf3TUAZJk
+	WrD9wAKuQWoZxHW40C6YyoKhM3o0HAIVvZZkGoE=
+X-Google-Smtp-Source: ABdhPJx0G06+SVFeAfanWZgl4Wt1aq8jSyAW3//gm+gaqO8zChYq9THeWCes77xvYw4BxAmfT1sE3Kw9TcV5DS7Z7Dk=
+X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
+ j15-20020a056a00234f00b004faf52b46a1mr17038240pfj.32.1650861876491; Sun, 24
+ Apr 2022 21:44:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418142457.84708-1-colin.i.king@gmail.com>
+References: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+In-Reply-To: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 25 Apr 2022 13:43:35 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+Message-ID: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+Subject: Re: plumbers session on syscall wrapping and kernel header libc
+ circular depdence?
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Florian Weimer <fweimer@redhat.com>, Arnd Bergmann <arnd@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>, linux-toolchains@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Apr 18, 2022 at 03:24:57PM +0100, Colin Ian King wrote:
-> Variable ret is being assigned a value that is never read, it is
-> being re-assigned again in either path of the if statement. The
-> assignment is redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> Although the value stored to 'ret' is used in the enclosing expression,
-> the value is never actually read from 'ret' [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Hello Nick,
 
-Applied, thank you.
+Sorry for the late reply.
+
+On Sat, Apr 16, 2022 at 2:48 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Florian, Arnd, and Masahiro,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
+>
+> Would you all be interested in a session (if you're planning on
+> attending) discussing syscall wrapping for libc's and UAPI circular
+> dependency on the libc?
+>
+> Masahiro and I were recently discussing the feasibility of building
+> the kernel UAPI header tests with -nostdinc, but there are some
+> interesting complications perhaps worth sharing with others?
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+I am not sure about the travel at the moment.
+I may be able to attend it remotely if the the plumbers is held as a
+hybrid conference.
+
+I am not quite sure how many developers would be interested in this topic,
+but we can continue discussion in the ML as well.
 
 -- 
-Dmitry
+Best Regards
+Masahiro Yamada
