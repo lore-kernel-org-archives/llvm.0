@@ -1,190 +1,78 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0452562
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 15:27:34 +0000 (UTC)
-Received: by mail-io1-f42.google.com with SMTP id g21so16201733iom.13
-        for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 08:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nYsiunOUmFwZ8o8GT74juEfa6oLm3zN9Ibj3gVa3bhU=;
-        b=i77OZZbZby0nwayMxGseETzr9Nj7J6fX5a++xq03SVhVqRw1UzRVEFc2taTVeAwKIx
-         bpvm7uM3vRs39zX0rrxk5JDfUWPopToIhRBrDI+o4mAuHvh3vFBZupK5zorHVe/CmH+u
-         vyFzmNAsKrnn+xdUsiFFpZlPY+NZEygZg5XCeHV51KiCqTj00m5DiEP+e+DnYHXQHART
-         h1Zphjo3zCVJueWZVhkfeYvQk2BGyHdlT/ujK+BZc6F7STAC3GVIK4fd389QU+E3CWYZ
-         WgAQhDs9ANzbCD4mOfXtByWpJFFyk+yN6QxirF8aFCaVelBhgkxpLlYf5lARzkvP5tZT
-         cS0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nYsiunOUmFwZ8o8GT74juEfa6oLm3zN9Ibj3gVa3bhU=;
-        b=EzoXTQ1zB+V6xjhgo5MUFij/rj5SxaAa9d6CQd8rTMxhotj9K7LxrtZFXfgYhEINXS
-         Uwen8S2haG6InGATW5ES+8ngWDNu5RoURqgGJ/5gfM056TGhBg3pcOXIiKRooGyPLrBB
-         Znbn6LjN7UIpowPyBI+wPOBqiwGRIkZxY9gPUkzmUIS1CSKiz5/rh/71qQ7+AhiA9TbR
-         8PUmns4r2hm/7yHRzMii4L8I9XKTw2xiAB3fh3wm+wbSzGjoiXMIhUlkzHLHa7+FMXdc
-         VaoTZWF8jPvaWWh1lUbvb0a0MoKLii8Q93zWGfneVQJ31sAL5G6COcGN44M+u/1ypSS8
-         1q3g==
-X-Gm-Message-State: AOAM531sSp2GAS021NdnIrE2czSHRge+m3A5edpQaQvEtrWQsXBunCUn
-	e+m6S3hn/xsN24HSUlYoAaM=
-X-Google-Smtp-Source: ABdhPJzaOOhKV4BPWVeNOg0tWQ6bvh+gsUzBd/G0AXF40GnUFg0YdN6YZlGg+EFWAsS/57V61YrvNQ==
-X-Received: by 2002:a05:6638:1352:b0:321:547b:daa2 with SMTP id u18-20020a056638135200b00321547bdaa2mr7317700jad.128.1650900453788;
-        Mon, 25 Apr 2022 08:27:33 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id b11-20020a6be70b000000b00654b3a46b5esm7499151ioh.53.2022.04.25.08.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 08:27:33 -0700 (PDT)
-Message-ID: <7faa6c9a-9ace-d1eb-0bca-8e8d7c3ae7ec@gmail.com>
-Date: Mon, 25 Apr 2022 17:27:27 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457772562
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 15:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650901399; x=1682437399;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=ncHMbBZ4m83sEc5SDGrjDhVdY42YZNX4BucyWDrc6kw=;
+  b=kmEZVHrfozihcs774f3dYiv7kFuHR6r14Cmdvfi0TfwRxvBFJvGtS2VJ
+   jtznvAvK+mjDZN3YYp01HK2qgvneO0394t13WXKMW0R1eFLgadmXlj70g
+   LEVgVYzG+WpxdE1MhyAf/q3xVZxQ2Cj3372Pw3hi47McPiOkOP9IOCHqZ
+   fdcQtfrIXzSEobtKRdSzUYIldZKkaWadtqC1eupxsSTrLFpPhBI04Rm5c
+   tIVqD/hFshHhFJeKcaXo4Oelji2607/CzJN00d6yZKSdkVpHSccAqXJw9
+   fsycRl4ybFpbkCSdkwK8A0Wg/aLqRLBpyQgVPLtrDbTfFjvNfbm09vjmr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265085539"
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="265085539"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:43:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
+   d="scan'208";a="537645272"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 Apr 2022 08:43:17 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nj0rt-0002dP-4P;
+	Mon, 25 Apr 2022 15:43:17 +0000
+Date: Mon, 25 Apr 2022 23:42:46 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: fs/jffs2/erase.o: warning: objtool: jffs2_erase_pending_blocks()
+ falls through to next function jffs2_free_jeb_node_refs()
+Message-ID: <202204252337.y1E8EFDh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v17 11/21] drm/mediatek: add display merge start/stop API
- for cmdq support
-Content-Language: en-US
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux@roeck-us.net, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "jason-jh . lin" <jason-jh.lin@mediatek.com>,
- Yongqiang Niu <yongqiang.niu@mediatek.com>, DTML
- <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- DRI Development <dri-devel@lists.freedesktop.org>, llvm@lists.linux.dev,
- singo.chang@mediatek.com, srv_heupstream <srv_heupstream@mediatek.com>,
- Project_Global_Chrome_Upstream_Group
- <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20220416020749.29010-1-nancy.lin@mediatek.com>
- <20220416020749.29010-12-nancy.lin@mediatek.com>
- <2cd07faf-e903-e55b-85c1-ce7a823ddb8b@gmail.com>
- <CAAOTY_8Ei1e+Y==y+e7LoHBH3-SZEiz4M0SSqecRfWVMsLKH3Q@mail.gmail.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAAOTY_8Ei1e+Y==y+e7LoHBH3-SZEiz4M0SSqecRfWVMsLKH3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Josh Poimboeuf <jpoimboe@redhat.com>
+CC: Ingo Molnar <mingo@kernel.org>
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   af2d861d4cd2a4da5137f795ee3509e6f944a25b
+commit: e6f393bc939d566ce3def71232d8013de9aaadde objtool: Fix function fallthrough detection
+date:   2 years, 11 months ago
+config: x86_64-randconfig-a005-20220425 (https://download.01.org/0day-ci/archive/20220425/202204252337.y1E8EFDh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e6f393bc939d566ce3def71232d8013de9aaadde
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e6f393bc939d566ce3def71232d8013de9aaadde
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-On 25/04/2022 15:32, Chun-Kuang Hu wrote:
-> Hi, Matthias:
-> 
-> Matthias Brugger <matthias.bgg@gmail.com> 於 2022年4月22日 週五 下午7:48寫道：
->>
->>
->>
->> On 16/04/2022 04:07, Nancy.Lin wrote:
->>> Add merge start/stop API for cmdq support. The ovl_adaptor merges
->>> are configured with each drm plane update. Need to enable/disable
->>> merge with cmdq making sure all the settings taken effect in the
->>> same vblank.
->>>
->>> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
->>> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> ---
->>>    drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 ++
->>>    drivers/gpu/drm/mediatek/mtk_disp_merge.c | 20 +++++++++++++++++---
->>>    2 files changed, 19 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
->>> index 53aa988dde3b..43a412525b75 100644
->>> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
->>> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
->>> @@ -66,6 +66,8 @@ void mtk_merge_stop(struct device *dev);
->>>    void mtk_merge_advance_config(struct device *dev, unsigned int l_w, unsigned int r_w,
->>>                              unsigned int h, unsigned int vrefresh, unsigned int bpc,
->>>                              struct cmdq_pkt *cmdq_pkt);
->>> +void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
->>> +void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
->>>
->>>    void mtk_ovl_bgclr_in_on(struct device *dev);
->>>    void mtk_ovl_bgclr_in_off(struct device *dev);
->>> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
->>> index 40da0555416d..c0d9b43b2a66 100644
->>> --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
->>> +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
->>> @@ -67,17 +67,31 @@ struct mtk_disp_merge {
->>>    };
->>>
->>>    void mtk_merge_start(struct device *dev)
->>
->> Probably not my call, but wouldn't it make sense to enhance mtk_merge_start to
->> pass 'struct cmdq_pkt *cmdq_pkt' directly instead of adding this 'adapter'?
-> 
-> In [1], mtk_merge_start() should match the function prototype of
-> mtk_ddp_comp_funcs.start, so keep the non-cmdq interface.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Well other callbacks, namely config hass cmdq_pkt. So we could change the 
-callback in a similar way is was done in
-d0afe37f5209 ("drm/mediatek: support CMDQ interface in ddp component")
+All warnings (new ones prefixed by >>):
 
+>> fs/jffs2/erase.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function jffs2_free_jeb_node_refs()
 
-But as i said it's up to you. You are the maintainer.
-
-Regards,
-Matthias
-
-> 
-> static const struct mtk_ddp_comp_funcs ddp_merge = {
->   .clk_enable = mtk_merge_clk_enable,
->   .clk_disable = mtk_merge_clk_disable,
->   .start = mtk_merge_start,
->   .stop = mtk_merge_stop,
->   .config = mtk_merge_config,
-> };
-> 
-> [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220419094143.9561-5-jason-jh.lin@mediatek.com/
-> 
-> Regards,
-> Chun-Kuang.
-> 
->>
->> In the end this is up to Chun-Kuang.
->>
->> Regards,
->> Matthias
->>
->>> +{
->>> +     mtk_merge_start_cmdq(dev, NULL);
->>> +}
->>> +
->>> +void mtk_merge_stop(struct device *dev)
->>>    {
->>>        struct mtk_disp_merge *priv = dev_get_drvdata(dev);
->>>
->>> -     writel(MERGE_EN, priv->regs + DISP_REG_MERGE_CTRL);
->>> +     mtk_merge_stop_cmdq(dev, NULL);
->>>    }
->>>
->>> -void mtk_merge_stop(struct device *dev)
->>> +void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
->>> +{
->>> +     struct mtk_disp_merge *priv = dev_get_drvdata(dev);
->>> +
->>> +     mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
->>> +                   DISP_REG_MERGE_CTRL);
->>> +}
->>> +
->>> +void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
->>>    {
->>>        struct mtk_disp_merge *priv = dev_get_drvdata(dev);
->>>
->>> -     writel(0x0, priv->regs + DISP_REG_MERGE_CTRL);
->>> +     mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
->>> +                   DISP_REG_MERGE_CTRL);
->>>    }
->>>
->>>    static void mtk_merge_fifo_setting(struct mtk_disp_merge *priv,
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
