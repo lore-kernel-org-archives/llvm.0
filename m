@@ -1,85 +1,189 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94467E
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 04:51:53 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-04.nifty.com with ESMTP id 23P4inH4032005
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 13:44:49 +0900
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 23P4iaxo013244
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 13:44:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23P4iaxo013244
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1650861877;
-	bh=eXtnkq15f32F+dq4gvLxxREDloNqTab17KTvabJawdY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=0PT6vvPiMccgBL21PVKDbkrYYrkHF6hvriHDGpu/bG84+d/gTqmkHSUbF43W8lTj3
-	 K5aTL8jEqohOicko2BOlQygdCTXwL/XAw/Ku8ka7Ei6b0UeQSLcNRoVLfIh9OTrybB
-	 +uksMZClTTM67WyRQKkUfa3z+pMvzn857QDxkJmkTsshR0L4OdJW7ljYn0TbHE7AJE
-	 O+Q6rn5N1RWn1NIj4LIJEfXtQNpPCBC9mj/Jq9bs+/FzDwUv/bIXL+C4hFN75PyuE9
-	 f9buAz7YrObWC2aGnyr4E5IMRSZa+5Kx4nuDhzvOddQ90X6GzulCC4qmnHRHiJg6PZ
-	 B1tjsZRKZdXOg==
-X-Nifty-SrcIP: [209.85.215.179]
-Received: by mail-pg1-f179.google.com with SMTP id i62so250902pgd.6
-        for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 21:44:37 -0700 (PDT)
-X-Gm-Message-State: AOAM533Yw0GRKXrLU4MI3xDG9T7065gMn2GvONv2rvLlwwZIf3TUAZJk
-	WrD9wAKuQWoZxHW40C6YyoKhM3o0HAIVvZZkGoE=
-X-Google-Smtp-Source: ABdhPJx0G06+SVFeAfanWZgl4Wt1aq8jSyAW3//gm+gaqO8zChYq9THeWCes77xvYw4BxAmfT1sE3Kw9TcV5DS7Z7Dk=
-X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
- j15-20020a056a00234f00b004faf52b46a1mr17038240pfj.32.1650861876491; Sun, 24
- Apr 2022 21:44:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D954F7E
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 05:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650863614; x=1682399614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kI+Eb3HXZmO8tMdYWAtqwTvLTzUUWhx8e2ynN6/5zlc=;
+  b=mxSqfOE9QTnjvsFala42EEz7Kx2N1f6TpkctYik4UW4BsbtVXvxHSqYX
+   yVADzsT13wKc7jhVf3nkQxf9cEEQEQu5kHZiMeW3MZ84myd4Noke8v92F
+   DWRneK3GLcupdZyZ9Xt+7czrcrGEdLwZrc3JDXtaFxiMzgBVhPxV7IZM4
+   j4y3MQ7yV19Vzz1xEZBnUg6Bfnmi8nmkXKiTVyG/fZaYuRl3phm1QZaYz
+   4YPfPq8dT08nG2cugWfGsNur3LRCO1KCobkVKNhX4i55HYWL2kPLC8opK
+   4a4hghNAfJxoMQfF2Jk1RCE4tFlgJ1wS9ue+ffc4DzENyN85Ehiun74zl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="290276386"
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="290276386"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:13:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
+   d="scan'208";a="704401579"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 22:13:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nir2P-0002AF-3Q;
+	Mon, 25 Apr 2022 05:13:29 +0000
+Date: Mon, 25 Apr 2022 13:12:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Collingbourne <pcc@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Peter Collingbourne <pcc@google.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
+	iamjoonsoo.kim@lge.com, rientjes@google.com,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	kasan-dev <kasan-dev@googlegroups.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3] mm: make minimum slab alignment a runtime property
+Message-ID: <202204251346.WbwgrNZw-lkp@intel.com>
+References: <20220422201830.288018-1-pcc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
-In-Reply-To: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 25 Apr 2022 13:43:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
-Message-ID: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
-Subject: Re: plumbers session on syscall wrapping and kernel header libc
- circular depdence?
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Florian Weimer <fweimer@redhat.com>, Arnd Bergmann <arnd@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>, linux-toolchains@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422201830.288018-1-pcc@google.com>
 
-Hello Nick,
+Hi Peter,
 
-Sorry for the late reply.
+Thank you for the patch! Yet something to improve:
 
-On Sat, Apr 16, 2022 at 2:48 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Hi Florian, Arnd, and Masahiro,
-> Jose and I are currently in the planning process to put together a
-> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> this year (Sept 12-14) in Dublin, Ireland.
->
-> Would you all be interested in a session (if you're planning on
-> attending) discussing syscall wrapping for libc's and UAPI circular
-> dependency on the libc?
->
-> Masahiro and I were recently discussing the feasibility of building
-> the kernel UAPI header tests with -nostdinc, but there are some
-> interesting complications perhaps worth sharing with others?
-> --
-> Thanks,
-> ~Nick Desaulniers
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
+base:   https://github.com/hnaz/linux-mm master
+config: arm64-buildonly-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220425/202204251346.WbwgrNZw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3aef97055dd4a480e05dff758164f153aaddbb49
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
+        git checkout 3aef97055dd4a480e05dff758164f153aaddbb49
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bounds.c:10:
+   In file included from include/linux/page-flags.h:10:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/arm64/include/asm/bug.h:26:
+   In file included from include/asm-generic/bug.h:22:
+   In file included from include/linux/printk.h:9:
+   In file included from include/linux/cache.h:6:
+   In file included from arch/arm64/include/asm/cache.h:56:
+   In file included from include/linux/kasan-enabled.h:5:
+   In file included from include/linux/static_key.h:1:
+>> include/linux/jump_label.h:285:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:291:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:313:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+>> include/linux/jump_label.h:316:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+                   ^
+   include/linux/jump_label.h:324:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           STATIC_KEY_CHECK_USE(key);
+           ^
+   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
+   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
+                                     ^
+   include/linux/jump_label.h:327:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   WARN_ON_ONCE(atomic_read(&key->enabled) != 0);
+                   ^
+   6 errors generated.
+   make[2]: *** [scripts/Makefile.build:122: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1283: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-I am not sure about the travel at the moment.
-I may be able to attend it remotely if the the plumbers is held as a
-hybrid conference.
+vim +/WARN +285 include/linux/jump_label.h
 
-I am not quite sure how many developers would be interested in this topic,
-but we can continue discussion in the ML as well.
+bf5438fca2950b Jason Baron     2010-09-17  282  
+c5905afb0ee655 Ingo Molnar     2012-02-24  283  static inline void static_key_slow_inc(struct static_key *key)
+d430d3d7e646eb Jason Baron     2011-03-16  284  {
+5cdda5117e125e Borislav Petkov 2017-10-18 @285  	STATIC_KEY_CHECK_USE(key);
+d430d3d7e646eb Jason Baron     2011-03-16  286  	atomic_inc(&key->enabled);
+d430d3d7e646eb Jason Baron     2011-03-16  287  }
+bf5438fca2950b Jason Baron     2010-09-17  288  
+c5905afb0ee655 Ingo Molnar     2012-02-24  289  static inline void static_key_slow_dec(struct static_key *key)
+bf5438fca2950b Jason Baron     2010-09-17  290  {
+5cdda5117e125e Borislav Petkov 2017-10-18  291  	STATIC_KEY_CHECK_USE(key);
+d430d3d7e646eb Jason Baron     2011-03-16  292  	atomic_dec(&key->enabled);
+bf5438fca2950b Jason Baron     2010-09-17  293  }
+bf5438fca2950b Jason Baron     2010-09-17  294  
+ce48c146495a1a Peter Zijlstra  2018-01-22  295  #define static_key_slow_inc_cpuslocked(key) static_key_slow_inc(key)
+ce48c146495a1a Peter Zijlstra  2018-01-22  296  #define static_key_slow_dec_cpuslocked(key) static_key_slow_dec(key)
+ce48c146495a1a Peter Zijlstra  2018-01-22  297  
+4c3ef6d79328c0 Jason Baron     2010-09-17  298  static inline int jump_label_text_reserved(void *start, void *end)
+4c3ef6d79328c0 Jason Baron     2010-09-17  299  {
+4c3ef6d79328c0 Jason Baron     2010-09-17  300  	return 0;
+4c3ef6d79328c0 Jason Baron     2010-09-17  301  }
+4c3ef6d79328c0 Jason Baron     2010-09-17  302  
+91bad2f8d30574 Jason Baron     2010-10-01  303  static inline void jump_label_lock(void) {}
+91bad2f8d30574 Jason Baron     2010-10-01  304  static inline void jump_label_unlock(void) {}
+91bad2f8d30574 Jason Baron     2010-10-01  305  
+d430d3d7e646eb Jason Baron     2011-03-16  306  static inline int jump_label_apply_nops(struct module *mod)
+d430d3d7e646eb Jason Baron     2011-03-16  307  {
+d430d3d7e646eb Jason Baron     2011-03-16  308  	return 0;
+d430d3d7e646eb Jason Baron     2011-03-16  309  }
+b202952075f626 Gleb Natapov    2011-11-27  310  
+e33886b38cc82a Peter Zijlstra  2015-07-24  311  static inline void static_key_enable(struct static_key *key)
+e33886b38cc82a Peter Zijlstra  2015-07-24  312  {
+5cdda5117e125e Borislav Petkov 2017-10-18  313  	STATIC_KEY_CHECK_USE(key);
+e33886b38cc82a Peter Zijlstra  2015-07-24  314  
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  315  	if (atomic_read(&key->enabled) != 0) {
+1dbb6704de91b1 Paolo Bonzini   2017-08-01 @316  		WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  317  		return;
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  318  	}
+1dbb6704de91b1 Paolo Bonzini   2017-08-01  319  	atomic_set(&key->enabled, 1);
+e33886b38cc82a Peter Zijlstra  2015-07-24  320  }
+e33886b38cc82a Peter Zijlstra  2015-07-24  321  
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
