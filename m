@@ -1,189 +1,103 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D954F7E
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 05:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650863614; x=1682399614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kI+Eb3HXZmO8tMdYWAtqwTvLTzUUWhx8e2ynN6/5zlc=;
-  b=mxSqfOE9QTnjvsFala42EEz7Kx2N1f6TpkctYik4UW4BsbtVXvxHSqYX
-   yVADzsT13wKc7jhVf3nkQxf9cEEQEQu5kHZiMeW3MZ84myd4Noke8v92F
-   DWRneK3GLcupdZyZ9Xt+7czrcrGEdLwZrc3JDXtaFxiMzgBVhPxV7IZM4
-   j4y3MQ7yV19Vzz1xEZBnUg6Bfnmi8nmkXKiTVyG/fZaYuRl3phm1QZaYz
-   4YPfPq8dT08nG2cugWfGsNur3LRCO1KCobkVKNhX4i55HYWL2kPLC8opK
-   4a4hghNAfJxoMQfF2Jk1RCE4tFlgJ1wS9ue+ffc4DzENyN85Ehiun74zl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10327"; a="290276386"
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="290276386"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2022 22:13:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,287,1643702400"; 
-   d="scan'208";a="704401579"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Apr 2022 22:13:29 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nir2P-0002AF-3Q;
-	Mon, 25 Apr 2022 05:13:29 +0000
-Date: Mon, 25 Apr 2022 13:12:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Peter Collingbourne <pcc@google.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
-	iamjoonsoo.kim@lge.com, rientjes@google.com,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	kasan-dev <kasan-dev@googlegroups.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3] mm: make minimum slab alignment a runtime property
-Message-ID: <202204251346.WbwgrNZw-lkp@intel.com>
-References: <20220422201830.288018-1-pcc@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3677E
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 06:17:40 +0000 (UTC)
+Received: by mail-yb1-f180.google.com with SMTP id m128so7267322ybm.5
+        for <llvm@lists.linux.dev>; Sun, 24 Apr 2022 23:17:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PCtKQYSTps0VrLDUq04agqNEXmphYahJ7hA7Tsk3PTM=;
+        b=xmgI3GlWs6Rk6xKPI/tcCK4csntqVoAoP7JRqaBpllY+Jzsru5LDACZ+ytbMq+BlrN
+         gU0YUaxaES0x/bq63pnO4SnQAQmv7rcYda8Z33CXsN96lC+3nDKdZQ1Fmy+tZ8CCZ+c1
+         3lc90n++hDsZ1c/L8/K35hiyvg1lPawVmjGOoJKrOuGAmTv1veZ3Ac+FXN+GS5K3lUtR
+         sX+qlrgi90P14509bbRC81qQ4slJwnL6H7eg3j3aFg8KhG5PqV+ASYTjAdPLQgHFMjPr
+         iM/J81qg8iO2NiJaYvW10+UyfYYsmMKUtMMOB3E+BxXv4nLd6zsa1bdnRDd90U4WBUPt
+         Lw7w==
+X-Gm-Message-State: AOAM533nr7EYfJu2/sTYekZvlWAaPUerAW6LzZ+htHsOyjyMdDXYripr
+	D3W1nrAlSCS7WmE3ORszeZjAoNsZq/3m4aVo8JI=
+X-Google-Smtp-Source: ABdhPJwZwQAaQ5egYyYjlBDWprpUmMiY8C08pHkGK7L97GUxtWa3ijJqZPpDBUDSxZiWSdAjFcDdwIhK2lar/ppEDE0=
+X-Received: by 2002:a25:76c6:0:b0:648:5616:ca50 with SMTP id
+ r189-20020a2576c6000000b006485616ca50mr4091431ybc.423.1650867460065; Sun, 24
+ Apr 2022 23:17:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422201830.288018-1-pcc@google.com>
+References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr> <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
+In-Reply-To: <YmXMiTXEvFXZ/swU@dev-arch.thelio-3990X>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Mon, 25 Apr 2022 15:17:29 +0900
+Message-ID: <CAMZ6Rq+3XOze01dZZRTe+V44N2uo5J_=rtd9bKH7d7Fq9sNxVw@mail.gmail.com>
+Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Peter,
+Hi Nathan,
 
-Thank you for the patch! Yet something to improve:
+Thanks for the comments!
 
-[auto build test ERROR on hnaz-mm/master]
+On Mon. 25 Apr 2022 at 07:17, Nathan Chancellor <nathan@kernel.org> wrote:
+> Hi Vincent,
+>
+> On Sat, Apr 23, 2022 at 12:17:25AM +0900, Vincent Mailhol wrote:
+> > The macros defined in this file are for testing only and are purposely
+> > not used. When compiled with W=2, both gcc and clang yield some
+> > -Wunused-macros warnings. Ignore them.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> The change itself looks fine but a couple of comments:
+>
+> 1. Nick and I do not pick up patches, we rely on others to do so.
+>    Additionally, this is not really something within our domain, despite
+>    what get_maintainer.pl might say. This change should be sent to
+>    either
+>
+>    Masahiro Yamada <masahiroy@kernel.org>
+>    linux-kbuild@vger.kernel.org
+>
+>    or
+>
+>    Andrew Morton <akpm@linux-foundation.org>
+>
+>    so that it can be applied by one of them.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
-base:   https://github.com/hnaz/linux-mm master
-config: arm64-buildonly-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220425/202204251346.WbwgrNZw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3aef97055dd4a480e05dff758164f153aaddbb49
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peter-Collingbourne/mm-make-minimum-slab-alignment-a-runtime-property/20220423-042024
-        git checkout 3aef97055dd4a480e05dff758164f153aaddbb49
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+Ack. As you pointed out, I indeed just followed get_maintainer.pl.
+I will resend a v2 to the people you pointed out (and exclude you).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 2. I am not sure that silencing warnings from W=2 is that useful, as
+>    they are unlikely to be real issues. Not to discourage you by any
+>    means but it might be more useful to focus on cleaning up warnings
+>    from W=1 and getting those promoted to regular build warnings.
 
-All errors (new ones prefixed by >>):
+Normally I agree, but there is one reason to fix this W=2: this
+warning appears when building other files.
 
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm64/include/asm/bug.h:26:
-   In file included from include/asm-generic/bug.h:22:
-   In file included from include/linux/printk.h:9:
-   In file included from include/linux/cache.h:6:
-   In file included from arch/arm64/include/asm/cache.h:56:
-   In file included from include/linux/kasan-enabled.h:5:
-   In file included from include/linux/static_key.h:1:
->> include/linux/jump_label.h:285:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           STATIC_KEY_CHECK_USE(key);
-           ^
-   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
-   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
-                                     ^
-   include/linux/jump_label.h:291:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           STATIC_KEY_CHECK_USE(key);
-           ^
-   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
-   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
-                                     ^
-   include/linux/jump_label.h:313:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           STATIC_KEY_CHECK_USE(key);
-           ^
-   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
-   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
-                                     ^
->> include/linux/jump_label.h:316:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
-                   ^
-   include/linux/jump_label.h:324:2: error: call to undeclared function 'WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           STATIC_KEY_CHECK_USE(key);
-           ^
-   include/linux/jump_label.h:81:35: note: expanded from macro 'STATIC_KEY_CHECK_USE'
-   #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
-                                     ^
-   include/linux/jump_label.h:327:3: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   WARN_ON_ONCE(atomic_read(&key->enabled) != 0);
-                   ^
-   6 errors generated.
-   make[2]: *** [scripts/Makefile.build:122: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1283: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Example:
+| $ make W=2 drivers/net/dummy.o
+|   CALL    scripts/checksyscalls.sh
+| <stdin>:21: warning: macro "__IGNORE_stat64" is not used [-Wunused-macros]
+| <stdin>:22: warning: macro "__IGNORE_lstat64" is not used [-Wunused-macros]
+| <stdin>:75: warning: macro "__IGNORE_llseek" is not used [-Wunused-macros]
+| <stdin>:159: warning: macro "__IGNORE_madvise1" is not used [-Wunused-macros]
+(rest of the output redacted).
+
+When I run W=2, I want to only see the warnings of the file I am
+working on. So I find it useful to fix the W=2 warnings which
+show up when building other files to not get spammed by
+irrelevant issues and to simplify the triage.
+
+My initial message lacked the rationale. I will add additional
+explanations in the v2 of this patch.
 
 
-vim +/WARN +285 include/linux/jump_label.h
-
-bf5438fca2950b Jason Baron     2010-09-17  282  
-c5905afb0ee655 Ingo Molnar     2012-02-24  283  static inline void static_key_slow_inc(struct static_key *key)
-d430d3d7e646eb Jason Baron     2011-03-16  284  {
-5cdda5117e125e Borislav Petkov 2017-10-18 @285  	STATIC_KEY_CHECK_USE(key);
-d430d3d7e646eb Jason Baron     2011-03-16  286  	atomic_inc(&key->enabled);
-d430d3d7e646eb Jason Baron     2011-03-16  287  }
-bf5438fca2950b Jason Baron     2010-09-17  288  
-c5905afb0ee655 Ingo Molnar     2012-02-24  289  static inline void static_key_slow_dec(struct static_key *key)
-bf5438fca2950b Jason Baron     2010-09-17  290  {
-5cdda5117e125e Borislav Petkov 2017-10-18  291  	STATIC_KEY_CHECK_USE(key);
-d430d3d7e646eb Jason Baron     2011-03-16  292  	atomic_dec(&key->enabled);
-bf5438fca2950b Jason Baron     2010-09-17  293  }
-bf5438fca2950b Jason Baron     2010-09-17  294  
-ce48c146495a1a Peter Zijlstra  2018-01-22  295  #define static_key_slow_inc_cpuslocked(key) static_key_slow_inc(key)
-ce48c146495a1a Peter Zijlstra  2018-01-22  296  #define static_key_slow_dec_cpuslocked(key) static_key_slow_dec(key)
-ce48c146495a1a Peter Zijlstra  2018-01-22  297  
-4c3ef6d79328c0 Jason Baron     2010-09-17  298  static inline int jump_label_text_reserved(void *start, void *end)
-4c3ef6d79328c0 Jason Baron     2010-09-17  299  {
-4c3ef6d79328c0 Jason Baron     2010-09-17  300  	return 0;
-4c3ef6d79328c0 Jason Baron     2010-09-17  301  }
-4c3ef6d79328c0 Jason Baron     2010-09-17  302  
-91bad2f8d30574 Jason Baron     2010-10-01  303  static inline void jump_label_lock(void) {}
-91bad2f8d30574 Jason Baron     2010-10-01  304  static inline void jump_label_unlock(void) {}
-91bad2f8d30574 Jason Baron     2010-10-01  305  
-d430d3d7e646eb Jason Baron     2011-03-16  306  static inline int jump_label_apply_nops(struct module *mod)
-d430d3d7e646eb Jason Baron     2011-03-16  307  {
-d430d3d7e646eb Jason Baron     2011-03-16  308  	return 0;
-d430d3d7e646eb Jason Baron     2011-03-16  309  }
-b202952075f626 Gleb Natapov    2011-11-27  310  
-e33886b38cc82a Peter Zijlstra  2015-07-24  311  static inline void static_key_enable(struct static_key *key)
-e33886b38cc82a Peter Zijlstra  2015-07-24  312  {
-5cdda5117e125e Borislav Petkov 2017-10-18  313  	STATIC_KEY_CHECK_USE(key);
-e33886b38cc82a Peter Zijlstra  2015-07-24  314  
-1dbb6704de91b1 Paolo Bonzini   2017-08-01  315  	if (atomic_read(&key->enabled) != 0) {
-1dbb6704de91b1 Paolo Bonzini   2017-08-01 @316  		WARN_ON_ONCE(atomic_read(&key->enabled) != 1);
-1dbb6704de91b1 Paolo Bonzini   2017-08-01  317  		return;
-1dbb6704de91b1 Paolo Bonzini   2017-08-01  318  	}
-1dbb6704de91b1 Paolo Bonzini   2017-08-01  319  	atomic_set(&key->enabled, 1);
-e33886b38cc82a Peter Zijlstra  2015-07-24  320  }
-e33886b38cc82a Peter Zijlstra  2015-07-24  321  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours sincerely,
+Vincent Mailhol
