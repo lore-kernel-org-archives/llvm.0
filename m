@@ -1,47 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A3933D6
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 21:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E12A33D6
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 21:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650920916; x=1682456916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w9h6Cdx4XjslBo66HrakyPOtDRXWJENi2JZ7dmBusrQ=;
-  b=WxiLxXoLjnOUypy6ZJghPASHB/D/JGsUdE+mW994LJmgleaZ0DV0SP97
-   TNZLIIRMYBdO+owWgjTVBA7ikq2ALPcV/V9jLgY2qE7buxplLmoPVwQ14
-   0CMrJXtOHA84Ka1KSxAccosqGFLS8fz8m1LtcqvaW8FtBhCJvMpLQ//Lc
-   opg5THyeHyddVhjua25DV+wzfaIF6CGha0QsO2FxZF4MU4eSEm8Xk73Mc
-   h8SFVItnO3eQQdjezEbbBGGf46h1cPYRof0/jgqu93azAwLjOpmdYe7UI
-   etozUQ0XzfNgRE5PrjHGb6uEQOLV2+gDejN6KKTd4aIYStIvkxQmkwpgp
+  t=1650923983; x=1682459983;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K37orOMojrXs5qDL8WyLkZCi+08bdVnSS7jsmHDoBsc=;
+  b=Yp8vohXNIb1Wt9zbKYrf0aH9csdT/NKVOhrdrObHw1yWCXnPSZPAQkI/
+   IMJBjd8eU+NbPPgGcHjfKx4K5SQXxp6P3Zvf3ShmVnVu+xeefYqWWg4ot
+   +e+OKFuLZ+f7occQpRoR54T0LzFU/G3N9PPALiLh5QCzoQbzsspkPJlNp
+   dEQX9U2mXWlC1N+G9gg/jC+xT0yxOJUsFoWr9imZFfCVFHdzOea/NqWsY
+   2AVnGIfD8JbfcDAEE6j+VXw4RBXk7NUDUAkZOMSTmlhSAsFKnmcQ3kwwZ
+   3EaElLpgH396VEfMS7k4IXX6v5J7opwe9KV9rcfBzO7PzI/qDohsls2PH
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290504540"
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="245299501"
 X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="290504540"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:08:36 -0700
+   d="scan'208";a="245299501"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:59:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="564254914"
+   d="scan'208";a="512829792"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2022 14:08:32 -0700
+  by orsmga003.jf.intel.com with ESMTP; 25 Apr 2022 14:59:34 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nj5wd-0002sj-V6;
-	Mon, 25 Apr 2022 21:08:31 +0000
-Date: Tue, 26 Apr 2022 05:08:16 +0800
+	id 1nj6k2-0002us-4m;
+	Mon, 25 Apr 2022 21:59:34 +0000
+Date: Tue, 26 Apr 2022 05:59:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, trix@redhat.com,
-	marpagan@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-	hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-	tianfei.zhang@intel.com, Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v1 1/1] fpga: dfl: fix the kernel warning when
- release/assign ports for SRIOV
-Message-ID: <202204260456.dOkQIjjg-lkp@intel.com>
-References: <20220425174827.89819-1-russell.h.weight@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:pr/22 73/189] drivers/hid/hid-magicmouse.c:662:41:
+ warning: format specifies type 'unsigned short' but the argument has type
+ 'int'
+Message-ID: <202204260549.BK1ztC91-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,81 +46,191 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220425174827.89819-1-russell.h.weight@intel.com>
 
-Hi Russ,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc4 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git af2d861d4cd2a4da5137f795ee3509e6f944a25b
-config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220426/202204260456.dOkQIjjg-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux pr/22
+head:   7ee315306d1a3b0da8cf2a53e7f55889d0e7f034
+commit: 03f2bf13a1adfe8af74f01c14af0943adef72470 [73/189] HID: magicmouse: add support for Macbook trackpads
+config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220426/202204260549.BK1ztC91-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4b4db40cd1b608457d6e1fcf95443bd940d01f3c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Russ-Weight/fpga-dfl-fix-the-kernel-warning-when-release-assign-ports-for-SRIOV/20220426-014949
-        git checkout 4b4db40cd1b608457d6e1fcf95443bd940d01f3c
+        # https://github.com/AsahiLinux/linux/commit/03f2bf13a1adfe8af74f01c14af0943adef72470
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux pr/22
+        git checkout 03f2bf13a1adfe8af74f01c14af0943adef72470
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/fpga/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hid/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/fpga/dfl.c:54: warning: cannot understand function prototype: 'struct dfl_dev_info '
-   drivers/fpga/dfl.c:74: warning: cannot understand function prototype: 'struct dfl_chardev_info '
-   drivers/fpga/dfl.c:154: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_port_ops_get'
-   drivers/fpga/dfl.c:154: warning: Excess function parameter 'pdev' description in 'dfl_fpga_port_ops_get'
-   drivers/fpga/dfl.c:220: warning: Function parameter or member 'fdata' not described in 'dfl_fpga_check_port_id'
-   drivers/fpga/dfl.c:220: warning: Excess function parameter 'pdev' description in 'dfl_fpga_check_port_id'
-   drivers/fpga/dfl.c:716: warning: Function parameter or member 'revision' not described in 'dfl_feature_info'
->> drivers/fpga/dfl.c:1509: warning: expecting prototype for __dfl_fpga_cdev_find_port(). Prototype was for __dfl_fpga_cdev_find_port_data() instead
+>> drivers/hid/hid-magicmouse.c:662:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                   hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
+                                       ~~~~~             ^~~~~~~~~~~~~~~~~~~~~
+                                       %04x
+   include/linux/hid.h:1218:30: note: expanded from macro 'hid_dbg'
+           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
+                                ~~~    ^~~~~~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   drivers/hid/hid-magicmouse.c:663:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                           le16_to_int(f->abs_y));
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/hid.h:1218:30: note: expanded from macro 'hid_dbg'
+           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
+                                ~~~    ^~~~~~~~~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   2 warnings generated.
+--
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'pos' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'hdev' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'work' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'battery_timer' not described in 'magicmouse_sc'
+   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'input_ops' not described in 'magicmouse_sc'
+>> drivers/hid/hid-magicmouse.c:592: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
 
 
-vim +1509 drivers/fpga/dfl.c
+vim +662 drivers/hid/hid-magicmouse.c
 
-543be3d8c999b3 Wu Hao   2018-06-30  1490  
-5d56e117001996 Wu Hao   2018-06-30  1491  /**
-5d56e117001996 Wu Hao   2018-06-30  1492   * __dfl_fpga_cdev_find_port - find a port under given container device
-5d56e117001996 Wu Hao   2018-06-30  1493   *
-5d56e117001996 Wu Hao   2018-06-30  1494   * @cdev: container device
-5d56e117001996 Wu Hao   2018-06-30  1495   * @data: data passed to match function
-5d56e117001996 Wu Hao   2018-06-30  1496   * @match: match function used to find specific port from the port device list
-5d56e117001996 Wu Hao   2018-06-30  1497   *
-5d56e117001996 Wu Hao   2018-06-30  1498   * Find a port device under container device. This function needs to be
-5d56e117001996 Wu Hao   2018-06-30  1499   * invoked with lock held.
-5d56e117001996 Wu Hao   2018-06-30  1500   *
-5d56e117001996 Wu Hao   2018-06-30  1501   * Return: pointer to port's platform device if successful, NULL otherwise.
-5d56e117001996 Wu Hao   2018-06-30  1502   *
-5d56e117001996 Wu Hao   2018-06-30  1503   * NOTE: you will need to drop the device reference with put_device() after use.
-5d56e117001996 Wu Hao   2018-06-30  1504   */
-4b4db40cd1b608 Xu Yilun 2022-04-25  1505  struct dfl_feature_dev_data *
-4b4db40cd1b608 Xu Yilun 2022-04-25  1506  __dfl_fpga_cdev_find_port_data(struct dfl_fpga_cdev *cdev, void *data,
-4b4db40cd1b608 Xu Yilun 2022-04-25  1507  			       int (*match)(struct dfl_feature_dev_data *,
-4b4db40cd1b608 Xu Yilun 2022-04-25  1508  					    void *))
-5d56e117001996 Wu Hao   2018-06-30 @1509  {
-4b4db40cd1b608 Xu Yilun 2022-04-25  1510  	struct dfl_feature_dev_data *fdata;
-5d56e117001996 Wu Hao   2018-06-30  1511  
-4b4db40cd1b608 Xu Yilun 2022-04-25  1512  	list_for_each_entry(fdata, &cdev->port_dev_list, node) {
-4b4db40cd1b608 Xu Yilun 2022-04-25  1513  		if (match(fdata, data))
-4b4db40cd1b608 Xu Yilun 2022-04-25  1514  			return fdata;
-5d56e117001996 Wu Hao   2018-06-30  1515  	}
-5d56e117001996 Wu Hao   2018-06-30  1516  
-5d56e117001996 Wu Hao   2018-06-30  1517  	return NULL;
-5d56e117001996 Wu Hao   2018-06-30  1518  }
-4b4db40cd1b608 Xu Yilun 2022-04-25  1519  EXPORT_SYMBOL_GPL(__dfl_fpga_cdev_find_port_data);
-5d56e117001996 Wu Hao   2018-06-30  1520  
+   571	
+   572	/**
+   573	 * struct trackpad report
+   574	 *
+   575	 * @report_id:		reportid
+   576	 * @buttons:		HID Usage Buttons 3 1-bit reports
+   577	 * @num_fingers:	the number of fingers being reported in @fingers
+   578	 * @clicked:		same as @buttons
+   579	 */
+   580	struct tp_header {
+   581		// HID mouse report
+   582		u8 report_id;
+   583		u8 buttons;
+   584		u8 rel_x;
+   585		u8 rel_y;
+   586		u8 padding[4];
+   587		// HID vendor part, up to 1751 bytes
+   588		u8 unknown[22];
+   589		u8 num_fingers;
+   590		u8 clicked;
+   591		u8 unknown3[14];
+ > 592	};
+   593	
+   594	static inline int le16_to_int(__le16 x)
+   595	{
+   596		return (signed short)le16_to_cpu(x);
+   597	}
+   598	
+   599	static void report_finger_data(struct input_dev *input, int slot,
+   600				       const struct input_mt_pos *pos,
+   601				       const struct tp_finger *f)
+   602	{
+   603		input_mt_slot(input, slot);
+   604		input_mt_report_slot_state(input, MT_TOOL_FINGER, true);
+   605	
+   606		input_report_abs(input, ABS_MT_TOUCH_MAJOR,
+   607				 le16_to_int(f->touch_major) << 1);
+   608		input_report_abs(input, ABS_MT_TOUCH_MINOR,
+   609				 le16_to_int(f->touch_minor) << 1);
+   610		input_report_abs(input, ABS_MT_WIDTH_MAJOR,
+   611				 le16_to_int(f->tool_major) << 1);
+   612		input_report_abs(input, ABS_MT_WIDTH_MINOR,
+   613				 le16_to_int(f->tool_minor) << 1);
+   614		input_report_abs(input, ABS_MT_ORIENTATION,
+   615				 J314_TP_MAX_FINGER_ORIENTATION - le16_to_int(f->orientation));
+   616		input_report_abs(input, ABS_MT_PRESSURE, le16_to_int(f->pressure));
+   617		input_report_abs(input, ABS_MT_POSITION_X, pos->x);
+   618		input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
+   619	}
+   620	
+   621	static int magicmouse_raw_event_spi(struct hid_device *hdev,
+   622			struct hid_report *report, u8 *data, int size)
+   623	{
+   624		struct magicmouse_sc *msc = hid_get_drvdata(hdev);
+   625		struct input_dev *input = msc->input;
+   626		struct tp_header *tp_hdr;
+   627		struct tp_finger *f;
+   628		int i, n;
+   629		u32 npoints;
+   630		const size_t hdr_sz = sizeof(struct tp_header);
+   631		const size_t touch_sz = sizeof(struct tp_finger);
+   632		u8 map_contacs[MAX_CONTACTS];
+   633	
+   634		// hid_warn(hdev, "%s\n", __func__);
+   635		// print_hex_dump_debug("appleft ev: ", DUMP_PREFIX_OFFSET, 16, 1, data,
+   636		// 		     size, false);
+   637	
+   638		if (data[0] != TRACKPAD2_USB_REPORT_ID)
+   639			return 0;
+   640	
+   641		/* Expect 46 bytes of prefix, and N * 30 bytes of touch data. */
+   642		if (size < hdr_sz || ((size - hdr_sz) % touch_sz) != 0)
+   643			return 0;
+   644	
+   645		tp_hdr = (struct tp_header *)data;
+   646	
+   647		npoints = (size - hdr_sz) / touch_sz;
+   648		if (npoints < tp_hdr->num_fingers || npoints > MAX_CONTACTS) {
+   649			hid_warn(hdev,
+   650				 "unexpected number of touches (%u) for "
+   651				 "report\n",
+   652				 npoints);
+   653			return 0;
+   654		}
+   655	
+   656		n = 0;
+   657		for (i = 0; i < tp_hdr->num_fingers; i++) {
+   658			f = (struct tp_finger *)(data + hdr_sz + i * touch_sz);
+   659			if (le16_to_int(f->touch_major) == 0)
+   660				continue;
+   661	
+ > 662			hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
+   663				le16_to_int(f->abs_y));
+   664			msc->pos[n].x = le16_to_int(f->abs_x);
+   665			msc->pos[n].y = -le16_to_int(f->abs_y);
+   666			map_contacs[n] = i;
+   667			n++;
+   668		}
+   669	
+   670		input_mt_assign_slots(input, msc->tracking_ids, msc->pos, n, 0);
+   671	
+   672		for (i = 0; i < n; i++) {
+   673			int idx = map_contacs[i];
+   674			f = (struct tp_finger *)(data + hdr_sz + idx * touch_sz);
+   675			report_finger_data(input, msc->tracking_ids[i], &msc->pos[i], f);
+   676		}
+   677	
+   678		input_mt_sync_frame(input);
+   679		input_report_key(input, BTN_MOUSE, data[1] & 1);
+   680	
+   681		input_sync(input);
+   682		return 1;
+   683	}
+   684	
 
 -- 
 0-DAY CI Kernel Test Service
