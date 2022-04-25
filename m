@@ -1,107 +1,99 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F307E
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 17:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650907526; x=1682443526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jGcTuSTntuAHYCdhP0sz0aVcA3gK8ccr+Nxg4lSLwFk=;
-  b=UxW8QRB3aCrixjuV0spoliXtSvS6kAp/EhqNBEkra1XvR6opuhRKQQ9+
-   3sv+1z9+hOU4zLIq5Dwun1CgJVEgf20eVmHREZV2sYA+a11KAc3zan1zv
-   kipVDiXAekwVWBut0Ko7Si5MKCS2mPcLV8kTECrYicNEATKEfwEIUBYR2
-   KAGmzB1wannrng6w0kv+JpqqmRQCFAL2fKNvCm3O8bn3jTRbm2/yHisgN
-   bKPrCL5VKjHDMi2uVYHw9mT3CrsGnxwb0EKK/kRVF6aCEUZY0eSQhmeG8
-   7uk8/duMnupHOI85cMDton8EpHvWtJ0wNAuVgUOMEmpg9j1ASIXFZjMQB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="328254066"
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="328254066"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 10:25:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="579392827"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 10:25:23 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nj2Sh-0002jU-0O;
-	Mon, 25 Apr 2022 17:25:23 +0000
-Date: Tue, 26 Apr 2022 01:24:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Kaehn <kaehndan@gmail.com>, tiwai@suse.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	alsa-devel@alsa-project.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] Add generic serial MIDI driver using serial bus API
-Message-ID: <202204260120.TIXTqkq1-lkp@intel.com>
-References: <20220420194747.490542-3-kaehndan@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453E57E
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 17:51:46 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id t25so27560586lfg.7
+        for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 10:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d4CKusOmKFpB//zpJna6TMOVyVV+HbHdecXxRDxqWJE=;
+        b=KbnauGYZbd2ceBOD/lP8RHEg9djTXfQAqnpQ28WeYUkk5sNd18iz3LlronhYaLANkw
+         pg5xLLuZraGQoEPZe2/GSkeSMbrvolPyxjnwwA1FoiNfOfiwSWUhV20aJXNOVAYV0Ry2
+         cwllTyb3FXsbfpuBFn2xTo2Efq34vbdmn/ZN/QXPOoaAMDV8mCVaVu+NdWEMwGLowlJO
+         9QoN6avMZS3/+VHZaHXMN1wn5v2Zl1NQzcuUZ9k2rmJCRKd3YOVbJP5ddUmAFfqMts1B
+         3D6z8Z7yUMhAcEsXjjDw3FrQE4cz5rKnBYsSi+IvBxi7ozMKqCAv90tLTFGCM0CD5H6r
+         tkpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d4CKusOmKFpB//zpJna6TMOVyVV+HbHdecXxRDxqWJE=;
+        b=OsXuFNcbw+sTo8tlVlwmeJ6mPnd6ICe5iprjM5YjUES0NvAni5tz5PJPyTaNJ1JynQ
+         jZVegALZlN166Fb+aXtAKNSi7QQk+zg0Cy7RTsFcQXC3dAsvaAz4yI/n7d8kOo3wrOzA
+         cjl8iDLz96XoqeHE4gGDCZZDKOLxP6i/7/6c/LvyvO91CrkTcXCqZ8GPC9XJ2GEfQJal
+         c/GRelFxbEJ1u6uxcz9oGGKu1AUaYh+ydKtXhh5n6kZT8hAuNwFm0kO/5xPq1ICQ8hgk
+         EoSY0xxMTr9RkfLDL/KYU0LdhArYzUq3PvKQaZg1ZBIOXKG9Lhko9zmFg1nuoZhZAkD0
+         lMmA==
+X-Gm-Message-State: AOAM532EYQeaT3zXQMLo2gmSfIAH9DgR79SA2EpADpU26PFrmDYxcw3q
+	6xInGlSCM+MS7Q3puIlXtKvvfJQsEyzSbd5MSm96Tg==
+X-Google-Smtp-Source: ABdhPJzYxIj3xqgaFZ1xKTponeM1pO9KPmIP8f/N+5TRbu+uuD3iTwOshtcQQhkuqn75wv91nWbwA0TMDleufJhexPw=
+X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
+ f17-20020a05651201d100b00471f63ab182mr9658870lfp.392.1650909102664; Mon, 25
+ Apr 2022 10:51:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420194747.490542-3-kaehndan@gmail.com>
+References: <CAKwvOdmwyFDYKMpq0dcvbq06drtZonpNJ3PqLx2RMBE00beHZA@mail.gmail.com>
+ <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+In-Reply-To: <CAK7LNARx_z1Cv4YOkYkdbgrv3PKVa3msHh8mCZDFvYDib++4kQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 25 Apr 2022 10:51:30 -0700
+Message-ID: <CAKwvOdnzHJX1+H2d4QxhtDS_W96Jq0YAgZJTHwHxmbHRVPx-uA@mail.gmail.com>
+Subject: Re: plumbers session on syscall wrapping and kernel header libc
+ circular depdence?
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Florian Weimer <fweimer@redhat.com>, Arnd Bergmann <arnd@kernel.org>, 
+	"Jose E. Marchesi" <jemarch@gnu.org>, linux-toolchains@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Daniel,
+On Sun, Apr 24, 2022 at 9:45 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Hello Nick,
+>
+> Sorry for the late reply.
+>
+> On Sat, Apr 16, 2022 at 2:48 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Hi Florian, Arnd, and Masahiro,
+> > Jose and I are currently in the planning process to put together a
+> > Kernel+Toolchain microconference track at Linux Plumbers Conference
+> > this year (Sept 12-14) in Dublin, Ireland.
+> >
+> > Would you all be interested in a session (if you're planning on
+> > attending) discussing syscall wrapping for libc's and UAPI circular
+> > dependency on the libc?
+> >
+> > Masahiro and I were recently discussing the feasibility of building
+> > the kernel UAPI header tests with -nostdinc, but there are some
+> > interesting complications perhaps worth sharing with others?
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+> I am not sure about the travel at the moment.
 
-Thank you for the patch! Perhaps something to improve:
+Bummer.
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on v5.18-rc4 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> I may be able to attend it remotely if the the plumbers is held as a
+> hybrid conference.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Kaehn/Add-generic-serial-MIDI-driver-using-serial-bus-API/20220421-035024
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220426/202204260120.TIXTqkq1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/65e00db0913a4019c3158e31aa6b2fd2c28ba03f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Kaehn/Add-generic-serial-MIDI-driver-using-serial-bus-API/20220421-035024
-        git checkout 65e00db0913a4019c3158e31aa6b2fd2c28ba03f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/acpi/arm64/ sound/drivers/
+I think it will be.
+https://lore.kernel.org/llvm/3119c35ba1fa7247e87d7acb56e85ea99092d0a4.camel@HansenPartnership.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> I am not quite sure how many developers would be interested in this topic,
+> but we can continue discussion in the ML as well.
 
-All warnings (new ones prefixed by >>):
-
->> sound/drivers/serial-generic.c:192:6: warning: no previous prototype for function 'snd_serial_generic_write_wakeup' [-Wmissing-prototypes]
-   void snd_serial_generic_write_wakeup(struct serdev_device *serdev)
-        ^
-   sound/drivers/serial-generic.c:192:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void snd_serial_generic_write_wakeup(struct serdev_device *serdev)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/snd_serial_generic_write_wakeup +192 sound/drivers/serial-generic.c
-
-   191	
- > 192	void snd_serial_generic_write_wakeup(struct serdev_device *serdev)
-   193	{
-   194		struct snd_serial_generic *drvdata = serdev_device_get_drvdata(serdev);
-   195	
-   196		if (!snd_rawmidi_transmit_empty(drvdata->midi_output))
-   197			snd_serial_generic_output_write(drvdata->midi_output);
-   198	}
-   199	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ok, based on the feedback, we will scrap the idea for the topic. I
+will follow up with the UAPI discussions on the list.
+--
+Thanks,
+~Nick Desaulniers
