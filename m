@@ -1,274 +1,190 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7EA2562
-	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 15:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650898989; x=1682434989;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4oB6OoqVRWigzoF3s/e7cGXReU33KeSaYIKnkPIisp0=;
-  b=HIa1KmwNFe+0+vLfUbtHzH5o7JelOiPwWABJSPEUcKogbEyhw2h53AUm
-   Ttt0XinJ9tbWocVLsm+JrYvA50dkg7dQNLv0chUwPLENjK4xc+sV22Ql1
-   6I4uNgDnUKlHYtRd77KT6CS2QCEHgGphP+BIrY65CA8cqbItSzQt36fKN
-   wYJ0oNWZHpEIA+SZHLojqEB07imTaTE85IaIcE9RUV8ZtfB7Wzi9FBs99
-   gk8LNUwdx24OSAHTBQ64/qmW6HBFQQAbs0rZH3cqwquYWUO8FWHqjBBMO
-   GOMa6mphRNlFIoYe6vdsbZHfRoI4EHQiSwREqpd7rBq46LY7mopmNZY18
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351716823"
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="351716823"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 08:03:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="512672392"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Apr 2022 08:03:06 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nj0F0-0002bG-1m;
-	Mon, 25 Apr 2022 15:03:06 +0000
-Date: Mon, 25 Apr 2022 23:02:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: drivers/mmc/host/mxcmmc.c:1028:18: warning: cast to smaller integer
- type 'enum mxcmci_type' from 'const void *'
-Message-ID: <202204252204.t0QXblB0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0452562
+	for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 15:27:34 +0000 (UTC)
+Received: by mail-io1-f42.google.com with SMTP id g21so16201733iom.13
+        for <llvm@lists.linux.dev>; Mon, 25 Apr 2022 08:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nYsiunOUmFwZ8o8GT74juEfa6oLm3zN9Ibj3gVa3bhU=;
+        b=i77OZZbZby0nwayMxGseETzr9Nj7J6fX5a++xq03SVhVqRw1UzRVEFc2taTVeAwKIx
+         bpvm7uM3vRs39zX0rrxk5JDfUWPopToIhRBrDI+o4mAuHvh3vFBZupK5zorHVe/CmH+u
+         vyFzmNAsKrnn+xdUsiFFpZlPY+NZEygZg5XCeHV51KiCqTj00m5DiEP+e+DnYHXQHART
+         h1Zphjo3zCVJueWZVhkfeYvQk2BGyHdlT/ujK+BZc6F7STAC3GVIK4fd389QU+E3CWYZ
+         WgAQhDs9ANzbCD4mOfXtByWpJFFyk+yN6QxirF8aFCaVelBhgkxpLlYf5lARzkvP5tZT
+         cS0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nYsiunOUmFwZ8o8GT74juEfa6oLm3zN9Ibj3gVa3bhU=;
+        b=EzoXTQ1zB+V6xjhgo5MUFij/rj5SxaAa9d6CQd8rTMxhotj9K7LxrtZFXfgYhEINXS
+         Uwen8S2haG6InGATW5ES+8ngWDNu5RoURqgGJ/5gfM056TGhBg3pcOXIiKRooGyPLrBB
+         Znbn6LjN7UIpowPyBI+wPOBqiwGRIkZxY9gPUkzmUIS1CSKiz5/rh/71qQ7+AhiA9TbR
+         8PUmns4r2hm/7yHRzMii4L8I9XKTw2xiAB3fh3wm+wbSzGjoiXMIhUlkzHLHa7+FMXdc
+         VaoTZWF8jPvaWWh1lUbvb0a0MoKLii8Q93zWGfneVQJ31sAL5G6COcGN44M+u/1ypSS8
+         1q3g==
+X-Gm-Message-State: AOAM531sSp2GAS021NdnIrE2czSHRge+m3A5edpQaQvEtrWQsXBunCUn
+	e+m6S3hn/xsN24HSUlYoAaM=
+X-Google-Smtp-Source: ABdhPJzaOOhKV4BPWVeNOg0tWQ6bvh+gsUzBd/G0AXF40GnUFg0YdN6YZlGg+EFWAsS/57V61YrvNQ==
+X-Received: by 2002:a05:6638:1352:b0:321:547b:daa2 with SMTP id u18-20020a056638135200b00321547bdaa2mr7317700jad.128.1650900453788;
+        Mon, 25 Apr 2022 08:27:33 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id b11-20020a6be70b000000b00654b3a46b5esm7499151ioh.53.2022.04.25.08.27.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 08:27:33 -0700 (PDT)
+Message-ID: <7faa6c9a-9ace-d1eb-0bca-8e8d7c3ae7ec@gmail.com>
+Date: Mon, 25 Apr 2022 17:27:27 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Fabio,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   af2d861d4cd2a4da5137f795ee3509e6f944a25b
-commit: 8223e885e74b6424cd5b0ab1de4581ca017b7a4e mmc: mxc: Convert the driver to DT-only
-date:   1 year, 5 months ago
-config: arm64-buildonly-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220425/202204252204.t0QXblB0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8223e885e74b6424cd5b0ab1de4581ca017b7a4e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8223e885e74b6424cd5b0ab1de4581ca017b7a4e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mmc/host/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mmc/host/mxcmmc.c:1028:18: warning: cast to smaller integer type 'enum mxcmci_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           host->devtype = (enum mxcmci_type)of_device_get_match_data(&pdev->dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v17 11/21] drm/mediatek: add display merge start/stop API
+ for cmdq support
+Content-Language: en-US
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux@roeck-us.net, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, DTML
+ <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ DRI Development <dri-devel@lists.freedesktop.org>, llvm@lists.linux.dev,
+ singo.chang@mediatek.com, srv_heupstream <srv_heupstream@mediatek.com>,
+ Project_Global_Chrome_Upstream_Group
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20220416020749.29010-1-nancy.lin@mediatek.com>
+ <20220416020749.29010-12-nancy.lin@mediatek.com>
+ <2cd07faf-e903-e55b-85c1-ce7a823ddb8b@gmail.com>
+ <CAAOTY_8Ei1e+Y==y+e7LoHBH3-SZEiz4M0SSqecRfWVMsLKH3Q@mail.gmail.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAAOTY_8Ei1e+Y==y+e7LoHBH3-SZEiz4M0SSqecRfWVMsLKH3Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +1028 drivers/mmc/host/mxcmmc.c
 
-   979	
-   980	static int mxcmci_probe(struct platform_device *pdev)
-   981	{
-   982		struct mmc_host *mmc;
-   983		struct mxcmci_host *host;
-   984		struct resource *res;
-   985		int ret = 0, irq;
-   986		bool dat3_card_detect = false;
-   987		dma_cap_mask_t mask;
-   988		struct imxmmc_platform_data *pdata = pdev->dev.platform_data;
-   989	
-   990		pr_info("i.MX/MPC512x SDHC driver\n");
-   991	
-   992		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   993		irq = platform_get_irq(pdev, 0);
-   994		if (irq < 0)
-   995			return irq;
-   996	
-   997		mmc = mmc_alloc_host(sizeof(*host), &pdev->dev);
-   998		if (!mmc)
-   999			return -ENOMEM;
-  1000	
-  1001		host = mmc_priv(mmc);
-  1002	
-  1003		host->base = devm_ioremap_resource(&pdev->dev, res);
-  1004		if (IS_ERR(host->base)) {
-  1005			ret = PTR_ERR(host->base);
-  1006			goto out_free;
-  1007		}
-  1008	
-  1009		host->phys_base = res->start;
-  1010	
-  1011		ret = mmc_of_parse(mmc);
-  1012		if (ret)
-  1013			goto out_free;
-  1014		mmc->ops = &mxcmci_ops;
-  1015	
-  1016		/* For devicetree parsing, the bus width is read from devicetree */
-  1017		if (pdata)
-  1018			mmc->caps = MMC_CAP_4_BIT_DATA | MMC_CAP_SDIO_IRQ;
-  1019		else
-  1020			mmc->caps |= MMC_CAP_SDIO_IRQ;
-  1021	
-  1022		/* MMC core transfer sizes tunable parameters */
-  1023		mmc->max_blk_size = 2048;
-  1024		mmc->max_blk_count = 65535;
-  1025		mmc->max_req_size = mmc->max_blk_size * mmc->max_blk_count;
-  1026		mmc->max_seg_size = mmc->max_req_size;
-  1027	
-> 1028		host->devtype = (enum mxcmci_type)of_device_get_match_data(&pdev->dev);
-  1029	
-  1030		/* adjust max_segs after devtype detection */
-  1031		if (!is_mpc512x_mmc(host))
-  1032			mmc->max_segs = 64;
-  1033	
-  1034		host->mmc = mmc;
-  1035		host->pdata = pdata;
-  1036		spin_lock_init(&host->lock);
-  1037	
-  1038		if (pdata)
-  1039			dat3_card_detect = pdata->dat3_card_detect;
-  1040		else if (mmc_card_is_removable(mmc)
-  1041				&& !of_property_read_bool(pdev->dev.of_node, "cd-gpios"))
-  1042			dat3_card_detect = true;
-  1043	
-  1044		ret = mmc_regulator_get_supply(mmc);
-  1045		if (ret)
-  1046			goto out_free;
-  1047	
-  1048		if (!mmc->ocr_avail) {
-  1049			if (pdata && pdata->ocr_avail)
-  1050				mmc->ocr_avail = pdata->ocr_avail;
-  1051			else
-  1052				mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
-  1053		}
-  1054	
-  1055		if (dat3_card_detect)
-  1056			host->default_irq_mask =
-  1057				INT_CARD_INSERTION_EN | INT_CARD_REMOVAL_EN;
-  1058		else
-  1059			host->default_irq_mask = 0;
-  1060	
-  1061		host->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
-  1062		if (IS_ERR(host->clk_ipg)) {
-  1063			ret = PTR_ERR(host->clk_ipg);
-  1064			goto out_free;
-  1065		}
-  1066	
-  1067		host->clk_per = devm_clk_get(&pdev->dev, "per");
-  1068		if (IS_ERR(host->clk_per)) {
-  1069			ret = PTR_ERR(host->clk_per);
-  1070			goto out_free;
-  1071		}
-  1072	
-  1073		ret = clk_prepare_enable(host->clk_per);
-  1074		if (ret)
-  1075			goto out_free;
-  1076	
-  1077		ret = clk_prepare_enable(host->clk_ipg);
-  1078		if (ret)
-  1079			goto out_clk_per_put;
-  1080	
-  1081		mxcmci_softreset(host);
-  1082	
-  1083		host->rev_no = mxcmci_readw(host, MMC_REG_REV_NO);
-  1084		if (host->rev_no != 0x400) {
-  1085			ret = -ENODEV;
-  1086			dev_err(mmc_dev(host->mmc), "wrong rev.no. 0x%08x. aborting.\n",
-  1087				host->rev_no);
-  1088			goto out_clk_put;
-  1089		}
-  1090	
-  1091		mmc->f_min = clk_get_rate(host->clk_per) >> 16;
-  1092		mmc->f_max = clk_get_rate(host->clk_per) >> 1;
-  1093	
-  1094		/* recommended in data sheet */
-  1095		mxcmci_writew(host, 0x2db4, MMC_REG_READ_TO);
-  1096	
-  1097		mxcmci_writel(host, host->default_irq_mask, MMC_REG_INT_CNTR);
-  1098	
-  1099		if (!host->pdata) {
-  1100			host->dma = dma_request_chan(&pdev->dev, "rx-tx");
-  1101			if (IS_ERR(host->dma)) {
-  1102				if (PTR_ERR(host->dma) == -EPROBE_DEFER) {
-  1103					ret = -EPROBE_DEFER;
-  1104					goto out_clk_put;
-  1105				}
-  1106	
-  1107				/* Ignore errors to fall back to PIO mode */
-  1108				host->dma = NULL;
-  1109			}
-  1110		} else {
-  1111			res = platform_get_resource(pdev, IORESOURCE_DMA, 0);
-  1112			if (res) {
-  1113				host->dmareq = res->start;
-  1114				host->dma_data.peripheral_type = IMX_DMATYPE_SDHC;
-  1115				host->dma_data.priority = DMA_PRIO_LOW;
-  1116				host->dma_data.dma_request = host->dmareq;
-  1117				dma_cap_zero(mask);
-  1118				dma_cap_set(DMA_SLAVE, mask);
-  1119				host->dma = dma_request_channel(mask, filter, host);
-  1120			}
-  1121		}
-  1122		if (host->dma)
-  1123			mmc->max_seg_size = dma_get_max_seg_size(
-  1124					host->dma->device->dev);
-  1125		else
-  1126			dev_info(mmc_dev(host->mmc), "dma not available. Using PIO\n");
-  1127	
-  1128		INIT_WORK(&host->datawork, mxcmci_datawork);
-  1129	
-  1130		ret = devm_request_irq(&pdev->dev, irq, mxcmci_irq, 0,
-  1131				       dev_name(&pdev->dev), host);
-  1132		if (ret)
-  1133			goto out_free_dma;
-  1134	
-  1135		platform_set_drvdata(pdev, mmc);
-  1136	
-  1137		if (host->pdata && host->pdata->init) {
-  1138			ret = host->pdata->init(&pdev->dev, mxcmci_detect_irq,
-  1139					host->mmc);
-  1140			if (ret)
-  1141				goto out_free_dma;
-  1142		}
-  1143	
-  1144		timer_setup(&host->watchdog, mxcmci_watchdog, 0);
-  1145	
-  1146		mmc_add_host(mmc);
-  1147	
-  1148		return 0;
-  1149	
-  1150	out_free_dma:
-  1151		if (host->dma)
-  1152			dma_release_channel(host->dma);
-  1153	
-  1154	out_clk_put:
-  1155		clk_disable_unprepare(host->clk_ipg);
-  1156	out_clk_per_put:
-  1157		clk_disable_unprepare(host->clk_per);
-  1158	
-  1159	out_free:
-  1160		mmc_free_host(mmc);
-  1161	
-  1162		return ret;
-  1163	}
-  1164	
+On 25/04/2022 15:32, Chun-Kuang Hu wrote:
+> Hi, Matthias:
+> 
+> Matthias Brugger <matthias.bgg@gmail.com> 於 2022年4月22日 週五 下午7:48寫道：
+>>
+>>
+>>
+>> On 16/04/2022 04:07, Nancy.Lin wrote:
+>>> Add merge start/stop API for cmdq support. The ovl_adaptor merges
+>>> are configured with each drm plane update. Need to enable/disable
+>>> merge with cmdq making sure all the settings taken effect in the
+>>> same vblank.
+>>>
+>>> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+>>> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>    drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 ++
+>>>    drivers/gpu/drm/mediatek/mtk_disp_merge.c | 20 +++++++++++++++++---
+>>>    2 files changed, 19 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>>> index 53aa988dde3b..43a412525b75 100644
+>>> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>>> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+>>> @@ -66,6 +66,8 @@ void mtk_merge_stop(struct device *dev);
+>>>    void mtk_merge_advance_config(struct device *dev, unsigned int l_w, unsigned int r_w,
+>>>                              unsigned int h, unsigned int vrefresh, unsigned int bpc,
+>>>                              struct cmdq_pkt *cmdq_pkt);
+>>> +void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+>>> +void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+>>>
+>>>    void mtk_ovl_bgclr_in_on(struct device *dev);
+>>>    void mtk_ovl_bgclr_in_off(struct device *dev);
+>>> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+>>> index 40da0555416d..c0d9b43b2a66 100644
+>>> --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+>>> +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+>>> @@ -67,17 +67,31 @@ struct mtk_disp_merge {
+>>>    };
+>>>
+>>>    void mtk_merge_start(struct device *dev)
+>>
+>> Probably not my call, but wouldn't it make sense to enhance mtk_merge_start to
+>> pass 'struct cmdq_pkt *cmdq_pkt' directly instead of adding this 'adapter'?
+> 
+> In [1], mtk_merge_start() should match the function prototype of
+> mtk_ddp_comp_funcs.start, so keep the non-cmdq interface.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Well other callbacks, namely config hass cmdq_pkt. So we could change the 
+callback in a similar way is was done in
+d0afe37f5209 ("drm/mediatek: support CMDQ interface in ddp component")
+
+
+But as i said it's up to you. You are the maintainer.
+
+Regards,
+Matthias
+
+> 
+> static const struct mtk_ddp_comp_funcs ddp_merge = {
+>   .clk_enable = mtk_merge_clk_enable,
+>   .clk_disable = mtk_merge_clk_disable,
+>   .start = mtk_merge_start,
+>   .stop = mtk_merge_stop,
+>   .config = mtk_merge_config,
+> };
+> 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220419094143.9561-5-jason-jh.lin@mediatek.com/
+> 
+> Regards,
+> Chun-Kuang.
+> 
+>>
+>> In the end this is up to Chun-Kuang.
+>>
+>> Regards,
+>> Matthias
+>>
+>>> +{
+>>> +     mtk_merge_start_cmdq(dev, NULL);
+>>> +}
+>>> +
+>>> +void mtk_merge_stop(struct device *dev)
+>>>    {
+>>>        struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+>>>
+>>> -     writel(MERGE_EN, priv->regs + DISP_REG_MERGE_CTRL);
+>>> +     mtk_merge_stop_cmdq(dev, NULL);
+>>>    }
+>>>
+>>> -void mtk_merge_stop(struct device *dev)
+>>> +void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+>>> +{
+>>> +     struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+>>> +
+>>> +     mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
+>>> +                   DISP_REG_MERGE_CTRL);
+>>> +}
+>>> +
+>>> +void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+>>>    {
+>>>        struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+>>>
+>>> -     writel(0x0, priv->regs + DISP_REG_MERGE_CTRL);
+>>> +     mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
+>>> +                   DISP_REG_MERGE_CTRL);
+>>>    }
+>>>
+>>>    static void mtk_merge_fifo_setting(struct mtk_disp_merge *priv,
