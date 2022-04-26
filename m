@@ -1,63 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2587E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:37:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC50C385A4;
-	Tue, 26 Apr 2022 18:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1650998266;
-	bh=WiXSbg1inz4+HZNgAwnO2NFGzpWvm6UUxHLCn1D/lhQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GBeUsXg6vfVsAoeNyeuKPy6Zrx/xe6J5VDZl6IUNh2X5G0Taeg8m3ydVrDKqVk5CU
-	 kqrxPmY7mQZAcepOxEhIkipjDsIl7HsBYGiuL9FZjft6krz8n0eDPUrFwINzsckMx6
-	 y52cUTnErojZr5w5lhdxMgjLBnN63+pjOXChYy+E=
-Date: Tue, 26 Apr 2022 20:37:42 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tom Rix <trix@redhat.com>
-Cc: jirislaby@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tty: n_gsm: return -EINVAL when adaption is not supported
-Message-ID: <Ymg79qM3Wq2rlYvj@kroah.com>
-References: <20220426120554.1120585-1-trix@redhat.com>
- <Ymfhtv5b9M33AQuc@kroah.com>
- <4789ae7a-64a2-566b-d445-b8433d3f867a@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5507E
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:46:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650998780; x=1682534780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ExvTUqp4Cjsjj9KvvRDjdEWd96EAzK6PTkx67YvD0yE=;
+  b=bnoR1AxrZJRDxqnttZ6b/DYPl46u5YHlSoTHBK8C1LRQkm44JGZnsknn
+   aLCuUeV/Ff04xkyahSPJjims/LgF6sdTMbYoYmEcdI25QbgirGnVLxhp9
+   OZDPM/+M6cFOWnWFbBVrx+Pebp2RjRtbl4sukpl83PMBTZE1KSF6vByIH
+   ap0ZP5/6sroQBFDm7IhHN36mhGJXG9MBsbdydDLEJo60TEjVK2S7wJKA3
+   FK2sMRrarqyfBB7w72pfFQgFQVnG1djtspb09Z5FtTc7QXUcAqSanRtok
+   4gly2ormTlZK0oqjYruUaPdXbBcUPEWBR5P4O+DOS+0GReagKtBgeO8Hl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328629591"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="328629591"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 11:46:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="513301710"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 Apr 2022 11:46:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njQCX-0003tW-5z;
+	Tue, 26 Apr 2022 18:46:17 +0000
+Date: Wed, 27 Apr 2022 02:46:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Felix Fietkau <nbd@nbd.name>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [matthias-bgg:v5.18-next/dts64 30/31]
+ arch/arm/boot/dts/en7523.dtsi:6:10: fatal error:
+ 'dt-bindings/clock/en7523-clk.h' file not found
+Message-ID: <202204270225.KTBJUC4B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4789ae7a-64a2-566b-d445-b8433d3f867a@redhat.com>
 
-On Tue, Apr 26, 2022 at 11:16:35AM -0700, Tom Rix wrote:
-> 
-> On 4/26/22 5:12 AM, Greg KH wrote:
-> > On Tue, Apr 26, 2022 at 08:05:54AM -0400, Tom Rix wrote:
-> > > The clang build fails with
-> > > n_gsm.c:940:13: error: variable 'size' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> > >          } else if (dlci->adaption == 2) {
-> > >                     ^~~~~~~~~~~~~~~~~~~
-> > > 
-> > > The else should return an error, so return -EINVAL.
-> > > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > What commit id does this fix?  Any reason you didn't cc: the author of
-> > the recent changes to this code?
-> Sorry missed this part.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git v5.18-next/dts64
+head:   cf11eccbf44d24cc7f8d16fbbf59afeff99e73bf
+commit: 09f4afc44ba9ebd33d389af345cff4d7668437ae [30/31] ARM: dts: add clock support for Airoha EN7523
+config: arm-randconfig-r012-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270225.KTBJUC4B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?id=09f4afc44ba9ebd33d389af345cff4d7668437ae
+        git remote add matthias-bgg https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git
+        git fetch --no-tags matthias-bgg v5.18-next/dts64
+        git checkout 09f4afc44ba9ebd33d389af345cff4d7668437ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Please always do that, otherwise it's hard to track, right?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Is this the same issue that 0-day reported?
-> 
-> Maybe, it was part of next's update today.  Where is 0-day reported ?
+All errors (new ones prefixed by >>):
 
-On the same mailing list you posted this patch to:
-	https://lore.kernel.org/r/202204230704.5MxboEEo-lkp@intel.com
+   In file included from arch/arm/boot/dts/en7523-evb.dts:7:
+>> arch/arm/boot/dts/en7523.dtsi:6:10: fatal error: 'dt-bindings/clock/en7523-clk.h' file not found
+   #include <dt-bindings/clock/en7523-clk.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-thanks,
 
-greg k-h
+vim +6 arch/arm/boot/dts/en7523.dtsi
+
+     2	
+     3	#include <dt-bindings/interrupt-controller/irq.h>
+     4	#include <dt-bindings/interrupt-controller/arm-gic.h>
+     5	#include <dt-bindings/gpio/gpio.h>
+   > 6	#include <dt-bindings/clock/en7523-clk.h>
+     7	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
