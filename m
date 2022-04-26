@@ -1,90 +1,218 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B277E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 07:09:16 +0000 (UTC)
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mo6zD-1oFHxB1QUN-00pgK2 for <llvm@lists.linux.dev>; Tue, 26 Apr 2022
- 09:09:14 +0200
-Received: by mail-wr1-f47.google.com with SMTP id s21so9346621wrb.8
-        for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 00:09:14 -0700 (PDT)
-X-Gm-Message-State: AOAM53251ecRcrctzqBQDKXsMlgJxlIg+sZV97oK29HwVFVFgOXxOP6R
-	yML7cepMQZ9+dH1d/wZ/DCaBWbbhCr10s/ptS94=
-X-Google-Smtp-Source: ABdhPJyitCaInx6Z72kT7HbV/L3WDZBD4emX0Kods9Wdg6Wr0aF21Su68bBHEfDdGdOQZlLetUdsQlPgJiAxbWD3KTA=
-X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
- m3-20020a5d64a3000000b0020a79315b84mr17597415wrp.407.1650956953878; Tue, 26
- Apr 2022 00:09:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3F3363
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 08:56:20 +0000 (UTC)
+X-UUID: ece299d785854b2d8d31040d7a9aadc4-20220426
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:148b2043-ba81-47a9-b43e-a9eb4c9870b5,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:e5de84c6-85ee-4ac1-ac05-bd3f1e72e732,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ece299d785854b2d8d31040d7a9aadc4-20220426
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 807469282; Tue, 26 Apr 2022 16:56:09 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 26 Apr 2022 16:56:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 26 Apr
+ 2022 16:56:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 26 Apr 2022 16:56:07 +0800
+Message-ID: <4f7df36754381c4c7352a9dbdbe79bb65ebf82d0.camel@mediatek.com>
+Subject: Re: [PATCH v17 07/21] soc: mediatek: mmsys: modify reset controller
+ for MT8195 vdosys1
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring
+	<robh+dt@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<srv_heupstream@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Tue, 26 Apr 2022 16:56:07 +0800
+In-Reply-To: <6e06f2a0-ee9b-4cf4-85a3-243ed3121c50@gmail.com>
+References: <20220416020749.29010-1-nancy.lin@mediatek.com>
+	 <20220416020749.29010-8-nancy.lin@mediatek.com>
+	 <6e06f2a0-ee9b-4cf4-85a3-243ed3121c50@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202204261130.D9GY2vp9-lkp@intel.com> <15dcf5b4-a5ee-66b8-2762-db7728c9928c@kernel.org>
-In-Reply-To: <15dcf5b4-a5ee-66b8-2762-db7728c9928c@kernel.org>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 26 Apr 2022 09:08:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2EB4k5oQDSK5n9RTGJv-Zwgijb-NG-qr7mCTz=mW9baQ@mail.gmail.com>
-Message-ID: <CAK8P3a2EB4k5oQDSK5n9RTGJv-Zwgijb-NG-qr7mCTz=mW9baQ@mail.gmail.com>
-Subject: Re: [soc:arm/multiplatform-late 13/18] arch/arm/mach-s3c/s3c24xx.c:683:9:
- warning: The platform is deprecated and scheduled for removal. Please reach
- to the maintainers of the platform and linux-samsung-soc@vger.kernel.org if
- you still use it.Without such feedback, the platform will be removed...
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, arm-soc <arm@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:W/Mpa2J8KQfoAN0PPNhy/VGGOzNcbmG9qEW4RzsEVmTrWIcP8E/
- 8R62cEiK0XmTX3PTeHtwwa0ZrTMWVhRXwHjm0RsN4KpcpoPBupZNVNziEgWfKAtRX9avmub
- WWd9H/blpIDlllYTrnSqsYf23OcZpLFmyBz/LQCYskfM219bmCrOgYaDzZ8OHGqA9T5cgO1
- SFTPR2XXtfODD3wOt4mBA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dUuw182wFgM=:aaYjqyUEdl9SSG2n2VDUmZ
- brNv0rt5YfwqEhIKZfzOuEIY6VD6lNZeeZkU76u/r7r5j+IaKSIku9MPYl7QdKtu+Ws0q5h0y
- rUH9Sq5K5DnqBsxjuiDF+0bHw8dcnzDu/FaiB9MGRUkrZMMMeBDm+ba1TZqERrCGh9mDqUESD
- /PgP2e8w+uGzEpekbS9iY5yXdirSKPkL6G9T7KA2HaDBPGD0hjzmAj3veVxcRIjbeRiVh9F3a
- 8/BMumOC9csBlqGKuQoUN0wVvamoaLRT4WCN7fh8Lqulcda9WT73FRZ4u2JbdfWPaqy9XUJIE
- vFC0UR3SUHujkpIgPlKDrKDriPN5CJ05/dIw2HMz8+igGFlibR9ejB+0AIE++Q4Lfn+IxQ81h
- ckFQ86bLTbI6QMwZFm5I0V83ni7wdODwb7uA7t83+xSKBcDjS+ru22s5ot3+pnrvgzqv9OMkc
- x/uHp7Bbu978dKQppEfDkpaom0FzvHU1wKMgD5p/4TBvf2/OHP0K20UCs0FmSB4MlvbfxWHch
- /Ril8e9ys6Xga2ehoVcaN0/7HOEN/z6yNzciehS1dhNmGawTUyPiLtz8YaXu2f245z4pZAI0a
- SidvoWZZ8PEnsoMXwc7NggPjjcpmEpDwOHrShiBWvgptY/+0AnxQjdf3yfQkliuEo67xg0WP7
- 1y7LqCXl73tGJcC/6kMGNTn5ARKYSRhOB9vmu4oYvJex8w8Beks859Y94a93JxO+WZ7o=
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-On Tue, Apr 26, 2022 at 8:56 AM Krzysztof Kozlowski <krzk@kernel.org> wrote=
-:
-> On 26/04/2022 05:24, kernel test robot wrote:
-> >
-> >    arch/arm/mach-s3c/s3c24xx.c:177:16: warning: variable 'tmp' set but =
-not used [-Wunused-but-set-variable]
-> >            unsigned long tmp =3D 0;
-> >                          ^
-> >>> arch/arm/mach-s3c/s3c24xx.c:683:9: warning: The platform is deprecate=
-d and scheduled for removal. Please reach to the maintainers of the platfor=
-m and linux-samsung-soc@vger.kernel.org if you still use it.Without such fe=
-edback, the platform will be removed after 2022. [-W#pragma-messages]
-> >    #pragma message "The platform is deprecated and scheduled for remova=
-l. " \
->
-> This pragma is in purpose, so -W#pragma-messages is not helpful. The
-> message will stay for 1 year here and ~2 years in s3c64xx.
+Hi Matthias,
 
-I don't think there is much we can do about this, from what I can
-tell, this is just the way that
-clang prints the message, and the kernel test robot pricked it up
-because clang has the word
-'warning:' in the output that gcc does not:
+Thanks for the review.
 
-$ echo "#pragma message(\"message\")" | clang -xc - -c -o /dev/null
-<stdin>:1:9: warning: message [-W#pragma-messages]
-#pragma message("message")
-        ^
-1 warning generated.
+On Fri, 2022-04-22 at 13:37 +0200, Matthias Brugger wrote:
+> 
+> On 16/04/2022 04:07, Nancy.Lin wrote:
+> > MT8195 vdosys1 has more than 32 reset bits and a different reset
+> > base
+> > than other chips. Modify mmsys for support 64 bit and different
+> > reset
+> > base.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >   drivers/soc/mediatek/mt8195-mmsys.h |  1 +
+> >   drivers/soc/mediatek/mtk-mmsys.c    | 39 ++++++++++++++++++----
+> > -------
+> >   drivers/soc/mediatek/mtk-mmsys.h    |  1 +
+> >   3 files changed, 27 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> > b/drivers/soc/mediatek/mt8195-mmsys.h
+> > index 5469073e3073..0a286fa5a824 100644
+> > --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> > @@ -139,6 +139,7 @@
+> >   #define MT8195_VDO1_MIXER_SOUT_SEL_IN				
+> > 0xf68
+> >   #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
+> > 0
+> >   
+> > +#define MT8195_VDO1_SW0_RST_B		0x1d0
+> >   #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
+> >   #define MT8195_VDO1_HDRBE_ASYNC_CFG_WD	0xe70
+> >   #define MT8195_VDO1_HDR_TOP_CFG		0xd00
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> > b/drivers/soc/mediatek/mtk-mmsys.c
+> > index ea04aa2c3840..d7c806f9e494 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -20,6 +20,8 @@
+> >   #include "mt8195-mmsys.h"
+> >   #include "mt8365-mmsys.h"
+> >   
+> > +#define MMSYS_SW_RESET_PER_REG 32
+> > +
+> >   static const struct mtk_mmsys_driver_data
+> > mt2701_mmsys_driver_data = {
+> >   	.clk_driver = "clk-mt2701-mm",
+> >   	.routes = mmsys_default_routing_table,
+> > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8173_mmsys_driver_data = {
+> >   	.routes = mmsys_default_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data
+> > = {
+> > @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8183_mmsys_driver_data = {
+> >   	.routes = mmsys_mt8183_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data
+> > = {
+> > @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data
+> > mt8186_mmsys_driver_data = {
+> >   	.routes = mmsys_mt8186_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
+> >   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
+> > +	.num_resets = 32,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data
+> > = {
+> > @@ -148,6 +153,8 @@ static const struct mtk_mmsys_driver_data
+> > mt8195_vdosys1_driver_data = {
+> >   	.clk_driver = "clk-mt8195-vdo1",
+> >   	.routes = mmsys_mt8195_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> > +	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
+> > +	.num_resets = 64,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_match_data mt8195_mmsys_match_data
+> > = {
+> > @@ -234,18 +241,22 @@ static int mtk_mmsys_reset_update(struct
+> > reset_controller_dev *rcdev, unsigned l
+> >   {
+> >   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys,
+> > rcdev);
+> >   	unsigned long flags;
+> > +	u32 offset;
+> >   	u32 reg;
+> >   
+> > +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
+> > +	id = id % MMSYS_SW_RESET_PER_REG;
+> > +
+> >   	spin_lock_irqsave(&mmsys->lock, flags);
+> >   
+> > -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> > +	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset +
+> > offset);
+> >   
+> >   	if (assert)
+> >   		reg &= ~BIT(id);
+> >   	else
+> >   		reg |= BIT(id);
+> >   
+> > -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> > +	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset +
+> > offset);
+> >   
+> >   	spin_unlock_irqrestore(&mmsys->lock, flags);
+> >   
+> > @@ -360,18 +371,6 @@ static int mtk_mmsys_probe(struct
+> > platform_device *pdev)
+> >   		return ret;
+> >   	}
+> >   
+> > -	spin_lock_init(&mmsys->lock);
+> > -
+> > -	mmsys->rcdev.owner = THIS_MODULE;
+> > -	mmsys->rcdev.nr_resets = 32;
+> > -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
+> > -	mmsys->rcdev.of_node = pdev->dev.of_node;
+> > -	ret = devm_reset_controller_register(&pdev->dev, &mmsys-
+> > >rcdev);
+> > -	if (ret) {
+> > -		dev_err(&pdev->dev, "Couldn't register mmsys reset
+> > controller: %d\n", ret);
+> > -		return ret;
+> > -	}
+> > -
+> 
+> I'm not sure why you move that code block. It's not explained in the
+> commit message.
+> 
+> Regards,
+> Matthias
 
-$ echo "#pragma message(\"message\")" | gcc -xc - -c -o /dev/null
-<stdin>:1:9: note: =E2=80=98#pragma message: message=E2=80=99
+The reason for moving the code block is the need for getting mmsys-
+>data first and then getting the nr_resets from mmsys->data-
+>num_resets. So I move the whole reset code section behind the get
+mmsys->data code section. I will explain more detail in the commit
+message.
 
-       Arnd
+Regards,
+Nancy
+
+
