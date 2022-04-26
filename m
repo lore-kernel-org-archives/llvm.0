@@ -1,121 +1,98 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A197B
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650996975; x=1682532975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JW9g477eFo5T/YbxZ6fEAgD7lLOuo7kBu55PzoCbgHs=;
-  b=flZjjGfVqf/CNGu9/WF30IlVTpds0c+zeOkgw1+lCSVwcmix+6pDPsFu
-   50oi0EQCwE3DdSXB+oOeP1ADOr1E/edD+2Pagp3FFPXRn4F3txGyC2bny
-   gkkjR/lGcpLoDjimpnn+moZp+pmJBzAz3OEOvzMnNvA+m1sBmOFQ4mTVP
-   lJoMu72y4+0msaQug4LAGChki6TPR1IAS05L4NkhtFqkDPLh1fAUQx6ur
-   iCrh/aBtey7Xs5e9sW90mRkaHRVN7VMfRfy4AOuAzuUGBzpiFqrh743eY
-   /u5gOMAfTR2hrPU9laO41nbAopL8lIbj8pwS8EtTThE7Bjdroiwsio4n8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263271880"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="263271880"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 11:16:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="617124827"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 11:16:11 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1njPjP-0003so-Aj;
-	Tue, 26 Apr 2022 18:16:11 +0000
-Date: Wed, 27 Apr 2022 02:15:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qing Wang <wangqing@vivo.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	Wang Qing <wangqing@vivo.com>
-Subject: Re: [PATCH V2 2/2] arm64: Add complex scheduler level for arm64
-Message-ID: <202204270201.FkymxKhn-lkp@intel.com>
-References: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53D17B
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1650997002;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fVgIa5VojhJQmFpaigVxKBbsCXWJBMH1RAn1ujk7PRM=;
+	b=IHYEa6DzsU9l7eEvp5qJgb0VMvRnH+7v2ZReN+/xlSknx5eZxpD+vfEMFR25rIxttanlWr
+	ph5dfhDKPdFBHw8gsiO73c2oyMKffUnP4tfqunOAjQ/ilVESjdMpvXDkgLdOHSZpY8C+2J
+	0pc+TOH19mM8KT6+wHVPYHYYi1+rpSA=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-102-yfhEGJD4NKOCfI_pBeIjtg-1; Tue, 26 Apr 2022 14:16:39 -0400
+X-MC-Unique: yfhEGJD4NKOCfI_pBeIjtg-1
+Received: by mail-qt1-f199.google.com with SMTP id ay26-20020a05622a229a00b002f20573a0faso10449971qtb.13
+        for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 11:16:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=fVgIa5VojhJQmFpaigVxKBbsCXWJBMH1RAn1ujk7PRM=;
+        b=Y0WmvbfntpWagh2I4LFJ0UYLHQsYoQnod+TrZ+EkiELll4spHBbK20KB+S5etsgMHN
+         w1OsUiENWB4HuMdhwEHo+n5+j85ueI0u8WrVXy+CI5hy/XyYCpFtm2L5HBrqPuKYo1gI
+         EY5RJH8CvB6ESn072lv2SQqYD/4oC2Y1EFta5BA4vwmLZU7UHSJJWws7xm9L20Kuo7xQ
+         Lnn7cH8I5QAsYzJWErtNsFLH/KOaX3HweC65l6+moHNE0JytuMvOT5CHjIWFFfoZd8WV
+         MuEC3APYbRl4238u3oVcVGC85rgbovd8G5M5Ns3J6e2WcaBupdmESG453CnJY5ReL8iu
+         cmSw==
+X-Gm-Message-State: AOAM533m3LB4QlF4PG78A7myH4b+r47/3hhwc1ceyfCncy0G1RwuusJS
+	dq6O/tcJRkVC2QuZtwz4vddHxS/C1jETmdQPv5Uppr9epJkS3OmDjBE9dqhL54b4S4GjZyD6EL9
+	C84rYW+r6eHoFBZUf2fEWYK6gbc6G7cJWQjRqG+2qFiOtVoyO/bUDsv2Qf8b6
+X-Received: by 2002:a37:8d46:0:b0:69e:6b77:f4c9 with SMTP id p67-20020a378d46000000b0069e6b77f4c9mr14005931qkd.96.1650996998584;
+        Tue, 26 Apr 2022 11:16:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzerrK0bIUs13gQCY8RmGVefmuG6cHRoTRh0nUnFq7Yi9W2qY/3jruZ+Z2t3dFRiI2Xbx2aAg==
+X-Received: by 2002:a37:8d46:0:b0:69e:6b77:f4c9 with SMTP id p67-20020a378d46000000b0069e6b77f4c9mr14005906qkd.96.1650996998279;
+        Tue, 26 Apr 2022 11:16:38 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002f363eccb2csm5954200qtw.89.2022.04.26.11.16.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 11:16:37 -0700 (PDT)
+Subject: Re: [PATCH] tty: n_gsm: return -EINVAL when adaption is not supported
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: jirislaby@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220426120554.1120585-1-trix@redhat.com>
+ <Ymfhtv5b9M33AQuc@kroah.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <4789ae7a-64a2-566b-d445-b8433d3f867a@redhat.com>
+Date: Tue, 26 Apr 2022 11:16:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
-
-Hi Qing,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on driver-core/driver-core-testing linus/master arm-perf/for-next/perf v5.18-rc4 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qing-Wang/Add-complex-scheduler-level-for-arm64/20220422-201107
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204270201.FkymxKhn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3b18155ccd99fb790e719fa432366dfdb97ab57c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qing-Wang/Add-complex-scheduler-level-for-arm64/20220422-201107
-        git checkout 3b18155ccd99fb790e719fa432366dfdb97ab57c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/arm64/kernel/smp.c:752:4: error: use of undeclared identifier 'arm64_complex_mask'
-           { arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
-             ^
->> arch/arm64/kernel/smp.c:752:24: error: use of undeclared identifier 'arm64_complex_flags'
-           { arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
-                                 ^
-   2 errors generated.
+In-Reply-To: <Ymfhtv5b9M33AQuc@kroah.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
 
-vim +/arm64_complex_mask +752 arch/arm64/kernel/smp.c
+On 4/26/22 5:12 AM, Greg KH wrote:
+> On Tue, Apr 26, 2022 at 08:05:54AM -0400, Tom Rix wrote:
+>> The clang build fails with
+>> n_gsm.c:940:13: error: variable 'size' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>>          } else if (dlci->adaption == 2) {
+>>                     ^~~~~~~~~~~~~~~~~~~
+>>
+>> The else should return an error, so return -EINVAL.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> What commit id does this fix?  Any reason you didn't cc: the author of
+> the recent changes to this code?
+Sorry missed this part.
+> Is this the same issue that 0-day reported?
 
-   746	
-   747	static struct sched_domain_topology_level arm64_topology[] = {
-   748	#ifdef CONFIG_SCHED_SMT
-   749		{ cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-   750	#endif
-   751	#ifdef CONFIG_SCHED_COMPLEX
- > 752		{ arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
-   753	#endif
-   754	#ifdef CONFIG_SCHED_CLUSTER
-   755		{ cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-   756	#endif
-   757	#ifdef CONFIG_SCHED_MC
-   758		{ cpu_coregroup_mask, cpu_core_flags, SD_INIT_NAME(MC) },
-   759	#endif
-   760		{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
-   761		{ NULL, },
-   762	};
-   763	
+Maybe, it was part of next's update today.  Where is 0-day reported ?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tom
+
+>
+> thanks,
+>
+> greg k-h
+>
+
