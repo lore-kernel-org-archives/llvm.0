@@ -1,191 +1,123 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD227B
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 11:43:43 +0000 (UTC)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kng4Q1L81zgYqW;
-	Tue, 26 Apr 2022 19:43:18 +0800 (CST)
-Received: from dggpemm100002.china.huawei.com (7.185.36.179) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 19:43:35 +0800
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- dggpemm100002.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 19:43:33 +0800
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2375.024; Tue, 26 Apr 2022 12:43:32 +0100
-From: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To: kernel test robot <lkp@intel.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "iommu@lists.linux-foundation.org"
-	<iommu@lists.linux-foundation.org>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, "kbuild-all@lists.01.org"
-	<kbuild-all@lists.01.org>, Linuxarm <linuxarm@huawei.com>,
-	"lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>, "joro@8bytes.org"
-	<joro@8bytes.org>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"will@kernel.org" <will@kernel.org>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	"Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>, "steven.price@arm.com"
-	<steven.price@arm.com>, "Sami.Mujawar@arm.com" <Sami.Mujawar@arm.com>,
-	"jon@solid-run.com" <jon@solid-run.com>, "eric.auger@redhat.com"
-	<eric.auger@redhat.com>, "laurentiu.tudor@nxp.com" <laurentiu.tudor@nxp.com>,
-	"hch@infradead.org" <hch@infradead.org>
-Subject: RE: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
- reserved regions
-Thread-Topic: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
- reserved regions
-Thread-Index: AQHYVmZKfsv4Ue0JXEuZq1FbubftY6z9MaGAgATjIbA=
-Date: Tue, 26 Apr 2022 11:43:31 +0000
-Message-ID: <ada9f0011e544fc5be9b61b7700f44d5@huawei.com>
-References: <20220422162907.1276-5-shameerali.kolothum.thodi@huawei.com>
- <202204231737.0jkKpxZk-lkp@intel.com>
-In-Reply-To: <202204231737.0jkKpxZk-lkp@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C456C7B
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 11:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650973505; x=1682509505;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6hJbZFcBpw7ynGE4LfFl0OhmDBYgY8WNxZLYB5+VIVo=;
+  b=OwJLbW3pMbzH7sLjV9gOitPbfDMcw5ParTanDV9ULzpyXOfjcwHALc6N
+   lPi2VbQU2r+8H7YJwI5jwGVEzFcbJ8fRYP/y0GehKShl9o5oYmvek6a5d
+   VVe2949byAcgITfxgFpGDkTvEHvMmcXttRZSQMPN3Zmj8Z1/pPpuSmsT8
+   kJ48+KlsA0wDXO8C/lKX4MNWwaUuGo8O4g1I5cX2SXTVS+6OggsiqnrlE
+   QtK5NbOzZ8aadrzw6PdLHGXhQgrYzqSGW1h+6C0HAdjuG0fXjY/qHEXli
+   N1TUKVOAVv4GT9UYy6I2i+EA4+/ZbDBWCgtVlOYCW/JkEZyRaPcSPtZhw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="252925387"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="252925387"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 04:45:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="616960293"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 04:45:03 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njJct-0003VC-7c;
+	Tue, 26 Apr 2022 11:45:03 +0000
+Date: Tue, 26 Apr 2022 19:44:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: sound/pci/hda/patch_realtek.c:886:20: warning: unused function
+ 'alc_shutup'
+Message-ID: <202204261914.HwEctUql-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Takashi,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: 327b34f2a97d72c41d4854d61336c9ae6ffe4a44 ALSA: hda: Nuke unused reboot_notify callback
+date:   9 months ago
+config: mips-randconfig-r003-20220426 (https://download.01.org/0day-ci/archive/20220426/202204261914.HwEctUql-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=327b34f2a97d72c41d4854d61336c9ae6ffe4a44
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 327b34f2a97d72c41d4854d61336c9ae6ffe4a44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/crypto/ sound/pci/hda/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
+   static inline void alc_shutup(struct hda_codec
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-1cddcfdc3c/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers include kernel nr_bisected scripts sound source usr
 
 
+vim +/alc_shutup +886 sound/pci/hda/patch_realtek.c
 
-> -----Original Message-----
-> From: kernel test robot [mailto:lkp@intel.com]
-> Sent: 23 April 2022 10:51
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
-> linux-arm-kernel@lists.infradead.org; linux-acpi@vger.kernel.org;
-> iommu@lists.linux-foundation.org
-> Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org; Linuxarm
-> <linuxarm@huawei.com>; lorenzo.pieralisi@arm.com; joro@8bytes.org;
-> robin.murphy@arm.com; will@kernel.org; wanghuiqiang
-> <wanghuiqiang@huawei.com>; Guohanjun (Hanjun Guo)
-> <guohanjun@huawei.com>; steven.price@arm.com; Sami.Mujawar@arm.com;
-> jon@solid-run.com; eric.auger@redhat.com; laurentiu.tudor@nxp.com;
-> hch@infradead.org
-> Subject: Re: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
-> reserved regions
->=20
+a361d84bfcd938 Kailang Yang 2007-06-05  885  
+08c189f2c5523e Takashi Iwai 2012-12-19 @886  static inline void alc_shutup(struct hda_codec *codec)
+a361d84bfcd938 Kailang Yang 2007-06-05  887  {
+1d045db96ad9b8 Takashi Iwai 2011-07-07  888  	struct alc_spec *spec = codec->spec;
+a361d84bfcd938 Kailang Yang 2007-06-05  889  
+c7273bd6c1922a Takashi Iwai 2018-06-12  890  	if (!snd_hda_get_bool_hint(codec, "shutup"))
+c7273bd6c1922a Takashi Iwai 2018-06-12  891  		return; /* disabled explicitly by hints */
+c7273bd6c1922a Takashi Iwai 2018-06-12  892  
+08c189f2c5523e Takashi Iwai 2012-12-19  893  	if (spec && spec->shutup)
+08c189f2c5523e Takashi Iwai 2012-12-19  894  		spec->shutup(codec);
+9bfb2844a2f9e6 Takashi Iwai 2013-07-24  895  	else
+c0ca5eced22215 Takashi Iwai 2019-02-20  896  		alc_shutup_pins(codec);
+1d045db96ad9b8 Takashi Iwai 2011-07-07  897  }
+1f0f4b8036b1fe Takashi Iwai 2011-06-27  898  
 
-[...]
-=20
-> >> drivers/acpi/arm64/iort.c:801:29: warning: no previous prototype for
-> function 'iort_rmr_alloc' [-Wmissing-prototypes]
->    struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc
-> *rmr_desc,
->                                ^
->    drivers/acpi/arm64/iort.c:801:1: note: declare 'static' if the functio=
-n is not
-> intended to be used outside of this translation unit
->    struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc
-> *rmr_desc,
+:::::: The code at line 886 was first introduced by commit
+:::::: 08c189f2c5523eda847cddb89eb8f44c0b957431 ALSA: hda - Use generic parser codes for Realtek driver
 
-Oops..missed the 'static' here. The rest of the warnings are because of the=
- dependency
-with ACPICA header patch here[1].
+:::::: TO: Takashi Iwai <tiwai@suse.de>
+:::::: CC: Takashi Iwai <tiwai@suse.de>
 
-Hi Robin/Lorenzo,
-
-I am planning to send out an updated series soon with that 'static' added a=
-nd the R-by
-tag received for patch #1 from Christoph. Appreciate if you can take a look=
- and let me=20
-know if you have any further comments on this series.
-
-Thanks,
-Shameer
-
-[1] https://lore.kernel.org/all/44610361.fMDQidcC6G@kreacher/
-
-
->    ^
->    static
->    drivers/acpi/arm64/iort.c:896:20: error: use of undeclared identifier
-> 'ACPI_IORT_RMR_REMAP_PERMITTED'
->                    if (rmr->flags & ACPI_IORT_RMR_REMAP_PERMITTED)
->                                     ^
->    drivers/acpi/arm64/iort.c:901:20: error: use of undeclared identifier
-> 'ACPI_IORT_RMR_ACCESS_PRIVILEGE'
->                    if (rmr->flags & ACPI_IORT_RMR_ACCESS_PRIVILEGE)
->                                     ^
->    drivers/acpi/arm64/iort.c:905:7: error: call to undeclared function
-> 'ACPI_IORT_RMR_ACCESS_ATTRIBUTES'; ISO C99 and later do not support
-> implicit function declarations [-Wimplicit-function-declaration]
->                    if (ACPI_IORT_RMR_ACCESS_ATTRIBUTES(rmr->flags) <=3D
->                        ^
->    drivers/acpi/arm64/iort.c:906:5: error: use of undeclared identifier
-> 'ACPI_IORT_RMR_ATTR_DEVICE_GRE'
->                                    ACPI_IORT_RMR_ATTR_DEVICE_GRE)
->                                    ^
->    drivers/acpi/arm64/iort.c:909:5: error: use of undeclared identifier
-> 'ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB'
->=20
-> ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB)
->                                    ^
->    1 warning and 5 errors generated.
->=20
->=20
-> vim +/iort_rmr_alloc +801 drivers/acpi/arm64/iort.c
->=20
->    800
->  > 801	struct iommu_iort_rmr_data *iort_rmr_alloc(struct
-> acpi_iort_rmr_desc *rmr_desc,
->    802						   int prot, enum iommu_resv_type type,
->    803						   u32 *sids, u32 num_sids)
->    804	{
->    805		struct iommu_iort_rmr_data *rmr_data;
->    806		struct iommu_resv_region *region;
->    807		u32 *sids_copy;
->    808		u64 addr =3D rmr_desc->base_address, size =3D rmr_desc->length;
->    809
->    810		rmr_data =3D kmalloc(sizeof(*rmr_data), GFP_KERNEL);
->    811		if (!rmr_data)
->    812			return NULL;
->    813
->    814		/* Create a copy of SIDs array to associate with this rmr_data */
->    815		sids_copy =3D kmemdup(sids, num_sids * sizeof(*sids),
-> GFP_KERNEL);
->    816		if (!sids_copy) {
->    817			kfree(rmr_data);
->    818			return NULL;
->    819		}
->    820		rmr_data->sids =3D sids_copy;
->    821		rmr_data->num_sids =3D num_sids;
->    822
->    823		if (!IS_ALIGNED(addr, SZ_64K) || !IS_ALIGNED(size, SZ_64K)) {
->    824			/* PAGE align base addr and size */
->    825			addr &=3D PAGE_MASK;
->    826			size =3D PAGE_ALIGN(size +
-> offset_in_page(rmr_desc->base_address));
->    827
->    828			pr_err(FW_BUG "RMR descriptor[0x%llx - 0x%llx] not
-> aligned to 64K, continue with [0x%llx - 0x%llx]\n",
->    829			       rmr_desc->base_address,
->    830			       rmr_desc->base_address + rmr_desc->length - 1,
->    831			       addr, addr + size - 1);
->    832		}
->    833
->    834		region =3D &rmr_data->rr;
->    835		INIT_LIST_HEAD(&region->list);
->    836		region->start =3D addr;
->    837		region->length =3D size;
->    838		region->prot =3D prot;
->    839		region->type =3D type;
->    840		region->free =3D iort_rmr_free;
->    841
->    842		return rmr_data;
->    843	}
->    844
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
