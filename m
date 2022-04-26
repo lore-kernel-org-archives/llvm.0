@@ -1,138 +1,127 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D861F7E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 19:47:03 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id w19so33764958lfu.11
-        for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 12:47:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yu7FAxuUHL5OGfbOLZmlJq7WriCq5/6A3eHY+LKJ9Q4=;
-        b=P4ASvHpLX+6wGTeMFgYCY4PFA1ZamXYe3Ld7190C96bfVuHKMMVLCoHRI4TufEKgbo
-         84dvnmJaBU7/NtY2cqObDFXKhuYUMZh44u1jjY0BgGg6ngyxFG6+bSMku6+8jLWT7U+w
-         uU4w7OzalEKia2NNAiyRdz4tsSDgUrb9xBWBMmDlo1/3HKmQw8jmy8Kx6MgPZc1CBHzu
-         JVtYWrLwIJlxmiyxg6iv/NEpvC2b+/JsKN63h+rN3rIOMzUElgXLyY478p8ryymEeR48
-         +N44oAf3tRYucMtMXOUJxm6O2nKEf5kFu8NnsnafpPbLuMqDjXIO+KJnaZZpSXVEoTMk
-         /rxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yu7FAxuUHL5OGfbOLZmlJq7WriCq5/6A3eHY+LKJ9Q4=;
-        b=oeDIEKTUoGDp/JiYDVOPaUz2FHzD9DIOMBf81GN5cEMNhClxL8zvyDd9Vi3I5IexOT
-         BR26tRLMooxqT85ZSM7RCoFpUEforOZvQdq95830iaXJEJC+9xxmq/0gtVldd58beJkA
-         NpRV0c4zEE7H03tIFo/rS/0eslThyuCC8/VHOGhGuFNk/yMy/qtqeeJ1CH1i6ByL4O2m
-         EkTsDRJzY1YO1Kj8f3mpZ5QPydO+qCdgEu8b+1UyDHZjFaSHGtHouw2m3bqgk5M50ASg
-         vA6cJbYKEniD8vlmanXJV4tJl5CQ69oxb97B51SQYRrr9452D5SaSVhtMd3sj/RVjZ6p
-         fK1A==
-X-Gm-Message-State: AOAM5323GucvWH30tYopSGYQ5JYCQ6juJJbbyjCs0F6pvaRhddYYkn+6
-	vELtC2ASpzv+sLFcDN7m00KjwnPxKj7I0EhZXNzdwkVv8P/FMg==
-X-Google-Smtp-Source: ABdhPJx3yY02dFqXWoZwxtNqxt8TDPvQ/b0nc46ilsOuF27gvQkoxWFi/ZHfOcnMXsQHddfx9lnLVWRcnNHoi3Ilh3U=
-X-Received: by 2002:a05:6512:3052:b0:472:7f8:f344 with SMTP id
- b18-20020a056512305200b0047207f8f344mr8190729lfb.380.1651002421695; Tue, 26
- Apr 2022 12:47:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232D17E
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 20:11:36 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.99.192]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MXXdn-1nN8Dl1QXX-00YyYT; Tue, 26 Apr 2022 22:10:58 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+	id 198DB3C088; Tue, 26 Apr 2022 22:10:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+	t=1651003856; bh=R/Kw4Op8hyZ4jcPee67qTZrfx8Tg8yOC+/sEkC2esoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wTIUDYxZf0jXcmnl84CmDsd6y8ocCqm85HkaULylafFos1Pl0b5ahPaM38DvcHUz6
+	 GSPPMpBnzjTvKDvf3cYpNeWYO3xoE4aH/j8EupWjse256FH1iNl8UWAdWL6EDZbLEE
+	 QSf320O5dKUBT3w7cQsX6UcWZUInR9zDeu0rKbfY=
+Date: Tue, 26 Apr 2022 22:10:55 +0200
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, llvm@lists.linux.dev
+Subject: Re: [PATCH 00/27] kbuild: yet another series of cleanups (modpost
+ and LTO)
+Message-ID: <YmhRz1SEjpEU8Nty@fjasle.eu>
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAEQFVGb2aXVu7eys5PM=xZ7gtzdap_QyRrzi3WzY83ka=heOwQ@mail.gmail.com>
- <CAK8P3a0Lwtm86wYH+0yFtr=Luc6g3OLu_+vzZaJqxDxNHFmQDQ@mail.gmail.com>
- <CAKwvOdmfHS8UwZhEL-tLMJSzCXQEZZZhEMpDXuJHtP5s9yePBw@mail.gmail.com>
- <CAEQFVGYpPaE3cCxUBaiT97GU1i4Nr6yJdv6mU1kiCxqkLSMfBQ@mail.gmail.com>
- <CAK8P3a2vHuRB1vkjVkKaNxr3Ptfv3UBS0scsShQPxY46_xh9kA@mail.gmail.com>
- <Ymg43Ed/Sg8szdKq@dev-arch.thelio-3990X> <CAKwvOdkvg+jKVqetfrNPn5yNCxfZYHAhu2Cvc+dGLFG3+kOGUg@mail.gmail.com>
- <CAKwvOd=gdtxWgJTMYMT5NpFwGH8vwH8NbL3HursoAXvQJ7yydA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=gdtxWgJTMYMT5NpFwGH8vwH8NbL3HursoAXvQJ7yydA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 26 Apr 2022 12:46:49 -0700
-Message-ID: <CAKwvOdn1Li3+_b7M8pdJ+-J=PZ_B6PVZ2o3QSbYXtvJ=B6eOXw@mail.gmail.com>
-Subject: Re: Android 11 clang toochain: kernel 5.18 build error with 32 bit target
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Mauro Rossi <issor.oruam@gmail.com>, 
-	Chih-Wei Huang <cwhuang@android-x86.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Mark Brown <broonie@kernel.org>, Brian Gerst <brgerst@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220424190811.1678416-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:122aPGvBqY6tIA/oCXwlRl7Mpi1hoD+1bqMgfw6wBwc7/XwIpVA
+ tF7voRfpYSiI1mICJ7rrQul2yM5xn5+uwMsYJ+4EXwMR9/LRUzyncr6jn2/NiMydmusiw1w
+ 0yLZefHPWffuC7tugEcFuBTX18JjhPH5og9os/6pIZzepIKZgmXYgmRDMwGmEmMRcQXAAfL
+ IhBTu4JaVBHoSOMZ4Xppw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MfXNq7HSm7Y=:8MI0vvK4hksh7bM8YAeCcI
+ 7YqNb4DgX+6BEA+wzM0SfU9HV1BPk0i3J2OMZm3uQ4MHKFsUVDraVvcYdk+c7Ltyp2Dx5n9xG
+ v4fPhyK2d60XIWjCOgAu/krFpmPOw6c7mpRP16JNM4Hyt62Rx0aJyDRtFlA4x9C9mvqNitEmo
+ mrv3qzQXva5a/BJcK9m9sG/YwUANRCCSIPjLOmgDzWumnb0o0/Ia2Mhfy2fqruHKqJbVVskzv
+ gA46poB7oMtBOSdPUwUWl4AVjdl6qFJmEQDuOFX/dmjuZCeKdugz2CgJfNPJG9arEv1x282T/
+ UI5q4j3p3Z+PP1pIPhTHSvHT1ggeenXZbcCz+GgA3eBb2XNFTG/0DiHaO5rvxAja1/FdsyYVz
+ f8u68KnoSFVBAtRGMhdGPeNS34OuMv/GlvPGlGLFvtcGTXAZigvddHgTq//S7pZBE2tCUmLkc
+ FXWJR1wZb1icdKedDjHETRIPUnS/w77peONwXAEtLhPJf5DzWPLQXhu5yf6+f7HroTOm9QFG5
+ Sq5Bx5yrbziU8uKglfwHU3UvGtabaLlIs3ek+IelQ1/h6HNOiaRwq2mSh3WP2I3mcOpbw+J/F
+ UFJX/trsX+0USBvdc0E0QgjAKbuzYckHiciVMRXAu2jdwZS/G50xNjJsJb7K7vn2tnPfQEjsd
+ 0xsBBM7GZo/d25FzkxxHjpg/TCajSoxoUV2MllaBg/8GZP5FaBSQtr+qwMMnbpgbTXM0=
 
-On Tue, Apr 26, 2022 at 12:31 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Tue, Apr 26, 2022 at 12:23 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Tue, Apr 26, 2022 at 11:24 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On Tue, Apr 26, 2022 at 02:21:16PM +0200, Arnd Bergmann wrote:
-> > > > On Mon, Apr 25, 2022 at 9:13 PM Mauro Rossi <issor.oruam@gmail.com> wrote:
-> > > > > I have checked also with kernel-5.17 and the same build error is
-> > > > > happening also there, so it is not due to commit 34737e2698 ("uaccess: add generic
-> > > > > __{get,put}_kernel_nofault")
-> > > >
-> > > > Ok, that's good to know, thanks for checking! I suspect the problem is
-> > > > using a slightly too-old prerelease build of clang, where the released
-> > > > clang-11 build had the asm-goto-with-output feature enabled.
-> > >
-> > > Correct, the build failure can be reproduced with tip of tree LLVM if
-> > > CONFIG_CC_HAS_ASM_GOTO_OUTPUT is manually disabled, such as:
-> >
-> > That begs the question though; not all supported versions of GCC have
-> > asm goto w/ outputs. Why is this not an issue for older gcc versions?
-> > Perhaps it's because clang is validating inline asm constraints in
-> > dead code again? I thought I had fixed that in
-> > commit 158807de5822 ("x86/uaccess: Make __get_user_size() Clang
-> > compliant on 32-bit")
-> > in v5.9-rc1.
-> >
-> > I don't know why `=a` can't be used, yet.
-> > void foo(void *a) {
-> >     asm("":"=a"(*((unsigned long*)a)));
-> > }
-> > Compiles w/ -m32 just fine.  Perhaps creduce is needed.
->
-> Cvise converged on:
-> void copy_from_kernel_nofault(void) {
->   asm("" : "=a"(*(long long *)0));
-> }
-> which is weird. Neither compiler accepts 0 for -m32, but they do for
-> -m64. Ah, it's the cast to long long*.
->
-> Let me see if this is fixable in the kernel sources.
+On Mon, Apr 25, 2022 at 04:07:44AM +0900 Masahiro Yamada wrote:
+> This is the third batch of cleanups in this development cycle.
+> 
+> This weekend, I wrote up the code I have been planning.
+> 
+> After a bunch of modpost refactoring, I got rid of the ugly code
+> in Makefiles.
+> 
+> With this, Kbuild will get back much simpler and cleaner.
+> 
 
-I should clean this up, but the approach seems to work, yeah?
+Hi Masahiro,
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index f78e2b3501a1..8d4978abff41 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -346,6 +346,8 @@ do {
-                                \
- #define __get_user_size(x, ptr, size, retval)                          \
- do {                                                                   \
-        unsigned char x_u8__;                                           \
-+       unsigned short x_u16__; \
-+       unsigned int x_u32__; \
-                                                                        \
-        retval = 0;                                                     \
-        __chk_user_ptr(ptr);                                            \
-@@ -355,10 +357,12 @@ do {
-                                \
-                (x) = x_u8__;                                           \
-                break;                                                  \
-        case 2:                                                         \
--               __get_user_asm(x, ptr, retval, "w");                    \
-+               __get_user_asm(x_u16__, ptr, retval, "w");              \
-+               (x) = x_u16__;                                          \
-                break;                                                  \
-        case 4:                                                         \
--               __get_user_asm(x, ptr, retval, "l");                    \
-+               __get_user_asm(x_u32__, ptr, retval, "l");              \
-+               (x) = x_u32__; \
-                break;                                                  \
-        case 8:                                                         \
-                __get_user_asm_u64(x, ptr, retval);                     \
+I tried applying the patch set onto your kbuild and
+kbuild-fixes-v5.18, but it didn't apply.  Can you give me
+a hint on your commit base?
+
+Kind regards,
+Nicolas
+
+> 
+> Masahiro Yamada (27):
+>   modpost: use snprintf() instead of sprintf() for safety
+>   modpost: do not write out any file when error occurred
+>   modpost: remove stale comment about sym_add_exported()
+>   modpost: add a separate error for exported symbols without definition
+>   modpost: retrieve the module dependency and CRCs in check_exports()
+>   modpost: use bool type where appropriate
+>   modpost: import include/linux/list.h
+>   modpost: traverse modules in order
+>   modpost: add sym_add_unresolved() helper
+>   modpost: traverse unresolved symbols in order
+>   modpost: use doubly linked list for dump_lists
+>   modpost: move struct namespace_list to modpost.c
+>   modpost: traverse the namespace_list in order
+>   modpost: dump Module.symvers in the same order of modules.order
+>   modpost: move static EXPORT_SYMBOL check to check_exports()
+>   modpost: make multiple export error
+>   modpost: make sym_add_exported() always allocate a new symbol
+>   modpost: make sym_add_exported() a void function
+>   modpost: use hlist for hash table implementation
+>   modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
+>   kbuild: record symbol versions in *.cmd files
+>   kbuild: generate a list of objects in vmlinux
+>   modpost: retrieve symbol versions by parsing *.cmd files
+>   modpost: generate linker script to collect symbol versions
+>   kbuild: embed symbol versions at final link of vmlinux or modules
+>   kbuild: stop generating *.symversions
+>   kbuild: do not create *.prelink.o for Clang LTO or IBT
+> 
+>  .gitignore                |   1 +
+>  Makefile                  |   1 +
+>  scripts/Kbuild.include    |   4 +
+>  scripts/Makefile.build    | 107 ++------
+>  scripts/Makefile.lib      |   7 -
+>  scripts/Makefile.modfinal |   6 +-
+>  scripts/Makefile.modpost  |   9 +-
+>  scripts/link-vmlinux.sh   |  38 ++-
+>  scripts/mod/file2alias.c  |   2 -
+>  scripts/mod/list.h        | 336 ++++++++++++++++++++++++
+>  scripts/mod/modpost.c     | 529 +++++++++++++++++++++++---------------
+>  scripts/mod/modpost.h     |  27 +-
+>  12 files changed, 731 insertions(+), 336 deletions(-)
+>  create mode 100644 scripts/mod/list.h
+> 
+> -- 
+> 2.32.0
+
 -- 
-Thanks,
-~Nick Desaulniers
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
