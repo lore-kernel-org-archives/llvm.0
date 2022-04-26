@@ -1,122 +1,119 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98E9625;
-	Tue, 26 Apr 2022 10:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650968642; x=1682504642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SUcHxR2at58PVF1YYffGQMoKoxwX9Qu0SIOQdjmPd80=;
-  b=NUv6YnlmVAdvjFz7iKDNfgg4X6S+0a/xNE4wciMLWrWXmKNMoi3dVnXE
-   OOpSoEBb3xsiE37ZNyR62s1gu7oUtPpStlfz+nT/TVI939fJNdQhPYarf
-   EFW4J3V0O9drfQa36QdMsjkGISbTYS2JTX5hHcFrz5ZJ2CZX/5EBJzl5T
-   f7GqP6hHth5QGhonaHMfQ8VSkTtTxIOMTrqcacPWf/KIQfl8yADu+8GXp
-   Exf8ODWsPPrG8KAZVUfQcohkwNJ9hKvbSD+Y38WR9B1ZEDYcVhuA1kvAy
-   /dJSI930XhAeQOWORhEoP6cDbPBociJhGlg80FNborE+t/iUqf6B2r7rM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247463396"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="247463396"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 03:24:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="558238295"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 26 Apr 2022 03:23:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1njIMO-0003QK-3z;
-	Tue, 26 Apr 2022 10:23:56 +0000
-Date: Tue, 26 Apr 2022 18:23:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
-	netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-	sbrivio@redhat.com, jesse.brandeburg@intel.com,
-	anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-	pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-	alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-	manishc@marvell.com, razor@blackwall.org,
-	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-	UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
-	bridge@lists.linux-foundation.org,
-	eng.alaamohamedsoliman.am@gmail.com
-Subject: Re: [PATCH net-next v4 1/2] rtnetlink: add extack support in fdb del
- handlers
-Message-ID: <202204261831.S6mBmtgP-lkp@intel.com>
-References: <8847c5d670c7ee11890d75f58a4922c5cb542f20.1650896000.git.eng.alaamohamedsoliman.am@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24345625
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 10:28:45 +0000 (UTC)
+X-UUID: 162355498c0b48f2b1df6850e9fcc7b6-20220426
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:51a7fbd9-65de-4ec1-bb7b-d6919820e1e8,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:61
+X-CID-INFO: VERSION:1.1.4,REQID:51a7fbd9-65de-4ec1-bb7b-d6919820e1e8,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Spam_GS981B3D,ACT
+	ION:quarantine,TS:61
+X-CID-META: VersionHash:faefae9,CLOUDID:bc09c02e-6199-437e-8ab4-9920b4bc5b76,C
+	OID:01946d09fe8b,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
+	le:nil,QS:0,BEC:nil
+X-UUID: 162355498c0b48f2b1df6850e9fcc7b6-20220426
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1132310296; Tue, 26 Apr 2022 18:28:36 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 26 Apr 2022 18:28:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 26 Apr 2022 18:28:34 +0800
+Message-ID: <2e336c54b07cf5b661fd4a613545a932bca792fb.camel@mediatek.com>
+Subject: Re: [PATCH v17 13/21] drm/mediatek: add display merge async reset
+ control
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, <wim@linux-watchdog.org>, AngeloGioacchino Del
+ Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Tue, 26 Apr 2022 18:28:34 +0800
+In-Reply-To: <b4f438026fe208f8f6511de34c7e84c8c59d843c.camel@pengutronix.de>
+References: <20220416020749.29010-1-nancy.lin@mediatek.com>
+	 <20220416020749.29010-14-nancy.lin@mediatek.com>
+	 <b4f438026fe208f8f6511de34c7e84c8c59d843c.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8847c5d670c7ee11890d75f58a4922c5cb542f20.1650896000.git.eng.alaamohamedsoliman.am@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-Hi Alaa,
+Hi Philipp,
 
-Thank you for the patch! Yet something to improve:
+Thanks for the review.
 
-[auto build test ERROR on horms-ipvs/master]
-[also build test ERROR on net/master linus/master v5.18-rc4]
-[cannot apply to net-next/master next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Mon, 2022-04-25 at 11:58 +0200, Philipp Zabel wrote:
+> On Sa, 2022-04-16 at 10:07 +0800, Nancy.Lin wrote:
+> > Add merge async reset control in mtk_merge_stop. Async hw doesn't
+> > do self
+> > reset on each sof signal(start of frame), so need to reset the
+> > async to
+> > clear the hw status for the next merge start.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_disp_merge.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> > b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> > index 9dca145cfb71..177473fa8160 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/of_device.h>
+> >  #include <linux/of_irq.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/reset.h>
+> >  #include <linux/soc/mediatek/mtk-cmdq.h>
+> >  
+> > 
+> > 
+> > 
+> >  #include "mtk_drm_ddp_comp.h"
+> > @@ -79,6 +80,9 @@ void mtk_merge_stop(struct device *dev)
+> >  	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+> >  
+> > 
+> > 
+> > 
+> >  	mtk_merge_stop_cmdq(dev, NULL);
+> > +
+> > +	if (priv->async_clk)
+> > +		device_reset_optional(dev);
+> 
+> To avoid the overhead of looking up the reset control in the device
+> tree every time, it would be better to request a reset control during
+> probe using devm_reset_control_get_optional_exclusive(). Here you'd
+> just call reset_control_reset().
+> 
+> regards
+> Philipp
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alaa-Mohamed/propagate-extack-to-vxlan_fdb_delete/20220425-222644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
-config: riscv-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261831.S6mBmtgP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/5e9c3e146040a4e37b45ca18c3b42c3dfd6d0a0e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alaa-Mohamed/propagate-extack-to-vxlan_fdb_delete/20220425-222644
-        git checkout 5e9c3e146040a4e37b45ca18c3b42c3dfd6d0a0e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/mscc/
+OK. I will refine it in the next revision.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Regards,
+Nancy
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/mscc/ocelot_net.c:784:70: error: too many arguments to function call, expected 5, have 6
-           return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge, extack);
-                  ~~~~~~~~~~~~~~                                               ^~~~~~
-   include/soc/mscc/ocelot.h:893:5: note: 'ocelot_fdb_del' declared here
-   int ocelot_fdb_del(struct ocelot *ocelot, int port, const unsigned char *addr,
-       ^
-   1 error generated.
-
-
-vim +784 drivers/net/ethernet/mscc/ocelot_net.c
-
-   774	
-   775	static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
-   776				       struct net_device *dev,
-   777				       const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
-   778	{
-   779		struct ocelot_port_private *priv = netdev_priv(dev);
-   780		struct ocelot_port *ocelot_port = &priv->port;
-   781		struct ocelot *ocelot = ocelot_port->ocelot;
-   782		int port = priv->chip_port;
-   783	
- > 784		return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge, extack);
-   785	}
-   786	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
