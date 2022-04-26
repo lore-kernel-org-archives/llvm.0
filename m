@@ -1,218 +1,202 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3F3363
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 08:56:20 +0000 (UTC)
-X-UUID: ece299d785854b2d8d31040d7a9aadc4-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:148b2043-ba81-47a9-b43e-a9eb4c9870b5,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:e5de84c6-85ee-4ac1-ac05-bd3f1e72e732,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: ece299d785854b2d8d31040d7a9aadc4-20220426
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 807469282; Tue, 26 Apr 2022 16:56:09 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 26 Apr 2022 16:56:08 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 26 Apr
- 2022 16:56:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 16:56:07 +0800
-Message-ID: <4f7df36754381c4c7352a9dbdbe79bb65ebf82d0.camel@mediatek.com>
-Subject: Re: [PATCH v17 07/21] soc: mediatek: mmsys: modify reset controller
- for MT8195 vdosys1
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring
-	<robh+dt@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<srv_heupstream@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Tue, 26 Apr 2022 16:56:07 +0800
-In-Reply-To: <6e06f2a0-ee9b-4cf4-85a3-243ed3121c50@gmail.com>
-References: <20220416020749.29010-1-nancy.lin@mediatek.com>
-	 <20220416020749.29010-8-nancy.lin@mediatek.com>
-	 <6e06f2a0-ee9b-4cf4-85a3-243ed3121c50@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEC1625
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 09:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650966349; x=1682502349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rpRq7F+eCG2d02z+AGMyDOmcLcf53HLO2zTvnZ9BGHo=;
+  b=NDuZdhlvdf9duFL20SPDfD+S9w2faqIp9t+6I1rxXWA0WQyYOislRaR+
+   Zp1pCXq6WlHMRchxr9c84mAOLi8DWqmqZ43//qavNJ/xkFhWt7y4hXaxo
+   XJGUyvnxgsppSMmVLEqtT5T8qY8klYpfMwACc/uZ5XOMe2lrxCg0a7Rip
+   9iiisIFqSJdiWdd/bIVjAiN04rNba2IiMk6nzL0V3/HngclERflgk+WH+
+   9s20smuHtr7yPMWA5oNZXObcUXz0jrKDXLioviMiF+oca9qBUrgSI0Zt6
+   wHgeGl008hS6JaxoBqFAXY3GcZTGHL5vUQ93oMpaA3v255ZmUY0I4t2FL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265046337"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="265046337"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:42:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="874248812"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 02:42:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njHid-0003OI-RJ;
+	Tue, 26 Apr 2022 09:42:51 +0000
+Date: Tue, 26 Apr 2022 17:42:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused
+ variable 'seville_of_match'
+Message-ID: <202204261706.ah6KplS9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Matthias,
+Hi Alexander,
 
-Thanks for the review.
+First bad commit (maybe != root cause):
 
-On Fri, 2022-04-22 at 13:37 +0200, Matthias Brugger wrote:
-> 
-> On 16/04/2022 04:07, Nancy.Lin wrote:
-> > MT8195 vdosys1 has more than 32 reset bits and a different reset
-> > base
-> > than other chips. Modify mmsys for support 64 bit and different
-> > reset
-> > base.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >   drivers/soc/mediatek/mt8195-mmsys.h |  1 +
-> >   drivers/soc/mediatek/mtk-mmsys.c    | 39 ++++++++++++++++++----
-> > -------
-> >   drivers/soc/mediatek/mtk-mmsys.h    |  1 +
-> >   3 files changed, 27 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
-> > b/drivers/soc/mediatek/mt8195-mmsys.h
-> > index 5469073e3073..0a286fa5a824 100644
-> > --- a/drivers/soc/mediatek/mt8195-mmsys.h
-> > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> > @@ -139,6 +139,7 @@
-> >   #define MT8195_VDO1_MIXER_SOUT_SEL_IN				
-> > 0xf68
-> >   #define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
-> > 0
-> >   
-> > +#define MT8195_VDO1_SW0_RST_B		0x1d0
-> >   #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD	0xe30
-> >   #define MT8195_VDO1_HDRBE_ASYNC_CFG_WD	0xe70
-> >   #define MT8195_VDO1_HDR_TOP_CFG		0xd00
-> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> > b/drivers/soc/mediatek/mtk-mmsys.c
-> > index ea04aa2c3840..d7c806f9e494 100644
-> > --- a/drivers/soc/mediatek/mtk-mmsys.c
-> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> > @@ -20,6 +20,8 @@
-> >   #include "mt8195-mmsys.h"
-> >   #include "mt8365-mmsys.h"
-> >   
-> > +#define MMSYS_SW_RESET_PER_REG 32
-> > +
-> >   static const struct mtk_mmsys_driver_data
-> > mt2701_mmsys_driver_data = {
-> >   	.clk_driver = "clk-mt2701-mm",
-> >   	.routes = mmsys_default_routing_table,
-> > @@ -86,6 +88,7 @@ static const struct mtk_mmsys_driver_data
-> > mt8173_mmsys_driver_data = {
-> >   	.routes = mmsys_default_routing_table,
-> >   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
-> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> > +	.num_resets = 32,
-> >   };
-> >   
-> >   static const struct mtk_mmsys_match_data mt8173_mmsys_match_data
-> > = {
-> > @@ -100,6 +103,7 @@ static const struct mtk_mmsys_driver_data
-> > mt8183_mmsys_driver_data = {
-> >   	.routes = mmsys_mt8183_routing_table,
-> >   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
-> >   	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
-> > +	.num_resets = 32,
-> >   };
-> >   
-> >   static const struct mtk_mmsys_match_data mt8183_mmsys_match_data
-> > = {
-> > @@ -114,6 +118,7 @@ static const struct mtk_mmsys_driver_data
-> > mt8186_mmsys_driver_data = {
-> >   	.routes = mmsys_mt8186_routing_table,
-> >   	.num_routes = ARRAY_SIZE(mmsys_mt8186_routing_table),
-> >   	.sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
-> > +	.num_resets = 32,
-> >   };
-> >   
-> >   static const struct mtk_mmsys_match_data mt8186_mmsys_match_data
-> > = {
-> > @@ -148,6 +153,8 @@ static const struct mtk_mmsys_driver_data
-> > mt8195_vdosys1_driver_data = {
-> >   	.clk_driver = "clk-mt8195-vdo1",
-> >   	.routes = mmsys_mt8195_routing_table,
-> >   	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> > +	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
-> > +	.num_resets = 64,
-> >   };
-> >   
-> >   static const struct mtk_mmsys_match_data mt8195_mmsys_match_data
-> > = {
-> > @@ -234,18 +241,22 @@ static int mtk_mmsys_reset_update(struct
-> > reset_controller_dev *rcdev, unsigned l
-> >   {
-> >   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys,
-> > rcdev);
-> >   	unsigned long flags;
-> > +	u32 offset;
-> >   	u32 reg;
-> >   
-> > +	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
-> > +	id = id % MMSYS_SW_RESET_PER_REG;
-> > +
-> >   	spin_lock_irqsave(&mmsys->lock, flags);
-> >   
-> > -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
-> > +	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset +
-> > offset);
-> >   
-> >   	if (assert)
-> >   		reg &= ~BIT(id);
-> >   	else
-> >   		reg |= BIT(id);
-> >   
-> > -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
-> > +	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset +
-> > offset);
-> >   
-> >   	spin_unlock_irqrestore(&mmsys->lock, flags);
-> >   
-> > @@ -360,18 +371,6 @@ static int mtk_mmsys_probe(struct
-> > platform_device *pdev)
-> >   		return ret;
-> >   	}
-> >   
-> > -	spin_lock_init(&mmsys->lock);
-> > -
-> > -	mmsys->rcdev.owner = THIS_MODULE;
-> > -	mmsys->rcdev.nr_resets = 32;
-> > -	mmsys->rcdev.ops = &mtk_mmsys_reset_ops;
-> > -	mmsys->rcdev.of_node = pdev->dev.of_node;
-> > -	ret = devm_reset_controller_register(&pdev->dev, &mmsys-
-> > >rcdev);
-> > -	if (ret) {
-> > -		dev_err(&pdev->dev, "Couldn't register mmsys reset
-> > controller: %d\n", ret);
-> > -		return ret;
-> > -	}
-> > -
-> 
-> I'm not sure why you move that code block. It's not explained in the
-> commit message.
-> 
-> Regards,
-> Matthias
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   1 year, 1 month ago
+config: s390-randconfig-r023-20220426 (https://download.01.org/0day-ci/archive/20220426/202204261706.ah6KplS9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/ocelot/
 
-The reason for moving the code block is the need for getting mmsys-
->data first and then getting the nr_resets from mmsys->data-
->num_resets. So I move the whole reset code section behind the get
-mmsys->data code section. I will explain more detail in the commit
-message.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Nancy
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/ocelot/seville_vsc9953.c:6:
+   In file included from include/soc/mscc/ocelot_vcap.h:9:
+   In file included from include/soc/mscc/ocelot.h:10:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:37:
+   In file included from include/net/net_namespace.h:39:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/ocelot/seville_vsc9953.c:1255:34: warning: unused variable 'seville_of_match' [-Wunused-const-variable]
+   static const struct of_device_id seville_of_match[] = {
+                                    ^
+   21 warnings generated.
 
 
+vim +/seville_of_match +1255 drivers/net/dsa/ocelot/seville_vsc9953.c
+
+84705fc165526e Maxim Kochetkov 2020-07-13  1254  
+84705fc165526e Maxim Kochetkov 2020-07-13 @1255  static const struct of_device_id seville_of_match[] = {
+84705fc165526e Maxim Kochetkov 2020-07-13  1256  	{ .compatible = "mscc,vsc9953-switch" },
+84705fc165526e Maxim Kochetkov 2020-07-13  1257  	{ },
+84705fc165526e Maxim Kochetkov 2020-07-13  1258  };
+84705fc165526e Maxim Kochetkov 2020-07-13  1259  MODULE_DEVICE_TABLE(of, seville_of_match);
+84705fc165526e Maxim Kochetkov 2020-07-13  1260  
+
+:::::: The code at line 1255 was first introduced by commit
+:::::: 84705fc165526e8e55d208b2b10a48cc720a106a net: dsa: felix: introduce support for Seville VSC9953 switch
+
+:::::: TO: Maxim Kochetkov <fido_max@inbox.ru>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
