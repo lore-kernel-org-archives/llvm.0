@@ -1,50 +1,54 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BFB62C
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 10:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98E9625;
+	Tue, 26 Apr 2022 10:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650968040; x=1682504040;
+  t=1650968642; x=1682504642;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=s3e2Mol8Q7Ae9bok6W3oQgnE6nys4q61z67ZOj7oV0U=;
-  b=RT02AiyiT1j3tEeCXpMRciNCpW9TzMErKMQqz+9xyUEqETnrvbLQhcbL
-   v7OnO8Ghr3xI8pnmAZSn9uXLWFJs2f7JTLxNlvPrLHd3lfeCe2X0EPR99
-   6hPoPS/SIlhuPxNywcPoOalXi6J1ELaOU+Qhs+GVotHCZkX3aI2MiUE23
-   x3wMV9NXnDpS8YUhXDo0/yHircDRjMFq7Kxfl1kqB04RFKAAEahDAcsg+
-   ZzgVbWCx06iWsRYl+6ev2rUSPELK3wUvdek4U+sy/UqxOKsfGARQClt54
-   e3X1AXdgiLBsbuTizpe9QVHY20WI3r13Vfpt+4t8bzDwzK2XcDsZndb7D
+  bh=SUcHxR2at58PVF1YYffGQMoKoxwX9Qu0SIOQdjmPd80=;
+  b=NUv6YnlmVAdvjFz7iKDNfgg4X6S+0a/xNE4wciMLWrWXmKNMoi3dVnXE
+   OOpSoEBb3xsiE37ZNyR62s1gu7oUtPpStlfz+nT/TVI939fJNdQhPYarf
+   EFW4J3V0O9drfQa36QdMsjkGISbTYS2JTX5hHcFrz5ZJ2CZX/5EBJzl5T
+   f7GqP6hHth5QGhonaHMfQ8VSkTtTxIOMTrqcacPWf/KIQfl8yADu+8GXp
+   Exf8ODWsPPrG8KAZVUfQcohkwNJ9hKvbSD+Y38WR9B1ZEDYcVhuA1kvAy
+   /dJSI930XhAeQOWORhEoP6cDbPBociJhGlg80FNborE+t/iUqf6B2r7rM
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265695684"
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247463396"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="265695684"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 03:13:59 -0700
+   d="scan'208";a="247463396"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 03:24:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="595693115"
+   d="scan'208";a="558238295"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 03:13:56 -0700
+  by orsmga007.jf.intel.com with ESMTP; 26 Apr 2022 03:23:56 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1njICh-0003Py-RN;
-	Tue, 26 Apr 2022 10:13:55 +0000
-Date: Tue, 26 Apr 2022 18:12:58 +0800
+	id 1njIMO-0003QK-3z;
+	Tue, 26 Apr 2022 10:23:56 +0000
+Date: Tue, 26 Apr 2022 18:23:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cai Huoqing <cai.huoqing@linux.dev>
+To: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
+	netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 4/4] drm/nvdla/uapi: Add UAPI of NVDLA driver
-Message-ID: <202204261827.CMHZCsOI-lkp@intel.com>
-References: <20220426060808.78225-5-cai.huoqing@linux.dev>
+	outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
+	sbrivio@redhat.com, jesse.brandeburg@intel.com,
+	anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+	pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+	alexandre.belloni@bootlin.com, shshaikh@marvell.com,
+	manishc@marvell.com, razor@blackwall.org,
+	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+	UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
+	bridge@lists.linux-foundation.org,
+	eng.alaamohamedsoliman.am@gmail.com
+Subject: Re: [PATCH net-next v4 1/2] rtnetlink: add extack support in fdb del
+ handlers
+Message-ID: <202204261831.S6mBmtgP-lkp@intel.com>
+References: <8847c5d670c7ee11890d75f58a4922c5cb542f20.1650896000.git.eng.alaamohamedsoliman.am@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,45 +57,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426060808.78225-5-cai.huoqing@linux.dev>
+In-Reply-To: <8847c5d670c7ee11890d75f58a4922c5cb542f20.1650896000.git.eng.alaamohamedsoliman.am@gmail.com>
 
-Hi Cai,
+Hi Alaa,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on linus/master linux/master v5.18-rc4 next-20220422]
+[auto build test ERROR on horms-ipvs/master]
+[also build test ERROR on net/master linus/master v5.18-rc4]
+[cannot apply to net-next/master next-20220422]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220426-141148
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: i386-randconfig-a003-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261827.CMHZCsOI-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alaa-Mohamed/propagate-extack-to-vxlan_fdb_delete/20220425-222644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+config: riscv-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261831.S6mBmtgP-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a54587f7637b8ee11ad624794af3b409e6306e07
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/5e9c3e146040a4e37b45ca18c3b42c3dfd6d0a0e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220426-141148
-        git checkout a54587f7637b8ee11ad624794af3b409e6306e07
+        git fetch --no-tags linux-review Alaa-Mohamed/propagate-extack-to-vxlan_fdb_delete/20220425-222644
+        git checkout 5e9c3e146040a4e37b45ca18c3b42c3dfd6d0a0e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/mscc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> error: include/uapi/drm/nvdla_drm.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
-   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/drm/nvdla_drm.h] Error 1
-   make[2]: Target '__headers' not remade because of errors.
-   make[1]: *** [Makefile:1280: headers] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/net/ethernet/mscc/ocelot_net.c:784:70: error: too many arguments to function call, expected 5, have 6
+           return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge, extack);
+                  ~~~~~~~~~~~~~~                                               ^~~~~~
+   include/soc/mscc/ocelot.h:893:5: note: 'ocelot_fdb_del' declared here
+   int ocelot_fdb_del(struct ocelot *ocelot, int port, const unsigned char *addr,
+       ^
+   1 error generated.
+
+
+vim +784 drivers/net/ethernet/mscc/ocelot_net.c
+
+   774	
+   775	static int ocelot_port_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
+   776				       struct net_device *dev,
+   777				       const unsigned char *addr, u16 vid, struct netlink_ext_ack *extack)
+   778	{
+   779		struct ocelot_port_private *priv = netdev_priv(dev);
+   780		struct ocelot_port *ocelot_port = &priv->port;
+   781		struct ocelot *ocelot = ocelot_port->ocelot;
+   782		int port = priv->chip_port;
+   783	
+ > 784		return ocelot_fdb_del(ocelot, port, addr, vid, ocelot_port->bridge, extack);
+   785	}
+   786	
 
 -- 
 0-DAY CI Kernel Test Service
