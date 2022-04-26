@@ -1,98 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53D17B
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1650997002;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fVgIa5VojhJQmFpaigVxKBbsCXWJBMH1RAn1ujk7PRM=;
-	b=IHYEa6DzsU9l7eEvp5qJgb0VMvRnH+7v2ZReN+/xlSknx5eZxpD+vfEMFR25rIxttanlWr
-	ph5dfhDKPdFBHw8gsiO73c2oyMKffUnP4tfqunOAjQ/ilVESjdMpvXDkgLdOHSZpY8C+2J
-	0pc+TOH19mM8KT6+wHVPYHYYi1+rpSA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-102-yfhEGJD4NKOCfI_pBeIjtg-1; Tue, 26 Apr 2022 14:16:39 -0400
-X-MC-Unique: yfhEGJD4NKOCfI_pBeIjtg-1
-Received: by mail-qt1-f199.google.com with SMTP id ay26-20020a05622a229a00b002f20573a0faso10449971qtb.13
-        for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 11:16:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=fVgIa5VojhJQmFpaigVxKBbsCXWJBMH1RAn1ujk7PRM=;
-        b=Y0WmvbfntpWagh2I4LFJ0UYLHQsYoQnod+TrZ+EkiELll4spHBbK20KB+S5etsgMHN
-         w1OsUiENWB4HuMdhwEHo+n5+j85ueI0u8WrVXy+CI5hy/XyYCpFtm2L5HBrqPuKYo1gI
-         EY5RJH8CvB6ESn072lv2SQqYD/4oC2Y1EFta5BA4vwmLZU7UHSJJWws7xm9L20Kuo7xQ
-         Lnn7cH8I5QAsYzJWErtNsFLH/KOaX3HweC65l6+moHNE0JytuMvOT5CHjIWFFfoZd8WV
-         MuEC3APYbRl4238u3oVcVGC85rgbovd8G5M5Ns3J6e2WcaBupdmESG453CnJY5ReL8iu
-         cmSw==
-X-Gm-Message-State: AOAM533m3LB4QlF4PG78A7myH4b+r47/3hhwc1ceyfCncy0G1RwuusJS
-	dq6O/tcJRkVC2QuZtwz4vddHxS/C1jETmdQPv5Uppr9epJkS3OmDjBE9dqhL54b4S4GjZyD6EL9
-	C84rYW+r6eHoFBZUf2fEWYK6gbc6G7cJWQjRqG+2qFiOtVoyO/bUDsv2Qf8b6
-X-Received: by 2002:a37:8d46:0:b0:69e:6b77:f4c9 with SMTP id p67-20020a378d46000000b0069e6b77f4c9mr14005931qkd.96.1650996998584;
-        Tue, 26 Apr 2022 11:16:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzerrK0bIUs13gQCY8RmGVefmuG6cHRoTRh0nUnFq7Yi9W2qY/3jruZ+Z2t3dFRiI2Xbx2aAg==
-X-Received: by 2002:a37:8d46:0:b0:69e:6b77:f4c9 with SMTP id p67-20020a378d46000000b0069e6b77f4c9mr14005906qkd.96.1650996998279;
-        Tue, 26 Apr 2022 11:16:38 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002f363eccb2csm5954200qtw.89.2022.04.26.11.16.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 11:16:37 -0700 (PDT)
-Subject: Re: [PATCH] tty: n_gsm: return -EINVAL when adaption is not supported
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: jirislaby@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220426120554.1120585-1-trix@redhat.com>
- <Ymfhtv5b9M33AQuc@kroah.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <4789ae7a-64a2-566b-d445-b8433d3f867a@redhat.com>
-Date: Tue, 26 Apr 2022 11:16:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67567B
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 18:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5565DC385A4;
+	Tue, 26 Apr 2022 18:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650997470;
+	bh=K2P4CR3cLpWGpkziBMUY1Z5EXMU45sivecbtZLcwVH4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bT5eBfX6/DMuJP8o7yAwV5waIk+vYWAkP4UIl2nBOEzZEvA6ju/45BYtU8734OXgn
+	 EOzwPigr7F//ZKzM9HU88Xoc3UhIZIF4n5EPu1bxTUelQqXy+tpIOn82O80MSCiKJx
+	 UwQH32QSgUsGat4qkmo1D09oNOx71FohHodLWbpNU03WGbv3NMH+50aXqjkS8KCu8g
+	 kLIjmTpq5vaRkI3YejscJ2Ncr1eaLMVxu/2xnLZTIjtdxMxa4acp3E0lvIdr7t1Hq8
+	 GjTngDczGnF39cvCWFACFrf9zS7xhnAkLhE6aANZDslFoC+isxmFadpP+dJ0P/EY1O
+	 iphGwzq4LaUYQ==
+Date: Tue, 26 Apr 2022 11:24:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Mauro Rossi <issor.oruam@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Chih-Wei Huang <cwhuang@android-x86.org>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: Android 11 clang toochain: kernel 5.18 build error with 32 bit
+ target
+Message-ID: <Ymg43Ed/Sg8szdKq@dev-arch.thelio-3990X>
+References: <CAEQFVGb2aXVu7eys5PM=xZ7gtzdap_QyRrzi3WzY83ka=heOwQ@mail.gmail.com>
+ <CAK8P3a0Lwtm86wYH+0yFtr=Luc6g3OLu_+vzZaJqxDxNHFmQDQ@mail.gmail.com>
+ <CAKwvOdmfHS8UwZhEL-tLMJSzCXQEZZZhEMpDXuJHtP5s9yePBw@mail.gmail.com>
+ <CAEQFVGYpPaE3cCxUBaiT97GU1i4Nr6yJdv6mU1kiCxqkLSMfBQ@mail.gmail.com>
+ <CAK8P3a2vHuRB1vkjVkKaNxr3Ptfv3UBS0scsShQPxY46_xh9kA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Ymfhtv5b9M33AQuc@kroah.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2vHuRB1vkjVkKaNxr3Ptfv3UBS0scsShQPxY46_xh9kA@mail.gmail.com>
 
+On Tue, Apr 26, 2022 at 02:21:16PM +0200, Arnd Bergmann wrote:
+> On Mon, Apr 25, 2022 at 9:13 PM Mauro Rossi <issor.oruam@gmail.com> wrote:
+> > I have checked also with kernel-5.17 and the same build error is
+> > happening also there, so it is not due to commit 34737e2698 ("uaccess: add generic
+> > __{get,put}_kernel_nofault")
+> 
+> Ok, that's good to know, thanks for checking! I suspect the problem is
+> using a slightly too-old prerelease build of clang, where the released
+> clang-11 build had the asm-goto-with-output feature enabled.
 
-On 4/26/22 5:12 AM, Greg KH wrote:
-> On Tue, Apr 26, 2022 at 08:05:54AM -0400, Tom Rix wrote:
->> The clang build fails with
->> n_gsm.c:940:13: error: variable 'size' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->>          } else if (dlci->adaption == 2) {
->>                     ^~~~~~~~~~~~~~~~~~~
->>
->> The else should return an error, so return -EINVAL.
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
-> What commit id does this fix?  Any reason you didn't cc: the author of
-> the recent changes to this code?
-Sorry missed this part.
-> Is this the same issue that 0-day reported?
+Correct, the build failure can be reproduced with tip of tree LLVM if
+CONFIG_CC_HAS_ASM_GOTO_OUTPUT is manually disabled, such as:
 
-Maybe, it was part of next's update today.  Where is 0-day reported ?
+diff --git a/init/Kconfig b/init/Kconfig
+index ddcbefe535e9..3121f1c96014 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -73,9 +73,9 @@ config CC_CAN_LINK_STATIC
+ config CC_HAS_ASM_GOTO
+ 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+ 
+-config CC_HAS_ASM_GOTO_OUTPUT
+-	depends on CC_HAS_ASM_GOTO
+-	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
++#config CC_HAS_ASM_GOTO_OUTPUT
++#	depends on CC_HAS_ASM_GOTO
++#	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
+ 
+ config TOOLS_SUPPORT_RELR
+ 	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
 
-Tom
+But all supported released versions of clang will have this enabled so I
+am not sure it is worth inserting a workaround for this particular
+problem... More on that below.
 
->
-> thanks,
->
-> greg k-h
->
+> Maybe we should just increase the minimum version to clang-11.1 for
+> the kernel to keep others from running into this issue.
 
+I am not sure how available clang 11.1.0 is for various distributions,
+but I am not fundamentally opposed to this, as it would resolve the
+issue in this particular case.
+
+It would be nice to have some way to detect prerelease vs. final
+versions of LLVM, which would help us out in this scenario. We have
+always tried to support prerelease versions of LLVM but only when it is
+the current main version. In other words, if someone is using a
+prereleased version of LLVM 14, we would tell them to either upgrade to
+the current LLVM 14 version or move to the current prerelease version of
+15, as LLVM intends for the main branch to be release worthy at any
+point, so this is not unreasonable.
+
+There is an upstream issue around this:
+
+https://github.com/llvm/llvm-project/issues/53825
+
+If we could look for "[0-9]git" in the output of 'clang --version', it
+would make it possible to say "prerelease version detected, upgrade if
+you experience any issues" or something along those lines.
+
+Another idea would be adopting something along the lines of GCC's
+versioning scheme: https://gcc.gnu.org/develop.html
+
+If upstream LLVM were to do that, we would be able to turn more of the
+release checks into x.1.0, rather than x.0.0.
+
+Cheers,
+Nathan
