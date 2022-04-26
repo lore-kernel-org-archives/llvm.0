@@ -1,152 +1,191 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8C27B
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 10:57:36 +0000 (UTC)
-X-UUID: d1f92736147f453d98dedf5da273e11e-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:3adac9f4-5fea-4483-993e-9dcaa7b1b077,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:1,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:9
-X-CID-INFO: VERSION:1.1.4,REQID:3adac9f4-5fea-4483-993e-9dcaa7b1b077,OB:0,LOB:
-	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:1,FILE:0,RULE:Release_UHam,ACTIO
-	N:release,TS:9
-X-CID-META: VersionHash:faefae9,CLOUDID:fda388c6-85ee-4ac1-ac05-bd3f1e72e732,C
-	OID:IGNORED,Recheck:0,SF:13|15|28|100|16|19|48|101|20,TC:nil,Content:0,EDM
-	:-3,File:nil,QS:0,BEC:nil
-X-UUID: d1f92736147f453d98dedf5da273e11e-20220426
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1935830264; Tue, 26 Apr 2022 18:57:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Apr 2022 18:57:29 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 18:57:29 +0800
-Message-ID: <f26dd0fd443ee04a5c27b3709ba053ee9bd0316e.camel@mediatek.com>
-Subject: Re: [PATCH v17 14/21] drm/mediatek: add ETHDR support for MT8195
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, <wim@linux-watchdog.org>, "AngeloGioacchino Del
- Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Tue, 26 Apr 2022 18:57:29 +0800
-In-Reply-To: <0e642da615b8f52fb36cd1248f8a124ea4e4b7b8.camel@pengutronix.de>
-References: <20220416020749.29010-1-nancy.lin@mediatek.com>
-	 <20220416020749.29010-15-nancy.lin@mediatek.com>
-	 <0e642da615b8f52fb36cd1248f8a124ea4e4b7b8.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD227B
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 11:43:43 +0000 (UTC)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kng4Q1L81zgYqW;
+	Tue, 26 Apr 2022 19:43:18 +0800 (CST)
+Received: from dggpemm100002.china.huawei.com (7.185.36.179) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 19:43:35 +0800
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ dggpemm100002.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 19:43:33 +0800
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2375.024; Tue, 26 Apr 2022 12:43:32 +0100
+From: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To: kernel test robot <lkp@intel.com>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "iommu@lists.linux-foundation.org"
+	<iommu@lists.linux-foundation.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, "kbuild-all@lists.01.org"
+	<kbuild-all@lists.01.org>, Linuxarm <linuxarm@huawei.com>,
+	"lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>, "joro@8bytes.org"
+	<joro@8bytes.org>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"will@kernel.org" <will@kernel.org>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	"Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>, "steven.price@arm.com"
+	<steven.price@arm.com>, "Sami.Mujawar@arm.com" <Sami.Mujawar@arm.com>,
+	"jon@solid-run.com" <jon@solid-run.com>, "eric.auger@redhat.com"
+	<eric.auger@redhat.com>, "laurentiu.tudor@nxp.com" <laurentiu.tudor@nxp.com>,
+	"hch@infradead.org" <hch@infradead.org>
+Subject: RE: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
+ reserved regions
+Thread-Topic: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
+ reserved regions
+Thread-Index: AQHYVmZKfsv4Ue0JXEuZq1FbubftY6z9MaGAgATjIbA=
+Date: Tue, 26 Apr 2022 11:43:31 +0000
+Message-ID: <ada9f0011e544fc5be9b61b7700f44d5@huawei.com>
+References: <20220422162907.1276-5-shameerali.kolothum.thodi@huawei.com>
+ <202204231737.0jkKpxZk-lkp@intel.com>
+In-Reply-To: <202204231737.0jkKpxZk-lkp@intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+X-CFilter-Loop: Reflected
 
-Hi Philipp,
 
-Thanks for the review.
 
-On Mon, 2022-04-25 at 12:00 +0200, Philipp Zabel wrote:
-> On Sa, 2022-04-16 at 10:07 +0800, Nancy.Lin wrote:
-> > ETHDR is a part of ovl_adaptor.
-> > ETHDR is designed for HDR video and graphics conversion in the
-> > external
-> > display path. It handles multiple HDR input types and performs tone
-> > mapping, color space/color format conversion, and then combine
-> > different layers, output the required HDR or SDR signal to the
-> > subsequent display path.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> 
-> [...]
-> > +static int mtk_ethdr_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct mtk_ethdr *priv;
-> > +	int ret;
-> > +	int i;
-> > +
-> > +	dev_info(dev, "%s+\n", __func__);
-> 
-> Left-over debug statements?
-> 
-Yes, I will remove the redundent log.
+> -----Original Message-----
+> From: kernel test robot [mailto:lkp@intel.com]
+> Sent: 23 April 2022 10:51
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
+> linux-arm-kernel@lists.infradead.org; linux-acpi@vger.kernel.org;
+> iommu@lists.linux-foundation.org
+> Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org; Linuxarm
+> <linuxarm@huawei.com>; lorenzo.pieralisi@arm.com; joro@8bytes.org;
+> robin.murphy@arm.com; will@kernel.org; wanghuiqiang
+> <wanghuiqiang@huawei.com>; Guohanjun (Hanjun Guo)
+> <guohanjun@huawei.com>; steven.price@arm.com; Sami.Mujawar@arm.com;
+> jon@solid-run.com; eric.auger@redhat.com; laurentiu.tudor@nxp.com;
+> hch@infradead.org
+> Subject: Re: [PATCH v11 4/9] ACPI/IORT: Add support to retrieve IORT RMR
+> reserved regions
+>=20
 
-Regards,
-Nancy
+[...]
+=20
+> >> drivers/acpi/arm64/iort.c:801:29: warning: no previous prototype for
+> function 'iort_rmr_alloc' [-Wmissing-prototypes]
+>    struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc
+> *rmr_desc,
+>                                ^
+>    drivers/acpi/arm64/iort.c:801:1: note: declare 'static' if the functio=
+n is not
+> intended to be used outside of this translation unit
+>    struct iommu_iort_rmr_data *iort_rmr_alloc(struct acpi_iort_rmr_desc
+> *rmr_desc,
 
-> > +
-> > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < ETHDR_ID_MAX; i++) {
-> > +		priv->ethdr_comp[i].dev = dev;
-> > +		priv->ethdr_comp[i].regs = of_iomap(dev->of_node, i);
-> > +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> > +		ret = cmdq_dev_get_client_reg(dev,
-> > +					      &priv-
-> > >ethdr_comp[i].cmdq_base, i);
-> > +		if (ret)
-> > +			dev_dbg(dev, "get mediatek,gce-client-reg
-> > fail!\n");
-> > +#endif
-> > +		dev_dbg(dev, "[DRM]regs:0x%p, node:%d\n", priv-
-> > >ethdr_comp[i].regs, i);
-> > +	}
-> > +
-> > +	for (i = 0; i < ETHDR_CLK_NUM; i++)
-> > +		priv->ethdr_clk[i].id = ethdr_clk_str[i];
-> > +	ret = devm_clk_bulk_get_optional(dev, ETHDR_CLK_NUM, priv-
-> > >ethdr_clk);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	priv->irq = platform_get_irq(pdev, 0);
-> > +	if (priv->irq < 0)
-> > +		priv->irq = 0;
-> > +
-> > +	if (priv->irq) {
-> > +		ret = devm_request_irq(dev, priv->irq,
-> > mtk_ethdr_irq_handler,
-> > +				       IRQF_TRIGGER_NONE,
-> > dev_name(dev), priv);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "Failed to request irq %d: %d\n",
-> > priv->irq, ret);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	priv->reset_ctl =
-> > devm_reset_control_array_get_optional_exclusive(dev);
-> 
-> This is missing error handling. You could use dev_err_probe() here.
-> 
-> regards
-> Philipp
+Oops..missed the 'static' here. The rest of the warnings are because of the=
+ dependency
+with ACPICA header patch here[1].
 
-OK, I will add error handling in the next revision. Thank you.
+Hi Robin/Lorenzo,
 
-Regards,
-Nancy
+I am planning to send out an updated series soon with that 'static' added a=
+nd the R-by
+tag received for patch #1 from Christoph. Appreciate if you can take a look=
+ and let me=20
+know if you have any further comments on this series.
 
+Thanks,
+Shameer
+
+[1] https://lore.kernel.org/all/44610361.fMDQidcC6G@kreacher/
+
+
+>    ^
+>    static
+>    drivers/acpi/arm64/iort.c:896:20: error: use of undeclared identifier
+> 'ACPI_IORT_RMR_REMAP_PERMITTED'
+>                    if (rmr->flags & ACPI_IORT_RMR_REMAP_PERMITTED)
+>                                     ^
+>    drivers/acpi/arm64/iort.c:901:20: error: use of undeclared identifier
+> 'ACPI_IORT_RMR_ACCESS_PRIVILEGE'
+>                    if (rmr->flags & ACPI_IORT_RMR_ACCESS_PRIVILEGE)
+>                                     ^
+>    drivers/acpi/arm64/iort.c:905:7: error: call to undeclared function
+> 'ACPI_IORT_RMR_ACCESS_ATTRIBUTES'; ISO C99 and later do not support
+> implicit function declarations [-Wimplicit-function-declaration]
+>                    if (ACPI_IORT_RMR_ACCESS_ATTRIBUTES(rmr->flags) <=3D
+>                        ^
+>    drivers/acpi/arm64/iort.c:906:5: error: use of undeclared identifier
+> 'ACPI_IORT_RMR_ATTR_DEVICE_GRE'
+>                                    ACPI_IORT_RMR_ATTR_DEVICE_GRE)
+>                                    ^
+>    drivers/acpi/arm64/iort.c:909:5: error: use of undeclared identifier
+> 'ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB'
+>=20
+> ACPI_IORT_RMR_ATTR_NORMAL_IWB_OWB)
+>                                    ^
+>    1 warning and 5 errors generated.
+>=20
+>=20
+> vim +/iort_rmr_alloc +801 drivers/acpi/arm64/iort.c
+>=20
+>    800
+>  > 801	struct iommu_iort_rmr_data *iort_rmr_alloc(struct
+> acpi_iort_rmr_desc *rmr_desc,
+>    802						   int prot, enum iommu_resv_type type,
+>    803						   u32 *sids, u32 num_sids)
+>    804	{
+>    805		struct iommu_iort_rmr_data *rmr_data;
+>    806		struct iommu_resv_region *region;
+>    807		u32 *sids_copy;
+>    808		u64 addr =3D rmr_desc->base_address, size =3D rmr_desc->length;
+>    809
+>    810		rmr_data =3D kmalloc(sizeof(*rmr_data), GFP_KERNEL);
+>    811		if (!rmr_data)
+>    812			return NULL;
+>    813
+>    814		/* Create a copy of SIDs array to associate with this rmr_data */
+>    815		sids_copy =3D kmemdup(sids, num_sids * sizeof(*sids),
+> GFP_KERNEL);
+>    816		if (!sids_copy) {
+>    817			kfree(rmr_data);
+>    818			return NULL;
+>    819		}
+>    820		rmr_data->sids =3D sids_copy;
+>    821		rmr_data->num_sids =3D num_sids;
+>    822
+>    823		if (!IS_ALIGNED(addr, SZ_64K) || !IS_ALIGNED(size, SZ_64K)) {
+>    824			/* PAGE align base addr and size */
+>    825			addr &=3D PAGE_MASK;
+>    826			size =3D PAGE_ALIGN(size +
+> offset_in_page(rmr_desc->base_address));
+>    827
+>    828			pr_err(FW_BUG "RMR descriptor[0x%llx - 0x%llx] not
+> aligned to 64K, continue with [0x%llx - 0x%llx]\n",
+>    829			       rmr_desc->base_address,
+>    830			       rmr_desc->base_address + rmr_desc->length - 1,
+>    831			       addr, addr + size - 1);
+>    832		}
+>    833
+>    834		region =3D &rmr_data->rr;
+>    835		INIT_LIST_HEAD(&region->list);
+>    836		region->start =3D addr;
+>    837		region->length =3D size;
+>    838		region->prot =3D prot;
+>    839		region->type =3D type;
+>    840		region->free =3D iort_rmr_free;
+>    841
+>    842		return rmr_data;
+>    843	}
+>    844
+>=20
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
