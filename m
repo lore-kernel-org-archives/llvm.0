@@ -1,136 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D48863E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 20:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF77FC385A0;
-	Tue, 26 Apr 2022 20:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651005174;
-	bh=y6FofLSikYDLr/NdPJbxqfXmtefk+7oqAIS6qhBPU7M=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=efmcIrvf0Nxe1a6Q7awgDa+Ms6glT2vUQSBlr12Ze71Jm838snVl4zWjmQ9ti6nm/
-	 QvSUlF8zvLKZYKRWo2a1pXbBXgPLSmO0HUygeBo4h0Yj1cY1gv46xuiPTrLO3jD08q
-	 Qn59SOyqfsbLsAuWT2PXAWdYv5sYgRgPgZNZQbiBEw2PaDZ/mox0kCzTDQNmnim4JG
-	 KZBjQSKpwKWU0cAx+wF3KVvtUHy2PbX3yZO07Sx4t/+wf2kvF4Zj9xqMyS5bpjWLHg
-	 3YSbB2OlwyvRH/qqmr4oqKJTNAygZzQ/RJHpBjzq3T9RXCD1B9xxi3Zmqvl9yKf0UZ
-	 VMJQqjZSpqIdg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 6A1195C038F; Tue, 26 Apr 2022 13:32:54 -0700 (PDT)
-Date: Tue, 26 Apr 2022 13:32:54 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-	Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7738D63E
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 20:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651005512; x=1682541512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qh+uGKxXeeI6qvvTw6mz04btbKD2n7pIfIveGNz4wqo=;
+  b=KJz65jfmSl1SdQIIzeZbM3qsAwlcVbz4MRtjNgb23UmhANkbOjgw6VgO
+   N3RwlbddQ2AFJyfeht0yBpiWAQhHthXo+5OqRoXwOLW2kc+MlhZ4X0flB
+   JjKNmBXPkkxHWqsXUvf+eEX18OEWRQxIsKqzCaFPotjXi+xwxwhHb2KxA
+   TKb5EynxWLTmt8XqzMVW6uTZDRw8ryWjITBC9w+ty/dIwRjmR9TTecP0o
+   Zv4zQUwYKt11QkfjCqjtuO0MzDPeXC0qK7BJP/4sTZ4qJZxEgiTxMnxhy
+   r2wuMo7TabPgvFptoiO/B8GvsqNhyvTjeRZeMWwR6S64otuzvXkKD14Ct
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265522269"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="265522269"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:38:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="679187536"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2022 13:38:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njRx7-0003xw-8f;
+	Tue, 26 Apr 2022 20:38:29 +0000
+Date: Wed, 27 Apr 2022 04:37:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Watson Chow <watson.chow@avnet.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/regulator/max20086-regulator.c:288:34: warning: unused
+ variable 'max20086_dt_ids'
+Message-ID: <202204270439.GkdfXdmL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
 
-On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
-> Hi all, 
-> 
-> My dependency checker is flagging yet another broken dependency. For
-> context, see [1].
-> 
-> Thankfully, it is fairly straight-forward to explain this time.
-> 
-> > stable_node = page_stable_node(page);
-> 
-> Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-> call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-> assigned to "stable_node".
-> 
-> > if (stable_node) {
-> >         if (stable_node->head != &migrate_nodes &&
-> >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
-> >             NUMA(stable_node->nid)) {
-> >                 stable_node_dup_del(stable_node); ‣dup: stable_node
-> >                 stable_node->head = &migrate_nodes;
-> >                 list_add(&stable_node->list, stable_node->head);
-> 
-> The dependency chain then runs into the two following if's, through an
-> assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-> finally reaches a call to "list_add()" (line 2039) where
-> "stable_node->head" gets passed as the second function argument. 
+Hi Watson,
 
-Huh.
+FYI, the error/warning still remains.
 
-But migrate_nodes is nothing more or less than a list_head structure.
-So one would expect that some other mechanism is protecting its ->prev
-and ->next pointers.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
+commit: bfff546aae50ae68ed395bf0e0848188d27b0ba3 regulator: Add MAX20086-MAX20089 driver
+date:   4 months ago
+config: arm-randconfig-c002-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270439.GkdfXdmL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfff546aae50ae68ed395bf0e0848188d27b0ba3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bfff546aae50ae68ed395bf0e0848188d27b0ba3
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
 
-> >         }
-> > }
-> > 
-> > static inline void list_add(struct list_head *new, struct list_head *head)
-> > {
-> >         __list_add(new, head, head->next);
-> > }
-> > 
-> > static inline void __list_add(struct list_head *new,
-> >                               struct list_head *prev,
-> >                               struct list_head *next)
-> > {
-> >         if (!__list_add_valid(new, prev, next))
-> >                 return;
-> > 
-> >         next->prev = new;
-> >         new->next = next;
-> >         new->prev = prev;
-> >         WRITE_ONCE(prev->next, new);
-> > }
-> 
-> By being passed into "list_add()" via "stable_node->head", the
-> dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-> whose destination address, "stable_node->head->next", is part of the
-> dependency chain and therefore carries an address dependency. 
-> 
-> However, as a result of the assignment in line 2038, Clang knows that
-> "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-> the dependency chain. 
-> 
-> What do you think?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Given that this is a non-atomic update, there had better be something
-protecting it.  This something might be a lock, a decremented-to-zero
-reference count, a rule about only one kthread being permitted to update
-that list, and so on.  In all such cases, the code would not be relying
-on the dependency, but rather on whatever was protecting that operation.
+All warnings (new ones prefixed by >>):
 
-Or am I missing something here?
+>> drivers/regulator/max20086-regulator.c:288:34: warning: unused variable 'max20086_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id max20086_dt_ids[] = {
+                                    ^
+   1 warning generated.
 
-							Thanx, Paul
 
-> Many thanks,
-> Paul
-> 
-> --
-> [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
-> 
+vim +/max20086_dt_ids +288 drivers/regulator/max20086-regulator.c
+
+   287	
+ > 288	static const struct of_device_id max20086_dt_ids[] = {
+   289		{
+   290			.compatible = "maxim,max20086",
+   291			.data = &(const struct max20086_chip_info) {
+   292				.id = MAX20086_DEVICE_ID_MAX20086,
+   293				.num_outputs = 4,
+   294			}
+   295		}, {
+   296			.compatible = "maxim,max20087",
+   297			.data = &(const struct max20086_chip_info) {
+   298				.id = MAX20086_DEVICE_ID_MAX20087,
+   299				.num_outputs = 4,
+   300			}
+   301		}, {
+   302			.compatible = "maxim,max20088",
+   303			.data = &(const struct max20086_chip_info) {
+   304				.id = MAX20086_DEVICE_ID_MAX20088,
+   305				.num_outputs = 2,
+   306			}
+   307		}, {
+   308			.compatible = "maxim,max20089",
+   309			.data = &(const struct max20086_chip_info) {
+   310				.id = MAX20086_DEVICE_ID_MAX20089,
+   311				.num_outputs = 2,
+   312			}
+   313		},
+   314		{ /* Sentinel */ },
+   315	};
+   316	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
