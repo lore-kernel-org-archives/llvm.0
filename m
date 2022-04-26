@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8077E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 19:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1E0C385A0;
-	Tue, 26 Apr 2022 19:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE16D7E
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 19:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75078C385B0;
+	Tue, 26 Apr 2022 19:02:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650999730;
+	s=k20201202; t=1650999748;
 	bh=+Rmjm5j+NVCX092c+nELx71iEIRBfHPkU0zB4Hx6TB8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MnT3ltsMPJzJwza8TSRmD1SkmDvKfkCtbVsBIEp6MOKWQir1Dt2eiM/PBSvKHFG8a
-	 7qJdPEtxurofVp9TleZJQQM+FJgvkwx23enixKhvG1uAldtn0przX+/3Fac316aKOi
-	 FacPYFrb8qO5HdxhOfMTumoajEL/NKmi50W5k003GJ8FeGfKR4D/9mO8Nqi722+BGX
-	 9mKAec5HQkNdW+31u3IziEOswuojP0jQpj6cIfheINovBbjYT9l45kR7e+671VtQeT
-	 wRe3JnKQIq7f3T8SvhWDES+B/SK8sl0r15NPA0RagQ3ltKqTZOGyfhY6TtCAgwL2/j
-	 5ofcNZ5fPov6Q==
+	b=KWAyOTy/S9i6LkNMyyS1a24WIB1omL8tm73edyXQVEC1jEekeNIT3rzk57gzhXLtl
+	 Mu43jnBN8dWyo+rxsVTFMHGVYs8ahrgp3YGGTJeXtKtvO/WvDeWKCrCQddBTZfLLFr
+	 C11h9rtUcdjOD+YjmN6OFkTVrct/08sFn3rKOQ9ib7eG38zw4VU4YGyj9abcPkvO9z
+	 jYKZ4v/k8epbG1D+a8DkAUlbisUKwadLTO1urhfnN4RxrbnJ2x1nl/qk7OFZVfDTEK
+	 l9z0emhfJX5kg93h+JBLojK8C9xxgDwXim8wvEi0W3BTXBqzHwdrTopaKleah7hym+
+	 aMfGUhjFuoz2g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -23,16 +23,16 @@ Cc: Alexey Kardashevskiy <aik@ozlabs.ru>,
 	Sasha Levin <sashal@kernel.org>,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	msuchanek@suse.de,
 	christophe.leroy@csgroup.eu,
+	msuchanek@suse.de,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.17 18/22] powerpc/perf: Fix 32bit compile
-Date: Tue, 26 Apr 2022 15:01:41 -0400
-Message-Id: <20220426190145.2351135-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 12/15] powerpc/perf: Fix 32bit compile
+Date: Tue, 26 Apr 2022 15:02:11 -0400
+Message-Id: <20220426190216.2351413-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220426190145.2351135-1-sashal@kernel.org>
-References: <20220426190145.2351135-1-sashal@kernel.org>
+In-Reply-To: <20220426190216.2351413-1-sashal@kernel.org>
+References: <20220426190216.2351413-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
