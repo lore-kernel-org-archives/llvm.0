@@ -1,78 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9C27E
-	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 06:56:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BD2C385A4;
-	Tue, 26 Apr 2022 06:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650956173;
-	bh=tUoudyOyw/bf8Z+w9m+kTM5pokDjoOIhgz/jJmrp7tY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VRfOG5QL3OvM6vSCx2v+GonIZpx4KC8Ji2ICcFNrSccGZt+MWEJ5dhRPbnMaRopSU
-	 bM5ystHBKFpaBjtstKQfMMGcQ0CCx6PtHq7MGV8VQtDdxx6F1ZxL4gx6Dpt4jug7vJ
-	 sSmx3ndCtawoWRH9rxOKRUHuSXsOB8NrGcCK5WYPaweZYyUKvltn+hTEzUBUpupBUN
-	 PlwFbAgKxS7PmteX9gKCb4Q4hNabqcnE8CSPlsqnMUWy1AIeaX4TG8ArfOYYsE7QRw
-	 161B/e2kx5MJ2/bLE+3KVyt1wIi9+rRH6bjGdrIel2lC/N6MObO0PT/8S7Rk24GKN3
-	 SsW2EHonqN6Pg==
-Message-ID: <15dcf5b4-a5ee-66b8-2762-db7728c9928c@kernel.org>
-Date: Tue, 26 Apr 2022 08:56:08 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E137E
+	for <llvm@lists.linux.dev>; Tue, 26 Apr 2022 06:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650956330; x=1682492330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5MCxt4YaDTywAcdqc4CDGtzAybUBOnEglVaY8ogqPRc=;
+  b=XNq914r/PwpbJkWGJBtheXwJxPzC35bo7d2lVD0jgLsU7sOiCn7G26OZ
+   jGR3Mat0UjGldhwYvX2+v3cQQPgO6rD0u8lKIlu/r7xi5rVZPen+lYBZg
+   WGJk3dmLt4zRCoRg/M4bi1nYRnm6hxkctvr2iSUHCuvT9S5cnkq/NGbM/
+   5y+jVNIS6rpDdrO+KxPB1MW63zK2c2/ID0Dsld2P1E1z8atISZBzNPQ00
+   KryulIc4iR8oY80NL0pTOgdW7hVJeeg9lP4Rh44P5U2sfbfQv/d/k2XzL
+   s58478UnKn/gM4wgnmjQK7RmSAHtiQV+Hv0DG2iEPqiZLjeIrrwVG0vt2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="263069757"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="263069757"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:58:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="564440338"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2022 23:58:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njF9r-0003J9-QB;
+	Tue, 26 Apr 2022 06:58:47 +0000
+Date: Tue, 26 Apr 2022 14:58:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [asahilinux:pr/22 154/189] sound/soc/codecs/tas2764.c:683:20:
+ warning: cast to smaller integer type 'enum tas2764_devid' from 'const void
+ *'
+Message-ID: <202204261404.u4PHBAns-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [soc:arm/multiplatform-late 13/18]
- arch/arm/mach-s3c/s3c24xx.c:683:9: warning: The platform is deprecated and
- scheduled for removal. Please reach to the maintainers of the platform and
- linux-samsung-soc@vger.kernel.org if you still use it.Without such feedback,
- the platform will be removed...
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-arm-kernel@lists.infradead.org, arm@kernel.org,
- Arnd Bergmann <arnd@arndb.de>
-References: <202204261130.D9GY2vp9-lkp@intel.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <202204261130.D9GY2vp9-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 26/04/2022 05:24, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm/multiplatform-late
-> head:   4894b187da71512fa656294ca916e7e73aa3243e
-> commit: 6a5e69c7ddeacbfcab1ffe501c32e21d7989c0f8 [13/18] ARM: s3c: mark as deprecated and schedule removal
-> config: arm-s3c2410_defconfig (https://download.01.org/0day-ci/archive/20220426/202204261130.D9GY2vp9-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=6a5e69c7ddeacbfcab1ffe501c32e21d7989c0f8
->         git remote add soc https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
->         git fetch --no-tags soc arm/multiplatform-late
->         git checkout 6a5e69c7ddeacbfcab1ffe501c32e21d7989c0f8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    arch/arm/mach-s3c/s3c24xx.c:177:16: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
->            unsigned long tmp = 0;
->                          ^
->>> arch/arm/mach-s3c/s3c24xx.c:683:9: warning: The platform is deprecated and scheduled for removal. Please reach to the maintainers of the platform and linux-samsung-soc@vger.kernel.org if you still use it.Without such feedback, the platform will be removed after 2022. [-W#pragma-messages]
->    #pragma message "The platform is deprecated and scheduled for removal. " \
+tree:   https://github.com/AsahiLinux/linux pr/22
+head:   7ee315306d1a3b0da8cf2a53e7f55889d0e7f034
+commit: cb66939651e8850d34306205ef68cc749355bfa0 [154/189] ASoC: tas2764: Extend driver to SN012776
+config: x86_64-randconfig-a003-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261404.u4PHBAns-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/cb66939651e8850d34306205ef68cc749355bfa0
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux pr/22
+        git checkout cb66939651e8850d34306205ef68cc749355bfa0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/codecs/
 
-This pragma is in purpose, so -W#pragma-messages is not helpful. The
-message will stay for 1 year here and ~2 years in s3c64xx.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/tas2764.c:683:20: warning: cast to smaller integer type 'enum tas2764_devid' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   tas2764->devid = (enum tas2764_devid) of_id->data;
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +683 sound/soc/codecs/tas2764.c
+
+   666	
+   667	static int tas2764_i2c_probe(struct i2c_client *client,
+   668				const struct i2c_device_id *id)
+   669	{
+   670		struct tas2764_priv *tas2764;
+   671		const struct of_device_id *of_id = NULL;
+   672		int result;
+   673	
+   674		tas2764 = devm_kzalloc(&client->dev, sizeof(struct tas2764_priv),
+   675				       GFP_KERNEL);
+   676		if (!tas2764)
+   677			return -ENOMEM;
+   678	
+   679		if (client->dev.of_node)
+   680			of_id = of_match_device(tas2764_of_match, &client->dev);	
+   681	
+   682		if (of_id)
+ > 683			tas2764->devid = (enum tas2764_devid) of_id->data;
+   684		else
+   685			tas2764->devid = DEVID_TAS2764;
+   686	
+   687		tas2764->dev = &client->dev;
+   688		i2c_set_clientdata(client, tas2764);
+   689		dev_set_drvdata(&client->dev, tas2764);
+   690	
+   691		tas2764->regmap = devm_regmap_init_i2c(client, &tas2764_i2c_regmap);
+   692		if (IS_ERR(tas2764->regmap)) {
+   693			result = PTR_ERR(tas2764->regmap);
+   694			dev_err(&client->dev, "Failed to allocate register map: %d\n",
+   695						result);
+   696			return result;
+   697		}
+   698	
+   699		if (client->dev.of_node) {
+   700			result = tas2764_parse_dt(&client->dev, tas2764);
+   701			if (result) {
+   702				dev_err(tas2764->dev, "%s: Failed to parse devicetree\n",
+   703					__func__);
+   704				return result;
+   705			}
+   706		}
+   707	
+   708		return devm_snd_soc_register_component(tas2764->dev,
+   709						       &soc_component_driver_tas2764,
+   710						       tas2764_dai_driver,
+   711						       ARRAY_SIZE(tas2764_dai_driver));
+   712	}
+   713	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
