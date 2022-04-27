@@ -1,94 +1,112 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516277F5
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 11:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E5F7F5
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 11:38:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651059485; x=1682595485;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=f9bFUaGTVR+i6An9LL+H6bnimlYb2K5th0PLpOc2b6o=;
-  b=J1V4oAQ3WJ5kEqHNp7fwBz6f1J3laTdlw0L2cOEgMw8KBkzXzJfy2iLf
-   dR7pNesxH+96MBJetC4GZqpmUcq0RZV0wbiZV3mU2vHyTsn3a2T6DJk5L
-   ShYZiIftId3OEoMvmi6Le5qb7m9PPP0pNcGL2dFYK0SDrYY9IK6Y8nDLI
-   BPtep8TMBx3uWHOvCyqFONlIRpEMBjnM3CCULKT/g7rPAvj9IhKiUKL0Q
-   5iS2pDMo0C3ciQlK1TXdqTSpKrlzQm3FAYPOt/c2fV/zbKUfg4afMJ6qJ
-   uusmOI/Ap0JjpeLZciMxdjPbKvy1S2FsgHMQ6i+bURrDvcyLNkw52Pay4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="266059524"
+  t=1651059507; x=1682595507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5TCsS4H2FgSYiKzRFMy/PRIxIgDmsoFmuDlmsLxXLrU=;
+  b=QjwhB/In2GbNzGyjUk/EqsRYs5cwMJ/30/xHeVDRdkJ6QyalSaUME0ki
+   mJNGCUSJOJ9Trz5BR43EeDiA3Z0bPXmg3gT7oTNJXBj3tokQG157ERTA0
+   uyi0RitjR6qFMJU73KbGXqWRa0tzAxzq93fO8MoRjEpWqKZFexax4+rEh
+   1Opg9w6nh51MtoYdXUtWije4+icpYfBEZhwPwgmCpRk5ZHHPtHfD5W+T3
+   /rMuZIBepSYEu+ilpWc93FtAgkw6Je7eXho22XEsmMO8TecDWLogaV1KV
+   crB2IUjOLgN041m2uuMCW2i+R/IM5MPcyY5RRI4ejfjzVDOHzllfh5eGR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246462387"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="266059524"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:38:04 -0700
+   d="scan'208";a="246462387"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:38:27 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="580545484"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.10]) ([10.255.29.10])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:38:02 -0700
-Subject: Re: [kbuild-all] Re: [soc:arm/multiplatform-late 13/18]
- arch/arm/mach-s3c/s3c24xx.c:683:9: warning: The platform is deprecated and
- scheduled for removal. Please reach to the maintainers of the platform and
- linux-samsung-soc@vger.kernel.org if you still use it.Without such feedback,
- the platform will be removed...
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
- Linux ARM <linux-arm-kernel@lists.infradead.org>, arm-soc <arm@kernel.org>
-References: <202204261130.D9GY2vp9-lkp@intel.com>
- <15dcf5b4-a5ee-66b8-2762-db7728c9928c@kernel.org>
- <CAK8P3a2EB4k5oQDSK5n9RTGJv-Zwgijb-NG-qr7mCTz=mW9baQ@mail.gmail.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <bb89d0d1-b26b-7f0a-7b52-bb00eb34aa48@intel.com>
-Date: Wed, 27 Apr 2022 19:38:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+   d="scan'208";a="617465323"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2022 04:38:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njfzz-0004dC-Ch;
+	Wed, 27 Apr 2022 11:38:23 +0000
+Date: Wed, 27 Apr 2022 19:37:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: cgel.zte@gmail.com, glider@google.com, elver@google.com,
+	akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, dvyukov@google.com,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
+	Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
+Message-ID: <202204271916.aTcNyVdc-lkp@intel.com>
+References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2EB4k5oQDSK5n9RTGJv-Zwgijb-NG-qr7mCTz=mW9baQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
+
+Hi,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
+base:   https://github.com/hnaz/linux-mm master
+config: arm-buildonly-randconfig-r004-20220427 (https://download.01.org/0day-ci/archive/20220427/202204271916.aTcNyVdc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/920e9e639493bc72bee803c763f09760e3acd063
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
+        git checkout 920e9e639493bc72bee803c763f09760e3acd063
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash mm/kfence/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   mm/kfence/core.c:1067:23: error: use of undeclared identifier 'addr'
+                   kfence_guarded_free(addr, meta, false);
+                                       ^
+>> mm/kfence/core.c:1075:23: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
+                   kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
+                                       ^~~~
+   mm/kfence/kfence.h:129:40: note: passing argument to parameter 'address' here
+   void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *regs,
+                                          ^
+   1 warning and 1 error generated.
 
 
+vim +1075 mm/kfence/core.c
 
-On 4/26/2022 3:08 PM, Arnd Bergmann wrote:
-> On Tue, Apr 26, 2022 at 8:56 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> On 26/04/2022 05:24, kernel test robot wrote:
->>>
->>>     arch/arm/mach-s3c/s3c24xx.c:177:16: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
->>>             unsigned long tmp = 0;
->>>                           ^
->>>>> arch/arm/mach-s3c/s3c24xx.c:683:9: warning: The platform is deprecated and scheduled for removal. Please reach to the maintainers of the platform and linux-samsung-soc@vger.kernel.org if you still use it.Without such feedback, the platform will be removed after 2022. [-W#pragma-messages]
->>>     #pragma message "The platform is deprecated and scheduled for removal. " \
->>
->> This pragma is in purpose, so -W#pragma-messages is not helpful. The
->> message will stay for 1 year here and ~2 years in s3c64xx.
-> 
-> I don't think there is much we can do about this, from what I can
-> tell, this is just the way that
-> clang prints the message, and the kernel test robot pricked it up
-> because clang has the word
-> 'warning:' in the output that gcc does not:
-> 
-> $ echo "#pragma message(\"message\")" | clang -xc - -c -o /dev/null
-> <stdin>:1:9: warning: message [-W#pragma-messages]
-> #pragma message("message")
->          ^
-> 1 warning generated.
-> 
-> $ echo "#pragma message(\"message\")" | gcc -xc - -c -o /dev/null
-> <stdin>:1:9: note: ‘#pragma message: message’
-> 
->         Arnd
+  1069	
+  1070	void __kfence_free(void *addr)
+  1071	{
+  1072		struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+  1073	
+  1074		if (!meta) {
+> 1075			kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
+  1076			return;
+  1077		}
+  1078	
+  1079		__try_free_kfence_meta(meta);
+  1080	}
+  1081	
 
-Hi Arnd, Krzysztof,
-
-Sorry for the noise, We have added the "pragma-messages" warnings to 
-ignore list.
-
-Best Regards,
-Rong Chen
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
