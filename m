@@ -1,77 +1,97 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B461A3B
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 13:45:44 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id z19so1987163edx.9
-        for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 06:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ib87TMnHdHSaWtcmbF0OjtdiDrTYghbPJrfftr1/beA=;
-        b=SaItUT9u06Eh7/ttp0tmVSQJhdgqGm0RaG2WwKokmUyZR5EslExzxThOhwuR5+YK1f
-         onyYH9SF4kFelpU+G/xj0BKJTJfO/PDIdYSY/c2rrXvk53UIcJd4z1fgrqU47qhxqzcR
-         Mtl0wDuzRXIP6J0WIH1fkgIkc6uf0JTmZfIkzdCS/5TiyX/msHNDJvu5+v86DF5sM8u8
-         BKAVki37XkZKCkwEXrSCLpi3EpjBpsuA27up8+zhFa3RI06cH6BHRUD9sOxBfBSPhZQ7
-         V643WRmHggAmKN68jedC0Acsy1iBpcaiO2i1Aroi1p6IH9XRogYe3Et3lVPc7YOTBGQo
-         ztLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ib87TMnHdHSaWtcmbF0OjtdiDrTYghbPJrfftr1/beA=;
-        b=Z2RDvyk+Buohl8r31bCst5Btbe+8PLFYP6+ATZVIJK9NveuPj3MJQJeDbf+GDqQ3WM
-         CIY9RM+cw8moljRExmIGZanei1c/AJSRjZKqAdOej0ZwN3Up2HJ1c2fQOk9pWjCYrkFp
-         FRCNaQh3CErBPB85TfjqBXUfmC3FXJU7sWlET1ysS/ARaHoPWmY6kYVKbV4NYOb/uoR9
-         J8D6tA5zyx1xAef/igWX8zLJlmrXEdzn1zgtYts5OxOe+J4p+ok2qIpqzOwp9e3H+ppC
-         1EgaQCdv9WIcMkdgNLAoUXrgnqlJmrIv29W/Kbjai/VMMyTSqsW1Jucb4FwgtV5/Kpww
-         ngAw==
-X-Gm-Message-State: AOAM532uB81JhQWQ/EJXQPGsvSxGa2pvGqs1rTEP0Yy/HhisICppqEBZ
-	R/CPHjO8Gfk66T9WXKca6fW9bl6oia3XrgO7oOs=
-X-Google-Smtp-Source: ABdhPJx1WY5M470N8OIdfRPQPI2v2H2iGF0+KhybAR8gwh/GX+t8lhQC4ORxmgh9NYM7nb/cUWL0BvikHNUxtWokfcE=
-X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
- ec17-20020a0564020d5100b00425d5e1e9f0mr21870786edb.125.1651067142414; Wed, 27
- Apr 2022 06:45:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720D6A3B
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 13:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714F6C385A9;
+	Wed, 27 Apr 2022 13:47:00 +0000 (UTC)
+Date: Wed, 27 Apr 2022 09:46:58 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] ftrace: Drop duplicate mcount locations
+Message-ID: <20220427094658.502fcaee@gandalf.local.home>
+In-Reply-To: <9b1b816cff1f479c8de0e9baa5a6ac680b84e17e.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<9b1b816cff1f479c8de0e9baa5a6ac680b84e17e.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220420211105.14654-10-jagathjog1996@gmail.com>
- <202204211211.febbJ6fy-lkp@intel.com> <20220424172002.7dd48dfa@jic23-huawei> <20220427030119.GA31584@jagath-PC>
-In-Reply-To: <20220427030119.GA31584@jagath-PC>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 27 Apr 2022 15:45:06 +0200
-Message-ID: <CAHp75VdtK6n_SAGr4bUUXEg28gGGxbazznG=HQf2RBtcOpr-bg@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] iio: accel: bma400: Add support for activity and
- inactivity events
-To: Jagath Jog J <jagathjog1996@gmail.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, kernel test robot <lkp@intel.com>, Dan Robertson <dan@dlrobertson.com>, 
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-iio <linux-iio@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 27, 2022 at 5:01 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> On Sun, Apr 24, 2022 at 05:20:02PM +0100, Jonathan Cameron wrote:
-> > On Thu, 21 Apr 2022 14:45:05 +0800
-> > kernel test robot <lkp@intel.com> wrote:
-> > > Thank you for the patch! Perhaps something to improve:
+On Wed, 27 Apr 2022 15:01:21 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-...
+> In the absence of section symbols [1], objtool (today) and recordmcount
+> (with a subsequent patch) generate __mcount_loc relocation records with
+> weak symbols as the base. This works fine as long as those weak symbols
+> are not overridden, but if they are, these can result in duplicate
+> entries in the final vmlinux mcount location table. This will cause
+> ftrace to fail when trying to patch the same location twice. Fix this by
+> dropping duplicate locations during ftrace init.
+> 
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
+> 
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>  kernel/trace/ftrace.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 4f1d2f5e726341..8bc4f282bb3ff4 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -6496,7 +6496,7 @@ static int ftrace_process_locs(struct module *mod,
+>  	struct dyn_ftrace *rec;
+>  	unsigned long count;
+>  	unsigned long *p;
+> -	unsigned long addr;
+> +	unsigned long addr, prev_addr = 0;
+>  	unsigned long flags = 0; /* Shut up gcc */
+>  	int ret = -ENOMEM;
+>  
+> @@ -6550,6 +6550,16 @@ static int ftrace_process_locs(struct module *mod,
+>  	while (p < end) {
+>  		unsigned long end_offset;
+>  		addr = ftrace_call_adjust(*p++);
+> +
+> +		/*
+> +		 * Drop duplicate entries, which can happen when weak
+> +		 * functions are overridden, and __mcount_loc relocation
+> +		 * records were generated against function names due to
+> +		 * absence of non-weak section symbols
+> +		 */
+> +		if (addr == prev_addr)
+> +			addr = 0;
 
-> To avoid warning can I do like this
-> field_value = FIELD_PREP(BMA400_INT_GEN1_MSK, state);
+Please don't use the side effect of addr == 0 causing the loop to continue
+for this logic. The two are not related. Simply call continue.
+
+		if (addr == prev_addr)
+			continue;
 
 
-Can the same be used as below ?
+-- Steve
 
-> > >   1089              set_mask_bits(&data->generic_event_en, msk, field_value);
 
-In other words, look for function macros in the bitfield.h.
+> +
+>  		/*
+>  		 * Some architecture linkers will pad between
+>  		 * the different mcount_loc sections of different
+> @@ -6569,6 +6579,7 @@ static int ftrace_process_locs(struct module *mod,
+>  
+>  		rec = &pg->records[pg->index++];
+>  		rec->ip = addr;
+> +		prev_addr = addr;
+>  	}
+>  
+>  	/* We should have used all pages */
 
--- 
-With Best Regards,
-Andy Shevchenko
