@@ -1,51 +1,51 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626887B
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 16:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21FC7B
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 16:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1651076169;
+	s=mimecast20190719; t=1651076369;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XwzMaPClFelWBj+M1/FlaJtyKAavIIdtNAVgltrSGwE=;
-	b=f/ywZPm8Lsz9BjEVxQ7IZD1cN5mt0onpOQNhToV3WpFdR7WF04P/i+MkudfXEfNm+FoNNe
-	Za2XlgJxPJAMd2dbO34UsxaJ1S2n2W9BbikqZ8Mb+Hkin8wbYGiZPXY8QSGWK4/2QAgdvc
-	J/dr+stImiofp0YVRyQ4lSQWZU7maKU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=sRv3Tm/YxvbVyc+FieRrE6e6WGvD5VYoIbrExTxqxIc=;
+	b=VVZ/Cwg+EHCsTrtBVySKXndQIRWOmbV9liClAwT8T5UAlb0SerZXEk1LnXtQXBm9e6y2cr
+	ilPmPoWbcG0eFAnHOH8C7sJ+HNB7paiF7Pgcdkwj9XWvSJ1c1Vd+TBuWlf2kU6Ezrs8GGZ
+	7IYFhsr8eUAbhDFY8V1eyP7D6XparMs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-MvghzK3JM3OQsgfPf7AFcw-1; Wed, 27 Apr 2022 12:16:07 -0400
-X-MC-Unique: MvghzK3JM3OQsgfPf7AFcw-1
-Received: by mail-ej1-f69.google.com with SMTP id qw33-20020a1709066a2100b006f001832229so1450407ejc.4
-        for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:16:07 -0700 (PDT)
+ us-mta-76-FKIdB0l3NneQtfThdCvNng-1; Wed, 27 Apr 2022 12:19:26 -0400
+X-MC-Unique: FKIdB0l3NneQtfThdCvNng-1
+Received: by mail-ed1-f69.google.com with SMTP id eg38-20020a05640228a600b00425d61d0302so1254661edb.17
+        for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:19:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XwzMaPClFelWBj+M1/FlaJtyKAavIIdtNAVgltrSGwE=;
-        b=xCQ21el8scwwUth0IJam5p+whPpw/El5wObZCZ2bu4BOn+WU1Po+dHBPKNdeM39Mbm
-         xRobAdO/C2H8hnVaW60ELtNLQWOhDCdu/HiEbASCNFAjC9aoI7oojVEbTXVvXVcPAVqp
-         YC1H2k2qOP0LZXyX8oDeYtbjcdb5Ailm/jZ5TlVfYOUCdw9gNSWb39XbgDZYlB/aXO4D
-         WuGQp3txwpJXBUYvfxzz4I0YaQg5ByeLiJufAxaWkWNYOYeC5+NCTITIwzW9HS2YwKyr
-         iIAEDjYYYXOB2lm0Q6jT/ihLSp31E3YqkiaRSvYIJk5zb9uJxMU8Te4n9jIZoXRDE8Pi
-         oqjQ==
-X-Gm-Message-State: AOAM53397DfDecMWI7BB22jNrsYkpTXzBPg+4sB8OQDbKR9Yr9bhPTn0
-	I7JFy0AHL82vAAyPeuddsRSsfd+8BkbpLjeFim5pFri6ZAn0jv1jBB5FVfs8Qjl9l8kcXafGDYU
-	1+PF1HFk2q7qOkA==
-X-Received: by 2002:a50:ba8a:0:b0:423:bdf5:41d6 with SMTP id x10-20020a50ba8a000000b00423bdf541d6mr31204243ede.204.1651076166097;
-        Wed, 27 Apr 2022 09:16:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwulvD8m9SPOwH8M5hEDhBATWqPusNqnumcNmDWp0DqCiaZlLyHFZbEtVTqmkld18Ve3VjXfg==
-X-Received: by 2002:a50:ba8a:0:b0:423:bdf5:41d6 with SMTP id x10-20020a50ba8a000000b00423bdf541d6mr31204191ede.204.1651076165723;
-        Wed, 27 Apr 2022 09:16:05 -0700 (PDT)
+        bh=sRv3Tm/YxvbVyc+FieRrE6e6WGvD5VYoIbrExTxqxIc=;
+        b=p+IzyqLJZYDrLCQM0s9eR4vclFlJlbgYov1NSlEyBTFe1MeQb9tM2poNIbGQT1vWT5
+         BvOvZFY1MTFeclEZkMeg7oPZb97cYtLcQPaMVyi3YEPRyDdltwy602DNXpHZYg7L+yNB
+         C8Wz3bUw69UCJuYxRegvoiYoyNLiK8a/km3VqBKmsNeP/oN7zmyhCJK3PYUXhXDDchwr
+         v//eBpApwhx2hpXDugl5yLC8xaW+6jog0Wmw/G4dv9W7DcQWOzbqMd70s7MHwcf+adwc
+         W3qFx1bKILdcIRnjBa1kCwWtf7tly0+2fP9lyJ+sc55pO5PSgmRQpJjWrCsfkSI/Fkqf
+         nI5Q==
+X-Gm-Message-State: AOAM532msO94EI0YmTIdep83w9FLDB3pbVgoJ6d1lK78So9bSN7IEhBH
+	TG4Us1EzFbBVxOAWkMed3Xol4BLNJQAgejN6aFx0XRvw3H7GMZldc9PpQ3fTQOhydm9AymXkV0V
+	CNF6Qxv3kpXKwqQ==
+X-Received: by 2002:a17:906:36c8:b0:6e7:a66f:766e with SMTP id b8-20020a17090636c800b006e7a66f766emr28037674ejc.354.1651076365279;
+        Wed, 27 Apr 2022 09:19:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxm5BaMBzoGtQo5IQdMhRfeY4QxolpdShU/5txFlpx42/oLivNC1lmGXxVf9+6OnL64aCieYg==
+X-Received: by 2002:a17:906:36c8:b0:6e7:a66f:766e with SMTP id b8-20020a17090636c800b006e7a66f766emr28037634ejc.354.1651076364904;
+        Wed, 27 Apr 2022 09:19:24 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id su22-20020a17090703d600b006f3a97cda9esm3257789ejb.18.2022.04.27.09.16.03
+        by smtp.googlemail.com with ESMTPSA id n21-20020a170906725500b006e10a7d6d03sm7039199ejk.219.2022.04.27.09.19.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 09:16:04 -0700 (PDT)
-Message-ID: <26ed111b-aab4-a596-dbfb-d561d1e13eb7@redhat.com>
-Date: Wed, 27 Apr 2022 18:16:03 +0200
+        Wed, 27 Apr 2022 09:19:23 -0700 (PDT)
+Message-ID: <5dae6922-d957-bd84-dcee-e970b77ce159@redhat.com>
+Date: Wed, 27 Apr 2022 18:19:21 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,7 +54,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH MANUALSEL 5.17 1/7] kvm: selftests: do not use bitfields
+Subject: Re: [PATCH MANUALSEL 5.15 1/7] kvm: selftests: do not use bitfields
  larger than 32-bits for PTEs
 To: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org
@@ -64,9 +64,9 @@ Cc: Nana Liu <nanliu@redhat.com>, Peter Xu <peterx@redhat.com>,
  ricarkol@google.com, yang.zhong@intel.com, aaronlewis@google.com,
  wei.w.wang@intel.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
  llvm@lists.linux.dev
-References: <20220427155408.19352-1-sashal@kernel.org>
+References: <20220427155431.19458-1-sashal@kernel.org>
 From: Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220427155408.19352-1-sashal@kernel.org>
+In-Reply-To: <20220427155431.19458-1-sashal@kernel.org>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=pbonzini@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -75,7 +75,7 @@ Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/27/22 17:53, Sasha Levin wrote:
+On 4/27/22 17:54, Sasha Levin wrote:
 > From: Paolo Bonzini <pbonzini@redhat.com>
 > 
 > [ Upstream commit f18b4aebe107d092e384b1ae680b1e1de7a0196d ]
@@ -128,10 +128,10 @@ On 4/27/22 17:53, Sasha Levin wrote:
 >   2 files changed, 92 insertions(+), 115 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 8a470da7b71a..15a2875698b5 100644
+> index 05e65ca1c30c..23861c8faa61 100644
 > --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 > +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -60,6 +60,21 @@
+> @@ -58,6 +58,21 @@
 >   /* CPUID.0x8000_0001.EDX */
 >   #define CPUID_GBPAGES		(1ul << 26)
 >   
@@ -154,7 +154,7 @@ On 4/27/22 17:53, Sasha Levin wrote:
 >   struct gpr64_regs {
 >   	u64 rax;
 > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 9f000dfb5594..0dd442c26015 100644
+> index da73b97e1e6d..46057079d8bb 100644
 > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
 > @@ -19,38 +19,6 @@
