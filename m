@@ -1,42 +1,56 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F25621
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 01:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0849B621
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 01:33:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651021398; x=1682557398;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LF1JHLf5LO3j4aSZiAdPAy35lsnxG8xaGxyQwONusG0=;
-  b=nIG4P3bOkFHuwTYQmFmAZlZ0Mp4cluYG9lXE3DISDtGjCuZqwlUzy2DI
-   PuCPV8KeH8SL6bjlsScVQcgy5Y+TTB5EW0hTUXMP6EKmlhurb1/de4Rqz
-   XkDxgdj974/SDfZ9euZvMyP1igyvvQ6311QtwRkoLMwjfZ7kuivatEQ5k
-   LcHgQDlY6S/8X1Deiy+C60Ig+MdiNmhgfsJwHVHWczeSVV1qdf1rPoxeY
-   +TbMQbjj5ptGRM10a7o0LNo/MP/WiLcpPMYSCdFPpz6LVA07Sx3vUpg2T
-   H/2LWDav42O41KZGorq6Y4yysxO8KVQyaj6+jSn/OYoBu+cfTTGwyL9GP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328714162"
+  t=1651023204; x=1682559204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G8Dj4gKe1sLtxGIzX7r31BTbZr1Rfh1JubY3941+Lps=;
+  b=iZWmNND73J9xO2ilEdBw3UwKC+FuMsiuAB15XvzCvAZTxNgha9loA542
+   f2iDXJ6eFJhyigcQ4bx6uOLi+KghHDeshqDTGMK0aEWWyUbp4z2zU3FD/
+   refX2DW3CPXFmqhpVIPmuOxU4DAqZdKSNAV3ql29VYLdcx4a+V/b+QFQ+
+   2Wg2alxUOz5IUPTZM0pWbYwz8fOrOsloZYCu90fjd6m8HXomZgeSXvfpy
+   KIvBDvroaHOGMytF962qBC0qAcQn4vnSVB89rAkY/igvIbYIoRksa1nzf
+   ta69AgVWwfUuaI7IGLLVj0AmsdGA7TzWMgR6+CmPzvZ05jhnmZz/Q8dR0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245701480"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="328714162"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 18:03:18 -0700
+   d="scan'208";a="245701480"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 18:33:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="730533754"
+   d="scan'208";a="617279875"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Apr 2022 18:03:15 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 18:33:17 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1njW5K-00048q-Ka;
-	Wed, 27 Apr 2022 01:03:14 +0000
-Date: Wed, 27 Apr 2022 09:02:39 +0800
+	id 1njWYO-0004BM-D3;
+	Wed, 27 Apr 2022 01:33:16 +0000
+Date: Wed, 27 Apr 2022 09:33:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thierry Reding <treding@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [thierryreding:for-5.19/work 141/141]
- drivers/iommu/of_iommu.c:227:24: warning: variable 'end' set but not used
-Message-ID: <202204270946.XYoXuYbi-lkp@intel.com>
+To: Nitesh Shetty <nj.shetty@samsung.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, chaitanyak@nvidia.com,
+	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+	dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, axboe@kernel.dk, msnitzer@redhat.com,
+	bvanassche@acm.org, martin.petersen@oracle.com, hare@suse.de,
+	kbusch@kernel.org, hch@lst.de, Frederick.Knight@netapp.com,
+	osandov@fb.com, lsf-pc@lists.linux-foundation.org,
+	djwong@kernel.org, josef@toxicpanda.com, clm@fb.com,
+	dsterba@suse.com, tytso@mit.edu, jack@suse.com,
+	nitheshshetty@gmail.com, gost.dev@samsung.com,
+	Nitesh Shetty <nj.shetty@samsung.com>,
+	Vincent Fu <vincent.fu@samsung.com>,
+	Arnav Dawn <arnav.dawn@samsung.com>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>
+Subject: Re: [PATCH v4 04/10] block: add emulation for copy
+Message-ID: <202204270913.Ecb3uQx1-lkp@intel.com>
+References: <20220426101241.30100-5-nj.shetty@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,89 +59,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220426101241.30100-5-nj.shetty@samsung.com>
 
-tree:   https://github.com/thierryreding/linux for-5.19/work
-head:   a39ec325554470289e8384e30d06a22960d1dd7b
-commit: a39ec325554470289e8384e30d06a22960d1dd7b [141/141] WIP
-config: i386-randconfig-a003-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270946.XYoXuYbi-lkp@intel.com/config)
+Hi Nitesh,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20220422]
+[cannot apply to axboe-block/for-next device-mapper-dm/for-next linus/master v5.18-rc4 v5.18-rc3 v5.18-rc2 v5.18-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Introduce-queue-limits-for-copy-offload-support/20220426-201825
+base:    e7d6987e09a328d4a949701db40ef63fbb970670
+config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270913.Ecb3uQx1-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/thierryreding/linux/commit/a39ec325554470289e8384e30d06a22960d1dd7b
-        git remote add thierryreding https://github.com/thierryreding/linux
-        git fetch --no-tags thierryreding for-5.19/work
-        git checkout a39ec325554470289e8384e30d06a22960d1dd7b
+        # https://github.com/intel-lab-lkp/linux/commit/c406c5145dc7d628d4197f6726c23a3f1179b88e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nitesh-Shetty/block-Introduce-queue-limits-for-copy-offload-support/20220426-201825
+        git checkout c406c5145dc7d628d4197f6726c23a3f1179b88e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iommu/of_iommu.c:227:24: warning: variable 'end' set but not used [-Wunused-but-set-variable]
-                                   phys_addr_t start, end;
-                                                      ^
->> drivers/iommu/of_iommu.c:222:17: warning: variable 'index' set but not used [-Wunused-but-set-variable]
-                           unsigned int index = 0;
-                                        ^
+   block/blk-lib.c:178:5: warning: no previous prototype for function 'blk_copy_offload' [-Wmissing-prototypes]
+   int blk_copy_offload(struct block_device *src_bdev, int nr_srcs,
+       ^
+   block/blk-lib.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int blk_copy_offload(struct block_device *src_bdev, int nr_srcs,
+   ^
+   static 
+>> block/blk-lib.c:276:5: warning: no previous prototype for function 'blk_submit_rw_buf' [-Wmissing-prototypes]
+   int blk_submit_rw_buf(struct block_device *bdev, void *buf, sector_t buf_len,
+       ^
+   block/blk-lib.c:276:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int blk_submit_rw_buf(struct block_device *bdev, void *buf, sector_t buf_len,
+   ^
+   static 
    2 warnings generated.
 
 
-vim +/end +227 drivers/iommu/of_iommu.c
+vim +/blk_submit_rw_buf +276 block/blk-lib.c
 
-   178	
-   179	/**
-   180	 * of_iommu_get_resv_regions - reserved region driver helper for device tree
-   181	 * @dev: device for which to get reserved regions
-   182	 * @list: reserved region list
-   183	 *
-   184	 * IOMMU drivers can use this to implement their .get_resv_regions() callback
-   185	 * for memory regions attached to a device tree node. See the reserved-memory
-   186	 * device tree bindings on how to use these:
-   187	 *
-   188	 *   Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
-   189	 */
-   190	void of_iommu_get_resv_regions(struct device *dev, struct list_head *list)
-   191	{
-   192	#if IS_ENABLED(CONFIG_OF_ADDRESS)
-   193		struct of_phandle_iterator it;
-   194		int err;
-   195	
-   196		of_for_each_phandle(&it, err, dev->of_node, "memory-region", NULL, 0) {
-   197			struct iommu_resv_region *region;
-   198			struct resource res;
-   199			const __be32 *maps;
-   200			int size;
-   201	
-   202			memset(&res, 0, sizeof(res));
-   203	
-   204			/*
-   205			 * The "reg" property is optional and can be omitted by reserved-memory regions
-   206			 * that represent reservations in the IOVA space, which are regions that should
-   207			 * not be mapped.
-   208			 */
-   209			if (of_find_property(it.node, "reg", NULL)) {
-   210				err = of_address_to_resource(it.node, 0, &res);
-   211				if (err < 0) {
-   212					dev_err(dev, "failed to parse memory region %pOF: %d\n",
-   213						it.node, err);
-   214					continue;
-   215				}
-   216			}
-   217	
-   218			maps = of_get_property(it.node, "iommu-addresses", &size);
-   219			if (maps) {
-   220				const __be32 *end = maps + size / sizeof(__be32);
-   221				struct device_node *np;
- > 222				unsigned int index = 0;
-   223				u32 phandle;
-   224				int na, ns;
-   225	
-   226				while (maps < end) {
- > 227					phys_addr_t start, end;
+   275	
+ > 276	int blk_submit_rw_buf(struct block_device *bdev, void *buf, sector_t buf_len,
+   277					sector_t sector, unsigned int op, gfp_t gfp_mask)
+   278	{
+   279		struct request_queue *q = bdev_get_queue(bdev);
+   280		struct bio *bio, *parent = NULL;
+   281		sector_t max_hw_len = min_t(unsigned int, queue_max_hw_sectors(q),
+   282				queue_max_segments(q) << (PAGE_SHIFT - SECTOR_SHIFT)) << SECTOR_SHIFT;
+   283		sector_t len, remaining;
+   284		int ret;
+   285	
+   286		for (remaining = buf_len; remaining > 0; remaining -= len) {
+   287			len = min_t(int, max_hw_len, remaining);
+   288	retry:
+   289			bio = bio_map_kern(q, buf, len, gfp_mask);
+   290			if (IS_ERR(bio)) {
+   291				len >>= 1;
+   292				if (len)
+   293					goto retry;
+   294				return PTR_ERR(bio);
+   295			}
+   296	
+   297			bio->bi_iter.bi_sector = sector >> SECTOR_SHIFT;
+   298			bio->bi_opf = op;
+   299			bio_set_dev(bio, bdev);
+   300			bio->bi_end_io = NULL;
+   301			bio->bi_private = NULL;
+   302	
+   303			if (parent) {
+   304				bio_chain(parent, bio);
+   305				submit_bio(parent);
+   306			}
+   307			parent = bio;
+   308			sector += len;
+   309			buf = (char *) buf + len;
+   310		}
+   311		ret = submit_bio_wait(bio);
+   312		bio_put(bio);
+   313	
+   314		return ret;
+   315	}
+   316	
 
 -- 
 0-DAY CI Kernel Test Service
