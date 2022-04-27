@@ -1,195 +1,123 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B157A20
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 02:25:40 +0000 (UTC)
-X-UUID: 6ee58a627b334415909218f2746fced3-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:13d7d03c-07b8-4389-b047-271ab6f8cf3e,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:6c44f82e-6199-437e-8ab4-9920b4bc5b76,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 6ee58a627b334415909218f2746fced3-20220428
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1069416685; Thu, 28 Apr 2022 10:25:28 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 28 Apr 2022 10:25:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 10:25:26 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 10:25:26 +0800
-Message-ID: <030e693e5fb231f7e53884da813da1391c71ecc8.camel@mediatek.com>
-Subject: Re: [PATCH v17 03/21] dt-bindings: mediatek: add ethdr definition
- for mt8195
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, <wim@linux-watchdog.org>, "AngeloGioacchino Del
- Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Thu, 28 Apr 2022 10:25:26 +0800
-In-Reply-To: <b699a15ae2e810e20d7c388bc347f57d0a951513.camel@pengutronix.de>
-References: <20220416020749.29010-1-nancy.lin@mediatek.com>
-	 <20220416020749.29010-4-nancy.lin@mediatek.com>
-	 <b699a15ae2e810e20d7c388bc347f57d0a951513.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87B2A31
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 02:56:46 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N5n3t-1nuti20xbP-017HWW; Thu, 28 Apr 2022 04:56:13 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by leknes.fjasle.eu (Postfix) with ESMTPS id 60FF93C01C;
+	Thu, 28 Apr 2022 04:56:11 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+	id 2A7005F6; Wed, 27 Apr 2022 22:08:45 +0200 (CEST)
+Date: Wed, 27 Apr 2022 22:08:45 +0200
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH 21/27] kbuild: record symbol versions in *.cmd files
+Message-ID: <YmmizaUdM5PjmCOK@bergen.fjasle.eu>
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
+ <20220424190811.1678416-22-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220424190811.1678416-22-masahiroy@kernel.org>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:4eZ1QVDrWYPEzqwAHKyFC4DUykBpGTm6QgZLqkfdK9SyXC1ZVLV
+ IhNcHRRrNti9CPiPtr0iLywTheurjnLfDex121sMY0iOnLiG9qpadaf0pYt3d894btmOhSl
+ q1vFPUstBCVH60KZYrOQ6IaeSfOPC5kknQJ1wpOV5YeAcWbwNM8/toELdyAFW/nn/0j6IdO
+ p8HpFhTVhaTVZ+STlSp/Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fcKuhkGh79Y=:LhoKNuOKROCfUwvPBS2C7t
+ ufB0RHf4iKnyU84WBzxK7MNX4VLk5ud24A6qcn8g2Vz3xOKvALW2XApaOUb5GRKkzCFu0GH31
+ ZPIT3/H2BA1hcRnK4ZtSe0zX49G8k20ql+l0fitLclqYewR/KvneTDMq2ORx2fEv2xGuHFAjO
+ 95hJ3piNQUBph2LUpQH/+HVZegBEhs8qnFO9NWf32mSaYJMQRWWHkboJqexewMHOvzuIRJj+z
+ MbP6yXuq50MqNZMnjbQMUBQP1R2LBGwV9xIaISqW7Nt9DoK5QFZiI6tsjNL9pV9Xgl2bjDaHK
+ k/SZfcObJEYJhp7uVN5VDJWQiTZhOQ6TCbIUB13kMFR7j8D8ytuYnRZOHAsfagvIkhVYCF+iH
+ GpZ3C4HGALlG5Ejo+Z2KyNPX8KofR3LMgVDB5eXH5BimrPO0v6VpIWbsJUZDY438MygXJVTih
+ kFwg9u7DAkpiLPMj8E3PaaTB1GlzPtG+YNVvcAp4XxfrVzezotcqGts1ZftfPpQLtz2xnVw+I
+ eYY6NNLezkS+JO6bm4x1Jn2Iay6QZAvHhZkhM2aGPPp0xfkwQaS30ZLKGvihrdDHSuX/VWJ2/
+ GKU0F3jqEQ1ad+Td1EiZfCTyFlJR3UshzW8ylWBrsQF0IdtIXjdy7M7mRzYrL2LP8e6HZl4oD
+ kEOvXMoNS3DrqIfzxicFXemRZJJ9Chbnyrul08eJr2y4UWF/O0PMHNbndEJPJvxc7obA=
 
-Hi Philipp,
-
-Thanks for the review.
-
-On Mon, 2022-04-25 at 11:54 +0200, Philipp Zabel wrote:
-> Hi Nancy,
+On ma. 25. april 2022 kl. 04.08 +0000 Masahiro Yamada wrote:
+> When CONFIG_MODVERSIONS=y, the output from genksyms is saved in
+> separate *.symversions files, and will be used much later when
+> CONFIG_LTO_CLANG=y because it is impossible to update LLVM bit code
+> here.
 > 
-> On Sa, 2022-04-16 at 10:07 +0800, Nancy.Lin wrote:
-> > Add vdosys1 ETHDR definition.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  .../display/mediatek/mediatek,ethdr.yaml      | 158
-> > ++++++++++++++++++
-> >  1 file changed, 158 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
-> > aml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr
-> > .yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr
-> > .yaml
-> > new file mode 100644
-> > index 000000000000..e8303c28a361
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr
-> > .yaml
-> > @@ -0,0 +1,158 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,ethdr.yaml*__;Iw!!CTRNKA9wMg0ARbw!zcXKSpPDpWKl7v-NJE7CCYQtbPpEYQazXsfVX8MAZeNc0RwE7UdQucLql2QskJLk$
-> >  
-> > +$schema: 
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zcXKSpPDpWKl7v-NJE7CCYQtbPpEYQazXsfVX8MAZeNc0RwE7UdQucLql2fDD2NQ$
-> >  
-> > +
-> > +title: Mediatek Ethdr Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> > +  - Philipp Zabel <p.zabel@pengutronix.de>
-> > +
-> > +description: |
-> > +  ETHDR is designed for HDR video and graphics conversion in the
-> > external display path.
-> > +  It handles multiple HDR input types and performs tone mapping,
-> > color space/color
-> > +  format conversion, and then combine different layers, output the
-> > required HDR or
-> > +  SDR signal to the subsequent display path. This engine is
-> > composed of two video
-> > +  frontends, two graphic frontends, one video backend and a mixer.
-> > ETHDR has two
-> > +  DMA function blocks, DS and ADL. These two function blocks read
-> > the pre-programmed
-> > +  registers from DRAM and set them to HW in the v-blanking period.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: mediatek,mt8195-disp-ethdr
-> > +  reg:
-> > +    maxItems: 7
-> > +  reg-names:
-> > +    items:
-> > +      - const: mixer
-> > +      - const: vdo_fe0
-> > +      - const: vdo_fe1
-> > +      - const: gfx_fe0
-> > +      - const: gfx_fe1
-> > +      - const: vdo_be
-> > +      - const: adl_ds
-> > +  interrupts:
-> > +    minItems: 1
-> > +  iommus:
-> > +    description: The compatible property is DMA function blocks.
-> > +      Should point to the respective IOMMU block with master port
-> > as argument,
-> > +      see
-> > Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
-> > +      details.
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +  clocks:
-> > +    items:
-> > +      - description: mixer clock
-> > +      - description: video frontend 0 clock
-> > +      - description: video frontend 1 clock
-> > +      - description: graphic frontend 0 clock
-> > +      - description: graphic frontend 1 clock
-> > +      - description: video backend clock
-> > +      - description: autodownload and menuload clock
-> > +      - description: video frontend 0 async clock
-> > +      - description: video frontend 1 async clock
-> > +      - description: graphic frontend 0 async clock
-> > +      - description: graphic frontend 1 async clock
-> > +      - description: video backend async clock
-> > +      - description: ethdr top clock
-> > +  clock-names:
-> > +    items:
-> > +      - const: mixer
-> > +      - const: vdo_fe0
-> > +      - const: vdo_fe1
-> > +      - const: gfx_fe0
-> > +      - const: gfx_fe1
-> > +      - const: vdo_be
-> > +      - const: adl_ds
-> > +      - const: vdo_fe0_async
-> > +      - const: vdo_fe1_async
-> > +      - const: gfx_fe0_async
-> > +      - const: gfx_fe1_async
-> > +      - const: vdo_be_async
-> > +      - const: ethdr_top
-> > +  power-domains:
-> > +    maxItems: 1
-> > +  resets:
-> > +    maxItems: 5
+> This approach is not robust because:
 > 
-> Please add a reset-names property and name these resets.
+>  - *.symversions may or may not exist. If *.symversions does not
+>    exist, we never know if it is missing for legitimate reason
+>    (i.e. no EXPORT_SYMBOL) or something bad has happened (for
+>    example, the user accidentally deleted it). Once it occurs,
+>    it is not self-healing because *.symversions is generated
+>    as a side effect of the build rule of the object.
 > 
-> regards
-> Philipp
+>  - stale (i.e. invalid) *.symversions might be picked up if an
+>    object is generated in a non-ordinary way, and corresponding
+>    *.symversions (, which was generated by old builds) just happen
+>    to exist.
+> 
+> A more robust approach is to save symbol versions in *.cmd files
+> because:
+> 
+>  - *.cmd always exists (if the object is generated by if_changed
+>    rule or friends). Even if the user accidentally deletes it,
+>    it will be regenerated in the next build.
+> 
+>  - *.cmd is always re-generated when the object is updated. This
+>    avoid stale version information being picked up.
+> 
+> I will remove *.symversions later.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  scripts/Makefile.build | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index f6a506318795..e03e85c90b26 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -175,6 +175,8 @@ gen_symversions =								\
+>  	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
+>  		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+>  		    > $@.symversions;						\
+> +		echo >> $(dot-target).cmd ;					\
+> +		sed 's/\(.*\) = \(.*\);/$(pound)\1=\2/' $@.symversions >> $(dot-target).cmd ; \
+>  	else									\
+>  		rm -f $@.symversions;						\
+>  	fi
 
-OK, I will fix it in the next revision.
+While reviewing this patch, I was missing the update of the comment a 
+few lines above.  But I understand that it makes more sense to update 
+it in the follow-up patch.
 
-Regards,
-Nancy
+Tested-by: Nicolas Schier <nicolas@fjasle.eu>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
+> -- 
+> 2.32.0
+
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
