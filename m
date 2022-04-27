@@ -1,42 +1,49 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000A27B
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040EA7B
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651050756; x=1682586756;
+  t=1651051599; x=1682587599;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lswIE0qDBgRPXTxgOcmdXmYU1FBWk9mNzYqp3iZo3yI=;
-  b=hkYCPZckXhG10n0uAUq41BoSO4nayKVcaEwMqmNPm55NA/lvPcvGpYvR
-   VQaJ0zTCpOs9YVt7tFl5WzAuli7RUNb+jl5hX4H8Ecx5ZxPyxeTp5lBhY
-   pBjb3FBb6oxltDpL2OXJX4i4AXcHrdnNP5dUfG3S155AXkcBOOYJNUx3H
-   bFz+C9d/xTnBdDJwg9MAVbpoonV6a38ufuAbVdtfEXwRLl8ztv9BToTmW
-   4SoFj5l9gy66pwOKeWBComqgRKYMClrj/0so4em72JbwLrGrq+jBd/nUm
-   6KxIXeYSbIn9e7nt+x7bjWnzwTTNf/8dmiRk6rl4TwbCJUcTj5BY5wXiv
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291020232"
+  bh=MEdpCvTbebSfftKt7KRsTDu5tKkUZCjAgldDSUjcCVk=;
+  b=ER+MpGCZNkMnE1RyqnnfXOWsTHjVZL5GcMCiK7jlsz5A2bn6S7antgJC
+   FzbGggop2qY4/fEk5gC8kBWVjmmUFBveUHdtNC28kt0PcToZlp/nRfgYw
+   n1LvBUHtX704opwMu5O+avrmmlMPiIZHVVzmPigbaA6DRPWNevQZBGvRD
+   nXdIUQvd/mCd5Ft91egaoAXcx3OVi1VvXeTOBl1MTpBbq9fDkRNSEdvEp
+   Ee0E9FfSHPY9rc7+M80X5DPpNpAoxZtF8WPA3tSu+yvS5HNq1tneFQkVN
+   zi2MPVtSbiriAWE5RzLVuwnK8VuL93tG4eHHmuU29fvFjFntkJiXAWUjM
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326363843"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="291020232"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:12:36 -0700
+   d="scan'208";a="326363843"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:26:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="650611167"
+   d="scan'208";a="539773403"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2022 02:12:35 -0700
+  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 02:26:35 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1njdis-0004Xi-JS;
-	Wed, 27 Apr 2022 09:12:34 +0000
-Date: Wed, 27 Apr 2022 17:12:16 +0800
+	id 1njdwR-0004YM-0M;
+	Wed, 27 Apr 2022 09:26:35 +0000
+Date: Wed, 27 Apr 2022 17:25:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Potapenko <glider@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v3 12/46] kmsan: add KMSAN runtime core
-Message-ID: <202204271730.igwpZeHZ-lkp@intel.com>
-References: <20220426164315.625149-13-glider@google.com>
+To: Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+	krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, khilman@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Johnson Wang <johnson.wang@mediatek.com>
+Subject: Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+Message-ID: <202204271737.oAuTwqZH-lkp@intel.com>
+References: <20220425125546.4129-3-johnson.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,206 +52,224 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426164315.625149-13-glider@google.com>
+In-Reply-To: <20220425125546.4129-3-johnson.wang@mediatek.com>
 
-Hi Alexander,
+Hi Johnson,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/x86/mm linus/master v5.18-rc4 next-20220427]
-[cannot apply to hnaz-mm/master]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v5.18-rc4 next-20220427]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Potapenko/Add-KernelMemorySanitizer-infrastructure/20220427-004851
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 203d8919a9eda5d1bc68ac3cd7637588334c9dc1
-config: arm64-randconfig-r001-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271730.igwpZeHZ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e646a4336193785fdd3120ed4a6b60ffb8860b1d
+        # https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexander-Potapenko/Add-KernelMemorySanitizer-infrastructure/20220427-004851
-        git checkout e646a4336193785fdd3120ed4a6b60ffb8860b1d
+        git fetch --no-tags linux-review Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+        git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/ drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:22:
-   In file included from include/linux/stat.h:6:
-   In file included from arch/arm64/include/asm/stat.h:13:
-   In file included from arch/arm64/include/asm/compat.h:19:
-   In file included from include/linux/sched.h:17:
-   In file included from include/linux/kmsan.h:16:
-   In file included from include/linux/vmalloc.h:13:
-   In file included from arch/arm64/include/asm/vmalloc.h:5:
-   In file included from arch/arm64/include/asm/pgtable.h:12:
->> arch/arm64/include/asm/mte.h:107:11: error: incomplete definition of type 'struct task_struct'
-               (task->thread.sctlr_user & (1UL << SCTLR_EL1_TCF0_SHIFT)))
-                ~~~~^
-   arch/arm64/include/asm/current.h:9:8: note: forward declaration of 'struct task_struct'
-   struct task_struct;
-          ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:13:
-   In file included from include/linux/irqdomain.h:35:
-   In file included from include/linux/of.h:17:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:22:
-   In file included from include/linux/stat.h:6:
-   In file included from arch/arm64/include/asm/stat.h:13:
-   In file included from arch/arm64/include/asm/compat.h:19:
-   In file included from include/linux/sched.h:17:
-   In file included from include/linux/kmsan.h:16:
-   In file included from include/linux/vmalloc.h:13:
-   In file included from arch/arm64/include/asm/vmalloc.h:5:
->> arch/arm64/include/asm/pgtable.h:299:19: error: incomplete definition of type 'struct task_struct'
-           if (mm != current->active_mm && atomic_read(&mm->mm_users) <= 1)
-                     ~~~~~~~^
-   arch/arm64/include/asm/current.h:9:8: note: forward declaration of 'struct task_struct'
-   struct task_struct;
-          ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+   drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named 'parent_type' in 'struct devfreq_passive_data'
+           passive_data->parent_type = CPUFREQ_PARENT_DEV;
+           ~~~~~~~~~~~~  ^
+   drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared identifier 'CPUFREQ_PARENT_DEV'
+           passive_data->parent_type = CPUFREQ_PARENT_DEV;
+                                       ^
+>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                           PTR_ERR(drv->devfreq));
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +107 arch/arm64/include/asm/mte.h
+vim +379 drivers/devfreq/mtk-cci-devfreq.c
 
-637ec831ea4f09 Vincenzo Frascino   2019-09-16   90  
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   91  static inline void mte_disable_tco_entry(struct task_struct *task)
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   92  {
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   93  	if (!system_supports_mte())
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   94  		return;
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   95  
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   96  	/*
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   97  	 * Re-enable tag checking (TCO set on exception entry). This is only
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   98  	 * necessary if MTE is enabled in either the kernel or the userspace
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18   99  	 * task in synchronous or asymmetric mode (SCTLR_EL1.TCF0 bit 0 is set
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  100  	 * for both). With MTE disabled in the kernel and disabled or
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  101  	 * asynchronous in userspace, tag check faults (including in uaccesses)
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  102  	 * are not reported, therefore there is no need to re-enable checking.
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  103  	 * This is beneficial on microarchitectures where re-enabling TCO is
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  104  	 * expensive.
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  105  	 */
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  106  	if (kasan_hw_tags_enabled() ||
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18 @107  	    (task->thread.sctlr_user & (1UL << SCTLR_EL1_TCF0_SHIFT)))
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  108  		asm volatile(SET_PSTATE_TCO(0));
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  109  }
-38ddf7dafaeaf3 Peter Collingbourne 2022-02-18  110  
+   255	
+   256	static int mtk_ccifreq_probe(struct platform_device *pdev)
+   257	{
+   258		struct device *dev = &pdev->dev;
+   259		struct mtk_ccifreq_drv *drv;
+   260		struct devfreq_passive_data *passive_data;
+   261		struct dev_pm_opp *opp;
+   262		unsigned long rate, opp_volt;
+   263		int ret;
+   264	
+   265		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+   266		if (!drv)
+   267			return -ENOMEM;
+   268	
+   269		drv->dev = dev;
+   270		drv->soc_data = (const struct mtk_ccifreq_platform_data *)
+   271					of_device_get_match_data(&pdev->dev);
+   272		mutex_init(&drv->reg_lock);
+   273		platform_set_drvdata(pdev, drv);
+   274	
+   275		drv->cci_clk = devm_clk_get(dev, "cci");
+   276		if (IS_ERR(drv->cci_clk)) {
+   277			ret = PTR_ERR(drv->cci_clk);
+   278			return dev_err_probe(dev, ret,
+   279					     "failed to get cci clk: %d\n", ret);
+   280		}
+   281	
+   282		drv->inter_clk = devm_clk_get(dev, "intermediate");
+   283		if (IS_ERR(drv->inter_clk)) {
+   284			ret = PTR_ERR(drv->inter_clk);
+   285			dev_err_probe(dev, ret,
+   286				      "failed to get intermediate clk: %d\n", ret);
+   287			goto out_free_resources;
+   288		}
+   289	
+   290		drv->proc_reg = devm_regulator_get_optional(dev, "proc");
+   291		if (IS_ERR(drv->proc_reg)) {
+   292			ret = PTR_ERR(drv->proc_reg);
+   293			dev_err_probe(dev, ret,
+   294				      "failed to get proc regulator: %d\n", ret);
+   295			goto out_free_resources;
+   296		}
+   297	
+   298		ret = regulator_enable(drv->proc_reg);
+   299		if (ret) {
+   300			dev_err(dev, "failed to enable proc regulator\n");
+   301			goto out_free_resources;
+   302		}
+   303	
+   304		drv->sram_reg = regulator_get_optional(dev, "sram");
+   305		if (IS_ERR(drv->sram_reg))
+   306			drv->sram_reg = NULL;
+   307		else {
+   308			ret = regulator_enable(drv->sram_reg);
+   309			if (ret) {
+   310				dev_err(dev, "failed to enable sram regulator\n");
+   311				goto out_free_resources;
+   312			}
+   313		}
+   314	
+   315		/*
+   316		 * We assume min voltage is 0 and tracking target voltage using
+   317		 * min_volt_shift for each iteration.
+   318		 * The retry_max is 3 times of expeted iteration count.
+   319		 */
+   320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv->soc_data->sram_max_volt,
+   321						       drv->soc_data->proc_max_volt),
+   322						   drv->soc_data->min_volt_shift);
+   323	
+   324		ret = clk_prepare_enable(drv->cci_clk);
+   325		if (ret)
+   326			goto out_free_resources;
+   327	
+   328		ret = clk_prepare_enable(drv->inter_clk);
+   329		if (ret)
+   330			goto out_disable_cci_clk;
+   331	
+   332		ret = dev_pm_opp_of_add_table(dev);
+   333		if (ret) {
+   334			dev_err(dev, "failed to add opp table: %d\n", ret);
+   335			goto out_disable_inter_clk;
+   336		}
+   337	
+   338		rate = clk_get_rate(drv->inter_clk);
+   339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
+   340		if (IS_ERR(opp)) {
+   341			ret = PTR_ERR(opp);
+   342			dev_err(dev, "failed to get intermediate opp: %d\n", ret);
+   343			goto out_remove_opp_table;
+   344		}
+   345		drv->inter_voltage = dev_pm_opp_get_voltage(opp);
+   346		dev_pm_opp_put(opp);
+   347	
+   348		rate = U32_MAX;
+   349		opp = dev_pm_opp_find_freq_floor(drv->dev, &rate);
+   350		if (IS_ERR(opp)) {
+   351			dev_err(dev, "failed to get opp\n");
+   352			ret = PTR_ERR(opp);
+   353			goto out_remove_opp_table;
+   354		}
+   355	
+   356		opp_volt = dev_pm_opp_get_voltage(opp);
+   357		dev_pm_opp_put(opp);
+   358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
+   359		if (ret) {
+   360			dev_err(dev, "failed to scale to highest voltage %lu in proc_reg\n",
+   361				opp_volt);
+   362			goto out_remove_opp_table;
+   363		}
+   364	
+   365		passive_data = devm_kzalloc(dev, sizeof(struct devfreq_passive_data),
+   366					    GFP_KERNEL);
+   367		if (!passive_data) {
+   368			ret = -ENOMEM;
+   369			goto out_remove_opp_table;
+   370		}
+   371	
+   372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
+   373		drv->devfreq = devm_devfreq_add_device(dev, &mtk_ccifreq_profile,
+   374						       DEVFREQ_GOV_PASSIVE,
+   375						       passive_data);
+   376		if (IS_ERR(drv->devfreq)) {
+   377			ret = -EPROBE_DEFER;
+   378			dev_err(dev, "failed to add devfreq device: %d\n",
+ > 379				PTR_ERR(drv->devfreq));
+   380			goto out_remove_opp_table;
+   381		}
+   382	
+   383		drv->opp_nb.notifier_call = mtk_ccifreq_opp_notifier;
+   384		ret = dev_pm_opp_register_notifier(dev, &drv->opp_nb);
+   385		if (ret) {
+   386			dev_err(dev, "failed to register opp notifier: %d\n", ret);
+   387			goto out_remove_devfreq_device;
+   388		}
+   389		return 0;
+   390	
+   391	out_remove_devfreq_device:
+   392		devm_devfreq_remove_device(dev, drv->devfreq);
+   393	
+   394	out_remove_opp_table:
+   395		dev_pm_opp_of_remove_table(dev);
+   396	
+   397	out_disable_inter_clk:
+   398		clk_disable_unprepare(drv->inter_clk);
+   399	
+   400	out_disable_cci_clk:
+   401		clk_disable_unprepare(drv->cci_clk);
+   402	
+   403	out_free_resources:
+   404		if (regulator_is_enabled(drv->proc_reg))
+   405			regulator_disable(drv->proc_reg);
+   406		if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
+   407			regulator_disable(drv->sram_reg);
+   408	
+   409		if (!IS_ERR(drv->proc_reg))
+   410			regulator_put(drv->proc_reg);
+   411		if (!IS_ERR(drv->sram_reg))
+   412			regulator_put(drv->sram_reg);
+   413		if (!IS_ERR(drv->cci_clk))
+   414			clk_put(drv->cci_clk);
+   415		if (!IS_ERR(drv->inter_clk))
+   416			clk_put(drv->inter_clk);
+   417	
+   418		return ret;
+   419	}
+   420	
 
 -- 
 0-DAY CI Kernel Test Service
