@@ -1,43 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D697E658
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A587E
 	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 03:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651029923; x=1682565923;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pnKrycee21aDUCZf4kWsfwjfxpOM+2+c8gST5n/8tg0=;
-  b=nYKgulNk7WIKb+NEzMZkgx6YdeXYBW6tEJvphohV01c6XEzfnT0g/8C2
-   HT/tQ66PePGcvqaEHCMJ8ZD3wLZdBxbPV/1JxQGHTLTGNqGCBnSzoNZ3F
-   DZcqaitgN2oucF3TbMSONr95JtMewAhqvd+DmRb9iOlMPjDBuN5dN3LZI
-   r8TjYFGkqyYolxjdjjXntfMqZDM2QAzAb1xS2MWVRAAwgcx14NrTN+VPI
-   T20fCuOaEx8R/wXHSxNgzhhTyb+zGZmORxpiKDo0kRVKT9CwDIjRu5KbI
-   692e0+Ds+4kf5L0DSc3JL8fvrPyoxYc69C2SRWFG1ficymrKXuv6MwjD4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263389333"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1UgTTUqJWW2RByGdnq7W8LlUbMB6DU4g8Sg5VkgmeBs=;
+  b=TC8V3h7S7zKiieWEh5kkTtmmmQLewhyevnFzegfQU7H+X5omahoIpzS8
+   LHqLK+7MTemQ7VebDy168JvcijXAXPjUVO0boM9pAFizoIBZgGkeWs1Bd
+   5djxsZ7iD/FBXsIuqaPKPUvxMvjkbYcN3MdAG0l3ml9Hxife6TlBSudn0
+   MHNPClYVnT2FBmFE1hB52IZrjB7Z0BjghXa0ufDaynyFjoXX0suWCnHVx
+   KEkIIdlkUU8PLKYSi4fusEMcusUNwkJYEYTMMzgZhSHyWMBUMQ6zZYToV
+   8PIVR7aUJrtytX7R9RNOcKwEUuNyS7A501tvvjvL5CKjjCbPD4qxwp1TN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="253179676"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="263389333"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 20:25:23 -0700
+   d="scan'208";a="253179676"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 20:25:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="564878800"
+   d="scan'208";a="807815338"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Apr 2022 20:25:21 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 26 Apr 2022 20:25:21 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1njYIr-0004Gl-6q;
+	id 1njYIr-0004Gg-4X;
 	Wed, 27 Apr 2022 03:25:21 +0000
-Date: Wed, 27 Apr 2022 11:25:14 +0800
+Date: Wed, 27 Apr 2022 11:25:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
+To: Erin MacNeil <lnx.erin@gmail.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [mark:stackleak/rework 9/9] drivers/misc/lkdtm/stackleak.c:30:34:
- error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202204271126.59JDH9bK-lkp@intel.com>
+	Erin MacNeil <lnx.erin@gmail.com>
+Subject: Re: [PATCH net-next] net: Add SO_RCVMARK socket option to provide
+ SO_MARK with recvmsg().
+Message-ID: <202204271132.O9UPUBp2-lkp@intel.com>
+References: <20220426173805.2652-1-lnx.erin@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,174 +47,374 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220426173805.2652-1-lnx.erin@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git stackleak/rework
-head:   7d99ba3a2a80dcf7265eafacebceaa798f5ca231
-commit: 7d99ba3a2a80dcf7265eafacebceaa798f5ca231 [9/9] WIP: stackleak: rework the LKDTM stackleak test
-config: hexagon-randconfig-r025-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271126.59JDH9bK-lkp@intel.com/config)
+Hi Erin,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Erin-MacNeil/net-Add-SO_RCVMARK-socket-option-to-provide-SO_MARK-with-recvmsg/20220427-014257
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 561215482cc69d1c758944d4463b3d5d96d37bd1
+config: mips-malta_kvm_defconfig (https://download.01.org/0day-ci/archive/20220427/202204271132.O9UPUBp2-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=7d99ba3a2a80dcf7265eafacebceaa798f5ca231
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark stackleak/rework
-        git checkout 7d99ba3a2a80dcf7265eafacebceaa798f5ca231
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/ba0c57c49e3f18b23fe626dd2e603cf4ed91ebf7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Erin-MacNeil/net-Add-SO_RCVMARK-socket-option-to-provide-SO_MARK-with-recvmsg/20220427-014257
+        git checkout ba0c57c49e3f18b23fe626dd2e603cf4ed91ebf7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/misc/lkdtm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/misc/lkdtm/stackleak.c:30:34: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           const unsigned long task_high = stackleak_task_high_bound(current);
-                                           ^
->> drivers/misc/lkdtm/stackleak.c:31:33: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           const unsigned long task_low = stackleak_task_low_bound(current);
-                                          ^
->> drivers/misc/lkdtm/stackleak.c:32:37: error: no member named 'lowest_stack' in 'struct task_struct'
-           unsigned long lowest_sp = current->lowest_stack;
-                                     ~~~~~~~  ^
->> drivers/misc/lkdtm/stackleak.c:33:29: error: use of undeclared identifier 'current_stack_pointer'
-           unsigned long current_sp = current_stack_pointer;
-                                      ^
-   4 errors generated.
+>> net/core/sock.c:1314:7: error: use of undeclared identifier 'SO_RCVMARK'; did you mean 'SOCK_RCVMARK'?
+           case SO_RCVMARK:
+                ^~~~~~~~~~
+                SOCK_RCVMARK
+   include/net/sock.h:898:2: note: 'SOCK_RCVMARK' declared here
+           SOCK_RCVMARK, /* Receive SO_MARK  ancillary data with packet */
+           ^
+>> net/core/sock.c:1314:7: error: duplicate case value: '27' and 'SOCK_RCVMARK' both equal '27'
+           case SO_RCVMARK:
+                ^
+   net/core/sock.c:1288:7: note: previous case defined here
+           case SO_DETACH_FILTER:
+                ^
+   arch/mips/include/uapi/asm/socket.h:65:26: note: expanded from macro 'SO_DETACH_FILTER'
+   #define SO_DETACH_FILTER        27
+                                   ^
+   net/core/sock.c:1743:7: error: use of undeclared identifier 'SO_RCVMARK'; did you mean 'SOCK_RCVMARK'?
+           case SO_RCVMARK:
+                ^~~~~~~~~~
+                SOCK_RCVMARK
+   include/net/sock.h:898:2: note: 'SOCK_RCVMARK' declared here
+           SOCK_RCVMARK, /* Receive SO_MARK  ancillary data with packet */
+           ^
+   3 errors generated.
 
 
-vim +/stackleak_task_high_bound +30 drivers/misc/lkdtm/stackleak.c
+vim +1314 net/core/sock.c
 
-    13	
-    14	/*
-    15	 * Check that stackleak tracks the lowest stack pointer and erases the stack
-    16	 * below this as expected.
-    17	 *
-    18	 * Returns true if tests pass, false otherwise.
-    19	 *
-    20	 * To prevent the lowest stack pointer changing during the test, IRQs are
-    21	 * masked and instrumentation of this function is disabled. We assume that the
-    22	 * compiler will create a fixed-size stack frame for this function.
-    23	 *
-    24	 * We cannot call any non-inlined functions during the test as these may alter
-    25	 * the lowest stack pointer and the poisoned region. As soon as we log an error
-    26	 * the test must be aborted as the printing code will use the stack.
-    27	 */
-    28	static noinstr bool check_stackleak_irqoff(void)
-    29	{
-  > 30		const unsigned long task_high = stackleak_task_high_bound(current);
-  > 31		const unsigned long task_low = stackleak_task_low_bound(current);
-  > 32		unsigned long lowest_sp = current->lowest_stack;
-  > 33		unsigned long current_sp = current_stack_pointer;
-    34		unsigned long check_high, check_low, check_ptr;
-    35		unsigned long untracked_low;
-    36		unsigned long found = 0;
-    37		const unsigned long check_depth =
-    38				STACKLEAK_SEARCH_DEPTH / sizeof(unsigned long);
-    39	
-    40		/*
-    41		 * Check that the current and lowest recorded stack pointers are within
-    42		 * expected bounds.
-    43		 */
-    44		if (current_sp < task_low || current_sp >= task_high) {
-    45			pr_err("FAIL: current_stack_pointer (0x%lx) outside of task stack bounds [0x%lx..0x%lx]\n",
-    46			       current_sp, task_low, task_high - 1);
-    47			return false;
-    48		}
-    49		if (lowest_sp < task_low || lowest_sp >= task_high) {
-    50			pr_err("FAIL: current->lowest_stack (0x%lx) outside of task stack bounds [0x%lx..0x%lx]\n",
-    51			       lowest_sp, task_low, task_high - 1);
-    52			return false;
-    53		}
-    54	
-    55		/*
-    56		 * Poison values are naturally-aligned unsigned long, and any poison
-    57		 * will be below the used portion of the stack, so align down to find
-    58		 * the address immediately above the first possible poison value.
-    59		 */
-    60		current_sp = ALIGN_DOWN(current_sp, sizeof(unsigned long));
-    61		lowest_sp = ALIGN_DOWN(current_sp, sizeof(unsigned long));
-    62	
-    63		/*
-    64		 * This function is not instrumented. If its stack frame starts more
-    65		 * than STACKLEAK_SEARCH_DEPTH below the lowest recorded stack pointer
-    66		 * (after alignment), erasing will not function correctly.
-    67		 */
-    68		if (current_sp < lowest_sp - STACKLEAK_SEARCH_DEPTH) {
-    69			pr_err("FAIL: stack pointer (0x%lx) is %ld bytes below current->lowest_stack (0x%lx)\n",
-    70			       current_sp, lowest_sp - current_sp, lowest_sp);
-    71			return false;
-    72		}
-    73	
-    74		/*
-    75		 * Depending on what has run prior to this function (including any
-    76		 * interrupts handled on the task stack), it's possible that:
-    77		 *
-    78		 * a) current_stack_pointer < current->lowest_stack
-    79		 *
-    80		 * b) current_stack_pointer == current->lowest_stack
-    81		 *
-    82		 * c) current_stack_pointer > current->lowest_stack
-    83		 *
-    84		 * For the high boundary we must start checking immediately below the
-    85		 * lowest of the two.
-    86		 *
-    87		 * For the low boundary we start immediately above the STACK_END_MAGIC.
-    88		 */
-    89		check_high = min(current_sp, lowest_sp);
-    90		check_low = task_low;
-    91	
-    92		check_ptr = check_high - sizeof(unsigned long);
-    93	
-    94		if (check_ptr <= check_low) {
-    95			pr_err("FAIL: not enough stack space for the test\n");
-    96			return false;
-    97		}
-    98	
-    99		/*
-   100		 * Search for 'check_depth' poison values in a row as stackleak_erase()
-   101		 * does.
-   102		 */
-   103		while (check_ptr > check_low && found <= check_depth) {
-   104			if (*(unsigned long *)check_ptr == STACKLEAK_POISON)
-   105				found++;
-   106			else
-   107				found = 0;
-   108	
-   109			check_ptr -= sizeof(unsigned long);
-   110		}
-   111	
-   112		/*
-   113		 * Either we found 'check_depth' poison values in a row, or we hit the
-   114		 * low check boundary. Either way, 'check_ptr' is just below the last
-   115		 * poison we checked.
-   116		 */
-   117		untracked_low = check_ptr + sizeof(unsigned long) * found;
-   118	
-   119		/*
-   120		 * Check for any remaining unpoisoned stack.
-   121		 */
-   122		while (check_ptr > check_low) {
-   123			unsigned long val = *(unsigned long *)check_ptr;
-   124	
-   125			if (val != STACKLEAK_POISON) {
-   126				pr_err("FAIL: non-poison value 0x%lx %lu bytes into poison region\n",
-   127				       val, untracked_low - check_ptr);
-   128				return false;
-   129			}
-   130	
-   131			check_ptr -= sizeof(unsigned long);
-   132		}
-   133	
-   134		pr_info("tracked: %lu bytes, untracked: %lu bytes, poisoned: %lu bytes\n",
-   135			task_high - check_high,
-   136			check_high - untracked_low,
-   137			untracked_low - task_low);
-   138	
-   139		return true;
-   140	}
-   141	
+  1031	
+  1032	/*
+  1033	 *	This is meant for all protocols to use and covers goings on
+  1034	 *	at the socket level. Everything here is generic.
+  1035	 */
+  1036	
+  1037	int sock_setsockopt(struct socket *sock, int level, int optname,
+  1038			    sockptr_t optval, unsigned int optlen)
+  1039	{
+  1040		struct so_timestamping timestamping;
+  1041		struct sock_txtime sk_txtime;
+  1042		struct sock *sk = sock->sk;
+  1043		int val;
+  1044		int valbool;
+  1045		struct linger ling;
+  1046		int ret = 0;
+  1047	
+  1048		/*
+  1049		 *	Options without arguments
+  1050		 */
+  1051	
+  1052		if (optname == SO_BINDTODEVICE)
+  1053			return sock_setbindtodevice(sk, optval, optlen);
+  1054	
+  1055		if (optlen < sizeof(int))
+  1056			return -EINVAL;
+  1057	
+  1058		if (copy_from_sockptr(&val, optval, sizeof(val)))
+  1059			return -EFAULT;
+  1060	
+  1061		valbool = val ? 1 : 0;
+  1062	
+  1063		lock_sock(sk);
+  1064	
+  1065		switch (optname) {
+  1066		case SO_DEBUG:
+  1067			if (val && !capable(CAP_NET_ADMIN))
+  1068				ret = -EACCES;
+  1069			else
+  1070				sock_valbool_flag(sk, SOCK_DBG, valbool);
+  1071			break;
+  1072		case SO_REUSEADDR:
+  1073			sk->sk_reuse = (valbool ? SK_CAN_REUSE : SK_NO_REUSE);
+  1074			break;
+  1075		case SO_REUSEPORT:
+  1076			sk->sk_reuseport = valbool;
+  1077			break;
+  1078		case SO_TYPE:
+  1079		case SO_PROTOCOL:
+  1080		case SO_DOMAIN:
+  1081		case SO_ERROR:
+  1082			ret = -ENOPROTOOPT;
+  1083			break;
+  1084		case SO_DONTROUTE:
+  1085			sock_valbool_flag(sk, SOCK_LOCALROUTE, valbool);
+  1086			sk_dst_reset(sk);
+  1087			break;
+  1088		case SO_BROADCAST:
+  1089			sock_valbool_flag(sk, SOCK_BROADCAST, valbool);
+  1090			break;
+  1091		case SO_SNDBUF:
+  1092			/* Don't error on this BSD doesn't and if you think
+  1093			 * about it this is right. Otherwise apps have to
+  1094			 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+  1095			 * are treated in BSD as hints
+  1096			 */
+  1097			val = min_t(u32, val, sysctl_wmem_max);
+  1098	set_sndbuf:
+  1099			/* Ensure val * 2 fits into an int, to prevent max_t()
+  1100			 * from treating it as a negative value.
+  1101			 */
+  1102			val = min_t(int, val, INT_MAX / 2);
+  1103			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+  1104			WRITE_ONCE(sk->sk_sndbuf,
+  1105				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
+  1106			/* Wake up sending tasks if we upped the value. */
+  1107			sk->sk_write_space(sk);
+  1108			break;
+  1109	
+  1110		case SO_SNDBUFFORCE:
+  1111			if (!capable(CAP_NET_ADMIN)) {
+  1112				ret = -EPERM;
+  1113				break;
+  1114			}
+  1115	
+  1116			/* No negative values (to prevent underflow, as val will be
+  1117			 * multiplied by 2).
+  1118			 */
+  1119			if (val < 0)
+  1120				val = 0;
+  1121			goto set_sndbuf;
+  1122	
+  1123		case SO_RCVBUF:
+  1124			/* Don't error on this BSD doesn't and if you think
+  1125			 * about it this is right. Otherwise apps have to
+  1126			 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+  1127			 * are treated in BSD as hints
+  1128			 */
+  1129			__sock_set_rcvbuf(sk, min_t(u32, val, sysctl_rmem_max));
+  1130			break;
+  1131	
+  1132		case SO_RCVBUFFORCE:
+  1133			if (!capable(CAP_NET_ADMIN)) {
+  1134				ret = -EPERM;
+  1135				break;
+  1136			}
+  1137	
+  1138			/* No negative values (to prevent underflow, as val will be
+  1139			 * multiplied by 2).
+  1140			 */
+  1141			__sock_set_rcvbuf(sk, max(val, 0));
+  1142			break;
+  1143	
+  1144		case SO_KEEPALIVE:
+  1145			if (sk->sk_prot->keepalive)
+  1146				sk->sk_prot->keepalive(sk, valbool);
+  1147			sock_valbool_flag(sk, SOCK_KEEPOPEN, valbool);
+  1148			break;
+  1149	
+  1150		case SO_OOBINLINE:
+  1151			sock_valbool_flag(sk, SOCK_URGINLINE, valbool);
+  1152			break;
+  1153	
+  1154		case SO_NO_CHECK:
+  1155			sk->sk_no_check_tx = valbool;
+  1156			break;
+  1157	
+  1158		case SO_PRIORITY:
+  1159			if ((val >= 0 && val <= 6) ||
+  1160			    ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) ||
+  1161			    ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+  1162				sk->sk_priority = val;
+  1163			else
+  1164				ret = -EPERM;
+  1165			break;
+  1166	
+  1167		case SO_LINGER:
+  1168			if (optlen < sizeof(ling)) {
+  1169				ret = -EINVAL;	/* 1003.1g */
+  1170				break;
+  1171			}
+  1172			if (copy_from_sockptr(&ling, optval, sizeof(ling))) {
+  1173				ret = -EFAULT;
+  1174				break;
+  1175			}
+  1176			if (!ling.l_onoff)
+  1177				sock_reset_flag(sk, SOCK_LINGER);
+  1178			else {
+  1179	#if (BITS_PER_LONG == 32)
+  1180				if ((unsigned int)ling.l_linger >= MAX_SCHEDULE_TIMEOUT/HZ)
+  1181					sk->sk_lingertime = MAX_SCHEDULE_TIMEOUT;
+  1182				else
+  1183	#endif
+  1184					sk->sk_lingertime = (unsigned int)ling.l_linger * HZ;
+  1185				sock_set_flag(sk, SOCK_LINGER);
+  1186			}
+  1187			break;
+  1188	
+  1189		case SO_BSDCOMPAT:
+  1190			break;
+  1191	
+  1192		case SO_PASSCRED:
+  1193			if (valbool)
+  1194				set_bit(SOCK_PASSCRED, &sock->flags);
+  1195			else
+  1196				clear_bit(SOCK_PASSCRED, &sock->flags);
+  1197			break;
+  1198	
+  1199		case SO_TIMESTAMP_OLD:
+  1200		case SO_TIMESTAMP_NEW:
+  1201		case SO_TIMESTAMPNS_OLD:
+  1202		case SO_TIMESTAMPNS_NEW:
+  1203			sock_set_timestamp(sk, optname, valbool);
+  1204			break;
+  1205	
+  1206		case SO_TIMESTAMPING_NEW:
+  1207		case SO_TIMESTAMPING_OLD:
+  1208			if (optlen == sizeof(timestamping)) {
+  1209				if (copy_from_sockptr(&timestamping, optval,
+  1210						      sizeof(timestamping))) {
+  1211					ret = -EFAULT;
+  1212					break;
+  1213				}
+  1214			} else {
+  1215				memset(&timestamping, 0, sizeof(timestamping));
+  1216				timestamping.flags = val;
+  1217			}
+  1218			ret = sock_set_timestamping(sk, optname, timestamping);
+  1219			break;
+  1220	
+  1221		case SO_RCVLOWAT:
+  1222			if (val < 0)
+  1223				val = INT_MAX;
+  1224			if (sock->ops->set_rcvlowat)
+  1225				ret = sock->ops->set_rcvlowat(sk, val);
+  1226			else
+  1227				WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
+  1228			break;
+  1229	
+  1230		case SO_RCVTIMEO_OLD:
+  1231		case SO_RCVTIMEO_NEW:
+  1232			ret = sock_set_timeout(&sk->sk_rcvtimeo, optval,
+  1233					       optlen, optname == SO_RCVTIMEO_OLD);
+  1234			break;
+  1235	
+  1236		case SO_SNDTIMEO_OLD:
+  1237		case SO_SNDTIMEO_NEW:
+  1238			ret = sock_set_timeout(&sk->sk_sndtimeo, optval,
+  1239					       optlen, optname == SO_SNDTIMEO_OLD);
+  1240			break;
+  1241	
+  1242		case SO_ATTACH_FILTER: {
+  1243			struct sock_fprog fprog;
+  1244	
+  1245			ret = copy_bpf_fprog_from_user(&fprog, optval, optlen);
+  1246			if (!ret)
+  1247				ret = sk_attach_filter(&fprog, sk);
+  1248			break;
+  1249		}
+  1250		case SO_ATTACH_BPF:
+  1251			ret = -EINVAL;
+  1252			if (optlen == sizeof(u32)) {
+  1253				u32 ufd;
+  1254	
+  1255				ret = -EFAULT;
+  1256				if (copy_from_sockptr(&ufd, optval, sizeof(ufd)))
+  1257					break;
+  1258	
+  1259				ret = sk_attach_bpf(ufd, sk);
+  1260			}
+  1261			break;
+  1262	
+  1263		case SO_ATTACH_REUSEPORT_CBPF: {
+  1264			struct sock_fprog fprog;
+  1265	
+  1266			ret = copy_bpf_fprog_from_user(&fprog, optval, optlen);
+  1267			if (!ret)
+  1268				ret = sk_reuseport_attach_filter(&fprog, sk);
+  1269			break;
+  1270		}
+  1271		case SO_ATTACH_REUSEPORT_EBPF:
+  1272			ret = -EINVAL;
+  1273			if (optlen == sizeof(u32)) {
+  1274				u32 ufd;
+  1275	
+  1276				ret = -EFAULT;
+  1277				if (copy_from_sockptr(&ufd, optval, sizeof(ufd)))
+  1278					break;
+  1279	
+  1280				ret = sk_reuseport_attach_bpf(ufd, sk);
+  1281			}
+  1282			break;
+  1283	
+  1284		case SO_DETACH_REUSEPORT_BPF:
+  1285			ret = reuseport_detach_prog(sk);
+  1286			break;
+  1287	
+  1288		case SO_DETACH_FILTER:
+  1289			ret = sk_detach_filter(sk);
+  1290			break;
+  1291	
+  1292		case SO_LOCK_FILTER:
+  1293			if (sock_flag(sk, SOCK_FILTER_LOCKED) && !valbool)
+  1294				ret = -EPERM;
+  1295			else
+  1296				sock_valbool_flag(sk, SOCK_FILTER_LOCKED, valbool);
+  1297			break;
+  1298	
+  1299		case SO_PASSSEC:
+  1300			if (valbool)
+  1301				set_bit(SOCK_PASSSEC, &sock->flags);
+  1302			else
+  1303				clear_bit(SOCK_PASSSEC, &sock->flags);
+  1304			break;
+  1305		case SO_MARK:
+  1306			if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
+  1307			    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
+  1308				ret = -EPERM;
+  1309				break;
+  1310			}
+  1311	
+  1312			__sock_set_mark(sk, val);
+  1313			break;
+> 1314		case SO_RCVMARK:
+  1315			sock_valbool_flag(sk, SOCK_RCVMARK, valbool);
+  1316			break;
+  1317	
+  1318		case SO_RXQ_OVFL:
+  1319			sock_valbool_flag(sk, SOCK_RXQ_OVFL, valbool);
+  1320			break;
+  1321	
+  1322		case SO_WIFI_STATUS:
+  1323			sock_valbool_flag(sk, SOCK_WIFI_STATUS, valbool);
+  1324			break;
+  1325	
+  1326		case SO_PEEK_OFF:
+  1327			if (sock->ops->set_peek_off)
+  1328				ret = sock->ops->set_peek_off(sk, val);
+  1329			else
+  1330				ret = -EOPNOTSUPP;
+  1331			break;
+  1332	
+  1333		case SO_NOFCS:
+  1334			sock_valbool_flag(sk, SOCK_NOFCS, valbool);
+  1335			break;
+  1336	
+  1337		case SO_SELECT_ERR_QUEUE:
+  1338			sock_valbool_flag(sk, SOCK_SELECT_ERR_QUEUE, valbool);
+  1339			break;
+  1340	
 
 -- 
 0-DAY CI Kernel Test Service
