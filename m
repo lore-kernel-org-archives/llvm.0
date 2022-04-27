@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F64C7B
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 15:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683ECC385A7;
-	Wed, 27 Apr 2022 15:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42EB7B
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 15:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20F02C385A9;
+	Wed, 27 Apr 2022 15:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651074859;
-	bh=sCF9/f0mpayue4I5/Ou8kdySrWJ/3xgtXAf6JIycnzs=;
+	s=k20201202; t=1651074872;
+	bh=lLlpYPeIzcjO7jp0cPMiyJzC4NNg3ezY7wLkaM8lrCk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=eun3howqrmfmfrqTeRvwFoNum5n9hO/CKvwD5QVnTAvRC7Ep43G0H1Iyb29YBYh4N
-	 ULoi5wJ+jCZ14yPcp73udDqGWpJ7/r3LNNnDJ1UPSZATWkzDNFd+ZmeqFZruee1Ic2
-	 aW6mXn+Y6I5Wa+uwJ4Bsc5Ta8566XHTKbNSyZsU/Pkum7sheL7I410a6CBi454USMZ
-	 +/FfGRoYzFZbZ5nSrNGjnEmnyacAw+uc0jW1B/McfcIniuiKui8tVSRJ4riKQask+G
-	 54YKFf6WiHfHB2bL634w6YveGo/37Q6jH++FhxcRp/pXRdnNRlK7EYuZC+FQW48YbT
-	 vKd15ceUONFqw==
+	b=gT2JeQICIGyDroTYfmyoiPo4qnao5jcL3MDvZy6wGGiLdWqMMWTPstmyveQec17vt
+	 jS/VrdeSKpt/mOu/N/j4KZK+nP1g0VkySQ457CQNO3CI9HKbTlZb/+WcRFwPBd06LD
+	 cM1Q9nqkhiVD4FRiDx53j7cxZJkspDNCt1IABfZo5xXMLfXpmOI+9H/bavx/D9SETF
+	 fe7sNMfsMieZ1Xd+nXOhd4SWbufK0zczVHB+IpT1ucw7oxmNxBrXerE88GUEDjYO+d
+	 yhNcrvHT85V6sIDGZ8O7CS/FfQZZJT6B72vuA4ibZ7C4E2WxnYoY99Z1661UzqW1X8
+	 7rVZRZ9ONaksg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,9 +35,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH MANUALSEL 5.17 1/7] kvm: selftests: do not use bitfields larger than 32-bits for PTEs
-Date: Wed, 27 Apr 2022 11:53:57 -0400
-Message-Id: <20220427155408.19352-1-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.15 1/7] kvm: selftests: do not use bitfields larger than 32-bits for PTEs
+Date: Wed, 27 Apr 2022 11:54:21 -0400
+Message-Id: <20220427155431.19458-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -101,10 +101,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 92 insertions(+), 115 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 8a470da7b71a..15a2875698b5 100644
+index 05e65ca1c30c..23861c8faa61 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -60,6 +60,21 @@
+@@ -58,6 +58,21 @@
  /* CPUID.0x8000_0001.EDX */
  #define CPUID_GBPAGES		(1ul << 26)
  
@@ -127,7 +127,7 @@ index 8a470da7b71a..15a2875698b5 100644
  struct gpr64_regs {
  	u64 rax;
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 9f000dfb5594..0dd442c26015 100644
+index da73b97e1e6d..46057079d8bb 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
 @@ -19,38 +19,6 @@
