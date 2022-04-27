@@ -1,276 +1,120 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040EA7B
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651051599; x=1682587599;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MEdpCvTbebSfftKt7KRsTDu5tKkUZCjAgldDSUjcCVk=;
-  b=ER+MpGCZNkMnE1RyqnnfXOWsTHjVZL5GcMCiK7jlsz5A2bn6S7antgJC
-   FzbGggop2qY4/fEk5gC8kBWVjmmUFBveUHdtNC28kt0PcToZlp/nRfgYw
-   n1LvBUHtX704opwMu5O+avrmmlMPiIZHVVzmPigbaA6DRPWNevQZBGvRD
-   nXdIUQvd/mCd5Ft91egaoAXcx3OVi1VvXeTOBl1MTpBbq9fDkRNSEdvEp
-   Ee0E9FfSHPY9rc7+M80X5DPpNpAoxZtF8WPA3tSu+yvS5HNq1tneFQkVN
-   zi2MPVtSbiriAWE5RzLVuwnK8VuL93tG4eHHmuU29fvFjFntkJiXAWUjM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326363843"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="326363843"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="539773403"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 02:26:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1njdwR-0004YM-0M;
-	Wed, 27 Apr 2022 09:26:35 +0000
-Date: Wed, 27 Apr 2022 17:25:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
-	krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, khilman@kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Johnson Wang <johnson.wang@mediatek.com>
-Subject: Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-Message-ID: <202204271737.oAuTwqZH-lkp@intel.com>
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC92D7B
+	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 09:36:38 +0000 (UTC)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R6VCDW018516;
+	Wed, 27 Apr 2022 09:36:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=wOYOBQTDmKHJ9iGvYwffbRu0unw8UKjjQnVlXqJp8/k=;
+ b=GBc/FfkpBdOM3LQFUOi1wVsV0l4bv8W8SdM9yVhLNGff5q1JxYkZVoCPRa2lXQW/LTDF
+ XDKc2/QrVVJEd2s7Z2PLBxPG/QigC1NWCgObvSx+e3xJXqURCI9fBWNfHZocG2u1q5JZ
+ XC2wTxwHW1rrADXvcPwTR3l01h2JqaEA9Pt0LzPSbOgTDRU09aF0RsSsE8KdhLOjyUAH
+ H1/wgSrcDIUMmi7oUtCvdaXiFEVp2HaDKX74Ez0jcwYEsn2ga8qo7En+/sqPH99tKelH
+ Ac6s51b0pXOT7nqIoUO4bdW5Tqyh5aRco0jZnVJICiu6OuyoXjiL5j4MVXKBaJVHCFt/ xQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvpgevs1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Apr 2022 09:36:25 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R9NYYL011352;
+	Wed, 27 Apr 2022 09:36:24 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvpgevr4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Apr 2022 09:36:24 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+	by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R9SceU002254;
+	Wed, 27 Apr 2022 09:36:22 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+	by ppma06fra.de.ibm.com with ESMTP id 3fm8qhmg34-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Apr 2022 09:36:22 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+	by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R9aJYv31785448
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 27 Apr 2022 09:36:19 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7ADC04C044;
+	Wed, 27 Apr 2022 09:36:19 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 454574C040;
+	Wed, 27 Apr 2022 09:36:17 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.116.196])
+	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Wed, 27 Apr 2022 09:36:16 +0000 (GMT)
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To: Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        llvm@lists.linux.dev
+Subject: [PATCH 0/2] ftrace/recordmcount: Handle object files without section symbols
+Date: Wed, 27 Apr 2022 15:01:20 +0530
+Message-Id: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0I5l914qw2sjcEy8vcTwnFx6QDGpb4Lt
+X-Proofpoint-ORIG-GUID: ZqHIazna3rCWKJ56c0qlH5HWZkmHM3oS
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425125546.4129-3-johnson.wang@mediatek.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_03,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 spamscore=0 adultscore=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204270063
 
-Hi Johnson,
+This solves a build issue on powerpc with binutils v2.36 and newer [1].
+Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+symbols") [2], binutils started dropping section symbols that it thought
+were unused. Due to this, in certain scenarios, recordmcount is unable 
+to find a non-weak symbol to generate a relocation record against.
 
-Thank you for the patch! Perhaps something to improve:
+Clang integrated assembler is also aggressive in dropping section 
+symbols [3].
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v5.18-rc4 next-20220427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+In the past, there have been various workarounds to address this. See 
+commits 55d5b7dd6451b5 ("initramfs: fix clang build failure") and 
+6e7b64b9dd6d96 ("elfcore: fix building with clang") and a recent patch:
+https://lore.kernel.org/linuxppc-dev/20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com/T/#u
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
-        git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/ drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
+Fix this issue by using the weak symbol in the relocation record. This 
+can result in duplicate locations in the mcount table if those weak 
+functions are overridden, so have ftrace skip dupicate entries.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Objtool already follows this approach, so patch 2 updates recordmcount 
+to do the same. Patch 1 updates ftrace to skip duplicate entries.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named 'parent_type' in 'struct devfreq_passive_data'
-           passive_data->parent_type = CPUFREQ_PARENT_DEV;
-           ~~~~~~~~~~~~  ^
-   drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared identifier 'CPUFREQ_PARENT_DEV'
-           passive_data->parent_type = CPUFREQ_PARENT_DEV;
-                                       ^
->> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                           PTR_ERR(drv->devfreq));
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning and 2 errors generated.
+- Naveen
 
 
-vim +379 drivers/devfreq/mtk-cci-devfreq.c
+[1] https://github.com/linuxppc/issues/issues/388
+[2] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
+[3] https://github.com/ClangBuiltLinux/linux/issues/981
 
-   255	
-   256	static int mtk_ccifreq_probe(struct platform_device *pdev)
-   257	{
-   258		struct device *dev = &pdev->dev;
-   259		struct mtk_ccifreq_drv *drv;
-   260		struct devfreq_passive_data *passive_data;
-   261		struct dev_pm_opp *opp;
-   262		unsigned long rate, opp_volt;
-   263		int ret;
-   264	
-   265		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   266		if (!drv)
-   267			return -ENOMEM;
-   268	
-   269		drv->dev = dev;
-   270		drv->soc_data = (const struct mtk_ccifreq_platform_data *)
-   271					of_device_get_match_data(&pdev->dev);
-   272		mutex_init(&drv->reg_lock);
-   273		platform_set_drvdata(pdev, drv);
-   274	
-   275		drv->cci_clk = devm_clk_get(dev, "cci");
-   276		if (IS_ERR(drv->cci_clk)) {
-   277			ret = PTR_ERR(drv->cci_clk);
-   278			return dev_err_probe(dev, ret,
-   279					     "failed to get cci clk: %d\n", ret);
-   280		}
-   281	
-   282		drv->inter_clk = devm_clk_get(dev, "intermediate");
-   283		if (IS_ERR(drv->inter_clk)) {
-   284			ret = PTR_ERR(drv->inter_clk);
-   285			dev_err_probe(dev, ret,
-   286				      "failed to get intermediate clk: %d\n", ret);
-   287			goto out_free_resources;
-   288		}
-   289	
-   290		drv->proc_reg = devm_regulator_get_optional(dev, "proc");
-   291		if (IS_ERR(drv->proc_reg)) {
-   292			ret = PTR_ERR(drv->proc_reg);
-   293			dev_err_probe(dev, ret,
-   294				      "failed to get proc regulator: %d\n", ret);
-   295			goto out_free_resources;
-   296		}
-   297	
-   298		ret = regulator_enable(drv->proc_reg);
-   299		if (ret) {
-   300			dev_err(dev, "failed to enable proc regulator\n");
-   301			goto out_free_resources;
-   302		}
-   303	
-   304		drv->sram_reg = regulator_get_optional(dev, "sram");
-   305		if (IS_ERR(drv->sram_reg))
-   306			drv->sram_reg = NULL;
-   307		else {
-   308			ret = regulator_enable(drv->sram_reg);
-   309			if (ret) {
-   310				dev_err(dev, "failed to enable sram regulator\n");
-   311				goto out_free_resources;
-   312			}
-   313		}
-   314	
-   315		/*
-   316		 * We assume min voltage is 0 and tracking target voltage using
-   317		 * min_volt_shift for each iteration.
-   318		 * The retry_max is 3 times of expeted iteration count.
-   319		 */
-   320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv->soc_data->sram_max_volt,
-   321						       drv->soc_data->proc_max_volt),
-   322						   drv->soc_data->min_volt_shift);
-   323	
-   324		ret = clk_prepare_enable(drv->cci_clk);
-   325		if (ret)
-   326			goto out_free_resources;
-   327	
-   328		ret = clk_prepare_enable(drv->inter_clk);
-   329		if (ret)
-   330			goto out_disable_cci_clk;
-   331	
-   332		ret = dev_pm_opp_of_add_table(dev);
-   333		if (ret) {
-   334			dev_err(dev, "failed to add opp table: %d\n", ret);
-   335			goto out_disable_inter_clk;
-   336		}
-   337	
-   338		rate = clk_get_rate(drv->inter_clk);
-   339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
-   340		if (IS_ERR(opp)) {
-   341			ret = PTR_ERR(opp);
-   342			dev_err(dev, "failed to get intermediate opp: %d\n", ret);
-   343			goto out_remove_opp_table;
-   344		}
-   345		drv->inter_voltage = dev_pm_opp_get_voltage(opp);
-   346		dev_pm_opp_put(opp);
-   347	
-   348		rate = U32_MAX;
-   349		opp = dev_pm_opp_find_freq_floor(drv->dev, &rate);
-   350		if (IS_ERR(opp)) {
-   351			dev_err(dev, "failed to get opp\n");
-   352			ret = PTR_ERR(opp);
-   353			goto out_remove_opp_table;
-   354		}
-   355	
-   356		opp_volt = dev_pm_opp_get_voltage(opp);
-   357		dev_pm_opp_put(opp);
-   358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
-   359		if (ret) {
-   360			dev_err(dev, "failed to scale to highest voltage %lu in proc_reg\n",
-   361				opp_volt);
-   362			goto out_remove_opp_table;
-   363		}
-   364	
-   365		passive_data = devm_kzalloc(dev, sizeof(struct devfreq_passive_data),
-   366					    GFP_KERNEL);
-   367		if (!passive_data) {
-   368			ret = -ENOMEM;
-   369			goto out_remove_opp_table;
-   370		}
-   371	
-   372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
-   373		drv->devfreq = devm_devfreq_add_device(dev, &mtk_ccifreq_profile,
-   374						       DEVFREQ_GOV_PASSIVE,
-   375						       passive_data);
-   376		if (IS_ERR(drv->devfreq)) {
-   377			ret = -EPROBE_DEFER;
-   378			dev_err(dev, "failed to add devfreq device: %d\n",
- > 379				PTR_ERR(drv->devfreq));
-   380			goto out_remove_opp_table;
-   381		}
-   382	
-   383		drv->opp_nb.notifier_call = mtk_ccifreq_opp_notifier;
-   384		ret = dev_pm_opp_register_notifier(dev, &drv->opp_nb);
-   385		if (ret) {
-   386			dev_err(dev, "failed to register opp notifier: %d\n", ret);
-   387			goto out_remove_devfreq_device;
-   388		}
-   389		return 0;
-   390	
-   391	out_remove_devfreq_device:
-   392		devm_devfreq_remove_device(dev, drv->devfreq);
-   393	
-   394	out_remove_opp_table:
-   395		dev_pm_opp_of_remove_table(dev);
-   396	
-   397	out_disable_inter_clk:
-   398		clk_disable_unprepare(drv->inter_clk);
-   399	
-   400	out_disable_cci_clk:
-   401		clk_disable_unprepare(drv->cci_clk);
-   402	
-   403	out_free_resources:
-   404		if (regulator_is_enabled(drv->proc_reg))
-   405			regulator_disable(drv->proc_reg);
-   406		if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
-   407			regulator_disable(drv->sram_reg);
-   408	
-   409		if (!IS_ERR(drv->proc_reg))
-   410			regulator_put(drv->proc_reg);
-   411		if (!IS_ERR(drv->sram_reg))
-   412			regulator_put(drv->sram_reg);
-   413		if (!IS_ERR(drv->cci_clk))
-   414			clk_put(drv->cci_clk);
-   415		if (!IS_ERR(drv->inter_clk))
-   416			clk_put(drv->inter_clk);
-   417	
-   418		return ret;
-   419	}
-   420	
 
+Naveen N. Rao (2):
+  ftrace: Drop duplicate mcount locations
+  recordmcount: Handle sections with no non-weak symbols
+
+ kernel/trace/ftrace.c  | 13 ++++++-
+ scripts/recordmcount.h | 86 +++++++++++++++++++++++++++++++++++-------
+ 2 files changed, 85 insertions(+), 14 deletions(-)
+
+
+base-commit: 83d8a0d166119de813cad27ae7d61f54f9aea707
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
