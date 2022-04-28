@@ -1,158 +1,223 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75AFEA6
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 07:45:36 +0000 (UTC)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S6LsWf030667;
-	Thu, 28 Apr 2022 07:45:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=2a2qnf85dZLG0wjLA1P68akEZ8qtEpjIISNNdWGejsE=;
- b=cnAO7dcKd8ACPVw3/k9vvdSONpztsPMY62GDMT8AQYx1dNrRMVOh2nfE2SmIJHcEqAW0
- 0v5COD3OMBclGwvQ/oHSf/8T8Y/2+sfpQ+VCuILKd8wwwnqao165SgBMTi/ck2KmFsdc
- 2fsEQYcqMq8qHPfypm1GbPvMyJ/UeEcgOmm+sgTbqa5nbynuvZLtHQ30IpKcacTBMmUy
- BtNdr/pLoGVCz/4/BTWQkE3NPq9mBpaJr7CS5V8MmfYKAA8A4dQEP6Ixn3Mh4uO64pdM
- zuIlYAQ2f3kDZvWJ1Hs6OBxPqZZ5fVHQ/BhDBSm3EqBs749IC0q3o09C9e4eGFKMxObj qQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqnkd1e5b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 07:45:30 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23S7DPUL000441;
-	Thu, 28 Apr 2022 07:45:29 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqnkd1e4p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 07:45:29 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-	by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S7gdL3025874;
-	Thu, 28 Apr 2022 07:45:27 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by ppma02fra.de.ibm.com with ESMTP id 3fpuyg9jh2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 07:45:27 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S7jPWU51773828
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 28 Apr 2022 07:45:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E740252050;
-	Thu, 28 Apr 2022 07:45:24 +0000 (GMT)
-Received: from localhost (unknown [9.43.72.179])
-	by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 566455204E;
-	Thu, 28 Apr 2022 07:45:24 +0000 (GMT)
-Date: Thu, 28 Apr 2022 13:15:22 +0530
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-	<1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-	<20220427095415.594e5120@gandalf.local.home>
-In-Reply-To: <20220427095415.594e5120@gandalf.local.home>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C228DEA6
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 07:48:33 +0000 (UTC)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpnlQ27X0zfbF6;
+	Thu, 28 Apr 2022 15:47:30 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 15:48:25 +0800
+Subject: Re: [hnaz-mm:master 214/410] mm/madvise.c:632:8: error: call to
+ undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support
+ implicit function declarations
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-kernel@vger.kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Naoya
+ Horiguchi <naoya.horiguchi@nec.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Linux Memory Management List
+	<linux-mm@kvack.org>
+References: <202204281452.cEOGcf4p-lkp@intel.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <b45ac0cd-ba02-c5ab-a91b-1289a7c05120@huawei.com>
+Date: Thu, 28 Apr 2022 15:48:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651129169.fpixr00hgx.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: v1C5Ow42GOdWULG5-pKCgFOsRicu5ma7
-X-Proofpoint-GUID: r79zgnhln1Qj5M-PyjrND798Rs2ceafb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=766 bulkscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204280045
+In-Reply-To: <202204281452.cEOGcf4p-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 
-Steven Rostedt wrote:
-> On Wed, 27 Apr 2022 15:01:22 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> If one or both of these weak functions are overridden in future, in the
->> final vmlinux mcount table, references to these will change over to the
->> non-weak variant which has its own mcount location entry. As such, there
->> will now be two entries for these functions, both pointing to the same
->> non-weak location.
->=20
-> But is that really true in all cases? x86 uses fentry these days, and oth=
-er
-> archs do things differently too. But the original mcount (-pg) call
-> happened *after* the frame setup. That means the offset of the mcount cal=
-l
-> would be at different offsets wrt the start of the function. If you have
-> one of these architectures that still use mcount, and the weak function
-> doesn't have the same size frame setup as the overriding function, then t=
-he
-> addresses will not be the same.
+On 2022/4/28 14:54, kernel test robot wrote:
+> tree:   https://github.com/hnaz/linux-mm master
+> head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
+> commit: fe343091405131f91dcb9230ae7649bb1ee7fe9a [214/410] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
+> config: i386-randconfig-a005-20220425 (https://download.01.org/0day-ci/archive/20220428/202204281452.cEOGcf4p-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/hnaz/linux-mm/commit/fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>         git remote add hnaz-mm https://github.com/hnaz/linux-mm
+>         git fetch --no-tags hnaz-mm master
+>         git checkout fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Note: the hnaz-mm/master HEAD bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66 builds fine.
+>       It only hurts bisectability.
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> mm/madvise.c:632:8: error: call to undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                                       is_swapin_error_entry(entry)) {
+>                                       ^
+>    1 error generated.
 
-Indeed, plain old -pg will be a problem. I'm not sure there is a generic=20
-way to address this. I suppose architectures will have to validate the=20
-mcount locations, something like this?
+I browsed the config file and found that CONFIG_SWAP is not set. But when I test it on my env, it works.
+And I'm somewhat confused now:
 
-diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/f=
-trace.h
-index d83758acd1c7c3..d8b104ed2fdf38 100644
---- a/arch/powerpc/include/asm/ftrace.h
-+++ b/arch/powerpc/include/asm/ftrace.h
-@@ -12,13 +12,7 @@
-=20
- #ifndef __ASSEMBLY__
- extern void _mcount(void);
--
--static inline unsigned long ftrace_call_adjust(unsigned long addr)
--{
--       /* relocation of mcount call site is the same as the address */
--       return addr;
--}
--
-+unsigned long ftrace_call_adjust(unsigned long addr);
- unsigned long prepare_ftrace_return(unsigned long parent, unsigned long ip=
-,
-                                    unsigned long sp);
-=20
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
-/ftrace.c
-index 4ee04aacf9f13c..976c08cd0573f7 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -858,6 +858,17 @@ void arch_ftrace_update_code(int command)
-        ftrace_modify_all_code(command);
- }
-=20
-+unsigned long ftrace_call_adjust(unsigned long addr)
-+{
-+       ppc_inst_t op =3D ppc_inst_read((u32 *)addr);
-+
-+       if (!is_bl_op(op))
-+               return 0;
-+
-+       /* relocation of mcount call site is the same as the address */
-+       return addr;
-+}
-+
- #ifdef CONFIG_PPC64
- #define PACATOC offsetof(struct paca_struct, kernel_toc)
-=20
+is_swapin_error_entry and pte_to_swp_entry are both defined in include/linux/swapops.h. But pte_to_swp_entry
+can be used normally but is_swapin_error_entry breaks the compile.
 
-We can tighten those checks as necessary, but it will be upto the=20
-architectures to validate the mcount locations. This all will have to be=20
-opt-in so that only architectures doing necessary validation will allow=20
-mcount relocations against weak symbols.
+Will take a more close look later. Thanks for report!
 
+> 
+> 
+> vim +/is_swapin_error_entry +632 mm/madvise.c
+> 
+>    587	
+>    588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+>    589					unsigned long end, struct mm_walk *walk)
+>    590	
+>    591	{
+>    592		struct mmu_gather *tlb = walk->private;
+>    593		struct mm_struct *mm = tlb->mm;
+>    594		struct vm_area_struct *vma = walk->vma;
+>    595		spinlock_t *ptl;
+>    596		pte_t *orig_pte, *pte, ptent;
+>    597		struct page *page;
+>    598		int nr_swap = 0;
+>    599		unsigned long next;
+>    600	
+>    601		next = pmd_addr_end(addr, end);
+>    602		if (pmd_trans_huge(*pmd))
+>    603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+>    604				goto next;
+>    605	
+>    606		if (pmd_trans_unstable(pmd))
+>    607			return 0;
+>    608	
+>    609		tlb_change_page_size(tlb, PAGE_SIZE);
+>    610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    611		flush_tlb_batched_pending(mm);
+>    612		arch_enter_lazy_mmu_mode();
+>    613		for (; addr != end; pte++, addr += PAGE_SIZE) {
+>    614			ptent = *pte;
+>    615	
+>    616			if (pte_none(ptent))
+>    617				continue;
+>    618			/*
+>    619			 * If the pte has swp_entry, just clear page table to
+>    620			 * prevent swap-in which is more expensive rather than
+>    621			 * (page allocation + zeroing).
+>    622			 */
+>    623			if (!pte_present(ptent)) {
+>    624				swp_entry_t entry;
+>    625	
+>    626				entry = pte_to_swp_entry(ptent);
+>    627				if (!non_swap_entry(entry)) {
+>    628					nr_swap--;
+>    629					free_swap_and_cache(entry);
+>    630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>    631				} else if (is_hwpoison_entry(entry) ||
+>  > 632					   is_swapin_error_entry(entry)) {
+>    633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>    634				}
+>    635				continue;
+>    636			}
+>    637	
+>    638			page = vm_normal_page(vma, addr, ptent);
+>    639			if (!page)
+>    640				continue;
+>    641	
+>    642			/*
+>    643			 * If pmd isn't transhuge but the page is THP and
+>    644			 * is owned by only this process, split it and
+>    645			 * deactivate all pages.
+>    646			 */
+>    647			if (PageTransCompound(page)) {
+>    648				if (page_mapcount(page) != 1)
+>    649					goto out;
+>    650				get_page(page);
+>    651				if (!trylock_page(page)) {
+>    652					put_page(page);
+>    653					goto out;
+>    654				}
+>    655				pte_unmap_unlock(orig_pte, ptl);
+>    656				if (split_huge_page(page)) {
+>    657					unlock_page(page);
+>    658					put_page(page);
+>    659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    660					goto out;
+>    661				}
+>    662				unlock_page(page);
+>    663				put_page(page);
+>    664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    665				pte--;
+>    666				addr -= PAGE_SIZE;
+>    667				continue;
+>    668			}
+>    669	
+>    670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
+>    671	
+>    672			if (PageSwapCache(page) || PageDirty(page)) {
+>    673				if (!trylock_page(page))
+>    674					continue;
+>    675				/*
+>    676				 * If page is shared with others, we couldn't clear
+>    677				 * PG_dirty of the page.
+>    678				 */
+>    679				if (page_mapcount(page) != 1) {
+>    680					unlock_page(page);
+>    681					continue;
+>    682				}
+>    683	
+>    684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
+>    685					unlock_page(page);
+>    686					continue;
+>    687				}
+>    688	
+>    689				ClearPageDirty(page);
+>    690				unlock_page(page);
+>    691			}
+>    692	
+>    693			if (pte_young(ptent) || pte_dirty(ptent)) {
+>    694				/*
+>    695				 * Some of architecture(ex, PPC) don't update TLB
+>    696				 * with set_pte_at and tlb_remove_tlb_entry so for
+>    697				 * the portability, remap the pte with old|clean
+>    698				 * after pte clearing.
+>    699				 */
+>    700				ptent = ptep_get_and_clear_full(mm, addr, pte,
+>    701								tlb->fullmm);
+>    702	
+>    703				ptent = pte_mkold(ptent);
+>    704				ptent = pte_mkclean(ptent);
+>    705				set_pte_at(mm, addr, pte, ptent);
+>    706				tlb_remove_tlb_entry(tlb, pte, addr);
+>    707			}
+>    708			mark_page_lazyfree(page);
+>    709		}
+>    710	out:
+>    711		if (nr_swap) {
+>    712			if (current->mm == mm)
+>    713				sync_mm_rss(mm);
+>    714	
+>    715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+>    716		}
+>    717		arch_leave_lazy_mmu_mode();
+>    718		pte_unmap_unlock(orig_pte, ptl);
+>    719		cond_resched();
+>    720	next:
+>    721		return 0;
+>    722	}
+>    723	
+> 
 
-- Naveen
