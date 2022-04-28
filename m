@@ -1,116 +1,109 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F3D136B
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 17:16:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651166213; x=1682702213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/+tcj9MOM8SRKwd/Bfj6oifzGIT2Rpk+mPUGMEyU7AI=;
-  b=HN/c//B1rea2ZDQSDg7IJpyN3Gd/pL84ISNVnshbUajjvfaQeB0wLz+0
-   0teYMJpW8QMWkqZ2lP/TcfRNrK9C6PlJBOb4hzpk+k6CyHVFBvocK8+QF
-   J3TFRoyvStPUpEPp30yjpsYwH3GfLW1vvgt8otDGLKibG6lAA2giZFVrk
-   2u09t+wfDrH0OLm+v5OzvC9TvNBxR4rA6+2j9zmQzKWo/t6horPZPFmM3
-   JMOFGzgnQ0xu4wr/3bMDuI/dXftGyuKd+iIN993YmA0LXRcvYNCG/G+vs
-   FjdBxQA5WiZ6sC/wSRBvieZREzlW2ttLvPAFa3wEWAblPK7U1R/kWP1FM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="291519810"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="291519810"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 10:16:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="534001962"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Apr 2022 10:16:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nk7l3-0005Z5-ON;
-	Thu, 28 Apr 2022 17:16:49 +0000
-Date: Fri, 29 Apr 2022 01:16:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <ltykernel@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 2/2] Swiotlb: Add device bounce buffer allocation
- interface
-Message-ID: <202204290145.wcC5anxG-lkp@intel.com>
-References: <20220428141429.1637028-3-ltykernel@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE53136B
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 17:20:23 +0000 (UTC)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGxVwg030270;
+	Thu, 28 Apr 2022 17:20:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=b81Gpf58B1llpSnoIWzOlyyA7TxuZToP2ay+KjLRyA0=;
+ b=aoJ5u4cTHYwLX8caDwjcOw9MztBXn1ds2yQkX4kW4HR/9wVXsgMisJdwWKvc2Mn+H3Gv
+ ZxezaQ6/wfEydNd4mfuxL4btSU5g+bXmLeqO9ZSFV8PvUZyptp0WzjIm2MDRGmRbVEAg
+ +kNN9/P+m2H7Hj0EBfQuFLbR5jYDZ2zeCss9FyaoDuc+V1pRlIFfsHB9E/AAKXiJ+Qex
+ AJMPSCWUSuVlTQsZBq92749NC7EunvN13yTduAGwSz0ATuz+JMytiMC+RJGdFsg7NwSv
+ G8kvXiJofCE1AHAQspHDxAzkh70R4X9dZ0beWWSNUgW5EJhSjVppE0L3rzpMknY5uV7a VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvwynms-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Apr 2022 17:20:13 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SHDb0r025666;
+	Thu, 28 Apr 2022 17:20:12 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+	by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvwynkt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Apr 2022 17:20:12 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+	by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SHCmWc015445;
+	Thu, 28 Apr 2022 17:20:11 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+	by ppma04ams.nl.ibm.com with ESMTP id 3fm938yu03-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Apr 2022 17:20:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SHK8Fi46858656
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Apr 2022 17:20:08 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AF765A4055;
+	Thu, 28 Apr 2022 17:20:08 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A92E5A404D;
+	Thu, 28 Apr 2022 17:20:05 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.8.21])
+	by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Thu, 28 Apr 2022 17:20:05 +0000 (GMT)
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To: Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        llvm@lists.linux.dev
+Subject: [PATCH v2 0/2] ftrace/recordmcount: Handle object files without section symbols
+Date: Thu, 28 Apr 2022 22:49:50 +0530
+Message-Id: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vBxMN0AtfqFLmBDSoaaBQDg7Z5jcuklQ
+X-Proofpoint-GUID: jWT1IvNYrKeUGYORWvVdJ8qdO7dFK1UI
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428141429.1637028-3-ltykernel@gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=689 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204280103
 
-Hi Tianyu,
+This is v2 of the series posted at:
+http://lkml.kernel.org/r/cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on next-20220428]
-[cannot apply to linus/master v5.18-rc4 v5.18-rc3 v5.18-rc2 v5.18-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+For v2, the first patch is slightly modified to skip the loop, rather 
+than depending on addr == 0 to do so. The second patch is updated to 
+make this behavior be opt-in by architectures so that they can validate 
+the read mcount locations.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianyu-Lan/swiotlb-Introduce-swiotlb-device-allocation-function/20220428-221517
-base:    bdc61aad77faf67187525028f1f355eff3849f22
-config: hexagon-randconfig-r045-20220428 (https://download.01.org/0day-ci/archive/20220429/202204290145.wcC5anxG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/68c4bec9aa77ed6aedaa27a63a2b1c5916f0db50
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianyu-Lan/swiotlb-Introduce-swiotlb-device-allocation-function/20220428-221517
-        git checkout 68c4bec9aa77ed6aedaa27a63a2b1c5916f0db50
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/base/core.c:30:
->> include/linux/swiotlb.h:213:6: warning: no previous prototype for function 'swiotlb_device_free' [-Wmissing-prototypes]
-   void swiotlb_device_free(struct device *dev)
-        ^
-   include/linux/swiotlb.h:213:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void swiotlb_device_free(struct device *dev)
-   ^
-   static 
->> include/linux/swiotlb.h:217:5: warning: no previous prototype for function 'swiotlb_device_allocate' [-Wmissing-prototypes]
-   int swiotlb_device_allocate(struct device *dev,
-       ^
-   include/linux/swiotlb.h:217:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int swiotlb_device_allocate(struct device *dev,
-   ^
-   static 
-   2 warnings generated.
+- Naveen
 
 
-vim +/swiotlb_device_free +213 include/linux/swiotlb.h
+Naveen N. Rao (2):
+  ftrace: Drop duplicate mcount locations
+  ftrace: recordmcount: Handle sections with no non-weak symbols
 
-   212	
- > 213	void swiotlb_device_free(struct device *dev)
-   214	{
-   215	}
-   216	
- > 217	int swiotlb_device_allocate(struct device *dev,
-   218				    unsigned int area_num,
-   219				    unsigned long size)
-   220	{
-   221		return -ENOMEM;
-   222	}
-   223	#endif /* CONFIG_SWIOTLB */
-   224	
+ Makefile                           |  4 ++
+ arch/powerpc/Kconfig               |  1 +
+ arch/powerpc/include/asm/ftrace.h  |  8 +--
+ arch/powerpc/kernel/trace/ftrace.c | 11 ++++
+ kernel/trace/Kconfig               |  6 ++
+ kernel/trace/ftrace.c              | 13 ++++-
+ scripts/Makefile.build             |  3 +
+ scripts/recordmcount.c             |  6 +-
+ scripts/recordmcount.h             | 94 ++++++++++++++++++++++++++----
+ 9 files changed, 125 insertions(+), 21 deletions(-)
 
+
+base-commit: 83d8a0d166119de813cad27ae7d61f54f9aea707
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
