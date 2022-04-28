@@ -1,126 +1,134 @@
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E79E33E5
-	for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 18:53:52 +0000 (UTC)
-Received: by mail-io1-f48.google.com with SMTP id 125so4211632iov.10
-        for <llvm@lists.linux.dev>; Wed, 27 Apr 2022 11:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VJ91s6H07ClEByjQbgZruheBlPpsvHRlP6vfpPqzZKY=;
-        b=EKwxHil5G0kU+wbkmov0G1EaEobARTaBhSglDRm/pqjMlzyw2xWvkwLpGcmiuCwiWJ
-         At36hRwRARLjFsB0PsstrYFE9MGEZmMhqVj6IkdW1Qe3i77MufwhagvCIO3pyldfedH+
-         1L5FME3HrT5gXe+YfTuK1vScwvVdBBAvF3r85wZ4RSEairsG6Sl93FEnp+wFW9Lub42h
-         JoeSUxM+XtEzDhZiGXt0UT79mhVEXx13upi3pSqqFpUs393Ub5H4TEiurTeKxrq4SzOx
-         bx8DqZf4u4eSuipwPj4ZXSXZxkJ0PDwLmP82YCvAND/nMeSjVzccZu1gkgmHm97aBOf9
-         qsLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VJ91s6H07ClEByjQbgZruheBlPpsvHRlP6vfpPqzZKY=;
-        b=kSJg/k2tELWb4jjfSynBMHGILyYKUBFA+z2oGGmdZtZyPwVzsBk5m5eEgPtuDy4HWp
-         HIvg1XJeEGv+V+J7GmnESUjmE+DlRbjd79YsmFZ8WCxpyRb1FScT5D+CWkaMhaY4wk67
-         2aIFKGjEmTaVSe7S+cd5jn26HH48j7EEr7hsDPDx7ng0b8k0/2n+3WUwLhX3F1UfysRB
-         hN19oWN8SIgCuYV7oN+C37T1GOP1CKh9T7hp5+Fnmu94JiY+gUxFEW6ofPFcTJELKYtJ
-         RpL1P9cYlFnLkU3z+Lvp6Gwi2TNS+KToIUtsXcob68AdCK1jqYpFv+HUrGl5YNtRVz6/
-         hAEA==
-X-Gm-Message-State: AOAM531vxOH6P36VP+mX72K3gpSr+YyzcUYSIV+yB9HZGCNmyH7wia3G
-	tI9TtRc7hxl3yrL/yyxqw1xhhBO2Ta5j0jEl+ow=
-X-Google-Smtp-Source: ABdhPJzl9VUnx3Oh6fY4dpfEp3sorFTDo26fFd33NZFaIoxLMKHh9xEeNMXVp8dcrjOJt836MeA+18nprDrk4z78Bj8=
-X-Received: by 2002:a5d:9f4e:0:b0:652:2323:2eb8 with SMTP id
- u14-20020a5d9f4e000000b0065223232eb8mr12051724iot.79.1651085631636; Wed, 27
- Apr 2022 11:53:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A76A20
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 02:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651111226; x=1682647226;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s/JcJvW3wfTIckLeDxPcud6kbJn60l+xQzGdJji3ixI=;
+  b=HlNP1ie2s15MASMszxQ5Bbej6jZWxqQ8fHu3eFPlP6W8UUxWqKKgDdAS
+   Xn1aJo77MbkiHt36mp7xU4Ct2VGVfOX/uZx2ZMsFo2pO8PQcj3a/kv5cM
+   2IfTb6cKitQZWBfuqxLfOchH3GkV1cGyCEn8Ea9UOrAdnkkL455eGzc2F
+   68qdTj3xcLN9G6PLdNzy7CMBWBsC8ufgDnngyiI0uDfyUxEjfDoadTQY7
+   AIZULT58qEdygxRWDMKEDoCJcxLw5reqbk7dVGuC1d/2kBio0nlLtNma3
+   FuYxuRt6cd3hw7DFAAr9djSTlLvVQsdfQ3G6ir8nnPuaR6B8xp4mNiPt2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="329074372"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="329074372"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 19:00:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="661511056"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Apr 2022 19:00:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1njtSB-0004xn-Kq;
+	Thu, 28 Apr 2022 02:00:23 +0000
+Date: Thu, 28 Apr 2022 09:59:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 4808/7265] arch/arm/mach-omap1/timer32k.c:215:12:
+ warning: no previous prototype for function 'omap_init_clocksource_32k'
+Message-ID: <202204280347.ar7Y3m5k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-9-alobakin@pm.me>
- <CAEf4BzZVohaHdCTz_KFVdEus2pndLTZvg=BHfujpgt29qbio3Q@mail.gmail.com> <05d21d85-7b59-a8f9-73dc-89189986db11@fb.com>
-In-Reply-To: <05d21d85-7b59-a8f9-73dc-89189986db11@fb.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 27 Apr 2022 11:53:40 -0700
-Message-ID: <CAEf4BzYrEfkdvP+k+np0S9-Rtf=xnpgVhL25wFgPQ81bm-_h_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 08/11] samples: bpf: fix shifting unsigned long
- by 32 positions
-To: Yonghong Song <yhs@fb.com>
-Cc: Alexander Lobakin <alobakin@pm.me>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Dmitrii Dolgov <9erthalion6@gmail.com>, Quentin Monnet <quentin@isovalent.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Chenbo Feng <fengc@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Daniel Wagner <daniel.wagner@bmw-carit.de>, Thomas Graf <tgraf@suug.ch>, 
-	Ong Boon Leong <boon.leong.ong@intel.com>, 
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Apr 27, 2022 at 8:55 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 4/20/22 10:18 AM, Andrii Nakryiko wrote:
-> > On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
-> >>
-> >> On 32 bit systems, shifting an unsigned long by 32 positions
-> >> yields the following warning:
-> >>
-> >> samples/bpf/tracex2_kern.c:60:23: warning: shift count >= width of type [-Wshift-count-overflow]
-> >>          unsigned int hi = v >> 32;
-> >>                              ^  ~~
-> >>
-> >
-> > long is always 64-bit in BPF, but I suspect this is due to
-> > samples/bpf/Makefile still using this clang + llc combo, where clang
-> > is called with native target and llc for -target bpf. Not sure if we
-> > are ready to ditch that complicated combination. Yonghong, do we still
-> > need that or can we just use -target bpf in samples/bpf?
->
-> Current most bpf programs in samples/bpf do not use vmlinux.h and CO-RE.
-> They direct use kernel header files. That is why clang C -> IR
-> compilation still needs to be native.
->
-> We could just use -target bpf for the whole compilation but that needs
-> to change the code to use vmlinux.h and CO-RE. There are already a
-> couple of sample bpf programs did this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f02ac5c95dfd45d2f50ecc68d79177de326c668c
+commit: d379e8899a8da1041c347ae5b792773c48a559a9 [4808/7265] ARM: omap1: move 32k counter from plat-omap to mach-omap1
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220428/202204280347.ar7Y3m5k-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d379e8899a8da1041c347ae5b792773c48a559a9
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d379e8899a8da1041c347ae5b792773c48a559a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Right, I guess I'm proposing to switch samples/bpf to vmlinux.h. Only
-purely networking BPF apps can get away with not using vmlinux.h
-because they might avoid dependency on kernel types. But even then a
-lot of modern networking apps seem to be gaining elements of more
-generic tracing and would rely on CO-RE for staying "portable" between
-kernels. So it might be totally fine to just use CO-RE universally in
-samples/bpf?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >
-> >
-> >> The usual way to avoid this is to shift by 16 two times (see
-> >> upper_32_bits() macro in the kernel). Use it across the BPF sample
-> >> code as well.
-> >>
-> >> Fixes: d822a1926849 ("samples/bpf: Add counting example for kfree_skb() function calls and the write() syscall")
-> >> Fixes: 0fb1170ee68a ("bpf: BPF based latency tracing")
-> >> Fixes: f74599f7c530 ("bpf: Add tests and samples for LWT-BPF")
-> >> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> >> ---
-> >>   samples/bpf/lathist_kern.c      | 2 +-
-> >>   samples/bpf/lwt_len_hist_kern.c | 2 +-
-> >>   samples/bpf/tracex2_kern.c      | 2 +-
-> >>   3 files changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >
-> > [...]
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-omap1/timer32k.c:215:12: warning: no previous prototype for function 'omap_init_clocksource_32k' [-Wmissing-prototypes]
+   int __init omap_init_clocksource_32k(void __iomem *vbase)
+              ^
+   arch/arm/mach-omap1/timer32k.c:215:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init omap_init_clocksource_32k(void __iomem *vbase)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/omap_init_clocksource_32k +215 arch/arm/mach-omap1/timer32k.c
+
+   205	
+   206	/**
+   207	 * omap_init_clocksource_32k - setup and register counter 32k as a
+   208	 * kernel clocksource
+   209	 * @pbase: base addr of counter_32k module
+   210	 * @size: size of counter_32k to map
+   211	 *
+   212	 * Returns 0 upon success or negative error code upon failure.
+   213	 *
+   214	 */
+ > 215	int __init omap_init_clocksource_32k(void __iomem *vbase)
+   216	{
+   217		int ret;
+   218	
+   219		/*
+   220		 * 32k sync Counter IP register offsets vary between the
+   221		 * highlander version and the legacy ones.
+   222		 * The 'SCHEME' bits(30-31) of the revision register is used
+   223		 * to identify the version.
+   224		 */
+   225		if (readl_relaxed(vbase + OMAP2_32KSYNCNT_REV_OFF) &
+   226							OMAP2_32KSYNCNT_REV_SCHEME)
+   227			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_HIGH;
+   228		else
+   229			sync32k_cnt_reg = vbase + OMAP2_32KSYNCNT_CR_OFF_LOW;
+   230	
+   231		/*
+   232		 * 120000 rough estimate from the calculations in
+   233		 * __clocksource_update_freq_scale.
+   234		 */
+   235		clocks_calc_mult_shift(&persistent_mult, &persistent_shift,
+   236				32768, NSEC_PER_SEC, 120000);
+   237	
+   238		ret = clocksource_mmio_init(sync32k_cnt_reg, "32k_counter", 32768,
+   239					250, 32, clocksource_mmio_readl_up);
+   240		if (ret) {
+   241			pr_err("32k_counter: can't register clocksource\n");
+   242			return ret;
+   243		}
+   244	
+   245		sched_clock_register(omap_32k_read_sched_clock, 32, 32768);
+   246		register_persistent_clock(omap_read_persistent_clock64);
+   247		pr_info("OMAP clocksource: 32k_counter at 32768 Hz\n");
+   248	
+   249		return 0;
+   250	}
+   251	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
