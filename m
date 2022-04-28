@@ -1,113 +1,123 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827D5136B
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 17:31:23 +0000 (UTC)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGwn2g036539;
-	Thu, 28 Apr 2022 17:31:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=UOJdp1TCQXMGKaap1xfqCqRJHtLXn6tqJXwjCeVYGO8=;
- b=amizwVNmUHiCyAox1AE/m9UvocObZnZcei+1XD4AzG1xgMBnFnmPeAWx4xQpz7rvPtLA
- GIhR9fIc6kB82PiJrQU/sZ7pahoXw89ODmM8NyijjHHlrZbrxaJqZAygK6wtq7CWPpMV
- tq0WQDeX1+J6tS+UKbJppenwx0vcWRDffzQ9i8wKAfDAnm+oEDB3ePgmtL+PQEVu+lcK
- 6gqe5vhQBPgJiJeXfQg2m8yVCGGyk5Nubmfto5q0pdKQTeDg7M2IC5f1NWi/Y9U1nIBn
- XAQWRZSFcwQLGjhG/NQfTxD1QFno5L+FO00eJotsf9Nt74FI9OT9XYEET1qDzqEKB2m/ YA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd74u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 17:31:18 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SHRUXN017159;
-	Thu, 28 Apr 2022 17:31:17 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd745-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 17:31:17 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-	by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SHCmXU015445;
-	Thu, 28 Apr 2022 17:31:15 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-	by ppma04ams.nl.ibm.com with ESMTP id 3fm938yu9w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Apr 2022 17:31:15 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-	by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SHI6NG41091346
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 28 Apr 2022 17:18:06 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1E64FAE051;
-	Thu, 28 Apr 2022 17:31:13 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5A2DCAE045;
-	Thu, 28 Apr 2022 17:31:12 +0000 (GMT)
-Received: from localhost (unknown [9.43.8.21])
-	by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Thu, 28 Apr 2022 17:31:12 +0000 (GMT)
-Date: Thu, 28 Apr 2022 23:01:09 +0530
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-	<1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-	<20220427095415.594e5120@gandalf.local.home>
-	<1651129169.fpixr00hgx.naveen@linux.ibm.com>
-	<20220428100602.7b215e52@gandalf.local.home>
-In-Reply-To: <20220428100602.7b215e52@gandalf.local.home>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E53136B
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 17:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651168073; x=1682704073;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l3asd7jUMKU9opiuGZOA/STECTct4mXum2WvbhBRH6A=;
+  b=FYH+zmqhYc/1C7r6KLuIssax1MGNhhWzmZoYtQrU2wRQzH9AmgKbd4Tr
+   4D5wTYLndNdlVlaRvuay76XYuvoIIhxbR9Pks8GzlKB/h8GQmdW3QtgwU
+   25KXY5qjr7uHP4zNLt9I4IEqpuzSvLB6V0IYzls1/By2+NWZhG9INkwrD
+   XQ6f9bMMVieRb5y1dU4N6bK/kmrEvc4lqO+bIZnxtjqMuTjvVUDo0ynE7
+   nxtYE5C8JFMtoKcRX3/Z8vRDMihb2std8IfkmGxEz0ByCNikWUOSLhAFb
+   CezZ9bPsKBYVaA0smKUBL/SuRlr76lU1EnBh8O0O+ADafGNamB8+DUNEh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265216278"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="265216278"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 10:47:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="618246322"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Apr 2022 10:47:51 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nk8F4-0005aB-M4;
+	Thu, 28 Apr 2022 17:47:50 +0000
+Date: Fri, 29 Apr 2022 01:47:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zong-Zhe Yang <kevin_yang@realtek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+	Ping-Ke Shih <pkshih@realtek.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 7/57]
+ drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202204290113.w78dhtXk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651166901.se7n53e6x9.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _vVoo22SHJ60vhyVlx5kYl9ko3bWX2gi
-X-Proofpoint-GUID: i3xUn0t9kbsH7PTUXToGLXIlrphwetHx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxlogscore=497 clxscore=1015
- impostorscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204280105
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Steven Rostedt wrote:
-> On Thu, 28 Apr 2022 13:15:22 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Indeed, plain old -pg will be a problem. I'm not sure there is a generic=
-=20
->> way to address this. I suppose architectures will have to validate the=20
->> mcount locations, something like this?
->=20
-> Perhaps another solution is to make the mcount locations after the linkin=
-g
-> is done. The main downside to that is that it takes time to go over the
-> entire vmlinux, and will slow down a compile that only modified a couple =
-of
-> files.
+Hi Zong-Zhe,
 
-Yes, and I think that is also very useful with LTO. So, that would be=20
-good to consider in the longer term.
+FYI, the error/warning still remains.
 
-For now, I have posted a v2 of this series with your comments addressed. =20
-It is working well in my tests on powerpc in the different=20
-configurations, including the older elf v1 abi with -pg. If it looks ok=20
-to you, we can go with this approach for now.
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   5c6cf64b40b98e4d4247fda11e4b4c859a24585d
+commit: 14f9f4790048f684c2b151c899895feae0b5731a [7/57] rtw89: ser: control hci interrupts on/off by state
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220429/202204290113.w78dhtXk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+        git checkout 14f9f4790048f684c2b151c899895feae0b5731a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/misc/lkdtm/ drivers/net/wireless/realtek/rtw89/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
 
 
-Thanks,
-Naveen
+vim +319 drivers/net/wireless/realtek/rtw89/ser.c
+
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  301  
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  302  /* state handler */
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  303  static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  304  {
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  305  	struct rtw89_dev *rtwdev = container_of(ser, struct rtw89_dev, ser);
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  306  
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  307  	switch (evt) {
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  308  	case SER_EV_STATE_IN:
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  309  		rtw89_hci_recovery_complete(rtwdev);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  310  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  311  	case SER_EV_L1_RESET:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  312  		ser_state_goto(ser, SER_RESET_TRX_ST);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  313  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  314  	case SER_EV_L2_RESET:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  315  		ser_state_goto(ser, SER_L2_RESET_ST);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  316  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  317  	case SER_EV_STATE_OUT:
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  318  		rtw89_hci_recovery_start(rtwdev);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11 @319  	default:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  320  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  321  	}
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  322  }
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  323  
+
+:::::: The code at line 319 was first introduced by commit
+:::::: e3ec7017f6a20d12ddd9fe23d345ebb7b8c104dd rtw89: add Realtek 802.11ax driver
+
+:::::: TO: Ping-Ke Shih <pkshih@realtek.com>
+:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
