@@ -1,31 +1,32 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87B2A31
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 02:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DCAA31
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 03:31:24 +0000 (UTC)
 Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N5n3t-1nuti20xbP-017HWW; Thu, 28 Apr 2022 04:56:13 +0200
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mw9Lu-1o2pG42aY8-00s6ay; Thu, 28 Apr 2022 05:30:44 +0200
 Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(Client did not present a certificate)
-	by leknes.fjasle.eu (Postfix) with ESMTPS id 60FF93C01C;
-	Thu, 28 Apr 2022 04:56:11 +0200 (CEST)
+	by leknes.fjasle.eu (Postfix) with ESMTPS id 1FCF23C01C;
+	Thu, 28 Apr 2022 05:30:43 +0200 (CEST)
 Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
 Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-	id 2A7005F6; Wed, 27 Apr 2022 22:08:45 +0200 (CEST)
-Date: Wed, 27 Apr 2022 22:08:45 +0200
+	id B89A65F6; Thu, 28 Apr 2022 05:30:42 +0200 (CEST)
+Date: Thu, 28 Apr 2022 05:30:42 +0200
 From: Nicolas Schier <nicolas@fjasle.eu>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Michal Marek <michal.lkml@markovi.net>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 21/27] kbuild: record symbol versions in *.cmd files
-Message-ID: <YmmizaUdM5PjmCOK@bergen.fjasle.eu>
+Subject: Re: [PATCH 27/27] kbuild: do not create *.prelink.o for Clang LTO or
+ IBT
+Message-ID: <YmoKYjwvX49KLNwT@bergen.fjasle.eu>
 References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-22-masahiroy@kernel.org>
+ <20220424190811.1678416-28-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,85 +36,348 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220424190811.1678416-22-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-28-masahiroy@kernel.org>
 Jabber-ID: nicolas@jabber.no
 X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:4eZ1QVDrWYPEzqwAHKyFC4DUykBpGTm6QgZLqkfdK9SyXC1ZVLV
- IhNcHRRrNti9CPiPtr0iLywTheurjnLfDex121sMY0iOnLiG9qpadaf0pYt3d894btmOhSl
- q1vFPUstBCVH60KZYrOQ6IaeSfOPC5kknQJ1wpOV5YeAcWbwNM8/toELdyAFW/nn/0j6IdO
- p8HpFhTVhaTVZ+STlSp/Q==
+X-Provags-ID: V03:K1:vpoCvagVWixJ1WtlIXCkQBjopiLXqY/cI3W05BJdkTp4F1VwKaF
+ fKz47nWVHcIN5znPoZqzbr627szB+zsL5OdIKJSSAnFvTIuQjCmccfXeHFQbOOT5rYrQwfz
+ 4RcbDvJR6QcU69m/d/H1IFAtiA1uLn7CoQ2GuW7a5OhG+zikAA8AsStMrLBH2hSJtgu+02c
+ 4Wl3xcjvr1Lcx2MWQPAhg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fcKuhkGh79Y=:LhoKNuOKROCfUwvPBS2C7t
- ufB0RHf4iKnyU84WBzxK7MNX4VLk5ud24A6qcn8g2Vz3xOKvALW2XApaOUb5GRKkzCFu0GH31
- ZPIT3/H2BA1hcRnK4ZtSe0zX49G8k20ql+l0fitLclqYewR/KvneTDMq2ORx2fEv2xGuHFAjO
- 95hJ3piNQUBph2LUpQH/+HVZegBEhs8qnFO9NWf32mSaYJMQRWWHkboJqexewMHOvzuIRJj+z
- MbP6yXuq50MqNZMnjbQMUBQP1R2LBGwV9xIaISqW7Nt9DoK5QFZiI6tsjNL9pV9Xgl2bjDaHK
- k/SZfcObJEYJhp7uVN5VDJWQiTZhOQ6TCbIUB13kMFR7j8D8ytuYnRZOHAsfagvIkhVYCF+iH
- GpZ3C4HGALlG5Ejo+Z2KyNPX8KofR3LMgVDB5eXH5BimrPO0v6VpIWbsJUZDY438MygXJVTih
- kFwg9u7DAkpiLPMj8E3PaaTB1GlzPtG+YNVvcAp4XxfrVzezotcqGts1ZftfPpQLtz2xnVw+I
- eYY6NNLezkS+JO6bm4x1Jn2Iay6QZAvHhZkhM2aGPPp0xfkwQaS30ZLKGvihrdDHSuX/VWJ2/
- GKU0F3jqEQ1ad+Td1EiZfCTyFlJR3UshzW8ylWBrsQF0IdtIXjdy7M7mRzYrL2LP8e6HZl4oD
- kEOvXMoNS3DrqIfzxicFXemRZJJ9Chbnyrul08eJr2y4UWF/O0PMHNbndEJPJvxc7obA=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NAY8wEee1Jw=:MPk3f6Uu8OkDerx5TFxCXP
+ qoJiFx57v3IK/pP8FB7xDhjRWFDrAQaxCwF5TjA/4GmNdQ5LwgM/JlbbSlRQYhRj1wwlfMh2u
+ mrFQEPqOYwcck3EuS/6jNylTCT4sp8/dFznLpmhbYdtrLhU4yIzCrorq7fuz4+vUU+CvBoYr8
+ UADOtELYZSfaKhJJAzXNRbkksuH9/ufh9EynoClzPQxvecsrr++aD2gD7F40ua2+kkibUAmzC
+ P1nct3uzNhRfJNcSJMR9TztZhgqA80bIj5wJugDTwxo67Sl2qj3Ph5FuCA2hELPtlaPu+RkDc
+ A/chVbvyotqIZ3OU+LIE8Gosfsb5JoIbGJj2ZoUWR86d3aWaXZqFVsgbUGDi+RpjRRD4mJcQL
+ xVCvnNQj2IasOgdM32umQqsguneH+qHOc8TIqszEcT11s0v1t36XiPc9gSOlSm9byPHjCWAz4
+ HZDjnLED1uvxuQeJuCvMIcr9bSOcbuvedMeXXGwnv15Jge+0/FvY00d4QVoDp9lkYdzn0Ct1X
+ mixKrEGP0EdolzNt+yrJMc3R4fJGNUbJ/10gNWavIf2+Ej3/vwUroGOyljRm1/MpC4tLzq9Fd
+ lxZD+zLM8TzbDDIRLm6OTjDrchtWUpWeyZYJKj3B2o1zp2S7J8rlRcddHOkvJE1IkcCSi4iVl
+ FBkMHhwqQKB0OGP8YrTUzPkwwH80YVYFtK0znahVDi8OnGwSwgaPXzpwDH5LjDxxxvVk=
 
-On ma. 25. april 2022 kl. 04.08 +0000 Masahiro Yamada wrote:
-> When CONFIG_MODVERSIONS=y, the output from genksyms is saved in
-> separate *.symversions files, and will be used much later when
-> CONFIG_LTO_CLANG=y because it is impossible to update LLVM bit code
-> here.
+On Mon 25 Apr 2022 04:08:11 GMT Masahiro Yamada wrote:
+> When CONFIG_LTO_CLANG=y, additional intermediate *.prelink.o is 
+> created
+> for each module. Also, objtool is postponed until LLVM bitcode is
+> converted to ELF.
 > 
-> This approach is not robust because:
+> CONFIG_X86_KERNEL_IBT works in a similar way to postpone objtool until
+> objects are merged together.
 > 
->  - *.symversions may or may not exist. If *.symversions does not
->    exist, we never know if it is missing for legitimate reason
->    (i.e. no EXPORT_SYMBOL) or something bad has happened (for
->    example, the user accidentally deleted it). Once it occurs,
->    it is not self-healing because *.symversions is generated
->    as a side effect of the build rule of the object.
+> This commit stops generating *.prelink.o, so the build flow will look
+> the same with/without LTO.
 > 
->  - stale (i.e. invalid) *.symversions might be picked up if an
->    object is generated in a non-ordinary way, and corresponding
->    *.symversions (, which was generated by old builds) just happen
->    to exist.
+> The following figures show how the LTO build currently works, and
+> how this commit is changing it.
 > 
-> A more robust approach is to save symbol versions in *.cmd files
-> because:
+> Current build flow
+> ==================
 > 
->  - *.cmd always exists (if the object is generated by if_changed
->    rule or friends). Even if the user accidentally deletes it,
->    it will be regenerated in the next build.
+>  [1] single-object module
 > 
->  - *.cmd is always re-generated when the object is updated. This
->    avoid stale version information being picked up.
+>                                     [+objtool]
+>            $(CC)                      $(LD)                $(LD)
+>     foo.c --------------------> foo.o -----> foo.prelink.o -----> foo.ko
+>                            (LLVM bitcode)        (ELF)       |
+>                                                              |
+>                                                  foo.mod.o --/
 > 
-> I will remove *.symversions later.
+>  [2] multi-object module
+>                                     [+objtool]
+>            $(CC)         $(AR)        $(LD)                $(LD)
+>     foo1.c -----> foo1.o -----> foo.o -----> foo.prelink.o -----> foo.ko
+>                            |  (archive)          (ELF)       |
+>     foo2.c -----> foo2.o --/                                 |
+>                 (LLVM bitcode)                   foo.mod.o --/
+> 
+>   One confusion is foo.o in multi-object module is an archive despite of
+>   its suffix.
+> 
+> New build flow
+> ==============
+> 
+>  [1] single-object module
+> 
+>   Since there is only one object, we do not need to have the LLVM
+>   bitcode stage. Use $(CC)+$(LD) to generate an ELF object in one
+>   build rule. Of course, only $(CC) is used when LTO is disabled.
+> 
+>            $(CC)+$(LD)[+objtool]           $(LD)
+>     foo.c ------------------------> foo.o -------> foo.ko
+>                                     (ELF)    |
+>                                              |
+>                                  foo.mod.o --/
+> 
+>  [2] multi-object module
+> 
+>   Previously, $(AR) was used to combine LLVM bitcode into an archive,
+>   but there was not a technical reason to do so.
+>   This commit just uses $(LD) to combine and convert them into a single
+>   ELF object.
+> 
+>                           [+objtool]
+>             $(CC)           $(LD)          $(LD)
+>     foo1.c -------> foo1.o -------> foo.o -------> foo.ko
+>                               |     (ELF)    |
+>     foo2.c -------> foo2.o ---/              |
+>                 (LLVM bitcode)   foo.mod.o --/
 > 
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 > 
->  scripts/Makefile.build | 2 ++
->  1 file changed, 2 insertions(+)
+>  scripts/Kbuild.include    |  4 +++
+>  scripts/Makefile.build    | 58 ++++++++++++---------------------------
+>  scripts/Makefile.lib      |  7 -----
+>  scripts/Makefile.modfinal |  5 ++--
+>  scripts/Makefile.modpost  |  9 ++----
+>  scripts/mod/modpost.c     |  7 -----
+>  6 files changed, 25 insertions(+), 65 deletions(-)
 > 
+> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> index 3514c2149e9d..455a0a6ce12d 100644
+> --- a/scripts/Kbuild.include
+> +++ b/scripts/Kbuild.include
+> @@ -15,6 +15,10 @@ pound := \#
+>  # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+>  dot-target = $(dir $@).$(notdir $@)
+>  
+> +###
+> +# Name of target with a '.tmp_' as filename prefix. foo/bar.o => foo/.tmp_bar.o
+> +tmp-target = $(dir $@).tmp_$(notdir $@)
+
+This matches the dot-target definition above, otherwise $(@D).tmp_$(@F) 
+would be an alternative.
+
+> +
+>  ###
+>  # The temporary file to save gcc -MMD generated dependencies must not
+>  # contain a comma
 > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index f6a506318795..e03e85c90b26 100644
+> index 7f199b0a5170..fe4d3a908dd0 100644
 > --- a/scripts/Makefile.build
 > +++ b/scripts/Makefile.build
-> @@ -175,6 +175,8 @@ gen_symversions =								\
->  	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
->  		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
->  		    > $@.symversions;						\
-> +		echo >> $(dot-target).cmd ;					\
-> +		sed 's/\(.*\) = \(.*\);/$(pound)\1=\2/' $@.symversions >> $(dot-target).cmd ; \
->  	else									\
->  		rm -f $@.symversions;						\
->  	fi
+> @@ -88,10 +88,6 @@ endif
+>  targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
+>  				$(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
+>  
+> -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> -targets-for-modules += $(patsubst %.o, %.prelink.o, $(filter %.o, $(obj-m)))
+> -endif
+> -
+>  ifdef need-modorder
+>  targets-for-modules += $(obj)/modules.order
+>  endif
+> @@ -153,8 +149,16 @@ $(obj)/%.ll: $(src)/%.c FORCE
+>  # The C file is compiled and updated dependency information is generated.
+>  # (See cmd_cc_o_c + relevant part of rule_cc_o_c)
+>  
+> +is-single-obj-m = $(if $(part-of-module),$(if $(filter $@, $(obj-m)),y))
 
-While reviewing this patch, I was missing the update of the comment a 
-few lines above.  But I understand that it makes more sense to update 
-it in the follow-up patch.
+Perhaps using $(and ..,..,y) instead if $(if ..,$(if ..,y))?
 
-Tested-by: Nicolas Schier <nicolas@fjasle.eu>
+is-single-obj-m = $(and $(part-of-module),$(filter $@, $(obj-m)),y)
+
+> +
+> +ifdef CONFIG_LTO_CLANG
+> +cmd_ld_single = $(if $(is-single-obj-m), ; $(LD) $(ld_flags) -r -o $(tmp-target) $@; mv $(tmp-target) $@)
+> +endif
+> +
+>  quiet_cmd_cc_o_c = CC $(quiet_modtag)  $@
+> -      cmd_cc_o_c = $(CC) $(c_flags) -c -o $@ $< $(cmd_objtool)
+> +      cmd_cc_o_c = $(CC) $(c_flags) -c -o $@ $< \
+> +		$(cmd_ld_single) \
+> +		$(cmd_objtool)
+>  
+>  ifdef CONFIG_MODVERSIONS
+>  # When module versioning is enabled the following steps are executed:
+> @@ -228,21 +232,16 @@ cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(o
+>  
+>  endif # CONFIG_STACK_VALIDATION
+>  
+> -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> -
+> -# Skip objtool for LLVM bitcode
+> -$(obj)/%.o: objtool-enabled :=
+> -
+> -else
+>  
+>  # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+>  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+>  # 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+>  
+> -$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
+> -	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+> +is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+>  
+> -endif
+> +delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+> +
+> +$(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
+
+same here?  $(and) versus $(if ..,$(if ..,y))
+
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
+>  
+>  ifdef CONFIG_TRIM_UNUSED_KSYMS
+>  cmd_gen_ksymdeps = \
+> @@ -271,24 +270,6 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
+>  	$(call if_changed_rule,cc_o_c)
+>  	$(call cmd,force_checksrc)
+>  
+> -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> -# Module .o files may contain LLVM bitcode, compile them into native code
+> -# before ELF processing
+> -quiet_cmd_cc_prelink_modules = LD [M]  $@
+> -      cmd_cc_prelink_modules =						\
+> -	$(LD) $(ld_flags) -r -o $@					\
+> -		--whole-archive $(filter-out FORCE,$^)			\
+> -		$(cmd_objtool)
+> -
+> -# objtool was skipped for LLVM bitcode, run it now that we have compiled
+> -# modules into native code
+> -$(obj)/%.prelink.o: objtool-enabled = y
+> -$(obj)/%.prelink.o: part-of-module := y
+> -
+> -$(obj)/%.prelink.o: $(obj)/%.o FORCE
+> -	$(call if_changed,cc_prelink_modules)
+> -endif
+> -
+>  cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+>  	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
+>  
+> @@ -298,7 +279,7 @@ $(obj)/%.mod: FORCE
+>  # List module undefined symbols
+>  cmd_undefined_syms = $(NM) $< | sed -n 's/^  *U //p' > $@
+>  
+> -$(obj)/%.usyms: $(obj)/%$(mod-prelink-ext).o FORCE
+> +$(obj)/%.usyms: $(obj)/%.o FORCE
+>  	$(call if_changed,undefined_syms)
+>  
+>  quiet_cmd_cc_lst_c = MKLST   $@
+> @@ -420,16 +401,11 @@ $(obj)/modules.order: $(obj-m) FORCE
+>  $(obj)/lib.a: $(lib-y) FORCE
+>  	$(call if_changed,ar)
+>  
+> -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> -quiet_cmd_link_multi-m = AR [M]  $@
+> -cmd_link_multi-m =						\
+> -	rm -f $@; 						\
+> -	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+> -else
+>  quiet_cmd_link_multi-m = LD [M]  $@
+> -      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@)
+> -endif
+> +      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
+>  
+> +$(multi-obj-m): objtool-enabled := $(delay-objtool)
+> +$(multi-obj-m): part-of-module := y
+>  $(multi-obj-m): %.o: %.mod FORCE
+>  	$(call if_changed,link_multi-m)
+>  $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 0453a1904646..f75138385449 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -225,13 +225,6 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp -nostdinc                    \
+>  		 $(addprefix -I,$(DTC_INCLUDE))                          \
+>  		 -undef -D__DTS__
+>  
+> -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> -# With CONFIG_LTO_CLANG, .o files in modules might be LLVM bitcode, so we
+> -# need to run LTO to compile them into native code (.lto.o) before further
+> -# processing.
+> -mod-prelink-ext := .prelink
+> -endif
+> -
+>  # Useful for describing the dependency of composite objects
+>  # Usage:
+>  #   $(call multi_depend, multi_used_targets, suffix_to_remove, suffix_to_add)
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index d429e3f9ae1d..51d384a0e4f9 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -9,7 +9,7 @@ __modfinal:
+>  include include/config/auto.conf
+>  include $(srctree)/scripts/Kbuild.include
+>  
+> -# for c_flags and mod-prelink-ext
+> +# for c_flags
+>  include $(srctree)/scripts/Makefile.lib
+>  
+>  # find all modules listed in modules.order
+> @@ -55,9 +55,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+>  	$(cmd);                                                              \
+>  	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+>  
+> -
+>  # Re-generate module BTFs if either module's .ko or vmlinux changed
+> -$(modules): %.ko: %$(mod-prelink-ext).o %.mod.o $(if $(CONFIG_MODVERSIONS), %.symver.lds) scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
+> +$(modules): %.ko: %.o %.mod.o $(if $(CONFIG_MODVERSIONS), %.symver.lds) scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
+>  	+$(call if_changed_except,ld_ko_o,vmlinux)
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> index 48585c4d04ad..f2ce411acd59 100644
+> --- a/scripts/Makefile.modpost
+> +++ b/scripts/Makefile.modpost
+> @@ -41,9 +41,6 @@ __modpost:
+>  include include/config/auto.conf
+>  include $(srctree)/scripts/Kbuild.include
+>  
+> -# for mod-prelink-ext
+> -include $(srctree)/scripts/Makefile.lib
+> -
+>  MODPOST = scripts/mod/modpost								\
+>  	$(if $(CONFIG_MODVERSIONS),-m)							\
+>  	$(if $(CONFIG_MODULE_SRCVERSION_ALL),-a)					\
+> @@ -118,8 +115,6 @@ $(input-symdump):
+>  	@echo >&2 '         Modules may not have dependencies or modversions.'
+>  	@echo >&2 '         You may get many unresolved symbol warnings.'
+>  
+> -modules := $(sort $(shell cat $(MODORDER)))
+> -
+>  # KBUILD_MODPOST_WARN can be set to avoid error out in case of undefined symbols
+>  ifneq ($(KBUILD_MODPOST_WARN)$(filter-out $(existing-input-symdump), $(input-symdump)),)
+>  MODPOST += -w
+> @@ -128,9 +123,9 @@ endif
+>  # Read out modules.order to pass in modpost.
+>  # Otherwise, allmodconfig would fail with "Argument list too long".
+>  quiet_cmd_modpost = MODPOST $@
+> -      cmd_modpost = sed 's/\.ko$$/$(mod-prelink-ext)\.o/' $< | $(MODPOST) -T -
+> +      cmd_modpost = sed 's/ko$$/o/' $< | $(MODPOST) -T -
+>  
+> -$(output-symdump): $(MODORDER) $(input-symdump) $(modules:.ko=$(mod-prelink-ext).o) FORCE
+> +$(output-symdump): $(MODORDER) $(input-symdump) FORCE
+>  	$(call if_changed,modpost)
+>  
+>  targets += $(output-symdump)
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index ef779ada04c6..d8de62506939 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2081,10 +2081,6 @@ static char *remove_dot(char *s)
+>  		size_t m = strspn(s + n + 1, "0123456789");
+>  		if (m && (s[n + m] == '.' || s[n + m] == 0))
+>  			s[n] = 0;
+> -
+> -		/* strip trailing .prelink */
+> -		if (strends(s, ".prelink"))
+> -			s[strlen(s) - 8] = '\0';
+>  	}
+>  	return s;
+>  }
+> @@ -2108,9 +2104,6 @@ static void read_symbols(const char *modname)
+>  		/* strip trailing .o */
+>  		tmp = NOFAIL(strdup(modname));
+>  		tmp[strlen(tmp) - 2] = '\0';
+> -		/* strip trailing .prelink */
+> -		if (strends(tmp, ".prelink"))
+> -			tmp[strlen(tmp) - 8] = '\0';
+>  		mod = new_module(tmp);
+>  
+>  		if (modversions)
 > -- 
 > 2.32.0
 
