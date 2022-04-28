@@ -1,168 +1,284 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8EBEC2
-	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 10:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651140500; x=1682676500;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VUMwZ63MNELypWD81g58+eNC1FFn5DLNTdcf/NM5P64=;
-  b=ACNpmrfUj/YSykQNLldgprRT3EPCeUqCVo0s0Q63LKJaFJWEwzcaqr78
-   Klsn8t3Pi0+f4wIZSY3ryvIbx9MQ9w7y1O3Z7ERUS4mIduPacEvI+LluW
-   OxOsSyARR7H4H7RSCROm2fTKeSpRHmKQHhFfSq9jXYM+BFQnNydL2m0be
-   H0+UNgwb9SBku9IdihPYAki+Dvq74/TkvrgybOP3f3Iu2OKUfLD8kpis1
-   fLf1nqvh4uw2t58In1LhSmGudO4zOdWSGRS26QzNNvhnQ6MqNxZDGLZ1Z
-   M5/v3nTXvFX0nFKjrXgP5wgbO6RUB4Pzyvx0N2pVrooN9TQdSGgJy6ucA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="246150158"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="246150158"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 03:08:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="533780517"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Apr 2022 03:08:18 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nk14L-0005Gd-SL;
-	Thu, 28 Apr 2022 10:08:17 +0000
-Date: Thu, 28 Apr 2022 18:08:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qu Wenruo <wqu@suse.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC v2 08/12] btrfs: switch buffered read to the new
- btrfs_read_repair_* based repair routine
-Message-ID: <202204281717.jzlTSpQj-lkp@intel.com>
-References: <7782502d2dc775c941f2f9e5309cbb9288034a53.1651043618.git.wqu@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9008C7B
+	for <llvm@lists.linux.dev>; Thu, 28 Apr 2022 10:47:57 +0000 (UTC)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kpsl4245BzhYgY;
+	Thu, 28 Apr 2022 18:47:28 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 18:47:47 +0800
+Subject: Re: [hnaz-mm:master 214/410] mm/madvise.c:632:8: error: call to
+ undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support
+ implicit function declarations
+From: Miaohe Lin <linmiaohe@huawei.com>
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-kernel@vger.kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Naoya
+ Horiguchi <naoya.horiguchi@nec.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Linux Memory Management List
+	<linux-mm@kvack.org>
+References: <202204281452.cEOGcf4p-lkp@intel.com>
+ <b45ac0cd-ba02-c5ab-a91b-1289a7c05120@huawei.com>
+Message-ID: <6b55693d-24ab-a0bb-5289-8ca917680088@huawei.com>
+Date: Thu, 28 Apr 2022 18:47:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7782502d2dc775c941f2f9e5309cbb9288034a53.1651043618.git.wqu@suse.com>
+In-Reply-To: <b45ac0cd-ba02-c5ab-a91b-1289a7c05120@huawei.com>
+Content-Type: multipart/mixed;
+	boundary="------------43CAAC4E840AE9593F2FCC06"
+Content-Language: en-US
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 
-Hi Qu,
+--------------43CAAC4E840AE9593F2FCC06
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on kdave/for-next]
-[also build test WARNING on next-20220428]
-[cannot apply to rostedt-trace/for-next v5.18-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On 2022/4/28 15:48, Miaohe Lin wrote:
+> On 2022/4/28 14:54, kernel test robot wrote:
+>> tree:   https://github.com/hnaz/linux-mm master
+>> head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
+>> commit: fe343091405131f91dcb9230ae7649bb1ee7fe9a [214/410] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
+>> config: i386-randconfig-a005-20220425 (https://download.01.org/0day-ci/archive/20220428/202204281452.cEOGcf4p-lkp@intel.com/config)
+>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # https://github.com/hnaz/linux-mm/commit/fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>>         git remote add hnaz-mm https://github.com/hnaz/linux-mm
+>>         git fetch --no-tags hnaz-mm master
+>>         git checkout fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> Note: the hnaz-mm/master HEAD bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66 builds fine.
+>>       It only hurts bisectability.
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>>> mm/madvise.c:632:8: error: call to undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>                                       is_swapin_error_entry(entry)) {
+>>                                       ^
+>>    1 error generated.
+> 
+> I browsed the config file and found that CONFIG_SWAP is not set. But when I test it on my env, it works.
+> And I'm somewhat confused now:
+> 
+> is_swapin_error_entry and pte_to_swp_entry are both defined in include/linux/swapops.h. But pte_to_swp_entry
+> can be used normally but is_swapin_error_entry breaks the compile.
+> 
+> Will take a more close look later. Thanks for report!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-introduce-a-pure-data-checksum-checking-helper/20220427-161943
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-config: arm-randconfig-c002-20220428 (https://download.01.org/0day-ci/archive/20220428/202204281717.jzlTSpQj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/3f389ea1be2d5c290c4b523743ca200983f45765
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qu-Wenruo/btrfs-introduce-a-pure-data-checksum-checking-helper/20220427-161943
-        git checkout 3f389ea1be2d5c290c4b523743ca200983f45765
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/btrfs/
+I'm sorry but I can't reproduce it in my env. It's very kind of you if you can help test the attached patch.
+Or should I send this patch directly?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All warnings (new ones prefixed by >>):
+> 
+>>
+>>
+>> vim +/is_swapin_error_entry +632 mm/madvise.c
+>>
+>>    587	
+>>    588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+>>    589					unsigned long end, struct mm_walk *walk)
+>>    590	
+>>    591	{
+>>    592		struct mmu_gather *tlb = walk->private;
+>>    593		struct mm_struct *mm = tlb->mm;
+>>    594		struct vm_area_struct *vma = walk->vma;
+>>    595		spinlock_t *ptl;
+>>    596		pte_t *orig_pte, *pte, ptent;
+>>    597		struct page *page;
+>>    598		int nr_swap = 0;
+>>    599		unsigned long next;
+>>    600	
+>>    601		next = pmd_addr_end(addr, end);
+>>    602		if (pmd_trans_huge(*pmd))
+>>    603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+>>    604				goto next;
+>>    605	
+>>    606		if (pmd_trans_unstable(pmd))
+>>    607			return 0;
+>>    608	
+>>    609		tlb_change_page_size(tlb, PAGE_SIZE);
+>>    610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>>    611		flush_tlb_batched_pending(mm);
+>>    612		arch_enter_lazy_mmu_mode();
+>>    613		for (; addr != end; pte++, addr += PAGE_SIZE) {
+>>    614			ptent = *pte;
+>>    615	
+>>    616			if (pte_none(ptent))
+>>    617				continue;
+>>    618			/*
+>>    619			 * If the pte has swp_entry, just clear page table to
+>>    620			 * prevent swap-in which is more expensive rather than
+>>    621			 * (page allocation + zeroing).
+>>    622			 */
+>>    623			if (!pte_present(ptent)) {
+>>    624				swp_entry_t entry;
+>>    625	
+>>    626				entry = pte_to_swp_entry(ptent);
+>>    627				if (!non_swap_entry(entry)) {
+>>    628					nr_swap--;
+>>    629					free_swap_and_cache(entry);
+>>    630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>>    631				} else if (is_hwpoison_entry(entry) ||
+>>  > 632					   is_swapin_error_entry(entry)) {
+>>    633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>>    634				}
+>>    635				continue;
+>>    636			}
+>>    637	
+>>    638			page = vm_normal_page(vma, addr, ptent);
+>>    639			if (!page)
+>>    640				continue;
+>>    641	
+>>    642			/*
+>>    643			 * If pmd isn't transhuge but the page is THP and
+>>    644			 * is owned by only this process, split it and
+>>    645			 * deactivate all pages.
+>>    646			 */
+>>    647			if (PageTransCompound(page)) {
+>>    648				if (page_mapcount(page) != 1)
+>>    649					goto out;
+>>    650				get_page(page);
+>>    651				if (!trylock_page(page)) {
+>>    652					put_page(page);
+>>    653					goto out;
+>>    654				}
+>>    655				pte_unmap_unlock(orig_pte, ptl);
+>>    656				if (split_huge_page(page)) {
+>>    657					unlock_page(page);
+>>    658					put_page(page);
+>>    659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>>    660					goto out;
+>>    661				}
+>>    662				unlock_page(page);
+>>    663				put_page(page);
+>>    664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>>    665				pte--;
+>>    666				addr -= PAGE_SIZE;
+>>    667				continue;
+>>    668			}
+>>    669	
+>>    670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
+>>    671	
+>>    672			if (PageSwapCache(page) || PageDirty(page)) {
+>>    673				if (!trylock_page(page))
+>>    674					continue;
+>>    675				/*
+>>    676				 * If page is shared with others, we couldn't clear
+>>    677				 * PG_dirty of the page.
+>>    678				 */
+>>    679				if (page_mapcount(page) != 1) {
+>>    680					unlock_page(page);
+>>    681					continue;
+>>    682				}
+>>    683	
+>>    684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
+>>    685					unlock_page(page);
+>>    686					continue;
+>>    687				}
+>>    688	
+>>    689				ClearPageDirty(page);
+>>    690				unlock_page(page);
+>>    691			}
+>>    692	
+>>    693			if (pte_young(ptent) || pte_dirty(ptent)) {
+>>    694				/*
+>>    695				 * Some of architecture(ex, PPC) don't update TLB
+>>    696				 * with set_pte_at and tlb_remove_tlb_entry so for
+>>    697				 * the portability, remap the pte with old|clean
+>>    698				 * after pte clearing.
+>>    699				 */
+>>    700				ptent = ptep_get_and_clear_full(mm, addr, pte,
+>>    701								tlb->fullmm);
+>>    702	
+>>    703				ptent = pte_mkold(ptent);
+>>    704				ptent = pte_mkclean(ptent);
+>>    705				set_pte_at(mm, addr, pte, ptent);
+>>    706				tlb_remove_tlb_entry(tlb, pte, addr);
+>>    707			}
+>>    708			mark_page_lazyfree(page);
+>>    709		}
+>>    710	out:
+>>    711		if (nr_swap) {
+>>    712			if (current->mm == mm)
+>>    713				sync_mm_rss(mm);
+>>    714	
+>>    715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+>>    716		}
+>>    717		arch_leave_lazy_mmu_mode();
+>>    718		pte_unmap_unlock(orig_pte, ptl);
+>>    719		cond_resched();
+>>    720	next:
+>>    721		return 0;
+>>    722	}
+>>    723	
+>>
+> 
 
->> fs/btrfs/extent_io.c:3076:6: warning: variable 'nbits' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (ctrl->error) {
-               ^~~~~~~~~~~
-   fs/btrfs/extent_io.c:3098:46: note: uninitialized use occurs here
-           for_each_set_bit(bit, ctrl->cur_bad_bitmap, nbits) {
-                                                       ^~~~~
-   include/linux/find.h:284:16: note: expanded from macro 'for_each_set_bit'
-                (bit) < (size);                                    \
-                         ^~~~
-   fs/btrfs/extent_io.c:3076:2: note: remove the 'if' if its condition is always false
-           if (ctrl->error) {
-           ^~~~~~~~~~~~~~~~~~
-   fs/btrfs/extent_io.c:3064:20: note: initialize the variable 'nbits' to silence this warning
-           unsigned int nbits;
-                             ^
-                              = 0
-   1 warning generated.
 
+--------------43CAAC4E840AE9593F2FCC06
+Content-Type: text/plain; charset="UTF-8";
+	name="0001-mm-swap-fix-implicit-function-declarations-of-is_swa.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename*0="0001-mm-swap-fix-implicit-function-declarations-of-is_swa.pa";
+	filename*1="tch"
 
-vim +3076 fs/btrfs/extent_io.c
-
-  3060	
-  3061	static void read_repair_finish(struct btrfs_read_repair_ctrl *ctrl)
-  3062	{
-  3063		struct btrfs_fs_info *fs_info;
-  3064		unsigned int nbits;
-  3065		u32 sectorsize;
-  3066		int bit;
-  3067		int i;
-  3068	
-  3069		if (!ctrl->initialized)
-  3070			return;
-  3071	
-  3072		/*
-  3073		 * Got a critical -ENOMEM error preivously, no repair should have been
-  3074		 * attempted.
-  3075		 */
-> 3076		if (ctrl->error) {
-  3077			ASSERT(bio_list_empty(&ctrl->bios));
-  3078			ASSERT(atomic_read(&ctrl->io_bytes) == 0);
-  3079			goto mark_error;
-  3080		}
-  3081	
-  3082		ASSERT(ctrl->inode);
-  3083		fs_info = btrfs_sb(ctrl->inode->i_sb);
-  3084		nbits = ctrl->bio_size >> fs_info->sectorsize_bits;
-  3085		sectorsize = fs_info->sectorsize;
-  3086	
-  3087		/* Go through each remaining mirrors to do the repair */
-  3088		for (i = get_next_mirror(ctrl->init_mirror, ctrl->num_copies);
-  3089		     i != ctrl->init_mirror; i = get_next_mirror(i, ctrl->num_copies)) {
-  3090			read_repair_from_one_mirror(ctrl, ctrl->inode, i);
-  3091	
-  3092			/* Check the error bitmap to see if no more corrupted sectors */
-  3093			if (bitmap_all_zero(ctrl->cur_bad_bitmap, nbits))
-  3094				break;
-  3095		}
-  3096	mark_error:
-  3097		/* Finish the unrecovered bad sectors */
-  3098		for_each_set_bit(bit, ctrl->cur_bad_bitmap, nbits) {
-  3099			struct page *page;
-  3100			unsigned int pgoff;
-  3101			u64 file_offset = (bit << fs_info->sectorsize_bits) +
-  3102					  ctrl->file_offset;
-  3103	
-  3104			page = read_repair_get_sector(ctrl, bit, &pgoff);
-  3105	
-  3106			end_page_read(page, false, file_offset, sectorsize);
-  3107			unlock_extent_cached_atomic(&BTRFS_I(ctrl->inode)->io_tree,
-  3108					file_offset, file_offset + sectorsize - 1, NULL);
-  3109		}
-  3110		kfree(ctrl->cur_bad_bitmap);
-  3111		kfree(ctrl->prev_bad_bitmap);
-  3112		ctrl->cur_bad_bitmap = NULL;
-  3113		ctrl->prev_bad_bitmap = NULL;
-  3114		ctrl->initialized = false;
-  3115		ctrl->error = false;
-  3116		ctrl->failed_bio = NULL;
-  3117		ASSERT(bio_list_empty(&ctrl->bios));
-  3118		ASSERT(atomic_read(&ctrl->io_bytes) == 0);
-  3119	}
-  3120	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+RnJvbSBjN2IzZDZlMGExNWZkNGU4NWE4ZjczMzNhYmIyMjIwYTU0YzA1MmU1IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNaWFvaGUgTGluIDxsaW5taWFvaGVAaHVhd2VpLmNv
+bT4KRGF0ZTogVGh1LCAyOCBBcHIgMjAyMiAxNzoyMTo1NSArMDgwMApTdWJqZWN0OiBbUEFU
+Q0hdIG1tL3N3YXA6IGZpeCBpbXBsaWNpdCBmdW5jdGlvbiBkZWNsYXJhdGlvbnMgb2YKIGlz
+X3N3YXBpbl9lcnJvcl9lbnRyeQoKS2VybmVsIHRlc3Qgcm9ib3QgcmVwb3J0ZWQgdGhlIGVy
+cm9yIG9mIGNhbGxpbmcgdG8gdW5kZWNsYXJlZCBmdW5jdGlvbgppc19zd2FwaW5fZXJyb3Jf
+ZW50cnkuIEZpeCBpdCBieSB3cmFwcGluZyB1cCBpc19zd2FwaW5fZXJyb3JfZW50cnkgd2l0
+aApDT05GSUdfU1dBUC4KClJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGlu
+dGVsLmNvbT4KU2lnbmVkLW9mZi1ieTogTWlhb2hlIExpbiA8bGlubWlhb2hlQGh1YXdlaS5j
+b20+Ci0tLQogaW5jbHVkZS9saW51eC9zd2FwLmggICAgfCA0ICsrKysKIGluY2x1ZGUvbGlu
+dXgvc3dhcG9wcy5oIHwgNyArKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDExIGluc2VydGlv
+bnMoKykKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3N3YXAuaCBiL2luY2x1ZGUvbGlu
+dXgvc3dhcC5oCmluZGV4IGI4MmMxOTZkODg2Ny4uZjNkNDQyNTJlNDc3IDEwMDY0NAotLS0g
+YS9pbmNsdWRlL2xpbnV4L3N3YXAuaAorKysgYi9pbmNsdWRlL2xpbnV4L3N3YXAuaApAQCAt
+NTUsMTAgKzU1LDE0IEBAIHN0YXRpYyBpbmxpbmUgaW50IGN1cnJlbnRfaXNfa3N3YXBkKHZv
+aWQpCiAgKiBhY3Rpb25zIG9uIGZhdWx0cy4KICAqLwogCisjaWZkZWYgQ09ORklHX1NXQVAK
+ICNkZWZpbmUgU1dQX1NXQVBJTl9FUlJPUl9OVU0gMQogI2RlZmluZSBTV1BfU1dBUElOX0VS
+Uk9SICAgICAoTUFYX1NXQVBGSUxFUyArIFNXUF9IV1BPSVNPTl9OVU0gKyBcCiAJCQkgICAg
+IFNXUF9NSUdSQVRJT05fTlVNICsgU1dQX0RFVklDRV9OVU0gKyBcCiAJCQkgICAgIFNXUF9Q
+VEVfTUFSS0VSX05VTSkKKyNlbHNlCisjZGVmaW5lIFNXUF9TV0FQSU5fRVJST1JfTlVNIDAK
+KyNlbmRpZgogLyoKICAqIFBURSBtYXJrZXJzIGFyZSB1c2VkIHRvIHBlcnNpc3QgaW5mb3Jt
+YXRpb24gb250byBQVEVzIHRoYXQgYXJlIG1hcHBlZCB3aXRoCiAgKiBmaWxlLWJhY2tlZCBt
+ZW1vcmllcy4gIEFzIGl0cyBuYW1lICJQVEUiIGhpbnRzLCBpdCBzaG91bGQgb25seSBiZSBh
+cHBsaWVkIHRvCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3N3YXBvcHMuaCBiL2luY2x1
+ZGUvbGludXgvc3dhcG9wcy5oCmluZGV4IGZmYzlmMTlhYjZmYi4uYWY2ZTZmYjRiOGU2IDEw
+MDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L3N3YXBvcHMuaAorKysgYi9pbmNsdWRlL2xpbnV4
+L3N3YXBvcHMuaApAQCAtMTA4LDYgKzEwOCw3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCAqc3dw
+X3RvX3JhZGl4X2VudHJ5KHN3cF9lbnRyeV90IGVudHJ5KQogCXJldHVybiB4YV9ta192YWx1
+ZShlbnRyeS52YWwpOwogfQogCisjaWZkZWYgQ09ORklHX1NXQVAKIHN0YXRpYyBpbmxpbmUg
+c3dwX2VudHJ5X3QgbWFrZV9zd2FwaW5fZXJyb3JfZW50cnkoc3RydWN0IHBhZ2UgKnBhZ2Up
+CiB7CiAJcmV0dXJuIHN3cF9lbnRyeShTV1BfU1dBUElOX0VSUk9SLCBwYWdlX3RvX3Bmbihw
+YWdlKSk7CkBAIC0xMTcsNiArMTE4LDEyIEBAIHN0YXRpYyBpbmxpbmUgaW50IGlzX3N3YXBp
+bl9lcnJvcl9lbnRyeShzd3BfZW50cnlfdCBlbnRyeSkKIHsKIAlyZXR1cm4gc3dwX3R5cGUo
+ZW50cnkpID09IFNXUF9TV0FQSU5fRVJST1I7CiB9CisjZWxzZQorc3RhdGljIGlubGluZSBp
+bnQgaXNfc3dhcGluX2Vycm9yX2VudHJ5KHN3cF9lbnRyeV90IGVudHJ5KQoreworCXJldHVy
+biAwOworfQorI2VuZGlmCiAKICNpZiBJU19FTkFCTEVEKENPTkZJR19ERVZJQ0VfUFJJVkFU
+RSkKIHN0YXRpYyBpbmxpbmUgc3dwX2VudHJ5X3QgbWFrZV9yZWFkYWJsZV9kZXZpY2VfcHJp
+dmF0ZV9lbnRyeShwZ29mZl90IG9mZnNldCkKLS0gCjIuMjMuMAoK
+--------------43CAAC4E840AE9593F2FCC06--
