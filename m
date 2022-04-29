@@ -1,105 +1,319 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08551851
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:08:51 +0000 (UTC)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-07.nifty.com with ESMTP id 23TH3ghV021998
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 02:03:42 +0900
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 23TH3R6m031957
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 02:03:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 23TH3R6m031957
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1651251808;
-	bh=2vpSHisjjsnf9NfbpwTfPLzqRn0BtksbaOiDQMdZIhY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vIZKmixvU3vr2L5AM0NRMs6Js+aaHTAUpjPmRsHYlD5bN0Z5suE+z4fPNRck9lLwY
-	 9OhL5IeMww9wXpimeozNQUifnf7B/A48CioSTRkFjOEZx4x+GUggqd/6KHorFx04oO
-	 r8J4y+qlitJaoI+gNbzG9DHCAxHri4RjZv8EGE3uywnsygVFleDHHyDUP+qmD8a7bz
-	 peFt01GltVqHLatiy9e82YOwbvsL1ooF0mnioAfyxzXQCcI9juATsu0Wl4hfRxLmON
-	 52rIlHEKuwQvNHp7HQC1mBOwHKCX1UfUM2iVHTlpL682CKfVJtbUPn92rSq3JehAlD
-	 plDZDEbrLlf5g==
-X-Nifty-SrcIP: [209.85.216.44]
-Received: by mail-pj1-f44.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so11035539pjb.5
-        for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 10:03:28 -0700 (PDT)
-X-Gm-Message-State: AOAM531USm3w1AlYzEnnZmbvYUcylfz+FOHKOaSA3UzUC1Wk+6Q9zYJY
-	G2FtqOe0vr7rQYRrDW0DCYD7Dop6zAhY8DhRuBk=
-X-Google-Smtp-Source: ABdhPJxTFHxNrrT5TqeOkyMPJTn0AidkGCpkTxYwuoLHQHkodF0cp0Iagk/I7OqOD0n4qehCHvFWugf2l3faxbK2OGU=
-X-Received: by 2002:a17:902:f54e:b0:15e:6c3f:5b5 with SMTP id
- h14-20020a170902f54e00b0015e6c3f05b5mr342925plf.99.1651251807401; Fri, 29 Apr
- 2022 10:03:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B8E1851
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:20:58 +0000 (UTC)
+Received: by mail-lj1-f176.google.com with SMTP id 4so11247250ljw.11
+        for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 10:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+puxdcpt6EvHpRAaNSgsU+ePtx47Qm8oD+9Rdv22w7A=;
+        b=N5HKLMmC5Qv9XiclVn2gPf7HB0G1kNS+wmpvQweaHP/tpcInDdZjFSkcdJ38cUuxzG
+         O1O72acJJqnVJV0ZnY3vnyN1STgJ83YO/2S8qqClGMDM1yEqWh35KgBVTNEXjUjYGbwe
+         FoUyP9w6LspJuGE066UQ3AXCd2AWx044kWYOuP1D6y148YXt/ctKUOrjseDJPTPlCKhH
+         n1JNH+okq95nc49o596FvKtoaE2BVdnKqpgBmG7Wg2iWkusZ1/kokspmSZTGXlQjx5jz
+         xLjM/eXEEeLQS7axGJFDt96WHpjrI+WcbMBdO5+P32sawhvJBFTcxY7MrTAs+xx7F1kd
+         6/3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+puxdcpt6EvHpRAaNSgsU+ePtx47Qm8oD+9Rdv22w7A=;
+        b=UHu/i2jsJzzwHIMlull7t4wyYYJc9PxU+x/LJYg02cqK0XqclKhXKEkY/UOFPIMGaA
+         FmK7dcwN9WjB35YRqvRXwmECgLteIrU1m2HkYOwDk4uPd9sSk8aY3z1s9A9RtboQO1me
+         1qYePxJ276fScBvJAqGisWUb2cMZ/vDKNjfJcSiLfil9Ot7g/gVKs5qvF+cQOi8YRVnc
+         yY+LmD5lbqf88+qgdGHP9MYavO45ZXR5wSMZlAf2IZ9f2qvcP4hVCqe/9A4zxOulg0mn
+         Z+TrJU4sXe69NVv5velqyTyIGEXf75LWqPpEnCsPLRWh4DzF0XmZxVwbzP9qRKZpWkUX
+         x6Zw==
+X-Gm-Message-State: AOAM530cwugy/wQ6JV7voUn9OAoVqeH58TcMNKNB5BAW90K1V+qk3XbH
+	gbEo0g8BWmxODWafkzFk72+hN7N2CHmJAU8p8+c6hw==
+X-Google-Smtp-Source: ABdhPJxCRY5kJom5F0RLmGX2B4OQ3sTmJWOScofwopjg5R0wEpr6gPsGFpi5rC2+1g/H135frxeoLtynwciZSXVSy+Q=
+X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
+ h4-20020a2e9ec4000000b0024b115caedbmr139405ljk.235.1651252856118; Fri, 29 Apr
+ 2022 10:20:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 30 Apr 2022 02:02:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARL+_amg-6RN9W+P9n8KuWqobpWrvo6gXxRphxj+=OU7Q@mail.gmail.com>
-Message-ID: <CAK7LNARL+_amg-6RN9W+P9n8KuWqobpWrvo6gXxRphxj+=OU7Q@mail.gmail.com>
-Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Arnd Bergmann <arnd@arndb.de>
+References: <962475179.3377.1651244787786@jenkins.jenkins>
+In-Reply-To: <962475179.3377.1651244787786@jenkins.jenkins>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 29 Apr 2022 10:20:45 -0700
+Message-ID: <CAKwvOdkR3tVWo9iGLryoAzY4x7BfDMCLDSx9jnd+p7-hKXD5qg@mail.gmail.com>
+Subject: Re: [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset representation
+To: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+Cc: Nikita Popov <npopov@redhat.com>, llvm@lists.linux.dev, ci_notify@linaro.org, 
+	Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 23, 2022 at 12:18 AM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
+On Fri, Apr 29, 2022 at 8:06 AM <ci_notify@linaro.org> wrote:
 >
-> The macros defined in this file are for testing only and are purposely
-> not used. When compiled with W=2, both gcc and clang yield some
-> -Wunused-macros warnings. Ignore them.
+> [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset representation:
+> commit b9dc5651477b4c3c132662e763308b27963248a9
+> Author: Nikita Popov <npopov@redhat.com>
 >
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>     [GVN] Encode GEPs in offset representation
+>
+> Results regressed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 22258
+> # First few build errors in logs:
+> # 00:02:56 arch/arm/lib/xor-neon.c:30:2: error: This code requires at least version 4.6 of GCC [-Werror,-W#warnings]
+
+Hi Maxim, can you please confirm this is the correct result of the
+bisection?  The above warning on the kernel is a known issue that has
+been fixed upstream.  Are the kernel builds not against mainline?
+
+I believe the below are known issues as well.
+
+> # 00:02:56 make[1]: *** [scripts/Makefile.build:288: arch/arm/lib/xor-neon.o] Error 1
+> # 00:02:56 make: *** [Makefile:1831: arch/arm/lib] Error 2
+> # 00:03:54 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+> # 00:03:54 make[1]: *** [scripts/Makefile.build:288: crypto/wp512.o] Error 1
+> # 00:06:35 make: *** [Makefile:1831: crypto] Error 2
+> # 00:11:56 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
+> # 00:11:56 make[4]: *** [scripts/Makefile.build:288: drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+> # 00:12:06 make[3]: *** [scripts/Makefile.build:550: drivers/gpu/drm/selftests] Error 2
+> # 00:30:12 drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: error: stack frame size (1432) exceeds limit (1024) in 'bw_calcs' [-Werror,-Wframe-larger-than]
+>
+> from
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 22260
+>
+> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+>
+> This commit has regressed these CI configurations:
+>  - tcwg_kernel/llvm-master-arm-stable-allmodconfig
+>
+> First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-b9dc5651477b4c3c132662e763308b27963248a9/
+> Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-942ec5c36d922b29d0e7200082b533018d42421a/
+> Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-baseline/
+> Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/
+>
+> Reproduce builds:
+> <cut>
+> mkdir investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
+> cd investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
+>
+> # Fetch scripts
+> git clone https://git.linaro.org/toolchain/jenkins-scripts
+>
+> # Fetch manifests and test.sh script
+> mkdir -p artifacts/manifests
+> curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/manifests/build-baseline.sh --fail
+> curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/manifests/build-parameters.sh --fail
+> curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/test.sh --fail
+> chmod +x artifacts/test.sh
+>
+> # Reproduce the baseline build (build all pre-requisites)
+> ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
+>
+> # Save baseline build state (which is then restored in artifacts/test.sh)
+> mkdir -p ./bisect
+> rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+>
+> cd llvm
+>
+> # Reproduce first_bad build
+> git checkout --detach b9dc5651477b4c3c132662e763308b27963248a9
+> ../artifacts/test.sh
+>
+> # Reproduce last_good build
+> git checkout --detach 942ec5c36d922b29d0e7200082b533018d42421a
+> ../artifacts/test.sh
+>
+> cd ..
+> </cut>
+>
+> Full commit (up to 1000 lines):
+> <cut>
+> commit b9dc5651477b4c3c132662e763308b27963248a9
+> Author: Nikita Popov <npopov@redhat.com>
+> Date:   Wed Apr 27 14:40:07 2022 +0200
+>
+>     [GVN] Encode GEPs in offset representation
+>
+>     When using opaque pointers, convert GEPs into offset representation
+>     of the form P + V1 * Scale1 + V2 * Scale2 + ... + ConstantOffset.
+>     This allows us to recognize equivalent address calculations even if
+>     the GEPs don't use the same source element type.
+>
+>     This fixes an opaque pointer codegen regression seen in rustc.
+>
+>     Differential Revision: https://reviews.llvm.org/D124527
 > ---
-
-Applied to linux-kbuild (only the second hunk)
-Thanks.
-
-The current check is not nice,
-but this does not hurt.
-
-
-
->  scripts/checksyscalls.sh | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  llvm/include/llvm/Transforms/Scalar/GVN.h |  2 ++
+>  llvm/lib/Transforms/Scalar/GVN.cpp        | 45 +++++++++++++++++++++++++------
+>  llvm/test/Transforms/GVN/opaque-ptr.ll    | 19 +++++--------
+>  3 files changed, 46 insertions(+), 20 deletions(-)
 >
-> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-> index 9dbab13329fa..cde15f22ec98 100755
-> --- a/scripts/checksyscalls.sh
-> +++ b/scripts/checksyscalls.sh
-> @@ -255,6 +255,7 @@ cat << EOF
->  /* 64-bit ports never needed these, and new 32-bit ports can use statx */
->  #define __IGNORE_fstat64
->  #define __IGNORE_fstatat64
+> diff --git a/llvm/include/llvm/Transforms/Scalar/GVN.h b/llvm/include/llvm/Transforms/Scalar/GVN.h
+> index d6f4e7376065..16ab1a490162 100644
+> --- a/llvm/include/llvm/Transforms/Scalar/GVN.h
+> +++ b/llvm/include/llvm/Transforms/Scalar/GVN.h
+> @@ -40,6 +40,7 @@ class CallInst;
+>  class ExtractValueInst;
+>  class Function;
+>  class FunctionPass;
+> +class GetElementPtrInst;
+>  class ImplicitControlFlowTracking;
+>  class LoadInst;
+>  class LoopInfo;
+> @@ -177,6 +178,7 @@ public:
+>      Expression createCmpExpr(unsigned Opcode, CmpInst::Predicate Predicate,
+>                               Value *LHS, Value *RHS);
+>      Expression createExtractvalueExpr(ExtractValueInst *EI);
+> +    Expression createGEPExpr(GetElementPtrInst *GEP);
+>      uint32_t lookupOrAddCall(CallInst *C);
+>      uint32_t phiTranslateImpl(const BasicBlock *BB, const BasicBlock *PhiBlock,
+>                                uint32_t Num, GVNPass &Gvn);
+> diff --git a/llvm/lib/Transforms/Scalar/GVN.cpp b/llvm/lib/Transforms/Scalar/GVN.cpp
+> index e0d78c944edb..34c1483a37e0 100644
+> --- a/llvm/lib/Transforms/Scalar/GVN.cpp
+> +++ b/llvm/lib/Transforms/Scalar/GVN.cpp
+> @@ -307,13 +307,7 @@ struct llvm::gvn::AvailableValueInBlock {
+>
+>  GVNPass::Expression GVNPass::ValueTable::createExpr(Instruction *I) {
+>    Expression e;
+> -  // For GEPs, disambiguate based on the source element type, which is not
+> -  // implied by the result type with opaque pointers. (Conversely, the source
+> -  // element type together with the operand types does imply the result type.)
+> -  if (const auto *GEP = dyn_cast<GetElementPtrInst>(I))
+> -    e.type = GEP->getSourceElementType();
+> -  else
+> -    e.type = I->getType();
+> +  e.type = I->getType();
+>    e.opcode = I->getOpcode();
+>    if (const GCRelocateInst *GCR = dyn_cast<GCRelocateInst>(I)) {
+>      // gc.relocate is 'special' call: its second and third operands are
+> @@ -404,6 +398,39 @@ GVNPass::ValueTable::createExtractvalueExpr(ExtractValueInst *EI) {
+>    return e;
+>  }
+>
+> +GVNPass::Expression GVNPass::ValueTable::createGEPExpr(GetElementPtrInst *GEP) {
+> +  Expression E;
+> +  Type *PtrTy = GEP->getType()->getScalarType();
+> +  const DataLayout &DL = GEP->getModule()->getDataLayout();
+> +  unsigned BitWidth = DL.getIndexTypeSizeInBits(PtrTy);
+> +  MapVector<Value *, APInt> VariableOffsets;
+> +  APInt ConstantOffset(BitWidth, 0);
+> +  if (PtrTy->isOpaquePointerTy() &&
+> +      GEP->collectOffset(DL, BitWidth, VariableOffsets, ConstantOffset)) {
+> +    // For opaque pointers, convert into offset representation, to recognize
+> +    // equivalent address calculations that use different type encoding.
+> +    LLVMContext &Context = GEP->getContext();
+> +    E.opcode = GEP->getOpcode();
+> +    E.type = nullptr;
+> +    E.varargs.push_back(lookupOrAdd(GEP->getPointerOperand()));
+> +    for (const auto &Pair : VariableOffsets) {
+> +      E.varargs.push_back(lookupOrAdd(Pair.first));
+> +      E.varargs.push_back(lookupOrAdd(ConstantInt::get(Context, Pair.second)));
+> +    }
+> +    if (!ConstantOffset.isZero())
+> +      E.varargs.push_back(
+> +          lookupOrAdd(ConstantInt::get(Context, ConstantOffset)));
+> +  } else {
+> +    // If converting to offset representation fails (for typed pointers and
+> +    // scalable vectors), fall back to type-based implementation:
+> +    E.opcode = GEP->getOpcode();
+> +    E.type = GEP->getSourceElementType();
+> +    for (Use &Op : GEP->operands())
+> +      E.varargs.push_back(lookupOrAdd(Op));
+> +  }
+> +  return E;
+> +}
 > +
->  EOF
->  }
+>  //===----------------------------------------------------------------------===//
+>  //                     ValueTable External Functions
+>  //===----------------------------------------------------------------------===//
+> @@ -587,9 +614,11 @@ uint32_t GVNPass::ValueTable::lookupOrAdd(Value *V) {
+>      case Instruction::InsertElement:
+>      case Instruction::ShuffleVector:
+>      case Instruction::InsertValue:
+> -    case Instruction::GetElementPtr:
+>        exp = createExpr(I);
+>        break;
+> +    case Instruction::GetElementPtr:
+> +      exp = createGEPExpr(cast<GetElementPtrInst>(I));
+> +      break;
+>      case Instruction::ExtractValue:
+>        exp = createExtractvalueExpr(cast<ExtractValueInst>(I));
+>        break;
+> diff --git a/llvm/test/Transforms/GVN/opaque-ptr.ll b/llvm/test/Transforms/GVN/opaque-ptr.ll
+> index fa203da28bb7..07e336a9e0b6 100644
+> --- a/llvm/test/Transforms/GVN/opaque-ptr.ll
+> +++ b/llvm/test/Transforms/GVN/opaque-ptr.ll
+> @@ -25,32 +25,26 @@ define void @gep_cse(ptr %p) {
+>  define void @gep_cse_offset_canonicalization(ptr %p, i64 %idx, i64 %idx2) {
+>  ; CHECK-LABEL: @gep_cse_offset_canonicalization(
+>  ; CHECK-NEXT:    [[GEP1:%.*]] = getelementptr i64, ptr [[P:%.*]], i64 1
+> -; CHECK-NEXT:    [[GEP1_SAME1:%.*]] = getelementptr i32, ptr [[P]], i64 2
+> -; CHECK-NEXT:    [[GEP1_SAME2:%.*]] = getelementptr i8, ptr [[P]], i64 8
+>  ; CHECK-NEXT:    [[GEP1_DIFFERENT:%.*]] = getelementptr i8, ptr [[P]], i64 12
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME1]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME2]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP1_DIFFERENT]])
+>  ; CHECK-NEXT:    [[GEP2:%.*]] = getelementptr i64, ptr [[P]], i64 [[IDX:%.*]]
+> -; CHECK-NEXT:    [[GEP2_SAME:%.*]] = getelementptr { i32, i32 }, ptr [[P]], i64 [[IDX]]
+>  ; CHECK-NEXT:    [[GEP2_DIFFERENT:%.*]] = getelementptr { i32, i32, i32 }, ptr [[P]], i64 [[IDX]]
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP2]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP2_SAME]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP2]])
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP2_DIFFERENT]])
+>  ; CHECK-NEXT:    [[GEP3:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX]]
+> -; CHECK-NEXT:    [[GEP3_SAME1:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 1, i64 [[IDX]]
+> -; CHECK-NEXT:    [[GEP3_SAME2:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 1, i32 0, i64 [[IDX]]
+>  ; CHECK-NEXT:    [[GEP3_DIFFERENT:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX2:%.*]]
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME1]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME2]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP3_DIFFERENT]])
+>  ; CHECK-NEXT:    [[GEP4:%.*]] = getelementptr [4 x i32], ptr [[P]], i64 [[IDX]], i64 [[IDX2]]
+> -; CHECK-NEXT:    [[GEP4_SAME:%.*]] = getelementptr [4 x float], ptr [[P]], i64 [[IDX]], i64 [[IDX2]]
+>  ; CHECK-NEXT:    [[GEP4_DIFFERENT:%.*]] = getelementptr [4 x float], ptr [[P]], i64 [[IDX2]], i64 [[IDX]]
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP4]])
+> -; CHECK-NEXT:    call void @use(ptr [[GEP4_SAME]])
+> +; CHECK-NEXT:    call void @use(ptr [[GEP4]])
+>  ; CHECK-NEXT:    call void @use(ptr [[GEP4_DIFFERENT]])
+>  ; CHECK-NEXT:    [[GEP5:%.*]] = getelementptr <vscale x 2 x i32>, ptr [[P]], i64 1
+>  ; CHECK-NEXT:    [[GEP5_SAME:%.*]] = getelementptr <vscale x 2 x float>, ptr [[P]], i64 1
+> @@ -88,6 +82,7 @@ define void @gep_cse_offset_canonicalization(ptr %p, i64 %idx, i64 %idx2) {
+>    call void @use(ptr %gep4)
+>    call void @use(ptr %gep4.same)
+>    call void @use(ptr %gep4.different)
+> +  ; TODO: %gep5 and %gep5.same are equivalent as well.
+>    %gep5 = getelementptr <vscale x 2 x i32>, ptr %p, i64 1
+>    %gep5.same = getelementptr <vscale x 2 x float>, ptr %p, i64 1
+>    %gep5.different = getelementptr <vscale x 2 x i64>, ptr %p, i64 1
+> </cut>
 
-Noise.
-I dropped it.
-
-
-
->
-> @@ -268,4 +269,4 @@ syscall_list() {
->  }
->
->  (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
-> -$* -Wno-error -E -x c - > /dev/null
-> +$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
-> --
-> 2.35.1
->
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Thanks,
+~Nick Desaulniers
