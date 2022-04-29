@@ -1,45 +1,48 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE51E1FAA
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 23:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651274189; x=1682810189;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SkoKmM0MKCxM4R400j5vwKOc0q/BGdAfbOI57vblFHY=;
-  b=fzpYnK0hf5xs+ZebanX5zQx4M5hnbL2xnaJvwip+wyGPEoX8zAN46sWk
-   zYVujAM3e4ZjnBPsPvJQeqh1a20aEQuvQ7luLs2VkTe6P7txQThAMG9YT
-   GEL8B2rRiNpdXdQVC0ISPF9iOmYlBa/+QhLI4UpDXAFVqgGjQ7C6FIpuv
-   L/ZAwV4+KRwBbvAgrdlBP0maQKe8jHBT5/LYoyzy2t+ZdAQQZMtV4/1gm
-   AU7XMemCvhugJxCRpsHCnyKhMMMugy+/b0wEAkiG9sXj7t61UxyBtpkqP
-   J+uVM4XTDui3h61kLtqctxWSbLxkjs8BXajJSQC/CV1fU5pHrCjSpKq90
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="329744924"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="329744924"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 16:16:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="662580069"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Apr 2022 16:16:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nkZqb-0006g0-EW;
-	Fri, 29 Apr 2022 23:16:25 +0000
-Date: Sat, 30 Apr 2022 07:15:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 280/410] lib/maple_tree.c:4207:20: warning: stack
- frame size (1088) exceeds limit (1024) in 'mas_wr_modify'
-Message-ID: <202204300731.xnlH7nv1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335FE1FAA
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 23:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=GuE59RNYBcSn7YxgPNLjHOdq2pqA9HQAGI3HMZ8V3bA=; b=Mg6soHH5neJME8iJ1TwIkua8FK
+	4tj0TafDVMPpeqLC33cK1YvHmi7JKaWuMNmUIkVN7Y5J9FG967oWK9ZMRBXuyLwz3coHcpSnYUi+S
+	qhtN1hnGwCbfWy13sN3Rb4aNTkWYbehc3ihRODwUTj8ysjEiGmXzA4lrwdgXtQ6bq+ELPHbxUOM+B
+	6IFDD+ykq2CD1tvoNT307XYOgsBkVrEz2iS3Xrn1sDUIH1xX/aNS2ggcoVsZ0xk3+6lylomVF2OLm
+	J9fk2qe3YH1VFmcfT3hTEdUBxC7MYdG8CFqTEqrNUPkmbgLPHUoP0VcyhXhwBVhzxJqlkbr033Ii+
+	g/4U+wQw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nkZvZ-009j5m-Ls; Fri, 29 Apr 2022 23:21:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A8436300385;
+	Sat, 30 Apr 2022 01:21:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6CEFA2028F01B; Sat, 30 Apr 2022 01:21:32 +0200 (CEST)
+Date: Sat, 30 Apr 2022 01:21:32 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 14/21] treewide: static_call: Pass call arguments to
+ the macro
+Message-ID: <Ymxy/CU+tZhQ9UtN@hirez.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-15-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,93 +51,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220429203644.2868448-15-samitolvanen@google.com>
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
-commit: c11c433e3be4e5bef47f0a62a72064e18708e952 [280/410] Maple Tree: add new data structure
-config: arm-moxart_defconfig (https://download.01.org/0day-ci/archive/20220430/202204300731.xnlH7nv1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/hnaz/linux-mm/commit/c11c433e3be4e5bef47f0a62a72064e18708e952
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout c11c433e3be4e5bef47f0a62a72064e18708e952
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Fri, Apr 29, 2022 at 01:36:37PM -0700, Sami Tolvanen wrote:
+> Include the function arguments in the static call macro to make it
+> possible to add a wrapper for the call. This is needed with
+> CONFIG_CFI_CLANG to disable indirect call checking for static calls
+> that are patched into direct calls at runtime.
+> 
+> Users of static_call were updated using the following Coccinelle
+> script and manually adjusted to preserve coding style:
+> 
+>   @@
+>   expression name;
+>   expression list args;
+>   identifier static_call =~ "^static_call(_mod|_cond)?$";
+>   @@
+> 
+>   - static_call(name)(args)
+>   + static_call(name, args)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Urgh, sadness.. I worked so hard to get away from that terrible syntax.
 
-All warnings (new ones prefixed by >>):
+Can you explain why this is needed? I don't think there are any indirect
+calls to get confused about. That is, if you have STATIC_CALL_INLINE
+then the compiler should be emitting direct calls to the trampoline.
 
-   lib/maple_tree.c:324:20: warning: unused function 'mte_set_full' [-Wunused-function]
-   static inline void mte_set_full(const struct maple_enode *node)
-                      ^
-   lib/maple_tree.c:329:20: warning: unused function 'mte_clear_full' [-Wunused-function]
-   static inline void mte_clear_full(const struct maple_enode *node)
-                      ^
->> lib/maple_tree.c:4207:20: warning: stack frame size (1088) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-   static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-                      ^
-   3 warnings generated.
-
-
-vim +/mas_wr_modify +4207 lib/maple_tree.c
-
-  4206	
-> 4207	static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-  4208	{
-  4209		unsigned char node_slots;
-  4210		unsigned char node_size;
-  4211		struct ma_state *mas = wr_mas->mas;
-  4212		struct maple_big_node b_node;
-  4213	
-  4214		/* Direct replacement */
-  4215		if (wr_mas->r_min == mas->index && wr_mas->r_max == mas->last) {
-  4216			rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
-  4217			if (!!wr_mas->entry ^ !!wr_mas->content)
-  4218				mas_update_gap(mas);
-  4219			return;
-  4220		}
-  4221	
-  4222		/* Attempt to append */
-  4223		node_slots = mt_slots[wr_mas->type];
-  4224		node_size = wr_mas->node_end - wr_mas->offset_end + mas->offset + 2;
-  4225		if (mas->max == ULONG_MAX)
-  4226			node_size++;
-  4227	
-  4228		/* slot and node store will not fit, go to the slow path */
-  4229		if (unlikely(node_size >= node_slots))
-  4230			goto slow_path;
-  4231	
-  4232		if (wr_mas->entry && (wr_mas->node_end < node_slots - 1) &&
-  4233		    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
-  4234				if (!wr_mas->content || !wr_mas->entry)
-  4235					mas_update_gap(mas);
-  4236				return;
-  4237		}
-  4238	
-  4239		if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
-  4240			return;
-  4241		else if (mas_wr_node_store(wr_mas))
-  4242			return;
-  4243	
-  4244		if (mas_is_err(mas))
-  4245			return;
-  4246	
-  4247	slow_path:
-  4248		memset(&b_node, 0, sizeof(struct maple_big_node));
-  4249		mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
-  4250		trace_ma_write(__func__, mas, 0, wr_mas->entry);
-  4251		mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-  4252	}
-  4253	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+At no point will there be an indirect call.
