@@ -1,131 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EEF10E8
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 05:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E1CC385A4;
-	Fri, 29 Apr 2022 05:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2596E10E8
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 06:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628D0C385A7;
+	Fri, 29 Apr 2022 06:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651211559;
-	bh=mB/IIs1FR3is78wWaUZ21NGLi5UKaRuwp0Ad4RteFOg=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=O9J1cuCF7ETHRUNxwgV6+8Z7dNfdwrZmpqy56U883xXb9qTEqpOoeiESjWeLfuzIi
-	 gObtIFBOB6ZPe26LFVKCHtjKWoJQIGp38N0m9H+8EAjPwL2udJzQ0XMCuv8CPU8ew0
-	 6q9k44ksMqTABD3t7qoPP+OkEYt5x7351yAxUpKhj4Z1O0pgug+xocqsVUeSH+4Fsb
-	 0hSz3qv+lSmZqYBxrOs5jWeK5sY+W2yvw5+C9ISOawQFl2oHfuFAEcIIdDAOKeK6nK
-	 hp7p229fMm6LfHWDfDnDBGApLe+RIcUSLrNOvTPaGXP9Y9gmZEJXWbKQiIngVCZx/D
-	 XI/v8nGQer4Pw==
-From: Kalle Valo <kvalo@kernel.org>
-To: Pkshih <pkshih@realtek.com>
-Cc: kernel test robot <lkp@intel.com>,  "llvm\@lists.linux.dev" <llvm@lists.linux.dev>,  "kbuild-all\@lists.01.org" <kbuild-all@lists.01.org>,  "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
-References: <20220426063235.41650-16-pkshih@realtek.com>
-	<202204290830.slUaIhad-lkp@intel.com>
-	<ba7dddf5224746daaaa4db7e3b9637ed@realtek.com>
-Date: Fri, 29 Apr 2022 08:52:36 +0300
-In-Reply-To: <ba7dddf5224746daaaa4db7e3b9637ed@realtek.com> (Pkshih's message
-	of "Fri, 29 Apr 2022 05:30:31 +0000")
-Message-ID: <877d78fnbv.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	s=k20201202; t=1651213217;
+	bh=LXfrj0WIcgM+fFTTDm5ZeG40FfDnkdZUKI03ybfl4u8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=trmOQwsRaxq25R6opRqhDeInct/K4YUWCFYmiwe1ldrcsJqwFBb2i/I4dnWMNbPNu
+	 KXkaQn32zKB0Qw0RQjX9ICuVSDxT/2cMIjkr557ZV46qincIw7HcuBJpXzDA8LblLH
+	 GdTsUcbFws3hbW/CnRVy212V8rmoF1NicAMDX9iZfpNnFZ4mnQTeEIcqoPxe/aVtsz
+	 w25gFru7yf7IQKtGfofSy9Exo6n7SRlJsj404GSIO6KWBlySMR6Gu04ZHZ7kxPAq/c
+	 rI06xAyTasTAz2PZLE5Cq5VxHnv8TxcCt1X2OWnYKCQeeYyN6DS70bRfNd6JO7QSdl
+	 bTPPbFDzRs0TA==
+Message-ID: <0fffaa30-6e4c-177c-d757-e7e4608f4557@kernel.org>
+Date: Fri, 29 Apr 2022 08:20:13 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] pinctrl: tegra: Add pinmux support for Tegra194
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Prathamesh Shete <pshete@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Thierry Reding <treding@nvidia.com>
+References: <20211018121815.3017-2-pshete@nvidia.com>
+ <202111060119.T02XJFAA-lkp@intel.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <202111060119.T02XJFAA-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Pkshih <pkshih@realtek.com> writes:
+On 05/11/2021 18:49, kernel test robot wrote:
+> Hi Prathamesh,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on tegra/for-next]
+> [also build test WARNING on v5.15]
+> [cannot apply to linusw-pinctrl/devel next-20211105]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 
->> -----Original Message-----
->> From: kernel test robot <lkp@intel.com>
->> Sent: Friday, April 29, 2022 8:46 AM
->> To: Pkshih <pkshih@realtek.com>; kvalo@kernel.org
->> Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org; linux-wireless@vger.kernel.org
->> Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
->> 
->> Hi Ping-Ke,
->> 
->> I love your patch! Perhaps something to improve:
->> 
->> [auto build test WARNING on wireless-next/main]
->> [also build test WARNING on next-20220428]
->> [cannot apply to wireless/main v5.18-rc4]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->> 
->> url:
->> https://github.com/intel-lab-lkp/linux/commits/Ping-Ke-Shih/rtw89-8852c-add-RFK-and-then-enable-8852ce
->> -in-Makefile-and-Kconfig/20220426-143456
->> base:
->> https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
->> main
->> config: i386-allmodconfig
->> (https://download.01.org/0day-ci/archive/20220429/202204290830.slUaIhad-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
->> c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
->> reproduce (this is a W=1 build):
->>         wget
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
->> -O
->> ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         #
->> https://github.com/intel-lab-lkp/linux/commit/5aaabdd4d9ac433ed14c1c02147c2609827739d2
->>         git remote add linux-review https://github.com/intel-lab-lkp/linux
->>         git fetch --no-tags linux-review
->> Ping-Ke-Shih/rtw89-8852c-add-RFK-and-then-enable-8852ce-in-Makefile-and-Kconfig/20220426-143456
->>         git checkout 5aaabdd4d9ac433ed14c1c02147c2609827739d2
->>         # save the config file
->>         mkdir build_dir && cp config build_dir/.config
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
->> W=1 O=build_dir ARCH=i386
->> SHELL=/bin/bash drivers/net/wireless/realtek/rtw89/
->> 
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->> 
->> All warnings (new ones prefixed by >>):
->> 
->> >> drivers/net/wireless/realtek/rtw89/rtw8852c.c:2640:2: warning:
->> > result of comparison of constant
->> 18446744073709551615 with expression of type 'typeof (_Generic((__msk), char: (unsigned char)0, unsigned
->> char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned
->> short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long:
->> (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default:
->> (__msk)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
->>            __write_ctrl(R_AX_PWR_RATE_CTRL, B_AX_FORCE_PWR_BY_RATE_VALUE_MASK,
->>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    drivers/net/wireless/realtek/rtw89/rtw8852c.c:2621:13: note: expanded from macro '__write_ctrl'
->>            u32 _wrt = FIELD_PREP(__msk, _val);                     \
->>                       ^~~~~~~~~~~~~~~~~~~~~~~
->>    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
->>                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
->>                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->>                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->>    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->>    include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
->>            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->>            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
->>            __compiletime_assert(condition, msg, prefix, suffix)
->>            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
->>                    if (!(condition))                                       \
->>                          ^~~~~~~~~
->
-> We add 'BUILD_BUG_ON((__msk & __en) != 0);' to prevent coding error during
-> development. The __msk and __en in the expression are constant and expected
-> no intersection of these two bit masks. Since we have verified this code,
-> I think I can send a patch to remove the BUILD_BUG_ON() from this macro.
+(...)
 
-I'm dropping the patchset, please submit a new version including your
-fix.
+                        \
+>                               ^~
+>>> drivers/pinctrl/tegra/pinctrl-tegra194.c:1113:27: warning: unused variable 'sdmmc1_hv_trim_pins' [-Wunused-const-variable]
+>    static const unsigned int sdmmc1_hv_trim_pins[] = {
+>                              ^
+>>> drivers/pinctrl/tegra/pinctrl-tegra194.c:1119:27: warning: unused variable 'sdmmc3_hv_trim_pins' [-Wunused-const-variable]
+>    static const unsigned int sdmmc3_hv_trim_pins[] = {
+>                              ^
+>>> drivers/pinctrl/tegra/pinctrl-tegra194.c:1128:27: warning: unused variable 'sys_reset_n_pins' [-Wunused-const-variable]
+>    static const unsigned int sys_reset_n_pins[] = {
+>                              ^
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Hi Prathamesh,
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+I stumbled on issue with your commit and now I found that this was
+already reported 4 times to you:
+https://lore.kernel.org/all/?q=sys_reset_n_pins
+
+Never fixed by the author.
+
+Why these reports about errors in your commit where ignored? It's your
+commit so leaving it as is in kernel is not responsible...
+
+Best regards,
+Krzysztof
