@@ -1,99 +1,206 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8AA7B
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 07:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651216862; x=1682752862;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jnx+Ro52qkbZweZcqPZpLGmaJi6VRUu8Ggk/PtUr1es=;
-  b=Ra8xssRI3NCfwEHsVWsVDF/MEVSzmrcstJrfMSejLC/o7N2mcTcEeafv
-   QyzSk559xYfe/ZxoDufgWe4uKX4COO5cs8gWJbj6d1DkRCxuMioyuByK6
-   rYybzqwz6V838u+zVEWZTlz4uL0PEgwGYljxFQIKmrgWObaUH0UwVa3fT
-   njY/WzltGawfVpfsK/GqKc32R3k+3rzcpBKW9eXpDwN0Uv2Gfv6tPf6US
-   zrYPkh42fXHdOjyUIYVrbZYc3hla0TaWEDFfwmggoEHzhEHVmQXKvWwib
-   gAf1D+kyTcIpAs9YVy23crLSGXAHpqXU9OIWiprxIWu5Wz5zKYPGy0aiV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266715769"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="266715769"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 00:21:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="706430857"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Apr 2022 00:21:00 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nkKvz-00066W-Cb;
-	Fri, 29 Apr 2022 07:20:59 +0000
-Date: Fri, 29 Apr 2022 15:20:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Ben Widawsky <ben.widawsky@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [cxl:pending 21/34] WARNING: modpost: vmlinux.o(.data+0x211170):
- Section mismatch in reference from the variable ocores_algorithm to the
- function .init.text:set_reset_devices()
-Message-ID: <202204291528.JcxVNDff-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE17A7B
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 07:26:02 +0000 (UTC)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23T7PHmL4002953, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23T7PHmL4002953
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 29 Apr 2022 15:25:18 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 29 Apr 2022 15:25:17 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 29 Apr 2022 15:25:17 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
+ RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
+ 15.01.2308.021; Fri, 29 Apr 2022 15:25:17 +0800
+From: Pkshih <pkshih@realtek.com>
+To: Kalle Valo <kvalo@kernel.org>
+CC: kernel test robot <lkp@intel.com>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Subject: RE: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
+Thread-Topic: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
+Thread-Index: AQHYWTevDaEDmvkQB06rbly2/np5Fa0FjE4AgADUjrCAAAdoJIAAGCUg
+Date: Fri, 29 Apr 2022 07:25:17 +0000
+Message-ID: <3e05c7bab2e9406789fdf483e09bb85e@realtek.com>
+References: <20220426063235.41650-16-pkshih@realtek.com>
+	<202204290830.slUaIhad-lkp@intel.com>
+	<ba7dddf5224746daaaa4db7e3b9637ed@realtek.com> <877d78fnbv.fsf@kernel.org>
+In-Reply-To: <877d78fnbv.fsf@kernel.org>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/4/29_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
-head:   e6829d1bd3c4b58296ee9e412f7ed4d6cb390192
-commit: 26f89535a5bb17915a2e1062c3999a2ee797c7b0 [21/34] cxl/mbox: Use type __u32 for mailbox payload sizes
-config: riscv-buildonly-randconfig-r003-20220428 (https://download.01.org/0day-ci/archive/20220429/202204291528.JcxVNDff-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=26f89535a5bb17915a2e1062c3999a2ee797c7b0
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl pending
-        git checkout 26f89535a5bb17915a2e1062c3999a2ee797c7b0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.data+0x211170): Section mismatch in reference from the variable ocores_algorithm to the function .init.text:set_reset_devices()
-The variable ocores_algorithm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.data+0x20a7cc): Section mismatch in reference from the variable rk805_pwrkey_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x20d8b8): Section mismatch in reference from the variable tegra_rtc_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2950a8): Section mismatch in reference from the variable wm5100_mixer_texts to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2950b8): Section mismatch in reference from the variable wm5100_mixer_texts to the variable .init.text:.LBB1_1
-<< WARNING: modpost: vmlinux.o(.data+0x2950d0): Section mismatch in reference from the variable wm5100_mixer_texts to the function .exit.text:versatile_pci_driver_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2950d4): Section mismatch in reference from the variable wm5100_mixer_texts to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2950d8): Section mismatch in reference from the variable wm5100_mixer_texts to the variable .exit.text:.LBB2_1
-<< WARNING: modpost: vmlinux.o(.data+0x2b6658): Section mismatch in reference from the variable t9015_dai to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.data+0x2bfb20): Section mismatch in reference from the variable sprd_mcdt_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x2bfb88): Section mismatch in reference from the variable stm32_sai_sub_driver to the function .init.text:set_reset_devices()
+> -----Original Message-----
+> From: Kalle Valo <kvalo@kernel.org>
+> Sent: Friday, April 29, 2022 1:53 PM
+> To: Pkshih <pkshih@realtek.com>
+> Cc: kernel test robot <lkp@intel.com>; llvm@lists.linux.dev; kbuild-all@l=
+ists.01.org;
+> linux-wireless@vger.kernel.org
+> Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconf=
+ig
+>=20
+> Pkshih <pkshih@realtek.com> writes:
+>=20
+> >> -----Original Message-----
+> >> From: kernel test robot <lkp@intel.com>
+> >> Sent: Friday, April 29, 2022 8:46 AM
+> >> To: Pkshih <pkshih@realtek.com>; kvalo@kernel.org
+> >> Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org; linux-wireless@vger=
+.kernel.org
+> >> Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kc=
+onfig
+> >>
+> >> Hi Ping-Ke,
+> >>
+> >> I love your patch! Perhaps something to improve:
+> >>
+> >> [auto build test WARNING on wireless-next/main]
+> >> [also build test WARNING on next-20220428]
+> >> [cannot apply to wireless/main v5.18-rc4]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note=
+.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch]
+> >>
+> >> url:
+> >>
+> https://github.com/intel-lab-lkp/linux/commits/Ping-Ke-Shih/rtw89-8852c-a=
+dd-RFK-and-then-enable-8852ce
+> >> -in-Makefile-and-Kconfig/20220426-143456
+> >> base:
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next=
+.git
+> >> main
+> >> config: i386-allmodconfig
+> >> (https://download.01.org/0day-ci/archive/20220429/202204290830.slUaIha=
+d-lkp@intel.com/config)
+> >> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
+> >> c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+> >> reproduce (this is a W=3D1 build):
+> >>         wget
+> >> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cro=
+ss
+> >> -O
+> >> ~/bin/make.cross
+> >>         chmod +x ~/bin/make.cross
+> >>         #
+> >> https://github.com/intel-lab-lkp/linux/commit/5aaabdd4d9ac433ed14c1c02=
+147c2609827739d2
+> >>         git remote add linux-review https://github.com/intel-lab-lkp/l=
+inux
+> >>         git fetch --no-tags linux-review
+> >> Ping-Ke-Shih/rtw89-8852c-add-RFK-and-then-enable-8852ce-in-Makefile-an=
+d-Kconfig/20220426-143456
+> >>         git checkout 5aaabdd4d9ac433ed14c1c02147c2609827739d2
+> >>         # save the config file
+> >>         mkdir build_dir && cp config build_dir/.config
+> >>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
+> >> W=3D1 O=3Dbuild_dir ARCH=3Di386
+> >> SHELL=3D/bin/bash drivers/net/wireless/realtek/rtw89/
+> >>
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >>
+> >> All warnings (new ones prefixed by >>):
+> >>
+> >> >> drivers/net/wireless/realtek/rtw89/rtw8852c.c:2640:2: warning:
+> >> > result of comparison of constant
+> >> 18446744073709551615 with expression of type 'typeof (_Generic((__msk)=
+, char: (unsigned char)0, unsigned
+> >> char: (unsigned char)0, signed char: (unsigned char)0, unsigned short:=
+ (unsigned short)0, short:
+> (unsigned
+> >> short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned=
+ long: (unsigned long)0, long:
+> >> (unsigned long)0, unsigned long long: (unsigned long long)0, long long=
+: (unsigned long long)0, default:
+> >> (__msk)))' (aka 'unsigned long') is always false [-Wtautological-const=
+ant-out-of-range-compare]
+> >>            __write_ctrl(R_AX_PWR_RATE_CTRL, B_AX_FORCE_PWR_BY_RATE_VAL=
+UE_MASK,
+> >>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~
+> >>    drivers/net/wireless/realtek/rtw89/rtw8852c.c:2621:13: note: expand=
+ed from macro '__write_ctrl'
+> >>            u32 _wrt =3D FIELD_PREP(__msk, _val);                     \
+> >>                       ^~~~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PR=
+EP'
+> >>                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ")=
+;    \
+> >>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIE=
+LD_CHECK'
+> >>                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >=
+     \
+> >>                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^=
+~~~~~~
+> >>    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-li=
+mit=3D0 to see all)
+> >>    include/linux/compiler_types.h:352:22: note: expanded from macro 'c=
+ompiletime_assert'
+> >>            _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+> >>            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> >>    include/linux/compiler_types.h:340:23: note: expanded from macro '_=
+compiletime_assert'
+> >>            __compiletime_assert(condition, msg, prefix, suffix)
+> >>            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>    include/linux/compiler_types.h:332:9: note: expanded from macro '__=
+compiletime_assert'
+> >>                    if (!(condition))                                  =
+     \
+> >>                          ^~~~~~~~~
+> >
+> > We add 'BUILD_BUG_ON((__msk & __en) !=3D 0);' to prevent coding error d=
+uring
+> > development. The __msk and __en in the expression are constant and expe=
+cted
+> > no intersection of these two bit masks. Since we have verified this cod=
+e,
+> > I think I can send a patch to remove the BUILD_BUG_ON() from this macro=
+.
+>=20
+> I'm dropping the patchset, please submit a new version including your
+> fix.
+>=20
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+v2 has sent. But, I misread the cause that isn't due to BUILD_BUG_ON() but =
+mask type.
+
+Ping-Ke
+
+
