@@ -1,217 +1,125 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28E01851
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651253516; x=1682789516;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1BdG3OSNM0hPqX3c2QOBjnMAfGyoh3U/Lu3pHCGB8BY=;
-  b=LCcliC24BAhpbogHWFSFJRVpPlNUPK2tKMjgYqfLidv27uZ7VOvHO/mx
-   ovgkBUrx0ncSzPPyRhIukBBBT4UNYo7l46FccRPk3XstI0TstDZmqilL6
-   SMozOtMz7HLWEr0xQF1sfTCR7E6r8yPHkHUhlIvE90xoeBzkXXwWd4CXa
-   mpEWVe8ZdLGx1M56u38+lSz46XgZuLvjBJ7IiJO6NlW7t3ECtxfOJc0wX
-   HpcOk86fN9rCR6tasAtwPDNq0nSOeCXR2w8XVFn5utx6Rp/f8G5AEjVLk
-   5LOo/51H668jwGlzO6L5uNEbnbe2mhspUSbs1T8TWedXV5jUGzRQMNgaH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="246628611"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="246628611"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:30:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="514926978"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Apr 2022 10:30:18 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nkURe-0006WL-6G;
-	Fri, 29 Apr 2022 17:30:18 +0000
-Date: Sat, 30 Apr 2022 01:30:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] vb2: add support for (un)prepare_streaming queue ops
-Message-ID: <202204300122.4EgCSZEG-lkp@intel.com>
-References: <3d8d5868-0896-edc8-5cab-490f9c4c498a@xs4all.nl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44401851
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:39:38 +0000 (UTC)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TGw0cJ011947;
+	Fri, 29 Apr 2022 17:39:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YoHa0fLQEkgm+3Igrqs1u82fd0eKrL3cNPKS8q/AGcs=;
+ b=bh6pzVLD+JALzZUxG9/IYtCYv8tb0e7wZUDHzxVGH637nt81PrchE5i2K3rY6nqvuNE3
+ vxfMkDFLMqdtShueEkai+pgunIfMy+c6T3QBRJB3hjmQ/xC0kzYtXu7NiHU3Rrk+ObKb
+ Z1CoxBLs0LxC/mVa4dQVos5kCs3S8WAI4+fVBIjWLMvomjbtHWvUnVC1cEmd/Vhjllxk
+ 50Tv3C/tVS5ayUgm2iTM+DiKYpmMftBTCrbkDKbVdokiYn7MfxsvnELk+DF9CyWGbFhI
+ cvAy5SE/Evzpd15aVS0eNLFjqhqEpYPrtHxKlTdphWUYgryupNAkhtElIMm/3nvYCLXi iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efudn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Apr 2022 17:39:26 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23THVGSR002413;
+	Fri, 29 Apr 2022 17:39:26 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efucs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Apr 2022 17:39:26 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+	by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23THbqX0031260;
+	Fri, 29 Apr 2022 17:39:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+	by ppma05fra.de.ibm.com with ESMTP id 3fm938ygfe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Apr 2022 17:39:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+	by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23THdLdl48365836
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 29 Apr 2022 17:39:21 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4078511C04C;
+	Fri, 29 Apr 2022 17:39:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C675B11C04A;
+	Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
+Received: from localhost (unknown [9.43.18.217])
+	by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
+Date: Fri, 29 Apr 2022 23:09:19 +0530
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
+ non-weak symbols
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+	<ndesaulniers@google.com>
+References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+	<126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+	<20220428184212.18fbf438@gandalf.local.home>
+In-Reply-To: <20220428184212.18fbf438@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d8d5868-0896-edc8-5cab-490f9c4c498a@xs4all.nl>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1651252324.js9790ngjg.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XjwigIEeW3HSn-VRBEuRqpTuXxv62pyz
+X-Proofpoint-ORIG-GUID: ed5zTfg3vACJAC1QySK7bIsb5o0AfjqR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_08,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=783
+ adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290088
 
-Hi Hans,
+Steven Rostedt wrote:
+> On Thu, 28 Apr 2022 22:49:52 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> But, with ppc64 elf abi v1 which only supports the old -pg flag, mcount
+>> location can differ between the weak and non-weak variants of a
+>> function. In such scenarios, one of the two mcount entries will be
+>> invalid. Such architectures need to validate mcount locations by
+>> ensuring that the instruction(s) at those locations are as expected. On
+>> powerpc, this can be a simple check to ensure that the instruction is a
+>> 'bl'. This check can be further tightened as necessary.
+>=20
+> I was thinking about this more, and I was thinking that we could create
+> another section; Perhaps __mcount_loc_weak. And place these in that
+> section. That way, we could check if these symbols to see if there's
+> already a symbol for it, and if there is, then drop it.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on v5.18-rc4 next-20220429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+If I'm understanding your suggestion right:
+- we now create a new section in each object file: __mcount_loc_weak,=20
+  and capture such relocations using weak symbols there.
+- we then ask the linker to put these separately between, say,=20
+  __start_mcount_loc_weak and __stop_mcount_loc_weak
+- on ftrace init, we go through entries in this range, but discard those=20
+  that belong to functions that also have an entry between=20
+  __start_mcount_loc and __stop_mcount loc.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Verkuil/vb2-add-support-for-un-prepare_streaming-queue-ops/20220429-204554
-base:   git://linuxtv.org/media_tree.git master
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220430/202204300122.4EgCSZEG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/617605203b2c478f0f817069e95d095afa9d6e2f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Verkuil/vb2-add-support-for-un-prepare_streaming-queue-ops/20220429-204554
-        git checkout 617605203b2c478f0f817069e95d095afa9d6e2f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/common/videobuf2/
+The primary issue I see here is that the mcount locations within the new=20
+weak section will end up being offsets from a different function in=20
+vmlinux, since the linker does not create a symbol for the weak=20
+functions that were over-ridden.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/common/videobuf2/videobuf2-core.c:548:27: warning: inequality comparison result unused [-Wunused-comparison]
-                                     q->cnt_wait_prepare != q->cnt_wait_finish;
-                                     ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-   drivers/media/common/videobuf2/videobuf2-core.c:548:27: note: use '|=' to turn this inequality comparison into an or-assignment
-                                     q->cnt_wait_prepare != q->cnt_wait_finish;
-                                                         ^~
-                                                         |=
-   1 warning generated.
+As an example, in the issue described in this patch set, if powerpc=20
+starts over-riding kexec_arch_apply_relocations(), then the current weak=20
+implementation in kexec_file.o gets carried over to the final vmlinux,=20
+but the instructions will instead appear under the previous function in=20
+kexec_file.o: crash_prepare_elf64_headers(). This function may or may=20
+not be traced to begin with, so we won't be able to figure out if this=20
+is valid or not.
 
 
-vim +548 drivers/media/common/videobuf2/videobuf2-core.c
-
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  499  
-2a87af6ba1b9df4 drivers/media/v4l2-core/videobuf2-core.c        Mauro Carvalho Chehab 2017-11-27  500  /*
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  501   * __vb2_queue_free() - free buffers at the end of the queue - video memory and
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  502   * related information, if no buffers are left return the queue to an
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  503   * uninitialized state. Might be called even if the queue has already been freed.
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  504   */
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  505  static int __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  506  {
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  507  	unsigned int buffer;
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  508  
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  509  	/*
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  510  	 * Sanity check: when preparing a buffer the queue lock is released for
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  511  	 * a short while (see __buf_prepare for the details), which would allow
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  512  	 * a race with a reqbufs which can call this function. Removing the
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  513  	 * buffers from underneath __buf_prepare is obviously a bad idea, so we
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  514  	 * check if any of the buffers is in the state PREPARING, and if so we
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  515  	 * just return -EAGAIN.
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  516  	 */
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  517  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  518  	     ++buffer) {
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  519  		if (q->bufs[buffer] == NULL)
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  520  			continue;
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  521  		if (q->bufs[buffer]->state == VB2_BUF_STATE_PREPARING) {
-b820935b35479e8 drivers/media/common/videobuf2/videobuf2-core.c Laurent Pinchart      2020-06-21  522  			dprintk(q, 1, "preparing buffers, cannot free\n");
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  523  			return -EAGAIN;
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  524  		}
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  525  	}
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  526  
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  527  	/* Call driver-provided cleanup function for each buffer, if provided */
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  528  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  529  	     ++buffer) {
-256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  530  		struct vb2_buffer *vb = q->bufs[buffer];
-256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  531  
-256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  532  		if (vb && vb->planes[0].mem_priv)
-a1d36d8c705e10a drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-03-17  533  			call_void_vb_qop(vb, buf_cleanup, vb);
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  534  	}
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  535  
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  536  	/* Release video buffer memory */
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  537  	__vb2_free_mem(q, buffers);
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  538  
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  539  #ifdef CONFIG_VIDEO_ADV_DEBUG
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  540  	/*
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  541  	 * Check that all the calls were balances during the life-time of this
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  542  	 * queue. If not (or if the debug level is 1 or up), then dump the
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  543  	 * counters to the kernel log.
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  544  	 */
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  545  	if (q->num_buffers) {
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  546  		bool unbalanced = q->cnt_start_streaming != q->cnt_stop_streaming ||
-617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  547  				  q->cnt_prepare_streaming != q->cnt_unprepare_streaming;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29 @548  				  q->cnt_wait_prepare != q->cnt_wait_finish;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  549  
-af3bac1a7c8a21f drivers/media/v4l2-core/videobuf2-core.c        Junghak Sung          2015-11-03  550  		if (unbalanced || debug) {
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  551  			pr_info("counters for queue %p:%s\n", q,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  552  				unbalanced ? " UNBALANCED!" : "");
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  553  			pr_info("     setup: %u start_streaming: %u stop_streaming: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  554  				q->cnt_queue_setup, q->cnt_start_streaming,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  555  				q->cnt_stop_streaming);
-617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  556  			pr_info("     prepare_streaming: %u unprepare_streaming: %u\n",
-617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  557  				q->cnt_prepare_streaming, q->cnt_unprepare_streaming);
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  558  			pr_info("     wait_prepare: %u wait_finish: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  559  				q->cnt_wait_prepare, q->cnt_wait_finish);
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  560  		}
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  561  		q->cnt_queue_setup = 0;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  562  		q->cnt_wait_prepare = 0;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  563  		q->cnt_wait_finish = 0;
-617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  564  		q->cnt_prepare_streaming = 0;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  565  		q->cnt_start_streaming = 0;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  566  		q->cnt_stop_streaming = 0;
-617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  567  		q->cnt_unprepare_streaming = 0;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  568  	}
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  569  	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  570  		struct vb2_buffer *vb = q->bufs[buffer];
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  571  		bool unbalanced = vb->cnt_mem_alloc != vb->cnt_mem_put ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  572  				  vb->cnt_mem_prepare != vb->cnt_mem_finish ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  573  				  vb->cnt_mem_get_userptr != vb->cnt_mem_put_userptr ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  574  				  vb->cnt_mem_attach_dmabuf != vb->cnt_mem_detach_dmabuf ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  575  				  vb->cnt_mem_map_dmabuf != vb->cnt_mem_unmap_dmabuf ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  576  				  vb->cnt_buf_queue != vb->cnt_buf_done ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  577  				  vb->cnt_buf_prepare != vb->cnt_buf_finish ||
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  578  				  vb->cnt_buf_init != vb->cnt_buf_cleanup;
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  579  
-af3bac1a7c8a21f drivers/media/v4l2-core/videobuf2-core.c        Junghak Sung          2015-11-03  580  		if (unbalanced || debug) {
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  581  			pr_info("   counters for queue %p, buffer %d:%s\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  582  				q, buffer, unbalanced ? " UNBALANCED!" : "");
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  583  			pr_info("     buf_init: %u buf_cleanup: %u buf_prepare: %u buf_finish: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  584  				vb->cnt_buf_init, vb->cnt_buf_cleanup,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  585  				vb->cnt_buf_prepare, vb->cnt_buf_finish);
-28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  586  			pr_info("     buf_out_validate: %u buf_queue: %u buf_done: %u buf_request_complete: %u\n",
-28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  587  				vb->cnt_buf_out_validate, vb->cnt_buf_queue,
-28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  588  				vb->cnt_buf_done, vb->cnt_buf_request_complete);
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  589  			pr_info("     alloc: %u put: %u prepare: %u finish: %u mmap: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  590  				vb->cnt_mem_alloc, vb->cnt_mem_put,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  591  				vb->cnt_mem_prepare, vb->cnt_mem_finish,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  592  				vb->cnt_mem_mmap);
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  593  			pr_info("     get_userptr: %u put_userptr: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  594  				vb->cnt_mem_get_userptr, vb->cnt_mem_put_userptr);
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  595  			pr_info("     attach_dmabuf: %u detach_dmabuf: %u map_dmabuf: %u unmap_dmabuf: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  596  				vb->cnt_mem_attach_dmabuf, vb->cnt_mem_detach_dmabuf,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  597  				vb->cnt_mem_map_dmabuf, vb->cnt_mem_unmap_dmabuf);
-2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  598  			pr_info("     get_dmabuf: %u num_users: %u vaddr: %u cookie: %u\n",
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  599  				vb->cnt_mem_get_dmabuf,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  600  				vb->cnt_mem_num_users,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  601  				vb->cnt_mem_vaddr,
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  602  				vb->cnt_mem_cookie);
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  603  		}
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  604  	}
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  605  #endif
-b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  606  
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  607  	/* Free videobuf buffers */
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  608  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  609  	     ++buffer) {
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  610  		kfree(q->bufs[buffer]);
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  611  		q->bufs[buffer] = NULL;
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  612  	}
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  613  
-2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  614  	q->num_buffers -= buffers;
-a7afcaccfab2fb0 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-02-24  615  	if (!q->num_buffers) {
-ce4686702f8f56e drivers/media/common/videobuf/videobuf2-core.c  Satendra Singh Thakur 2017-12-28  616  		q->memory = VB2_MEMORY_UNKNOWN;
-bd50d999d4d4f31 drivers/media/video/videobuf2-core.c            Marek Szyprowski      2011-10-25  617  		INIT_LIST_HEAD(&q->queued_list);
-a7afcaccfab2fb0 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-02-24  618  	}
-63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  619  	return 0;
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  620  }
-e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  621  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+- Naveen
