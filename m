@@ -1,206 +1,315 @@
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE17A7B
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 07:26:02 +0000 (UTC)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23T7PHmL4002953, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23T7PHmL4002953
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 29 Apr 2022 15:25:18 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 29 Apr 2022 15:25:17 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 29 Apr 2022 15:25:17 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Fri, 29 Apr 2022 15:25:17 +0800
-From: Pkshih <pkshih@realtek.com>
-To: Kalle Valo <kvalo@kernel.org>
-CC: kernel test robot <lkp@intel.com>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Subject: RE: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
-Thread-Topic: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconfig
-Thread-Index: AQHYWTevDaEDmvkQB06rbly2/np5Fa0FjE4AgADUjrCAAAdoJIAAGCUg
-Date: Fri, 29 Apr 2022 07:25:17 +0000
-Message-ID: <3e05c7bab2e9406789fdf483e09bb85e@realtek.com>
-References: <20220426063235.41650-16-pkshih@realtek.com>
-	<202204290830.slUaIhad-lkp@intel.com>
-	<ba7dddf5224746daaaa4db7e3b9637ed@realtek.com> <877d78fnbv.fsf@kernel.org>
-In-Reply-To: <877d78fnbv.fsf@kernel.org>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/4/29_=3F=3F_06:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A7D7B
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 07:39:46 +0000 (UTC)
+X-UUID: bf0dd4b2313a435e8a4f6654082b01f4-20220429
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:d840cc8d-efa0-4251-b066-4296357a077b,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:3eeaefc6-85ee-4ac1-ac05-bd3f1e72e732,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: bf0dd4b2313a435e8a4f6654082b01f4-20220429
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1787033799; Fri, 29 Apr 2022 15:39:42 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 29 Apr 2022 15:39:41 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 29 Apr 2022 15:39:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 29 Apr 2022 15:39:40 +0800
+Message-ID: <0fb7b063fc246c89430ddf310406ae954a3e3650.camel@mediatek.com>
+Subject: Re: [PATCH v18 04/21] soc: mediatek: add mtk-mmsys support for
+ mt8195 vdosys1
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Fri, 29 Apr 2022 15:39:40 +0800
+In-Reply-To: <20220428105408.11189-5-nancy.lin@mediatek.com>
+References: <20220428105408.11189-1-nancy.lin@mediatek.com>
+	 <20220428105408.11189-5-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
+Hi, Nancy:
 
-> -----Original Message-----
-> From: Kalle Valo <kvalo@kernel.org>
-> Sent: Friday, April 29, 2022 1:53 PM
-> To: Pkshih <pkshih@realtek.com>
-> Cc: kernel test robot <lkp@intel.com>; llvm@lists.linux.dev; kbuild-all@l=
-ists.01.org;
-> linux-wireless@vger.kernel.org
-> Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kconf=
-ig
->=20
-> Pkshih <pkshih@realtek.com> writes:
->=20
-> >> -----Original Message-----
-> >> From: kernel test robot <lkp@intel.com>
-> >> Sent: Friday, April 29, 2022 8:46 AM
-> >> To: Pkshih <pkshih@realtek.com>; kvalo@kernel.org
-> >> Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org; linux-wireless@vger=
-.kernel.org
-> >> Subject: Re: [PATCH 15/15] rtw89: 8852c: add 8852ce to Makefile and Kc=
-onfig
-> >>
-> >> Hi Ping-Ke,
-> >>
-> >> I love your patch! Perhaps something to improve:
-> >>
-> >> [auto build test WARNING on wireless-next/main]
-> >> [also build test WARNING on next-20220428]
-> >> [cannot apply to wireless/main v5.18-rc4]
-> >> [If your patch is applied to the wrong git tree, kindly drop us a note=
-.
-> >> And when submitting patch, we suggest to use '--base' as documented in
-> >> https://git-scm.com/docs/git-format-patch]
-> >>
-> >> url:
-> >>
-> https://github.com/intel-lab-lkp/linux/commits/Ping-Ke-Shih/rtw89-8852c-a=
-dd-RFK-and-then-enable-8852ce
-> >> -in-Makefile-and-Kconfig/20220426-143456
-> >> base:
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next=
-.git
-> >> main
-> >> config: i386-allmodconfig
-> >> (https://download.01.org/0day-ci/archive/20220429/202204290830.slUaIha=
-d-lkp@intel.com/config)
-> >> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
-> >> c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
-> >> reproduce (this is a W=3D1 build):
-> >>         wget
-> >> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cro=
-ss
-> >> -O
-> >> ~/bin/make.cross
-> >>         chmod +x ~/bin/make.cross
-> >>         #
-> >> https://github.com/intel-lab-lkp/linux/commit/5aaabdd4d9ac433ed14c1c02=
-147c2609827739d2
-> >>         git remote add linux-review https://github.com/intel-lab-lkp/l=
-inux
-> >>         git fetch --no-tags linux-review
-> >> Ping-Ke-Shih/rtw89-8852c-add-RFK-and-then-enable-8852ce-in-Makefile-an=
-d-Kconfig/20220426-143456
-> >>         git checkout 5aaabdd4d9ac433ed14c1c02147c2609827739d2
-> >>         # save the config file
-> >>         mkdir build_dir && cp config build_dir/.config
-> >>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
-> >> W=3D1 O=3Dbuild_dir ARCH=3Di386
-> >> SHELL=3D/bin/bash drivers/net/wireless/realtek/rtw89/
-> >>
-> >> If you fix the issue, kindly add following tag as appropriate
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >>
-> >> All warnings (new ones prefixed by >>):
-> >>
-> >> >> drivers/net/wireless/realtek/rtw89/rtw8852c.c:2640:2: warning:
-> >> > result of comparison of constant
-> >> 18446744073709551615 with expression of type 'typeof (_Generic((__msk)=
-, char: (unsigned char)0, unsigned
-> >> char: (unsigned char)0, signed char: (unsigned char)0, unsigned short:=
- (unsigned short)0, short:
-> (unsigned
-> >> short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned=
- long: (unsigned long)0, long:
-> >> (unsigned long)0, unsigned long long: (unsigned long long)0, long long=
-: (unsigned long long)0, default:
-> >> (__msk)))' (aka 'unsigned long') is always false [-Wtautological-const=
-ant-out-of-range-compare]
-> >>            __write_ctrl(R_AX_PWR_RATE_CTRL, B_AX_FORCE_PWR_BY_RATE_VAL=
-UE_MASK,
-> >>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~
-> >>    drivers/net/wireless/realtek/rtw89/rtw8852c.c:2621:13: note: expand=
-ed from macro '__write_ctrl'
-> >>            u32 _wrt =3D FIELD_PREP(__msk, _val);                     \
-> >>                       ^~~~~~~~~~~~~~~~~~~~~~~
-> >>    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PR=
-EP'
-> >>                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ")=
-;    \
-> >>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIE=
-LD_CHECK'
-> >>                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >=
-     \
-> >>                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^=
-~~~~~~
-> >>    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-li=
-mit=3D0 to see all)
-> >>    include/linux/compiler_types.h:352:22: note: expanded from macro 'c=
-ompiletime_assert'
-> >>            _compiletime_assert(condition, msg, __compiletime_assert_, =
-__COUNTER__)
-> >>            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~
-> >>    include/linux/compiler_types.h:340:23: note: expanded from macro '_=
-compiletime_assert'
-> >>            __compiletime_assert(condition, msg, prefix, suffix)
-> >>            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>    include/linux/compiler_types.h:332:9: note: expanded from macro '__=
-compiletime_assert'
-> >>                    if (!(condition))                                  =
-     \
-> >>                          ^~~~~~~~~
-> >
-> > We add 'BUILD_BUG_ON((__msk & __en) !=3D 0);' to prevent coding error d=
-uring
-> > development. The __msk and __en in the expression are constant and expe=
-cted
-> > no intersection of these two bit masks. Since we have verified this cod=
-e,
-> > I think I can send a patch to remove the BUILD_BUG_ON() from this macro=
-.
->=20
-> I'm dropping the patchset, please submit a new version including your
-> fix.
->=20
+On Thu, 2022-04-28 at 18:53 +0800, Nancy.Lin wrote:
+> Add mt8195 vdosys1 routing table to the driver data of mtk-mmsys.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/soc/mediatek/mt8195-mmsys.h    | 136
+> +++++++++++++++++++++++++
+>  drivers/soc/mediatek/mtk-mmsys.c       |   2 +
+>  include/linux/soc/mediatek/mtk-mmsys.h |   9 ++
+>  3 files changed, 147 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> b/drivers/soc/mediatek/mt8195-mmsys.h
+> index abfe94a30248..51031d75e81e 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -75,6 +75,70 @@
+>  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 <<
+> 16)
+>  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			
+> (3 << 16)
+>  
+> +#define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
+> +#define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			
+> 1
+> +
+> +#define MT8195_VDO1_VPP_MERGE0_P1_SEL_IN			0xf08
+> +#define MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1			
+> 1
+> +
+> +#define MT8195_VDO1_DISP_DPI1_SEL_IN				0xf10
+> +#define MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT			
+> 0
+> +
+> +#define MT8195_VDO1_DISP_DP_INTF0_SEL_IN			0xf14
+> +#define MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT		
+> 0
+> +
+> +#define MT8195_VDO1_MERGE4_SOUT_SEL				0xf18
+> +#define MT8195_MERGE4_SOUT_TO_DPI1_SEL				
+> 	2
+> +#define MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL				
+> 3
+> +
+> +#define MT8195_VDO1_MIXER_IN1_SEL_IN				0xf24
+> +#define MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT		
+> 	1
+> +
+> +#define MT8195_VDO1_MIXER_IN2_SEL_IN				0xf28
+> +#define MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT		
+> 	1
+> +
+> +#define MT8195_VDO1_MIXER_IN3_SEL_IN				0xf2c
+> +#define MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT		
+> 	1
+> +
+> +#define MT8195_VDO1_MIXER_IN4_SEL_IN				0xf30
+> +#define MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT		
+> 	1
+> +
+> +#define MT8195_VDO1_MIXER_OUT_SOUT_SEL				
+> 0xf34
+> +#define MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL			
+> 	1
+> +
+> +#define MT8195_VDO1_VPP_MERGE1_P0_SEL_IN			0xf3c
+> +#define MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2			
+> 1
+> +
+> +#define MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL			0xf40
+> +#define MT8195_SOUT_TO_MIXER_IN1_SEL					
+> 1
+> +
+> +#define MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL			0xf44
+> +#define MT8195_SOUT_TO_MIXER_IN2_SEL					
+> 1
+> +
+> +#define MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL			0xf48
+> +#define MT8195_SOUT_TO_MIXER_IN3_SEL					
+> 1
+> +
+> +#define MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL			0xf4c
+> +#define MT8195_SOUT_TO_MIXER_IN4_SEL					
+> 1
+> +
+> +#define MT8195_VDO1_MERGE4_ASYNC_SEL_IN				
+> 0xf50
+> +#define MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT		
+> 	1
+> +
+> +#define MT8195_VDO1_MIXER_IN1_SOUT_SEL				
+> 0xf58
+> +#define MT8195_MIXER_IN1_SOUT_TO_DISP_MIXER				
+> 0
+> +
+> +#define MT8195_VDO1_MIXER_IN2_SOUT_SEL				
+> 0xf5c
+> +#define MT8195_MIXER_IN2_SOUT_TO_DISP_MIXER				
+> 0
+> +
+> +#define MT8195_VDO1_MIXER_IN3_SOUT_SEL				
+> 0xf60
+> +#define MT8195_MIXER_IN3_SOUT_TO_DISP_MIXER				
+> 0
+> +
+> +#define MT8195_VDO1_MIXER_IN4_SOUT_SEL				
+> 0xf64
+> +#define MT8195_MIXER_IN4_SOUT_TO_DISP_MIXER				
+> 0
+> +
+> +#define MT8195_VDO1_MIXER_SOUT_SEL_IN				
+> 0xf68
+> +#define MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER			
+> 0
+> +
+>  static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] =
+> {
+>  	{
+>  		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
+> @@ -364,6 +428,78 @@ static const struct mtk_mmsys_routes
+> mmsys_mt8195_routing_table[] = {
+>  		DDP_COMPONENT_DSC1, DDP_COMPONENT_MERGE0,
+>  		MT8195_VDO0_SEL_OUT, MT8195_SOUT_DSC_WRAP1_OUT_TO_MASK,
+>  		MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE
+> +	}, {
+> +		DDP_COMPONENT_MDP_RDMA0, DDP_COMPONENT_MERGE1,
+> +		MT8195_VDO1_VPP_MERGE0_P0_SEL_IN, GENMASK(0, 0),
+> +		MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0
+> +	}, {
+> +		DDP_COMPONENT_MDP_RDMA1, DDP_COMPONENT_MERGE1,
+> +		MT8195_VDO1_VPP_MERGE0_P1_SEL_IN, GENMASK(0, 0),
+> +		MT8195_VPP_MERGE0_P1_SEL_IN_FROM_MDP_RDMA1
+> +	}, {
+> +		DDP_COMPONENT_MDP_RDMA2, DDP_COMPONENT_MERGE2,
+> +		MT8195_VDO1_VPP_MERGE1_P0_SEL_IN, GENMASK(0, 0),
+> +		MT8195_VPP_MERGE1_P0_SEL_IN_FROM_MDP_RDMA2
+> +	}, {
+> +		DDP_COMPONENT_MERGE1, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MERGE0_ASYNC_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_SOUT_TO_MIXER_IN1_SEL
+> +	}, {
+> +		DDP_COMPONENT_MERGE2, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MERGE1_ASYNC_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_SOUT_TO_MIXER_IN2_SEL
+> +	}, {
+> +		DDP_COMPONENT_MERGE3, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MERGE2_ASYNC_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_SOUT_TO_MIXER_IN3_SEL
+> +	}, {
+> +		DDP_COMPONENT_MERGE4, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MERGE3_ASYNC_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_SOUT_TO_MIXER_IN4_SEL
+> +	}, {
+> +		DDP_COMPONENT_ETHDR_MIXER, DDP_COMPONENT_MERGE5,
+> +		MT8195_VDO1_MIXER_OUT_SOUT_SEL, GENMASK(0, 0),
+> +		MT8195_MIXER_SOUT_TO_MERGE4_ASYNC_SEL
+> +	}, {
+> +		DDP_COMPONENT_MERGE1, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MIXER_IN1_SEL_IN, GENMASK(0, 0),
+> +		MT8195_MIXER_IN1_SEL_IN_FROM_MERGE0_ASYNC_SOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE2, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MIXER_IN2_SEL_IN, GENMASK(0, 0),
+> +		MT8195_MIXER_IN2_SEL_IN_FROM_MERGE1_ASYNC_SOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE3, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MIXER_IN3_SEL_IN, GENMASK(0, 0),
+> +		MT8195_MIXER_IN3_SEL_IN_FROM_MERGE2_ASYNC_SOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE4, DDP_COMPONENT_ETHDR_MIXER,
+> +		MT8195_VDO1_MIXER_IN4_SEL_IN, GENMASK(0, 0),
+> +		MT8195_MIXER_IN4_SEL_IN_FROM_MERGE3_ASYNC_SOUT
+> +	}, {
+> +		DDP_COMPONENT_ETHDR_MIXER, DDP_COMPONENT_MERGE5,
+> +		MT8195_VDO1_MIXER_SOUT_SEL_IN, GENMASK(2, 0),
+> +		MT8195_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER
+> +	}, {
+> +		DDP_COMPONENT_ETHDR_MIXER, DDP_COMPONENT_MERGE5,
+> +		MT8195_VDO1_MERGE4_ASYNC_SEL_IN, GENMASK(2, 0),
+> +		MT8195_MERGE4_ASYNC_SEL_IN_FROM_MIXER_OUT_SOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
+> +		MT8195_VDO1_DISP_DPI1_SEL_IN, GENMASK(1, 0),
+> +		MT8195_DISP_DPI1_SEL_IN_FROM_VPP_MERGE4_MOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DPI1,
+> +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_MERGE4_SOUT_TO_DPI1_SEL
+> +	}, {
+> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
+> +		MT8195_VDO1_DISP_DP_INTF0_SEL_IN, GENMASK(1, 0),
+> +		MT8195_DISP_DP_INTF0_SEL_IN_FROM_VPP_MERGE4_MOUT
+> +	}, {
+> +		DDP_COMPONENT_MERGE5, DDP_COMPONENT_DP_INTF1,
+> +		MT8195_VDO1_MERGE4_SOUT_SEL, GENMASK(1, 0),
+> +		MT8195_MERGE4_SOUT_TO_DP_INTF0_SEL
+>  	}
+>  };
+>  
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> b/drivers/soc/mediatek/mtk-mmsys.c
+> index 548efed8dc1c..03c75a82c8d3 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -146,6 +146,8 @@ static const struct mtk_mmsys_driver_data
+> mt8195_vdosys0_driver_data = {
+>  static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data
+> = {
+>  	.io_start = 0x1c100000,
+>  	.clk_driver = "clk-mt8195-vdo1",
+> +	.routes = mmsys_mt8195_routing_table,
 
-v2 has sent. But, I misread the cause that isn't due to BUILD_BUG_ON() but =
-mask type.
+I think vdo0 and vdo1 are independent, so the routing table would also
+be independent. Merge these two table into one would waste time to
+search routing of other mmsys.
 
-Ping-Ke
+> +	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+>  };
+>  
+>  static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
+> b/include/linux/soc/mediatek/mtk-mmsys.h
+> index fb719fd1281c..b4388ba43341 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -28,7 +28,16 @@ enum mtk_ddp_comp_id {
+>  	DDP_COMPONENT_DSI1,
+>  	DDP_COMPONENT_DSI2,
+>  	DDP_COMPONENT_DSI3,
+> +	DDP_COMPONENT_ETHDR_MIXER,
+>  	DDP_COMPONENT_GAMMA,
+> +	DDP_COMPONENT_MDP_RDMA0,
+> +	DDP_COMPONENT_MDP_RDMA1,
+> +	DDP_COMPONENT_MDP_RDMA2,
+> +	DDP_COMPONENT_MDP_RDMA3,
+> +	DDP_COMPONENT_MDP_RDMA4,
+> +	DDP_COMPONENT_MDP_RDMA5,
+> +	DDP_COMPONENT_MDP_RDMA6,
+> +	DDP_COMPONENT_MDP_RDMA7,
 
+These new component is not strongly related to mt8195 (maybe other SoC
+has these component), so I would like adding these new component to
+another patch.
+
+Regards,
+CK
+
+>  	DDP_COMPONENT_MERGE0,
+>  	DDP_COMPONENT_MERGE1,
+>  	DDP_COMPONENT_MERGE2,
 
