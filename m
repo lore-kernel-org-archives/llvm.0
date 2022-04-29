@@ -1,319 +1,217 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B8E1851
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:20:58 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id 4so11247250ljw.11
-        for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 10:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+puxdcpt6EvHpRAaNSgsU+ePtx47Qm8oD+9Rdv22w7A=;
-        b=N5HKLMmC5Qv9XiclVn2gPf7HB0G1kNS+wmpvQweaHP/tpcInDdZjFSkcdJ38cUuxzG
-         O1O72acJJqnVJV0ZnY3vnyN1STgJ83YO/2S8qqClGMDM1yEqWh35KgBVTNEXjUjYGbwe
-         FoUyP9w6LspJuGE066UQ3AXCd2AWx044kWYOuP1D6y148YXt/ctKUOrjseDJPTPlCKhH
-         n1JNH+okq95nc49o596FvKtoaE2BVdnKqpgBmG7Wg2iWkusZ1/kokspmSZTGXlQjx5jz
-         xLjM/eXEEeLQS7axGJFDt96WHpjrI+WcbMBdO5+P32sawhvJBFTcxY7MrTAs+xx7F1kd
-         6/3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+puxdcpt6EvHpRAaNSgsU+ePtx47Qm8oD+9Rdv22w7A=;
-        b=UHu/i2jsJzzwHIMlull7t4wyYYJc9PxU+x/LJYg02cqK0XqclKhXKEkY/UOFPIMGaA
-         FmK7dcwN9WjB35YRqvRXwmECgLteIrU1m2HkYOwDk4uPd9sSk8aY3z1s9A9RtboQO1me
-         1qYePxJ276fScBvJAqGisWUb2cMZ/vDKNjfJcSiLfil9Ot7g/gVKs5qvF+cQOi8YRVnc
-         yY+LmD5lbqf88+qgdGHP9MYavO45ZXR5wSMZlAf2IZ9f2qvcP4hVCqe/9A4zxOulg0mn
-         Z+TrJU4sXe69NVv5velqyTyIGEXf75LWqPpEnCsPLRWh4DzF0XmZxVwbzP9qRKZpWkUX
-         x6Zw==
-X-Gm-Message-State: AOAM530cwugy/wQ6JV7voUn9OAoVqeH58TcMNKNB5BAW90K1V+qk3XbH
-	gbEo0g8BWmxODWafkzFk72+hN7N2CHmJAU8p8+c6hw==
-X-Google-Smtp-Source: ABdhPJxCRY5kJom5F0RLmGX2B4OQ3sTmJWOScofwopjg5R0wEpr6gPsGFpi5rC2+1g/H135frxeoLtynwciZSXVSy+Q=
-X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
- h4-20020a2e9ec4000000b0024b115caedbmr139405ljk.235.1651252856118; Fri, 29 Apr
- 2022 10:20:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28E01851
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 17:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651253516; x=1682789516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1BdG3OSNM0hPqX3c2QOBjnMAfGyoh3U/Lu3pHCGB8BY=;
+  b=LCcliC24BAhpbogHWFSFJRVpPlNUPK2tKMjgYqfLidv27uZ7VOvHO/mx
+   ovgkBUrx0ncSzPPyRhIukBBBT4UNYo7l46FccRPk3XstI0TstDZmqilL6
+   SMozOtMz7HLWEr0xQF1sfTCR7E6r8yPHkHUhlIvE90xoeBzkXXwWd4CXa
+   mpEWVe8ZdLGx1M56u38+lSz46XgZuLvjBJ7IiJO6NlW7t3ECtxfOJc0wX
+   HpcOk86fN9rCR6tasAtwPDNq0nSOeCXR2w8XVFn5utx6Rp/f8G5AEjVLk
+   5LOo/51H668jwGlzO6L5uNEbnbe2mhspUSbs1T8TWedXV5jUGzRQMNgaH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="246628611"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="246628611"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:30:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="514926978"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Apr 2022 10:30:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nkURe-0006WL-6G;
+	Fri, 29 Apr 2022 17:30:18 +0000
+Date: Sat, 30 Apr 2022 01:30:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH] vb2: add support for (un)prepare_streaming queue ops
+Message-ID: <202204300122.4EgCSZEG-lkp@intel.com>
+References: <3d8d5868-0896-edc8-5cab-490f9c4c498a@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <962475179.3377.1651244787786@jenkins.jenkins>
-In-Reply-To: <962475179.3377.1651244787786@jenkins.jenkins>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 29 Apr 2022 10:20:45 -0700
-Message-ID: <CAKwvOdkR3tVWo9iGLryoAzY4x7BfDMCLDSx9jnd+p7-hKXD5qg@mail.gmail.com>
-Subject: Re: [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset representation
-To: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
-Cc: Nikita Popov <npopov@redhat.com>, llvm@lists.linux.dev, ci_notify@linaro.org, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d8d5868-0896-edc8-5cab-490f9c4c498a@xs4all.nl>
 
-On Fri, Apr 29, 2022 at 8:06 AM <ci_notify@linaro.org> wrote:
->
-> [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset representation:
-> commit b9dc5651477b4c3c132662e763308b27963248a9
-> Author: Nikita Popov <npopov@redhat.com>
->
->     [GVN] Encode GEPs in offset representation
->
-> Results regressed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 22258
-> # First few build errors in logs:
-> # 00:02:56 arch/arm/lib/xor-neon.c:30:2: error: This code requires at least version 4.6 of GCC [-Werror,-W#warnings]
+Hi Hans,
 
-Hi Maxim, can you please confirm this is the correct result of the
-bisection?  The above warning on the kernel is a known issue that has
-been fixed upstream.  Are the kernel builds not against mainline?
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.18-rc4 next-20220429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I believe the below are known issues as well.
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Verkuil/vb2-add-support-for-un-prepare_streaming-queue-ops/20220429-204554
+base:   git://linuxtv.org/media_tree.git master
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220430/202204300122.4EgCSZEG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/617605203b2c478f0f817069e95d095afa9d6e2f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hans-Verkuil/vb2-add-support-for-un-prepare_streaming-queue-ops/20220429-204554
+        git checkout 617605203b2c478f0f817069e95d095afa9d6e2f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/common/videobuf2/
 
-> # 00:02:56 make[1]: *** [scripts/Makefile.build:288: arch/arm/lib/xor-neon.o] Error 1
-> # 00:02:56 make: *** [Makefile:1831: arch/arm/lib] Error 2
-> # 00:03:54 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-> # 00:03:54 make[1]: *** [scripts/Makefile.build:288: crypto/wp512.o] Error 1
-> # 00:06:35 make: *** [Makefile:1831: crypto] Error 2
-> # 00:11:56 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
-> # 00:11:56 make[4]: *** [scripts/Makefile.build:288: drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
-> # 00:12:06 make[3]: *** [scripts/Makefile.build:550: drivers/gpu/drm/selftests] Error 2
-> # 00:30:12 drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: error: stack frame size (1432) exceeds limit (1024) in 'bw_calcs' [-Werror,-Wframe-larger-than]
->
-> from
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 22260
->
-> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
->
-> This commit has regressed these CI configurations:
->  - tcwg_kernel/llvm-master-arm-stable-allmodconfig
->
-> First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-b9dc5651477b4c3c132662e763308b27963248a9/
-> Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-942ec5c36d922b29d0e7200082b533018d42421a/
-> Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/build-baseline/
-> Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/
->
-> Reproduce builds:
-> <cut>
-> mkdir investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
-> cd investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
->
-> # Fetch scripts
-> git clone https://git.linaro.org/toolchain/jenkins-scripts
->
-> # Fetch manifests and test.sh script
-> mkdir -p artifacts/manifests
-> curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/manifests/build-baseline.sh --fail
-> curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/manifests/build-parameters.sh --fail
-> curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-allmodconfig/12/artifact/artifacts/test.sh --fail
-> chmod +x artifacts/test.sh
->
-> # Reproduce the baseline build (build all pre-requisites)
-> ./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
->
-> # Save baseline build state (which is then restored in artifacts/test.sh)
-> mkdir -p ./bisect
-> rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
->
-> cd llvm
->
-> # Reproduce first_bad build
-> git checkout --detach b9dc5651477b4c3c132662e763308b27963248a9
-> ../artifacts/test.sh
->
-> # Reproduce last_good build
-> git checkout --detach 942ec5c36d922b29d0e7200082b533018d42421a
-> ../artifacts/test.sh
->
-> cd ..
-> </cut>
->
-> Full commit (up to 1000 lines):
-> <cut>
-> commit b9dc5651477b4c3c132662e763308b27963248a9
-> Author: Nikita Popov <npopov@redhat.com>
-> Date:   Wed Apr 27 14:40:07 2022 +0200
->
->     [GVN] Encode GEPs in offset representation
->
->     When using opaque pointers, convert GEPs into offset representation
->     of the form P + V1 * Scale1 + V2 * Scale2 + ... + ConstantOffset.
->     This allows us to recognize equivalent address calculations even if
->     the GEPs don't use the same source element type.
->
->     This fixes an opaque pointer codegen regression seen in rustc.
->
->     Differential Revision: https://reviews.llvm.org/D124527
-> ---
->  llvm/include/llvm/Transforms/Scalar/GVN.h |  2 ++
->  llvm/lib/Transforms/Scalar/GVN.cpp        | 45 +++++++++++++++++++++++++------
->  llvm/test/Transforms/GVN/opaque-ptr.ll    | 19 +++++--------
->  3 files changed, 46 insertions(+), 20 deletions(-)
->
-> diff --git a/llvm/include/llvm/Transforms/Scalar/GVN.h b/llvm/include/llvm/Transforms/Scalar/GVN.h
-> index d6f4e7376065..16ab1a490162 100644
-> --- a/llvm/include/llvm/Transforms/Scalar/GVN.h
-> +++ b/llvm/include/llvm/Transforms/Scalar/GVN.h
-> @@ -40,6 +40,7 @@ class CallInst;
->  class ExtractValueInst;
->  class Function;
->  class FunctionPass;
-> +class GetElementPtrInst;
->  class ImplicitControlFlowTracking;
->  class LoadInst;
->  class LoopInfo;
-> @@ -177,6 +178,7 @@ public:
->      Expression createCmpExpr(unsigned Opcode, CmpInst::Predicate Predicate,
->                               Value *LHS, Value *RHS);
->      Expression createExtractvalueExpr(ExtractValueInst *EI);
-> +    Expression createGEPExpr(GetElementPtrInst *GEP);
->      uint32_t lookupOrAddCall(CallInst *C);
->      uint32_t phiTranslateImpl(const BasicBlock *BB, const BasicBlock *PhiBlock,
->                                uint32_t Num, GVNPass &Gvn);
-> diff --git a/llvm/lib/Transforms/Scalar/GVN.cpp b/llvm/lib/Transforms/Scalar/GVN.cpp
-> index e0d78c944edb..34c1483a37e0 100644
-> --- a/llvm/lib/Transforms/Scalar/GVN.cpp
-> +++ b/llvm/lib/Transforms/Scalar/GVN.cpp
-> @@ -307,13 +307,7 @@ struct llvm::gvn::AvailableValueInBlock {
->
->  GVNPass::Expression GVNPass::ValueTable::createExpr(Instruction *I) {
->    Expression e;
-> -  // For GEPs, disambiguate based on the source element type, which is not
-> -  // implied by the result type with opaque pointers. (Conversely, the source
-> -  // element type together with the operand types does imply the result type.)
-> -  if (const auto *GEP = dyn_cast<GetElementPtrInst>(I))
-> -    e.type = GEP->getSourceElementType();
-> -  else
-> -    e.type = I->getType();
-> +  e.type = I->getType();
->    e.opcode = I->getOpcode();
->    if (const GCRelocateInst *GCR = dyn_cast<GCRelocateInst>(I)) {
->      // gc.relocate is 'special' call: its second and third operands are
-> @@ -404,6 +398,39 @@ GVNPass::ValueTable::createExtractvalueExpr(ExtractValueInst *EI) {
->    return e;
->  }
->
-> +GVNPass::Expression GVNPass::ValueTable::createGEPExpr(GetElementPtrInst *GEP) {
-> +  Expression E;
-> +  Type *PtrTy = GEP->getType()->getScalarType();
-> +  const DataLayout &DL = GEP->getModule()->getDataLayout();
-> +  unsigned BitWidth = DL.getIndexTypeSizeInBits(PtrTy);
-> +  MapVector<Value *, APInt> VariableOffsets;
-> +  APInt ConstantOffset(BitWidth, 0);
-> +  if (PtrTy->isOpaquePointerTy() &&
-> +      GEP->collectOffset(DL, BitWidth, VariableOffsets, ConstantOffset)) {
-> +    // For opaque pointers, convert into offset representation, to recognize
-> +    // equivalent address calculations that use different type encoding.
-> +    LLVMContext &Context = GEP->getContext();
-> +    E.opcode = GEP->getOpcode();
-> +    E.type = nullptr;
-> +    E.varargs.push_back(lookupOrAdd(GEP->getPointerOperand()));
-> +    for (const auto &Pair : VariableOffsets) {
-> +      E.varargs.push_back(lookupOrAdd(Pair.first));
-> +      E.varargs.push_back(lookupOrAdd(ConstantInt::get(Context, Pair.second)));
-> +    }
-> +    if (!ConstantOffset.isZero())
-> +      E.varargs.push_back(
-> +          lookupOrAdd(ConstantInt::get(Context, ConstantOffset)));
-> +  } else {
-> +    // If converting to offset representation fails (for typed pointers and
-> +    // scalable vectors), fall back to type-based implementation:
-> +    E.opcode = GEP->getOpcode();
-> +    E.type = GEP->getSourceElementType();
-> +    for (Use &Op : GEP->operands())
-> +      E.varargs.push_back(lookupOrAdd(Op));
-> +  }
-> +  return E;
-> +}
-> +
->  //===----------------------------------------------------------------------===//
->  //                     ValueTable External Functions
->  //===----------------------------------------------------------------------===//
-> @@ -587,9 +614,11 @@ uint32_t GVNPass::ValueTable::lookupOrAdd(Value *V) {
->      case Instruction::InsertElement:
->      case Instruction::ShuffleVector:
->      case Instruction::InsertValue:
-> -    case Instruction::GetElementPtr:
->        exp = createExpr(I);
->        break;
-> +    case Instruction::GetElementPtr:
-> +      exp = createGEPExpr(cast<GetElementPtrInst>(I));
-> +      break;
->      case Instruction::ExtractValue:
->        exp = createExtractvalueExpr(cast<ExtractValueInst>(I));
->        break;
-> diff --git a/llvm/test/Transforms/GVN/opaque-ptr.ll b/llvm/test/Transforms/GVN/opaque-ptr.ll
-> index fa203da28bb7..07e336a9e0b6 100644
-> --- a/llvm/test/Transforms/GVN/opaque-ptr.ll
-> +++ b/llvm/test/Transforms/GVN/opaque-ptr.ll
-> @@ -25,32 +25,26 @@ define void @gep_cse(ptr %p) {
->  define void @gep_cse_offset_canonicalization(ptr %p, i64 %idx, i64 %idx2) {
->  ; CHECK-LABEL: @gep_cse_offset_canonicalization(
->  ; CHECK-NEXT:    [[GEP1:%.*]] = getelementptr i64, ptr [[P:%.*]], i64 1
-> -; CHECK-NEXT:    [[GEP1_SAME1:%.*]] = getelementptr i32, ptr [[P]], i64 2
-> -; CHECK-NEXT:    [[GEP1_SAME2:%.*]] = getelementptr i8, ptr [[P]], i64 8
->  ; CHECK-NEXT:    [[GEP1_DIFFERENT:%.*]] = getelementptr i8, ptr [[P]], i64 12
->  ; CHECK-NEXT:    call void @use(ptr [[GEP1]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME1]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME2]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
->  ; CHECK-NEXT:    call void @use(ptr [[GEP1_DIFFERENT]])
->  ; CHECK-NEXT:    [[GEP2:%.*]] = getelementptr i64, ptr [[P]], i64 [[IDX:%.*]]
-> -; CHECK-NEXT:    [[GEP2_SAME:%.*]] = getelementptr { i32, i32 }, ptr [[P]], i64 [[IDX]]
->  ; CHECK-NEXT:    [[GEP2_DIFFERENT:%.*]] = getelementptr { i32, i32, i32 }, ptr [[P]], i64 [[IDX]]
->  ; CHECK-NEXT:    call void @use(ptr [[GEP2]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP2_SAME]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP2]])
->  ; CHECK-NEXT:    call void @use(ptr [[GEP2_DIFFERENT]])
->  ; CHECK-NEXT:    [[GEP3:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX]]
-> -; CHECK-NEXT:    [[GEP3_SAME1:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 1, i64 [[IDX]]
-> -; CHECK-NEXT:    [[GEP3_SAME2:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 1, i32 0, i64 [[IDX]]
->  ; CHECK-NEXT:    [[GEP3_DIFFERENT:%.*]] = getelementptr { [0 x i32], [0 x i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX2:%.*]]
->  ; CHECK-NEXT:    call void @use(ptr [[GEP3]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME1]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME2]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
->  ; CHECK-NEXT:    call void @use(ptr [[GEP3_DIFFERENT]])
->  ; CHECK-NEXT:    [[GEP4:%.*]] = getelementptr [4 x i32], ptr [[P]], i64 [[IDX]], i64 [[IDX2]]
-> -; CHECK-NEXT:    [[GEP4_SAME:%.*]] = getelementptr [4 x float], ptr [[P]], i64 [[IDX]], i64 [[IDX2]]
->  ; CHECK-NEXT:    [[GEP4_DIFFERENT:%.*]] = getelementptr [4 x float], ptr [[P]], i64 [[IDX2]], i64 [[IDX]]
->  ; CHECK-NEXT:    call void @use(ptr [[GEP4]])
-> -; CHECK-NEXT:    call void @use(ptr [[GEP4_SAME]])
-> +; CHECK-NEXT:    call void @use(ptr [[GEP4]])
->  ; CHECK-NEXT:    call void @use(ptr [[GEP4_DIFFERENT]])
->  ; CHECK-NEXT:    [[GEP5:%.*]] = getelementptr <vscale x 2 x i32>, ptr [[P]], i64 1
->  ; CHECK-NEXT:    [[GEP5_SAME:%.*]] = getelementptr <vscale x 2 x float>, ptr [[P]], i64 1
-> @@ -88,6 +82,7 @@ define void @gep_cse_offset_canonicalization(ptr %p, i64 %idx, i64 %idx2) {
->    call void @use(ptr %gep4)
->    call void @use(ptr %gep4.same)
->    call void @use(ptr %gep4.different)
-> +  ; TODO: %gep5 and %gep5.same are equivalent as well.
->    %gep5 = getelementptr <vscale x 2 x i32>, ptr %p, i64 1
->    %gep5.same = getelementptr <vscale x 2 x float>, ptr %p, i64 1
->    %gep5.different = getelementptr <vscale x 2 x i64>, ptr %p, i64 1
-> </cut>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/common/videobuf2/videobuf2-core.c:548:27: warning: inequality comparison result unused [-Wunused-comparison]
+                                     q->cnt_wait_prepare != q->cnt_wait_finish;
+                                     ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+   drivers/media/common/videobuf2/videobuf2-core.c:548:27: note: use '|=' to turn this inequality comparison into an or-assignment
+                                     q->cnt_wait_prepare != q->cnt_wait_finish;
+                                                         ^~
+                                                         |=
+   1 warning generated.
 
 
+vim +548 drivers/media/common/videobuf2/videobuf2-core.c
+
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  499  
+2a87af6ba1b9df4 drivers/media/v4l2-core/videobuf2-core.c        Mauro Carvalho Chehab 2017-11-27  500  /*
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  501   * __vb2_queue_free() - free buffers at the end of the queue - video memory and
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  502   * related information, if no buffers are left return the queue to an
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  503   * uninitialized state. Might be called even if the queue has already been freed.
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  504   */
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  505  static int __vb2_queue_free(struct vb2_queue *q, unsigned int buffers)
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  506  {
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  507  	unsigned int buffer;
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  508  
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  509  	/*
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  510  	 * Sanity check: when preparing a buffer the queue lock is released for
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  511  	 * a short while (see __buf_prepare for the details), which would allow
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  512  	 * a race with a reqbufs which can call this function. Removing the
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  513  	 * buffers from underneath __buf_prepare is obviously a bad idea, so we
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  514  	 * check if any of the buffers is in the state PREPARING, and if so we
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  515  	 * just return -EAGAIN.
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  516  	 */
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  517  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  518  	     ++buffer) {
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  519  		if (q->bufs[buffer] == NULL)
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  520  			continue;
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  521  		if (q->bufs[buffer]->state == VB2_BUF_STATE_PREPARING) {
+b820935b35479e8 drivers/media/common/videobuf2/videobuf2-core.c Laurent Pinchart      2020-06-21  522  			dprintk(q, 1, "preparing buffers, cannot free\n");
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  523  			return -EAGAIN;
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  524  		}
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  525  	}
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  526  
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  527  	/* Call driver-provided cleanup function for each buffer, if provided */
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  528  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  529  	     ++buffer) {
+256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  530  		struct vb2_buffer *vb = q->bufs[buffer];
+256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  531  
+256f3162c17595b drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  532  		if (vb && vb->planes[0].mem_priv)
+a1d36d8c705e10a drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-03-17  533  			call_void_vb_qop(vb, buf_cleanup, vb);
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  534  	}
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  535  
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  536  	/* Release video buffer memory */
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  537  	__vb2_free_mem(q, buffers);
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  538  
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  539  #ifdef CONFIG_VIDEO_ADV_DEBUG
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  540  	/*
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  541  	 * Check that all the calls were balances during the life-time of this
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  542  	 * queue. If not (or if the debug level is 1 or up), then dump the
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  543  	 * counters to the kernel log.
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  544  	 */
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  545  	if (q->num_buffers) {
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  546  		bool unbalanced = q->cnt_start_streaming != q->cnt_stop_streaming ||
+617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  547  				  q->cnt_prepare_streaming != q->cnt_unprepare_streaming;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29 @548  				  q->cnt_wait_prepare != q->cnt_wait_finish;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  549  
+af3bac1a7c8a21f drivers/media/v4l2-core/videobuf2-core.c        Junghak Sung          2015-11-03  550  		if (unbalanced || debug) {
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  551  			pr_info("counters for queue %p:%s\n", q,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  552  				unbalanced ? " UNBALANCED!" : "");
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  553  			pr_info("     setup: %u start_streaming: %u stop_streaming: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  554  				q->cnt_queue_setup, q->cnt_start_streaming,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  555  				q->cnt_stop_streaming);
+617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  556  			pr_info("     prepare_streaming: %u unprepare_streaming: %u\n",
+617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  557  				q->cnt_prepare_streaming, q->cnt_unprepare_streaming);
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  558  			pr_info("     wait_prepare: %u wait_finish: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  559  				q->cnt_wait_prepare, q->cnt_wait_finish);
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  560  		}
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  561  		q->cnt_queue_setup = 0;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  562  		q->cnt_wait_prepare = 0;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  563  		q->cnt_wait_finish = 0;
+617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  564  		q->cnt_prepare_streaming = 0;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  565  		q->cnt_start_streaming = 0;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  566  		q->cnt_stop_streaming = 0;
+617605203b2c478 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2022-04-29  567  		q->cnt_unprepare_streaming = 0;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  568  	}
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  569  	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  570  		struct vb2_buffer *vb = q->bufs[buffer];
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  571  		bool unbalanced = vb->cnt_mem_alloc != vb->cnt_mem_put ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  572  				  vb->cnt_mem_prepare != vb->cnt_mem_finish ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  573  				  vb->cnt_mem_get_userptr != vb->cnt_mem_put_userptr ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  574  				  vb->cnt_mem_attach_dmabuf != vb->cnt_mem_detach_dmabuf ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  575  				  vb->cnt_mem_map_dmabuf != vb->cnt_mem_unmap_dmabuf ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  576  				  vb->cnt_buf_queue != vb->cnt_buf_done ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  577  				  vb->cnt_buf_prepare != vb->cnt_buf_finish ||
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  578  				  vb->cnt_buf_init != vb->cnt_buf_cleanup;
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  579  
+af3bac1a7c8a21f drivers/media/v4l2-core/videobuf2-core.c        Junghak Sung          2015-11-03  580  		if (unbalanced || debug) {
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  581  			pr_info("   counters for queue %p, buffer %d:%s\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  582  				q, buffer, unbalanced ? " UNBALANCED!" : "");
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  583  			pr_info("     buf_init: %u buf_cleanup: %u buf_prepare: %u buf_finish: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  584  				vb->cnt_buf_init, vb->cnt_buf_cleanup,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  585  				vb->cnt_buf_prepare, vb->cnt_buf_finish);
+28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  586  			pr_info("     buf_out_validate: %u buf_queue: %u buf_done: %u buf_request_complete: %u\n",
+28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  587  				vb->cnt_buf_out_validate, vb->cnt_buf_queue,
+28d77c21cbeb2c6 drivers/media/common/videobuf2/videobuf2-core.c Hans Verkuil          2019-01-16  588  				vb->cnt_buf_done, vb->cnt_buf_request_complete);
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  589  			pr_info("     alloc: %u put: %u prepare: %u finish: %u mmap: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  590  				vb->cnt_mem_alloc, vb->cnt_mem_put,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  591  				vb->cnt_mem_prepare, vb->cnt_mem_finish,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  592  				vb->cnt_mem_mmap);
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  593  			pr_info("     get_userptr: %u put_userptr: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  594  				vb->cnt_mem_get_userptr, vb->cnt_mem_put_userptr);
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  595  			pr_info("     attach_dmabuf: %u detach_dmabuf: %u map_dmabuf: %u unmap_dmabuf: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  596  				vb->cnt_mem_attach_dmabuf, vb->cnt_mem_detach_dmabuf,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  597  				vb->cnt_mem_map_dmabuf, vb->cnt_mem_unmap_dmabuf);
+2e33dbb06da4078 drivers/media/common/videobuf/videobuf2-core.c  Mauro Carvalho Chehab 2017-12-28  598  			pr_info("     get_dmabuf: %u num_users: %u vaddr: %u cookie: %u\n",
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  599  				vb->cnt_mem_get_dmabuf,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  600  				vb->cnt_mem_num_users,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  601  				vb->cnt_mem_vaddr,
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  602  				vb->cnt_mem_cookie);
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  603  		}
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  604  	}
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  605  #endif
+b5b4541eef8eac8 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-01-29  606  
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  607  	/* Free videobuf buffers */
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  608  	for (buffer = q->num_buffers - buffers; buffer < q->num_buffers;
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  609  	     ++buffer) {
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  610  		kfree(q->bufs[buffer]);
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  611  		q->bufs[buffer] = NULL;
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  612  	}
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  613  
+2d86401c2cbfce9 drivers/media/video/videobuf2-core.c            Guennadi Liakhovetski 2011-09-28  614  	q->num_buffers -= buffers;
+a7afcaccfab2fb0 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-02-24  615  	if (!q->num_buffers) {
+ce4686702f8f56e drivers/media/common/videobuf/videobuf2-core.c  Satendra Singh Thakur 2017-12-28  616  		q->memory = VB2_MEMORY_UNKNOWN;
+bd50d999d4d4f31 drivers/media/video/videobuf2-core.c            Marek Szyprowski      2011-10-25  617  		INIT_LIST_HEAD(&q->queued_list);
+a7afcaccfab2fb0 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2014-02-24  618  	}
+63faabfd89f4db9 drivers/media/v4l2-core/videobuf2-core.c        Hans Verkuil          2013-12-13  619  	return 0;
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  620  }
+e23ccc0ad925863 drivers/media/video/videobuf2-core.c            Pawel Osciak          2010-10-11  621  
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
