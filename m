@@ -1,117 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7599B7B
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 19:47:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AE2C385A4;
-	Fri, 29 Apr 2022 19:47:28 +0000 (UTC)
-Date: Fri, 29 Apr 2022 15:47:26 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
- non-weak symbols
-Message-ID: <20220429154726.19f72a1a@gandalf.local.home>
-In-Reply-To: <1651257788.xtscezsfky.naveen@linux.ibm.com>
-References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-	<126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-	<20220428184212.18fbf438@gandalf.local.home>
-	<1651252324.js9790ngjg.naveen@linux.ibm.com>
-	<20220429135916.47c3e623@gandalf.local.home>
-	<1651257788.xtscezsfky.naveen@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954987B
+	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 20:25:35 +0000 (UTC)
+Received: by mail-pf1-f174.google.com with SMTP id y38so7817037pfa.6
+        for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 13:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=5pPN8mjwx/AbKx3KOw4z6XHphBE7jWSt7OLsq9OVFo8=;
+        b=RFv6M1M7x1ZS99n8d92LLnRufVr4PLadgMM5VGutzeL9WiG6XAw+x64RYu1SyYmECi
+         Mgqcj7VrYXtSD7tbwFk/1jiljcK0dm5HDDK9lIJ79BFvNUOM1eg9maedbdcAHaxnXCar
+         I1z/V/Y5vO70u0X2LKMTscnDn6tOvq0uLlqUNAYD6I4sORc+BpLOoP2zkWc8GROaWs/o
+         hXhuYoAS85NaPKJ3cbQZelgaixZXGBCkqgP54uKnK0oUoQ1Uwq4rLK0QVg9euB7lZk5P
+         LYab+nm/m4WjwA34d4u95jVabBy5DyD4JL4pn9DuXBlmP6Xx0UxxJlIR94tRwDPA6IiR
+         Urew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=5pPN8mjwx/AbKx3KOw4z6XHphBE7jWSt7OLsq9OVFo8=;
+        b=UMub1dCNyga86owZ8tipuhCsZgiuIwm7vquctOvG0E4uS67GjT/XUdEFqbb+oqXt6J
+         tTgJG7wn33+LEz2yxrYKHopBZSBCt2zM4+Fd4T8EfiNtZbdN8r0hiTn2xOP83GX5bLpy
+         o0nOa4WoHZ1h2v9/fRfRT3hLPJUx5/ctQD/ZOVG7TeAIIhk24PUwqwMUpUNi8k5cSTlO
+         4FHQftachUfVuI2/D3KrkRwFYd/IrUJ6RlrERkduaz9UHng9em4jlWWvsFFoL1Y5voHC
+         MwGAy28TrO14AXc17rPIXkhVTj8YX2UJMfj9AZKkhzGvqeJsll5UPCvVIi15BQYZC4VL
+         Yfmw==
+X-Gm-Message-State: AOAM532ua/nSCUBxoxEFuEYSUyX20LwMKDGcOK1BWpAt3feslgy1XRJt
+	78QXVsVda5rDMEaJeec150sl4ubirekpltxs7TrnHpiSUb0m
+X-Google-Smtp-Source: ABdhPJxx2r/bcAs9WTy7Awo124jl+kplEIfMVJpvGa2fwL3kN/hW26+AhysMcaozbOAR8ytmX6BRXa3mpgy8RwBmV3Q=
+X-Received: by 2002:a05:6a00:1946:b0:4fe:309f:d612 with SMTP id
+ s6-20020a056a00194600b004fe309fd612mr766654pfk.10.1651263934498; Fri, 29 Apr
+ 2022 13:25:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From: Bill Wendling <morbo@google.com>
+Date: Fri, 29 Apr 2022 13:25:23 -0700
+Message-ID: <CAGG=3QX8M0p2JQOs6tq0ZSqHKLhzVh77eCxYkh22SDL6Qaa36g@mail.gmail.com>
+Subject: 2022 Clang-Built Linux Meetup: Call For Papers
+To: clang-built-linux <llvm@lists.linux.dev>, 
+	clang linux fellowship <clang-linux-fellowship@google.com>, 
+	android-llvm-dev <android-llvm-dev@google.com>, 
+	linux-toolchains <linux-toolchains@vger.kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Kees Cook <keescook@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 30 Apr 2022 01:03:01 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+The 2022 Clang-Built Linux Meetup is planned for 10-11 September, 2022
+in Dublin, Ireland.
 
-> > The point of this section is to know which functions in __mcount_loc may
-> > have been overridden, as they would be found in the __mcount_loc_weak
-> > section. And then we can do something "special" to them.  
-> 
-> I'm not sure I follow that. How are you intending to figure out which 
-> functions were overridden by looking at entries in the __mcount_loc_weak 
-> section?
+This is a time for everyone interested in Clang and Linux to get
+together to share ideas, present current works, and generally have
+fun. Best of all, we're meeting in person this year!
 
-If there's duplicates (or something strange with the offset) then we could
-delete the one that has the match in the weak section.
+  https://clangbuiltlinux.github.io/cbl-meetup/
 
-> 
-> In the final vmlinux image, we only get offsets into .text for all 
-> mcount locations, but no symbol information. The only hint is the fact 
-> that a single kallsym symbol has multiple mcount locations within it. 
-> Even then, the symbol with duplicate mcount entries won't be the 
-> function that was overridden.
-> 
-> We could do a kallsyms_lookup() on each entry and consult the 
-> __mcount_loc_weak section to identify duplicates, but that looks to be 
-> very expensive.
-> 
-> Did you have a different approach in mind?
+Call For Papers
 
-We only need to look at the ones in the weak section. How many that is may
-determine if that's feasible or not.
+If you have ideas for a presentation, create an "issue" on the GitHub site:
 
-> 
-> >   
-> >> 
-> >> As an example, in the issue described in this patch set, if powerpc 
-> >> starts over-riding kexec_arch_apply_relocations(), then the current weak 
-> >> implementation in kexec_file.o gets carried over to the final vmlinux, 
-> >> but the instructions will instead appear under the previous function in 
-> >> kexec_file.o: crash_prepare_elf64_headers(). This function may or may 
-> >> not be traced to begin with, so we won't be able to figure out if this 
-> >> is valid or not.  
-> > 
-> > If it was overridden, then there would be two entries for function that
-> > overrides the weak function in the __mcount_loc section, right? One for the
-> > new function, and one that was overridden.  
-> 
-> In the final vmlinux, we will have two entries: one pointing at the 
-> correct function, while the other will point to some other function 
-> name. So, at least from kallsym perspective, duplicate mcount entries 
-> won't be for the function that was overridden, but some arbitrary 
-> function that came before the weak function in the object file.
+  https://github.com/ClangBuiltLinux/cbl-meetup/issues
 
-Right, and we should be able to find them.
+More information will be forthcoming as the date approaches and
+logistics are solidified.
 
-> 
-> > Of course this could be more
-> > complex if the new function had been marked notrace.
-> > 
-> > I was thinking of doing this just so that we know what functions are weak
-> > and perhaps need extra processing.
-> > 
-> > Another issue with weak functions and ftrace just came up here:
-> > 
-> >   https://lore.kernel.org/all/20220428095803.66c17c32@gandalf.local.home/  
-> 
-> I noticed this just yesterday:
-> 
->   # cat available_filter_functions | sort | uniq -d | wc -l
->   430
-> 
-> I'm fairly certain that some of those are due to weak functions -- I 
-> just wasn't sure if all of those were.
-
-Probably :-/
-
-> 
-> I suppose this will now also be a problem with ftrace_location(), given 
-> that it was recently changed to look at an entire function for mcount 
-> locations?
-> 
-
-Maybe. I have to focus on other things at the moment, but I'll try to find
-some time to look at this deeper.
-
--- Steve
+Share and enjoy!
+-bw
