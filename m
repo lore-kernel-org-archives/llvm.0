@@ -1,156 +1,92 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE1A469C
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 16:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651336870; x=1682872870;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uDxIPh1uye+uJJf7dVhmWzNhTsY/pRGws8jFAb9xpKs=;
-  b=ULNbtcPza8vQ6nDKIkb7HGnSgabznocGYWwXR82VRo6xU/hTXzvLQwqA
-   hZ/VbXVl9awFVvEiAQf+Ma6zgRYacqUYStfbL78DO+DeOOj81DUDoXwah
-   mAK/yQHDIDGK70Dc3CFwVuPIjxOPdZ4WZOBTvvnfCWSPxARPZznHd3QIi
-   e9aI3FQ+Ts9qKADjaUF9RRyjDZBsXfsPVAsIEIPdxJ2K+AnyMUl36cDji
-   PgNR2iLBHF+uYYl+e0P2+/ixiQAdKHYq5Mf/yRKZQdwjPMXQSNyX23+MY
-   Z/QjuONWMa0+TJ8EnAlSLXarrUdae6rTdPjMvoouvAzc05o9YKm12nfnl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="246815551"
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="246815551"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 09:41:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="515335433"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Apr 2022 09:41:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nkq9b-0007Pb-JD;
-	Sat, 30 Apr 2022 16:41:07 +0000
-Date: Sun, 1 May 2022 00:40:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dai Ngo <dai.ngo@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:nfsd-courteous-server 3/7] fs/nfsd/nfsd.h:180:59: error:
- expected ';' after return statement
-Message-ID: <202205010039.npL4Bn76-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102031FC3
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 17:37:19 +0000 (UTC)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <heiko@sntech.de>)
+	id 1nkqP3-0002Do-Ak; Sat, 30 Apr 2022 18:57:05 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: kernel test robot <lkp@intel.com>, Peter Geis <pgwipeout@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, devicetree <devicetree@vger.kernel.org>, arm-mail-list <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
+Date: Sat, 30 Apr 2022 18:57:04 +0200
+Message-ID: <7373923.EvYhyI6sBW@diego>
+In-Reply-To: <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
+References: <20220429115252.2360496-6-pgwipeout@gmail.com> <202204300850.X97CRcO6-lkp@intel.com> <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
-head:   d5b28de053a07bebbf61359a4bbceeaef3b48962
-commit: 5e58ea722404baa3052c44d8e68129502b34f135 [3/7] NFSD: move create/destroy of laundry_wq to init_nfsd and exit_nfsd
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220501/202205010039.npL4Bn76-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=5e58ea722404baa3052c44d8e68129502b34f135
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel nfsd-courteous-server
-        git checkout 5e58ea722404baa3052c44d8e68129502b34f135
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+Am Samstag, 30. April 2022, 16:46:31 CEST schrieb Peter Geis:
+> On Fri, Apr 29, 2022 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Peter,
+> >
+> > I love your patch! Yet something to improve:
+> >
+> > [auto build test ERROR on robh/for-next]
+> > [also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next shawnguo/for-next soc/for-next v5.18-rc4]
+> > [cannot apply to rockchip/for-next xilinx-xlnx/master keystone/next next-20220429]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> 
+> The three new device trees are dependent on my usb series which was
+> accepted through Heiko's tree.
+> I can drop the xhci dependency, but this will just happen again adding
+> it back in if it's done in this RC series.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Of course dropping that part is not necessary :-)
+I.e. the dependency is in my tree and this stuff will go on top.
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/nfsd/nfssvc.c:27:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   1 error generated.
---
-   In file included from fs/nfsd/export.c:21:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   fs/nfsd/export.c:979:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode            *inode;
-                                    ^
-   1 warning and 1 error generated.
---
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:442:
-   In file included from fs/nfsd/state.h:42:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:1130:
-   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
-   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
-   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
-   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-   #define __stringify(x...)       __stringify_1(x)
-                                   ^~~~~~~~~~~~~~~~
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-   #define __stringify_1(x...)     #x
-                                   ^~
-   <scratch space>:45:1: note: expanded from here
-   "./trace.h"
-   ^~~~~~~~~~~
-   2 errors generated.
+I'm just not sure if I should give Krzysztof more time for patch1.
+The binding of course looks great now already, I guess I'll let the
+Quartz-B sit some days more.
 
 
-vim +180 fs/nfsd/nfsd.h
+Heiko
 
-   150	
-   151	/* 
-   152	 * NFSv4 State
-   153	 */
-   154	#ifdef CONFIG_NFSD_V4
-   155	extern unsigned long max_delegations;
-   156	int nfsd4_init_slabs(void);
-   157	void nfsd4_free_slabs(void);
-   158	int nfs4_state_start(void);
-   159	int nfs4_state_start_net(struct net *net);
-   160	void nfs4_state_shutdown(void);
-   161	void nfs4_state_shutdown_net(struct net *net);
-   162	int nfs4_reset_recoverydir(char *recdir);
-   163	char * nfs4_recoverydir(void);
-   164	bool nfsd4_spo_must_allow(struct svc_rqst *rqstp);
-   165	int nfsd4_create_laundry_wq(void);
-   166	void nfsd4_destroy_laundry_wq(void);
-   167	#else
-   168	static inline int nfsd4_init_slabs(void) { return 0; }
-   169	static inline void nfsd4_free_slabs(void) { }
-   170	static inline int nfs4_state_start(void) { return 0; }
-   171	static inline int nfs4_state_start_net(struct net *net) { return 0; }
-   172	static inline void nfs4_state_shutdown(void) { }
-   173	static inline void nfs4_state_shutdown_net(struct net *net) { }
-   174	static inline int nfs4_reset_recoverydir(char *recdir) { return 0; }
-   175	static inline char * nfs4_recoverydir(void) {return NULL; }
-   176	static inline bool nfsd4_spo_must_allow(struct svc_rqst *rqstp)
-   177	{
-   178		return false;
-   179	}
- > 180	static inline int nfsd4_create_laundry_wq(void) { return 0 };
-   181	static inline void nfsd4_destroy_laundry_wq(void) {};
-   182	#endif
-   183	
+> 
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> > config: arm64-randconfig-r021-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300850.X97CRcO6-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://github.com/intel-lab-lkp/linux/commit/d933bfeea016da20a99bce012bbf071f9d86e2bf
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+> >         git checkout d933bfeea016da20a99bce012bbf071f9d86e2bf
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:601.1-16 Label or path usb_host0_xhci not found
+> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:605.1-16 Label or path usb_host1_xhci not found
+> >    FATAL ERROR: Syntax error parsing input tree
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+
+
