@@ -1,30 +1,29 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BFC185E
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 21:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8716C385A7;
-	Sat, 30 Apr 2022 21:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651354230;
-	bh=vAVhhXypRqDZcqGhaCYEaH4e+Ngkzft0fv8RfvcJdcc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UeokDMgihaUGrwVXZ1/Yej5wrXuZBv9ggnZeIXmyQu1aWrgUvaL7YPgeSsdO2LAjV
-	 NWY/WCi8sXyvcY8FRtY6dZzUqMgwX/J/orA9FjsS9gDwl/peAmt1XmCGmm3REIYI9l
-	 ghTuNmTsu6k7GErshPTZxkSMiYMbwZE7JaPcdeTtq1cMA8HtSMz8JsvjbNV08uNlTr
-	 knUeGsAPUxRzY5nFQDCnonASHWDAnwyDQ9KX15uNHo9cUe7C8W+egFR4ztvgkpkZeY
-	 nzXBICbJggtQK5+zwaWizA2qMWX4l9YfwR4XoPakssKivYdA3TKzIpfGoPgZ0ZWBBK
-	 BAIPAD8xu212A==
-Date: Sat, 30 Apr 2022 14:30:28 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mauro Rossi <issor.oruam@gmail.com>
-Cc: luto@kernel.org, Chih-Wei Huang <cwhuang@android-x86.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
- llvm 11.0.2 internal assembler
-Message-ID: <Ym2qdHAB6BMMlegB@thelio-3990X>
-References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4227823C3
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 21:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=bnDPlV0Dc9sLm1RymyVAiKBxdIfGczhj1WyheEv8HQE=; b=a6pHHUQGzYqW14TCoRaSs4xOv1
+	rE9WS1HZ3jD+28LyqdyXmT9x2Y1eWe/yx+uEEHo7MvSK4VxVc0LwHVUZVX17OgL+V9VtA3cCl8Nft
+	+cnRFKeqW7sft25+rB0unT20iMTMxue7wsEUfAlsfsEJ0MWdTINioKPZjfDZiNtQv4gv4X49bIA5y
+	GYyS8lJRgDNuo0a0CoRmhsMUkteoqGyoC1NtxlPjxMGOEcessAizYe+q1vFUXXH46RTU8XVMxH8gQ
+	gjfX96LsZiQcJ2fytOIUBkUmRHxMCjx4h1sZiHVD6x3zgmO1xyL7gh16d8t2h+Y3f1v7SgqFjpdBQ
+	hnXC3YAQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nkulB-00DblM-Pu; Sat, 30 Apr 2022 21:36:13 +0000
+Date: Sat, 30 Apr 2022 22:36:13 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [willy-pagecache:for-next 60/69] fs/ntfs/aops.c:378:12: warning:
+ stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio'
+Message-ID: <Ym2rzWiP8iNRHWxS@casper.infradead.org>
+References: <202204301355.hFVoSOPa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,99 +32,13 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
+In-Reply-To: <202204301355.hFVoSOPa-lkp@intel.com>
 
-Hi Mauro,
+On Sat, Apr 30, 2022 at 01:11:43PM +0800, kernel test robot wrote:
+> >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+>    static int ntfs_read_folio(struct file *file, struct folio *folio)
+>               ^
+>    1 warning generated.
 
-[+ llvm@lists.linux.dev and Nick]
-
-On Fri, Apr 29, 2022 at 07:40:07PM +0200, Mauro Rossi wrote:
-> Hi Andy,
-> 
-> I am an hobbyist contributing to android-x86 FOSS project lead by
-> Chih-Huwei Huang (in Cc: for information/alignement)
-> 
-> I am performing periodic tests to build kernel for Android 11 based iso image
-> which relies on aosp shipped prebuild clang toolchain (clang version 11.0.2)
-> 
-> When building linux 5.18rc4 and also with linux 5.17 x86_64 64bit kernel targets
-> there is a building error in arch/x86/entry
-> 
->   AS      arch/x86/entry/entry_64.o
-> <instantiation>:2:2: error: unknown use of instruction mnemonic
-> without a size suffix
->  lsl %rax, %rax
->  ^
-> <instantiation>:1:1: note: while in macro instantiation
-> LOAD_CPU_AND_NODE_SEG_LIMIT %rax
-> ^
-> <instantiation>:2:2: note: while in macro instantiation
->  GET_PERCPU_BASE %rax
->  ^
-> /home/utente/r-x86_kernel/kernel/arch/x86/entry/entry_64.S:890:2:
-> note: while in macro instantiation
->  SAVE_AND_SET_GSBASE scratch_reg=%rax save_reg=%rbx
->  ^
-> make[3]: *** [/home/utente/r-x86_kernel/kernel/scripts/Makefile.build:389:
-> arch/x86/entry/entry_64.o] Error 1
-> make[2]: *** [/home/utente/r-x86_kernel/kernel/scripts/Makefile.build:550:
-> arch/x86/entry] Error 2
-> make[1]: *** [/home/utente/r-x86_kernel/kernel/Makefile:1887: arch/x86] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> 
-> As other interesting info, the building error does not happen when
-> building x86 32bit kernel target and i can build 86_64 64bit kernel
-> target only by setting the LLVM_IAS=0 parameter to disable the
-> internal llvm assembler
-
-This error was fixed in LLVM 11.0.0 final, which was released after
-Android's LLVM 11.0.2:
-
-https://github.com/ClangBuiltLinux/linux/issues/1079
-
-> I wanted to ask you if you could help us, if there could be a way to
-> improve arch/x86/entry/entry_64.S code to be able to complete the
-> build without disabling the llvm internal assembler.
-> 
-> I don't know if this building error may be caused by the clang version
-> 11.0.2, but at some point the aosp and android version may hit this
-> same issue,
-> so I wanted to highlight this issue to you to have a competent person feedback,
-> as I am more a "trial and error" guy than a kernel expert
-
-I am open to other opinions but I am not inclined to suggest working
-around this in the kernel for two reasons:
-
-1. This issue was resolved in the toolchain almost two years ago, so it
-   is not a recent failure.
-
-2. Android's LLVM 11.0.2 is technically older than the minimum version
-   that the kernel supports (11.0.0), which I would argue means it is
-   unsupported. 11.0.0 final was released on October 12th, 2020 and
-   Android's LLVM 11.0.2 was committed on June 11th, 2020, so you are
-   potentially missing four months worth of fixes:
-
-   https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/431c74471920f3f9b0517692fb69515c023bde41
-
-   Unfortunately, due to the way that LLVM versions work, it is not so
-   easy to check for this but perhaps we should consider trying to
-   handle this, so that others don't continue to trip over old bugs.
-
-Moving to LLVM_IAS=0 is the solution that we went with for clang-10 when
-it was supported after the switch to the integrated assembler by
-default, which I do not think is an unreasonable solution for this
-issue.
-
-Alternatively, you could apply the hack that Nick inserted into Android
-for this issue if upgrading your toolchain or turning off the integrated
-assembler is not possible:
-
-https://android.googlesource.com/kernel/common/+/e58f084735b8abf744d61083b92172ee23d45aae
-
-I really do not mean to sound dismissive or rude, I apologize if it
-comes off that way, but we have worked quite hard to avoid inserting
-unnecessary workarounds, as they are ultimately technical debt that can
-be hard to manage over the long term.
-
-Cheers,
-Nathan
+Am I getting this warning because I changed the name of the function?
+Or did I do something Bad?
