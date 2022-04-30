@@ -1,47 +1,48 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA151FAA
-	for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 23:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Cc9wZ7jbygrqxfO1k5hdmSYC6xqhyAv60HjCEdg7k9Y=; b=cEcg8VvxAdZnBo7JOh5l638Yfp
-	/n6FPztndQQn1Lo4ySoW9J7S5uwj0246oQaAaKc3ztTzVxOXuFQj6pXy8sQRNHh5t04vH6b7PRHVh
-	bQqe9Roa7Yiei99IecXCLKMBF9ZUWwKSE5pbBmMIaQnr+nhjZyrqpMxB+GWmYsGl4ygyMynTDtRGT
-	/Qt+UdxjYf8kd3+rnBxTLrz6uqjCeYQSjP2PBrTTM9ILULPbpgFOICuC0tTucF6mEc1/pP/6DpjRB
-	LI2w26AEHg4ex9SR1ZkgiyRNsuSbP0xCbO+9xxAoUXjkUe0fav6AG7AxYBUjAO82gcYZlUBuu9DVX
-	/b0QT7yQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nka4T-009jCu-Rs; Fri, 29 Apr 2022 23:30:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6C8B23001EA;
-	Sat, 30 Apr 2022 01:30:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4B9462028F01B; Sat, 30 Apr 2022 01:30:45 +0200 (CEST)
-Date: Sat, 30 Apr 2022 01:30:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 16/21] objtool: Add support for CONFIG_CFI_CLANG
-Message-ID: <Ymx1JcO36h7YqLa0@hirez.programming.kicks-ass.net>
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-17-samitolvanen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70714680
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 00:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651277850; x=1682813850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kAcWmtvMs86EJf0sId+GTZ326TwVr2sRH2tRpBuMGfI=;
+  b=bHzDtvlknTYMCb68St7RFkM9cAkhNLeShSSqimm2roMTP6vYV1V0ax8b
+   u8jhDFhYQ/n3slQ3WmY6QIDeB+PR0O446gFCwvJJH2WEDJQuoy4wuer9B
+   rOfcztIv+WHv2K48fcGCCvsAzMIDZ3tFoDk82IiMGrRv3N3XhfEibEnd2
+   iFii5MIV9psjZnYC+NORHvxFuJbTd42yqAPz51EpC38HA/kSwYx/cgEtP
+   7CMY2Wc29kR3zLpiOyS5dr40i0E/nQ8e2yeEPoniPCIx038CB6fp4VV/7
+   VfN1nPmPWQ2gwE6oBRqse+buzMIE9a2KPPsfyVcQ3iESZRyS/AF5BqwiV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="248739434"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="248739434"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 17:17:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="630301471"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2022 17:17:27 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nkane-0006iN-OV;
+	Sat, 30 Apr 2022 00:17:26 +0000
+Date: Sat, 30 Apr 2022 08:16:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Geis <pgwipeout@gmail.com>, linux-rockchip@lists.infradead.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/7] arm64: dts: rockchip: add Pine64 Quartz64-B
+ device tree
+Message-ID: <202204300850.X97CRcO6-lkp@intel.com>
+References: <20220429115252.2360496-6-pgwipeout@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,101 +51,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220429203644.2868448-17-samitolvanen@google.com>
+In-Reply-To: <20220429115252.2360496-6-pgwipeout@gmail.com>
 
-On Fri, Apr 29, 2022 at 01:36:39PM -0700, Sami Tolvanen wrote:
+Hi Peter,
 
-> +static void *kcfi_alloc_hash(unsigned long size)
-> +{
-> +	kcfi_bits = max(10, ilog2(size));
-> +	kcfi_hash = mmap(NULL, sizeof(struct hlist_head) << kcfi_bits,
-> +			PROT_READ|PROT_WRITE,
-> +			MAP_PRIVATE|MAP_ANON, -1, 0);
-> +	if (kcfi_hash == (void *)-1L) {
-> +		WARN("mmap fail kcfi_hash");
-> +		kcfi_hash = NULL;
-> +	}  else if (stats) {
-> +		printf("kcfi_bits: %d\n", kcfi_bits);
-> +	}
-> +
-> +	return kcfi_hash;
-> +}
-> +
-> +static void add_kcfi_type(struct kcfi_type *type)
-> +{
-> +	hlist_add_head(&type->hash,
-> +		&kcfi_hash[hash_min(
-> +			sec_offset_hash(type->sec, type->offset),
-> +			kcfi_bits)]);
+I love your patch! Yet something to improve:
 
-:se cino=(0:0
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next shawnguo/for-next soc/for-next v5.18-rc4]
+[cannot apply to rockchip/for-next xilinx-xlnx/master keystone/next next-20220429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Also, I'm thinking you can unwrap some lines at least.
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-r021-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300850.X97CRcO6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d933bfeea016da20a99bce012bbf071f9d86e2bf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+        git checkout d933bfeea016da20a99bce012bbf071f9d86e2bf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> +}
-> +
-> +static bool is_kcfi_typeid(struct elf *elf, struct instruction *insn)
-> +{
-> +	struct hlist_head *head;
-> +	struct kcfi_type *type;
-> +	struct reloc *reloc;
-> +
-> +	if (!kcfi)
-> +		return false;
-> +
-> +	/* Compiler-generated annotation in .kcfi_types. */
-> +	head = &kcfi_hash[hash_min(sec_offset_hash(insn->sec, insn->offset), kcfi_bits)];
-> +
-> +	hlist_for_each_entry(type, head, hash)
-> +		if (type->sec == insn->sec && type->offset == insn->offset)
-> +			return true;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-missing { }
+All errors (new ones prefixed by >>):
 
-> +
-> +	/* Manual annotation (in assembly code). */
-> +	reloc = find_reloc_by_dest(elf, insn->sec, insn->offset);
-> +
-> +	if (reloc && !strncmp(reloc->sym->name, "__kcfi_typeid_", 14))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  /*
->   * This checks to see if the given function is a "noreturn" function.
->   *
-> @@ -388,13 +487,18 @@ static int decode_instructions(struct objtool_file *file)
->  			insn->sec = sec;
->  			insn->offset = offset;
->  
-> -			ret = arch_decode_instruction(file, sec, offset,
-> -						      sec->sh.sh_size - offset,
-> -						      &insn->len, &insn->type,
-> -						      &insn->immediate,
-> -						      &insn->stack_ops);
-> -			if (ret)
-> -				goto err;
-> +			if (is_kcfi_typeid(file->elf, insn)) {
-> +				insn->type = INSN_KCFI_TYPEID;
-> +				insn->len = KCFI_TYPEID_LEN;
+>> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:601.1-16 Label or path usb_host0_xhci not found
+>> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:605.1-16 Label or path usb_host1_xhci not found
+   FATAL ERROR: Syntax error parsing input tree
 
-Urgh, what does this do for decode speed? This is a hash-lookup for
-every single instruction.
-
-Is that kcfi location array sorted by the compiler? Because then you can
-keep a running iterator and replace the whole lookup with a simple
-equality comparison.
-
-> +			} else {
-> +				ret = arch_decode_instruction(file, sec, offset,
-> +							      sec->sh.sh_size - offset,
-> +							      &insn->len, &insn->type,
-> +							      &insn->immediate,
-> +							      &insn->stack_ops);
-> +				if (ret)
-> +					goto err;
-> +			}
->  
->  			/*
->  			 * By default, "ud2" is a dead end unless otherwise
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
