@@ -1,77 +1,127 @@
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F727B
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 01:00:40 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id y2so17211497ybi.7
-        for <llvm@lists.linux.dev>; Fri, 29 Apr 2022 18:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v+/lXmWN9a4yBqHcUhGldW2cPmJygtUYS178VCmvTIc=;
-        b=sae9+FjGo9T5Lw9oasK5TSXV+WiJ9kOd1rZxgJTdRsikk6ZkRbafNdUGY5LNRGAq7z
-         KLeLF9me10KOS2tdhq3QqUpedIvCKSr1k5DC/BpSJXrYAbYGX36I/OHi5sPl2+ZQlekd
-         66J+Wwfye+d+OmHrkDF8heOen1RhSJWCYyaI2bN5JBrcN16V9XbLRRbXVKl4swa18OO5
-         tjzIGXovtKoxHb2BPhqhs7CQ8j16lH/BUJJAJBpzv9rkOq3Qi4oG9OwF3Ppi6ZYwQt7t
-         c0tGVoQRbXL9RFIYG+2HjirHMKUjpclTwnxrV6ci7lqAUdDwRL4xfTYawAje7RdrXeb3
-         Ouqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v+/lXmWN9a4yBqHcUhGldW2cPmJygtUYS178VCmvTIc=;
-        b=bIjxTz1C+HCOfbCN4DYmsUaaQMa1awyzNbBOrQTTA6VoRehe9bbXTIPZsp6ASYq1rf
-         Q3b9BfbCbcXMmUxXycZb+mQbCsIhCoBXbrJ/VnqljwCjw7iN2pvGlBWA4Ila1WPGdRHA
-         4VNUnSJuHYuIFiYtcrwQ2/HXPL7cHdbxoFeW8QyZAT+whUnHiWJ2Ni+jUTOfkRbE7iff
-         KPBDiGobUyqaSDQY4M7BaI4JXCXw0rhZsEDFBXRFjnhJHVfuoZpt3Z/o6VkcOpxe/yP4
-         QsYbqoJ4Xrn7uLT799myHG194ADUiwFTqBTKXr2dbFgRdJPfEGFd1weNa8mrLaGQlzqX
-         9dUQ==
-X-Gm-Message-State: AOAM531j33vsmMajxcmp6OKbu3QPdwc7owxb/MY1JQEIHyszrexBENE0
-	I21Ye3vIW4RtGHP92YuXOtorx+gvEAG/rEIiXh7RuQ==
-X-Google-Smtp-Source: ABdhPJyhcCyxowcmxR+EC+1LVLQSQWfwL5P0ozbbvft+6vNS3yhM7DK8vGFq8LI/3sHN0lOaYWVuT+28wwYR2ixEuLk=
-X-Received: by 2002:a5b:2c9:0:b0:644:b7c9:3766 with SMTP id
- h9-20020a5b02c9000000b00644b7c93766mr1986227ybp.428.1651280439211; Fri, 29
- Apr 2022 18:00:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAEC7B
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 01:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651282712; x=1682818712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AdNqjN2aPR9DTlrBrCsJSY4O3w+eaIoczFhTKfpPs48=;
+  b=Tf74/qnMCnuQ2+XR77FTs+6FON3LPGI9XoHbAvnY5DAcBugx510SuhM3
+   KsgM5Ihlb3fw+NePyIsiyricwH9IKAp1Of/UaT7imBni20nh5AMe6K1gC
+   bF8VXf+3Lp9zl5bbdrDVpWUFv9ojY5rbYPzhkWlw+j6pIb9nwTwAROZEF
+   8fNakFNPEZGvf4dYQkLqeXm80bs/Pgk+AHOkNsrr2EO665kWqu3thkXDG
+   xgdpi8gs9/99DMnOe358hXjW0Wj/xH68dqix3cxf1jkiXMrP+1giqY2rk
+   RwFlPvrEOw/UzcJTtVL0Y2Fiqx2hKx8PmsB9U4gnNvyZUdac9XiNbFelC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="327317173"
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="327317173"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 18:38:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="882066061"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Apr 2022 18:38:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nkc44-0006lV-QX;
+	Sat, 30 Apr 2022 01:38:28 +0000
+Date: Sat, 30 Apr 2022 09:38:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Huckleberry <nhuck@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v5 7/8] crypto: arm64/polyval: Add PMULL accelerated
+ implementation of POLYVAL
+Message-ID: <202204300918.SdgoNFfx-lkp@intel.com>
+References: <20220427003759.1115361-8-nhuck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-17-samitolvanen@google.com> <Ymx1JcO36h7YqLa0@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ymx1JcO36h7YqLa0@hirez.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 29 Apr 2022 18:00:03 -0700
-Message-ID: <CABCJKufNUoJJPcraG-o2AvTBSWmFEQAzg0z-Z=xLohBqsMA3KQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 16/21] objtool: Add support for CONFIG_CFI_CLANG
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427003759.1115361-8-nhuck@google.com>
 
-On Fri, Apr 29, 2022 at 4:30 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> Urgh, what does this do for decode speed? This is a hash-lookup for
-> every single instruction.
+Hi Nathan,
 
-Two actually, since .kcfi_traps only contains compiler-emitted
-locations and we also have to check for manual type annotations. I
-haven't measured performance yet, but I also didn't notice a
-significant impact here.
+Thank you for the patch! Yet something to improve:
 
-> Is that kcfi location array sorted by the compiler? Because then you can
-> keep a running iterator and replace the whole lookup with a simple
-> equality comparison.
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linus/master v5.18-rc4 next-20220429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-The compiler generates a separate .kcfi_types section for each text
-section and the entries are emitted in order, so this should be
-doable.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Huckleberry/crypto-HCTR2-support/20220427-084044
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220430/202204300918.SdgoNFfx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3d3f8a04f4735ce4fc1a9b59cd6fa091e11a35c3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nathan-Huckleberry/crypto-HCTR2-support/20220427-084044
+        git checkout 3d3f8a04f4735ce4fc1a9b59cd6fa091e11a35c3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-Sami
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/crypto/polyval-ce-glue.c:188:1: error: redefinition of '__inittest'
+   module_init(polyval_ce_mod_init);
+   ^
+   include/linux/module.h:131:42: note: expanded from macro 'module_init'
+           static inline initcall_t __maybe_unused __inittest(void)                \
+                                                   ^
+   arch/arm64/crypto/polyval-ce-glue.c:186:1: note: previous definition is here
+   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
+   ^
+   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
+   }                                                               \
+                                                                   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+           static inline initcall_t __maybe_unused __inittest(void)                \
+                                                   ^
+>> arch/arm64/crypto/polyval-ce-glue.c:188:1: error: redefinition of 'init_module'
+   module_init(polyval_ce_mod_init);
+   ^
+   include/linux/module.h:133:6: note: expanded from macro 'module_init'
+           int init_module(void) __copy(initfn)                    \
+               ^
+   arch/arm64/crypto/polyval-ce-glue.c:186:1: note: previous definition is here
+   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
+   ^
+   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
+   }                                                               \
+                                                                   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+           int init_module(void) __copy(initfn)                    \
+               ^
+   2 errors generated.
+
+
+vim +/__inittest +188 arch/arm64/crypto/polyval-ce-glue.c
+
+   187	
+ > 188	module_init(polyval_ce_mod_init);
+   189	module_exit(polyval_ce_mod_exit);
+   190	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
