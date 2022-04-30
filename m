@@ -1,92 +1,153 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102031FC3
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 17:37:19 +0000 (UTC)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nkqP3-0002Do-Ak; Sat, 30 Apr 2022 18:57:05 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: kernel test robot <lkp@intel.com>, Peter Geis <pgwipeout@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>, llvm@lists.linux.dev, kbuild-all@lists.01.org, devicetree <devicetree@vger.kernel.org>, arm-mail-list <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
-Date: Sat, 30 Apr 2022 18:57:04 +0200
-Message-ID: <7373923.EvYhyI6sBW@diego>
-In-Reply-To: <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
-References: <20220429115252.2360496-6-pgwipeout@gmail.com> <202204300850.X97CRcO6-lkp@intel.com> <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607881FD4
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 18:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651344215; x=1682880215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oWYIihokUaJM/i9/QmGaXX3gl+K8rlFxtNay5clvk0I=;
+  b=VUtEWa0ssPUBeV3Jrub/2PePGnUp5LPRzfQj7JOg0Tfa77WlEZk//+vV
+   gljgn/LouD+0aiyo7qLns4bSD8PGLDniXrUM8xnImoFK/UKQoyqhyOO/m
+   1BPLI1yXIN3rQ97yeqob0OlRE4rxXHuTZgyU84PVHvVIFcLinDrb6nwmm
+   u3tPyQumjBxKwWVR6aSD9d/dslwQh3DkKmTXMLF0+D0xiYheIZ7BAmm0q
+   K+27FS0s+geHuOzyuLRhAPbs3r5Wb40aTSDWVBuZNiwpHpTVE+2DBxhwG
+   Ql/9SLoejbPUHqYv7urofd6026TpK7JYfPS2PTS61Rl5TmKpxxFKNTNex
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="265760774"
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="265760774"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 11:43:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="732688331"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 30 Apr 2022 11:43:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nks41-0007VT-Fq;
+	Sat, 30 Apr 2022 18:43:29 +0000
+Date: Sun, 1 May 2022 02:42:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+	Greg KH <greg@kroah.com>, Jaroslav Kysela <perex@perex.cz>,
+	Kai Vehmanen <kai.vehmanen@intel.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+	Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v3 2/2] ALSA: hda - identify when audio is provided by a
+ video driver
+Message-ID: <202205010257.ZFhZYEG9-lkp@intel.com>
+References: <6b5f1e2cec0137d5aab089a7e7497972ff5addb1.1651326000.git.mchehab@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b5f1e2cec0137d5aab089a7e7497972ff5addb1.1651326000.git.mchehab@kernel.org>
 
-Am Samstag, 30. April 2022, 16:46:31 CEST schrieb Peter Geis:
-> On Fri, Apr 29, 2022 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Peter,
-> >
-> > I love your patch! Yet something to improve:
-> >
-> > [auto build test ERROR on robh/for-next]
-> > [also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next shawnguo/for-next soc/for-next v5.18-rc4]
-> > [cannot apply to rockchip/for-next xilinx-xlnx/master keystone/next next-20220429]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch]
-> 
-> The three new device trees are dependent on my usb series which was
-> accepted through Heiko's tree.
-> I can drop the xhci dependency, but this will just happen again adding
-> it back in if it's done in this RC series.
+Hi Mauro,
 
-Of course dropping that part is not necessary :-)
-I.e. the dependency is in my tree and this stuff will go on top.
+I love your patch! Yet something to improve:
 
-I'm just not sure if I should give Krzysztof more time for patch1.
-The binding of course looks great now already, I guess I'll let the
-Quartz-B sit some days more.
+[auto build test ERROR on mcgrof/modules-next]
+[also build test ERROR on linus/master v5.18-rc4 next-20220429]
+[cannot apply to tiwai-sound/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/Let-userspace-know-when-snd-hda-intel-needs-i915/20220430-214332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+config: riscv-buildonly-randconfig-r003-20220428 (https://download.01.org/0day-ci/archive/20220501/202205010257.ZFhZYEG9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/32f6557b5cc77c3cc2fcf6e68f11d989e31c954d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mauro-Carvalho-Chehab/Let-userspace-know-when-snd-hda-intel-needs-i915/20220430-214332
+        git checkout 32f6557b5cc77c3cc2fcf6e68f11d989e31c954d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash sound/hda/
 
-Heiko
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> > config: arm64-randconfig-r021-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300850.X97CRcO6-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm64 cross compiling tool for clang build
-> >         # apt-get install binutils-aarch64-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/d933bfeea016da20a99bce012bbf071f9d86e2bf
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
-> >         git checkout d933bfeea016da20a99bce012bbf071f9d86e2bf
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:601.1-16 Label or path usb_host0_xhci not found
-> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:605.1-16 Label or path usb_host1_xhci not found
-> >    FATAL ERROR: Syntax error parsing input tree
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> 
+All errors (new ones prefixed by >>):
+
+>> sound/hda/hdac_component.c:202:7: error: call to undeclared function '__try_module_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!__try_module_get(acomp->ops->owner, dev->driver->owner)) {
+                ^
+   sound/hda/hdac_component.c:202:7: note: did you mean 'try_module_get'?
+   include/linux/module.h:759:20: note: 'try_module_get' declared here
+   static inline bool try_module_get(struct module *module)
+                      ^
+   1 error generated.
 
 
+vim +/__try_module_get +202 sound/hda/hdac_component.c
 
+   183	
+   184	static int hdac_component_master_bind(struct device *dev)
+   185	{
+   186		struct drm_audio_component *acomp = hdac_get_acomp(dev);
+   187		int ret;
+   188	
+   189		if (WARN_ON(!acomp))
+   190			return -EINVAL;
+   191	
+   192		ret = component_bind_all(dev, acomp);
+   193		if (ret < 0)
+   194			return ret;
+   195	
+   196		if (WARN_ON(!(acomp->dev && acomp->ops))) {
+   197			ret = -EINVAL;
+   198			goto out_unbind;
+   199		}
+   200	
+   201		/* pin the module to avoid dynamic unbinding, but only if given */
+ > 202		if (!__try_module_get(acomp->ops->owner, dev->driver->owner)) {
+   203			ret = -ENODEV;
+   204			goto out_unbind;
+   205		}
+   206	
+   207		if (acomp->audio_ops && acomp->audio_ops->master_bind) {
+   208			ret = acomp->audio_ops->master_bind(dev, acomp);
+   209			if (ret < 0)
+   210				goto module_put;
+   211		}
+   212	
+   213		complete_all(&acomp->master_bind_complete);
+   214		return 0;
+   215	
+   216	 module_put:
+   217		module_put(acomp->ops->owner);
+   218	out_unbind:
+   219		component_unbind_all(dev, acomp);
+   220		complete_all(&acomp->master_bind_complete);
+   221	
+   222		return ret;
+   223	}
+   224	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
