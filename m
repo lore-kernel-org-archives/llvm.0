@@ -1,128 +1,156 @@
-Received: from komekko.fuwafuwatime.moe (komekko.fuwafuwatime.moe [65.21.224.109])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6521FA4
-	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 16:16:20 +0000 (UTC)
-Received: from megumin.fuwafuwatime.moe (c-174-50-122-55.hsd1.ga.comcast.net [174.50.122.55])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by komekko.fuwafuwatime.moe (Postfix) with ESMTPSA id 87E981A7B66;
-	Sat, 30 Apr 2022 19:07:59 +0300 (EEST)
-Received: from localhost (bubbles.localdomain [192.168.1.101])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by megumin.fuwafuwatime.moe (Postfix) with ESMTPSA id 64665BB6B5B;
-	Sat, 30 Apr 2022 12:07:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=concord.sh; s=dkim;
-	t=1651334876;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=skqVWzMwophoEkJSS/d4zaggvs9O9ypBAst/OCvrWUI=;
-	b=lDrp0a+eCJopgMZ+28H/ix2OqjLXZk3TXlRvSA7ljsSXD9/gu8sFJHdKcyoEs7xdTFfwSH
-	nSiyknf+iWj6UuyRGNtR+0ew8GuX9EAkqwCgDy/F5kQqmzI852WHf6b4AF2ddtArV9e+YD
-	LRaj+Zf9lFzFU6hhEeYY9yRwhqfNPywMsiSKHhJCI1hA9Zbi5HjoUWvu/Em92UwVXKsFyn
-	9KU73ucJiekuZPlsqcnb60Q7EajBR6Jm9MFbCs/ZxRjmZ00kBr19mJB/ZMsuOSomuZSfva
-	OsNe0ws9BpRW+WjCoYG8sLxdQut407naJI4iSJV/XAJTf15VxvmU5c8FwumpPw==
-Date: Sat, 30 Apr 2022 12:07:50 -0400
-From: Kenton Groombridge <me@concord.sh>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] KCFI support
-Message-ID: <20220430160750.ov7ddsq2vzibwrju@bubbles>
-Mail-Followup-To: Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-References: <20220429203644.2868448-1-samitolvanen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE1A469C
+	for <llvm@lists.linux.dev>; Sat, 30 Apr 2022 16:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651336870; x=1682872870;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uDxIPh1uye+uJJf7dVhmWzNhTsY/pRGws8jFAb9xpKs=;
+  b=ULNbtcPza8vQ6nDKIkb7HGnSgabznocGYWwXR82VRo6xU/hTXzvLQwqA
+   hZ/VbXVl9awFVvEiAQf+Ma6zgRYacqUYStfbL78DO+DeOOj81DUDoXwah
+   mAK/yQHDIDGK70Dc3CFwVuPIjxOPdZ4WZOBTvvnfCWSPxARPZznHd3QIi
+   e9aI3FQ+Ts9qKADjaUF9RRyjDZBsXfsPVAsIEIPdxJ2K+AnyMUl36cDji
+   PgNR2iLBHF+uYYl+e0P2+/ixiQAdKHYq5Mf/yRKZQdwjPMXQSNyX23+MY
+   Z/QjuONWMa0+TJ8EnAlSLXarrUdae6rTdPjMvoouvAzc05o9YKm12nfnl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="246815551"
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="246815551"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 09:41:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="515335433"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 Apr 2022 09:41:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nkq9b-0007Pb-JD;
+	Sat, 30 Apr 2022 16:41:07 +0000
+Date: Sun, 1 May 2022 00:40:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dai Ngo <dai.ngo@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
+Subject: [cel:nfsd-courteous-server 3/7] fs/nfsd/nfsd.h:180:59: error:
+ expected ';' after return statement
+Message-ID: <202205010039.npL4Bn76-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zpbpn5imnhuprfsc"
-Content-Disposition: inline
-In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=me@concord.sh smtp.mailfrom=me@concord.sh
-X-Spam-Status: No, score=-4.20
-
-
---zpbpn5imnhuprfsc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 22/04/29 01:36PM, Sami Tolvanen wrote:
-> KCFI is a proposed forward-edge control-flow integrity scheme for
-> Clang, which is more suitable for kernel use than the existing CFI
-> scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-> alter function references to point to a jump table, and won't break
-> function address equality. The latest LLVM patches are here:
->=20
->   https://reviews.llvm.org/D119296
->   https://reviews.llvm.org/D124211
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
+head:   d5b28de053a07bebbf61359a4bbceeaef3b48962
+commit: 5e58ea722404baa3052c44d8e68129502b34f135 [3/7] NFSD: move create/destroy of laundry_wq to init_nfsd and exit_nfsd
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220501/202205010039.npL4Bn76-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=5e58ea722404baa3052c44d8e68129502b34f135
+        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+        git fetch --no-tags cel nfsd-courteous-server
+        git checkout 5e58ea722404baa3052c44d8e68129502b34f135
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
-Many thanks for continuing to work on this! As a user who has been
-following the evolution of this patch series for a while now, I have a
-couple of burning questions:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-1) The LLVM patch says that kCFI is not compatible with execute-only
-memory. Is there a plan ahead for kCFI if and when execute-only memory
-is implemented?
+All errors (new ones prefixed by >>):
 
-2) kCFI only checks indirect calls while Clang's traditional CFI has
-more schemes like bad cast checking and so on. Are there any major
-security tradeoffs as a result of this?
+   In file included from fs/nfsd/nfssvc.c:27:
+>> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
+   static inline int nfsd4_create_laundry_wq(void) { return 0 };
+                                                             ^
+                                                             ;
+   1 error generated.
+--
+   In file included from fs/nfsd/export.c:21:
+>> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
+   static inline int nfsd4_create_laundry_wq(void) { return 0 };
+                                                             ^
+                                                             ;
+   fs/nfsd/export.c:979:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
+           struct inode            *inode;
+                                    ^
+   1 warning and 1 error generated.
+--
+   In file included from fs/nfsd/trace.c:4:
+   In file included from fs/nfsd/trace.h:442:
+   In file included from fs/nfsd/state.h:42:
+>> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
+   static inline int nfsd4_create_laundry_wq(void) { return 0 };
+                                                             ^
+                                                             ;
+   In file included from fs/nfsd/trace.c:4:
+   In file included from fs/nfsd/trace.h:1130:
+   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
+   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
+   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~
+   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
+   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
+   #define __stringify(x...)       __stringify_1(x)
+                                   ^~~~~~~~~~~~~~~~
+   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
+   #define __stringify_1(x...)     #x
+                                   ^~
+   <scratch space>:45:1: note: expanded from here
+   "./trace.h"
+   ^~~~~~~~~~~
+   2 errors generated.
 
-V/R
 
-Kenton Groombridge
+vim +180 fs/nfsd/nfsd.h
 
---zpbpn5imnhuprfsc
-Content-Type: application/pgp-signature; name="signature.asc"
+   150	
+   151	/* 
+   152	 * NFSv4 State
+   153	 */
+   154	#ifdef CONFIG_NFSD_V4
+   155	extern unsigned long max_delegations;
+   156	int nfsd4_init_slabs(void);
+   157	void nfsd4_free_slabs(void);
+   158	int nfs4_state_start(void);
+   159	int nfs4_state_start_net(struct net *net);
+   160	void nfs4_state_shutdown(void);
+   161	void nfs4_state_shutdown_net(struct net *net);
+   162	int nfs4_reset_recoverydir(char *recdir);
+   163	char * nfs4_recoverydir(void);
+   164	bool nfsd4_spo_must_allow(struct svc_rqst *rqstp);
+   165	int nfsd4_create_laundry_wq(void);
+   166	void nfsd4_destroy_laundry_wq(void);
+   167	#else
+   168	static inline int nfsd4_init_slabs(void) { return 0; }
+   169	static inline void nfsd4_free_slabs(void) { }
+   170	static inline int nfs4_state_start(void) { return 0; }
+   171	static inline int nfs4_state_start_net(struct net *net) { return 0; }
+   172	static inline void nfs4_state_shutdown(void) { }
+   173	static inline void nfs4_state_shutdown_net(struct net *net) { }
+   174	static inline int nfs4_reset_recoverydir(char *recdir) { return 0; }
+   175	static inline char * nfs4_recoverydir(void) {return NULL; }
+   176	static inline bool nfsd4_spo_must_allow(struct svc_rqst *rqstp)
+   177	{
+   178		return false;
+   179	}
+ > 180	static inline int nfsd4_create_laundry_wq(void) { return 0 };
+   181	static inline void nfsd4_destroy_laundry_wq(void) {};
+   182	#endif
+   183	
 
------BEGIN PGP SIGNATURE-----
-
-iQKTBAABCgB9FiEEP+u3AkfbrORB/inCFt7v5V9Ft54FAmJtXtFfFIAAAAAALgAo
-aXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5maWZ0aGhvcnNlbWFuLm5ldDNG
-RUJCNzAyNDdEQkFDRTQ0MUZFMjlDMjE2REVFRkU1NUY0NUI3OUUACgkQFt7v5V9F
-t544Dg//ZWfCVPSPbS6jIItV88Z+1j0B2V2ovBXyACDNw9+gb0nK3wdofNteeb+v
-4/U/TIG66RKItrpzntuNJH6aaNvwXFnZX4Zoen+l9z/Y2bppPWk3j/FELtnPTopQ
-Sze0C34gdGZnnHyzQwTl8QVmRJsON+FN0PmZfCQp4+5NRjWJRF3aI3fGBBYPS9sd
-JkiG1k8/pQBRI5IcjYogXNshK/LPV/HpwUhkKdrG+f+Qbs+ItENMS3nO5c80yvd+
-dVSzRf+5pCQHAu6JmcUWTejYG13oI5VasRTruh4US3ITaHB1uIPX1Qkhkejl9RMJ
-hKhEbpKkEqZDBEU9eA5Zvjz2miSEnYBIBKdP8HloN4dhBAznKoiC9Q0hVMmR+kPD
-oXnGs6YqgIP2n6tp8nq50nL/sieaBetzjnVb7qwnUHcmEsfFBa7enprmuwVgi/5g
-sxgO7wup05JlE85rF5JOAXVcWC3zb8au+yMQknDx1p/hGvlMFWK+w0OqecK2dbos
-crliqCbiL+2iL98O1ocYt40HT0AV3uuw8kSbMwjcJJepNvpTzrjf2q90ydCvCoDa
-crAjD2xs16YHG7On/4P19fhh6Pirn/FlMYquKuOqInAU7qSDiu5vnqsXFn2UiuUc
-wDqcwxC0qupYuI+Gm8PAb/QIcEY177T5OHOcu+qMppIasNsnCcI=
-=jtla
------END PGP SIGNATURE-----
-
---zpbpn5imnhuprfsc--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
