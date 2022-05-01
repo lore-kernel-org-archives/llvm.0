@@ -1,105 +1,76 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEA523D3
-	for <llvm@lists.linux.dev>; Sun,  1 May 2022 18:40:54 +0000 (UTC)
-Received: by mail-qt1-f171.google.com with SMTP id p4so9292827qtq.12
-        for <llvm@lists.linux.dev>; Sun, 01 May 2022 11:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i9jSsJK67gVprD0OhIIxIaW2gZ3IT+EyIX8/ekopw/E=;
-        b=NysN4XwiguttMWVksj7bhwyRkFDKawgcSZh2/EYGkK65y30NFKISODSSBr9h/0qix5
-         fXmGQBFA0zF2UMfum3alevpj1tCiqDAyQIwTZYEuJaYFRUrUrWah4HHHuLkcnu965T4y
-         HZzfDrHPbwPHSIKcVQ2h54tV/IIGN5AIWNTXh1U1ebN2r/7sx8we8b/DnNb9YQ5IG4nn
-         Lj6nZZhuPbGQJTKh/z1TX/5h1jkI44wPyUOU/hot5NZW+X7HMOCCPlXRcGf1T2rClABf
-         zzhXhKSfYwVQz6th7SZ6Joq5AxgaeDJ2Bum27sixeWvP8ygUissyc5Hb0AfJHeooqjwU
-         R8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i9jSsJK67gVprD0OhIIxIaW2gZ3IT+EyIX8/ekopw/E=;
-        b=F1ttWjs4tegR4+uTSjk9Vzo/k293tiga/hOzNwBt8E9QZK0cuAq6l2kBbANu0vQU4d
-         blY5Cqippb0wDcK9iHTkIMloQT+eqAQWQzJ3RNKCzA78MipAil6ZSBAbmHnSeRTqDLyO
-         UPlf89KFKCI7nA+v7OWaVVaHLBvjcI3hIDt5vz8b7JqwgLCgjLh8jinoKzWylqn2OImT
-         +TplPupchBbCsVMzfphJczbnC1/8PFBKGKjdItHkoEhwfvlgInr3X3548TmqFHSXXpNp
-         1sVVaxUGACw7UBshg8myP7FWC7VcI3AnJAJ1io/eHNgWsfEYMnwtFqZ63G6wNUPnmBsS
-         8OdQ==
-X-Gm-Message-State: AOAM532hkUAinXt+t0Te7kdJGAdJ6Ap6aNrf95OPFo1hVPV4TQrabp14
-	5GtLeF2Mifr3lyc0883VQPdLB/zmX2OJDbjzdWU=
-X-Google-Smtp-Source: ABdhPJzcCM4JYknjyCagt7fQbMyD8hG2cFLA9ewuAj8jaiz34kcNy5TjrFhmDsUkm42CdCTwMEavhsQpUIDX6jbrNzQ=
-X-Received: by 2002:ac8:5f10:0:b0:2f3:9f2e:e67b with SMTP id
- x16-20020ac85f10000000b002f39f2ee67bmr5412384qta.40.1651430453636; Sun, 01
- May 2022 11:40:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A449F28EC
+	for <llvm@lists.linux.dev>; Sun,  1 May 2022 22:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651444231; x=1682980231;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iTpaTEN2r/J6s4XisfUsH2CvcJKBnF900FPluiBMKy4=;
+  b=jOakhZEUqzI/CpKR7rTU/0YmosAsooSCyFGwyNDsLcKtxcVAjUD9alSH
+   3rx78xMSQKwUAncDd/6/QV9T6Y0qHCh61GIcWTImYfbBTQ7lGUJIGaiyV
+   yyPDg7nMhDKhWxN+TuaYXLotvC/5/dAfU9VxNiXpxt1VAtmzndZsDW8YB
+   HVUuyDSwvyyZjA4YUUUzlE1RWIm2uWE4HCaCgB5WZ4b0ipSY5ZQ5zPT1F
+   uvQyscLnkicBQ8J8o+m0yG47y9D5a9fOzstWeFlKuu8gy8kHEAPX1X18/
+   Bb5ghxnmstn4OqjXBwmZYmFGRqj52k8BWP/JNIaJNb8XE2lypHrsn6roh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="266938603"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="266938603"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 15:30:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="733153395"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 May 2022 15:30:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlI5E-00095r-03;
+	Sun, 01 May 2022 22:30:28 +0000
+Date: Mon, 2 May 2022 06:29:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leonardo Bras <leobras@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: ld.lld: error: inline assembly requires more registers than
+ available at line 523
+Message-ID: <202205020637.JVJo3blw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAEQFVGb2aXVu7eys5PM=xZ7gtzdap_QyRrzi3WzY83ka=heOwQ@mail.gmail.com>
- <CAK8P3a0Lwtm86wYH+0yFtr=Luc6g3OLu_+vzZaJqxDxNHFmQDQ@mail.gmail.com>
- <CAKwvOdmfHS8UwZhEL-tLMJSzCXQEZZZhEMpDXuJHtP5s9yePBw@mail.gmail.com>
- <CAEQFVGYpPaE3cCxUBaiT97GU1i4Nr6yJdv6mU1kiCxqkLSMfBQ@mail.gmail.com>
- <CAEQFVGaUOQhCCceNzivzsR7XeNFrau48BuV-nf7CnSw7YauVoQ@mail.gmail.com>
- <CAEQFVGY6UwuV0s_926Mg=fWaApjYUJmqeK_E4ySpABkZRFwTLQ@mail.gmail.com> <CAEQFVGavOWzTf5VNNNr39pHaaJW8W=6hiGDH1JmVTQ2kf5KqAw@mail.gmail.com>
-In-Reply-To: <CAEQFVGavOWzTf5VNNNr39pHaaJW8W=6hiGDH1JmVTQ2kf5KqAw@mail.gmail.com>
-From: Mauro Rossi <issor.oruam@gmail.com>
-Date: Sun, 1 May 2022 20:40:42 +0200
-Message-ID: <CAEQFVGZfq17gj9z7Z_MDVUAsx-e16cJ3h1KVzcZ1-eimBcGoag@mail.gmail.com>
-Subject: Re: Android 11 clang toochain: kernel 5.18 build error with 32 bit target
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Chih-Wei Huang <cwhuang@android-x86.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> As promised I have rechecked the kernel build with Android 11 prebuilt
-> toolchain (clang 11.0.2)
->
->   CC      mm/maccess.o
-> /home/utente/r-x86_kernel/kernel/mm/maccess.c:37:3: error: invalid
-> output size for constraint '=a'
->                 copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
->                 ^
-> /home/utente/r-x86_kernel/kernel/mm/maccess.c:19:3: note: expanded
-> from macro 'copy_from_kernel_nofault_loop'
->                 __get_kernel_nofault(dst, src, type, err_label);
->          \
->                 ^
-> /home/utente/r-x86_kernel/kernel/arch/x86/include/asm/uaccess.h:538:18:
-> note: expanded from macro '__get_kernel_nofault'
->         __get_user_size(*((type *)(dst)), (__force type __user *)(src), \
->                         ^
-> /home/utente/r-x86_kernel/kernel/mm/maccess.c:37:3: error: invalid
-> output size for constraint '=a'
-> /home/utente/r-x86_kernel/kernel/mm/maccess.c:19:3: note: expanded
-> from macro 'copy_from_kernel_nofault_loop'
->                 __get_kernel_nofault(dst, src, type, err_label);
->          \
->                 ^
-> /home/utente/r-x86_kernel/kernel/arch/x86/include/asm/uaccess.h:538:18:
-> note: expanded from macro '__get_kernel_nofault'
->         __get_user_size(*((type *)(dst)), (__force type __user *)(src), \
->                         ^
-> 2 errors generated.
->
-> At this point I will proceed in testing the build with Nick proposed
-> changes in __get_user_size()
-> and report back
->
-> Thank you
-> M.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
+date:   2 months ago
+config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ba1f77c546966c12d86220d078e5838dcaeab348
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Hello,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Nick proposed patch works for 32bit build and shows no regression in 64bit build
-For Nick, in case you are not submitting for kernel-5.18 could you
-please provide me with
-commit title and message and allow me to use the fix in our future
-android-x86 LTS kernel builds?
+All errors (new ones prefixed by >>):
 
-Thank you
+>> ld.lld: error: inline assembly requires more registers than available at line 523
+>> ld.lld: error: inline assembly requires more registers than available at line 523
 
-Mauro
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
