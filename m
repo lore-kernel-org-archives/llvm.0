@@ -1,24 +1,24 @@
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741EC23D4
-	for <llvm@lists.linux.dev>; Sun,  1 May 2022 08:45:35 +0000 (UTC)
-Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-05.nifty.com with ESMTP id 2418gBP8022652
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6157523D4
+	for <llvm@lists.linux.dev>; Sun,  1 May 2022 08:49:57 +0000 (UTC)
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-03.nifty.com with ESMTP id 2418gAjA032169
 	for <llvm@lists.linux.dev>; Sun, 1 May 2022 17:42:11 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-12.nifty.com with ESMTP id 2418f2S4008518;
-	Sun, 1 May 2022 17:41:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2S4008518
+	by conuserg-12.nifty.com with ESMTP id 2418f2S9008518;
+	Sun, 1 May 2022 17:41:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2S9008518
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1651394473;
-	bh=Q4PI1sHZaxJQnV1PrMopJJ/MUAwlu29QQhVGT8He9pY=;
+	s=dec2015msa; t=1651394477;
+	bh=985j4qhMc0ABTO6gqDauWtSkenp3iTNDTrKHUN6acdI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AdA7qWJhTr8FshmNKSr5/l+w58qGqCL50cofbYjqS0QKY8Bn3yDhLWK2IshSbdKy7
-	 QnjE8RuSXw7PBQa3iaknS59br9Zm3ZD/PisU/fGcYG7Qr57SHCW4pGLeyXW4/meLYc
-	 MAqQMBisgg1HYUFzFRaAfSx+CXasj+r10gjrupXNF0k+h3wSeZF/vLdfIej6SiqmLY
-	 E/pUOv4+3mRNnwm8zbSJovzJ+wrONxRtCrCvLK3xEu/zWo3oYBSCppbecvZWchz2rx
-	 RJwLx2XDUei89t9zlLFy3TtEbDLwwbC2JjALuB+2PX6BsEuO12Z9w/VUIYyQHWrE01
-	 aUq+1Wa2PNbUA==
+	b=Y1CsZsf4O6jrUuKF2DH7X9ya1Ou3Ld83RwSh41SByrkBrvlU16CoM0h8uTi6WU3Kf
+	 2lbO3gL8W3UODMrVXJMivMKfE5Mpi4KHOb8a8F9wXYpaj0+OK7glbgSLR6SLVnYCph
+	 nQUPQIlU/XlBNjexObQuua575GwMitQ5nmQQnbIy415/oqM+AquqHxDNWw6osBTnBp
+	 xNRxcVuYFruSml2+FnakW2Fh5XqtzjOYpNICYdmpRk76xTCJF44mQZrNT8eAIaIPUX
+	 pbQ4m1P6vJE0YP2uoErkF77lB795ybEdKBdH/hPgojFFOQ0psPxJa6iM7jq9HRRUPg
+	 SieA3Oi5YdQIg==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -26,9 +26,9 @@ Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: [PATCH v2 17/26] modpost: extract symbol versions from *.cmd files
-Date: Sun,  1 May 2022 17:40:23 +0900
-Message-Id: <20220501084032.1025918-18-masahiroy@kernel.org>
+Subject: [PATCH v2 22/26] kbuild: do not create *.prelink.o for Clang LTO or IBT
+Date: Sun,  1 May 2022 17:40:28 +0900
+Message-Id: <20220501084032.1025918-23-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
 References: <20220501084032.1025918-1-masahiroy@kernel.org>
@@ -40,308 +40,315 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-versions into ELF objects. Then, modpost extracts the version CRCs
-from them.
+When CONFIG_LTO_CLANG=y, additional intermediate *.prelink.o is created
+for each module. Also, objtool is postponed until LLVM bitcode is
+converted to ELF.
 
-The following figures show how it currently works, and how I am trying
-to change it.
+CONFIG_X86_KERNEL_IBT works in a similar way to postpone objtool until
+objects are merged together.
 
-Current implementation
-======================
+This commit stops generating *.prelink.o, so the build flow will look
+the same with/without LTO.
 
-                  embed CRC        |---------|              |------------|
-       $(CC)        $(LD)          |         |              | final link |
-  *.c ------> *.o --------> *.o -->| modpost |-- *.o ------>| for        |
-                      /            |         |-- *.mod.c -->| vmlinux    |
-     genksyms        /             |         |              | or module  |
-  *.c ------> *.symversions        |---------|              |------------|
+The following figures show how the LTO build currently works, and
+how this commit is changing it.
 
-Genksyms outputs the calculated CRCs in the form of linker script
-(*.symversions), which is used by $(LD) to update the object.
-
-If CONFIG_LTO_CLANG=y, the build process becomes much more complex.
-Embedding the CRCs is postponed until the LLVM bitcode is converted
-into ELF, creating another intermediate *.prelink.o.
-
-However, this complexity is unneeded. There is no reason why we must
-embed version CRCs in objects so early.
-
-There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
-modules (scripts/Makefile.modfinal). We can embed CRCs at the very
-last moment.
-
-New implementation
+Current build flow
 ==================
 
-       $(CC)           |---------|                    |------------|
-  *.c ------> *.o  --->|         |                    | final link |
-                       | modpost |-- *.o ------------>| for        |
-      genksyms         |         |-- *.mod.c -------->| vmlinux    |
-  *.c ------> *.cmd -->|         |-- *.symver.lds --->| or module  |
-                       |---------|                    |------------|
+ [1] single-object module
 
-We can pass the symbol versions to modpost as separate text data.
-(The previous commit output the versions in *.cmd files.)
+                                    [+objtool]
+           $(CC)                      $(LD)                $(LD)
+    foo.c --------------------> foo.o -----> foo.prelink.o -----> foo.ko
+                           (LLVM bitcode)        (ELF)       |
+                                                             |
+                                                 foo.mod.o --/
 
-This commit changes modpost to retrieve CRCs from *.cmd files instead
-of from ELF objects.
+ [2] multi-object module
+                                    [+objtool]
+           $(CC)         $(AR)        $(LD)                $(LD)
+    foo1.c -----> foo1.o -----> foo.o -----> foo.prelink.o -----> foo.ko
+                           |  (archive)          (ELF)       |
+    foo2.c -----> foo2.o --/                                 |
+                (LLVM bitcode)                   foo.mod.o --/
+
+  One confusion is foo.o in multi-object module is an archive despite of
+  its suffix.
+
+New build flow
+==============
+
+ [1] single-object module
+
+  Since there is only one object, we do not need to have the LLVM
+  bitcode stage. Use $(CC)+$(LD) to generate an ELF object in one
+  build rule. Of course, only $(CC) is used when LTO is disabled.
+
+           $(CC)+$(LD)[+objtool]           $(LD)
+    foo.c ------------------------> foo.o -------> foo.ko
+                                    (ELF)    |
+                                             |
+                                 foo.mod.o --/
+
+ [2] multi-object module
+
+  Previously, $(AR) was used to combine LLVM bitcode into an archive,
+  but there was not a technical reason to do so.
+  This commit just uses $(LD) to combine and convert them into a single
+  ELF object.
+
+                          [+objtool]
+            $(CC)           $(LD)          $(LD)
+    foo1.c -------> foo1.o -------> foo.o -------> foo.ko
+                              |     (ELF)    |
+    foo2.c -------> foo2.o ---/              |
+                (LLVM bitcode)   foo.mod.o --/
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
 Changes in v2:
-  - Simplify the implementation (parse .cmd files after ELF)
+ - replace the chain of $(if ...) with $(and )
 
- scripts/mod/modpost.c | 184 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 136 insertions(+), 48 deletions(-)
+ scripts/Kbuild.include    |  4 +++
+ scripts/Makefile.build    | 58 ++++++++++++---------------------------
+ scripts/Makefile.lib      |  7 -----
+ scripts/Makefile.modfinal |  5 ++--
+ scripts/Makefile.modpost  |  9 ++----
+ scripts/mod/modpost.c     |  7 -----
+ 6 files changed, 25 insertions(+), 65 deletions(-)
 
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index 3514c2149e9d..455a0a6ce12d 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -15,6 +15,10 @@ pound := \#
+ # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+ dot-target = $(dir $@).$(notdir $@)
+ 
++###
++# Name of target with a '.tmp_' as filename prefix. foo/bar.o => foo/.tmp_bar.o
++tmp-target = $(dir $@).tmp_$(notdir $@)
++
+ ###
+ # The temporary file to save gcc -MMD generated dependencies must not
+ # contain a comma
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 1f480e4ff70a..cc8f362f58e2 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -88,10 +88,6 @@ endif
+ targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
+ 				$(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
+ 
+-ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-targets-for-modules += $(patsubst %.o, %.prelink.o, $(filter %.o, $(obj-m)))
+-endif
+-
+ ifdef need-modorder
+ targets-for-modules += $(obj)/modules.order
+ endif
+@@ -152,8 +148,16 @@ $(obj)/%.ll: $(src)/%.c FORCE
+ # The C file is compiled and updated dependency information is generated.
+ # (See cmd_cc_o_c + relevant part of rule_cc_o_c)
+ 
++is-single-obj-m = $(and $(part-of-module),$(filter $@, $(obj-m)),y)
++
++ifdef CONFIG_LTO_CLANG
++cmd_ld_single = $(if $(is-single-obj-m), ; $(LD) $(ld_flags) -r -o $(tmp-target) $@; mv $(tmp-target) $@)
++endif
++
+ quiet_cmd_cc_o_c = CC $(quiet_modtag)  $@
+-      cmd_cc_o_c = $(CC) $(c_flags) -c -o $@ $< $(cmd_objtool)
++      cmd_cc_o_c = $(CC) $(c_flags) -c -o $@ $< \
++		$(cmd_ld_single) \
++		$(cmd_objtool)
+ 
+ ifdef CONFIG_MODVERSIONS
+ # When module versioning is enabled the following steps are executed:
+@@ -224,21 +228,16 @@ cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(o
+ 
+ endif # CONFIG_STACK_VALIDATION
+ 
+-ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-
+-# Skip objtool for LLVM bitcode
+-$(obj)/%.o: objtool-enabled :=
+-
+-else
+ 
+ # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+ # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+ # 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+ 
+-$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
+-	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
++is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+ 
+-endif
++delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
++
++$(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
+ 
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ cmd_gen_ksymdeps = \
+@@ -267,24 +266,6 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
+ 	$(call if_changed_rule,cc_o_c)
+ 	$(call cmd,force_checksrc)
+ 
+-ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-# Module .o files may contain LLVM bitcode, compile them into native code
+-# before ELF processing
+-quiet_cmd_cc_prelink_modules = LD [M]  $@
+-      cmd_cc_prelink_modules =						\
+-	$(LD) $(ld_flags) -r -o $@					\
+-		--whole-archive $(filter-out FORCE,$^)			\
+-		$(cmd_objtool)
+-
+-# objtool was skipped for LLVM bitcode, run it now that we have compiled
+-# modules into native code
+-$(obj)/%.prelink.o: objtool-enabled = y
+-$(obj)/%.prelink.o: part-of-module := y
+-
+-$(obj)/%.prelink.o: $(obj)/%.o FORCE
+-	$(call if_changed,cc_prelink_modules)
+-endif
+-
+ cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+ 	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
+ 
+@@ -294,7 +275,7 @@ $(obj)/%.mod: FORCE
+ # List module undefined symbols
+ cmd_undefined_syms = $(NM) $< | sed -n 's/^  *U //p' > $@
+ 
+-$(obj)/%.usyms: $(obj)/%$(mod-prelink-ext).o FORCE
++$(obj)/%.usyms: $(obj)/%.o FORCE
+ 	$(call if_changed,undefined_syms)
+ 
+ quiet_cmd_cc_lst_c = MKLST   $@
+@@ -416,16 +397,11 @@ $(obj)/modules.order: $(obj-m) FORCE
+ $(obj)/lib.a: $(lib-y) FORCE
+ 	$(call if_changed,ar)
+ 
+-ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-quiet_cmd_link_multi-m = AR [M]  $@
+-cmd_link_multi-m =						\
+-	rm -f $@; 						\
+-	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+-else
+ quiet_cmd_link_multi-m = LD [M]  $@
+-      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@)
+-endif
++      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
+ 
++$(multi-obj-m): objtool-enabled := $(delay-objtool)
++$(multi-obj-m): part-of-module := y
+ $(multi-obj-m): %.o: %.mod FORCE
+ 	$(call if_changed,link_multi-m)
+ $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 0453a1904646..f75138385449 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -225,13 +225,6 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp -nostdinc                    \
+ 		 $(addprefix -I,$(DTC_INCLUDE))                          \
+ 		 -undef -D__DTS__
+ 
+-ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-# With CONFIG_LTO_CLANG, .o files in modules might be LLVM bitcode, so we
+-# need to run LTO to compile them into native code (.lto.o) before further
+-# processing.
+-mod-prelink-ext := .prelink
+-endif
+-
+ # Useful for describing the dependency of composite objects
+ # Usage:
+ #   $(call multi_depend, multi_used_targets, suffix_to_remove, suffix_to_add)
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index d429e3f9ae1d..51d384a0e4f9 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -9,7 +9,7 @@ __modfinal:
+ include include/config/auto.conf
+ include $(srctree)/scripts/Kbuild.include
+ 
+-# for c_flags and mod-prelink-ext
++# for c_flags
+ include $(srctree)/scripts/Makefile.lib
+ 
+ # find all modules listed in modules.order
+@@ -55,9 +55,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	$(cmd);                                                              \
+ 	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+-
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+-$(modules): %.ko: %$(mod-prelink-ext).o %.mod.o $(if $(CONFIG_MODVERSIONS), %.symver.lds) scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
++$(modules): %.ko: %.o %.mod.o $(if $(CONFIG_MODVERSIONS), %.symver.lds) scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
+ 	+$(call if_changed_except,ld_ko_o,vmlinux)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index fecd721537c9..01e1c8b88a67 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -41,9 +41,6 @@ __modpost:
+ include include/config/auto.conf
+ include $(srctree)/scripts/Kbuild.include
+ 
+-# for mod-prelink-ext
+-include $(srctree)/scripts/Makefile.lib
+-
+ MODPOST = scripts/mod/modpost								\
+ 	$(if $(CONFIG_MODVERSIONS),-m)							\
+ 	$(if $(CONFIG_MODULE_REL_CRCS),-r)						\
+@@ -119,8 +116,6 @@ $(input-symdump):
+ 	@echo >&2 '         Modules may not have dependencies or modversions.'
+ 	@echo >&2 '         You may get many unresolved symbol warnings.'
+ 
+-modules := $(sort $(shell cat $(MODORDER)))
+-
+ # KBUILD_MODPOST_WARN can be set to avoid error out in case of undefined symbols
+ ifneq ($(KBUILD_MODPOST_WARN)$(filter-out $(existing-input-symdump), $(input-symdump)),)
+ MODPOST += -w
+@@ -129,9 +124,9 @@ endif
+ # Read out modules.order to pass in modpost.
+ # Otherwise, allmodconfig would fail with "Argument list too long".
+ quiet_cmd_modpost = MODPOST $@
+-      cmd_modpost = sed 's/\.ko$$/$(mod-prelink-ext)\.o/' $< | $(MODPOST) -T -
++      cmd_modpost = sed 's/ko$$/o/' $< | $(MODPOST) -T -
+ 
+-$(output-symdump): $(MODORDER) $(input-symdump) $(modules:.ko=$(mod-prelink-ext).o) FORCE
++$(output-symdump): $(MODORDER) $(input-symdump) FORCE
+ 	$(call if_changed,modpost)
+ 
+ targets += $(output-symdump)
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 375b9463cb8a..d8df0f8d3def 100644
+index 935f57f73e40..1f2f53688d40 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -429,19 +429,10 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+@@ -1955,10 +1955,6 @@ static char *remove_dot(char *s)
+ 		size_t m = strspn(s + n + 1, "0123456789");
+ 		if (m && (s[n + m] == '.' || s[n + m] == 0))
+ 			s[n] = 0;
+-
+-		/* strip trailing .prelink */
+-		if (strends(s, ".prelink"))
+-			s[strlen(s) - 8] = '\0';
+ 	}
  	return s;
  }
- 
--static void sym_set_crc(const char *name, unsigned int crc)
-+static void sym_set_crc(struct symbol *sym, unsigned int crc)
- {
--	struct symbol *s = find_symbol(name);
--
--	/*
--	 * Ignore stand-alone __crc_*, which might be auto-generated symbols
--	 * such as __*_veneer in ARM ELF.
--	 */
--	if (!s)
--		return;
--
--	s->crc = crc;
--	s->crc_valid = true;
-+	sym->crc = crc;
-+	sym->crc_valid = true;
- }
- 
- static void *grab_file(const char *filename, size_t *size)
-@@ -664,33 +655,6 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
- 	return 0;
- }
- 
--static void handle_modversion(const struct module *mod,
--			      const struct elf_info *info,
--			      const Elf_Sym *sym, const char *symname)
--{
--	unsigned int crc;
--
--	if (sym->st_shndx == SHN_UNDEF) {
--		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
--		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
--		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
--		     symname);
--
--		return;
--	}
--
--	if (sym->st_shndx == SHN_ABS) {
--		crc = sym->st_value;
--	} else {
--		unsigned int *crcp;
--
--		/* symbol points to the CRC in the ELF object */
--		crcp = sym_get_data(info, sym);
--		crc = TO_NATIVE(*crcp);
--	}
--	sym_set_crc(symname, crc);
--}
--
- static void handle_symbol(struct module *mod, struct elf_info *info,
- 			  const Elf_Sym *sym, const char *symname)
- {
-@@ -1997,6 +1961,111 @@ static char *remove_dot(char *s)
- 	return s;
- }
- 
-+/*
-+ * The CRCs are recorded in .*.cmd files in the form of:
-+ * #SYMVER <name> <crc>
-+ */
-+static void extract_crcs_from_cmdfile(const char *object, struct module *mod)
-+{
-+	char cmd_file[PATH_MAX];
-+	char *buf, *p;
-+	const char *base;
-+	int dirlen, ret;
-+
-+	base = strrchr(object, '/');
-+	if (base) {
-+		base++;
-+		dirlen = base - object;
-+	} else {
-+		dirlen = 0;
-+		base = object;
-+	}
-+
-+	ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
-+		       dirlen, object, base);
-+	if (ret >= sizeof(cmd_file)) {
-+		error("%s: too long path was truncated\n", cmd_file);
-+		return;
-+	}
-+
-+	buf = read_text_file(cmd_file);
-+	p = buf;
-+
-+	while ((p = strstr(p, "\n#SYMVER "))) {
-+		char *name;
-+		size_t namelen;
-+		unsigned int crc;
-+		struct symbol *sym;
-+
-+		name = p + strlen("\n#SYMVER ");
-+
-+		p = strchr(name, ' ');
-+		if (!p) {
-+			error("invalid\n");
-+			goto out;
-+		}
-+
-+		namelen = p - name;
-+
-+		p++;
-+
-+		if (!isdigit(*p)) {
-+			error("invalid\n");
-+			goto out;
-+		}
-+
-+		crc = strtol(p, &p, 0);
-+
-+		if (*p != '\n') {
-+			error("invalid\n");
-+			goto out;
-+		}
-+
-+		name[namelen] = '\0';
-+
-+		sym = sym_find_with_module(name, mod);
-+		if (!sym) {
-+			warn("Skip the version for unexported symbol \"%s\" [%s%s]",
-+			     name, mod->name, mod->is_vmlinux ? "" : ".ko");
-+			continue;
-+		}
-+		sym_set_crc(sym, crc);
-+	}
-+
-+out:
-+	free(buf);
-+}
-+
-+/*
-+ * The symbol versions (CRC) are recorded in the .*.cmd files.
-+ * Parse them to retrieve CRCs for the current module.
-+ */
-+static void mod_set_crcs(struct module *mod)
-+{
-+	char objlist[PATH_MAX];
-+	char *buf, *p, *obj;
-+	int ret;
-+
-+	if (mod->is_vmlinux) {
-+		strcpy(objlist, ".vmlinux.objs");
-+	} else {
-+		/* objects for a module are listed in the *.mod file. */
-+		ret = snprintf(objlist, sizeof(objlist), "%s.mod", mod->name);
-+		if (ret >= sizeof(objlist)) {
-+			error("%s: too long path was truncated\n", objlist);
-+			return;
-+		}
-+	}
-+
-+	buf = read_text_file(objlist);
-+	p = buf;
-+
-+	while ((obj = strsep(&p, "\n")) && obj[0])
-+		extract_crcs_from_cmdfile(obj, mod);
-+
-+	free(buf);
-+}
-+
- static void read_symbols(const char *modname)
- {
- 	const char *symname;
-@@ -2057,9 +2126,6 @@ static void read_symbols(const char *modname)
- 		if (strstarts(symname, "__kstrtabns_"))
- 			sym_update_namespace(symname + strlen("__kstrtabns_"),
- 					     sym_get_data(&info, sym));
--		if (strstarts(symname, "__crc_"))
--			handle_modversion(mod, &info, sym,
--					  symname + strlen("__crc_"));
+@@ -2087,9 +2083,6 @@ static void read_symbols(const char *modname)
+ 		/* strip trailing .o */
+ 		tmp = NOFAIL(strdup(modname));
+ 		tmp[strlen(tmp) - 2] = '\0';
+-		/* strip trailing .prelink */
+-		if (strends(tmp, ".prelink"))
+-			tmp[strlen(tmp) - 8] = '\0';
+ 		mod = new_module(tmp);
+ 		free(tmp);
  	}
- 
- 	// check for static EXPORT_SYMBOL_* functions && global vars
-@@ -2088,12 +2154,17 @@ static void read_symbols(const char *modname)
- 
- 	parse_elf_finish(&info);
- 
--	/* Our trick to get versioning for module struct etc. - it's
--	 * never passed as an argument to an exported function, so
--	 * the automatic versioning doesn't pick it up, but it's really
--	 * important anyhow */
--	if (modversions)
-+	if (modversions) {
-+		/*
-+		 * Our trick to get versioning for module struct etc. - it's
-+		 * never passed as an argument to an exported function, so
-+		 * the automatic versioning doesn't pick it up, but it's really
-+		 * important anyhow
-+		 */
- 		sym_add_unresolved("module_layout", mod, false);
-+
-+		mod_set_crcs(mod);
-+	}
- }
- 
- static void read_symbols_from_files(const char *filename)
-@@ -2453,7 +2524,7 @@ static void read_dump(const char *fname)
- 		}
- 		s = sym_add_exported(symname, mod, export_no(export));
- 		s->is_static = false;
--		sym_set_crc(symname, crc);
-+		sym_set_crc(s, crc);
- 		sym_update_namespace(symname, namespace);
- 	}
- 	free(buf);
-@@ -2483,6 +2554,20 @@ static void write_dump(const char *fname)
- 	free(buf.p);
- }
- 
-+static void check_symversions(struct module *mod)
-+{
-+	struct symbol *sym;
-+
-+	list_for_each_entry(sym, &mod->exported_symbols, list) {
-+		if (!sym->crc_valid) {
-+			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
-+			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
-+			     sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
-+			     sym->name);
-+		}
-+	}
-+}
-+
- static void write_namespace_deps_files(const char *fname)
- {
- 	struct module *mod;
-@@ -2579,6 +2664,9 @@ int main(int argc, char **argv)
- 		char fname[PATH_MAX];
- 		int ret;
- 
-+		if (modversions && !mod->from_dump)
-+			check_symversions(mod);
-+
- 		if (mod->is_vmlinux || mod->from_dump)
- 			continue;
- 
 -- 
 2.32.0
 
