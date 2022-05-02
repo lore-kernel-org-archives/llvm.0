@@ -1,134 +1,214 @@
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F4128E0
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 13:38:41 +0000 (UTC)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-d39f741ba0so14258338fac.13
-        for <llvm@lists.linux.dev>; Mon, 02 May 2022 06:38:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0860828E0
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 13:43:46 +0000 (UTC)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e9027efe6aso14256559fac.10
+        for <llvm@lists.linux.dev>; Mon, 02 May 2022 06:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=7234wV44cOuJ23RO0Pqn6HlOIHAJzLkHqm2CFFAMvGg=;
-        b=oRCGfD09B6LnZ+PrcDjMwx4GuTh8sirUqbDh3Uzs52wgth2A7wzFacxBexH854+LIW
-         k9KLQcB1kpopnMlZwI+72kBbRZJWnMwzcq0E4F7DHV0dXiggGqZZaTbEmTtd2eNqeish
-         nIwLFKeGv8MXCVI8kHfZ5s2Z2LtJO1+sGAUxhCGFcwCruNyWnKhII67HPaMR1nWzHus4
-         jpdwox1YrrREKTEIZm/fi2iqMuvhDm2uWQXugewrYXA8z3T6GMuwXr37jEtelZQRcuov
-         wAYZEBQOUFVTtVQmQBnk+57gRL9SmJWpiqyQeLPtfwQkRMktcaVdFv6Nlxx14EGInFEt
-         6GtA==
+        bh=SZS23R8/3aS8hn+ag0EZfvYi/qn+HWC2fpxjigLbwL8=;
+        b=UNP4TjQWPwuVfp6XRBKcHnbi9I4brVINNlFFUvNcomXdIyUvMEsQNN/iBMGOIy6qXa
+         U3HAa0YA6qIqgWWa7RDcWOuxj4VFnBkmEPEEDXzGU5fgiifoe8kN99AuoMjGF64Y5i5P
+         80X+b7Sf99p7MyvucsH42RJOdepw/RQmgftXwISAoVFzarZzYeropcyinM1RCiN0MZnw
+         cWN8rbJqp19kEs9oY6XOVASDAzidg4e3jOKDIEpX3699n5X31emqcJlE9vLMVGieyZPH
+         lbl6f4fl/XE7+ICY+6C7n0BzFjikw56P8rtVitnftt0aqaKDGbyvux2ZfxFXUF8nmgFe
+         WZfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7234wV44cOuJ23RO0Pqn6HlOIHAJzLkHqm2CFFAMvGg=;
-        b=s3aKoejgscu8QXTnr1TSNDaB1t6U0EyqzMFWPLp5x264gFXQUvsrC4tQLSzzlAuTFs
-         z6GecqFLOr7wWzG647yUdlC7xQSR9lBNdZetlXFaiSSUc/Lu36rNLI9lLiESQiGGeV+S
-         1ZXa2MLmjHXcATpqKWvwgOtgd5dS3piOcVNs5RKiQax9VyZY5x8rGuegq9NgLZ8cUHBe
-         hhzUGpNTV0wzheQxVp+MmJzG+gM3jj3VmfeZBjNrYAJgoMkRAxa7IDhIE6+KEtHnw2q3
-         g7bbkAfcqttiX4nDQiAclIN1kG6w6jlwI6B8pv3d28NYbp/R/N9Q9TA5XEk0ijQgYwxh
-         NCBg==
-X-Gm-Message-State: AOAM532V2S4aYCGFb0+yrZMbXPmnctdYjPYEKuoC+GFsqk4gvQPWF/7t
-	CV7ntmXygpix2EVlvfG+SX+DnGQaJ+EpELN9hE4=
-X-Google-Smtp-Source: ABdhPJyhQp69yZSZQ+hpG3zgVHK/34xJZojnkVMoH45nZ/3I9Bke/XtptBu+hASkI1RIsf3VnXu1lFTR1pQPfQadpHg=
-X-Received: by 2002:a05:6870:5b8a:b0:e6:589e:201d with SMTP id
- em10-20020a0568705b8a00b000e6589e201dmr6379638oab.71.1651498721028; Mon, 02
- May 2022 06:38:41 -0700 (PDT)
+        bh=SZS23R8/3aS8hn+ag0EZfvYi/qn+HWC2fpxjigLbwL8=;
+        b=ft42/6yPOvS6FKvS37k+kvXMQVHTwtxBKk09sBPkf4Q9tJQ1jFaty+BSrqpb6brBsz
+         AUM12Lv0KEFBKi99EeQMSczdihCOdKSHIrO15MYW6oNzlKhetxgCamJXrT3Nblg/T9xz
+         OaezaPkWQ4HHbOV9U/JNwz/Z+eXpFGGoJZc3rDcfD+aN+iPGU0byM6ajUxgCmgjvk0c5
+         2cYNyl0qS03vMkAzf1RYjQyOHSL4VdeUB4vWhQG+Gk4tTcm5RqDEKRKlnNa0/7LKSja5
+         WepkmBUUzXDV53BlBJeh0O5E6zA1i7aI8IYI3odgMrBYFBdGBLhV72/CMqnXD5QCIUoC
+         OA9A==
+X-Gm-Message-State: AOAM530ySti+CPTH3T8j5YBxjOzeQ2KrLwfLBzywVAfCubwTpgUsRp47
+	YaGGk71w5IHmSkKMhTAawYeLbL1fxmqpeWLqyfA=
+X-Google-Smtp-Source: ABdhPJwHclCFT2TQxVLkZG72hIFxYuXSoE1SrnGa/xh8TsP31EvTN9bhqMxe1iprI9aSI30jJu4aiUovupdu6b4WshU=
+X-Received: by 2002:a05:6870:d0ce:b0:ed:9988:ba91 with SMTP id
+ k14-20020a056870d0ce00b000ed9988ba91mr3217956oaa.205.1651499026041; Mon, 02
+ May 2022 06:43:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217141858.71281-1-cgzones@googlemail.com> <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com>
-In-Reply-To: <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-4-cgzones@googlemail.com> <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
+ <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
+In-Reply-To: <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
 From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date: Mon, 2 May 2022 15:38:29 +0200
-Message-ID: <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
-Subject: Re: [PATCH] security: declare member holding string literal const
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: SElinux list <selinux@vger.kernel.org>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Paul Moore <paul@paul-moore.com>, 
-	Xin Long <lucien.xin@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>, 
-	Todd Kjos <tkjos@google.com>, Olga Kornievskaia <kolga@netapp.com>, 
-	Linux kernel mailing list <linux-kernel@vger.kernel.org>, linux-security-module@vger.kernel.org, 
-	llvm@lists.linux.dev
+Date: Mon, 2 May 2022 15:43:35 +0200
+Message-ID: <CAJ2a_De2o7+v2v4QDnXNB=q9N6J84iMz8QMe6vK7ojvxVhfqqQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: SElinux list <selinux@vger.kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>, Serge Hallyn <serge@hallyn.com>, 
+	Austin Kim <austin.kim@lge.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Yang Li <yang.lee@linux.alibaba.com>, 
+	Linux kernel mailing list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 17 Feb 2022 at 23:50, Casey Schaufler <casey@schaufler-ca.com> wrot=
-e:
+On Tue, 8 Mar 2022 at 17:09, Christian G=C3=B6ttsche <cgzones@googlemail.co=
+m> wrote:
 >
-> On 2/17/2022 6:18 AM, Christian G=C3=B6ttsche wrote:
-> > The struct security_hook_list member lsm is assigned in
-> > security_add_hooks() with string literals passed from the individual
-> > security modules.  Declare the function parameter and the struct member
-> > const to signal their immutability.
+> On Fri, 18 Feb 2022 at 18:31, Nick Desaulniers <ndesaulniers@google.com> =
+wrote:
 > >
-> > Reported by Clang [-Wwrite-strings]:
+> > On Thu, Feb 17, 2022 at 6:22 AM Christian G=C3=B6ttsche
+> > <cgzones@googlemail.com> wrote:
+> > >
+> > > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+> > > introduced a NULL check on the context after a successful call to
+> > > security_sid_to_context().  This is on the one hand redundant after
+> > > checking for success and on the other hand insufficient on an actual
+> > > NULL pointer, since the context is passed to seq_escape() leading to =
+a
+> > > call of strlen() on it.
+> > >
+> > > Reported by Clang analyzer:
+> > >
+> > >     In file included from security/selinux/hooks.c:28:
+> > >     In file included from ./include/linux/tracehook.h:50:
+> > >     In file included from ./include/linux/memcontrol.h:13:
+> > >     In file included from ./include/linux/cgroup.h:18:
+> > >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed a=
+s 1st argument to string length function [unix.cstring.NullArg]
+> > >             seq_escape_mem(m, src, strlen(src), flags, esc);
+> > >                                    ^~~~~~~~~~~
 > >
-> >      security/selinux/hooks.c:7388:63: error: passing 'const char [8]' =
-to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible-p=
-ointer-types-discards-qualifiers]
-> >              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks=
-), selinux);
-> >                                                                        =
-   ^~~~~~~~~
-> >      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to par=
-ameter 'lsm' here
-> >                                      char *lsm);
-> >                                            ^
-> >
-> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > I'm guessing there was more to this trace for this instance of this war=
+ning?
 >
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Yes, complete output appended at the end.
+>
+> >
+> > >
+> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > ---
+> > >  security/selinux/hooks.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > > index 1e69f88eb326..ac802b99d36c 100644
+> > > --- a/security/selinux/hooks.c
+> > > +++ b/security/selinux/hooks.c
+> > > @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid=
+)
+> > >         rc =3D security_sid_to_context(&selinux_state, sid,
+> > >                                              &context, &len);
+> > >         if (!rc) {
+> >
+> > ^ perhaps changing this condition to:
+> >
+> > if (!rc && context) {
+> >
+> > It might be nice to retain the null ptr check should the semantics of
+> > security_sid_to_context ever change.
+>
+> If I read the implementation of security_sid_to_context() and its callees
+> correctly it should never return 0 (success) and not have populated its 3
+> argument, unless the passed pointer was zero, which by passing the addres=
+s
+> of a stack variable - &context - is not the case).
 >
 
 Kindly ping;
-any progress on this one?
+is my analysis correct that after
 
-> > ---
-> >   include/linux/lsm_hooks.h | 4 ++--
-> >   security/security.c       | 2 +-
-> >   2 files changed, 3 insertions(+), 3 deletions(-)
+    rc =3D security_sid_to_context(&selinux_state, sid,
+                                                  &context, &len);
+
+there is no possibility that rc is 0 AND context is NULL?
+
 > >
-> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > index 419b5febc3ca..47cdf3fbecef 100644
-> > --- a/include/linux/lsm_hooks.h
-> > +++ b/include/linux/lsm_hooks.h
-> > @@ -1595,7 +1595,7 @@ struct security_hook_list {
-> >       struct hlist_node               list;
-> >       struct hlist_head               *head;
-> >       union security_list_options     hook;
-> > -     char                            *lsm;
-> > +     const char                      *lsm;
-> >   } __randomize_layout;
+> > > -               bool has_comma =3D context && strchr(context, ',');
+> > > +               bool has_comma =3D strchr(context, ',');
+> > >
+> > >                 seq_putc(m, '=3D');
+> > >                 if (has_comma)
+> > > --
+> > > 2.35.1
+> > >
 > >
-> >   /*
-> > @@ -1630,7 +1630,7 @@ extern struct security_hook_heads security_hook_h=
-eads;
-> >   extern char *lsm_names;
 > >
-> >   extern void security_add_hooks(struct security_hook_list *hooks, int =
-count,
-> > -                             char *lsm);
-> > +                             const char *lsm);
-> >
-> >   #define LSM_FLAG_LEGACY_MAJOR       BIT(0)
-> >   #define LSM_FLAG_EXCLUSIVE  BIT(1)
-> > diff --git a/security/security.c b/security/security.c
-> > index 9663ffcca4b0..a48eb3badfdd 100644
-> > --- a/security/security.c
-> > +++ b/security/security.c
-> > @@ -478,7 +478,7 @@ static int lsm_append(const char *new, char **resul=
-t)
-> >    * Each LSM has to register its hooks with the infrastructure.
-> >    */
-> >   void __init security_add_hooks(struct security_hook_list *hooks, int =
-count,
-> > -                             char *lsm)
-> > +                             const char *lsm)
-> >   {
-> >       int i;
-> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+> clang-tidy report:
+>
+> ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1st
+> argument to string length function
+> [clang-analyzer-unix.cstring.NullArg]
+>         seq_escape_mem(m, src, strlen(src), flags, esc);
+>                                ^
+> ./security/selinux/hooks.c:1041:6: note: Assuming the condition is false
+>         if (!(sbsec->flags & SE_SBINITIALIZED))
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./security/selinux/hooks.c:1041:2: note: Taking false branch
+>         if (!(sbsec->flags & SE_SBINITIALIZED))
+>         ^
+> ./security/selinux/hooks.c:1044:6: note: Assuming the condition is false
+>         if (!selinux_initialized(&selinux_state))
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./security/selinux/hooks.c:1044:2: note: Taking false branch
+>         if (!selinux_initialized(&selinux_state))
+>         ^
+> ./security/selinux/hooks.c:1047:6: note: Assuming the condition is true
+>         if (sbsec->flags & FSCONTEXT_MNT) {
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./security/selinux/hooks.c:1047:2: note: Taking true branch
+>         if (sbsec->flags & FSCONTEXT_MNT) {
+>         ^
+> ./security/selinux/hooks.c:1050:8: note: Calling 'show_sid'
+>                 rc =3D show_sid(m, sbsec->sid);
+>                      ^~~~~~~~~~~~~~~~~~~~~~~
+> ./security/selinux/hooks.c:1020:7: note: Value assigned to 'context'
+>         rc =3D security_sid_to_context(&selinux_state, sid,
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./security/selinux/hooks.c:1022:6: note: Assuming 'rc' is 0
+>         if (!rc) {
+>             ^~~
+> ./security/selinux/hooks.c:1022:2: note: Taking true branch
+>         if (!rc) {
+>         ^
+> ./security/selinux/hooks.c:1023:20: note: Assuming 'context' is null
+>                 bool has_comma =3D context && strchr(context, ',');
+>                                  ^~~~~~~
+> ./security/selinux/hooks.c:1023:28: note: Left side of '&&' is false
+>                 bool has_comma =3D context && strchr(context, ',');
+>                                          ^
+> ./security/selinux/hooks.c:1026:7: note: 'has_comma' is false
+>                 if (has_comma)
+>                     ^~~~~~~~~
+> ./security/selinux/hooks.c:1026:3: note: Taking false branch
+>                 if (has_comma)
+>                 ^
+> ./security/selinux/hooks.c:1028:17: note: Passing null pointer value
+> via 2nd parameter 's'
+>                 seq_escape(m, context, "\"\n\\");
+>                               ^~~~~~~
+> ./security/selinux/hooks.c:1028:3: note: Calling 'seq_escape'
+>                 seq_escape(m, context, "\"\n\\");
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ././include/linux/seq_file.h:152:20: note: Passing null pointer value
+> via 2nd parameter 'src'
+>         seq_escape_str(m, s, ESCAPE_OCTAL, esc);
+>                           ^
+> ././include/linux/seq_file.h:152:2: note: Calling 'seq_escape_str'
+>         seq_escape_str(m, s, ESCAPE_OCTAL, esc);
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ././include/linux/seq_file.h:136:25: note: Null pointer passed as 1st
+> argument to string length function
+>         seq_escape_mem(m, src, strlen(src), flags, esc);
+>                                ^      ~~~
