@@ -1,72 +1,124 @@
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970AF17D3
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 11:05:29 +0000 (UTC)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KsK7L19PDzMpnT4;
-	Mon,  2 May 2022 12:28:30 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-	by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KsK7K1rsBzlhSLy;
-	Mon,  2 May 2022 12:28:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1651487310;
-	bh=bptxyVnLNXDttaSUgFWYcO2XLQjIKj3V2V77zSKRijg=;
-	h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-	b=sYTRVnzK1acffNdh7/XJLYB4Fjo92WqaJCNs/hMVa+uJfHNWBKhAZHNpBtt1fEaMD
-	 237w1h/545j3O0sw7hscVWWqPSrmj4czUN0G/e84DS0j+Fw9voO3MZkJyguMiD9ffv
-	 FTxBLd6NoJWv7jjmx56xV1bhdGBqEtTYdhXHZ2Xc=
-Message-ID: <32f41b83-2019-475b-b72a-6b824fe796f8@digikod.net>
-Date: Mon, 2 May 2022 12:29:41 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937AB15A7
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 12:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651495095; x=1683031095;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dgCtEdJb9lLZIamHFWhFKa3OLS9C9OlCTvLvlTNfkrY=;
+  b=TpCFTl2/83/BORIcfW6X3BXvRAObOEPx4etIXy51JWq0oyPwuWoJJWk0
+   /z9Pu2jdy1mMZsf0WxbEk/MntGJPFTin/ZkMP2Wdkm+2ms4L+lhKbnO08
+   ggjsuI0eLgmJDYRpnkZWJOcHeYgsW9wsj32lfP7gxVfRUyR8OHHMqFAMr
+   ksl7/qNofyahecuh/VEzYg7zF784pvQwxUTaYXmiV0272/5il4b+CCfiU
+   hPqt/i38VPra22ZJhDhpTrBmSXjsdqmKJIddJv7IiAnwRq/sp4E8N1gUe
+   MrY+AiF2SQiigUOiIGq0/klv54xTDWGGQfYDN8FXKz4xDOB3J2EmvqWPM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="254649204"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="254649204"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:38:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="598596365"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 May 2022 05:38:13 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlVJd-0009YA-6L;
+	Mon, 02 May 2022 12:38:13 +0000
+Date: Mon, 2 May 2022 20:37:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 4/4] xfs: validate v5 feature fields
+Message-ID: <202205022014.DmgdkxxR-lkp@intel.com>
+References: <20220502082018.1076561-5-david@fromorbit.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent:
-Content-Language: en-US
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Andy Whitcroft <apw@canonical.com>,
- Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- llvm@lists.linux.dev, linux-kernel <linux-kernel@vger.kernel.org>
-References: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
- <CANiq72nLOfmEt-CZBmm2ouEB_x6Jm9ggDVFCVJxYxKw7O0LTzQ@mail.gmail.com>
-From: =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: clang-format inconsistencies with checkpatch.pl
-In-Reply-To: <CANiq72nLOfmEt-CZBmm2ouEB_x6Jm9ggDVFCVJxYxKw7O0LTzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220502082018.1076561-5-david@fromorbit.com>
+
+Hi Dave,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on next-20220429]
+[cannot apply to v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+config: s390-randconfig-r032-20220501 (https://download.01.org/0day-ci/archive/20220502/202205022014.DmgdkxxR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/701c0cd0bdea877a997898941f62df6c05045f40
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
+        git checkout 701c0cd0bdea877a997898941f62df6c05045f40
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/xfs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/xfs/libxfs/xfs_sb.c:37:1: warning: no previous prototype for function 'xfs_sb_validate_v5_features' [-Wmissing-prototypes]
+   xfs_sb_validate_v5_features(
+   ^
+   fs/xfs/libxfs/xfs_sb.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool
+   ^
+   static 
+   1 warning generated.
 
 
+vim +/xfs_sb_validate_v5_features +37 fs/xfs/libxfs/xfs_sb.c
 
-On 23/04/2022 18:14, Miguel Ojeda wrote:
-> Hi Mickaël,
-> 
-> On Sat, Apr 23, 2022 at 1:45 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> I also noticed that there is some clang-format configuration lines that
->> are commented because of incompatibilities with versions older than 6.
->> Shouldn't we require a minimal version, at least the 6th?
-> 
-> I will be increasing this cycle the version to 11, which is the
-> minimum LLVM supported at the moment, and then keep it sync'd to that
-> minimum.
+    28	
+    29	/*
+    30	 * Physical superblock buffer manipulations. Shared with libxfs in userspace.
+    31	 */
+    32	
+    33	/*
+    34	 * Validate all the compulsory V4 feature bits are set on a V5 filesystem.
+    35	 */
+    36	bool
+  > 37	xfs_sb_validate_v5_features(
+    38		struct xfs_sb	*sbp)
+    39	{
+    40		/* We must not have any unknown V4 feature bits set */
+    41		if (sbp->sb_versionnum & ~XFS_SB_VERSION_OKBITS)
+    42			return false;
+    43	
+    44		/*
+    45		 * The CRC bit is considered an invalid V4 flag, so we have to add it
+    46		 * manually to the OKBITS mask.
+    47		 */
+    48		if (sbp->sb_features2 & ~(XFS_SB_VERSION2_OKBITS |
+    49					  XFS_SB_VERSION2_CRCBIT))
+    50			return false;
+    51	
+    52		/* Now check all the required V4 feature flags are set. */
+    53	
 
-OK, thanks.
-
-> 
->> About checkpatch.pl, it incorrectly warns about space between function
->> name and open parenthesis for *for_each* functions (specifically
->> interpreted as "for" statements in .clang-format, e.g. list_for_each_entry).
-> 
-> Note that the prevailing kernel style is to not have a space. This
-> should be fixed with the increase to 11.
-
-I was talking about the ForEachMacros exceptions. Should these be 
-removed or at least not updated for new for_each functions [1]?
-
-[1] https://lore.kernel.org/r/20220412153906.428179-1-mic@digikod.net
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
