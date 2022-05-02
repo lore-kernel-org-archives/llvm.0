@@ -1,41 +1,30 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9A02F2A
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 17:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651514086; x=1683050086;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=QSuAdWXNezg/43wQCSILPHE45X+zLQpYNOi9j9gxJbw=;
-  b=bF78TxFq0AbMzWDokXJH4o+Z9KEsS6I1xfOAo2ePaiQcMcMl3GdJiIaK
-   nSSYWVx86JM0NEPMu07rUiOg86puRxMJXfrz8hoiXNfyujY41JT1NzA/R
-   UeNZjznZiSI4YEksZK+ULUxqOzPBejPGfnCLlXaUPwmc0G3B4LlgFvTbk
-   eCChoA04lRf9oLqwcsB8EzNSCcNaMuURcKRtVDmqeM109kHA0TmlTdnKM
-   ivol2KoZ6/EMM7qrxKRbPfbeDCM9PJNtpCML14p+d/yfcclsxMqCAMfox
-   7LyPo99YddsMLGe6dZqr6/StIsq57GKCOm10GDiqrg7kcrUH+dRUg+3vO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247192406"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="247192406"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 10:54:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="620007878"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 10:54:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlaFm-0009kW-7d;
-	Mon, 02 May 2022 17:54:34 +0000
-Date: Tue, 3 May 2022 01:53:47 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [asahilinux:bits/100-shutdown-notifier 4/20] kernel/reboot.o:
- warning: objtool: sys_off_handler_power_off()+0x6a: sibling call from
- callable instruction with modified stack frame
-Message-ID: <202205030138.Quaup1Vx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABD52F2A
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 18:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B65C385AC;
+	Mon,  2 May 2022 18:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651514414;
+	bh=EubwGzbfbBYKRz56gIaYdoiNqVKpVK+pxTm8DS7GvNQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tL1nasUabAClUQj0vHyo9fmQaefv0v2UsPdxEM3b0Q8C0HKe4ClW/DuFLtRjZBCyG
+	 iGgar/NCR1lRDQ+YQLFTlzfxhPK5r4YHIJLksmJEw+8DThHWXrsJq5BP1bbg0uxATm
+	 wKqevIxCY3B1AIdhwtGqBbrVJJ2x1tttTN4mEqqo8E8x63+8BQJpVp/WnaetpjQ7TL
+	 eo7055YbMDW/DEZBjbSIIEltuKEkzzZwb6zol1WvbKsKw62UuFilvQsQpG6F/jd21o
+	 EejZj0JkfdxFK2Ds/eMAXYAMw6jbuB9NNKCsQHIqolYPWYRlmXJUM7ZgCzS60fxFf0
+	 WqdeI0KfZ9jIA==
+Date: Mon, 2 May 2022 11:00:12 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [willy-pagecache:for-next 60/69] fs/ntfs/aops.c:378:12: warning:
+ stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio'
+Message-ID: <YnAcLApzs6frds2n@dev-arch.thelio-3990X>
+References: <202204301355.hFVoSOPa-lkp@intel.com>
+ <Ym2rzWiP8iNRHWxS@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,35 +33,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Ym2rzWiP8iNRHWxS@casper.infradead.org>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Dmitry Osipenko <digetx@gmail.com>
-CC: Hector Martin <marcan@marcan.st>
+On Sat, Apr 30, 2022 at 10:36:13PM +0100, Matthew Wilcox wrote:
+> On Sat, Apr 30, 2022 at 01:11:43PM +0800, kernel test robot wrote:
+> > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+> >    static int ntfs_read_folio(struct file *file, struct folio *folio)
+> >               ^
+> >    1 warning generated.
+> 
+> Am I getting this warning because I changed the name of the function?
+> Or did I do something Bad?
 
-tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
-head:   06115822707a3ed6f89da2ea9c157c283b6750ee
-commit: 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3 [4/20] kernel: Add combined power-off+restart handler call chain API
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220503/202205030138.Quaup1Vx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/100-shutdown-notifier
-        git checkout 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+I assume so. There have been other reports of high stack usage in this
+function, which it seems Arnd narrowed down to 64K pages (or 256K pages
+in this case):
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+https://lore.kernel.org/20210927141815.1711736-1-arnd@kernel.org/
 
-All warnings (new ones prefixed by >>):
+https://lore.kernel.org/202103280658.kByZmw5Q-lkp@intel.com/
 
->> kernel/reboot.o: warning: objtool: sys_off_handler_power_off()+0x6a: sibling call from callable instruction with modified stack frame
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
