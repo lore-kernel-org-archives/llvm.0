@@ -1,42 +1,43 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937AB15A7
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 12:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6428E0
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 12:48:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651495095; x=1683031095;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dgCtEdJb9lLZIamHFWhFKa3OLS9C9OlCTvLvlTNfkrY=;
-  b=TpCFTl2/83/BORIcfW6X3BXvRAObOEPx4etIXy51JWq0oyPwuWoJJWk0
-   /z9Pu2jdy1mMZsf0WxbEk/MntGJPFTin/ZkMP2Wdkm+2ms4L+lhKbnO08
-   ggjsuI0eLgmJDYRpnkZWJOcHeYgsW9wsj32lfP7gxVfRUyR8OHHMqFAMr
-   ksl7/qNofyahecuh/VEzYg7zF784pvQwxUTaYXmiV0272/5il4b+CCfiU
-   hPqt/i38VPra22ZJhDhpTrBmSXjsdqmKJIddJv7IiAnwRq/sp4E8N1gUe
-   MrY+AiF2SQiigUOiIGq0/klv54xTDWGGQfYDN8FXKz4xDOB3J2EmvqWPM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="254649204"
+  t=1651495696; x=1683031696;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LJyisvBfntxgR8HUsmpbZAIgluWtIfFxjvi7b9/X/8M=;
+  b=Lubdjq0hDc2vJDzyG1fRl7aSCbCC/M9XrXTK2HLcwaY3NR2Qb8MYvsYK
+   QkdK3gOhLitbxfZhR8osLQkutwfTzNETa4nqyaRSKrqTqFFmibmXwsTk7
+   N+C4qIBcBXNs3Pmq8CUb5cT3S7DKnDJnAWjUbF+34p9kdnej8l5wDUWbo
+   zGfxe8pDbYFe+BTL+qfsKz5ngyfA/JbufLVaCvLam52Tspwu9MFfk/CMN
+   vNbLuuf+7f2zO0/g9WWdAtBd0LmBGX0B4TlDjEfErjQWA+pb3Zc140rGV
+   nIdCCik/k67PFHHNdordn2A1Yxcr8G8syAvbWgVFtVHn3dhb/n0axII7e
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="254652207"
 X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="254649204"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:38:15 -0700
+   d="scan'208";a="254652207"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:48:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="598596365"
+   d="scan'208";a="652802553"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 May 2022 05:38:13 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2022 05:48:14 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nlVJd-0009YA-6L;
-	Mon, 02 May 2022 12:38:13 +0000
-Date: Mon, 2 May 2022 20:37:24 +0800
+	id 1nlVTJ-0009YR-Bt;
+	Mon, 02 May 2022 12:48:13 +0000
+Date: Mon, 2 May 2022 20:47:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 4/4] xfs: validate v5 feature fields
-Message-ID: <202205022014.DmgdkxxR-lkp@intel.com>
-References: <20220502082018.1076561-5-david@fromorbit.com>
+To: Dafna Hirschfeld <dhirschfeld@habana.ai>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 44/44]
+ drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype
+ for function 'gaudi_scrub_device_dram'
+Message-ID: <202205022000.4qwpPGir-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,79 +46,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502082018.1076561-5-david@fromorbit.com>
 
-Hi Dave,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on next-20220429]
-[cannot apply to v5.18-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: s390-randconfig-r032-20220501 (https://download.01.org/0day-ci/archive/20220502/202205022014.DmgdkxxR-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
+commit: 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a [44/44] habanalabs: add device memory scrub ability through debugfs
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205022000.4qwpPGir-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/701c0cd0bdea877a997898941f62df6c05045f40
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
-        git checkout 701c0cd0bdea877a997898941f62df6c05045f40
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/xfs/libxfs/xfs_sb.c:37:1: warning: no previous prototype for function 'xfs_sb_validate_v5_features' [-Wmissing-prototypes]
-   xfs_sb_validate_v5_features(
-   ^
-   fs/xfs/libxfs/xfs_sb.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool
+>> drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype for function 'gaudi_scrub_device_dram' [-Wmissing-prototypes]
+   int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
+       ^
+   drivers/misc/habanalabs/gaudi/gaudi.c:4743:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
    ^
    static 
    1 warning generated.
 
 
-vim +/xfs_sb_validate_v5_features +37 fs/xfs/libxfs/xfs_sb.c
+vim +/gaudi_scrub_device_dram +4743 drivers/misc/habanalabs/gaudi/gaudi.c
 
-    28	
-    29	/*
-    30	 * Physical superblock buffer manipulations. Shared with libxfs in userspace.
-    31	 */
-    32	
-    33	/*
-    34	 * Validate all the compulsory V4 feature bits are set on a V5 filesystem.
-    35	 */
-    36	bool
-  > 37	xfs_sb_validate_v5_features(
-    38		struct xfs_sb	*sbp)
-    39	{
-    40		/* We must not have any unknown V4 feature bits set */
-    41		if (sbp->sb_versionnum & ~XFS_SB_VERSION_OKBITS)
-    42			return false;
-    43	
-    44		/*
-    45		 * The CRC bit is considered an invalid V4 flag, so we have to add it
-    46		 * manually to the OKBITS mask.
-    47		 */
-    48		if (sbp->sb_features2 & ~(XFS_SB_VERSION2_OKBITS |
-    49					  XFS_SB_VERSION2_CRCBIT))
-    50			return false;
-    51	
-    52		/* Now check all the required V4 feature flags are set. */
-    53	
+  4742	
+> 4743	int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
+  4744	{
+  4745		struct asic_fixed_properties *prop = &hdev->asic_prop;
+  4746		u64  cur_addr = DRAM_BASE_ADDR_USER;
+  4747		u32 chunk_size, busy;
+  4748		int rc, dma_id;
+  4749	
+  4750		while (cur_addr < prop->dram_end_address) {
+  4751			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
+  4752				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
+  4753	
+  4754				chunk_size =
+  4755				min((u64)SZ_2G, prop->dram_end_address - cur_addr);
+  4756	
+  4757				dev_dbg(hdev->dev,
+  4758					"Doing HBM scrubbing for 0x%09llx - 0x%09llx\n",
+  4759					cur_addr, cur_addr + chunk_size);
+  4760	
+  4761				WREG32(mmDMA0_CORE_SRC_BASE_LO + dma_offset,
+  4762						lower_32_bits(val));
+  4763				WREG32(mmDMA0_CORE_SRC_BASE_HI + dma_offset,
+  4764						upper_32_bits(val));
+  4765				WREG32(mmDMA0_CORE_DST_BASE_LO + dma_offset,
+  4766							lower_32_bits(cur_addr));
+  4767				WREG32(mmDMA0_CORE_DST_BASE_HI + dma_offset,
+  4768							upper_32_bits(cur_addr));
+  4769				WREG32(mmDMA0_CORE_DST_TSIZE_0 + dma_offset,
+  4770						chunk_size);
+  4771				WREG32(mmDMA0_CORE_COMMIT + dma_offset,
+  4772						((1 << DMA0_CORE_COMMIT_LIN_SHIFT) |
+  4773						(1 << DMA0_CORE_COMMIT_MEM_SET_SHIFT)));
+  4774	
+  4775				cur_addr += chunk_size;
+  4776	
+  4777				if (cur_addr == prop->dram_end_address)
+  4778					break;
+  4779			}
+  4780	
+  4781			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
+  4782				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
+  4783	
+  4784				rc = hl_poll_timeout(
+  4785					hdev,
+  4786					mmDMA0_CORE_STS0 + dma_offset,
+  4787					busy,
+  4788					((busy & DMA0_CORE_STS0_BUSY_MASK) == 0),
+  4789					1000,
+  4790					HBM_SCRUBBING_TIMEOUT_US);
+  4791	
+  4792				if (rc) {
+  4793					dev_err(hdev->dev,
+  4794						"DMA Timeout during HBM scrubbing of DMA #%d\n",
+  4795						dma_id);
+  4796					return -EIO;
+  4797				}
+  4798			}
+  4799		}
+  4800	
+  4801		return 0;
+  4802	}
+  4803	
 
 -- 
 0-DAY CI Kernel Test Service
