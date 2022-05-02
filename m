@@ -1,132 +1,73 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3629A2908
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 15:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651504835; x=1683040835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+skAkhDg06hvLMrJWFmLdWZ0pxA6nwrAmG1HffehxzM=;
-  b=PBcQ7H9SWqmQbKTd9tHvsBnjJjAbqHMa+da2JUmOGjO/n89qiDwjv7uk
-   i4nAWNlR9sB5Tic3ucJ8tRbmYs2PgtR4VygjrXLn3p8yDY9/+0i7S0MR8
-   xMcudo3TPB2y5PkX+WjGFE5pEHjLnCIlA5SNjGUb9/QWMTqxNvmkqw8Zk
-   QlvJFBd1YIXEn/VFRwC/6a2g+WKVOqPtO00H651OuVkWfWaG63BPOwUyo
-   lWfU3QicFzFcVs4T6If2J3fIIArUB6eo+lZnDpd1RzfDN6xQGgiBllHs3
-   xNYzTAGCpQDlVP6YH3E4tat3d6YjnCV2otdimXDLsq72sEcaWf3yK41/a
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330227466"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="330227466"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:20:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="516144562"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 08:20:31 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlXqg-0009dr-LS;
-	Mon, 02 May 2022 15:20:30 +0000
-Date: Mon, 2 May 2022 23:19:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 15/20] sound/soc/codecs/tas2764.c:683:20:
- warning: cast to smaller integer type 'enum tas2764_devid' from 'const void
- *'
-Message-ID: <202205022313.dZqidUBY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CD92908
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 15:20:39 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id d12so26588629ybc.4
+        for <llvm@lists.linux.dev>; Mon, 02 May 2022 08:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
+        b=nCCr/m44vAOB3fWxcTwSvULnXuiNVu4xAEa/q8PX0e8wp//HRJ3pAwZlfI8oXQakqb
+         PBNA5VrluDTvJXwHjjEqKVrz+t1ZAhOuAy0UZ/lpPuIF5TfAQhvGp0eP9kDlGthADP7B
+         jQS2jgmlIf2O2YIMWFKayiS6OkGnXXTuI6mSozGLIgWSqWTudoL0mragtOrIMycv0iNu
+         cZvbiKKjzeuQMjCAHgd1ar9MSdep3a1AilDwleb2gMChOjj8zJLFVuMg4VeHUCWQC8gh
+         4i9wU09zBuZyOBMRAX6+2An3+4aqYMkmsLVezmWAt06zT2xLERXvPiNYHUXkJ6I1taeF
+         kDFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
+        b=aSEA/Q6BRfQ+Qr+VcPaVfZoj4DVXR/QTQXKLaPuh2jNeKcdBsbFgY1Ap0nGyMhEfar
+         cqANlEhwD+/gen6Qj4/pkDv+0mDTucmm0F2/Vmu7KpkuzWwKlEnd4CyauIASWhYs7bAo
+         m+Cc5xpC0zd849N6EM+78k05zImzP/ezYRymhLTgsI509/r6r7nb35y5iQHGpXE79WEa
+         1s51uBxuFjYPu23SpUJZt8ZoAN56hRa6C4IT+bfUz77+M7FOGqBELmrsXUb02WfAkrst
+         MEtTCj7UGAqDL8UcfNrLN2H+cNrvPUV5m1mcdDrDQn/dFmdUQhQ/OtUvAj0pZwY71EmS
+         BbCQ==
+X-Gm-Message-State: AOAM530xGyMC4yzosvs1PKTZrWOxhDExBeFw0O45sBb4q3/5nmVkWwGL
+	sw5v2k61NClUCh1HWdOrlBJKcE6SIFH+jT7GK2IehA==
+X-Google-Smtp-Source: ABdhPJzqk8+IJH8fkyTp0bTuIuMWgJsHqUrnpAZSbYcMmkZ/+21K1dsNoH6iUg94I0Y7z6gpiKYrRf3BnqDN09p5vbs=
+X-Received: by 2002:a25:3455:0:b0:648:44db:51e0 with SMTP id
+ b82-20020a253455000000b0064844db51e0mr10124096yba.314.1651504838091; Mon, 02
+ May 2022 08:20:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-22-samitolvanen@google.com> <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 2 May 2022 08:20:05 -0700
+Message-ID: <CABCJKucK39XnVPA=EhLSJ+vcgVLCSgnGzLrRy9tZSM2jzZtUBg@mail.gmail.com>
+Subject: Re: [RFC PATCH 21/21] x86: Add support for CONFIG_CFI_CLANG
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   91b81123719d8b742da188f01ee3d897e0fac92b
-commit: 29756799398dae179e17370b2e5d2a397b683440 [15/20] ASoC: tas2764: Extend driver to SN012776
-config: arm64-randconfig-r005-20220501 (https://download.01.org/0day-ci/archive/20220502/202205022313.dZqidUBY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/29756799398dae179e17370b2e5d2a397b683440
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout 29756799398dae179e17370b2e5d2a397b683440
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/codecs/
+On Sat, Apr 30, 2022 at 2:24 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Apr 29, 2022 at 01:36:44PM -0700, Sami Tolvanen wrote:
+> > -     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
+> > +     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> > +         report_cfi(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
+>
+> This way you'll first get a BUG splat and then tack on the CFI thing.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The CFI ud2 isn't in the bug table, which means find_bug returns
+BUG_TRAP_TYPE_NONE and report_bug bails out before printing out
+anything.
 
-All warnings (new ones prefixed by >>):
-
->> sound/soc/codecs/tas2764.c:683:20: warning: cast to smaller integer type 'enum tas2764_devid' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-                   tas2764->devid = (enum tas2764_devid) of_id->data;
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +683 sound/soc/codecs/tas2764.c
-
-   666	
-   667	static int tas2764_i2c_probe(struct i2c_client *client,
-   668				const struct i2c_device_id *id)
-   669	{
-   670		struct tas2764_priv *tas2764;
-   671		const struct of_device_id *of_id = NULL;
-   672		int result;
-   673	
-   674		tas2764 = devm_kzalloc(&client->dev, sizeof(struct tas2764_priv),
-   675				       GFP_KERNEL);
-   676		if (!tas2764)
-   677			return -ENOMEM;
-   678	
-   679		if (client->dev.of_node)
-   680			of_id = of_match_device(tas2764_of_match, &client->dev);	
-   681	
-   682		if (of_id)
- > 683			tas2764->devid = (enum tas2764_devid) of_id->data;
-   684		else
-   685			tas2764->devid = DEVID_TAS2764;
-   686	
-   687		tas2764->dev = &client->dev;
-   688		i2c_set_clientdata(client, tas2764);
-   689		dev_set_drvdata(&client->dev, tas2764);
-   690	
-   691		tas2764->regmap = devm_regmap_init_i2c(client, &tas2764_i2c_regmap);
-   692		if (IS_ERR(tas2764->regmap)) {
-   693			result = PTR_ERR(tas2764->regmap);
-   694			dev_err(&client->dev, "Failed to allocate register map: %d\n",
-   695						result);
-   696			return result;
-   697		}
-   698	
-   699		if (client->dev.of_node) {
-   700			result = tas2764_parse_dt(&client->dev, tas2764);
-   701			if (result) {
-   702				dev_err(tas2764->dev, "%s: Failed to parse devicetree\n",
-   703					__func__);
-   704				return result;
-   705			}
-   706		}
-   707	
-   708		return devm_snd_soc_register_component(tas2764->dev,
-   709						       &soc_component_driver_tas2764,
-   710						       tas2764_dai_driver,
-   711						       ARRAY_SIZE(tas2764_dai_driver));
-   712	}
-   713	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sami
