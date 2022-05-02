@@ -1,104 +1,78 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36397F
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 07:35:07 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id 82A3E5C00A8;
-	Mon,  2 May 2022 03:35:06 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Mon, 02 May 2022 03:35:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1651476906; x=1651563306; bh=S2
-	nsONwhQYHk2WKWDIyib55Mao5pVha1rrbz562lqmw=; b=oMUJjZC9VFI4Y9ZrrS
-	AVqmJhpnsCyVFrdsVUne/zN81T2i++nCMRrEdDARwqM9CFe0yVq584k+kigJxcSA
-	doxh2Cof4hoy/Sqt8N3Y6RV5w2t9vruwZfzOJl5fhWmvuMk1P0MdDJtcb54PkZDX
-	TIpSP4ErmPBXCUIZAY2ZmH6b295yA90xKb3blwSnz+1cLlWv97hcAcOwD45J54GV
-	lqU+nSYhbu8dNcuCSMsOZbNSryy/nQODry8iZ2anLLxOgOFoq9GC7dzAWxLIBXij
-	KlUx96XizjSrNjQFCmyD2D6ncEKZm/dcUa2cx3oe53A1ZJSk5g+MlMcAZLpF+1t8
-	eVBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651476906; x=
-	1651563306; bh=S2nsONwhQYHk2WKWDIyib55Mao5pVha1rrbz562lqmw=; b=S
-	M1YGUSmmWpAzX4pJNIGyY14o6WVvnzwZAVEN2FaJiem0WxT6XhivjkMH/h7fHeRs
-	l67xjIEGkeSQoNgyvlWQ7Se2My33LVFH7gX0J9U6hYLH05lTEJoAtKwBHBhZC/Su
-	1brsjbwOgmMEj+OJmYqeXg68Yne8mT5hNSHhGdyb/U4E1TuCBQprjGya6ZcgJgDv
-	bKptHPgcWZ0xcWwBWuuHPnPwbMJlFqzCbpvCK2XgpcQH71OEXIQ2ix5aMtmqW4v8
-	zC063gswEadAIcX5gYgUpoPsS/DZzh6Y/kTbTSyHnJ7z4WzARStHnO6HXYUACC6h
-	v63YcRIAi7AhvwkKY6Jew==
-X-ME-Sender: <xms:qYlvYkNI3FpX87qJEzYVswQN7KzEjnqtZzsrpD26KTTNRP3x71xw1A>
-    <xme:qYlvYq8ScZiZVrt5p6MWp-vynjoWpa9dpTa5WjLh_PBrAq-KQYNtt62-M5Sr7QOBp
-    PLUGYbUn2-_3kileO8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeggdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:qYlvYrSGonH9NsOeZBPC23NXzV_0opuzLRw2AGCkgSKiSTA4Y0N-uw>
-    <xmx:qYlvYst-DPIYZsJNrFqYjI21Q6RhtqhhA_4-kanAFTX38ea9_GUoqw>
-    <xmx:qYlvYscipHKO3907Ai6w-NmOgH49dT7FS-QWF3Vzzt47xd8dclIEFA>
-    <xmx:qolvYk5Pf2GWGcdDAF7M-UsGCZbwuKoiEScXOvpq5ALVfUMFxof8Pg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1C0E0A60063; Mon,  2 May 2022 03:35:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042677F
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 07:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=pOoEoq3uxOd2hY3qnCRK9aDXRSIdbU9S375EHmEixg8=; b=Zx1qMADDPH8oEOTa4jVupxWl6E
+	jp0Ix1UpwVxb/Fun8uQkpi/VDVUrELD+eS/RX9VUTmUff5Lfk9pHLGnzXGRo5XQjnKpVQAnDGA+HY
+	6njW7JD42U9XDnB6D3TI9rmTZ/aqSpbsxfUtPIHKH48smGoBc+hsJpqXaRadtuEJcHvW3GiOXvq13
+	d4zs632v/3gKbbrqz0yWyBW7gjlr+57/KxIGorr/dnptiwV1AYALOr2y65wpMHAAJ4xsSV0n37yzE
+	19MxrkmlClL3jeLhLETg9bIIv0pjGFEOLCYtKCiGSpok8qhV9B6cU0FBm//Y4T/y5l5jfkXJiDpIU
+	UHe+W3Jw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nlQlP-00AOnG-Mt; Mon, 02 May 2022 07:46:36 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4FA2398035B; Mon,  2 May 2022 09:46:33 +0200 (CEST)
+Date: Mon, 2 May 2022 09:46:33 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 14/21] treewide: static_call: Pass call arguments to
+ the macro
+Message-ID: <20220502074633.GA479834@worktop.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-15-samitolvanen@google.com>
+ <Ymxy/CU+tZhQ9UtN@hirez.programming.kicks-ass.net>
+ <CABCJKud8vC6RwQLs2YXnZMZaXGNYBEq+sNmOsgGjjAw4MfuZuw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <5291f623-6f0d-4cc0-8358-6aea4e8aa667@www.fastmail.com>
-In-Reply-To: 
- <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
-References: <202205020811.kEEGO8QC-lkp@intel.com>
- <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
-Date: Mon, 02 May 2022 09:34:44 +0200
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "Arnd Bergmann" <arnd@arndb.de>, "kernel test robot" <lkp@intel.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- "Hector Martin" <marcan@marcan.st>
-Subject: Re: [asahilinux:asahi-soc/rtkit-sart-nvme 4/6] drivers/soc/apple/sart.c:284:4:
- warning: format specifies type 'unsigned long long' but the argument has type
- 'phys_addr_t' (aka 'unsigned int')
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKud8vC6RwQLs2YXnZMZaXGNYBEq+sNmOsgGjjAw4MfuZuw@mail.gmail.com>
 
-Hi Arnd,
+On Fri, Apr 29, 2022 at 05:49:21PM -0700, Sami Tolvanen wrote:
+> On Fri, Apr 29, 2022 at 4:21 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > Can you explain why this is needed? I don't think there are any indirect
+> > calls to get confused about. That is, if you have STATIC_CALL_INLINE
+> > then the compiler should be emitting direct calls to the trampoline.
+> 
+> Clang emits an indirect call for ({ &f; })(), which is optimized into
+> a direct call when possible. Come to think of it, the recent
+> InstCombine change to the compiler patch should solve this issue. Let
+> me double check, I'd be more than happy to drop these two patches.
 
-On Mon, May 2, 2022, at 08:39, Arnd Bergmann wrote:
-> On Mon, May 2, 2022 at 2:21 AM kernel test robot <lkp@intel.com> wrote:
->
->>    277
->>    278                  clear_bit(i, &sart->used_entries);
->>    279                  dev_dbg(sart->dev, "cleared entry %d\n", i);
->>    280                  return 0;
->>    281          }
->>    282
->>    283          dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
->>  > 284                   paddr, size);
->>    285
->
-> Hi Sven,
->
-> to print a phys_addr_t, you should pass the address by reference and use
-> the special "%pap" format string modifier. I'm not entirely sure if it should
-> actually be a dma_addr_t instead of a phys_addr_t. If the type gets changed,
-> the format string would become "%pad".
+Oooh, but this must not require any magic. That is, we have a *ton* of
+code that relies on constant propagation of function pointers to not
+emit indirect calls.
 
-I've been using %pa for all other prints in this file since v1 and just
-missed this one for some reason. I'm a bit confused why the bots found this last
-one only now but I'll fix it as well.
+Please make sure that 'just-works'.
+
+Look at all the __always_inline functions in rbtree*.h for instance,
+some like latch and augment rely on quite complicated const propagation
+for the actual function pointer is in a const struct.
+
+I've verified all that actually generates direct calls when we did that
+code (on GCC, clang wasn't really a thing back then).
 
 
-Thanks,
 
-Sven
