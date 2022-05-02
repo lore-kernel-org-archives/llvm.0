@@ -1,127 +1,74 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29F415A7
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 06:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651472484; x=1683008484;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=biwKOA28VeX5Nrjpb+vh/m5zHN7TB76nMxJdSjk9EOs=;
-  b=ed7XaPg66OUiIiio3bniO0ymECHSX96W/ArpPMBtMJNKJHzOwTgNa0K0
-   UVe6vI1bdIGDoDHHvzq/XJyTR3c0RZ8ETazEo0NgfXfiEdK/b723cILwL
-   s8UWpNPZNWtoP7luaaNtbevfbZtmxqA9vlDQOMCiGn0m/HkDtwzXrBGLx
-   GQNjKXfezfTZkfqjLYhhnH7JtB7A7BmU68wcv4Qj443vcSRxZLq15KLXC
-   JmH4isHU+Q/ZEsvRosniNOGEL4T8WB8uYElpx1aNWTwAPzeDYCQVpED5N
-   oZFqgsOHfZbAB2T8ETnoVNq0NcMNJX+o8WBx6TWV6L0NhBX0OIpeFMuRs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="267294189"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="267294189"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 23:21:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="733293262"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 May 2022 23:21:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlPQv-0009L9-Rq;
-	Mon, 02 May 2022 06:21:21 +0000
-Date: Mon, 2 May 2022 14:20:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [tomoyo-test1:master 2/2] drivers/infiniband/core/device.c:2857:2:
- error: call to __compiletime_assert_500 declared with 'error' attribute:
- Please avoid flushing system_unbound_wq.
-Message-ID: <202205021448.6SzhD1Cz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5A17F
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 06:39:31 +0000 (UTC)
+Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mzhzd-1o7BpY2trl-00vdne for <llvm@lists.linux.dev>; Mon, 02 May 2022
+ 08:39:29 +0200
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f863469afbso113996257b3.0
+        for <llvm@lists.linux.dev>; Sun, 01 May 2022 23:39:29 -0700 (PDT)
+X-Gm-Message-State: AOAM5309/DwVy8ENGRHZ6WyiBOssxb3gnQ3zAFujIB/Bfz/9MhTsYsKP
+	XEhFI8PttZB9IHYwyAD3kMKrBJR2tNDAiqkB/oQ=
+X-Google-Smtp-Source: ABdhPJzE5OwpHzpXPFEJtsLJFYHLxPubCpwCFMQg0sr1QksMReTLI4jUw6Ctec+D9T/Lf1Yk2XlAE95Ueu1oyO8PiT0=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr10502132ywk.209.1651473568501; Sun, 01
+ May 2022 23:39:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202205020811.kEEGO8QC-lkp@intel.com>
+In-Reply-To: <202205020811.kEEGO8QC-lkp@intel.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 2 May 2022 08:39:12 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
+Message-ID: <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
+Subject: Re: [asahilinux:asahi-soc/rtkit-sart-nvme 4/6] drivers/soc/apple/sart.c:284:4:
+ warning: format specifies type 'unsigned long long' but the argument has type
+ 'phys_addr_t' (aka 'unsigned int')
+To: kernel test robot <lkp@intel.com>
+Cc: Sven Peter <sven@svenpeter.dev>, clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Hector Martin <marcan@marcan.st>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:WEWocu+1YPJJi8rXefR38vbY+75it7JV7HHOuyc66hdK1KLQLvk
+ r7zYnWsVU8/uzl8HSmAYiqye02hANqdThu4zCzfUVePQIAWaL/QcqKaYPCMnlkQD8bkXhni
+ T20FywxEt7tSw4c1M43Chjv9ln7478DdMi9ZjXKKizI+V4nHcDIREXgOmP7x6iq3rFr1LJn
+ ao/vyVC7XfZTKRAPoa6iw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YqrtPzTjVBQ=:PMC7QThjgvP1Jb1Xsao/0t
+ XfBPqu+D3InA5j+bWwuyRmJldRU1Jwb5eunZiWZbJdb3/DzUB1Z2+dVs2zxpFwOEb6s6nMRms
+ x30PmT6ojhkGSNw7aumtue22/Tn+uaTlklRym/GoqNG9bm/7DAVacOL3V+Cbn08JwCfzMEkqf
+ U7omqfuux1aRE81H114zGYBSu8w4eQvOZYD3vGdIGFRL9MQxRsYY90jWgYncD0pjaFTpDEdry
+ M+Hn/QdD+xSSzgvsNJrUkDeb7McBpCXmZBiBGs1IfKIC2j0QgHUBvJx0bk+Izud1wvR1z7v+6
+ /erGHxVKvxy+D4wGLSL+VgJrfYvSIqs06cS4CJvo4hh1sRtnWkoHnIS+8Rm/iK8P8eeaYn/KD
+ pYC6W26y8QHMl022D7LK95krkE3CIE348M4k3Wqxjm/nmp37w3Y8iYSx+6lgIL1h+kCaTPm63
+ AYKlbbb7fBHiKVj+/zuFrxYgAYcreePL/dgw+pAfh3y1oFUFLkm0kWnezNNJfjTWwGwsFagJ3
+ EUUS3/W4vWqv/fzDFIKf/0LvwvhX4Ez5dvq/wOc3/4uDbmHDmdSCxTOA7X8yGdRK/AgMI4KrZ
+ IiITtFSRnpxHPdVa+5KmpVMjXaLWPGhYqTlm2RwVLEI1pygptdW8KakfD1OPo6XesbhkHnCn4
+ oDz9JONFoamT7zyuRBE//mWmBq67Ar9DwPibrAoadOvBOypgTMboPw6HV5UO1woz6ZTc=
 
-tree:   https://scm.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
-head:   c806998d6e2cfdbcf8f4b241b709552b7d85fa3e
-commit: c806998d6e2cfdbcf8f4b241b709552b7d85fa3e [2/2] workqueue: Wrap flush_workqueue() using a macro
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220502/202205021448.6SzhD1Cz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add tomoyo-test1 https://scm.osdn.net/gitroot/tomoyo/tomoyo-test1.git
-        git fetch --no-tags tomoyo-test1 master
-        git checkout c806998d6e2cfdbcf8f4b241b709552b7d85fa3e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/infiniband/core/
+On Mon, May 2, 2022 at 2:21 AM kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>    277
+>    278                  clear_bit(i, &sart->used_entries);
+>    279                  dev_dbg(sart->dev, "cleared entry %d\n", i);
+>    280                  return 0;
+>    281          }
+>    282
+>    283          dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
+>  > 284                   paddr, size);
+>    285
 
-All errors (new ones prefixed by >>):
+Hi Sven,
 
->> drivers/infiniband/core/device.c:2857:2: error: call to __compiletime_assert_500 declared with 'error' attribute: Please avoid flushing system_unbound_wq.
-           flush_workqueue(system_unbound_wq);
-           ^
-   include/linux/workqueue.h:669:2: note: expanded from macro 'flush_workqueue'
-           BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:39:1: note: expanded from here
-   __compiletime_assert_500
-   ^
-   1 error generated.
+to print a phys_addr_t, you should pass the address by reference and use
+the special "%pap" format string modifier. I'm not entirely sure if it should
+actually be a dma_addr_t instead of a phys_addr_t. If the type gets changed,
+the format string would become "%pad".
 
-
-vim +/error +2857 drivers/infiniband/core/device.c
-
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2840  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2841  static void __exit ib_core_cleanup(void)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2842  {
-5ef8c0c180a631 Jason Gunthorpe   2018-05-28  2843  	roce_gid_mgmt_cleanup();
-6c80b41abe22ae Leon Romanovsky   2017-06-20  2844  	nldev_exit();
-c9901724a2f141 Leon Romanovsky   2017-06-05  2845  	rdma_nl_unregister(RDMA_NL_LS);
-4e0f7b9070726a Parav Pandit      2019-02-26  2846  	unregister_pernet_device(&rdma_dev_net_ops);
-42df744c4166af Janne Karhunen    2019-06-14  2847  	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
-c2e49c92326f9b Mark Bloch        2016-05-19  2848  	ib_sa_cleanup();
-4c2cb4220431cb Mark Bloch        2016-05-19  2849  	ib_mad_cleanup();
-e3f20f02864f6d Leon Romanovsky   2016-05-19  2850  	addr_cleanup();
-c9901724a2f141 Leon Romanovsky   2017-06-05  2851  	rdma_nl_exit();
-55aeed06544f67 Jason Gunthorpe   2015-08-04  2852  	class_unregister(&ib_class);
-f794809a7259df Jack Morgenstein  2018-08-27  2853  	destroy_workqueue(ib_comp_unbound_wq);
-14d3a3b2498eda Christoph Hellwig 2015-12-11  2854  	destroy_workqueue(ib_comp_wq);
-f7c6a7b5d59980 Roland Dreier     2007-03-04  2855  	/* Make sure that any pending umem accounting work is done. */
-f06267104dd911 Tejun Heo         2010-10-19  2856  	destroy_workqueue(ib_wq);
-d0899892edd089 Jason Gunthorpe   2019-02-12 @2857  	flush_workqueue(system_unbound_wq);
-e59178d895afa2 Jason Gunthorpe   2019-02-06  2858  	WARN_ON(!xa_empty(&clients));
-0df91bb67334ee Jason Gunthorpe   2019-02-06  2859  	WARN_ON(!xa_empty(&devices));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2860  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2861  
-
-:::::: The code at line 2857 was first introduced by commit
-:::::: d0899892edd089790eb17943ecf28254a909deae RDMA/device: Provide APIs from the core code to help unregistration
-
-:::::: TO: Jason Gunthorpe <jgg@mellanox.com>
-:::::: CC: Jason Gunthorpe <jgg@mellanox.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+       Arnd
