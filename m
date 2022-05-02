@@ -1,74 +1,151 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5A17F
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 06:39:31 +0000 (UTC)
-Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mzhzd-1o7BpY2trl-00vdne for <llvm@lists.linux.dev>; Mon, 02 May 2022
- 08:39:29 +0200
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f863469afbso113996257b3.0
-        for <llvm@lists.linux.dev>; Sun, 01 May 2022 23:39:29 -0700 (PDT)
-X-Gm-Message-State: AOAM5309/DwVy8ENGRHZ6WyiBOssxb3gnQ3zAFujIB/Bfz/9MhTsYsKP
-	XEhFI8PttZB9IHYwyAD3kMKrBJR2tNDAiqkB/oQ=
-X-Google-Smtp-Source: ABdhPJzE5OwpHzpXPFEJtsLJFYHLxPubCpwCFMQg0sr1QksMReTLI4jUw6Ctec+D9T/Lf1Yk2XlAE95Ueu1oyO8PiT0=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr10502132ywk.209.1651473568501; Sun, 01
- May 2022 23:39:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37777F
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 07:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651474945; x=1683010945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LRyLlJLvu19lLwxcC7JKQKdYckR3OJ2ppVlcOdhNaMY=;
+  b=VJen3gMtd7qr9tbRLSAfW2/83BKTDw8ag4gKEmyymvHqgs/flXhd7aBT
+   6tKusqjEjfunDjAjQANbQJvrqQXaaDY+qKFxdqGE+/t1lKH/aCjnSxSzW
+   co2BLRalbly86VsAa+tdfjLjoeGAHZQqFA2Xx8p4/UCLt156n0yc7pN2q
+   AWT+HtRnC1OzJJL5el1vdGFeUknYqdNc7fap5c907xouCIGg+uDvWZi1/
+   NKQ9B7c/5f2PdpjUA167rWBbC0kv8sVM0AquMPEhtp1dlIZYdwHwg9uL3
+   uQb/ocooBzLFk6WLvAzO09DCh0OHy7bOYnqTIOQ7z8b1RifLNXWh4Yvg6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247693204"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="247693204"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 00:02:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="545906944"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 00:02:23 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlQ4c-0009MB-Lm;
+	Mon, 02 May 2022 07:02:22 +0000
+Date: Mon, 2 May 2022 15:01:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [drm-msm:msm-next-staging 61/96]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warning:
+ variable 'mode' is uninitialized when used here
+Message-ID: <202205021439.HE0yB3Rm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202205020811.kEEGO8QC-lkp@intel.com>
-In-Reply-To: <202205020811.kEEGO8QC-lkp@intel.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 2 May 2022 08:39:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
-Message-ID: <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
-Subject: Re: [asahilinux:asahi-soc/rtkit-sart-nvme 4/6] drivers/soc/apple/sart.c:284:4:
- warning: format specifies type 'unsigned long long' but the argument has type
- 'phys_addr_t' (aka 'unsigned int')
-To: kernel test robot <lkp@intel.com>
-Cc: Sven Peter <sven@svenpeter.dev>, clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Hector Martin <marcan@marcan.st>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:WEWocu+1YPJJi8rXefR38vbY+75it7JV7HHOuyc66hdK1KLQLvk
- r7zYnWsVU8/uzl8HSmAYiqye02hANqdThu4zCzfUVePQIAWaL/QcqKaYPCMnlkQD8bkXhni
- T20FywxEt7tSw4c1M43Chjv9ln7478DdMi9ZjXKKizI+V4nHcDIREXgOmP7x6iq3rFr1LJn
- ao/vyVC7XfZTKRAPoa6iw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YqrtPzTjVBQ=:PMC7QThjgvP1Jb1Xsao/0t
- XfBPqu+D3InA5j+bWwuyRmJldRU1Jwb5eunZiWZbJdb3/DzUB1Z2+dVs2zxpFwOEb6s6nMRms
- x30PmT6ojhkGSNw7aumtue22/Tn+uaTlklRym/GoqNG9bm/7DAVacOL3V+Cbn08JwCfzMEkqf
- U7omqfuux1aRE81H114zGYBSu8w4eQvOZYD3vGdIGFRL9MQxRsYY90jWgYncD0pjaFTpDEdry
- M+Hn/QdD+xSSzgvsNJrUkDeb7McBpCXmZBiBGs1IfKIC2j0QgHUBvJx0bk+Izud1wvR1z7v+6
- /erGHxVKvxy+D4wGLSL+VgJrfYvSIqs06cS4CJvo4hh1sRtnWkoHnIS+8Rm/iK8P8eeaYn/KD
- pYC6W26y8QHMl022D7LK95krkE3CIE348M4k3Wqxjm/nmp37w3Y8iYSx+6lgIL1h+kCaTPm63
- AYKlbbb7fBHiKVj+/zuFrxYgAYcreePL/dgw+pAfh3y1oFUFLkm0kWnezNNJfjTWwGwsFagJ3
- EUUS3/W4vWqv/fzDFIKf/0LvwvhX4Ez5dvq/wOc3/4uDbmHDmdSCxTOA7X8yGdRK/AgMI4KrZ
- IiITtFSRnpxHPdVa+5KmpVMjXaLWPGhYqTlm2RwVLEI1pygptdW8KakfD1OPo6XesbhkHnCn4
- oDz9JONFoamT7zyuRBE//mWmBq67Ar9DwPibrAoadOvBOypgTMboPw6HV5UO1woz6ZTc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 2, 2022 at 2:21 AM kernel test robot <lkp@intel.com> wrote:
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
+head:   f1fc2b87de4719cfa8e193e0746cc524dd9f7472
+commit: d7d0e73f7de33a2b9998b607707a3e944ef3b86d [61/96] drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021439.HE0yB3Rm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
+        git fetch --no-tags drm-msm msm-next-staging
+        git checkout d7d0e73f7de33a2b9998b607707a3e944ef3b86d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/ti/ drivers/gpu/drm/msm/ drivers/pci/controller/dwc/
 
->    277
->    278                  clear_bit(i, &sart->used_entries);
->    279                  dev_dbg(sart->dev, "cleared entry %d\n", i);
->    280                  return 0;
->    281          }
->    282
->    283          dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
->  > 284                   paddr, size);
->    285
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi Sven,
+All warnings (new ones prefixed by >>):
 
-to print a phys_addr_t, you should pass the address by reference and use
-the special "%pap" format string modifier. I'm not entirely sure if it should
-actually be a dma_addr_t instead of a phys_addr_t. If the type gets changed,
-the format string would become "%pad".
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warning: variable 'mode' is uninitialized when used here [-Wuninitialized]
+                           phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
+                                             ^~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h:36:21: note: expanded from macro 'DPU_DEBUG'
+                           DRM_DEBUG(fmt, ##__VA_ARGS__); \
+                                            ^~~~~~~~~~~
+   include/drm/drm_print.h:526:32: note: expanded from macro 'DRM_DEBUG'
+           __drm_dbg(DRM_UT_CORE, fmt, ##__VA_ARGS__)
+                                         ^~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:250:37: note: initialize the variable 'mode' to silence this warning
+           const struct drm_display_mode *mode;
+                                              ^
+                                               = NULL
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:410:6: warning: variable 'refcount' set but not used [-Wunused-but-set-variable]
+           int refcount;
+               ^
+   2 warnings generated.
 
-       Arnd
+
+vim +/mode +253 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+
+   237	
+   238	/**
+   239	 * dpu_encoder_phys_wb_atomic_check - verify and fixup given atomic states
+   240	 * @phys_enc:	Pointer to physical encoder
+   241	 * @crtc_state:	Pointer to CRTC atomic state
+   242	 * @conn_state:	Pointer to connector atomic state
+   243	 */
+   244	static int dpu_encoder_phys_wb_atomic_check(
+   245			struct dpu_encoder_phys *phys_enc,
+   246			struct drm_crtc_state *crtc_state,
+   247			struct drm_connector_state *conn_state)
+   248	{
+   249		struct drm_framebuffer *fb;
+   250		const struct drm_display_mode *mode;
+   251	
+   252		DPU_DEBUG("[atomic_check:%d, \"%s\",%d,%d]\n",
+ > 253				phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
+   254	
+   255		if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
+   256			return 0;
+   257	
+   258		fb = conn_state->writeback_job->fb;
+   259		mode = &crtc_state->mode;
+   260	
+   261		if (!conn_state || !conn_state->connector) {
+   262			DPU_ERROR("invalid connector state\n");
+   263			return -EINVAL;
+   264		} else if (conn_state->connector->status !=
+   265				connector_status_connected) {
+   266			DPU_ERROR("connector not connected %d\n",
+   267					conn_state->connector->status);
+   268			return -EINVAL;
+   269		}
+   270	
+   271		DPU_DEBUG("[fb_id:%u][fb:%u,%u]\n", fb->base.id,
+   272				fb->width, fb->height);
+   273	
+   274		if (fb->width != mode->hdisplay) {
+   275			DPU_ERROR("invalid fb w=%d, mode w=%d\n", fb->width,
+   276					mode->hdisplay);
+   277			return -EINVAL;
+   278		} else if (fb->height != mode->vdisplay) {
+   279			DPU_ERROR("invalid fb h=%d, mode h=%d\n", fb->height,
+   280					  mode->vdisplay);
+   281			return -EINVAL;
+   282		} else if (fb->width > DEFAULT_MAX_WRITEBACK_WIDTH) {
+   283			DPU_ERROR("invalid fb w=%d, maxlinewidth=%u\n",
+   284					  fb->width, DEFAULT_MAX_WRITEBACK_WIDTH);
+   285			return -EINVAL;
+   286		}
+   287	
+   288		return 0;
+   289	}
+   290	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
