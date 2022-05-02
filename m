@@ -1,77 +1,69 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC702908
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 15:32:08 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id y2so26626301ybi.7
-        for <llvm@lists.linux.dev>; Mon, 02 May 2022 08:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=hCGKNipS00tBX8rbB28dkiVg/BvdNz8E722on+AV5GE=;
-        b=iJhBELUzXOr15YhTf0wF+a681aftQovvW35I2W0xmmMp8MntU2wDtF3J/uFXVkHeUI
-         FFh10K8dP/kcvw5GV42gc2kKRsaEByU7ysTgBlBeGuBG8+jtAY9IAEIfWWsgn4nIJpbw
-         bsd6Y41l2YVABLJQ92bJl0KYYuPYfpyYZI9eYjsmq+GzxKmgW0yHxGKt2ihtN9vq3ExH
-         dBOuCATwLlUCWDwVviy4J4NRKpwr/ejONaiz5p0ymgLsXU8O6QPNTKF7w7usOFpdARND
-         A5001AxyjOwcV5fpVk7WWUtsEuvWLCeK6kDaDgzQI8xbzzBrq2zM5i8zSaUPu8vITIUg
-         4CLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=hCGKNipS00tBX8rbB28dkiVg/BvdNz8E722on+AV5GE=;
-        b=mbtVq+1YkJR9eH+g7aEFK+VXtKG3PylLyh5524qgXFBLJ7F5Ib4g386GYXAqca9+jQ
-         s1Q6cUQVPDTAs8Z7o8/c0urmZvjyCh1BTaqtaDs/Yg2wxHZJzN5VGOG7Oy6hUKrpj9L0
-         a4wpFeC7V4/g2GVc+wGmtHLwdzbrqr0rJPrAaRuuAwBHXC1RvXm8ZcXTsOJ34wsEc3lk
-         TuL1lVO2LMUjOgharX9yXtrt2lQck+vHEzE77RvHV9ibYvPZJ6wi/hXQUmt1VLdpNfJ7
-         G9lmDkF1HFEZwDcpAWKL0SyskD6qefGQ1aaeY3LOvh3jhlouRGGflAGc60EAufmIUoqM
-         elXQ==
-X-Gm-Message-State: AOAM531okFlFN/23awbMvVouLH9tHR+5ia4nkcbncTkQHd0vipJK4hrK
-	7w/UGugobXDuXVVs43F31EUyoR4PsKRhiUnOXyYl0g==
-X-Google-Smtp-Source: ABdhPJwj3QrPFfxu2nyuN5kFPO+0frvF6GLCyRxUVFMu80sCrG1GMxBjBR97BxQia0hYHO5LXNrgaz0HEPZ7M14xL8o=
-X-Received: by 2002:a5b:2c9:0:b0:644:b7c9:3766 with SMTP id
- h9-20020a5b02c9000000b00644b7c93766mr10147935ybp.428.1651505527625; Mon, 02
- May 2022 08:32:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED522C9E
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 16:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C422C385AC;
+	Mon,  2 May 2022 16:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651507991;
+	bh=JZXiTjp2nZoUeQLFyk/etfp/xO0bupP46m6Ig16wE4M=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=uzYGYXfzQuKJqqXLbTMe/U4KQ6G8oymnirJ1L3lX1rEFCZxbeusc1FkWV5w2ur0Pu
+	 wnFml5U2xMd0aHOTFMj+c2BydaM3niaLwKJeZLb9uXM4GF+7HcEg++dolj1u6z7n66
+	 rN32fnWKxIBENOursdNu1EwHdbayUAMwTLO4QtaqV3462iIodz1flH9I8ItPE26INh
+	 ROonfFO1IjiVI1nn+iIs3ns+X6eOkBH0mbiQTE3qmulA6YwfcyL/bDh6bhg138Zubs
+	 xN//s2zVqwRooiCcdXiqaxxXXGX/0D+I7aYGnYXoa6XsLKxsCEigY/UbmSoNZGw87d
+	 e9muuuzDi7Nzg==
+Date: Mon, 2 May 2022 18:12:59 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: kernel test robot <lkp@intel.com>
+cc: Joshua-Dickens <Joshua@joshua-dickens.com>, llvm@lists.linux.dev, 
+    kbuild-all@lists.01.org, linux-input@vger.kernel.org, 
+    Joshua Dickens <joshua.dickens@wacom.com>, 
+    Jason Gerecke <jason.gerecke@wacom.com>
+Subject: Re: [hid:for-5.19/wacom 1/2] drivers/hid/wacom_wac.c:2411:42: warning:
+ format specifies type 'unsigned short' but the argument has type 'int'
+In-Reply-To: <202204212217.M2efI2Po-lkp@intel.com>
+Message-ID: <nycvar.YFH.7.76.2205021812120.28985@cbobk.fhfr.pm>
+References: <202204212217.M2efI2Po-lkp@intel.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com> <20220430160750.ov7ddsq2vzibwrju@bubbles>
-In-Reply-To: <20220430160750.ov7ddsq2vzibwrju@bubbles>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 2 May 2022 08:31:35 -0700
-Message-ID: <CABCJKufWFy0ShK49YAqk60mVApQ3qrfOj9R1nuLAWXiVtqbPJA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/21] KCFI support
-To: Sami Tolvanen <samitolvanen@google.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Sat, Apr 30, 2022 at 9:08 AM Kenton Groombridge <me@concord.sh> wrote:
-> Many thanks for continuing to work on this! As a user who has been
-> following the evolution of this patch series for a while now, I have a
-> couple of burning questions:
->
-> 1) The LLVM patch says that kCFI is not compatible with execute-only
-> memory. Is there a plan ahead for kCFI if and when execute-only memory
-> is implemented?
+On Thu, 21 Apr 2022, kernel test robot wrote:
 
-There's no plan for executable-only memory right now, that would
-require type hashes to be moved somewhere else to read-only memory.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-5.19/wacom
+> head:   6ff1cae2e30a79265bcce85f617663c480936ab0
+> commit: 6d09085b38e5ace0001cf4f3cdbd4bf247533b61 [1/2] HID: wacom: Adding Support for new usages
+> config: riscv-randconfig-r026-20220420 (https://download.01.org/0day-ci/archive/20220421/202204212217.M2efI2Po-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=6d09085b38e5ace0001cf4f3cdbd4bf247533b61
+>         git remote add hid https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
+>         git fetch --no-tags hid for-5.19/wacom
+>         git checkout 6d09085b38e5ace0001cf4f3cdbd4bf247533b61
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/ kernel/
 
-> 2) kCFI only checks indirect calls while Clang's traditional CFI has
-> more schemes like bad cast checking and so on. Are there any major
-> security tradeoffs as a result of this?
+Joshua,
 
-No, cfi-icall is only scheme that's relevant for the kernel. The other
-schemes implemented in Clang are mostly useful for C++.
+could you please send a fixup patch to get the types right? This got 
+introduced by 6d09085b38e5a ("HID: wacom: Adding Support for new usages")
 
-Sami
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+
