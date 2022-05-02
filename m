@@ -1,38 +1,38 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CD92908
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 15:20:39 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id d12so26588629ybc.4
-        for <llvm@lists.linux.dev>; Mon, 02 May 2022 08:20:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAC12908
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 15:23:30 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f83983782fso151545877b3.6
+        for <llvm@lists.linux.dev>; Mon, 02 May 2022 08:23:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
-        b=nCCr/m44vAOB3fWxcTwSvULnXuiNVu4xAEa/q8PX0e8wp//HRJ3pAwZlfI8oXQakqb
-         PBNA5VrluDTvJXwHjjEqKVrz+t1ZAhOuAy0UZ/lpPuIF5TfAQhvGp0eP9kDlGthADP7B
-         jQS2jgmlIf2O2YIMWFKayiS6OkGnXXTuI6mSozGLIgWSqWTudoL0mragtOrIMycv0iNu
-         cZvbiKKjzeuQMjCAHgd1ar9MSdep3a1AilDwleb2gMChOjj8zJLFVuMg4VeHUCWQC8gh
-         4i9wU09zBuZyOBMRAX6+2An3+4aqYMkmsLVezmWAt06zT2xLERXvPiNYHUXkJ6I1taeF
-         kDFw==
+         :cc:content-transfer-encoding;
+        bh=ea1oEhzhMj8grWxQC5SgcBArE4/rXmfoEAuZM9GaSnk=;
+        b=e8jLUWg60Xj2yGbY7ch7OqYrOgajvXWhT4iTIr2BEfGc4+9NKE3qXx5Xs7EWsTT9GL
+         OeGOmR0vut0qQzy7JH/IrH9ka8nmoGFb2Gvyc23nt5LdSRcK5YcEOi9gq0tuIX1LeJ8F
+         dgO5NTyqgBNIjtZfsGM/MVGmXurbMVjBLSFRbguI2sjEXBxprRb2lYwaWk3ntkRBUDU5
+         w3d7TRfSKPgIEQBDgV73myrvp6CyIfvHo0gPoeiO3QhVlTaXfe6T8J6DfnjHgI0tJoXs
+         /uqM+NbLt9VQB70/97KqEMc8frtLzcwZYPKAQP5xl9ZKUvDReHs43KuwvnY0KNe0WvE5
+         DjCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
-        b=aSEA/Q6BRfQ+Qr+VcPaVfZoj4DVXR/QTQXKLaPuh2jNeKcdBsbFgY1Ap0nGyMhEfar
-         cqANlEhwD+/gen6Qj4/pkDv+0mDTucmm0F2/Vmu7KpkuzWwKlEnd4CyauIASWhYs7bAo
-         m+Cc5xpC0zd849N6EM+78k05zImzP/ezYRymhLTgsI509/r6r7nb35y5iQHGpXE79WEa
-         1s51uBxuFjYPu23SpUJZt8ZoAN56hRa6C4IT+bfUz77+M7FOGqBELmrsXUb02WfAkrst
-         MEtTCj7UGAqDL8UcfNrLN2H+cNrvPUV5m1mcdDrDQn/dFmdUQhQ/OtUvAj0pZwY71EmS
-         BbCQ==
-X-Gm-Message-State: AOAM530xGyMC4yzosvs1PKTZrWOxhDExBeFw0O45sBb4q3/5nmVkWwGL
-	sw5v2k61NClUCh1HWdOrlBJKcE6SIFH+jT7GK2IehA==
-X-Google-Smtp-Source: ABdhPJzqk8+IJH8fkyTp0bTuIuMWgJsHqUrnpAZSbYcMmkZ/+21K1dsNoH6iUg94I0Y7z6gpiKYrRf3BnqDN09p5vbs=
-X-Received: by 2002:a25:3455:0:b0:648:44db:51e0 with SMTP id
- b82-20020a253455000000b0064844db51e0mr10124096yba.314.1651504838091; Mon, 02
- May 2022 08:20:38 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ea1oEhzhMj8grWxQC5SgcBArE4/rXmfoEAuZM9GaSnk=;
+        b=7BvC7jZNZbyy5nV05JVAkaEzcd6qvcKpd3918pVTj62T6qg11l2BoHK2ZcMQ0oqE/j
+         pYv23poczsnNcWX5gmhfTWszL3e+5SZBIrcB3ubIUkP3toBdumwUUNcfN9KpM2czSppD
+         sxdOdKIKfX3DO5XPreFDiGLs0doEhBpH5+R1Tvra1l9WCUja7p97tBjsOb+ca+dV2l7J
+         H3w13/VWxZCshGQ4IL88L9Plq+ZW/7E1NdNgX92hfoSSxz/XXM5034zyH5vlUeUcETfp
+         H9mNVVEVleZjJWX6sVPMrRAgCUeIkcsg0HT4bjr0qWs9RFphdF9bZjh+1cvox799/KZ3
+         X2CQ==
+X-Gm-Message-State: AOAM531PdlqBSQ2fbnW6/6UQGv+YL48IyTT5uoxDg5e479Dnm4mQ+cuz
+	W/cAQs/eIlFe2awWX90ioZaam8nvvCsHGTrQdkctLg==
+X-Google-Smtp-Source: ABdhPJzuy+A0wik9KFC+HHMm48ehGTHQOFaLPm3WarFTvUfmKlDOQAAm23en8K1MA9diKN/+E2i0Bt2GyOtIU8ryfck=
+X-Received: by 2002:a81:a93:0:b0:2f4:d65a:d44e with SMTP id
+ 141-20020a810a93000000b002f4d65ad44emr11108924ywk.243.1651505009686; Mon, 02
+ May 2022 08:23:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,34 +40,73 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-22-samitolvanen@google.com> <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
+ <202204291545.47C6A97EA2@keescook> <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 2 May 2022 08:20:05 -0700
-Message-ID: <CABCJKucK39XnVPA=EhLSJ+vcgVLCSgnGzLrRy9tZSM2jzZtUBg@mail.gmail.com>
-Subject: Re: [RFC PATCH 21/21] x86: Add support for CONFIG_CFI_CLANG
+Date: Mon, 2 May 2022 08:22:57 -0700
+Message-ID: <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] KCFI support
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+Cc: Kees Cook <keescook@chromium.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Will Deacon <will@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
 	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>, 
 	linux-hardening@vger.kernel.org, 
 	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 30, 2022 at 2:24 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Sat, Apr 30, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote=
+:
 >
-> On Fri, Apr 29, 2022 at 01:36:44PM -0700, Sami Tolvanen wrote:
-> > -     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
-> > +     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > +         report_cfi(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
+> On Fri, Apr 29, 2022 at 03:53:12PM -0700, Kees Cook wrote:
+> > On Fri, Apr 29, 2022 at 01:36:23PM -0700, Sami Tolvanen wrote:
+> > > KCFI is a proposed forward-edge control-flow integrity scheme for
+> > > Clang, which is more suitable for kernel use than the existing CFI
+> > > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+> > > alter function references to point to a jump table, and won't break
+> > > function address equality.
+> >
+> > =F0=9F=8E=89 :)
+> >
+> > > The latest LLVM patches are here:
+> > >
+> > >   https://reviews.llvm.org/D119296
+> > >   https://reviews.llvm.org/D124211
+> > >
+> > > [...]
+> > > To test this series, you'll need to compile your own Clang toolchain
+> > > with the patches linked above. You can also find the complete source
+> > > tree here:
+> > >
+> > >   https://github.com/samitolvanen/llvm-project/commits/kcfi-rfc
+> >
+> > And note that this RFC is seeking to break a bit of a circular dependen=
+cy
+> > with regard to the design of __builtin_kcfi_call_unchecked (D124211
+> > above), as the implementation has gone around a few times in review wit=
+hin
+> > LLVM, and we want to make sure that kernel folks are okay with what was
+> > settled on. If there are no objections on the kernel side, then we can
+> > land the KCFI patches, as this is basically the only remaining blocker.
 >
-> This way you'll first get a BUG splat and then tack on the CFI thing.
+> So aside from the static_call usage, was there any other?
 
-The CFI ud2 isn't in the bug table, which means find_bug returns
-BUG_TRAP_TYPE_NONE and report_bug bails out before printing out
-anything.
+Not at the moment, and it looks like we can get rid of that too.
+
+> Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> attribute or qualifier for this, such that one can mark a function
+> pointer as not doing CFI.
+>
+> I simply doesn't make sense to have a builtin that operates on an
+> expression. The whole thing is about indirect calls, IOW function
+> pointers.
+
+I also thought an attribute would be more convenient, but the compiler
+folks prefer a built-in:
+
+https://reviews.llvm.org/D122673
 
 Sami
