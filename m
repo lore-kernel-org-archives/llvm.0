@@ -1,60 +1,46 @@
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE70D3212
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 22:07:40 +0000 (UTC)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-	by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KsXlG0SWnzMqFPG;
-	Mon,  2 May 2022 21:11:54 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-	by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KsXlF18QfzlhSMS;
-	Mon,  2 May 2022 21:11:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1651518714;
-	bh=0NxUaaWbrR2tDqr7m+/6m1rvuQPmqjcU76RBWpb2ACo=;
-	h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
-	b=bn9kQv/9cYMoic4chLoAuI0NTaixiFmyd0AVe5+MB/o3qzTIRPBCjxK9baQXjuyrO
-	 6IQguVyyZjdlm6mL4SwdN0JAIajtfuB5IyCu0pdBD1VMDeoCHYn8jN8Ra1HbeLJghP
-	 NKYmm3EH0g+EgCOMfbk+6fFDaXl8nu7qxE/6P6UM=
-Message-ID: <ee3feb13-fbf8-6651-76ff-1324878d72e8@digikod.net>
-Date: Mon, 2 May 2022 21:13:05 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3687A322C
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 23:52:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC4FC385AC;
+	Mon,  2 May 2022 23:52:58 +0000 (UTC)
+Date: Mon, 2 May 2022 19:52:51 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nick Desaulniers
+ <ndesaulniers@google.com>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
+ symbols
+Message-ID: <20220502195251.5d862365@rorschach.local.home>
+In-Reply-To: <819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<20220427095415.594e5120@gandalf.local.home>
+	<1651129169.fpixr00hgx.naveen@linux.ibm.com>
+	<20220428100602.7b215e52@gandalf.local.home>
+	<819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent:
-Content-Language: en-US
-From: =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-To: Miguel Ojeda <ojeda@kernel.org>, Andy Whitcroft <apw@canonical.com>,
- Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
-Subject: Re: clang-format inconsistencies with checkpatch.pl
-In-Reply-To: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 2 May 2022 14:44:56 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-On 23/04/2022 13:45, Mickaël Salaün wrote:
-> Hi,
-> 
-> I would like to use clang-format (with a pinned version, probably 14) to 
-> keep a consistent coding style, or at least start with one. However, 
-> there is some inconsistencies with the checkpatch.pl script:
-> 
-> In some cases, goto labels are indented, which checkpatch.pl doesn't like.
+> If we do that after the linking, won't it be a nightmare with the 
+> trampolines installed by the linker when the destination is over the 24 
+> bits limit ?
 
-This can be fixed with SplitEmptyFunction: false. I'll send a patch for 
-that if it's OK with you.
+Not sure what you mean. The locations I'm talking about is the full
+address saved in the __mcount_loc table (data section).
 
-> 
-> checkpatch.pl complains about some functions (e.g. FIXTURE or 
-> FIXTURE_VARIANT_ADD) that get an open brace just after but without a space.
-
-Miguel, do you know how/if clang-format can enforce that style? FIXTURE 
-macros are struct declarations though.
+-- Steve
