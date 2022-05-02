@@ -1,47 +1,49 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606523212
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 21:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19633212
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 21:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651525879; x=1683061879;
+  t=1651527677; x=1683063677;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=e51YJRAyK2oFyodJN78dW1B+cSnosSuF7pHpOHVfPBM=;
-  b=mNN7X9lhpbLIcryVYnzuKS3u15g6XrkIm7kTpZ2xNLDyEkoAUfScgLlP
-   0J4cuCE2Csy6tFGnqRl/+voKA6fqF2dfMRL3PnC4k8N5H6F06elKf7bB+
-   2ZZRsZt32sj42aMmuvfKYh6Er/naUiJN034GJGdyxi9qJ2JIyp+62+5yp
-   xlYR5rHfTaa/8cujWibd7IdtNFDBZZnasoTr9Rd6pR3pz/43H8hotorNl
-   UbP3F68wUO/irL64yLIBf+B41q26D+3qKk/fMai4RaUIejdzxReoAjaqq
-   WoSHMuh/5RIsMCFKE+hkubrow4MAajcIWoyAhDeSe55GWbFwEQYDZD3tz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266917354"
+  bh=whQ8TXX/TlgEcBTOl+OsYKGzR21rpHVKqhavg+yiwqk=;
+  b=guLicNaehvd1Q3ekPqrtLU7byFswSv3yQC+ZhGw6BG8xHVtP3XIsjHb4
+   Vv+Wlo4rMi/qZ3eIPWaCLJVV0G23WNkYaFX9mJlTJrkYjPxnyjtePvLbL
+   0pcAJpcV2CW3c5SMiQJsqsqvCu9IPqFy4BMG80WTSbwYyn9KlAXWphit7
+   ER68AtE4GGIY1E28jrut9TVTjn0iQHmnuD0Hz7P2CpW5TRMJJe+siV7dZ
+   yD/WU2DpfybLVWxlNme7ukobwog4PtHeUcPqElH4cKar9AWtxyUdTTyEb
+   bzJrdtuV3cB2Su6/wOigw+mbFp34U091diSCafZ9pIOyVN1w8Lu42peJa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247244276"
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="266917354"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:11:18 -0700
+   d="scan'208";a="247244276"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:41:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="583902533"
+   d="scan'208";a="631255792"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 May 2022 14:11:15 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 02 May 2022 14:41:14 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nldK4-0009sV-FJ;
-	Mon, 02 May 2022 21:11:12 +0000
-Date: Tue, 3 May 2022 05:10:23 +0800
+	id 1nldn8-0009ta-8F;
+	Mon, 02 May 2022 21:41:14 +0000
+Date: Tue, 3 May 2022 05:40:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Minchan Kim <minchan@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>, John Dias <joaodias@google.com>,
-	Minchan Kim <minchan@kernel.org>
-Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
-Message-ID: <202205030525.VFo3Ds9w-lkp@intel.com>
-References: <20220502173558.2510641-1-minchan@kernel.org>
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 3/3] drm: Allow simpledrm to setup its emulated FB as
+ firmware provided
+Message-ID: <202205030522.Y2Nq4tz7-lkp@intel.com>
+References: <20220502153900.408522-4-javierm@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,84 +52,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
+In-Reply-To: <20220502153900.408522-4-javierm@redhat.com>
 
-Hi Minchan,
+Hi Javier,
 
 I love your patch! Yet something to improve:
 
-[auto build test ERROR on hnaz-mm/master]
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on shawnguo/for-next linus/master linux/master v5.18-rc5 next-20220502]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
-base:   https://github.com/hnaz/linux-mm master
-config: x86_64-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030525.VFo3Ds9w-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/drm-Allow-simpledrm-to-setup-its-emulated-FB-as-firmware-provided/20220502-234145
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: hexagon-randconfig-r045-20220501 (https://download.01.org/0day-ci/archive/20220503/202205030522.Y2Nq4tz7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1b8636710c31d44310f1d344e337c207562b851d
+        # https://github.com/intel-lab-lkp/linux/commit/28ef46724e385165777a21d9f661188fa2577a1e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
-        git checkout 1b8636710c31d44310f1d344e337c207562b851d
+        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-Allow-simpledrm-to-setup-its-emulated-FB-as-firmware-provided/20220502-234145
+        git checkout 28ef46724e385165777a21d9f661188fa2577a1e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/tiny/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:13:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:20:
->> include/linux/mm.h:1630:47: error: use of undeclared identifier 'MIGRATE_CMA'; did you mean 'MIGRATE_SYNC'?
-           return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
-                                                        ^~~~~~~~~~~
-                                                        MIGRATE_SYNC
-   include/linux/migrate_mode.h:18:2: note: 'MIGRATE_SYNC' declared here
-           MIGRATE_SYNC,
-           ^
-   In file included from arch/x86/kernel/asm-offsets.c:13:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:20:
->> include/linux/mm.h:1631:9: error: use of undeclared identifier 'MIGRATE_ISOLATE'; did you mean 'MIGRATE_MOVABLE'?
-                   mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
-                         ^~~~~~~~~~~~~~~
-                         MIGRATE_MOVABLE
-   include/linux/mmzone.h:44:2: note: 'MIGRATE_MOVABLE' declared here
-           MIGRATE_MOVABLE,
-           ^
+>> drivers/gpu/drm/tiny/simpledrm.c:904:31: error: call to undeclared function 'DRM_FB_SET_OPTION'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+                                        ^
+>> drivers/gpu/drm/tiny/simpledrm.c:904:49: error: use of undeclared identifier 'DRM_FB_FW'
+           drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+                                                          ^
    2 errors generated.
-   make[2]: *** [scripts/Makefile.build:122: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1283: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
 
-vim +1630 include/linux/mm.h
+vim +/DRM_FB_SET_OPTION +904 drivers/gpu/drm/tiny/simpledrm.c
 
-  1623	
-  1624	/* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
-  1625	#ifdef CONFIG_MIGRATION
-  1626	static inline bool is_pinnable_page(struct page *page)
-  1627	{
-  1628		int mt = get_pageblock_migratetype(page);
-  1629	
-> 1630		return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
-> 1631			mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
-  1632	}
-  1633	#else
-  1634	static inline bool is_pinnable_page(struct page *page)
-  1635	{
-  1636		return true;
-  1637	}
-  1638	#endif
-  1639	
+   884	
+   885	/*
+   886	 * Platform driver
+   887	 */
+   888	
+   889	static int simpledrm_probe(struct platform_device *pdev)
+   890	{
+   891		struct simpledrm_device *sdev;
+   892		struct drm_device *dev;
+   893		int ret;
+   894	
+   895		sdev = simpledrm_device_create(&simpledrm_driver, pdev);
+   896		if (IS_ERR(sdev))
+   897			return PTR_ERR(sdev);
+   898		dev = &sdev->dev;
+   899	
+   900		ret = drm_dev_register(dev, 0);
+   901		if (ret)
+   902			return ret;
+   903	
+ > 904		drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+   905	
+   906		return 0;
+   907	}
+   908	
 
 -- 
 0-DAY CI Kernel Test Service
