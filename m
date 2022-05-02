@@ -1,50 +1,43 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8EF3204
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 19:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=mYYa7YhSPmVPESGC3WBfSUVLu7/5dL6ovKiS3tnTNxc=; b=X7JjkI1eS+hZwlLL/I9p7ec0h2
-	UeIxqvrdiJt3meq6ElbsNEDYIxW+qZz/j2FrSu6coXltcfr4QtTMMPFDzslv9IR5A31jl1ddBKnH9
-	c2qsGdbgoQzF9iywxqp5QHtMYcYLEB3+RVk8mUsIOTnJ93L7VRDhLz56q/kJE1S8EfyygaZ+EPJH4
-	+lUKye+VxqZ8KUh1eKBescSHXrCybAweDQoUoV1TG8LbXYRpZEdQGzvMqMTJ67eTO75Z/LyqmGrAJ
-	WIdEZp2LKR7NJxMrEW0UmH4MNpVWroXNW+J0b79QIxFrPP2W8RHSAR29nZiASkc9sS+Ga1qVVPW+d
-	6RQX6kKQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nlc8m-00AZWD-7z; Mon, 02 May 2022 19:55:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 772E030017D;
-	Mon,  2 May 2022 21:55:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5223120288CEB; Mon,  2 May 2022 21:55:25 +0200 (CEST)
-Date: Mon, 2 May 2022 21:55:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Mark Rutland <mark.rutland@arm.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>, Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] KCFI support
-Message-ID: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <202204291545.47C6A97EA2@keescook>
- <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
- <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9883204
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 20:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651522625; x=1683058625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TDgkeaExvvU4MUaWhsjsOW8SUcyecyq5v6Ttz09eSDk=;
+  b=CglC6ij+PIVE626rB/QXGEnhz0NkhvqFGhAj5m1Cdgq6Gk8/R1lDBI3P
+   QUrwbvsudKDr+wfukYvjjDzyiI4nfYQjtzuH0LP+e3k/d5WchH28RVfMU
+   CpsZzgVoSBMd3M4kul7qj0FoX6h0cWTnvayrJZDXx2X3ft9l+cE2ISr9I
+   nmuGiAIQJqil7zOz5VNoqY39jpomzdSoO4yWESMoh0E/WB+2n47iedhF0
+   N90JprHnjcngwol0Qxh4lJoIrelF7oJeEZ2Q3yiVP8SsklICcVrMkEDQM
+   vk0uZxi34+f/kxX5PLV94WVZVcrVPZ/ZMRpmtOc5+v5zWqsC52zY6KxMD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="249301799"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="249301799"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 13:17:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="546602152"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 13:17:02 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlcTd-0009qH-Lh;
+	Mon, 02 May 2022 20:17:01 +0000
+Date: Tue, 3 May 2022 04:16:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/11]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
+ prototype for function 'spihid_get_data'
+Message-ID: <202205030410.6Owech62-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,25 +46,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
 
-On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   11b586fd5cff82ad72e9a281c0deb27959d16857
+commit: 11b586fd5cff82ad72e9a281c0deb27959d16857 [11/11] WIP: HID: transport: spi: add Apple SPI transport
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220503/202205030410.6Owech62-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/11b586fd5cff82ad72e9a281c0deb27959d16857
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 11b586fd5cff82ad72e9a281c0deb27959d16857
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/ drivers/hid/spi-hid/
 
-> > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
-> > attribute or qualifier for this, such that one can mark a function
-> > pointer as not doing CFI.
-> >
-> > I simply doesn't make sense to have a builtin that operates on an
-> > expression. The whole thing is about indirect calls, IOW function
-> > pointers.
-> 
-> I also thought an attribute would be more convenient, but the compiler
-> folks prefer a built-in:
-> 
-> https://reviews.llvm.org/D122673
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-That seems to mostly worry about C++ things (overload sets, template
-specialization, name mangling) we kernel folks don't seem to much care
-about.
+All warnings (new ones prefixed by >>):
 
-I'll stick with saying type system makes more sense to me though.
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+                        ^
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   ^
+   static 
+   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
+                   ^
+   2 warnings generated.
+--
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+
+   258	
+ > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   260	{
+   261		switch (idev->id) {
+   262		case SPIHID_DEVICE_ID_KBD:
+   263			return container_of(idev, struct spihid_apple, kbd);
+   264		case SPIHID_DEVICE_ID_TP:
+   265			return container_of(idev, struct spihid_apple, tp);
+   266		default:
+   267			return NULL;
+   268		}
+   269	}
+   270	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
