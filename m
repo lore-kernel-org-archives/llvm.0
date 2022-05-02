@@ -1,214 +1,96 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0860828E0
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 13:43:46 +0000 (UTC)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e9027efe6aso14256559fac.10
-        for <llvm@lists.linux.dev>; Mon, 02 May 2022 06:43:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06228E0
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 14:10:57 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id k27so16747908edk.4
+        for <llvm@lists.linux.dev>; Mon, 02 May 2022 07:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SZS23R8/3aS8hn+ag0EZfvYi/qn+HWC2fpxjigLbwL8=;
-        b=UNP4TjQWPwuVfp6XRBKcHnbi9I4brVINNlFFUvNcomXdIyUvMEsQNN/iBMGOIy6qXa
-         U3HAa0YA6qIqgWWa7RDcWOuxj4VFnBkmEPEEDXzGU5fgiifoe8kN99AuoMjGF64Y5i5P
-         80X+b7Sf99p7MyvucsH42RJOdepw/RQmgftXwISAoVFzarZzYeropcyinM1RCiN0MZnw
-         cWN8rbJqp19kEs9oY6XOVASDAzidg4e3jOKDIEpX3699n5X31emqcJlE9vLMVGieyZPH
-         lbl6f4fl/XE7+ICY+6C7n0BzFjikw56P8rtVitnftt0aqaKDGbyvux2ZfxFXUF8nmgFe
-         WZfA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=joK5j7ew5SKN/cHxslItBx63j5PdrPIBK5veE/G0SHQ=;
+        b=HoTx0fI9k/wNi8rf31TR+bf9CBgvi+XlcN26lQIR2oH50DFX3uY8EjYs8+G9Ly2AX6
+         VPiXuWl7g1L+R+0+J1tpVhf4zprGMtz4C9LDN/Qc721rO0peoxWUrcKYLl0kciA4tqxQ
+         1KowbweQSYEX5KdI3o8/+qh+R7PyJ3OccMWbBK10okckN8R3Q0gY6c3EkRMJegBaKMZI
+         936Msgv+6Au0TlDpcEAoY7o80jMmf/3NxXozY4m+iJ2RyuL0MOCa1VWtSr08jqiE4A6L
+         C73Sp9OLZalQdJcEQEHzDVNfcQs9a/u0xbXkxTGFvEY5Oul2MsuNymLbIj8SGyfqGbeK
+         T0Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SZS23R8/3aS8hn+ag0EZfvYi/qn+HWC2fpxjigLbwL8=;
-        b=ft42/6yPOvS6FKvS37k+kvXMQVHTwtxBKk09sBPkf4Q9tJQ1jFaty+BSrqpb6brBsz
-         AUM12Lv0KEFBKi99EeQMSczdihCOdKSHIrO15MYW6oNzlKhetxgCamJXrT3Nblg/T9xz
-         OaezaPkWQ4HHbOV9U/JNwz/Z+eXpFGGoJZc3rDcfD+aN+iPGU0byM6ajUxgCmgjvk0c5
-         2cYNyl0qS03vMkAzf1RYjQyOHSL4VdeUB4vWhQG+Gk4tTcm5RqDEKRKlnNa0/7LKSja5
-         WepkmBUUzXDV53BlBJeh0O5E6zA1i7aI8IYI3odgMrBYFBdGBLhV72/CMqnXD5QCIUoC
-         OA9A==
-X-Gm-Message-State: AOAM530ySti+CPTH3T8j5YBxjOzeQ2KrLwfLBzywVAfCubwTpgUsRp47
-	YaGGk71w5IHmSkKMhTAawYeLbL1fxmqpeWLqyfA=
-X-Google-Smtp-Source: ABdhPJwHclCFT2TQxVLkZG72hIFxYuXSoE1SrnGa/xh8TsP31EvTN9bhqMxe1iprI9aSI30jJu4aiUovupdu6b4WshU=
-X-Received: by 2002:a05:6870:d0ce:b0:ed:9988:ba91 with SMTP id
- k14-20020a056870d0ce00b000ed9988ba91mr3217956oaa.205.1651499026041; Mon, 02
- May 2022 06:43:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=joK5j7ew5SKN/cHxslItBx63j5PdrPIBK5veE/G0SHQ=;
+        b=QFkiBPupR8yg+jLQz3mE9AOF3fTcGXwecd9cfbD9f+L5LEitpZ+ITsK/YBQ8zFx6qj
+         2PUQX3ZKRFZhCeKF4fGCVS/lNpN4/CULlTh8o2Ng8ESiiTnOYhvzci/W9w5AAgowA0bt
+         hNX80GhD/+H07iSIrRIzt93XbSbDC9LUku86irK9Lgp1kk6Q+S4Wsgzb0MeO0e6SJloe
+         TadMs74hRI7WjuVReTryvz/VdCBreOHrlIo5zZNKZ2GycBgudc4QWZ0hHLU8RVkAVyN/
+         xgNqHvp46iHBadGAnX883CK1IyIvy1eaBRi7kvyZClczuCNqwKYQeYjUeGYC5oj+coDI
+         wjzA==
+X-Gm-Message-State: AOAM533cew3AWdUV+yzK8BloE8t1mhb3gXI0uwGItVdmFCCk59+J3x6C
+	tXEiYVxCjAwGPKABRiMye4bln/V8q7g=
+X-Google-Smtp-Source: ABdhPJz6NFDvTejbV7HnVzqZN55zXR3cWNJXtPu/IPMmkDmCdKUEg/L8wi7+Q3qw3YfQxCG1r7+jBA==
+X-Received: by 2002:aa7:dd91:0:b0:427:b2c4:1c7a with SMTP id g17-20020aa7dd91000000b00427b2c41c7amr9825791edv.91.1651500655633;
+        Mon, 02 May 2022 07:10:55 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
+        by smtp.gmail.com with ESMTPSA id s23-20020a056402037700b0042617ba639bsm6732338edw.37.2022.05.02.07.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 07:10:55 -0700 (PDT)
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To: selinux@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selinux: avoid extra semicolon
+Date: Mon,  2 May 2022 16:10:51 +0200
+Message-Id: <20220502141052.34413-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.36.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com>
- <20220217142133.72205-4-cgzones@googlemail.com> <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
- <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
-In-Reply-To: <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
-From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date: Mon, 2 May 2022 15:43:35 +0200
-Message-ID: <CAJ2a_De2o7+v2v4QDnXNB=q9N6J84iMz8QMe6vK7ojvxVhfqqQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: SElinux list <selinux@vger.kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>, Serge Hallyn <serge@hallyn.com>, 
-	Austin Kim <austin.kim@lge.com>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Yang Li <yang.lee@linux.alibaba.com>, 
-	Linux kernel mailing list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 8 Mar 2022 at 17:09, Christian G=C3=B6ttsche <cgzones@googlemail.co=
-m> wrote:
->
-> On Fri, 18 Feb 2022 at 18:31, Nick Desaulniers <ndesaulniers@google.com> =
-wrote:
-> >
-> > On Thu, Feb 17, 2022 at 6:22 AM Christian G=C3=B6ttsche
-> > <cgzones@googlemail.com> wrote:
-> > >
-> > > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
-> > > introduced a NULL check on the context after a successful call to
-> > > security_sid_to_context().  This is on the one hand redundant after
-> > > checking for success and on the other hand insufficient on an actual
-> > > NULL pointer, since the context is passed to seq_escape() leading to =
-a
-> > > call of strlen() on it.
-> > >
-> > > Reported by Clang analyzer:
-> > >
-> > >     In file included from security/selinux/hooks.c:28:
-> > >     In file included from ./include/linux/tracehook.h:50:
-> > >     In file included from ./include/linux/memcontrol.h:13:
-> > >     In file included from ./include/linux/cgroup.h:18:
-> > >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed a=
-s 1st argument to string length function [unix.cstring.NullArg]
-> > >             seq_escape_mem(m, src, strlen(src), flags, esc);
-> > >                                    ^~~~~~~~~~~
-> >
-> > I'm guessing there was more to this trace for this instance of this war=
-ning?
->
-> Yes, complete output appended at the end.
->
-> >
-> > >
-> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > > ---
-> > >  security/selinux/hooks.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > > index 1e69f88eb326..ac802b99d36c 100644
-> > > --- a/security/selinux/hooks.c
-> > > +++ b/security/selinux/hooks.c
-> > > @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid=
-)
-> > >         rc =3D security_sid_to_context(&selinux_state, sid,
-> > >                                              &context, &len);
-> > >         if (!rc) {
-> >
-> > ^ perhaps changing this condition to:
-> >
-> > if (!rc && context) {
-> >
-> > It might be nice to retain the null ptr check should the semantics of
-> > security_sid_to_context ever change.
->
-> If I read the implementation of security_sid_to_context() and its callees
-> correctly it should never return 0 (success) and not have populated its 3
-> argument, unless the passed pointer was zero, which by passing the addres=
-s
-> of a stack variable - &context - is not the case).
->
+Wrap macro into `do { } while (0)` to avoid Clang emitting warnings
+about extra semicolons.
+Similar to userspace commit
+https://github.com/SELinuxProject/selinux/commit/9d85aa60d12e468e7fd510c2b5475b5299b71622
 
-Kindly ping;
-is my analysis correct that after
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ security/selinux/ss/avtab.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    rc =3D security_sid_to_context(&selinux_state, sid,
-                                                  &context, &len);
+diff --git a/security/selinux/ss/avtab.c b/security/selinux/ss/avtab.c
+index cfdae20792e1..6178af5fedbe 100644
+--- a/security/selinux/ss/avtab.c
++++ b/security/selinux/ss/avtab.c
+@@ -40,7 +40,7 @@ static inline int avtab_hash(const struct avtab_key *keyp, u32 mask)
+ 
+ 	u32 hash = 0;
+ 
+-#define mix(input) { \
++#define mix(input) do { \
+ 	u32 v = input; \
+ 	v *= c1; \
+ 	v = (v << r1) | (v >> (32 - r1)); \
+@@ -48,7 +48,7 @@ static inline int avtab_hash(const struct avtab_key *keyp, u32 mask)
+ 	hash ^= v; \
+ 	hash = (hash << r2) | (hash >> (32 - r2)); \
+ 	hash = hash * m + n; \
+-}
++} while (0)
+ 
+ 	mix(keyp->target_class);
+ 	mix(keyp->target_type);
+-- 
+2.36.0
 
-there is no possibility that rc is 0 AND context is NULL?
-
-> >
-> > > -               bool has_comma =3D context && strchr(context, ',');
-> > > +               bool has_comma =3D strchr(context, ',');
-> > >
-> > >                 seq_putc(m, '=3D');
-> > >                 if (has_comma)
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
-> clang-tidy report:
->
-> ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1st
-> argument to string length function
-> [clang-analyzer-unix.cstring.NullArg]
->         seq_escape_mem(m, src, strlen(src), flags, esc);
->                                ^
-> ./security/selinux/hooks.c:1041:6: note: Assuming the condition is false
->         if (!(sbsec->flags & SE_SBINITIALIZED))
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./security/selinux/hooks.c:1041:2: note: Taking false branch
->         if (!(sbsec->flags & SE_SBINITIALIZED))
->         ^
-> ./security/selinux/hooks.c:1044:6: note: Assuming the condition is false
->         if (!selinux_initialized(&selinux_state))
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./security/selinux/hooks.c:1044:2: note: Taking false branch
->         if (!selinux_initialized(&selinux_state))
->         ^
-> ./security/selinux/hooks.c:1047:6: note: Assuming the condition is true
->         if (sbsec->flags & FSCONTEXT_MNT) {
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./security/selinux/hooks.c:1047:2: note: Taking true branch
->         if (sbsec->flags & FSCONTEXT_MNT) {
->         ^
-> ./security/selinux/hooks.c:1050:8: note: Calling 'show_sid'
->                 rc =3D show_sid(m, sbsec->sid);
->                      ^~~~~~~~~~~~~~~~~~~~~~~
-> ./security/selinux/hooks.c:1020:7: note: Value assigned to 'context'
->         rc =3D security_sid_to_context(&selinux_state, sid,
->              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./security/selinux/hooks.c:1022:6: note: Assuming 'rc' is 0
->         if (!rc) {
->             ^~~
-> ./security/selinux/hooks.c:1022:2: note: Taking true branch
->         if (!rc) {
->         ^
-> ./security/selinux/hooks.c:1023:20: note: Assuming 'context' is null
->                 bool has_comma =3D context && strchr(context, ',');
->                                  ^~~~~~~
-> ./security/selinux/hooks.c:1023:28: note: Left side of '&&' is false
->                 bool has_comma =3D context && strchr(context, ',');
->                                          ^
-> ./security/selinux/hooks.c:1026:7: note: 'has_comma' is false
->                 if (has_comma)
->                     ^~~~~~~~~
-> ./security/selinux/hooks.c:1026:3: note: Taking false branch
->                 if (has_comma)
->                 ^
-> ./security/selinux/hooks.c:1028:17: note: Passing null pointer value
-> via 2nd parameter 's'
->                 seq_escape(m, context, "\"\n\\");
->                               ^~~~~~~
-> ./security/selinux/hooks.c:1028:3: note: Calling 'seq_escape'
->                 seq_escape(m, context, "\"\n\\");
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ././include/linux/seq_file.h:152:20: note: Passing null pointer value
-> via 2nd parameter 'src'
->         seq_escape_str(m, s, ESCAPE_OCTAL, esc);
->                           ^
-> ././include/linux/seq_file.h:152:2: note: Calling 'seq_escape_str'
->         seq_escape_str(m, s, ESCAPE_OCTAL, esc);
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ././include/linux/seq_file.h:136:25: note: Null pointer passed as 1st
-> argument to string length function
->         seq_escape_mem(m, src, strlen(src), flags, esc);
->                                ^      ~~~
