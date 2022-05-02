@@ -1,45 +1,44 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A378217C1
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 09:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8D817D3
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 10:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651483472; x=1683019472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Un8ROf/YYHiOCU6+fstsqJ861Fy1UPDTbQBPV60OZOg=;
-  b=K0YfWsP0Vew4CwH7SRWc5nsuv7s33I55CIGiZeHW007NtVn++ZVIC2CM
-   a3zxYYQ8SKy3U7qEC9tR26F4N4txmgIkEuJJsh8zPussV7+raYcpTVupQ
-   /6CSpP+xzkwEcDJkAck1uNWMA/QCelU6jFor/KoFd+2ORoo6awi1YkqvI
-   EZKVPAoLgTBqdtHUhoMq3sO4iBc5bkOAzwZP9VFIatBb2DrPFIHtEVreL
-   Suz7lCNGyqI8OF4Bj18w1AwE6qvRpkLbZKmJewPHw1FZmRfXEOEWS1l1m
-   2b94JZT2MYX8zsAVmkC0naqNH4e78bHhgCjHocb2gpmNE/yrcBwjxNKhF
+  t=1651487734; x=1683023734;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zme2bzTcTZV/5vtvzNRcSb+yOsr8qbK1hibOHo76+wI=;
+  b=TwW4slbPcg0UnVy3ku0x2uK49WvQrZ2KFXABJaQLohPofJ/H7OVdzYtX
+   Jt7H7a9GgxKqZ2HOv1q2cpZ155zZPihAtbxNEIzFQSjStA+nBndDV4YmT
+   T3XV7JXlqFIyI5RZAFvjyCCO2PqaZeq+ESZK5Z1D+RLLG3G1JBH/MSysR
+   XccCVHVs9hcLyRG7QZC0hW886/s77ueKsU/OG5yTTiaA6o+r3/ktr5vcf
+   ojoDIdCce6Ay2MoBlIUC3UJtO3qPd9GKsahE8wz2GiWOcFnWl1XBUnWIj
+   OwCVvUbM+Q3dFYwntcEee9oGPLi9L6FIoTvZcAkzf1f52rQ9W3+J3mG+T
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="330149486"
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="330162827"
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="330149486"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 02:24:32 -0700
+   d="scan'208";a="330162827"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 03:35:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="546067712"
+   d="scan'208";a="516014895"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 02:24:30 -0700
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 03:35:32 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nlSI9-0009Rn-Ao;
-	Mon, 02 May 2022 09:24:29 +0000
-Date: Mon, 2 May 2022 17:24:08 +0800
+	id 1nlTOt-0009UR-G2;
+	Mon, 02 May 2022 10:35:31 +0000
+Date: Mon, 2 May 2022 18:35:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu
+To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Dharmendra Singh <dharamhans87@gmail.com>,
-	linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org, bschubert@ddn.com
-Subject: Re: [PATCH v3 3/3] Avoid lookup in d_revalidate()
-Message-ID: <202205021705.GXaOa8o4-lkp@intel.com>
-References: <20220502054628.25826-4-dharamhans87@gmail.com>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:axboe/linux-block/for-5.19/io_uring-pbuf 48/89]
+ fs/io_uring.c:8498:6: warning: unused variable 'i'
+Message-ID: <202205021814.miF011yS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,239 +47,193 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502054628.25826-4-dharamhans87@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dharmendra,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on v5.18-rc5]
-[cannot apply to mszeredi-fuse/for-next next-20220429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-base:    672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-config: hexagon-randconfig-r045-20220502 (https://download.01.org/0day-ci/archive/20220502/202205021705.GXaOa8o4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-5.=
+19/io_uring-pbuf
+head:   086401d42d41ebb636d9293288494033cbf9ba10
+commit: 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4 [48/89] io_uring: store SC=
+M state in io_fixed_file->file_ptr
+config: mips-randconfig-r015-20220501 (https://download.01.org/0day-ci/arch=
+ive/20220502/202205021814.miF011yS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d=
+36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=3D1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
+make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a531ce8124c046dffefe5cd731c952c8f7248c5b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-        git checkout a531ce8124c046dffefe5cd731c952c8f7248c5b
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/5e45690a1cb8cb5=
+91ccf4a517cdd6ad6cb369ac4
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/lin=
+ux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-5.19/io=
+_uring-pbuf
+        git checkout 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/fuse/
+        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
+1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/fuse/dir.c:571:5: warning: no previous prototype for function 'fuse_do_atomic_common' [-Wmissing-prototypes]
-   int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-       ^
-   fs/fuse/dir.c:571:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
+>> fs/io_uring.c:8498:6: warning: unused variable 'i'
+   int i;
    ^
-   static 
->> fs/fuse/dir.c:668:63: warning: variable 'fi' is uninitialized when used here [-Wuninitialized]
-                   err = fuse_atomic_open_revalidate_inode(reval_inode, entry, fi,
-                                                                               ^~
-   fs/fuse/dir.c:585:23: note: initialize the variable 'fi' to silence this warning
-           struct fuse_inode *fi;
-                                ^
-                                 = NULL
-   2 warnings generated.
+   fatal error: error in backend: Nested variants found in inline asm strin=
+g: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
+h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
+branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
+de/asm/atomic.h", .line =3D 155, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
+et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1 # atomic_add
+   addu $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
+s/ and include the crash backtrace, preprocessed source, and associated run=
+ script.
+   Stack dump:
+   0. Program arguments: clang -Wp,-MMD,fs/.io_uring.o.d -nostdinc -Iarch/m=
+ips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/mi=
+ps/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./inc=
+lude/generated/uapi -include include/linux/compiler-version.h -include incl=
+ude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ -D=
+VMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDRESS=3D0x8400000=
+0 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_EXT=
+RA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-stri=
+ct-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-function-=
+declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-securi=
+ty -std=3Dgnu11 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-war=
+ning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divisio=
+n -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET_H=
+ARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmips=
+32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-ath25 =
+-Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -fno-d=
+elete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-member =
+-O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimplicit-fallthrough =
+-Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-stack=
+-clash-protection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign=
+ -Wcast-function-type -fno-strict-overflow -fno-stack-check -Werror=3Ddate-=
+time -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-unused-para=
+meter -Wmissing-declarations -Wmissing-format-attribute -Wmissing-prototype=
+s -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-variable -=
+Wunused-const-variable -Wno-missing-field-initializers -Wno-sign-compare -W=
+no-type-limits -Wno-shift-negative-value -I fs -I ./fs -DKBUILD_MODFILE=3D"=
+fs/io_uring" -DKBUILD_BASENAME=3D"io_uring" -DKBUILD_MODNAME=3D"io_uring" -=
+D__KBUILD_MODNAME=3Dkmod_io_uring -c -o fs/io_uring.o fs/io_uring.c
+   1. <eof> parser at end of file
+   2. Code generation
+   3. Running pass 'Function Pass Manager' on module 'fs/io_uring.c'.
+   4. Running pass 'Mips Assembly Printer' on function '@io_uring_cancel_ge=
+neric'
+   #0 0x000055fc440b0cdf Signals.cpp:0:0
+   #1 0x000055fc440aeb04 llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
+oss/clang-09325d3606/bin/clang-15+0x34b1b04)
+   #2 0x000055fc43fedf17 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
+cross/clang-09325d3606/bin/clang-15+0x33f0f17)
+   #3 0x000055fc440a713e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
+ang-09325d3606/bin/clang-15+0x34aa13e)
+   #4 0x000055fc41cbf28b (/opt/cross/clang-09325d3606/bin/clang-15+0x10c228=
+b)
+   #5 0x000055fc43ff4a4c llvm::report_fatal_error(llvm::Twine const&, bool)=
+ (/opt/cross/clang-09325d3606/bin/clang-15+0x33f7a4c)
+   #6 0x000055fc44d33540 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
+ const (/opt/cross/clang-09325d3606/bin/clang-15+0x4136540)
+   #7 0x000055fc44d2f442 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
+lang-09325d3606/bin/clang-15+0x4132442)
+   #8 0x000055fc427533f7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
+achineFunction&) (/opt/cross/clang-09325d3606/bin/clang-15+0x1b563f7)
+   #9 0x000055fc4343a6ad llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
+ction&) (.part.53) MachineFunctionPass.cpp:0:0
+   #10 0x000055fc438832c7 llvm::FPPassManager::runOnFunction(llvm::Function=
+&) (/opt/cross/clang-09325d3606/bin/clang-15+0x2c862c7)
+   #11 0x000055fc43883441 llvm::FPPassManager::runOnModule(llvm::Module&) (=
+/opt/cross/clang-09325d3606/bin/clang-15+0x2c86441)
+   #12 0x000055fc43883fbf llvm::legacy::PassManagerImpl::run(llvm::Module&)=
+ (/opt/cross/clang-09325d3606/bin/clang-15+0x2c86fbf)
+   #13 0x000055fc443dd37f clang::EmitBackendOutput(clang::DiagnosticsEngine=
+&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
+TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
+ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
+lvm::raw_pwrite_stream> >) (/opt/cross/clang-09325d3606/bin/clang-15+0x37e0=
+37f)
+   #14 0x000055fc4505ccd1 clang::BackendConsumer::HandleTranslationUnit(cla=
+ng::ASTContext&) (/opt/cross/clang-09325d3606/bin/clang-15+0x445fcd1)
+   #15 0x000055fc45be2ac1 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
+ross/clang-09325d3606/bin/clang-15+0x4fe5ac1)
+   #16 0x000055fc4505c395 clang::CodeGenAction::ExecuteAction() (/opt/cross=
+/clang-09325d3606/bin/clang-15+0x445f395)
+   #17 0x000055fc44a44751 clang::FrontendAction::Execute() (/opt/cross/clan=
+g-09325d3606/bin/clang-15+0x3e47751)
+   #18 0x000055fc449d8d0a clang::CompilerInstance::ExecuteAction(clang::Fro=
+ntendAction&) (/opt/cross/clang-09325d3606/bin/clang-15+0x3ddbd0a)
+   #19 0x000055fc44b0bc6b (/opt/cross/clang-09325d3606/bin/clang-15+0x3f0ec=
+6b)
+   #20 0x000055fc41cc083c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
+ng-09325d3606/bin/clang-15+0x10c383c)
+   #21 0x000055fc41cbd50b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
+cpp:0:0
+   #22 0x000055fc44867d95 void llvm::function_ref<void ()>::callback_fn<cla=
+ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
+ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
+tor<char> const::'lambda'()>(long) Job.cpp:0:0
+   #23 0x000055fc43feddd3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
+ion_ref<void ()>) (/opt/cross/clang-09325d3606/bin/clang-15+0x33f0dd3)
+   #24 0x000055fc4486868e clang::driver::CC1Command::Execute(llvm::ArrayRef=
+<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
+har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
+   #25 0x000055fc4483aa17 clang::driver::Compilation::ExecuteCommand(clang:=
+:driver::Command const&, clang::driver::Command const (/opt/cross/clang-093=
+25d3606/bin/clang-15+0x3c3da17)
+   #26 0x000055fc4483b3f7 clang::driver::Compilation::ExecuteJobs(clang::dr=
+iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) const (/opt/cross/clang-09325d3606/bin/clang-15+0x3c3e3f7)
+   #27 0x000055fc448448ea clang::driver::Driver::ExecuteCompilation(clang::=
+driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) (/opt/cross/clang-09325d3606/bin/clang-15+0x3c478ea)
+   #28 0x000055fc41c0994f main (/opt/cross/clang-09325d3606/bin/clang-15+0x=
+100c94f)
+   #29 0x00007f969d4be7fd __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
+6+0x237fd)
+   #30 0x000055fc41cbd02a _start (/opt/cross/clang-09325d3606/bin/clang-15+=
+0x10c002a)
+   clang-15: error: clang frontend command failed with exit code 70 (use -v=
+ to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 09325d36061e42b495d1f=
+4c7e933e260eac260ed)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-09325d3606/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib =
+mm nr_bisected scripts security sound source usr virt
 
 
-vim +/fuse_do_atomic_common +571 fs/fuse/dir.c
+vim +/i +8498 fs/io_uring.c
 
-   564	
-   565	
-   566	/*
-   567	 * This is common function for initiating atomic operations into libfuse.
-   568	 * Currently being used by Atomic create(atomic lookup + create) and
-   569	 * Atomic open(atomic lookup + open).
-   570	 */
- > 571	int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-   572				  struct dentry **alias, struct file *file,
-   573				  struct inode *reval_inode, unsigned int flags,
-   574				  umode_t mode, uint32_t opcode)
-   575	{
-   576		int err;
-   577		struct inode *inode;
-   578		struct fuse_mount *fm = get_fuse_mount(dir);
-   579		struct fuse_conn *fc = get_fuse_conn(dir);
-   580		FUSE_ARGS(args);
-   581		struct fuse_forget_link *forget;
-   582		struct fuse_create_in inarg;
-   583		struct fuse_open_out outopen;
-   584		struct fuse_entry_out outentry;
-   585		struct fuse_inode *fi;
-   586		struct fuse_file *ff;
-   587		struct dentry *res = NULL;
-   588		void *security_ctx = NULL;
-   589		u32 security_ctxlen;
-   590		bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
-   591		bool create_op = (opcode == FUSE_CREATE ||
-   592				  opcode == FUSE_ATOMIC_CREATE) ? true : false;
-   593		u64 attr_version = fuse_get_attr_version(fm->fc);
-   594	
-   595		if (alias)
-   596			*alias = NULL;
-   597	
-   598		/* Userspace expects S_IFREG in create mode */
-   599		BUG_ON(create_op && (mode & S_IFMT) != S_IFREG);
-   600	
-   601		forget = fuse_alloc_forget();
-   602		err = -ENOMEM;
-   603		if (!forget)
-   604			goto out_err;
-   605	
-   606		err = -ENOMEM;
-   607		ff = fuse_file_alloc(fm);
-   608		if (!ff)
-   609			goto out_put_forget_req;
-   610	
-   611		if (!fc->dont_mask)
-   612			mode &= ~current_umask();
-   613	
-   614		flags &= ~O_NOCTTY;
-   615		memset(&inarg, 0, sizeof(inarg));
-   616		memset(&outentry, 0, sizeof(outentry));
-   617		inarg.flags = flags;
-   618		inarg.mode = mode;
-   619		inarg.umask = current_umask();
-   620	
-   621		if (fm->fc->handle_killpriv_v2 && (flags & O_TRUNC) &&
-   622		    !(flags & O_EXCL) && !capable(CAP_FSETID)) {
-   623			inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
-   624		}
-   625	
-   626		args.opcode = opcode;
-   627		args.nodeid = get_node_id(dir);
-   628		args.in_numargs = 2;
-   629		args.in_args[0].size = sizeof(inarg);
-   630		args.in_args[0].value = &inarg;
-   631		args.in_args[1].size = entry->d_name.len + 1;
-   632		args.in_args[1].value = entry->d_name.name;
-   633		args.out_numargs = 2;
-   634		args.out_args[0].size = sizeof(outentry);
-   635		args.out_args[0].value = &outentry;
-   636		args.out_args[1].size = sizeof(outopen);
-   637		args.out_args[1].value = &outopen;
-   638	
-   639		if (fm->fc->init_security) {
-   640			err = get_security_context(entry, mode, &security_ctx,
-   641						   &security_ctxlen);
-   642			if (err)
-   643				goto out_put_forget_req;
-   644	
-   645			args.in_numargs = 3;
-   646			args.in_args[2].size = security_ctxlen;
-   647			args.in_args[2].value = security_ctx;
-   648		}
-   649	
-   650		err = fuse_simple_request(fm, &args);
-   651		kfree(security_ctx);
-   652		if (err)
-   653			goto out_free_ff;
-   654	
-   655		err = -EIO;
-   656		if (!S_ISREG(outentry.attr.mode) || invalid_nodeid(outentry.nodeid) ||
-   657		    fuse_invalid_attr(&outentry.attr))
-   658			goto out_free_ff;
-   659	
-   660		ff->fh = outopen.fh;
-   661		ff->nodeid = outentry.nodeid;
-   662		ff->open_flags = outopen.open_flags;
-   663	
-   664		/* Inode revalidation was bypassed previously for type other than
-   665		 * directories, revalidate now as we got fresh attributes.
-   666		 */
-   667		if (reval_inode) {
- > 668			err = fuse_atomic_open_revalidate_inode(reval_inode, entry, fi,
-   669								forget, &outentry,
-   670								attr_version);
-   671			if (err)
-   672				goto out_free_ff;
-   673			inode = reval_inode;
-   674			kfree(forget);
-   675			goto out_finish_open;
-   676		}
-   677		inode = fuse_iget(dir->i_sb, outentry.nodeid, outentry.generation,
-   678				  &outentry.attr, entry_attr_timeout(&outentry), 0);
-   679		if (!inode) {
-   680			flags &= ~(O_CREAT | O_EXCL | O_TRUNC);
-   681			fuse_sync_release(NULL, ff, flags);
-   682			fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   683			err = -ENOMEM;
-   684			goto out_err;
-   685		}
-   686		kfree(forget);
-   687		/*
-   688		 * In atomic create, we skipped lookup and it is very much likely that
-   689		 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
-   690		 * Note: Only REG file is allowed under create/atomic create.
-   691		 */
-   692		/* There is special case when at very first call where we check if
-   693		 * atomic create is implemented by USER SPACE/libfuse or not, we
-   694		 * skipped lookup. Now, in case where atomic create is not implemented
-   695		 * underlying, we fall back to FUSE_CREATE. here we are required to handle
-   696		 * DCACHE_PAR_LOOKUP flag.
-   697		 */
-   698		if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
-   699			d_instantiate(entry, inode);
-   700		else {
-   701			res = d_splice_alias(inode, entry);
-   702			if (res) {
-   703				 /* Close the file in user space, but do not unlink it,
-   704				  * if it was created - with network file systems other
-   705				  * clients might have already accessed it.
-   706				  */
-   707				if (IS_ERR(res)) {
-   708					fi = get_fuse_inode(inode);
-   709					fuse_sync_release(fi, ff, flags);
-   710					fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   711					err = PTR_ERR(res);
-   712					goto out_err;
-   713				}
-   714				entry = res;
-   715				if (alias)
-   716					*alias = res;
-   717			}
-   718		}
-   719		fuse_change_entry_timeout(entry, &outentry);
-   720		/*
-   721		 * In case of atomic create, we want to indicate directory change
-   722		 * only if USER SPACE actually created the file.
-   723		 */
-   724		if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
-   725			fuse_dir_changed(dir);
-   726		err = finish_open(file, entry, generic_file_open);
-   727	out_finish_open:
-   728		if (err) {
-   729			fi = get_fuse_inode(inode);
-   730			fuse_sync_release(fi, ff, flags);
-   731		} else {
-   732			file->private_data = ff;
-   733			fuse_finish_open(inode, file);
-   734		}
-   735		return err;
-   736	
-   737	out_free_ff:
-   738		fuse_file_free(ff);
-   739	out_put_forget_req:
-   740		kfree(forget);
-   741	out_err:
-   742		return err;
-   743	}
-   744	
+9123c8ffce1610 Pavel Begunkov   2021-06-14  8495 =20
+fff4db76be297b Pavel Begunkov   2021-04-25  8496  static void __io_sqe_file=
+s_unregister(struct io_ring_ctx *ctx)
+1ad555c6ae6e28 Bijan Mottahedeh 2021-01-15  8497  {
+1f59bc0f18cf46 Pavel Begunkov   2022-04-06 @8498  	int i;
+1f59bc0f18cf46 Pavel Begunkov   2022-04-06  8499 =20
 
--- 
+:::::: The code at line 8498 was first introduced by commit
+:::::: 1f59bc0f18cf46abe27ea18cfa4cb7f1b4166896 io_uring: don't scm-account=
+ for non af_unix sockets
+
+:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+--=20
 0-DAY CI Kernel Test Service
 https://01.org/lkp
