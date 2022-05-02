@@ -1,69 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED522C9E
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 16:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C422C385AC;
-	Mon,  2 May 2022 16:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651507991;
-	bh=JZXiTjp2nZoUeQLFyk/etfp/xO0bupP46m6Ig16wE4M=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=uzYGYXfzQuKJqqXLbTMe/U4KQ6G8oymnirJ1L3lX1rEFCZxbeusc1FkWV5w2ur0Pu
-	 wnFml5U2xMd0aHOTFMj+c2BydaM3niaLwKJeZLb9uXM4GF+7HcEg++dolj1u6z7n66
-	 rN32fnWKxIBENOursdNu1EwHdbayUAMwTLO4QtaqV3462iIodz1flH9I8ItPE26INh
-	 ROonfFO1IjiVI1nn+iIs3ns+X6eOkBH0mbiQTE3qmulA6YwfcyL/bDh6bhg138Zubs
-	 xN//s2zVqwRooiCcdXiqaxxXXGX/0D+I7aYGnYXoa6XsLKxsCEigY/UbmSoNZGw87d
-	 e9muuuzDi7Nzg==
-Date: Mon, 2 May 2022 18:12:59 +0200 (CEST)
-From: Jiri Kosina <jikos@kernel.org>
-To: kernel test robot <lkp@intel.com>
-cc: Joshua-Dickens <Joshua@joshua-dickens.com>, llvm@lists.linux.dev, 
-    kbuild-all@lists.01.org, linux-input@vger.kernel.org, 
-    Joshua Dickens <joshua.dickens@wacom.com>, 
-    Jason Gerecke <jason.gerecke@wacom.com>
-Subject: Re: [hid:for-5.19/wacom 1/2] drivers/hid/wacom_wac.c:2411:42: warning:
- format specifies type 'unsigned short' but the argument has type 'int'
-In-Reply-To: <202204212217.M2efI2Po-lkp@intel.com>
-Message-ID: <nycvar.YFH.7.76.2205021812120.28985@cbobk.fhfr.pm>
-References: <202204212217.M2efI2Po-lkp@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A412F33
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 16:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651509766; x=1683045766;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D3wMZFZpe2ZlYEhjuVFF/JE9SxqxI1IK1rZxLLvrtns=;
+  b=L47v2/o5xxDZ2I2Is/S/1S8jSsCnCRKAN94sNYjxpNsnBtJBBQqR73tr
+   LPjoy9d24psQk1KrBthWsYQmQYDB/Du2dMeqbmxBoRiC3py/07jKT951z
+   /JAZDY/QWdbhv0TxcHS3gtY+i0/Td1gHRhzalqJ0MAhVVItcQFWBc9FmR
+   iB2nflfEH0K46O2gA4xTYePTKSge+a3iPjWOI0OkGFxYzDV4uSmy0pG3x
+   evoVTawEcVZOjHs2Kkt/X+o+ILsIXif41vRVLXwF2DhaSsjyQ9rg9FotB
+   zaHiGtpcOepIv4cWOmfexIVZyAhBRtHG0vZGRx+teAPdUVsDcXPBvwRJC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266106773"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="266106773"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="516177017"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 09:42:43 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlZ8F-0009hD-7Q;
+	Mon, 02 May 2022 16:42:43 +0000
+Date: Tue, 3 May 2022 00:42:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 2/20] drivers/dma/apple-admac.c:203:11:
+ warning: format specifies type 'unsigned long long' but the argument has
+ type 'dma_addr_t' (aka 'unsigned int')
+Message-ID: <202205030024.ZdYFyB3P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 21 Apr 2022, kernel test robot wrote:
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   91b81123719d8b742da188f01ee3d897e0fac92b
+commit: 428ea35bca43fe213456fa57640c57deeadc4204 [2/20] dmaengine: apple-admac: Add Apple ADMAC driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030024.ZdYFyB3P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/428ea35bca43fe213456fa57640c57deeadc4204
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout 428ea35bca43fe213456fa57640c57deeadc4204
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma/ drivers/platform/ sound/soc/
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-5.19/wacom
-> head:   6ff1cae2e30a79265bcce85f617663c480936ab0
-> commit: 6d09085b38e5ace0001cf4f3cdbd4bf247533b61 [1/2] HID: wacom: Adding Support for new usages
-> config: riscv-randconfig-r026-20220420 (https://download.01.org/0day-ci/archive/20220421/202204212217.M2efI2Po-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=6d09085b38e5ace0001cf4f3cdbd4bf247533b61
->         git remote add hid https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
->         git fetch --no-tags hid for-5.19/wacom
->         git checkout 6d09085b38e5ace0001cf4f3cdbd4bf247533b61
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/ kernel/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Joshua,
+All warnings (new ones prefixed by >>):
 
-could you please send a fixup patch to get the types right? This got 
-introduced by 6d09085b38e5a ("HID: wacom: Adding Support for new usages")
+>> drivers/dma/apple-admac.c:203:11: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+                   channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
+                           ^~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+>> drivers/dma/apple-admac.c:206:46: warning: shift count >= width of type [-Wshift-count-overflow]
+           admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+                                                       ^  ~~
+>> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for function 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+       ^
+   drivers/dma/apple-admac.c:260:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   ^
+   static 
+   3 warnings generated.
 
-Thanks,
+
+vim +203 drivers/dma/apple-admac.c
+
+   187	
+   188	/*
+   189	 * Write one hardware descriptor for a dmaegine cyclic transaction.
+   190	 */
+   191	static void admac_cyclic_write_one_desc(struct admac_data *ad, int channo,
+   192						struct admac_tx *tx)
+   193	{
+   194		dma_addr_t addr;
+   195	
+   196		if (WARN_ON(!tx->cyclic))
+   197			return;
+   198	
+   199		addr = tx->buf_addr + (tx->submitted_pos % tx->buf_len);
+   200		WARN_ON(addr + tx->period_len > tx->buf_end);
+   201	
+   202		dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+ > 203			channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
+   204	
+   205		admac_poke(ad, REG_DESC_WRITE(channo), addr);
+ > 206		admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+   207		admac_poke(ad, REG_DESC_WRITE(channo), tx->period_len);
+   208		admac_poke(ad, REG_DESC_WRITE(channo), FLAG_DESC_NOTIFY);
+   209	
+   210		tx->submitted_pos += tx->period_len;
+   211		tx->submitted_pos %= 2 * tx->buf_len;
+   212	}
+   213	
+   214	/*
+   215	 * Write all the hardware descriptors for a cyclic transaction
+   216	 * there is space for.
+   217	 */
+   218	static void admac_cyclic_write_desc(struct admac_data *ad, int channo,
+   219						struct admac_tx *tx)
+   220	{
+   221		int i;
+   222	
+   223		for (i = 0; i < 4; i++) {
+   224			if (admac_peek(ad, REG_DESC_RING(channo)) & RING_FULL)
+   225				break;
+   226			admac_cyclic_write_one_desc(ad, channo, tx);
+   227		}
+   228	}
+   229	
+   230	static int admac_alloc_chan_resources(struct dma_chan *chan)
+   231	{
+   232		return 0;
+   233	}
+   234	
+   235	static void admac_free_chan_resources(struct dma_chan *chan)
+   236	{
+   237		// TODO
+   238	}
+   239	
+   240	static int admac_ring_noccupied_slots(int ringval)
+   241	{
+   242		int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
+   243		int rdslot = FIELD_GET(RING_READ_SLOT, ringval);
+   244	
+   245		if (wrslot != rdslot) {
+   246			return (wrslot + 4 - rdslot) % 4;
+   247		} else {
+   248			WARN_ON((ringval & (RING_FULL | RING_EMPTY)) == 0);
+   249	
+   250			if (ringval & RING_FULL)
+   251				return 4;
+   252			else
+   253				return 0;
+   254		}
+   255	}
+   256	
+   257	/*
+   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
+   259	 */
+ > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   261	{
+   262		u32 ring1, ring2;
+   263		u32 residue1, residue2;
+   264		int nreports;
+   265		size_t pos;
+   266	
+   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
+   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
+   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
+   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
+   271	
+   272		if (residue2 > residue1) {
+   273			// engine must have loaded next descriptor between the two residue reads
+   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
+   275		} else {
+   276			// no descriptor load between the two reads, ring2 is safe to use
+   277			nreports = admac_ring_noccupied_slots(ring2);
+   278		}
+   279	
+   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
+   281							 - residue2;
+   282	
+   283		return adtx->buf_len - pos % adtx->buf_len;
+   284	}
+   285	
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
