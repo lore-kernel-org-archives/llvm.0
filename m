@@ -1,46 +1,47 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4053212
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 20:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606523212
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 21:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651525088; x=1683061088;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wbjFnBER4Dc9RytbOMj0elJyEk5o5pxKnlfsjbG8la8=;
-  b=C2G21177mPyz4CBced/j0uF2d/0y9lezbPNJee38fWFsFr5EkFLoi272
-   pwO6z75mdXrZ35L1GAGC80eH6cIheQELvb5e4KhDNeio9RJQrq2KjQDwy
-   rNzT54mfkdljQoRMLVLNf2nPQD05rUHROdXRb2jGQQB1lkU3RQY2VhqlS
-   5MvYQ/tKci0h8iJqiVVUhpxZqCh4u47ygXf/EKM9rfkzhgWQQoW+LI8vC
-   Wouv5HJH/VrIQtNINIg0Q+UlScLIg8I5n3oK/87iWwoCAJuefxrHdhOOp
-   W4Z99crPwEHeSGRMSObcr0fFdnTKytupB17NlER+Tt0veas/gJyv9ZpBB
+  t=1651525879; x=1683061879;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e51YJRAyK2oFyodJN78dW1B+cSnosSuF7pHpOHVfPBM=;
+  b=mNN7X9lhpbLIcryVYnzuKS3u15g6XrkIm7kTpZ2xNLDyEkoAUfScgLlP
+   0J4cuCE2Csy6tFGnqRl/+voKA6fqF2dfMRL3PnC4k8N5H6F06elKf7bB+
+   2ZZRsZt32sj42aMmuvfKYh6Er/naUiJN034GJGdyxi9qJ2JIyp+62+5yp
+   xlYR5rHfTaa/8cujWibd7IdtNFDBZZnasoTr9Rd6pR3pz/43H8hotorNl
+   UbP3F68wUO/irL64yLIBf+B41q26D+3qKk/fMai4RaUIejdzxReoAjaqq
+   WoSHMuh/5RIsMCFKE+hkubrow4MAajcIWoyAhDeSe55GWbFwEQYDZD3tz
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266173875"
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266917354"
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="266173875"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 13:58:08 -0700
+   d="scan'208";a="266917354"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:11:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="598793152"
+   d="scan'208";a="583902533"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 May 2022 13:58:05 -0700
+  by orsmga008.jf.intel.com with ESMTP; 02 May 2022 14:11:15 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nld7N-0009rj-8B;
-	Mon, 02 May 2022 20:58:05 +0000
-Date: Tue, 3 May 2022 04:57:10 +0800
+	id 1nldK4-0009sV-FJ;
+	Mon, 02 May 2022 21:11:12 +0000
+Date: Tue, 3 May 2022 05:10:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Gao <chao.gao@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
-	Robert Hu <robert.hu@intel.com>,
-	Farrah Chen <farrah.chen@intel.com>,
-	Danmei Wei <danmei.wei@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Zeng Guang <guang.zeng@intel.com>
-Subject: [kvm:queue 74/77] arch/x86/kvm/vmx/vmx.c:4405:5: warning: no
- previous prototype for function 'vmx_get_pid_table_order'
-Message-ID: <202205030401.Ka1ygWqv-lkp@intel.com>
+To: Minchan Kim <minchan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	John Hubbard <jhubbard@nvidia.com>, John Dias <joaodias@google.com>,
+	Minchan Kim <minchan@kernel.org>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <202205030525.VFo3Ds9w-lkp@intel.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,46 +50,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-head:   2764011106d0436cb44702cfb0981339d68c3509
-commit: 101c99f6506d7fc293111190d65fedadb711c9ea [74/77] KVM: VMX: enable IPI virtualization
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220503/202205030401.Ka1ygWqv-lkp@intel.com/config)
+Hi Minchan,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030525.VFo3Ds9w-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=101c99f6506d7fc293111190d65fedadb711c9ea
-        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
-        git fetch --no-tags kvm queue
-        git checkout 101c99f6506d7fc293111190d65fedadb711c9ea
+        # https://github.com/intel-lab-lkp/linux/commit/1b8636710c31d44310f1d344e337c207562b851d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+        git checkout 1b8636710c31d44310f1d344e337c207562b851d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/vmx.c:4405:5: warning: no previous prototype for function 'vmx_get_pid_table_order' [-Wmissing-prototypes]
-   int vmx_get_pid_table_order(struct kvm *kvm)
-       ^
-   arch/x86/kvm/vmx/vmx.c:4405:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vmx_get_pid_table_order(struct kvm *kvm)
-   ^
-   static 
-   1 warning generated.
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+>> include/linux/mm.h:1630:47: error: use of undeclared identifier 'MIGRATE_CMA'; did you mean 'MIGRATE_SYNC'?
+           return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+                                                        ^~~~~~~~~~~
+                                                        MIGRATE_SYNC
+   include/linux/migrate_mode.h:18:2: note: 'MIGRATE_SYNC' declared here
+           MIGRATE_SYNC,
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+>> include/linux/mm.h:1631:9: error: use of undeclared identifier 'MIGRATE_ISOLATE'; did you mean 'MIGRATE_MOVABLE'?
+                   mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+                         ^~~~~~~~~~~~~~~
+                         MIGRATE_MOVABLE
+   include/linux/mmzone.h:44:2: note: 'MIGRATE_MOVABLE' declared here
+           MIGRATE_MOVABLE,
+           ^
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:122: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1283: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/vmx_get_pid_table_order +4405 arch/x86/kvm/vmx/vmx.c
+vim +1630 include/linux/mm.h
 
-  4404	
-> 4405	int vmx_get_pid_table_order(struct kvm *kvm)
-  4406	{
-  4407		return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
-  4408	}
-  4409	
+  1623	
+  1624	/* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
+  1625	#ifdef CONFIG_MIGRATION
+  1626	static inline bool is_pinnable_page(struct page *page)
+  1627	{
+  1628		int mt = get_pageblock_migratetype(page);
+  1629	
+> 1630		return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+> 1631			mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+  1632	}
+  1633	#else
+  1634	static inline bool is_pinnable_page(struct page *page)
+  1635	{
+  1636		return true;
+  1637	}
+  1638	#endif
+  1639	
 
 -- 
 0-DAY CI Kernel Test Service
