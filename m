@@ -1,43 +1,50 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767D22F32
-	for <llvm@lists.linux.dev>; Mon,  2 May 2022 18:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651517701; x=1683053701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kCXTzSns0iKYl99rL1sjqvkpHrrz+nGZO+gRgT8qpxU=;
-  b=n1tFqHADeCyFoDK+Sj1kjI/eY6A+ibLdL62EcJv0hQM/7fr6zN8nreo9
-   W6X4+bYNTeylQ3AVepcOCaBPy2sg4js/T/1LQLWJ2MIxL4QrV9ioSh/lO
-   sf7e+4XaAjDcJze2AL6kMpLqLJ7DlSxJw2ZgGQlc4BCjgrjzjcT36yHsT
-   tI36n/o+lNNm78D90vc0J0/3U7b4hunOcwPFgOZrFOAvbJkyssxcaNnDW
-   iO68HAKBtHkoIDpSY2Vgy6sG3L2GY1QvrMAMeGYwmNPsAr01U85ZnK5bq
-   U2GO5z+mUKLlDr37YfaFFATVKPiM9V9JLQaILV0NmClHBXq7eFk6HdiMp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266890443"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="266890443"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 11:55:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="631209620"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 May 2022 11:54:59 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlbCE-0009n9-L9;
-	Mon, 02 May 2022 18:54:58 +0000
-Date: Tue, 3 May 2022 02:54:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 13/20] sound/soc/apple/macaudio.c:429:12:
- warning: stack frame size (1056) exceeds limit (1024) in
- 'macaudio_late_probe'
-Message-ID: <202205030219.YmvdsBD1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8EF3204
+	for <llvm@lists.linux.dev>; Mon,  2 May 2022 19:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=mYYa7YhSPmVPESGC3WBfSUVLu7/5dL6ovKiS3tnTNxc=; b=X7JjkI1eS+hZwlLL/I9p7ec0h2
+	UeIxqvrdiJt3meq6ElbsNEDYIxW+qZz/j2FrSu6coXltcfr4QtTMMPFDzslv9IR5A31jl1ddBKnH9
+	c2qsGdbgoQzF9iywxqp5QHtMYcYLEB3+RVk8mUsIOTnJ93L7VRDhLz56q/kJE1S8EfyygaZ+EPJH4
+	+lUKye+VxqZ8KUh1eKBescSHXrCybAweDQoUoV1TG8LbXYRpZEdQGzvMqMTJ67eTO75Z/LyqmGrAJ
+	WIdEZp2LKR7NJxMrEW0UmH4MNpVWroXNW+J0b79QIxFrPP2W8RHSAR29nZiASkc9sS+Ga1qVVPW+d
+	6RQX6kKQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nlc8m-00AZWD-7z; Mon, 02 May 2022 19:55:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 772E030017D;
+	Mon,  2 May 2022 21:55:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5223120288CEB; Mon,  2 May 2022 21:55:25 +0200 (CEST)
+Date: Mon, 2 May 2022 21:55:25 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Kees Cook <keescook@chromium.org>, Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@redhat.com>, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 00/21] KCFI support
+Message-ID: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook>
+ <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+ <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,69 +53,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   91b81123719d8b742da188f01ee3d897e0fac92b
-commit: 6b20b01b79c235ed4543ef5ae2b788b7bca85643 [13/20] ASoC: Add macaudio machine driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030219.YmvdsBD1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/6b20b01b79c235ed4543ef5ae2b788b7bca85643
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout 6b20b01b79c235ed4543ef5ae2b788b7bca85643
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/platform/ sound/soc/apple/
+On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> > attribute or qualifier for this, such that one can mark a function
+> > pointer as not doing CFI.
+> >
+> > I simply doesn't make sense to have a builtin that operates on an
+> > expression. The whole thing is about indirect calls, IOW function
+> > pointers.
+> 
+> I also thought an attribute would be more convenient, but the compiler
+> folks prefer a built-in:
+> 
+> https://reviews.llvm.org/D122673
 
-All warnings (new ones prefixed by >>):
+That seems to mostly worry about C++ things (overload sets, template
+specialization, name mangling) we kernel folks don't seem to much care
+about.
 
->> sound/soc/apple/macaudio.c:429:12: warning: stack frame size (1056) exceeds limit (1024) in 'macaudio_late_probe' [-Wframe-larger-than]
-   static int macaudio_late_probe(struct snd_soc_card *card)
-              ^
-   1 warning generated.
-
-
-vim +/macaudio_late_probe +429 sound/soc/apple/macaudio.c
-
-   428	
- > 429	static int macaudio_late_probe(struct snd_soc_card *card)
-   430	{
-   431		struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
-   432		struct snd_kcontrol *kcontrol;
-   433		struct snd_soc_pcm_runtime *rtd;
-   434		int ret;
-   435	
-   436		list_for_each_entry(kcontrol, &ma->hidden_kcontrols, list) {
-   437			struct fixed_kctl *fctl = find_fixed_kctl(kcontrol->id.name);
-   438	
-   439			if (fctl)
-   440				snd_soc_kcontrol_set_strval(card, kcontrol, fctl->value);
-   441		}
-   442	
-   443		for_each_card_rtds(card, rtd) {
-   444			bool speakers_link = !strcmp(rtd->dai_link->name, "Speaker")
-   445					|| !strcmp(rtd->dai_link->name, "Speakers");
-   446	
-   447			if (speakers_link && ma->speaker_chmap) {
-   448				ret = snd_pcm_add_chmap_ctls(rtd->pcm,
-   449					SNDRV_PCM_STREAM_PLAYBACK, ma->speaker_chmap,
-   450					rtd->num_codecs, 0, NULL);
-   451				if (ret < 0)
-   452					dev_err(card->dev, "failed to add channel map on '%s': %d\n",
-   453						rtd->dai_link->name, ret);
-   454			}
-   455		}
-   456	
-   457		return 0;
-   458	}
-   459	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I'll stick with saying type system makes more sense to me though.
