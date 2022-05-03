@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F097F
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 17:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7ED7F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 17:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651598602; x=1683134602;
+  t=1651600463; x=1683136463;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ef4T+no/iI7o6wwX/7V02MZ3KP+/jnxftN+hnxSles0=;
-  b=g21XeNWfz0aOBmZdvI+KH543F6/8oRobCmMl9DbCNHUbhAbX9EhIV5YI
-   /Ka5RzZTW00ImkmDtPiH8usSTnnl7fApj8N9NcCKcjhfd/vD1EtN1s1rP
-   ysCsdwyC4E7urcnP4D45XvVGVzA73o8L2klxdcP9zdTvaM/0RTsOWYbDG
-   B6BgdGKlb4RdmXIijGUyoKApk2g6VaJyy52zmOSdYIIWEn2ZpQ2M8wRtM
-   YAAnGD5RDhfG2WCwb9yxgiYoedQ1qK3w/s+4DAIGtxeZ7Qor5sJW/DxvG
-   1uSZBZy3faF3dL/wFkntDq5GrgTVhirRRR5y7QhOVaTEdAMGUo0x1QA0I
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266381894"
+  bh=6ZUxORY7E9pTc8VQk5ZIDZ4Nj1kqBgVR34mX3h+A7rw=;
+  b=iMUdmNnZiD8egRNsSx1Oys/ROOGEnMgImhx5skZ/F6/ZRqG9xvLtexus
+   lm0fqNXhvomAR0r0eiAhVtAA55GCk76ruQAYLVU553pp0SIv6rHi2hlC2
+   fXUMgAgReT+YoGhi3tZqdvZPT2z54tUF8MxKHkyM5xQyyI9klh5Dk07jW
+   WQg651NqhAen6miIlet22KbmXPSA8C2NEwAka+PQpxE3RR98x6jlW9fJO
+   XH9Fk1mC/6e/cusgAwvGaKUDHDJfjIhDQgvP543FqhLBTF49S2oImiMTa
+   XN9X2gqv27j5qlqCN1RSAlfIwwkH1ukmYhNfNJZthX4+ezZduABrRZ46l
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267138840"
 X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="266381894"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 10:23:21 -0700
+   d="scan'208";a="267138840"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 10:54:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="547699540"
+   d="scan'208";a="653363775"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 10:23:19 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 May 2022 10:54:20 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nlwF4-000AeV-NL;
-	Tue, 03 May 2022 17:23:18 +0000
-Date: Wed, 4 May 2022 01:22:52 +0800
+	id 1nlwj5-000Ag5-RG;
+	Tue, 03 May 2022 17:54:19 +0000
+Date: Wed, 4 May 2022 01:53:22 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Linux Memory Management List <linux-mm@kvack.org>,
 	Andrew Morton <akpm@linux-foundation.org>
-Subject: [linux-next:master 7459/8237] mm/shmem.c:2354:8: warning: variable
- 'page' is uninitialized when used here
-Message-ID: <202205040121.S0ILU2a8-lkp@intel.com>
+Subject: [linux-next:master 7457/8237] mm/shmem.c:721:20: error: call to
+ __compiletime_assert_289 declared with 'error' attribute: BUILD_BUG failed
+Message-ID: <202205040154.R7lMeKvs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,146 +49,149 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   44a2f39e611ac0bc1f17c288a583d7f2e5684aa7
-commit: b0bb08b2d5f399369a906eff0287e64b531881d8 [7459/8237] mm/shmem: turn shmem_alloc_page() into shmem_alloc_folio()
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220504/202205040121.S0ILU2a8-lkp@intel.com/config)
+commit: 9a44f3462edc490370e1ac6f0dbc9266f32b39be [7457/8237] mm/shmem: convert shmem_add_to_page_cache to take a folio
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220504/202205040154.R7lMeKvs-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b0bb08b2d5f399369a906eff0287e64b531881d8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=9a44f3462edc490370e1ac6f0dbc9266f32b39be
         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
         git fetch --no-tags linux-next master
-        git checkout b0bb08b2d5f399369a906eff0287e64b531881d8
+        git checkout 9a44f3462edc490370e1ac6f0dbc9266f32b39be
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/shmem.c:2354:8: warning: variable 'page' is uninitialized when used here [-Wuninitialized]
-                   if (!page)
-                        ^~~~
-   mm/shmem.c:2335:19: note: initialize the variable 'page' to silence this warning
-           struct page *page;
-                            ^
-                             = NULL
-   1 warning generated.
+>> mm/shmem.c:721:20: error: call to __compiletime_assert_289 declared with 'error' attribute: BUILD_BUG failed
+                                   count_vm_event(THP_FILE_FALLBACK);
+                                                  ^
+   include/linux/vm_event_item.h:148:30: note: expanded from macro 'THP_FILE_FALLBACK'
+   #define THP_FILE_FALLBACK ({ BUILD_BUG(); 0; })
+                                ^
+   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+                       ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:225:1: note: expanded from here
+   __compiletime_assert_289
+   ^
+   mm/shmem.c:743:19: error: call to __compiletime_assert_291 declared with 'error' attribute: BUILD_BUG failed
+                           count_vm_event(THP_FILE_ALLOC);
+                                          ^
+   include/linux/vm_event_item.h:147:27: note: expanded from macro 'THP_FILE_ALLOC'
+   #define THP_FILE_ALLOC ({ BUILD_BUG(); 0; })
+                             ^
+   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+                       ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:231:1: note: expanded from here
+   __compiletime_assert_291
+   ^
+   2 errors generated.
 
 
-vim +/page +2354 mm/shmem.c
+vim +/error +721 mm/shmem.c
 
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2318  
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2319  #ifdef CONFIG_USERFAULTFD
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2320  int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2321  			   pmd_t *dst_pmd,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2322  			   struct vm_area_struct *dst_vma,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2323  			   unsigned long dst_addr,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2324  			   unsigned long src_addr,
-0b51a78cb242cd Peter Xu                2022-04-29  2325  			   bool zeropage, bool wp_copy,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2326  			   struct page **pagep)
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2327  {
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2328  	struct inode *inode = file_inode(dst_vma->vm_file);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2329  	struct shmem_inode_info *info = SHMEM_I(inode);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2330  	struct address_space *mapping = inode->i_mapping;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2331  	gfp_t gfp = mapping_gfp_mask(mapping);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2332  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2333  	void *page_kaddr;
-9a44f3462edc49 Matthew Wilcox (Oracle  2022-04-29  2334) 	struct folio *folio;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2335  	struct page *page;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2336  	int ret;
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2337  	pgoff_t max_off;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2338  
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2339  	if (!shmem_inode_acct_block(inode, 1)) {
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2340  		/*
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2341  		 * We may have got a page, returned -ENOENT triggering a retry,
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2342  		 * and now we find ourselves with -ENOMEM. Release the page, to
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2343  		 * avoid a BUG_ON in our caller.
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2344  		 */
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2345  		if (unlikely(*pagep)) {
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2346  			put_page(*pagep);
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2347  			*pagep = NULL;
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2348  		}
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2349  		return -ENOMEM;
-7ed9d238c7dbb1 Axel Rasmussen          2021-05-14  2350  	}
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2351  
-cb658a453b9327 Andrea Arcangeli        2017-02-22  2352  	if (!*pagep) {
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2353  		ret = -ENOMEM;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22 @2354  		if (!page)
-0f0796945614b7 Mike Rapoport           2017-09-06  2355  			goto out_unacct_blocks;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2356  
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2357  		if (!zeropage) {	/* COPY */
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2358  			page_kaddr = kmap_atomic(page);
-8d10396342063c Mike Rapoport           2017-09-06  2359  			ret = copy_from_user(page_kaddr,
-8d10396342063c Mike Rapoport           2017-09-06  2360  					     (const void __user *)src_addr,
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2361  					     PAGE_SIZE);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2362  			kunmap_atomic(page_kaddr);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2363  
-c1e8d7c6a7a682 Michel Lespinasse       2020-06-08  2364  			/* fallback to copy_from_user outside mmap_lock */
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2365  			if (unlikely(ret)) {
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2366  				*pagep = page;
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2367  				ret = -ENOENT;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2368  				/* don't free the page */
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2369  				goto out_unacct_blocks;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2370  			}
-19b482c29b6f38 Muchun Song             2022-03-22  2371  
-19b482c29b6f38 Muchun Song             2022-03-22  2372  			flush_dcache_page(page);
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2373  		} else {		/* ZEROPAGE */
-19b482c29b6f38 Muchun Song             2022-03-22  2374  			clear_user_highpage(page, dst_addr);
-8d10396342063c Mike Rapoport           2017-09-06  2375  		}
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2376  	} else {
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2377  		page = *pagep;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2378  		*pagep = NULL;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2379  	}
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2380  
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2381  	VM_BUG_ON(PageLocked(page));
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2382  	VM_BUG_ON(PageSwapBacked(page));
-9cc90c664a65f9 Andrea Arcangeli        2017-02-22  2383  	__SetPageLocked(page);
-9cc90c664a65f9 Andrea Arcangeli        2017-02-22  2384  	__SetPageSwapBacked(page);
-a425d3584e7e69 Andrea Arcangeli        2017-02-22  2385  	__SetPageUptodate(page);
-9cc90c664a65f9 Andrea Arcangeli        2017-02-22  2386  
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2387  	ret = -EFAULT;
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2388  	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2389  	if (unlikely(pgoff >= max_off))
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2390  		goto out_release;
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2391  
-9a44f3462edc49 Matthew Wilcox (Oracle  2022-04-29  2392) 	folio = page_folio(page);
-9a44f3462edc49 Matthew Wilcox (Oracle  2022-04-29  2393) 	ret = shmem_add_to_page_cache(folio, mapping, pgoff, NULL,
-3fea5a499d57de Johannes Weiner         2020-06-03  2394  				      gfp & GFP_RECLAIM_MASK, dst_mm);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2395  	if (ret)
-3fea5a499d57de Johannes Weiner         2020-06-03  2396  		goto out_release;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2397  
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2398  	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-0b51a78cb242cd Peter Xu                2022-04-29  2399  				       page, true, wp_copy);
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2400  	if (ret)
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2401  		goto out_delete_from_cache;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2402  
-94b7cc01da5a3c Yang Shi                2020-04-20  2403  	spin_lock_irq(&info->lock);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2404  	info->alloced++;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2405  	inode->i_blocks += BLOCKS_PER_PAGE;
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2406  	shmem_recalc_inode(inode);
-94b7cc01da5a3c Yang Shi                2020-04-20  2407  	spin_unlock_irq(&info->lock);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2408  
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2409  	unlock_page(page);
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2410  	return 0;
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2411  out_delete_from_cache:
-e2a50c1f64145a Andrea Arcangeli        2018-11-30  2412  	delete_from_page_cache(page);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2413  out_release:
-9cc90c664a65f9 Andrea Arcangeli        2017-02-22  2414  	unlock_page(page);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2415  	put_page(page);
-4c27fe4c4c84f3 Mike Rapoport           2017-02-22  2416  out_unacct_blocks:
-0f0796945614b7 Mike Rapoport           2017-09-06  2417  	shmem_inode_unacct_blocks(inode, 1);
-7d64ae3ab648a9 Axel Rasmussen          2021-06-30  2418  	return ret;
-8d10396342063c Mike Rapoport           2017-09-06  2419  }
-3460f6e5c1ed94 Axel Rasmussen          2021-06-30  2420  #endif /* CONFIG_USERFAULTFD */
-8d10396342063c Mike Rapoport           2017-09-06  2421  
+5a6e75f8110c97e Kirill A. Shutemov      2016-07-26  695  
+46f65ec15c6878a Hugh Dickins            2011-08-03  696  /*
+46f65ec15c6878a Hugh Dickins            2011-08-03  697   * Like add_to_page_cache_locked, but error if expected item has gone.
+46f65ec15c6878a Hugh Dickins            2011-08-03  698   */
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  699) static int shmem_add_to_page_cache(struct folio *folio,
+46f65ec15c6878a Hugh Dickins            2011-08-03  700  				   struct address_space *mapping,
+3fea5a499d57dec Johannes Weiner         2020-06-03  701  				   pgoff_t index, void *expected, gfp_t gfp,
+3fea5a499d57dec Johannes Weiner         2020-06-03  702  				   struct mm_struct *charge_mm)
+46f65ec15c6878a Hugh Dickins            2011-08-03  703  {
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  704) 	XA_STATE_ORDER(xas, &mapping->i_pages, index, folio_order(folio));
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  705) 	long nr = folio_nr_pages(folio);
+3fea5a499d57dec Johannes Weiner         2020-06-03  706  	int error;
+46f65ec15c6878a Hugh Dickins            2011-08-03  707  
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  708) 	VM_BUG_ON_FOLIO(index != round_down(index, nr), folio);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  709) 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  710) 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  711) 	VM_BUG_ON(expected && folio_test_large(folio));
+46f65ec15c6878a Hugh Dickins            2011-08-03  712  
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  713) 	folio_ref_add(folio, nr);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  714) 	folio->mapping = mapping;
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  715) 	folio->index = index;
+46f65ec15c6878a Hugh Dickins            2011-08-03  716  
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  717) 	if (!folio_test_swapcache(folio)) {
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  718) 		error = mem_cgroup_charge(folio, charge_mm, gfp);
+3fea5a499d57dec Johannes Weiner         2020-06-03  719  		if (error) {
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  720) 			if (folio_test_large(folio)) {
+3fea5a499d57dec Johannes Weiner         2020-06-03 @721  				count_vm_event(THP_FILE_FALLBACK);
+3fea5a499d57dec Johannes Weiner         2020-06-03  722  				count_vm_event(THP_FILE_FALLBACK_CHARGE);
+3fea5a499d57dec Johannes Weiner         2020-06-03  723  			}
+3fea5a499d57dec Johannes Weiner         2020-06-03  724  			goto error;
+3fea5a499d57dec Johannes Weiner         2020-06-03  725  		}
+4c6355b25e8bb83 Johannes Weiner         2020-06-03  726  	}
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  727) 	folio_throttle_swaprate(folio, gfp);
+3fea5a499d57dec Johannes Weiner         2020-06-03  728  
+552446a4166189a Matthew Wilcox          2017-12-01  729  	do {
+552446a4166189a Matthew Wilcox          2017-12-01  730  		xas_lock_irq(&xas);
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  731) 		if (expected != xas_find_conflict(&xas)) {
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  732) 			xas_set_err(&xas, -EEXIST);
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  733) 			goto unlock;
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  734) 		}
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  735) 		if (expected && xas_find_conflict(&xas)) {
+552446a4166189a Matthew Wilcox          2017-12-01  736  			xas_set_err(&xas, -EEXIST);
+552446a4166189a Matthew Wilcox          2017-12-01  737  			goto unlock;
+800d8c63b2e989c Kirill A. Shutemov      2016-07-26  738  		}
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  739) 		xas_store(&xas, folio);
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  740) 		if (xas_error(&xas))
+6b24ca4a1a8d4ee Matthew Wilcox (Oracle  2020-06-27  741) 			goto unlock;
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  742) 		if (folio_test_large(folio)) {
+800d8c63b2e989c Kirill A. Shutemov      2016-07-26  743  			count_vm_event(THP_FILE_ALLOC);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  744) 			__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS, nr);
+800d8c63b2e989c Kirill A. Shutemov      2016-07-26  745  		}
+800d8c63b2e989c Kirill A. Shutemov      2016-07-26  746  		mapping->nrpages += nr;
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  747) 		__lruvec_stat_mod_folio(folio, NR_FILE_PAGES, nr);
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  748) 		__lruvec_stat_mod_folio(folio, NR_SHMEM, nr);
+552446a4166189a Matthew Wilcox          2017-12-01  749  unlock:
+552446a4166189a Matthew Wilcox          2017-12-01  750  		xas_unlock_irq(&xas);
+552446a4166189a Matthew Wilcox          2017-12-01  751  	} while (xas_nomem(&xas, gfp));
+552446a4166189a Matthew Wilcox          2017-12-01  752  
+552446a4166189a Matthew Wilcox          2017-12-01  753  	if (xas_error(&xas)) {
+3fea5a499d57dec Johannes Weiner         2020-06-03  754  		error = xas_error(&xas);
+3fea5a499d57dec Johannes Weiner         2020-06-03  755  		goto error;
+46f65ec15c6878a Hugh Dickins            2011-08-03  756  	}
+552446a4166189a Matthew Wilcox          2017-12-01  757  
+552446a4166189a Matthew Wilcox          2017-12-01  758  	return 0;
+3fea5a499d57dec Johannes Weiner         2020-06-03  759  error:
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  760) 	folio->mapping = NULL;
+9a44f3462edc490 Matthew Wilcox (Oracle  2022-04-29  761) 	folio_ref_sub(folio, nr);
+3fea5a499d57dec Johannes Weiner         2020-06-03  762  	return error;
+46f65ec15c6878a Hugh Dickins            2011-08-03  763  }
+46f65ec15c6878a Hugh Dickins            2011-08-03  764  
 
-:::::: The code at line 2354 was first introduced by commit
-:::::: 4c27fe4c4c84f3afd504ecff2420cc1ad420d38e userfaultfd: shmem: add shmem_mcopy_atomic_pte for userfaultfd support
+:::::: The code at line 721 was first introduced by commit
+:::::: 3fea5a499d57dec46043fcdb08e38eac1767bb0d mm: memcontrol: convert page cache to a new mem_cgroup_charge() API
 
-:::::: TO: Mike Rapoport <rppt@linux.vnet.ibm.com>
+:::::: TO: Johannes Weiner <hannes@cmpxchg.org>
 :::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
