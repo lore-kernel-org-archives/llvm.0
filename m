@@ -1,157 +1,112 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7842B33CA
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651609106; x=1683145106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/DmKAqhcBCwyk+W58kHF9vgs2kME3Fop4ErwDfmo6zI=;
-  b=kQ3qVkJaNrF4XTRkIVFOjcjIYljL6HwE3GrF4Y15TaI7GqrBITY3tKIp
-   /BUSNa+8vuF7BjEvyKfcy29NpUTM4wCilxxZFXvy5ZurTBr1PH20hM+xG
-   7fKt2ryF/HSkU1DC93dEO+Jb6akK/0CPg01Xq+27El3Kv1fanAvK4f0c7
-   RPkZQjc4iH+5M3KVAmJ1rpFWJu7Y2xanOBJRqi/QUHyzbRzK/NK7kARn1
-   Vts1sGkSGmJ8NleTHxQtUIFSjRp2xGLIFR6mxpwYxAVGlM3oV2woF8Ce5
-   Z2u9WY1Jhji45h2GdgBLCfM51jRYsw2LhK11j1n+bbbr8nJVlaaw1KIXf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="249558635"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="249558635"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 13:18:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="620488390"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 May 2022 13:18:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlyyV-000AlZ-P5;
-	Tue, 03 May 2022 20:18:23 +0000
-Date: Wed, 4 May 2022 04:17:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dipen Patel <dipenp@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: [arm-tegra:hte/for-next 7/10] drivers/gpio/gpiolib-cdev.c:851:34:
- error: incompatible function pointer types passing 'irqreturn_t (struct
- hte_ts_data *, void *)' (aka 'enum irqreturn (struct hte_ts_data *, void
- *)') to parameter of type 'hte_ts_cb_t' (aka 'enum hte_return (*)(struct
- h...
-Message-ID: <202205040454.CGWxoTt3-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D16F33C9
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:55:08 +0000 (UTC)
+Received: by mail-pj1-f49.google.com with SMTP id fv2so16382142pjb.4
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 13:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jw8bm6qCSYy6P6VWUeZnWl92t/l9H4EI5gAHlpwVuZA=;
+        b=kt6TKIb3spJG6f46eBQBOofeRVyb/ToPb9O6thHh0PamzgM1zvWRbVz5kiNssVNFBZ
+         Ve6UEn/QrqYtA3goKXOZjwlYELzP7vNMxkNOI3gmDQDOLN7ZzrhXgX5O2r/TFkh+7xxP
+         G36udorrUQIVhMwU9srG5RrlZ1tUaiM6B/Xd0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jw8bm6qCSYy6P6VWUeZnWl92t/l9H4EI5gAHlpwVuZA=;
+        b=rMs6qB0B5MgDGsBzXm/JJ9V9vSAwpTxT52td09xiY5v1C2rMfXZ83qFEx28Q9IpZU/
+         dOfbIHHAhv7U2onMx1iboU8cacJpkNFpVZUxLzViCaWMykIcuIIG+Ktro7G9aHAu/HOj
+         2nN7UiT5zM6EJ4u3+7iHibmuySZ5e4LJ3BP/c4EFEtb5QlZv6i15SV0oAx/S/ToPhlau
+         FRAtoOb0XRFdAl33X1Hr4wFap0rVtbh242VDPBpTTT0MWXSc/SOox51om5Fuq8KO31sA
+         LW6vsg8ZOPjNLF5lJ2UKWeKF5ujYrs546RvhVVQSMCM6IzkOCbuu0OKUYBZk+kGtkdE6
+         3PhQ==
+X-Gm-Message-State: AOAM533EtoBW+WozyLIyaeFml8xIcIPPjVkO/oHMHFwYL/BQ0ub6FNcv
+	iefQ2SFDXHIlKCTeApcjW3IfXyNbnf9YMQ==
+X-Google-Smtp-Source: ABdhPJzRSol0jBLTzDF96PQvrfj8KiGYUArjUPSdiPRTUGAqUoEG4/WpJCH57Jb+kl4mAgl4y1qGLA==
+X-Received: by 2002:a17:902:bf06:b0:14d:8c72:96c6 with SMTP id bi6-20020a170902bf0600b0014d8c7296c6mr18218018plb.156.1651611308496;
+        Tue, 03 May 2022 13:55:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0015e8d4eb2d1sm6806192pla.283.2022.05.03.13.55.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 13:55:08 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	David Howells <dhowells@redhat.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/6] randstruct: Enable Clang support
+Date: Tue,  3 May 2022 13:54:57 -0700
+Message-Id: <20220503205503.3054173-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2263; h=from:subject; bh=X6EU4DNXnTBgSHB25uvB/YQy33D9lwDWmQXpLxpRzXs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicZalCEa9KZwdrR1ffYy76FhePPL8ViJcDNFJlqIM 9nd88byJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnGWpQAKCRCJcvTf3G3AJrpDD/ 4+NYBcLmsDxx+YqOPNtZQwIIUoAslvLe7/qL+HjN1AqimNDYdEtWnARl/cEtEtcuunXDDHpAlbDcfC y3KI7dGI78viVuwe1glQ8FbUqDElLxBdQ/OUt2WgQQ9QhGDfKa4vOki1GcsKv5j2rbZ7k5a5vTBdx/ wkRgyLrxCGZWEC3UygQhTrnab2RmOZaBMw57mxjmMqRb/AvYGqgqMnWahl2yubL3tqQMiMxjluDeQI 91ZKeTYtj75MsB5GezmxZAcPHow+o9sP56AjpL7y+uEk1zYZmk3mw0DS4TYPJe52wHPLlsTDwLyToF MXELE+YyqVQs6MoZN68VJmh6tahuhP4/SzgkfdRFrjIQSBFXon7Am04S2kRrXSHQFdGfnJyTnydrRp jW2IrDXX3BINAqjxObarMqzgDaaoSQAxhApaann26UVr8SU3bTzvzcYyfn/mnKG9iFep54gLQDgWfP gTwewKETf/GlCllJIEucaQmzcbbcjbsj2YI3IBbnf+TX46CuToYZRQi91fs6BVPb58VZLIPyOPwf/n 4LEDEtlJdnwDHXganksJt8QU8vqvk2f1Ord4lwn6ZLRsE/92OK5Tn7UdvY9VhEF5yqk5j7edplw6O+ q3aTuiKQm1VwEiIqSS7kQcAqYUq2CiuerfufKKYbN8YFZKfIGAyGwIRd5OhA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git hte/for-next
-head:   cedbe14082d169f4c1136c70c5170a76bd9a076a
-commit: 98935236600d4e179b664ffcfcd54e0ec3a1b4e3 [7/10] gpiolib: cdev: Add hardware timestamp clock type
-config: arm-ep93xx_defconfig (https://download.01.org/0day-ci/archive/20220504/202205040454.CGWxoTt3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git/commit/?id=98935236600d4e179b664ffcfcd54e0ec3a1b4e3
-        git remote add arm-tegra https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git
-        git fetch --no-tags arm-tegra hte/for-next
-        git checkout 98935236600d4e179b664ffcfcd54e0ec3a1b4e3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This enables Clang's recently added structure layout randomization
+support, similar to the existing kernel-specific GCC plugin. The general
+Makefile and Kconfig changes are mainly mechanical (moving options
+around), but the random seed generation changes are a bit fiddly because
+it needs to be created very early. I think I did this reasonably, but
+I'd love some more eyes on it.
 
-All errors (new ones prefixed by >>):
+Thanks!
 
-   drivers/gpio/gpiolib-cdev.c:572:8: error: unknown type name 'hte_return_t'; did you mean 'irqreturn_t'?
-   static hte_return_t process_hw_ts_thread(void *p)
-          ^~~~~~~~~~~~
-          irqreturn_t
-   include/linux/irqreturn.h:17:24: note: 'irqreturn_t' declared here
-   typedef enum irqreturn irqreturn_t;
-                          ^
-   drivers/gpio/gpiolib-cdev.c:581:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-                   return HTE_CB_HANDLED;
-                   ~~~~~~ ^~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:612:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-                   return HTE_CB_HANDLED;
-                   ~~~~~~ ^~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:620:9: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-           return HTE_CB_HANDLED;
-           ~~~~~~ ^~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:623:8: error: unknown type name 'hte_return_t'; did you mean 'irqreturn_t'?
-   static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
-          ^~~~~~~~~~~~
-          irqreturn_t
-   include/linux/irqreturn.h:17:24: note: 'irqreturn_t' declared here
-   typedef enum irqreturn irqreturn_t;
-                          ^
-   drivers/gpio/gpiolib-cdev.c:630:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-                   return HTE_CB_HANDLED;
-                   ~~~~~~ ^~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:644:11: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-                           return HTE_CB_HANDLED;
-                           ~~~~~~ ^~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:652:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-                   return HTE_RUN_SECOND_CB;
-                   ~~~~~~ ^~~~~~~~~~~~~~~~~
-   drivers/gpio/gpiolib-cdev.c:655:9: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
-           return HTE_CB_HANDLED;
-           ~~~~~~ ^~~~~~~~~~~~~~
->> drivers/gpio/gpiolib-cdev.c:851:34: error: incompatible function pointer types passing 'irqreturn_t (struct hte_ts_data *, void *)' (aka 'enum irqreturn (struct hte_ts_data *, void *)') to parameter of type 'hte_ts_cb_t' (aka 'enum hte_return (*)(struct hte_ts_data *, void *)') [-Werror,-Wincompatible-function-pointer-types]
-           return hte_request_ts_ns(hdesc, process_hw_ts,
-                                           ^~~~~~~~~~~~~
-   include/linux/hte.h:234:75: note: passing argument to parameter 'cb' here
-   static inline int hte_request_ts_ns(struct hte_ts_desc *desc, hte_ts_cb_t cb,
-                                                                             ^
->> drivers/gpio/gpiolib-cdev.c:852:6: error: incompatible function pointer types passing 'irqreturn_t (void *)' (aka 'enum irqreturn (void *)') to parameter of type 'hte_ts_sec_cb_t' (aka 'enum hte_return (*)(void *)') [-Werror,-Wincompatible-function-pointer-types]
-                                    process_hw_ts_thread, line);
-                                    ^~~~~~~~~~~~~~~~~~~~
-   include/linux/hte.h:235:25: note: passing argument to parameter 'tcb' here
-                                       hte_ts_sec_cb_t tcb, void *data)
-                                                       ^
-   7 warnings and 4 errors generated.
+-Kees
 
+Kees Cook (6):
+  netfs: Eliminate Clang randstruct warning
+  sancov: Split plugin build from plugin CFLAGS
+  randstruct: Reorganize Kconfigs and attribute macros
+  randstruct: Split randstruct Makefile and CFLAGS
+  randstruct: Move seed generation into scripts/basic/
+  randstruct: Enable Clang support
 
-vim +851 drivers/gpio/gpiolib-cdev.c
-
-   828	
-   829	static int hte_edge_setup(struct line *line, u64 eflags)
-   830	{
-   831		int ret;
-   832		unsigned long flags = 0;
-   833		struct hte_ts_desc *hdesc = &line->hdesc;
-   834	
-   835		if (eflags & GPIO_V2_LINE_FLAG_EDGE_RISING)
-   836			flags |= test_bit(FLAG_ACTIVE_LOW, &line->desc->flags) ?
-   837					  HTE_FALLING_EDGE_TS : HTE_RISING_EDGE_TS;
-   838		if (eflags & GPIO_V2_LINE_FLAG_EDGE_FALLING)
-   839			flags |= test_bit(FLAG_ACTIVE_LOW, &line->desc->flags) ?
-   840					  HTE_RISING_EDGE_TS : HTE_FALLING_EDGE_TS;
-   841	
-   842		line->total_discard_seq = 0;
-   843	
-   844		hte_init_line_attr(hdesc, desc_to_gpio(line->desc), flags,
-   845				   NULL, line->desc);
-   846	
-   847		ret = hte_ts_get(NULL, hdesc, 0);
-   848		if (ret)
-   849			return ret;
-   850	
- > 851		return hte_request_ts_ns(hdesc, process_hw_ts,
- > 852					 process_hw_ts_thread, line);
-   853	}
-   854	
+ Documentation/dontdiff                       |  1 +
+ Documentation/kbuild/reproducible-builds.rst |  8 +--
+ Makefile                                     |  1 +
+ arch/arm/vdso/Makefile                       |  2 +-
+ arch/arm64/kernel/vdso/Makefile              |  3 +-
+ arch/riscv/Kconfig                           |  2 +-
+ arch/sparc/vdso/Makefile                     |  3 +-
+ arch/x86/entry/vdso/Makefile                 |  3 +-
+ arch/x86/mm/pti.c                            |  2 +-
+ include/linux/compiler-gcc.h                 |  8 ---
+ include/linux/compiler_types.h               | 14 ++--
+ include/linux/netfs.h                        |  4 +-
+ include/linux/vermagic.h                     | 10 +--
+ kernel/panic.c                               |  2 +-
+ scripts/Makefile.gcc-plugins                 | 22 +++---
+ scripts/Makefile.randstruct                  | 17 +++++
+ scripts/basic/.gitignore                     |  1 +
+ scripts/basic/Makefile                       | 11 +++
+ scripts/gcc-plugins/Kconfig                  | 38 ----------
+ scripts/gcc-plugins/Makefile                 | 15 ++--
+ scripts/gcc-plugins/gen-random-seed.sh       |  9 ---
+ scripts/gen-randstruct-seed.sh               |  7 ++
+ security/Kconfig.hardening                   | 73 ++++++++++++++++++++
+ 23 files changed, 159 insertions(+), 97 deletions(-)
+ create mode 100644 scripts/Makefile.randstruct
+ delete mode 100755 scripts/gcc-plugins/gen-random-seed.sh
+ create mode 100755 scripts/gen-randstruct-seed.sh
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+
