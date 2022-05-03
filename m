@@ -1,47 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA7217F8
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 08:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB2D7F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 08:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651567772; x=1683103772;
+  t=1651567783; x=1683103783;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DmzcaiLRqqiyo8PYpg9kyWYjjUJjoZ8e2OsQMfbGjZM=;
-  b=OpfUUp0O9e4f3uRBdQT14SaB0pxBc7PLO90p51We2bMvdMpm++UiI+E8
-   wQHoslAbZgClp86K/FIrVO+bHo8YVVQuBfhVgob1qVhd6ROXvua4kzudL
-   lGGFR62raHvIHodb4Wi+stBcABYWOwS0yObD1KyvuYA17knTnXKcvxGMW
-   uF4e/u9IRpU4lXMvLLaqQ73AjnmeezKnPJfnDWsLamgsJvuEuReDw7G0r
-   IcDLwH/1V+zvWlkK+j4/Htep3zgCVtgmvIgkbbVk1qJo8jrwwU6Vb2U5h
-   iHWrLZi1t5xvHlpg9OTja1FaGWGsQ08I+6AwSUjkS9h1PEKmu6QjYk6TO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="292616743"
+  bh=b0xp0nnIya6SZHB35HRYNszZ1txj5JbqsqqLbxHJ3iI=;
+  b=iNSpyFmqbrEnshhxSEA2Zy03C82/wXpQQWCfhxzAMysRFXwM8WfDtHiX
+   7EZ0TM8X9WTUcbOKnlBrZac6vRIRitbvK9zAHfUDXMvAMaSX60XEyMQla
+   AMZd9AC6N/kgw6Wsoull/33GcMsv1IslZuJLNFwY2pWJsT44AY4GH/qXR
+   nBm5JLOtlzZnkJemocqKeqj4usRnuxqTBMtTBFZPmg9TfZVZOLEN4Vm0D
+   cLYEvE+y2GZTrMjdQbnbKcvI88MwXH6In8fUrxl84r0MGVkl8wokQ6YcR
+   RiUZUq3KGz0vf81du5F0cVCTcCcnC0G3kJRXOZc+5OhbtyPoW/XEddc6s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267023057"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="292616743"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
+   d="scan'208";a="267023057"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="888298048"
+   d="scan'208";a="733831904"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
+  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nloDp-000AJ2-3P;
+	id 1nloDp-000AIz-2d;
 	Tue, 03 May 2022 08:49:29 +0000
-Date: Tue, 3 May 2022 16:48:34 +0800
+Date: Tue, 3 May 2022 16:48:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Minchan Kim <minchan@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>, John Dias <joaodias@google.com>,
-	Minchan Kim <minchan@kernel.org>
-Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
-Message-ID: <202205031644.EtLKbqIX-lkp@intel.com>
-References: <20220502173558.2510641-1-minchan@kernel.org>
+To: Delyan Kratunov <delyank@fb.com>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"ast@kernel.org" <ast@kernel.org>,
+	"andrii@kernel.org" <andrii@kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH bpf-next v2 2/5] bpf: implement sleepable uprobes by
+ chaining tasks_trace and normal rcu
+Message-ID: <202205031643.UGYirnXb-lkp@intel.com>
+References: <588dd77e9e7424e0abc0e0e624524ef8a2c7b847.1651532419.git.delyank@fb.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,109 +50,182 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
+In-Reply-To: <588dd77e9e7424e0abc0e0e624524ef8a2c7b847.1651532419.git.delyank@fb.com>
 
-Hi Minchan,
+Hi Delyan,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on hnaz-mm/master]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
-base:   https://github.com/hnaz/linux-mm master
-config: hexagon-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031644.EtLKbqIX-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Delyan-Kratunov/sleepable-uprobe-support/20220503-071247
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: s390-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031643.UGYirnXb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1b8636710c31d44310f1d344e337c207562b851d
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cfa0f114829902b579da16d7520a39317905c502
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
-        git checkout 1b8636710c31d44310f1d344e337c207562b851d
+        git fetch --no-tags linux-review Delyan-Kratunov/sleepable-uprobe-support/20220503-071247
+        git checkout cfa0f114829902b579da16d7520a39317905c502
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   include/linux/mm.h:1630:47: error: use of undeclared identifier 'MIGRATE_CMA'; did you mean 'MIGRATE_SYNC'?
-           return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
-                                                        ^~~~~~~~~~~
-                                                        MIGRATE_SYNC
-   include/linux/migrate_mode.h:18:2: note: 'MIGRATE_SYNC' declared here
-           MIGRATE_SYNC,
-           ^
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   include/linux/mm.h:1631:9: error: use of undeclared identifier 'MIGRATE_ISOLATE'; did you mean 'MIGRATE_MOVABLE'?
-                   mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
-                         ^~~~~~~~~~~~~~~
-                         MIGRATE_MOVABLE
-   include/linux/mmzone.h:44:2: note: 'MIGRATE_MOVABLE' declared here
-           MIGRATE_MOVABLE,
-           ^
->> fs/statfs.c:131:3: warning: 'memcpy' will always overflow; destination buffer has size 64, but size argument is 88 [-Wfortify-source]
-                   memcpy(&buf, st, sizeof(*st));
-                   ^
-   1 warning and 2 errors generated.
+   In file included from kernel/trace/trace_uprobe.c:10:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/trace/trace_uprobe.c:10:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/trace/trace_uprobe.c:10:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/trace/trace_uprobe.c:1349:9: error: call to undeclared function 'uprobe_call_bpf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = uprobe_call_bpf(call, regs);
+                         ^
+   kernel/trace/trace_uprobe.c:1349:9: note: did you mean 'trace_call_bpf'?
+   include/linux/trace_events.h:752:28: note: 'trace_call_bpf' declared here
+   static inline unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+                              ^
+   12 warnings and 1 error generated.
 
 
-vim +/memcpy +131 fs/statfs.c
+vim +/uprobe_call_bpf +1349 kernel/trace/trace_uprobe.c
 
-c8b91accfa1059 Al Viro 2011-03-12  125  
-c8b91accfa1059 Al Viro 2011-03-12  126  static int do_statfs_native(struct kstatfs *st, struct statfs __user *p)
-c8b91accfa1059 Al Viro 2011-03-12  127  {
-c8b91accfa1059 Al Viro 2011-03-12  128  	struct statfs buf;
-7ed1ee6118ae77 Al Viro 2010-03-23  129  
-c8b91accfa1059 Al Viro 2011-03-12  130  	if (sizeof(buf) == sizeof(*st))
-c8b91accfa1059 Al Viro 2011-03-12 @131  		memcpy(&buf, st, sizeof(*st));
-7ed1ee6118ae77 Al Viro 2010-03-23  132  	else {
-c8b91accfa1059 Al Viro 2011-03-12  133  		if (sizeof buf.f_blocks == 4) {
-c8b91accfa1059 Al Viro 2011-03-12  134  			if ((st->f_blocks | st->f_bfree | st->f_bavail |
-c8b91accfa1059 Al Viro 2011-03-12  135  			     st->f_bsize | st->f_frsize) &
-7ed1ee6118ae77 Al Viro 2010-03-23  136  			    0xffffffff00000000ULL)
-7ed1ee6118ae77 Al Viro 2010-03-23  137  				return -EOVERFLOW;
-7ed1ee6118ae77 Al Viro 2010-03-23  138  			/*
-7ed1ee6118ae77 Al Viro 2010-03-23  139  			 * f_files and f_ffree may be -1; it's okay to stuff
-7ed1ee6118ae77 Al Viro 2010-03-23  140  			 * that into 32 bits
-7ed1ee6118ae77 Al Viro 2010-03-23  141  			 */
-c8b91accfa1059 Al Viro 2011-03-12  142  			if (st->f_files != -1 &&
-c8b91accfa1059 Al Viro 2011-03-12  143  			    (st->f_files & 0xffffffff00000000ULL))
-7ed1ee6118ae77 Al Viro 2010-03-23  144  				return -EOVERFLOW;
-c8b91accfa1059 Al Viro 2011-03-12  145  			if (st->f_ffree != -1 &&
-c8b91accfa1059 Al Viro 2011-03-12  146  			    (st->f_ffree & 0xffffffff00000000ULL))
-7ed1ee6118ae77 Al Viro 2010-03-23  147  				return -EOVERFLOW;
-7ed1ee6118ae77 Al Viro 2010-03-23  148  		}
-7ed1ee6118ae77 Al Viro 2010-03-23  149  
-c8b91accfa1059 Al Viro 2011-03-12  150  		buf.f_type = st->f_type;
-c8b91accfa1059 Al Viro 2011-03-12  151  		buf.f_bsize = st->f_bsize;
-c8b91accfa1059 Al Viro 2011-03-12  152  		buf.f_blocks = st->f_blocks;
-c8b91accfa1059 Al Viro 2011-03-12  153  		buf.f_bfree = st->f_bfree;
-c8b91accfa1059 Al Viro 2011-03-12  154  		buf.f_bavail = st->f_bavail;
-c8b91accfa1059 Al Viro 2011-03-12  155  		buf.f_files = st->f_files;
-c8b91accfa1059 Al Viro 2011-03-12  156  		buf.f_ffree = st->f_ffree;
-c8b91accfa1059 Al Viro 2011-03-12  157  		buf.f_fsid = st->f_fsid;
-c8b91accfa1059 Al Viro 2011-03-12  158  		buf.f_namelen = st->f_namelen;
-c8b91accfa1059 Al Viro 2011-03-12  159  		buf.f_frsize = st->f_frsize;
-c8b91accfa1059 Al Viro 2011-03-12  160  		buf.f_flags = st->f_flags;
-c8b91accfa1059 Al Viro 2011-03-12  161  		memset(buf.f_spare, 0, sizeof(buf.f_spare));
-c8b91accfa1059 Al Viro 2011-03-12  162  	}
-c8b91accfa1059 Al Viro 2011-03-12  163  	if (copy_to_user(p, &buf, sizeof(buf)))
-c8b91accfa1059 Al Viro 2011-03-12  164  		return -EFAULT;
-7ed1ee6118ae77 Al Viro 2010-03-23  165  	return 0;
-7ed1ee6118ae77 Al Viro 2010-03-23  166  }
-7ed1ee6118ae77 Al Viro 2010-03-23  167  
+  1334	
+  1335	static void __uprobe_perf_func(struct trace_uprobe *tu,
+  1336				       unsigned long func, struct pt_regs *regs,
+  1337				       struct uprobe_cpu_buffer *ucb, int dsize)
+  1338	{
+  1339		struct trace_event_call *call = trace_probe_event_call(&tu->tp);
+  1340		struct uprobe_trace_entry_head *entry;
+  1341		struct hlist_head *head;
+  1342		void *data;
+  1343		int size, esize;
+  1344		int rctx;
+  1345	
+  1346		if (bpf_prog_array_valid(call)) {
+  1347			u32 ret;
+  1348	
+> 1349			ret = uprobe_call_bpf(call, regs);
+  1350			if (!ret)
+  1351				return;
+  1352		}
+  1353	
+  1354		esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
+  1355	
+  1356		size = esize + tu->tp.size + dsize;
+  1357		size = ALIGN(size + sizeof(u32), sizeof(u64)) - sizeof(u32);
+  1358		if (WARN_ONCE(size > PERF_MAX_TRACE_SIZE, "profile buffer not large enough"))
+  1359			return;
+  1360	
+  1361		preempt_disable();
+  1362		head = this_cpu_ptr(call->perf_events);
+  1363		if (hlist_empty(head))
+  1364			goto out;
+  1365	
+  1366		entry = perf_trace_buf_alloc(size, NULL, &rctx);
+  1367		if (!entry)
+  1368			goto out;
+  1369	
+  1370		if (is_ret_probe(tu)) {
+  1371			entry->vaddr[0] = func;
+  1372			entry->vaddr[1] = instruction_pointer(regs);
+  1373			data = DATAOF_TRACE_ENTRY(entry, true);
+  1374		} else {
+  1375			entry->vaddr[0] = instruction_pointer(regs);
+  1376			data = DATAOF_TRACE_ENTRY(entry, false);
+  1377		}
+  1378	
+  1379		memcpy(data, ucb->buf, tu->tp.size + dsize);
+  1380	
+  1381		if (size - esize > tu->tp.size + dsize) {
+  1382			int len = tu->tp.size + dsize;
+  1383	
+  1384			memset(data + len, 0, size - esize - len);
+  1385		}
+  1386	
+  1387		perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+  1388				      head, NULL);
+  1389	 out:
+  1390		preempt_enable();
+  1391	}
+  1392	
 
 -- 
 0-DAY CI Kernel Test Service
