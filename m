@@ -1,102 +1,93 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DC033C9
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 21:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651613070; x=1683149070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VquISUrDva1ii+/TThhn+PnxLPxmCUEioQRKIcqao2w=;
-  b=dY6TJdcFeGWuJHd5xV5cP+BemL6eEAuR1VUt+tY7lZYEldYZqLU9WGR9
-   XSwPetN2eWEWlrWe5JsNH6sz4KmU0u4LsUqwODFFsiLegFWRc9tHsX5sH
-   YSJTL55H7jqw9ZoeEZ3a99z1Cvpm+D1FqQwh7LoQDXhglxpEbyltaHphM
-   Uy2FgPO/R9tVcWGZqWzSiMbLs5rYGpk7Xo9sfsdrOCHTtGcBuRg5PYmO0
-   rUw5cJfvRozchfIqSQeDEe290wppFswsYuTOOZWw43MuWgXPkKnZ92IVn
-   bEv3y97WEevqiUuyB29zOTYDxsIlVvW5uziFj4e/5djUjPTfRrmEdtLWR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267745902"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="267745902"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 14:24:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="889153341"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 14:24:27 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm00Q-000Ao1-CT;
-	Tue, 03 May 2022 21:24:26 +0000
-Date: Wed, 4 May 2022 05:23:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Quentin Schulz <foss+kernel@0leil.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, shawnx.tu@intel.com,
-	mchehab@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: Re: [PATCH 2/3] media: ov5675: add device-tree support
-Message-ID: <202205040514.C0uKmI1p-lkp@intel.com>
-References: <20220503154259.1166203-2-foss+kernel@0leil.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7B533C9
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 21:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB6DC385B2;
+	Tue,  3 May 2022 21:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651613520;
+	bh=oUV5PgMCLnoqfU3So5a2m7tM/4sVepUMn+p9KajRc7Y=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=V3SnkDsUjFOaPhiHQKb0RBPCoZKSlMCLEd43Dgm6LRlKy+tZUmPyE8ygzHJvQtwD0
+	 lYCHWR4Cxz44hLEkS8YjazrKWwRUXOYsMuyOJYRfDuS3EBx1tgRb0y/dyf8XkUF21A
+	 zM6CqVdJXZMjtWyqZHUM5lFfNfId+5KRabM7ZNAs2eTAsK6OlbRt/6YF4+fEPS+rjv
+	 nPe+aIHnM/esQTQiUZ5AheF8VuZq7pe+sqHp4Dfodf6vsYR915ZVb6EjCvN37WIWB5
+	 b5Zu1QZfJ8+0J4ET7YIQlyp9hHpY6OO6CVBwgKHQdvVyiHAXan0B0S68ojJp0upkT6
+	 Ea2RwA/CBQ51g==
+Message-ID: <7562f8eccd7cc0e447becfe9912179088784e3b9.camel@kernel.org>
+Subject: Re: [PATCH 1/6] netfs: Eliminate Clang randstruct warning
+From: Jeff Layton <jlayton@kernel.org>
+To: Kees Cook <keescook@chromium.org>, Bill Wendling <morbo@google.com>
+Cc: David Howells <dhowells@redhat.com>, Masahiro Yamada
+ <masahiroy@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Date: Tue, 03 May 2022 17:31:57 -0400
+In-Reply-To: <20220503205503.3054173-2-keescook@chromium.org>
+References: <20220503205503.3054173-1-keescook@chromium.org>
+	 <20220503205503.3054173-2-keescook@chromium.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503154259.1166203-2-foss+kernel@0leil.net>
+Content-Transfer-Encoding: 7bit
 
-Hi Quentin,
+On Tue, 2022-05-03 at 13:54 -0700, Kees Cook wrote:
+> Clang's structure layout randomization feature gets upset when it sees
+> struct inode (which is randomized) cast to struct netfs_i_context. This
+> is due to seeing the inode pointer as being treated as an array of inodes,
+> rather than "something else, following struct inode".
+> 
+> Since netfs can't use container_of() (since it doesn't know what the
+> true containing struct is), it uses this direct offset instead. Adjust
+> the code to better reflect what is happening: an arbitrary pointer is
+> being adjusted and cast to something else: use a "void *" for the math.
+> The resulting binary output is the same, but Clang no longer sees an
+> unexpected cross-structure cast:
+> 
+> In file included from ../fs/nfs/inode.c:50:
+> In file included from ../fs/nfs/fscache.h:15:
+> In file included from ../include/linux/fscache.h:18:
+> ../include/linux/netfs.h:298:9: error: casting from randomized structure pointer type 'struct inode *' to 'struct netfs_i_context *'
+>         return (struct netfs_i_context *)(inode + 1);
+>                ^
+> 1 error generated.
+> 
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/linux/netfs.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
+> index c7bf1eaf51d5..0c33b715cbfd 100644
+> --- a/include/linux/netfs.h
+> +++ b/include/linux/netfs.h
+> @@ -295,7 +295,7 @@ extern void netfs_stats_show(struct seq_file *);
+>   */
+>  static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
+>  {
+> -	return (struct netfs_i_context *)(inode + 1);
+> +	return (void *)inode + sizeof(*inode);
+>  }
+>  
+>  /**
+> @@ -307,7 +307,7 @@ static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
+>   */
+>  static inline struct inode *netfs_inode(struct netfs_i_context *ctx)
+>  {
+> -	return ((struct inode *)ctx) - 1;
+> +	return (void *)ctx - sizeof(struct inode);
+>  }
+>  
+>  /**
 
-Thank you for the patch! Perhaps something to improve:
+Looks reasonable.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on robh/for-next linus/master v5.18-rc5 next-20220503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Quentin-Schulz/media-dt-bindings-ov5675-document-YAML-binding/20220503-234500
-base:   git://linuxtv.org/media_tree.git master
-config: x86_64-randconfig-a011-20220502 (https://download.01.org/0day-ci/archive/20220504/202205040514.C0uKmI1p-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1623110421bc0b9cec990a62a40655076de1e71c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Quentin-Schulz/media-dt-bindings-ov5675-document-YAML-binding/20220503-234500
-        git checkout 1623110421bc0b9cec990a62a40655076de1e71c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpio/ drivers/leds/ drivers/media/i2c/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/i2c/ov5675.c:1383:34: warning: unused variable 'ov5675_of_match' [-Wunused-const-variable]
-   static const struct of_device_id ov5675_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/ov5675_of_match +1383 drivers/media/i2c/ov5675.c
-
-  1382	
-> 1383	static const struct of_device_id ov5675_of_match[] = {
-  1384		{ .compatible = "ovti,ov5675", },
-  1385		{ /* sentinel */ },
-  1386	};
-  1387	MODULE_DEVICE_TABLE(of, ov5675_of_match);
-  1388	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
