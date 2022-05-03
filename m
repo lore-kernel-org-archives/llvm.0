@@ -1,116 +1,168 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC587F
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 09:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651570837; x=1683106837;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P+iOAd44yQAu6dFiULlp+J/3lk1X57kR5DCW90siNJg=;
-  b=gJvWDLUf3PbCWGlejBzAbc93AC948rmh4muSowqRhzpIMKRMrD60xhH2
-   RpFSxZbW0PgODYwLaEcxqbLDhZ4JrzFBKZr8NndZQ5JIcWNf1Hdl5mywh
-   8RCYTmdTsLUHh5L1Ta0dwSs5hW0RjTSAjDxr11DvlqNn9u9Wh/WCbaERJ
-   Jm/dKxjxbUKqAqJkmadnfUM9M6Q7uvsf526e6zZKgk6XaqcGPeCTvftqk
-   0siMJWs/VfIlraN/TQAXwORE3YnAEdCeFVhqE9fehlvZLcGIEDdbkXrjN
-   iYGDWMFBnVVAdvKzaEJKDI5GwNITQcU9oDfE6dhggWIEbI5zxPlTLUp9W
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247346553"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="247346553"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:40:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="631449685"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 03 May 2022 02:40:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlp1G-000ALL-9h;
-	Tue, 03 May 2022 09:40:34 +0000
-Date: Tue, 3 May 2022 17:39:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christoph Hellwig <hch@lst.de>,
-	James Bottomley <james.bottomley@hansenpartnership.com>,
-	linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 13/24] aic7xxx: make BUILD_SCSIID() a function
-Message-ID: <202205031715.Eiw7By3c-lkp@intel.com>
-References: <20220502213820.3187-14-hare@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509B87F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 10:23:51 +0000 (UTC)
+X-UUID: 0e450f6e7cd446e583a6542003b278e9-20220503
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:0727bf47-5f78-4798-b91e-0007d73ea7e8,OB:0,LO
+	B:0,IP:0,URL:25,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,A
+	CTION:release,TS:5
+X-CID-META: VersionHash:faefae9,CLOUDID:693051c7-85ee-4ac1-ac05-bd3f1e72e732,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 0e450f6e7cd446e583a6542003b278e9-20220503
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 275906235; Tue, 03 May 2022 18:23:47 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 3 May 2022 18:23:47 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 3 May 2022 18:23:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 18:23:46 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v19 01/25] dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+Date: Tue, 3 May 2022 18:23:21 +0800
+Message-ID: <20220503102345.22817-2-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220503102345.22817-1-nancy.lin@mediatek.com>
+References: <20220503102345.22817-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502213820.3187-14-hare@suse.de>
+Content-Type: text/plain
+X-MTK: N
 
-Hi Hannes,
+Add vdosys1 RDMA definition.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../display/mediatek/mediatek,mdp-rdma.yaml   | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next powerpc/next linus/master v5.18-rc5 next-20220502]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hannes-Reinecke/scsi-EH-rework-prep-patches-part-1/20220503-054317
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-config: arm64-randconfig-r022-20220502 (https://download.01.org/0day-ci/archive/20220503/202205031715.Eiw7By3c-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/5436bc0a0e277a5742af0b7b443b4591ce0e5b74
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hannes-Reinecke/scsi-EH-rework-prep-patches-part-1/20220503-054317
-        git checkout 5436bc0a0e277a5742af0b7b443b4591ce0e5b74
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/scsi/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
-                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
-                   ~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: note: place parentheses around the '|' expression to silence this warning
-                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
-                                        ^
-                                       )
-   drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: note: place parentheses around the '?:' expression to evaluate it first
-                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
-                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +808 drivers/scsi/aic7xxx/aic7xxx_osm.c
-
-   800	
-   801	
-   802	static inline unsigned int ahc_build_scsiid(struct ahc_softc *ahc,
-   803						    struct scsi_device *sdev)
-   804	{
-   805		unsigned int scsiid =
-   806			((sdev->id << TID_SHIFT) & TID) |
-   807			((sdev->channel == 0) ? ahc->our_id : ahc->our_id_b) |
- > 808			(sdev->channel == 0) ? 0 : TWIN_CHNLB;
-   809		return scsiid;
-   810	}
-   811	
-
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+new file mode 100644
+index 000000000000..ca31accb0a95
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+@@ -0,0 +1,94 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek MDP RDMA
++
++maintainers:
++  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
++  - Philipp Zabel <p.zabel@pengutronix.de>
++
++description:
++  The MediaTek MDP RDMA stands for Read Direct Memory Access.
++  It provides real time data to the back-end panel driver, such as DSI,
++  DPI and DP_INTF.
++  It contains one line buffer to store the sufficient pixel data.
++  RDMA device node must be siblings to the central MMSYS_CONFIG node.
++  For a description of the MMSYS_CONFIG binding, see
++  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml for details.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: mediatek,mt8195-vdo1-rdma
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  power-domains:
++    description: A phandle and PM domain specifier as defined by bindings of
++      the power controller specified by phandle. See
++      Documentation/devicetree/bindings/power/power-domain.yaml for details.
++
++  clocks:
++    items:
++      - description: RDMA Clock
++
++  iommus:
++    description:
++      This property should point to the respective IOMMU block with master port as argument,
++      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
++
++  mediatek,gce-client-reg:
++    description:
++      The register of display function block to be set by gce. There are 4 arguments,
++      such as gce node, subsys id, offset and register size. The subsys id that is
++      mapping to the register of display function blocks is defined in the gce header
++      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle of GCE
++        - description: GCE subsys id
++        - description: register offset
++        - description: register size
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - power-domains
++  - clocks
++  - iommus
++  - mediatek,gce-client-reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/power/mt8195-power.h>
++    #include <dt-bindings/gce/mt8195-gce.h>
++    #include <dt-bindings/memory/mt8195-memory-port.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        vdo1_rdma0: mdp-rdma@1c104000 {
++            compatible = "mediatek,mt8195-vdo1-rdma";
++            reg = <0 0x1c104000 0 0x1000>;
++            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
++            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
++            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
++            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
++            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000 0x1000>;
++        };
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+
