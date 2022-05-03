@@ -1,228 +1,106 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9997D33C9
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 22:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651615590; x=1683151590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yvkjUNabNq6cy33KpNVELYiaBalI0xS/GPm/17OLuJI=;
-  b=jKhniS5EtjsUThLwrbl8lEmq94fN84zca9wROrGcUookPmgOU1Px5TM1
-   L279qA42UYiFU2WjaICylCPSYUPPZZE8WteG5sZC+h55zvoqxwIzCzKab
-   STwl8qv6HQtb9CmKapENbix5GS0sAZ2XrsGEP4To7ngXDQMl5uzKztqnj
-   BjG6xODja7IgEX9vW8dWodAL96wez7aIgg+pcOO88GKP2hqOpvnHAkU5a
-   bq5/WddmLLK1h20MZn9LPthD6NAMrfzVwFdiXyZ7pKVKA1C2eSy3H83VI
-   WUh7I+TaSjYOMZ2mrqQZc59CtUcWjfn456+RKugAPmIWiNLRQfKd0URdc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248142416"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="248142416"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:06:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734112350"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 15:06:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm0f5-000Aq9-V2;
-	Tue, 03 May 2022 22:06:27 +0000
-Date: Wed, 4 May 2022 06:05:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ansuel Smith <ansuelsmth@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v6 06/11] leds: trigger: netdev: add hardware control
- support
-Message-ID: <202205040646.Qyd8nG2X-lkp@intel.com>
-References: <20220503151633.18760-7-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB952F41
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 22:35:46 +0000 (UTC)
+Received: by mail-vs1-f47.google.com with SMTP id q2so17870571vsr.5
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 15:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
+        b=Ue8FeaYYp63Oq+H4NMZb+pBRhFnk/iofdWy5gXeIg5QTwAVaQhcPh7NJMycsbGfWZE
+         Fc+5btEiGJmM5fEXhaxOFjxGU7fzkiSoqnkUqFrl1ZRRzs4ig52ohWMhFGSgHhm+VyaG
+         TWPDOh3RfjJbT1pjROk+5GJXdEClUvyooIraMli+y9nHLH03LpgjlCrH+hdF8m40WCQE
+         E5GOMstVRJssp5a6VJFS+WxZDfGT+cOVRpciMnyrojahl/hfM9ETPdwkTCKcre9KwcNY
+         l73O7V2zpphu3uEFz9tC/hRsuke1nKrMRDzlaIhhkSYfm4lNq2qk0/FjvFICEl6nNSsW
+         YGgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
+        b=AGQib+um0wiH0uN2uPFmUPcOseUa5Wkiud2HtxKLS3qTeJ9KB/j549FdX4Ae+wHtRm
+         cXLQ7A+3Dc9hrUMJSamU3GhMu57ElgyM3lnzmTUOvmh5Vrjbds05ksMryFWkHIerDh29
+         etW1WHGjzRvDAWqR1ZYjxy/xM/Se+aNtR6smk+FXtfb5LIYPD2D9faSX0WAH+xGoD8he
+         3pl1SP+syeNUdqqPttAOSoiNaysCCN+fMKQQRBs95OAZuXzUxDIPcLO5VvsahXvoD6YQ
+         5/hbacF4KPJMBfhvGbrdNKv/eojmkZyVkUjxYLwwvmBp3K+Q5MbHZlLRj5qrDPCAKCKE
+         UUbg==
+X-Gm-Message-State: AOAM532EGtxyxbFq4pyOt6tvoszIFqr5N7x91XguDK6RWo8yHj6q4Pne
+	ay/egYTVyQVGlY21FI84l4fLNXL3TQoHzHzTGDqQtA==
+X-Google-Smtp-Source: ABdhPJyL+ddQCd6SprqNHsm9X7kOXr4Vs6rtLnwYWhuO4UVCOvXbzKSI2dWSxbo9OUaHxwRSd1gZJrBcmkLhnuY7a5Y=
+X-Received: by 2002:a67:c408:0:b0:32d:1319:2e38 with SMTP id
+ c8-20020a67c408000000b0032d13192e38mr6059296vsk.72.1651617345595; Tue, 03 May
+ 2022 15:35:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503151633.18760-7-ansuelsmth@gmail.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook> <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+ <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com> <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+In-Reply-To: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+From: Peter Collingbourne <pcc@google.com>
+Date: Tue, 3 May 2022 15:35:34 -0700
+Message-ID: <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] KCFI support
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, LKML <linux-kernel@vger.kernel.org>, 
+	X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ansuel,
+On Mon, May 2, 2022 at 1:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
+>
+> > > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> > > attribute or qualifier for this, such that one can mark a function
+> > > pointer as not doing CFI.
+> > >
+> > > I simply doesn't make sense to have a builtin that operates on an
+> > > expression. The whole thing is about indirect calls, IOW function
+> > > pointers.
+> >
+> > I also thought an attribute would be more convenient, but the compiler
+> > folks prefer a built-in:
+> >
+> > https://reviews.llvm.org/D122673
+>
+> That seems to mostly worry about C++ things (overload sets, template
+> specialization, name mangling) we kernel folks don't seem to much care
+> about.
+>
+> I'll stick with saying type system makes more sense to me though.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on net-next/master net/master linus/master v5.18-rc5 next-20220503]
-[cannot apply to pavel-leds/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I'd say it's not only the C++ issues but more the "action at a
+distance" that's implied by having this be part of the type system.
+With this being in the function type it's hard to tell whether any
+particular call will have CFI disabled, without needing to go and look
+at how the function pointer is defined. On the other hand, if we
+explicitly mark up the calls with CFI disabled, the code becomes
+easier to audit (think Rust "unsafe" blocks).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ansuel-Smith/Adds-support-for-PHY-LEDs-with-offload-triggers/20220503-232347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-randconfig-r041-20220501 (https://download.01.org/0day-ci/archive/20220504/202205040646.Qyd8nG2X-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d5c00815ca4c96e479d3653feceef0d4f21723c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ansuel-Smith/Adds-support-for-PHY-LEDs-with-offload-triggers/20220503-232347
-        git checkout d5c00815ca4c96e479d3653feceef0d4f21723c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/leds/trigger/
+Does it seem any better to you to have this be marked up via the
+function expression, rather than the call? The idea is that this would
+always compile to a check-free function call, no matter what "func"
+is:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+__builtin_kcfi_call_unchecked(func)(args)
 
-All errors (new ones prefixed by >>):
+We already have this, to some degree, with KCFI as implemented: CFI
+checks are disabled if the function expression refers to a declared
+function. The builtin would allow overriding the decision to also
+disable CFI checks for function expressions that use the builtin. It
+also wouldn't preclude a type based system later on (the builtin would
+become effectively a cast to the "unchecked" type).
 
->> drivers/leds/trigger/ledtrig-netdev.c:102:8: error: call to undeclared function 'led_trigger_blink_mode_is_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           if (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
-                               ^
->> drivers/leds/trigger/ledtrig-netdev.c:137:13: error: no member named 'hw_control_configure' in 'struct led_classdev'
-                   led_cdev->hw_control_configure(led_cdev, BIT(TRIGGER_NETDEV_LINK),
-                   ~~~~~~~~  ^
->> drivers/leds/trigger/ledtrig-netdev.c:138:13: error: use of undeclared identifier 'BLINK_MODE_ZERO'
-                                                  BLINK_MODE_ZERO);
-                                                  ^
-   drivers/leds/trigger/ledtrig-netdev.c:146:14: error: no member named 'hw_control_configure' in 'struct led_classdev'
-                           led_cdev->hw_control_configure(led_cdev, BIT(detail->bit),
-                           ~~~~~~~~  ^
->> drivers/leds/trigger/ledtrig-netdev.c:147:14: error: use of undeclared identifier 'BLINK_MODE_ENABLE'
-                                                          BLINK_MODE_ENABLE);
-                                                          ^
->> drivers/leds/trigger/ledtrig-netdev.c:150:13: error: no member named 'hw_control_start' in 'struct led_classdev'
-                   led_cdev->hw_control_start(led_cdev);
-                   ~~~~~~~~  ^
->> drivers/leds/trigger/ledtrig-netdev.c:503:17: error: no member named 'hw_control_status' in 'struct led_classdev'
-                   if (led_cdev->hw_control_status(led_cdev)) {
-                       ~~~~~~~~  ^
-   drivers/leds/trigger/ledtrig-netdev.c:504:19: error: no member named 'hw_control_configure' in 'struct led_classdev'
-                           rc = led_cdev->hw_control_configure(led_cdev, BIT(TRIGGER_NETDEV_LINK),
-                                ~~~~~~~~  ^
-   drivers/leds/trigger/ledtrig-netdev.c:505:12: error: use of undeclared identifier 'BLINK_MODE_ZERO'
-                                                               BLINK_MODE_ZERO);
-                                                               ^
-   9 errors generated.
-
-
-vim +/led_trigger_blink_mode_is_supported +102 drivers/leds/trigger/ledtrig-netdev.c
-
-    68	
-    69	static bool validate_baseline_state(struct led_netdev_data *trigger_data)
-    70	{
-    71		struct led_classdev *led_cdev = trigger_data->led_cdev;
-    72		struct netdev_led_attr_detail *detail;
-    73		u32 hw_blink_mode_supported = 0;
-    74		bool force_sw = false;
-    75		int i;
-    76	
-    77		for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-    78			detail = &attr_details[i];
-    79	
-    80			/* Mode not active, skip */
-    81			if (!test_bit(detail->bit, &trigger_data->mode))
-    82				continue;
-    83	
-    84			/* Hardware only mode enabled on software controlled led */
-    85			if (led_cdev->blink_mode == SOFTWARE_CONTROLLED &&
-    86			    detail->hardware_only)
-    87				return false;
-    88	
-    89			/* Check if the mode supports hardware mode */
-    90			if (led_cdev->blink_mode != SOFTWARE_CONTROLLED) {
-    91				/* With a net dev set, force software mode.
-    92				 * With modes are handled by hardware, led will blink
-    93				 * based on his own events and will ignore any event
-    94				 * from the provided dev.
-    95				 */
-    96				if (trigger_data->net_dev) {
-    97					force_sw = true;
-    98					continue;
-    99				}
-   100	
-   101				/* With empty dev, check if the mode is supported */
- > 102				if (led_trigger_blink_mode_is_supported(led_cdev, detail->bit))
-   103					hw_blink_mode_supported |= BIT(detail->bit);
-   104			}
-   105		}
-   106	
-   107		/* We can't run modes handled by both software and hardware.
-   108		 * Check if we run hardware modes and check if all the modes
-   109		 * can be handled by hardware.
-   110		 */
-   111		if (hw_blink_mode_supported && hw_blink_mode_supported != trigger_data->mode)
-   112			return false;
-   113	
-   114		/* Modes are valid. Decide now the running mode to later
-   115		 * set the baseline.
-   116		 * Software mode is enforced with net_dev set. With an empty
-   117		 * one hardware mode is selected by default (if supported).
-   118		 */
-   119		if (force_sw || led_cdev->blink_mode == SOFTWARE_CONTROLLED)
-   120			trigger_data->blink_mode = SOFTWARE_CONTROLLED;
-   121		else
-   122			trigger_data->blink_mode = HARDWARE_CONTROLLED;
-   123	
-   124		return true;
-   125	}
-   126	
-   127	static void set_baseline_state(struct led_netdev_data *trigger_data)
-   128	{
-   129		int i;
-   130		int current_brightness;
-   131		struct netdev_led_attr_detail *detail;
-   132		struct led_classdev *led_cdev = trigger_data->led_cdev;
-   133	
-   134		/* Modes already validated. Directly apply hw trigger modes */
-   135		if (trigger_data->blink_mode == HARDWARE_CONTROLLED) {
-   136			/* We are refreshing the blink modes. Reset them */
- > 137			led_cdev->hw_control_configure(led_cdev, BIT(TRIGGER_NETDEV_LINK),
- > 138						       BLINK_MODE_ZERO);
-   139	
-   140			for (i = 0; i < ARRAY_SIZE(attr_details); i++) {
-   141				detail = &attr_details[i];
-   142	
-   143				if (!test_bit(detail->bit, &trigger_data->mode))
-   144					continue;
-   145	
-   146				led_cdev->hw_control_configure(led_cdev, BIT(detail->bit),
- > 147							       BLINK_MODE_ENABLE);
-   148			}
-   149	
- > 150			led_cdev->hw_control_start(led_cdev);
-   151	
-   152			return;
-   153		}
-   154	
-   155		/* Handle trigger modes by software */
-   156		current_brightness = led_cdev->brightness;
-   157		if (current_brightness)
-   158			led_cdev->blink_brightness = current_brightness;
-   159		if (!led_cdev->blink_brightness)
-   160			led_cdev->blink_brightness = led_cdev->max_brightness;
-   161	
-   162		if (!trigger_data->carrier_link_up) {
-   163			led_set_brightness(led_cdev, LED_OFF);
-   164		} else {
-   165			if (test_bit(TRIGGER_NETDEV_LINK, &trigger_data->mode))
-   166				led_set_brightness(led_cdev,
-   167						   led_cdev->blink_brightness);
-   168			else
-   169				led_set_brightness(led_cdev, LED_OFF);
-   170	
-   171			/* If we are looking for RX/TX start periodically
-   172			 * checking stats
-   173			 */
-   174			if (test_bit(TRIGGER_NETDEV_TX, &trigger_data->mode) ||
-   175			    test_bit(TRIGGER_NETDEV_RX, &trigger_data->mode))
-   176				schedule_delayed_work(&trigger_data->work, 0);
-   177		}
-   178	}
-   179	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Peter
