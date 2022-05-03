@@ -1,44 +1,46 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF9B7F
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 01:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBE47F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 01:57:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651541174; x=1683077174;
+  t=1651543035; x=1683079035;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/hXC35HPvlxH3T+ghZTTmqCyfsWHn/R3ik2lq6LAws8=;
-  b=E1McHNSiqdlA2QdezdguXpl97RKqfh4NO6c5mts2VA1PlgXCmQJBinJy
-   S5WsC1qVASHONAFFaqMrte1AQE1NVZGT4hja7SZais7296sRy/16DkxBy
-   m8d2WfV0FjYAsLtMPqVUj1hTcf8Bb/v+eEwDyQqAzSfZobDEFqOGr+JFq
-   iYwPvStoLykibf7Z85KT+Z+hKC+9miwBkFyYCHOsSbj6kS97FnprrLzxa
-   IKEjZQCs2GqzQiCOS6pryH5YisZ8IxFJHDFeKpfu+PP9aeRgDutwjJLTH
-   2rP9MKCe7r+/J/3Qx9ymCRUwuZ145zdydvnE5sGBqhd+ZKaq1a2RPJ1yz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="254833318"
+  bh=NyefZZ9y7G7xrqWCgPttv9WeU8zvIUfo/AfMX+3Wl2k=;
+  b=LJoiMfDnrqGBm1+0a4pLBbzP9F30gDv5AK98kyL+KvDhqmLQUpcsFTmH
+   pQufyyaHp3t9yJmvM64jS4Z6Sz1G+ZiAz/T6RauiuBMHMrIoMnhIKoWtB
+   J8gm8RKPF48nrHGMrv8XXuh418Em0uHKlrftHNyx/b0nJ6dZPSFnLZNKk
+   GLFZZ0cE6z0ASyvjWnxOaRpLKPYau6HYE+cOAXzuiusZhUpELdw5GwO3J
+   kJQP7TmzpgmrIY+g0g8WHygDqNsxuu+7EMDk6z2nq91dq/0TItM5Iyyw7
+   jsrYwoG6BoPK5dLHQK4WQz8MkE/OK3V9P8hwX0agfNJMQz55imwrETWMA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266223139"
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="254833318"
+   d="scan'208";a="266223139"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:26:14 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:57:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="620150460"
+   d="scan'208";a="620156274"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 18:26:12 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 18:57:13 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nlhIq-000A2p-1K;
-	Tue, 03 May 2022 01:26:12 +0000
-Date: Tue, 3 May 2022 09:25:59 +0800
+	id 1nlhmq-000A3h-Gz;
+	Tue, 03 May 2022 01:57:12 +0000
+Date: Tue, 3 May 2022 09:56:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Chris Wilson <chris@chris-wilson.co.uk>,
-	Nathan Chancellor <natechancellor@gmail.com>
-Subject: drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function
- 'debug_fence_init_onstack'
-Message-ID: <202205030929.Dk88nH74-lkp@intel.com>
+To: Chao Gao <chao.gao@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Zeng Guang <guang.zeng@intel.com>
+Subject: [kvm:queue 74/77] arch/x86/kvm/vmx/vmx.c:4405:5: error: no previous
+ prototype for function 'vmx_get_pid_table_order'
+Message-ID: <202205030944.BOEY0IuK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,71 +50,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9050ba3a61a4b5bd84c2cde092a100404f814f31
-commit: 9f4069b055d1508c833115df7493b6e0001e5c9b drm/i915: re-disable -Wframe-address
-date:   2 years ago
-config: x86_64-randconfig-r023-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030929.Dk88nH74-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+head:   2764011106d0436cb44702cfb0981339d68c3509
+commit: 101c99f6506d7fc293111190d65fedadb711c9ea [74/77] KVM: VMX: enable IPI virtualization
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220503/202205030944.BOEY0IuK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9f4069b055d1508c833115df7493b6e0001e5c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9f4069b055d1508c833115df7493b6e0001e5c9b
+        # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=101c99f6506d7fc293111190d65fedadb711c9ea
+        git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+        git fetch --no-tags kvm queue
+        git checkout 101c99f6506d7fc293111190d65fedadb711c9ea
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function 'debug_fence_init_onstack' [-Werror,-Wunused-function]
-   static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
-                      ^
->> drivers/gpu/drm/i915/i915_sw_fence.c:111:20: error: unused function 'debug_fence_free' [-Werror,-Wunused-function]
-   static inline void debug_fence_free(struct i915_sw_fence *fence)
-                      ^
-   2 errors generated.
+>> arch/x86/kvm/vmx/vmx.c:4405:5: error: no previous prototype for function 'vmx_get_pid_table_order' [-Werror,-Wmissing-prototypes]
+   int vmx_get_pid_table_order(struct kvm *kvm)
+       ^
+   arch/x86/kvm/vmx/vmx.c:4405:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vmx_get_pid_table_order(struct kvm *kvm)
+   ^
+   static 
+   1 error generated.
 
 
-vim +/debug_fence_init_onstack +90 drivers/gpu/drm/i915/i915_sw_fence.c
+vim +/vmx_get_pid_table_order +4405 arch/x86/kvm/vmx/vmx.c
 
-fc1584059d6c43 Chris Wilson 2016-11-25   89  
-214707fc2ce08d Chris Wilson 2017-10-12  @90  static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
-214707fc2ce08d Chris Wilson 2017-10-12   91  {
-214707fc2ce08d Chris Wilson 2017-10-12   92  }
-214707fc2ce08d Chris Wilson 2017-10-12   93  
-fc1584059d6c43 Chris Wilson 2016-11-25   94  static inline void debug_fence_activate(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25   95  {
-fc1584059d6c43 Chris Wilson 2016-11-25   96  }
-fc1584059d6c43 Chris Wilson 2016-11-25   97  
-fc1584059d6c43 Chris Wilson 2016-11-25   98  static inline void debug_fence_set_state(struct i915_sw_fence *fence,
-fc1584059d6c43 Chris Wilson 2016-11-25   99  					 int old, int new)
-fc1584059d6c43 Chris Wilson 2016-11-25  100  {
-fc1584059d6c43 Chris Wilson 2016-11-25  101  }
-fc1584059d6c43 Chris Wilson 2016-11-25  102  
-fc1584059d6c43 Chris Wilson 2016-11-25  103  static inline void debug_fence_deactivate(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  104  {
-fc1584059d6c43 Chris Wilson 2016-11-25  105  }
-fc1584059d6c43 Chris Wilson 2016-11-25  106  
-fc1584059d6c43 Chris Wilson 2016-11-25  107  static inline void debug_fence_destroy(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  108  {
-fc1584059d6c43 Chris Wilson 2016-11-25  109  }
-fc1584059d6c43 Chris Wilson 2016-11-25  110  
-fc1584059d6c43 Chris Wilson 2016-11-25 @111  static inline void debug_fence_free(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  112  {
-fc1584059d6c43 Chris Wilson 2016-11-25  113  }
-fc1584059d6c43 Chris Wilson 2016-11-25  114  
-
-:::::: The code at line 90 was first introduced by commit
-:::::: 214707fc2ce08d09982bc4fe4b7a1c1f010e82be drm/i915/selftests: Wrap a timer into a i915_sw_fence
-
-:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
-:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
+  4404	
+> 4405	int vmx_get_pid_table_order(struct kvm *kvm)
+  4406	{
+  4407		return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
+  4408	}
+  4409	
 
 -- 
 0-DAY CI Kernel Test Service
