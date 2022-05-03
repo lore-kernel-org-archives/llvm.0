@@ -1,120 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEB03204
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 15:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57E9C385A4;
-	Tue,  3 May 2022 15:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651592059;
-	bh=VqIlEqEbZ+xZhr6crxUY9DNMWXRl3djbnBGfWQmcHOM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PxzOIt6WRGY5YE/+TuJJbBHO4BLyhbbFkRwYet5xV1BzYFPPXbjUlNfqCyBlPqHO1
-	 CIpGuNbOwIepe9BkRD/Gvb4SH8F02yN3K74uqRnAn2IYeyAawdzl49oLN8TGnXB3f2
-	 RhUr/hOf+KoVo8ef+BBq1NFDKb+pkhIKHL3A7JSzfBWygR0g0rHHiHxO55n3z0YCUc
-	 5eX3gcNMa18jT30q7w3mcTi+GmeyB9bY2dFTXmbsQfIh5wGJl6NzX8lRxOIrh5zdX+
-	 csZee80+EI7AnUAh7uC+YSzzdVXLi3N2UTzBHbDnlbhN2JL5fq5NDH4bIcNnetttqj
-	 wnv4hAQ1XeqUA==
-Date: Tue, 3 May 2022 08:34:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Nikita Popov <npopov@redhat.com>, llvm@lists.linux.dev,
-	ci_notify@linaro.org
-Subject: Re: [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset
- representation
-Message-ID: <YnFLeL93iHk+3vBd@dev-arch.thelio-3990X>
-References: <962475179.3377.1651244787786@jenkins.jenkins>
- <CAKwvOdkR3tVWo9iGLryoAzY4x7BfDMCLDSx9jnd+p7-hKXD5qg@mail.gmail.com>
- <7230BF09-41E5-44C7-A3B4-C1FD017C277C@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63620322E
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 16:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF69C385A9;
+	Tue,  3 May 2022 16:25:41 +0000 (UTC)
+Date: Tue, 3 May 2022 12:25:33 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nick Desaulniers
+ <ndesaulniers@google.com>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
+ symbols
+Message-ID: <20220503122533.6033647e@rorschach.local.home>
+In-Reply-To: <6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+	<20220427095415.594e5120@gandalf.local.home>
+	<1651129169.fpixr00hgx.naveen@linux.ibm.com>
+	<20220428100602.7b215e52@gandalf.local.home>
+	<819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
+	<20220502195251.5d862365@rorschach.local.home>
+	<6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7230BF09-41E5-44C7-A3B4-C1FD017C277C@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Maxim,
+On Tue, 3 May 2022 11:20:22 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-On Tue, May 03, 2022 at 04:35:04PM +0300, Maxim Kuvyrkov wrote:
-> > On Apr 29, 2022, at 8:20 PM, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > 
-> > On Fri, Apr 29, 2022 at 8:06 AM <ci_notify@linaro.org> wrote:
-> >> 
-> >> [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset representation:
-> >> commit b9dc5651477b4c3c132662e763308b27963248a9
-> >> Author: Nikita Popov <npopov@redhat.com>
-> >> 
-> >> [GVN] Encode GEPs in offset representation
-> >> 
-> >> Results regressed to
-> >> # reset_artifacts:
-> >> -10
-> >> # build_abe binutils:
-> >> -9
-> >> # build_llvm:
-> >> -5
-> >> # build_abe qemu:
-> >> -2
-> >> # linux_n_obj:
-> >> 22258
-> >> # First few build errors in logs:
-> >> # 00:02:56 arch/arm/lib/xor-neon.c:30:2: error: This code requires at least version 4.6 of GCC [-Werror,-W#warnings]
-> > 
-> > Hi Maxim, can you please confirm this is the correct result of the
-> > bisection? The above warning on the kernel is a known issue that has
-> > been fixed upstream. Are the kernel builds not against mainline?
-> > 
-> > I believe the below are known issues as well.
-> 
-> Hi Nick,
-> 
-> See below ...
-> 
-> > 
-> >> # 00:02:56 make[1]: *** [scripts/Makefile.build:288: arch/arm/lib/xor-neon.o] Error 1
-> >> # 00:02:56 make: *** [Makefile:1831: arch/arm/lib] Error 2
-> >> # 00:03:54 crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-> >> # 00:03:54 make[1]: *** [scripts/Makefile.build:288: crypto/wp512.o] Error 1
-> >> # 00:06:35 make: *** [Makefile:1831: crypto] Error 2
-> >> # 00:11:56 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
-> >> # 00:11:56 make[4]: *** [scripts/Makefile.build:288: drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
-> >> # 00:12:06 make[3]: *** [scripts/Makefile.build:550: drivers/gpu/drm/selftests] Error 2
-> >> # 00:30:12 drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: error: stack frame size (1432) exceeds limit (1024) in 'bw_calcs' [-Werror,-Wframe-larger-than]
-> >> 
-> >> from
-> >> # reset_artifacts:
-> >> -10
-> >> # build_abe binutils:
-> >> -9
-> >> # build_llvm:
-> >> -5
-> >> # build_abe qemu:
-> >> -2
-> >> # linux_n_obj:
-> >> 22260
-> >> 
-> >> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-> >> 
-> >> This commit has regressed these CI configurations:
-> >> - tcwg_kernel/llvm-master-arm-stable-allmodconfig
-> 
-> This is reported against "stable" Linux tree, aka linux-rolling-stable branch [1].  So yeah, it's not a report about a new regression, but rather a report about regression reaching a stable branch.
-> 
-> Does this answer your question?  Or is the report still looks not right?
+> Maybe I misunderstood. When you say 'after linking', do you mean vmlinux 
+> or vmlinux.o ?
 
-I think what Nick is getting at (or at least where I was confused by the
-initial report) is that these warnings (or errors with CONFIG_WERROR, in
-this case) have always been present in this configuration in the
-linux-rolling-stable branch, so I would not have expected these being
-present to trigger a regression report for LLVM.  In fact, the "last
-good" build has the exact same errors and results as the "first bad"
-build, with the LLVM hash being the only variable from what I can tell,
-so I would not expect a report to be generated in that case, but I don't
-know the conditions under which bisection starts.
+Whichever ;-)
 
-Cheers,
-Nathan
+> 
+> In vmlinux, the addresses to be saved in __mcount_loc table might not 
+> contain anymore a call to _mcount but a call to a trampoline that jumps 
+> to _mcount, in case _mcount is too far from the said location at link 
+> time. That's what I meant.
+
+But how is that different than what is done today? And at linking,
+everything still calls mcount. It's not until runtime things change.
+
+The point I'm talking about is that after linking, if the linker
+removed unused code (which would include unused weak functions,
+right?), then the calls to mcount that were in the weak functions would
+be gone too, and they would not be added by recordmcount, and for those
+that are still around, then using their symbols as the reference point
+would also not be an issue.
+
+The problem we have right now is that the only symbol we have is a weak
+function to reference the mcount call location in the __mcount_loc
+section. But if all the global entries are not used and the linker
+removes them, then the references using those symbols in the
+__mcount_loc section will be "undefined". After linking, everything in
+the vmlinux(.o) is set, and we are free to use that as a reference
+point for the call sites.
+
+-- Steve
