@@ -1,133 +1,119 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0761E7F
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 00:58:55 +0000 (UTC)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 2430wPrr020143
-	for <llvm@lists.linux.dev>; Tue, 3 May 2022 09:58:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2430wPrr020143
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1651539506;
-	bh=X5yyCYnmChLJWpoXfwlLy3Yqy1jj1u5sgNOnl2YeT+8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BqnpbHz0UnpeqwSt+Vh3kMd2Mz3wq2IHmLBOeM8mDRlkFxHYkrdDHmqS7Ueyp8Ec2
-	 WzUJSAutmuoLS57d+5Yd7k+VMLH2wvyTDo6zGu5uyUj38yf1KnZse6f4aPXTnIJBd7
-	 Bl7LMOOI9T9mMlm0+9kO2wSkKdidb88+eIvdbHsV0hBZRWMAqwNCFu+Ya7ZIj5TTOm
-	 IyDvxlk8WVietj8Z9johK3i1EsH7T5pYD5MFsjgEgLYPw+KlBcZq4jArC8GlqQ1QT5
-	 slAULcj9Vs3Wk2wyv9SJyHqbDYmjqsc1Ssb9jemTXbc9VL640r3RL41gVSjNK9jez0
-	 YvA0a9zF0Hw+A==
-X-Nifty-SrcIP: [209.85.160.49]
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso5324053fac.1
-        for <llvm@lists.linux.dev>; Mon, 02 May 2022 17:58:25 -0700 (PDT)
-X-Gm-Message-State: AOAM5317v/l18XjUQAR2dj4/BZmEQmhyKLy7vDys9V58NnSWvUcEcOjT
-	pT34VvZC7zbZXskIlBA8Nj19BmGnz7t7gg3aUJU=
-X-Google-Smtp-Source: ABdhPJz+NT1ytlT70sSlhO329TCvsmWaO6n7IEVV8ssLDz1hwnrwWgFpFLcb6+3gsOZ1Cyq8cWbiLDuibQJ8QIabxoU=
-X-Received: by 2002:a17:90a:e517:b0:1d7:5bbd:f9f0 with SMTP id
- t23-20020a17090ae51700b001d75bbdf9f0mr2001475pjy.77.1651539493892; Mon, 02
- May 2022 17:58:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF9B7F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 01:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651541174; x=1683077174;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/hXC35HPvlxH3T+ghZTTmqCyfsWHn/R3ik2lq6LAws8=;
+  b=E1McHNSiqdlA2QdezdguXpl97RKqfh4NO6c5mts2VA1PlgXCmQJBinJy
+   S5WsC1qVASHONAFFaqMrte1AQE1NVZGT4hja7SZais7296sRy/16DkxBy
+   m8d2WfV0FjYAsLtMPqVUj1hTcf8Bb/v+eEwDyQqAzSfZobDEFqOGr+JFq
+   iYwPvStoLykibf7Z85KT+Z+hKC+9miwBkFyYCHOsSbj6kS97FnprrLzxa
+   IKEjZQCs2GqzQiCOS6pryH5YisZ8IxFJHDFeKpfu+PP9aeRgDutwjJLTH
+   2rP9MKCe7r+/J/3Qx9ymCRUwuZ145zdydvnE5sGBqhd+ZKaq1a2RPJ1yz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="254833318"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="254833318"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:26:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="620150460"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 18:26:12 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlhIq-000A2p-1K;
+	Tue, 03 May 2022 01:26:12 +0000
+Date: Tue, 3 May 2022 09:25:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Chris Wilson <chris@chris-wilson.co.uk>,
+	Nathan Chancellor <natechancellor@gmail.com>
+Subject: drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function
+ 'debug_fence_init_onstack'
+Message-ID: <202205030929.Dk88nH74-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com>
-In-Reply-To: <20220209185752.1226407-2-alexandr.lobakin@intel.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 3 May 2022 09:57:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS0SLmpCHB8W=D6kGmfb5S+ESjY674P6q7RiO7faD=wqQ@mail.gmail.com>
-Message-ID: <CAK7LNAS0SLmpCHB8W=D6kGmfb5S+ESjY674P6q7RiO7faD=wqQ@mail.gmail.com>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> to simplify livepatching (hopefully globally later on) triggers the
-> following:
->
-> ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
->
-> The reason is that for now the condition from remove_dot():
->
-> if (m && (s[n + m] == '.' || s[n + m] == 0))
->
-> which was designed to test if it's a dot or a '\0' after the suffix
-> is never satisfied.
-> This is due to that `s[n + m]` always points to the last digit of a
-> numeric suffix, not on the symbol next to it (from a custom debug
-> print added to modpost):
->
-> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
->
-> So it's off-by-one and was like that since 2014.
-> Fix this for the sake of upcoming features, but don't bother
-> stable-backporting, as it's well hidden -- apart from that LD flag,
-> can be triggered only by GCC LTO which never landed upstream.
->
-> Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9050ba3a61a4b5bd84c2cde092a100404f814f31
+commit: 9f4069b055d1508c833115df7493b6e0001e5c9b drm/i915: re-disable -Wframe-address
+date:   2 years ago
+config: x86_64-randconfig-r023-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030929.Dk88nH74-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9f4069b055d1508c833115df7493b6e0001e5c9b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9f4069b055d1508c833115df7493b6e0001e5c9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function 'debug_fence_init_onstack' [-Werror,-Wunused-function]
+   static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
+                      ^
+>> drivers/gpu/drm/i915/i915_sw_fence.c:111:20: error: unused function 'debug_fence_free' [-Werror,-Wunused-function]
+   static inline void debug_fence_free(struct i915_sw_fence *fence)
+                      ^
+   2 errors generated.
 
 
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+vim +/debug_fence_init_onstack +90 drivers/gpu/drm/i915/i915_sw_fence.c
 
+fc1584059d6c43 Chris Wilson 2016-11-25   89  
+214707fc2ce08d Chris Wilson 2017-10-12  @90  static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
+214707fc2ce08d Chris Wilson 2017-10-12   91  {
+214707fc2ce08d Chris Wilson 2017-10-12   92  }
+214707fc2ce08d Chris Wilson 2017-10-12   93  
+fc1584059d6c43 Chris Wilson 2016-11-25   94  static inline void debug_fence_activate(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25   95  {
+fc1584059d6c43 Chris Wilson 2016-11-25   96  }
+fc1584059d6c43 Chris Wilson 2016-11-25   97  
+fc1584059d6c43 Chris Wilson 2016-11-25   98  static inline void debug_fence_set_state(struct i915_sw_fence *fence,
+fc1584059d6c43 Chris Wilson 2016-11-25   99  					 int old, int new)
+fc1584059d6c43 Chris Wilson 2016-11-25  100  {
+fc1584059d6c43 Chris Wilson 2016-11-25  101  }
+fc1584059d6c43 Chris Wilson 2016-11-25  102  
+fc1584059d6c43 Chris Wilson 2016-11-25  103  static inline void debug_fence_deactivate(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  104  {
+fc1584059d6c43 Chris Wilson 2016-11-25  105  }
+fc1584059d6c43 Chris Wilson 2016-11-25  106  
+fc1584059d6c43 Chris Wilson 2016-11-25  107  static inline void debug_fence_destroy(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  108  {
+fc1584059d6c43 Chris Wilson 2016-11-25  109  }
+fc1584059d6c43 Chris Wilson 2016-11-25  110  
+fc1584059d6c43 Chris Wilson 2016-11-25 @111  static inline void debug_fence_free(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  112  {
+fc1584059d6c43 Chris Wilson 2016-11-25  113  }
+fc1584059d6c43 Chris Wilson 2016-11-25  114  
 
+:::::: The code at line 90 was first introduced by commit
+:::::: 214707fc2ce08d09982bc4fe4b7a1c1f010e82be drm/i915/selftests: Wrap a timer into a i915_sw_fence
 
->  scripts/mod/modpost.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 6bfa33217914..4648b7afe5cc 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
->
->         if (n && s[n]) {
->                 size_t m = strspn(s + n + 1, "0123456789");
-> -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
->                         s[n] = 0;
->
->                 /* strip trailing .lto */
-> --
-> 2.34.1
->
-
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
