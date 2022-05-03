@@ -1,227 +1,431 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724502F57
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 13:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651584767; x=1683120767;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P6lksBlkSRkUq3MUiei8a63i/FmrG1lA59W1lUgCuUc=;
-  b=jZu7r8fNyfxv1z8MPiKmBt3ewauIWCZ07TO9QXE2IauTrZPnnIL2vNQ8
-   FxtL28CUEWyh2K0Ttibbfl0ZB5+95MgSd8zB2VuK6w4hzADWhEmxFnd9f
-   juZTmux3I9OtrCOCEfeYlWv3YvVrYfQ4+urPyIyB/T+k+PVNthaNk8e0q
-   Gn2oyu2QZvig6SJFD7vfKf3dvTPiYkQ4SXoGDZYNCNSrnRXO97vP2YmRD
-   eMzxPv5rgbuxDmhUHUtDi+UKazIvr7ZG66claCRb+m3M7OjY94EvpN+yz
-   CnNBWkfRS+Q/NtAduHja78algDU8kIaSpogJlxauWRYefKLlllVoUfc9k
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="292661933"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="292661933"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:32:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="692153323"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 06:32:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlsdv-000AUk-Gd;
-	Tue, 03 May 2022 13:32:43 +0000
-Date: Tue, 3 May 2022 21:32:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sven Schnelle <svens@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-audit@redhat.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
-Message-ID: <202205032119.La0IM2Sw-lkp@intel.com>
-References: <20220503090212.1322050-1-svens@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89202F44
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 13:35:08 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id w1so30336182lfa.4
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 06:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TWGsMBVGvu/Fp5R0M3POyWDAk7vDI4eYhHqZY71K6kk=;
+        b=aQHAM8uTJUkOsP+/hK1gpr5YXeePoNNTnVgDVOOyuLvPyZ4WNUZf+4ZJRQg/TSb97/
+         o6rKC0UjZuzxu3gaz4ruP3547JLBV+domJGdYhw/QvzIUDu+/a6Vi9LxVNNJVI/utrgd
+         0t+P42c361xEUNOv5d+VXYHvlmAtYoVBhw9iJbFn3Lj50StJ80xEKWawau9HJFqwc6vM
+         PjqiqLWYbQwohYW+YJ7HtqZ5aUH+y/Zu2pkH4dnxlynnbGbR2jNEXUiU04XpklivyE/4
+         wepjRXldZxphiKZPN7mKA0K7bC0ZwN/7OwDk/IMIsUO5zix8RzXYvy7NmzLqrsFSypTM
+         x5nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TWGsMBVGvu/Fp5R0M3POyWDAk7vDI4eYhHqZY71K6kk=;
+        b=I+A6bSJyj6LIDSrEn/hd7IlpEs+6VxApf3cKSE9sTIML4Vp3vvUHKx+3I7K75Oadm2
+         s+BUC4wLEeH/0Vaor/VOjVFaJgMGTNzCCUQQcNllMivR8J6sRSdXJzxbf19B493T713a
+         hRRzLL5IzS94cjsEExiIDuAqAUzCM9BjMV/znFCkED3ZylxfRQWAoi/Z88PPMcUUhYmr
+         Kv6f+UHKU3HKLKKGgUmUOzcI52qNXGR4fd1yh82H2lDIH2NrXdqNdfAqOazVzK2smthu
+         nXA/QpJMDubWsd3pORpXaqEJlDVoLzF0VZBKUfc20HE1hPngGNwd6NFv5Z0hrbJnFDwP
+         VI5g==
+X-Gm-Message-State: AOAM531rY1j27Og3UJmhJmKxxs0i0Pm/u9MYQr/6Wzdbig44zjmwzVwB
+	ixG8b/qRsbl1X0kioucIbhSZ
+X-Google-Smtp-Source: ABdhPJzPJMQvOkg7RWt+Wqk34tkICVJe1ptWtu/7JBXwp7VsGhvVR9X4PIystdelTeHqX7P6vWBprg==
+X-Received: by 2002:a05:6512:3b26:b0:473:a671:eff2 with SMTP id f38-20020a0565123b2600b00473a671eff2mr3092557lfv.500.1651584906705;
+        Tue, 03 May 2022 06:35:06 -0700 (PDT)
+Received: from smtpclient.apple ([31.173.83.165])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05651c119000b0024f3d1daed1sm1367628ljo.89.2022.05.03.06.35.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 May 2022 06:35:06 -0700 (PDT)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset
+ representation
+From: Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+In-Reply-To: <CAKwvOdkR3tVWo9iGLryoAzY4x7BfDMCLDSx9jnd+p7-hKXD5qg@mail.gmail.com>
+Date: Tue, 3 May 2022 16:35:04 +0300
+Cc: Nikita Popov <npopov@redhat.com>,
+ llvm@lists.linux.dev,
+ ci_notify@linaro.org,
+ Nathan Chancellor <nathan@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7230BF09-41E5-44C7-A3B4-C1FD017C277C@linaro.org>
+References: <962475179.3377.1651244787786@jenkins.jenkins>
+ <CAKwvOdkR3tVWo9iGLryoAzY4x7BfDMCLDSx9jnd+p7-hKXD5qg@mail.gmail.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 
-Hi Sven,
+> On Apr 29, 2022, at 8:20 PM, Nick Desaulniers =
+<ndesaulniers@google.com> wrote:
+>=20
+> On Fri, Apr 29, 2022 at 8:06 AM <ci_notify@linaro.org> wrote:
+>>=20
+>> [TCWG CI] Regression caused by llvm: [GVN] Encode GEPs in offset =
+representation:
+>> commit b9dc5651477b4c3c132662e763308b27963248a9
+>> Author: Nikita Popov <npopov@redhat.com>
+>>=20
+>> [GVN] Encode GEPs in offset representation
+>>=20
+>> Results regressed to
+>> # reset_artifacts:
+>> -10
+>> # build_abe binutils:
+>> -9
+>> # build_llvm:
+>> -5
+>> # build_abe qemu:
+>> -2
+>> # linux_n_obj:
+>> 22258
+>> # First few build errors in logs:
+>> # 00:02:56 arch/arm/lib/xor-neon.c:30:2: error: This code requires at =
+least version 4.6 of GCC [-Werror,-W#warnings]
+>=20
+> Hi Maxim, can you please confirm this is the correct result of the
+> bisection? The above warning on the kernel is a known issue that has
+> been fixed upstream. Are the kernel builds not against mainline?
+>=20
+> I believe the below are known issues as well.
 
-I love your patch! Yet something to improve:
+Hi Nick,
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on pcmoore-audit/next v5.18-rc5 next-20220503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+See below ...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9050ba3a61a4b5bd84c2cde092a100404f814f31
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220503/202205032119.La0IM2Sw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b89caaec1c1bd3382c6cef08d08beadbaf808513
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
-        git checkout b89caaec1c1bd3382c6cef08d08beadbaf808513
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+>=20
+>> # 00:02:56 make[1]: *** [scripts/Makefile.build:288: =
+arch/arm/lib/xor-neon.o] Error 1
+>> # 00:02:56 make: *** [Makefile:1831: arch/arm/lib] Error 2
+>> # 00:03:54 crypto/wp512.c:782:13: error: stack frame size (1168) =
+exceeds limit (1024) in 'wp512_process_buffer' =
+[-Werror,-Wframe-larger-than]
+>> # 00:03:54 make[1]: *** [scripts/Makefile.build:288: crypto/wp512.o] =
+Error 1
+>> # 00:06:35 make: *** [Makefile:1831: crypto] Error 2
+>> # 00:11:56 drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: =
+stack frame size (1040) exceeds limit (1024) in '__igt_reserve' =
+[-Werror,-Wframe-larger-than]
+>> # 00:11:56 make[4]: *** [scripts/Makefile.build:288: =
+drivers/gpu/drm/selftests/test-drm_mm.o] Error 1
+>> # 00:12:06 make[3]: *** [scripts/Makefile.build:550: =
+drivers/gpu/drm/selftests] Error 2
+>> # 00:30:12 =
+drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: =
+error: stack frame size (1432) exceeds limit (1024) in 'bw_calcs' =
+[-Werror,-Wframe-larger-than]
+>>=20
+>> from
+>> # reset_artifacts:
+>> -10
+>> # build_abe binutils:
+>> -9
+>> # build_llvm:
+>> -5
+>> # build_abe qemu:
+>> -2
+>> # linux_n_obj:
+>> 22260
+>>=20
+>> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, =
+REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+>>=20
+>> This commit has regressed these CI configurations:
+>> - tcwg_kernel/llvm-master-arm-stable-allmodconfig
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is reported against "stable" Linux tree, aka linux-rolling-stable =
+branch [1].  So yeah, it's not a report about a new regression, but =
+rather a report about regression reaching a stable branch.
 
-All errors (new ones prefixed by >>):
+Does this answer your question?  Or is the report still looks not right?
 
-   net/socket.c:2206:6: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
-           int max_optlen;
-               ^
->> net/socket.c:2924:68: error: too many arguments to function call, expected 2, have 3
-           err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
-                 ~~~~~~~~~~~~~~~~                                            ^
-   include/linux/audit.h:643:19: note: 'audit_socketcall' declared here
-   static inline int audit_socketcall(int nargs, unsigned long *args)
-                     ^
-   1 warning and 1 error generated.
+[1] =
+https://git.linaro.org/ci/job/configs.git/tree/tcwg_kernel.yaml.in#n42
+
+Regards,
+
+--
+Maxim Kuvyrkov
+https://www.linaro.org
 
 
-vim +2924 net/socket.c
 
-  2896	
-  2897	/*
-  2898	 *	System call vectors.
-  2899	 *
-  2900	 *	Argument checking cleaned up. Saved 20% in size.
-  2901	 *  This function doesn't need to set the kernel lock because
-  2902	 *  it is set by the callees.
-  2903	 */
-  2904	
-  2905	SYSCALL_DEFINE2(socketcall, int, call, unsigned long __user *, args)
-  2906	{
-  2907		unsigned long a[AUDITSC_ARGS];
-  2908		unsigned long a0, a1;
-  2909		int err;
-  2910		unsigned int len;
-  2911	
-  2912		if (call < 1 || call > SYS_SENDMMSG)
-  2913			return -EINVAL;
-  2914		call = array_index_nospec(call, SYS_SENDMMSG + 1);
-  2915	
-  2916		len = nargs[call];
-  2917		if (len > sizeof(a))
-  2918			return -EINVAL;
-  2919	
-  2920		/* copy_from_user should be SMP safe. */
-  2921		if (copy_from_user(a, args, len))
-  2922			return -EFAULT;
-  2923	
-> 2924		err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
-  2925		if (err)
-  2926			return err;
-  2927	
-  2928		a0 = a[0];
-  2929		a1 = a[1];
-  2930	
-  2931		switch (call) {
-  2932		case SYS_SOCKET:
-  2933			err = __sys_socket(a0, a1, a[2]);
-  2934			break;
-  2935		case SYS_BIND:
-  2936			err = __sys_bind(a0, (struct sockaddr __user *)a1, a[2]);
-  2937			break;
-  2938		case SYS_CONNECT:
-  2939			err = __sys_connect(a0, (struct sockaddr __user *)a1, a[2]);
-  2940			break;
-  2941		case SYS_LISTEN:
-  2942			err = __sys_listen(a0, a1);
-  2943			break;
-  2944		case SYS_ACCEPT:
-  2945			err = __sys_accept4(a0, (struct sockaddr __user *)a1,
-  2946					    (int __user *)a[2], 0);
-  2947			break;
-  2948		case SYS_GETSOCKNAME:
-  2949			err =
-  2950			    __sys_getsockname(a0, (struct sockaddr __user *)a1,
-  2951					      (int __user *)a[2]);
-  2952			break;
-  2953		case SYS_GETPEERNAME:
-  2954			err =
-  2955			    __sys_getpeername(a0, (struct sockaddr __user *)a1,
-  2956					      (int __user *)a[2]);
-  2957			break;
-  2958		case SYS_SOCKETPAIR:
-  2959			err = __sys_socketpair(a0, a1, a[2], (int __user *)a[3]);
-  2960			break;
-  2961		case SYS_SEND:
-  2962			err = __sys_sendto(a0, (void __user *)a1, a[2], a[3],
-  2963					   NULL, 0);
-  2964			break;
-  2965		case SYS_SENDTO:
-  2966			err = __sys_sendto(a0, (void __user *)a1, a[2], a[3],
-  2967					   (struct sockaddr __user *)a[4], a[5]);
-  2968			break;
-  2969		case SYS_RECV:
-  2970			err = __sys_recvfrom(a0, (void __user *)a1, a[2], a[3],
-  2971					     NULL, NULL);
-  2972			break;
-  2973		case SYS_RECVFROM:
-  2974			err = __sys_recvfrom(a0, (void __user *)a1, a[2], a[3],
-  2975					     (struct sockaddr __user *)a[4],
-  2976					     (int __user *)a[5]);
-  2977			break;
-  2978		case SYS_SHUTDOWN:
-  2979			err = __sys_shutdown(a0, a1);
-  2980			break;
-  2981		case SYS_SETSOCKOPT:
-  2982			err = __sys_setsockopt(a0, a1, a[2], (char __user *)a[3],
-  2983					       a[4]);
-  2984			break;
-  2985		case SYS_GETSOCKOPT:
-  2986			err =
-  2987			    __sys_getsockopt(a0, a1, a[2], (char __user *)a[3],
-  2988					     (int __user *)a[4]);
-  2989			break;
-  2990		case SYS_SENDMSG:
-  2991			err = __sys_sendmsg(a0, (struct user_msghdr __user *)a1,
-  2992					    a[2], true);
-  2993			break;
-  2994		case SYS_SENDMMSG:
-  2995			err = __sys_sendmmsg(a0, (struct mmsghdr __user *)a1, a[2],
-  2996					     a[3], true);
-  2997			break;
-  2998		case SYS_RECVMSG:
-  2999			err = __sys_recvmsg(a0, (struct user_msghdr __user *)a1,
-  3000					    a[2], true);
-  3001			break;
-  3002		case SYS_RECVMMSG:
-  3003			if (IS_ENABLED(CONFIG_64BIT))
-  3004				err = __sys_recvmmsg(a0, (struct mmsghdr __user *)a1,
-  3005						     a[2], a[3],
-  3006						     (struct __kernel_timespec __user *)a[4],
-  3007						     NULL);
-  3008			else
-  3009				err = __sys_recvmmsg(a0, (struct mmsghdr __user *)a1,
-  3010						     a[2], a[3], NULL,
-  3011						     (struct old_timespec32 __user *)a[4]);
-  3012			break;
-  3013		case SYS_ACCEPT4:
-  3014			err = __sys_accept4(a0, (struct sockaddr __user *)a1,
-  3015					    (int __user *)a[2], a[3]);
-  3016			break;
-  3017		default:
-  3018			err = -EINVAL;
-  3019			break;
-  3020		}
-  3021		return err;
-  3022	}
-  3023	
+>>=20
+>> First_bad build: =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/build-b9dc5651477b4c3c132662e763308b2796=
+3248a9/
+>> Last_good build: =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/build-942ec5c36d922b29d0e7200082b533018d=
+42421a/
+>> Baseline build: =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/build-baseline/
+>> Even more details: =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/
+>>=20
+>> Reproduce builds:
+>> <cut>
+>> mkdir investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
+>> cd investigate-llvm-b9dc5651477b4c3c132662e763308b27963248a9
+>>=20
+>> # Fetch scripts
+>> git clone https://git.linaro.org/toolchain/jenkins-scripts
+>>=20
+>> # Fetch manifests and test.sh script
+>> mkdir -p artifacts/manifests
+>> curl -o artifacts/manifests/build-baseline.sh =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/manifests/build-baseline.sh --fail
+>> curl -o artifacts/manifests/build-parameters.sh =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/manifests/build-parameters.sh --fail
+>> curl -o artifacts/test.sh =
+https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-stable-a=
+llmodconfig/12/artifact/artifacts/test.sh --fail
+>> chmod +x artifacts/test.sh
+>>=20
+>> # Reproduce the baseline build (build all pre-requisites)
+>> ./jenkins-scripts/tcwg_kernel-build.sh @@ =
+artifacts/manifests/build-baseline.sh
+>>=20
+>> # Save baseline build state (which is then restored in =
+artifacts/test.sh)
+>> mkdir -p ./bisect
+>> rsync -a --del --delete-excluded --exclude /bisect/ --exclude =
+/artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
+>>=20
+>> cd llvm
+>>=20
+>> # Reproduce first_bad build
+>> git checkout --detach b9dc5651477b4c3c132662e763308b27963248a9
+>> ../artifacts/test.sh
+>>=20
+>> # Reproduce last_good build
+>> git checkout --detach 942ec5c36d922b29d0e7200082b533018d42421a
+>> ../artifacts/test.sh
+>>=20
+>> cd ..
+>> </cut>
+>>=20
+>> Full commit (up to 1000 lines):
+>> <cut>
+>> commit b9dc5651477b4c3c132662e763308b27963248a9
+>> Author: Nikita Popov <npopov@redhat.com>
+>> Date:   Wed Apr 27 14:40:07 2022 +0200
+>>=20
+>>    [GVN] Encode GEPs in offset representation
+>>=20
+>>    When using opaque pointers, convert GEPs into offset =
+representation
+>>    of the form P + V1 * Scale1 + V2 * Scale2 + ... + ConstantOffset.
+>>    This allows us to recognize equivalent address calculations even =
+if
+>>    the GEPs don't use the same source element type.
+>>=20
+>>    This fixes an opaque pointer codegen regression seen in rustc.
+>>=20
+>>    Differential Revision: https://reviews.llvm.org/D124527
+>> ---
+>> llvm/include/llvm/Transforms/Scalar/GVN.h |  2 ++
+>> llvm/lib/Transforms/Scalar/GVN.cpp        | 45 =
++++++++++++++++++++++++++------
+>> llvm/test/Transforms/GVN/opaque-ptr.ll    | 19 +++++--------
+>> 3 files changed, 46 insertions(+), 20 deletions(-)
+>>=20
+>> diff --git a/llvm/include/llvm/Transforms/Scalar/GVN.h =
+b/llvm/include/llvm/Transforms/Scalar/GVN.h
+>> index d6f4e7376065..16ab1a490162 100644
+>> --- a/llvm/include/llvm/Transforms/Scalar/GVN.h
+>> +++ b/llvm/include/llvm/Transforms/Scalar/GVN.h
+>> @@ -40,6 +40,7 @@ class CallInst;
+>> class ExtractValueInst;
+>> class Function;
+>> class FunctionPass;
+>> +class GetElementPtrInst;
+>> class ImplicitControlFlowTracking;
+>> class LoadInst;
+>> class LoopInfo;
+>> @@ -177,6 +178,7 @@ public:
+>>     Expression createCmpExpr(unsigned Opcode, CmpInst::Predicate =
+Predicate,
+>>                              Value *LHS, Value *RHS);
+>>     Expression createExtractvalueExpr(ExtractValueInst *EI);
+>> +    Expression createGEPExpr(GetElementPtrInst *GEP);
+>>     uint32_t lookupOrAddCall(CallInst *C);
+>>     uint32_t phiTranslateImpl(const BasicBlock *BB, const BasicBlock =
+*PhiBlock,
+>>                               uint32_t Num, GVNPass &Gvn);
+>> diff --git a/llvm/lib/Transforms/Scalar/GVN.cpp =
+b/llvm/lib/Transforms/Scalar/GVN.cpp
+>> index e0d78c944edb..34c1483a37e0 100644
+>> --- a/llvm/lib/Transforms/Scalar/GVN.cpp
+>> +++ b/llvm/lib/Transforms/Scalar/GVN.cpp
+>> @@ -307,13 +307,7 @@ struct llvm::gvn::AvailableValueInBlock {
+>>=20
+>> GVNPass::Expression GVNPass::ValueTable::createExpr(Instruction *I) {
+>>   Expression e;
+>> -  // For GEPs, disambiguate based on the source element type, which =
+is not
+>> -  // implied by the result type with opaque pointers. (Conversely, =
+the source
+>> -  // element type together with the operand types does imply the =
+result type.)
+>> -  if (const auto *GEP =3D dyn_cast<GetElementPtrInst>(I))
+>> -    e.type =3D GEP->getSourceElementType();
+>> -  else
+>> -    e.type =3D I->getType();
+>> +  e.type =3D I->getType();
+>>   e.opcode =3D I->getOpcode();
+>>   if (const GCRelocateInst *GCR =3D dyn_cast<GCRelocateInst>(I)) {
+>>     // gc.relocate is 'special' call: its second and third operands =
+are
+>> @@ -404,6 +398,39 @@ =
+GVNPass::ValueTable::createExtractvalueExpr(ExtractValueInst *EI) {
+>>   return e;
+>> }
+>>=20
+>> +GVNPass::Expression =
+GVNPass::ValueTable::createGEPExpr(GetElementPtrInst *GEP) {
+>> +  Expression E;
+>> +  Type *PtrTy =3D GEP->getType()->getScalarType();
+>> +  const DataLayout &DL =3D GEP->getModule()->getDataLayout();
+>> +  unsigned BitWidth =3D DL.getIndexTypeSizeInBits(PtrTy);
+>> +  MapVector<Value *, APInt> VariableOffsets;
+>> +  APInt ConstantOffset(BitWidth, 0);
+>> +  if (PtrTy->isOpaquePointerTy() &&
+>> +      GEP->collectOffset(DL, BitWidth, VariableOffsets, =
+ConstantOffset)) {
+>> +    // For opaque pointers, convert into offset representation, to =
+recognize
+>> +    // equivalent address calculations that use different type =
+encoding.
+>> +    LLVMContext &Context =3D GEP->getContext();
+>> +    E.opcode =3D GEP->getOpcode();
+>> +    E.type =3D nullptr;
+>> +    E.varargs.push_back(lookupOrAdd(GEP->getPointerOperand()));
+>> +    for (const auto &Pair : VariableOffsets) {
+>> +      E.varargs.push_back(lookupOrAdd(Pair.first));
+>> +      E.varargs.push_back(lookupOrAdd(ConstantInt::get(Context, =
+Pair.second)));
+>> +    }
+>> +    if (!ConstantOffset.isZero())
+>> +      E.varargs.push_back(
+>> +          lookupOrAdd(ConstantInt::get(Context, ConstantOffset)));
+>> +  } else {
+>> +    // If converting to offset representation fails (for typed =
+pointers and
+>> +    // scalable vectors), fall back to type-based implementation:
+>> +    E.opcode =3D GEP->getOpcode();
+>> +    E.type =3D GEP->getSourceElementType();
+>> +    for (Use &Op : GEP->operands())
+>> +      E.varargs.push_back(lookupOrAdd(Op));
+>> +  }
+>> +  return E;
+>> +}
+>> +
+>> =
+//=3D=3D=3D---------------------------------------------------------------=
+-------=3D=3D=3D//
+>> //                     ValueTable External Functions
+>> =
+//=3D=3D=3D---------------------------------------------------------------=
+-------=3D=3D=3D//
+>> @@ -587,9 +614,11 @@ uint32_t GVNPass::ValueTable::lookupOrAdd(Value =
+*V) {
+>>     case Instruction::InsertElement:
+>>     case Instruction::ShuffleVector:
+>>     case Instruction::InsertValue:
+>> -    case Instruction::GetElementPtr:
+>>       exp =3D createExpr(I);
+>>       break;
+>> +    case Instruction::GetElementPtr:
+>> +      exp =3D createGEPExpr(cast<GetElementPtrInst>(I));
+>> +      break;
+>>     case Instruction::ExtractValue:
+>>       exp =3D createExtractvalueExpr(cast<ExtractValueInst>(I));
+>>       break;
+>> diff --git a/llvm/test/Transforms/GVN/opaque-ptr.ll =
+b/llvm/test/Transforms/GVN/opaque-ptr.ll
+>> index fa203da28bb7..07e336a9e0b6 100644
+>> --- a/llvm/test/Transforms/GVN/opaque-ptr.ll
+>> +++ b/llvm/test/Transforms/GVN/opaque-ptr.ll
+>> @@ -25,32 +25,26 @@ define void @gep_cse(ptr %p) {
+>> define void @gep_cse_offset_canonicalization(ptr %p, i64 %idx, i64 =
+%idx2) {
+>> ; CHECK-LABEL: @gep_cse_offset_canonicalization(
+>> ; CHECK-NEXT:    [[GEP1:%.*]] =3D getelementptr i64, ptr [[P:%.*]], =
+i64 1
+>> -; CHECK-NEXT:    [[GEP1_SAME1:%.*]] =3D getelementptr i32, ptr =
+[[P]], i64 2
+>> -; CHECK-NEXT:    [[GEP1_SAME2:%.*]] =3D getelementptr i8, ptr [[P]], =
+i64 8
+>> ; CHECK-NEXT:    [[GEP1_DIFFERENT:%.*]] =3D getelementptr i8, ptr =
+[[P]], i64 12
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME1]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP1_SAME2]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP1]])
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP1_DIFFERENT]])
+>> ; CHECK-NEXT:    [[GEP2:%.*]] =3D getelementptr i64, ptr [[P]], i64 =
+[[IDX:%.*]]
+>> -; CHECK-NEXT:    [[GEP2_SAME:%.*]] =3D getelementptr { i32, i32 }, =
+ptr [[P]], i64 [[IDX]]
+>> ; CHECK-NEXT:    [[GEP2_DIFFERENT:%.*]] =3D getelementptr { i32, i32, =
+i32 }, ptr [[P]], i64 [[IDX]]
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP2]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP2_SAME]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP2]])
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP2_DIFFERENT]])
+>> ; CHECK-NEXT:    [[GEP3:%.*]] =3D getelementptr { [0 x i32], [0 x =
+i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX]]
+>> -; CHECK-NEXT:    [[GEP3_SAME1:%.*]] =3D getelementptr { [0 x i32], =
+[0 x i32] }, ptr [[P]], i64 0, i32 1, i64 [[IDX]]
+>> -; CHECK-NEXT:    [[GEP3_SAME2:%.*]] =3D getelementptr { [0 x i32], =
+[0 x i32] }, ptr [[P]], i64 1, i32 0, i64 [[IDX]]
+>> ; CHECK-NEXT:    [[GEP3_DIFFERENT:%.*]] =3D getelementptr { [0 x =
+i32], [0 x i32] }, ptr [[P]], i64 0, i32 0, i64 [[IDX2:%.*]]
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME1]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP3_SAME2]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP3]])
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP3_DIFFERENT]])
+>> ; CHECK-NEXT:    [[GEP4:%.*]] =3D getelementptr [4 x i32], ptr [[P]], =
+i64 [[IDX]], i64 [[IDX2]]
+>> -; CHECK-NEXT:    [[GEP4_SAME:%.*]] =3D getelementptr [4 x float], =
+ptr [[P]], i64 [[IDX]], i64 [[IDX2]]
+>> ; CHECK-NEXT:    [[GEP4_DIFFERENT:%.*]] =3D getelementptr [4 x =
+float], ptr [[P]], i64 [[IDX2]], i64 [[IDX]]
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP4]])
+>> -; CHECK-NEXT:    call void @use(ptr [[GEP4_SAME]])
+>> +; CHECK-NEXT:    call void @use(ptr [[GEP4]])
+>> ; CHECK-NEXT:    call void @use(ptr [[GEP4_DIFFERENT]])
+>> ; CHECK-NEXT:    [[GEP5:%.*]] =3D getelementptr <vscale x 2 x i32>, =
+ptr [[P]], i64 1
+>> ; CHECK-NEXT:    [[GEP5_SAME:%.*]] =3D getelementptr <vscale x 2 x =
+float>, ptr [[P]], i64 1
+>> @@ -88,6 +82,7 @@ define void @gep_cse_offset_canonicalization(ptr =
+%p, i64 %idx, i64 %idx2) {
+>>   call void @use(ptr %gep4)
+>>   call void @use(ptr %gep4.same)
+>>   call void @use(ptr %gep4.different)
+>> +  ; TODO: %gep5 and %gep5.same are equivalent as well.
+>>   %gep5 =3D getelementptr <vscale x 2 x i32>, ptr %p, i64 1
+>>   %gep5.same =3D getelementptr <vscale x 2 x float>, ptr %p, i64 1
+>>   %gep5.different =3D getelementptr <vscale x 2 x i64>, ptr %p, i64 1
+>> </cut>
+>=20
+>=20
+>=20
+> --=20
+> Thanks,
+> ~Nick Desaulniers
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
