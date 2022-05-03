@@ -1,106 +1,185 @@
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB952F41
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 22:35:46 +0000 (UTC)
-Received: by mail-vs1-f47.google.com with SMTP id q2so17870571vsr.5
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 15:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
-        b=Ue8FeaYYp63Oq+H4NMZb+pBRhFnk/iofdWy5gXeIg5QTwAVaQhcPh7NJMycsbGfWZE
-         Fc+5btEiGJmM5fEXhaxOFjxGU7fzkiSoqnkUqFrl1ZRRzs4ig52ohWMhFGSgHhm+VyaG
-         TWPDOh3RfjJbT1pjROk+5GJXdEClUvyooIraMli+y9nHLH03LpgjlCrH+hdF8m40WCQE
-         E5GOMstVRJssp5a6VJFS+WxZDfGT+cOVRpciMnyrojahl/hfM9ETPdwkTCKcre9KwcNY
-         l73O7V2zpphu3uEFz9tC/hRsuke1nKrMRDzlaIhhkSYfm4lNq2qk0/FjvFICEl6nNSsW
-         YGgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
-        b=AGQib+um0wiH0uN2uPFmUPcOseUa5Wkiud2HtxKLS3qTeJ9KB/j549FdX4Ae+wHtRm
-         cXLQ7A+3Dc9hrUMJSamU3GhMu57ElgyM3lnzmTUOvmh5Vrjbds05ksMryFWkHIerDh29
-         etW1WHGjzRvDAWqR1ZYjxy/xM/Se+aNtR6smk+FXtfb5LIYPD2D9faSX0WAH+xGoD8he
-         3pl1SP+syeNUdqqPttAOSoiNaysCCN+fMKQQRBs95OAZuXzUxDIPcLO5VvsahXvoD6YQ
-         5/hbacF4KPJMBfhvGbrdNKv/eojmkZyVkUjxYLwwvmBp3K+Q5MbHZlLRj5qrDPCAKCKE
-         UUbg==
-X-Gm-Message-State: AOAM532EGtxyxbFq4pyOt6tvoszIFqr5N7x91XguDK6RWo8yHj6q4Pne
-	ay/egYTVyQVGlY21FI84l4fLNXL3TQoHzHzTGDqQtA==
-X-Google-Smtp-Source: ABdhPJyL+ddQCd6SprqNHsm9X7kOXr4Vs6rtLnwYWhuO4UVCOvXbzKSI2dWSxbo9OUaHxwRSd1gZJrBcmkLhnuY7a5Y=
-X-Received: by 2002:a67:c408:0:b0:32d:1319:2e38 with SMTP id
- c8-20020a67c408000000b0032d13192e38mr6059296vsk.72.1651617345595; Tue, 03 May
- 2022 15:35:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F83F33F6
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 23:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651621653; x=1683157653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/hX5NeeBdLMGWUILQNv60Zwp3g5arz4ofV+yCSsZZlM=;
+  b=hxdTlMDN8HP1gt/5FmeiRxnm6smGpS+IbK/EGfgPj/IF2X2iPbOWTjFj
+   A4P0fldpAvJJTqCVkKbgyjvA9qeRgrxbtNC8vWomRGqQElAvH742tYst4
+   0Cz2dkjAjtyLJ1OGVew5qegTxlrJ6QK7+FC2s515so5HWKvAI9z7YDGQQ
+   rTf3JQfTEE0ZbkRXeC9EKNAqVJ4CUe6ZYjgQ1dIcVH/Us/obbxH4dP1De
+   d0s8oonUPPf2JrwWSn05bi0e2/12MLjgXMisQoQSpTEpN4UDEjj/rfIxv
+   p9P2wMeT4mIgwvjostpBdgAhrYO2EmrihN0PNR1WPHDbG+rGOIRcnf9I6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266464833"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="266464833"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 16:47:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="547969506"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 16:47:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nm2Er-000At6-TR;
+	Tue, 03 May 2022 23:47:29 +0000
+Date: Wed, 4 May 2022 07:47:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dipen Patel <dipenp@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: [arm-tegra:hte/for-next 2/10] drivers/hte/hte.c:616:6: warning:
+ variable 'ei' is used uninitialized whenever 'if' condition is true
+Message-ID: <202205040735.Qhz7Bads-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <202204291545.47C6A97EA2@keescook> <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
- <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com> <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
-In-Reply-To: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
-From: Peter Collingbourne <pcc@google.com>
-Date: Tue, 3 May 2022 15:35:34 -0700
-Message-ID: <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/21] KCFI support
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, LKML <linux-kernel@vger.kernel.org>, 
-	X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 2, 2022 at 1:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
->
-> > > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
-> > > attribute or qualifier for this, such that one can mark a function
-> > > pointer as not doing CFI.
-> > >
-> > > I simply doesn't make sense to have a builtin that operates on an
-> > > expression. The whole thing is about indirect calls, IOW function
-> > > pointers.
-> >
-> > I also thought an attribute would be more convenient, but the compiler
-> > folks prefer a built-in:
-> >
-> > https://reviews.llvm.org/D122673
->
-> That seems to mostly worry about C++ things (overload sets, template
-> specialization, name mangling) we kernel folks don't seem to much care
-> about.
->
-> I'll stick with saying type system makes more sense to me though.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git hte/for-next
+head:   cedbe14082d169f4c1136c70c5170a76bd9a076a
+commit: a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f [2/10] drivers: Add hardware timestamp engine (HTE)
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205040735.Qhz7Bads-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git/commit/?id=a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f
+        git remote add arm-tegra https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git
+        git fetch --no-tags arm-tegra hte/for-next
+        git checkout a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hte/
 
-I'd say it's not only the C++ issues but more the "action at a
-distance" that's implied by having this be part of the type system.
-With this being in the function type it's hard to tell whether any
-particular call will have CFI disabled, without needing to go and look
-at how the function pointer is defined. On the other hand, if we
-explicitly mark up the calls with CFI disabled, the code becomes
-easier to audit (think Rust "unsafe" blocks).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Does it seem any better to you to have this be marked up via the
-function expression, rather than the call? The idea is that this would
-always compile to a check-free function call, no matter what "func"
-is:
+All warnings (new ones prefixed by >>):
 
-__builtin_kcfi_call_unchecked(func)(args)
+>> drivers/hte/hte.c:616:6: warning: variable 'ei' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (ret < 0)
+               ^~~~~~~
+   drivers/hte/hte.c:630:13: note: uninitialized use occurs here
+           module_put(ei->gdev->owner);
+                      ^~
+   drivers/hte/hte.c:616:2: note: remove the 'if' if its condition is always false
+           if (ret < 0)
+           ^~~~~~~~~~~~
+   drivers/hte/hte.c:595:6: warning: variable 'ei' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!gdev->chip) {
+               ^~~~~~~~~~~
+   drivers/hte/hte.c:630:13: note: uninitialized use occurs here
+           module_put(ei->gdev->owner);
+                      ^~
+   drivers/hte/hte.c:595:2: note: remove the 'if' if its condition is always false
+           if (!gdev->chip) {
+           ^~~~~~~~~~~~~~~~~~
+   drivers/hte/hte.c:570:24: note: initialize the variable 'ei' to silence this warning
+           struct hte_ts_info *ei;
+                                 ^
+                                  = NULL
+   2 warnings generated.
 
-We already have this, to some degree, with KCFI as implemented: CFI
-checks are disabled if the function expression refers to a declared
-function. The builtin would allow overriding the decision to also
-disable CFI checks for function expressions that use the builtin. It
-also wouldn't preclude a type based system later on (the builtin would
-become effectively a cast to the "unchecked" type).
 
-Peter
+vim +616 drivers/hte/hte.c
+
+   551	
+   552	/**
+   553	 * hte_ts_get() - The function to initialize and obtain HTE desc.
+   554	 *
+   555	 * The function initializes the consumer provided HTE descriptor. If consumer
+   556	 * has device tree node, index is used to parse the line id and other details.
+   557	 * The function needs to be called before using any request APIs.
+   558	 *
+   559	 * @dev: HTE consumer/client device, used in case of parsing device tree node.
+   560	 * @desc: Pre-allocated timestamp descriptor.
+   561	 * @index: The index will be used as an index to parse line_id from the
+   562	 * device tree node if node is present.
+   563	 *
+   564	 * Context: Holds mutex lock.
+   565	 * Returns: Returns 0 on success or negative error code on failure.
+   566	 */
+   567	int hte_ts_get(struct device *dev, struct hte_ts_desc *desc, int index)
+   568	{
+   569		struct hte_device *gdev;
+   570		struct hte_ts_info *ei;
+   571		const struct fwnode_handle *fwnode;
+   572		struct of_phandle_args args;
+   573		u32 xlated_id;
+   574		int ret;
+   575		bool free_name;
+   576	
+   577		if (!desc)
+   578			return -EINVAL;
+   579	
+   580		fwnode = dev ? dev_fwnode(dev) : NULL;
+   581	
+   582		if (is_of_node(fwnode))
+   583			gdev = hte_of_get_dev(dev, desc, index, &args, &free_name);
+   584		else
+   585			gdev = hte_get_dev(desc);
+   586	
+   587		if (IS_ERR(gdev)) {
+   588			pr_err("%s() no hte dev found\n", __func__);
+   589			return PTR_ERR(gdev);
+   590		}
+   591	
+   592		if (!try_module_get(gdev->owner))
+   593			return -ENODEV;
+   594	
+   595		if (!gdev->chip) {
+   596			pr_err("%s(): requested id does not have provider\n",
+   597			       __func__);
+   598			ret = -ENODEV;
+   599			goto out;
+   600		}
+   601	
+   602		if (is_of_node(fwnode)) {
+   603			if (!gdev->chip->xlate_of)
+   604				ret = -EINVAL;
+   605			else
+   606				ret = gdev->chip->xlate_of(gdev->chip, &args,
+   607							   desc, &xlated_id);
+   608		} else {
+   609			if (!gdev->chip->xlate_plat)
+   610				ret = -EINVAL;
+   611			else
+   612				ret = gdev->chip->xlate_plat(gdev->chip, desc,
+   613							     &xlated_id);
+   614		}
+   615	
+ > 616		if (ret < 0)
+   617			goto out;
+   618	
+   619		ei = &gdev->ei[xlated_id];
+   620	
+   621		ret = hte_bind_ts_info_locked(ei, desc, xlated_id);
+   622		if (ret)
+   623			goto out;
+   624	
+   625		ei->free_attr_name = free_name;
+   626	
+   627		return 0;
+   628	
+   629	out:
+   630		module_put(ei->gdev->owner);
+   631	
+   632		return ret;
+   633	}
+   634	EXPORT_SYMBOL_GPL(hte_ts_get);
+   635	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
