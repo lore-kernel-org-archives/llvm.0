@@ -1,27 +1,27 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABE32F23
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 10:23:53 +0000 (UTC)
-X-UUID: 45676ef5d8934c31864966fcd6981b85-20220503
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29A22F26
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 10:23:54 +0000 (UTC)
+X-UUID: c14d07079ec64c93855432239df12693-20220503
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:7b449138-4bf0-4d28-b9b0-84ff12a6a460,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:d23051c7-85ee-4ac1-ac05-bd3f1e72e732,C
+X-CID-O-INFO: VERSION:1.1.4,REQID:7c0e42bb-1402-4a90-8b2d-9662ea262df9,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:fc1e892f-6199-437e-8ab4-9920b4bc5b76,C
 	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 45676ef5d8934c31864966fcd6981b85-20220503
+X-UUID: c14d07079ec64c93855432239df12693-20220503
 Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1881301314; Tue, 03 May 2022 18:23:49 +0800
+	with ESMTP id 1999961492; Tue, 03 May 2022 18:23:49 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 3 May 2022 18:23:48 +0800
+ Tue, 3 May 2022 18:23:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 18:23:48 +0800
+ 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 18:23:47 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
@@ -36,9 +36,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v19 16/25] drm/mediatek: add display merge mute/unmute support for MT8195
-Date: Tue, 3 May 2022 18:23:36 +0800
-Message-ID: <20220503102345.22817-17-nancy.lin@mediatek.com>
+Subject: [PATCH v19 11/25] soc: mediatek: add mtk-mutex component - dp_intf1
+Date: Tue, 3 May 2022 18:23:31 +0800
+Message-ID: <20220503102345.22817-12-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220503102345.22817-1-nancy.lin@mediatek.com>
 References: <20220503102345.22817-1-nancy.lin@mediatek.com>
@@ -51,67 +51,37 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add merge mute/unmute setting for MT8195.
-MT8195 Vdosys1 merge1~merge4 support HW mute function.
+Add mtk-mutex DDP_COMPONENT_DP_INTF1 component. The MT8195 vdosys1 path
+component contains ovl_adaptor, merge5, and dp_intf1. It is a preparation
+for adding support for MT8195 vdosys1 path component.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/gpu/drm/mediatek/mtk_disp_merge.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/soc/mediatek/mtk-mutex.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-index c7af5ccab916..2e13d2fb429e 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-@@ -58,12 +58,15 @@
- #define FLD_PREULTRA_TH_LOW			GENMASK(15, 0)
- #define FLD_PREULTRA_TH_HIGH			GENMASK(31, 16)
- 
-+#define DISP_REG_MERGE_MUTE_0		0xf00
-+
- struct mtk_disp_merge {
- 	void __iomem			*regs;
- 	struct clk			*clk;
- 	struct clk			*async_clk;
- 	struct cmdq_client_reg		cmdq_reg;
- 	bool				fifo_en;
-+	bool				mute_support;
- };
- 
- void mtk_merge_start(struct device *dev)
-@@ -80,6 +83,10 @@ void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
- {
- 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
- 
-+	if (priv->mute_support)
-+		mtk_ddp_write(cmdq_pkt, 0x0, &priv->cmdq_reg, priv->regs,
-+			      DISP_REG_MERGE_MUTE_0);
-+
- 	mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
- 		      DISP_REG_MERGE_CTRL);
- }
-@@ -88,6 +95,10 @@ void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
- {
- 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
- 
-+	if (priv->mute_support)
-+		mtk_ddp_write(cmdq_pkt, 0x1, &priv->cmdq_reg, priv->regs,
-+			      DISP_REG_MERGE_MUTE_0);
-+
- 	mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
- 		      DISP_REG_MERGE_CTRL);
- }
-@@ -262,6 +273,8 @@ static int mtk_disp_merge_probe(struct platform_device *pdev)
- 	priv->fifo_en = of_property_read_bool(dev->of_node,
- 					      "mediatek,merge-fifo-en");
- 
-+	priv->mute_support = of_property_read_bool(dev->of_node,
-+						   "mediatek,merge-mute");
- 	platform_set_drvdata(pdev, priv);
- 
- 	ret = component_add(dev, &mtk_disp_merge_component_ops);
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index 981d56967e7a..4721f0b74d9b 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -498,6 +498,9 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DP_INTF0:
+ 		sof_id = MUTEX_SOF_DP_INTF0;
+ 		break;
++	case DDP_COMPONENT_DP_INTF1:
++		sof_id = MUTEX_SOF_DP_INTF1;
++		break;
+ 	default:
+ 		if (mtx->data->mutex_mod[id] < 32) {
+ 			offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
+@@ -538,6 +541,7 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DPI0:
+ 	case DDP_COMPONENT_DPI1:
+ 	case DDP_COMPONENT_DP_INTF0:
++	case DDP_COMPONENT_DP_INTF1:
+ 		writel_relaxed(MUTEX_SOF_SINGLE_MODE,
+ 			       mtx->regs +
+ 			       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg,
 -- 
 2.18.0
 
