@@ -1,47 +1,46 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB2D7F
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 08:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC587F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 09:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651567783; x=1683103783;
+  t=1651570837; x=1683106837;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=b0xp0nnIya6SZHB35HRYNszZ1txj5JbqsqqLbxHJ3iI=;
-  b=iNSpyFmqbrEnshhxSEA2Zy03C82/wXpQQWCfhxzAMysRFXwM8WfDtHiX
-   7EZ0TM8X9WTUcbOKnlBrZac6vRIRitbvK9zAHfUDXMvAMaSX60XEyMQla
-   AMZd9AC6N/kgw6Wsoull/33GcMsv1IslZuJLNFwY2pWJsT44AY4GH/qXR
-   nBm5JLOtlzZnkJemocqKeqj4usRnuxqTBMtTBFZPmg9TfZVZOLEN4Vm0D
-   cLYEvE+y2GZTrMjdQbnbKcvI88MwXH6In8fUrxl84r0MGVkl8wokQ6YcR
-   RiUZUq3KGz0vf81du5F0cVCTcCcnC0G3kJRXOZc+5OhbtyPoW/XEddc6s
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267023057"
+  bh=P+iOAd44yQAu6dFiULlp+J/3lk1X57kR5DCW90siNJg=;
+  b=gJvWDLUf3PbCWGlejBzAbc93AC948rmh4muSowqRhzpIMKRMrD60xhH2
+   RpFSxZbW0PgODYwLaEcxqbLDhZ4JrzFBKZr8NndZQ5JIcWNf1Hdl5mywh
+   8RCYTmdTsLUHh5L1Ta0dwSs5hW0RjTSAjDxr11DvlqNn9u9Wh/WCbaERJ
+   Jm/dKxjxbUKqAqJkmadnfUM9M6Q7uvsf526e6zZKgk6XaqcGPeCTvftqk
+   0siMJWs/VfIlraN/TQAXwORE3YnAEdCeFVhqE9fehlvZLcGIEDdbkXrjN
+   iYGDWMFBnVVAdvKzaEJKDI5GwNITQcU9oDfE6dhggWIEbI5zxPlTLUp9W
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247346553"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="267023057"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
+   d="scan'208";a="247346553"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:40:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="733831904"
+   d="scan'208";a="631449685"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 03 May 2022 02:40:34 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nloDp-000AIz-2d;
-	Tue, 03 May 2022 08:49:29 +0000
-Date: Tue, 3 May 2022 16:48:31 +0800
+	id 1nlp1G-000ALL-9h;
+	Tue, 03 May 2022 09:40:34 +0000
+Date: Tue, 3 May 2022 17:39:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Delyan Kratunov <delyank@fb.com>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH bpf-next v2 2/5] bpf: implement sleepable uprobes by
- chaining tasks_trace and normal rcu
-Message-ID: <202205031643.UGYirnXb-lkp@intel.com>
-References: <588dd77e9e7424e0abc0e0e624524ef8a2c7b847.1651532419.git.delyank@fb.com>
+To: Hannes Reinecke <hare@suse.de>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Christoph Hellwig <hch@lst.de>,
+	James Bottomley <james.bottomley@hansenpartnership.com>,
+	linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH 13/24] aic7xxx: make BUILD_SCSIID() a function
+Message-ID: <202205031715.Eiw7By3c-lkp@intel.com>
+References: <20220502213820.3187-14-hare@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,182 +49,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <588dd77e9e7424e0abc0e0e624524ef8a2c7b847.1651532419.git.delyank@fb.com>
+In-Reply-To: <20220502213820.3187-14-hare@suse.de>
 
-Hi Delyan,
+Hi Hannes,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next powerpc/next linus/master v5.18-rc5 next-20220502]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Delyan-Kratunov/sleepable-uprobe-support/20220503-071247
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: s390-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031643.UGYirnXb-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hannes-Reinecke/scsi-EH-rework-prep-patches-part-1/20220503-054317
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: arm64-randconfig-r022-20220502 (https://download.01.org/0day-ci/archive/20220503/202205031715.Eiw7By3c-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/cfa0f114829902b579da16d7520a39317905c502
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/5436bc0a0e277a5742af0b7b443b4591ce0e5b74
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Delyan-Kratunov/sleepable-uprobe-support/20220503-071247
-        git checkout cfa0f114829902b579da16d7520a39317905c502
+        git fetch --no-tags linux-review Hannes-Reinecke/scsi-EH-rework-prep-patches-part-1/20220503-054317
+        git checkout 5436bc0a0e277a5742af0b7b443b4591ce0e5b74
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/trace/trace_uprobe.c:10:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/trace_uprobe.c:10:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/trace_uprobe.c:10:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/trace/trace_uprobe.c:1349:9: error: call to undeclared function 'uprobe_call_bpf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = uprobe_call_bpf(call, regs);
-                         ^
-   kernel/trace/trace_uprobe.c:1349:9: note: did you mean 'trace_call_bpf'?
-   include/linux/trace_events.h:752:28: note: 'trace_call_bpf' declared here
-   static inline unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
-                              ^
-   12 warnings and 1 error generated.
+>> drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
+                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
+                   ~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: note: place parentheses around the '|' expression to silence this warning
+                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
+                                        ^
+                                       )
+   drivers/scsi/aic7xxx/aic7xxx_osm.c:808:24: note: place parentheses around the '?:' expression to evaluate it first
+                   (sdev->channel == 0) ? 0 : TWIN_CHNLB;
+                   ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/uprobe_call_bpf +1349 kernel/trace/trace_uprobe.c
+vim +808 drivers/scsi/aic7xxx/aic7xxx_osm.c
 
-  1334	
-  1335	static void __uprobe_perf_func(struct trace_uprobe *tu,
-  1336				       unsigned long func, struct pt_regs *regs,
-  1337				       struct uprobe_cpu_buffer *ucb, int dsize)
-  1338	{
-  1339		struct trace_event_call *call = trace_probe_event_call(&tu->tp);
-  1340		struct uprobe_trace_entry_head *entry;
-  1341		struct hlist_head *head;
-  1342		void *data;
-  1343		int size, esize;
-  1344		int rctx;
-  1345	
-  1346		if (bpf_prog_array_valid(call)) {
-  1347			u32 ret;
-  1348	
-> 1349			ret = uprobe_call_bpf(call, regs);
-  1350			if (!ret)
-  1351				return;
-  1352		}
-  1353	
-  1354		esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
-  1355	
-  1356		size = esize + tu->tp.size + dsize;
-  1357		size = ALIGN(size + sizeof(u32), sizeof(u64)) - sizeof(u32);
-  1358		if (WARN_ONCE(size > PERF_MAX_TRACE_SIZE, "profile buffer not large enough"))
-  1359			return;
-  1360	
-  1361		preempt_disable();
-  1362		head = this_cpu_ptr(call->perf_events);
-  1363		if (hlist_empty(head))
-  1364			goto out;
-  1365	
-  1366		entry = perf_trace_buf_alloc(size, NULL, &rctx);
-  1367		if (!entry)
-  1368			goto out;
-  1369	
-  1370		if (is_ret_probe(tu)) {
-  1371			entry->vaddr[0] = func;
-  1372			entry->vaddr[1] = instruction_pointer(regs);
-  1373			data = DATAOF_TRACE_ENTRY(entry, true);
-  1374		} else {
-  1375			entry->vaddr[0] = instruction_pointer(regs);
-  1376			data = DATAOF_TRACE_ENTRY(entry, false);
-  1377		}
-  1378	
-  1379		memcpy(data, ucb->buf, tu->tp.size + dsize);
-  1380	
-  1381		if (size - esize > tu->tp.size + dsize) {
-  1382			int len = tu->tp.size + dsize;
-  1383	
-  1384			memset(data + len, 0, size - esize - len);
-  1385		}
-  1386	
-  1387		perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
-  1388				      head, NULL);
-  1389	 out:
-  1390		preempt_enable();
-  1391	}
-  1392	
+   800	
+   801	
+   802	static inline unsigned int ahc_build_scsiid(struct ahc_softc *ahc,
+   803						    struct scsi_device *sdev)
+   804	{
+   805		unsigned int scsiid =
+   806			((sdev->id << TID_SHIFT) & TID) |
+   807			((sdev->channel == 0) ? ahc->our_id : ahc->our_id_b) |
+ > 808			(sdev->channel == 0) ? 0 : TWIN_CHNLB;
+   809		return scsiid;
+   810	}
+   811	
 
 -- 
 0-DAY CI Kernel Test Service
