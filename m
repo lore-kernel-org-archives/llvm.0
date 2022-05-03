@@ -1,101 +1,157 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370BD33CA
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:02:46 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id n8so15913009plh.1
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 13:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
-        b=PCvGCzsvIlu1EuXOzDqVzSwE4DAmJ15LlcKthP3s6kp4sJdaVpq9wwEcFLGha/McMd
-         E2KG//amULHo4ISJDsiQ3tbmqYzmtcZUlJtCvhMEch/LKDRQZK8W0ShcLlfggWS3h0q7
-         qkw6Ff1OihT0y0Hk+heZknTEeRzZmualGVja8NdrYSVda816O8WOKHPBRZ1XM0xH48Zp
-         pheeFma0vOK2GncA1jZ/fqB0SubqSY44XUX/dLcAp8fUoktfTTqKnq2YJbL+oeV4X4ht
-         4lCKXiUK/OJoyFM/YS8HdWvMOfMgFbGuz2D/V8hmJUhMncrWk2CW4UwrQeubLmzIzkw4
-         k6Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
-        b=0v4EFQ76lnKRo/8Y26l22ql0l76pz+Vf1UHnicdxX0RbCQ1TAeNOwuLwJHudLQ7qVG
-         Q+Cgjhqfqp7eF4ULTxLjmOMVntdHLgyFDvaUc1YE3RgwxhiP2dyH5JrKSosCB6uh2rb4
-         h480U/Mvb1pp4N2LSITwCDYsBnVloO9eX9mz4Edwn/Sp4fjsBPkna6I9eRE9n7xriGfr
-         98bRVbCxiQwB8qnf24ER0gVjvmj37K3XRRZhaLMQ0rDGFm4c2WU5hPllsy+zN0LbSJ3c
-         F8t6ADIQifczbbtaM5rnibcJqXqZJphUFg1Sr21bbLvUbjx4HzQFBHxgbTPY4QSWrHOD
-         h8jQ==
-X-Gm-Message-State: AOAM531rrx4E3ZOCdZU/qmDD7sEm/S4vgSut5KO8AfusvZ8krAfPUCbY
-	/n/XJVUYMypPF/7ohTGuz9ZSQuni64Vj2BMVtJUm
-X-Google-Smtp-Source: ABdhPJyGr+c8LNlbNNBXcpq/E9lvU6ileaoiIgySTkkuyQiPg6JdjkUnr0umPie0YLBfSrHZOOgapp9FoirQubuXdyk=
-X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id
- n20-20020a17090a929400b001b948e9a030mr6495804pjo.200.1651608165644; Tue, 03
- May 2022 13:02:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7842B33CA
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651609106; x=1683145106;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/DmKAqhcBCwyk+W58kHF9vgs2kME3Fop4ErwDfmo6zI=;
+  b=kQ3qVkJaNrF4XTRkIVFOjcjIYljL6HwE3GrF4Y15TaI7GqrBITY3tKIp
+   /BUSNa+8vuF7BjEvyKfcy29NpUTM4wCilxxZFXvy5ZurTBr1PH20hM+xG
+   7fKt2ryF/HSkU1DC93dEO+Jb6akK/0CPg01Xq+27El3Kv1fanAvK4f0c7
+   RPkZQjc4iH+5M3KVAmJ1rpFWJu7Y2xanOBJRqi/QUHyzbRzK/NK7kARn1
+   Vts1sGkSGmJ8NleTHxQtUIFSjRp2xGLIFR6mxpwYxAVGlM3oV2woF8Ce5
+   Z2u9WY1Jhji45h2GdgBLCfM51jRYsw2LhK11j1n+bbbr8nJVlaaw1KIXf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="249558635"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="249558635"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 13:18:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="620488390"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 03 May 2022 13:18:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nlyyV-000AlZ-P5;
+	Tue, 03 May 2022 20:18:23 +0000
+Date: Wed, 4 May 2022 04:17:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dipen Patel <dipenp@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: [arm-tegra:hte/for-next 7/10] drivers/gpio/gpiolib-cdev.c:851:34:
+ error: incompatible function pointer types passing 'irqreturn_t (struct
+ hte_ts_data *, void *)' (aka 'enum irqreturn (struct hte_ts_data *, void
+ *)') to parameter of type 'hte_ts_cb_t' (aka 'enum hte_return (*)(struct
+ h...
+Message-ID: <202205040454.CGWxoTt3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220217141858.71281-1-cgzones@googlemail.com>
- <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com> <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
-In-Reply-To: <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 May 2022 16:02:34 -0400
-Message-ID: <CAHC9VhR-Xk65iSfZxVvaK+mJoFszxT2E8vF=cus1aAKcB0EgYg@mail.gmail.com>
-Subject: Re: [PATCH] security: declare member holding string literal const
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, SElinux list <selinux@vger.kernel.org>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Xin Long <lucien.xin@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>, 
-	Todd Kjos <tkjos@google.com>, Olga Kornievskaia <kolga@netapp.com>, 
-	Linux kernel mailing list <linux-kernel@vger.kernel.org>, linux-security-module@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 2, 2022 at 9:38 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
-> On Thu, 17 Feb 2022 at 23:50, Casey Schaufler <casey@schaufler-ca.com> wr=
-ote:
-> > On 2/17/2022 6:18 AM, Christian G=C3=B6ttsche wrote:
-> > > The struct security_hook_list member lsm is assigned in
-> > > security_add_hooks() with string literals passed from the individual
-> > > security modules.  Declare the function parameter and the struct memb=
-er
-> > > const to signal their immutability.
-> > >
-> > > Reported by Clang [-Wwrite-strings]:
-> > >
-> > >      security/selinux/hooks.c:7388:63: error: passing 'const char [8]=
-' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible=
--pointer-types-discards-qualifiers]
-> > >              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hoo=
-ks), selinux);
-> > >                                                                      =
-     ^~~~~~~~~
-> > >      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to p=
-arameter 'lsm' here
-> > >                                      char *lsm);
-> > >                                            ^
-> > >
-> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> >
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> >
->
-> Kindly ping;
-> any progress on this one?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git hte/for-next
+head:   cedbe14082d169f4c1136c70c5170a76bd9a076a
+commit: 98935236600d4e179b664ffcfcd54e0ec3a1b4e3 [7/10] gpiolib: cdev: Add hardware timestamp clock type
+config: arm-ep93xx_defconfig (https://download.01.org/0day-ci/archive/20220504/202205040454.CGWxoTt3-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git/commit/?id=98935236600d4e179b664ffcfcd54e0ec3a1b4e3
+        git remote add arm-tegra https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git
+        git fetch --no-tags arm-tegra hte/for-next
+        git checkout 98935236600d4e179b664ffcfcd54e0ec3a1b4e3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I've already added my Reviewed-by tag, as has Casey, so I think it's
-pretty "safe" at this point.  The next step is for James to pull this
-into the LSM tree.  If it is still collecting dust at the end of this
-week, ping us again and I can just go ahead and pull it into the
-SELinux tree, it's small enough that it shouldn't cause any problems.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---=20
-paul-moore.com
+All errors (new ones prefixed by >>):
+
+   drivers/gpio/gpiolib-cdev.c:572:8: error: unknown type name 'hte_return_t'; did you mean 'irqreturn_t'?
+   static hte_return_t process_hw_ts_thread(void *p)
+          ^~~~~~~~~~~~
+          irqreturn_t
+   include/linux/irqreturn.h:17:24: note: 'irqreturn_t' declared here
+   typedef enum irqreturn irqreturn_t;
+                          ^
+   drivers/gpio/gpiolib-cdev.c:581:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+                   return HTE_CB_HANDLED;
+                   ~~~~~~ ^~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:612:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+                   return HTE_CB_HANDLED;
+                   ~~~~~~ ^~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:620:9: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+           return HTE_CB_HANDLED;
+           ~~~~~~ ^~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:623:8: error: unknown type name 'hte_return_t'; did you mean 'irqreturn_t'?
+   static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
+          ^~~~~~~~~~~~
+          irqreturn_t
+   include/linux/irqreturn.h:17:24: note: 'irqreturn_t' declared here
+   typedef enum irqreturn irqreturn_t;
+                          ^
+   drivers/gpio/gpiolib-cdev.c:630:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+                   return HTE_CB_HANDLED;
+                   ~~~~~~ ^~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:644:11: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+                           return HTE_CB_HANDLED;
+                           ~~~~~~ ^~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:652:10: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+                   return HTE_RUN_SECOND_CB;
+                   ~~~~~~ ^~~~~~~~~~~~~~~~~
+   drivers/gpio/gpiolib-cdev.c:655:9: warning: implicit conversion from enumeration type 'enum hte_return' to different enumeration type 'irqreturn_t' (aka 'enum irqreturn') [-Wenum-conversion]
+           return HTE_CB_HANDLED;
+           ~~~~~~ ^~~~~~~~~~~~~~
+>> drivers/gpio/gpiolib-cdev.c:851:34: error: incompatible function pointer types passing 'irqreturn_t (struct hte_ts_data *, void *)' (aka 'enum irqreturn (struct hte_ts_data *, void *)') to parameter of type 'hte_ts_cb_t' (aka 'enum hte_return (*)(struct hte_ts_data *, void *)') [-Werror,-Wincompatible-function-pointer-types]
+           return hte_request_ts_ns(hdesc, process_hw_ts,
+                                           ^~~~~~~~~~~~~
+   include/linux/hte.h:234:75: note: passing argument to parameter 'cb' here
+   static inline int hte_request_ts_ns(struct hte_ts_desc *desc, hte_ts_cb_t cb,
+                                                                             ^
+>> drivers/gpio/gpiolib-cdev.c:852:6: error: incompatible function pointer types passing 'irqreturn_t (void *)' (aka 'enum irqreturn (void *)') to parameter of type 'hte_ts_sec_cb_t' (aka 'enum hte_return (*)(void *)') [-Werror,-Wincompatible-function-pointer-types]
+                                    process_hw_ts_thread, line);
+                                    ^~~~~~~~~~~~~~~~~~~~
+   include/linux/hte.h:235:25: note: passing argument to parameter 'tcb' here
+                                       hte_ts_sec_cb_t tcb, void *data)
+                                                       ^
+   7 warnings and 4 errors generated.
+
+
+vim +851 drivers/gpio/gpiolib-cdev.c
+
+   828	
+   829	static int hte_edge_setup(struct line *line, u64 eflags)
+   830	{
+   831		int ret;
+   832		unsigned long flags = 0;
+   833		struct hte_ts_desc *hdesc = &line->hdesc;
+   834	
+   835		if (eflags & GPIO_V2_LINE_FLAG_EDGE_RISING)
+   836			flags |= test_bit(FLAG_ACTIVE_LOW, &line->desc->flags) ?
+   837					  HTE_FALLING_EDGE_TS : HTE_RISING_EDGE_TS;
+   838		if (eflags & GPIO_V2_LINE_FLAG_EDGE_FALLING)
+   839			flags |= test_bit(FLAG_ACTIVE_LOW, &line->desc->flags) ?
+   840					  HTE_RISING_EDGE_TS : HTE_FALLING_EDGE_TS;
+   841	
+   842		line->total_discard_seq = 0;
+   843	
+   844		hte_init_line_attr(hdesc, desc_to_gpio(line->desc), flags,
+   845				   NULL, line->desc);
+   846	
+   847		ret = hte_ts_get(NULL, hdesc, 0);
+   848		if (ret)
+   849			return ret;
+   850	
+ > 851		return hte_request_ts_ns(hdesc, process_hw_ts,
+ > 852					 process_hw_ts_thread, line);
+   853	}
+   854	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
