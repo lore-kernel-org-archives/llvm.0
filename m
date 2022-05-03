@@ -1,139 +1,101 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F333CA
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 18:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651604124; x=1683140124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RRH3uGu21hD4LSufA6g3sfh3VROgeSacWtL5YxuG6w8=;
-  b=P0o2fI/9JGvx2mfQqvpplsambVnj1yk0Ot5jHMOCp0pDgGpnSOqGoFQx
-   r7A38ZlaCft6jiuZERsnFz0zsJ7lbubU/BlFd4e/kTrpn1VmAuSy1caHu
-   P8fcfQ3YkTlPgQK8NzCQWOKVWPUfeKX6q0Gvtm2qpQ1hdKySpGvJHVWaq
-   1ySQWM7GI5ntrJmA+0E+zQ+ZITWMZaesLym1d6rLHeqPDBybr7cHjFz1E
-   3USsmDERUaughUzT2yeoeGBY1LZi/bN2Sp85qEZAHYtnPhmwrPaf1GyIw
-   xiAAhW5ZiRd1O+exjO3YZd/IhMz1acStgUkWpQsUN9KkfShfgoB2WVNi2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="249540378"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="249540378"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 11:55:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734040047"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 11:55:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlxg9-000Aj9-R9;
-	Tue, 03 May 2022 18:55:21 +0000
-Date: Wed, 4 May 2022 02:54:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 13/14]
- drivers/input/misc/macsmc-hid.c:59:9: error: call to undeclared function
- 'kernel_can_power_off'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205040253.wEANtH27-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370BD33CA
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:02:46 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id n8so15913009plh.1
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 13:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
+        b=PCvGCzsvIlu1EuXOzDqVzSwE4DAmJ15LlcKthP3s6kp4sJdaVpq9wwEcFLGha/McMd
+         E2KG//amULHo4ISJDsiQ3tbmqYzmtcZUlJtCvhMEch/LKDRQZK8W0ShcLlfggWS3h0q7
+         qkw6Ff1OihT0y0Hk+heZknTEeRzZmualGVja8NdrYSVda816O8WOKHPBRZ1XM0xH48Zp
+         pheeFma0vOK2GncA1jZ/fqB0SubqSY44XUX/dLcAp8fUoktfTTqKnq2YJbL+oeV4X4ht
+         4lCKXiUK/OJoyFM/YS8HdWvMOfMgFbGuz2D/V8hmJUhMncrWk2CW4UwrQeubLmzIzkw4
+         k6Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
+        b=0v4EFQ76lnKRo/8Y26l22ql0l76pz+Vf1UHnicdxX0RbCQ1TAeNOwuLwJHudLQ7qVG
+         Q+Cgjhqfqp7eF4ULTxLjmOMVntdHLgyFDvaUc1YE3RgwxhiP2dyH5JrKSosCB6uh2rb4
+         h480U/Mvb1pp4N2LSITwCDYsBnVloO9eX9mz4Edwn/Sp4fjsBPkna6I9eRE9n7xriGfr
+         98bRVbCxiQwB8qnf24ER0gVjvmj37K3XRRZhaLMQ0rDGFm4c2WU5hPllsy+zN0LbSJ3c
+         F8t6ADIQifczbbtaM5rnibcJqXqZJphUFg1Sr21bbLvUbjx4HzQFBHxgbTPY4QSWrHOD
+         h8jQ==
+X-Gm-Message-State: AOAM531rrx4E3ZOCdZU/qmDD7sEm/S4vgSut5KO8AfusvZ8krAfPUCbY
+	/n/XJVUYMypPF/7ohTGuz9ZSQuni64Vj2BMVtJUm
+X-Google-Smtp-Source: ABdhPJyGr+c8LNlbNNBXcpq/E9lvU6ileaoiIgySTkkuyQiPg6JdjkUnr0umPie0YLBfSrHZOOgapp9FoirQubuXdyk=
+X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id
+ n20-20020a17090a929400b001b948e9a030mr6495804pjo.200.1651608165644; Tue, 03
+ May 2022 13:02:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220217141858.71281-1-cgzones@googlemail.com>
+ <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com> <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
+In-Reply-To: <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 3 May 2022 16:02:34 -0400
+Message-ID: <CAHC9VhR-Xk65iSfZxVvaK+mJoFszxT2E8vF=cus1aAKcB0EgYg@mail.gmail.com>
+Subject: Re: [PATCH] security: declare member holding string literal const
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: Casey Schaufler <casey@schaufler-ca.com>, SElinux list <selinux@vger.kernel.org>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Xin Long <lucien.xin@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>, 
+	Todd Kjos <tkjos@google.com>, Olga Kornievskaia <kolga@netapp.com>, 
+	Linux kernel mailing list <linux-kernel@vger.kernel.org>, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: 0f263115481acb56629afae7ff2bda87b8aef659 [13/14] Input: macsmc-hid: New driver to handle the Apple Mac SMC buttons/lid
-config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220504/202205040253.wEANtH27-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/0f263115481acb56629afae7ff2bda87b8aef659
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout 0f263115481acb56629afae7ff2bda87b8aef659
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Mon, May 2, 2022 at 9:38 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+> On Thu, 17 Feb 2022 at 23:50, Casey Schaufler <casey@schaufler-ca.com> wr=
+ote:
+> > On 2/17/2022 6:18 AM, Christian G=C3=B6ttsche wrote:
+> > > The struct security_hook_list member lsm is assigned in
+> > > security_add_hooks() with string literals passed from the individual
+> > > security modules.  Declare the function parameter and the struct memb=
+er
+> > > const to signal their immutability.
+> > >
+> > > Reported by Clang [-Wwrite-strings]:
+> > >
+> > >      security/selinux/hooks.c:7388:63: error: passing 'const char [8]=
+' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible=
+-pointer-types-discards-qualifiers]
+> > >              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hoo=
+ks), selinux);
+> > >                                                                      =
+     ^~~~~~~~~
+> > >      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to p=
+arameter 'lsm' here
+> > >                                      char *lsm);
+> > >                                            ^
+> > >
+> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> >
+> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> >
+>
+> Kindly ping;
+> any progress on this one?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I've already added my Reviewed-by tag, as has Casey, so I think it's
+pretty "safe" at this point.  The next step is for James to pull this
+into the LSM tree.  If it is still collecting dust at the end of this
+week, ping us again and I can just go ahead and pull it into the
+SELinux tree, it's small enough that it shouldn't cause any problems.
 
-All errors (new ones prefixed by >>):
-
->> drivers/input/misc/macsmc-hid.c:59:9: error: call to undeclared function 'kernel_can_power_off'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   if (kernel_can_power_off())
-                                       ^
-   drivers/input/misc/macsmc-hid.c:59:9: note: did you mean 'kernel_power_off'?
-   include/linux/reboot.h:72:13: note: 'kernel_power_off' declared here
-   extern void kernel_power_off(void);
-               ^
-   1 error generated.
-
-
-vim +/kernel_can_power_off +59 drivers/input/misc/macsmc-hid.c
-
-    29	
-    30	static int macsmc_hid_event(struct notifier_block *nb, unsigned long event, void *data)
-    31	{
-    32		struct macsmc_hid *smchid = container_of(nb, struct macsmc_hid, nb);
-    33		u16 type = event >> 16;
-    34		u8 d1 = (event >> 8) & 0xff;
-    35		u8 d2 = event & 0xff;
-    36	
-    37		switch (type) {
-    38		case SMC_EV_BTN:
-    39			switch (d1) {
-    40			case BTN_POWER:
-    41				input_report_key(smchid->input, KEY_POWER, d2);
-    42				input_sync(smchid->input);
-    43				break;
-    44			case BTN_POWER_HELD1:
-    45				/*
-    46				 * TODO: is this pre-warning useful?
-    47				 */
-    48				if (d2)
-    49					dev_warn(smchid->dev, "Power button held down\n");
-    50				break;
-    51			case BTN_POWER_HELD2:
-    52				/*
-    53				 * If we get here, we have about 4 seconds before forced shutdown.
-    54				 * Try to do an emergency shutdown to make sure the NVMe cache is
-    55				 * flushed. macOS actually does this by panicing (!)...
-    56				 */
-    57				if (d2) {
-    58					dev_crit(smchid->dev, "Triggering forced shutdown!\n");
-  > 59					if (kernel_can_power_off())
-    60						kernel_power_off();
-    61					else /* Missing macsmc-reboot driver? */
-    62						kernel_restart("SMC power button triggered restart");
-    63				}
-    64				break;
-    65			default:
-    66				dev_info(smchid->dev, "Unknown SMC button event: %02x %02x\n", d1, d2);
-    67				break;
-    68			}
-    69			return NOTIFY_OK;
-    70		case SMC_EV_LID:
-    71			input_report_switch(smchid->input, SW_LID, d1);
-    72			input_sync(smchid->input);
-    73			return NOTIFY_OK;
-    74		}
-    75	
-    76		return NOTIFY_DONE;
-    77	}
-    78	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+paul-moore.com
