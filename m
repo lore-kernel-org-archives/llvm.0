@@ -1,23 +1,23 @@
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B312F2B
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 12:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1662F2B
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 12:19:14 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
 	(Authenticated sender: kholk11)
-	with ESMTPSA id 3438A1F440F8
+	with ESMTPSA id A75421F440F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1651580351;
-	bh=Kbp3jH3G9NyAoitGMroyp0Zf93XM4dV4wjDdHF8CGw4=;
+	s=mail; t=1651580346;
+	bh=0L9QYyKQP4UKYOIU/t2r/ePKygeEbRIhjmxvtJB1nsY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ToWVlCnYcPMRdgabszrKxHo20uQz8lkVov1Wp0kokPeyw+LRmoCQaVpdpGDjQ8cKu
-	 OtCpZn1nBUAikkFZ7fgpOYjgjI7RzIsX6x85bZ3FN+7FZAMxRMUgb6MtHPvqM03a1+
-	 QplSNhCigtOnoLt+p4IuW9dba2PRHy40OA/TiErRnIV+9FUUZ5sr0Vk1bmdgU55R5B
-	 iRykv74WVs42Tdjcx1ize9bmTfnZwtF8x1sqhZlZomRtcKu0LwVQM816w74F8h2tDO
-	 jDTL8CdMZxZwPr969G+xOAOwF8mvH1yOVprKfTtEYJu4OWidzX+B4J84oiuCVUF58k
-	 LutLhXAATe6pw==
-Message-ID: <f3d7bb2e-f300-001d-868b-12da0a4ae306@collabora.com>
-Date: Tue, 3 May 2022 14:19:07 +0200
+	b=e93BsPlwcyqrlux8DndbUgg2m8B8Wp3ZMFLqEc4IXKrtjYxRII/iRD3JDd8gmsvaC
+	 B65TNEimBPXt1lUDxu8RXccuUEFhThBNoO82g2B/kdpRk/DsPc0TwiTHsaDztyEbfU
+	 pMuYXMwJ7QqKk9Phhvq5reIDY/XRY/qzYY9V9w9d5h0Ow3rh9zr/j2hYtcLvkSvqpZ
+	 Egpv5cc4filEqdOcsDzCGrR/FrzgJlfjj0W4T2QbwHG2n/5/g6xdBxhp39OzGJO/T3
+	 eOXD/q8LYwptxNHEI3OqSwVAQ1P5XNla4Kzlh5F/ysX8ijKXoew1E9HQtMfPi83dGL
+	 2Ec3w/9UPtJVg==
+Message-ID: <8c7c8c7d-840b-30e6-7b2b-341713385d1a@collabora.com>
+Date: Tue, 3 May 2022 14:19:03 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,8 +26,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v19 09/25] soc: mediatek: mmsys: add mmsys for support 64
- reset bits
+Subject: Re: [PATCH v19 04/25] soc: mediatek: add mtk-mmsys ethdr and mdp_rdma
+ components
 Content-Language: en-US
 To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
  Matthias Brugger <matthias.bgg@gmail.com>,
@@ -44,22 +44,17 @@ Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
  llvm@lists.linux.dev, singo.chang@mediatek.com,
  Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220503102345.22817-1-nancy.lin@mediatek.com>
- <20220503102345.22817-10-nancy.lin@mediatek.com>
+ <20220503102345.22817-5-nancy.lin@mediatek.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220503102345.22817-10-nancy.lin@mediatek.com>
+In-Reply-To: <20220503102345.22817-5-nancy.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 03/05/22 12:23, Nancy.Lin ha scritto:
-> Add mmsys for support 64 reset bits. It is a preparation for MT8195
-> vdosys1 HW reset. MT8195 vdosys1 has more than 32 reset bits.
-> 
-> 1. Add the number of reset bits in mmsys private data
-> 2. move the whole "reset register code section" behind the
-> "get mmsys->data" code section for getting the num_resets in mmsys->data.
+> Add new mmsys component: ethdr_mixer and mdp_rdma. These components will
+> use in mt8195 vdosys1.
 > 
 > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
 
