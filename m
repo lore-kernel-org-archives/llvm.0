@@ -1,93 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7B533C9
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 21:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB6DC385B2;
-	Tue,  3 May 2022 21:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8BD33C9
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 21:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A6D8C385A9;
+	Tue,  3 May 2022 21:34:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651613520;
-	bh=oUV5PgMCLnoqfU3So5a2m7tM/4sVepUMn+p9KajRc7Y=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=V3SnkDsUjFOaPhiHQKb0RBPCoZKSlMCLEd43Dgm6LRlKy+tZUmPyE8ygzHJvQtwD0
-	 lYCHWR4Cxz44hLEkS8YjazrKWwRUXOYsMuyOJYRfDuS3EBx1tgRb0y/dyf8XkUF21A
-	 zM6CqVdJXZMjtWyqZHUM5lFfNfId+5KRabM7ZNAs2eTAsK6OlbRt/6YF4+fEPS+rjv
-	 nPe+aIHnM/esQTQiUZ5AheF8VuZq7pe+sqHp4Dfodf6vsYR915ZVb6EjCvN37WIWB5
-	 b5Zu1QZfJ8+0J4ET7YIQlyp9hHpY6OO6CVBwgKHQdvVyiHAXan0B0S68ojJp0upkT6
-	 Ea2RwA/CBQ51g==
-Message-ID: <7562f8eccd7cc0e447becfe9912179088784e3b9.camel@kernel.org>
-Subject: Re: [PATCH 1/6] netfs: Eliminate Clang randstruct warning
-From: Jeff Layton <jlayton@kernel.org>
-To: Kees Cook <keescook@chromium.org>, Bill Wendling <morbo@google.com>
-Cc: David Howells <dhowells@redhat.com>, Masahiro Yamada
- <masahiroy@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Date: Tue, 03 May 2022 17:31:57 -0400
-In-Reply-To: <20220503205503.3054173-2-keescook@chromium.org>
-References: <20220503205503.3054173-1-keescook@chromium.org>
-	 <20220503205503.3054173-2-keescook@chromium.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+	s=k20201202; t=1651613643;
+	bh=sN5FuOKqNd0XV4Nh0Le7UJ1EWbfgNf8PwkVQcOXZWhs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UthkOEc1attrGYiLizI9QSas2cCXLo7yZKned3biguUWuJRbxF1UJAb1M0AB/oB96
+	 oOqiC2gU3Z1QbmwaCryFRRu+N75sf8rXMHZwpX4ERf8BzySnhmAqT0H1T3Q4+bdHHd
+	 BYnUTfRZo4AmkynYUPOoQKhVkKcbKzpNuqYY22oUi5se3h5vjdVVuP5H9mUw+tlJ4Y
+	 /lGjw4U6k3pkZbiyjpWGpJer+YqLEytyPVVVGsOoYsaxXAvVCBgbgTAEFuHPEJkRZT
+	 b90rgGc4M27RTavZC2c7gX9XQoAIhMDQrJd7MkzCX17xUM0i6ReFiigo4MWSe11BKu
+	 XGY9sw/PZHEJA==
+Date: Tue, 3 May 2022 14:34:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
+	stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	llvm@lists.linux.dev
+Subject: Re: Apply d799769188529abc6cbf035a10087a51f7832b6b to 5.17 and 5.15?
+Message-ID: <YnGfyLAkB3NG+Ms2@dev-arch.thelio-3990X>
+References: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
+ <877d7ig9oz.fsf@mpe.ellerman.id.au>
+ <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
 
-On Tue, 2022-05-03 at 13:54 -0700, Kees Cook wrote:
-> Clang's structure layout randomization feature gets upset when it sees
-> struct inode (which is randomized) cast to struct netfs_i_context. This
-> is due to seeing the inode pointer as being treated as an array of inodes,
-> rather than "something else, following struct inode".
+On Thu, Apr 21, 2022 at 08:13:13AM -0700, Nathan Chancellor wrote:
+> On Thu, Apr 21, 2022 at 05:46:52PM +1000, Michael Ellerman wrote:
+> > Nathan Chancellor <nathan@kernel.org> writes:
+> > > Hi Greg, Sasha, and Michael,
+> > >
+> > > Commit d79976918852 ("powerpc/64: Add UADDR64 relocation support") fixes
+> > > a boot failure with CONFIG_RELOCATABLE=y kernels linked with recent
+> > > versions of ld.lld [1]. Additionally, it resolves a separate boot
+> > > failure that Paul Menzel reported [2] with ld.lld 13.0.0. Is this a
+> > > reasonable backport for 5.17 and 5.15? It applies cleanly, resolves both
+> > > problems, and does not appear to cause any other issues in my testing
+> > > for both trees but I was curious what Michael's opinion was, as I am far
+> > > from a PowerPC expert.
+> > >
+> > > This change does apply cleanly to 5.10 (I did not try earlier branches)
+> > > but there are other changes needed for ld.lld to link CONFIG_RELOCATABLE
+> > > kernels in that branch so to avoid any regressions, I think it is safe
+> > > to just focus on 5.15 and 5.17.
+> > 
+> > I considered tagging it for stable, but I wanted it to get a bit of
+> > testing first, it's a reasonably big patch.
+> > 
+> > I think we're reasonably confident it doesn't introduce any new bugs,
+> > but more testing time is always good.
+> > 
+> > So I guess I'd be inclined to wait another week or so before requesting
+> > a stable backport?
 > 
-> Since netfs can't use container_of() (since it doesn't know what the
-> true containing struct is), it uses this direct offset instead. Adjust
-> the code to better reflect what is happening: an arbitrary pointer is
-> being adjusted and cast to something else: use a "void *" for the math.
-> The resulting binary output is the same, but Clang no longer sees an
-> unexpected cross-structure cast:
-> 
-> In file included from ../fs/nfs/inode.c:50:
-> In file included from ../fs/nfs/fscache.h:15:
-> In file included from ../include/linux/fscache.h:18:
-> ../include/linux/netfs.h:298:9: error: casting from randomized structure pointer type 'struct inode *' to 'struct netfs_i_context *'
->         return (struct netfs_i_context *)(inode + 1);
->                ^
-> 1 error generated.
-> 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/netfs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index c7bf1eaf51d5..0c33b715cbfd 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -295,7 +295,7 @@ extern void netfs_stats_show(struct seq_file *);
->   */
->  static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
->  {
-> -	return (struct netfs_i_context *)(inode + 1);
-> +	return (void *)inode + sizeof(*inode);
->  }
->  
->  /**
-> @@ -307,7 +307,7 @@ static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
->   */
->  static inline struct inode *netfs_inode(struct netfs_i_context *ctx)
->  {
-> -	return ((struct inode *)ctx) - 1;
-> +	return (void *)ctx - sizeof(struct inode);
->  }
->  
->  /**
+> Sure, thanks for the response! I'll ping this thread on Monday, May 2nd,
+> so that we have two more RC releases to try and flush out any lingering
+> issues. If you do receive any reports of regressions, please let me
+> know.
 
-Looks reasonable.
+I decided to wait an extra day just to give people the opportunity to
+install -rc5 and run it through their tests. I have not heard of any
+reports yet, are there any further objections?
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Cheers,
+Nathan
