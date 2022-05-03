@@ -1,30 +1,30 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2826D290C
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 10:23:51 +0000 (UTC)
-X-UUID: 14667ef03796445396a3599c55f09815-20220503
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23287F
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 10:23:53 +0000 (UTC)
+X-UUID: 2e0f78415af745a985b660fee0d525eb-20220503
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:c00eafd6-4dbd-44db-9a8b-44b3a4108c67,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:613051c7-85ee-4ac1-ac05-bd3f1e72e732,C
+X-CID-O-INFO: VERSION:1.1.4,REQID:afc3ef4b-b5ff-415f-a046-79bb4568efe2,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:-12
+X-CID-META: VersionHash:faefae9,CLOUDID:d73051c7-85ee-4ac1-ac05-bd3f1e72e732,C
 	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 14667ef03796445396a3599c55f09815-20220503
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-UUID: 2e0f78415af745a985b660fee0d525eb-20220503
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1240670005; Tue, 03 May 2022 18:23:47 +0800
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 25692647; Tue, 03 May 2022 18:23:51 +0800
 Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 3 May 2022 18:23:46 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 3 May 2022 18:23:50 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 3 May 2022 18:23:46 +0800
+ 15.0.1497.2; Tue, 3 May 2022 18:23:49 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 18:23:46 +0800
+ 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 18:23:49 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
@@ -39,10 +39,12 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v19 00/25] Add MediaTek SoC DRM (vdosys1) support for mt8195
-Date: Tue, 3 May 2022 18:23:20 +0800
-Message-ID: <20220503102345.22817-1-nancy.lin@mediatek.com>
+Subject: [PATCH v19 18/25] drm/mediatek: add ETHDR support for MT8195
+Date: Tue, 3 May 2022 18:23:38 +0800
+Message-ID: <20220503102345.22817-19-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220503102345.22817-1-nancy.lin@mediatek.com>
+References: <20220503102345.22817-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,202 +54,469 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
-
-Add DRM and these modules support by the patches below:
-
-Changes in v19:
-- fix reviewer comment
-  - separate mt8195 mmsys component to a new patch
-  - separate mt8195 vdo0 and vdo1 routing table
-  - separate mmsys_write_reg api to a new patch and simplify write reg code
-  - separate mmsys 64 bit reset to a new patch
-  - separate mtk-mutex dp_intf1 component to a new patch
-
-Changes in v18:
-- fix reviewer comment
-  - fix rdma binding doc
-  - fix ethdr binding doc
-  - refine mmsys config cmdq support
-  - refine merge reset control flow, get reset control in probe function
-  - add ethdr reset control error handling and remove dbg log
-- rebase to vdosys0 series v20 (ref [5])
-
-Changes in v17:
-- fix reviewer comment in v16
-  - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
-  - separate mmsys config API
-  - move mdp_rdma binding yaml
-- fix ovl adaptor pm runtime get sync timing issue
-- rebase to vdosys0 series v19 (ref [5])
-- rebase to [7] for modify vblank register change
-
-Changes in v16:
-- fix reviewer comment in v 15
-  - fix mtk_drm_ddp_comp.c alignment
-  - fix vdosys0 mmsys num before adding vdosys1 patch
-
-Changes in v15:
-- fix ethdr uppercase hex number in dts
-
-Changes in v14:
-- remove MTK_MMSYS 64 bit dependency
-- add ethdr.yaml back and fix dt_schema check fail
-
-Resend v13
-- add related maintainer in maillist
-
-Changes in v13:
-- fix reviewer comment in v12
-  - fix rdma dt-binding format
-  - fix dts node naming
-- fix 32 bit build error
-  - modify 64bit dependency for mtk-mmsys
-- rebase to vdosys0 series v16. (ref [5])
-
-Changes in v12:
-- fix reviewer comment in v11
-  - modify mbox index
-  - refine dma dev for ovl_adaptor sub driver
-
-Changes in v11:
-- remove ethdr vblank spin lock
-- refine ovl_adaptor print message
-
-Changes in v10:
-- refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
-- fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
-
-Changes in v9:
-- rebase on kernel-5.16-rc1
-- rebase on vdosys0 series v13. (ref [5])
-- fix ovl_adaptor sub driver is brought up unintentionally
-- fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue 
-
-Changes in v8:
-- separate merge async reset to new patch.
-- separate drm ovl_adaptor sub driver to new patch.
-- fix reviewer comment in v7.
-
-Changes in v7:
-- rebase on vdosys0 series v12 (ref[5])
-- add dma description in ethdr binding document.
-- refine vdosys1 bit definition of mmsys routing table.
-- separate merge modification into 3 pathces.
-- separate mutex modification into 2 patches.
-- add plane color coding for mdp_rdma csc.
-- move mdp_rdma pm control to ovl_adaptor.
-- fix reviewer comment in v6.
-
-Changes in v6:
-- rebase on kernel-5.15-rc1.
-- change mbox label to gce0 for dts node of vdosys1.
-- modify mmsys reset num for mt8195.
-- rebase on vdosys0 series v10. (ref [5])
-- use drm to bring up ovl_adaptor driver.
-- move drm iommu/mutex check from kms init to drm bind.
-- modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
-- modify for reviewer's comment in v5.
-
-Changes in v5:
-- add mmsys reset controller reference.
-
-Changes in v4:
-- use merge common driver for merge1~4.
-- refine ovl_adaptor rdma driver.
-- use ovl_adaptor ddp_comp function instead of ethdr.
-- modify for reviewer's comment in v3.
-
-Changes in v3:
-- modify for reviewer's comment in v2.
-- add vdosys1 2 pixels align limit.
-- add mixer odd offset support.
-
-Changes in v2:
-- Merge PSEUDO_OVL and ETHDR into one DRM component.
-- Add mmsys config API for vdosys1 hardware setting.
-- Add mmsys reset control using linux reset framework.
+ETHDR is a part of ovl_adaptor.
+ETHDR is designed for HDR video and graphics conversion in the external
+display path. It handles multiple HDR input types and performs tone
+mapping, color space/color format conversion, and then combine
+different layers, output the required HDR or SDR signal to the
+subsequent display path.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-
-This series are based on the following patch:
-[1] arm64: dts: Add mediatek SoC mt8195 and evaluation board
-    20220112114724.1953-4-tinghan.shen@mediatek.com
-[2] arm64: dts: mt8195: add IOMMU and smi nodes
-    20210615173233.26682-15-tinghan.shen@mediatek.com
-[3] arm64: dts: mt8195: add gce node
-    20220126090109.32143-1-jason-jh.lin@mediatek.com
-[4] [v2] arm64: dts: mt8195: add display node for vdosys0
-    20220225021535.2655-1-jason-jh.lin@mediatek.com
-[5] Add MediaTek SoC DRM (vdosys0) support for mt8195 - v20 series
-    20220419094143.9561-1-jason-jh.lin@mediatek.com
-[6] dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
-    20220407075726.17771-2-yong.wu@mediatek.com
-[7] [V2] drm/mediatek: Add vblank register/unregister callback functions
-    20220321072320.15019-1-rex-bc.chen@mediatek.com
-
-Nancy.Lin (25):
-  dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
-  dt-bindings: reset: mt8195: add vdosys1 reset control bit
-  dt-bindings: mediatek: add ethdr definition for mt8195
-  soc: mediatek: add mtk-mmsys ethdr and mdp_rdma components
-  soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
-  soc: mediatek: add mtk_mmsys_write_reg API
-  soc: mediatek: add mtk-mmsys config API for mt8195 vdosys1
-  soc: mediatek: add cmdq support of mtk-mmsys config API for mt8195
-    vdosys1
-  soc: mediatek: mmsys: add mmsys for support 64 reset bits
-  soc: mediatek: mmsys: add reset control for MT8195 vdosys1
-  soc: mediatek: add mtk-mutex component - dp_intf1
-  soc: mediatek: add mtk-mutex support for mt8195 vdosys1
-  drm/mediatek: add display MDP RDMA support for MT8195
-  drm/mediatek: add display merge advance config API for MT8195
-  drm/mediatek: add display merge start/stop API for cmdq support
-  drm/mediatek: add display merge mute/unmute support for MT8195
-  drm/mediatek: add display merge async reset control
-  drm/mediatek: add ETHDR support for MT8195
-  drm/mediatek: add mediatek-drm plane color encoding info
-  drm/mediatek: add ovl_adaptor support for MT8195
-  drm/mediatek: add dma dev get function
-  drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
-  drm/mediatek: add drm ovl_adaptor sub driver for MT8195
-  drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
-  arm64: dts: mt8195: add display node for vdosys1
-
- .../display/mediatek/mediatek,ethdr.yaml      | 191 +++++++
- .../display/mediatek/mediatek,mdp-rdma.yaml   |  94 ++++
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 227 +++++++-
- drivers/gpu/drm/mediatek/Makefile             |   5 +-
- drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  38 ++
- drivers/gpu/drm/mediatek/mtk_disp_merge.c     |  94 +++-
- .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 514 ++++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  96 ++--
- drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 125 +++--
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 351 ++++++++----
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  25 +-
- drivers/gpu/drm/mediatek/mtk_drm_plane.c      |   1 +
- drivers/gpu/drm/mediatek/mtk_drm_plane.h      |   1 +
- drivers/gpu/drm/mediatek/mtk_ethdr.c          | 369 +++++++++++++
- drivers/gpu/drm/mediatek/mtk_ethdr.h          |  26 +
- drivers/gpu/drm/mediatek/mtk_mdp_rdma.c       | 315 +++++++++++
- drivers/gpu/drm/mediatek/mtk_mdp_rdma.h       |  20 +
- drivers/soc/mediatek/mt8195-mmsys.h           | 146 +++++
- drivers/soc/mediatek/mtk-mmsys.c              | 130 +++--
- drivers/soc/mediatek/mtk-mmsys.h              |   1 +
- drivers/soc/mediatek/mtk-mutex.c              |  37 ++
- include/dt-bindings/reset/mt8195-resets.h     |  12 +
- include/linux/soc/mediatek/mtk-mmsys.h        |  25 +
- 25 files changed, 2672 insertions(+), 235 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
- create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
- create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/gpu/drm/mediatek/Makefile      |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h |   1 +
+ drivers/gpu/drm/mediatek/mtk_ethdr.c   | 369 +++++++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_ethdr.h   |  26 ++
+ 5 files changed, 398 insertions(+)
  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
- create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
- create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
 
+diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
+index 6e604a933ed0..fb158a1e7f06 100644
+--- a/drivers/gpu/drm/mediatek/Makefile
++++ b/drivers/gpu/drm/mediatek/Makefile
+@@ -14,6 +14,7 @@ mediatek-drm-y := mtk_disp_aal.o \
+ 		  mtk_drm_plane.o \
+ 		  mtk_dsi.o \
+ 		  mtk_dpi.o \
++		  mtk_ethdr.o \
+ 		  mtk_mdp_rdma.o
+ 
+ obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index aff079c06833..2554c7315b2a 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -835,6 +835,7 @@ static struct platform_driver * const mtk_drm_drivers[] = {
+ 	&mtk_dpi_driver,
+ 	&mtk_drm_platform_driver,
+ 	&mtk_dsi_driver,
++	&mtk_ethdr_driver,
+ 	&mtk_mdp_rdma_driver,
+ };
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.h b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+index 7b37b5cf9629..3b393e4b364a 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+@@ -61,6 +61,7 @@ extern struct platform_driver mtk_disp_ovl_driver;
+ extern struct platform_driver mtk_disp_rdma_driver;
+ extern struct platform_driver mtk_dpi_driver;
+ extern struct platform_driver mtk_dsi_driver;
++extern struct platform_driver mtk_ethdr_driver;
+ extern struct platform_driver mtk_mdp_rdma_driver;
+ 
+ #endif /* MTK_DRM_DRV_H */
+diff --git a/drivers/gpu/drm/mediatek/mtk_ethdr.c b/drivers/gpu/drm/mediatek/mtk_ethdr.c
+new file mode 100644
+index 000000000000..2f882be87e4d
+--- /dev/null
++++ b/drivers/gpu/drm/mediatek/mtk_ethdr.c
+@@ -0,0 +1,369 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2021 MediaTek Inc.
++ */
++
++#include <drm/drm_fourcc.h>
++#include <linux/clk.h>
++#include <linux/component.h>
++#include <linux/of_device.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/reset.h>
++#include <linux/soc/mediatek/mtk-cmdq.h>
++#include <linux/soc/mediatek/mtk-mmsys.h>
++
++#include "mtk_drm_crtc.h"
++#include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
++#include "mtk_ethdr.h"
++
++#define MIX_INTEN			0x4
++#define MIX_FME_CPL_INTEN			BIT(1)
++#define MIX_INTSTA			0x8
++#define MIX_EN				0xc
++#define MIX_RST				0x14
++#define MIX_ROI_SIZE			0x18
++#define MIX_DATAPATH_CON		0x1c
++#define OUTPUT_NO_RND				BIT(3)
++#define SOURCE_RGB_SEL				BIT(7)
++#define BACKGROUND_RELAY			(4 << 9)
++#define MIX_ROI_BGCLR			0x20
++#define BGCLR_BLACK				0xff000000
++#define MIX_SRC_CON			0x24
++#define MIX_SRC_L0_EN				BIT(0)
++#define MIX_L_SRC_CON(n)		(0x28 + 0x18 * (n))
++#define NON_PREMULTI_SOURCE			(2 << 12)
++#define MIX_L_SRC_SIZE(n)		(0x30 + 0x18 * (n))
++#define MIX_L_SRC_OFFSET(n)		(0x34 + 0x18 * (n))
++#define MIX_FUNC_DCM0			0x120
++#define MIX_FUNC_DCM1			0x124
++#define MIX_FUNC_DCM_ENABLE			0xffffffff
++
++#define HDR_VDO_FE_0804_HDR_DM_FE	0x804
++#define HDR_VDO_FE_0804_BYPASS_ALL		0xfd
++#define HDR_GFX_FE_0204_GFX_HDR_FE	0x204
++#define HDR_GFX_FE_0204_BYPASS_ALL		0xfd
++#define HDR_VDO_BE_0204_VDO_DM_BE	0x204
++#define HDR_VDO_BE_0204_BYPASS_ALL		0x7e
++
++#define MIXER_INX_MODE_BYPASS			0
++#define MIXER_INX_MODE_EVEN_EXTEND		1
++#define DEFAULT_9BIT_ALPHA			0x100
++#define	MIXER_ALPHA_AEN				BIT(8)
++#define	MIXER_ALPHA				0xff
++#define ETHDR_CLK_NUM				13
++
++enum mtk_ethdr_comp_id {
++	ETHDR_MIXER,
++	ETHDR_VDO_FE0,
++	ETHDR_VDO_FE1,
++	ETHDR_GFX_FE0,
++	ETHDR_GFX_FE1,
++	ETHDR_VDO_BE,
++	ETHDR_ADL_DS,
++	ETHDR_ID_MAX
++};
++
++struct mtk_ethdr_comp {
++	struct device		*dev;
++	void __iomem		*regs;
++	struct cmdq_client_reg	cmdq_base;
++};
++
++struct mtk_ethdr {
++	struct mtk_ethdr_comp	ethdr_comp[ETHDR_ID_MAX];
++	struct clk_bulk_data	ethdr_clk[ETHDR_CLK_NUM];
++	struct device		*mmsys_dev;
++	void			(*vblank_cb)(void *data);
++	void			*vblank_cb_data;
++	int			irq;
++	struct reset_control	*reset_ctl;
++};
++
++static const char * const ethdr_clk_str[] = {
++	"ethdr_top",
++	"mixer",
++	"vdo_fe0",
++	"vdo_fe1",
++	"gfx_fe0",
++	"gfx_fe1",
++	"vdo_be",
++	"adl_ds",
++	"vdo_fe0_async",
++	"vdo_fe1_async",
++	"gfx_fe0_async",
++	"gfx_fe1_async",
++	"vdo_be_async",
++};
++
++void mtk_ethdr_register_vblank_cb(struct device *dev,
++				  void (*vblank_cb)(void *),
++				  void *vblank_cb_data)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	priv->vblank_cb = vblank_cb;
++	priv->vblank_cb_data = vblank_cb_data;
++}
++
++void mtk_ethdr_unregister_vblank_cb(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	priv->vblank_cb = NULL;
++	priv->vblank_cb_data = NULL;
++}
++
++void mtk_ethdr_enable_vblank(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	writel(MIX_FME_CPL_INTEN, priv->ethdr_comp[ETHDR_MIXER].regs + MIX_INTEN);
++}
++
++void mtk_ethdr_disable_vblank(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	writel(0x0, priv->ethdr_comp[ETHDR_MIXER].regs + MIX_INTEN);
++}
++
++static irqreturn_t mtk_ethdr_irq_handler(int irq, void *dev_id)
++{
++	struct mtk_ethdr *priv = dev_id;
++
++	writel(0x0, priv->ethdr_comp[ETHDR_MIXER].regs + MIX_INTSTA);
++
++	if (!priv->vblank_cb)
++		return IRQ_NONE;
++
++	priv->vblank_cb(priv->vblank_cb_data);
++
++	return IRQ_HANDLED;
++}
++
++void mtk_ethdr_layer_config(struct device *dev, unsigned int idx,
++			    struct mtk_plane_state *state,
++			    struct cmdq_pkt *cmdq_pkt)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++	struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
++	struct mtk_plane_pending_state *pending = &state->pending;
++	unsigned int offset = (pending->x & 1) << 31 | pending->y << 16 | pending->x;
++	unsigned int align_width = ALIGN_DOWN(pending->width, 2);
++	unsigned int alpha_con = 0;
++
++	dev_dbg(dev, "%s+ idx:%d", __func__, idx);
++
++	if (idx >= 4)
++		return;
++
++	if (!pending->enable) {
++		mtk_ddp_write(cmdq_pkt, 0, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_SIZE(idx));
++		return;
++	}
++
++	if (state->base.fb && state->base.fb->format->has_alpha)
++		alpha_con = MIXER_ALPHA_AEN | MIXER_ALPHA;
++
++	mtk_mmsys_mixer_in_config(priv->mmsys_dev, idx + 1, alpha_con ? false : true,
++				  DEFAULT_9BIT_ALPHA,
++				  pending->x & 1 ? MIXER_INX_MODE_EVEN_EXTEND :
++				  MIXER_INX_MODE_BYPASS, align_width / 2 - 1, cmdq_pkt);
++
++	mtk_ddp_write(cmdq_pkt, pending->height << 16 | align_width, &mixer->cmdq_base,
++		      mixer->regs, MIX_L_SRC_SIZE(idx));
++	mtk_ddp_write(cmdq_pkt, offset, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_OFFSET(idx));
++	mtk_ddp_write_mask(cmdq_pkt, alpha_con, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_CON(idx),
++			   0x1ff);
++	mtk_ddp_write_mask(cmdq_pkt, BIT(idx), &mixer->cmdq_base, mixer->regs, MIX_SRC_CON,
++			   BIT(idx));
++}
++
++void mtk_ethdr_config(struct device *dev, unsigned int w,
++		      unsigned int h, unsigned int vrefresh,
++		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++	struct mtk_ethdr_comp *vdo_fe0 = &priv->ethdr_comp[ETHDR_VDO_FE0];
++	struct mtk_ethdr_comp *vdo_fe1 = &priv->ethdr_comp[ETHDR_VDO_FE1];
++	struct mtk_ethdr_comp *gfx_fe0 = &priv->ethdr_comp[ETHDR_GFX_FE0];
++	struct mtk_ethdr_comp *gfx_fe1 = &priv->ethdr_comp[ETHDR_GFX_FE1];
++	struct mtk_ethdr_comp *vdo_be = &priv->ethdr_comp[ETHDR_VDO_BE];
++	struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
++
++	dev_dbg(dev, "%s-w:%d, h:%d\n", __func__, w, h);
++
++	mtk_ddp_write(cmdq_pkt, HDR_VDO_FE_0804_BYPASS_ALL, &vdo_fe0->cmdq_base,
++		      vdo_fe0->regs, HDR_VDO_FE_0804_HDR_DM_FE);
++
++	mtk_ddp_write(cmdq_pkt, HDR_VDO_FE_0804_BYPASS_ALL, &vdo_fe1->cmdq_base,
++		      vdo_fe1->regs, HDR_VDO_FE_0804_HDR_DM_FE);
++
++	mtk_ddp_write(cmdq_pkt, HDR_GFX_FE_0204_BYPASS_ALL, &gfx_fe0->cmdq_base,
++		      gfx_fe0->regs, HDR_GFX_FE_0204_GFX_HDR_FE);
++
++	mtk_ddp_write(cmdq_pkt, HDR_GFX_FE_0204_BYPASS_ALL, &gfx_fe1->cmdq_base,
++		      gfx_fe1->regs, HDR_GFX_FE_0204_GFX_HDR_FE);
++
++	mtk_ddp_write(cmdq_pkt, HDR_VDO_BE_0204_BYPASS_ALL, &vdo_be->cmdq_base,
++		      vdo_be->regs, HDR_VDO_BE_0204_VDO_DM_BE);
++
++	mtk_ddp_write(cmdq_pkt, MIX_FUNC_DCM_ENABLE, &mixer->cmdq_base, mixer->regs, MIX_FUNC_DCM0);
++	mtk_ddp_write(cmdq_pkt, MIX_FUNC_DCM_ENABLE, &mixer->cmdq_base, mixer->regs, MIX_FUNC_DCM1);
++	mtk_ddp_write(cmdq_pkt, h << 16 | w, &mixer->cmdq_base, mixer->regs, MIX_ROI_SIZE);
++	mtk_ddp_write(cmdq_pkt, BGCLR_BLACK, &mixer->cmdq_base, mixer->regs, MIX_ROI_BGCLR);
++	mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
++		      MIX_L_SRC_CON(0));
++	mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
++		      MIX_L_SRC_CON(1));
++	mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
++		      MIX_L_SRC_CON(2));
++	mtk_ddp_write(cmdq_pkt, NON_PREMULTI_SOURCE, &mixer->cmdq_base, mixer->regs,
++		      MIX_L_SRC_CON(3));
++	mtk_ddp_write(cmdq_pkt, 0x0, &mixer->cmdq_base, mixer->regs, MIX_L_SRC_SIZE(0));
++	mtk_ddp_write(cmdq_pkt, OUTPUT_NO_RND | SOURCE_RGB_SEL | BACKGROUND_RELAY,
++		      &mixer->cmdq_base, mixer->regs, MIX_DATAPATH_CON);
++	mtk_ddp_write_mask(cmdq_pkt, MIX_SRC_L0_EN, &mixer->cmdq_base, mixer->regs,
++			   MIX_SRC_CON, MIX_SRC_L0_EN);
++
++	mtk_mmsys_hdr_confing(priv->mmsys_dev, w / 2, h, cmdq_pkt);
++	mtk_mmsys_mixer_in_channel_swap(priv->mmsys_dev, 4, 0, cmdq_pkt);
++}
++
++void mtk_ethdr_start(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++	struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
++
++	writel(1, mixer->regs + MIX_EN);
++}
++
++void mtk_ethdr_stop(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++	struct mtk_ethdr_comp *mixer = &priv->ethdr_comp[ETHDR_MIXER];
++
++	writel(0, mixer->regs + MIX_EN);
++	writel(1, mixer->regs + MIX_RST);
++	reset_control_reset(priv->reset_ctl);
++	writel(0, mixer->regs + MIX_RST);
++}
++
++int mtk_ethdr_clk_enable(struct device *dev)
++{
++	int ret;
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	ret = clk_bulk_prepare_enable(ETHDR_CLK_NUM, priv->ethdr_clk);
++	if (ret)
++		dev_err(dev,
++			"ethdr_clk prepare enable failed\n");
++	return ret;
++}
++
++void mtk_ethdr_clk_disable(struct device *dev)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	clk_bulk_disable_unprepare(ETHDR_CLK_NUM, priv->ethdr_clk);
++}
++
++static int mtk_ethdr_bind(struct device *dev, struct device *master,
++			  void *data)
++{
++	struct mtk_ethdr *priv = dev_get_drvdata(dev);
++
++	priv->mmsys_dev = data;
++	return 0;
++}
++
++static void mtk_ethdr_unbind(struct device *dev, struct device *master, void *data)
++{
++}
++
++static const struct component_ops mtk_ethdr_component_ops = {
++	.bind	= mtk_ethdr_bind,
++	.unbind = mtk_ethdr_unbind,
++};
++
++static int mtk_ethdr_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_ethdr *priv;
++	int ret;
++	int i;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	for (i = 0; i < ETHDR_ID_MAX; i++) {
++		priv->ethdr_comp[i].dev = dev;
++		priv->ethdr_comp[i].regs = of_iomap(dev->of_node, i);
++#if IS_REACHABLE(CONFIG_MTK_CMDQ)
++		ret = cmdq_dev_get_client_reg(dev,
++					      &priv->ethdr_comp[i].cmdq_base, i);
++		if (ret)
++			dev_dbg(dev, "get mediatek,gce-client-reg fail!\n");
++#endif
++		dev_dbg(dev, "[DRM]regs:0x%p, node:%d\n", priv->ethdr_comp[i].regs, i);
++	}
++
++	for (i = 0; i < ETHDR_CLK_NUM; i++)
++		priv->ethdr_clk[i].id = ethdr_clk_str[i];
++	ret = devm_clk_bulk_get_optional(dev, ETHDR_CLK_NUM, priv->ethdr_clk);
++	if (ret)
++		return ret;
++
++	priv->irq = platform_get_irq(pdev, 0);
++	if (priv->irq < 0)
++		priv->irq = 0;
++
++	if (priv->irq) {
++		ret = devm_request_irq(dev, priv->irq, mtk_ethdr_irq_handler,
++				       IRQF_TRIGGER_NONE, dev_name(dev), priv);
++		if (ret < 0) {
++			dev_err(dev, "Failed to request irq %d: %d\n", priv->irq, ret);
++			return ret;
++		}
++	}
++
++	priv->reset_ctl = devm_reset_control_array_get_optional_exclusive(dev);
++	if (IS_ERR(priv->reset_ctl)) {
++		dev_err_probe(dev, PTR_ERR(priv->reset_ctl), "cannot get ethdr reset control\n");
++		return PTR_ERR(priv->reset_ctl);
++	}
++
++	platform_set_drvdata(pdev, priv);
++
++	ret = component_add(dev, &mtk_ethdr_component_ops);
++	if (ret)
++		dev_notice(dev, "Failed to add component: %d\n", ret);
++
++	return ret;
++}
++
++static int mtk_ethdr_remove(struct platform_device *pdev)
++{
++	component_del(&pdev->dev, &mtk_ethdr_component_ops);
++	return 0;
++}
++
++static const struct of_device_id mtk_ethdr_driver_dt_match[] = {
++	{ .compatible = "mediatek,mt8195-disp-ethdr"},
++	{},
++};
++
++MODULE_DEVICE_TABLE(of, mtk_ethdr_driver_dt_match);
++
++struct platform_driver mtk_ethdr_driver = {
++	.probe		= mtk_ethdr_probe,
++	.remove		= mtk_ethdr_remove,
++	.driver		= {
++		.name	= "mediatek-disp-ethdr",
++		.owner	= THIS_MODULE,
++		.of_match_table = mtk_ethdr_driver_dt_match,
++	},
++};
+diff --git a/drivers/gpu/drm/mediatek/mtk_ethdr.h b/drivers/gpu/drm/mediatek/mtk_ethdr.h
+new file mode 100644
+index 000000000000..db806d206d9e
+--- /dev/null
++++ b/drivers/gpu/drm/mediatek/mtk_ethdr.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2021 MediaTek Inc.
++ */
++
++#ifndef __MTK_ETHDR_H__
++#define __MTK_ETHDR_H__
++
++void mtk_ethdr_start(struct device *dev);
++void mtk_ethdr_stop(struct device *dev);
++int mtk_ethdr_clk_enable(struct device *dev);
++void mtk_ethdr_clk_disable(struct device *dev);
++void mtk_ethdr_config(struct device *dev, unsigned int w,
++		      unsigned int h, unsigned int vrefresh,
++		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
++void mtk_ethdr_layer_config(struct device *dev, unsigned int idx,
++			    struct mtk_plane_state *state,
++			    struct cmdq_pkt *cmdq_pkt);
++void mtk_ethdr_register_vblank_cb(struct device *dev,
++				  void (*vblank_cb)(void *),
++				  void *vblank_cb_data);
++void mtk_ethdr_unregister_vblank_cb(struct device *dev);
++void mtk_ethdr_enable_vblank(struct device *dev);
++void mtk_ethdr_disable_vblank(struct device *dev);
++#endif
++
 -- 
 2.18.0
 
