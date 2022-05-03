@@ -1,285 +1,65 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8100D2F44
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 13:43:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651585426; x=1683121426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I+ad57DTlQ5+StAlR5dBr8SiSEVqSPWh3Rd1URMec+k=;
-  b=YYDYvzRh1az1W1+eND6oYeXPyFSE3EwaM09vz42l7ZJgJqRAfQoxW5CL
-   SIMhEv2VJ0MylWnhL2MPIqANflCyopHRvJ06gZpH0iHQhf4QWkmZ/QnHR
-   Bt4ioXTfbt0OeUWNUEC3XQMgN9JQ6FOteze0WoIJsx7ePL7ZvmXsKqupY
-   UsR4zB0/g85eX+489nkViLPhsTtD6GvI9FeHcTZCodaX26+lJs2XX4EuH
-   Ekwrn/ZJmFrf5i4jml63qfexX9Ybrt5u/h6dnnraa5Fo5wU40KHwTVt8J
-   zGRLJAgKD59xsxI5ExyweHN/gQdKL5iVHjrZS3HaeBImGJbz0QZh75JA8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266321196"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="266321196"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:43:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="620345606"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 May 2022 06:43:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nlsoa-000AVR-0J;
-	Tue, 03 May 2022 13:43:44 +0000
-Date: Tue, 3 May 2022 21:42:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 11/14]
- drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type
- 'struct sys_off_handler'
-Message-ID: <202205032150.wuq5sqcq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B9C3204
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 14:57:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.megasoftsol.com (Postfix) with ESMTP id 11E9F90E6AD
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:22:42 +0530 (IST)
+Received: from mail.megasoftsol.com ([127.0.0.1])
+	by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 5iDZHzmAMbt0 for <llvm@lists.linux.dev>;
+	Tue,  3 May 2022 20:22:41 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.megasoftsol.com (Postfix) with ESMTP id 740AA90E6BE
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:22:41 +0530 (IST)
+X-Virus-Scanned: amavisd-new at megasoftsol.com
+Received: from mail.megasoftsol.com ([127.0.0.1])
+	by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id YQdUWJwurUad for <llvm@lists.linux.dev>;
+	Tue,  3 May 2022 20:22:41 +0530 (IST)
+Received: from asda.co.uk (unknown [20.97.211.134])
+	(Authenticated sender: admin)
+	by mail.megasoftsol.com (Postfix) with ESMTPSA id A700890E6AD
+	for <llvm@lists.linux.dev>; Tue,  3 May 2022 20:22:40 +0530 (IST)
+Reply-To: sales@asdaa.uk
+From: ASDA Stores Limited <Hanes.Thomas23877@asda.co.uk>
+To: llvm@lists.linux.dev
+Subject: 2nd Quater puchase request
+Date: 03 May 2022 14:55:08 +0000
+Message-ID: <20220503092157.6607089254CB7522@asda.co.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: c65d40d51ad43c1cb61a2e8658005340a622b826 [11/14] power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
-config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205032150.wuq5sqcq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/c65d40d51ad43c1cb61a2e8658005340a622b826
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout c65d40d51ad43c1cb61a2e8658005340a622b826
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Dear llvm
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                                  ^
-   drivers/power/reset/macsmc-reboot.c:54:9: note: forward declaration of 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                  ^
-   drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct power_off_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
->> drivers/power/reset/macsmc-reboot.c:144:37: error: incomplete definition of type 'struct power_off_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:142:37: note: forward declaration of 'struct power_off_data'
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
-   drivers/power/reset/macsmc-reboot.c:156:35: warning: declaration of 'struct restart_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
->> drivers/power/reset/macsmc-reboot.c:158:37: error: incomplete definition of type 'struct restart_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:156:35: note: forward declaration of 'struct restart_data'
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
-   drivers/power/reset/macsmc-reboot.c:170:42: warning: declaration of 'struct reboot_prep_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
->> drivers/power/reset/macsmc-reboot.c:172:37: error: incomplete definition of type 'struct reboot_prep_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
-   drivers/power/reset/macsmc-reboot.c:176:14: error: incomplete definition of type 'struct reboot_prep_data'
-           switch (data->mode) {
-                   ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
->> drivers/power/reset/macsmc-reboot.c:289:37: error: use of undeclared identifier 'RESTART_PRIO_HIGH'
-           reboot->sys_off.restart_priority = RESTART_PRIO_HIGH;
-                                              ^
->> drivers/power/reset/macsmc-reboot.c:292:8: error: call to undeclared function 'devm_register_sys_off_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = devm_register_sys_off_handler(&pdev->dev, &reboot->sys_off);
-                 ^
-   3 warnings and 7 errors generated.
-
-
-vim +54 drivers/power/reset/macsmc-reboot.c
-
-    50	
-    51	struct macsmc_reboot {
-    52		struct device *dev;
-    53		struct apple_smc *smc;
-  > 54		struct sys_off_handler sys_off;
-    55	
-    56		union {
-    57			struct macsmc_reboot_nvmem nvm;
-    58			struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
-    59		};
-    60	};
-    61	
-    62	/* Helpers to read/write a u8 given a struct nvmem_cell */
-    63	static int nvmem_cell_get_u8(struct nvmem_cell *cell)
-    64	{
-    65		size_t len;
-    66		u8 val;
-    67		void *ret = nvmem_cell_read(cell, &len);
-    68	
-    69		if (IS_ERR(ret))
-    70			return PTR_ERR(ret);
-    71	
-    72		if (len < 1) {
-    73			kfree(ret);
-    74			return -EINVAL;
-    75		}
-    76	
-    77		val = *(u8 *)ret;
-    78		kfree(ret);
-    79		return val;
-    80	}
-    81	
-    82	static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
-    83	{
-    84		return nvmem_cell_write(cell, &val, sizeof(val));
-    85	}
-    86	
-    87	static ssize_t macsmc_ac_power_mode_store(struct device *dev, struct device_attribute *attr,
-    88						  const char *buf, size_t n)
-    89	{
-    90		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-    91		int mode;
-    92		int ret;
-    93	
-    94		mode = sysfs_match_string(ac_power_modes, buf);
-    95		if (mode < 0)
-    96			return mode;
-    97	
-    98		ret = nvmem_cell_set_u8(reboot->nvm.pm_setting, ac_power_mode_map[mode]);
-    99		if (ret < 0)
-   100			return ret;
-   101	
-   102		return n;
-   103	}
-   104	
-   105	static ssize_t macsmc_ac_power_mode_show(struct device *dev,
-   106						 struct device_attribute *attr, char *buf)
-   107	{
-   108		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-   109		int len = 0;
-   110		int i;
-   111		int mode = nvmem_cell_get_u8(reboot->nvm.pm_setting);
-   112	
-   113		if (mode < 0)
-   114			return mode;
-   115	
-   116		for (i = 0; i < ARRAY_SIZE(ac_power_mode_map); i++)
-   117			if (mode == ac_power_mode_map[i])
-   118				len += scnprintf(buf+len, PAGE_SIZE-len,
-   119						 "[%s] ", ac_power_modes[i]);
-   120			else
-   121				len += scnprintf(buf+len, PAGE_SIZE-len,
-   122						 "%s ", ac_power_modes[i]);
-   123		buf[len-1] = '\n';
-   124		return len;
-   125	}
-   126	static DEVICE_ATTR(ac_power_mode, 0644, macsmc_ac_power_mode_show,
-   127			   macsmc_ac_power_mode_store);
-   128	
-   129	/*
-   130	 * SMC 'MBSE' key actions:
-   131	 *
-   132	 * 'offw' - shutdown warning
-   133	 * 'slpw' - sleep warning
-   134	 * 'rest' - restart warning
-   135	 * 'off1' - shutdown (needs PMU bit set to stay on)
-   136	 * 'susp' - suspend
-   137	 * 'phra' - restart ("PE Halt Restart Action"?)
-   138	 * 'panb' - panic beginning
-   139	 * 'pane' - panic end
-   140	 */
-   141	
-   142	static void macsmc_power_off(struct power_off_data *data)
-   143	{
- > 144		struct macsmc_reboot *reboot = data->cb_data;
-   145	
-   146		dev_info(reboot->dev, "Issuing power off (off1)\n");
-   147	
-   148		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
-   149			dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
-   150		} else {
-   151			mdelay(100);
-   152			WARN_ON(1);
-   153		}
-   154	}
-   155	
-   156	static void macsmc_restart(struct restart_data *data)
-   157	{
- > 158		struct macsmc_reboot *reboot = data->cb_data;
-   159	
-   160		dev_info(reboot->dev, "Issuing restart (phra)\n");
-   161	
-   162		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
-   163			dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
-   164		} else {
-   165			mdelay(100);
-   166			WARN_ON(1);
-   167		}
-   168	}
-   169	
-   170	static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-   171	{
- > 172		struct macsmc_reboot *reboot = data->cb_data;
-   173		u32 val;
-   174		u8 shutdown_flag;
-   175	
-   176		switch (data->mode) {
-   177			case SYS_RESTART:
-   178				val = SMC_KEY(rest);
-   179				shutdown_flag = 0;
-   180				break;
-   181			case SYS_POWER_OFF:
-   182				val = SMC_KEY(offw);
-   183				shutdown_flag = 1;
-   184				break;
-   185			default:
-   186				return;
-   187		}
-   188	
-   189		dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
-   190	
-   191		/* On the Mac Mini, this will turn off the LED for power off */
-   192		if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
-   193			dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
-   194	
-   195		/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
-   196		if (reboot->nvm.boot_stage &&
-   197		    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
-   198			dev_err(reboot->dev, "Failed to write boot_stage\n");
-   199	
-   200		/*
-   201		 * Set the PMU flag to actually reboot into the off state.
-   202		 * Without this, the device will just reboot. We make it optional in case it is no longer
-   203		 * necessary on newer hardware.
-   204		 */
-   205		if (reboot->nvm.shutdown_flag &&
-   206		    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
-   207			dev_err(reboot->dev, "Failed to write shutdown_flag\n");
-   208	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+We are interested in having some of your hot selling product in=20
+our stores and outlets spread all over United Kingdom, Northern=20
+Island and Africa. ASDA Stores Limited is one of the highest-
+ranking Wholesale & Retail outlets in the United Kingdom. 
+=20=20
+We shall furnish our detailed company profile in our next=20
+correspondent. However, it would be appreciated if you can send=20
+us your catalog through email to learn more about your company's=20
+products and wholesale quote. It is hopeful that we can start a=20
+viable long-lasting business relationship (partnership) with you.=20=20
+  
+=20=20
+Your prompt response would be delightfully appreciated. 
+=20=20
+Best Wishes=20
+  
+=20=20
+Hanes S. Thomas=20
+Procurement Office.=20
+ASDA Stores Limited=20
+Tel:  + 44 - 7451271650=20
+WhatsApp: + 44 =E2=80=93 7441440360=20
+Website: www.asda.co.uk
