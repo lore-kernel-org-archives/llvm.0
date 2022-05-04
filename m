@@ -1,128 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6860733C9
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 17:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A276AC385A4;
-	Wed,  4 May 2022 17:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651684564;
-	bh=KdZtJj7/GWM8ZYLUQd/9LzkOkG0HQw3v9nmA9n/ALns=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QyKqYVjSFRGQ80Cs3l+qczRQaPYi+zp+jyOlZrCX3yOt4HJSyjToMaclNzwMyf7E4
-	 vXDfrHDOCKAT0sC77vwG/kSW5ahtXe532mcICAuDEE90VtX7cxYD+A1ufJS6Gx/tnv
-	 8eLE7ypPGKAVEQML16y/3+1BKCZ2oDOPBDizuURBy2u+e9G2Zz6cpDTtfUyMksupD1
-	 hgepRW7eHhHf9F4rrpqYOM6iOQ9Di/SqjOvwzzTGoiHTCkpyUOTHxxC867DAt475nH
-	 X4PhpkbrMSkiNd9YC/VFI6Jeqi8NOLSavu6DGa9F7wGmm6cp/M12EjvWeYXZWGkFFZ
-	 03v/C6obYhSNA==
-From: SeongJae Park <sj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	llvm@lists.linux.dev,
-	kbuild-all@lists.01.org
-Subject: RE: [PATCH] mm/damon/sysfs: fix pid leak under fvaddr ops use case
-Date: Wed,  4 May 2022 17:16:01 +0000
-Message-Id: <20220504171601.106690-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202205041011.jv6vuDe4-lkp@intel.com>
-References: 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E1B33C9
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 17:24:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651685060; x=1683221060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v851XFF7wlJdKL8425wlGESczY3BpKet3O8VZ3I0eCU=;
+  b=eHQtO5I7AggOkI8P8fDoCv4w6LPCN5uN+wAoSlRvboSn3cF3V3+d6Y8b
+   iCaiOBmXB03DKZz6JYKTNrEzlhD5xXSdVJijJRKGSE+OZSEjHWVtSvLpH
+   L//gWfh2tWwLLMM2mxJeuuHH7MiLpjIc+wWTJU8Kp3QkDxBU2OFpDhR4B
+   gFTTeB+fqyabQ6e2nFByxBRqtaVBOaDIrvBQYCnXrKmKNJ+S/cIuuibI9
+   JY4onhYMyuMe8ESJLrTcA75DEWPgQ8KrIq3GmVZzT1pq0KnXQ7lEqAQHp
+   rFi5Mx56y53eJojlzEImPjmtde2OmacWjOsVrVvVf54qDOfReVqCN05du
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="328375718"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="328375718"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 10:24:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="620898536"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 10:24:17 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmIjY-000Bej-PN;
+	Wed, 04 May 2022 17:24:16 +0000
+Date: Thu, 5 May 2022 01:23:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
+	lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
+	andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-iio@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V3 5/5] iio: accel: sca3300: Add inclination channels
+Message-ID: <202205050139.AiGvfpnI-lkp@intel.com>
+References: <20220504133612.604304-6-Qing-wu.Li@leica-geosystems.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504133612.604304-6-Qing-wu.Li@leica-geosystems.com.cn>
 
-On Wed, 4 May 2022 10:53:47 +0800 kernel test robot <lkp@intel.com> wrote:
+Hi LI,
 
-> Hi SeongJae,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on hnaz-mm/master]
+Thank you for the patch! Perhaps something to improve:
 
-This patch is on top of mm-unstable branch of akpm's mm tree.  More
-specifically, this patch depends on a commit[1] on the tree.  So, this error
-shouldn't occur on top of the tree.
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on v5.18-rc5 next-20220504]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If I'm missing something, please let me know.
+url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-sca3300-add-compitible-for-scl3300/20220504-213941
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220505/202205050139.AiGvfpnI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7d890b741d98d981843f66de413c1420e3fa27d3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review LI-Qingwu/iio-accel-sca3300-add-compitible-for-scl3300/20220504-213941
+        git checkout 7d890b741d98d981843f66de413c1420e3fa27d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/accel/
 
-[0] git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-unstable&id=cb52aff4ed86a5992309bc7efc228303a7dc084d
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/accel/sca3300.c:152:28: warning: unused variable 'scl3300_scan_masks' [-Wunused-const-variable]
+   static const unsigned long scl3300_scan_masks[] = {
+                              ^
+   1 warning generated.
 
 
-Thanks,
-SJ
+vim +/scl3300_scan_masks +152 drivers/iio/accel/sca3300.c
 
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/SeongJae-Park/mm-dam=
-> on-sysfs-fix-pid-leak-under-fvaddr-ops-use-case/20220504-060657
-> base:   https://github.com/hnaz/linux-mm master
-> config: hexagon-randconfig-r045-20220501 (https://download.01.org/0day-ci/a=
-> rchive/20220504/202205041011.jv6vuDe4-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a=
-> 645a1e30011cc8da624f13dac5fd915628)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-> make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/60cfe4571b04ef4ca2e=
-> 34793fbad737bb43dc0c6
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review SeongJae-Park/mm-damon-sysfs-fix-p=
-> id-leak-under-fvaddr-ops-use-case/20220504-060657
->         git checkout 60cfe4571b04ef4ca2e34793fbad737bb43dc0c6
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-> 1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash mm/damon/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> mm/damon/sysfs.c:2089:20: error: use of undeclared identifier 'DAMON_OPS=
-> _FVADDR'; did you mean 'DAMON_OPS_VADDR'?
->                                    ctx->ops.id =3D=3D DAMON_OPS_FVADDR)
->                                                   ^~~~~~~~~~~~~~~~
->                                                   DAMON_OPS_VADDR
->    include/linux/damon.h:267:2: note: 'DAMON_OPS_VADDR' declared here
->            DAMON_OPS_VADDR,
->            ^
->    mm/damon/sysfs.c:2206:55: error: use of undeclared identifier 'DAMON_OPS=
-> _FVADDR'; did you mean 'DAMON_OPS_VADDR'?
->            if (ctx->ops.id !=3D DAMON_OPS_VADDR && ctx->ops.id !=3D DAMON_O=
-> PS_FVADDR)
->                                                                 ^~~~~~~~~~~=
-> ~~~~~
->                                                                 DAMON_OPS_V=
-> ADDR
->    include/linux/damon.h:267:2: note: 'DAMON_OPS_VADDR' declared here
->            DAMON_OPS_VADDR,
->            ^
->    2 errors generated.
-> 
-> 
-> vim +2089 mm/damon/sysfs.c
-> 
->   2082
->   2083  static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
->   2084  {
->   2085          struct damon_target *t, *next;
->   2086
->   2087          damon_for_each_target_safe(t, next, ctx) {
->   2088                  if (ctx->ops.id =3D=3D DAMON_OPS_VADDR ||
-> > 2089                                  ctx->ops.id =3D=3D DAMON_OPS_FVADDR=
-> )
->   2090                          put_pid(t->pid);
->   2091                  damon_destroy_target(t);
->   2092          }
->   2093  }
->   2094
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-> 
+   151	
+ > 152	static const unsigned long scl3300_scan_masks[] = {
+   153		BIT(SCA3300_ACC_X) | BIT(SCA3300_ACC_Y) | BIT(SCA3300_ACC_Z) |
+   154		BIT(SCA3300_TEMP) |
+   155		BIT(SCA3300_INCLI_X) | BIT(SCA3300_INCLI_Y) | BIT(SCA3300_INCLI_Z),
+   156		0
+   157	};
+   158	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
