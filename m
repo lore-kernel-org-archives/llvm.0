@@ -1,47 +1,46 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270B120EC
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:41 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id 15so19559pgf.4
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A5F20EA
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:39 +0000 (UTC)
+Received: by mail-pg1-f175.google.com with SMTP id j70so26946pge.1
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z9UACyPlKQMpsfBiUxRNSWJwLKyqQ0BVbIzFlqTVpEg=;
-        b=VrQ6dmSQ7VwQQlIfvwbiI2ql0BVm4J4y9LnkKFZwetWH13cFjtZDcQhXtoigM+PS1n
-         cWMsbR1tWdnyAFxVTIwv3Ub+HJcEvYJUmHiHKdd7Tvd9COj+RhcM0WyuPg5dj9PivY8a
-         z6yX6sb9Wvgoc2VwmZES4MbGCx8+oyfzVBgW4=
+        bh=jHmaho/x33MqcwhAHjzMaEbYW3Sn2ucNcqc26yK2kNU=;
+        b=P8OaWDj1i9vMS2YXwPGohhK4T/Iw+CyPZ/W6hEEhH6k1LaC96jgeOuZ+dQGCL7k52R
+         9vedbYNUSwVa5cTgkoS7mq60UIXNgrNEh8xt0xCvSUKOkKMHizwfjhRvtgim24nhUgRa
+         9onXSvEkUpL1rmnA+09r2XcsNzTJwLrKjOBuk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z9UACyPlKQMpsfBiUxRNSWJwLKyqQ0BVbIzFlqTVpEg=;
-        b=7Gj4T2QhUfOFuffR2goYmknF+r5YjQtpsRHAIU0NEQHgSHXcIk/LinTA+7aDKGYznr
-         lpknzlJxu75ucJbTEVlzfuMedqFDkWthDWWZfKY2R7eRIComsaa1QVc3GkkAMFpbrhLj
-         i0DIDcgpsrXJk+dpBpoPTKcLKbZp8Iihsikn+MvtkosTr7xvOtie3cGop00k2dGkcgbA
-         SdOR7TJjEuryZKVxw3ZCBrXqmad4qLrwdOUAT/aOjrixGg5yZc3xcFY4ZCd9EbEDIAaT
-         XgwbdzAUQQ3vXOTa+FCV4rto1sQ1EkwBGJ7W8SQJdhVl9ap92VSh3d7a+MVHKK4l36TX
-         kJuQ==
-X-Gm-Message-State: AOAM531e992btCsKMQE3z08IA3txXEUy5xaameLjD2E0WF1lNkkZBFG+
-	JbpZUDcJ+LhGThXzQAOB9NGB0A==
-X-Google-Smtp-Source: ABdhPJwEApgoIF80IVfCqZ7Wc14eeSv0NeFMafCSFu13taEwh77M4/lfD99nmAtgnvxZOmH48ydyyA==
-X-Received: by 2002:a65:524b:0:b0:383:1b87:2d21 with SMTP id q11-20020a65524b000000b003831b872d21mr15967593pgp.482.1651628860634;
-        Tue, 03 May 2022 18:47:40 -0700 (PDT)
+        bh=jHmaho/x33MqcwhAHjzMaEbYW3Sn2ucNcqc26yK2kNU=;
+        b=heaETeDG4K1/Sk3R7/sHX78YK+/z/goZgQfSH9LyCGYs2qSvQfFCiqNkVX6XO6Efbe
+         SG74oNmp+zo/xQXK9vLk46pQPAZFMSb2IDTyE8xHYVJ5QndhlM91GJnAQB1fGlX6hnQG
+         AdrXjHRbGpptBoHgSJdIodzNyjvXLrH+RCMzA2kTrW3nZdcjeuUXE1WZAje3mcWAr8dh
+         GZ0cCyfhhK75wEF4wr46lRtsI5yAHIZi8mgFOJLT8bc1HhvOkBDp5kF/+lQJOn57N8jI
+         hh1QZBnYhDWHB8SIf4WisHOAmKb5uDx8nY7Ap2eIT2/2DHaP/mvLbgIIUoOg5q1KmZIU
+         FBZw==
+X-Gm-Message-State: AOAM533t/pnEeELGB9UX0iM3qvpcvJKMsJkDYyBn1wAPXz1q+YLOCyW1
+	mLdeovMVghd3kBRSqe4wWoFcRA==
+X-Google-Smtp-Source: ABdhPJwDwI9Zn57H+UzccAss3I4+YVo4G5gzupm0JsKJ0LRhyJxSmHdZxJnL2FMxr0l8EdjG4443ww==
+X-Received: by 2002:a05:6a00:2482:b0:50d:481d:b516 with SMTP id c2-20020a056a00248200b0050d481db516mr18785143pfv.10.1651628859404;
+        Tue, 03 May 2022 18:47:39 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f1-20020aa782c1000000b0051008603b66sm534694pfn.219.2022.05.03.18.47.37
+        by smtp.gmail.com with ESMTPSA id i3-20020a17090a718300b001d6a79768b6sm1982097pjk.49.2022.05.03.18.47.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 03 May 2022 18:47:39 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: "Gustavo A . R . Silva" <gustavoars@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Christian Lamparter <chunkeey@googlemail.com>,
-	Kalle Valo <kvalo@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
 	linux-wireless@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -59,6 +58,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	brcm80211-dev-list.pdl@broadcom.com,
 	Christian Brauner <brauner@kernel.org>,
 	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+	Christian Lamparter <chunkeey@googlemail.com>,
 	Chris Zankel <chris@zankel.net>,
 	Cong Wang <cong.wang@bytedance.com>,
 	Daniel Axtens <dja@axtens.net>,
@@ -92,9 +92,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Jens Axboe <axboe@kernel.dk>,
 	Johan Hedberg <johan.hedberg@gmail.com>,
 	Johannes Berg <johannes.berg@intel.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
 	John Keeping <john@metanate.com>,
 	Juergen Gross <jgross@suse.com>,
+	Kalle Valo <kvalo@kernel.org>,
 	Keith Packard <keithp@keithp.com>,
 	keyrings@vger.kernel.org,
 	kunit-dev@googlegroups.com,
@@ -155,9 +155,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	xen-devel@lists.xenproject.org,
 	Xiu Jianfeng <xiujianfeng@huawei.com>,
 	Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 09/32] p54: Use mem_to_flex_dup() with struct p54_cal_database
-Date: Tue,  3 May 2022 18:44:18 -0700
-Message-Id: <20220504014440.3697851-10-keescook@chromium.org>
+Subject: [PATCH 12/32] cfg80211: Use mem_to_flex_dup() with struct cfg80211_bss_ies
+Date: Tue,  3 May 2022 18:44:21 -0700
+Message-Id: <20220504014440.3697851-13-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220504014440.3697851-1-keescook@chromium.org>
 References: <20220504014440.3697851-1-keescook@chromium.org>
@@ -167,7 +167,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2429; h=from:subject; bh=nMnYI58OZL/NYqqBGThX6X9At9N55AKclw2PdmxLkv8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqCpEYc7sUWDpluF0bUB90CkVbrB3/z8O0fymGg eduju0uJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHaggAKCRCJcvTf3G3AJkJoEA CB3d+CRBr1VkScrlHfbIs1LkNyymQ0HwJgl7p4QyueseREG9Mt5326Iwc7RqKF+Rn+YzyWk8dFShzv z6gbI8PNrGAqBPz5BIqLg3dYYHVK5dPPYcYrISNYxFwyXlYH5CnwM8gllN72k9RJxbWzAxh0A+60N/ jviJWlHykiM1Zhxd/qazs6ZevTYO060Zif3DN8WCX/LuwNHp30u5sclQ55oDW3betiobkSC6Ov1eP6 Hi7uDPuaVPlM2ZtdStVUbJUtmb0ddMSgxtTLjFPmzu+/igOg0pwYTovc41hbeEbBnxlRHIoUJWYLEF 9HwXpVeVj29IIka07Wj1DhYds+eo/zSM1UgogveTLy1YqauYGa0HDWQq9oUmlyE1DVBtfNlwDKfQFw abW5WTkLqlaK1bDWZEM/2f5rXJ6Qb2wLF8985KU4MwKaSdM+Jib4Npl3mdvg3RTIqLUDL5C0EsnPZd jx7VWu4NuZxHBeVOpG042kcl9h6NgrzPV4i2lneNTdK9Mf4aIUBuhXuEi0RjjZPRX5KWBWDETa+SHA xIpk2sXTFarSyRcDwvPPRN7FWxxM5y5OPAGRGPRQhj9zCDB+Eh+NAEZe1GFUTZYOWu4PHtyiVVuH0q lf+bEbHqDfX8rt+XVzeUsKcH3bW7KZvEkMLgB/C70MIwPtiUdXvWDMDbvCRw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4271; h=from:subject; bh=zLIoLyad9bBq8i+CHRJcAMhW5JgPaoyM4x0VIL3Wjf8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqDR3XqoFSprf0Mf1o1HYj7dBBBP7wDZ118xdTx ToM0RNGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHagwAKCRCJcvTf3G3AJpDCD/ wMlRRCUB8XTmCXlLdvPCGb5ACTTMa3Km0myBmfsx6i7FkHxAEfNtllJsJZ1xGdv/WP8g4XEUJ0zuGC 7wsRbPVl7sHYNyFiAu9iXMMSYvJVG0G1YrRXdH2A3UhX8o4+JfEVNj7XazhRyhM9cIwvTR0hQBUIKJ OO0TtkviYxesRpL1xBvgYIcCWjxEvNdpsGjAfF7Wn6Ml1dOstypUTb2ulq7hIf7BX8w63KuqOXZx6V eQKW4gi3cQO3gPoEWsv9zeDktQzxWbaMN212KDtDCB76/UH1i+QQg8eLLlaSQ/55nnf45kUX75sHkI zDmnUC7uL8hJaFE7/98/TeYKsLAgbyP1/MwzniEWgtSaLkPJj+BDTLhK4+jBB7zxpXsyQsyJXmfWnN 69jBTE8Z6ldaOWiCaA2dwzQcHNWXsHvzTspOWk/Tiv7AIUHd8Nqe4ecJtsbDBBxQU21ogSn3TNlfat 3ZCTfW1XDttiZNSK2Rit27Gb0LCzE4nKpVwxT5qmFoGk/jjq2ZfP1uWkMyv4TOb/bfGw5ZiXtTJwtA 22mI6CUOQ9lCD1lIB2WdB8z0yibGypy9fbuDpeqzg6v+weYYD4cY0Q38ZtkdzpABByyOAlmZm7iXIU /hIQA44hD8/vgfuYEgBfavnXALP3koZt6viHAklNZAsuY6wiAG9ZgR2ZT8XQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -176,66 +176,118 @@ replace the open-coded a deserialization of bytes out of memory into a
 trailing flexible array by using a flex_array.h helper to perform the
 allocation, bounds checking, and copying.
 
-Cc: Christian Lamparter <chunkeey@googlemail.com>
-Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>
 Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
 Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Eric Dumazet <edumazet@google.com>
 Cc: linux-wireless@vger.kernel.org
 Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/wireless/intersil/p54/eeprom.c | 8 ++------
- drivers/net/wireless/intersil/p54/p54.h    | 4 ++--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ include/net/cfg80211.h |  4 ++--
+ net/wireless/scan.c    | 21 ++++++---------------
+ 2 files changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/wireless/intersil/p54/eeprom.c b/drivers/net/wireless/intersil/p54/eeprom.c
-index 5bd35c147e19..bd9b3ea327b9 100644
---- a/drivers/net/wireless/intersil/p54/eeprom.c
-+++ b/drivers/net/wireless/intersil/p54/eeprom.c
-@@ -702,7 +702,7 @@ static int p54_convert_output_limits(struct ieee80211_hw *dev,
- static struct p54_cal_database *p54_convert_db(struct pda_custom_wrapper *src,
- 					       size_t total_len)
- {
--	struct p54_cal_database *dst;
-+	struct p54_cal_database *dst = NULL;
- 	size_t payload_len, entries, entry_size, offset;
- 
- 	payload_len = le16_to_cpu(src->len);
-@@ -713,16 +713,12 @@ static struct p54_cal_database *p54_convert_db(struct pda_custom_wrapper *src,
- 	     (payload_len + sizeof(*src) != total_len))
- 		return NULL;
- 
--	dst = kmalloc(sizeof(*dst) + payload_len, GFP_KERNEL);
--	if (!dst)
-+	if (mem_to_flex_dup(&dst, src->data, payload_len, GFP_KERNEL))
- 		return NULL;
- 
- 	dst->entries = entries;
- 	dst->entry_size = entry_size;
- 	dst->offset = offset;
--	dst->len = payload_len;
--
--	memcpy(dst->data, src->data, payload_len);
- 	return dst;
- }
- 
-diff --git a/drivers/net/wireless/intersil/p54/p54.h b/drivers/net/wireless/intersil/p54/p54.h
-index 3356ea708d81..22bbb6d28245 100644
---- a/drivers/net/wireless/intersil/p54/p54.h
-+++ b/drivers/net/wireless/intersil/p54/p54.h
-@@ -125,8 +125,8 @@ struct p54_cal_database {
- 	size_t entries;
- 	size_t entry_size;
- 	size_t offset;
--	size_t len;
+diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+index 68713388b617..fa236015f6ef 100644
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -2600,9 +2600,9 @@ struct cfg80211_inform_bss {
+ struct cfg80211_bss_ies {
+ 	u64 tsf;
+ 	struct rcu_head rcu_head;
+-	int len;
++	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, len);
+ 	bool from_beacon;
 -	u8 data[];
-+	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, len);
 +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, data);
  };
  
- #define EEPROM_READBACK_LEN 0x3fc
+ /**
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index 4a6d86432910..9f53d05c6aaa 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -1932,7 +1932,7 @@ cfg80211_inform_single_bss_data(struct wiphy *wiphy,
+ 				gfp_t gfp)
+ {
+ 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wiphy);
+-	struct cfg80211_bss_ies *ies;
++	struct cfg80211_bss_ies *ies = NULL;
+ 	struct ieee80211_channel *channel;
+ 	struct cfg80211_internal_bss tmp = {}, *res;
+ 	int bss_type;
+@@ -1978,13 +1978,10 @@ cfg80211_inform_single_bss_data(struct wiphy *wiphy,
+ 	 * override the IEs pointer should we have received an earlier
+ 	 * indication of Probe Response data.
+ 	 */
+-	ies = kzalloc(sizeof(*ies) + ielen, gfp);
+-	if (!ies)
++	if (mem_to_flex_dup(&ies, ie, ielen, gfp))
+ 		return NULL;
+-	ies->len = ielen;
+ 	ies->tsf = tsf;
+ 	ies->from_beacon = false;
+-	memcpy(ies->data, ie, ielen);
+ 
+ 	switch (ftype) {
+ 	case CFG80211_BSS_FTYPE_BEACON:
+@@ -2277,7 +2274,7 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
+ 	size_t ielen = len - offsetof(struct ieee80211_mgmt,
+ 				      u.probe_resp.variable);
+ 	size_t new_ie_len;
+-	struct cfg80211_bss_ies *new_ies;
++	struct cfg80211_bss_ies *new_ies = NULL;
+ 	const struct cfg80211_bss_ies *old;
+ 	u8 cpy_len;
+ 
+@@ -2314,8 +2311,7 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
+ 	if (!new_ie)
+ 		return;
+ 
+-	new_ies = kzalloc(sizeof(*new_ies) + new_ie_len, GFP_ATOMIC);
+-	if (!new_ies)
++	if (mem_to_flex_dup(&new_ies, new_ie, new_ie_len, GFP_ATOMIC))
+ 		goto out_free;
+ 
+ 	pos = new_ie;
+@@ -2333,10 +2329,8 @@ cfg80211_update_notlisted_nontrans(struct wiphy *wiphy,
+ 	memcpy(pos, mbssid + cpy_len, ((ie + ielen) - (mbssid + cpy_len)));
+ 
+ 	/* update ie */
+-	new_ies->len = new_ie_len;
+ 	new_ies->tsf = le64_to_cpu(mgmt->u.probe_resp.timestamp);
+ 	new_ies->from_beacon = ieee80211_is_beacon(mgmt->frame_control);
+-	memcpy(new_ies->data, new_ie, new_ie_len);
+ 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
+ 		old = rcu_access_pointer(nontrans_bss->proberesp_ies);
+ 		rcu_assign_pointer(nontrans_bss->proberesp_ies, new_ies);
+@@ -2363,7 +2357,7 @@ cfg80211_inform_single_bss_frame_data(struct wiphy *wiphy,
+ 				      gfp_t gfp)
+ {
+ 	struct cfg80211_internal_bss tmp = {}, *res;
+-	struct cfg80211_bss_ies *ies;
++	struct cfg80211_bss_ies *ies = NULL;
+ 	struct ieee80211_channel *channel;
+ 	bool signal_valid;
+ 	struct ieee80211_ext *ext = NULL;
+@@ -2442,14 +2436,11 @@ cfg80211_inform_single_bss_frame_data(struct wiphy *wiphy,
+ 		capability = le16_to_cpu(mgmt->u.probe_resp.capab_info);
+ 	}
+ 
+-	ies = kzalloc(sizeof(*ies) + ielen, gfp);
+-	if (!ies)
++	if (mem_to_flex_dup(&ies, variable, ielen, gfp))
+ 		return NULL;
+-	ies->len = ielen;
+ 	ies->tsf = le64_to_cpu(mgmt->u.probe_resp.timestamp);
+ 	ies->from_beacon = ieee80211_is_beacon(mgmt->frame_control) ||
+ 			   ieee80211_is_s1g_beacon(mgmt->frame_control);
+-	memcpy(ies->data, variable, ielen);
+ 
+ 	if (ieee80211_is_probe_resp(mgmt->frame_control))
+ 		rcu_assign_pointer(tmp.pub.proberesp_ies, ies);
 -- 
 2.32.0
 
