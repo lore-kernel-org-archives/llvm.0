@@ -1,178 +1,126 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [144.76.43.62])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6248D2101
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 08:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=ity6IPNC2WIGLGTiJizfPDCFcsI1FfOGUjdPuI/9x1Q=;
-	t=1651651500; x=1652861100; b=YG5iNzwEk/nMLRf8n7w7PSLgsBpNnXL1SBwBYAUltdyOwap
-	rrqghX3NQwdE24ZDG+sZZcrcSFqJ9PU+eQtHpH0ARgzZytLRoGmAeOaNSG50m6ZRvm8GNxH0IXJcm
-	TArgUPKaZNuaFihPdINR/df0dPzDYJ3S1UZ9NIQuPImkYscbJaz6cugLSGrbnHZDWRd2ALz4p3BJB
-	VuV7jyxN+eruAEU+Y5Qn/ziGsgnVXx6b3dB3m8kg7OKLkUeoKK6t4c+7lUw0vkIT28zB5usk2Wu9K
-	3PoDUdcbskO/UOt07YwUsCygDbdm58huqBoFlJ1FuodonKd//0QOP82Uw9roYvvw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1nm9Oe-001wnb-ND;
-	Wed, 04 May 2022 09:26:04 +0200
-Message-ID: <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
-Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Kees Cook <keescook@chromium.org>, "Gustavo A . R . Silva"
-	 <gustavoars@kernel.org>
-Cc: Keith Packard <keithp@keithp.com>, Francis Laniel
- <laniel_francis@privacyrequired.com>, Daniel Axtens <dja@axtens.net>, Dan
- Williams <dan.j.williams@intel.com>, Vincenzo Frascino
- <vincenzo.frascino@arm.com>, Guenter Roeck <linux@roeck-us.net>, Daniel
- Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk <tadeusz.struk@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>,  alsa-devel@alsa-project.org, Al Viro
- <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>,
- Andrew Morton <akpm@linux-foundation.org>,  Andy Gross <agross@kernel.org>,
- Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
- Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson
- <bjorn.andersson@linaro.org>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Bradley Grove <linuxdrivers@attotech.com>, 
- brcm80211-dev-list.pdl@broadcom.com, Christian Brauner
- <brauner@kernel.org>,  Christian =?ISO-8859-1?Q?G=F6ttsche?=
- <cgzones@googlemail.com>, Christian Lamparter <chunkeey@googlemail.com>, 
- Chris Zankel <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, David
- Gow <davidgow@google.com>,  David Howells <dhowells@redhat.com>, "David S.
- Miller" <davem@davemloft.net>, Dennis Dalessandro
- <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
- Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>,  Eric Dumazet
- <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, Eugeniu Rosca
- <erosca@de.adit-jv.com>,  Felipe Balbi <balbi@kernel.org>, Frank Rowand
- <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>,  Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
- <gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>, Hante
- Meuleman <hante.meuleman@broadcom.com>,  Herbert Xu
- <herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub
- Kicinski <kuba@kernel.org>,  "James E.J. Bottomley" <jejb@linux.ibm.com>,
- James Morris <jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens
- Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John
- Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
- <kvalo@kernel.org>, keyrings@vger.kernel.org,  kunit-dev@googlegroups.com,
- Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan"
- <kys@microsoft.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
- <lee.jones@linaro.org>,  Leon Romanovsky <leon@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>,  linux1394-devel@lists.sourceforge.net,
- linux-afs@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org,  linux-bluetooth@vger.kernel.org,
- linux-hardening@vger.kernel.org,  linux-hyperv@vger.kernel.org,
- linux-integrity@vger.kernel.org,  linux-rdma@vger.kernel.org,
- linux-scsi@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-usb@vger.kernel.org,  linux-wireless@vger.kernel.org,
- linux-xtensa@linux-xtensa.org,  llvm@lists.linux.dev, Loic Poulain
- <loic.poulain@linaro.org>, Louis Peens <louis.peens@corigine.com>, Luca
- Coelho <luciano.coelho@intel.com>, Luiz Augusto von Dentz
- <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, Marcel
- Holtmann <marcel@holtmann.org>,  Mark Brown <broonie@kernel.org>, "Martin
- K. Petersen" <martin.petersen@oracle.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
- <songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>, 
- netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Paolo Abeni
- <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, Rich Felker
- <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, Russell King
- <linux@armlinux.org.uk>,  selinux@vger.kernel.org, "Serge E. Hallyn"
- <serge@hallyn.com>,  SHA-cyfmac-dev-list@infineon.com, Simon Horman
- <simon.horman@corigine.com>,  Stefano Stabellini <sstabellini@kernel.org>,
- Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert
- <steffen.klassert@secunet.com>, Stephen Hemminger <sthemmin@microsoft.com>,
-  Stephen Smalley <stephen.smalley.work@gmail.com>, Takashi Iwai
- <tiwai@suse.com>, Tom Rix <trix@redhat.com>,  Udipto Goswami
- <quic_ugoswami@quicinc.com>, wcn36xx@lists.infradead.org, Wei Liu
- <wei.liu@kernel.org>,  xen-devel@lists.xenproject.org, Xiu Jianfeng
- <xiujianfeng@huawei.com>, Yang Yingliang <yangyingliang@huawei.com>,
- kvalo@kernel.org
-Date: Wed, 04 May 2022 09:25:56 +0200
-In-Reply-To: <20220504014440.3697851-3-keescook@chromium.org>
-References: <20220504014440.3697851-1-keescook@chromium.org>
-	 <20220504014440.3697851-3-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB71F210C
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 09:14:47 +0000 (UTC)
+X-UUID: dcf8e19eb15f402484aa424b6d6a9df0-20220504
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:9a79a31f-4f80-427a-9515-5f9f87c7d160,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:103
+X-CID-INFO: VERSION:1.1.4,REQID:9a79a31f-4f80-427a-9515-5f9f87c7d160,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
+	ION:quarantine,TS:103
+X-CID-META: VersionHash:faefae9,CLOUDID:8e67ac2f-6199-437e-8ab4-9920b4bc5b76,C
+	OID:f1846824bb4a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: dcf8e19eb15f402484aa424b6d6a9df0-20220504
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1326827952; Wed, 04 May 2022 17:14:44 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 17:14:43 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 4 May 2022 17:14:43 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 4 May 2022 17:14:43 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v20 02/25] dt-bindings: reset: mt8195: add vdosys1 reset control bit
+Date: Wed, 4 May 2022 17:14:17 +0800
+Message-ID: <20220504091440.2052-3-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220504091440.2052-1-nancy.lin@mediatek.com>
+References: <20220504091440.2052-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain
+X-MTK: N
 
-On Tue, 2022-05-03 at 18:44 -0700, Kees Cook wrote:
-> 
-> For example, using the most complicated helper, mem_to_flex_dup():
-> 
->     /* Flexible array struct with members identified. */
->     struct something {
->         int mode;
->         DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, how_many);
->         unsigned long flags;
->         DECLARE_FLEX_ARRAY_ELEMENTS(u32, value);
+Add vdosys1 reset control bit for MT8195 platform.
 
-In many cases, the order of the elements doesn't really matter, so maybe
-it'd be nicer to be able to write it as something like
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ include/dt-bindings/reset/mt8195-resets.h | 45 +++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-DECLARE_FLEX_STRUCT(something,
-	int mode;
-	unsigned long flags;
-	,
-	int, how_many,
-	u32, value);
+diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
+index a26bccc8b957..1ccfe2f28964 100644
+--- a/include/dt-bindings/reset/mt8195-resets.h
++++ b/include/dt-bindings/reset/mt8195-resets.h
+@@ -26,4 +26,49 @@
+ 
+ #define MT8195_TOPRGU_SW_RST_NUM               16
+ 
++/* VDOSYS1 */
++#define MT8195_VDOSYS1_SW0_RST_B_SMI_LARB2                     0
++#define MT8195_VDOSYS1_SW0_RST_B_SMI_LARB3                     1
++#define MT8195_VDOSYS1_SW0_RST_B_GALS                          2
++#define MT8195_VDOSYS1_SW0_RST_B_FAKE_ENG0                     3
++#define MT8195_VDOSYS1_SW0_RST_B_FAKE_ENG1                     4
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA0                     5
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA1                     6
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA2                     7
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA3                     8
++#define MT8195_VDOSYS1_SW0_RST_B_VPP_MERGE0                    9
++#define MT8195_VDOSYS1_SW0_RST_B_VPP_MERGE1                    10
++#define MT8195_VDOSYS1_SW0_RST_B_VPP_MERGE2                    11
++#define MT8195_VDOSYS1_SW0_RST_B_VPP_MERGE3                    12
++#define MT8195_VDOSYS1_SW0_RST_B_VPP_MERGE4                    13
++#define MT8195_VDOSYS1_SW0_RST_B_VPP2_TO_VDO1_DL_ASYNC         14
++#define MT8195_VDOSYS1_SW0_RST_B_VPP3_TO_VDO1_DL_ASYNC         15
++#define MT8195_VDOSYS1_SW0_RST_B_DISP_MUTEX                    16
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA4                     17
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA5                     18
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA6                     19
++#define MT8195_VDOSYS1_SW0_RST_B_MDP_RDMA7                     20
++#define MT8195_VDOSYS1_SW0_RST_B_DP_INTF0                      21
++#define MT8195_VDOSYS1_SW0_RST_B_DPI0                          22
++#define MT8195_VDOSYS1_SW0_RST_B_DPI1                          23
++#define MT8195_VDOSYS1_SW0_RST_B_DISP_MONITOR                  24
++#define MT8195_VDOSYS1_SW0_RST_B_MERGE0_DL_ASYNC               25
++#define MT8195_VDOSYS1_SW0_RST_B_MERGE1_DL_ASYNC               26
++#define MT8195_VDOSYS1_SW0_RST_B_MERGE2_DL_ASYNC               27
++#define MT8195_VDOSYS1_SW0_RST_B_MERGE3_DL_ASYNC               28
++#define MT8195_VDOSYS1_SW0_RST_B_MERGE4_DL_ASYNC               29
++#define MT8195_VDOSYS1_SW0_RST_B_VDO0_DSC_TO_VDO1_DL_ASYNC     30
++#define MT8195_VDOSYS1_SW0_RST_B_VDO0_MERGE_TO_VDO1_DL_ASYNC   31
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0                   32
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0                   33
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE                    34
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1                   48
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1                   49
++#define MT8195_VDOSYS1_SW1_RST_B_DISP_MIXER                    50
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC          51
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC          52
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC          53
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC          54
++#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC           55
++
+ #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8195 */
+-- 
+2.18.0
 
-perhaps? OK, that doesn't seem so nice either.
-
-Maybe
-
-struct something {
-	int mode;
-	unsigned long flags;
-	FLEX_ARRAY(
-		int, how_many,
-		u32, value
-	);
-};
-
-or so? The long and duplicated DECLARE_FLEX_ARRAY_ELEMENTS_COUNT and
-DECLARE_FLEX_ARRAY_ELEMENTS seems a bit tedious to me, at least in cases
-where the struct layout is not the most important thing (or it's already
-at the end anyway).
-
-
->     struct something *instance = NULL;
->     int rc;
-> 
->     rc = mem_to_flex_dup(&instance, byte_array, count, GFP_KERNEL);
->     if (rc)
->         return rc;
-
-This seems rather awkward, having to set it to NULL, then checking rc
-(and possibly needing a separate variable for it), etc.
-
-But I can understand how you arrived at this:
- - need to pass instance or &instance or such for typeof()
-   or offsetof() or such
- - instance = mem_to_flex_dup(instance, ...)
-   looks too much like it would actually dup 'instance', rather than
-   'byte_array'
- - if you pass &instance anyway, checking for NULL is simple and adds a
-   bit of safety
-
-but still, honestly, I don't like it. As APIs go, it feels a bit
-cumbersome and awkward to use, and you really need everyone to use this,
-and not say "uh what, I'll memcpy() instead".
-
-Maybe there should also be a realloc() version of it?
-
-
-> +/** __fas_bytes - Calculate potential size of flexible array structure
-
-I think you forgot "\n *" in many cases here after "/**".
-
-johannes
