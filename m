@@ -1,43 +1,54 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077612105
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 07:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651649584; x=1683185584;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KfgdqSk9odbLxeB6Wlsncoi63Xb5UE/LBNpGXNPnJOU=;
-  b=mzmzwLNO0IMSVEk7dnEWMIjsiqNorNdjx6lFT3XZ3szor8omf2PPeSH0
-   qUM09KcgwKsfEBgkPziXKBJ4W6LAi3igj0CCz5w19aYJCUEHxjBWBgi5o
-   L2tZxldVEGkADpXFYMsqI1jYfB+W0RlOsD6tFwM2R552Q8HiW8YYIdlQQ
-   6GXF8Pm3sgQkH6+lsq7MJQkONrq5W9z2iVSBYST2YbEIYTQPZsntuFkAJ
-   3S3JUS57bTBWGRSRCh4Ikg+VBJWgY1hTgFPdwf03JykS8gk2Xw01qcae0
-   KLliR8sKlPOr1GbLaXVOYMfMn3jr3nLA+xLg0P6e0QJ9/+hULW0hJAjGq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328231890"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="328231890"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:33:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="631845182"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 May 2022 00:32:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm9VI-000BB2-96;
-	Wed, 04 May 2022 07:32:56 +0000
-Date: Wed, 4 May 2022 15:32:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [kees:for-next/kspp 12/12] fs/gfs2/meta_io.h:44:12: error: casting
- from randomized structure pointer type 'struct address_space *' to 'struct
- gfs2_glock *'
-Message-ID: <202205041550.naKxwCBj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3425F2101
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 07:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=cTSIQdlg91RSK+na/NVKBd/Ax/ZBULg9Q/4Gx74hmBE=; b=DJ4sRfVFdZHqiUR1scXw9foZfl
+	L7yKxBEJhUhm/nN8KNGznPTfuCfQS10cTZGTZncnxpQcvHtmIibXuZIf4BWhkVTwUsXutzODCujTX
+	9ol5m6lfkrhF1XEjyiZyaKvorG5EUGu2bSqA/FcWM5LcriPRGK2tDMPLFNt4Lz0WYO0NKcTysvqe1
+	ju+XiMI9AoOmYgIRswBct3J0G8rSnfT/S/lYzMGoHVAa5UY/87fStP27Br/E5nPYN5Sh2OitDpTAx
+	CPy06b7r2hzVIO98a1HVNwlRWcw0xPwXqpEILLaa17u5ZiJGLI0PMYOMFXL3CPPGYkmCdK5kE6dIL
+	wBOgZgjg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nm9Wd-00B171-EK; Wed, 04 May 2022 07:34:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7BD913004B5;
+	Wed,  4 May 2022 09:34:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 3EF7E2029A1DC; Wed,  4 May 2022 09:34:18 +0200 (CEST)
+Date: Wed, 4 May 2022 09:34:18 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Peter Collingbourne <pcc@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@redhat.com>, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 00/21] KCFI support
+Message-ID: <YnIses89/uPLrazS@hirez.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook>
+ <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+ <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
+ <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+ <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,58 +57,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
-head:   1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-commit: 1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa [12/12] randstruct: Enable Clang support
-config: riscv-randconfig-c006-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041550.naKxwCBj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/kspp
-        git checkout 1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Tue, May 03, 2022 at 03:35:34PM -0700, Peter Collingbourne wrote:
+> On Mon, May 2, 2022 at 1:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
+> >
+> > > > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> > > > attribute or qualifier for this, such that one can mark a function
+> > > > pointer as not doing CFI.
+> > > >
+> > > > I simply doesn't make sense to have a builtin that operates on an
+> > > > expression. The whole thing is about indirect calls, IOW function
+> > > > pointers.
+> > >
+> > > I also thought an attribute would be more convenient, but the compiler
+> > > folks prefer a built-in:
+> > >
+> > > https://reviews.llvm.org/D122673
+> >
+> > That seems to mostly worry about C++ things (overload sets, template
+> > specialization, name mangling) we kernel folks don't seem to much care
+> > about.
+> >
+> > I'll stick with saying type system makes more sense to me though.
+> 
+> I'd say it's not only the C++ issues but more the "action at a
+> distance" that's implied by having this be part of the type system.
+> With this being in the function type it's hard to tell whether any
+> particular call will have CFI disabled, without needing to go and look
+> at how the function pointer is defined.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Look at how we use volatile:
 
-All errors (new ones prefixed by >>):
+	*(volatile int *)(&foo)
 
-   In file included from fs/gfs2/acl.c:23:
->> fs/gfs2/meta_io.h:44:12: error: casting from randomized structure pointer type 'struct address_space *' to 'struct gfs2_glock *'
-                   return (((struct gfs2_glock *)mapping) - 1)->gl_name.ln_sbd;
-                            ^
-   1 error generated.
+we don't use volatile on actual variable definitions (much), but instead
+cast it in at the usage site. Same can be done with this if so desired.
 
+> On the other hand, if we
+> explicitly mark up the calls with CFI disabled, the code becomes
+> easier to audit (think Rust "unsafe" blocks).
 
-vim +44 fs/gfs2/meta_io.h
+I don't know any Rust. To me Rust still looks like line noise.
 
-009d851837ab26 Steven Whitehouse 2009-12-08  39  
-009d851837ab26 Steven Whitehouse 2009-12-08  40  static inline struct gfs2_sbd *gfs2_mapping2sbd(struct address_space *mapping)
-009d851837ab26 Steven Whitehouse 2009-12-08  41  {
-009d851837ab26 Steven Whitehouse 2009-12-08  42  	struct inode *inode = mapping->host;
-009d851837ab26 Steven Whitehouse 2009-12-08  43  	if (mapping->a_ops == &gfs2_meta_aops)
-15562c439d0a18 Bob Peterson      2015-03-16 @44  		return (((struct gfs2_glock *)mapping) - 1)->gl_name.ln_sbd;
-1b2ad41214c9bf Steven Whitehouse 2014-03-31  45  	else if (mapping->a_ops == &gfs2_rgrp_aops)
-1b2ad41214c9bf Steven Whitehouse 2014-03-31  46  		return container_of(mapping, struct gfs2_sbd, sd_aspace);
-009d851837ab26 Steven Whitehouse 2009-12-08  47  	else
-009d851837ab26 Steven Whitehouse 2009-12-08  48  		return inode->i_sb->s_fs_info;
-009d851837ab26 Steven Whitehouse 2009-12-08  49  }
-b3b94faa5fe596 David Teigland    2006-01-16  50  
+> Does it seem any better to you to have this be marked up via the
+> function expression, rather than the call? The idea is that this would
+> always compile to a check-free function call, no matter what "func"
+> is:
+> 
+> __builtin_kcfi_call_unchecked(func)(args)
+> 
+> We already have this, to some degree, with KCFI as implemented: CFI
+> checks are disabled if the function expression refers to a declared
+> function. The builtin would allow overriding the decision to also
+> disable CFI checks for function expressions that use the builtin. It
+> also wouldn't preclude a type based system later on (the builtin would
+> become effectively a cast to the "unchecked" type).
 
-:::::: The code at line 44 was first introduced by commit
-:::::: 15562c439d0a1850b71aa1c0d92d1f4fb9503c8d GFS2: Move glock superblock pointer to field gl_name
-
-:::::: TO: Bob Peterson <rpeterso@redhat.com>
-:::::: CC: Bob Peterson <rpeterso@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+That's still a bit naf; you've effectively made that builtin a type-cast.
