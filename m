@@ -1,22 +1,26 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25CA2111
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 09:14:49 +0000 (UTC)
-X-UUID: e31ae5a5cefc407fa07e9f814908259d-20220504
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C0D210C
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 09:14:50 +0000 (UTC)
+X-UUID: dee0bcf400984e40976b1b86d92f0f98-20220504
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:207b983f-b10d-4cde-bdb0-d05492d7a504,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-	TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:d78974c7-85ee-4ac1-ac05-bd3f1e72e732,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: e31ae5a5cefc407fa07e9f814908259d-20220504
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.4,REQID:13bac185-20ff-4fa1-bf5b-585fc5373b5f,OB:20,L
+	OB:20,IP:0,URL:25,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ha
+	m,ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.4,REQID:13bac185-20ff-4fa1-bf5b-585fc5373b5f,OB:20,LOB
+	:20,IP:0,URL:25,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3
+	D,ACTION:quarantine,TS:100
+X-CID-META: VersionHash:faefae9,CLOUDID:218a74c7-85ee-4ac1-ac05-bd3f1e72e732,C
+	OID:f1846824bb4a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: dee0bcf400984e40976b1b86d92f0f98-20220504
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1164254497; Wed, 04 May 2022 17:14:45 +0800
+	with ESMTP id 545314738; Wed, 04 May 2022 17:14:44 +0800
 Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
  Wed, 4 May 2022 17:14:44 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
@@ -39,9 +43,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v20 07/25] soc: mediatek: add mtk-mmsys config API for mt8195 vdosys1
-Date: Wed, 4 May 2022 17:14:22 +0800
-Message-ID: <20220504091440.2052-8-nancy.lin@mediatek.com>
+Subject: [PATCH v20 01/25] dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+Date: Wed, 4 May 2022 17:14:16 +0800
+Message-ID: <20220504091440.2052-2-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220504091440.2052-1-nancy.lin@mediatek.com>
 References: <20220504091440.2052-1-nancy.lin@mediatek.com>
@@ -54,106 +58,115 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add four mmsys config APIs. The config APIs are used for config
-mmsys reg. Some mmsys regs need to be set according to the
-HW engine binding to the mmsys simultaneously.
-
-1. mtk_mmsys_merge_async_config: config merge async width/height.
-   async is used for cross-clock domain synchronization.
-2. mtk_mmsys_hdr_confing: config hdr backend async width/height.
-3. mtk_mmsys_mixer_in_config and mtk_mmsys_mixer_in_config:
-   config mixer related settings.
+Add vdosys1 RDMA definition.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
 ---
- drivers/soc/mediatek/mt8195-mmsys.h    |  6 +++++
- drivers/soc/mediatek/mtk-mmsys.c       | 35 ++++++++++++++++++++++++++
- include/linux/soc/mediatek/mtk-mmsys.h |  9 +++++++
- 3 files changed, 50 insertions(+)
+ .../display/mediatek/mediatek,mdp-rdma.yaml   | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
 
-diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-index fd7b455bd675..454944a9409c 100644
---- a/drivers/soc/mediatek/mt8195-mmsys.h
-+++ b/drivers/soc/mediatek/mt8195-mmsys.h
-@@ -75,6 +75,12 @@
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
- 
-+#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				0xe30
-+#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				0xe70
-+#define MT8195_VDO1_HDR_TOP_CFG					0xd00
-+#define MT8195_VDO1_MIXER_IN1_ALPHA				0xd30
-+#define MT8195_VDO1_MIXER_IN1_PAD				0xd40
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+new file mode 100644
+index 000000000000..ca31accb0a95
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+@@ -0,0 +1,94 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- #define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
- #define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			1
- 
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 21fb4e91bf70..1b9b44e0d9d9 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -229,6 +229,41 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
- 
-+void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height)
-+{
-+	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MERGE0_ASYNC_CFG_WD + 0x10 * idx,
-+			      ~0, height << 16 | width);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mmsys_merge_async_config);
++title: MediaTek MDP RDMA
 +
-+void mtk_mmsys_hdr_confing(struct device *dev, int be_width, int be_height)
-+{
-+	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_HDRBE_ASYNC_CFG_WD, ~0,
-+			      be_height << 16 | be_width);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mmsys_hdr_confing);
++maintainers:
++  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
++  - Philipp Zabel <p.zabel@pengutronix.de>
 +
-+void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
-+			       u8 mode, u32 biwidth)
-+{
-+	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
++description:
++  The MediaTek MDP RDMA stands for Read Direct Memory Access.
++  It provides real time data to the back-end panel driver, such as DSI,
++  DPI and DP_INTF.
++  It contains one line buffer to store the sufficient pixel data.
++  RDMA device node must be siblings to the central MMSYS_CONFIG node.
++  For a description of the MMSYS_CONFIG binding, see
++  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml for details.
 +
-+	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_ALPHA + (idx - 1) * 4, ~0,
-+			      alpha << 16 | alpha);
-+	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_HDR_TOP_CFG, BIT(19 + idx),
-+			      alpha_sel << (19 + idx));
-+	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
-+			      GENMASK(31, 16) | GENMASK(1, 0), biwidth << 16 | mode);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_config);
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: mediatek,mt8195-vdo1-rdma
 +
-+void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap)
-+{
-+	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
-+			      BIT(4), channel_swap << 4);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_channel_swap);
++  reg:
++    maxItems: 1
 +
- static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned long id,
- 				  bool assert)
- {
-diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-index b4388ba43341..fe620929b0f9 100644
---- a/include/linux/soc/mediatek/mtk-mmsys.h
-+++ b/include/linux/soc/mediatek/mtk-mmsys.h
-@@ -73,4 +73,13 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
- 			      enum mtk_ddp_comp_id cur,
- 			      enum mtk_ddp_comp_id next);
- 
-+void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height);
++  interrupts:
++    maxItems: 1
 +
-+void mtk_mmsys_hdr_confing(struct device *dev, int be_width, int be_height);
++  power-domains:
++    description: A phandle and PM domain specifier as defined by bindings of
++      the power controller specified by phandle. See
++      Documentation/devicetree/bindings/power/power-domain.yaml for details.
 +
-+void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
-+			       u8 mode, u32 biwidth);
++  clocks:
++    items:
++      - description: RDMA Clock
 +
-+void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap);
++  iommus:
++    description:
++      This property should point to the respective IOMMU block with master port as argument,
++      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
 +
- #endif /* __MTK_MMSYS_H */
++  mediatek,gce-client-reg:
++    description:
++      The register of display function block to be set by gce. There are 4 arguments,
++      such as gce node, subsys id, offset and register size. The subsys id that is
++      mapping to the register of display function blocks is defined in the gce header
++      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      items:
++        - description: phandle of GCE
++        - description: GCE subsys id
++        - description: register offset
++        - description: register size
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - power-domains
++  - clocks
++  - iommus
++  - mediatek,gce-client-reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/power/mt8195-power.h>
++    #include <dt-bindings/gce/mt8195-gce.h>
++    #include <dt-bindings/memory/mt8195-memory-port.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        vdo1_rdma0: mdp-rdma@1c104000 {
++            compatible = "mediatek,mt8195-vdo1-rdma";
++            reg = <0 0x1c104000 0 0x1000>;
++            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
++            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
++            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
++            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
++            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000 0x1000>;
++        };
++    };
 -- 
 2.18.0
 
