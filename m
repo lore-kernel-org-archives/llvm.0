@@ -1,233 +1,101 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BBF20E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:37:37 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id n8so337696plh.1
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 20:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lsBVjxx2frcPFNjY4/BLqdzh7cys7mpO3LyMH5LAbSE=;
-        b=e/seADFb6dKCy5O35I2lb3QkGM1U1AG+HWJjIUEuWUaLYiQ/bRCqVwsL3BCOvWYEuK
-         9qpY1aU7RmqPGGBT5JUv2H6Jc6siGFaT+PVsx+FN+n4iHis5NM0gOyiK9HY2IIWzLhh4
-         mk3V/alwvU0/DDln8pB7kZALicerW3KUceFLU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lsBVjxx2frcPFNjY4/BLqdzh7cys7mpO3LyMH5LAbSE=;
-        b=f89wvRTmaSIdSPqwMOYfLwM2roywuUOjr0hmcbHFac7SGnhK/vDKEiZzgUIQUnEoGT
-         mk1zFUphJkVCjhzRxphLiCfy4Fsy3hh7jKQUUNvXeAwqvJ3W7I5zpBoAeNw493Fyd0xz
-         eWV4OjyydVu3g2LAdNZMgDXLah+niyCekcRdm4eJTG9wklBMCq/zv4ZSFQShUAorPHqE
-         UkYND+BCLwR+P4jvYmHIu9ED1Qh0sD6+B2ZvLC2iRlX+7h7HuDkv9zfkYnMVgYmxlMrt
-         HnTmc3bwt8FWlz6DoLXmd/UvZ/46irw1Sj09ljKf/OUYaKEJJoi6mBDQ2f/od0t1PkWa
-         QJMg==
-X-Gm-Message-State: AOAM53148svz+Q/97l6z8LjTCCpGj27WUKy4XmjWfZ5ETK4MtXC8rR6k
-	hSJhsAtWThBOMQPqDcTIFUsptw==
-X-Google-Smtp-Source: ABdhPJw42Y4zw7XGLJ0qL8m2iK8R/sg3Y/yQJpglfujQWmDGz21UKIQOVg7Md/ZATtyrGT1c7jNF4A==
-X-Received: by 2002:a17:90b:1b44:b0:1dc:315f:4510 with SMTP id nv4-20020a17090b1b4400b001dc315f4510mr8282445pjb.28.1651635456924;
-        Tue, 03 May 2022 20:37:36 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k23-20020a170902ba9700b0015e8d4eb1fesm7117388pls.72.2022.05.03.20.37.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 20:37:36 -0700 (PDT)
-Date: Tue, 3 May 2022 20:37:35 -0700
-From: Kees Cook <keescook@chromium.org>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Rich Felker <dalias@aerifal.cx>,
-	Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Gross <agross@kernel.org>, Andy Lavr <andy.lavr@gmail.com>,
-	Arend van Spriel <aspriel@gmail.com>,
-	Baowen Zheng <baowen.zheng@corigine.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Bradley Grove <linuxdrivers@attotech.com>,
-	brcm80211-dev-list.pdl@broadcom.com,
-	Christian Brauner <brauner@kernel.org>,
-	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-	Christian Lamparter <chunkeey@googlemail.com>,
-	Chris Zankel <chris@zankel.net>,
-	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	David Gow <davidgow@google.com>,
-	David Howells <dhowells@redhat.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eli Cohen <elic@nvidia.com>, Eric Paris <eparis@parisplace.org>,
-	Eugeniu Rosca <erosca@de.adit-jv.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Francis Laniel <laniel_francis@privacyrequired.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Franky Lin <franky.lin@broadcom.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Gregory Greenman <gregory.greenman@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Hante Meuleman <hante.meuleman@broadcom.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Hulk Robot <hulkci@huawei.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	James Morris <jmorris@namei.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jens Axboe <axboe@kernel.dk>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>,
-	Kalle Valo <kvalo@kernel.org>, Keith Packard <keithp@keithp.com>,
-	keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
-	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Lee Jones <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	linux1394-devel@lists.sourceforge.net,
-	linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Louis Peens <louis.peens@corigine.com>,
-	Luca Coelho <luciano.coelho@intel.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Mark Brown <broonie@kernel.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Max Filippov <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>,
-	Muchun Song <songmuchun@bytedance.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	SHA-cyfmac-dev-list@infineon.com,
-	Simon Horman <simon.horman@corigine.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Stefan Richter <stefanr@s5r6.in-berlin.de>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>,
-	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-	Udipto Goswami <quic_ugoswami@quicinc.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
-	xen-devel@lists.xenproject.org,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 01/32] netlink: Avoid memcpy() across flexible array
- boundary
-Message-ID: <202205032027.B2A9FB4AA@keescook>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-2-keescook@chromium.org>
- <20220504033105.GA13667@embeddedor>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B25320E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:40:08 +0000 (UTC)
+X-UUID: 23a483dc1b82470ab70f394d42308179-20220504
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:8e621abb-c534-4821-b6f8-ebaec5a25666,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:8e621abb-c534-4821-b6f8-ebaec5a25666,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+	N:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:2fe49e2f-6199-437e-8ab4-9920b4bc5b76,C
+	OID:31e3b17f8134,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: 23a483dc1b82470ab70f394d42308179-20220504
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1004933582; Wed, 04 May 2022 11:39:55 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 11:39:54 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 4 May 2022 11:39:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 4 May 2022 11:39:53 +0800
+Message-ID: <334c76e4d22ed6de34e03a6c5b639bcd1ddf28e1.camel@mediatek.com>
+Subject: Re: [PATCH v19 04/25] soc: mediatek: add mtk-mmsys ethdr and
+ mdp_rdma components
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Wed, 4 May 2022 11:39:53 +0800
+In-Reply-To: <20220503102345.22817-5-nancy.lin@mediatek.com>
+References: <20220503102345.22817-1-nancy.lin@mediatek.com>
+	 <20220503102345.22817-5-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504033105.GA13667@embeddedor>
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-On Tue, May 03, 2022 at 10:31:05PM -0500, Gustavo A. R. Silva wrote:
-> On Tue, May 03, 2022 at 06:44:10PM -0700, Kees Cook wrote:
-> [...]
-> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> > index 1b5a9c2e1c29..09346aee1022 100644
-> > --- a/net/netlink/af_netlink.c
-> > +++ b/net/netlink/af_netlink.c
-> > @@ -2445,7 +2445,10 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
-> >  			  NLMSG_ERROR, payload, flags);
-> >  	errmsg = nlmsg_data(rep);
-> >  	errmsg->error = err;
-> > -	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-> > +	errmsg->msg = *nlh;
-> > +	if (payload > sizeof(*errmsg))
-> > +		memcpy(errmsg->msg.nlmsg_payload, nlh->nlmsg_payload,
-> > +		       nlh->nlmsg_len - sizeof(*nlh));
+Hi, Nancy:
+
+On Tue, 2022-05-03 at 18:23 +0800, Nancy.Lin wrote:
+> Add new mmsys component: ethdr_mixer and mdp_rdma. These components
+> will
+> use in mt8195 vdosys1.
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
 > 
-> They have nlmsg_len()[1] for the length of the payload without the header:
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> ---
+>  include/linux/soc/mediatek/mtk-mmsys.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> /**
->  * nlmsg_len - length of message payload
->  * @nlh: netlink message header
->  */
-> static inline int nlmsg_len(const struct nlmsghdr *nlh)
-> {
-> 	return nlh->nlmsg_len - NLMSG_HDRLEN;
-> }
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
+> b/include/linux/soc/mediatek/mtk-mmsys.h
+> index fb719fd1281c..b4388ba43341 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -28,7 +28,16 @@ enum mtk_ddp_comp_id {
+>  	DDP_COMPONENT_DSI1,
+>  	DDP_COMPONENT_DSI2,
+>  	DDP_COMPONENT_DSI3,
+> +	DDP_COMPONENT_ETHDR_MIXER,
+>  	DDP_COMPONENT_GAMMA,
+> +	DDP_COMPONENT_MDP_RDMA0,
+> +	DDP_COMPONENT_MDP_RDMA1,
+> +	DDP_COMPONENT_MDP_RDMA2,
+> +	DDP_COMPONENT_MDP_RDMA3,
+> +	DDP_COMPONENT_MDP_RDMA4,
+> +	DDP_COMPONENT_MDP_RDMA5,
+> +	DDP_COMPONENT_MDP_RDMA6,
+> +	DDP_COMPONENT_MDP_RDMA7,
+>  	DDP_COMPONENT_MERGE0,
+>  	DDP_COMPONENT_MERGE1,
+>  	DDP_COMPONENT_MERGE2,
 
-Oh, hm, yeah, that would be much cleaner. The relationship between
-"payload" and nlmsg_len is confusing in here. :)
-
-So, this should be simpler:
-
--	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-+	errmsg->msg = *nlh;
-+	memcpy(errmsg->msg.nlmsg_payload, nlh->nlmsg_payload, nlmsg_len(nlh));
-
-It's actually this case that triggered my investigation in __bos(1)'s
-misbehavior around sub-structs, since this case wasn't getting silenced:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
-
-It still feels like it should be possible to get this right without
-splitting the memcpy, though. Hmpf.
-
-> (would that function use some sanitization, though? what if nlmsg_len is
-> somehow manipulated to be less than NLMSG_HDRLEN?...)
-
-Maybe something like:
-
-static inline int nlmsg_len(const struct nlmsghdr *nlh)
-{
-	if (WARN_ON(nlh->nlmsg_len < NLMSG_HDRLEN))
-		return 0;
-	return nlh->nlmsg_len - NLMSG_HDRLEN;
-}
-
-> Also, it seems there is at least one more instance of this same issue:
-> 
-> diff --git a/net/netfilter/ipset/ip_set_core.c b/net/netfilter/ipset/ip_set_core.c
-> index 16ae92054baa..d06184b94af5 100644
-> --- a/net/netfilter/ipset/ip_set_core.c
-> +++ b/net/netfilter/ipset/ip_set_core.c
-> @@ -1723,7 +1723,8 @@ call_ad(struct net *net, struct sock *ctnl, struct sk_buff *skb,
->                                   nlh->nlmsg_seq, NLMSG_ERROR, payload, 0);
->                 errmsg = nlmsg_data(rep);
->                 errmsg->error = ret;
-> -               memcpy(&errmsg->msg, nlh, nlh->nlmsg_len);
-> +               errmsg->msg = *nlh;
-> +               memcpy(errmsg->msg.nlmsg_payload, nlh->nlmsg_payload, nlmsg_len(nlh));
-
-Ah, yes, nice catch!
-
->                 cmdattr = (void *)&errmsg->msg + min_len;
-> 
->                 ret = nla_parse(cda, IPSET_ATTR_CMD_MAX, cmdattr,
-> 
-> --
-> Gustavo
-> 
-> [1] https://elixir.bootlin.com/linux/v5.18-rc5/source/include/net/netlink.h#L577
-
--- 
-Kees Cook
