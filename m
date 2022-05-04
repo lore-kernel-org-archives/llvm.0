@@ -1,42 +1,53 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F83F33F6
-	for <llvm@lists.linux.dev>; Tue,  3 May 2022 23:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5932A17C9
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651621653; x=1683157653;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/hX5NeeBdLMGWUILQNv60Zwp3g5arz4ofV+yCSsZZlM=;
-  b=hxdTlMDN8HP1gt/5FmeiRxnm6smGpS+IbK/EGfgPj/IF2X2iPbOWTjFj
-   A4P0fldpAvJJTqCVkKbgyjvA9qeRgrxbtNC8vWomRGqQElAvH742tYst4
-   0Cz2dkjAjtyLJ1OGVew5qegTxlrJ6QK7+FC2s515so5HWKvAI9z7YDGQQ
-   rTf3JQfTEE0ZbkRXeC9EKNAqVJ4CUe6ZYjgQ1dIcVH/Us/obbxH4dP1De
-   d0s8oonUPPf2JrwWSn05bi0e2/12MLjgXMisQoQSpTEpN4UDEjj/rfIxv
-   p9P2wMeT4mIgwvjostpBdgAhrYO2EmrihN0PNR1WPHDbG+rGOIRcnf9I6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266464833"
+  t=1651627180; x=1683163180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i4MxkxPDNSGtzMvlquogsvEU8lFtzY2vpeFrQnL7YOU=;
+  b=T4Jm4+QUd0EKkiTIeC4QYnrSKvkkxrEJSaQfyeZgZ9L9zG3EFSsa9yHk
+   DSgiavyrvLSH84TntMhkJHzlBZdKcGTkqxkUaeDOqv9pwTP5zWSdd2kAf
+   ZCIRFWn4/vlwo9nfNjnyv/oO/weFUCNUmgTxeszhSW7ivSmEqj0GiCfyi
+   MZen+HC5eWxzeGMyCTKA5X9vMTcpBsLSmCOPOocc59dQ4/ThHEDPNIhJq
+   +oA8iaen7uH5hrNaCG3CQWs36QmovjsWKPNTA+4MD63SGuEP0xJGLXOC+
+   DhzEPvVR/1AeVCPnJ/ljFiBjgAT3rfYmdciWqXJM1GmZS2wszYQr1N0mV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328176807"
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="266464833"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 16:47:33 -0700
+   d="scan'208";a="328176807"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 18:19:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="547969506"
+   d="scan'208";a="516817108"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 16:47:30 -0700
+  by orsmga003.jf.intel.com with ESMTP; 03 May 2022 18:19:33 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nm2Er-000At6-TR;
-	Tue, 03 May 2022 23:47:29 +0000
-Date: Wed, 4 May 2022 07:47:28 +0800
+	id 1nm3fw-000Avv-BI;
+	Wed, 04 May 2022 01:19:32 +0000
+Date: Wed, 4 May 2022 09:19:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dipen Patel <dipenp@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: [arm-tegra:hte/for-next 2/10] drivers/hte/hte.c:616:6: warning:
- variable 'ei' is used uninitialized whenever 'if' condition is true
-Message-ID: <202205040735.Qhz7Bads-lkp@intel.com>
+To: Guowei Du <duguoweisz@gmail.com>, jack@suse.cz
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, amir73il@gmail.com,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	viro@zeniv.linux.org.uk, jmorris@namei.org, serge@hallyn.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org,
+	linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, paul@paul-moore.com,
+	stephen.smalley.work@gmail.com, eparis@parisplace.org,
+	keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+	tony.luck@intel.com, selinux@vger.kernel.org, duguoweisz@gmail.com,
+	duguowei <duguowei@xiaomi.com>
+Subject: Re: [PATCH] fsnotify: add generic perm check for unlink/rmdir
+Message-ID: <202205040959.SAV6vlzH-lkp@intel.com>
+References: <20220503183750.1977-1-duguoweisz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,140 +56,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220503183750.1977-1-duguoweisz@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git hte/for-next
-head:   cedbe14082d169f4c1136c70c5170a76bd9a076a
-commit: a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f [2/10] drivers: Add hardware timestamp engine (HTE)
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205040735.Qhz7Bads-lkp@intel.com/config)
+Hi Guowei,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v5.18-rc5]
+[cannot apply to jack-fs/fsnotify next-20220503]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guowei-Du/fsnotify-add-generic-perm-check-for-unlink-rmdir/20220504-024310
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+config: hexagon-randconfig-r041-20220501 (https://download.01.org/0day-ci/archive/20220504/202205040959.SAV6vlzH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git/commit/?id=a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f
-        git remote add arm-tegra https://git.kernel.org/pub/scm/linux/kernel/git/swarren/linux-tegra.git
-        git fetch --no-tags arm-tegra hte/for-next
-        git checkout a15a6cd5adac70f8ea9188b55ff0b2899cc34e0f
+        # https://github.com/intel-lab-lkp/linux/commit/6f635019bbd2ab22a64e03164c8812a46531966e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guowei-Du/fsnotify-add-generic-perm-check-for-unlink-rmdir/20220504-024310
+        git checkout 6f635019bbd2ab22a64e03164c8812a46531966e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hte/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hte/hte.c:616:6: warning: variable 'ei' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (ret < 0)
-               ^~~~~~~
-   drivers/hte/hte.c:630:13: note: uninitialized use occurs here
-           module_put(ei->gdev->owner);
-                      ^~
-   drivers/hte/hte.c:616:2: note: remove the 'if' if its condition is always false
-           if (ret < 0)
-           ^~~~~~~~~~~~
-   drivers/hte/hte.c:595:6: warning: variable 'ei' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!gdev->chip) {
-               ^~~~~~~~~~~
-   drivers/hte/hte.c:630:13: note: uninitialized use occurs here
-           module_put(ei->gdev->owner);
-                      ^~
-   drivers/hte/hte.c:595:2: note: remove the 'if' if its condition is always false
-           if (!gdev->chip) {
-           ^~~~~~~~~~~~~~~~~~
-   drivers/hte/hte.c:570:24: note: initialize the variable 'ei' to silence this warning
-           struct hte_ts_info *ei;
-                                 ^
-                                  = NULL
-   2 warnings generated.
+>> security/security.c:1169:28: error: passing 'const struct path *' to parameter of type 'struct path *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           return fsnotify_path_perm(dir, dentry, MAY_RMDIR);
+                                     ^~~
+   include/linux/fsnotify.h:83:51: note: passing argument to parameter 'path' here
+   static inline int fsnotify_path_perm(struct path *path, struct dentry *dentry, __u32 mask)
+                                                     ^
+   security/security.c:1180:28: error: passing 'const struct path *' to parameter of type 'struct path *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           return fsnotify_path_perm(dir, dentry, MAY_UNLINK);
+                                     ^~~
+   include/linux/fsnotify.h:83:51: note: passing argument to parameter 'path' here
+   static inline int fsnotify_path_perm(struct path *path, struct dentry *dentry, __u32 mask)
+                                                     ^
+   2 errors generated.
 
 
-vim +616 drivers/hte/hte.c
+vim +1169 security/security.c
 
-   551	
-   552	/**
-   553	 * hte_ts_get() - The function to initialize and obtain HTE desc.
-   554	 *
-   555	 * The function initializes the consumer provided HTE descriptor. If consumer
-   556	 * has device tree node, index is used to parse the line id and other details.
-   557	 * The function needs to be called before using any request APIs.
-   558	 *
-   559	 * @dev: HTE consumer/client device, used in case of parsing device tree node.
-   560	 * @desc: Pre-allocated timestamp descriptor.
-   561	 * @index: The index will be used as an index to parse line_id from the
-   562	 * device tree node if node is present.
-   563	 *
-   564	 * Context: Holds mutex lock.
-   565	 * Returns: Returns 0 on success or negative error code on failure.
-   566	 */
-   567	int hte_ts_get(struct device *dev, struct hte_ts_desc *desc, int index)
-   568	{
-   569		struct hte_device *gdev;
-   570		struct hte_ts_info *ei;
-   571		const struct fwnode_handle *fwnode;
-   572		struct of_phandle_args args;
-   573		u32 xlated_id;
-   574		int ret;
-   575		bool free_name;
-   576	
-   577		if (!desc)
-   578			return -EINVAL;
-   579	
-   580		fwnode = dev ? dev_fwnode(dev) : NULL;
-   581	
-   582		if (is_of_node(fwnode))
-   583			gdev = hte_of_get_dev(dev, desc, index, &args, &free_name);
-   584		else
-   585			gdev = hte_get_dev(desc);
-   586	
-   587		if (IS_ERR(gdev)) {
-   588			pr_err("%s() no hte dev found\n", __func__);
-   589			return PTR_ERR(gdev);
-   590		}
-   591	
-   592		if (!try_module_get(gdev->owner))
-   593			return -ENODEV;
-   594	
-   595		if (!gdev->chip) {
-   596			pr_err("%s(): requested id does not have provider\n",
-   597			       __func__);
-   598			ret = -ENODEV;
-   599			goto out;
-   600		}
-   601	
-   602		if (is_of_node(fwnode)) {
-   603			if (!gdev->chip->xlate_of)
-   604				ret = -EINVAL;
-   605			else
-   606				ret = gdev->chip->xlate_of(gdev->chip, &args,
-   607							   desc, &xlated_id);
-   608		} else {
-   609			if (!gdev->chip->xlate_plat)
-   610				ret = -EINVAL;
-   611			else
-   612				ret = gdev->chip->xlate_plat(gdev->chip, desc,
-   613							     &xlated_id);
-   614		}
-   615	
- > 616		if (ret < 0)
-   617			goto out;
-   618	
-   619		ei = &gdev->ei[xlated_id];
-   620	
-   621		ret = hte_bind_ts_info_locked(ei, desc, xlated_id);
-   622		if (ret)
-   623			goto out;
-   624	
-   625		ei->free_attr_name = free_name;
-   626	
-   627		return 0;
-   628	
-   629	out:
-   630		module_put(ei->gdev->owner);
-   631	
-   632		return ret;
-   633	}
-   634	EXPORT_SYMBOL_GPL(hte_ts_get);
-   635	
+  1160	
+  1161	int security_path_rmdir(const struct path *dir, struct dentry *dentry)
+  1162	{
+  1163		int ret;
+  1164		if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+  1165			return 0;
+  1166		ret = call_int_hook(path_rmdir, 0, dir, dentry);
+  1167		if (ret)
+  1168			return ret;
+> 1169		return fsnotify_path_perm(dir, dentry, MAY_RMDIR);
+  1170	}
+  1171	
 
 -- 
 0-DAY CI Kernel Test Service
