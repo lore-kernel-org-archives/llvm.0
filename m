@@ -1,120 +1,344 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72957A
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 06:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651647117; x=1683183117;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WUdxltnjTGYi8GJimo0jo/o4IQzWZJE09Y0WFyBoURo=;
-  b=fq5SUDa8/kxtta2D4KcNxpzf1rPHcaB81Xy72O0PUm/i/hftadQuI9vN
-   fJRhwix9C/nckXT9lYR6DuV7BV8Scdzsu7YxL+zpMOwNkO1qCRcu4Go0o
-   xLGdtYtooLFGXKbKH3nZu6nkurepqdTSKHtIa0zAunojghZQX1ZOMPLJK
-   +2+niygiNPGrbrnF+tUKh8wea68xpITVwY/Q9nuPRP1nv+w32l5ezwDe3
-   IS6fZ6MwTolPR0IipVZNDdvd32Wkk9PJYGSh279LQWfcdODtnj6zLc6BZ
-   yf1IzmMp7DhJSseghlx1wiStad77zbaN0ssDA8KyII9DRDm2SqW7aVm4E
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="265269706"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="265269706"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 23:51:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="599405338"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 May 2022 23:51:55 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm8ra-000B9f-JT;
-	Wed, 04 May 2022 06:51:54 +0000
-Date: Wed, 4 May 2022 14:51:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc4-stacked-bridges 2/2] net/bridge/br_input.c:45:7:
- error: no member named 'offload_fwd_mark' in 'struct sk_buff'
-Message-ID: <202205041436.UX6XOeS0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B112101
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 07:11:45 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id 202so474269pgc.9
+        for <llvm@lists.linux.dev>; Wed, 04 May 2022 00:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=52Ofjcc0wakVR7XsYhREwkaBOLIZ5tcP8RWAoexv5a8=;
+        b=BbmFkAbU/EHznY10Yg44fH8Na5TMQzvAcX6Brnn7nJmxn/qWJaH9IKjRD4vrdSdu44
+         obmj9j1ShPn8jhSRYTBSEE6Wfm4kgL4K6Uaxd22BLDOVrnRUOVgmbzdsuhVi0Br+NMIi
+         BvXrfHu/GU3W1GRQbEgIMBEVsSFAKiw31duI+piU7uKb9N9tIaQjBAI/xnJWHh/R1Z5J
+         XBDr+3DAX2p9hw9xi9F7arJ2s/GqUCAqfiAxdw5gOQUZZadjSw9f1aOcOy4oYcpS6beH
+         TZ73azXsfLtFhry17RYUuX61Y9tCRH0ylF0EbNyb0+tn0uiJ38OWm9+Q5ZgUEQEIqm6t
+         zfLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=52Ofjcc0wakVR7XsYhREwkaBOLIZ5tcP8RWAoexv5a8=;
+        b=pJuW/SddKdQagYOIyld1Fiy7It4V8Z8SxVXzGSyEnWCq0Kz7SoAbXOJRXIHSdpcmuo
+         PPwAKS25JS6EenPBQRVL5HzcBpx0hdDRBdrIBLHGcvijzPEPE24ACSMmZIiilkwoM2gf
+         KSWPdbnlNUShK9xT/WZPfGEWWGMQ4lWuawJHZcyYGSyFSL5N+K/3oH0yKeFtYV3hsvYC
+         BK/zrbCjstcoU6za7FaeTLNjVVJT6zg7GXs9npQNFMWdTbsYDArE11L3MqgOsfFWMFme
+         rPuk3QtGgu5WT2OaEUDfx3VjPodwao8qSMMg74EVEMY9sFiLn+Rojs1SJjmkisSaSyH2
+         dSvA==
+X-Gm-Message-State: AOAM5308+ZqonPRAJjCCX8Z9LrPkbN3VGZ8DSbvyYyTRegZv723ZTbqk
+	fZsKRBcq2uDySJUZ3+pJ7rBChw==
+X-Google-Smtp-Source: ABdhPJwWxy/aMf3pnDbi+ni4M1fRwbvKXbt/my2mj97f0S9HdB09RGkQOWXNEOxkWS+D9xaiBGmplA==
+X-Received: by 2002:aa7:962e:0:b0:50d:5ed8:aa23 with SMTP id r14-20020aa7962e000000b0050d5ed8aa23mr19419109pfg.43.1651648304936;
+        Wed, 04 May 2022 00:11:44 -0700 (PDT)
+Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id e9-20020a635449000000b003c14af505edsm11471085pgm.5.2022.05.04.00.11.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 00:11:43 -0700 (PDT)
+Message-ID: <5cb86579-5e75-ac46-8f76-fac9ac405c47@ozlabs.ru>
+Date: Wed, 4 May 2022 17:11:37 +1000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/lunn/linux.git v5.18-rc4-stacked-bridges
-head:   eab6004bc4f6b012db3b6e1fac75f4911662baf5
-commit: eab6004bc4f6b012db3b6e1fac75f4911662baf5 [2/2] net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
-config: x86_64-randconfig-a011-20220502 (https://download.01.org/0day-ci/archive/20220504/202205041436.UX6XOeS0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc4-stacked-bridges
-        git checkout eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/bridge/br_input.c:45:7: error: no member named 'offload_fwd_mark' in 'struct sk_buff'
-           skb->offload_fwd_mark = false;
-           ~~~  ^
-   1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [PATCH kernel] powerpc/llvm/lto: Allow LLVM LTO builds
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ Nicholas Piggin <npiggin@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Sathvika Vasireddy
+ <sv@linux.ibm.com>, Russell Currey <ruscur@russell.cc>,
+ "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+ Sami Tolvanen <samitolvanen@google.com>
+References: <20220429064547.2334280-1-aik@ozlabs.ru>
+ <CAKwvOdmUMhqhQhDCpWjMNiQQPvwOJB9MbUkF3RR0BL+H+DagmA@mail.gmail.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <CAKwvOdmUMhqhQhDCpWjMNiQQPvwOJB9MbUkF3RR0BL+H+DagmA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +45 net/bridge/br_input.c
 
-    32	
-    33	static int br_pass_frame_up(struct sk_buff *skb)
-    34	{
-    35		struct net_device *indev, *brdev = BR_INPUT_SKB_CB(skb)->brdev;
-    36		struct net_bridge *br = netdev_priv(brdev);
-    37		struct net_bridge_vlan_group *vg;
-    38	
-    39		dev_sw_netstats_rx_add(brdev, skb->len);
-    40	
-    41		vg = br_vlan_group_rcu(br);
-    42	
-    43		/* Reset the offload_fwd_mark because there could be a stacked bridge
-    44		 * above. */
-  > 45		skb->offload_fwd_mark = false;
-    46	
-    47		/* Bridge is just like any other port.  Make sure the
-    48		 * packet is allowed except in promisc mode when someone
-    49		 * may be running packet capture.
-    50		 */
-    51		if (!(brdev->flags & IFF_PROMISC) &&
-    52		    !br_allowed_egress(vg, skb)) {
-    53			kfree_skb(skb);
-    54			return NET_RX_DROP;
-    55		}
-    56	
-    57		indev = skb->dev;
-    58		skb->dev = brdev;
-    59		skb = br_handle_vlan(br, NULL, vg, skb);
-    60		if (!skb)
-    61			return NET_RX_DROP;
-    62		/* update the multicast stats if the packet is IGMP/MLD */
-    63		br_multicast_count(br, NULL, skb, br_multicast_igmp_type(skb),
-    64				   BR_MCAST_DIR_TX);
-    65	
-    66		return NF_HOOK(NFPROTO_BRIDGE, NF_BR_LOCAL_IN,
-    67			       dev_net(indev), NULL, skb, indev, NULL,
-    68			       br_netif_receive_skb);
-    69	}
-    70	
+On 5/4/22 07:21, Nick Desaulniers wrote:
+> On Thu, Apr 28, 2022 at 11:46 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+>>
+>> This enables LTO_CLANG builds on POWER with the upstream version of
+>> LLVM.
+>>
+>> LTO optimizes the output vmlinux binary and this may affect the FTP
+>> alternative section if alt branches use "bc" (Branch Conditional) which
+>> is limited by 16 bit offsets. This shows up in errors like:
+>>
+>> ld.lld: error: InputSection too large for range extension thunk vmlinux.o:(__ftr_alt_97+0xF0)
+>>
+>> This works around the issue by replacing "bc" in FTR_SECTION_ELSE with
+>> "b" which allows 26 bit offsets.
+>>
+>> This catches the problem instructions in vmlinux.o before it LTO'ed:
+>>
+>> $ objdump -d -M raw -j __ftr_alt_97 vmlinux.o | egrep '\S+\s*\<bc\>'
+>>    30:   00 00 82 40     bc      4,eq,30 <__ftr_alt_97+0x30>
+>>    f0:   00 00 82 40     bc      4,eq,f0 <__ftr_alt_97+0xf0>
+>>
+>> This allows LTO builds for ppc64le_defconfig plus LTO options.
+>> Note that DYNAMIC_FTRACE/FUNCTION_TRACER is not supported by LTO builds
+>> but this is not POWERPC-specific.
+> 
+> $ ARCH=powerpc make LLVM=1 -j72 ppc64le_defconfig
+> $ ARCH=powerpc make LLVM=1 -j72 menuconfig
+> <disable FTRACE, enable LTO_CLANG_THIN>
+> $ ARCH=powerpc make LLVM=1 -j72
+> ...
+>    VDSO64L arch/powerpc/kernel/vdso/vdso64.so.dbg
+> /usr/bin/powerpc64le-linux-gnu-ld:
+> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: error
+> loading plugin:
+> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: cannot open
+> shared object file: No such file or directory
+> clang-15: error: linker command failed with exit code 1 (use -v to see
+> invocation)
+> make[1]: *** [arch/powerpc/kernel/vdso/Makefile:67:
+> arch/powerpc/kernel/vdso/vdso64.so.dbg] Error 1
+> 
+> Looks like LLD isn't being invoked correctly to link the vdso.
+> Probably need to revisit
+> https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google.com/
+> 
+> How were you working around this issue? Perhaps you built clang to
+> default to LLD? (there's a cmake option for that)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+I was not.
+
+Just did clean build like this:
+
+mkdir ~/pbuild/llvm/llvm-lto-latest-cleanbuild
+
+cd ~/pbuild/llvm/llvm-lto-latest-cleanbuild
+
+CC='clang' CXX='clang++' cmake -G Ninja 
+-DLLVM_ENABLE_PROJECTS="clang;lld" -DLLVM_TARGETS_TO_BUILD=PowerPC 
+~/p/llvm/llvm-latest/llvm/ -DLLVM_ENABLE_LTO=ON   -DLLVM_ENABLE_LLD=ON 
+-DLLVM_BINUTILS_INCDIR=/usr/include -DCMAKE_BUILD_TYPE=Release
+
+ninja -j 50
+
+It builds fine:
+
+[fstn1-p1 ~/p/kernels-llvm/llvm]$ find 
+/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/ -iname LLVMgold.so 
+-exec ls -l {} \;
+-rwxrwxr-x 1 aik aik 39032840 May  4 13:06 
+/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/lib/LLVMgold.so 
+
+
+
+
+
+and then in the kernel tree:
+
+
+PATH=/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/bin:$PATH make 
+-j64 
+O=/home/aik/pbuild/kernels-llvm/llvm-wip-llvm-latest-lto-full-cleanbuild/ 
+ARCH=powerpc LLVM_IAS=1 CC=clang LLVM=1 ppc64le_defconfig
+
+then enabled LTO in that .config and then just built "vmlinux":
+
+
+[fstn1-p1 ~/p/kernels-llvm/llvm]$ ls -l 
+/home/aik/pbuild/kernels-llvm/llvm-wip-llvm-latest-lto-full-cleanbuild/vmlinux 
+
+-rwxrwxr-x 1 aik aik 48145272 May  4 17:00 
+/home/aik/pbuild/kernels-llvm/llvm-wip-llvm-latest-lto-full-cleanbuild/vmlinux
+
+which boots under qemu, the kernel version is:
+
+Preparing to boot Linux version 5.18.0-rc2_0bb153baeff0_a+fstn1 
+(aik@fstn1-p1) (clang version 15.0.0 (https://github.com/llvm/llvm-proje
+ct.git e29dc0c6fde284e7f05aa5f45b05c629c9fad295), LLD 15.0.0) #1 SMP Wed 
+May 4 16:54:16 AEST 2022
+
+
+
+Before I got to this point, I did many unspeakable things to that build 
+system so may be it is screwed in some way but I cannot pinpoint it.
+
+The installed clang/lld is 12.0.0-3ubuntu1~21.04.2 and 
+-DLLVM_ENABLE_LLD=ON from cmake is to accelerate rebuilding of LLVM (for 
+bisecting). I'll try without it now, just takes ages to complete.
+
+> 
+> Perhaps for now I should just send:
+> ```
+> diff --git a/arch/powerpc/kernel/vdso/Makefile
+> b/arch/powerpc/kernel/vdso/Makefile
+> index 954974287ee7..8762e6513683 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -55,6 +55,11 @@ AS32FLAGS := -D__VDSO32__ -s
+>   CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
+>   AS64FLAGS := -D__VDSO64__ -s
+> 
+> +ifneq ($(LLVM),)
+> +CC32FLAGS += -fuse-ld=lld
+> +CC64FLAGS += -fuse-ld=lld
+> +endif
+> +
+>   targets += vdso32.lds
+>   CPPFLAGS_vdso32.lds += -P -C -Upowerpc
+>   targets += vdso64.lds
+> ```
+> 
+> 
+>>
+>> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+>> ---
+>>
+>> Note 1:
+>> This is further development of
+>> https://lore.kernel.org/all/20220211023125.1790960-1-aik@ozlabs.ru/T/
+>>
+>> Note 2:
+>> CONFIG_ZSTD_COMPRESS and CONFIG_ZSTD_DECOMPRESS must be both "m" or "y"
+>> or it won't link. For details:
+>> https://lore.kernel.org/lkml/20220428043850.1706973-1-aik@ozlabs.ru/T/
+> 
+> Yeah, I just hit this:
+> ```
+>    LTO     vmlinux.o
+> LLVM ERROR: Function Import: link error: linking module flags 'Code
+> Model': IDs have conflicting values in
+> 'lib/built-in.a(entropy_common.o at 5782)' and
+> 'lib/built-in.a(zstd_decompress_block.o at 6202)'
+> PLEASE submit a bug report to
+> https://github.com/llvm/llvm-project/issues/ and include the crash
+> backtrace.
+> LLVM ERROR: Failed to rename temporary file
+> .thinlto-cache/Thin-96f93f.tmp.o to
+> .thinlto-cache/llvmcache-A5B351EA452D46A86980E29C78B7260673348AAF: No
+> such file or directory
+> scripts/link-vmlinux.sh: line 76: 1240312 Aborted
+> ${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
+> make: *** [Makefile:1158: vmlinux] Error 134
+> ```
+> These two configs aren't easily modified in menuconfig. Perhaps you
+> could find the concise set of configs that need to be disabled for
+> this to be buildable? At least so others can test more easily, or even
+> so we can update Kconfig checks.
+
+
+I have posted v2:
+
+https://lore.kernel.org/lkml/20220429053329.2278740-1-aik@ozlabs.ru/T/
+
+with this one, the ppc64 defconfigs should just work.
+
+
+>> ---
+>>   arch/powerpc/Kconfig                   | 2 ++
+>>   arch/powerpc/kernel/exceptions-64s.S   | 4 +++-
+>>   arch/powerpc/lib/copyuser_64.S         | 3 ++-
+>>   arch/powerpc/lib/feature-fixups-test.S | 3 +--
+>>   arch/powerpc/lib/memcpy_64.S           | 3 ++-
+>>   5 files changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>> index 174edabb74fa..e2c7b5c1d0a6 100644
+>> --- a/arch/powerpc/Kconfig
+>> +++ b/arch/powerpc/Kconfig
+>> @@ -158,6 +158,8 @@ config PPC
+>>          select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+>>          select ARCH_WANT_LD_ORPHAN_WARN
+>>          select ARCH_WEAK_RELEASE_ACQUIRE
+>> +       select ARCH_SUPPORTS_LTO_CLANG
+>> +       select ARCH_SUPPORTS_LTO_CLANG_THIN
+>>          select BINFMT_ELF
+>>          select BUILDTIME_TABLE_SORT
+>>          select CLONE_BACKWARDS
+>> diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
+>> index b66dd6f775a4..5b783bd51260 100644
+>> --- a/arch/powerpc/kernel/exceptions-64s.S
+>> +++ b/arch/powerpc/kernel/exceptions-64s.S
+>> @@ -476,9 +476,11 @@ DEFINE_FIXED_SYMBOL(\name\()_common_real, text)
+>>                  .if IHSRR_IF_HVMODE
+>>                  BEGIN_FTR_SECTION
+>>                  bne     masked_Hinterrupt
+>> +               b       4f
+>>                  FTR_SECTION_ELSE
+>> -               bne     masked_interrupt
+>>                  ALT_FTR_SECTION_END_IFSET(CPU_FTR_HVMODE | CPU_FTR_ARCH_206)
+>> +               bne     masked_interrupt
+>> +4:
+>>                  .elseif IHSRR
+>>                  bne     masked_Hinterrupt
+>>                  .else
+>> diff --git a/arch/powerpc/lib/copyuser_64.S b/arch/powerpc/lib/copyuser_64.S
+>> index db8719a14846..d07f95eebc65 100644
+>> --- a/arch/powerpc/lib/copyuser_64.S
+>> +++ b/arch/powerpc/lib/copyuser_64.S
+>> @@ -75,10 +75,11 @@ _GLOBAL(__copy_tofrom_user_base)
+>>    * set is Power6.
+>>    */
+>>   test_feature = (SELFTEST_CASE == 1)
+>> +       beq     .Ldst_aligned
+>>   BEGIN_FTR_SECTION
+>>          nop
+>>   FTR_SECTION_ELSE
+>> -       bne     .Ldst_unaligned
+>> +       b       .Ldst_unaligned
+>>   ALT_FTR_SECTION_END(CPU_FTR_UNALIGNED_LD_STD | CPU_FTR_CP_USE_DCBTZ, \
+>>                      CPU_FTR_UNALIGNED_LD_STD)
+>>   .Ldst_aligned:
+>> diff --git a/arch/powerpc/lib/feature-fixups-test.S b/arch/powerpc/lib/feature-fixups-test.S
+>> index 480172fbd024..2751e42a9fd7 100644
+>> --- a/arch/powerpc/lib/feature-fixups-test.S
+>> +++ b/arch/powerpc/lib/feature-fixups-test.S
+>> @@ -145,7 +145,6 @@ BEGIN_FTR_SECTION
+>>   FTR_SECTION_ELSE
+>>   2:     or      2,2,2
+>>          PPC_LCMPI       r3,1
+>> -       beq     3f
+>>          blt     2b
+>>          b       3f
+>>          b       1b
+>> @@ -160,10 +159,10 @@ globl(ftr_fixup_test6_expected)
+>>   1:     or      1,1,1
+>>   2:     or      2,2,2
+>>          PPC_LCMPI       r3,1
+>> -       beq     3f
+>>          blt     2b
+>>          b       3f
+>>          b       1b
+>> +       nop
+>>   3:     or      1,1,1
+>>          or      2,2,2
+>>          or      3,3,3
+>> diff --git a/arch/powerpc/lib/memcpy_64.S b/arch/powerpc/lib/memcpy_64.S
+>> index 016c91e958d8..286c7e2d0883 100644
+>> --- a/arch/powerpc/lib/memcpy_64.S
+>> +++ b/arch/powerpc/lib/memcpy_64.S
+>> @@ -50,10 +50,11 @@ ALT_FTR_SECTION_END_IFCLR(CPU_FTR_VMX_COPY)
+>>      At the time of writing the only CPU that has this combination of bits
+>>      set is Power6. */
+>>   test_feature = (SELFTEST_CASE == 1)
+>> +       beq      .ldst_aligned
+>>   BEGIN_FTR_SECTION
+>>          nop
+>>   FTR_SECTION_ELSE
+>> -       bne     .Ldst_unaligned
+>> +       b       .Ldst_unaligned
+>>   ALT_FTR_SECTION_END(CPU_FTR_UNALIGNED_LD_STD | CPU_FTR_CP_USE_DCBTZ, \
+>>                       CPU_FTR_UNALIGNED_LD_STD)
+>>   .Ldst_aligned:
+>> --
+>> 2.30.2
+>>
+> 
+> 
