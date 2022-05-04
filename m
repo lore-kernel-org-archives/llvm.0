@@ -1,98 +1,176 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CB72F2B
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 22:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651704560; x=1683240560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5P/PrMYYu3/0Y8TeBq+/Mcp8ybxA6LS0+AwYjUJWd44=;
-  b=InPHbIRtq3+JW1L6l0ByBgNXQr6fsaXtMeDMw0YZgBu2eQsRHwmXTWf2
-   lvpHAfX/shs3Eq4iN0pifU9JGEEVBFYkenHwET1FQu+BUt7l0O9rrGWGr
-   HGUxlOjBMpsjVJBJSLO2oUqrhMoFhm+mP7DveaWEw+JRqL94uM0gtigx4
-   U4h2gOjmEJQgsi7R7EJ/YK6NmYdJaOjMBNF8Qn/jFBWnAAGi3GONbJRAH
-   wZfRRqFGcgsXncrg1AzS3Ly6T5iIB9cLEYKSL5X5xv6yoD3mq7FsUU/Ox
-   PiaAw52+OdYgw+cOhwaDk1MGKtWs9VcJef4XvTVgmAvvfNy+UJteg7RR9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="247829371"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="247829371"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 15:49:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="734620159"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 15:49:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmNo2-000Brq-TI;
-	Wed, 04 May 2022 22:49:14 +0000
-Date: Thu, 5 May 2022 06:48:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>,
-	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-	will@kernel.org, axboe@kernel.dk
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mb@lightnvm.io,
-	ckeepax@opensource.cirrus.com, manjunatha.venkatesh@nxp.com,
-	mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
-	jasowang@redhat.com, sunilmut@microsoft.com,
-	bjorn.andersson@linaro.org, rvmanjumce@gmail.com,
-	ashish.deshpande@nxp.com
-Subject: Re: [PATCH v3] [PATCH v3] uwb: nxp: sr1xx: UWB driver support for
- sr1xx series chip
-Message-ID: <202205050656.HCzWfiw2-lkp@intel.com>
-References: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0994F3D6E
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 22:57:40 +0000 (UTC)
+Received: by mail-wm1-f43.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso4106034wma.0
+        for <llvm@lists.linux.dev>; Wed, 04 May 2022 15:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qfWwXZWPvxEE3w1uLnkzPlrx6nJaZSmQ1gbsC3kCZlI=;
+        b=fMehx6+pldeupaypGl5lGMLh8Blc5Pb964suvnwujkOTfmhEds0USznV5iIpAmDMiQ
+         3bX5ovLiBcm+P+Qjkm7S30sNoAIneyphU/3HUmg8FgNya3x4Ys+vGWu+B9CwMsbZwixV
+         5hhw5d61RXfF0ZuA9a19yWLWnmsownsAlvxGOq/bh+zf+KCchfsYUSjN3DbkCogRNiil
+         4sZMBBy0wN3DJWJ3HV3y9RTPrsOy6eZO4wbIVzlw9cfeY3DYzhWrMs9JJuoIK2/rWVPl
+         SzHF6XACCrgzPRUtq8fL5afcNflV6Vriy9o5VdAvBNuxRLNvKxX70jkd0hURqNp4X2R8
+         1xwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qfWwXZWPvxEE3w1uLnkzPlrx6nJaZSmQ1gbsC3kCZlI=;
+        b=4+IBx/ttZ3Fr15cKSeioYgQXyd2yryqJeypHWQniXCJmfIGMVEquer7gGjNrOHml1m
+         Azr0PesbbYAZXJkEurv8ZFr9vtViNeNvqRij5dEaSspZ2K489VzEo1wobKBNiATOU6qN
+         2XjunghRrHUW+/4gu5VoGX5JIIIxo3DupklBK9susmZj95dw5QaBXMo/1sp4uLqYZLDf
+         QbgfrJ+6fAbDXJDIw6qGJa5nX77/ebD7QROBMQ7+3rIi37/G3gE9djKuqFXpxVGtydnY
+         AhbPWYoy4sHvrTnOHOm4RJtbid8Sc1jOMiRk84sRSq5OqWmN0PHnsibomyhAlJQyzLDm
+         i4Dw==
+X-Gm-Message-State: AOAM533c3xfOjEaumpK3E1r+kxbUcQpmcp86SzJApZJGO/SxcmTxT42/
+	6H4H3mjvnLZroiAPY6uMLGdlMK0eJKqObe2zqMj8
+X-Google-Smtp-Source: ABdhPJzn8kCki7g2xrksVPCE2X0dMoSQ5GNrlnQWJqU+8a/RnZE5ShgkUyQvDBvdRa4kG7oifCsX28YouBnWU5DkxR0=
+X-Received: by 2002:a05:600c:4fc9:b0:394:4317:1aa4 with SMTP id
+ o9-20020a05600c4fc900b0039443171aa4mr1477643wmq.179.1651705059031; Wed, 04
+ May 2022 15:57:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
+References: <20220504014440.3697851-1-keescook@chromium.org> <20220504014440.3697851-29-keescook@chromium.org>
+In-Reply-To: <20220504014440.3697851-29-keescook@chromium.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 4 May 2022 18:57:28 -0400
+Message-ID: <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
+Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
+To: Kees Cook <keescook@chromium.org>
+Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
+	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	netdev@vger.kernel.org, selinux@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, 
+	Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
+	Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove <linuxdrivers@attotech.com>, 
+	brcm80211-dev-list.pdl@broadcom.com, Christian Brauner <brauner@kernel.org>, 
+	Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel <chris@zankel.net>, 
+	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>, 
+	Daniel Vetter <daniel.vetter@ffwll.ch>, Dan Williams <dan.j.williams@intel.com>, 
+	David Gow <davidgow@google.com>, David Howells <dhowells@redhat.com>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
+	Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
+	Eugeniu Rosca <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, 
+	Francis Laniel <laniel_francis@privacyrequired.com>, Frank Rowand <frowand.list@gmail.com>, 
+	Franky Lin <franky.lin@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Gregory Greenman <gregory.greenman@intel.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Hante Meuleman <hante.meuleman@broadcom.com>, 
+	Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris <jmorris@namei.org>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jens Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>, 
+	Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, 
+	Leon Romanovsky <leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	linux1394-devel@lists.sourceforge.net, linux-afs@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-xtensa@linux-xtensa.org, 
+	llvm@lists.linux.dev, Loic Poulain <loic.poulain@linaro.org>, 
+	Louis Peens <louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, 
+	Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Muchun Song <songmuchun@bytedance.com>, 
+	Nathan Chancellor <nathan@kernel.org>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Rich Felker <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	SHA-cyfmac-dev-list@infineon.com, Simon Horman <simon.horman@corigine.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, Stefan Richter <stefanr@s5r6.in-berlin.de>, 
+	Stephen Hemminger <sthemmin@microsoft.com>, Tadeusz Struk <tadeusz.struk@linaro.org>, 
+	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>, 
+	Udipto Goswami <quic_ugoswami@quicinc.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>, 
+	xen-devel@lists.xenproject.org, Yang Yingliang <yangyingliang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Manjunatha,
+On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> As part of the work to perform bounds checking on all memcpy() uses,
+> replace the open-coded a deserialization of bytes out of memory into a
+> trailing flexible array by using a flex_array.h helper to perform the
+> allocation, bounds checking, and copying:
+>
+>     struct xfrm_sec_ctx
+>     struct sidtab_str_cache
+>
+> Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Cc: Eric Paris <eparis@parisplace.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Cc: "Christian G=C3=B6ttsche" <cgzones@googlemail.com>
+> Cc: netdev@vger.kernel.org
+> Cc: selinux@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/uapi/linux/xfrm.h    | 4 ++--
+>  security/selinux/ss/sidtab.c | 9 +++------
+>  security/selinux/xfrm.c      | 7 ++-----
+>  3 files changed, 7 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
+> index 65e13a099b1a..4a6fa2beff6a 100644
+> --- a/include/uapi/linux/xfrm.h
+> +++ b/include/uapi/linux/xfrm.h
+> @@ -31,9 +31,9 @@ struct xfrm_id {
+>  struct xfrm_sec_ctx {
+>         __u8    ctx_doi;
+>         __u8    ctx_alg;
+> -       __u16   ctx_len;
+> +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
+>         __u32   ctx_sid;
+> -       char    ctx_str[0];
+> +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
+>  };
 
-Thank you for the patch! Yet something to improve:
+While I like the idea of this in principle, I'd like to hear about the
+testing you've done on these patches.  A previous flex array
+conversion in the audit uapi headers ended up causing a problem with
+GCC12 and SWIG; while it was a SWIG problem and not a kernel header
+problem that was thin consolation for those with broken builds.
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on linux/master linus/master v5.18-rc5 next-20220504]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> diff --git a/security/selinux/ss/sidtab.c b/security/selinux/ss/sidtab.c
+> index a54b8652bfb5..a9d434e8cff7 100644
+> --- a/security/selinux/ss/sidtab.c
+> +++ b/security/selinux/ss/sidtab.c
+> @@ -23,8 +23,8 @@ struct sidtab_str_cache {
+>         struct rcu_head rcu_member;
+>         struct list_head lru_member;
+>         struct sidtab_entry *parent;
+> -       u32 len;
+> -       char str[];
+> +       DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(u32, len);
+> +       DECLARE_FLEX_ARRAY_ELEMENTS(char, str);
+>  };
+>
+>  #define index_to_sid(index) ((index) + SECINITSID_NUM + 1)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 35a7609639c49f76f13f206402cbf692c4ae3e4e
-config: x86_64-randconfig-a014-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050656.HCzWfiw2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/037b22462c3f4715f0a04e1be05cd12986880d21
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
-        git checkout 037b22462c3f4715f0a04e1be05cd12986880d21
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> error: include/uapi/misc/sr1xx.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
-   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/misc/sr1xx.h] Error 1
-   make[2]: Target '__headers' not remade because of errors.
-   make[1]: *** [Makefile:1280: headers] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+paul-moore.com
