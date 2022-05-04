@@ -1,32 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19C92583
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 15:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D335C385A4;
-	Wed,  4 May 2022 15:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1651676838;
-	bh=FNwGFZSSghL9KJyuzsHgp8CpQhQa/0a0SraBBTLra4s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZDVvxDUIhbbvKmGH5qGnShIF1ZmFCdyILLdSTu5IRtMrPoUPUnDmdmWAQ2i951dTy
-	 sFe7kaYhdE6HyCKFVpsv5Y+USd8z20/mJ3U+O1CMigypiOVKZVoTMINI0BTLJOHXU+
-	 OuWb26ahdNvM79PpbePCO8CNFmu/34V01YSJLxYw=
-Date: Wed, 4 May 2022 17:07:17 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C6C2583
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 15:08:28 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id iq10so1511502pjb.0
+        for <llvm@lists.linux.dev>; Wed, 04 May 2022 08:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=QW7CQXai9IiD71Wvf+o2VYxsrI+DMXmN1vsS0b5DV0rtrX+G8r3eGzQnrLgcSNLS6o
+         18VjexLmt9t17aqS0qc4jCF5CPslGIy/SB1vEauI+iOiw3aemKigwzjm7wU//Osg3Pbt
+         9wMF/4HUhAaX0invtmDD41DdrKFbACP1VK8u0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=EXfq6zkA1al+ewp/Zk8eYR3NUZVclhj4rDae6bAlqW97pK0bdLtIxv0D4yKjs0yREg
+         3Euk849eZLyUp/NOCt0SPpzjuwuM3goCfSlbrLI1tDFVPetB3wxEIoBNtEHLibLH/7i6
+         TmcCW6uqKpKVeuADkUuPvx9zOC5wyYkT7onUQ3LD7D+VNeX9HAW8rev3XeRJ/+ofoBox
+         OCTu1kx+TW4e9xZrX+YC9K4VC5sf2zI1AWr0BddHTI+GKgYzxZROfouo1y0NU/i9U/4k
+         Xcj1aBzsCr+vIGEYpb8kwufcK45az/Qz3SJR24WwQYMYeO6fvem0cyi7IRSqLETlZiSe
+         WhqA==
+X-Gm-Message-State: AOAM533mQ+gHE7wlcYKgO7T9TvsrgFIK3hvBbDQCPK2uVm48Q3Decu5U
+	rIGljv8Sd1pK2KJUeoR9O617qA==
+X-Google-Smtp-Source: ABdhPJwHiFEMEf0LT8rKs64uS9VK7WCOKMtRJ3EqkT4Zb3Dx1isF6RYPGWL4Kz+uhEu4FzOD4HUSMQ==
+X-Received: by 2002:a17:902:82c8:b0:15c:f7c7:ef9d with SMTP id u8-20020a17090282c800b0015cf7c7ef9dmr22125373plz.44.1651676908149;
+        Wed, 04 May 2022 08:08:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l9-20020a62be09000000b0050dc76281fesm8311194pff.216.2022.05.04.08.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:08:27 -0700 (PDT)
+Date: Wed, 4 May 2022 08:08:26 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Gross <agross@kernel.org>, Andy Lavr <andy.lavr@gmail.com>,
+	Arend van Spriel <aspriel@gmail.com>,
+	Baowen Zheng <baowen.zheng@corigine.com>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	brcm80211-dev-list.pdl@broadcom.com,
+	Christian Brauner <brauner@kernel.org>,
+	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	Christian Lamparter <chunkeey@googlemail.com>,
+	Chris Zankel <chris@zankel.net>,
+	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	David Gow <davidgow@google.com>,
+	David Howells <dhowells@redhat.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eli Cohen <elic@nvidia.com>, Eric Paris <eparis@parisplace.org>,
+	Eugeniu Rosca <erosca@de.adit-jv.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Francis Laniel <laniel_francis@privacyrequired.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Franky Lin <franky.lin@broadcom.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Hante Meuleman <hante.meuleman@broadcom.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Hulk Robot <hulkci@huawei.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	James Morris <jmorris@namei.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jens Axboe <axboe@kernel.dk>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>,
+	Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+	kunit-dev@googlegroups.com, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Lee Jones <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	linux1394-devel@lists.sourceforge.net,
+	linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+	llvm@lists.linux.dev, Louis Peens <louis.peens@corigine.com>,
+	Luca Coelho <luciano.coelho@intel.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Mark Brown <broonie@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Max Filippov <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
-	stable@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: Re: Apply d799769188529abc6cbf035a10087a51f7832b6b to 5.17 and 5.15?
-Message-ID: <YnKWpUVITMjaUUkt@kroah.com>
-References: <Yl8pNxSGUgeHZ1FT@dev-arch.thelio-3990X>
- <877d7ig9oz.fsf@mpe.ellerman.id.au>
- <YmF0iajmlAg6Kj9I@dev-fedora.thelio-3990X>
- <YnGfyLAkB3NG+Ms2@dev-arch.thelio-3990X>
- <87o80eugqj.fsf@mpe.ellerman.id.au>
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Paul Moore <paul@paul-moore.com>, Rich Felker <dalias@aerifal.cx>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	SHA-cyfmac-dev-list@infineon.com,
+	Simon Horman <simon.horman@corigine.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+	Udipto Goswami <quic_ugoswami@quicinc.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Wei Liu <wei.liu@kernel.org>, xen-devel@lists.xenproject.org,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct
+ wcn36xx_hal_ind_msg
+Message-ID: <202205040730.161645EC@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-11-keescook@chromium.org>
+ <8735hpc0q1.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,47 +143,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o80eugqj.fsf@mpe.ellerman.id.au>
+In-Reply-To: <8735hpc0q1.fsf@kernel.org>
 
-On Wed, May 04, 2022 at 01:19:32PM +1000, Michael Ellerman wrote:
-> Nathan Chancellor <nathan@kernel.org> writes:
-> > On Thu, Apr 21, 2022 at 08:13:13AM -0700, Nathan Chancellor wrote:
-> >> On Thu, Apr 21, 2022 at 05:46:52PM +1000, Michael Ellerman wrote:
-> >> > Nathan Chancellor <nathan@kernel.org> writes:
-> >> > > Hi Greg, Sasha, and Michael,
-> >> > >
-> >> > > Commit d79976918852 ("powerpc/64: Add UADDR64 relocation support") fixes
-> >> > > a boot failure with CONFIG_RELOCATABLE=y kernels linked with recent
-> >> > > versions of ld.lld [1]. Additionally, it resolves a separate boot
-> >> > > failure that Paul Menzel reported [2] with ld.lld 13.0.0. Is this a
-> >> > > reasonable backport for 5.17 and 5.15? It applies cleanly, resolves both
-> >> > > problems, and does not appear to cause any other issues in my testing
-> >> > > for both trees but I was curious what Michael's opinion was, as I am far
-> >> > > from a PowerPC expert.
-> >> > >
-> >> > > This change does apply cleanly to 5.10 (I did not try earlier branches)
-> >> > > but there are other changes needed for ld.lld to link CONFIG_RELOCATABLE
-> >> > > kernels in that branch so to avoid any regressions, I think it is safe
-> >> > > to just focus on 5.15 and 5.17.
-> >> > 
-> >> > I considered tagging it for stable, but I wanted it to get a bit of
-> >> > testing first, it's a reasonably big patch.
-> >> > 
-> >> > I think we're reasonably confident it doesn't introduce any new bugs,
-> >> > but more testing time is always good.
-> >> > 
-> >> > So I guess I'd be inclined to wait another week or so before requesting
-> >> > a stable backport?
-> >> 
-> >> Sure, thanks for the response! I'll ping this thread on Monday, May 2nd,
-> >> so that we have two more RC releases to try and flush out any lingering
-> >> issues. If you do receive any reports of regressions, please let me
-> >> know.
-> >
-> > I decided to wait an extra day just to give people the opportunity to
-> > install -rc5 and run it through their tests. I have not heard of any
-> > reports yet, are there any further objections?
+On Wed, May 04, 2022 at 08:42:46AM +0300, Kalle Valo wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> No objection.
+> > As part of the work to perform bounds checking on all memcpy() uses,
+> > replace the open-coded a deserialization of bytes out of memory into a
+> > trailing flexible array by using a flex_array.h helper to perform the
+> > allocation, bounds checking, and copying.
+> >
+> > Cc: Loic Poulain <loic.poulain@linaro.org>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: wcn36xx@lists.infradead.org
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> [...]
+> 
+> > --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> > +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> > @@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
+> >  
+> >  struct wcn36xx_hal_ind_msg {
+> >  	struct list_head list;
+> > -	size_t msg_len;
+> > -	u8 msg[];
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
+> 
+> This affects readability quite a lot and tbh I don't like it. Isn't
+> there any simpler way to solve this?
 
-Now queued up!
+Similar to how I plumbed member names into __mem_to_flex(), I could do
+the same for __mem_to_flex_dup(). That way if the struct member aliases
+(DECLARE_FLEX...)  aren't added, the longer form of the helper could
+be used. Instead of:
+
+	if (mem_to_flex_dup(&msg_ind, buf, len, GFP_ATOMIC)) {
+
+it would be:
+
+	if (__mem_to_flex_dup(&msg_ind, /* self */, msg,
+			      msg_len, buf, len, GFP_ATOMIC)) {
+
+This was how I'd written the helpers in an earlier version, but it
+seemed much cleaner to avoid repeating structure layout details at each
+call site.
+
+I couldn't find any other way to encode the needed information. It'd be
+wonderful if C would let us do:
+
+	struct wcn36xx_hal_ind_msg {
+		struct list_head list;
+		size_t msg_len;
+		u8 msg[msg_len];
+	}
+
+And provide some kind of interrogation:
+
+	__builtin_flex_array_member(msg_ind) -> msg_ind->msg
+	__builtin_flex_array_count(msg_ind)  -> msg_ind->msg_len
+
+My hope would be to actually use the member aliases to teach things like
+-fsanitize=array-bounds about flexible arrays. If it encounters a
+structure with the aliases, it could add the instrumentation to do the
+bounds checking of things like:
+
+	msg_ind->msg[42]; /* check that 42 is < msg_ind->msg_len */
+
+I also wish I could find a way to make the proposed macros "forward
+portable" into proposed C syntax above, but this eluded me as well.
+For example:
+
+	struct wcn36xx_hal_ind_msg {
+		size_t msg_len;
+		struct list_head list;
+		BOUNDED_FLEX_ARRAY(u8, msg, msg_len);
+	}
+
+	#ifdef CC_HAS_DYNAMIC_ARRAY_LEN
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)	type name[bounds]
+	#else
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)			\
+		magic_alias_of msg_len __flex_array_elements_count;	\
+		union {							\
+			type name[];					\
+			type __flex_array_elements[];			\
+		}
+	#endif
+
+But I couldn't sort out the "magic_alias_of" syntax that wouldn't force
+structures into having the count member immediately before the flex
+array, which would impose more limitations on where this could be
+used...
+
+Anyway, I'm open to ideas on how to improve this!
+
+-Kees
+
+-- 
+Kees Cook
