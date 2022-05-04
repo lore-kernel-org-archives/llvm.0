@@ -1,137 +1,170 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865512583
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 15:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651678930; x=1683214930;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NO8tAeiPK3K0Hr9frV1lRTE+HO29ZdSEd0GGtR88tZE=;
-  b=AFbxwLstIHFtDNLfMLnZ1zE/wITHFoDVIpRtq0se13lX17SeFX+keCvB
-   quE2+a8UR3xMDlgcsEbuL9K6vt+3Wg9eqnmVlHfbdpmxNdtTyV7bFO61Z
-   Cn1CqmWZQRtuQmvhHL1NVrulmP6E/+cGlvrAPZ2QQ8rJnMiuvaaAMpQ8T
-   fKjRVv1vIn8H+FpJZ26HI/pU5B16DM6gDUPvPkQ6rYmTCnL5OCEhZdYVJ
-   WN4Yi8VMK7GJHuvmz8vgEMbxQZ2tLhPiQYOVbDnuXbiAXcHJCx5nRxpig
-   dn34qw7TlCPDl/BR/dncxe8SYa1RlQ6eUrxKxZCSsE3PhX8xD1vU4Ngzj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267956395"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="267956395"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:42:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="653770696"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 May 2022 08:42:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmH8i-000BVj-0h;
-	Wed, 04 May 2022 15:42:08 +0000
-Date: Wed, 4 May 2022 23:42:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Slaby <jslaby@suse.cz>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 53/73] drivers/video/console/vgacon.c:370:4: error:
- incompatible pointer types assigning to 'struct uni_pagedir *' from 'struct
- uni_pagedict *'
-Message-ID: <202205042336.F5kLAB1t-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4FC2583
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 16:09:03 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-304-235WxlwhNjKFdg4Xv28oCg-1; Wed, 04 May 2022 17:08:18 +0100
+X-MC-Unique: 235WxlwhNjKFdg4Xv28oCg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 4 May 2022 17:08:15 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 4 May 2022 17:08:15 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Kees Cook' <keescook@chromium.org>, Johannes Berg
+	<johannes@sipsolutions.net>
+CC: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Keith Packard
+	<keithp@keithp.com>, Francis Laniel <laniel_francis@privacyrequired.com>,
+	Daniel Axtens <dja@axtens.net>, Dan Williams <dan.j.williams@intel.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Guenter Roeck
+	<linux@roeck-us.net>, Daniel Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk
+	<tadeusz.struk@linaro.org>, Alexei Starovoitov <ast@kernel.org>,
+	"alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>, Al Viro
+	<viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+	Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>,
+	Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>,
+	"Baowen Zheng" <baowen.zheng@corigine.com>, Bjorn Andersson
+	<bjorn.andersson@linaro.org>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	"brcm80211-dev-list.pdl@broadcom.com" <brcm80211-dev-list.pdl@broadcom.com>,
+	Christian Brauner <brauner@kernel.org>, =?iso-8859-1?Q?Christian_G=F6ttsche?=
+	<cgzones@googlemail.com>, Christian Lamparter <chunkeey@googlemail.com>,
+	Chris Zankel <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, "David
+ Gow" <davidgow@google.com>, David Howells <dhowells@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>, Dennis Dalessandro
+	<dennis.dalessandro@cornelisnetworks.com>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, Dexuan Cui <decui@microsoft.com>, "Dmitry
+ Kasatkin" <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>, "Eric
+ Dumazet" <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, "Eugeniu
+ Rosca" <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, Frank Rowand
+	<frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Gregory Greenman
+	<gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>, "Hante
+ Meuleman" <hante.meuleman@broadcom.com>, Herbert Xu
+	<herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub Kicinski
+	<kuba@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris
+	<jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela
+	<perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe
+	<axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John Keeping
+	<john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
+	<kvalo@kernel.org>, "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+	"kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>, Kuniyuki Iwashima
+	<kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, "Lars-Peter
+ Clausen" <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, Leon Romanovsky
+	<leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	"linux1394-devel@lists.sourceforge.net"
+	<linux1394-devel@lists.sourceforge.net>, "linux-afs@lists.infradead.org"
+	<linux-afs@lists.infradead.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>, "linux-bluetooth@vger.kernel.org"
+	<linux-bluetooth@vger.kernel.org>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+	<linux-integrity@vger.kernel.org>, "linux-rdma@vger.kernel.org"
+	<linux-rdma@vger.kernel.org>, "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-wireless@vger.kernel.org"
+	<linux-wireless@vger.kernel.org>, "linux-xtensa@linux-xtensa.org"
+	<linux-xtensa@linux-xtensa.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, Loic Poulain <loic.poulain@linaro.org>, Louis Peens
+	<louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, "Luiz
+ Augusto von Dentz" <luiz.dentz@gmail.com>, Marc Dionne
+	<marc.dionne@auristor.com>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown
+	<broonie@kernel.org>, "Martin K. Petersen" <martin.petersen@oracle.com>, "Max
+ Filippov" <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
+	<songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, =?iso-8859-1?Q?Nuno_S=E1?= <nuno.sa@analog.com>,
+	Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, "Rich
+ Felker" <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, "SHA-cyfmac-dev-list@infineon.com"
+	<SHA-cyfmac-dev-list@infineon.com>, Simon Horman <simon.horman@corigine.com>,
+	Stefano Stabellini <sstabellini@kernel.org>, Stefan Richter
+	<stefanr@s5r6.in-berlin.de>, Steffen Klassert <steffen.klassert@secunet.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>, Stephen Smalley
+	<stephen.smalley.work@gmail.com>, Takashi Iwai <tiwai@suse.com>, Tom Rix
+	<trix@redhat.com>, Udipto Goswami <quic_ugoswami@quicinc.com>,
+	"wcn36xx@lists.infradead.org" <wcn36xx@lists.infradead.org>, Wei Liu
+	<wei.liu@kernel.org>, "xen-devel@lists.xenproject.org"
+	<xen-devel@lists.xenproject.org>, Xiu Jianfeng <xiujianfeng@huawei.com>,
+	"Yang Yingliang" <yangyingliang@huawei.com>
+Subject: RE: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+Thread-Topic: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+Thread-Index: AQHYX80GRJFxZRupFEigWcMQWGiaSK0O4MfQ
+Date: Wed, 4 May 2022 16:08:15 +0000
+Message-ID: <bc2efc31d25e4f42a98f0a5d7a8ad88a@AcuMS.aculab.com>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-3-keescook@chromium.org>
+ <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+ <202205040819.DEA70BD@keescook>
+In-Reply-To: <202205040819.DEA70BD@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   fab642eca5e0ca41e656c8a0685cadf975b7ff88
-commit: 9aaf33513f7cd36e3ac26196731192e7d7d92a99 [53/73] vt: rename and document struct uni_pagedir
-config: hexagon-randconfig-r045-20220501 (https://download.01.org/0day-ci/archive/20220504/202205042336.F5kLAB1t-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=9aaf33513f7cd36e3ac26196731192e7d7d92a99
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 9aaf33513f7cd36e3ac26196731192e7d7d92a99
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/video/console/
+From: Kees Cook
+> Sent: 04 May 2022 16:38
+...
+> > >     struct something *instance =3D NULL;
+> > >     int rc;
+> > >
+> > >     rc =3D mem_to_flex_dup(&instance, byte_array, count, GFP_KERNEL);
+> > >     if (rc)
+> > >         return rc;
+> >
+> > This seems rather awkward, having to set it to NULL, then checking rc
+> > (and possibly needing a separate variable for it), etc.
+>=20
+> I think the errno return is completely required. I had an earlier version
+> of this that was much more like a drop-in replacement for memcpy that
+> would just truncate or panic, and when I had it all together, I could
+> just imagine hearing Linus telling me to start over because it was unsafe
+> (truncation may be just as bad as overflow) and disruptive ("never BUG"),
+> and that it should be recoverable. So, I rewrote it all to return a
+> __must_check errno.
+>=20
+> Requiring instance to be NULL is debatable, but I feel pretty strongly
+> about it because it does handle a class of mistakes (resource leaks),
+> and it's not much of a burden to require a known-good starting state.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Why not make it look like malloc() since it seems to be malloc().
+That gives a much better calling convention.
+Passing pointers and integers by reference can generate horrid code.
+(Mostly because it stops the compiler keeping values in registers.)
 
-All error/warnings (new ones prefixed by >>):
+If you want the type information inside the 'function'
+use a #define so that the use is:
 
->> drivers/video/console/vgacon.c:370:4: error: incompatible pointer types assigning to 'struct uni_pagedir *' from 'struct uni_pagedict *' [-Werror,-Wincompatible-pointer-types]
-           p = *c->vc_uni_pagedir_loc;
-             ^ ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/video/console/vgacon.c:371:28: warning: comparison of distinct pointer types ('struct uni_pagedict **' and 'struct uni_pagedir **') [-Wcompare-distinct-pointer-types]
-           if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
-               ~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
->> drivers/video/console/vgacon.c:373:25: error: incompatible pointer types assigning to 'struct uni_pagedict **' from 'struct uni_pagedir **' [-Werror,-Wincompatible-pointer-types]
-                   c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
-                                         ^ ~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+=09mem_to_flex_dup(instance, byte_array, count, GFP_KERNEL);
+=09if (!instance)
+=09=09return ...
+(or use ERR_PTR() etc).
 
+=09David
 
-vim +370 drivers/video/console/vgacon.c
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16  342  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  343  static void vgacon_init(struct vc_data *c, int init)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  344  {
-e4bdab70dd07d8 Takashi Iwai       2014-05-13  345  	struct uni_pagedir *p;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  346  
-50ec42edd9784f Antonino A. Daplas 2006-06-26  347  	/*
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  348  	 * We cannot be loaded as a module, therefore init will be 1
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  349  	 * if we are the default console, however if we are a fallback
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  350  	 * console, for example if fbcon has failed registration, then
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  351  	 * init will be 0, so we need to make sure our boot parameters
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  352  	 * have been copied to the console structure for vgacon_resize
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  353  	 * ultimately called by vc_resize.  Any subsequent calls to
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  354  	 * vgacon_init init will have init set to 0 too.
-50ec42edd9784f Antonino A. Daplas 2006-06-26  355  	 */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  356  	c->vc_can_do_color = vga_can_do_color;
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  357  	c->vc_scan_lines = vga_scan_lines;
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  358  	c->vc_font.height = c->vc_cell_height = vga_video_font_height;
-50ec42edd9784f Antonino A. Daplas 2006-06-26  359  
-50ec42edd9784f Antonino A. Daplas 2006-06-26  360  	/* set dimensions manually if init != 0 since vc_resize() will fail */
-50ec42edd9784f Antonino A. Daplas 2006-06-26  361  	if (init) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  362  		c->vc_cols = vga_video_num_columns;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  363  		c->vc_rows = vga_video_num_lines;
-50ec42edd9784f Antonino A. Daplas 2006-06-26  364  	} else
-50ec42edd9784f Antonino A. Daplas 2006-06-26  365  		vc_resize(c, vga_video_num_columns, vga_video_num_lines);
-50ec42edd9784f Antonino A. Daplas 2006-06-26  366  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  367  	c->vc_complement_mask = 0x7700;
-a40920b42ae232 Bill Nottingham    2005-05-01  368  	if (vga_512_chars)
-a40920b42ae232 Bill Nottingham    2005-05-01  369  		c->vc_hi_font_mask = 0x0800;
-^1da177e4c3f41 Linus Torvalds     2005-04-16 @370  	p = *c->vc_uni_pagedir_loc;
-0f2893f0d1acff Takashi Iwai       2014-05-13 @371  	if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  372  		con_free_unimap(c);
-0f2893f0d1acff Takashi Iwai       2014-05-13 @373  		c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
-0f2893f0d1acff Takashi Iwai       2014-05-13  374  		vgacon_refcount++;
-0f2893f0d1acff Takashi Iwai       2014-05-13  375  	}
-0f2893f0d1acff Takashi Iwai       2014-05-13  376  	if (!vgacon_uni_pagedir && p)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  377  		con_set_default_unimap(c);
-f6c06b6807ff92 Matthew Garrett    2009-11-13  378  
-b434a680a29424 Matthew Garrett    2009-11-13  379  	/* Only set the default if the user didn't deliberately override it */
-b434a680a29424 Matthew Garrett    2009-11-13  380  	if (global_cursor_default == -1)
-b434a680a29424 Matthew Garrett    2009-11-13  381  		global_cursor_default =
-b434a680a29424 Matthew Garrett    2009-11-13  382  			!(screen_info.flags & VIDEO_FLAGS_NOCURSOR);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  383  }
-^1da177e4c3f41 Linus Torvalds     2005-04-16  384  
-
-:::::: The code at line 370 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
