@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B8E2105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95E42106
 	for <llvm@lists.linux.dev>; Wed,  4 May 2022 07:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651649579; x=1683185579;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MHhfMqQDOoJ9yfAH++kCDJ9iYJiXmFxk5uyPkNVpZ2s=;
-  b=XZHxh9is7cU+I2Zm2exFuTN9NMo3lcKqdCAfPrwy0QTNDemqH7Gj4d8Y
-   A2HyIAB7EMnd8N+eZtxsLUCOTpjvQ43BSOytp9d2DGLKEjfMDqzbk++kU
-   b16XRcM3C8eMskMzkQ7c8jj9IxIj2NkEKf9Q5uour5gtDxmoG1wFP1Q3L
-   XyLSINST6zcm4XUWLJ/yAN8wz0FlnEfK9UK61MCCS9jJN2vBr/uY0Jt4s
-   +WCT4TNXlnulSXJfy6qTYJPs+l3ifBHRBci/W3H7un6hQI6pcRS0TkwQz
-   BUJ/aElPq6mde12+h7GRGI96tGobM2qQVi3McC5UNvD6CV7W06CRhCKTt
+  bh=YcbSbN/EdUH2G37lxbPJX7/t7tkGuDEzj+QFtM1C77M=;
+  b=Zv8sLLvyaXk0Dg/JrvNYqMgYZ8Nd4KC542QxlcOvgdzCI1aqfq/5Csyo
+   9WAHnt7sAjNjCMK84k8ITHFvryaOmeTiut4vCjvY8tDQ5sjj4cCNW5bXk
+   +VdhNBYW/PsvuVtVQZD31OihYbZgayJJQADFL6rgFmCTSgpWqCQx82N2z
+   te2UyoQEwoCkLOZmPzIP8LOpt8D6B6CYbYwSNFlLQFtxV48V4NGvoUhFh
+   h0vWNp38/jUyLW9uG3ny7yqCXH4IG3k4KCyNA0R4VeoryQDhpYiuNyl4I
+   ckV/0lrj89hXC0e1n8+fvW+40jFRuIZquNXwTO+vJMq5zrxH0iFYqJNQs
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="292879984"
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247599363"
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="292879984"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:32:58 -0700
+   d="scan'208";a="247599363"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:32:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="548416555"
+   d="scan'208";a="734279862"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 00:32:56 -0700
+  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 00:32:56 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nm9VI-000BAw-0u;
-	Wed, 04 May 2022 07:32:56 +0000
-Date: Wed, 4 May 2022 15:32:30 +0800
+	id 1nm9VH-000BAt-PN;
+	Wed, 04 May 2022 07:32:55 +0000
+Date: Wed, 4 May 2022 15:32:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [vsyrjala:crtc_clock_compute_8 10/26]
- drivers/gpu/drm/i915/display/intel_ddi.c:325:5: error: no previous prototype
- for function 'intel_crtc_dotclock'
-Message-ID: <202205041506.Q9YdhHrE-lkp@intel.com>
+Subject: [niks:has_ioport_v3 39/39] include/asm-generic/io.h:713:2: error:
+ 'error' attribute does not appear on the first declaration
+Message-ID: <202205041505.DuFfLvAz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,62 +46,669 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/vsyrjala/linux.git crtc_clock_compute_8
-head:   aee27a93a2e9c552d016d4eadaff5aa87dccce13
-commit: eb839775996f072098b810f91bc34757d1ea008e [10/26] drm/i915: Extract intel_crtc_dotclock()
-config: x86_64-randconfig-r023-20220502 (https://download.01.org/0day-ci/archive/20220504/202205041506.Q9YdhHrE-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v3
+head:   45df38c1492340a5c06ff7ad2966735c1f5c4d94
+commit: 45df38c1492340a5c06ff7ad2966735c1f5c4d94 [39/39] asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
+config: powerpc-mpc512x_defconfig (https://download.01.org/0day-ci/archive/20220504/202205041505.DuFfLvAz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/vsyrjala/linux/commit/eb839775996f072098b810f91bc34757d1ea008e
-        git remote add vsyrjala https://github.com/vsyrjala/linux.git
-        git fetch --no-tags vsyrjala crtc_clock_compute_8
-        git checkout eb839775996f072098b810f91bc34757d1ea008e
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=45df38c1492340a5c06ff7ad2966735c1f5c4d94
+        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
+        git fetch --no-tags niks has_ioport_v3
+        git checkout 45df38c1492340a5c06ff7ad2966735c1f5c4d94
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_ddi.c:325:5: error: no previous prototype for function 'intel_crtc_dotclock' [-Werror,-Wmissing-prototypes]
-   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
-       ^
-   drivers/gpu/drm/i915/display/intel_ddi.c:325:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:643:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:640:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:102:1: note: expanded from here
+   __do_insl
    ^
-   static 
-   1 error generated.
+   arch/powerpc/include/asm/io.h:582:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:643:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:640:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:104:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:583:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:643:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:640:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:106:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:584:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:643:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:640:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:108:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:585:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:713:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("inb()/inb_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:23:16: note: previous declaration is here
+   DEF_PCI_AC_RET(inb, u8, (unsigned long port), (port), pio, port)
+                  ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:716:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("inw()/inw_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:24:16: note: previous declaration is here
+   DEF_PCI_AC_RET(inw, u16, (unsigned long port), (port), pio, port)
+                  ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:719:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("inl()/inl_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:25:16: note: previous declaration is here
+   DEF_PCI_AC_RET(inl, u32, (unsigned long port), (port), pio, port)
+                  ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:722:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outb()/outb_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:26:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outb, (u8 val, unsigned long port), (val, port), pio, port)
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:725:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outw()/outw_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:27:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outw, (u16 val, unsigned long port), (val, port), pio, port)
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:728:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outl()/outl_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:28:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outl, (u32 val, unsigned long port), (val, port), pio, port)
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:730:9: warning: 'inb_p' macro redefined [-Wmacro-redefined]
+   #define inb_p inb
+           ^
+   arch/powerpc/include/asm/io.h:823:9: note: previous definition is here
+   #define inb_p(port)             inb(port)
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:731:9: warning: 'inw_p' macro redefined [-Wmacro-redefined]
+   #define inw_p inw
+           ^
+   arch/powerpc/include/asm/io.h:825:9: note: previous definition is here
+   #define inw_p(port)             inw(port)
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:732:9: warning: 'inl_p' macro redefined [-Wmacro-redefined]
+   #define inl_p inl
+           ^
+   arch/powerpc/include/asm/io.h:827:9: note: previous definition is here
+   #define inl_p(port)             inl(port)
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:733:9: warning: 'outb_p' macro redefined [-Wmacro-redefined]
+   #define outb_p outb
+           ^
+   arch/powerpc/include/asm/io.h:824:9: note: previous definition is here
+   #define outb_p(val, port)       (udelay(1), outb((val), (port)))
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:734:9: warning: 'outw_p' macro redefined [-Wmacro-redefined]
+   #define outw_p outw
+           ^
+   arch/powerpc/include/asm/io.h:826:9: note: previous definition is here
+   #define outw_p(val, port)       (udelay(1), outw((val), (port)))
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:735:9: warning: 'outl_p' macro redefined [-Wmacro-redefined]
+   #define outl_p outl
+           ^
+   arch/powerpc/include/asm/io.h:828:9: note: previous definition is here
+   #define outl_p(val, port)       (udelay(1), outl((val), (port)))
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:739:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("insb()/insb_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:43:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:738:6: error: conflicting types for 'insb'
+   void insb(unsigned long addr, void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:737:14: note: expanded from macro 'insb'
+   #define insb insb
+                ^
+   arch/powerpc/include/asm/io-defs.h:43:18: note: previous definition is here
+   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:742:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("insw()/insw_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:45:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:741:6: error: conflicting types for 'insw'
+   void insw(unsigned long addr, void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:740:14: note: expanded from macro 'insw'
+   #define insw insw
+                ^
+   arch/powerpc/include/asm/io-defs.h:45:18: note: previous definition is here
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:745:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("insl()/insl_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:47:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:744:6: error: conflicting types for 'insl'
+   void insl(unsigned long addr, void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:743:14: note: expanded from macro 'insl'
+   #define insl insl
+                ^
+   arch/powerpc/include/asm/io-defs.h:47:18: note: previous definition is here
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:748:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outsb()/outsb_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:49:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:747:6: error: conflicting types for 'outsb'
+   void outsb(unsigned long addr, const void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:746:15: note: expanded from macro 'outsb'
+   #define outsb outsb
+                 ^
+   arch/powerpc/include/asm/io-defs.h:49:18: note: previous definition is here
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:751:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outsw()/outsw_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:51:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:750:6: error: conflicting types for 'outsw'
+   void outsw(unsigned long addr, const void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:749:15: note: expanded from macro 'outsw'
+   #define outsw outsw
+                 ^
+   arch/powerpc/include/asm/io-defs.h:51:18: note: previous definition is here
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+   include/asm-generic/io.h:754:2: error: 'error' attribute does not appear on the first declaration
+           __compiletime_error("outsl()/outsl_p() requires CONFIG_HAS_IOPORT");
+           ^
+   include/linux/compiler_attributes.h:146:56: note: expanded from macro '__compiletime_error'
+   # define __compiletime_error(msg)       __attribute__((__error__(msg)))
+                                                          ^
+   arch/powerpc/include/asm/io-defs.h:53:18: note: previous declaration is here
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:1027:
+>> include/asm-generic/io.h:753:6: error: conflicting types for 'outsl'
+   void outsl(unsigned long addr, const void *buffer, unsigned int count)
+        ^
+   include/asm-generic/io.h:752:15: note: expanded from macro 'outsl'
+   #define outsl outsl
+                 ^
+   arch/powerpc/include/asm/io-defs.h:53:18: note: previous definition is here
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+                    ^
+   12 warnings and 18 errors generated.
+   make[2]: *** [scripts/Makefile.build:120: arch/powerpc/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/intel_crtc_dotclock +325 drivers/gpu/drm/i915/display/intel_ddi.c
+vim +/error +713 include/asm-generic/io.h
 
-   324	
- > 325	int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
-   326	{
-   327		int dotclock;
-   328	
-   329		if (intel_crtc_has_dp_encoder(pipe_config))
-   330			dotclock = intel_dotclock_calculate(pipe_config->port_clock,
-   331							    &pipe_config->dp_m_n);
-   332		else if (pipe_config->has_hdmi_sink && pipe_config->pipe_bpp > 24)
-   333			dotclock = pipe_config->port_clock * 24 / pipe_config->pipe_bpp;
-   334		else
-   335			dotclock = pipe_config->port_clock;
-   336	
-   337		if (pipe_config->output_format == INTEL_OUTPUT_FORMAT_YCBCR420 &&
-   338		    !intel_crtc_has_dp_encoder(pipe_config))
-   339			dotclock *= 2;
-   340	
-   341		if (pipe_config->pixel_multiplier)
-   342			dotclock /= pipe_config->pixel_multiplier;
-   343	
-   344		return dotclock;
-   345	}
-   346	
+   701	
+   702	#ifndef outsl_p
+   703	#define outsl_p outsl_p
+   704	static inline void outsl_p(unsigned long addr, const void *buffer,
+   705				   unsigned int count)
+   706	{
+   707		outsl(addr, buffer, count);
+   708	}
+   709	#endif
+   710	#else /* CONFIG_HAS_IOPORT */
+   711	#define inb inb
+   712	u8 inb(unsigned long addr)
+ > 713		__compiletime_error("inb()/inb_p() requires CONFIG_HAS_IOPORT");
+   714	#define inw inw
+   715	u16 inw(unsigned long addr)
+   716		__compiletime_error("inw()/inw_p() requires CONFIG_HAS_IOPORT");
+   717	#define inl inl
+   718	u32 inl(unsigned long addr)
+   719		__compiletime_error("inl()/inl_p() requires CONFIG_HAS_IOPORT");
+   720	#define outb outb
+   721	void outb(u8 value, unsigned long addr)
+   722		__compiletime_error("outb()/outb_p() requires CONFIG_HAS_IOPORT");
+   723	#define outw outw
+   724	void outw(u16 value, unsigned long addr)
+   725		__compiletime_error("outw()/outw_p() requires CONFIG_HAS_IOPORT");
+   726	#define outl outl
+   727	void outl(u32 value, unsigned long addr)
+   728		__compiletime_error("outl()/outl_p() requires CONFIG_HAS_IOPORT");
+   729	
+ > 730	#define inb_p inb
+ > 731	#define inw_p inw
+ > 732	#define inl_p inl
+ > 733	#define outb_p outb
+ > 734	#define outw_p outw
+ > 735	#define outl_p outl
+   736	
+   737	#define insb insb
+ > 738	void insb(unsigned long addr, void *buffer, unsigned int count)
+   739		__compiletime_error("insb()/insb_p() requires CONFIG_HAS_IOPORT");
+   740	#define insw insw
+ > 741	void insw(unsigned long addr, void *buffer, unsigned int count)
+   742		__compiletime_error("insw()/insw_p() requires CONFIG_HAS_IOPORT");
+   743	#define insl insl
+ > 744	void insl(unsigned long addr, void *buffer, unsigned int count)
+   745		__compiletime_error("insl()/insl_p() requires CONFIG_HAS_IOPORT");
+   746	#define outsb outsb
+ > 747	void outsb(unsigned long addr, const void *buffer, unsigned int count)
+   748		__compiletime_error("outsb()/outsb_p() requires CONFIG_HAS_IOPORT");
+   749	#define outsw outsw
+ > 750	void outsw(unsigned long addr, const void *buffer, unsigned int count)
+   751		__compiletime_error("outsw()/outsw_p() requires CONFIG_HAS_IOPORT");
+   752	#define outsl outsl
+ > 753	void outsl(unsigned long addr, const void *buffer, unsigned int count)
+   754		__compiletime_error("outsl()/outsl_p() requires CONFIG_HAS_IOPORT");
+   755	
 
 -- 
 0-DAY CI Kernel Test Service
