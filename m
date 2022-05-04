@@ -1,56 +1,50 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D320E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECC220E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651636962; x=1683172962;
+  t=1651638402; x=1683174402;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OyN5mceNj+AWcDecdxPU2pdvxMVgMY1EeS2aRZyWFTo=;
-  b=jwgqUN4KVo6PnYUzz0eelkMCJMUin3uoTiJ4+G6Ghwn7Itgrmin44NXz
-   rN39WdD89R8QOsqcB59G8XsMhPcT3Irg5sF+VIvctFYHaYOeEb+3alBbq
-   at9P0aUhaR95JLyu33LiIPmKVM8pBBUrnMReAxzEq65y4WpZQB3TmaI+7
-   aaNS5zz+OIMovmj2PUyysee2a6NQxEF1efN+DnMwz+eAxkhXBpceruSwo
-   YyacOLGBqKNVc8qM9ucHBwiikwA9BWaj61fkeAb912c1t7s/bl0GHy91s
-   2n7VQoKLzYK43VN2VqfuG1YMMVfChDajQ0ZmkAFFDQL3AUaUJnbCte5Qu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328197756"
+  bh=KL0VQr9q7v/ilrpm5D5wFlNTKVUad7oBMkfv8Plpj90=;
+  b=DwQsHtGSA/3vSRlncI0T2ncBJYMjaTeJymbyvaIh7JR2EB+/69p7DCPg
+   rNWOocxvXTYadvj7qZbY9G75/rNDKMN4LPejAx/mZSqlGztsd8e/F1WlG
+   eoS92B5UiJM08fQEGX7ItXLnVS4LD8TdIsEezLy5jOwN1f6vgy3o3yneD
+   ieDaR61Twbou6ndZEG9ORMlq6yRA7aajwnnkl7eYg9U7C14O+IKvqSFQy
+   HqnOIxy1cVyVVZVQRrHSa4JDAkrDUfQNBEDIOjLJGkuMT5qb5iXCGXgrg
+   SYCYL9L3lWA+wB2LnWrqAVVwUa5rbwMmQCmTlACdrzXYFfem8JPSSPjzn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248201245"
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="328197756"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:02:42 -0700
+   d="scan'208";a="248201245"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:26:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734215663"
+   d="scan'208";a="653556113"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 21:02:38 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 May 2022 21:26:38 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nm6Dk-000B32-Md;
-	Wed, 04 May 2022 04:02:36 +0000
-Date: Wed, 4 May 2022 12:01:56 +0800
+	id 1nm6az-000B4N-HH;
+	Wed, 04 May 2022 04:26:37 +0000
+Date: Wed, 4 May 2022 12:26:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
 	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
 	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-	Frank Li <Frank.Li@nxp.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/13] PCI: dwc: Add unroll iATU space support to the
- regions disable method
-Message-ID: <202205041128.dPzBiZsY-lkp@intel.com>
-References: <20220503212300.30105-4-Sergey.Semin@baikalelectronics.ru>
+	Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 07/23] ata: libahci_platform: Convert to using devm
+ bulk clocks API
+Message-ID: <202205041215.o6Ubib6t-lkp@intel.com>
+References: <20220503200938.18027-8-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,156 +53,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503212300.30105-4-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220503200938.18027-8-Sergey.Semin@baikalelectronics.ru>
 
 Hi Serge,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on v5.18-rc5 next-20220503]
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on robh/for-next linus/master v5.18-rc5 next-20220503]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220504-052648
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: riscv-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041128.dPzBiZsY-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220504-041431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041215.o6Ubib6t-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b7ab9c3904c4948a2bdb0ed9bf5ca5e38c9ac52c
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2aa1a2fe25d3757c2c3a6c59ec00c135ba17fe96
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220504-052648
-        git checkout b7ab9c3904c4948a2bdb0ed9bf5ca5e38c9ac52c
+        git fetch --no-tags linux-review Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220504-041431
+        git checkout 2aa1a2fe25d3757c2c3a6c59ec00c135ba17fe96
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
-   In file included from drivers/pci/controller/dwc/../../pci.h:5:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
-   In file included from drivers/pci/controller/dwc/../../pci.h:5:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
-   In file included from drivers/pci/controller/dwc/../../pci.h:5:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-designware.c:508:14: warning: result of comparison of constant 2147483648 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
-                   if (region == PCIE_ATU_REGION_INBOUND) {
-                       ~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   8 warnings and 20 errors generated.
+>> drivers/ata/ahci_da850.c:181:6: error: invalid argument type 'struct clk_bulk_data' to unary expression
+           if (!hpriv->clks[0]) {
+               ^~~~~~~~~~~~~~~
+>> drivers/ata/ahci_da850.c:186:18: error: assigning to 'struct clk_bulk_data' from incompatible type 'struct clk *'
+                   hpriv->clks[0] = clk;
+                                  ^ ~~~
+   drivers/ata/ahci_da850.c:194:6: error: invalid argument type 'struct clk_bulk_data' to unary expression
+           if (!hpriv->clks[1]) {
+               ^~~~~~~~~~~~~~~
+   drivers/ata/ahci_da850.c:201:18: error: assigning to 'struct clk_bulk_data' from incompatible type 'struct clk *'
+                   hpriv->clks[1] = clk;
+                                  ^ ~~~
+>> drivers/ata/ahci_da850.c:204:46: error: passing 'struct clk_bulk_data' to parameter of incompatible type 'struct clk *'
+           mpy = ahci_da850_calculate_mpy(clk_get_rate(hpriv->clks[1]));
+                                                       ^~~~~~~~~~~~~~
+   include/linux/clk.h:584:40: note: passing argument to parameter 'clk' here
+   unsigned long clk_get_rate(struct clk *clk);
+                                          ^
+   5 errors generated.
+--
+>> drivers/ata/ahci_dm816.c:72:6: error: invalid argument type 'struct clk_bulk_data' to unary expression
+           if (!hpriv->clks[1]) {
+               ^~~~~~~~~~~~~~~
+>> drivers/ata/ahci_dm816.c:77:29: error: passing 'struct clk_bulk_data' to parameter of incompatible type 'struct clk *'
+           refclk_rate = clk_get_rate(hpriv->clks[1]);
+                                      ^~~~~~~~~~~~~~
+   include/linux/clk.h:584:40: note: passing argument to parameter 'clk' here
+   unsigned long clk_get_rate(struct clk *clk);
+                                          ^
+   2 errors generated.
 
 
-vim +/int +508 drivers/pci/controller/dwc/pcie-designware.c
+vim +181 drivers/ata/ahci_da850.c
 
-   490	
-   491	void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
-   492				 enum dw_pcie_region_type type)
-   493	{
-   494		int region;
-   495	
-   496		switch (type) {
-   497		case DW_PCIE_REGION_INBOUND:
-   498			region = PCIE_ATU_REGION_INBOUND;
-   499			break;
-   500		case DW_PCIE_REGION_OUTBOUND:
-   501			region = PCIE_ATU_REGION_OUTBOUND;
-   502			break;
-   503		default:
-   504			return;
-   505		}
-   506	
-   507		if (pci->iatu_unroll_enabled) {
- > 508			if (region == PCIE_ATU_REGION_INBOUND) {
-   509				dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-   510							 ~(u32)PCIE_ATU_ENABLE);
-   511			} else {
-   512				dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-   513							 ~(u32)PCIE_ATU_ENABLE);
-   514			}
-   515		} else {
-   516			dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
-   517			dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
-   518		}
-   519	}
-   520	
+018d5ef2048fca Akinobu Mita              2015-01-29  159  
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  160  static int ahci_da850_probe(struct platform_device *pdev)
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  161  {
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  162  	struct device *dev = &pdev->dev;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  163  	struct ahci_host_priv *hpriv;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  164  	void __iomem *pwrdn_reg;
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  165  	struct resource *res;
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  166  	struct clk *clk;
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  167  	u32 mpy;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  168  	int rc;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  169  
+16af2d65842d34 Kunihiko Hayashi          2018-08-22  170  	hpriv = ahci_platform_get_resources(pdev, 0);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  171  	if (IS_ERR(hpriv))
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  172  		return PTR_ERR(hpriv);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  173  
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  174  	/*
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  175  	 * Internally ahci_platform_get_resources() calls clk_get(dev, NULL)
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  176  	 * when trying to obtain the functional clock. This SATA controller
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  177  	 * uses two clocks for which we specify two connection ids. If we don't
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  178  	 * have the functional clock at this point - call clk_get() again with
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  179  	 * con_id = "fck".
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  180  	 */
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30 @181  	if (!hpriv->clks[0]) {
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  182  		clk = clk_get(dev, "fck");
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  183  		if (IS_ERR(clk))
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  184  			return PTR_ERR(clk);
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  185  
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30 @186  		hpriv->clks[0] = clk;
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  187  	}
+82dbe1a68fd65a Bartosz Golaszewski       2017-01-30  188  
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  189  	/*
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  190  	 * The second clock used by ahci-da850 is the external REFCLK. If we
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  191  	 * didn't get it from ahci_platform_get_resources(), let's try to
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  192  	 * specify the con_id in clk_get().
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  193  	 */
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  194  	if (!hpriv->clks[1]) {
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  195  		clk = clk_get(dev, "refclk");
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  196  		if (IS_ERR(clk)) {
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  197  			dev_err(dev, "unable to obtain the reference clock");
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  198  			return -ENODEV;
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  199  		}
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  200  
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  201  		hpriv->clks[1] = clk;
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  202  	}
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  203  
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30 @204  	mpy = ahci_da850_calculate_mpy(clk_get_rate(hpriv->clks[1]));
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  205  	if (mpy == 0) {
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  206  		dev_err(dev, "invalid REFCLK multiplier value: 0x%x", mpy);
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  207  		return -EINVAL;
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  208  	}
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  209  
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  210  	rc = ahci_platform_enable_resources(hpriv);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  211  	if (rc)
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  212  		return rc;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  213  
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  214  	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+c88c094985ad38 Christophe JAILLET        2017-08-16  215  	if (!res) {
+c88c094985ad38 Christophe JAILLET        2017-08-16  216  		rc = -ENODEV;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  217  		goto disable_resources;
+c88c094985ad38 Christophe JAILLET        2017-08-16  218  	}
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  219  
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  220  	pwrdn_reg = devm_ioremap(dev, res->start, resource_size(res));
+c88c094985ad38 Christophe JAILLET        2017-08-16  221  	if (!pwrdn_reg) {
+c88c094985ad38 Christophe JAILLET        2017-08-16  222  		rc = -ENOMEM;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  223  		goto disable_resources;
+c88c094985ad38 Christophe JAILLET        2017-08-16  224  	}
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  225  
+cdf0ead3747200 Bartosz Golaszewski       2017-01-30  226  	da850_sata_init(dev, pwrdn_reg, hpriv->mmio, mpy);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  227  
+018d5ef2048fca Akinobu Mita              2015-01-29  228  	rc = ahci_platform_init_host(pdev, hpriv, &ahci_da850_port_info,
+018d5ef2048fca Akinobu Mita              2015-01-29  229  				     &ahci_platform_sht);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  230  	if (rc)
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  231  		goto disable_resources;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  232  
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  233  	return 0;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  234  disable_resources:
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  235  	ahci_platform_disable_resources(hpriv);
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  236  	return rc;
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  237  }
+ae8723f8a9c8e8 Bartlomiej Zolnierkiewicz 2014-03-25  238  
 
 -- 
 0-DAY CI Kernel Test Service
