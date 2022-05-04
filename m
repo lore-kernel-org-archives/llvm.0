@@ -1,300 +1,242 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61733237
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 19:58:15 +0000 (UTC)
-Received: by mail-ej1-f41.google.com with SMTP id y3so4873842ejo.12
-        for <llvm@lists.linux.dev>; Wed, 04 May 2022 12:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y+sByE56HbVf5kRX6gGxIKl4lkDcQYxYxjANal7cqo4=;
-        b=Fisf8qNfLenDK0j792maHiYPMMvmyhGB9B3J/xS9stoAM/UZoSn3s9eWa4z58SqqtN
-         zwNzc/F7jGucn3q+uOerwwvhkYcHR8WadSDg35wFqZ6iJOtuV3DgeIHYCsICPjn3FRC5
-         ijS3ruVDVcid8vwK6Aeyu8cvVWuqX4vHHcMprgjz8mGjIqaTTVh5y7xE1A9w5vPgc3/M
-         9OL1YFUN+X3Smqy7ONv67Xs9IxNQQJThHBH0mRzDjCqw6Y6Boyru+xViNBlwab5eTP66
-         Ql7OyvNLc8tFoVxvf1pFaiO/JKRt9GNoTAQHusID9bvyAzw/qXdqG5nBEcpTVWJq8YZ4
-         Z1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y+sByE56HbVf5kRX6gGxIKl4lkDcQYxYxjANal7cqo4=;
-        b=jy5pIKJHiY34PpaC2jJ6z00MSGmpuPUtPa13HdyfmVHo8Lx0pQKaKPMYlv5Am7h6tn
-         wmx1aCsic7l3zY3nCDezvXilKz+upmGNoejIR84FXdmg9YVySyBhVSW9fKYYvpRUtI5r
-         qFioEFkdPFYjEBLIjpOT8VF68p/fne9WNdUKGeplxr0+oOcs3yqVCxpWiToyujDY8oO2
-         lFZkQsItz5kZ/ZX7FIZEW4ifiJ7Ijced9GzTmzJgvDF1Gz1KTveb+JNF/LwzyZN4IBR0
-         1PtQoyGYNz3hQYwK1Cm7mNmOS8tdwMB0XrWaG6mkze9wPlcefQ5rAtdwdYw9Dvelftuk
-         5bMQ==
-X-Gm-Message-State: AOAM533aioI2NWpHJEIpfbKpzOnCswufnSKzYA9YDxPR6029PAjr0i+v
-	rHA6AsWKDNYkGQDwRYqnjVXcnMMt4Po0DUxpG7/qNA==
-X-Google-Smtp-Source: ABdhPJyNqylHJlc3dOLmSwn3LLwT4ktliGhTIZtJUbCp6p9cyFNeSQSMHaaSeuuF72ZsBGrGa7DMKOVMS/2gIc+sdec=
-X-Received: by 2002:a17:907:9726:b0:6f4:c0e:40ce with SMTP id
- jg38-20020a170907972600b006f40c0e40cemr21300141ejc.170.1651694293700; Wed, 04
- May 2022 12:58:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400A03237
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 20:11:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651695063; x=1683231063;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zyaGWU6dc4sJyiCu9lx0sTzHkueZWVwMWhYROsaMyQU=;
+  b=Edh/OhBPlxmtcTiveSx6ULpmNj0tHWAsX06cvShQ1Ok4i5E0H26oxkeK
+   e6/cQfHau8DV3JwTQzlB8B1rDCsqOojBiEz/EFa8luiQXeaTO+VNwzBSW
+   KEGTaxpVW4jfu9vgYryM9Op5JGDFhnKPK6kDsn+kDiHkhBKK8s7qjlnFX
+   CdyC+RwibQPMsiTNpsbeI2jSgfEDbfyceb5quDeaeMpnNDuSlZrrWpDxx
+   cD9nooDfA4dA8lZvlA/1Awesg2uXo35KiwwBS6EOvNL0JXxfb5YBGFH2D
+   1BIBGKkmrUa2EwJU9xE7M+SKuH9wWYms7+AkAEHMINmz+4FGZclmPuXwJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248422460"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="248422460"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 13:11:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="664631589"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 04 May 2022 13:11:01 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmLKu-000BkZ-Al;
+	Wed, 04 May 2022 20:11:00 +0000
+Date: Thu, 5 May 2022 04:10:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jchao Sun <sunjunchao2870@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: fs/fs-writeback.c:2397:6: warning: variable 'wb' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202205050403.jB6rulkz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220504014440.3697851-1-keescook@chromium.org> <20220504014440.3697851-4-keescook@chromium.org>
-In-Reply-To: <20220504014440.3697851-4-keescook@chromium.org>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Wed, 4 May 2022 14:58:02 -0500
-Message-ID: <CAGS_qxrPauYtkrfB37ne9bOXJR2JQc4=jaJP5tGN4mnha7mANg@mail.gmail.com>
-Subject: Re: [PATCH 03/32] flex_array: Add Kunit tests
-To: Kees Cook <keescook@chromium.org>
-Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>, David Gow <davidgow@google.com>, 
-	kunit-dev@googlegroups.com, Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, 
-	Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
-	Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove <linuxdrivers@attotech.com>, 
-	brcm80211-dev-list.pdl@broadcom.com, Christian Brauner <brauner@kernel.org>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel <chris@zankel.net>, 
-	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>, 
-	Daniel Vetter <daniel.vetter@ffwll.ch>, Dan Williams <dan.j.williams@intel.com>, 
-	David Howells <dhowells@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
-	Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
-	Eric Paris <eparis@parisplace.org>, Eugeniu Rosca <erosca@de.adit-jv.com>, 
-	Felipe Balbi <balbi@kernel.org>, Francis Laniel <laniel_francis@privacyrequired.com>, 
-	Frank Rowand <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman <gregory.greenman@intel.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Haiyang Zhang <haiyangz@microsoft.com>, 
-	Hante Meuleman <hante.meuleman@broadcom.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris <jmorris@namei.org>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jens Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>, 
-	Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, 
-	Leon Romanovsky <leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	linux1394-devel@lists.sourceforge.net, linux-afs@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-xtensa@linux-xtensa.org, 
-	llvm@lists.linux.dev, Loic Poulain <loic.poulain@linaro.org>, 
-	Louis Peens <louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, 
-	Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Muchun Song <songmuchun@bytedance.com>, 
-	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, Rich Felker <dalias@aerifal.cx>, 
-	Rob Herring <robh+dt@kernel.org>, Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org, 
-	"Serge E. Hallyn" <serge@hallyn.com>, SHA-cyfmac-dev-list@infineon.com, 
-	Simon Horman <simon.horman@corigine.com>, Stefano Stabellini <sstabellini@kernel.org>, 
-	Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Stephen Hemminger <sthemmin@microsoft.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Tadeusz Struk <tadeusz.struk@linaro.org>, Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>, 
-	Udipto Goswami <quic_ugoswami@quicinc.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>, 
-	xen-devel@lists.xenproject.org, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, May 3, 2022 at 8:47 PM Kees Cook <keescook@chromium.org> wrote:
-> +#define COMPARE_STRUCTS(STRUCT_A, STRUCT_B)    do {                    \
-> +       STRUCT_A *ptr_A;                                                \
-> +       STRUCT_B *ptr_B;                                                \
-> +       int rc;                                                         \
-> +       size_t size_A, size_B;                                          \
-> +                                                                       \
-> +       /* matching types for flex array elements and count */          \
-> +       KUNIT_EXPECT_EQ(test, sizeof(*ptr_A), sizeof(*ptr_B));          \
-> +       KUNIT_EXPECT_TRUE(test, __same_type(*ptr_A->data,               \
-> +               *ptr_B->__flex_array_elements));                        \
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220505-023756/Jchao-Sun/Add-assert-for-inode-i_io_list-in-inode_io_list_move_locked/20220503-180501
+head:   af0b042e914fbaf7a7ac9d463c91b8566461c39f
+commit: af0b042e914fbaf7a7ac9d463c91b8566461c39f writeback: Fix inode->i_io_list not be protected by inode->i_lock error
+date:   87 minutes ago
+config: x86_64-randconfig-a011-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050403.jB6rulkz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/af0b042e914fbaf7a7ac9d463c91b8566461c39f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220505-023756/Jchao-Sun/Add-assert-for-inode-i_io_list-in-inode_io_list_move_locked/20220503-180501
+        git checkout af0b042e914fbaf7a7ac9d463c91b8566461c39f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Leaving some minor suggestions to go along with David's comments.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Should we make these KUNIT_ASSERT_.* instead?
-I assume if we have a type-mismatch, then we should bail out instead
-of continuing to produce more error messages.
+All warnings (new ones prefixed by >>):
 
-> +       KUNIT_EXPECT_TRUE(test, __same_type(ptr_A->datalen,             \
-> +               ptr_B->__flex_array_elements_count));                   \
-> +       KUNIT_EXPECT_EQ(test, sizeof(*ptr_A->data),                     \
-> +                             sizeof(*ptr_B->__flex_array_elements));   \
-> +       KUNIT_EXPECT_EQ(test, offsetof(typeof(*ptr_A), data),           \
-> +                             offsetof(typeof(*ptr_B),                  \
-> +                                      __flex_array_elements));         \
-> +       KUNIT_EXPECT_EQ(test, offsetof(typeof(*ptr_A), datalen),        \
-> +                             offsetof(typeof(*ptr_B),                  \
-> +                                      __flex_array_elements_count));   \
-> +                                                                       \
-> +       /* struct_size() vs __fas_bytes() */                            \
-> +       size_A = struct_size(ptr_A, data, 13);                          \
-> +       rc = __fas_bytes(ptr_B, __flex_array_elements,                  \
-> +                        __flex_array_elements_count, 13, &size_B);     \
-> +       KUNIT_EXPECT_EQ(test, rc, 0);                                   \
-
-Hmm, what do you think about inlining the call/dropping rc?
-
-i.e. something like
-KUNIT_EXPECT_EQ(test, 0, __fas_bytes(ptr_B, __flex_array_elements, \
-                        __flex_array_elements_count, 13, &size_B));
-
-That would give a slightly clearer error message on failure.
-Otherwise the user only really gets a line number to try and start to
-understand what went wrong.
-
-> +
-> +#define CHECK_COPY(ptr)                do {                                            \
-> +       typeof(*(ptr)) *_cc_dst = (ptr);                                        \
-> +       KUNIT_EXPECT_EQ(test, _cc_dst->induce_padding, 0);                      \
-> +       memcpy(&padding, &_cc_dst->induce_padding + sizeof(_cc_dst->induce_padding), \
-> +              sizeof(padding));                                                \
-> +       /* Padding should be zero too. */                                       \
-> +       KUNIT_EXPECT_EQ(test, padding, 0);                                      \
-> +       KUNIT_EXPECT_EQ(test, src->count, _cc_dst->count);                      \
-
-This also seems like a good place to use ASSERT instead of EXPECT.
+>> fs/fs-writeback.c:2397:6: warning: variable 'wb' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if ((inode->i_state & flags) != flags) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fs-writeback.c:2467:15: note: uninitialized use occurs here
+           spin_unlock(&wb->list_lock);
+                        ^~
+   fs/fs-writeback.c:2397:2: note: remove the 'if' if its condition is always true
+           if ((inode->i_state & flags) != flags) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fs-writeback.c:2355:26: note: initialize the variable 'wb' to silence this warning
+           struct bdi_writeback *wb;
+                                   ^
+                                    = NULL
+   1 warning generated.
 
 
-> +       KUNIT_EXPECT_EQ(test, _cc_dst->count, TEST_TARGET);                     \
-> +       for (i = 0; i < _cc_dst->count - 1; i++) {                              \
-> +               /* 'A' is 0x41, and here repeated in a u32. */                  \
-> +               KUNIT_EXPECT_EQ(test, _cc_dst->flex[i], 0x41414141);            \
-> +       }                                                                       \
-> +       /* Last item should be different. */                                    \
-> +       KUNIT_EXPECT_EQ(test, _cc_dst->flex[_cc_dst->count - 1], 0x14141414);   \
-> +} while (0)
-> +
-> +/* Test copying from one flexible array struct into another. */
-> +static void flex_cpy_test(struct kunit *test)
-> +{
-> +#define TEST_BOUNDS    13
-> +#define TEST_TARGET    12
-> +#define TEST_SMALL     10
-> +       struct flex_cpy_obj *src, *dst;
-> +       unsigned long padding;
-> +       int i, rc;
-> +
-> +       /* Prepare open-coded source. */
-> +       src = kzalloc(struct_size(src, flex, TEST_BOUNDS), GFP_KERNEL);
+vim +2397 fs/fs-writeback.c
 
-Looks like we could use kunit_kzalloc() here and avoid needing the
-manual call to kfree?
-This also holds for the other test cases where they don't have early
-calls to kfree().
+1efff914afac8a Theodore Ts'o         2015-03-17  2323  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2324  /**
+35d14f278e530e Eric Biggers          2021-01-12  2325   * __mark_inode_dirty -	internal function to mark an inode dirty
+0117d4272b1acd Mauro Carvalho Chehab 2017-05-12  2326   *
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2327   * @inode: inode to mark
+35d14f278e530e Eric Biggers          2021-01-12  2328   * @flags: what kind of dirty, e.g. I_DIRTY_SYNC.  This can be a combination of
+35d14f278e530e Eric Biggers          2021-01-12  2329   *	   multiple I_DIRTY_* flags, except that I_DIRTY_TIME can't be combined
+35d14f278e530e Eric Biggers          2021-01-12  2330   *	   with I_DIRTY_PAGES.
+0117d4272b1acd Mauro Carvalho Chehab 2017-05-12  2331   *
+35d14f278e530e Eric Biggers          2021-01-12  2332   * Mark an inode as dirty.  We notify the filesystem, then update the inode's
+35d14f278e530e Eric Biggers          2021-01-12  2333   * dirty flags.  Then, if needed we add the inode to the appropriate dirty list.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2334   *
+35d14f278e530e Eric Biggers          2021-01-12  2335   * Most callers should use mark_inode_dirty() or mark_inode_dirty_sync()
+35d14f278e530e Eric Biggers          2021-01-12  2336   * instead of calling this directly.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2337   *
+35d14f278e530e Eric Biggers          2021-01-12  2338   * CAREFUL!  We only add the inode to the dirty list if it is hashed or if it
+35d14f278e530e Eric Biggers          2021-01-12  2339   * refers to a blockdev.  Unhashed inodes will never be added to the dirty list
+35d14f278e530e Eric Biggers          2021-01-12  2340   * even if they are later hashed, as they will have been marked dirty already.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2341   *
+35d14f278e530e Eric Biggers          2021-01-12  2342   * In short, ensure you hash any inodes _before_ you start marking them dirty.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2343   *
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2344   * Note that for blockdevs, inode->dirtied_when represents the dirtying time of
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2345   * the block-special inode (/dev/hda1) itself.  And the ->dirtied_when field of
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2346   * the kernel-internal blockdev inode represents the dirtying time of the
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2347   * blockdev's pages.  This is why for I_DIRTY_PAGES we always use
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2348   * page->mapping->host, so the page-dirtying time is recorded in the internal
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2349   * blockdev inode.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2350   */
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2351  void __mark_inode_dirty(struct inode *inode, int flags)
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2352  {
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2353  	struct super_block *sb = inode->i_sb;
+35d14f278e530e Eric Biggers          2021-01-12  2354  	int dirtytime = 0;
+af0b042e914fba Jchao Sun             2022-05-04  2355  	struct bdi_writeback *wb;
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2356  
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2357  	trace_writeback_mark_inode_dirty(inode, flags);
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2358  
+35d14f278e530e Eric Biggers          2021-01-12  2359  	if (flags & I_DIRTY_INODE) {
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2360  		/*
+35d14f278e530e Eric Biggers          2021-01-12  2361  		 * Notify the filesystem about the inode being dirtied, so that
+35d14f278e530e Eric Biggers          2021-01-12  2362  		 * (if needed) it can update on-disk fields and journal the
+35d14f278e530e Eric Biggers          2021-01-12  2363  		 * inode.  This is only needed when the inode itself is being
+35d14f278e530e Eric Biggers          2021-01-12  2364  		 * dirtied now.  I.e. it's only needed for I_DIRTY_INODE, not
+35d14f278e530e Eric Biggers          2021-01-12  2365  		 * for just I_DIRTY_PAGES or I_DIRTY_TIME.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2366  		 */
+9fb0a7da0c528d Tejun Heo             2013-01-11  2367  		trace_writeback_dirty_inode_start(inode, flags);
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2368  		if (sb->s_op->dirty_inode)
+a38ed483a72672 Eric Biggers          2021-01-12  2369  			sb->s_op->dirty_inode(inode, flags & I_DIRTY_INODE);
+9fb0a7da0c528d Tejun Heo             2013-01-11  2370  		trace_writeback_dirty_inode(inode, flags);
+e2728c5621fd9c Eric Biggers          2021-01-12  2371  
+35d14f278e530e Eric Biggers          2021-01-12  2372  		/* I_DIRTY_INODE supersedes I_DIRTY_TIME. */
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2373  		flags &= ~I_DIRTY_TIME;
+35d14f278e530e Eric Biggers          2021-01-12  2374  	} else {
+35d14f278e530e Eric Biggers          2021-01-12  2375  		/*
+35d14f278e530e Eric Biggers          2021-01-12  2376  		 * Else it's either I_DIRTY_PAGES, I_DIRTY_TIME, or nothing.
+35d14f278e530e Eric Biggers          2021-01-12  2377  		 * (We don't support setting both I_DIRTY_PAGES and I_DIRTY_TIME
+35d14f278e530e Eric Biggers          2021-01-12  2378  		 * in one call to __mark_inode_dirty().)
+35d14f278e530e Eric Biggers          2021-01-12  2379  		 */
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2380  		dirtytime = flags & I_DIRTY_TIME;
+35d14f278e530e Eric Biggers          2021-01-12  2381  		WARN_ON_ONCE(dirtytime && flags != I_DIRTY_TIME);
+35d14f278e530e Eric Biggers          2021-01-12  2382  	}
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2383  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2384  	/*
+9c6ac78eb3521c Tejun Heo             2014-10-24  2385  	 * Paired with smp_mb() in __writeback_single_inode() for the
+9c6ac78eb3521c Tejun Heo             2014-10-24  2386  	 * following lockless i_state test.  See there for details.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2387  	 */
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2388  	smp_mb();
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2389  
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2390  	if (((inode->i_state & flags) == flags) ||
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2391  	    (dirtytime && (inode->i_state & I_DIRTY_INODE)))
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2392  		return;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2393  
+250df6ed274d76 Dave Chinner          2011-03-22  2394  	spin_lock(&inode->i_lock);
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2395  	if (dirtytime && (inode->i_state & I_DIRTY_INODE))
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2396  		goto out_unlock_inode;
+03ba3782e8dcc5 Jens Axboe            2009-09-09 @2397  	if ((inode->i_state & flags) != flags) {
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2398  		const int was_dirty = inode->i_state & I_DIRTY;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2399  
+52ebea749aaed1 Tejun Heo             2015-05-22  2400  		inode_attach_wb(inode, NULL);
+52ebea749aaed1 Tejun Heo             2015-05-22  2401  
+35d14f278e530e Eric Biggers          2021-01-12  2402  		/* I_DIRTY_INODE supersedes I_DIRTY_TIME. */
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2403  		if (flags & I_DIRTY_INODE)
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2404  			inode->i_state &= ~I_DIRTY_TIME;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2405  		inode->i_state |= flags;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2406  
+af0b042e914fba Jchao Sun             2022-05-04  2407  		wb = locked_inode_to_wb_and_lock_list(inode);
+af0b042e914fba Jchao Sun             2022-05-04  2408  		spin_lock(&inode->i_lock);
+af0b042e914fba Jchao Sun             2022-05-04  2409  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2410  		/*
+5afced3bf28100 Jan Kara              2020-05-29  2411  		 * If the inode is queued for writeback by flush worker, just
+5afced3bf28100 Jan Kara              2020-05-29  2412  		 * update its dirty state. Once the flush worker is done with
+5afced3bf28100 Jan Kara              2020-05-29  2413  		 * the inode it will place it on the appropriate superblock
+5afced3bf28100 Jan Kara              2020-05-29  2414  		 * list, based upon its state.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2415  		 */
+5afced3bf28100 Jan Kara              2020-05-29  2416  		if (inode->i_state & I_SYNC_QUEUED)
+af0b042e914fba Jchao Sun             2022-05-04  2417  			goto out_unlock;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2418  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2419  		/*
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2420  		 * Only add valid (hashed) inodes to the superblock's
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2421  		 * dirty list.  Add blockdev inodes as well.
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2422  		 */
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2423  		if (!S_ISBLK(inode->i_mode)) {
+1d3382cbf02986 Al Viro               2010-10-23  2424  			if (inode_unhashed(inode))
+af0b042e914fba Jchao Sun             2022-05-04  2425  				goto out_unlock;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2426  		}
+a4ffdde6e56fdf Al Viro               2010-06-02  2427  		if (inode->i_state & I_FREEING)
+af0b042e914fba Jchao Sun             2022-05-04  2428  			goto out_unlock;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2429  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2430  		/*
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2431  		 * If the inode was already on b_dirty/b_io/b_more_io, don't
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2432  		 * reposition it (that would break b_dirty time-ordering).
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2433  		 */
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2434  		if (!was_dirty) {
+d6c10f1fc8626d Tejun Heo             2015-05-22  2435  			struct list_head *dirty_list;
+a66979abad090b Dave Chinner          2011-03-22  2436  			bool wakeup_bdi = false;
+500b067c5e6cee Jens Axboe            2009-09-09  2437  
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2438  			inode->dirtied_when = jiffies;
+a2f4870697a5bc Theodore Ts'o         2015-03-17  2439  			if (dirtytime)
+a2f4870697a5bc Theodore Ts'o         2015-03-17  2440  				inode->dirtied_time_when = jiffies;
+d6c10f1fc8626d Tejun Heo             2015-05-22  2441  
+0e11f6443f522f Christoph Hellwig     2018-02-21  2442  			if (inode->i_state & I_DIRTY)
+0747259d13febf Tejun Heo             2015-05-22  2443  				dirty_list = &wb->b_dirty;
+a2f4870697a5bc Theodore Ts'o         2015-03-17  2444  			else
+0747259d13febf Tejun Heo             2015-05-22  2445  				dirty_list = &wb->b_dirty_time;
+d6c10f1fc8626d Tejun Heo             2015-05-22  2446  
+c7f5408493aeb0 Dave Chinner          2015-03-04  2447  			wakeup_bdi = inode_io_list_move_locked(inode, wb,
+d6c10f1fc8626d Tejun Heo             2015-05-22  2448  							       dirty_list);
+d6c10f1fc8626d Tejun Heo             2015-05-22  2449  
+0747259d13febf Tejun Heo             2015-05-22  2450  			spin_unlock(&wb->list_lock);
+af0b042e914fba Jchao Sun             2022-05-04  2451  			spin_unlock(&inode->i_lock);
+0ae45f63d4ef8d Theodore Ts'o         2015-02-02  2452  			trace_writeback_dirty_inode_enqueue(inode);
+a66979abad090b Dave Chinner          2011-03-22  2453  
+d6c10f1fc8626d Tejun Heo             2015-05-22  2454  			/*
+d6c10f1fc8626d Tejun Heo             2015-05-22  2455  			 * If this is the first dirty inode for this bdi,
+d6c10f1fc8626d Tejun Heo             2015-05-22  2456  			 * we have to wake-up the corresponding bdi thread
+d6c10f1fc8626d Tejun Heo             2015-05-22  2457  			 * to make sure background write-back happens
+d6c10f1fc8626d Tejun Heo             2015-05-22  2458  			 * later.
+d6c10f1fc8626d Tejun Heo             2015-05-22  2459  			 */
+f56753ac2a9081 Christoph Hellwig     2020-09-24  2460  			if (wakeup_bdi &&
+f56753ac2a9081 Christoph Hellwig     2020-09-24  2461  			    (wb->bdi->capabilities & BDI_CAP_WRITEBACK))
+0747259d13febf Tejun Heo             2015-05-22  2462  				wb_wakeup_delayed(wb);
+a66979abad090b Dave Chinner          2011-03-22  2463  			return;
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2464  		}
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2465  	}
+af0b042e914fba Jchao Sun             2022-05-04  2466  out_unlock:
+af0b042e914fba Jchao Sun             2022-05-04  2467  	spin_unlock(&wb->list_lock);
+250df6ed274d76 Dave Chinner          2011-03-22  2468  out_unlock_inode:
+250df6ed274d76 Dave Chinner          2011-03-22  2469  	spin_unlock(&inode->i_lock);
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2470  }
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2471  EXPORT_SYMBOL(__mark_inode_dirty);
+03ba3782e8dcc5 Jens Axboe            2009-09-09  2472  
 
-Doing so would also let you use KUNIT_ASSERT's without fear of leaking
-these allocations.
-
-> +       src->count = TEST_BOUNDS;
-> +       memset(src->flex, 'A', flex_array_size(src, flex, TEST_BOUNDS));
-> +       src->flex[src->count - 2] = 0x14141414;
-> +       src->flex[src->count - 1] = 0x24242424;
-> +
-> +       /* Prepare open-coded destination, alloc only. */
-> +       dst = kzalloc(struct_size(src, flex, TEST_BOUNDS), GFP_KERNEL);
-> +       /* Pre-fill with 0xFE marker. */
-> +       memset(dst, 0xFE, struct_size(src, flex, TEST_BOUNDS));
-> +       /* Pretend we're 1 element smaller. */
-> +       dst->count = TEST_TARGET;
-> +
-> +       /* Pretend to match the target destination size. */
-> +       src->count = TEST_TARGET;
-> +
-> +       rc = flex_cpy(dst, src);
-> +       KUNIT_EXPECT_EQ(test, rc, 0);
-> +       CHECK_COPY(dst);
-> +       /* Item past last copied item is unchanged from initial memset. */
-> +       KUNIT_EXPECT_EQ(test, dst->flex[dst->count], 0xFEFEFEFE);
-> +
-> +       /* Now trip overflow, and verify we didn't clobber beyond end. */
-> +       src->count = TEST_BOUNDS;
-> +       rc = flex_cpy(dst, src);
-> +       KUNIT_EXPECT_EQ(test, rc, -E2BIG);
-> +       /* Item past last copied item is unchanged from initial memset. */
-> +       KUNIT_EXPECT_EQ(test, dst->flex[dst->count], 0xFEFEFEFE);
-> +
-> +       /* Reset destination contents. */
-> +       memset(dst, 0xFD, struct_size(src, flex, TEST_BOUNDS));
-> +       dst->count = TEST_TARGET;
-> +
-> +       /* Copy less than max. */
-> +       src->count = TEST_SMALL;
-> +       rc = flex_cpy(dst, src);
-> +       KUNIT_EXPECT_EQ(test, rc, 0);
-> +       /* Verify count was adjusted. */
-> +       KUNIT_EXPECT_EQ(test, dst->count, TEST_SMALL);
-
-Just an FYI, macros get evaluated before the expect macros can stringify them.
-So the error message would look something like
-  Expected dest->count == 10
-     but dest->count = 9
-
-Not a big concern, but just noting that "TEST_SMALL" won't be visible at all.
-Could opt for
-
-KUNIT_EXPECT_EQ_MSG(test, dst->count, TEST_SMALL, "my custom extra message");
-
-if you think it'd be usable to make the test more grokkable.
-
-> +       /* Verify element beyond src size was wiped. */
-> +       KUNIT_EXPECT_EQ(test, dst->flex[TEST_SMALL], 0);
-> +       /* Verify element beyond original dst size was untouched. */
-> +       KUNIT_EXPECT_EQ(test, dst->flex[TEST_TARGET], 0xFDFDFDFD);
-> +
-> +       kfree(dst);
-> +       kfree(src);
-> +#undef TEST_BOUNDS
-> +#undef TEST_TARGET
-> +#undef TEST_SMALL
-> +}
-> +
-> +static void flex_dup_test(struct kunit *test)
-> +{
-> +#define TEST_TARGET    12
-> +       struct flex_cpy_obj *src, *dst = NULL, **null = NULL;
-> +       struct flex_dup_obj *encap = NULL;
-> +       unsigned long padding;
-> +       int i, rc;
-> +
-> +       /* Prepare open-coded source. */
-> +       src = kzalloc(struct_size(src, flex, TEST_TARGET), GFP_KERNEL);
-> +       src->count = TEST_TARGET;
-> +       memset(src->flex, 'A', flex_array_size(src, flex, TEST_TARGET));
-> +       src->flex[src->count - 1] = 0x14141414;
-> +
-> +       /* Reject NULL @alloc. */
-> +       rc = flex_dup(null, src, GFP_KERNEL);
-> +       KUNIT_EXPECT_EQ(test, rc, -EINVAL);
-> +
-> +       /* Check good copy. */
-> +       rc = flex_dup(&dst, src, GFP_KERNEL);
-> +       KUNIT_EXPECT_EQ(test, rc, 0);
-> +       KUNIT_ASSERT_TRUE(test, dst != NULL);
-> +       CHECK_COPY(dst);
-> +
-> +       /* Reject non-NULL *@alloc. */
-> +       rc = flex_dup(&dst, src, GFP_KERNEL);
-> +       KUNIT_EXPECT_EQ(test, rc, -EINVAL);
-> +
-> +       kfree(dst);
-> +
-> +       /* Check good encap copy. */
-> +       rc = __flex_dup(&encap, .fas, src, GFP_KERNEL);
-> +       KUNIT_EXPECT_EQ(test, rc, 0);
-> +       KUNIT_ASSERT_TRUE(test, dst != NULL);
-
-FYI, there's a new KUNIT_ASSERT_NOT_NULL() macro in the
--kselftest/kunit branch,
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220211164246.410079-1-ribalda@chromium.org/
-
-But that's not planned for inclusion into mainline until 5.19, so
-leaving this as-is is better for now.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
