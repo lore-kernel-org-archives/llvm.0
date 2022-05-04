@@ -1,47 +1,47 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2078220E6
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:57:46 +0000 (UTC)
-Received: by mail-pf1-f181.google.com with SMTP id j6so2281pfe.13
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:57:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E9520EC
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:57:48 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id j6so2348pfe.13
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RgEz4A26uAC0tPMSdTdWzcdcPMkc9MyjUZa57zGhp5c=;
-        b=THMBXiotwI/HtB6w2vZ4AUJ2BjQh4hIPsHX7+RZwOa1PHLlgiT/9TXJjWzKZ2YkERx
-         +jSME8ruQzJrkosl9qqzWHjBRc3gpjhe8YYA4SgiQV2fs5uQIJ4ItuKhnxn0qRtTRwig
-         4dauL4e9jCHwc/wxp5WYhLqZAsMtRYdbGk0Nk=
+        bh=dWvrJlxp0hfwq/rpuMGCsTJMwzo7GNCIoJATWYPCVJE=;
+        b=OW0yn3aPFgkfwn8L35EyIBf488Ir3oPRdcuBBy8HPNsH5M0x5CXqSqshhOTKtpKq5L
+         QF/xhc9eykoWhvFmZW6nwgo8tyY5Hha7nsaQ+7vI7aAIrUuE+pM/MYF4FAAKrs9ERjRM
+         nEcriHnnehj4N7XQ40GlCVy2op0vzdnIn84H4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RgEz4A26uAC0tPMSdTdWzcdcPMkc9MyjUZa57zGhp5c=;
-        b=uyIaa4NtDJA81i3pr+ucOSrZH27vosG3wFhAM4/EyZcnEipAfEWyEVxJz2suEiuDor
-         N1dqajDOu9se/axl34fTrNJU2mp0A2gCds7xBQ3beGgqrRyj4RyQU4K4gLLr8/xqSh7P
-         R5e6y6CbHAdFqqU8KYvq8XxZt1fAnlkzokGxJHfP+PWrd3FvkdPDNtGqsMMGhSLGlDNo
-         mOnvI+sn2Y7lJmP2H/+/cvuu3yuyOtHsej3SxDQ0Kwv5/9/5pxtPBvJTlLYLVajR2WvP
-         3AnP+qfXBCIF3d8LXtAI6JFGDzc3v8bL+nMqlVWZvurzSL3fuMV3J1UbywUU2qKincdy
-         g5fA==
-X-Gm-Message-State: AOAM530xlc/l/1uIPWEdSSBNc+GCDIKcsX+gnKlOJTxUrXKPXE4TRvHa
-	mwkUinIkIDEvx/0GxKgpnzQeYg==
-X-Google-Smtp-Source: ABdhPJy/mXnQX0lzKSCAqZ5j/o4PSwRGlEpcGdLSsNwTNiJ+5ZDPNEMrqd4G6zPJoCRhzNbxNPSiag==
-X-Received: by 2002:a65:6e8f:0:b0:3c1:c903:e5fe with SMTP id bm15-20020a656e8f000000b003c1c903e5femr6684833pgb.424.1651629465609;
-        Tue, 03 May 2022 18:57:45 -0700 (PDT)
+        bh=dWvrJlxp0hfwq/rpuMGCsTJMwzo7GNCIoJATWYPCVJE=;
+        b=XizsH39CTh2KTmyZ2UcxXa2RmMzbPRObjEyQOE/QdfsSyscEh3S0G/bipLTTW3QwJz
+         4MOt9sFUBfyjrCTD3yIMwp9nzkFzc55xfExqNIDndwxarrsF4l6I/KoaJ/9lsXxADp88
+         zRi3+AraYj3oiOCQF9PcCXr72UszZL0Y5ELvsTpIOelVZ5p8SHN3SIsoTYUgAQ5tXpis
+         wds4yomSR6p+BmbG8qmLVc5D00kcTd9qvPivXIoNgIPXYUYT/LflPSR/RouJWbrhVB6g
+         GvKk4uo7DP9XfAlNq8TeubSGQ+UPAqclzKIaWBfq16q8a5HLE3OXc7A7EJppfDa3Gl6/
+         kCXA==
+X-Gm-Message-State: AOAM530KBYdgp1OTALWm9z7rJnT67mQ/lVzrMtFgOiNcEVjRl5NLJP04
+	FjwAh7WAHJcl7EJ5QrxaG8sYtQ==
+X-Google-Smtp-Source: ABdhPJwbC/L7nZs96BtZ9jeB/rQtyCDwXrBrp6VlWrbG6DOzItmYMRFYheK4g32qpwyIMeuySKD+FQ==
+X-Received: by 2002:a63:2b05:0:b0:3c2:3ed1:5fa9 with SMTP id r5-20020a632b05000000b003c23ed15fa9mr8717398pgr.220.1651629467921;
+        Tue, 03 May 2022 18:57:47 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r7-20020a17090b050700b001d2bff34228sm2042759pjz.9.2022.05.03.18.57.44
+        by smtp.gmail.com with ESMTPSA id x21-20020a1709027c1500b0015e8d4eb202sm6984553pll.76.2022.05.03.18.57.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 18:57:45 -0700 (PDT)
+        Tue, 03 May 2022 18:57:46 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: "Gustavo A . R . Silva" <gustavoars@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	linux-hyperv@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	alsa-devel@alsa-project.org,
 	Al Viro <viro@zeniv.linux.org.uk>,
@@ -68,7 +68,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
 	devicetree@vger.kernel.org,
-	Dexuan Cui <decui@microsoft.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eli Cohen <elic@nvidia.com>,
 	Eric Dumazet <edumazet@google.com>,
 	Eric Paris <eparis@parisplace.org>,
@@ -80,12 +80,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Gregory Greenman <gregory.greenman@intel.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
 	Hante Meuleman <hante.meuleman@broadcom.com>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Hulk Robot <hulkci@huawei.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	James Morris <jmorris@namei.org>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
@@ -100,7 +100,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	keyrings@vger.kernel.org,
 	kunit-dev@googlegroups.com,
 	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
 	Lars-Peter Clausen <lars@metafoo.de>,
 	Lee Jones <lee.jones@linaro.org>,
 	Leon Romanovsky <leon@kernel.org>,
@@ -111,9 +110,10 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-arm-msm@vger.kernel.org,
 	linux-bluetooth@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
 	linux-rdma@vger.kernel.org,
 	linux-scsi@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-wireless@vger.kernel.org,
 	linux-xtensa@linux-xtensa.org,
@@ -127,6 +127,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Mark Brown <broonie@kernel.org>,
 	"Martin K. Petersen" <martin.petersen@oracle.com>,
 	Max Filippov <jcmvbkbc@gmail.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
 	Muchun Song <songmuchun@bytedance.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	netdev@vger.kernel.org,
@@ -138,12 +139,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Russell King <linux@armlinux.org.uk>,
 	selinux@vger.kernel.org,
+	"Serge E. Hallyn" <serge@hallyn.com>,
 	SHA-cyfmac-dev-list@infineon.com,
 	Simon Horman <simon.horman@corigine.com>,
 	Stefano Stabellini <sstabellini@kernel.org>,
 	Stefan Richter <stefanr@s5r6.in-berlin.de>,
 	Steffen Klassert <steffen.klassert@secunet.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>,
 	Tadeusz Struk <tadeusz.struk@linaro.org>,
 	Takashi Iwai <tiwai@suse.com>,
@@ -151,13 +152,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Udipto Goswami <quic_ugoswami@quicinc.com>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	wcn36xx@lists.infradead.org,
-	Wei Liu <wei.liu@kernel.org>,
 	xen-devel@lists.xenproject.org,
 	Xiu Jianfeng <xiujianfeng@huawei.com>,
 	Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 26/32] ima: Use mem_to_flex_dup() with struct modsig
-Date: Tue,  3 May 2022 18:44:35 -0700
-Message-Id: <20220504014440.3697851-27-keescook@chromium.org>
+Subject: [PATCH 25/32] Drivers: hv: utils: Use mem_to_flex_dup() with struct cn_msg
+Date: Tue,  3 May 2022 18:44:34 -0700
+Message-Id: <20220504014440.3697851-26-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220504014440.3697851-1-keescook@chromium.org>
 References: <20220504014440.3697851-1-keescook@chromium.org>
@@ -167,7 +167,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2212; h=from:subject; bh=0OJGwcsHhKZ90NmLpvzscbvuHwuTm4ffAc9aRODTTVY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqG62vfnuT12WKQv0IVuyRZyZzMX4U3Y+bYmap0 sx6VNCCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHahgAKCRCJcvTf3G3AJp8HEA CsjdGpDagpIubOZwh4SIwzLI0mQ71SVDOmeVgjaMH3wCaEUbVyUbQcZCwMkSSQkmaYi0JHdt186r90 KEdAes66ANgHJSwIbVxb19utRynHoJDFwO5gfVuTp2sVSu0AKP3KnJZajTXsyucbZynSVAJNanMloi v43qXD0nlRXkU0gX5ADpraYNTEc4DmC1I4QdBks60+U4wHFdhcjQvwo5U7V+5dzuva3RK7ldVtXJrB VeE5PpJQ5Xc1tmru3dEvFHv9MKipcoi+cf2u17BgJcgfDnUcb/oIr/jZVk1w2GF8Ilp5rtUyr0DM8m Na/yIL9jeaPARJok7fgLZP9afaRB6ZwWwE4H2uMjCy1cT6gasjHiZsGre3gXlWVcsFQqLjohy6kCxW rBj7pLN4d++yrxKprYmKAt3zeatf5EMTvrLIgqFUOrk/sAwpHwlXmgGTkAeWNhT8J5VVKpaeshrS8f gKI9RgmhD5seOLoAZLEOSns1PPAdryQb5THkD3O+72gLN08L6etoAPODJ68wd7fcwq7Wg5n5/+AkF2 1jkeaI8b1sgNrwkPOtdnKDQm4yxesI//AmfFdH7EEjbVd52gAVu+rbz7yhcBh1dHRczes2IJW3soaR v4zCatjhXz33SY1+Zru2qRrDvhgaoAqzqRxMbwi9eNYoszXDTRyDKQ8NgEFg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2219; h=from:subject; bh=dgFYdMqTm4tBMA+d8KWXYde/YMvArhgtiTydpKgqF6s=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqGpwfENVCD78xIrOKs07wFk+8+2VNIIqaIzTy/ MQg5zx6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHahgAKCRCJcvTf3G3AJlkID/ 9xYgI2yUTmOqWGUHwjPg6PRpPwUj6yqPTnvHBjZmeB6GcMkb/J1qYZ0We4QMX2FKo8/RxUIZmkpsBI ghlT5pXLwU+EL9vLRAtiKFcmM6HmLrpDOA+H7c/+3yz3nLeExs5il9FvDhAWsAneG2E6lymkjrtZwB PmGHZ1SbLjt7dlHn9zzeTTcBLGvqVG+t1HbL1yM0qT9sxR33bwrS1/XY/VbQ9ZBwXv5G1ci/UQYTn+ IxWJQyTz1WY3n4gGJIy12AX3Gg0SC3bdx9m5pnqgXmSvY3uw+gAkf+Jq+ITd7t+YW8zrXaiMMGPmhC +dn4j7Pvv4hNJ6R/d9/lrj8cAs53cQUbwW3e/7yRsiZb37BKs643K8RW97bKNemjiBUk2NngqjWaOl FzxBm7iGLEjOq989XZeJNEB+MQLecqtGjX+/LxzzzpvAKeMi9bXDiSJAfPG2yxB7wzIUCmUUxW3kKq 5ITIvocBuuqbJzokzh+M+VX/4LsefOVBxhkljlxxgFvwnLhsXHSrMa9c7vd07TAikSiJ0Vi6xYDuv0 m4TiF4oEz1DuG0oiUI9BpM7VSTL+S8V/5GoKv/V+vcO7lhrDKhfS7G8kPKHplhyqNqe7RD2pCIVyOI ++T7/zqpV+vaRd4iu+z+vgmLDrCZcODKGwvjXW2ZeAEW8baladN7FbwkDLDA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -176,61 +176,61 @@ replace the open-coded a deserialization of bytes out of memory into a
 trailing flexible array by using a flex_array.h helper to perform the
 allocation, bounds checking, and copying.
 
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Stephen Hemminger <sthemmin@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: linux-hyperv@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- security/integrity/ima/ima_modsig.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/hv/hv_utils_transport.c | 7 ++-----
+ include/uapi/linux/connector.h  | 4 ++--
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
-index fb25723c65bc..200c080d36de 100644
---- a/security/integrity/ima/ima_modsig.c
-+++ b/security/integrity/ima/ima_modsig.c
-@@ -28,8 +28,8 @@ struct modsig {
- 	 * This is what will go to the measurement list if the template requires
- 	 * storing the signature.
- 	 */
--	int raw_pkcs7_len;
--	u8 raw_pkcs7[];
-+	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, raw_pkcs7_len);
-+	DECLARE_FLEX_ARRAY_ELEMENTS(u8, raw_pkcs7);
+diff --git a/drivers/hv/hv_utils_transport.c b/drivers/hv/hv_utils_transport.c
+index 832885198643..43b4f8893cc0 100644
+--- a/drivers/hv/hv_utils_transport.c
++++ b/drivers/hv/hv_utils_transport.c
+@@ -217,20 +217,17 @@ static void hvt_cn_callback(struct cn_msg *msg, struct netlink_skb_parms *nsp)
+ int hvutil_transport_send(struct hvutil_transport *hvt, void *msg, int len,
+ 			  void (*on_read_cb)(void))
+ {
+-	struct cn_msg *cn_msg;
++	struct cn_msg *cn_msg = NULL;
+ 	int ret = 0;
+ 
+ 	if (hvt->mode == HVUTIL_TRANSPORT_INIT ||
+ 	    hvt->mode == HVUTIL_TRANSPORT_DESTROY) {
+ 		return -EINVAL;
+ 	} else if (hvt->mode == HVUTIL_TRANSPORT_NETLINK) {
+-		cn_msg = kzalloc(sizeof(*cn_msg) + len, GFP_ATOMIC);
+-		if (!cn_msg)
++		if (mem_to_flex_dup(&cn_msg, msg, len, GFP_ATOMIC))
+ 			return -ENOMEM;
+ 		cn_msg->id.idx = hvt->cn_id.idx;
+ 		cn_msg->id.val = hvt->cn_id.val;
+-		cn_msg->len = len;
+-		memcpy(cn_msg->data, msg, len);
+ 		ret = cn_netlink_send(cn_msg, 0, 0, GFP_ATOMIC);
+ 		kfree(cn_msg);
+ 		/*
+diff --git a/include/uapi/linux/connector.h b/include/uapi/linux/connector.h
+index 3738936149a2..b85bbe753dae 100644
+--- a/include/uapi/linux/connector.h
++++ b/include/uapi/linux/connector.h
+@@ -73,9 +73,9 @@ struct cn_msg {
+ 	__u32 seq;
+ 	__u32 ack;
+ 
+-	__u16 len;		/* Length of the following data */
++	__DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, len);
+ 	__u16 flags;
+-	__u8 data[0];
++	__DECLARE_FLEX_ARRAY_ELEMENTS(__u8, data);
  };
  
- /*
-@@ -42,7 +42,7 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
- {
- 	const size_t marker_len = strlen(MODULE_SIG_STRING);
- 	const struct module_signature *sig;
--	struct modsig *hdr;
-+	struct modsig *hdr = NULL;
- 	size_t sig_len;
- 	const void *p;
- 	int rc;
-@@ -65,8 +65,7 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
- 	buf_len -= sig_len + sizeof(*sig);
- 
- 	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
--	hdr = kzalloc(sizeof(*hdr) + sig_len, GFP_KERNEL);
--	if (!hdr)
-+	if (mem_to_flex_dup(&hdr, buf + buf_len, sig_len, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	hdr->pkcs7_msg = pkcs7_parse_message(buf + buf_len, sig_len);
-@@ -76,9 +75,6 @@ int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
- 		return rc;
- 	}
- 
--	memcpy(hdr->raw_pkcs7, buf + buf_len, sig_len);
--	hdr->raw_pkcs7_len = sig_len;
--
- 	/* We don't know the hash algorithm yet. */
- 	hdr->hash_algo = HASH_ALGO__LAST;
- 
+ #endif /* _UAPI__CONNECTOR_H */
 -- 
 2.32.0
 
