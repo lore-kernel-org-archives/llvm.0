@@ -1,119 +1,178 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from sipsolutions.net (s3.sipsolutions.net [144.76.43.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3425F2101
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 07:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6248D2101
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 08:05:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=cTSIQdlg91RSK+na/NVKBd/Ax/ZBULg9Q/4Gx74hmBE=; b=DJ4sRfVFdZHqiUR1scXw9foZfl
-	L7yKxBEJhUhm/nN8KNGznPTfuCfQS10cTZGTZncnxpQcvHtmIibXuZIf4BWhkVTwUsXutzODCujTX
-	9ol5m6lfkrhF1XEjyiZyaKvorG5EUGu2bSqA/FcWM5LcriPRGK2tDMPLFNt4Lz0WYO0NKcTysvqe1
-	ju+XiMI9AoOmYgIRswBct3J0G8rSnfT/S/lYzMGoHVAa5UY/87fStP27Br/E5nPYN5Sh2OitDpTAx
-	CPy06b7r2hzVIO98a1HVNwlRWcw0xPwXqpEILLaa17u5ZiJGLI0PMYOMFXL3CPPGYkmCdK5kE6dIL
-	wBOgZgjg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nm9Wd-00B171-EK; Wed, 04 May 2022 07:34:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7BD913004B5;
-	Wed,  4 May 2022 09:34:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3EF7E2029A1DC; Wed,  4 May 2022 09:34:18 +0200 (CEST)
-Date: Wed, 4 May 2022 09:34:18 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Peter Collingbourne <pcc@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>, Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] KCFI support
-Message-ID: <YnIses89/uPLrazS@hirez.programming.kicks-ass.net>
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <202204291545.47C6A97EA2@keescook>
- <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
- <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
- <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
- <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
+	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=ity6IPNC2WIGLGTiJizfPDCFcsI1FfOGUjdPuI/9x1Q=;
+	t=1651651500; x=1652861100; b=YG5iNzwEk/nMLRf8n7w7PSLgsBpNnXL1SBwBYAUltdyOwap
+	rrqghX3NQwdE24ZDG+sZZcrcSFqJ9PU+eQtHpH0ARgzZytLRoGmAeOaNSG50m6ZRvm8GNxH0IXJcm
+	TArgUPKaZNuaFihPdINR/df0dPzDYJ3S1UZ9NIQuPImkYscbJaz6cugLSGrbnHZDWRd2ALz4p3BJB
+	VuV7jyxN+eruAEU+Y5Qn/ziGsgnVXx6b3dB3m8kg7OKLkUeoKK6t4c+7lUw0vkIT28zB5usk2Wu9K
+	3PoDUdcbskO/UOt07YwUsCygDbdm58huqBoFlJ1FuodonKd//0QOP82Uw9roYvvw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1nm9Oe-001wnb-ND;
+	Wed, 04 May 2022 09:26:04 +0200
+Message-ID: <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Kees Cook <keescook@chromium.org>, "Gustavo A . R . Silva"
+	 <gustavoars@kernel.org>
+Cc: Keith Packard <keithp@keithp.com>, Francis Laniel
+ <laniel_francis@privacyrequired.com>, Daniel Axtens <dja@axtens.net>, Dan
+ Williams <dan.j.williams@intel.com>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Guenter Roeck <linux@roeck-us.net>, Daniel
+ Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk <tadeusz.struk@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>,  alsa-devel@alsa-project.org, Al Viro
+ <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+ Andrew Morton <akpm@linux-foundation.org>,  Andy Gross <agross@kernel.org>,
+ Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
+ Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson
+ <bjorn.andersson@linaro.org>, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Bradley Grove <linuxdrivers@attotech.com>, 
+ brcm80211-dev-list.pdl@broadcom.com, Christian Brauner
+ <brauner@kernel.org>,  Christian =?ISO-8859-1?Q?G=F6ttsche?=
+ <cgzones@googlemail.com>, Christian Lamparter <chunkeey@googlemail.com>, 
+ Chris Zankel <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, David
+ Gow <davidgow@google.com>,  David Howells <dhowells@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>, Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
+ Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>,  Eric Dumazet
+ <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, Eugeniu Rosca
+ <erosca@de.adit-jv.com>,  Felipe Balbi <balbi@kernel.org>, Frank Rowand
+ <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>,  Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
+ <gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>, Hante
+ Meuleman <hante.meuleman@broadcom.com>,  Herbert Xu
+ <herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub
+ Kicinski <kuba@kernel.org>,  "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ James Morris <jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens
+ Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John
+ Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
+ <kvalo@kernel.org>, keyrings@vger.kernel.org,  kunit-dev@googlegroups.com,
+ Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
+ <lee.jones@linaro.org>,  Leon Romanovsky <leon@kernel.org>, Liam Girdwood
+ <lgirdwood@gmail.com>,  linux1394-devel@lists.sourceforge.net,
+ linux-afs@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org,  linux-bluetooth@vger.kernel.org,
+ linux-hardening@vger.kernel.org,  linux-hyperv@vger.kernel.org,
+ linux-integrity@vger.kernel.org,  linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org,  linux-security-module@vger.kernel.org,
+ linux-usb@vger.kernel.org,  linux-wireless@vger.kernel.org,
+ linux-xtensa@linux-xtensa.org,  llvm@lists.linux.dev, Loic Poulain
+ <loic.poulain@linaro.org>, Louis Peens <louis.peens@corigine.com>, Luca
+ Coelho <luciano.coelho@intel.com>, Luiz Augusto von Dentz
+ <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, Marcel
+ Holtmann <marcel@holtmann.org>,  Mark Brown <broonie@kernel.org>, "Martin
+ K. Petersen" <martin.petersen@oracle.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
+ <songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>, 
+ netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, Nuno
+ =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Paolo Abeni
+ <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, Rich Felker
+ <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, Russell King
+ <linux@armlinux.org.uk>,  selinux@vger.kernel.org, "Serge E. Hallyn"
+ <serge@hallyn.com>,  SHA-cyfmac-dev-list@infineon.com, Simon Horman
+ <simon.horman@corigine.com>,  Stefano Stabellini <sstabellini@kernel.org>,
+ Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Stephen Hemminger <sthemmin@microsoft.com>,
+  Stephen Smalley <stephen.smalley.work@gmail.com>, Takashi Iwai
+ <tiwai@suse.com>, Tom Rix <trix@redhat.com>,  Udipto Goswami
+ <quic_ugoswami@quicinc.com>, wcn36xx@lists.infradead.org, Wei Liu
+ <wei.liu@kernel.org>,  xen-devel@lists.xenproject.org, Xiu Jianfeng
+ <xiujianfeng@huawei.com>, Yang Yingliang <yangyingliang@huawei.com>,
+ kvalo@kernel.org
+Date: Wed, 04 May 2022 09:25:56 +0200
+In-Reply-To: <20220504014440.3697851-3-keescook@chromium.org>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+	 <20220504014440.3697851-3-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 
-On Tue, May 03, 2022 at 03:35:34PM -0700, Peter Collingbourne wrote:
-> On Mon, May 2, 2022 at 1:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
-> >
-> > > > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
-> > > > attribute or qualifier for this, such that one can mark a function
-> > > > pointer as not doing CFI.
-> > > >
-> > > > I simply doesn't make sense to have a builtin that operates on an
-> > > > expression. The whole thing is about indirect calls, IOW function
-> > > > pointers.
-> > >
-> > > I also thought an attribute would be more convenient, but the compiler
-> > > folks prefer a built-in:
-> > >
-> > > https://reviews.llvm.org/D122673
-> >
-> > That seems to mostly worry about C++ things (overload sets, template
-> > specialization, name mangling) we kernel folks don't seem to much care
-> > about.
-> >
-> > I'll stick with saying type system makes more sense to me though.
+On Tue, 2022-05-03 at 18:44 -0700, Kees Cook wrote:
 > 
-> I'd say it's not only the C++ issues but more the "action at a
-> distance" that's implied by having this be part of the type system.
-> With this being in the function type it's hard to tell whether any
-> particular call will have CFI disabled, without needing to go and look
-> at how the function pointer is defined.
-
-Look at how we use volatile:
-
-	*(volatile int *)(&foo)
-
-we don't use volatile on actual variable definitions (much), but instead
-cast it in at the usage site. Same can be done with this if so desired.
-
-> On the other hand, if we
-> explicitly mark up the calls with CFI disabled, the code becomes
-> easier to audit (think Rust "unsafe" blocks).
-
-I don't know any Rust. To me Rust still looks like line noise.
-
-> Does it seem any better to you to have this be marked up via the
-> function expression, rather than the call? The idea is that this would
-> always compile to a check-free function call, no matter what "func"
-> is:
+> For example, using the most complicated helper, mem_to_flex_dup():
 > 
-> __builtin_kcfi_call_unchecked(func)(args)
-> 
-> We already have this, to some degree, with KCFI as implemented: CFI
-> checks are disabled if the function expression refers to a declared
-> function. The builtin would allow overriding the decision to also
-> disable CFI checks for function expressions that use the builtin. It
-> also wouldn't preclude a type based system later on (the builtin would
-> become effectively a cast to the "unchecked" type).
+>     /* Flexible array struct with members identified. */
+>     struct something {
+>         int mode;
+>         DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, how_many);
+>         unsigned long flags;
+>         DECLARE_FLEX_ARRAY_ELEMENTS(u32, value);
 
-That's still a bit naf; you've effectively made that builtin a type-cast.
+In many cases, the order of the elements doesn't really matter, so maybe
+it'd be nicer to be able to write it as something like
+
+DECLARE_FLEX_STRUCT(something,
+	int mode;
+	unsigned long flags;
+	,
+	int, how_many,
+	u32, value);
+
+perhaps? OK, that doesn't seem so nice either.
+
+Maybe
+
+struct something {
+	int mode;
+	unsigned long flags;
+	FLEX_ARRAY(
+		int, how_many,
+		u32, value
+	);
+};
+
+or so? The long and duplicated DECLARE_FLEX_ARRAY_ELEMENTS_COUNT and
+DECLARE_FLEX_ARRAY_ELEMENTS seems a bit tedious to me, at least in cases
+where the struct layout is not the most important thing (or it's already
+at the end anyway).
+
+
+>     struct something *instance = NULL;
+>     int rc;
+> 
+>     rc = mem_to_flex_dup(&instance, byte_array, count, GFP_KERNEL);
+>     if (rc)
+>         return rc;
+
+This seems rather awkward, having to set it to NULL, then checking rc
+(and possibly needing a separate variable for it), etc.
+
+But I can understand how you arrived at this:
+ - need to pass instance or &instance or such for typeof()
+   or offsetof() or such
+ - instance = mem_to_flex_dup(instance, ...)
+   looks too much like it would actually dup 'instance', rather than
+   'byte_array'
+ - if you pass &instance anyway, checking for NULL is simple and adds a
+   bit of safety
+
+but still, honestly, I don't like it. As APIs go, it feels a bit
+cumbersome and awkward to use, and you really need everyone to use this,
+and not say "uh what, I'll memcpy() instead".
+
+Maybe there should also be a realloc() version of it?
+
+
+> +/** __fas_bytes - Calculate potential size of flexible array structure
+
+I think you forgot "\n *" in many cases here after "/**".
+
+johannes
