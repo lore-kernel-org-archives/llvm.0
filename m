@@ -1,50 +1,43 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0896C20ED
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:41 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id h12so142979plf.12
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245D620EE
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:43 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id x23so10860504pff.9
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OUtFJC5/TKCmTq7i/wF9dXPYB7F9m5Fe+Glt57epyug=;
-        b=LA1DuW2pq5PcEvMCaSGHJyuI7WWCw3brL8SvS9+2zVb7L13DgPnUJao9oTWLzzgmb0
-         FDFEPcC6DrQfzS+lsrgByCwuE3V59hlwMRxN4HndNJubDx+3EuT5ltBW8juSZqsKA86J
-         6Mk0HEWOn29+r/VVptC8G26Rp5mKAXoQSht84=
+        bh=c1Rtb5BPD8+4OzMMFAYya8AfbyIngu3+nEeMZt3y0UI=;
+        b=PPT74quvAq5PeXKx/MiU6TPQu9k3CNU13XJUuKL0EyoDADIEUu/0flA/RnFvgA1c7X
+         mBDEtN+hqIFmsdnm+Z9MnOUhAzMjdHFmhT3p34uRueOVQQXniPBqP+mbSA7EtL7aqOIy
+         RKCLgSNE4LzNp+Ti/YBiXR973K5zL+mViu9iQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OUtFJC5/TKCmTq7i/wF9dXPYB7F9m5Fe+Glt57epyug=;
-        b=goNB9vm2k1zSQrWEi4pQqQfQCgqa+hGKz2oMKvu4nkS6PHD1YFCgLLlL+Mtt19o/q5
-         JJAvUtuG2sXH3JhJi0DUBR/Vc5jQ6TXlAKrFp8YU5B1ADbRmg9DDeKTXw6qHlwHPWcTH
-         sqiOXzmNdxDnsWQ27zXOktc5ZHqzPy3ZMPfzyHnDq6WgOfJ+tTYwQumCvoB5nTA8PCZH
-         ZxZvHToSEfXN9YeKDzK/U4yQYZhy64mkX0g8hqcdd80iaInDWkwzAS4LS7qnfNvxi+aW
-         cX6tzmexxAGp0M+i/tMKliJUnM3f+Yi9iN4t3ix3QTp2vg+YmJIQUXDSI18qXMcD9CJM
-         cFfw==
-X-Gm-Message-State: AOAM533PAkKsDxutSreUlZnTZy5EFJ25NIoTXsJq41oCdcpBBOCchfEs
-	D8L0ymlltaik5vL3ABB+eJ8R1A==
-X-Google-Smtp-Source: ABdhPJx7ujhXCzRS91FZ+LbZ03DWxWBQ0dT1Khz71PDh68k6Z8Yrj0NdP/nPQNiqOyMCkQJP+cu5vw==
-X-Received: by 2002:a17:902:e811:b0:15e:b27b:92ef with SMTP id u17-20020a170902e81100b0015eb27b92efmr8546338plg.142.1651628861418;
-        Tue, 03 May 2022 18:47:41 -0700 (PDT)
+        bh=c1Rtb5BPD8+4OzMMFAYya8AfbyIngu3+nEeMZt3y0UI=;
+        b=JnTCMAC7TE1DJv1yAsif6t6xabL4SxAoPBzpOSWNGy/D3+irjTcTZhgMT6C3NyzSr0
+         PwIVpjVe/cKVwL+Slufcf7xtlg5heZodzwOeRZoQ3+LjWpzOypLjyv/QMwrshyLQll2d
+         h4sAhAOKxdyxmCnD33lux4Pe7gX+JsccLD2Mtk8wV56M0s5Dgva8o4blHYuSqY40LydY
+         wl8OyxZeXcBXdzu6hJUkM2F9grixXSbWnpamUjYusRj/WZupcyrP9NpZfT+O8mp/sBA0
+         gGeRuoJ0tkbxfhrXzH68wo8OSJuNhAgCwfN51RNMaffV1Ju906NlCXjYpnUnEeUWojQc
+         SjvA==
+X-Gm-Message-State: AOAM531iIkbXi34u052GjvQK0kPGGCwSQmfzMG8hSy9apqYanczbRt8V
+	HEa31YFmvLdeaMg9doYlRozFfg==
+X-Google-Smtp-Source: ABdhPJxnr15nFI48HkUIGCzg3Ti+ux7Hnf2+eF3BCNGMnuO30iNkq86oUQW51ItlsFi5999/esgbAg==
+X-Received: by 2002:a62:33c2:0:b0:50d:a588:daab with SMTP id z185-20020a6233c2000000b0050da588daabmr18437024pfz.31.1651628862604;
+        Tue, 03 May 2022 18:47:42 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a23-20020a62bd17000000b0050dc762817csm6895201pff.86.2022.05.03.18.47.37
+        by smtp.gmail.com with ESMTPSA id a7-20020aa780c7000000b0050dc76281b6sm7143766pfn.144.2022.05.03.18.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 18:47:39 -0700 (PDT)
+        Tue, 03 May 2022 18:47:41 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: "Gustavo A . R . Silva" <gustavoars@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Kalle Valo <kvalo@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	wcn36xx@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
+	linux1394-devel@lists.sourceforge.net,
 	Alexei Starovoitov <ast@kernel.org>,
 	alsa-devel@alsa-project.org,
 	Al Viro <viro@zeniv.linux.org.uk>,
@@ -68,11 +61,13 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Dan Williams <dan.j.williams@intel.com>,
 	David Gow <davidgow@google.com>,
 	David Howells <dhowells@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
 	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
 	devicetree@vger.kernel.org,
 	Dexuan Cui <decui@microsoft.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eli Cohen <elic@nvidia.com>,
+	Eric Dumazet <edumazet@google.com>,
 	Eric Paris <eparis@parisplace.org>,
 	Eugeniu Rosca <erosca@de.adit-jv.com>,
 	Felipe Balbi <balbi@kernel.org>,
@@ -86,6 +81,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Hante Meuleman <hante.meuleman@broadcom.com>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Hulk Robot <hulkci@huawei.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	"James E.J. Bottomley" <jejb@linux.ibm.com>,
 	James Morris <jmorris@namei.org>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
@@ -97,6 +93,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Johannes Berg <johannes@sipsolutions.net>,
 	John Keeping <john@metanate.com>,
 	Juergen Gross <jgross@suse.com>,
+	Kalle Valo <kvalo@kernel.org>,
 	Keith Packard <keithp@keithp.com>,
 	keyrings@vger.kernel.org,
 	kunit-dev@googlegroups.com,
@@ -106,7 +103,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Lee Jones <lee.jones@linaro.org>,
 	Leon Romanovsky <leon@kernel.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
-	linux1394-devel@lists.sourceforge.net,
 	linux-afs@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-arm-msm@vger.kernel.org,
@@ -118,8 +114,10 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-scsi@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
 	linux-xtensa@linux-xtensa.org,
 	llvm@lists.linux.dev,
+	Loic Poulain <loic.poulain@linaro.org>,
 	Louis Peens <louis.peens@corigine.com>,
 	Luca Coelho <luciano.coelho@intel.com>,
 	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
@@ -131,8 +129,10 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Mimi Zohar <zohar@linux.ibm.com>,
 	Muchun Song <songmuchun@bytedance.com>,
 	Nathan Chancellor <nathan@kernel.org>,
+	netdev@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
 	Rich Felker <dalias@aerifal.cx>,
 	Rob Herring <robh+dt@kernel.org>,
@@ -142,7 +142,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	SHA-cyfmac-dev-list@infineon.com,
 	Simon Horman <simon.horman@corigine.com>,
 	Stefano Stabellini <sstabellini@kernel.org>,
-	Stefan Richter <stefanr@s5r6.in-berlin.de>,
 	Steffen Klassert <steffen.klassert@secunet.com>,
 	Stephen Hemminger <sthemmin@microsoft.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>,
@@ -151,13 +150,14 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tom Rix <trix@redhat.com>,
 	Udipto Goswami <quic_ugoswami@quicinc.com>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	wcn36xx@lists.infradead.org,
 	Wei Liu <wei.liu@kernel.org>,
 	xen-devel@lists.xenproject.org,
 	Xiu Jianfeng <xiujianfeng@huawei.com>,
 	Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct wcn36xx_hal_ind_msg
-Date: Tue,  3 May 2022 18:44:19 -0700
-Message-Id: <20220504014440.3697851-11-keescook@chromium.org>
+Subject: [PATCH 18/32] firewire: Use __mem_to_flex_dup() with struct iso_interrupt_event
+Date: Tue,  3 May 2022 18:44:27 -0700
+Message-Id: <20220504014440.3697851-19-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220504014440.3697851-1-keescook@chromium.org>
 References: <20220504014440.3697851-1-keescook@chromium.org>
@@ -167,7 +167,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2631; h=from:subject; bh=Msy2+XfnfeHEfU9VZJ5tdjPuaYOOARhkHxIAzZX3hrE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqCU5cwj3opYKUJRuHiQ6yrF7a8I32dTqix7rZH epN2AJmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHaggAKCRCJcvTf3G3AJlHYD/ wPCLYVdBQwlOASKzq0go8+yQ9WXYDGyw7A8O0OnAVu3fIR1Fz5Lc4pY5x32WjVh8glBxJBPELf/CJL MNaKgMdTHQ7NA2hxtEc7bQM+t4sMdVV5x1MYPoH8LFiI3+Tvt13YvoQ+E1WZ0t2qqUC8zhxbH36dxW Bc0wCumlz/0FK9T//W8qmXHq+YCTZhpOj4lIosW7Ic80QXG9vfEguHz+8nSw2PXbpXiLtiKMXYVPis NcxiHBa5qoFp2VamsSe418quush6XqJxmFvLZl7mtiboKYYYu2/qPzI5A37FAbPIGCru3jMXR/tCbm Q/hHT9bgmoM7Gg13G5tslRAOTf4pY5AWKIKHlUwbJswOg2FEBoabSKGh058NrhtgM0MjsUnbiDiOZ5 aO0FKd7cJsVfNFB7uZ3+4sBW8mA109abyB33FJQ/eJ+s21q6pPofkO9ECLZme3sqINH5kUfMBZEGbc CCwh1fPl5ZjvS1fXH/PGcDGjsAPJyMdcuEmaFNP9/8CuF7AfC9V9oEUOZ4lm0ofCSU0/fD12keSaj3 IHfhVbZKNV1ZZFfOUd6M2qngKUJR4ZbYTuwFlDxka/MvOQ2XJ1z5dhL/T/KTejeZjeDoZmMeDtRSc8 Toe4QQtXjKsYj/+iwJSz5/80d1lP2aqDJFhk1y/i4XSNcgPBCqcyBiQzMbsQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2017; h=from:subject; bh=En62c6cYeUTmU8jbvcTu7IkYSFHpDUIXfTMNPx9PLGc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqEY3t8cFKELeYkm2NJIduUgR+ZPwYvLuYXHKSq h9RlNwCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHahAAKCRCJcvTf3G3AJmzQD/ 40OwL2hRSWj9CwaOb0EjwNMYNrEpXdJJUx4PtLsO50tNm7kViyp0rIIENwt0Refm3UMfgJOd4uhpAP UnN8m9LoCHDWTn2Ip+vIMDS3s7F5W2nAcbk5hF/C+qyUcxpZ01AbHR+GyZjxwzVt9qEG+TAXzPRQnp dfwWrtSjiyM2jKV9PjBNt6qRhM7Jxt/+wokWBFK4eM8IKP5wMTPXf0n1BGa/3mFi6dkoZD+yXtl4IT q4PePWOvlJ8zihIyMKu6xe3P2Cd5gPfwiDcsKwkrzufOJPHAEhY8riHbDxYytvqLGG7bw341elDFvM fFg+b/yC+gowOuz1miET0BDC+cA6vVe4BMDspdtGoFbNEJfsp72+AkNfwxKDENX6TekjFRU3iHzOci lPoBqEyf2AILOQko5Kh9u3twT5Z6Azf7bj/NRatR/QKpZXBkjRcvBCR8SN8nlgdnYckPdhxRBU5YUS IHSagdIFo3kzcAF1P/Aq785Nakdj4SMvQp66HlJm0gKK57rvSGhQtlRXIDROMfObo/Dar+MBASK/fr qWo15PcDT/tqMlbzcrYAAB4BcvmIgHfXG5riesv5IcmZv6ehMHVZTaM4Sf1wIA6V0OWztJpmHeUVBs 1l35/YNa44KeLfFackz/5o7jU6Cqxn/jknqaXV6GkQkL2jafxDjZYhz781sQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -176,67 +176,53 @@ replace the open-coded a deserialization of bytes out of memory into a
 trailing flexible array by using a flex_array.h helper to perform the
 allocation, bounds checking, and copying.
 
-Cc: Loic Poulain <loic.poulain@linaro.org>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: wcn36xx@lists.infradead.org
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
+Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
+Cc: linux1394-devel@lists.sourceforge.net
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/wireless/ath/wcn36xx/smd.c | 8 ++------
- drivers/net/wireless/ath/wcn36xx/smd.h | 4 ++--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ drivers/firewire/core-cdev.c       | 7 ++-----
+ include/uapi/linux/firewire-cdev.h | 4 ++--
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
-index dc3805609284..106af0a2ffc4 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.c
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.c
-@@ -3343,7 +3343,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
- 	const struct wcn36xx_hal_msg_header *msg_header = buf;
- 	struct ieee80211_hw *hw = priv;
- 	struct wcn36xx *wcn = hw->priv;
--	struct wcn36xx_hal_ind_msg *msg_ind;
-+	struct wcn36xx_hal_ind_msg *msg_ind = NULL;
- 	wcn36xx_dbg_dump(WCN36XX_DBG_SMD_DUMP, "SMD <<< ", buf, len);
+diff --git a/drivers/firewire/core-cdev.c b/drivers/firewire/core-cdev.c
+index c9fe5903725a..7e884c61e12e 100644
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -913,17 +913,14 @@ static void iso_callback(struct fw_iso_context *context, u32 cycle,
+ 			 size_t header_length, void *header, void *data)
+ {
+ 	struct client *client = data;
+-	struct iso_interrupt_event *e;
++	struct iso_interrupt_event *e = NULL;
  
- 	switch (msg_header->msg_type) {
-@@ -3407,16 +3407,12 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
- 	case WCN36XX_HAL_DELETE_STA_CONTEXT_IND:
- 	case WCN36XX_HAL_PRINT_REG_INFO_IND:
- 	case WCN36XX_HAL_SCAN_OFFLOAD_IND:
--		msg_ind = kmalloc(struct_size(msg_ind, msg, len), GFP_ATOMIC);
--		if (!msg_ind) {
-+		if (mem_to_flex_dup(&msg_ind, buf, len, GFP_ATOMIC)) {
- 			wcn36xx_err("Run out of memory while handling SMD_EVENT (%d)\n",
- 				    msg_header->msg_type);
- 			return -ENOMEM;
- 		}
+-	e = kmalloc(sizeof(*e) + header_length, GFP_ATOMIC);
+-	if (e == NULL)
++	if (__mem_to_flex_dup(&e, .interrupt, header, header_length, GFP_ATOMIC))
+ 		return;
  
--		msg_ind->msg_len = len;
--		memcpy(msg_ind->msg, buf, len);
--
- 		spin_lock(&wcn->hal_ind_lock);
- 		list_add_tail(&msg_ind->list, &wcn->hal_ind_queue);
- 		queue_work(wcn->hal_ind_wq, &wcn->hal_ind_work);
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.h b/drivers/net/wireless/ath/wcn36xx/smd.h
-index 3fd598ac2a27..76ecac46f36b 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.h
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.h
-@@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
- 
- struct wcn36xx_hal_ind_msg {
- 	struct list_head list;
--	size_t msg_len;
--	u8 msg[];
-+	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
-+	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
+ 	e->interrupt.type      = FW_CDEV_EVENT_ISO_INTERRUPT;
+ 	e->interrupt.closure   = client->iso_closure;
+ 	e->interrupt.cycle     = cycle;
+-	e->interrupt.header_length = header_length;
+-	memcpy(e->interrupt.header, header, header_length);
+ 	queue_event(client, &e->event, &e->interrupt,
+ 		    sizeof(e->interrupt) + header_length, NULL, 0);
+ }
+diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
+index 5effa9832802..22c5f59e9dfa 100644
+--- a/include/uapi/linux/firewire-cdev.h
++++ b/include/uapi/linux/firewire-cdev.h
+@@ -264,8 +264,8 @@ struct fw_cdev_event_iso_interrupt {
+ 	__u64 closure;
+ 	__u32 type;
+ 	__u32 cycle;
+-	__u32 header_length;
+-	__u32 header[0];
++	__DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u32, header_length);
++	__DECLARE_FLEX_ARRAY_ELEMENTS(__u32, header);
  };
  
- struct wcn36xx;
+ /**
 -- 
 2.32.0
 
