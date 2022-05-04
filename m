@@ -1,124 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E80320E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A314DC385A4;
-	Wed,  4 May 2022 03:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651634526;
-	bh=CbH7e4NC57tInXkJXSsd/52EmX/XddNYerXxPthi51M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DIwdXVh+VV/zYYIjKLXr4Szv2+RVCJso7Yrna+VEBVSMJIQebRGfEQocYWQ9qhBs9
-	 dQhrwZuigtil9oBZ0XW5HelOufcdZFi1O1bEAbcRZ9J3x10G9yhO9l+C09ZtlmyZZw
-	 GpucC3kt0l5cbMUvCa/VeS02litV5lRqA8iw3KlM+jhY2mY8KWgoCBOGbAq/+BTRhA
-	 S5YyOElAtqNxHS/8Wxq/re4LfIWS6fv/NGLYVJZNcc3jPTL6Uv6dSAbPCH8oAPDBUW
-	 0SnkgLUJaaLFnOfHJVoL8Ba5zNeTdXKoSb3ecp2gjmvxidB+mHtoYDlFTsxQh+zp9M
-	 5qO0Pg46G3n2A==
-Date: Tue, 3 May 2022 22:31:05 -0500
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Rich Felker <dalias@aerifal.cx>,
-	Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Gross <agross@kernel.org>, Andy Lavr <andy.lavr@gmail.com>,
-	Arend van Spriel <aspriel@gmail.com>,
-	Baowen Zheng <baowen.zheng@corigine.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Bradley Grove <linuxdrivers@attotech.com>,
-	brcm80211-dev-list.pdl@broadcom.com,
-	Christian Brauner <brauner@kernel.org>,
-	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-	Christian Lamparter <chunkeey@googlemail.com>,
-	Chris Zankel <chris@zankel.net>,
-	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	David Gow <davidgow@google.com>,
-	David Howells <dhowells@redhat.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eli Cohen <elic@nvidia.com>, Eric Paris <eparis@parisplace.org>,
-	Eugeniu Rosca <erosca@de.adit-jv.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Francis Laniel <laniel_francis@privacyrequired.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Franky Lin <franky.lin@broadcom.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Gregory Greenman <gregory.greenman@intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Hante Meuleman <hante.meuleman@broadcom.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Hulk Robot <hulkci@huawei.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	James Morris <jmorris@namei.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jens Axboe <axboe@kernel.dk>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>,
-	Kalle Valo <kvalo@kernel.org>, Keith Packard <keithp@keithp.com>,
-	keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
-	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Lee Jones <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	linux1394-devel@lists.sourceforge.net,
-	linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Louis Peens <louis.peens@corigine.com>,
-	Luca Coelho <luciano.coelho@intel.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Mark Brown <broonie@kernel.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Max Filippov <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>,
-	Muchun Song <songmuchun@bytedance.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	SHA-cyfmac-dev-list@infineon.com,
-	Simon Horman <simon.horman@corigine.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Stefan Richter <stefanr@s5r6.in-berlin.de>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Tadeusz Struk <tadeusz.struk@linaro.org>,
-	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
-	Udipto Goswami <quic_ugoswami@quicinc.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
-	xen-devel@lists.xenproject.org,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 01/32] netlink: Avoid memcpy() across flexible array
- boundary
-Message-ID: <20220504033105.GA13667@embeddedor>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-2-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1C920E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:25:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651634740; x=1683170740;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=70wCwFFYJ1c3kSyutV0+R5VqBjClLpK77FnSrlqf7n0=;
+  b=OquQGltYxQr5Wrv9wYt5A+ynPJBB4SwQfo7sE6T+7pc9maO9lFO0bjTg
+   5l+ipXjV6boLDu2fbAeb9p4XVJj44qaP6bY8WET9kSWU+eZ/xIoLwkzZs
+   atUu2+H/Vn0LoKvP6IZ7Exu6fB5vtXqBuvVcsOSiPsNUo2LYVtkPSQlVb
+   xyjGBJNRY26CKlhgFEHDgAOevgFYUjmeYLAQpW3kVD+kj5XPoH5NJ7NjV
+   xqQ/r4oOmLNYwTZKZgMYi9nNTJSjAVvY4DKgNzvgcI3AoBpO7LzR1Hy2u
+   Du0H4d2gzyLaYluHv+3bbcmC5JEGsdBGf2UMLJAVvkBC3xPqSITVdyqli
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266494694"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="266494694"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 20:25:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="693091564"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 20:25:36 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nm5dv-000B1m-Ps;
+	Wed, 04 May 2022 03:25:35 +0000
+Date: Wed, 4 May 2022 11:24:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Minchan Kim <minchan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, John Dias <joaodias@google.com>,
+	Tim Murray <timmurray@google.com>, Minchan Kim <minchan@kernel.org>
+Subject: Re: [PATCH] mm: don't be stuck to rmap lock on reclaim path
+Message-ID: <202205041158.b7On1pwy-lkp@intel.com>
+References: <20220503170341.1413961-1-minchan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -127,91 +51,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220504014440.3697851-2-keescook@chromium.org>
+In-Reply-To: <20220503170341.1413961-1-minchan@kernel.org>
 
-On Tue, May 03, 2022 at 06:44:10PM -0700, Kees Cook wrote:
-> In preparation for run-time memcpy() bounds checking, split the nlmsg
-> copying for error messages (which crosses a previous unspecified flexible
-> array boundary) in half. Avoids the future run-time warning:
-> 
-> memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" (size 16)
-> 
-> Creates an explicit flexible array at the end of nlmsghdr for the payload,
-> named "nlmsg_payload". There is no impact on UAPI; the sizeof(struct
-> nlmsghdr) does not change, but now the compiler can better reason about
-> where things are being copied.
-> 
-> Fixed-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Link: https://lore.kernel.org/lkml/d7251d92-150b-5346-6237-52afc154bb00@rasmusvillemoes.dk
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Rich Felker <dalias@aerifal.cx>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/uapi/linux/netlink.h | 1 +
->  net/netlink/af_netlink.c     | 5 ++++-
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/netlink.h b/include/uapi/linux/netlink.h
-> index 855dffb4c1c3..47f9342d51bc 100644
-> --- a/include/uapi/linux/netlink.h
-> +++ b/include/uapi/linux/netlink.h
-> @@ -47,6 +47,7 @@ struct nlmsghdr {
->  	__u16		nlmsg_flags;	/* Additional flags */
->  	__u32		nlmsg_seq;	/* Sequence number */
->  	__u32		nlmsg_pid;	/* Sending process port ID */
-> +	__u8		nlmsg_payload[];/* Contents of message */
->  };
->  
->  /* Flags values */
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> index 1b5a9c2e1c29..09346aee1022 100644
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -2445,7 +2445,10 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
->  			  NLMSG_ERROR, payload, flags);
->  	errmsg = nlmsg_data(rep);
->  	errmsg->error = err;
-> -	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-> +	errmsg->msg = *nlh;
-> +	if (payload > sizeof(*errmsg))
-> +		memcpy(errmsg->msg.nlmsg_payload, nlh->nlmsg_payload,
-> +		       nlh->nlmsg_len - sizeof(*nlh));
+Hi Minchan,
 
-They have nlmsg_len()[1] for the length of the payload without the header:
+I love your patch! Yet something to improve:
 
-/**
- * nlmsg_len - length of message payload
- * @nlh: netlink message header
- */
-static inline int nlmsg_len(const struct nlmsghdr *nlh)
-{
-	return nlh->nlmsg_len - NLMSG_HDRLEN;
-}
+[auto build test ERROR on hnaz-mm/master]
 
-(would that function use some sanitization, though? what if nlmsg_len is
-somehow manipulated to be less than NLMSG_HDRLEN?...)
+url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-don-t-be-stuck-to-rmap-lock-on-reclaim-path/20220504-010625
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220504/202205041158.b7On1pwy-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0e190ce022ef259d63eb2cf50110b292ba17c79c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Minchan-Kim/mm-don-t-be-stuck-to-rmap-lock-on-reclaim-path/20220504-010625
+        git checkout 0e190ce022ef259d63eb2cf50110b292ba17c79c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Also, it seems there is at least one more instance of this same issue:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/net/netfilter/ipset/ip_set_core.c b/net/netfilter/ipset/ip_set_core.c
-index 16ae92054baa..d06184b94af5 100644
---- a/net/netfilter/ipset/ip_set_core.c
-+++ b/net/netfilter/ipset/ip_set_core.c
-@@ -1723,7 +1723,8 @@ call_ad(struct net *net, struct sock *ctnl, struct sk_buff *skb,
-                                  nlh->nlmsg_seq, NLMSG_ERROR, payload, 0);
-                errmsg = nlmsg_data(rep);
-                errmsg->error = ret;
--               memcpy(&errmsg->msg, nlh, nlh->nlmsg_len);
-+               errmsg->msg = *nlh;
-+               memcpy(errmsg->msg.nlmsg_payload, nlh->nlmsg_payload, nlmsg_len(nlh));
-                cmdattr = (void *)&errmsg->msg + min_len;
+All errors (new ones prefixed by >>):
 
-                ret = nla_parse(cda, IPSET_ATTR_CMD_MAX, cmdattr,
+>> mm/page_idle.c:106:19: error: passing 'const struct rmap_walk_control *' to parameter of type 'struct rmap_walk_control *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           rmap_walk(folio, &rwc);
+                            ^~~~
+   include/linux/rmap.h:403:63: note: passing argument to parameter 'rwc' here
+   void rmap_walk(struct folio *folio, struct rmap_walk_control *rwc);
+                                                                 ^
+   1 error generated.
 
---
-Gustavo
 
-[1] https://elixir.bootlin.com/linux/v5.18-rc5/source/include/net/netlink.h#L577
+vim +106 mm/page_idle.c
+
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   85  
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   86  static void page_idle_clear_pte_refs(struct page *page)
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   87  {
+4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29   88) 	struct folio *folio = page_folio(page);
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   89  	/*
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   90  	 * Since rwc.arg is unused, rwc is effectively immutable, so we
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   91  	 * can make it static const to save some cycles and stack.
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   92  	 */
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   93  	static const struct rmap_walk_control rwc = {
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   94  		.rmap_one = page_idle_clear_pte_refs_one,
+2f031c6f042cb8 Matthew Wilcox (Oracle  2022-01-29   95) 		.anon_lock = folio_lock_anon_vma_read,
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   96  	};
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   97  	bool need_lock;
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   98  
+4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29   99) 	if (!folio_mapped(folio) || !folio_raw_mapping(folio))
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  100  		return;
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  101  
+4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29  102) 	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29  103) 	if (need_lock && !folio_trylock(folio))
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  104  		return;
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  105  
+84fbbe21894bb9 Matthew Wilcox (Oracle  2022-01-29 @106) 	rmap_walk(folio, &rwc);
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  107  
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  108  	if (need_lock)
+4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29  109) 		folio_unlock(folio);
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  110  }
+33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  111  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
