@@ -1,132 +1,125 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C411F29AA
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 18:09:11 +0000 (UTC)
-Received: by mail-ot1-f50.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so1425904otl.0
-        for <llvm@lists.linux.dev>; Wed, 04 May 2022 11:09:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4790D29AA
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 18:14:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1651688052;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C0zlJgjvydDgnPqcmveoCO3N//MvSRzCyDmJy5zb+no=;
+	b=ebjmJwc9ZF8Q4viNV5AJ1Hp8XTAYhSFPo28pvfs5XsUud7FtHWgDfs8Rm1ffbrlkT+CdEy
+	9FJRyXTDnaqa63dF8kWZFquqY4WuqD8ocaGw7T/7Qh6bE00DcgiiXQoldPxuo68kGfGYxS
+	6H9ACk77lVyedt97VsDOJNQG+4mzo6c=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-Zfxvc7nrN9aj3BUdjSat_Q-1; Wed, 04 May 2022 14:14:09 -0400
+X-MC-Unique: Zfxvc7nrN9aj3BUdjSat_Q-1
+Received: by mail-ej1-f69.google.com with SMTP id qw30-20020a1709066a1e00b006f45e7f44b0so1297986ejc.5
+        for <llvm@lists.linux.dev>; Wed, 04 May 2022 11:14:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D+E9lNuRbHFdd170vr+MtjOcic+cq6LuKuOZKRSFmmQ=;
-        b=3FRsbg21aamatuH12CCVpozE1j715q+FYJMJxCkwyooh3uar1a+CRMrJH3XdrtQJT/
-         tn8YUB2xWoI3uH4eKRvypWFerkiy2A8U9wvoi3skzlhZ5sa2mwaXWz8BPQQDu68/PkJH
-         8i9rJTu3pctXTDBYseUMEBAyUe5mg42SjS0RUNP6EhF4BpuT6BxzBM5YxuXksCVr3OdC
-         apRwW5bSGXMZaLdFvB9VZlMkY8ZqK9QgF+TEe/lUD7aQ9b88ytda/6veZtGKP4gbx0/g
-         ivVS6UUeCzGcbCspPx1hxbnN3hkgyjCjCxrtBuUjx8yer14tgQ+smgnN9j1K4/3X68QW
-         +lYw==
-X-Gm-Message-State: AOAM531/bxcA5QQDYSUinTFLFVgxF5J8jAbKsrl4K54sPP+IBGsY0tUt
-	i/7l5NPE+jBywR5EfQ/eyg==
-X-Google-Smtp-Source: ABdhPJz7UxGCoN/1mtQLUptxPhW193aedSmrIFdTLYGH8vHQEwAOv7HLwELKhlP+txzkjgVxGZbMKA==
-X-Received: by 2002:a05:6830:116:b0:606:3fb1:e89e with SMTP id i22-20020a056830011600b006063fb1e89emr2227922otp.310.1651687750783;
-        Wed, 04 May 2022 11:09:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d19-20020a4ad353000000b0035eb4e5a6bfsm6240803oos.21.2022.05.04.11.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 11:09:10 -0700 (PDT)
-Received: (nullmailer pid 1975953 invoked by uid 1000);
-	Wed, 04 May 2022 18:09:09 -0000
-Date: Wed, 4 May 2022 13:09:09 -0500
-From: Rob Herring <robh@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Frank Rowand <frowand.list@gmail.com>, Guenter Roeck <linux@roeck-us.net>, linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org, kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org, linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, llvm@lists.linux.dev, netdev@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH 29/32] xtensa: Use mem_to_flex_dup() with struct property
-Message-ID: <YnKbaXEUHyu+btOD@robh.at.kernel.org>
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-30-keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C0zlJgjvydDgnPqcmveoCO3N//MvSRzCyDmJy5zb+no=;
+        b=klp/I/VSmb9qq7bbnJSaTspGFSfWoXg8iR3QJtExkQV5KM/s0akcN175a32OzMgLDN
+         pvY1GM/jqSZYZWjJJdp9AlyubcCrpssr3mIcPehIXQ7OFAnx9BtQ72D1LODpUgRiOvj0
+         rhtdOtDVug0FMHNwQ1VNs6VxDSuvJDEqmcLgq0QipMnxXOCFMa7qEV6NIC3y4+SJMiPK
+         GWrWgn8VkOkoFGINQnA6wUp1ObatMN14md4RCceVhdYBRUnChxFBsv6ccUQXu/052zY5
+         K5E5IFat/F3GQurf2IdC0Avh8UswNwqSr89q1D9sYApGdD1qaa2slufblWB+DsVreQ3M
+         tUyg==
+X-Gm-Message-State: AOAM530nSIfejDT4PbFDo/+xl9iJeWGCEbQ/jNDlJquDJ8h5enS1lo4f
+	g3YpE6cuEyjLFTKYmwdmFcxlOplOyygE2jqF/giqpLKKZVE+xpERZJkRmz3SzLBfgxymkj6jNIY
+	S0Dd7Qnc0lVk0+cqSV2dwofqP8d/1Ug==
+X-Received: by 2002:a05:6402:948:b0:425:ea37:96b8 with SMTP id h8-20020a056402094800b00425ea3796b8mr24153859edz.90.1651688047934;
+        Wed, 04 May 2022 11:14:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyTEBfb0ryOK/vx4ajvgOHhhpmbxc2K498YISD/TH1LmEO3NLmXijjaZhnJxBKsoUMIv486HQKaYcLmJx8MkqI=
+X-Received: by 2002:a05:6402:948:b0:425:ea37:96b8 with SMTP id
+ h8-20020a056402094800b00425ea3796b8mr24153831edz.90.1651688047690; Wed, 04
+ May 2022 11:14:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504014440.3697851-30-keescook@chromium.org>
+References: <202205020637.JVJo3blw-lkp@intel.com> <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
+In-Reply-To: <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
+From: Leonardo Bras Soares Passos <leobras@redhat.com>
+Date: Wed, 4 May 2022 15:13:56 -0300
+Message-ID: <CAJ6HWG5P6LXEY80tcXxtfvnPnhiNcqUvV+xyKygLbcw37UFvyw@mail.gmail.com>
+Subject: Re: ld.lld: error: inline assembly requires more registers than
+ available at line 523
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=lsoaresp@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Gmail won't send this, so I've trimmed the recipients...
+On Wed, May 4, 2022 at 2:55 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+> > commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
+> > date:   2 months ago
+> > config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout ba1f77c546966c12d86220d078e5838dcaeab348
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> ld.lld: error: inline assembly requires more registers than available at line 523
+> > >> ld.lld: error: inline assembly requires more registers than available at line 523
+> >
+>
+> I don't think this bisection result is correct; this error is visible at
+> v5.17-rc3, which this commit is based on. This is likely the same root
+> cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
+> LTO. I'll reduce something down and comment there if it turns out to be
+> different.
+>
+> Cheers,
+> Nathan
+>
 
-On Tue, May 03, 2022 at 06:44:38PM -0700, Kees Cook wrote:
-> As part of the work to perform bounds checking on all memcpy() uses,
-> replace the open-coded a deserialization of bytes out of memory into a
-> trailing flexible array by using a flex_array.h helper to perform the
-> allocation, bounds checking, and copying.
-> 
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-xtensa@linux-xtensa.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/xtensa/platforms/xtfpga/setup.c | 9 +++------
->  include/linux/of.h                   | 3 ++-
->  2 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/xtensa/platforms/xtfpga/setup.c b/arch/xtensa/platforms/xtfpga/setup.c
-> index 538e6748e85a..31c1fa4ba4ec 100644
-> --- a/arch/xtensa/platforms/xtfpga/setup.c
-> +++ b/arch/xtensa/platforms/xtfpga/setup.c
-> @@ -102,7 +102,7 @@ CLK_OF_DECLARE(xtfpga_clk, "cdns,xtfpga-clock", xtfpga_clk_setup);
->  #define MAC_LEN 6
->  static void __init update_local_mac(struct device_node *node)
->  {
-> -	struct property *newmac;
-> +	struct property *newmac = NULL;
->  	const u8* macaddr;
->  	int prop_len;
->  
-> @@ -110,19 +110,16 @@ static void __init update_local_mac(struct device_node *node)
->  	if (macaddr == NULL || prop_len != MAC_LEN)
->  		return;
->  
-> -	newmac = kzalloc(sizeof(*newmac) + MAC_LEN, GFP_KERNEL);
-> -	if (newmac == NULL)
-> +	if (mem_to_flex_dup(&newmac, macaddr, MAC_LEN, GFP_KERNEL))
->  		return;
->  
-> -	newmac->value = newmac + 1;
-> -	newmac->length = MAC_LEN;
-> +	newmac->value = newmac->contents;
->  	newmac->name = kstrdup("local-mac-address", GFP_KERNEL);
->  	if (newmac->name == NULL) {
->  		kfree(newmac);
->  		return;
->  	}
->  
-> -	memcpy(newmac->value, macaddr, MAC_LEN);
->  	((u8*)newmac->value)[5] = (*(u32*)DIP_SWITCHES_VADDR) & 0x3f;
->  	of_update_property(node, newmac);
->  }
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 17741eee0ca4..efb0f419fd1f 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -30,7 +30,7 @@ typedef u32 ihandle;
->  
->  struct property {
->  	char	*name;
-> -	int	length;
-> +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, length);
->  	void	*value;
->  	struct property *next;
->  #if defined(CONFIG_OF_DYNAMIC) || defined(CONFIG_SPARC)
-> @@ -42,6 +42,7 @@ struct property {
->  #if defined(CONFIG_OF_KOBJ)
->  	struct bin_attribute attr;
->  #endif
-> +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, contents);
+Hello Nathan,
+I went down on this issue, but I have no idea how to proceed. These
+are my findings:
+- This commit (ba1f77c546966c12d86220d078e5838dcaeab348) fixes the
+build, thus allowing this error to happen later (in LTO stage)
+- The commit that introduced this issue was 69d0db01e210, due to removing :
+   ubsan-cflags-$(CONFIG_UBSAN_OBJECT_SIZE)       += -fsanitize=object-size
+- Only by having this flag enabled in ubsan-cflags-y on
+torvalds/master causes the build to succeed
 
-99.9% of the time, this is not where the property value is stored as it 
-points into an FDT blob. I suppose that is okay, but just want to make 
-sure.
+At this point, given the commit message in 69d0db01e210 I was thinking
+of finding & fixing the code that causes the ld.lld error to happen,
+but I was lacking the skills to extract any filename from LTO step.
 
-The DT API for creating new nodes and properties is horrible as it is 
-multiple allocs and strdups which makes for tricky error paths. A better 
-API to centralize it would be welcome, but if this is the only case you 
-came across it's certainly not a requirement.
+But it's also possible to create a patch just adding
+'ubsan-cflags-$(CONFIG_SOMETHING)      += -fsanitize=object-size'
+and fix this build.
 
-Rob
+What would you suggest?
+
+Best regards,
+Leo
+
