@@ -1,110 +1,302 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7713E17C9
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:36:26 +0000 (UTC)
-X-UUID: 7b76a2315ff4434e95a226aa64066ef7-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:cee8f844-9481-479e-bc83-c47e6495e2cb,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:7d71992f-6199-437e-8ab4-9920b4bc5b76,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 7b76a2315ff4434e95a226aa64066ef7-20220504
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1770905408; Wed, 04 May 2022 09:36:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 4 May 2022 09:36:18 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 4 May 2022 09:36:18 +0800
-Message-ID: <7707ae9a9e5ac1e860e0620b9e1009be1425c9cc.camel@mediatek.com>
-Subject: Re: [PATCH v19 06/25] soc: mediatek: add mtk_mmsys_write_reg API
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, "Rob
- Herring" <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
-	<p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Wed, 4 May 2022 09:36:18 +0800
-In-Reply-To: <c6be6d95-35f0-fb62-2d10-53f974ba67e4@collabora.com>
-References: <20220503102345.22817-1-nancy.lin@mediatek.com>
-	 <20220503102345.22817-7-nancy.lin@mediatek.com>
-	 <c6be6d95-35f0-fb62-2d10-53f974ba67e4@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9847717C9
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:33 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id k1so167499pll.4
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sclcWESS1vfOtw+/lNSZNu/Le9PHpJZ15I1QqAAnvbk=;
+        b=aAevwHR9bd3JwLUN2/LQ5c9sjKYomRXHOOzT8MO771crgcUz3lq0Os/XqytwNxvtUl
+         OUsDFPJQodMi3Gdr6qEsX6JPLYzpX2mmV6xIquzdXHmOBlRoXebJSJEipFEaZ36NWHtd
+         8ThHw67NIdrIhrBqNV3S6GthwijgxDY2pMUM4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sclcWESS1vfOtw+/lNSZNu/Le9PHpJZ15I1QqAAnvbk=;
+        b=BFozbjnQIUr/bNHlmrTXTDGqNY4upoTZRrPAqPMDC7tBX0dPxAcu0VgS0TXYiRjMHL
+         CynUlRISOCAe2NjKsQtMfkEGWimMfek8lfj6bTBuFkPp89Ynd/e5d1FfvvFGw2ki5+Ui
+         UbpbNAj31HIl44r6HF5DTp2qGdXDF8BgHHq24cRxEqxHqSnpK4e0bwZDGkYlD7B+1wwL
+         ShgwurWCVxRAHWKdHDay8AzpnakPca+pR48c9k7ifZIgO3D98s185rJ+Is2uHLqwAGsT
+         iaY8GJgzH54R5R4vcCYzRc/pS41gcY2ATqCfnE1uN/yUcLokI5cynu9xq1RywtLrV9FL
+         jlFQ==
+X-Gm-Message-State: AOAM5335plk4lKifWDemoeVQ/ZjXMB5wHCU6ubRpyiv8M5i+u9uRMcsN
+	BSJtZoB++2WSMVulboFCFrE4jg==
+X-Google-Smtp-Source: ABdhPJydthUqGsV5WN/Na4umt7Tao7IcxfjHP60PQVyNBHqb1vS1VBDCQ+czysKBY9MzdUuG7LicnA==
+X-Received: by 2002:a17:90b:4b52:b0:1dc:6602:4ea with SMTP id mi18-20020a17090b4b5200b001dc660204eamr7857020pjb.38.1651628852964;
+        Tue, 03 May 2022 18:47:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k18-20020aa78212000000b0050dc76281d8sm7127921pfi.178.2022.05.03.18.47.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 18:47:32 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: "Gustavo A . R . Silva" <gustavoars@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	alsa-devel@alsa-project.org,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Andy Lavr <andy.lavr@gmail.com>,
+	Arend van Spriel <aspriel@gmail.com>,
+	Baowen Zheng <baowen.zheng@corigine.com>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	brcm80211-dev-list.pdl@broadcom.com,
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+	Christian Lamparter <chunkeey@googlemail.com>,
+	Chris Zankel <chris@zankel.net>,
+	Cong Wang <cong.wang@bytedance.com>,
+	Daniel Axtens <dja@axtens.net>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	David Gow <davidgow@google.com>,
+	David Howells <dhowells@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	devicetree@vger.kernel.org,
+	Dexuan Cui <decui@microsoft.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eli Cohen <elic@nvidia.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Eugeniu Rosca <erosca@de.adit-jv.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Francis Laniel <laniel_francis@privacyrequired.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Franky Lin <franky.lin@broadcom.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Hante Meuleman <hante.meuleman@broadcom.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Hulk Robot <hulkci@huawei.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	James Morris <jmorris@namei.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jens Axboe <axboe@kernel.dk>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Keeping <john@metanate.com>,
+	Juergen Gross <jgross@suse.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Keith Packard <keithp@keithp.com>,
+	keyrings@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Lee Jones <lee.jones@linaro.org>,
+	Leon Romanovsky <leon@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	linux1394-devel@lists.sourceforge.net,
+	linux-afs@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-xtensa@linux-xtensa.org,
+	llvm@lists.linux.dev,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Louis Peens <louis.peens@corigine.com>,
+	Luca Coelho <luciano.coelho@intel.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Mark Brown <broonie@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	netdev@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Rich Felker <dalias@aerifal.cx>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	selinux@vger.kernel.org,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	SHA-cyfmac-dev-list@infineon.com,
+	Simon Horman <simon.horman@corigine.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	Takashi Iwai <tiwai@suse.com>,
+	Tom Rix <trix@redhat.com>,
+	Udipto Goswami <quic_ugoswami@quicinc.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	wcn36xx@lists.infradead.org,
+	Wei Liu <wei.liu@kernel.org>,
+	xen-devel@lists.xenproject.org,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Yang Yingliang <yangyingliang@huawei.com>
+Subject: [PATCH 00/32] Introduce flexible array struct memcpy() helpers
+Date: Tue,  3 May 2022 18:44:09 -0700
+Message-Id: <20220504014440.3697851-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6778; h=from:subject; bh=NBPx/kHPxccGjkqS1SEj//lWw761DgDLlzW6gj8lDu4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqAMDKbiuLQ8pX7zUwKdz8OKsd8xesPXEJn90lJ iEErvqmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHagAAKCRCJcvTf3G3AJjEaD/ sFb+hZKXd2lFEv0+WnlWvb0j4ta2t/UZVhsNUWQNDJHAVtv+Zlu02MxnR0jdR0CBnsA3iKMPIFMmfD pdgs6dba5/tH1Iyi6jW+wJXwtek/3ey7ygj+u19Odj4PSt0QygwmNm6MjSvTES52gqKWv74MU5t5xz L/SasXg+UAUYtWgal3FtLixo//9nvHNO1pQXa0nIFsWFnV/HFJgtQ4lutI26Hj2oKn8G30z3GHGSn4 1IRXOAidSEkPmoGdbgk1b5NrcIB4dDVp1bZOWVQ48/ez1pipyXC5BUmkDkC/X1S5WnuU0ZQ0UW1Grm 3khhO+QcGTzdaxvhpnGpJechhRJETE1ML25oQrj3M1NNy97RDl4CAzoWJillKIvj0+U+3eRoIKQc09 jVarH3JkPknzz7xPutFPSXX+ZRRa9ZIrntaHAJu8fM/gDMHvlhMmoSO/MpZW8uL4xNo34dAwBiIsfO 3kXWSB5poclt6J8JY4UGRwxeS2Ccjolknj9sm/IfEioLedUmK04grKYVaFhwm/AgWMQXfLQYxU4UVg LzieTWMmZ+uNuV5sEynHPDSzGXpTKhNmWdH0WmkjYCGd9FIF8ySFxwKVRfGpnPqbVGVOMqmYz9piV5 jE5S5aSXLfYPuj0uiXQg9UZZfkTvEGuBLHq71VsZwciiyvWRhtAG4UU4gmcQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Angelo,
+Hi,
 
-Thanks for the review.
+This is the next phase of memcpy() buffer bounds checking[1], which
+starts by adding a new set of helpers to address common code patterns
+that result in memcpy() usage that can't be easily verified by the
+compiler (i.e. dynamic bounds due to flexible arrays). The runtime WARN
+from memcpy has been posted before, but now there's more context around
+alternatives for refactoring false positives, etc.
 
-On Tue, 2022-05-03 at 14:19 +0200, AngeloGioacchino Del Regno wrote:
-> Il 03/05/22 12:23, Nancy.Lin ha scritto:
-> > Add mtk_mmsys_write_reg API. Simplify code for writing mmsys reg.
-> > It is a preparation for adding support for mmsys config API.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > ---
-> >   drivers/soc/mediatek/mtk-mmsys.c | 35 ++++++++++++++-------------
-> > -----
-> >   1 file changed, 15 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> > b/drivers/soc/mediatek/mtk-mmsys.c
-> > index ab3c5cbb0175..3e2e5e3f721d 100644
-> > --- a/drivers/soc/mediatek/mtk-mmsys.c
-> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> > @@ -191,22 +191,26 @@ static int
-> > mtk_mmsys_find_match_drvdata(struct mtk_mmsys *mmsys,
-> >   	return -EINVAL;
-> >   }
-> >   
-> > +static void mtk_mmsys_write_reg(struct mtk_mmsys *mmsys, u32
-> > offset, u32 mask, u32 val)
-> > +{
-> > +	u32 tmp;
-> > +
-> > +	tmp = readl_relaxed(mmsys->regs + offset);
-> > +	tmp = (tmp & ~mask) | val;
-> > +	writel_relaxed(tmp, mmsys->regs + offset);
-> > +}
-> > +
-> 
-> Uhm... this is the equivalent of regmap_update_bits(): I fear that
-> calling this
-> mtk_mmsys_write_reg() may lead to confusion.
-> 
-> I think that a more appropriate name would be mtk_mmsys_update_bits()
-> or
-> something similar, recalling that this is not just a register write,
-> but
-> a RMW.
-> 
-> Regards,
-> Angelo
+The core of this series is patches 2 (flex_array.h), 3 (flex_array
+KUnit), and 4 (runtime memcpy WARN). Patch 1 is a fix to land before 4
+(and I can send separately), and everything else are examples of what the
+conversions look like for one of the helpers, mem_to_flex_dup(). These
+will need to land via their respective trees, but they all depend on
+patch 2, which I'm hoping to land in the coming merge window.
 
-Thanks for your suggestion. I will refine the function name in the next
-revision.
+I'm happy to also point out that the conversions (patches 5+) are actually
+a net reduction in lines of code:
+ 49 files changed, 154 insertions(+), 244 deletions(-)
 
-Regards,
-Nancy
+Anyway, please let me know what you think. And apologies in advance
+if this is spammy; the CC list got rather large due to the "treewide"
+nature of the example conversions.
+
+Also available here:
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=flexcpy/next-20220502
+
+-Kees
+
+[1] https://lwn.net/Articles/864521/
+
+Kees Cook (32):
+  netlink: Avoid memcpy() across flexible array boundary
+  Introduce flexible array struct memcpy() helpers
+  flex_array: Add Kunit tests
+  fortify: Add run-time WARN for cross-field memcpy()
+  brcmfmac: Use mem_to_flex_dup() with struct brcmf_fweh_queue_item
+  iwlwifi: calib: Prepare to use mem_to_flex_dup()
+  iwlwifi: calib: Use mem_to_flex_dup() with struct iwl_calib_result
+  iwlwifi: mvm: Use mem_to_flex_dup() with struct ieee80211_key_conf
+  p54: Use mem_to_flex_dup() with struct p54_cal_database
+  wcn36xx: Use mem_to_flex_dup() with struct wcn36xx_hal_ind_msg
+  nl80211: Use mem_to_flex_dup() with struct cfg80211_cqm_config
+  cfg80211: Use mem_to_flex_dup() with struct cfg80211_bss_ies
+  mac80211: Use mem_to_flex_dup() with several structs
+  af_unix: Use mem_to_flex_dup() with struct unix_address
+  802/garp: Use mem_to_flex_dup() with struct garp_attr
+  802/mrp: Use mem_to_flex_dup() with struct mrp_attr
+  net/flow_offload: Use mem_to_flex_dup() with struct flow_action_cookie
+  firewire: Use __mem_to_flex_dup() with struct iso_interrupt_event
+  afs: Use mem_to_flex_dup() with struct afs_acl
+  ASoC: sigmadsp: Use mem_to_flex_dup() with struct sigmadsp_data
+  soc: qcom: apr: Use mem_to_flex_dup() with struct apr_rx_buf
+  atags_proc: Use mem_to_flex_dup() with struct buffer
+  Bluetooth: Use mem_to_flex_dup() with struct
+    hci_op_configure_data_path
+  IB/hfi1: Use mem_to_flex_dup() for struct tid_rb_node
+  Drivers: hv: utils: Use mem_to_flex_dup() with struct cn_msg
+  ima: Use mem_to_flex_dup() with struct modsig
+  KEYS: Use mem_to_flex_dup() with struct user_key_payload
+  selinux: Use mem_to_flex_dup() with xfrm and sidtab
+  xtensa: Use mem_to_flex_dup() with struct property
+  usb: gadget: f_fs: Use mem_to_flex_dup() with struct ffs_buffer
+  xenbus: Use mem_to_flex_dup() with struct read_buffer
+  esas2r: Use __mem_to_flex() with struct atto_ioctl
+
+ arch/arm/kernel/atags_proc.c                  |  12 +-
+ arch/xtensa/platforms/xtfpga/setup.c          |   9 +-
+ drivers/firewire/core-cdev.c                  |   7 +-
+ drivers/hv/hv_utils_transport.c               |   7 +-
+ drivers/infiniband/hw/hfi1/user_exp_rcv.c     |   7 +-
+ drivers/infiniband/hw/hfi1/user_exp_rcv.h     |   4 +-
+ drivers/net/wireless/ath/wcn36xx/smd.c        |   8 +-
+ drivers/net/wireless/ath/wcn36xx/smd.h        |   4 +-
+ .../broadcom/brcm80211/brcmfmac/fweh.c        |  11 +-
+ drivers/net/wireless/intel/iwlwifi/dvm/agn.h  |   2 +-
+ .../net/wireless/intel/iwlwifi/dvm/calib.c    |  23 +-
+ .../net/wireless/intel/iwlwifi/dvm/ucode.c    |   8 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/sta.c  |   8 +-
+ drivers/net/wireless/intersil/p54/eeprom.c    |   8 +-
+ drivers/net/wireless/intersil/p54/p54.h       |   4 +-
+ drivers/scsi/esas2r/atioctl.h                 |   1 +
+ drivers/scsi/esas2r/esas2r_ioctl.c            |  11 +-
+ drivers/soc/qcom/apr.c                        |  12 +-
+ drivers/usb/gadget/function/f_fs.c            |  11 +-
+ drivers/xen/xenbus/xenbus_dev_frontend.c      |  12 +-
+ fs/afs/internal.h                             |   4 +-
+ fs/afs/xattr.c                                |   7 +-
+ include/keys/user-type.h                      |   4 +-
+ include/linux/flex_array.h                    | 637 ++++++++++++++++++
+ include/linux/fortify-string.h                |  70 +-
+ include/linux/of.h                            |   3 +-
+ include/linux/string.h                        |   1 +
+ include/net/af_unix.h                         |  14 +-
+ include/net/bluetooth/hci.h                   |   4 +-
+ include/net/cfg80211.h                        |   4 +-
+ include/net/flow_offload.h                    |   4 +-
+ include/net/garp.h                            |   4 +-
+ include/net/mac80211.h                        |   4 +-
+ include/net/mrp.h                             |   4 +-
+ include/uapi/linux/connector.h                |   4 +-
+ include/uapi/linux/firewire-cdev.h            |   4 +-
+ include/uapi/linux/netlink.h                  |   1 +
+ include/uapi/linux/stddef.h                   |  14 +
+ include/uapi/linux/xfrm.h                     |   4 +-
+ lib/Kconfig.debug                             |  12 +-
+ lib/Makefile                                  |   1 +
+ lib/flex_array_kunit.c                        | 523 ++++++++++++++
+ net/802/garp.c                                |   9 +-
+ net/802/mrp.c                                 |   9 +-
+ net/bluetooth/hci_request.c                   |   9 +-
+ net/core/flow_offload.c                       |   7 +-
+ net/mac80211/cfg.c                            |  22 +-
+ net/mac80211/ieee80211_i.h                    |  12 +-
+ net/netlink/af_netlink.c                      |   5 +-
+ net/unix/af_unix.c                            |   7 +-
+ net/wireless/core.h                           |   4 +-
+ net/wireless/nl80211.c                        |  15 +-
+ net/wireless/scan.c                           |  21 +-
+ security/integrity/ima/ima_modsig.c           |  12 +-
+ security/keys/user_defined.c                  |   7 +-
+ security/selinux/ss/sidtab.c                  |   9 +-
+ security/selinux/xfrm.c                       |   7 +-
+ sound/soc/codecs/sigmadsp.c                   |  11 +-
+ 58 files changed, 1409 insertions(+), 253 deletions(-)
+ create mode 100644 include/linux/flex_array.h
+ create mode 100644 lib/flex_array_kunit.c
+
+-- 
+2.32.0
 
