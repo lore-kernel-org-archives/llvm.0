@@ -1,79 +1,89 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70C62110
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 09:54:29 +0000 (UTC)
-X-UUID: 05633f7d53cf42deb769150493a697db-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0da1c78c-4e58-4d58-afe2-5477d4fdc9bf,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:b3412816-2e53-443e-b81a-655c13977218,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 05633f7d53cf42deb769150493a697db-20220504
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-	(envelope-from <rex-bc.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 246735322; Wed, 04 May 2022 17:54:25 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 17:54:24 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 4 May 2022 17:54:24 +0800
-Message-ID: <85f79f5c23e98a12703c721b343425469cace550.camel@mediatek.com>
-Subject: Re: [PATCH v20 02/25] dt-bindings: reset: mt8195: add vdosys1 reset
- control bit
-From: Rex-BC Chen <rex-bc.chen@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	"wim@linux-watchdog.org" <wim@linux-watchdog.org>, "AngeloGioacchino Del
- Regno" <angelogioacchino.delregno@collabora.com>, "linux@roeck-us.net"
-	<linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Jason-JH Lin =?UTF-8?Q?=28=E6=9E=97=E7=9D=BF=E7=A5=A5=29?=
-	<Jason-JH.Lin@mediatek.com>, Yongqiang Niu
- =?UTF-8?Q?=28=E7=89=9B=E6=B0=B8=E5=BC=BA=29?= <yongqiang.niu@mediatek.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Singo Chang
- =?UTF-8?Q?=28=E5=BC=B5=E8=88=88=E5=9C=8B=29?= <Singo.Chang@mediatek.com>,
-	Project_Global_Chrome_Upstream_Group
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Wed, 4 May 2022 17:54:24 +0800
-In-Reply-To: <20220504091440.2052-3-nancy.lin@mediatek.com>
-References: <20220504091440.2052-1-nancy.lin@mediatek.com>
-	 <20220504091440.2052-3-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4CA2110
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 09:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651658121; x=1683194121;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TQAj5zU5YBDIpsvllkIWVZmIaEkdqHUjk7C411iG0ro=;
+  b=N0afb06ylAx7jsC4YCS+Lxx1ux1/aYur95Dolx2LplW0tTINuBlNMpwO
+   Wni0M8h/+T+gEMS+fsQ+NtJfg8vDvPgrACjzdf4xEjZLcBrOaqut5EAJa
+   EmfT31rLhYYMUoMXInbQ0i1Rptt3BI9fFpphhRP+yGmmdqtll+kZ9glyN
+   Y7box8K5zSxybrAick0ayaXnPvgguDJiqlLLqOEHeYHrd7sAyzYCKsERs
+   JT52Ec3vSuXh3zmeuC3i1KytIXMDkOSz4DpAwkpAaF3kqmBoeH/+U8ipM
+   6/qLHF3zjuzyQixSE2B6WbPhp/e8t2b96WSZXwFA+JEAMKQy5k6oGPw2q
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354154810"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="354154810"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:55:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="693685435"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 May 2022 02:55:19 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmBj4-000BI3-Qu;
+	Wed, 04 May 2022 09:55:18 +0000
+Date: Wed, 4 May 2022 17:55:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sc8180x-next-20220502 2/29]
+ drivers/usb/typec/ucsi/ucsi_glink.c:622:34: warning: unused variable
+ 'ucsi_glink_of_match'
+Message-ID: <202205041711.8Ka8RUyq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 2022-05-04 at 17:14 +0800, Nancy.Lin wrote:
-> Add vdosys1 reset control bit for MT8195 platform.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  include/dt-bindings/reset/mt8195-resets.h | 45
-> +++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
-> 
+tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
+head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
+commit: be6dcf10ab84d8bb9ec872791f28b2724996fc32 [2/29] pmic_glink: Add UCSI/PAN prototype
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205041711.8Ka8RUyq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/be6dcf10ab84d8bb9ec872791f28b2724996fc32
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8180x-next-20220502
+        git checkout be6dcf10ab84d8bb9ec872791f28b2724996fc32
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/usb/typec/ucsi/
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/ucsi/ucsi_glink.c:622:34: warning: unused variable 'ucsi_glink_of_match' [-Wunused-const-variable]
+   static const struct of_device_id ucsi_glink_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/ucsi_glink_of_match +622 drivers/usb/typec/ucsi/ucsi_glink.c
+
+   621	
+ > 622	static const struct of_device_id ucsi_glink_of_match[] = {
+   623		{ .compatible = "qcom,glink-ucsi", },
+   624		{}
+   625	};
+   626	//MODULE_DEVICE_TABLE(of, ucsi_glink_of_match);
+   627	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
