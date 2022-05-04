@@ -1,380 +1,146 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C24920F7
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 05:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651642736; x=1683178736;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E9tG3SXKs0FY6/8Enp14/1nQegyW5MhoV10nEN/hBMA=;
-  b=bqR7Q4SBVMbpNle4/nQ4UltH980U5qbdKkgsXx4Qz6p5OBOZUyGcT9Aa
-   LuUJqgu1uZHlYdwvmrBz3I9d+8k6bH3lv0wyhaR0Ew6HGZ6d4ouo6/LD2
-   KLx0MYSHuojpqV7sjpGhr8EJHb8I/mLgAA4npTvzkoCzhKzhSZkaPosSh
-   f5eA69GQq569HTQaoR4UC7iQ/u5l0Do2Unn3RRAyKTeJ7C2QSHh+AlC0T
-   vaOCjsPiFARs2Vru4vs23IpsCB6E3AGBmyJp69/+DEhCW2fiyDQcnT4cP
-   m+/RqRi5tOBK3C6VljMiD8OlLewBWFNXQv//hhFy5SrcScZ4uFD0o8s+u
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="249648494"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="249648494"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 22:38:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="734242383"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 22:38:47 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm7io-000B63-Cf;
-	Wed, 04 May 2022 05:38:46 +0000
-Date: Wed, 4 May 2022 13:38:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [niks:has_ioport_v3 39/39] include/asm-generic/io.h:737:9: warning:
- 'insb' macro redefined
-Message-ID: <202205041331.P2Djdwnj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A462320F7
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 05:43:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EF2C385A5;
+	Wed,  4 May 2022 05:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651642995;
+	bh=JrTxy6eXsiDtGM/F/9OTUVdSC11/W1yM6qcTiJhEEWY=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=ptNmZdYs+o6KHSEb902G1QgyncrLgIYxwRjyZ9+W9VTxnFGJHKAdTcbe0JtEXzd4l
+	 aYwCxztA+GFA6BxNwpRJ+fwdrhYF+K4ZZZLdzPKi8lBBWFO/VNZwdIAlyDMFIxmOWz
+	 hAmvQ+5DrbHNQghYSGB1afStWvfnMlPcYreVpeGPzS9YPA/9Y4p/yFDlQcLqjzbi/7
+	 oTPIz0yt7M1rWvdVDxqtNaenj2/snIMXH2fVjjBqgI4xeMRFMaS+uomXQ38nO6fIxg
+	 l9QT60aMp2PNBolRmvUG9+MmaPk4GD+QjG/dwTaQmabfDmxvYb7M7hfSFb2fcWpc9I
+	 jV5YMv8gNlmpA==
+From: Kalle Valo <kvalo@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>,  Loic Poulain
+ <loic.poulain@linaro.org>,  "David S. Miller" <davem@davemloft.net>,  Eric
+ Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>,  wcn36xx@lists.infradead.org,
+  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,  Alexei
+ Starovoitov <ast@kernel.org>,  alsa-devel@alsa-project.org,  Al Viro
+ <viro@zeniv.linux.org.uk>,  Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+  Andrew Morton <akpm@linux-foundation.org>,  Andy Gross
+ <agross@kernel.org>,  Andy Lavr <andy.lavr@gmail.com>,  Arend van Spriel
+ <aspriel@gmail.com>,  Baowen Zheng <baowen.zheng@corigine.com>,  Bjorn
+ Andersson <bjorn.andersson@linaro.org>,  Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>,  Bradley Grove <linuxdrivers@attotech.com>,
+  brcm80211-dev-list.pdl@broadcom.com,  Christian Brauner
+ <brauner@kernel.org>,  Christian =?utf-8?Q?G=C3=B6ttsche?=
+ <cgzones@googlemail.com>,
+  Christian Lamparter <chunkeey@googlemail.com>,  Chris Zankel
+ <chris@zankel.net>,  Cong Wang <cong.wang@bytedance.com>,  Daniel Axtens
+ <dja@axtens.net>,  Daniel Vetter <daniel.vetter@ffwll.ch>,  Dan Williams
+ <dan.j.williams@intel.com>,  David Gow <davidgow@google.com>,  David
+ Howells <dhowells@redhat.com>,  Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>,  devicetree@vger.kernel.org,
+  Dexuan Cui <decui@microsoft.com>,  Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>,  Eli Cohen <elic@nvidia.com>,  Eric Paris
+ <eparis@parisplace.org>,  Eugeniu Rosca <erosca@de.adit-jv.com>,  Felipe
+ Balbi <balbi@kernel.org>,  Francis Laniel
+ <laniel_francis@privacyrequired.com>,  Frank Rowand
+ <frowand.list@gmail.com>,  Franky Lin <franky.lin@broadcom.com>,  Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>,  Gregory Greenman
+ <gregory.greenman@intel.com>,  Guenter Roeck <linux@roeck-us.net>,
+  Haiyang Zhang <haiyangz@microsoft.com>,  Hante Meuleman
+ <hante.meuleman@broadcom.com>,  Herbert Xu <herbert@gondor.apana.org.au>,
+  Hulk Robot <hulkci@huawei.com>,  "James E.J. Bottomley"
+ <jejb@linux.ibm.com>,  James Morris <jmorris@namei.org>,  Jarkko Sakkinen
+ <jarkko@kernel.org>,  Jaroslav Kysela <perex@perex.cz>,  Jason Gunthorpe
+ <jgg@ziepe.ca>,  Jens Axboe <axboe@kernel.dk>,  Johan Hedberg
+ <johan.hedberg@gmail.com>,  Johannes Berg <johannes.berg@intel.com>,
+  Johannes Berg <johannes@sipsolutions.net>,  John Keeping
+ <john@metanate.com>,  Juergen Gross <jgross@suse.com>,  Keith Packard
+ <keithp@keithp.com>,  keyrings@vger.kernel.org,
+  kunit-dev@googlegroups.com,  Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+  "K. Y. Srinivasan" <kys@microsoft.com>,  Lars-Peter Clausen
+ <lars@metafoo.de>,  Lee Jones <lee.jones@linaro.org>,  Leon Romanovsky
+ <leon@kernel.org>,  Liam Girdwood <lgirdwood@gmail.com>,
+  linux1394-devel@lists.sourceforge.net,  linux-afs@lists.infradead.org,
+  linux-arm-kernel@lists.infradead.org,  linux-arm-msm@vger.kernel.org,
+  linux-bluetooth@vger.kernel.org,  linux-hardening@vger.kernel.org,
+  linux-hyperv@vger.kernel.org,  linux-integrity@vger.kernel.org,
+  linux-rdma@vger.kernel.org,  linux-scsi@vger.kernel.org,
+  linux-security-module@vger.kernel.org,  linux-usb@vger.kernel.org,
+  linux-xtensa@linux-xtensa.org,  llvm@lists.linux.dev,  Louis Peens
+ <louis.peens@corigine.com>,  Luca Coelho <luciano.coelho@intel.com>,  Luiz
+ Augusto von Dentz <luiz.dentz@gmail.com>,  Marc Dionne
+ <marc.dionne@auristor.com>,  Marcel Holtmann <marcel@holtmann.org>,  Mark
+ Brown <broonie@kernel.org>,  "Martin K. Petersen"
+ <martin.petersen@oracle.com>,  Max Filippov <jcmvbkbc@gmail.com>,  Mimi
+ Zohar <zohar@linux.ibm.com>,  Muchun Song <songmuchun@bytedance.com>,
+  Nathan Chancellor <nathan@kernel.org>,  Nick Desaulniers
+ <ndesaulniers@google.com>,  Nuno =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>,
+  Paul Moore
+ <paul@paul-moore.com>,  Rich Felker <dalias@aerifal.cx>,  Rob Herring
+ <robh+dt@kernel.org>,  Russell King <linux@armlinux.org.uk>,
+  selinux@vger.kernel.org,  "Serge E. Hallyn" <serge@hallyn.com>,
+  SHA-cyfmac-dev-list@infineon.com,  Simon Horman
+ <simon.horman@corigine.com>,  Stefano Stabellini <sstabellini@kernel.org>,
+  Stefan Richter <stefanr@s5r6.in-berlin.de>,  Steffen Klassert
+ <steffen.klassert@secunet.com>,  Stephen Hemminger
+ <sthemmin@microsoft.com>,  Stephen Smalley
+ <stephen.smalley.work@gmail.com>,  Tadeusz Struk
+ <tadeusz.struk@linaro.org>,  Takashi Iwai <tiwai@suse.com>,  Tom Rix
+ <trix@redhat.com>,  Udipto Goswami <quic_ugoswami@quicinc.com>,  Vincenzo
+ Frascino <vincenzo.frascino@arm.com>,  Wei Liu <wei.liu@kernel.org>,
+  xen-devel@lists.xenproject.org,  Xiu Jianfeng <xiujianfeng@huawei.com>,
+  Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct wcn36xx_hal_ind_msg
+References: <20220504014440.3697851-1-keescook@chromium.org>
+	<20220504014440.3697851-11-keescook@chromium.org>
+Date: Wed, 04 May 2022 08:42:46 +0300
+In-Reply-To: <20220504014440.3697851-11-keescook@chromium.org> (Kees Cook's
+	message of "Tue, 3 May 2022 18:44:19 -0700")
+Message-ID: <8735hpc0q1.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v3
-head:   45df38c1492340a5c06ff7ad2966735c1f5c4d94
-commit: 45df38c1492340a5c06ff7ad2966735c1f5c4d94 [39/39] asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
-config: riscv-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041331.P2Djdwnj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=45df38c1492340a5c06ff7ad2966735c1f5c4d94
-        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-        git fetch --no-tags niks has_ioport_v3
-        git checkout 45df38c1492340a5c06ff7ad2966735c1f5c4d94
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/target/
+Kees Cook <keescook@chromium.org> writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> As part of the work to perform bounds checking on all memcpy() uses,
+> replace the open-coded a deserialization of bytes out of memory into a
+> trailing flexible array by using a flex_array.h helper to perform the
+> allocation, bounds checking, and copying.
+>
+> Cc: Loic Poulain <loic.poulain@linaro.org>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: wcn36xx@lists.infradead.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-All warnings (new ones prefixed by >>):
+[...]
 
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:737:9: warning: 'insb' macro redefined [-Wmacro-redefined]
-   #define insb insb
-           ^
-   arch/riscv/include/asm/io.h:104:9: note: previous definition is here
-   #define insb(addr, buffer, count) __insb((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:740:9: warning: 'insw' macro redefined [-Wmacro-redefined]
-   #define insw insw
-           ^
-   arch/riscv/include/asm/io.h:105:9: note: previous definition is here
-   #define insw(addr, buffer, count) __insw((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:743:9: warning: 'insl' macro redefined [-Wmacro-redefined]
-   #define insl insl
-           ^
-   arch/riscv/include/asm/io.h:106:9: note: previous definition is here
-   #define insl(addr, buffer, count) __insl((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:746:9: warning: 'outsb' macro redefined [-Wmacro-redefined]
-   #define outsb outsb
-           ^
-   arch/riscv/include/asm/io.h:118:9: note: previous definition is here
-   #define outsb(addr, buffer, count) __outsb((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:749:9: warning: 'outsw' macro redefined [-Wmacro-redefined]
-   #define outsw outsw
-           ^
-   arch/riscv/include/asm/io.h:119:9: note: previous definition is here
-   #define outsw(addr, buffer, count) __outsw((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:752:9: warning: 'outsl' macro redefined [-Wmacro-redefined]
-   #define outsl outsl
-           ^
-   arch/riscv/include/asm/io.h:120:9: note: previous definition is here
-   #define outsl(addr, buffer, count) __outsl((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_configfs.c:28:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1081:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   7 warnings and 20 errors generated.
---
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:737:9: warning: 'insb' macro redefined [-Wmacro-redefined]
-   #define insb insb
-           ^
-   arch/riscv/include/asm/io.h:104:9: note: previous definition is here
-   #define insb(addr, buffer, count) __insb((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:740:9: warning: 'insw' macro redefined [-Wmacro-redefined]
-   #define insw insw
-           ^
-   arch/riscv/include/asm/io.h:105:9: note: previous definition is here
-   #define insw(addr, buffer, count) __insw((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:743:9: warning: 'insl' macro redefined [-Wmacro-redefined]
-   #define insl insl
-           ^
-   arch/riscv/include/asm/io.h:106:9: note: previous definition is here
-   #define insl(addr, buffer, count) __insl((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:746:9: warning: 'outsb' macro redefined [-Wmacro-redefined]
-   #define outsb outsb
-           ^
-   arch/riscv/include/asm/io.h:118:9: note: previous definition is here
-   #define outsb(addr, buffer, count) __outsb((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:749:9: warning: 'outsw' macro redefined [-Wmacro-redefined]
-   #define outsw outsw
-           ^
-   arch/riscv/include/asm/io.h:119:9: note: previous definition is here
-   #define outsw(addr, buffer, count) __outsw((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
->> include/asm-generic/io.h:752:9: warning: 'outsl' macro redefined [-Wmacro-redefined]
-   #define outsl outsl
-           ^
-   arch/riscv/include/asm/io.h:120:9: note: previous definition is here
-   #define outsl(addr, buffer, count) __outsl((void __iomem *)(long)addr, buffer, count)
-           ^
-   In file included from drivers/target/target_core_spc.c:16:
-   In file included from include/scsi/scsi_tcq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1081:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   drivers/target/target_core_spc.c:223:6: warning: variable 'prod_len' set but not used [-Wunused-but-set-variable]
-           u32 prod_len;
-               ^
-   drivers/target/target_core_spc.c:224:6: warning: variable 'unit_serial_len' set but not used [-Wunused-but-set-variable]
-           u32 unit_serial_len, off = 0;
-               ^
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   9 warnings and 20 errors generated.
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> @@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
+>  
+>  struct wcn36xx_hal_ind_msg {
+>  	struct list_head list;
+> -	size_t msg_len;
+> -	u8 msg[];
+> +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
+> +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
 
-
-vim +/insb +737 include/asm-generic/io.h
-
-   736	
- > 737	#define insb insb
-   738	void insb(unsigned long addr, void *buffer, unsigned int count)
-   739		__compiletime_error("insb()/insb_p() requires CONFIG_HAS_IOPORT");
- > 740	#define insw insw
-   741	void insw(unsigned long addr, void *buffer, unsigned int count)
-   742		__compiletime_error("insw()/insw_p() requires CONFIG_HAS_IOPORT");
- > 743	#define insl insl
-   744	void insl(unsigned long addr, void *buffer, unsigned int count)
-   745		__compiletime_error("insl()/insl_p() requires CONFIG_HAS_IOPORT");
- > 746	#define outsb outsb
-   747	void outsb(unsigned long addr, const void *buffer, unsigned int count)
-   748		__compiletime_error("outsb()/outsb_p() requires CONFIG_HAS_IOPORT");
- > 749	#define outsw outsw
-   750	void outsw(unsigned long addr, const void *buffer, unsigned int count)
-   751		__compiletime_error("outsw()/outsw_p() requires CONFIG_HAS_IOPORT");
- > 752	#define outsl outsl
-   753	void outsl(unsigned long addr, const void *buffer, unsigned int count)
-   754		__compiletime_error("outsl()/outsl_p() requires CONFIG_HAS_IOPORT");
-   755	
+This affects readability quite a lot and tbh I don't like it. Isn't
+there any simpler way to solve this?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
