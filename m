@@ -1,101 +1,100 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9DD20E0
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 02:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651629815; x=1683165815;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SaDiayL72AA9TGo8je0ypoIe2eI0QEYm3nLs7LcNJss=;
-  b=UTJdB494wPqEEHuoyAa5y1MFy1vYgotkRYhvJWBdmowIaArj2uavyDJ0
-   3S2H/tNb5fDXdt9MTG9aDqIMHd/CjbbjCnatZbxSooAwTKMNLh6xdVdpf
-   gLPQTwWhvTeGLkAwGbzDEMUlRQ/inN2aUhKfaXHj6Ing8B25cCGWSl7og
-   0Kw55hTuamkiIVSF5xVmSbrfPd6ZqX0TQbSoj9IClV1ZSrQHa6CYqFJ5z
-   HBRd5nR1jmDTXEQfMZEbPNlPAAG1SmN/iI2x5SjrAv2gSQJ7w26vFniPX
-   aIhhf9uD0wuXDg2FzhRclf3WuqWV27wppKAGnQY9OI2wccVXqd26YwQZZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267519846"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="267519846"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 19:03:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="692969961"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 19:03:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm4MX-000Axn-Fr;
-	Wed, 04 May 2022 02:03:33 +0000
-Date: Wed, 4 May 2022 10:02:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [norov:gup 45/48] lib/bitmap.c:1570:17: error: initializing
- 'unsigned long *' with an expression of type 'const unsigned long *'
- discards qualifiers
-Message-ID: <202205041022.rYfACmSF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434B220E0
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 02:18:19 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id a191so66719pge.2
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 19:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oRTJFa40kHEh7n+tr3P07b1F40qTa0npYYEBgfPr++w=;
+        b=n/0q8ggAw/ULQhiaru0IV3uK2w+sdISkFouZ1TEhbqIcrsZxTnBxvgzZXKMtWCK5gf
+         cRbvr41Ie/Dz1d6ZSbVSxXS8ghz15CLo7dmzdO1hR1aVz6BCDd9NLKdYbpXpySsPZ4yg
+         +elIiZRfRerfPmK+ESdtpIxNLDywj4X4dwyW+IL69pF4x2fypmlL5aZycoCU8iSUSQ2j
+         85xi7aRskoAA5rgZAQCgK06QjKUD61do2Qu28KqDLLKSLIJHksYlULKSMIJ6mG8WfUBd
+         dtpHtYo5MmRbRA+k0o5YH6fp7dkQS2uhJQST9DN6bz/fts85PKiiPjse/lPOas8qsAt8
+         2aiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oRTJFa40kHEh7n+tr3P07b1F40qTa0npYYEBgfPr++w=;
+        b=gLQrC+fZSwnaG+geDKx8d2idoih0unDq4Q7BFtYXT6tQ5wimzXBn6vQHaOD6YDYR4s
+         wxPqJQ5MjGC2GZJjOJoer7lDMXDdvik0+LCOpuo1xrDp67WwGUvgXRj8iQWPHeE4Qu2O
+         qO+c4Chg4towd+aqlaMR5igBEV1+KFF5q6KO9KKZBsFZ+jXn6n+UbSlJPHMotAPof6a5
+         LwZ4GsDNtWbtRC4oxu8V1UzstrapOdZ2vjr79f5y4ODb6QqJ1H3A3elZPMiRFaKRFwZA
+         Hkcn6e2RiVDSdGpoqrD7yy35IDLwA47n0VyRzH/HqV5uZ4UFvppSrAq5UQqqPuVBApl8
+         RJBg==
+X-Gm-Message-State: AOAM532Obv8pXMuTj3vHGuKHPKGbOfG045yIdWRZBTWNioYizX1BeIrT
+	rNKANY3iAln9GqoLXiR4baw1yQ==
+X-Google-Smtp-Source: ABdhPJxU0wXZroQ6HfCO+s6K0BJhScDxfmzFomW6S3SzG3CgbjBZpzrMge6CMRgp7CAdqn4/FP3RXA==
+X-Received: by 2002:a63:1b5e:0:b0:3aa:593c:9392 with SMTP id b30-20020a631b5e000000b003aa593c9392mr16086048pgm.470.1651630699497;
+        Tue, 03 May 2022 19:18:19 -0700 (PDT)
+Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id q26-20020a63505a000000b003aa8b87feb5sm13968274pgl.0.2022.05.03.19.18.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 19:18:18 -0700 (PDT)
+Message-ID: <0b2a1361-e0a4-35b2-c58d-ef4b913c025e@ozlabs.ru>
+Date: Wed, 4 May 2022 12:18:13 +1000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Yury,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/norov/linux gup
-head:   c96226d23c745b114dc041e0d8d0c272b280c71a
-commit: f1cbd19c47bf73d532ff30571601c7ede57d5f82 [45/48] lib: add bitmap_{from,to}_arr64
-config: mips-randconfig-r015-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041022.rYfACmSF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/norov/linux/commit/f1cbd19c47bf73d532ff30571601c7ede57d5f82
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov gup
-        git checkout f1cbd19c47bf73d532ff30571601c7ede57d5f82
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> lib/bitmap.c:1570:17: error: initializing 'unsigned long *' with an expression of type 'const unsigned long *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
-                          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   lib/bitmap.c:1575:22: warning: shift count >= width of type [-Wshift-count-overflow]
-                           *buf |= *bitmap++ << 32;
-                                             ^  ~~
-   1 warning and 1 error generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [PATCH kernel] powerpc/llvm/lto: Allow LLVM LTO builds
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ Nicholas Piggin <npiggin@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Sathvika Vasireddy
+ <sv@linux.ibm.com>, Russell Currey <ruscur@russell.cc>,
+ "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+ Sami Tolvanen <samitolvanen@google.com>
+References: <20220429064547.2334280-1-aik@ozlabs.ru>
+ <CAKwvOdmFhua9b4=DS4QYJmKg=0kT3CtEjXgfo8fnifU2t-ttPQ@mail.gmail.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <CAKwvOdmFhua9b4=DS4QYJmKg=0kT3CtEjXgfo8fnifU2t-ttPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +1570 lib/bitmap.c
 
-  1561	
-  1562	/**
-  1563	 * bitmap_to_arr64 - copy the contents of bitmap to a u64 array of bits
-  1564	 *	@buf: array of u64 (in host byte order), the dest bitmap
-  1565	 *	@bitmap: array of unsigned longs, the source bitmap
-  1566	 *	@nbits: number of bits in @bitmap
-  1567	 */
-  1568	void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits)
-  1569	{
-> 1570		unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
+On 5/4/22 07:24, Nick Desaulniers wrote:
+> On Thu, Apr 28, 2022 at 11:46 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+>>
+>> diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
+>> index b66dd6f775a4..5b783bd51260 100644
+>> --- a/arch/powerpc/kernel/exceptions-64s.S
+>> +++ b/arch/powerpc/kernel/exceptions-64s.S
+>> @@ -476,9 +476,11 @@ DEFINE_FIXED_SYMBOL(\name\()_common_real, text)
+>>                  .if IHSRR_IF_HVMODE
+>>                  BEGIN_FTR_SECTION
+>>                  bne     masked_Hinterrupt
+>> +               b       4f
+>>                  FTR_SECTION_ELSE
+> 
+> Do you need to have the ELSE even if there's nothing in it; should it
+> have a nop?  The rest of the assembler changes LGTM, but withholding
+> RB tag until we have Kconfig dependencies in better shape.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+The FTR patcher will add the necessary amount of "nop"s there and 
+dropping "FTR_SECTION_ELSE" breaks the build as it does some 
+"pushsection" magic.
+
+
+> 
+>> -               bne     masked_interrupt
+>>                  ALT_FTR_SECTION_END_IFSET(CPU_FTR_HVMODE | CPU_FTR_ARCH_206)
+>> +               bne     masked_interrupt
+>> +4:
+>>                  .elseif IHSRR
+>>                  bne     masked_Hinterrupt
+>>                  .else
+> 
