@@ -1,391 +1,194 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB9D19B
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651640263; x=1683176263;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TKbMmqJMecGyQ4357XaOEihsKegdoHeuzCRszZsT7iM=;
-  b=GEaZULQnDYg2r2CR2HgmV510bfFK1WgcEtohOiBxzrpxVbtW4lzvpPBI
-   q7ZyEAsOoJJT/8NSiTvPJr/ZB2h3kLiY48SWBuMSgadXBW5r2YxUQbuNu
-   nsjB9C4xbAXxY+rqZH8L5XSwigI/ne5NysSj0CXO3/rpMMEa0ZKFKLKTt
-   FuCmfkd71b1F8QWm918i4QAeeVHzX9S0dByYIg0TDLBgChlHtA7da9WOa
-   uEtyGtt3c33jHo2s7wROgx76sWKq9oOCUX+vh8n62kcDsj03FjKZ8QPqz
-   aFpI5v/+rA16RqWEBDZjUpM2QiMoieV08aQzHGf7VjFdji/R/jiP0iWKR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247572051"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="247572051"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:57:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734232612"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 21:57:40 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nm751-000B4l-Uf;
-	Wed, 04 May 2022 04:57:39 +0000
-Date: Wed, 4 May 2022 12:57:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [kees:for-next/kspp 12/12] net/decnet/dn_route.c:1123:15: error:
- casting from randomized structure pointer type 'struct neighbour *' to
- 'struct dn_neigh *'
-Message-ID: <202205041247.WKBEHGS5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262B620F7
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 05:05:29 +0000 (UTC)
+X-UUID: 3933d28452bf4d65a5ad49e94a66acee-20220504
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:d28a3d8d-d83e-432b-8ea9-57e405c41ac2,OB:0,LO
+	B:10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:d28a3d8d-d83e-432b-8ea9-57e405c41ac2,OB:0,LOB:
+	10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:d09ca12f-6199-437e-8ab4-9920b4bc5b76,C
+	OID:8492e884c8a8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: 3933d28452bf4d65a5ad49e94a66acee-20220504
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1363498504; Wed, 04 May 2022 13:05:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 13:05:23 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 4 May 2022 13:05:23 +0800
+Message-ID: <dd0648c549886a82156dabf73335d396df292628.camel@mediatek.com>
+Subject: Re: [PATCH v19 07/25] soc: mediatek: add mtk-mmsys config API for
+ mt8195 vdosys1
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Wed, 4 May 2022 13:05:23 +0800
+In-Reply-To: <20220503102345.22817-8-nancy.lin@mediatek.com>
+References: <20220503102345.22817-1-nancy.lin@mediatek.com>
+	 <20220503102345.22817-8-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
-head:   1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-commit: 1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa [12/12] randstruct: Enable Clang support
-config: hexagon-randconfig-r034-20220502 (https://download.01.org/0day-ci/archive/20220504/202205041247.WKBEHGS5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/kspp
-        git checkout 1fe35f29cf8220a5f9ab39ee3e5c722eb716b6fa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/decnet/
+Hi, Nancy:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, 2022-05-03 at 18:23 +0800, Nancy.Lin wrote:
+> Add four mmsys config APIs. The config APIs are used for config
+> mmsys reg. Some mmsys regs need to be set according to the
+> HW engine binding to the mmsys simultaneously.
+> 
+> 1. mtk_mmsys_merge_async_config: config merge async width/height.
+>    async is used for cross-clock domain synchronization.
+> 2. mtk_mmsys_hdr_confing: config hdr backend async width/height.
+> 3. mtk_mmsys_mixer_in_config and mtk_mmsys_mixer_in_config:
+>    config mixer related settings.
 
-All errors (new ones prefixed by >>):
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
->> net/decnet/dn_route.c:1123:15: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-                           gateway = ((struct dn_neigh *)neigh)->addr;
-                                      ^
-   net/decnet/dn_route.c:1432:15: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-                           gateway = ((struct dn_neigh *)neigh)->addr;
-                                      ^
-   2 errors generated.
---
->> net/decnet/dn_dev.c:857:25: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-                   struct dn_neigh *dn = (struct dn_neigh *)dn_db->router;
-                                         ^
-   net/decnet/dn_dev.c:905:24: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-           struct dn_neigh *dn = (struct dn_neigh *)dn_db->router;
-                                 ^
-   2 errors generated.
---
->> net/decnet/dn_neigh.c:429:26: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-                                   if (msg->priority > ((struct dn_neigh *)dn_db->router)->priority)
-                                                        ^
-   1 error generated.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/soc/mediatek/mt8195-mmsys.h    |  6 +++++
+>  drivers/soc/mediatek/mtk-mmsys.c       | 35
+> ++++++++++++++++++++++++++
+>  include/linux/soc/mediatek/mtk-mmsys.h |  9 +++++++
+>  3 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> b/drivers/soc/mediatek/mt8195-mmsys.h
+> index fd7b455bd675..454944a9409c 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -75,6 +75,12 @@
+>  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 <<
+> 16)
+>  #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			
+> (3 << 16)
+>  
+> +#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				
+> 0xe30
+> +#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				
+> 0xe70
+> +#define MT8195_VDO1_HDR_TOP_CFG					
+> 0xd00
+> +#define MT8195_VDO1_MIXER_IN1_ALPHA				0xd30
+> +#define MT8195_VDO1_MIXER_IN1_PAD				0xd40
+> +
+>  #define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
+>  #define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			
+> 1
+>  
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> b/drivers/soc/mediatek/mtk-mmsys.c
+> index 3e2e5e3f721d..199503dd544a 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -228,6 +228,41 @@ void mtk_mmsys_ddp_disconnect(struct device
+> *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>  
+> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int
+> width, int height)
+> +{
+> +	mtk_mmsys_write_reg(dev_get_drvdata(dev),
+> MT8195_VDO1_MERGE0_ASYNC_CFG_WD + 0x10 * idx,
+> +			    ~0, height << 16 | width);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_merge_async_config);
+> +
+> +void mtk_mmsys_hdr_confing(struct device *dev, int be_width, int
+> be_height)
+> +{
+> +	mtk_mmsys_write_reg(dev_get_drvdata(dev),
+> MT8195_VDO1_HDRBE_ASYNC_CFG_WD, ~0,
+> +			    be_height << 16 | be_width);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_hdr_confing);
+> +
+> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool
+> alpha_sel, u16 alpha,
+> +			       u8 mode, u32 biwidth)
+> +{
+> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> +
+> +	mtk_mmsys_write_reg(mmsys, MT8195_VDO1_MIXER_IN1_ALPHA + (idx -
+> 1) * 4, ~0,
+> +			    alpha << 16 | alpha);
+> +	mtk_mmsys_write_reg(mmsys, MT8195_VDO1_HDR_TOP_CFG, BIT(19 +
+> idx),
+> +			    alpha_sel << (19 + idx));
+> +	mtk_mmsys_write_reg(mmsys, MT8195_VDO1_MIXER_IN1_PAD + (idx -
+> 1) * 4,
+> +			    GENMASK(31, 16) | GENMASK(1, 0), biwidth <<
+> 16 | mode);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_config);
+> +
+> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx,
+> bool channel_swap)
+> +{
+> +	mtk_mmsys_write_reg(dev_get_drvdata(dev),
+> MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
+> +			    BIT(4), channel_swap << 4);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_channel_swap);
+> +
+>  static int mtk_mmsys_reset_update(struct reset_controller_dev
+> *rcdev, unsigned long id,
+>  				  bool assert)
+>  {
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
+> b/include/linux/soc/mediatek/mtk-mmsys.h
+> index b4388ba43341..fe620929b0f9 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -73,4 +73,13 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>  			      enum mtk_ddp_comp_id cur,
+>  			      enum mtk_ddp_comp_id next);
+>  
+> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int
+> width, int height);
+> +
+> +void mtk_mmsys_hdr_confing(struct device *dev, int be_width, int
+> be_height);
+> +
+> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool
+> alpha_sel, u16 alpha,
+> +			       u8 mode, u32 biwidth);
+> +
+> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx,
+> bool channel_swap);
+> +
+>  #endif /* __MTK_MMSYS_H */
 
-
-vim +1123 net/decnet/dn_route.c
-
-^1da177e4c3f41 Linus Torvalds    2005-04-16   952  
-bef55aebd560c5 David S. Miller   2011-03-12   953  static int dn_route_output_slow(struct dst_entry **pprt, const struct flowidn *oldflp, int try_hard)
-^1da177e4c3f41 Linus Torvalds    2005-04-16   954  {
-bef55aebd560c5 David S. Miller   2011-03-12   955  	struct flowidn fld = {
-bef55aebd560c5 David S. Miller   2011-03-12   956  		.daddr = oldflp->daddr,
-bef55aebd560c5 David S. Miller   2011-03-12   957  		.saddr = oldflp->saddr,
-bef55aebd560c5 David S. Miller   2011-03-12   958  		.flowidn_scope = RT_SCOPE_UNIVERSE,
-bef55aebd560c5 David S. Miller   2011-03-12   959  		.flowidn_mark = oldflp->flowidn_mark,
-1fb9489bf190ce Pavel Emelyanov   2012-08-08   960  		.flowidn_iif = LOOPBACK_IFINDEX,
-bef55aebd560c5 David S. Miller   2011-03-12   961  		.flowidn_oif = oldflp->flowidn_oif,
-1d28f42c1bd4bb David S. Miller   2011-03-12   962  	};
-^1da177e4c3f41 Linus Torvalds    2005-04-16   963  	struct dn_route *rt = NULL;
-7562f876cd9380 Pavel Emelianov   2007-05-03   964  	struct net_device *dev_out = NULL, *dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   965  	struct neighbour *neigh = NULL;
-95c961747284a6 Eric Dumazet      2012-04-15   966  	unsigned int hash;
-95c961747284a6 Eric Dumazet      2012-04-15   967  	unsigned int flags = 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   968  	struct dn_fib_res res = { .fi = NULL, .type = RTN_UNICAST };
-^1da177e4c3f41 Linus Torvalds    2005-04-16   969  	int err;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   970  	int free_res = 0;
-c4ea94ab3710eb Steven Whitehouse 2006-03-20   971  	__le16 gateway = 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   972  
-^1da177e4c3f41 Linus Torvalds    2005-04-16   973  	if (decnet_debug_level & 16)
-^1da177e4c3f41 Linus Torvalds    2005-04-16   974  		printk(KERN_DEBUG
-^1da177e4c3f41 Linus Torvalds    2005-04-16   975  		       "dn_route_output_slow: dst=%04x src=%04x mark=%d"
-bef55aebd560c5 David S. Miller   2011-03-12   976  		       " iif=%d oif=%d\n", le16_to_cpu(oldflp->daddr),
-bef55aebd560c5 David S. Miller   2011-03-12   977  		       le16_to_cpu(oldflp->saddr),
-1fb9489bf190ce Pavel Emelyanov   2012-08-08   978  		       oldflp->flowidn_mark, LOOPBACK_IFINDEX,
-bef55aebd560c5 David S. Miller   2011-03-12   979  		       oldflp->flowidn_oif);
-^1da177e4c3f41 Linus Torvalds    2005-04-16   980  
-^1da177e4c3f41 Linus Torvalds    2005-04-16   981  	/* If we have an output interface, verify its a DECnet device */
-bef55aebd560c5 David S. Miller   2011-03-12   982  	if (oldflp->flowidn_oif) {
-bef55aebd560c5 David S. Miller   2011-03-12   983  		dev_out = dev_get_by_index(&init_net, oldflp->flowidn_oif);
-^1da177e4c3f41 Linus Torvalds    2005-04-16   984  		err = -ENODEV;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   985  		if (dev_out && dev_out->dn_ptr == NULL) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16   986  			dev_put(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16   987  			dev_out = NULL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   988  		}
-^1da177e4c3f41 Linus Torvalds    2005-04-16   989  		if (dev_out == NULL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16   990  			goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   991  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16   992  
-^1da177e4c3f41 Linus Torvalds    2005-04-16   993  	/* If we have a source address, verify that its a local address */
-bef55aebd560c5 David S. Miller   2011-03-12   994  	if (oldflp->saddr) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16   995  		err = -EADDRNOTAVAIL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16   996  
-^1da177e4c3f41 Linus Torvalds    2005-04-16   997  		if (dev_out) {
-bef55aebd560c5 David S. Miller   2011-03-12   998  			if (dn_dev_islocal(dev_out, oldflp->saddr))
-^1da177e4c3f41 Linus Torvalds    2005-04-16   999  				goto source_ok;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1000  			dev_put(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1001  			goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1002  		}
-c6d14c84566d6b Eric Dumazet      2009-11-04  1003  		rcu_read_lock();
-c6d14c84566d6b Eric Dumazet      2009-11-04  1004  		for_each_netdev_rcu(&init_net, dev) {
-7562f876cd9380 Pavel Emelianov   2007-05-03  1005  			if (!dev->dn_ptr)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1006  				continue;
-bef55aebd560c5 David S. Miller   2011-03-12  1007  			if (!dn_dev_islocal(dev, oldflp->saddr))
-9bbf28a1ff7b9d Patrick Caulfield 2006-08-02  1008  				continue;
-7562f876cd9380 Pavel Emelianov   2007-05-03  1009  			if ((dev->flags & IFF_LOOPBACK) &&
-bef55aebd560c5 David S. Miller   2011-03-12  1010  			    oldflp->daddr &&
-bef55aebd560c5 David S. Miller   2011-03-12  1011  			    !dn_dev_islocal(dev, oldflp->daddr))
-9bbf28a1ff7b9d Patrick Caulfield 2006-08-02  1012  				continue;
-7562f876cd9380 Pavel Emelianov   2007-05-03  1013  
-7562f876cd9380 Pavel Emelianov   2007-05-03  1014  			dev_out = dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1015  			break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1016  		}
-c6d14c84566d6b Eric Dumazet      2009-11-04  1017  		rcu_read_unlock();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1018  		if (dev_out == NULL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1019  			goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1020  		dev_hold(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1021  source_ok:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1022  		;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1023  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1024  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1025  	/* No destination? Assume its local */
-bef55aebd560c5 David S. Miller   2011-03-12  1026  	if (!fld.daddr) {
-bef55aebd560c5 David S. Miller   2011-03-12  1027  		fld.daddr = fld.saddr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1028  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1029  		dev_put(dev_out);
-a36a0d4008488f David S. Miller   2016-04-10  1030  		err = -EINVAL;
-2774c7aba6c97a Eric W. Biederman 2007-09-26  1031  		dev_out = init_net.loopback_dev;
-a36a0d4008488f David S. Miller   2016-04-10  1032  		if (!dev_out->dn_ptr)
-a36a0d4008488f David S. Miller   2016-04-10  1033  			goto out;
-a36a0d4008488f David S. Miller   2016-04-10  1034  		err = -EADDRNOTAVAIL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1035  		dev_hold(dev_out);
-bef55aebd560c5 David S. Miller   2011-03-12  1036  		if (!fld.daddr) {
-bef55aebd560c5 David S. Miller   2011-03-12  1037  			fld.daddr =
-bef55aebd560c5 David S. Miller   2011-03-12  1038  			fld.saddr = dnet_select_source(dev_out, 0,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1039  						       RT_SCOPE_HOST);
-bef55aebd560c5 David S. Miller   2011-03-12  1040  			if (!fld.daddr)
-3f96d644976825 Vadim Fedorenko   2021-01-26  1041  				goto done;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1042  		}
-1fb9489bf190ce Pavel Emelyanov   2012-08-08  1043  		fld.flowidn_oif = LOOPBACK_IFINDEX;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1044  		res.type = RTN_LOCAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1045  		goto make_route;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1046  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1047  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1048  	if (decnet_debug_level & 16)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1049  		printk(KERN_DEBUG
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1050  		       "dn_route_output_slow: initial checks complete."
-46b9e4bb76ee26 Rasmus Villemoes  2015-02-23  1051  		       " dst=%04x src=%04x oif=%d try_hard=%d\n",
-bef55aebd560c5 David S. Miller   2011-03-12  1052  		       le16_to_cpu(fld.daddr), le16_to_cpu(fld.saddr),
-bef55aebd560c5 David S. Miller   2011-03-12  1053  		       fld.flowidn_oif, try_hard);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1054  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1055  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1056  	 * N.B. If the kernel is compiled without router support then
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1057  	 * dn_fib_lookup() will evaluate to non-zero so this if () block
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1058  	 * will always be executed.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1059  	 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1060  	err = -ESRCH;
-bef55aebd560c5 David S. Miller   2011-03-12  1061  	if (try_hard || (err = dn_fib_lookup(&fld, &res)) != 0) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1062  		struct dn_dev *dn_db;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1063  		if (err != -ESRCH)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1064  			goto out;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1065  		/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1066  		 * Here the fallback is basically the standard algorithm for
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1067  		 * routing in endnodes which is described in the DECnet routing
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1068  		 * docs
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1069  		 *
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1070  		 * If we are not trying hard, look in neighbour cache.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1071  		 * The result is tested to ensure that if a specific output
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1072  		 * device/source address was requested, then we honour that
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1073  		 * here
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1074  		 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1075  		if (!try_hard) {
-bef55aebd560c5 David S. Miller   2011-03-12  1076  			neigh = neigh_lookup_nodev(&dn_neigh_table, &init_net, &fld.daddr);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1077  			if (neigh) {
-bef55aebd560c5 David S. Miller   2011-03-12  1078  				if ((oldflp->flowidn_oif &&
-bef55aebd560c5 David S. Miller   2011-03-12  1079  				    (neigh->dev->ifindex != oldflp->flowidn_oif)) ||
-bef55aebd560c5 David S. Miller   2011-03-12  1080  				    (oldflp->saddr &&
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1081  				    (!dn_dev_islocal(neigh->dev,
-bef55aebd560c5 David S. Miller   2011-03-12  1082  						     oldflp->saddr)))) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1083  					neigh_release(neigh);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1084  					neigh = NULL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1085  				} else {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1086  					dev_put(dev_out);
-bef55aebd560c5 David S. Miller   2011-03-12  1087  					if (dn_dev_islocal(neigh->dev, fld.daddr)) {
-2774c7aba6c97a Eric W. Biederman 2007-09-26  1088  						dev_out = init_net.loopback_dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1089  						res.type = RTN_LOCAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1090  					} else {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1091  						dev_out = neigh->dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1092  					}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1093  					dev_hold(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1094  					goto select_source;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1095  				}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1096  			}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1097  		}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1098  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1099  		/* Not there? Perhaps its a local address */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1100  		if (dev_out == NULL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1101  			dev_out = dn_dev_get_default();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1102  		err = -ENODEV;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1103  		if (dev_out == NULL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1104  			goto out;
-fc766e4c496591 Eric Dumazet      2010-10-29  1105  		dn_db = rcu_dereference_raw(dev_out->dn_ptr);
-a36a0d4008488f David S. Miller   2016-04-10  1106  		if (!dn_db)
-a36a0d4008488f David S. Miller   2016-04-10  1107  			goto e_inval;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1108  		/* Possible improvement - check all devices for local addr */
-bef55aebd560c5 David S. Miller   2011-03-12  1109  		if (dn_dev_islocal(dev_out, fld.daddr)) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1110  			dev_put(dev_out);
-2774c7aba6c97a Eric W. Biederman 2007-09-26  1111  			dev_out = init_net.loopback_dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1112  			dev_hold(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1113  			res.type = RTN_LOCAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1114  			goto select_source;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1115  		}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1116  		/* Not local either.... try sending it to the default router */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1117  		neigh = neigh_clone(dn_db->router);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1118  		BUG_ON(neigh && neigh->dev != dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1119  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1120  		/* Ok then, we assume its directly connected and move on */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1121  select_source:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1122  		if (neigh)
-^1da177e4c3f41 Linus Torvalds    2005-04-16 @1123  			gateway = ((struct dn_neigh *)neigh)->addr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1124  		if (gateway == 0)
-bef55aebd560c5 David S. Miller   2011-03-12  1125  			gateway = fld.daddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1126  		if (fld.saddr == 0) {
-bef55aebd560c5 David S. Miller   2011-03-12  1127  			fld.saddr = dnet_select_source(dev_out, gateway,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1128  						       res.type == RTN_LOCAL ?
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1129  						       RT_SCOPE_HOST :
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1130  						       RT_SCOPE_LINK);
-bef55aebd560c5 David S. Miller   2011-03-12  1131  			if (fld.saddr == 0 && res.type != RTN_LOCAL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1132  				goto e_addr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1133  		}
-bef55aebd560c5 David S. Miller   2011-03-12  1134  		fld.flowidn_oif = dev_out->ifindex;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1135  		goto make_route;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1136  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1137  	free_res = 1;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1138  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1139  	if (res.type == RTN_NAT)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1140  		goto e_inval;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1141  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1142  	if (res.type == RTN_LOCAL) {
-bef55aebd560c5 David S. Miller   2011-03-12  1143  		if (!fld.saddr)
-bef55aebd560c5 David S. Miller   2011-03-12  1144  			fld.saddr = fld.daddr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1145  		dev_put(dev_out);
-2774c7aba6c97a Eric W. Biederman 2007-09-26  1146  		dev_out = init_net.loopback_dev;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1147  		dev_hold(dev_out);
-a36a0d4008488f David S. Miller   2016-04-10  1148  		if (!dev_out->dn_ptr)
-a36a0d4008488f David S. Miller   2016-04-10  1149  			goto e_inval;
-bef55aebd560c5 David S. Miller   2011-03-12  1150  		fld.flowidn_oif = dev_out->ifindex;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1151  		if (res.fi)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1152  			dn_fib_info_put(res.fi);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1153  		res.fi = NULL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1154  		goto make_route;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1155  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1156  
-bef55aebd560c5 David S. Miller   2011-03-12  1157  	if (res.fi->fib_nhs > 1 && fld.flowidn_oif == 0)
-bef55aebd560c5 David S. Miller   2011-03-12  1158  		dn_fib_select_multipath(&fld, &res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1159  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1160  	/*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1161  	 * We could add some logic to deal with default routes here and
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1162  	 * get rid of some of the special casing above.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1163  	 */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1164  
-bef55aebd560c5 David S. Miller   2011-03-12  1165  	if (!fld.saddr)
-bef55aebd560c5 David S. Miller   2011-03-12  1166  		fld.saddr = DN_FIB_RES_PREFSRC(res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1167  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1168  	dev_put(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1169  	dev_out = DN_FIB_RES_DEV(res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1170  	dev_hold(dev_out);
-bef55aebd560c5 David S. Miller   2011-03-12  1171  	fld.flowidn_oif = dev_out->ifindex;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1172  	gateway = DN_FIB_RES_GW(res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1173  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1174  make_route:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1175  	if (dev_out->flags & IFF_LOOPBACK)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1176  		flags |= RTCF_LOCAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1177  
-af13b3c338bea6 David Laight      2020-03-23  1178  	rt = dst_alloc(&dn_dst_ops, dev_out, 0, DST_OBSOLETE_NONE, 0);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1179  	if (rt == NULL)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1180  		goto e_nobufs;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1181  
-fe736e778c604d David Miller      2017-11-28  1182  	rt->dn_next = NULL;
-cf91166223772e David S. Miller   2011-04-28  1183  	memset(&rt->fld, 0, sizeof(rt->fld));
-bef55aebd560c5 David S. Miller   2011-03-12  1184  	rt->fld.saddr        = oldflp->saddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1185  	rt->fld.daddr        = oldflp->daddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1186  	rt->fld.flowidn_oif  = oldflp->flowidn_oif;
-bef55aebd560c5 David S. Miller   2011-03-12  1187  	rt->fld.flowidn_iif  = 0;
-bef55aebd560c5 David S. Miller   2011-03-12  1188  	rt->fld.flowidn_mark = oldflp->flowidn_mark;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1189  
-bef55aebd560c5 David S. Miller   2011-03-12  1190  	rt->rt_saddr      = fld.saddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1191  	rt->rt_daddr      = fld.daddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1192  	rt->rt_gateway    = gateway ? gateway : fld.daddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1193  	rt->rt_local_src  = fld.saddr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1194  
-bef55aebd560c5 David S. Miller   2011-03-12  1195  	rt->rt_dst_map    = fld.daddr;
-bef55aebd560c5 David S. Miller   2011-03-12  1196  	rt->rt_src_map    = fld.saddr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1197  
-fccd7d5c77ff61 David S. Miller   2012-07-02  1198  	rt->n = neigh;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1199  	neigh = NULL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1200  
-d8d1f30b95a635 Changli Gao       2010-06-10  1201  	rt->dst.lastuse = jiffies;
-d8d1f30b95a635 Changli Gao       2010-06-10  1202  	rt->dst.output  = dn_output;
-d8d1f30b95a635 Changli Gao       2010-06-10  1203  	rt->dst.input   = dn_rt_bug;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1204  	rt->rt_flags      = flags;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1205  	if (flags & RTCF_LOCAL)
-d8d1f30b95a635 Changli Gao       2010-06-10  1206  		rt->dst.input = dn_nsp_rx;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1207  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1208  	err = dn_rt_set_next_hop(rt, &res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1209  	if (err)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1210  		goto e_neighbour;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1211  
-bef55aebd560c5 David S. Miller   2011-03-12  1212  	hash = dn_hash(rt->fld.saddr, rt->fld.daddr);
-560fd93bca66c2 Wei Wang          2017-06-17  1213  	/* dn_insert_route() increments dst->__refcnt */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1214  	dn_insert_route(rt, hash, (struct dn_route **)pprt);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1215  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1216  done:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1217  	if (neigh)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1218  		neigh_release(neigh);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1219  	if (free_res)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1220  		dn_fib_res_put(&res);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1221  	dev_put(dev_out);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1222  out:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1223  	return err;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1224  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1225  e_addr:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1226  	err = -EADDRNOTAVAIL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1227  	goto done;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1228  e_inval:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1229  	err = -EINVAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1230  	goto done;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1231  e_nobufs:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1232  	err = -ENOBUFS;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1233  	goto done;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1234  e_neighbour:
-560fd93bca66c2 Wei Wang          2017-06-17  1235  	dst_release_immediate(&rt->dst);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1236  	goto e_nobufs;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1237  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  1238  
-
-:::::: The code at line 1123 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
