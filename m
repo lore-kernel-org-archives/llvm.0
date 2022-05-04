@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F3520E8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6A920EB
 	for <llvm@lists.linux.dev>; Wed,  4 May 2022 02:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651632876; x=1683168876;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TTK/nw4JGd0DgfC3qaTPpWApZeu31vUgT5+PhlW7+/0=;
-  b=VgqFczC9gthwFlSPqwsD2onMISj+zv6VLnqbUlpLfxQQIq8vZaMWBlN4
-   2YtijSHh4vlTSKcQ1pDntuM6ny0zfEu3y8FoYSegb3QxyDil11nGAdCBw
-   t5Ps69bSyeTpMr3ZTWW6y7FCjOhPPyX9ZUdaNTimg0scnn+089Ry72K56
-   e9I1LF8xjVv0QZR+bQzRknbklVu6qNs4e0uRVEtKuSnN914F7AJqUVpnS
-   kkv9XG8B+21ynITWjCd8jo1ASmDL/ICloWHTL9OPKGxIx6ro8138EpKJp
-   FrJSy6pMrvu6DQuSyDbdAbv4JKcyGsVyHGETuXBkjURi9Y5h4+H9oJ4Cv
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="330634562"
+  bh=HxFwtYpjpmRFdvTf/9xqAkVN6i8U8Ky4fUdZWTr/aCY=;
+  b=PVOQ3DwGG2nbxXB2YkrhjxWB6IdR6zJo5uBreyXkd8ZVzU89SpddydLp
+   dzyGbCVJ/uLo3fxf93O6ST+DSQP87WpXc67tr9KptACsB0hD0/GHVqoTW
+   uO3vEHh9LrfjgCMokL65AV3CYNIgydSwdmf5SmZnR+7NvrpsTUhHWJEhd
+   18Ln4kcJvmlgAtLb+OAmAPFhTrtemF8uMjg6HKsOxMI8zchyxQL/85BRd
+   05ltyEa5UDNBzZoCZQ2U3I1x9BN9hJsFbEkbtPKDiTZz+zEYreI6hc/ww
+   j0WH9ZVZY9yzCQ6p1/PSHtgZvwfyupUxaZtGM7mrGCXuzgVRTA0IWCHDV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248188037"
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="330634562"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 19:54:36 -0700
+   d="scan'208";a="248188037"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 19:54:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734200291"
+   d="scan'208";a="889681119"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 19:54:35 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 19:54:35 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nm59u-000AzV-Fz;
+	id 1nm59u-000Aza-HI;
 	Wed, 04 May 2022 02:54:34 +0000
-Date: Wed, 4 May 2022 10:53:47 +0800
+Date: Wed, 4 May 2022 10:53:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: SeongJae Park <sj@kernel.org>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH] mm/damon/sysfs: fix pid leak under fvaddr ops use case
-Message-ID: <202205041011.jv6vuDe4-lkp@intel.com>
-References: <20220503220531.45913-1-sj@kernel.org>
+Subject: Re: [Intel-gfx] [PATCH 10/26] drm/i915: Extract intel_crtc_dotclock()
+Message-ID: <202205041054.2CCCG4hP-lkp@intel.com>
+References: <20220503182242.18797-11-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,66 +45,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503220531.45913-1-sj@kernel.org>
+In-Reply-To: <20220503182242.18797-11-ville.syrjala@linux.intel.com>
 
-Hi SeongJae,
+Hi Ville,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on hnaz-mm/master]
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip next-20220503]
+[cannot apply to v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/SeongJae-Park/mm-damon-sysfs-fix-pid-leak-under-fvaddr-ops-use-case/20220504-060657
-base:   https://github.com/hnaz/linux-mm master
-config: hexagon-randconfig-r045-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041011.jv6vuDe4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-Make-fastset-not-suck-and-allow-seamless-M-N-changes/20220504-022619
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220504/202205041054.2CCCG4hP-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/60cfe4571b04ef4ca2e34793fbad737bb43dc0c6
+        # https://github.com/intel-lab-lkp/linux/commit/a7c24aec0d5727b1e827ab8c847aa42188d199f2
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review SeongJae-Park/mm-damon-sysfs-fix-pid-leak-under-fvaddr-ops-use-case/20220504-060657
-        git checkout 60cfe4571b04ef4ca2e34793fbad737bb43dc0c6
+        git fetch --no-tags linux-review Ville-Syrjala/drm-i915-Make-fastset-not-suck-and-allow-seamless-M-N-changes/20220504-022619
+        git checkout a7c24aec0d5727b1e827ab8c847aa42188d199f2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash mm/damon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/damon/sysfs.c:2089:20: error: use of undeclared identifier 'DAMON_OPS_FVADDR'; did you mean 'DAMON_OPS_VADDR'?
-                                   ctx->ops.id == DAMON_OPS_FVADDR)
-                                                  ^~~~~~~~~~~~~~~~
-                                                  DAMON_OPS_VADDR
-   include/linux/damon.h:267:2: note: 'DAMON_OPS_VADDR' declared here
-           DAMON_OPS_VADDR,
-           ^
-   mm/damon/sysfs.c:2206:55: error: use of undeclared identifier 'DAMON_OPS_FVADDR'; did you mean 'DAMON_OPS_VADDR'?
-           if (ctx->ops.id != DAMON_OPS_VADDR && ctx->ops.id != DAMON_OPS_FVADDR)
-                                                                ^~~~~~~~~~~~~~~~
-                                                                DAMON_OPS_VADDR
-   include/linux/damon.h:267:2: note: 'DAMON_OPS_VADDR' declared here
-           DAMON_OPS_VADDR,
-           ^
-   2 errors generated.
+>> drivers/gpu/drm/i915/display/intel_ddi.c:325:5: warning: no previous prototype for function 'intel_crtc_dotclock' [-Wmissing-prototypes]
+   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+       ^
+   drivers/gpu/drm/i915/display/intel_ddi.c:325:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +2089 mm/damon/sysfs.c
+vim +/intel_crtc_dotclock +325 drivers/gpu/drm/i915/display/intel_ddi.c
 
-  2082	
-  2083	static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
-  2084	{
-  2085		struct damon_target *t, *next;
-  2086	
-  2087		damon_for_each_target_safe(t, next, ctx) {
-  2088			if (ctx->ops.id == DAMON_OPS_VADDR ||
-> 2089					ctx->ops.id == DAMON_OPS_FVADDR)
-  2090				put_pid(t->pid);
-  2091			damon_destroy_target(t);
-  2092		}
-  2093	}
-  2094	
+   324	
+ > 325	int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+   326	{
+   327		int dotclock;
+   328	
+   329		if (intel_crtc_has_dp_encoder(pipe_config))
+   330			dotclock = intel_dotclock_calculate(pipe_config->port_clock,
+   331							    &pipe_config->dp_m_n);
+   332		else if (pipe_config->has_hdmi_sink && pipe_config->pipe_bpp > 24)
+   333			dotclock = pipe_config->port_clock * 24 / pipe_config->pipe_bpp;
+   334		else
+   335			dotclock = pipe_config->port_clock;
+   336	
+   337		if (pipe_config->output_format == INTEL_OUTPUT_FORMAT_YCBCR420 &&
+   338		    !intel_crtc_has_dp_encoder(pipe_config))
+   339			dotclock *= 2;
+   340	
+   341		if (pipe_config->pixel_multiplier)
+   342			dotclock /= pipe_config->pixel_multiplier;
+   343	
+   344		return dotclock;
+   345	}
+   346	
 
 -- 
 0-DAY CI Kernel Test Service
