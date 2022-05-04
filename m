@@ -1,32 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4427A2F2B
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 22:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D61C385A5;
-	Wed,  4 May 2022 22:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651703560;
-	bh=5sSmnc3ozns8rvYY0p6S1jYZuv4ruYLbzxRnarZYMTk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LD4YxiZzejUE8ulKUUEgX+XPRlJiMnV+Lqb+RxdPUs+37Xqjw1fzwNGQIeME7dd4d
-	 lwQJ1dW09gNCa5ECwoZ761/hEfrIjE/xh7Y4tR5n1PflzBpILFMADFA8BUIUbutoBd
-	 WL0z5wdebvnLCGceHGR7Edn4EiWbhBFNCNTBWVl7Ximr94ekTmHnroeaMmz5pMV/5o
-	 nw9JVSNC3yaQ8YBL7PWp0HHAb5iq8kBN5/6uoAPFy5mhklulKljVOgerh7hSEFAneN
-	 WHNoqK7ePp4vBqMZNaD2NjF85eK+J6AHECddk0MZFSsn9sqYlxQcEvr4qvOz20ovVK
-	 +MquWSF7srenQ==
-Date: Wed, 4 May 2022 15:32:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Leonardo Bras Soares Passos <leobras@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: ld.lld: error: inline assembly requires more registers than
- available at line 523
-Message-ID: <YnL/BVvd78zIkwil@dev-arch.thelio-3990X>
-References: <202205020637.JVJo3blw-lkp@intel.com>
- <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
- <CAJ6HWG5P6LXEY80tcXxtfvnPnhiNcqUvV+xyKygLbcw37UFvyw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CB72F2B
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 22:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651704560; x=1683240560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5P/PrMYYu3/0Y8TeBq+/Mcp8ybxA6LS0+AwYjUJWd44=;
+  b=InPHbIRtq3+JW1L6l0ByBgNXQr6fsaXtMeDMw0YZgBu2eQsRHwmXTWf2
+   lvpHAfX/shs3Eq4iN0pifU9JGEEVBFYkenHwET1FQu+BUt7l0O9rrGWGr
+   HGUxlOjBMpsjVJBJSLO2oUqrhMoFhm+mP7DveaWEw+JRqL94uM0gtigx4
+   U4h2gOjmEJQgsi7R7EJ/YK6NmYdJaOjMBNF8Qn/jFBWnAAGi3GONbJRAH
+   wZfRRqFGcgsXncrg1AzS3Ly6T5iIB9cLEYKSL5X5xv6yoD3mq7FsUU/Ox
+   PiaAw52+OdYgw+cOhwaDk1MGKtWs9VcJef4XvTVgmAvvfNy+UJteg7RR9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="247829371"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="247829371"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 15:49:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="734620159"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 15:49:15 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmNo2-000Brq-TI;
+	Wed, 04 May 2022 22:49:14 +0000
+Date: Thu, 5 May 2022 06:48:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>,
+	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+	will@kernel.org, axboe@kernel.dk
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mb@lightnvm.io,
+	ckeepax@opensource.cirrus.com, manjunatha.venkatesh@nxp.com,
+	mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
+	jasowang@redhat.com, sunilmut@microsoft.com,
+	bjorn.andersson@linaro.org, rvmanjumce@gmail.com,
+	ashish.deshpande@nxp.com
+Subject: Re: [PATCH v3] [PATCH v3] uwb: nxp: sr1xx: UWB driver support for
+ sr1xx series chip
+Message-ID: <202205050656.HCzWfiw2-lkp@intel.com>
+References: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,83 +53,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ6HWG5P6LXEY80tcXxtfvnPnhiNcqUvV+xyKygLbcw37UFvyw@mail.gmail.com>
+In-Reply-To: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
 
-Hi Leo,
+Hi Manjunatha,
 
-On Wed, May 04, 2022 at 03:13:56PM -0300, Leonardo Bras Soares Passos wrote:
-> On Wed, May 4, 2022 at 2:55 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-> > > commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
-> > > date:   2 months ago
-> > > config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout ba1f77c546966c12d86220d078e5838dcaeab348
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> > >
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > > >> ld.lld: error: inline assembly requires more registers than available at line 523
-> > > >> ld.lld: error: inline assembly requires more registers than available at line 523
-> > >
-> >
-> > I don't think this bisection result is correct; this error is visible at
-> > v5.17-rc3, which this commit is based on. This is likely the same root
-> > cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
-> > LTO. I'll reduce something down and comment there if it turns out to be
-> > different.
-> >
-> > Cheers,
-> > Nathan
-> >
-> 
-> Hello Nathan,
-> I went down on this issue, but I have no idea how to proceed. These
-> are my findings:
-> - This commit (ba1f77c546966c12d86220d078e5838dcaeab348) fixes the
-> build, thus allowing this error to happen later (in LTO stage)
-> - The commit that introduced this issue was 69d0db01e210, due to removing :
->    ubsan-cflags-$(CONFIG_UBSAN_OBJECT_SIZE)       += -fsanitize=object-size
-> - Only by having this flag enabled in ubsan-cflags-y on
-> torvalds/master causes the build to succeed
+Thank you for the patch! Yet something to improve:
 
-Ah, thanks for that investigation!
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on linux/master linus/master v5.18-rc5 next-20220504]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> At this point, given the commit message in 69d0db01e210 I was thinking
-> of finding & fixing the code that causes the ld.lld error to happen,
-> but I was lacking the skills to extract any filename from LTO step.
+url:    https://github.com/intel-lab-lkp/linux/commits/Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 35a7609639c49f76f13f206402cbf692c4ae3e4e
+config: x86_64-randconfig-a014-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050656.HCzWfiw2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/037b22462c3f4715f0a04e1be05cd12986880d21
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
+        git checkout 037b22462c3f4715f0a04e1be05cd12986880d21
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
-Right, this is not always easy with full LTO :( unfortunately, this
-issue is not reproducible with either no LTO or ThinLTO... When issues
-like this have come up in the past, I have had success linking
-individual object files/archives but that has not worked for this issue.
-I am going to try and bisect this randconfig against a defconfig and see
-if there is a minimal set of configs that reproduces this issue, which
-might make it easier to see what is going on here.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> But it's also possible to create a patch just adding
-> 'ubsan-cflags-$(CONFIG_SOMETHING)      += -fsanitize=object-size'
-> and fix this build.
+All errors (new ones prefixed by >>):
 
-Right, although that is basically reverting 69d0db01e210 for just that
-configuration, which we don't want to do for the reasons outlined in
-that commit message.
+>> error: include/uapi/misc/sr1xx.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/misc/sr1xx.h] Error 1
+   make[2]: Target '__headers' not remade because of errors.
+   make[1]: *** [Makefile:1280: headers] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-I'll see what comes of this config bisect.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
