@@ -1,53 +1,52 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245D620EE
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:43 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id x23so10860504pff.9
-        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15E220EB
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 01:47:46 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id 202so6333pgc.9
+        for <llvm@lists.linux.dev>; Tue, 03 May 2022 18:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=c1Rtb5BPD8+4OzMMFAYya8AfbyIngu3+nEeMZt3y0UI=;
-        b=PPT74quvAq5PeXKx/MiU6TPQu9k3CNU13XJUuKL0EyoDADIEUu/0flA/RnFvgA1c7X
-         mBDEtN+hqIFmsdnm+Z9MnOUhAzMjdHFmhT3p34uRueOVQQXniPBqP+mbSA7EtL7aqOIy
-         RKCLgSNE4LzNp+Ti/YBiXR973K5zL+mViu9iQ=
+        bh=tt+uE/qYWOs3CEanZOjmvMoORa5i/xMNqAO3DwAd5m4=;
+        b=YmT1lNTRttmLRyn/WOgpT0DAFWD3BvjkOIsApwxFa4B3Com0bh2yQqIJO66Wiak8Tt
+         rwU+QSbZtL4swuVhrV8kkivMWLyJT9AqfxXpJ4Lm9ZibQLMBbHjNrpcN7FDNu1QRPCS+
+         uiBQnyfLBZT2SNnaE6twmHxSxmZ2FlIbgcsF8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=c1Rtb5BPD8+4OzMMFAYya8AfbyIngu3+nEeMZt3y0UI=;
-        b=JnTCMAC7TE1DJv1yAsif6t6xabL4SxAoPBzpOSWNGy/D3+irjTcTZhgMT6C3NyzSr0
-         PwIVpjVe/cKVwL+Slufcf7xtlg5heZodzwOeRZoQ3+LjWpzOypLjyv/QMwrshyLQll2d
-         h4sAhAOKxdyxmCnD33lux4Pe7gX+JsccLD2Mtk8wV56M0s5Dgva8o4blHYuSqY40LydY
-         wl8OyxZeXcBXdzu6hJUkM2F9grixXSbWnpamUjYusRj/WZupcyrP9NpZfT+O8mp/sBA0
-         gGeRuoJ0tkbxfhrXzH68wo8OSJuNhAgCwfN51RNMaffV1Ju906NlCXjYpnUnEeUWojQc
-         SjvA==
-X-Gm-Message-State: AOAM531iIkbXi34u052GjvQK0kPGGCwSQmfzMG8hSy9apqYanczbRt8V
-	HEa31YFmvLdeaMg9doYlRozFfg==
-X-Google-Smtp-Source: ABdhPJxnr15nFI48HkUIGCzg3Ti+ux7Hnf2+eF3BCNGMnuO30iNkq86oUQW51ItlsFi5999/esgbAg==
-X-Received: by 2002:a62:33c2:0:b0:50d:a588:daab with SMTP id z185-20020a6233c2000000b0050da588daabmr18437024pfz.31.1651628862604;
-        Tue, 03 May 2022 18:47:42 -0700 (PDT)
+        bh=tt+uE/qYWOs3CEanZOjmvMoORa5i/xMNqAO3DwAd5m4=;
+        b=RtwByw+vgMHoOmYOQACj54ULLrdbgijxTdiKUc5lf5Xw1fqCcVOJCYzmCKWLQWqNde
+         Hfjalhw+iCWRQlFK1fEWB4Lzdzn2Uy6dsmHjDweQYs//kR6Zsef7IwN9wcObyUMVWvo/
+         ReG2vF7lusXMzZkMx7W4Rt89leEpswo+MCSZRmndq6wscV8/hmZCbaxUfqKSykvPnKBn
+         a8pABd0XDyiNojAbChyjr2Jo9RX4eAjKHpCkxBhzhFUKufDH88sUfZaUhi44x91EBigW
+         7K6mNItdO39Z1PXIyf90Cl0fyeOasAdXMxTcu/XY8tKzAnKazqNt0EGWCjKzMGJ15vg0
+         eNIw==
+X-Gm-Message-State: AOAM530HjfZUZ2DOGKPNtEtpTWgMWSoUc4nQnczNUMMKVPZcXWIgdxGf
+	J5+cQOpjr3H5bsdV87eusGsdeg==
+X-Google-Smtp-Source: ABdhPJxm8oQpe82/AlfHpo86YsbZI42gD8lqIDet1sGBcYjpwPke9wpE0Wpp3R+D8mPYMYqjJQCKXw==
+X-Received: by 2002:a65:490d:0:b0:39e:58cb:b1eb with SMTP id p13-20020a65490d000000b0039e58cbb1ebmr16428991pgs.390.1651628866265;
+        Tue, 03 May 2022 18:47:46 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a7-20020aa780c7000000b0050dc76281b6sm7143766pfn.144.2022.05.03.18.47.40
+        by smtp.gmail.com with ESMTPSA id j17-20020aa783d1000000b0050dc7628166sm6962339pfn.64.2022.05.03.18.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 18:47:41 -0700 (PDT)
+        Tue, 03 May 2022 18:47:45 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: "Gustavo A . R . Silva" <gustavoars@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>,
-	Stefan Richter <stefanr@s5r6.in-berlin.de>,
-	linux1394-devel@lists.sourceforge.net,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	alsa-devel@alsa-project.org,
 	Al Viro <viro@zeniv.linux.org.uk>,
 	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Gross <agross@kernel.org>,
 	Andy Lavr <andy.lavr@gmail.com>,
 	Arend van Spriel <aspriel@gmail.com>,
 	Baowen Zheng <baowen.zheng@corigine.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
 	Bradley Grove <linuxdrivers@attotech.com>,
 	brcm80211-dev-list.pdl@broadcom.com,
@@ -103,9 +102,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Lee Jones <lee.jones@linaro.org>,
 	Leon Romanovsky <leon@kernel.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
+	linux1394-devel@lists.sourceforge.net,
 	linux-afs@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
 	linux-bluetooth@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
@@ -142,6 +141,7 @@ Cc: Kees Cook <keescook@chromium.org>,
 	SHA-cyfmac-dev-list@infineon.com,
 	Simon Horman <simon.horman@corigine.com>,
 	Stefano Stabellini <sstabellini@kernel.org>,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
 	Steffen Klassert <steffen.klassert@secunet.com>,
 	Stephen Hemminger <sthemmin@microsoft.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>,
@@ -155,9 +155,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	xen-devel@lists.xenproject.org,
 	Xiu Jianfeng <xiujianfeng@huawei.com>,
 	Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 18/32] firewire: Use __mem_to_flex_dup() with struct iso_interrupt_event
-Date: Tue,  3 May 2022 18:44:27 -0700
-Message-Id: <20220504014440.3697851-19-keescook@chromium.org>
+Subject: [PATCH 21/32] soc: qcom: apr: Use mem_to_flex_dup() with struct apr_rx_buf
+Date: Tue,  3 May 2022 18:44:30 -0700
+Message-Id: <20220504014440.3697851-22-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220504014440.3697851-1-keescook@chromium.org>
 References: <20220504014440.3697851-1-keescook@chromium.org>
@@ -167,7 +167,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2017; h=from:subject; bh=En62c6cYeUTmU8jbvcTu7IkYSFHpDUIXfTMNPx9PLGc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqEY3t8cFKELeYkm2NJIduUgR+ZPwYvLuYXHKSq h9RlNwCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHahAAKCRCJcvTf3G3AJmzQD/ 40OwL2hRSWj9CwaOb0EjwNMYNrEpXdJJUx4PtLsO50tNm7kViyp0rIIENwt0Refm3UMfgJOd4uhpAP UnN8m9LoCHDWTn2Ip+vIMDS3s7F5W2nAcbk5hF/C+qyUcxpZ01AbHR+GyZjxwzVt9qEG+TAXzPRQnp dfwWrtSjiyM2jKV9PjBNt6qRhM7Jxt/+wokWBFK4eM8IKP5wMTPXf0n1BGa/3mFi6dkoZD+yXtl4IT q4PePWOvlJ8zihIyMKu6xe3P2Cd5gPfwiDcsKwkrzufOJPHAEhY8riHbDxYytvqLGG7bw341elDFvM fFg+b/yC+gowOuz1miET0BDC+cA6vVe4BMDspdtGoFbNEJfsp72+AkNfwxKDENX6TekjFRU3iHzOci lPoBqEyf2AILOQko5Kh9u3twT5Z6Azf7bj/NRatR/QKpZXBkjRcvBCR8SN8nlgdnYckPdhxRBU5YUS IHSagdIFo3kzcAF1P/Aq785Nakdj4SMvQp66HlJm0gKK57rvSGhQtlRXIDROMfObo/Dar+MBASK/fr qWo15PcDT/tqMlbzcrYAAB4BcvmIgHfXG5riesv5IcmZv6ehMHVZTaM4Sf1wIA6V0OWztJpmHeUVBs 1l35/YNa44KeLfFackz/5o7jU6Cqxn/jknqaXV6GkQkL2jafxDjZYhz781sQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1693; h=from:subject; bh=f797ezn2sQWsQcALbTjtcz0/uVJxqqsdCbEE9J5EL4c=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicdqFcya5M1Ba7xKOXe16qG7jIlVI8ph+ibFXwwOp nrqS7nGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnHahQAKCRCJcvTf3G3AJhB6D/ 4mAanYpWDhhzP0wFox6ZgqAP9umNDzMV7dRX4Y08wPvedXkTuo/N0jclu6EdK/Bs4KaQilIZSFkLno xsM8xXSf4UqStJoT27N7DzjgnXKUJuyB5HZu1PfC+8PJ3QEnqiU5wE/l/2KdIJiAa7Xrj82dQB2cOe f9cgwxVbs3UnZy77Wv+k8FP5dMShK5yfzH0kpSd88R+/mDgZ6PLzi6zr8ZQiGCGdehQ7yp7ahiIA+i aAsDm3/+QhB0XaYdbqgAm2IAn+ouEdBPFgeXFzXqJwdi8AEfwBoByO06B8F23M3UCLdd6ZTRuaYeVQ kIZhzXstlVWDB9mIUnTP7dpfIY0lC+xzWyCLtZeT4bAvCwQB9CAAEWnSx7qfxwfOCYH1OjKUWJ+Xo4 5bWdci/vlaLQLD13TFP2X8QMY+seDM4SmnQAjgo5eITKrQ8RREz044kssPiR5qrnynNMOFWoNryxir 5TxsUJqEcElCuxyYstu2GZWqRpIeTKHVnaCu6XWtUkfQXhXikks9R9eVs6gSl+qIiVvgsVs7Tv/R9N rFtDfCJB155p3+TaJfCxSA/1e92fAlkjvrq+Ar3n/Jqs+/JGlPFT7Zy0qsgxzMjclrsboCWAvbLZZ2 OSexYpHjEn8jykFiHVbn1z48UtV3JdplNzCir+Gph+mH4axRJfHc0k7gYzyA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
@@ -176,53 +176,53 @@ replace the open-coded a deserialization of bytes out of memory into a
 trailing flexible array by using a flex_array.h helper to perform the
 allocation, bounds checking, and copying.
 
-Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc: linux1394-devel@lists.sourceforge.net
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/firewire/core-cdev.c       | 7 ++-----
- include/uapi/linux/firewire-cdev.h | 4 ++--
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ drivers/soc/qcom/apr.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/firewire/core-cdev.c b/drivers/firewire/core-cdev.c
-index c9fe5903725a..7e884c61e12e 100644
---- a/drivers/firewire/core-cdev.c
-+++ b/drivers/firewire/core-cdev.c
-@@ -913,17 +913,14 @@ static void iso_callback(struct fw_iso_context *context, u32 cycle,
- 			 size_t header_length, void *header, void *data)
- {
- 	struct client *client = data;
--	struct iso_interrupt_event *e;
-+	struct iso_interrupt_event *e = NULL;
+diff --git a/drivers/soc/qcom/apr.c b/drivers/soc/qcom/apr.c
+index 3caabd873322..6cf6f6df276e 100644
+--- a/drivers/soc/qcom/apr.c
++++ b/drivers/soc/qcom/apr.c
+@@ -40,8 +40,8 @@ struct packet_router {
  
--	e = kmalloc(sizeof(*e) + header_length, GFP_ATOMIC);
--	if (e == NULL)
-+	if (__mem_to_flex_dup(&e, .interrupt, header, header_length, GFP_ATOMIC))
- 		return;
- 
- 	e->interrupt.type      = FW_CDEV_EVENT_ISO_INTERRUPT;
- 	e->interrupt.closure   = client->iso_closure;
- 	e->interrupt.cycle     = cycle;
--	e->interrupt.header_length = header_length;
--	memcpy(e->interrupt.header, header, header_length);
- 	queue_event(client, &e->event, &e->interrupt,
- 		    sizeof(e->interrupt) + header_length, NULL, 0);
- }
-diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
-index 5effa9832802..22c5f59e9dfa 100644
---- a/include/uapi/linux/firewire-cdev.h
-+++ b/include/uapi/linux/firewire-cdev.h
-@@ -264,8 +264,8 @@ struct fw_cdev_event_iso_interrupt {
- 	__u64 closure;
- 	__u32 type;
- 	__u32 cycle;
--	__u32 header_length;
--	__u32 header[0];
-+	__DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u32, header_length);
-+	__DECLARE_FLEX_ARRAY_ELEMENTS(__u32, header);
+ struct apr_rx_buf {
+ 	struct list_head node;
+-	int len;
+-	uint8_t buf[];
++	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, len);
++	DECLARE_FLEX_ARRAY_ELEMENTS(uint8_t, buf);
  };
  
  /**
+@@ -162,7 +162,7 @@ static int apr_callback(struct rpmsg_device *rpdev, void *buf,
+ 				  int len, void *priv, u32 addr)
+ {
+ 	struct packet_router *apr = dev_get_drvdata(&rpdev->dev);
+-	struct apr_rx_buf *abuf;
++	struct apr_rx_buf *abuf = NULL;
+ 	unsigned long flags;
+ 
+ 	if (len <= APR_HDR_SIZE) {
+@@ -171,13 +171,9 @@ static int apr_callback(struct rpmsg_device *rpdev, void *buf,
+ 		return -EINVAL;
+ 	}
+ 
+-	abuf = kzalloc(sizeof(*abuf) + len, GFP_ATOMIC);
+-	if (!abuf)
++	if (mem_to_flex_dup(&abuf, buf, len, GFP_ATOMIC))
+ 		return -ENOMEM;
+ 
+-	abuf->len = len;
+-	memcpy(abuf->buf, buf, len);
+-
+ 	spin_lock_irqsave(&apr->rx_lock, flags);
+ 	list_add_tail(&abuf->node, &apr->rx_list);
+ 	spin_unlock_irqrestore(&apr->rx_lock, flags);
 -- 
 2.32.0
 
