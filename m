@@ -1,105 +1,304 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4765620E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:50:13 +0000 (UTC)
-X-UUID: 86fc2c6520e64543bc1ad4117eca4f23-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:4439533b-04b3-47d5-a427-31a0c7b89d6b,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:53
-X-CID-INFO: VERSION:1.1.4,REQID:4439533b-04b3-47d5-a427-31a0c7b89d6b,OB:0,LOB:
-	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-	N:release,TS:53
-X-CID-META: VersionHash:faefae9,CLOUDID:1a5c67c7-85ee-4ac1-ac05-bd3f1e72e732,C
-	OID:9d76720f4212,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-	,QS:0,BEC:nil
-X-UUID: 86fc2c6520e64543bc1ad4117eca4f23-20220504
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-	(envelope-from <rex-bc.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 840021313; Wed, 04 May 2022 11:50:07 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 11:50:06 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 4 May 2022 11:50:06 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 4 May 2022 11:50:06 +0800
-Message-ID: <ab2ca5755069df3e9efb467d028a4d10004d9420.camel@mediatek.com>
-Subject: Re: [PATCH v19 02/25] dt-bindings: reset: mt8195: add vdosys1 reset
- control bit
-From: Rex-BC Chen <rex-bc.chen@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Wed, 4 May 2022 11:50:06 +0800
-In-Reply-To: <20220503102345.22817-3-nancy.lin@mediatek.com>
-References: <20220503102345.22817-1-nancy.lin@mediatek.com>
-	 <20220503102345.22817-3-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7312A20E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651636959; x=1683172959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G/G+Nty+op6go1f4SOkm+//jqDawnNJnuOUV4gqoBy4=;
+  b=ZvjyS/gZW8hVPRch52/CSKHpEFgFJAsmt3jSgK745+d+q/oVzEg60yC9
+   Gt3qu9twn3I0mgEeEnXSkgcarV7dxHOASiV6n0fIPWXzRjkE+cctSYdkS
+   paiNKrmxZFv4R4XEdTUHUzUJ9W+dl06H504Tg2NxlUXhByq9y1LP5hc3c
+   QJCIU4X5hoTPDOSOD2g36gvYdWklS5cpvEreol4HRTmMPYIbNCuwfwo6+
+   W1TpWVh/fI13rX2v1PNLQrbmwqJ4tjY9DkmjR7UcE2I60N4SQfTasiMH2
+   33wgElcFPhMDtpN7jM/TzrIHZUvwRTbLykh9OmVPVPFZje4jY0N+T8S9E
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354094326"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="354094326"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:02:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="693144486"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 21:02:37 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nm6Dk-000B2x-Km;
+	Wed, 04 May 2022 04:02:36 +0000
+Date: Wed, 4 May 2022 12:01:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 1/1] pcie/portdrv: Hack in DOE and CDAT support
+Message-ID: <202205041107.30URfLeU-lkp@intel.com>
+References: <20220503153449.4088-2-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503153449.4088-2-Jonathan.Cameron@huawei.com>
 
-On Tue, 2022-05-03 at 18:23 +0800, Nancy.Lin wrote:
-> Add vdosys1 reset control bit for MT8195 platform.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  include/dt-bindings/reset/mt8195-resets.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-
-> bindings/reset/mt8195-resets.h
-> index a26bccc8b957..aab8d74496a6 100644
-> --- a/include/dt-bindings/reset/mt8195-resets.h
-> +++ b/include/dt-bindings/reset/mt8195-resets.h
-> @@ -26,4 +26,16 @@
->  
->  #define MT8195_TOPRGU_SW_RST_NUM               16
->  
-> +/* VDOSYS1 */
-> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE0_DL_ASYNC          25
-> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE1_DL_ASYNC          26
-> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE2_DL_ASYNC          27
-> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE3_DL_ASYNC          28
-> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE4_DL_ASYNC          29
-> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC     51
-> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC     52
-> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC     53
-> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC     54
-> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC      55
-> +
->  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8195 */
+Hi Jonathan,
 
-Hello Nancy,
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.18-rc5 next-20220503]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-From my previous experience, this should be "index".
-I think you can list all of them from 0 to 55.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/DOE-usage-with-pcie-portdrv/20220503-233751
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220504/202205041107.30URfLeU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fc2dfabb21cebe51654723860419130c3bcc09d6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cameron/DOE-usage-with-pcie-portdrv/20220503-233751
+        git checkout fc2dfabb21cebe51654723860419130c3bcc09d6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-BRs,
-Rex
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+           ^
+   ./include/generated/autoksyms.h:195:9: note: previous definition is here
+   #define __KSYM_net/phonet/pep-gprs.o 1
+           ^
+   ./include/generated/autoksyms.h:197:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+                     ^
+   ./include/generated/autoksyms.h:197:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+           ^
+   ./include/generated/autoksyms.h:196:9: note: previous definition is here
+   #define __KSYM_net/phonet/pn_netlink.o 1
+           ^
+   ./include/generated/autoksyms.h:198:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/tls/tls_sw.o 1
+                     ^
+   ./include/generated/autoksyms.h:198:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/tls/tls_sw.o 1
+           ^
+   ./include/generated/autoksyms.h:197:9: note: previous definition is here
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+           ^
+   ./include/generated/autoksyms.h:199:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
+                     ^
+   ./include/generated/autoksyms.h:199:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
+           ^
+   ./include/generated/autoksyms.h:198:9: note: previous definition is here
+   #define __KSYM_net/tls/tls_sw.o 1
+           ^
+   ./include/generated/autoksyms.h:200:24: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_security/keys/trusted-keys/trusted_tpm1.o 1
+                          ^
+   ./include/generated/autoksyms.h:201:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/init.o 1
+                       ^
+   ./include/generated/autoksyms.h:202:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/pcm_native.o 1
+                       ^
+   ./include/generated/autoksyms.h:202:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/core/pcm_native.o 1
+           ^
+   ./include/generated/autoksyms.h:201:9: note: previous definition is here
+   #define __KSYM_sound/core/init.o 1
+           ^
+   ./include/generated/autoksyms.h:203:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+                       ^
+   ./include/generated/autoksyms.h:203:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+           ^
+   ./include/generated/autoksyms.h:202:9: note: previous definition is here
+   #define __KSYM_sound/core/pcm_native.o 1
+           ^
+   ./include/generated/autoksyms.h:204:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+                       ^
+   ./include/generated/autoksyms.h:204:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+           ^
+   ./include/generated/autoksyms.h:203:9: note: previous definition is here
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+           ^
+   ./include/generated/autoksyms.h:205:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+                       ^
+   ./include/generated/autoksyms.h:205:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+           ^
+   ./include/generated/autoksyms.h:204:9: note: previous definition is here
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+           ^
+   ./include/generated/autoksyms.h:206:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+                       ^
+   ./include/generated/autoksyms.h:206:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+           ^
+   ./include/generated/autoksyms.h:205:9: note: previous definition is here
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+           ^
+   ./include/generated/autoksyms.h:207:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/iso-resources.o 1
+                       ^
+   ./include/generated/autoksyms.h:207:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/iso-resources.o 1
+           ^
+   ./include/generated/autoksyms.h:206:9: note: previous definition is here
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+           ^
+   ./include/generated/autoksyms.h:208:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
+                       ^
+   ./include/generated/autoksyms.h:208:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
+           ^
+   ./include/generated/autoksyms.h:207:9: note: previous definition is here
+   #define __KSYM_sound/firewire/iso-resources.o 1
+           ^
+>> drivers/pci/pcie/portdrv_core.c:11:10: fatal error: 'linux/pci-doe.h' file not found
+   #include <linux/pci-doe.h>
+            ^~~~~~~~~~~~~~~~~
+   400 warnings and 1 error generated.
+--
+           ^
+   ./include/generated/autoksyms.h:195:9: note: previous definition is here
+   #define __KSYM_net/phonet/pep-gprs.o 1
+           ^
+   ./include/generated/autoksyms.h:197:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+                     ^
+   ./include/generated/autoksyms.h:197:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+           ^
+   ./include/generated/autoksyms.h:196:9: note: previous definition is here
+   #define __KSYM_net/phonet/pn_netlink.o 1
+           ^
+   ./include/generated/autoksyms.h:198:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/tls/tls_sw.o 1
+                     ^
+   ./include/generated/autoksyms.h:198:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/tls/tls_sw.o 1
+           ^
+   ./include/generated/autoksyms.h:197:9: note: previous definition is here
+   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
+           ^
+   ./include/generated/autoksyms.h:199:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
+                     ^
+   ./include/generated/autoksyms.h:199:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
+   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
+           ^
+   ./include/generated/autoksyms.h:198:9: note: previous definition is here
+   #define __KSYM_net/tls/tls_sw.o 1
+           ^
+   ./include/generated/autoksyms.h:200:24: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_security/keys/trusted-keys/trusted_tpm1.o 1
+                          ^
+   ./include/generated/autoksyms.h:201:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/init.o 1
+                       ^
+   ./include/generated/autoksyms.h:202:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/pcm_native.o 1
+                       ^
+   ./include/generated/autoksyms.h:202:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/core/pcm_native.o 1
+           ^
+   ./include/generated/autoksyms.h:201:9: note: previous definition is here
+   #define __KSYM_sound/core/init.o 1
+           ^
+   ./include/generated/autoksyms.h:203:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+                       ^
+   ./include/generated/autoksyms.h:203:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+           ^
+   ./include/generated/autoksyms.h:202:9: note: previous definition is here
+   #define __KSYM_sound/core/pcm_native.o 1
+           ^
+   ./include/generated/autoksyms.h:204:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+                       ^
+   ./include/generated/autoksyms.h:204:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+           ^
+   ./include/generated/autoksyms.h:203:9: note: previous definition is here
+   #define __KSYM_sound/core/seq/seq_lock.o 1
+           ^
+   ./include/generated/autoksyms.h:205:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+                       ^
+   ./include/generated/autoksyms.h:205:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+           ^
+   ./include/generated/autoksyms.h:204:9: note: previous definition is here
+   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
+           ^
+   ./include/generated/autoksyms.h:206:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+                       ^
+   ./include/generated/autoksyms.h:206:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+           ^
+   ./include/generated/autoksyms.h:205:9: note: previous definition is here
+   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
+           ^
+   ./include/generated/autoksyms.h:207:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/iso-resources.o 1
+                       ^
+   ./include/generated/autoksyms.h:207:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/iso-resources.o 1
+           ^
+   ./include/generated/autoksyms.h:206:9: note: previous definition is here
+   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
+           ^
+   ./include/generated/autoksyms.h:208:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
+                       ^
+   ./include/generated/autoksyms.h:208:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
+   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
+           ^
+   ./include/generated/autoksyms.h:207:9: note: previous definition is here
+   #define __KSYM_sound/firewire/iso-resources.o 1
+           ^
+>> drivers/pci/pcie/portdrv_pci.c:11:10: fatal error: 'linux/pci-doe.h' file not found
+   #include <linux/pci-doe.h>
+            ^~~~~~~~~~~~~~~~~
+   400 warnings and 1 error generated.
+
+
+vim +11 drivers/pci/pcie/portdrv_core.c
+
+  > 11	#include <linux/pci-doe.h>
+    12	#include <linux/kernel.h>
+    13	#include <linux/errno.h>
+    14	#include <linux/pm.h>
+    15	#include <linux/pm_runtime.h>
+    16	#include <linux/string.h>
+    17	#include <linux/slab.h>
+    18	#include <linux/aer.h>
+    19	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
