@@ -1,42 +1,56 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7312A20E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D320E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 04:02:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651636959; x=1683172959;
+  t=1651636962; x=1683172962;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=G/G+Nty+op6go1f4SOkm+//jqDawnNJnuOUV4gqoBy4=;
-  b=ZvjyS/gZW8hVPRch52/CSKHpEFgFJAsmt3jSgK745+d+q/oVzEg60yC9
-   Gt3qu9twn3I0mgEeEnXSkgcarV7dxHOASiV6n0fIPWXzRjkE+cctSYdkS
-   paiNKrmxZFv4R4XEdTUHUzUJ9W+dl06H504Tg2NxlUXhByq9y1LP5hc3c
-   QJCIU4X5hoTPDOSOD2g36gvYdWklS5cpvEreol4HRTmMPYIbNCuwfwo6+
-   W1TpWVh/fI13rX2v1PNLQrbmwqJ4tjY9DkmjR7UcE2I60N4SQfTasiMH2
-   33wgElcFPhMDtpN7jM/TzrIHZUvwRTbLykh9OmVPVPFZje4jY0N+T8S9E
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354094326"
+  bh=OyN5mceNj+AWcDecdxPU2pdvxMVgMY1EeS2aRZyWFTo=;
+  b=jwgqUN4KVo6PnYUzz0eelkMCJMUin3uoTiJ4+G6Ghwn7Itgrmin44NXz
+   rN39WdD89R8QOsqcB59G8XsMhPcT3Irg5sF+VIvctFYHaYOeEb+3alBbq
+   at9P0aUhaR95JLyu33LiIPmKVM8pBBUrnMReAxzEq65y4WpZQB3TmaI+7
+   aaNS5zz+OIMovmj2PUyysee2a6NQxEF1efN+DnMwz+eAxkhXBpceruSwo
+   YyacOLGBqKNVc8qM9ucHBwiikwA9BWaj61fkeAb912c1t7s/bl0GHy91s
+   2n7VQoKLzYK43VN2VqfuG1YMMVfChDajQ0ZmkAFFDQL3AUaUJnbCte5Qu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328197756"
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="354094326"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:02:38 -0700
+   d="scan'208";a="328197756"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 21:02:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="693144486"
+   d="scan'208";a="734215663"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 21:02:37 -0700
+  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 21:02:38 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nm6Dk-000B2x-Km;
+	id 1nm6Dk-000B32-Md;
 	Wed, 04 May 2022 04:02:36 +0000
-Date: Wed, 4 May 2022 12:01:43 +0800
+Date: Wed, 4 May 2022 12:01:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 1/1] pcie/portdrv: Hack in DOE and CDAT support
-Message-ID: <202205041107.30URfLeU-lkp@intel.com>
-References: <20220503153449.4088-2-Jonathan.Cameron@huawei.com>
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Kishon Vijay Abraham I <kishon@ti.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+	Frank Li <Frank.Li@nxp.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/13] PCI: dwc: Add unroll iATU space support to the
+ regions disable method
+Message-ID: <202205041128.dPzBiZsY-lkp@intel.com>
+References: <20220503212300.30105-4-Sergey.Semin@baikalelectronics.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,259 +59,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503153449.4088-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20220503212300.30105-4-Sergey.Semin@baikalelectronics.ru>
 
-Hi Jonathan,
+Hi Serge,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on v5.18-rc5 next-20220503]
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on v5.18-rc5 next-20220503]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/DOE-usage-with-pcie-portdrv/20220503-233751
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220504-052648
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220504/202205041107.30URfLeU-lkp@intel.com/config)
+config: riscv-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041128.dPzBiZsY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fc2dfabb21cebe51654723860419130c3bcc09d6
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b7ab9c3904c4948a2bdb0ed9bf5ca5e38c9ac52c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jonathan-Cameron/DOE-usage-with-pcie-portdrv/20220503-233751
-        git checkout fc2dfabb21cebe51654723860419130c3bcc09d6
+        git fetch --no-tags linux-review Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220504-052648
+        git checkout b7ab9c3904c4948a2bdb0ed9bf5ca5e38c9ac52c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/controller/dwc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-           ^
-   ./include/generated/autoksyms.h:195:9: note: previous definition is here
-   #define __KSYM_net/phonet/pep-gprs.o 1
-           ^
-   ./include/generated/autoksyms.h:197:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-                     ^
-   ./include/generated/autoksyms.h:197:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-           ^
-   ./include/generated/autoksyms.h:196:9: note: previous definition is here
-   #define __KSYM_net/phonet/pn_netlink.o 1
-           ^
-   ./include/generated/autoksyms.h:198:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/tls/tls_sw.o 1
-                     ^
-   ./include/generated/autoksyms.h:198:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/tls/tls_sw.o 1
-           ^
-   ./include/generated/autoksyms.h:197:9: note: previous definition is here
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-           ^
-   ./include/generated/autoksyms.h:199:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
-                     ^
-   ./include/generated/autoksyms.h:199:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
-           ^
-   ./include/generated/autoksyms.h:198:9: note: previous definition is here
-   #define __KSYM_net/tls/tls_sw.o 1
-           ^
-   ./include/generated/autoksyms.h:200:24: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_security/keys/trusted-keys/trusted_tpm1.o 1
-                          ^
-   ./include/generated/autoksyms.h:201:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/init.o 1
-                       ^
-   ./include/generated/autoksyms.h:202:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/pcm_native.o 1
-                       ^
-   ./include/generated/autoksyms.h:202:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/core/pcm_native.o 1
-           ^
-   ./include/generated/autoksyms.h:201:9: note: previous definition is here
-   #define __KSYM_sound/core/init.o 1
-           ^
-   ./include/generated/autoksyms.h:203:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-                       ^
-   ./include/generated/autoksyms.h:203:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-           ^
-   ./include/generated/autoksyms.h:202:9: note: previous definition is here
-   #define __KSYM_sound/core/pcm_native.o 1
-           ^
-   ./include/generated/autoksyms.h:204:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-                       ^
-   ./include/generated/autoksyms.h:204:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-           ^
-   ./include/generated/autoksyms.h:203:9: note: previous definition is here
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-           ^
-   ./include/generated/autoksyms.h:205:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-                       ^
-   ./include/generated/autoksyms.h:205:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-           ^
-   ./include/generated/autoksyms.h:204:9: note: previous definition is here
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-           ^
-   ./include/generated/autoksyms.h:206:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-                       ^
-   ./include/generated/autoksyms.h:206:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-           ^
-   ./include/generated/autoksyms.h:205:9: note: previous definition is here
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-           ^
-   ./include/generated/autoksyms.h:207:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/iso-resources.o 1
-                       ^
-   ./include/generated/autoksyms.h:207:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/iso-resources.o 1
-           ^
-   ./include/generated/autoksyms.h:206:9: note: previous definition is here
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-           ^
-   ./include/generated/autoksyms.h:208:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
-                       ^
-   ./include/generated/autoksyms.h:208:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
-           ^
-   ./include/generated/autoksyms.h:207:9: note: previous definition is here
-   #define __KSYM_sound/firewire/iso-resources.o 1
-           ^
->> drivers/pci/pcie/portdrv_core.c:11:10: fatal error: 'linux/pci-doe.h' file not found
-   #include <linux/pci-doe.h>
-            ^~~~~~~~~~~~~~~~~
-   400 warnings and 1 error generated.
---
-           ^
-   ./include/generated/autoksyms.h:195:9: note: previous definition is here
-   #define __KSYM_net/phonet/pep-gprs.o 1
-           ^
-   ./include/generated/autoksyms.h:197:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-                     ^
-   ./include/generated/autoksyms.h:197:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-           ^
-   ./include/generated/autoksyms.h:196:9: note: previous definition is here
-   #define __KSYM_net/phonet/pn_netlink.o 1
-           ^
-   ./include/generated/autoksyms.h:198:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/tls/tls_sw.o 1
-                     ^
-   ./include/generated/autoksyms.h:198:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/tls/tls_sw.o 1
-           ^
-   ./include/generated/autoksyms.h:197:9: note: previous definition is here
-   #define __KSYM_net/sunrpc/auth_gss/gss_generic_token.o 1
-           ^
-   ./include/generated/autoksyms.h:199:19: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
-                     ^
-   ./include/generated/autoksyms.h:199:9: warning: '__KSYM_net' macro redefined [-Wmacro-redefined]
-   #define __KSYM_net/vmw_vsock/af_vsock_tap.o 1
-           ^
-   ./include/generated/autoksyms.h:198:9: note: previous definition is here
-   #define __KSYM_net/tls/tls_sw.o 1
-           ^
-   ./include/generated/autoksyms.h:200:24: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_security/keys/trusted-keys/trusted_tpm1.o 1
-                          ^
-   ./include/generated/autoksyms.h:201:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/init.o 1
-                       ^
-   ./include/generated/autoksyms.h:202:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/pcm_native.o 1
-                       ^
-   ./include/generated/autoksyms.h:202:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/core/pcm_native.o 1
-           ^
-   ./include/generated/autoksyms.h:201:9: note: previous definition is here
-   #define __KSYM_sound/core/init.o 1
-           ^
-   ./include/generated/autoksyms.h:203:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-                       ^
-   ./include/generated/autoksyms.h:203:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-           ^
-   ./include/generated/autoksyms.h:202:9: note: previous definition is here
-   #define __KSYM_sound/core/pcm_native.o 1
-           ^
-   ./include/generated/autoksyms.h:204:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-                       ^
-   ./include/generated/autoksyms.h:204:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-           ^
-   ./include/generated/autoksyms.h:203:9: note: previous definition is here
-   #define __KSYM_sound/core/seq/seq_lock.o 1
-           ^
-   ./include/generated/autoksyms.h:205:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-                       ^
-   ./include/generated/autoksyms.h:205:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-           ^
-   ./include/generated/autoksyms.h:204:9: note: previous definition is here
-   #define __KSYM_sound/firewire/bebob/bebob_stream.o 1
-           ^
-   ./include/generated/autoksyms.h:206:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-                       ^
-   ./include/generated/autoksyms.h:206:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-           ^
-   ./include/generated/autoksyms.h:205:9: note: previous definition is here
-   #define __KSYM_sound/firewire/fireface/ff-transaction.o 1
-           ^
-   ./include/generated/autoksyms.h:207:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/iso-resources.o 1
-                       ^
-   ./include/generated/autoksyms.h:207:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/iso-resources.o 1
-           ^
-   ./include/generated/autoksyms.h:206:9: note: previous definition is here
-   #define __KSYM_sound/firewire/fireworks/fireworks_command.o 1
-           ^
-   ./include/generated/autoksyms.h:208:21: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
-   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
-                       ^
-   ./include/generated/autoksyms.h:208:9: warning: '__KSYM_sound' macro redefined [-Wmacro-redefined]
-   #define __KSYM_sound/firewire/oxfw/oxfw-stream.o 1
-           ^
-   ./include/generated/autoksyms.h:207:9: note: previous definition is here
-   #define __KSYM_sound/firewire/iso-resources.o 1
-           ^
->> drivers/pci/pcie/portdrv_pci.c:11:10: fatal error: 'linux/pci-doe.h' file not found
-   #include <linux/pci-doe.h>
-            ^~~~~~~~~~~~~~~~~
-   400 warnings and 1 error generated.
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
+   In file included from drivers/pci/controller/dwc/../../pci.h:5:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
+   In file included from drivers/pci/controller/dwc/../../pci.h:5:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:16:
+   In file included from drivers/pci/controller/dwc/../../pci.h:5:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/pci/controller/dwc/pcie-designware.c:508:14: warning: result of comparison of constant 2147483648 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
+                   if (region == PCIE_ATU_REGION_INBOUND) {
+                       ~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   8 warnings and 20 errors generated.
 
 
-vim +11 drivers/pci/pcie/portdrv_core.c
+vim +/int +508 drivers/pci/controller/dwc/pcie-designware.c
 
-  > 11	#include <linux/pci-doe.h>
-    12	#include <linux/kernel.h>
-    13	#include <linux/errno.h>
-    14	#include <linux/pm.h>
-    15	#include <linux/pm_runtime.h>
-    16	#include <linux/string.h>
-    17	#include <linux/slab.h>
-    18	#include <linux/aer.h>
-    19	
+   490	
+   491	void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
+   492				 enum dw_pcie_region_type type)
+   493	{
+   494		int region;
+   495	
+   496		switch (type) {
+   497		case DW_PCIE_REGION_INBOUND:
+   498			region = PCIE_ATU_REGION_INBOUND;
+   499			break;
+   500		case DW_PCIE_REGION_OUTBOUND:
+   501			region = PCIE_ATU_REGION_OUTBOUND;
+   502			break;
+   503		default:
+   504			return;
+   505		}
+   506	
+   507		if (pci->iatu_unroll_enabled) {
+ > 508			if (region == PCIE_ATU_REGION_INBOUND) {
+   509				dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+   510							 ~(u32)PCIE_ATU_ENABLE);
+   511			} else {
+   512				dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+   513							 ~(u32)PCIE_ATU_ENABLE);
+   514			}
+   515		} else {
+   516			dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
+   517			dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
+   518		}
+   519	}
+   520	
 
 -- 
 0-DAY CI Kernel Test Service
