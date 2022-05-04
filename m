@@ -1,51 +1,55 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD9D20E8
-	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:45:36 +0000 (UTC)
-X-UUID: db535762277644ada50f7f4e00a7886f-20220504
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4765620E8
+	for <llvm@lists.linux.dev>; Wed,  4 May 2022 03:50:13 +0000 (UTC)
+X-UUID: 86fc2c6520e64543bc1ad4117eca4f23-20220504
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:af441f4b-61e0-46c3-b200-c391c4b01978,OB:0,LO
-	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:3d2f67c7-85ee-4ac1-ac05-bd3f1e72e732,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: db535762277644ada50f7f4e00a7886f-20220504
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-	(envelope-from <ck.hu@mediatek.com>)
+X-CID-O-INFO: VERSION:1.1.4,REQID:4439533b-04b3-47d5-a427-31a0c7b89d6b,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:4439533b-04b3-47d5-a427-31a0c7b89d6b,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+	N:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:1a5c67c7-85ee-4ac1-ac05-bd3f1e72e732,C
+	OID:9d76720f4212,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: 86fc2c6520e64543bc1ad4117eca4f23-20220504
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+	(envelope-from <rex-bc.chen@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 883556782; Wed, 04 May 2022 11:45:25 +0800
+	with ESMTP id 840021313; Wed, 04 May 2022 11:50:07 +0800
 Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 4 May 2022 11:45:24 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 11:50:06 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 4 May 2022 11:45:23 +0800
+ 15.0.1497.2; Wed, 4 May 2022 11:50:06 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 4 May 2022 11:45:23 +0800
-Message-ID: <de091078d417618e8d9c76447d4e6ed43ea398f8.camel@mediatek.com>
-Subject: Re: [PATCH v19 05/25] soc: mediatek: add mtk-mmsys support for
- mt8195 vdosys1
-From: CK Hu <ck.hu@mediatek.com>
+ Transport; Wed, 4 May 2022 11:50:06 +0800
+Message-ID: <ab2ca5755069df3e9efb467d028a4d10004d9420.camel@mediatek.com>
+Subject: Re: [PATCH v19 02/25] dt-bindings: reset: mt8195: add vdosys1 reset
+ control bit
+From: Rex-BC Chen <rex-bc.chen@mediatek.com>
 To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
 	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
 	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
 	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
- lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
-	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
- Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Date: Wed, 4 May 2022 11:45:23 +0800
-In-Reply-To: <20220503102345.22817-6-nancy.lin@mediatek.com>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Wed, 4 May 2022 11:50:06 +0800
+In-Reply-To: <20220503102345.22817-3-nancy.lin@mediatek.com>
 References: <20220503102345.22817-1-nancy.lin@mediatek.com>
-	 <20220503102345.22817-6-nancy.lin@mediatek.com>
+	 <20220503102345.22817-3-nancy.lin@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
@@ -57,23 +61,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-MTK: N
 
-Hi, Nancy:
-
 On Tue, 2022-05-03 at 18:23 +0800, Nancy.Lin wrote:
-> Add mt8195 vdosys1 routing table to the driver data of mtk-mmsys.
-
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
-
+> Add vdosys1 reset control bit for MT8195 platform.
 > 
 > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 > Reviewed-by: AngeloGioacchino Del Regno <
 > angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 > ---
->  drivers/soc/mediatek/mt8195-mmsys.h | 139
-> ++++++++++++++++++++++++++++
->  drivers/soc/mediatek/mtk-mmsys.c    |   2 +
->  2 files changed, 141 insertions(+)
+>  include/dt-bindings/reset/mt8195-resets.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> 
+> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-
+> bindings/reset/mt8195-resets.h
+> index a26bccc8b957..aab8d74496a6 100644
+> --- a/include/dt-bindings/reset/mt8195-resets.h
+> +++ b/include/dt-bindings/reset/mt8195-resets.h
+> @@ -26,4 +26,16 @@
+>  
+>  #define MT8195_TOPRGU_SW_RST_NUM               16
+>  
+> +/* VDOSYS1 */
+> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE0_DL_ASYNC          25
+> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE1_DL_ASYNC          26
+> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE2_DL_ASYNC          27
+> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE3_DL_ASYNC          28
+> +#define MT8195_VDOSYS1_SW0_RST_B_MERGE4_DL_ASYNC          29
+> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC     51
+> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC     52
+> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC     53
+> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC     54
+> +#define MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC      55
+> +
+>  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8195 */
+
+Hello Nancy,
+
+From my previous experience, this should be "index".
+I think you can list all of them from 0 to 55.
+
+BRs,
+Rex
 
