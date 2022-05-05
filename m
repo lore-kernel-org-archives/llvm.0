@@ -1,49 +1,32 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C8D632
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 13:42:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651758141; x=1683294141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Klh2w7LNZv2eWeVfq9/1/u2/n898gwlGd/zAyuhv2Ck=;
-  b=D6HB/XyINBWflW+0U3NVPO4hEX9hL9QEQG8adrCWWHPxjLTmIF2D492L
-   qvl/wOvGQu9oG7zuBvTJlrZj2GUNlgDEaHXYYCoukhe1aoxrDacdiD0Qc
-   7Ge4f7xN5X0hba/bW3FEFXW0S/4NCo0NlQmq7n55uLLFzGPAByWQ0fwgQ
-   01lCNzdeKdCwLVzuVEceVOz9vwHl+Dp1zJC8yNjg6sVNTs/ewbw+sV4sJ
-   osGr5tCByFjkamInAS24ZbGfjLycVafM9d1noZ5Gw0cxIwXfPZZw7dJVK
-   kCCX5NvDNHiRmIS9SRqdxQLjCpUTuEjBKzCPxnwPWUzIRjqQTZGIaozLT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="293311662"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="293311662"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:42:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="708942820"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 May 2022 06:42:18 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmbkH-000CR9-R7;
-	Thu, 05 May 2022 13:42:17 +0000
-Date: Thu, 5 May 2022 21:41:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/7] net: phy: introduce
- genphy_c45_pma_baset1_read_master_slave()
-Message-ID: <202205052146.y8znPT8Q-lkp@intel.com>
-References: <20220505063318.296280-5-o.rempel@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB11C625
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 14:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
+	Thu,  5 May 2022 14:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651762304;
+	bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
+	 0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
+	 LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
+	 HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
+	 7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
+	 hkEVYZlT/UfTA==
+Date: Thu, 5 May 2022 07:51:42 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Walle <michael@walle.cc>
+Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
+Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
+References: <20220407150828.202513-1-michael@walle.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,64 +35,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505063318.296280-5-o.rempel@pengutronix.de>
+In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
 
-Hi Oleksij,
+On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
+> The supplied buffer might be on the stack and we get the following error
+> message:
+> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+> 
+> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
+> necessary.
+> 
+> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+> changes since v1:
+>  - remove extra empty line
+>  - add fixes tag as suggested by Codrin
+> 
+>  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index b0eae94909f4..5eca3b3bb609 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	unsigned int_addr_flag = 0;
+>  	struct i2c_msg *m_start = msg;
+>  	bool is_read;
+> +	u8 *dma_buf;
+>  
+>  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+>  
+> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	dev->msg = m_start;
+>  	dev->recv_len_abort = false;
+>  
+> +	if (dev->use_dma) {
+> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+> +		if (!dma_buf) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+> +		dev->buf = dma_buf;
+> +	}
+> +
+>  	ret = at91_do_twi_transfer(dev);
+> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>  
+>  	ret = (ret < 0) ? ret : num;
+>  out:
+> -- 
+> 2.30.2
+> 
+> 
 
-I love your patch! Perhaps something to improve:
+This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+causes the following clang warning:
 
-[auto build test WARNING on net-next/master]
+drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        if (dev->use_dma) {
+            ^~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                 ^~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
+        if (dev->use_dma) {
+        ^~~~~~~~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
+        u8 *dma_buf;
+                   ^
+                    = NULL
+1 error generated.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220505/202205052146.y8znPT8Q-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/80dad43edb356876484acb116b8a906dd4bef941
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
-        git checkout 80dad43edb356876484acb116b8a906dd4bef941
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+Should this variable be initialized or should the call to
+i2c_put_dma_safe_msg_buf() be moved into the if statement?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/phy-c45.c:558: warning: expecting prototype for genphy_c45_baset1_read_master_slave(). Prototype was for genphy_c45_pma_baset1_read_master_slave() instead
-
-
-vim +558 drivers/net/phy/phy-c45.c
-
-   552	
-   553	/**
-   554	 * genphy_c45_baset1_read_master_slave - read forced master/slave configuration
-   555	 * @phydev: target phy_device struct
-   556	 */
-   557	int genphy_c45_pma_baset1_read_master_slave(struct phy_device *phydev)
- > 558	{
-   559		int val;
-   560	
-   561		phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
-   562	
-   563		val = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL);
-   564		if (val < 0)
-   565			return val;
-   566	
-   567		if (val & MDIO_PMA_PMD_BT1_CTRL_CFG_MST)
-   568			phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
-   569		else
-   570			phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
-   571	
-   572		return 0;
-   573	}
-   574	EXPORT_SYMBOL_GPL(genphy_c45_pma_baset1_read_master_slave);
-   575	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
