@@ -1,154 +1,116 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380B536D
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 03:14:55 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id w4so4312019wrg.12
-        for <llvm@lists.linux.dev>; Wed, 04 May 2022 20:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ucVUJA/3XuUnAZZDdzrSa00V5OM/xNG80G7w+rY/AM=;
-        b=TuxTKLvOuI4WPEKhesTppN+S/ZTkV+RZI5Wf5W2p+hsrw7/gyfISF8EIiT+rnx8Zu6
-         zyyiN1wYwPcxjcCA2Sf5xnxirRkddqYIXy2R06dd7qAEUind0ZWDkOOMEqGzEQWPzWzC
-         ZTGq5qihhGmXwhHHxuYfhzg3wQjnC+ThZO+LDVhD9+QIb89VKx3wO1YbUFwWrxXrBCMa
-         SL8UA4+69pMFcpj8M2pJPoNe1J5xXeNZwxQABf1kR5+ALPhLTrYwt5fLtjpY8BeYkBF4
-         nHH6g/sC5IM5M9d/Ecm/JssJwuDneWf8+Vn5nXmTehGUz+AEuc9+Pt2ztZNda+z83bgG
-         KQkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ucVUJA/3XuUnAZZDdzrSa00V5OM/xNG80G7w+rY/AM=;
-        b=mZ22hO3V6YlsF4GXVjpLFvobXN1CRInrCgNVEKYTrSgxQxjUo3NWuiAkZKXfTi3eje
-         69Vpw2c4XWeiSXLgPX0acIreX/wK2Lr35/AJ2jqZPey2yuXidbmmgxFF3U9g4FQsIKjJ
-         uklt99fGKxxO5y0Udz0wUe7sY/DdyF7Bz/X5Gli5hpZEbbnG7IW1vN3sm6nfNhfpvMkS
-         AMLnuvkpgClTKrvX5km3tIAuEmY4JzYG32/GLYHjpRBqCxw34kEGPflKECeKTw9CugNZ
-         YNl5ja4UTdBZPH7wtoZQeuw5XMAmjXF7S8jnJqM2hi3E32vfgdoLdi7/f+VeKxjMv0+X
-         WfsQ==
-X-Gm-Message-State: AOAM531SRey7YCzo2lj0BuZxy2OZUNhH0haxr8ia6Va0Y82tD4xu+scr
-	bD6F1tim9628FjMLbjVAIHsoRvG1xJczsy+jQGh1
-X-Google-Smtp-Source: ABdhPJzVMX+BMHIo/6Rx3rt/EGt5DUCiA1Xs3vZE5oz5hLJkbM0bMmp2okAEnKI/au/mDAitpvRIKuXqsxBU1V8TuLw=
-X-Received: by 2002:a5d:590d:0:b0:20a:c3eb:2584 with SMTP id
- v13-20020a5d590d000000b0020ac3eb2584mr18412244wrd.18.1651720493308; Wed, 04
- May 2022 20:14:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3657F
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 05:55:40 +0000 (UTC)
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LO
+	B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:108
+X-CID-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LOB:
+	0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+	TION:quarantine,TS:108
+X-CID-META: VersionHash:faefae9,CLOUDID:b2474316-2e53-443e-b81a-655c13977218,C
+	OID:6060dbeaf70c,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
+	,QS:0,BEC:nil
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <lina.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1907580698; Thu, 05 May 2022 13:55:30 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 13:55:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 5 May 2022 13:55:29 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 13:55:28 +0800
+From: Lina Wang <lina.wang@mediatek.com>
+To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Eric Dumazet <edumazet@google.com>,
+	Willem de Bruijn <willemb@google.com>, Maciej enczykowski <maze@google.com>,
+	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<llvm@lists.linux.dev>, Lina Wang <lina.wang@mediatek.com>
+Subject: [PATCH v6 1/2] net: fix wrong network header length
+Date: Thu, 5 May 2022 13:48:49 +0800
+Message-ID: <20220505054850.4878-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220504014440.3697851-1-keescook@chromium.org>
- <20220504014440.3697851-29-keescook@chromium.org> <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
- <20220504234324.GA12556@embeddedor>
-In-Reply-To: <20220504234324.GA12556@embeddedor>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 4 May 2022 23:14:42 -0400
-Message-ID: <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
-Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	netdev@vger.kernel.org, selinux@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, 
-	Al Viro <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, 
-	Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
-	Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove <linuxdrivers@attotech.com>, 
-	brcm80211-dev-list.pdl@broadcom.com, Christian Brauner <brauner@kernel.org>, 
-	Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel <chris@zankel.net>, 
-	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>, 
-	Daniel Vetter <daniel.vetter@ffwll.ch>, Dan Williams <dan.j.williams@intel.com>, 
-	David Gow <davidgow@google.com>, David Howells <dhowells@redhat.com>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
-	Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
-	Eugeniu Rosca <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, 
-	Francis Laniel <laniel_francis@privacyrequired.com>, Frank Rowand <frowand.list@gmail.com>, 
-	Franky Lin <franky.lin@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Gregory Greenman <gregory.greenman@intel.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Hante Meuleman <hante.meuleman@broadcom.com>, 
-	Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris <jmorris@namei.org>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Jens Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>, 
-	Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, 
-	Leon Romanovsky <leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	linux1394-devel@lists.sourceforge.net, linux-afs@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-xtensa@linux-xtensa.org, 
-	llvm@lists.linux.dev, Loic Poulain <loic.poulain@linaro.org>, 
-	Louis Peens <louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, 
-	Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Muchun Song <songmuchun@bytedance.com>, 
-	Nathan Chancellor <nathan@kernel.org>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Rich Felker <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	SHA-cyfmac-dev-list@infineon.com, Simon Horman <simon.horman@corigine.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, Stefan Richter <stefanr@s5r6.in-berlin.de>, 
-	Stephen Hemminger <sthemmin@microsoft.com>, Tadeusz Struk <tadeusz.struk@linaro.org>, 
-	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>, 
-	Udipto Goswami <quic_ugoswami@quicinc.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>, 
-	xen-devel@lists.xenproject.org, Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Wed, May 4, 2022 at 7:34 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Hi Paul,
->
-> On Wed, May 04, 2022 at 06:57:28PM -0400, Paul Moore wrote:
-> > On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
->
-> [..]
->
-> > > +++ b/include/uapi/linux/xfrm.h
-> > > @@ -31,9 +31,9 @@ struct xfrm_id {
-> > >  struct xfrm_sec_ctx {
-> > >         __u8    ctx_doi;
-> > >         __u8    ctx_alg;
-> > > -       __u16   ctx_len;
-> > > +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
-> > >         __u32   ctx_sid;
-> > > -       char    ctx_str[0];
-> > > +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
-> > >  };
-> >
-> > While I like the idea of this in principle, I'd like to hear about the
-> > testing you've done on these patches.  A previous flex array
-> > conversion in the audit uapi headers ended up causing a problem with
->
-> I'm curious about which commit caused those problems...?
+When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+network_header\transport_header\mac_header have been updated as ipv4 acts,
+but other skbs in frag_list didnot update anything, just ipv6 packets.
 
-Commit ed98ea2128b6 ("audit: replace zero-length array with
-flexible-array member"), however, as I said earlier, the problem was
-actually with SWIG, it just happened to be triggered by the kernel
-commit.  There was a brief fedora-devel mail thread about the problem,
-see the link below:
+udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+frag_list and make sure right udp payload is delivered to user space.
+Unfortunately, other skbs in frag_list who are still ipv6 packets are
+updated like the first skb and will have wrong transport header length.
 
-* https://www.spinics.net/lists/fedora-devel/msg297991.html
+e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+has the same network_header(24)& transport_header(64), after
+bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+skb's network_header is 44,transport_header is 64, other skbs in frag_list
+didnot change.After skb_segment_list, the other skbs in frag_list has
+different network_header(24) and transport_header(44), so there will be 20
+bytes different from original,that is difference between ipv6 header and
+ipv4 header. Just change transport_header to be the same with original.
 
-To reiterate, I'm supportive of changes like this, but I would like to
-hear how it was tested to ensure there are no unexpected problems with
-userspace.  If there are userspace problems it doesn't mean we can't
-make changes like this, it just means we need to ensure that the
-userspace issues are resolved first.
+Actually, there are two solutions to fix it, one is traversing all skbs
+and changing every skb header in bpf_skb_proto_6_to_4, the other is
+modifying frag_list skb's header in skb_segment_list. Considering
+efficiency, adopt the second one--- when the first skb and other skbs in
+frag_list has different network_header length, restore them to make sure
+right udp payload is delivered to user space.
 
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+---
+ net/core/skbuff.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 10bde7c6db44..e8006e0a1b25 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3897,7 +3897,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 	unsigned int delta_len = 0;
+ 	struct sk_buff *tail = NULL;
+ 	struct sk_buff *nskb, *tmp;
+-	int err;
++	int len_diff, err;
+ 
+ 	skb_push(skb, -skb_network_offset(skb) + offset);
+ 
+@@ -3937,9 +3937,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
+ 
+ 		skb_release_head_state(nskb);
++		len_diff = skb_network_header_len(nskb) - skb_network_header_len(skb);
+ 		__copy_skb_header(nskb, skb);
+ 
+ 		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
++		nskb->transport_header += len_diff;
+ 		skb_copy_from_linear_data_offset(skb, -tnl_hlen,
+ 						 nskb->data - tnl_hlen,
+ 						 offset + tnl_hlen);
 -- 
-paul-moore.com
+2.18.0
+
