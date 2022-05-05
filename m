@@ -1,22 +1,46 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DBE632
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 12:45:42 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF040106F;
-	Thu,  5 May 2022 05:45:41 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7DD33F885;
-	Thu,  5 May 2022 05:45:40 -0700 (PDT)
-Date: Thu, 5 May 2022 13:45:37 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: kernel test robot <lkp@intel.com>, Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
- error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
-References: <202205050943.HDgeO9iV-lkp@intel.com>
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0957632
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 12:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651755011; x=1683291011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+r26UPeOiOD5mZHL8FtWXo/czVM8PSHetoaVEoGMRHo=;
+  b=iHqEIA6MgqPXLexBcomqfuIycRXo5Bxs6qQkOL5AGLh/Uz4i3VJW2j6a
+   d1I6RxiFXMi9KKEYPAM90z1R2jm9i705Cd7W8EpLxkVECsuYo+j46ISHN
+   A1JSt2MkMNOZi9xOIHACzBjVlybq9uDPVKtKfxc1o1PCl+v/rBwfDs8rb
+   QSBFnqsZZ511CGLNpjfRYsCgrbrO+ScAo+m6kRhxPDQJ5z/pNtqbl/zm0
+   O0Gbinc+TwohyO2J1LADozu9Ft1EkXO+zBP0LFgDlGmDmTxdcgvjpuloa
+   soRx8DVKIACDV0DjLXlFzPxaxSSVxsXlqiov1w9SUqBengRAyuUkE8A3J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267986640"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="267986640"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 05:50:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="549332767"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 05 May 2022 05:50:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmavo-000CPq-1V;
+	Thu, 05 May 2022 12:50:08 +0000
+Date: Thu, 5 May 2022 20:49:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Scally <djrscally@gmail.com>, linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, yong.zhi@intel.com,
+	sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+	tian.shu.qiu@intel.com, andriy.shevchenko@linux.intel.com,
+	hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v3 07/15] media: i2c: Add support for new frequencies to
+ ov7251
+Message-ID: <202205052045.9ovlO4pA-lkp@intel.com>
+References: <20220504223027.3480287-8-djrscally@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -25,85 +49,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205050943.HDgeO9iV-lkp@intel.com>
+In-Reply-To: <20220504223027.3480287-8-djrscally@gmail.com>
 
-Hi Kees,
+Hi Daniel,
 
-I hadn't realised the LKDTM STACKLEAK test could be built with
-CONFIG_STACKLEAK=n, and my rework of that depends upon helpers that only exist
-when CONFIG_STACKLEAK=y.
+I love your patch! Perhaps something to improve:
 
-IMO the test is nonsensical for CONFIG_STACKLEAK=n, and I reckon we should
-either:
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-a) Not build the stackleak test at all when CONFIG_STACKLEAK=n
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Scally/Support-OVTI7251-on-Microsoft-Surface-line/20220505-063608
+base:   git://linuxtv.org/media_tree.git master
+config: hexagon-buildonly-randconfig-r002-20220501 (https://download.01.org/0day-ci/archive/20220505/202205052045.9ovlO4pA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4f69999ece8bcd0a4e1e616cac23441d2606348d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Scally/Support-OVTI7251-on-Microsoft-Surface-line/20220505-063608
+        git checkout 4f69999ece8bcd0a4e1e616cac23441d2606348d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-b) Have a small stub that just logs that CONFIG_STACKLEAK=n and the test is
-   being skipped.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Do you have any preference between the two?
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Mark.
+>> drivers/media/i2c/ov7251.c:176:37: warning: unused variable 'ov7251_pll1_cfg_24_mhz_319_2_mhz' [-Wunused-const-variable]
+   static const struct ov7251_pll1_cfg ov7251_pll1_cfg_24_mhz_319_2_mhz = {
+                                       ^
+   1 warning generated.
 
-On Thu, May 05, 2022 at 09:43:36AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
-> head:   d46ac904fd35edfccc5080818e950d4d3b4697c4
-> commit: f4cfacd92972cc440d534b5156df23d0a2136bab [21/25] lkdtm/stackleak: rework boundary management
-> config: s390-randconfig-r044-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050943.HDgeO9iV-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=f4cfacd92972cc440d534b5156df23d0a2136bab
->         git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
->         git fetch --no-tags kees for-next/kspp
->         git checkout f4cfacd92972cc440d534b5156df23d0a2136bab
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/misc/lkdtm/stackleak.c:17:39: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            const unsigned long task_stack_low = stackleak_task_low_bound(current);
->                                                 ^
-> >> drivers/misc/lkdtm/stackleak.c:18:40: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            const unsigned long task_stack_high = stackleak_task_high_bound(current);
->                                                  ^
->    drivers/misc/lkdtm/stackleak.c:19:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'unsigned long (void)' [-Wint-conversion]
->            const unsigned long current_sp = current_stack_pointer;
->                                ^            ~~~~~~~~~~~~~~~~~~~~~
->    drivers/misc/lkdtm/stackleak.c:20:43: error: no member named 'lowest_stack' in 'struct task_struct'; did you mean 'ret_stack'?
->            const unsigned long lowest_sp = current->lowest_stack;
->                                                     ^~~~~~~~~~~~
->                                                     ret_stack
->    include/linux/sched.h:1365:28: note: 'ret_stack' declared here
->            struct ftrace_ret_stack         *ret_stack;
->                                             ^
->    drivers/misc/lkdtm/stackleak.c:20:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'struct ftrace_ret_stack *' [-Wint-conversion]
->            const unsigned long lowest_sp = current->lowest_stack;
->                                ^           ~~~~~~~~~~~~~~~~~~~~~
->    drivers/misc/lkdtm/stackleak.c:42:16: error: call to undeclared function 'stackleak_find_top_of_poison'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            poison_high = stackleak_find_top_of_poison(task_stack_low, untracked_high);
->                          ^
->    2 warnings and 4 errors generated.
-> 
-> 
-> vim +/stackleak_task_low_bound +17 drivers/misc/lkdtm/stackleak.c
-> 
->     13	
->     14	void lkdtm_STACKLEAK_ERASING(void)
->     15	{
->     16		const unsigned long task_stack_base = (unsigned long)task_stack_page(current);
->   > 17		const unsigned long task_stack_low = stackleak_task_low_bound(current);
->   > 18		const unsigned long task_stack_high = stackleak_task_high_bound(current);
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+
+vim +/ov7251_pll1_cfg_24_mhz_319_2_mhz +176 drivers/media/i2c/ov7251.c
+
+   175	
+ > 176	static const struct ov7251_pll1_cfg ov7251_pll1_cfg_24_mhz_319_2_mhz = {
+   177		.pre_div = 0x05,
+   178		.mult = 0x85,
+   179		.div = 0x02,
+   180		.pix_div = 0x0a,
+   181		.mipi_div = 0x05,
+   182	};
+   183	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
