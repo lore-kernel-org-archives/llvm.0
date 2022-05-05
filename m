@@ -1,45 +1,144 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECC029AA
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 18:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651773902; x=1683309902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xJVaziiJiO/giX8r3WzYf4FZE6x1ucwWfymWctZyaUg=;
-  b=OY4DXedzdk14yiquYMYExCG0RG++HekbwiSvVXFEUIQtXQ1GlqEACwva
-   mK3St78ZFcNePSjrcxlDhWeym6INQPDKy+ixYHXVU9NO0yXkHw7GaFAlf
-   YitYZ112suPWmmeqoLqK38myU0E3+ibvEJNkhNUEtaO+jRmHjENMOn+hh
-   oqxccYT0pbcRffZPPK1sK16VhskiqgqwJhNuBuugV203N5SHS0XskoZ5H
-   X3auN+29bHrtD9LM3Db3BczmrS1qEwcRE73DMI0xBmt4G18jCoDdOL+8E
-   9WtA25ZZnV7EewscyjFZ9x0t5PdDyKivFQS/lMY9JCmm4ZesBQNFTudw1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267045976"
-X-IronPort-AV: E=Sophos;i="5.91,202,1647327600"; 
-   d="scan'208";a="267045976"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 11:05:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,202,1647327600"; 
-   d="scan'208";a="585473235"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 May 2022 11:04:59 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmfqU-000Ce0-V5;
-	Thu, 05 May 2022 18:04:59 +0000
-Date: Fri, 6 May 2022 02:04:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guoqing Jiang <guoqing.jiang@linux.dev>, song@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, buczek@molgen.mpg.de,
-	linux-raid@vger.kernel.org,
-	Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
-Subject: Re: [PATCH V3 1/2] md: don't unregister sync_thread with
- reconfig_mutex held
-Message-ID: <202205060116.J42KgtCW-lkp@intel.com>
-References: <20220505081641.21500-2-guoqing.jiang@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99112F2E
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 18:39:19 +0000 (UTC)
+Received: by mail-pl1-f179.google.com with SMTP id d17so5237614plg.0
+        for <llvm@lists.linux.dev>; Thu, 05 May 2022 11:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bIDYG8oUb6Mu7NvJ6XCyJeRsH11vzTSCPCwxqfuBo6Q=;
+        b=TAsZfcIzZ1Euc/qIeEg34BQq2COz7cgqBz00GoicuXUNf9pdGcbnWHwxzUdfUr95G6
+         aZkeIr2DXfy8REqoWNWUrHkDO72sG3i0jXoJwl1ByCdJe4nI3ufTivSeF9XGTyVfZSBt
+         E8X9FJkYlIIwFcdiPVlMoWZYSaWqjlfPLGIK0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bIDYG8oUb6Mu7NvJ6XCyJeRsH11vzTSCPCwxqfuBo6Q=;
+        b=sBpuar3RStEuPdxU7qryH2VnVhwlcaavT0zvNgB8hsQi5tLZb+EPZTeSkqlIrzhLVm
+         W1zJH/lfk32J1yEryUQLSMFv0kQFkGVWhRdLNhbSshewhUvyIFy6YIREYTk786H2NCqq
+         LPsOVy3XxeqpEGBXF4qo+Hv91q/h5egnlGSFui/AMOlhQx8iF2hrwRWU1RBTybQdBaAh
+         fCe8JS/MTGwcJq5Ih9o+4pNE/nZ1K69Z2p/JNPdFR+j6S6HfujD72mlgLSdnIHbfuppz
+         HmFSMtSyEnwaKqyI7bHneYhWd8G0PvlP1kXQF2gJ7Rbr4u+6L3o8ZXRUZdmGnZfDdfMW
+         Blbg==
+X-Gm-Message-State: AOAM531Hca0/5p2ND6+at2fvrnPeLogYHKfcn4vEGrbSh47mOGd6FM+p
+	EBTJ9Zl5KKCS33HpFOGRJx94oA==
+X-Google-Smtp-Source: ABdhPJywOBGnVCItaZdbWHBhKk99ReUqQqdPAt9X91jhcKRKzWEoF57vDV5JAH3IfEnT7+kmtExgOg==
+X-Received: by 2002:a17:902:ea53:b0:15b:1bb8:ac9e with SMTP id r19-20020a170902ea5300b0015b1bb8ac9emr27991008plg.45.1651775959313;
+        Thu, 05 May 2022 11:39:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa78657000000b0050dc762818bsm1678035pfo.101.2022.05.05.11.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 11:39:18 -0700 (PDT)
+Date: Thu, 5 May 2022 11:39:17 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	netdev@vger.kernel.org, selinux@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Gross <agross@kernel.org>, Andy Lavr <andy.lavr@gmail.com>,
+	Arend van Spriel <aspriel@gmail.com>,
+	Baowen Zheng <baowen.zheng@corigine.com>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Bradley Grove <linuxdrivers@attotech.com>,
+	brcm80211-dev-list.pdl@broadcom.com,
+	Christian Brauner <brauner@kernel.org>,
+	Christian Lamparter <chunkeey@googlemail.com>,
+	Chris Zankel <chris@zankel.net>,
+	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	David Gow <davidgow@google.com>,
+	David Howells <dhowells@redhat.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>,
+	Eugeniu Rosca <erosca@de.adit-jv.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Francis Laniel <laniel_francis@privacyrequired.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Franky Lin <franky.lin@broadcom.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Hante Meuleman <hante.meuleman@broadcom.com>,
+	Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	James Morris <jmorris@namei.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Jens Axboe <axboe@kernel.dk>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>,
+	Kalle Valo <kvalo@kernel.org>, Keith Packard <keithp@keithp.com>,
+	keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+	Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Lee Jones <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	linux1394-devel@lists.sourceforge.net,
+	linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Louis Peens <louis.peens@corigine.com>,
+	Luca Coelho <luciano.coelho@intel.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Mark Brown <broonie@kernel.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Max Filippov <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Paolo Abeni <pabeni@redhat.com>, Rich Felker <dalias@aerifal.cx>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	SHA-cyfmac-dev-list@infineon.com,
+	Simon Horman <simon.horman@corigine.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Stefan Richter <stefanr@s5r6.in-berlin.de>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Tadeusz Struk <tadeusz.struk@linaro.org>,
+	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+	Udipto Goswami <quic_ugoswami@quicinc.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+	xen-devel@lists.xenproject.org,
+	Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
+Message-ID: <202205051124.6D80ABAE32@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-29-keescook@chromium.org>
+ <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
+ <20220504234324.GA12556@embeddedor>
+ <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,117 +147,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505081641.21500-2-guoqing.jiang@linux.dev>
+In-Reply-To: <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
 
-Hi Guoqing,
+On Wed, May 04, 2022 at 11:14:42PM -0400, Paul Moore wrote:
+> On Wed, May 4, 2022 at 7:34 PM Gustavo A. R. Silva
+> <gustavoars@kernel.org> wrote:
+> >
+> > Hi Paul,
+> >
+> > On Wed, May 04, 2022 at 06:57:28PM -0400, Paul Moore wrote:
+> > > On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > [..]
+> >
+> > > > +++ b/include/uapi/linux/xfrm.h
+> > > > @@ -31,9 +31,9 @@ struct xfrm_id {
+> > > >  struct xfrm_sec_ctx {
+> > > >         __u8    ctx_doi;
+> > > >         __u8    ctx_alg;
+> > > > -       __u16   ctx_len;
+> > > > +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
+> > > >         __u32   ctx_sid;
+> > > > -       char    ctx_str[0];
+> > > > +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
+> > > >  };
+> > >
+> > > While I like the idea of this in principle, I'd like to hear about the
+> > > testing you've done on these patches.  A previous flex array
+> > > conversion in the audit uapi headers ended up causing a problem with
+> >
+> > I'm curious about which commit caused those problems...?
+> 
+> Commit ed98ea2128b6 ("audit: replace zero-length array with
+> flexible-array member"), however, as I said earlier, the problem was
+> actually with SWIG, it just happened to be triggered by the kernel
+> commit.  There was a brief fedora-devel mail thread about the problem,
+> see the link below:
+> 
+> * https://www.spinics.net/lists/fedora-devel/msg297991.html
 
-Thank you for the patch! Perhaps something to improve:
+Wow, that's pretty weird -- it looks like SWIG was scraping the headers
+to build its conversions? I assume SWIG has been fixed now?
 
-[auto build test WARNING on song-md/md-next]
-[also build test WARNING on v5.18-rc5 next-20220505]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> To reiterate, I'm supportive of changes like this, but I would like to
+> hear how it was tested to ensure there are no unexpected problems with
+> userspace.  If there are userspace problems it doesn't mean we can't
+> make changes like this, it just means we need to ensure that the
+> userspace issues are resolved first.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guoqing-Jiang/two-fixes-for-md/20220505-162202
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-config: hexagon-randconfig-r045-20220505 (https://download.01.org/0day-ci/archive/20220506/202205060116.J42KgtCW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e8e9c97eb79c337a89a98a92106cfa6139a7c9e0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Guoqing-Jiang/two-fixes-for-md/20220505-162202
-        git checkout e8e9c97eb79c337a89a98a92106cfa6139a7c9e0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/md/
+Well, as this is the first and only report of any problems with [0] -> []
+conversions (in UAPI or anywhere) that I remember seeing, and they've
+been underway since at least v5.9, I hadn't been doing any new testing.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So, for this case, I guess I should ask what tests you think would be
+meaningful here? Anything using #include should be fine:
+https://codesearch.debian.net/search?q=linux%2Fxfrm.h&literal=1&perpkg=1
+Which leaves just this, which may be doing something weird:
 
-All warnings (new ones prefixed by >>):
+libabigail_2.0-1/tests/data/test-diff-filter/test-PR27569-v0.abi
+        </data-member>
+        <data-member access="public" layout-offset-in-bits="128">
+          <var-decl name="seq_hi" type-id="3f1a6b60" visibility="default" filepath="include/uapi/linux/xfrm.h" line="97" column="1"/>
+        </data-member>
+        <data-member access="public" layout-offset-in-bits="160">
 
->> drivers/md/md.c:9448:3: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-                   mddev_lock(mddev);
-                   ^~~~~~~~~~ ~~~~~
-   1 warning generated.
+But I see that SWIG doesn't show up in a search for linux/audit.h:
+https://codesearch.debian.net/search?q=linux%2Faudit.h&literal=1&perpkg=1
 
-
-vim +/warn_unused_result +9448 drivers/md/md.c
-
-  9434	
-  9435	void md_reap_sync_thread(struct mddev *mddev)
-  9436	{
-  9437		struct md_rdev *rdev;
-  9438		sector_t old_dev_sectors = mddev->dev_sectors;
-  9439		bool is_reshaped = false, is_locked = false;
-  9440	
-  9441		if (mddev_is_locked(mddev)) {
-  9442			is_locked = true;
-  9443			mddev_unlock(mddev);
-  9444		}
-  9445		/* resync has finished, collect result */
-  9446		md_unregister_thread(&mddev->sync_thread);
-  9447		if (is_locked)
-> 9448			mddev_lock(mddev);
-  9449	
-  9450		if (!test_bit(MD_RECOVERY_INTR, &mddev->recovery) &&
-  9451		    !test_bit(MD_RECOVERY_REQUESTED, &mddev->recovery) &&
-  9452		    mddev->degraded != mddev->raid_disks) {
-  9453			/* success...*/
-  9454			/* activate any spares */
-  9455			if (mddev->pers->spare_active(mddev)) {
-  9456				sysfs_notify_dirent_safe(mddev->sysfs_degraded);
-  9457				set_bit(MD_SB_CHANGE_DEVS, &mddev->sb_flags);
-  9458			}
-  9459		}
-  9460		if (test_bit(MD_RECOVERY_RESHAPE, &mddev->recovery) &&
-  9461		    mddev->pers->finish_reshape) {
-  9462			mddev->pers->finish_reshape(mddev);
-  9463			if (mddev_is_clustered(mddev))
-  9464				is_reshaped = true;
-  9465		}
-  9466	
-  9467		/* If array is no-longer degraded, then any saved_raid_disk
-  9468		 * information must be scrapped.
-  9469		 */
-  9470		if (!mddev->degraded)
-  9471			rdev_for_each(rdev, mddev)
-  9472				rdev->saved_raid_disk = -1;
-  9473	
-  9474		md_update_sb(mddev, 1);
-  9475		/* MD_SB_CHANGE_PENDING should be cleared by md_update_sb, so we can
-  9476		 * call resync_finish here if MD_CLUSTER_RESYNC_LOCKED is set by
-  9477		 * clustered raid */
-  9478		if (test_and_clear_bit(MD_CLUSTER_RESYNC_LOCKED, &mddev->flags))
-  9479			md_cluster_ops->resync_finish(mddev);
-  9480		clear_bit(MD_RECOVERY_RUNNING, &mddev->recovery);
-  9481		clear_bit(MD_RECOVERY_DONE, &mddev->recovery);
-  9482		clear_bit(MD_RECOVERY_SYNC, &mddev->recovery);
-  9483		clear_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
-  9484		clear_bit(MD_RECOVERY_REQUESTED, &mddev->recovery);
-  9485		clear_bit(MD_RECOVERY_CHECK, &mddev->recovery);
-  9486		/*
-  9487		 * We call md_cluster_ops->update_size here because sync_size could
-  9488		 * be changed by md_update_sb, and MD_RECOVERY_RESHAPE is cleared,
-  9489		 * so it is time to update size across cluster.
-  9490		 */
-  9491		if (mddev_is_clustered(mddev) && is_reshaped
-  9492					      && !test_bit(MD_CLOSING, &mddev->flags))
-  9493			md_cluster_ops->update_size(mddev, old_dev_sectors);
-  9494		wake_up(&resync_wait);
-  9495		/* flag recovery needed just to double check */
-  9496		set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
-  9497		sysfs_notify_dirent_safe(mddev->sysfs_action);
-  9498		md_new_event();
-  9499		if (mddev->event_work.func)
-  9500			queue_work(md_misc_wq, &mddev->event_work);
-  9501	}
-  9502	EXPORT_SYMBOL(md_reap_sync_thread);
-  9503	
+So this may not be a sufficient analysis...
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook
