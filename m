@@ -1,53 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBD1369
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 00:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46534C385A4
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 00:34:59 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dIvmPEiz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1651710896;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tnC1+qRF+ciP+q6CHbeRaXIz/leRGorupnOwUpOwflA=;
-	b=dIvmPEizBesoAFpFaMW5IhHZOZ/abNRUv8YA9jGJKrKgyijFfUvV2ylGMaDm1D3M87ar9j
-	3N+jxxVjkkwvRsrwKs8tkYZfCjRgrdgezrCdyoWepSNn4wSu5HUSW7HZanXyGfJa4kapnj
-	DpDItaHtWFjJ2cjiiDS9loKVyL1jc9g=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ea201ed0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-	for <llvm@lists.linux.dev>;
-	Thu, 5 May 2022 00:34:56 +0000 (UTC)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f863469afbso33675097b3.0
-        for <llvm@lists.linux.dev>; Wed, 04 May 2022 17:34:56 -0700 (PDT)
-X-Gm-Message-State: AOAM5332Np6ZCtQbjv9JRiBekBRevvk0/RHPxX7xxYmbSY3tbWKc8z5X
-	BBa59rQIAnQc2a/ulNkGyvXYTCwAS49c9CXu29E=
-X-Google-Smtp-Source: ABdhPJxFr907tMrzyLaiI7ZALTgATrZJBmLFKZ4XIFvya0WZsy5rGZDeMn8L4JglFRXceNF2q00ja1PLfDEXJxCdAV4=
-X-Received: by 2002:a81:ad5b:0:b0:2f7:c91e:ab42 with SMTP id
- l27-20020a81ad5b000000b002f7c91eab42mr22698261ywk.499.1651710895557; Wed, 04
- May 2022 17:34:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7519E369
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 01:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651715028; x=1683251028;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zwza5U7NsfaBQi0ChOCEggAFl0x8H9t6iT813UM9/Ck=;
+  b=NEmLBxMQgqAzPJ8ev5N2e5a96vbmJKWPaoFDzr6BsRKSmhJeIFBI/j5l
+   yNC53T8bDpVwA956oi1+mvaMMQTIZDW+pUtd5z0SbfFD3SDaxWCUcqkyq
+   qOhMwTO0HuAVXf+Xf0ce4Uips2ZbcqrUtDQtr07KNFbrRdxxjplxx0gIu
+   LuZTkcSBbVaP77Asnv8Iw5vUf4Eo4vcjr8MlsV/dx+fMYi3ON5zAkknNR
+   MytabuJsxQFlFxTmWCBopXXhK4pyDQs21uDwjIrSfEWjwLTBZzRdxD9Bh
+   Sqv5la97KM9QDXZaOKy9z3+/P88wU0cRsFR0gNd+9sLaflMO3azDiisa9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="265548884"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="265548884"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:43:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="621071506"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 18:43:46 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmQWv-000ByF-HV;
+	Thu, 05 May 2022 01:43:45 +0000
+Date: Thu, 5 May 2022 09:43:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
+ error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202205050943.HDgeO9iV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220503131204.571547-1-Jason@zx2c4.com> <20220504111644.284927-1-Jason@zx2c4.com>
- <YnL6ouh5xxZIJqeN@dev-arch.thelio-3990X>
-In-Reply-To: <YnL6ouh5xxZIJqeN@dev-arch.thelio-3990X>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Thu, 5 May 2022 02:34:44 +0200
-X-Gmail-Original-Message-ID: <CAHmME9o8br7cnG1980=sqC89zw8=_C9sO2ytkcwt5tNhJbQTHw@mail.gmail.com>
-Message-ID: <CAHmME9o8br7cnG1980=sqC89zw8=_C9sO2ytkcwt5tNhJbQTHw@mail.gmail.com>
-Subject: Re: [PATCH v3] random: use first 128 bits of input as fast init
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks! Should be fixed by
-https://lore.kernel.org/lkml/20220505002910.IAcnpEOE2zR2ibERl4Lh3Y_PMmtb0Rf43lVevgztJiM@z/
-which is actually an earlier commit but unearthed by the one you
-bisected to.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
+head:   d46ac904fd35edfccc5080818e950d4d3b4697c4
+commit: f4cfacd92972cc440d534b5156df23d0a2136bab [21/25] lkdtm/stackleak: rework boundary management
+config: s390-randconfig-r044-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050943.HDgeO9iV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=f4cfacd92972cc440d534b5156df23d0a2136bab
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees for-next/kspp
+        git checkout f4cfacd92972cc440d534b5156df23d0a2136bab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/misc/lkdtm/stackleak.c:17:39: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           const unsigned long task_stack_low = stackleak_task_low_bound(current);
+                                                ^
+>> drivers/misc/lkdtm/stackleak.c:18:40: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           const unsigned long task_stack_high = stackleak_task_high_bound(current);
+                                                 ^
+   drivers/misc/lkdtm/stackleak.c:19:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'unsigned long (void)' [-Wint-conversion]
+           const unsigned long current_sp = current_stack_pointer;
+                               ^            ~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/lkdtm/stackleak.c:20:43: error: no member named 'lowest_stack' in 'struct task_struct'; did you mean 'ret_stack'?
+           const unsigned long lowest_sp = current->lowest_stack;
+                                                    ^~~~~~~~~~~~
+                                                    ret_stack
+   include/linux/sched.h:1365:28: note: 'ret_stack' declared here
+           struct ftrace_ret_stack         *ret_stack;
+                                            ^
+   drivers/misc/lkdtm/stackleak.c:20:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'struct ftrace_ret_stack *' [-Wint-conversion]
+           const unsigned long lowest_sp = current->lowest_stack;
+                               ^           ~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/lkdtm/stackleak.c:42:16: error: call to undeclared function 'stackleak_find_top_of_poison'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           poison_high = stackleak_find_top_of_poison(task_stack_low, untracked_high);
+                         ^
+   2 warnings and 4 errors generated.
+
+
+vim +/stackleak_task_low_bound +17 drivers/misc/lkdtm/stackleak.c
+
+    13	
+    14	void lkdtm_STACKLEAK_ERASING(void)
+    15	{
+    16		const unsigned long task_stack_base = (unsigned long)task_stack_page(current);
+  > 17		const unsigned long task_stack_low = stackleak_task_low_bound(current);
+  > 18		const unsigned long task_stack_high = stackleak_task_high_bound(current);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
