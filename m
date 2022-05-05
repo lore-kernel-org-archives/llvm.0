@@ -1,79 +1,169 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE0F20E4
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 16:52:16 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f863469afbso55623547b3.0
-        for <llvm@lists.linux.dev>; Thu, 05 May 2022 09:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rfQ3wFLudSyAVcYhy/IDVjHP+wEQPyVpR9aHM7jrE7Y=;
-        b=sw3JZLlEUvxXIbfiDbppduUwHQVv6t31IHX3OJUdmm5PWZiRUlPNBf9uXc7UUhU9kj
-         n8wK3fbAWAbgSJ1ONS7xcHkFXO/ISm/HxkLEnSdYQ0ALSOw/4dXaZtfNOy/h0ta55j1l
-         /wlHmLGGFrORYBuO21cB+SuthyaGjBCAt9vfgldo8hBl1LHw30uomfMRdy1RkOQuBXV1
-         pFUdSC9vpKmlpearNwbAp4MJ1G2cekiVhy4x2tt3zSPBLRRLDI2Y2y4f6DF5D41aVVcR
-         cv0xveIl05fCjWu/Ur8j+9hYaccDQM7tZgXJDkt9xpl4Lc60ZQGUmW3llEBLobh41X12
-         oKGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rfQ3wFLudSyAVcYhy/IDVjHP+wEQPyVpR9aHM7jrE7Y=;
-        b=MQzTB3uhhA/UYnmScg9KyW1MVAXH+OYwM4kZpOkf+jLzopkB4iqKO0CoL3uxLHe6cq
-         0TmnjpTbCUUsrYxdZPee5xQJwqn2tEdxvFOoSzEOVKpnPkQ6kl3w9V0wE9F6EGv4Jjb9
-         Zh4WwVcJT5mF5PmPZUHU7o7PooZBh5BRdA5s1nDYNdKvjHzVqFP1w0mtmtt7VAYIlLgR
-         fY3KiFw1wJlZ+5qw5UfI51p/PzfhI6s83EiriSlQ40CWqA/6BlFpnN0Ur2Rw3wdpqZQ9
-         RhAMFZ2pdKsbwd8kAAiPzbqIjx2bU66VuL77vbMeIG+hvzts0EWcRxPW5BEthhO6rrbD
-         wYKA==
-X-Gm-Message-State: AOAM530hkjOhNWEYfeqI+wUzCYmAVpTm9Ne1r9nWRMb9iDCGiArWgn6H
-	woI0rzULa/R8L7MWBEzIfY2xBO3AIw51axKsEfnYIg==
-X-Google-Smtp-Source: ABdhPJxqdsh6bV7V24MiWF4uRoLFGHvOE5bi1VIjMq8PKIRH504kLGElnVgYclES0yuQ69mZYQ1KYQ8QktHfyMj1P3E=
-X-Received: by 2002:a81:1108:0:b0:2f7:bf11:3fb9 with SMTP id
- 8-20020a811108000000b002f7bf113fb9mr25421990ywr.305.1651769535660; Thu, 05
- May 2022 09:52:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00D320E4
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 17:11:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651770707; x=1683306707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u1FYaTGfAwYIyvT2VgCzuIDSbbEnT2oLmYjIT11cmiw=;
+  b=PxrmJWL2PfhZ6ShJ6Bi7GHTMEkflMaknVLgPO64TixHiWQQ2z8vU/upe
+   pQYtdKLZC6rX9/o9nzoZNcoG8rhmetR4RL2oWKJvEo1MXN/Yikv2tQuu+
+   dMksMQ5LzTwBAsmLIsZzaJ2CduOtK4v4F5ouVIe052J+l/LEIjNXl1+/7
+   hxSwyfpodWiRxjIHsblz9Gww8+Mov+oqm7J8YmcKZyoanVgRVUMxyxNzV
+   ot7DL4LzeOOblVIVBkknqiRsUVbvG+j0DSC+pLOt6uEVZYWz/gYc9L/XG
+   hCRWLwaKbheY0+bLcxSLJmvBSd1GkLbc5ZMR1SfKvhdG6iu6CCZJu6X01
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268336109"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="268336109"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 10:11:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="632527981"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 May 2022 10:11:44 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmf0x-000CbM-TP;
+	Thu, 05 May 2022 17:11:43 +0000
+Date: Fri, 6 May 2022 01:11:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Scally <djrscally@gmail.com>, linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, yong.zhi@intel.com,
+	sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+	tian.shu.qiu@intel.com, andriy.shevchenko@linux.intel.com,
+	hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v3 15/15] media: i2c: Add vblank control to ov7251 driver
+Message-ID: <202205060133.HrXVpuXG-lkp@intel.com>
+References: <20220504223027.3480287-16-djrscally@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-11-samitolvanen@google.com> <YnP7j+miotxYM6fu@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <YnP7j+miotxYM6fu@FVFF77S0Q05N.cambridge.arm.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 5 May 2022 09:51:39 -0700
-Message-ID: <CABCJKue6c0FMpKXysdoT0Lc+RBqGFhp52iM03tttWwRv7CZr5w@mail.gmail.com>
-Subject: Re: [RFC PATCH 10/21] treewide: Drop function_nocfi
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504223027.3480287-16-djrscally@gmail.com>
 
-On Thu, May 5, 2022 at 9:30 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> I also believe that in most cases we can drop the __nocfi annotation on callers
-> now that we can mark the called assembly function with SYM_TYPED_FUNC_START().
+Hi Daniel,
 
-Good point, thanks for pointing that out. I'll add these to the next
-version of the series.
+I love your patch! Perhaps something to improve:
 
-> There' a latent bug here with the existing CFI scheme, since
-> `kpti_install_ng_mappings` isn't marked with __nocfi, and should explode when
-> calling `idmap_kpti_install_ng_mappings` via the idmap.
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on v5.18-rc5 next-20220505]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-The CONFIG_UNMAP_KERNEL_AT_EL0 version of kpti_install_ng_mappings is
-marked __nocfi
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Scally/Support-OVTI7251-on-Microsoft-Surface-line/20220505-063608
+base:   git://linuxtv.org/media_tree.git master
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220506/202205060133.HrXVpuXG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/132a5a799bbe214b679bc8e242193c5c1ff1d967
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Scally/Support-OVTI7251-on-Microsoft-Surface-line/20220505-063608
+        git checkout 132a5a799bbe214b679bc8e242193c5c1ff1d967
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/crypto/ drivers/media/i2c/
 
-> There' a latent bug here with the existing CFI scheme, since
-> `machine_kexec` isn't marked with __nocfi, and should explode when calling
-> `cpu_soft_restart` via the idmap.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But it's indeed missing from this one.
+All warnings (new ones prefixed by >>):
 
-Sami
+>> drivers/media/i2c/ov7251.c:1218:18: warning: variable 'vblank_def' set but not used [-Wunused-but-set-variable]
+           int vblank_max, vblank_def;
+                           ^
+   drivers/media/i2c/ov7251.c:193:37: warning: unused variable 'ov7251_pll1_cfg_24_mhz_319_2_mhz' [-Wunused-const-variable]
+   static const struct ov7251_pll1_cfg ov7251_pll1_cfg_24_mhz_319_2_mhz = {
+                                       ^
+   2 warnings generated.
+
+
+vim +/vblank_def +1218 drivers/media/i2c/ov7251.c
+
+  1211	
+  1212	static int ov7251_set_format(struct v4l2_subdev *sd,
+  1213				     struct v4l2_subdev_state *sd_state,
+  1214				     struct v4l2_subdev_format *format)
+  1215	{
+  1216		struct ov7251 *ov7251 = to_ov7251(sd);
+  1217		struct v4l2_mbus_framefmt *__format;
+> 1218		int vblank_max, vblank_def;
+  1219		struct v4l2_rect *__crop;
+  1220		const struct ov7251_mode_info *new_mode;
+  1221		int ret = 0;
+  1222	
+  1223		mutex_lock(&ov7251->lock);
+  1224	
+  1225		__crop = __ov7251_get_pad_crop(ov7251, sd_state, format->pad,
+  1226					       format->which);
+  1227	
+  1228		new_mode = v4l2_find_nearest_size(ov7251_mode_info_data,
+  1229					ARRAY_SIZE(ov7251_mode_info_data),
+  1230					width, height,
+  1231					format->format.width, format->format.height);
+  1232	
+  1233		__crop->width = new_mode->width;
+  1234		__crop->height = new_mode->height;
+  1235	
+  1236		if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+  1237			ret = __v4l2_ctrl_modify_range(ov7251->exposure,
+  1238						       1, new_mode->exposure_max,
+  1239						       1, new_mode->exposure_def);
+  1240			if (ret < 0)
+  1241				goto exit;
+  1242	
+  1243			ret = __v4l2_ctrl_s_ctrl(ov7251->exposure,
+  1244						 new_mode->exposure_def);
+  1245			if (ret < 0)
+  1246				goto exit;
+  1247	
+  1248			ret = __v4l2_ctrl_s_ctrl(ov7251->gain, 16);
+  1249			if (ret < 0)
+  1250				goto exit;
+  1251	
+  1252			vblank_max = OV7251_TIMING_MAX_VTS - new_mode->height;
+  1253			vblank_def = new_mode->vts - new_mode->height;
+  1254			ret = __v4l2_ctrl_modify_range(ov7251->vblank,
+  1255						       OV7251_TIMING_MIN_VTS,
+  1256						       vblank_max, 1, vblank_max);
+  1257			if (ret < 0)
+  1258				goto exit;
+  1259	
+  1260			ov7251->current_mode = new_mode;
+  1261		}
+  1262	
+  1263		__format = __ov7251_get_pad_format(ov7251, sd_state, format->pad,
+  1264						   format->which);
+  1265		__format->width = __crop->width;
+  1266		__format->height = __crop->height;
+  1267		__format->code = MEDIA_BUS_FMT_Y10_1X10;
+  1268		__format->field = V4L2_FIELD_NONE;
+  1269		__format->colorspace = V4L2_COLORSPACE_SRGB;
+  1270		__format->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(__format->colorspace);
+  1271		__format->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
+  1272					__format->colorspace, __format->ycbcr_enc);
+  1273		__format->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(__format->colorspace);
+  1274	
+  1275		format->format = *__format;
+  1276	
+  1277	exit:
+  1278		mutex_unlock(&ov7251->lock);
+  1279	
+  1280		return ret;
+  1281	}
+  1282	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
