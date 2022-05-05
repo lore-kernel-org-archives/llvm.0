@@ -1,258 +1,115 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [144.76.43.62])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6584632
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 13:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=WOqM4DKEC8qEB5Nc8Asp0yMdSAPt0BrvJUl7fGL2K2o=;
-	t=1651756678; x=1652966278; b=Hah3OIPMDeiC89Kb4l+V3HdfaGeeSyqs9lAk6uF1UWmAJJn
-	nBM2PpsJp+5UojIc0klNC9Qrre/LxZk04c3jPPhbP2YwN1olg5t+31uyIrBLc71KohkYg3JzgKN+u
-	WyoN62ZfBWHsFpqlpJ5uKNncbVTfC57iP+apXfRMx2Wc1SFe6XyWnzQSUG6LV55+UR2Ww4O18yq/A
-	1CkZYd37mM1f2hnadGeCGQYHun0HW2zvb8TKFBPh30lB3xRdJPkuSXLOtAAmeeCLvilzrdjeWi/iB
-	NEeJpkE9h9ARQfg6yfmFRz90h4pRxQdFXFailB8+vlCQVgWRg4bORCvx+jEqJg4A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1nmbLD-002nmQ-2E;
-	Thu, 05 May 2022 15:16:23 +0200
-Message-ID: <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
-Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Kees Cook <keescook@chromium.org>
-Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Keith Packard
- <keithp@keithp.com>, Francis Laniel <laniel_francis@privacyrequired.com>, 
- Daniel Axtens <dja@axtens.net>, Dan Williams <dan.j.williams@intel.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Guenter Roeck
- <linux@roeck-us.net>, Daniel Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk
- <tadeusz.struk@linaro.org>, Alexei Starovoitov <ast@kernel.org>,
- alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>, Andrew
- Gabbasov <andrew_gabbasov@mentor.com>, Andrew Morton
- <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, Andy Lavr
- <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, Baowen Zheng
- <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,  Bradley Grove
- <linuxdrivers@attotech.com>, brcm80211-dev-list.pdl@broadcom.com, Christian
- Brauner <brauner@kernel.org>, Christian =?ISO-8859-1?Q?G=F6ttsche?=
- <cgzones@googlemail.com>, Christian Lamparter <chunkeey@googlemail.com>, 
- Chris Zankel <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, David
- Gow <davidgow@google.com>,  David Howells <dhowells@redhat.com>, "David S.
- Miller" <davem@davemloft.net>, Dennis Dalessandro
- <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
- Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>,  Eric Dumazet
- <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, Eugeniu Rosca
- <erosca@de.adit-jv.com>,  Felipe Balbi <balbi@kernel.org>, Frank Rowand
- <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>,  Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
- <gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>, Hante
- Meuleman <hante.meuleman@broadcom.com>,  Herbert Xu
- <herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub
- Kicinski <kuba@kernel.org>,  "James E.J. Bottomley" <jejb@linux.ibm.com>,
- James Morris <jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens
- Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John
- Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
- <kvalo@kernel.org>, keyrings@vger.kernel.org,  kunit-dev@googlegroups.com,
- Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan"
- <kys@microsoft.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
- <lee.jones@linaro.org>,  Leon Romanovsky <leon@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>,  linux1394-devel@lists.sourceforge.net,
- linux-afs@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org,  linux-bluetooth@vger.kernel.org,
- linux-hardening@vger.kernel.org,  linux-hyperv@vger.kernel.org,
- linux-integrity@vger.kernel.org,  linux-rdma@vger.kernel.org,
- linux-scsi@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-usb@vger.kernel.org,  linux-wireless@vger.kernel.org,
- linux-xtensa@linux-xtensa.org,  llvm@lists.linux.dev, Loic Poulain
- <loic.poulain@linaro.org>, Louis Peens <louis.peens@corigine.com>, Luca
- Coelho <luciano.coelho@intel.com>, Luiz Augusto von Dentz
- <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, Marcel
- Holtmann <marcel@holtmann.org>,  Mark Brown <broonie@kernel.org>, "Martin
- K. Petersen" <martin.petersen@oracle.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
- <songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>, 
- netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Paolo Abeni
- <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, Rich Felker
- <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, Russell King
- <linux@armlinux.org.uk>,  selinux@vger.kernel.org, "Serge E. Hallyn"
- <serge@hallyn.com>,  SHA-cyfmac-dev-list@infineon.com, Simon Horman
- <simon.horman@corigine.com>,  Stefano Stabellini <sstabellini@kernel.org>,
- Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert
- <steffen.klassert@secunet.com>, Stephen Hemminger <sthemmin@microsoft.com>,
-  Stephen Smalley <stephen.smalley.work@gmail.com>, Takashi Iwai
- <tiwai@suse.com>, Tom Rix <trix@redhat.com>,  Udipto Goswami
- <quic_ugoswami@quicinc.com>, wcn36xx@lists.infradead.org, Wei Liu
- <wei.liu@kernel.org>,  xen-devel@lists.xenproject.org, Xiu Jianfeng
- <xiujianfeng@huawei.com>, Yang Yingliang <yangyingliang@huawei.com>
-Date: Thu, 05 May 2022 15:16:19 +0200
-In-Reply-To: <202205040819.DEA70BD@keescook>
-References: <20220504014440.3697851-1-keescook@chromium.org>
-	 <20220504014440.3697851-3-keescook@chromium.org>
-	 <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
-	 <202205040819.DEA70BD@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C8D632
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 13:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651758141; x=1683294141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Klh2w7LNZv2eWeVfq9/1/u2/n898gwlGd/zAyuhv2Ck=;
+  b=D6HB/XyINBWflW+0U3NVPO4hEX9hL9QEQG8adrCWWHPxjLTmIF2D492L
+   qvl/wOvGQu9oG7zuBvTJlrZj2GUNlgDEaHXYYCoukhe1aoxrDacdiD0Qc
+   7Ge4f7xN5X0hba/bW3FEFXW0S/4NCo0NlQmq7n55uLLFzGPAByWQ0fwgQ
+   01lCNzdeKdCwLVzuVEceVOz9vwHl+Dp1zJC8yNjg6sVNTs/ewbw+sV4sJ
+   osGr5tCByFjkamInAS24ZbGfjLycVafM9d1noZ5Gw0cxIwXfPZZw7dJVK
+   kCCX5NvDNHiRmIS9SRqdxQLjCpUTuEjBKzCPxnwPWUzIRjqQTZGIaozLT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="293311662"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="293311662"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:42:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="708942820"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 May 2022 06:42:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmbkH-000CR9-R7;
+	Thu, 05 May 2022 13:42:17 +0000
+Date: Thu, 5 May 2022 21:41:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/7] net: phy: introduce
+ genphy_c45_pma_baset1_read_master_slave()
+Message-ID: <202205052146.y8znPT8Q-lkp@intel.com>
+References: <20220505063318.296280-5-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505063318.296280-5-o.rempel@pengutronix.de>
 
-On Wed, 2022-05-04 at 08:38 -0700, Kees Cook wrote:
-> 
-> It seemed like requiring a structure be rearranged to take advantage of
-> the "automatic layout introspection" wasn't very friendly. On the other
-> hand, looking at the examples, most of them are already neighboring
-> members. Hmmm.
+Hi Oleksij,
 
-A lot of them are, and many could be, though not all.
+I love your patch! Perhaps something to improve:
 
-> > or so? The long and duplicated DECLARE_FLEX_ARRAY_ELEMENTS_COUNT and
-> > DECLARE_FLEX_ARRAY_ELEMENTS seems a bit tedious to me, at least in cases
-> > where the struct layout is not the most important thing (or it's already
-> > at the end anyway).
-> 
-> The names aren't great, but I wanted to distinguish "elements" as the
-> array not the count. Yay naming.
+[auto build test WARNING on net-next/master]
 
-:-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220505/202205052146.y8znPT8Q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/80dad43edb356876484acb116b8a906dd4bef941
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
+        git checkout 80dad43edb356876484acb116b8a906dd4bef941
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
 
-> However, perhaps the solution is to have _both_. i.e using
-> BOUNDED_FLEX_ARRAY(count_type, count_name, array_type, array_name) for
-> the "neighboring" case, and the DECLARE...{ELEMENTS,COUNT} for the
-> "split" case.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Seems reasonable to me.
+All warnings (new ones prefixed by >>):
 
-> And DECLARE_FLEX_ARRAY_ELEMENTS could actually be expanded to include
-> the count_name too, so both methods could be "forward portable" to a
-> future where C grew the syntax for bounded flex arrays.
-
-I guess I don't see that happening :)
-
-> > This seems rather awkward, having to set it to NULL, then checking rc
-> > (and possibly needing a separate variable for it), etc.
-> 
-> I think the errno return is completely required. I had an earlier version
-> of this that was much more like a drop-in replacement for memcpy that
-> would just truncate or panic, 
-> 
-
-Oh, I didn't mean to imply it should truncate or panic or such - but if
-it returns a pointer it can still be an ERR_PTR() or NULL instead of
-having this separate indication, which even often confuses static type
-checkers since they don't always see the "errno == 0 <=> ptr != NULL"
-relation.
-
-So not saying you shouldn't have any error return - clearly you need
-that, just saying that I'm not sure that having the two separated is
-great.
+>> drivers/net/phy/phy-c45.c:558: warning: expecting prototype for genphy_c45_baset1_read_master_slave(). Prototype was for genphy_c45_pma_baset1_read_master_slave() instead
 
 
-> Requiring instance to be NULL is debatable, but I feel pretty strongly
-> about it because it does handle a class of mistakes (resource leaks),
-> and it's not much of a burden to require a known-good starting state.
+vim +558 drivers/net/phy/phy-c45.c
 
-Yeah, dunno, I guess I'm slightly more on the side of not requiring it,
-since we don't do the same for kmalloc() etc. and probably really
-wouldn't want to add kmalloc_s() that does it ;-)
+   552	
+   553	/**
+   554	 * genphy_c45_baset1_read_master_slave - read forced master/slave configuration
+   555	 * @phydev: target phy_device struct
+   556	 */
+   557	int genphy_c45_pma_baset1_read_master_slave(struct phy_device *phydev)
+ > 558	{
+   559		int val;
+   560	
+   561		phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
+   562	
+   563		val = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL);
+   564		if (val < 0)
+   565			return val;
+   566	
+   567		if (val & MDIO_PMA_PMD_BT1_CTRL_CFG_MST)
+   568			phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
+   569		else
+   570			phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
+   571	
+   572		return 0;
+   573	}
+   574	EXPORT_SYMBOL_GPL(genphy_c45_pma_baset1_read_master_slave);
+   575	
 
-I mean, you _could_ go there:
-
-int kmalloc_s(void **ptr, size_t size, gfp_t gfp)
-{
-  void *ret;
-
-  if (*ptr)
-    return -EINVAL;
-
-  ret = kmalloc(size, gfp);
-  if (!ret)
-    return -ENOMEM;
-  *ptr = ret;
-  return 0;  
-}
-
-right? But we don't really do that, and I'm not sure it'd be a win if
-done over the whole code base.
-
-So I'm not really sure why this aspect here should need to be different,
-except of course that you already need the input argument for the magic.
-
-But we could still have (this prototype is theoretical, of course, it
-cannot be implemented in C):
-
-void *mem_to_flex_dup(void *ptr, const void *data, size_t elements,
-                      gfp_t gfp);
-
-
-which isn't really that much better though.
-
-And btw, while I was writing it down I was looking to see if it should
-be "size_t elements" or "size_t len" (like memcpy), it took me some time
-to figure out, and I was looking at the examples:
-
- 1) most of them actually use __u8 or some variant thereof, so you
-    could probably add an even simpler macro like
-       BOUNDED_FLEX_DATA(int, bytes, data)
-    which has the u8 type internally.
-
- 2) Unless I'm confusing myself, you got the firewire change wrong,
-    because __mem_to_flex_dup takes the "elements_count", but the
-    memcpy() there wasn't multiplied by the sizeof(element)? Or maybe
-    the fact that it was declared as __u32 header[0] is wrong, and it
-    should be __u8, but it's all very confusing, and I'm really not
-    sure about this at all.
-
-
-
-One "perhaps you'll laugh me out of the room" suggestion might be to
-actually be able to initialize the whole thing too?
-
-
-mydata = flex_struct_alloc(mydata, GFP_KERNEL,
-                           variable_data, variable_len,
-                           .member = 1,
-                           .another = 2);
-
-(the ordering can't really be otherwise since you have to use
-__VA_ARGS__).
-
-That might reduce some more code too, though I guess it's quite some
-additional magic ... :)
-
-
-> > but still, honestly, I don't like it. As APIs go, it feels a bit
-> > cumbersome and awkward to use, and you really need everyone to use this,
-> > and not say "uh what, I'll memcpy() instead".
-> 
-> Sure, and I have tried to get it down as small as possible. The earlier
-> "just put all the member names in every call" version was horrid. :P
-
-:-D
-
-> I
-> realize it's more work to check errno, but the memcpy() API we've all
-> been trained to use is just plain dangerous. I don't think it's
-> unreasonable to ask people to retrain themselves to avoid it. All that
-> said, yes, I want it to be as friendly as possible.
-> 
-> > Maybe there should also be a realloc() version of it?
-> 
-> Sure! Seems reasonable. I'd like to see the code pattern for this
-> though. Do you have any examples?
-
-I was going to point to struct cfg80211_bss_ies, but I realize now
-they're RCU-managed, so we never resize them anyway ... So maybe it's
-less common than I thought it might be.
-
-I suppose you know better since you converted a lot of stuff already :-)
-
-johannes
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
