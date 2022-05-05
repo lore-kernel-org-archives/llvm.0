@@ -1,109 +1,154 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7519E369
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 01:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651715028; x=1683251028;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zwza5U7NsfaBQi0ChOCEggAFl0x8H9t6iT813UM9/Ck=;
-  b=NEmLBxMQgqAzPJ8ev5N2e5a96vbmJKWPaoFDzr6BsRKSmhJeIFBI/j5l
-   yNC53T8bDpVwA956oi1+mvaMMQTIZDW+pUtd5z0SbfFD3SDaxWCUcqkyq
-   qOhMwTO0HuAVXf+Xf0ce4Uips2ZbcqrUtDQtr07KNFbrRdxxjplxx0gIu
-   LuZTkcSBbVaP77Asnv8Iw5vUf4Eo4vcjr8MlsV/dx+fMYi3ON5zAkknNR
-   MytabuJsxQFlFxTmWCBopXXhK4pyDQs21uDwjIrSfEWjwLTBZzRdxD9Bh
-   Sqv5la97KM9QDXZaOKy9z3+/P88wU0cRsFR0gNd+9sLaflMO3azDiisa9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="265548884"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="265548884"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:43:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="621071506"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 18:43:46 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmQWv-000ByF-HV;
-	Thu, 05 May 2022 01:43:45 +0000
-Date: Thu, 5 May 2022 09:43:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
- error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202205050943.HDgeO9iV-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380B536D
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 03:14:55 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id w4so4312019wrg.12
+        for <llvm@lists.linux.dev>; Wed, 04 May 2022 20:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6ucVUJA/3XuUnAZZDdzrSa00V5OM/xNG80G7w+rY/AM=;
+        b=TuxTKLvOuI4WPEKhesTppN+S/ZTkV+RZI5Wf5W2p+hsrw7/gyfISF8EIiT+rnx8Zu6
+         zyyiN1wYwPcxjcCA2Sf5xnxirRkddqYIXy2R06dd7qAEUind0ZWDkOOMEqGzEQWPzWzC
+         ZTGq5qihhGmXwhHHxuYfhzg3wQjnC+ThZO+LDVhD9+QIb89VKx3wO1YbUFwWrxXrBCMa
+         SL8UA4+69pMFcpj8M2pJPoNe1J5xXeNZwxQABf1kR5+ALPhLTrYwt5fLtjpY8BeYkBF4
+         nHH6g/sC5IM5M9d/Ecm/JssJwuDneWf8+Vn5nXmTehGUz+AEuc9+Pt2ztZNda+z83bgG
+         KQkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6ucVUJA/3XuUnAZZDdzrSa00V5OM/xNG80G7w+rY/AM=;
+        b=mZ22hO3V6YlsF4GXVjpLFvobXN1CRInrCgNVEKYTrSgxQxjUo3NWuiAkZKXfTi3eje
+         69Vpw2c4XWeiSXLgPX0acIreX/wK2Lr35/AJ2jqZPey2yuXidbmmgxFF3U9g4FQsIKjJ
+         uklt99fGKxxO5y0Udz0wUe7sY/DdyF7Bz/X5Gli5hpZEbbnG7IW1vN3sm6nfNhfpvMkS
+         AMLnuvkpgClTKrvX5km3tIAuEmY4JzYG32/GLYHjpRBqCxw34kEGPflKECeKTw9CugNZ
+         YNl5ja4UTdBZPH7wtoZQeuw5XMAmjXF7S8jnJqM2hi3E32vfgdoLdi7/f+VeKxjMv0+X
+         WfsQ==
+X-Gm-Message-State: AOAM531SRey7YCzo2lj0BuZxy2OZUNhH0haxr8ia6Va0Y82tD4xu+scr
+	bD6F1tim9628FjMLbjVAIHsoRvG1xJczsy+jQGh1
+X-Google-Smtp-Source: ABdhPJzVMX+BMHIo/6Rx3rt/EGt5DUCiA1Xs3vZE5oz5hLJkbM0bMmp2okAEnKI/au/mDAitpvRIKuXqsxBU1V8TuLw=
+X-Received: by 2002:a5d:590d:0:b0:20a:c3eb:2584 with SMTP id
+ v13-20020a5d590d000000b0020ac3eb2584mr18412244wrd.18.1651720493308; Wed, 04
+ May 2022 20:14:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-29-keescook@chromium.org> <CAHC9VhT5Y=ENiSyb=S-NVbGX63sLOv4nVuR_GS-yww6tiz0wYA@mail.gmail.com>
+ <20220504234324.GA12556@embeddedor>
+In-Reply-To: <20220504234324.GA12556@embeddedor>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 4 May 2022 23:14:42 -0400
+Message-ID: <CAHC9VhRJC4AxeDsGpdphfJD4WzgaeBsdONHnixBzft5u_cE-Dw@mail.gmail.com>
+Subject: Re: [PATCH 28/32] selinux: Use mem_to_flex_dup() with xfrm and sidtab
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Eric Paris <eparis@parisplace.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
+	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	netdev@vger.kernel.org, selinux@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, 
+	Al Viro <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, 
+	Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, 
+	Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove <linuxdrivers@attotech.com>, 
+	brcm80211-dev-list.pdl@broadcom.com, Christian Brauner <brauner@kernel.org>, 
+	Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel <chris@zankel.net>, 
+	Cong Wang <cong.wang@bytedance.com>, Daniel Axtens <dja@axtens.net>, 
+	Daniel Vetter <daniel.vetter@ffwll.ch>, Dan Williams <dan.j.williams@intel.com>, 
+	David Gow <davidgow@google.com>, David Howells <dhowells@redhat.com>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org, 
+	Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eli Cohen <elic@nvidia.com>, Eric Dumazet <edumazet@google.com>, 
+	Eugeniu Rosca <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, 
+	Francis Laniel <laniel_francis@privacyrequired.com>, Frank Rowand <frowand.list@gmail.com>, 
+	Franky Lin <franky.lin@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Gregory Greenman <gregory.greenman@intel.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Hante Meuleman <hante.meuleman@broadcom.com>, 
+	Hulk Robot <hulkci@huawei.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris <jmorris@namei.org>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jens Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	John Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>, 
+	Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, 
+	Leon Romanovsky <leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	linux1394-devel@lists.sourceforge.net, linux-afs@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-xtensa@linux-xtensa.org, 
+	llvm@lists.linux.dev, Loic Poulain <loic.poulain@linaro.org>, 
+	Louis Peens <louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, 
+	Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Muchun Song <songmuchun@bytedance.com>, 
+	Nathan Chancellor <nathan@kernel.org>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Rich Felker <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	SHA-cyfmac-dev-list@infineon.com, Simon Horman <simon.horman@corigine.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, Stefan Richter <stefanr@s5r6.in-berlin.de>, 
+	Stephen Hemminger <sthemmin@microsoft.com>, Tadeusz Struk <tadeusz.struk@linaro.org>, 
+	Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>, 
+	Udipto Goswami <quic_ugoswami@quicinc.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>, 
+	xen-devel@lists.xenproject.org, Yang Yingliang <yangyingliang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
-head:   d46ac904fd35edfccc5080818e950d4d3b4697c4
-commit: f4cfacd92972cc440d534b5156df23d0a2136bab [21/25] lkdtm/stackleak: rework boundary management
-config: s390-randconfig-r044-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050943.HDgeO9iV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=f4cfacd92972cc440d534b5156df23d0a2136bab
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/kspp
-        git checkout f4cfacd92972cc440d534b5156df23d0a2136bab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+On Wed, May 4, 2022 at 7:34 PM Gustavo A. R. Silva
+<gustavoars@kernel.org> wrote:
+>
+> Hi Paul,
+>
+> On Wed, May 04, 2022 at 06:57:28PM -0400, Paul Moore wrote:
+> > On Tue, May 3, 2022 at 9:57 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> [..]
+>
+> > > +++ b/include/uapi/linux/xfrm.h
+> > > @@ -31,9 +31,9 @@ struct xfrm_id {
+> > >  struct xfrm_sec_ctx {
+> > >         __u8    ctx_doi;
+> > >         __u8    ctx_alg;
+> > > -       __u16   ctx_len;
+> > > +       __DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(__u16, ctx_len);
+> > >         __u32   ctx_sid;
+> > > -       char    ctx_str[0];
+> > > +       __DECLARE_FLEX_ARRAY_ELEMENTS(char, ctx_str);
+> > >  };
+> >
+> > While I like the idea of this in principle, I'd like to hear about the
+> > testing you've done on these patches.  A previous flex array
+> > conversion in the audit uapi headers ended up causing a problem with
+>
+> I'm curious about which commit caused those problems...?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Commit ed98ea2128b6 ("audit: replace zero-length array with
+flexible-array member"), however, as I said earlier, the problem was
+actually with SWIG, it just happened to be triggered by the kernel
+commit.  There was a brief fedora-devel mail thread about the problem,
+see the link below:
 
-All errors (new ones prefixed by >>):
+* https://www.spinics.net/lists/fedora-devel/msg297991.html
 
->> drivers/misc/lkdtm/stackleak.c:17:39: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           const unsigned long task_stack_low = stackleak_task_low_bound(current);
-                                                ^
->> drivers/misc/lkdtm/stackleak.c:18:40: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           const unsigned long task_stack_high = stackleak_task_high_bound(current);
-                                                 ^
-   drivers/misc/lkdtm/stackleak.c:19:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'unsigned long (void)' [-Wint-conversion]
-           const unsigned long current_sp = current_stack_pointer;
-                               ^            ~~~~~~~~~~~~~~~~~~~~~
-   drivers/misc/lkdtm/stackleak.c:20:43: error: no member named 'lowest_stack' in 'struct task_struct'; did you mean 'ret_stack'?
-           const unsigned long lowest_sp = current->lowest_stack;
-                                                    ^~~~~~~~~~~~
-                                                    ret_stack
-   include/linux/sched.h:1365:28: note: 'ret_stack' declared here
-           struct ftrace_ret_stack         *ret_stack;
-                                            ^
-   drivers/misc/lkdtm/stackleak.c:20:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'struct ftrace_ret_stack *' [-Wint-conversion]
-           const unsigned long lowest_sp = current->lowest_stack;
-                               ^           ~~~~~~~~~~~~~~~~~~~~~
-   drivers/misc/lkdtm/stackleak.c:42:16: error: call to undeclared function 'stackleak_find_top_of_poison'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           poison_high = stackleak_find_top_of_poison(task_stack_low, untracked_high);
-                         ^
-   2 warnings and 4 errors generated.
-
-
-vim +/stackleak_task_low_bound +17 drivers/misc/lkdtm/stackleak.c
-
-    13	
-    14	void lkdtm_STACKLEAK_ERASING(void)
-    15	{
-    16		const unsigned long task_stack_base = (unsigned long)task_stack_page(current);
-  > 17		const unsigned long task_stack_low = stackleak_task_low_bound(current);
-  > 18		const unsigned long task_stack_high = stackleak_task_high_bound(current);
+To reiterate, I'm supportive of changes like this, but I would like to
+hear how it was tested to ensure there are no unexpected problems with
+userspace.  If there are userspace problems it doesn't mean we can't
+make changes like this, it just means we need to ensure that the
+userspace issues are resolved first.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+paul-moore.com
