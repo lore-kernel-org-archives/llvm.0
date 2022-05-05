@@ -1,32 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB11C625
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 14:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
-	Thu,  5 May 2022 14:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651762304;
-	bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
-	 0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
-	 LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
-	 HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
-	 7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
-	 hkEVYZlT/UfTA==
-Date: Thu, 5 May 2022 07:51:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Walle <michael@walle.cc>
-Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
-References: <20220407150828.202513-1-michael@walle.cc>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59944625
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 15:08:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651763302; x=1683299302;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ocBht83/TVqIHB7fBIQ8ek09DRB391vGKX6ORBQ/3g4=;
+  b=Hyf7YDrUUXcvJqtbNa+aD33L/cpXV0aaRgU9aG4i6L4ncHYliM8LW2G/
+   qgePNxe2oV16sDBUnVC3MGDrvbYIa+loUNeEF9vC4TC2NTsHylTx7w+T8
+   auJbr9kX3cb/uWqBUzW/TNE3kLAQTtVKFDGI7WFf34tgCrEBxpS/Hygf4
+   5Woc8B+cJk7nqSpjOM2RWHVVRi3kSXG6JadR0J0GBs81E0SiPkgxfnj0f
+   7TZtUIWDK/ozOHyrgTaWQ6ufiyK0QXM9TWs8yWP8MI+nTrZSvLPOY32p8
+   N9WKPxul6OKoND6RAvNYnJGyH4YsRnQAWuI/UeDWos6w/8TR4zLHjaDow
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354569595"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="354569595"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:03:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="694693743"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 05 May 2022 08:03:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmd0p-000CUU-BM;
+	Thu, 05 May 2022 15:03:27 +0000
+Date: Thu, 5 May 2022 23:03:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jack Xiao <Jack.Xiao@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [linux-next:master 8878/9357]
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3826:6: warning: variable 'index' is
+ used uninitialized whenever 'if' condition is true
+Message-ID: <202205052242.u5bVKpOl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,82 +48,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
 
-On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
-> The supplied buffer might be on the stack and we get the following error
-> message:
-> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
-> 
-> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-> necessary.
-> 
-> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> ---
-> changes since v1:
->  - remove extra empty line
->  - add fixes tag as suggested by Codrin
-> 
->  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index b0eae94909f4..5eca3b3bb609 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	unsigned int_addr_flag = 0;
->  	struct i2c_msg *m_start = msg;
->  	bool is_read;
-> +	u8 *dma_buf;
->  
->  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
->  
-> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	dev->msg = m_start;
->  	dev->recv_len_abort = false;
->  
-> +	if (dev->use_dma) {
-> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> +		if (!dma_buf) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-> +		dev->buf = dma_buf;
-> +	}
-> +
->  	ret = at91_do_twi_transfer(dev);
-> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->  
->  	ret = (ret < 0) ? ret : num;
->  out:
-> -- 
-> 2.30.2
-> 
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   632a8c88e339fe86ae6e420a24dfc641d4dd0ab5
+commit: 15d839c16a66434c19f9c8a560b7553f9468e588 [8878/9357] drm/amdgpu/gfx10: add mes support for gfx ib test
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220505/202205052242.u5bVKpOl-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=15d839c16a66434c19f9c8a560b7553f9468e588
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 15d839c16a66434c19f9c8a560b7553f9468e588
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-causes the following clang warning:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (dev->use_dma) {
-            ^~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
-        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-                                 ^~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
-        if (dev->use_dma) {
-        ^~~~~~~~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
-        u8 *dma_buf;
-                   ^
-                    = NULL
-1 error generated.
+All warnings (new ones prefixed by >>):
 
-Should this variable be initialized or should the call to
-i2c_put_dma_safe_msg_buf() be moved into the if statement?
+   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3829:12: error: implicit declaration of function 'amdgpu_mes_ctx_get_offs' [-Werror,-Wimplicit-function-declaration]
+                   offset = amdgpu_mes_ctx_get_offs(ring, AMDGPU_MES_CTX_IB_OFFS);
+                            ^
+>> drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3826:6: warning: variable 'index' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (ring->is_mes_queue) {
+               ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3883:30: note: uninitialized use occurs here
+           amdgpu_device_wb_free(adev, index);
+                                       ^~~~~
+   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3826:2: note: remove the 'if' if its condition is always false
+           if (ring->is_mes_queue) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:3819:16: note: initialize the variable 'index' to silence this warning
+           unsigned index;
+                         ^
+                          = 0
+   1 warning and 1 error generated.
 
-Cheers,
-Nathan
+
+vim +3826 drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
+
+  3813	
+  3814	static int gfx_v10_0_ring_test_ib(struct amdgpu_ring *ring, long timeout)
+  3815	{
+  3816		struct amdgpu_device *adev = ring->adev;
+  3817		struct amdgpu_ib ib;
+  3818		struct dma_fence *f = NULL;
+  3819		unsigned index;
+  3820		uint64_t gpu_addr;
+  3821		volatile uint32_t *cpu_ptr;
+  3822		long r;
+  3823	
+  3824		memset(&ib, 0, sizeof(ib));
+  3825	
+> 3826		if (ring->is_mes_queue) {
+  3827			uint32_t padding, offset;
+  3828	
+  3829			offset = amdgpu_mes_ctx_get_offs(ring, AMDGPU_MES_CTX_IB_OFFS);
+  3830			padding = amdgpu_mes_ctx_get_offs(ring,
+  3831							  AMDGPU_MES_CTX_PADDING_OFFS);
+  3832	
+  3833			ib.gpu_addr = amdgpu_mes_ctx_get_offs_gpu_addr(ring, offset);
+  3834			ib.ptr = amdgpu_mes_ctx_get_offs_cpu_addr(ring, offset);
+  3835	
+  3836			gpu_addr = amdgpu_mes_ctx_get_offs_gpu_addr(ring, padding);
+  3837			cpu_ptr = amdgpu_mes_ctx_get_offs_cpu_addr(ring, padding);
+  3838			*cpu_ptr = cpu_to_le32(0xCAFEDEAD);
+  3839		} else {
+  3840			r = amdgpu_device_wb_get(adev, &index);
+  3841			if (r)
+  3842				return r;
+  3843	
+  3844			gpu_addr = adev->wb.gpu_addr + (index * 4);
+  3845			adev->wb.wb[index] = cpu_to_le32(0xCAFEDEAD);
+  3846			cpu_ptr = &adev->wb.wb[index];
+  3847	
+  3848			r = amdgpu_ib_get(adev, NULL, 20, AMDGPU_IB_POOL_DIRECT, &ib);
+  3849			if (r) {
+  3850				DRM_ERROR("amdgpu: failed to get ib (%ld).\n", r);
+  3851				goto err1;
+  3852			}
+  3853		}
+  3854	
+  3855		ib.ptr[0] = PACKET3(PACKET3_WRITE_DATA, 3);
+  3856		ib.ptr[1] = WRITE_DATA_DST_SEL(5) | WR_CONFIRM;
+  3857		ib.ptr[2] = lower_32_bits(gpu_addr);
+  3858		ib.ptr[3] = upper_32_bits(gpu_addr);
+  3859		ib.ptr[4] = 0xDEADBEEF;
+  3860		ib.length_dw = 5;
+  3861	
+  3862		r = amdgpu_ib_schedule(ring, 1, &ib, NULL, &f);
+  3863		if (r)
+  3864			goto err2;
+  3865	
+  3866		r = dma_fence_wait_timeout(f, false, timeout);
+  3867		if (r == 0) {
+  3868			r = -ETIMEDOUT;
+  3869			goto err2;
+  3870		} else if (r < 0) {
+  3871			goto err2;
+  3872		}
+  3873	
+  3874		if (le32_to_cpu(*cpu_ptr) == 0xDEADBEEF)
+  3875			r = 0;
+  3876		else
+  3877			r = -EINVAL;
+  3878	err2:
+  3879		if (!ring->is_mes_queue)
+  3880			amdgpu_ib_free(adev, &ib, NULL);
+  3881		dma_fence_put(f);
+  3882	err1:
+  3883		amdgpu_device_wb_free(adev, index);
+  3884		return r;
+  3885	}
+  3886	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
