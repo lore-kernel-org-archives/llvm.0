@@ -1,49 +1,31 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E3F2568
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 16:25:40 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so8491253pjq.0
-        for <llvm@lists.linux.dev>; Thu, 05 May 2022 09:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AMszwqVGUUkRlqT3bH9KZgvoJEDUJqYcdmFvwR43CTQ=;
-        b=nqkUAGbObnsBEq0E+RdFzEBv9xuAOfg+/oONK+DfcjkFJ+Lqbk1Lxsyuf4E2dI9W0p
-         wL4xpitBmfFa56MgN1186scmSSm3YB/7qrUEctUAW/Fk6aTk2AAkifz9WkeNpn+XaQUH
-         SdP5hM0JRdmsjkaCO7o5uz9TiBKRdlWD+/Djg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AMszwqVGUUkRlqT3bH9KZgvoJEDUJqYcdmFvwR43CTQ=;
-        b=czuL1bv9kAd2dVhpgk71b1BtMILU+U534Cz7/Vf/oZcV6ssROHHPx847GqMf1z+CpC
-         Hb/OPQR7o+Wk4oor2MOYHrj8AmRI+8USYZZtYNE/JzDGDpKFPcHFjLEbnmM4nj7jdzIT
-         iH7I1kEbRQ/VPFP8QGkU/vBMe/5x+F8odT1ia1qeqhz+UAUxO3QHatCCrT3mkeJvhB1u
-         ySQhgY78/4AC/DD/7SoohrkY+l2SXvafHIDRLYXNoa+40g/0wEBl2NoYxkkOSnDeBSmQ
-         la4DXFSAWUZ2qdZgy10sF+o8mVj9mFcoqPFbc220cV865pOrQmTXemNnzAHimRCw6TvM
-         TvFw==
-X-Gm-Message-State: AOAM531D5dgd4HkZ64QV1HziefGnnHBYBmcfCusBdtrjfn96KyENPHuh
-	0te27QFL+qYUKj3MpQz+vsyJLg==
-X-Google-Smtp-Source: ABdhPJx6wPVrYHxsa68KRgQKpBYm+86c0ZSHTSAAubzPSZ9HEe2FvIzxPyT8mlJ1clOyQ1w2FcrXkQ==
-X-Received: by 2002:a17:903:2312:b0:15e:a6c8:a313 with SMTP id d18-20020a170903231200b0015ea6c8a313mr20672636plh.122.1651767940456;
-        Thu, 05 May 2022 09:25:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170902849700b0015e8d4eb287sm1749040plo.209.2022.05.05.09.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 09:25:40 -0700 (PDT)
-Date: Thu, 5 May 2022 09:25:39 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
- error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202205050924.7D219E774@keescook>
-References: <202205050943.HDgeO9iV-lkp@intel.com>
- <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF40397
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 16:30:12 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85844106F;
+	Thu,  5 May 2022 09:30:12 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.147])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D2573FA31;
+	Thu,  5 May 2022 09:30:10 -0700 (PDT)
+Date: Thu, 5 May 2022 17:30:07 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 10/21] treewide: Drop function_nocfi
+Message-ID: <YnP7j+miotxYM6fu@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-11-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,31 +34,151 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <20220429203644.2868448-11-samitolvanen@google.com>
 
-On Thu, May 05, 2022 at 01:45:37PM +0100, Mark Rutland wrote:
-> Hi Kees,
+On Fri, Apr 29, 2022 at 01:36:33PM -0700, Sami Tolvanen wrote:
+> With -fsanitize=kcfi, we no longer need function_nocfi() as
+> the compiler won't change function references to point to a
+> jump table. Remove all implementations and uses of the macro.
 > 
-> I hadn't realised the LKDTM STACKLEAK test could be built with
-> CONFIG_STACKLEAK=n, and my rework of that depends upon helpers that only exist
-> when CONFIG_STACKLEAK=y.
-> 
-> IMO the test is nonsensical for CONFIG_STACKLEAK=n, and I reckon we should
-> either:
-> 
-> a) Not build the stackleak test at all when CONFIG_STACKLEAK=n
-> 
-> b) Have a small stub that just logs that CONFIG_STACKLEAK=n and the test is
->    being skipped.
-> 
-> Do you have any preference between the two?
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  arch/arm64/include/asm/compiler.h         | 16 ----------------
+>  arch/arm64/include/asm/ftrace.h           |  2 +-
+>  arch/arm64/include/asm/mmu_context.h      |  2 +-
+>  arch/arm64/kernel/acpi_parking_protocol.c |  2 +-
+>  arch/arm64/kernel/cpufeature.c            |  2 +-
+>  arch/arm64/kernel/ftrace.c                |  2 +-
+>  arch/arm64/kernel/machine_kexec.c         |  2 +-
+>  arch/arm64/kernel/psci.c                  |  2 +-
+>  arch/arm64/kernel/smp_spin_table.c        |  2 +-
+>  drivers/firmware/psci/psci.c              |  4 ++--
+>  drivers/misc/lkdtm/usercopy.c             |  2 +-
+>  include/linux/compiler.h                  | 10 ----------
+>  12 files changed, 11 insertions(+), 37 deletions(-)
 
-Since it's looking for a specific poison, it doesn't make sense to look
-for this property as magically appearing (where as this kind of thing
-sometimes exists for other tests: did the hypervisor block it instead of
-the kernel, etc)
+Nice!
 
-So, yeah, I'd wrap it in an ifdef with an else: XFAIL.
+I also believe that in most cases we can drop the __nocfi annotation on callers
+now that we can mark the called assembly function with SYM_TYPED_FUNC_START().
 
--- 
-Kees Cook
+In most cases we needed the __nocfi annotation on a caller because it was
+invoking an assembly function at an unusual virtual address (which differed
+from the link address), and the existing CFI scheme couldn't handle that. The
+kCFI scheme should handle that fine so long as the type ID before the function
+is accessible.
+
+The other odd case was where we had the non-cfi address of a target function
+(e.g. for callback structures populated in assembly), and that doesn't matter
+with kCFI.
+
+In looking at the below I spotted some latent issues. I'll prepare some patches
+for those.
+
+> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
+> index dc3ea4080e2e..6fb2e6bcc392 100644
+> --- a/arch/arm64/include/asm/compiler.h
+> +++ b/arch/arm64/include/asm/compiler.h
+> @@ -23,20 +23,4 @@
+>  #define __builtin_return_address(val)					\
+>  	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
+>  
+> -#ifdef CONFIG_CFI_CLANG
+> -/*
+> - * With CONFIG_CFI_CLANG, the compiler replaces function address
+> - * references with the address of the function's CFI jump table
+> - * entry. The function_nocfi macro always returns the address of the
+> - * actual function instead.
+> - */
+> -#define function_nocfi(x) ({						\
+> -	void *addr;							\
+> -	asm("adrp %0, " __stringify(x) "\n\t"				\
+> -	    "add  %0, %0, :lo12:" __stringify(x)			\
+> -	    : "=r" (addr));						\
+> -	addr;								\
+> -})
+> -#endif
+> -
+>  #endif /* __ASM_COMPILER_H */
+> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+> index 1494cfa8639b..c96d47cb8f46 100644
+> --- a/arch/arm64/include/asm/ftrace.h
+> +++ b/arch/arm64/include/asm/ftrace.h
+> @@ -26,7 +26,7 @@
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>  #define ARCH_SUPPORTS_FTRACE_OPS 1
+>  #else
+> -#define MCOUNT_ADDR		((unsigned long)function_nocfi(_mcount))
+> +#define MCOUNT_ADDR		((unsigned long)_mcount)
+>  #endif
+>  
+>  /* The BL at the callsite's adjusted rec->ip */
+> diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+> index 6770667b34a3..c9df5ab2c448 100644
+> --- a/arch/arm64/include/asm/mmu_context.h
+> +++ b/arch/arm64/include/asm/mmu_context.h
+> @@ -164,7 +164,7 @@ static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
+>  		ttbr1 |= TTBR_CNP_BIT;
+>  	}
+>  
+> -	replace_phys = (void *)__pa_symbol(function_nocfi(idmap_cpu_replace_ttbr1));
+> +	replace_phys = (void *)__pa_symbol(idmap_cpu_replace_ttbr1);
+>  
+>  	cpu_install_idmap();
+>  	replace_phys(ttbr1);
+
+
+As long as we create `idmap_cpu_replace_ttbr1` with SYM_TYPED_FUNC_START(), we
+can drop `__nocfi` from `cpu_replace_ttbr1`
+
+[...]
+
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index d72c4b4d389c..dae07d99508b 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1619,7 +1619,7 @@ kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
+>  	if (arm64_use_ng_mappings)
+>  		return;
+>  
+> -	remap_fn = (void *)__pa_symbol(function_nocfi(idmap_kpti_install_ng_mappings));
+> +	remap_fn = (void *)__pa_symbol(idmap_kpti_install_ng_mappings);
+>  
+>  	cpu_install_idmap();
+>  	remap_fn(cpu, num_online_cpus(), __pa_symbol(swapper_pg_dir));
+
+There' a latent bug here with the existing CFI scheme, since
+`kpti_install_ng_mappings` isn't marked with __nocfi, and should explode when
+calling `idmap_kpti_install_ng_mappings` via the idmap.
+
+With the kCFI scheme we instead need to mark `idmap_kpti_install_ng_mappings`
+with SYM_TYPED_FUNC_START().
+
+[...]
+
+> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+> index e16b248699d5..4eb5388aa5a6 100644
+> --- a/arch/arm64/kernel/machine_kexec.c
+> +++ b/arch/arm64/kernel/machine_kexec.c
+> @@ -204,7 +204,7 @@ void machine_kexec(struct kimage *kimage)
+>  		typeof(cpu_soft_restart) *restart;
+>  
+>  		cpu_install_idmap();
+> -		restart = (void *)__pa_symbol(function_nocfi(cpu_soft_restart));
+> +		restart = (void *)__pa_symbol(cpu_soft_restart);
+>  		restart(is_hyp_nvhe(), kimage->start, kimage->arch.dtb_mem,
+>  			0, 0);
+>  	} else {
+
+There' a latent bug here with the existing CFI scheme, since
+`machine_kexec` isn't marked with __nocfi, and should explode when calling
+`cpu_soft_restart` via the idmap.
+
+With the kCFI scheme we instead need to mark `cpu_soft_restart` with
+SYM_TYPED_FUNC_START(). It's currently marked as SYM_CODE() because it doesn't
+follow the usual function call conventions, but that also means it's broken for
+BTI, and for now (without something like objtool caring about function calling
+conventions) SYM_FUNC_START() is fine.
+
+Thanks,
+Mark.
