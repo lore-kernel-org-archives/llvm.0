@@ -1,144 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from elaine.keithp.com (home.keithp.com [63.227.221.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E7B2568
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 15:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF23C385AE;
-	Thu,  5 May 2022 15:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651763899;
-	bh=BSLHwZBU7CEcphBe/qi0nQ6hse+0DaLEQ9dWC+R/3Fc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EuJrI7SOU5Y/UcoEhlXrTw6pKOQ0AMRNAdrLI8NhFbPYVnDqpyFZBpA1gqepEkxZN
-	 bvvH6XGUgEOAU5/weZia3rDkML8glIxPAzFij2pwQP75xBfwZ3xJo7SMqMVg+R09Sn
-	 5rkCau7yV2ibfVTurh6YLgJvoOLa4vTdhHcnxmI9PCGpM2y3FTeST6TcsDGdWLz5OX
-	 Yk0K99EeTAcCAcSvI/A40vnGeicpMjeK42bmvMZ+Xa8d64Fi+Digwj1UrhWo4U/nwz
-	 flMRmQgjS0gH5ApSf35HEqY+HAV+dx9b7oeI2Fg/mVW5uaecVh9/q/5gmYq5tQ7Fdw
-	 5AVkxyu8gFfDA==
-Date: Thu, 5 May 2022 08:18:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Walle <michael@walle.cc>
-Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-Message-ID: <YnPquUxSSlJehVgY@dev-arch.thelio-3990X>
-References: <20220407150828.202513-1-michael@walle.cc>
- <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
- <54f02090e6621460b66dc9d233d53283@walle.cc>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796952568
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 15:26:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by elaine.keithp.com (Postfix) with ESMTP id B02553F32465;
+	Thu,  5 May 2022 08:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+	t=1651763774; bh=O3aXJOWYxVTqOu3VmcXxOiZZOhMrUjqY/t6cXMT24+E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=M3zB+WUy+cYZq4HgtgtbfmLljWbRpIeJ5Zkg9r1D71YqvPlgOkiQ4tXheXCRGUa8+
+	 RMuby4CqFAMCoPUIrwdzYTZDTf78io+RFFo6OcdGBDUFDZRaGhZfKKcTtwdj7WCFy4
+	 6tn6om4NwF6owZoCYEHNTlN4dA5iODmOFbhrxNDmu4q/fHHXFfSRYzNqzWEthWHBp3
+	 hB3E0o3k1G8NwFJfKh9rQpVZYZLwPg6CF6he0rk/+KFPQLpotGYN+CgB1L7QQOYecl
+	 ymeV9rACfLcKoB95CZdy6K628IEeM8t07ROlSN+X9O0IbQydzX/BQ3xj9k+MYZwzPf
+	 UxJC+uQh0iuJw==
+X-Virus-Scanned: Debian amavisd-new at keithp.com
+Received: from elaine.keithp.com ([127.0.0.1])
+	by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
+	with LMTP id SEPHfPO_-W_I; Thu,  5 May 2022 08:16:14 -0700 (PDT)
+Received: from keithp.com (koto.keithp.com [192.168.11.2])
+	by elaine.keithp.com (Postfix) with ESMTPSA id 18D4A3F32969;
+	Thu,  5 May 2022 08:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+	t=1651763773; bh=O3aXJOWYxVTqOu3VmcXxOiZZOhMrUjqY/t6cXMT24+E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=krSTvH+KcMYcsYiJs+brgDawkHD6ep7gtAt/7ImbSH+PVnVS6n5TIWQoiUP+PjBfQ
+	 TTV9zZEzFSNSLzQmSsEIJT24ancVfic/4tw1+i19H4UqIv2Soci174vL3i+L8WgOn3
+	 3GAVx4Wwdu1vRPL7EVqx5qPLOOTreMDXIScBgNd+X5AcHfMZWw538tPrPoKpSSqHZH
+	 dCLZclbzdDsdQUL6m86l3cbny8WccVcefFqv7gslHwR8P3ZsfbW/X+4PLXD3hTeyro
+	 XMqcEagdrGN5NURX0L6R0oPpkf8LkkkUJo0DYZf6b68EQ+TuLV1TgvwIq/q3gwMiYO
+	 4YgvEK7vCGplw==
+Received: by keithp.com (Postfix, from userid 1000)
+	id 4874D1E601B9; Thu,  5 May 2022 08:16:12 -0700 (PDT)
+From: Keith Packard <keithp@keithp.com>
+To: Johannes Berg <johannes@sipsolutions.net>, Kees Cook
+ <keescook@chromium.org>
+Cc: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Francis Laniel
+ <laniel_francis@privacyrequired.com>, Daniel Axtens <dja@axtens.net>, Dan
+ Williams <dan.j.williams@intel.com>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Guenter Roeck <linux@roeck-us.net>, Daniel
+ Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk <tadeusz.struk@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, Al Viro
+ <viro@zeniv.linux.org.uk>, Andrew
+ Gabbasov <andrew_gabbasov@mentor.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, Andy Lavr
+ <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, Baowen Zheng
+ <baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove
+ <linuxdrivers@attotech.com>, brcm80211-dev-list.pdl@broadcom.com,
+ Christian
+ Brauner <brauner@kernel.org>, Christian =?utf-8?Q?G=C3=B6ttsche?=
+ <cgzones@googlemail.com>,
+ Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel
+ <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, David
+ Gow <davidgow@google.com>, David Howells <dhowells@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>, Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org,
+ Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>, Eric Dumazet
+ <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, Eugeniu Rosca
+ <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, Frank Rowand
+ <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
+ <gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Hante
+ Meuleman <hante.meuleman@broadcom.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub
+ Kicinski <kuba@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ James Morris <jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens
+ Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John
+ Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
+ <kvalo@kernel.org>, keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+ Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
+ <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, linux1394-devel@lists.sourceforge.net,
+ linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev, Loic Poulain
+ <loic.poulain@linaro.org>, Louis Peens <louis.peens@corigine.com>, Luca
+ Coelho <luciano.coelho@intel.com>, Luiz Augusto von Dentz
+ <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, Marcel
+ Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, "Martin
+ K. Petersen" <martin.petersen@oracle.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
+ <songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>,
+ netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, Nuno
+ =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>, Paolo Abeni <pabeni@redhat.com>,
+ Paul Moore
+ <paul@paul-moore.com>, Rich Felker <dalias@aerifal.cx>, Rob Herring
+ <robh+dt@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ selinux@vger.kernel.org, "Serge E. Hallyn" <serge@hallyn.com>,
+ SHA-cyfmac-dev-list@infineon.com, Simon Horman
+ <simon.horman@corigine.com>, Stefano Stabellini <sstabellini@kernel.org>,
+ Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Stephen Hemminger
+ <sthemmin@microsoft.com>, Stephen Smalley
+ <stephen.smalley.work@gmail.com>, Takashi Iwai <tiwai@suse.com>, Tom Rix
+ <trix@redhat.com>, Udipto Goswami <quic_ugoswami@quicinc.com>,
+ wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+ xen-devel@lists.xenproject.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+In-Reply-To: <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-3-keescook@chromium.org>
+ <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+ <202205040819.DEA70BD@keescook>
+ <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
+Date: Thu, 05 May 2022 08:16:11 -0700
+Message-ID: <871qx8qabo.fsf@keithp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54f02090e6621460b66dc9d233d53283@walle.cc>
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha256; protocol="application/pgp-signature"
 
-On Thu, May 05, 2022 at 05:11:30PM +0200, Michael Walle wrote:
-> [+ Wolfram]
-> 
-> Am 2022-05-05 16:51, schrieb Nathan Chancellor:
-> > On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
-> > > The supplied buffer might be on the stack and we get the following
-> > > error
-> > > message:
-> > > [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc
-> > > memory
-> > > 
-> > > Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region
-> > > if
-> > > necessary.
-> > > 
-> > > Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> > > ---
-> > > changes since v1:
-> > >  - remove extra empty line
-> > >  - add fixes tag as suggested by Codrin
-> > > 
-> > >  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-at91-master.c
-> > > b/drivers/i2c/busses/i2c-at91-master.c
-> > > index b0eae94909f4..5eca3b3bb609 100644
-> > > --- a/drivers/i2c/busses/i2c-at91-master.c
-> > > +++ b/drivers/i2c/busses/i2c-at91-master.c
-> > > @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter
-> > > *adap, struct i2c_msg *msg, int num)
-> > >  	unsigned int_addr_flag = 0;
-> > >  	struct i2c_msg *m_start = msg;
-> > >  	bool is_read;
-> > > +	u8 *dma_buf;
-> > > 
-> > >  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
-> > > 
-> > > @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter
-> > > *adap, struct i2c_msg *msg, int num)
-> > >  	dev->msg = m_start;
-> > >  	dev->recv_len_abort = false;
-> > > 
-> > > +	if (dev->use_dma) {
-> > > +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> > > +		if (!dma_buf) {
-> > > +			ret = -ENOMEM;
-> > > +			goto out;
-> > > +		}
-> > > +		dev->buf = dma_buf;
-> > > +	}
-> > > +
-> > >  	ret = at91_do_twi_transfer(dev);
-> > > +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-> > > 
-> > >  	ret = (ret < 0) ? ret : num;
-> > >  out:
-> > > --
-> > > 2.30.2
-> > > 
-> > > 
-> > 
-> > This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-> > causes the following clang warning:
-> 
-> Ugh..
-> 
-> > drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf'
-> > is used uninitialized whenever 'if' condition is false
-> > [-Werror,-Wsometimes-uninitialized]
-> >         if (dev->use_dma) {
-> >             ^~~~~~~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use
-> > occurs here
-> >         i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-> >                                  ^~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if
-> > its condition is always true
-> >         if (dev->use_dma) {
-> >         ^~~~~~~~~~~~~~~~~~
-> > drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the
-> > variable 'dma_buf' to silence this warning
-> >         u8 *dma_buf;
-> >                    ^
-> >                     = NULL
-> > 1 error generated.
-> > 
-> > Should this variable be initialized or should the call to
-> > i2c_put_dma_safe_msg_buf() be moved into the if statement?
-> 
-> Initializing dma_buf with NULL should to the trick because
-> i2c_put_dma_safe_msg_buf() is handling NULL gracefully. No
-> need for an extra "if (dma_buf)".
-> 
-> Will you take care or should I send a patch?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I can send a patch, thank you for the input!
+Johannes Berg <johannes@sipsolutions.net> writes:
 
-Cheers,
-Nathan
+> Yeah, dunno, I guess I'm slightly more on the side of not requiring it,
+> since we don't do the same for kmalloc() etc. and probably really
+> wouldn't want to add kmalloc_s() that does it ;-)
+
+I suspect the number of bugs this catches will be small, but they'll be
+in places where the flow of control is complicated. What we want is to
+know that there's no "real" value already present. I'd love it if we
+could make the macro declare a new name (yeah, I know, mixing
+declarations and code).
+
+Of course, we could also end up with people writing a wrapping macro
+that sets the variable to NULL before invoking the underlying macro...
+
+=2D-=20
+=2Dkeith
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEw4O3eCVWE9/bQJ2R2yIaaQAAABEFAmJz6jsACgkQ2yIaaQAA
+ABGQAg/+NFgE01jSUQAsZc8G2KY9qfifpQ5rzrWtedUNXoOhcAo33tvPHnED0AxP
+Q4MXv/X4TRCTOD/5aBjZeKgy9I9G2jYbZq9iYf5uaD9zIECpE5XyznDZzo15cWBE
+B+W7olq9dqiARf6CuwNpYCjB8zv2ubR42c+faTCJNM63owpN9xpGT/7OEbE0HoKg
+TawmusqNU2nOkT82kjh1iVoK0BbmPSATiKkCH9ZpUVQYOQvsyieFtAlQREms/pip
+ccnHssDAaV1dgAg2NlKDzU30XA3rIIsfX+v3Bh+CWoj77Az7IO8+/V+nmNm5GHyy
+bs8LUQY3Z7/otHyGVfjVN9eU6LcEvstr7tOPLWxF0h+YxJk12uKhUZnmt4NisYrL
+uOcx/MC4y6tx9+kdn1U5KoV+O/ekhW/N/WwYcE6YUYZeol3Ahpve77B7uzLbwyOj
+TMLF83DtVqGLwl1y5mdKUfdeUeYhVMYo+eaq0ChKHdYdKj9ra2BaL1oiTc3lKqVW
+FdHX7C9qLA4LsTzfuDiEQDOrnwMDXhvtQrysTOjlQLIcivarCfxIKQw0co8Vubug
+sceCDXCr5qY2cCr51YqbDSVqEXK5Dos7IGlIyIlZH0YCktIbgOGTEPZDcidplXy2
+LWWWFIK6Viz1AgjSRxRU24qmTbFCFLZdboKDuzsCHG8HDByLmNM=
+=BTwc
+-----END PGP SIGNATURE-----
+--=-=-=--
