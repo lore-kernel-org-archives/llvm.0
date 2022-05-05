@@ -1,34 +1,22 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003EE632
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 12:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DBE632
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 12:45:42 +0000 (UTC)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7A1F106F;
-	Thu,  5 May 2022 05:36:39 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF040106F;
+	Thu,  5 May 2022 05:45:41 -0700 (PDT)
 Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 918A43F885;
-	Thu,  5 May 2022 05:36:37 -0700 (PDT)
-Date: Thu, 5 May 2022 13:36:29 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7DD33F885;
+	Thu,  5 May 2022 05:45:40 -0700 (PDT)
+Date: Thu, 5 May 2022 13:45:37 +0100
 From: Mark Rutland <mark.rutland@arm.com>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] KCFI support
-Message-ID: <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <YnKnLyyXPJl5Llc0@FVFF77S0Q05N>
- <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
- <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com>
+To: kernel test robot <lkp@intel.com>, Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
+ error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
+References: <202205050943.HDgeO9iV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,32 +25,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com>
+In-Reply-To: <202205050943.HDgeO9iV-lkp@intel.com>
 
-On Wed, May 04, 2022 at 01:17:25PM -0700, Sami Tolvanen wrote:
-> On Wed, May 4, 2022 at 9:41 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > Hi Mark,
-> >
-> > On Wed, May 4, 2022 at 9:18 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> > > I wanted to give this a spin on arm64, but I'm seeing some very odd toolchain
-> > > behaviour. I'm not sure if I've done something wrong, or if I'm just hitting an
-> > > edge-case, but it looks like using -fsanitize=kcfi causes the toolchain to hit
-> > > out-of-memory errors and other issues which look like they could be memory
-> > > corruption.
-> >
-> > Thanks for the detailed bug report! It definitely looks like something
-> > is wrong with the recent switch from std::string to Twine in the Clang
-> > code. I didn't see this issue when compiling the arm64 kernel, but
-> > I'll take a closer look and see if I can reproduce it.
-> 
-> I was able to reproduce this by turning off assertions in Clang. It
-> seems to work fine with -DLLVM_ENABLE_ASSERTIONS=ON. I'll go fix.
+Hi Kees,
 
-FWIW, a `-DLLVM_ENABLE_ASSERTIONS=ON` build also seems to work for me when
-building a kernel with CONFIG_CFI_CLANG=y. It's much slower than a regular
-Release build, so I'm still waiting for that to finish building a kernel, but
-it has gotten much further through the build without issues.
+I hadn't realised the LKDTM STACKLEAK test could be built with
+CONFIG_STACKLEAK=n, and my rework of that depends upon helpers that only exist
+when CONFIG_STACKLEAK=y.
+
+IMO the test is nonsensical for CONFIG_STACKLEAK=n, and I reckon we should
+either:
+
+a) Not build the stackleak test at all when CONFIG_STACKLEAK=n
+
+b) Have a small stub that just logs that CONFIG_STACKLEAK=n and the test is
+   being skipped.
+
+Do you have any preference between the two?
 
 Thanks,
 Mark.
+
+On Thu, May 05, 2022 at 09:43:36AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
+> head:   d46ac904fd35edfccc5080818e950d4d3b4697c4
+> commit: f4cfacd92972cc440d534b5156df23d0a2136bab [21/25] lkdtm/stackleak: rework boundary management
+> config: s390-randconfig-r044-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050943.HDgeO9iV-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install s390 cross compiling tool for clang build
+>         # apt-get install binutils-s390x-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=f4cfacd92972cc440d534b5156df23d0a2136bab
+>         git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+>         git fetch --no-tags kees for-next/kspp
+>         git checkout f4cfacd92972cc440d534b5156df23d0a2136bab
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/misc/lkdtm/stackleak.c:17:39: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            const unsigned long task_stack_low = stackleak_task_low_bound(current);
+>                                                 ^
+> >> drivers/misc/lkdtm/stackleak.c:18:40: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            const unsigned long task_stack_high = stackleak_task_high_bound(current);
+>                                                  ^
+>    drivers/misc/lkdtm/stackleak.c:19:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'unsigned long (void)' [-Wint-conversion]
+>            const unsigned long current_sp = current_stack_pointer;
+>                                ^            ~~~~~~~~~~~~~~~~~~~~~
+>    drivers/misc/lkdtm/stackleak.c:20:43: error: no member named 'lowest_stack' in 'struct task_struct'; did you mean 'ret_stack'?
+>            const unsigned long lowest_sp = current->lowest_stack;
+>                                                     ^~~~~~~~~~~~
+>                                                     ret_stack
+>    include/linux/sched.h:1365:28: note: 'ret_stack' declared here
+>            struct ftrace_ret_stack         *ret_stack;
+>                                             ^
+>    drivers/misc/lkdtm/stackleak.c:20:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'struct ftrace_ret_stack *' [-Wint-conversion]
+>            const unsigned long lowest_sp = current->lowest_stack;
+>                                ^           ~~~~~~~~~~~~~~~~~~~~~
+>    drivers/misc/lkdtm/stackleak.c:42:16: error: call to undeclared function 'stackleak_find_top_of_poison'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            poison_high = stackleak_find_top_of_poison(task_stack_low, untracked_high);
+>                          ^
+>    2 warnings and 4 errors generated.
+> 
+> 
+> vim +/stackleak_task_low_bound +17 drivers/misc/lkdtm/stackleak.c
+> 
+>     13	
+>     14	void lkdtm_STACKLEAK_ERASING(void)
+>     15	{
+>     16		const unsigned long task_stack_base = (unsigned long)task_stack_page(current);
+>   > 17		const unsigned long task_stack_low = stackleak_task_low_bound(current);
+>   > 18		const unsigned long task_stack_high = stackleak_task_high_bound(current);
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
