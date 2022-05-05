@@ -1,38 +1,38 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965B42568
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 16:01:16 +0000 (UTC)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f16645872fso53579717b3.4
-        for <llvm@lists.linux.dev>; Thu, 05 May 2022 09:01:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9FA2568
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 16:24:04 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso54433797b3.6
+        for <llvm@lists.linux.dev>; Thu, 05 May 2022 09:24:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DcrivyRXvs78RFPsaHX0wtRuc37eGonVpkZc+fBUUp4=;
-        b=SWulOcJxmVeZWRUP1r6ihWVnsx4vTmwi4LLMgKz74yg3+KJ+ewPEUGHzph6ZBsR7QZ
-         haxC8UhbOAPhatpgkvmR/Z0HRRx55tsMFnC7gxS2LGQXN7HnykS4CwtaRiK942O3wUKs
-         qq7RDt1iU7ye3njrHkDpfcGYzJOBhIvjlCrLcHN2SxElDLdjKCX5+N9AQDaeLr+h6/Hf
-         TF8MWUYRetgCTAH5kOeSGpj1SY3scjUUziOdTuetbjph81XA+lyZc07zWmOfjgZ8vZFf
-         waw0UDrA/7G20XsiZcN9b6KVrkqZAiOyy6KeEVEWmIIe3q5I8FjCPuxlZkcbx449hoV+
-         +rPg==
+        bh=smRiEfnbDo26TwlBRyyocGS+bQqlFH9vecfF+kAEs0s=;
+        b=Qchh5LkpHNgVC4oS9Z3uWgrF0tIOlBwLOSM/ue3hd7CJxr3Xz29EiGWTzgXTX2LwGK
+         4uq7mH3isrmT1EXJizLeJvJFDf9LhlUWCoaapbPnape0t+PH8AJj+InrnhX20me7M3HY
+         0B22flgiAh5eU+2rzqiChpz1dG3nkkfcoA5K4izNjU7LnZI5qiNJ1bES9xbfWS0aiMLn
+         FMtUx1jWRGAWdwCFESrmwS5Fc8W+htfQnqj9NZBWJhEW4YYXh4B6Plfp1rs4wwS80kCy
+         61wjIvrcCLt+vJmaIMIapWofk3R5LsYlU1VYyQHWZBjyEYCrwX1AeAxL3OazAT1j/diq
+         aQ8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DcrivyRXvs78RFPsaHX0wtRuc37eGonVpkZc+fBUUp4=;
-        b=uR239KesqV26L4d4cGnJyX20dcIzEXx8i/fvh/I+4XTCjHy4OwHXUTSLqSiolgY2s1
-         DtSUuD4voOql6pb+29u+YRB+Z/MTbj744dgzfZ7lygvVGH+tNOIB/Dq9S6kgAToL1EmQ
-         723Mf1OCV5DeXDJ9RDMCBDPKp87O9Z4OBBHRV8DCXFwRozz767cEL8nVyzN/u2dQSHTW
-         fLk1vxzxiiLdVe+Nf3jTIynRABOxWMuiQCmoZsMjJR4MZHc57PVorqw/6ORbuU9495xT
-         xMfCPOTPsNcdvNppA2buwz+8GcFHWoTAcD5hUj0sQfUO5rvS8sZpG80wJNhK/aU84QVX
-         /FSQ==
-X-Gm-Message-State: AOAM533fRgogHqgyEDcng7BCZLSXcKSQvMbo61BIZ5+iUfunA/+5Wbaw
-	+wD5ClY9mz+rUTbUEpes5zdM/HeoK9Q3fcPyUy22Fg==
-X-Google-Smtp-Source: ABdhPJyeRJ1A9AX0DmoDqRxo1/DLQHUcof5m2XXSj8lNypY3bHNmQWOqrUEnbss0WuBMSpwMGU3MP94Rte1iYZrYks8=
-X-Received: by 2002:a81:8d02:0:b0:2f8:c9f7:4041 with SMTP id
- d2-20020a818d02000000b002f8c9f74041mr24674320ywg.117.1651766475264; Thu, 05
- May 2022 09:01:15 -0700 (PDT)
+        bh=smRiEfnbDo26TwlBRyyocGS+bQqlFH9vecfF+kAEs0s=;
+        b=K9vFqENDr8QX8B+7//82AWjJ9saus5IIgRweJjyfvrUoRvssTctjhC3dYNObFbl5eF
+         MbLtfJiGIRX9CarkLjy7kJU2ncilVGGUACUYkpoQIxaABjd7xhbi5AgYSf2n8LDcr8r8
+         d9WbUfS3x/FB0q5lEKfA8NxuxG/Pn48AbloWAddsAf8bmy6NT+7NwuBXvPrLR4I1Z7XK
+         QNJNepzUDDF1Igh1YWeRrSDxfGUrXu3IB5/PusbUFy/AS9FrAs3Ia8ZtBcxFD/+7mwap
+         bNDDMdS2/DujkMoWPzSq6m687vpEEcT4lQxQV3tYiE5h29Fsv8OfhynNZla3CPTznFoy
+         T4mg==
+X-Gm-Message-State: AOAM531y5WApGnE7hBmqnHdPQaIRP1Y/qZUkVEqPe5FUPmnWBMn12MJn
+	jaovCE95iagRuZB6H93QHPYFGoIhhIZf3yeF+m47uw==
+X-Google-Smtp-Source: ABdhPJwBW6nLJQllaWjle33ZcjdAaJs8arGj4v4LRwbmOZTByqaTFnO79d1yMOwsSb1JbpmCL3d16OL6yDeASvHtlUs=
+X-Received: by 2002:a81:a93:0:b0:2f4:d65a:d44e with SMTP id
+ 141-20020a810a93000000b002f4d65ad44emr23725228ywk.243.1651767843390; Thu, 05
+ May 2022 09:24:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,13 +40,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220429203644.2868448-1-samitolvanen@google.com>
- <YnKnLyyXPJl5Llc0@FVFF77S0Q05N> <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
- <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com> <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
+ <20220429203644.2868448-10-samitolvanen@google.com> <YnPw+SiY9Ij/b7Yg@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <YnPw+SiY9Ij/b7Yg@FVFF77S0Q05N.cambridge.arm.com>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 5 May 2022 09:00:39 -0700
-Message-ID: <CABCJKuced3-MoZoBdpL+=h1PC32C-5C12HZH96+dfEp43dJwaQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/21] KCFI support
+Date: Thu, 5 May 2022 09:23:27 -0700
+Message-ID: <CABCJKufjVAbSCcoQZzkemvkmMmwb6DoRYNPu3ADHGoRL_zFPtg@mail.gmail.com>
+Subject: Re: [RFC PATCH 09/21] arm64: Add CFI error handling
 To: Mark Rutland <mark.rutland@arm.com>
 Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
 	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>, 
@@ -57,15 +56,31 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
 	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 5, 2022 at 5:36 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> FWIW, a `-DLLVM_ENABLE_ASSERTIONS=ON` build also seems to work for me when
-> building a kernel with CONFIG_CFI_CLANG=y. It's much slower than a regular
-> Release build, so I'm still waiting for that to finish building a kernel, but
-> it has gotten much further through the build without issues.
+On Thu, May 5, 2022 at 8:45 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> It would be a bit nicer if we could encode the register index into the BRK
+> immediate, i.e. allocate a range of 32 immediates (or 31 given BLR XZR is
+> nonsensical), and have:
+>
+>         BRK #CFI_BRK_IMM + n
+>
+> ... where `n` is the Xn index.
+>
+> That way the kernel doesn't need to know the specific code sequence and
+> wouldn't have to decode the instruction to find the relevant register -- we
+> could determine that from the ESR alone. That would also avoid tying the
+> compiler into a specific code sequence, and would allow that to change.
+>
+> Since the BRK immediate is 16 bits, we have enough space to also encode the
+> index of the wB register, which would allow the kernel's BRK handler to recover
+> and log the expected type value and the the value at the target of the branch
+> (that latter we can recover from xN, so we don't need wA to be encoded into the
+> immediate).
 
-Thanks for confirming. This issue should be fixed here if you want to
-give it another try:
+Sure, sounds like a good idea.
 
-https://github.com/samitolvanen/llvm-project/commits/kcfi
+> ... does the compiler side of that sound possible?
+
+Yes, this should be doable. I'll take a look and change this in the
+next version.
 
 Sami
