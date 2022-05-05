@@ -1,49 +1,45 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C078533E0
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 20:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8652CA4
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 21:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651782448; x=1683318448;
+  t=1651784849; x=1683320849;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LBkM+/38j5GpzaAIvuHMMzTzEjphpOTuzU4wuxKrqqE=;
-  b=BwknG3+0u9FgsD4ktl2wVCiMdwIZ3xtDZtsc68FiKlolJ3ENUi9xYxWD
-   qmwEraGL9UugWKxA3wxYIzWijziqu2acdJoA0N/6BkNeTrNzI9qVK9yCG
-   uNCDV1ibXT2SdTgs+YLc/SBorxfhwO0L6Gu6+HdJ41HiPN2Q+rqsediY3
-   1hiA7Qrlq1nApAFk6S08KXfzYJ97rkBSRrgLn70iWgfb4t2mXhuuwvpiL
-   JChrCzmI6dZeJvRq39YW9UwOtgj2gVEijEPFSdSHIS7Mp1ZU8xuXCp/2E
-   oWrVhxsyNp6XJKW/ybXFSRJqDcE8x9kd0GjXqF5I+S4wSa7JW+KU74tqS
+  bh=emk+u4QGTOihANvtJGusMZwI7AXthtuoRKkv+2jjuq8=;
+  b=PJuyqMNu8Yk+h3tRW5GFPIF1ZB2xjvVwPAiOli3tNyiZv7X6Nfe69SGM
+   1IazLASRFdiOypmVsqMpZkImJfJXnIwfyGTA08SWY8JenfZYvgWIBGgC2
+   FpkA5JFB0gm+sQjYGnsqFVBvNJxlr1J32sCC/0iT5q6qEJN5YkTDEEAJH
+   egUkfea9WKUMKu7eqvhH0HTjjK0IdBTmKCR4dJNcEfs4sw1pdSOgn1HmM
+   9kln/QfmG+7ITIaQOz63CbJbaCGGDRsfvRlra1/KvvtkEZS80ZtwmoxSQ
+   ofpgzXAo7OOrKZYkZtVydKDBHvqKK3ImEcqRDSveGcwLU7RDv4YorvoYx
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268134723"
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="293455120"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268134723"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 13:27:28 -0700
+   d="scan'208";a="293455120"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 14:06:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="891502899"
+   d="scan'208";a="709126636"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 May 2022 13:27:24 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 05 May 2022 14:06:51 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nmi4J-000Cj6-UP;
-	Thu, 05 May 2022 20:27:23 +0000
-Date: Fri, 6 May 2022 04:26:42 +0800
+	id 1nmigV-000Cl4-2W;
+	Thu, 05 May 2022 21:06:51 +0000
+Date: Fri, 6 May 2022 05:06:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-	krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-	peda@axentia.se
+To: Thomas Zimmermann <tzimmermann@suse.de>, airlied@redhat.com,
+	jfalempe@redhat.com, daniel@ffwll.ch
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, lee.jones@linaro.org,
-	linux@armlinux.org.uk, Manohar.Puri@microchip.com,
-	Kavyasree.Kotagiri@microchip.com, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH 4/4] mux: lan966: Add support for flexcom mux controller
-Message-ID: <202205060409.Vpkpcw6T-lkp@intel.com>
-References: <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/mgag200: Fail on I2C initialization errors
+Message-ID: <202205060439.bfJ2FmzU-lkp@intel.com>
+References: <20220505152244.413-1-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,50 +48,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
+In-Reply-To: <20220505152244.413-1-tzimmermann@suse.de>
 
-Hi Kavyasree,
+Hi Thomas,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on robh/for-next]
-[cannot apply to soc/for-next linus/master v5.18-rc5 next-20220505]
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip tegra-drm/drm/tegra/for-next v5.18-rc5 next-20220505]
+[cannot apply to airlied/drm-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kavyasree-Kotagiri/Add-support-for-lan966-flexcom-multiplexer/20220503-190011
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220506/202205060409.Vpkpcw6T-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-mgag200-Fail-on-I2C-initialization-errors/20220505-234643
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220506/202205060439.bfJ2FmzU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8c4bcef1d51c8668507ca53f7cad11e6ace1b2b
+        # https://github.com/intel-lab-lkp/linux/commit/11682b9fc557a02edac08b0dedc91ce704c2f749
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kavyasree-Kotagiri/Add-support-for-lan966-flexcom-multiplexer/20220503-190011
-        git checkout f8c4bcef1d51c8668507ca53f7cad11e6ace1b2b
+        git fetch --no-tags linux-review Thomas-Zimmermann/drm-mgag200-Fail-on-I2C-initialization-errors/20220505-234643
+        git checkout 11682b9fc557a02edac08b0dedc91ce704c2f749
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mgag200/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: devm_mux_control_get
-   >>> referenced by atmel-flexcom.c
-   >>> mfd/atmel-flexcom.o:(atmel_flexcom_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: mux_control_select_delay
-   >>> referenced by atmel-flexcom.c
-   >>> mfd/atmel-flexcom.o:(atmel_flexcom_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: mux_control_deselect
-   >>> referenced by atmel-flexcom.c
-   >>> mfd/atmel-flexcom.o:(atmel_flexcom_probe) in archive drivers/built-in.a
+>> drivers/gpu/drm/mgag200/mgag200_mode.c:819:47: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   drm_err(dev, "failed to add DDC bus: %d\n", ret);
+                                                               ^~~
+   include/drm/drm_print.h:438:46: note: expanded from macro 'drm_err'
+           __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
+                                                       ^~~~~~~~~~~
+   include/drm/drm_print.h:425:48: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+                                                         ^~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/gpu/drm/mgag200/mgag200_mode.c:815:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +/ret +819 drivers/gpu/drm/mgag200/mgag200_mode.c
+
+   808	
+   809	static int mgag200_vga_connector_init(struct mga_device *mdev)
+   810	{
+   811		struct drm_device *dev = &mdev->base;
+   812		struct mga_connector *mconnector = &mdev->connector;
+   813		struct drm_connector *connector = &mconnector->base;
+   814		struct mga_i2c_chan *i2c;
+   815		int ret;
+   816	
+   817		i2c = mgag200_i2c_create(dev);
+   818		if (IS_ERR(i2c)) {
+ > 819			drm_err(dev, "failed to add DDC bus: %d\n", ret);
+   820			return PTR_ERR(i2c);
+   821		}
+   822	
+   823		ret = drm_connector_init_with_ddc(dev, connector,
+   824						  &mga_vga_connector_funcs,
+   825						  DRM_MODE_CONNECTOR_VGA,
+   826						  &i2c->adapter);
+   827		if (ret)
+   828			goto err_mgag200_i2c_destroy;
+   829		drm_connector_helper_add(connector, &mga_vga_connector_helper_funcs);
+   830	
+   831		mconnector->i2c = i2c;
+   832	
+   833		return 0;
+   834	
+   835	err_mgag200_i2c_destroy:
+   836		mgag200_i2c_destroy(i2c);
+   837		return ret;
+   838	}
+   839	
 
 -- 
 0-DAY CI Kernel Test Service
