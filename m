@@ -1,206 +1,182 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from elaine.keithp.com (home.keithp.com [63.227.221.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8BD33E0
-	for <llvm@lists.linux.dev>; Thu,  5 May 2022 19:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651780597; x=1683316597;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KwanYcUMTk/tFXkADBVfoZ8TSGBgi+TKmiWKVnS1X1U=;
-  b=NuBSvaCFDr/hpdRSYa14veG2zrDkIBUQw4liiJvo6284WJo8bN+IHTVz
-   okIFHjW656DdI6wQFFbOwXtWgBWlUYX1F29o9tAxtwapT39N632u2lr4/
-   ScC70SZt4UEAVmh0oieXlgdMfB8EqtgRtGer/LTwg0Qqaiztm78EzpOYz
-   nvkNSzW3HWUPLln0Aabi+o6vZ8X+syPzrFGgqj/2rF+OaMZlslGNUq24r
-   xhpvZsb82l5w9QVIDHrTV58YHj4c+VivNgtpX0Eu3/EvPdkBpyHXR/lwF
-   mWdbiNbMas1K4QFcKTwIBdH9bFMNLvUm5SaPLIcXPWBQFLHgghO0zAzrr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268381273"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268381273"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 12:56:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="517675586"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 05 May 2022 12:56:19 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmhaE-000Chc-P8;
-	Thu, 05 May 2022 19:56:18 +0000
-Date: Fri, 6 May 2022 03:56:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/context-tracking.2022.05.03a
- 54/58] kernel/context_tracking.c:91:4: error: call to undeclared function
- 'rcu_irq_work_resched'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205060346.y3d1cOFv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A2E33E0
+	for <llvm@lists.linux.dev>; Thu,  5 May 2022 20:08:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by elaine.keithp.com (Postfix) with ESMTP id 891C13F3296F;
+	Thu,  5 May 2022 13:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+	t=1651781336; bh=FYwb/JL7BiNf1ERDNYW+QEpxdN3SDh8ueitySQdIrBQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=Np/XZ4pFy233AB0Yh+gi2AcW/e9+t3y/fWG6qdh4wkqzGzyv/5d60R37rlx2q0dkx
+	 ZcA/OHcd/fQ1CoFSDxr0Vi8FXjWjSwahx9raUDyKmUlHDNFden+UlqdoPoL9lb3N6j
+	 z/Qqv9Wa2pLIQ3ZQ4WNbOu4gllTZvT8Le/cE0WdmezbxN7Lo811QY78xROKox4aoxD
+	 YtJ5TG07Cfh89+3GGGmDQQjL7bmwxYOqopOZ5A82byaJA6k7cohAwc8JRFZ33WFxKZ
+	 /7mx5KCwL1wU3NFmP6UKOcEgk9zOwdOR12cnrjAgCLv/62+PIg/yKTdgVBApfc2HeW
+	 bh24dG0NyBe9A==
+X-Virus-Scanned: Debian amavisd-new at keithp.com
+Received: from elaine.keithp.com ([127.0.0.1])
+	by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
+	with LMTP id 5VTuAkNJ6jJp; Thu,  5 May 2022 13:08:56 -0700 (PDT)
+Received: from keithp.com (koto.keithp.com [192.168.11.2])
+	by elaine.keithp.com (Postfix) with ESMTPSA id 067933F3296B;
+	Thu,  5 May 2022 13:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+	t=1651781336; bh=FYwb/JL7BiNf1ERDNYW+QEpxdN3SDh8ueitySQdIrBQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=Np/XZ4pFy233AB0Yh+gi2AcW/e9+t3y/fWG6qdh4wkqzGzyv/5d60R37rlx2q0dkx
+	 ZcA/OHcd/fQ1CoFSDxr0Vi8FXjWjSwahx9raUDyKmUlHDNFden+UlqdoPoL9lb3N6j
+	 z/Qqv9Wa2pLIQ3ZQ4WNbOu4gllTZvT8Le/cE0WdmezbxN7Lo811QY78xROKox4aoxD
+	 YtJ5TG07Cfh89+3GGGmDQQjL7bmwxYOqopOZ5A82byaJA6k7cohAwc8JRFZ33WFxKZ
+	 /7mx5KCwL1wU3NFmP6UKOcEgk9zOwdOR12cnrjAgCLv/62+PIg/yKTdgVBApfc2HeW
+	 bh24dG0NyBe9A==
+Received: by keithp.com (Postfix, from userid 1000)
+	id A1FFA1E601B9; Thu,  5 May 2022 13:08:55 -0700 (PDT)
+From: Keith Packard <keithp@keithp.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>, "Gustavo A . R . Silva"
+ <gustavoars@kernel.org>, Francis Laniel
+ <laniel_francis@privacyrequired.com>, Daniel Axtens <dja@axtens.net>, Dan
+ Williams <dan.j.williams@intel.com>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Guenter Roeck <linux@roeck-us.net>, Daniel
+ Vetter <daniel.vetter@ffwll.ch>, Tadeusz Struk <tadeusz.struk@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, alsa-devel@alsa-project.org, Al Viro
+ <viro@zeniv.linux.org.uk>, Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>,
+ Andy Lavr <andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>,
+ Baowen Zheng <baowen.zheng@corigine.com>, Bjorn Andersson
+ <bjorn.andersson@linaro.org>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Bradley Grove <linuxdrivers@attotech.com>,
+ brcm80211-dev-list.pdl@broadcom.com, Christian Brauner
+ <brauner@kernel.org>, Christian =?utf-8?Q?G=C3=B6ttsche?=
+ <cgzones@googlemail.com>,
+ Christian Lamparter <chunkeey@googlemail.com>, Chris Zankel
+ <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, David Gow
+ <davidgow@google.com>, David Howells <dhowells@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>, Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>, devicetree@vger.kernel.org,
+ Dexuan Cui <decui@microsoft.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>, Eric Dumazet
+ <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, Eugeniu Rosca
+ <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, Frank Rowand
+ <frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman
+ <gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Hante Meuleman <hante.meuleman@broadcom.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub
+ Kicinski <kuba@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ James Morris <jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens
+ Axboe <axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John
+ Keeping <john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
+ <kvalo@kernel.org>, keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+ Kuniyuki Iwashima <kuniyu@amazon.co.jp>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
+ <lee.jones@linaro.org>, Leon Romanovsky <leon@kernel.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, linux1394-devel@lists.sourceforge.net,
+ linux-afs@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev, Loic Poulain
+ <loic.poulain@linaro.org>, Louis Peens <louis.peens@corigine.com>, Luca
+ Coelho <luciano.coelho@intel.com>, Luiz Augusto von Dentz
+ <luiz.dentz@gmail.com>, Marc Dionne <marc.dionne@auristor.com>, Marcel
+ Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, "Martin
+ K. Petersen" <martin.petersen@oracle.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
+ <songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>,
+ netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, Nuno
+ =?utf-8?Q?S=C3=A1?= <nuno.sa@analog.com>, Paolo Abeni <pabeni@redhat.com>,
+ Paul Moore
+ <paul@paul-moore.com>, Rich Felker <dalias@aerifal.cx>, Rob Herring
+ <robh+dt@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ selinux@vger.kernel.org, "Serge E. Hallyn" <serge@hallyn.com>,
+ SHA-cyfmac-dev-list@infineon.com, Simon Horman
+ <simon.horman@corigine.com>, Stefano Stabellini <sstabellini@kernel.org>,
+ Stefan Richter <stefanr@s5r6.in-berlin.de>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Stephen Hemminger
+ <sthemmin@microsoft.com>, Stephen Smalley
+ <stephen.smalley.work@gmail.com>, Takashi Iwai <tiwai@suse.com>, Tom Rix
+ <trix@redhat.com>, Udipto Goswami <quic_ugoswami@quicinc.com>,
+ wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+ xen-devel@lists.xenproject.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+In-Reply-To: <202205051228.4D5B8CD624@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-3-keescook@chromium.org>
+ <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+ <202205040819.DEA70BD@keescook>
+ <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
+ <871qx8qabo.fsf@keithp.com> <202205051228.4D5B8CD624@keescook>
+Date: Thu, 05 May 2022 13:08:55 -0700
+Message-ID: <87pmkrpwrs.fsf@keithp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha256; protocol="application/pgp-signature"
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/context-tracking.2022.05.03a
-head:   9527c561aed6424e77fd2a8827c37f1103c89177
-commit: cc2a2df362d428cc4c660df04d3e3403562fafb2 [54/58] rcu/context-tracking: Move deferred nocb resched to context tracking
-config: riscv-randconfig-c006-20220505 (https://download.01.org/0day-ci/archive/20220506/202205060346.y3d1cOFv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/cc2a2df362d428cc4c660df04d3e3403562fafb2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/context-tracking.2022.05.03a
-        git checkout cc2a2df362d428cc4c660df04d3e3403562fafb2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Kees Cook <keescook@chromium.org> writes:
 
-All errors (new ones prefixed by >>):
+> I don't think I can do a declaration and an expression statement at the
+> same time with different scopes, but that would be kind of cool. We did
+> just move to c11 to gain the in-loop iterator declarations...
 
-   In file included from kernel/context_tracking.c:18:
-   In file included from include/linux/context_tracking.h:6:
-   In file included from include/linux/vtime.h:5:
-   include/linux/context_tracking_state.h:51:29: error: incompatible pointer types passing 'enum ctx_state *' to parameter of type 'const atomic_t *' [-Werror,-Wincompatible-pointer-types]
-           return atomic_read_acquire(&ct->state);
-                                      ^~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:32:37: note: passing argument to parameter 'v' here
-   atomic_read_acquire(const atomic_t *v)
-                                       ^
-   In file included from kernel/context_tracking.c:21:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/context_tracking.c:21:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/context_tracking.c:21:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> kernel/context_tracking.c:91:4: error: call to undeclared function 'rcu_irq_work_resched'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           rcu_irq_work_resched();
-                           ^
-   7 warnings and 2 errors generated.
+Yeah, you'd end up creating a statement-level macro, and I think that
+would have poor syntax:
 
+        mem_to_flex_dup(struct something *instance, rc, byte_array,
+                        count, GFP_KERNEL);
+        if (rc)
+           return rc;
 
-vim +/rcu_irq_work_resched +91 kernel/context_tracking.c
+I bet you've already considered the simpler form:
 
-    51	
-    52	/**
-    53	 * __ct_user_enter - Inform the context tracking that the CPU is going
-    54	 *		     to enter user or guest space mode.
-    55	 *
-    56	 * This function must be called right before we switch from the kernel
-    57	 * to user or guest space, when it's guaranteed the remaining kernel
-    58	 * instructions to execute won't use any RCU read side critical section
-    59	 * because this function sets RCU in extended quiescent state.
-    60	 */
-    61	void noinstr __ct_user_enter(enum ctx_state state)
-    62	{
-    63		lockdep_assert_irqs_disabled();
-    64	
-    65		/* Kernel threads aren't supposed to go to userspace */
-    66		WARN_ON_ONCE(!current->mm);
-    67	
-    68		if (!context_tracking_recursion_enter())
-    69			return;
-    70	
-    71		if ( __this_cpu_read(context_tracking.state) != state) {
-    72			if (__this_cpu_read(context_tracking.active)) {
-    73				/*
-    74				 * At this stage, only low level arch entry code remains and
-    75				 * then we'll run in userspace. We can assume there won't be
-    76				 * any RCU read-side critical section until the next call to
-    77				 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
-    78				 * on the tick.
-    79				 */
-    80				if (state == CONTEXT_USER) {
-    81					instrumentation_begin();
-    82					trace_user_enter(0);
-    83					vtime_user_enter(current);
-    84					instrumentation_end();
-    85				}
-    86				/*
-    87				 * Other than generic entry implementation, we may be past the last
-    88				 * rescheduling opportunity in the entry code. Trigger a self IPI
-    89				 * that will fire and reschedule once we resume in user/guest mode.
-    90				 */
-  > 91				rcu_irq_work_resched();
-    92				rcu_user_enter();
-    93			}
-    94			/*
-    95			 * Even if context tracking is disabled on this CPU, because it's outside
-    96			 * the full dynticks mask for example, we still have to keep track of the
-    97			 * context transitions and states to prevent inconsistency on those of
-    98			 * other CPUs.
-    99			 * If a task triggers an exception in userspace, sleep on the exception
-   100			 * handler and then migrate to another CPU, that new CPU must know where
-   101			 * the exception returns by the time we call exception_exit().
-   102			 * This information can only be provided by the previous CPU when it called
-   103			 * exception_enter().
-   104			 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
-   105			 * is false because we know that CPU is not tickless.
-   106			 */
-   107			__this_cpu_write(context_tracking.state, state);
-   108		}
-   109		context_tracking_recursion_exit();
-   110	}
-   111	EXPORT_SYMBOL_GPL(__ct_user_enter);
-   112	
+        struct something *instance =3D mem_to_flex_dup(byte_array, count, G=
+FP_KERNEL);
+        if (IS_ERR(instance))
+            return PTR_ERR(instance);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This doesn't allow you to require a new name, so you effectively lose
+the check you're trying to insist upon.
+
+Some way to ask the compiler 'is this reference dead?' would be nice --
+it knows if a valid pointer was passed to free, or if a variable has not
+been initialized, after all; we just need that exposed at the source
+level.
+
+=2D-=20
+=2Dkeith
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEw4O3eCVWE9/bQJ2R2yIaaQAAABEFAmJ0LtcACgkQ2yIaaQAA
+ABHC0hAAr3uHP5hrK0TrjV0miTlsckS+Z8SZ2+xvHioDubRTMMdfP79BMu5ndZB4
+QaRps+OPUgs6f0p8V2N5qN2jruvrUHrKXQyiIjdsRQmUp+3qyvpjuYrtNDeHHTD2
+vfM0b48EgU8kkiVZH9ksTQ/b48dkf2r7GYLnmd3VO/LkFTymGVqvodKSYl/6dZOZ
+x7yTZYIRcbsjqPumSocldZhrYNuDwDWd3K2voU8pDD202q2xk3BpatYQOCnRYAzk
+Le8pCTMAkJmy3VcKuORvTyRaq0/AvjfjEVHVP9ucCk68zGEU1/egKnkv3iQ5b7UY
+RzyQTJSlFZQv2EomuxRRhmKQ/Ubqr//1Y5P8FLqQjJFdocf7x/wCkMdE5X/WZhIN
+tjA64pkC+b20mi6NQ5XouaUSTBKTnU44rsSCWsabc+fBx96Arj1tMJCrOoqYCWpy
+yg2mbeB3A55aDXAVSoC9vKoeleOJER70z7sOfycFpLPcO/XAoDOUOlfH46McYIIK
+0xMfYCih17SZ/wY5s/NAamDnihpT26Zkm028+XJtQdxgyS3rSIjH+TxqQ3dpl+Tq
+q78xgiJ/GBR6QVyfdgbWEbXlJUOTIA1gtT+YvkC9NwhJszdT72psVFUXtZraEaRs
++XEV7uZeDpyI0x1VGRqSDZgJtavhxjCqeR9SZ21Vch7I0NhT24I=
+=lS49
+-----END PGP SIGNATURE-----
+--=-=-=--
