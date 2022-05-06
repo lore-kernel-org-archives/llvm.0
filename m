@@ -1,50 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F973622
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 06:32:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DD5C385A8;
-	Fri,  6 May 2022 06:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651818778;
-	bh=ZDI5eE9bg9C0Wj48HjyHvazNLVqpUpreJ/qe0kZV4ZI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=gK05L7iCwvnU3ysFoZAZ1dK5zDhaiytBTw+S4TIL7DzzVU4gsdDpHuGsnZmM5n39b
-	 Ojbph5bOP3hd35loR9ksIDgYzWd1GiQyV1cw5gS/DORER9ghu5U2WcAqFsEzi40bEP
-	 6tUuPU8FTt4OgIaSD/FcGLbNJMmXk/TeVQI9912vGQVcOFc943rKB+ZoUeQ90vnUwJ
-	 w4uyfJSP3ysqSQVWkLR3rSCzkm6tGEr+CGVfmMYel7wNV5VH+B6iWye9sSukYDqDbb
-	 ELXZ/Xt091MIaY3vEdYreaBefFmhxE4GntjR2MJRLmSGRRvoHqQ02SYp1TR+Ns/Ckc
-	 W3NXHjBF6AQvg==
-Date: Fri, 6 May 2022 08:32:53 +0200 (CEST)
-From: Jiri Kosina <jikos@kernel.org>
-To: Daniel Ogorchock <djogorchock@gmail.com>
-cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-    kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: drivers/hid/hid-nintendo.c:403:29: warning: unused variable
- 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
-In-Reply-To: <CAEVj2tk8uzXm5D-17QppezPgSfrYd3dW6K6CiU+BFvUd4jYtTQ@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2205060832320.28985@cbobk.fhfr.pm>
-References: <202204211058.3UoweQuz-lkp@intel.com> <nycvar.YFH.7.76.2204211021050.30217@cbobk.fhfr.pm> <CAEVj2tk8uzXm5D-17QppezPgSfrYd3dW6K6CiU+BFvUd4jYtTQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA527E8
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 06:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651819533; x=1683355533;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fi8z3mSzHPLzas4HaqdOJ94WwBNJNYKXF7/1Em0DvKA=;
+  b=TZnlYrlu4ReqLWWtr3sahTLr5NbdY9tF6cJbiuWJKtpigwdXN8r0kKC4
+   EkHaI9RKHm3bG9Ga45OkNcJ296HDbLgtlNiPyZEFebmQWVYQBOLi6j6Ns
+   qBlnnv8tefTlIsCoL4bGGFyE6BSXSrwjb2AiFTTRlOltIuxPSIB1I3UTw
+   Y/nbElrkB7JTKHgnuJ8F2bJemxLr+PIdfUB/LwOT/QSxABFj09M5bGngc
+   gr2R9o7Eup5tDTkzvYK8uc8nLc+Y8BqaZng+KGYVwD7rG4TaCS9Jel1ME
+   DIfmNstgs61wgehtGsoNmvb46JwfkxUaQ0Z0rrvD3mkBq5HbpUVNZpWko
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267209931"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="267209931"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 23:45:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="549726550"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 05 May 2022 23:45:31 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmriU-000DED-CR;
+	Fri, 06 May 2022 06:45:30 +0000
+Date: Fri, 6 May 2022 14:45:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chengming Gui <Jack.Gui@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Evan Quan <evan.quan@amd.com>
+Subject: [agd5f:drm-next 523/573]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:5:
+ warning: no previous prototype for function 'smu_v13_0_7_check_fw_status'
+Message-ID: <202205061407.MF1Stxst-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 21 Apr 2022, Daniel Ogorchock wrote:
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   e7b25ac8f27f561894f8f65caec0dfafed3ddbb5
+commit: 113cc31dde66e3153f7290141b6c008dce8ab2bf [523/573] drm/amd/pm: add SMU_13_0_7 ppt_funcs for SMU_13_0_7
+config: arm64-randconfig-r006-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061407.MF1Stxst-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 113cc31dde66e3153f7290141b6c008dce8ab2bf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
-> Hi Jiri,
-> 
-> Apologies for the delay on this. I'll try to carve some time out this
-> weekend to submit a patch to avoid the warnings.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Just a friendly ping to make sure this doesn't get lost in between cracks 
-:) Thanks,
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:5: warning: no previous prototype for function 'smu_v13_0_7_check_fw_status' [-Wmissing-prototypes]
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+       ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+   ^
+   static 
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:281:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:359:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:464:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   4 warnings generated.
+
+
+vim +/smu_v13_0_7_check_fw_status +206 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c
+
+   205	
+ > 206	int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+   207		struct amdgpu_device *adev = smu->adev;
+   208		uint32_t mp1_fw_flags;
+   209	
+   210		mp1_fw_flags = RREG32_PCIE(MP1_Public |
+   211					   (smnMP1_FIRMWARE_FLAGS_SMU_13_0_7 & 0xffffffff));
+   212	
+   213		if ((mp1_fw_flags & MP1_FIRMWARE_FLAGS__INTERRUPTS_ENABLED_MASK) >>
+   214				MP1_FIRMWARE_FLAGS__INTERRUPTS_ENABLED__SHIFT)
+   215			return 0;
+   216	
+   217		return -EIO;
+   218	}
+   219	
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
