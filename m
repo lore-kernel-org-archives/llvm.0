@@ -1,80 +1,138 @@
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [83.166.143.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3531A57
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:15:29 +0000 (UTC)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwHm1JRczMq1Nh;
-	Fri,  6 May 2022 17:59:48 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-	by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwHk75KxzlhMCD;
-	Fri,  6 May 2022 17:59:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1651852788;
-	bh=FwUwTwzNw2dY+saQkKbv3eld/gA2PBZH+qVRfKX7BmU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Fdc+tWYWQRrB5aMc7U/wG0siD98Nv3TUSDtvtOo4mTLZvot4crKa4jYp5Y4hXOT6c
-	 7fW0rGzo88MBE/C5vxXLcGAHxemlisMT05anG63iPZbzswiAMI/HpkthTXAVO0+7PK
-	 PMscO48OTnoQwWmz3X6BLlYyTP1bZsOdkcG6Q8Ds=
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Andy Whitcroft <apw@canonical.com>,
-	Brian Norris <briannorris@chromium.org>,
-	Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Joe Perches <joe@perches.com>,
-	Kees Cook <keescook@chromium.org>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 0/5] Fix clang-format configuration according to checkpatch.pl
-Date: Fri,  6 May 2022 18:01:01 +0200
-Message-Id: <20220506160106.522341-1-mic@digikod.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1022862A
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6231DC385A8;
+	Fri,  6 May 2022 16:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651855756;
+	bh=kMsGmkJ+Xrc4/MbwXnnOKyG6OyT2xeuPISMz+O+QKcE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oEftss9Q2h8A2+YSwXVGNqSkK4QcwTxCLONQ0JuSrd88r4+q8VBxcyv7TYY7HfKAk
+	 eQ1qySDJYXm9b0mxaCUrLHG2MokdUFTUL0lex8C0mLuCoc+LMa3PEhdTIy/rPIYTd1
+	 CyFJvWL4StYqLyOOFzSzgJpDP/w/GvT5tEGUDKElKemL1JblCLsetRyXDc8Z1xIx2w
+	 +rGQIZgmK29pqhYj95EGkYyA20f5sMV0ZUWriY1WWodmLZCWwpahn+GCfEReULdzAu
+	 D34t4xX0wAzsOLOz1nf/2Sp5pWxpFmZ7v4t6OBbJyELrO1qr5T7hWs4EN9t1gv9D4c
+	 HIiBxio4/L1Hg==
+Date: Fri, 6 May 2022 09:49:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Leonardo Bras Soares Passos <leobras@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: ld.lld: error: inline assembly requires more registers than
+ available at line 523
+Message-ID: <YnVRiiTeDjmcuo4o@dev-arch.thelio-3990X>
+References: <202205020637.JVJo3blw-lkp@intel.com>
+ <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
+ <CAJ6HWG5P6LXEY80tcXxtfvnPnhiNcqUvV+xyKygLbcw37UFvyw@mail.gmail.com>
+ <YnL/BVvd78zIkwil@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnL/BVvd78zIkwil@dev-arch.thelio-3990X>
 
-Hi,
+On Wed, May 04, 2022 at 03:32:37PM -0700, Nathan Chancellor wrote:
+> Hi Leo,
+> 
+> On Wed, May 04, 2022 at 03:13:56PM -0300, Leonardo Bras Soares Passos wrote:
+> > On Wed, May 4, 2022 at 2:55 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+> > > > commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
+> > > > date:   2 months ago
+> > > > config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
+> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+> > > > reproduce (this is a W=1 build):
+> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > >         chmod +x ~/bin/make.cross
+> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
+> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > >         git fetch --no-tags linus master
+> > > >         git checkout ba1f77c546966c12d86220d078e5838dcaeab348
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> > > >
+> > > > If you fix the issue, kindly add following tag as appropriate
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > >
+> > > > All errors (new ones prefixed by >>):
+> > > >
+> > > > >> ld.lld: error: inline assembly requires more registers than available at line 523
+> > > > >> ld.lld: error: inline assembly requires more registers than available at line 523
+> > > >
+> > >
+> > > I don't think this bisection result is correct; this error is visible at
+> > > v5.17-rc3, which this commit is based on. This is likely the same root
+> > > cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
+> > > LTO. I'll reduce something down and comment there if it turns out to be
+> > > different.
+> > >
+> > > Cheers,
+> > > Nathan
+> > >
+> > 
+> > Hello Nathan,
+> > I went down on this issue, but I have no idea how to proceed. These
+> > are my findings:
+> > - This commit (ba1f77c546966c12d86220d078e5838dcaeab348) fixes the
+> > build, thus allowing this error to happen later (in LTO stage)
+> > - The commit that introduced this issue was 69d0db01e210, due to removing :
+> >    ubsan-cflags-$(CONFIG_UBSAN_OBJECT_SIZE)       += -fsanitize=object-size
+> > - Only by having this flag enabled in ubsan-cflags-y on
+> > torvalds/master causes the build to succeed
+> 
+> Ah, thanks for that investigation!
+> 
+> > At this point, given the commit message in 69d0db01e210 I was thinking
+> > of finding & fixing the code that causes the ld.lld error to happen,
+> > but I was lacking the skills to extract any filename from LTO step.
+> 
+> Right, this is not always easy with full LTO :( unfortunately, this
+> issue is not reproducible with either no LTO or ThinLTO... When issues
+> like this have come up in the past, I have had success linking
+> individual object files/archives but that has not worked for this issue.
+> I am going to try and bisect this randconfig against a defconfig and see
+> if there is a minimal set of configs that reproduces this issue, which
+> might make it easier to see what is going on here.
+> 
+> > But it's also possible to create a patch just adding
+> > 'ubsan-cflags-$(CONFIG_SOMETHING)      += -fsanitize=object-size'
+> > and fix this build.
+> 
+> Right, although that is basically reverting 69d0db01e210 for just that
+> configuration, which we don't want to do for the reasons outlined in
+> that commit message.
+> 
+> I'll see what comes of this config bisect.
 
-This series brings some improvements to the clang-format configuration
-to make it compatible with the checkpatch.pl rules:
-https://lore.kernel.org/r/8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net
+i386_defconfig + CONFIG_LTO_CLANG_FULL=y + CONFIG_X86_GENERIC=y is
+enough to reproduce this:
 
-I also found that the for_each issue has already been talk about here:
-https://lore.kernel.org/lkml/CAHmME9ofzanQTBD_WYBRW49d+gM77rCdh8Utdk4+PM9n_bmKwA@mail.gmail.com/
+$ make -skj"$(nproc)" ARCH=i386 LLVM=1 mrproper defconfig
 
-I use these changes for Landlock.
+$ scripts/config -d LTO_NONE -e LTO_CLANG_FULL -e X86_GENERIC
 
-This is based on v5.18-rc5.
+$ make -skj"$(nproc)" ARCH=i386 LLVM=1 olddefconfig all
+ld.lld: error: inline assembly requires more registers than available at line 538
+ld.lld: error: inline assembly requires more registers than available at line 538
 
-Previous version:
-https://lore.kernel.org/r/20220412153906.428179-1-mic@digikod.net
+We have a known issue with 32-bit x86 '-march='/'-mtune=' and running
+out of registers can be reproduced without LTO:
 
-Regards,
+https://github.com/ClangBuiltLinux/linux/issues/1589
 
-Mickaël Salaün (5):
-  clang-format: Update and extend the for_each list with tools/
-  clang-format: Update to clang-format >= 6
-  clang-format: Fix goto labels indentation
-  clang-format: Fix empty curly braces
-  clang-format: Fix space after for_each macros
+Until there is a fix for that, I don't think that it is worth
+investigating this further.
 
- .clang-format | 216 +++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 169 insertions(+), 47 deletions(-)
-
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
--- 
-2.35.1
-
+Cheers,
+Nathan
