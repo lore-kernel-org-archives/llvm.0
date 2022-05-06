@@ -1,45 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F68811
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 12:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD387811
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 13:08:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651841247; x=1683377247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1JBwQExLjRf+shqSc42QfV8mXfEQe1cLSimGmvbq6XQ=;
-  b=WMtueZu5wxcA7fvc6SS8kjFq9azBoI9+qlUoIJZ0Uvgd2wAHcGyUfsD8
-   8EnLrcZgRsOt5/KK77gz0R2bLU7Hti5eFfYcYO5HW8JympOqSAvFUgKQN
-   uI2IL1AkMmv28n+V8O6sXZ7hlJZEX6pEOlXPyGAX6tS5dyr+Xmvttr9pj
-   aPYn9aD++pYLcos5Vv4bqLNP8wI8pqOsmJ1aLUR8shIuftD+mTG3lUydn
-   LhOku1tofd9GCwVufDo232otP5HjxnA1R76ox2ahWRPkUgWv8xyAg/nzo
-   b1S9CEIqac7vuNt/BxHFUE1OQqJs95TepumbMqHCTypntSBDBYieFfXzb
+  t=1651842517; x=1683378517;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QSKIY9jv5XBTS8ipMKKAVANdapr0MkQGNVaBRAzZZJc=;
+  b=ZhyTAg9KuMq1YIF84j3LpxDkGHAlP/RQPQGGZmZslnPkbgf44MwnHzdt
+   G9K0T/QBUASBX5UU6OfUfcaSefPGysmgJsUwn7rhpXKLanP2mHciQiutN
+   4Dha32ntoC0d1guMx64tcEoNfbha3X8k+AkwPmWZMtLCL/CVMjgpFOJwz
+   RXnvyoWc2MNsyTQQGOwAPa7qegFLF5odOrGeRoA4amuqSgFHRq9WBsfp9
+   zU/bcGK1ism8CyTljTyrBpsSgN7qR5noPrhvM3W/dtx8UmXXGel0+BHvw
+   hKuKuRJ/mb3+kC3OfXBGdWFpaQevkFoMdb1/EBgs+c9aNR0SKQ4xFEiPQ
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331445278"
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268605517"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="331445278"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 05:47:27 -0700
+   d="scan'208";a="268605517"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 06:08:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="537872611"
+   d="scan'208";a="654695553"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 May 2022 05:47:25 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 06 May 2022 06:08:29 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nmxMi-000DTq-IJ;
-	Fri, 06 May 2022 12:47:24 +0000
-Date: Fri, 6 May 2022 20:47:05 +0800
+	id 1nmxh6-000DUe-Gy;
+	Fri, 06 May 2022 13:08:28 +0000
+Date: Fri, 6 May 2022 21:08:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+To: Jack Xiao <Jack.Xiao@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
-Message-ID: <202205062033.yS62xm5Z-lkp@intel.com>
-References: <20220506070102.26032-5-haoxu.linux@gmail.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [linux-next:master 8865/9759]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:131:40: warning: format specifies
+ type 'long' but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202205062149.A4sTXbos-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,65 +48,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506070102.26032-5-haoxu.linux@gmail.com>
 
-Hi Hao,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on f2e030dd7aaea5a937a2547dc980fab418fbc5e7]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/fast-poll-multishot-mode/20220506-150750
-base:   f2e030dd7aaea5a937a2547dc980fab418fbc5e7
-config: mips-pic32mzda_defconfig (https://download.01.org/0day-ci/archive/20220506/202205062033.yS62xm5Z-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   38a288f5941ef03752887ad86f2d85442358c99a
+commit: 32de57e9ef59b6f646849a8bd615b7c978a4fa6d [8865/9759] drm/amdgpu/mes: manage mes doorbell allocation
+config: arm-randconfig-r005-20220506 (https://download.01.org/0day-ci/archive/20220506/202205062149.A4sTXbos-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/acb232e81643bd097278ebdc17038e6f280e7212
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hao-Xu/fast-poll-multishot-mode/20220506-150750
-        git checkout acb232e81643bd097278ebdc17038e6f280e7212
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=32de57e9ef59b6f646849a8bd615b7c978a4fa6d
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 32de57e9ef59b6f646849a8bd615b7c978a4fa6d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/io_uring.c:6067:2: error: call to undeclared function '__io_poll_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           __io_poll_clean(req);
-           ^
-   fs/io_uring.c:6067:2: note: did you mean '__io_fill_cqe'?
-   fs/io_uring.c:2141:20: note: '__io_fill_cqe' declared here
-   static inline bool __io_fill_cqe(struct io_ring_ctx *ctx, u64 user_data,
-                      ^
-   1 error generated.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:131:40: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+           DRM_INFO("max_doorbell_slices=%ld\n", doorbell_process_limit);
+                                         ~~~     ^~~~~~~~~~~~~~~~~~~~~~
+                                         %u
+   include/drm/drm_print.h:498:29: note: expanded from macro 'DRM_INFO'
+           _DRM_PRINTK(, INFO, fmt, ##__VA_ARGS__)
+                               ~~~    ^~~~~~~~~~~
+   include/drm/drm_print.h:494:53: note: expanded from macro '_DRM_PRINTK'
+           printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:39:12: warning: unused function 'amdgpu_mes_alloc_process_doorbells' [-Wunused-function]
+   static int amdgpu_mes_alloc_process_doorbells(struct amdgpu_device *adev,
+              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:51:13: warning: unused function 'amdgpu_mes_free_process_doorbells' [-Wunused-function]
+   static void amdgpu_mes_free_process_doorbells(struct amdgpu_device *adev,
+               ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:59:12: warning: unused function 'amdgpu_mes_queue_doorbell_get' [-Wunused-function]
+   static int amdgpu_mes_queue_doorbell_get(struct amdgpu_device *adev,
+              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:90:13: warning: unused function 'amdgpu_mes_queue_doorbell_free' [-Wunused-function]
+   static void amdgpu_mes_queue_doorbell_free(struct amdgpu_device *adev,
+               ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:105:12: warning: unused function 'amdgpu_mes_doorbell_init' [-Wunused-function]
+   static int amdgpu_mes_doorbell_init(struct amdgpu_device *adev)
+              ^
+   6 warnings generated.
 
 
-vim +/__io_poll_clean +6067 fs/io_uring.c
+vim +131 drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c
 
-  6058	
-  6059	static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
-  6060	{
-  6061		int ret;
-  6062	
-  6063		ret = io_poll_check_events(req, locked);
-  6064		if (ret > 0)
-  6065			return;
-  6066	
-> 6067		__io_poll_clean(req);
-  6068	
-  6069		if (!ret)
-  6070			io_req_task_submit(req, locked);
-  6071		else
-  6072			io_req_complete_failed(req, ret);
-  6073	}
-  6074	
+   104	
+   105	static int amdgpu_mes_doorbell_init(struct amdgpu_device *adev)
+   106	{
+   107		size_t doorbell_start_offset;
+   108		size_t doorbell_aperture_size;
+   109		size_t doorbell_process_limit;
+   110	
+   111		doorbell_start_offset = (adev->doorbell_index.max_assignment+1) * sizeof(u32);
+   112		doorbell_start_offset =
+   113			roundup(doorbell_start_offset,
+   114				amdgpu_mes_doorbell_process_slice(adev));
+   115	
+   116		doorbell_aperture_size = adev->doorbell.size;
+   117		doorbell_aperture_size =
+   118				rounddown(doorbell_aperture_size,
+   119					  amdgpu_mes_doorbell_process_slice(adev));
+   120	
+   121		if (doorbell_aperture_size > doorbell_start_offset)
+   122			doorbell_process_limit =
+   123				(doorbell_aperture_size - doorbell_start_offset) /
+   124				amdgpu_mes_doorbell_process_slice(adev);
+   125		else
+   126			return -ENOSPC;
+   127	
+   128		adev->mes.doorbell_id_offset = doorbell_start_offset / sizeof(u32);
+   129		adev->mes.max_doorbell_slices = doorbell_process_limit;
+   130	
+ > 131		DRM_INFO("max_doorbell_slices=%ld\n", doorbell_process_limit);
 
 -- 
 0-DAY CI Kernel Test Service
