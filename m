@@ -1,48 +1,53 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632AD807
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 11:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AFB807
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 11:46:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651836357; x=1683372357;
+  t=1651837564; x=1683373564;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kyfzg+1FMV7p3SGw9zcFubkJsd+r/h4xK7eZfqId260=;
-  b=E722gsuaVpr0914oJJy+Q24LS2+YK9Atw9YMGkBoI2w7UKmaCbPO09gq
-   rTkp7VJcN5ZZpSDozAjLrd5LgiML00ivUEx+KeBAZu5RyD9jqgW2YxLBq
-   w16/XqfpJXe09IAL6VKcG08fYMcph7gFJQ4swsmyjcnhisZLUz70NimeB
-   prutlEAtzikdiOjpt1zagZC11CRxRBgWFStPAbztp7sVi2yRmJ+JivNZ5
-   hTcTpi6fvPv5suyTbYd2HiaEkoU5K7ZjAYTvBxI13+I5snAN+Z4HAGMDF
-   oL/Yn5sERSfyr0nnmG+bNCIJ6ZPRGsrkyHTJklBbOKS13DJWKfdGMh86w
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="266032798"
+  bh=t935uiHDr0FwSTZ51xfRHQyUrAV/YgeTPxzpxBGwWOI=;
+  b=XPquN0KkzxaPxJO4op2c5nQk0PrU1KxfukkeUcyDdf3LFGx1c3zy4zFQ
+   W7x+/ZUnfkl12jNwuPYJy+/tNnKilck6hKhbIdkGM5znShKHz8k5qvcAt
+   gsvcFra5uCAxDdm8QCm5FipWX0cC6TZKj7uMwphZYqXiwgJ6ViUVKh1ru
+   lovfmQrsXsc8gSJ1Ndo+YrfCHOaoR/kmsuRX/aHMFyPE1fUC5sXnxcHRk
+   9X6k+wazpJipxsgQY7v6c406F0cDeaRM5VKrfQe1lehO234BBc525x3xd
+   DdSgBtjCSsc0G8zxuliw7Z4dfIPZV26ESR2vjPsXzTDRJA2wpqgpADdNF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267284209"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="266032798"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:25:56 -0700
+   d="scan'208";a="267284209"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:46:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="709423885"
+   d="scan'208";a="665448955"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 May 2022 04:25:53 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 06 May 2022 04:46:00 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nmw5o-000DPn-M6;
-	Fri, 06 May 2022 11:25:52 +0000
-Date: Fri, 6 May 2022 19:25:24 +0800
+	id 1nmwPI-000DQW-30;
+	Fri, 06 May 2022 11:46:00 +0000
+Date: Fri, 6 May 2022 19:45:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qin Jian <qinjian@cqplus1.com>, krzysztof.kozlowski@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
-	mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-	maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-	arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH v14 8/9] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Message-ID: <202205061902.b3IMQRUc-lkp@intel.com>
-References: <e15ca64a9c62fe8cae970d6fe2b73f8a73966dd3.1651805790.git.qinjian@cqplus1.com>
+To: Paran Lee <p4ranlee@gmail.com>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Roman Gushchin <roman.gushchin@linux.dev>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+	Oliver Glitta <glittao@gmail.com>,
+	Austin Kim <austindh.kim@gmail.com>
+Subject: Re: [PATCH] slub: kunit catch kmem_cache_alloc failed
+Message-ID: <202205061914.zGa4ozYg-lkp@intel.com>
+References: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,164 +56,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e15ca64a9c62fe8cae970d6fe2b73f8a73966dd3.1651805790.git.qinjian@cqplus1.com>
+In-Reply-To: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
 
-Hi Qin,
+Hi Paran,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on pza/reset/next]
-[also build test WARNING on clk/clk-next tip/irq/core linus/master v5.18-rc5 next-20220506]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc5 next-20220506]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220506/202205061902.b3IMQRUc-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Paran-Lee/slub-kunit-catch-kmem_cache_alloc-failed/20220506-125540
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fe27d189e3f42e31d3c8223d5daed7285e334c5e
+config: hexagon-randconfig-r014-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061914.zGa4ozYg-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/5e6762b3fc12b5c86bf345c0c3bbfa788ed1bda7
+        # https://github.com/intel-lab-lkp/linux/commit/4827e156a14ba66c648125c98967c96178ca024d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
-        git checkout 5e6762b3fc12b5c86bf345c0c3bbfa788ed1bda7
+        git fetch --no-tags linux-review Paran-Lee/slub-kunit-catch-kmem_cache_alloc-failed/20220506-125540
+        git checkout 4827e156a14ba66c648125c98967c96178ca024d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/clk-sp7021.c:325:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           reg  = HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
-           (m << 16) | FIELD_PREP(m, value);       \
-                       ^~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:326:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           reg |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
-           (m << 16) | FIELD_PREP(m, value);       \
-                       ^~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:327:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           reg |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
-           (m << 16) | FIELD_PREP(m, value);       \
-                       ^~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:328:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           reg |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
-           (m << 16) | FIELD_PREP(m, value);       \
-                       ^~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/clk/clk-sp7021.c:331:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           reg  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
-           (m << 16) | FIELD_PREP(m, value);       \
-                       ^~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>> lib/slub_kunit.c:40:16: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           unsigned long tmp;
+                         ^
+   1 warning generated.
 
 
-vim +325 drivers/clk/clk-sp7021.c
+vim +40 lib/slub_kunit.c
 
-835254e31aec3c Qin Jian 2022-05-06  320  
-835254e31aec3c Qin Jian 2022-05-06  321  static void plltv_set_rate(struct sp_pll *clk)
-835254e31aec3c Qin Jian 2022-05-06  322  {
-835254e31aec3c Qin Jian 2022-05-06  323  	u32 reg;
-835254e31aec3c Qin Jian 2022-05-06  324  
-835254e31aec3c Qin Jian 2022-05-06 @325  	reg  = HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-835254e31aec3c Qin Jian 2022-05-06  326  	reg |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-835254e31aec3c Qin Jian 2022-05-06  327  	reg |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-835254e31aec3c Qin Jian 2022-05-06  328  	reg |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-835254e31aec3c Qin Jian 2022-05-06  329  	writel(reg, clk->reg);
-835254e31aec3c Qin Jian 2022-05-06  330  
-835254e31aec3c Qin Jian 2022-05-06  331  	reg  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-835254e31aec3c Qin Jian 2022-05-06  332  	writel(reg, clk->reg + 4);
-835254e31aec3c Qin Jian 2022-05-06  333  
-835254e31aec3c Qin Jian 2022-05-06  334  	reg  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
-835254e31aec3c Qin Jian 2022-05-06  335  	reg |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
-835254e31aec3c Qin Jian 2022-05-06  336  	writel(reg, clk->reg + 8);
-835254e31aec3c Qin Jian 2022-05-06  337  }
-835254e31aec3c Qin Jian 2022-05-06  338  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  28  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  29  #ifndef CONFIG_KASAN
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  30  static void test_next_pointer(struct kunit *test)
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  31  {
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  32  	struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  33  				SLAB_POISON, NULL);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  34  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+4827e156a14ba6 Paran Lee     2022-05-06  35  	if (!p) {
+4827e156a14ba6 Paran Lee     2022-05-06  36  		kunit_err(test, "Allocation failed: %s\n", __func__);
+4827e156a14ba6 Paran Lee     2022-05-06  37  		kmem_cache_destroy(s);
+4827e156a14ba6 Paran Lee     2022-05-06  38  		return;
+4827e156a14ba6 Paran Lee     2022-05-06  39  	}
+1f9f78b1b376f8 Oliver Glitta 2021-06-28 @40  	unsigned long tmp;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  41  	unsigned long *ptr_addr;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  42  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  43  	kmem_cache_free(s, p);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  44  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  45  	ptr_addr = (unsigned long *)(p + s->offset);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  46  	tmp = *ptr_addr;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  47  	p[s->offset] = 0x12;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  48  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  49  	/*
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  50  	 * Expecting three errors.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  51  	 * One for the corrupted freechain and the other one for the wrong
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  52  	 * count of objects in use. The third error is fixing broken cache.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  53  	 */
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  54  	validate_slab_cache(s);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  55  	KUNIT_EXPECT_EQ(test, 3, slab_errors);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  56  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  57  	/*
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  58  	 * Try to repair corrupted freepointer.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  59  	 * Still expecting two errors. The first for the wrong count
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  60  	 * of objects in use.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  61  	 * The second error is for fixing broken cache.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  62  	 */
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  63  	*ptr_addr = tmp;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  64  	slab_errors = 0;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  65  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  66  	validate_slab_cache(s);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  67  	KUNIT_EXPECT_EQ(test, 2, slab_errors);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  68  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  69  	/*
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  70  	 * Previous validation repaired the count of objects in use.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  71  	 * Now expecting no error.
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  72  	 */
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  73  	slab_errors = 0;
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  74  	validate_slab_cache(s);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  75  	KUNIT_EXPECT_EQ(test, 0, slab_errors);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  76  
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  77  	kmem_cache_destroy(s);
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  78  }
+1f9f78b1b376f8 Oliver Glitta 2021-06-28  79  
 
 -- 
 0-DAY CI Kernel Test Service
