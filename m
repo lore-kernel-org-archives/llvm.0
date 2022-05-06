@@ -1,21 +1,21 @@
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [83.166.143.175])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD697F
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:00:00 +0000 (UTC)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-	by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwHr6bv2zMqSHG;
-	Fri,  6 May 2022 17:59:52 +0200 (CEST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F587F
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:05:29 +0000 (UTC)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwHp14YjzMq1Pq;
+	Fri,  6 May 2022 17:59:50 +0200 (CEST)
 Received: from localhost (unknown [23.97.221.149])
-	by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwHq1CRGzljsTN;
-	Fri,  6 May 2022 17:59:51 +0200 (CEST)
+	by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwHn67n9zlhRVR;
+	Fri,  6 May 2022 17:59:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1651852792;
-	bh=wXt5V32MOkd3JJdPG9GwDCkPTH/BF8OWATmyHyUQ6Gs=;
+	s=20191114; t=1651852790;
+	bh=ZKdObc4dUw8b1ppw9KF6MlLviIGEalnvEuIINAYEM+o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lRc3SrWTV3AmR/r28718FJBdJMqWCLH3epIPUkeDPP5Fvsxo0yTfsoSPEIx8a41Y3
-	 eD6qhRb2ozK76zekD+h18j4KhJ0cqak1Vg21qn/w3LrH6g6XnjHr5Ez123dytbMtSe
-	 g6zCe59CnX4hyrlxED8pwmtjPGgn6C06qu7PKqFk=
+	b=eA96egW46rPu6iKJNmfwWCOXFRzp+ZVSbJ0AMdxdU5kSEzBL9zS+zxnjwu7B/RZcJ
+	 doSlHACIFWkWTM4fL5RGJMrpgw9mfE5aF2Z+QrJjDE5FYn7m1M7GJV9CbM+fuMyShE
+	 sBMgM4qWA+Obbr1ij98sMJMxnhvb4o6GpAHQJGmE=
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Miguel Ojeda <ojeda@kernel.org>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
@@ -33,9 +33,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	Tom Rix <trix@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 5/5] clang-format: Fix space after for_each macros
-Date: Fri,  6 May 2022 18:01:06 +0200
-Message-Id: <20220506160106.522341-6-mic@digikod.net>
+Subject: [PATCH v2 3/5] clang-format: Fix goto labels indentation
+Date: Fri,  6 May 2022 18:01:04 +0200
+Message-Id: <20220506160106.522341-4-mic@digikod.net>
 In-Reply-To: <20220506160106.522341-1-mic@digikod.net>
 References: <20220506160106.522341-1-mic@digikod.net>
 Precedence: bulk
@@ -47,48 +47,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Set SpaceBeforeParens to ControlStatementsExceptForEachMacros to not add
-space between a for_each macro and the following parenthesis.  This
-option is available since clang-format-11 [1] and is in line with the
-checkpatch.pl rules [2].
-
-I found that this patch has also been sent by Brian Norris some weeks
-ago [3].
+Thanks to IndentGotoLabels introduced with clang-format-10 [1], we can
+avoid goto labels identation.  This follows the current coding style and
+it is then in line with the checkpatch.pl rules [2].
 
 Link: https://clang.llvm.org/docs/ClangFormatStyleOptions.html [1]
 Link: https://lore.kernel.org/r/8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net [2]
-Link: https://lore.kernel.org/lkml/YmHuZjmP9MxkgJ0R@google.com/ [3]
 Cc: Miguel Ojeda <ojeda@kernel.org>
 Cc: Tom Rix <trix@redhat.com>
-Co-developed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20220506160106.522341-6-mic@digikod.net
+Link: https://lore.kernel.org/r/20220506160106.522341-4-mic@digikod.net
 ---
- .clang-format | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .clang-format | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/.clang-format b/.clang-format
-index 235f7bb8f84a..1e083df1a689 100644
+index 3bc1bdf0f3a1..30f68219c09e 100644
 --- a/.clang-format
 +++ b/.clang-format
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #
--# clang-format configuration file. Intended for clang-format >= 6.
-+# clang-format configuration file. Intended for clang-format >= 11.
- #
- # For more information, see:
- #
-@@ -667,7 +667,7 @@ SpaceAfterTemplateKeyword: true
- SpaceBeforeAssignmentOperators: true
- SpaceBeforeCtorInitializerColon: true
- SpaceBeforeInheritanceColon: true
--SpaceBeforeParens: ControlStatements
-+SpaceBeforeParens: ControlStatementsExceptForEachMacros
- SpaceBeforeRangeBasedForLoopColon: true
- SpaceInEmptyParentheses: false
- SpacesBeforeTrailingComments: 1
+@@ -633,6 +633,7 @@ IncludeCategories:
+     Priority: 1
+ IncludeIsMainRegex: '(Test)?$'
+ IndentCaseLabels: false
++IndentGotoLabels: false
+ IndentPPDirectives: None
+ IndentWidth: 8
+ IndentWrappedFunctionNames: false
 -- 
 2.35.1
 
