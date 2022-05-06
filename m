@@ -1,43 +1,30 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF95A33C4
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 20:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651867698; x=1683403698;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=36tOLME8tLydXyELJoXPs6Juu6fr2MpYy+50gIjcGTc=;
-  b=E0DQw4HGHTEvlQHjPGrQACXhRHWjfeDQiQPZa3m58g9pxolCCvk+VUPA
-   3O6OYlpl1hYC1td/pwlBGYRIuVHbp7FelAuBI6aGYg40UHfUPqTQi4ga+
-   KwnissqhG8Ol6BDWdiAI7E9sOM+oxshs/PDR2BQ4C3BeVq40rV2KLymc7
-   4JcprhQdnf21FJVnWFd99+ZxOUNH2cVlPo2nyGmAu2+Ed0vTLvV9RONTf
-   vf6o9kthlTsRuBy+kPFDxbfk9x3OecYCryy5/AJfFPz6avSoeAr/WGQSi
-   4VwUfNTVdsBGZ6jWUlsC7P3XAGo1+JDMryaO5tRcgg/fJpxlt1KaeUbjB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267402979"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="267402979"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:08:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="812532872"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 13:08:16 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nn4FM-000DqZ-9w;
-	Fri, 06 May 2022 20:08:16 +0000
-Date: Sat, 7 May 2022 04:07:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-cleanups-v2-drv-owner-wip 7/7]
- drivers/target/loopback/tcm_loop.c:314:3: error: field designator 'module'
- does not refer to any field in type 'struct scsi_host_template'
-Message-ID: <202205070341.800VDMqg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE473D7B
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 21:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CB8C385A8;
+	Fri,  6 May 2022 21:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651873825;
+	bh=C1WgvDTrsdFQDpie7GvorQalkinTyCMq4IOsxxaE93s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H0vA0cSnSY8xX+24xCc0Gk0rX2+exhkFMnIoLQ1DWP3FgTGSMzx0YzRbHFS8jLRVG
+	 HH8xcJ4lj7fg8p4fWH+3S8SuQbqTzvJmUrZmTN1BZVyLSLxjoLbX4S2c7hD22GY5Hb
+	 059JfWfLHnfbcEJBxgK6/fxglazs7y55jlaYqnuG/tpSNJY4l/k+r8RrDt/p3sJEGc
+	 zcansRzWIAHShUvhrwKs+8ezR4guqYk/AeQunHWS/Awlpg5Xoit+W463JYvLNVhOwm
+	 u4qw34cRe1HaFmnfuhw6bSRU118Mc14GJ+1YvHp/XrFV3xVSxw3sltOMgMDAE2B4Dk
+	 yPy/srrMTzVgg==
+Date: Fri, 6 May 2022 14:50:23 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: ksummit-discuss@lists.linuxfoundation.org, linux-kernel@vger.kernel.org,
+	kbuild@lists.01.org, lkp@intel.com, llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: uninitialized variables bugs
+Message-ID: <YnWYHzQC4Y55sOsT@dev-arch.thelio-3990X>
+References: <20220506091338.GE4031@kadam>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,62 +33,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220506091338.GE4031@kadam>
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
-head:   17609caecd53df20f631703ea084a70e7735b5d7
-commit: 17609caecd53df20f631703ea084a70e7735b5d7 [7/7] WIP
-config: hexagon-randconfig-r026-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070341.800VDMqg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/17609caecd53df20f631703ea084a70e7735b5d7
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
-        git checkout 17609caecd53df20f631703ea084a70e7735b5d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/target/loopback/
+Hi Dan,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, May 06, 2022 at 12:13:38PM +0300, Dan Carpenter wrote:
+> Ever since commit 78a5255ffb6a ("Stop the ad-hoc games with
+> -Wno-maybe-initialized"), GCC's uninitialized variable warnings have
+> been disabled by default.  Now, you have to turn on W=1 or W=2 to see
+> the warnings which nobody except Arnd does.
 
-All errors (new ones prefixed by >>):
+Thank you a lot for bringing this up; the situation does leave much to
+be desired from my side, as I am having to fix quite a number of these
+issues because people just are not seeing them and they break our builds
+because of CONFIG_WERROR (as they should).
 
->> drivers/target/loopback/tcm_loop.c:314:3: error: field designator 'module' does not refer to any field in type 'struct scsi_host_template'
-           .module                 = THIS_MODULE,
-            ^
-   1 error generated.
+> Disabling that has lead to a bunch of embarrassing bugs where variables
+> are *never* initialized.  Very unsubtle bugs.  The bugs doesn't reach
+> users because Nathan Chancellor and I review Clang and Smatch warnings
+> respectively.  Also the kbuild-bot reports uninitialized variables.
 
+Thankfully, I believe the situation is a lot less worse than it could be
+because the kbuild test robot tests with clang and finds these before
+they make it into any tree:
 
-vim +314 drivers/target/loopback/tcm_loop.c
+https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wuninitialized
+https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wsometimes-uninitialized
 
-8f4a1fb0d029fe Hannes Reinecke    2013-10-16  300  
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  301  static struct scsi_host_template tcm_loop_driver_template = {
-8946b077ca385a Al Viro            2013-03-31  302  	.show_info		= tcm_loop_show_info,
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  303  	.proc_name		= "tcm_loopback",
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  304  	.name			= "TCM_Loopback",
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  305  	.queuecommand		= tcm_loop_queuecommand,
-db5ed4dfd5dd01 Christoph Hellwig  2014-11-13  306  	.change_queue_depth	= scsi_change_queue_depth,
-969871cdc2d0f5 Hannes Reinecke    2013-10-16  307  	.eh_abort_handler = tcm_loop_abort_task,
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  308  	.eh_device_reset_handler = tcm_loop_device_reset,
-8f4a1fb0d029fe Hannes Reinecke    2013-10-16  309  	.eh_target_reset_handler = tcm_loop_target_reset,
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  310  	.this_id		= -1,
-2e88efd3aaafa0 Christoph Hellwig  2011-11-29  311  	.sg_tablesize		= 256,
-2e88efd3aaafa0 Christoph Hellwig  2011-11-29  312  	.max_sectors		= 0xFFFF,
-4af14d113bcf95 Christoph Hellwig  2018-12-13  313  	.dma_boundary		= PAGE_SIZE - 1,
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18 @314  	.module			= THIS_MODULE,
-c40ecc12cfdb63 Christoph Hellwig  2014-11-13  315  	.track_queue_depth	= 1,
-e0eb5d38b732b0 Mike Christie      2021-02-27  316  	.cmd_size		= sizeof(struct tcm_loop_cmd),
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  317  };
-3703b2c5d041a6 Nicholas Bellinger 2011-03-18  318  
+> It's a lot to deal with.  Uninitialized variable bugs are probably the
+> most common bug I have to deal with.
 
-:::::: The code at line 314 was first introduced by commit
-:::::: 3703b2c5d041a68095cdd22380c23ce27d449ad7 [SCSI] tcm_loop: Add multi-fabric Linux/SCSI LLD fabric module
+Agreed.
 
-:::::: TO: Nicholas Bellinger <nab@linux-iscsi.org>
-:::::: CC: James Bottomley <James.Bottomley@suse.de>
+> It's frustrating.  Sometimes the false positives are hard to analyse
+> because I have to read through multiple functions.  A lot of times
+> when I write a patch and a commit message Nathan has already fixed it
+> so it's just a waste of time.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sorry :( I should be better about either cc'ing you directly or adding
+the kernel-janitors mailing list, as there are others who would benefit
+from seeing these patches fly by. I know that isn't really the point of
+the email but I'll try to make your life easier in the future.
+
+> It's risky as well.  The Smatch check for uninitialized variables was
+> broken for most of 2021.  Nathan sometimes goes on vacation.
+> 
+> I guess I would hope that one day we can turn on the GCC uninitialized
+> variable warnings again.  That would mean silencing false positives
+> which a lot of people don't want to do...  Maybe Clang has fewer false
+> positives than GCC?
+
+Yes, clang does have fewer false positives than GCC for a couple of
+reasons:
+
+1. As Arnd touched on, Clang's -Wuninitialized and
+-Wsometimes-uninitialized do not check for initializations across
+function boundaries. In your example below with 'read(&val)', clang will
+assume that read() initializes val. While that does mean that there is
+slightly less coverage, it does drives the false positive rate way down,
+almost to zero. There are occasionally times where clang fails to figure
+out certain conditions which will avoid an uninitialized use but I
+believe that means the code is not as clear as it could be. For example,
+commit 118de6106735 ("net: ethernet: rmnet: Restructure if checks to
+avoid uninitialized warning").
+
+2. clang used to only have these warnings under
+-Wconditional-uninitialized, which suffers from the same issue as
+-Wmaybe-uninitialized ("maybe it is uninitialized?").
+-Wsometimes-uninitialized was split off from that warning back in 2011
+to be more assertive ("this IS uninitialized if these conditions hold"):
+
+https://github.com/llvm/llvm-project/commit/4323bf8e2e5135c49f814940b2b546298c01ecbc
+
+Perhaps GCC could consider something to this?
+
+Clang's static analyzer, which Tom regularly runs, will check variables
+across function boundaries. I am not sure what the false positive rate
+on that check is but it does turn up issues like smatch does.
+
+> The Smatch check for uninitialized variable was deliberately written to
+> be more strict than GCC because GCC was missing bugs.  So I think
+> leaving Smatch false positives is fine.  There is a trade off between
+> fewer false positives and missing bugs and Smatch is meant to err on the
+> side of finding bugs but with the cost of false positives.
+
+I would agree with this too.
+
+Cheers,
+Nathan
