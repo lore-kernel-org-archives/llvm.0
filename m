@@ -1,33 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1022862A
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6231DC385A8;
-	Fri,  6 May 2022 16:49:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651855756;
-	bh=kMsGmkJ+Xrc4/MbwXnnOKyG6OyT2xeuPISMz+O+QKcE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oEftss9Q2h8A2+YSwXVGNqSkK4QcwTxCLONQ0JuSrd88r4+q8VBxcyv7TYY7HfKAk
-	 eQ1qySDJYXm9b0mxaCUrLHG2MokdUFTUL0lex8C0mLuCoc+LMa3PEhdTIy/rPIYTd1
-	 CyFJvWL4StYqLyOOFzSzgJpDP/w/GvT5tEGUDKElKemL1JblCLsetRyXDc8Z1xIx2w
-	 +rGQIZgmK29pqhYj95EGkYyA20f5sMV0ZUWriY1WWodmLZCWwpahn+GCfEReULdzAu
-	 D34t4xX0wAzsOLOz1nf/2Sp5pWxpFmZ7v4t6OBbJyELrO1qr5T7hWs4EN9t1gv9D4c
-	 HIiBxio4/L1Hg==
-Date: Fri, 6 May 2022 09:49:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Leonardo Bras Soares Passos <leobras@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: ld.lld: error: inline assembly requires more registers than
- available at line 523
-Message-ID: <YnVRiiTeDjmcuo4o@dev-arch.thelio-3990X>
-References: <202205020637.JVJo3blw-lkp@intel.com>
- <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
- <CAJ6HWG5P6LXEY80tcXxtfvnPnhiNcqUvV+xyKygLbcw37UFvyw@mail.gmail.com>
- <YnL/BVvd78zIkwil@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96298A5B
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 16:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651856278; x=1683392278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C4xl3D7B9gT1f6Bq0vyZdhuycmcUGIGXjPtyEFigCCE=;
+  b=L1kcqi+jtBfevhyRMCJN7Iuun4LdN/yYOL01VgANN6ikWwdnJVXRxPil
+   aZmZwqSfX7OKcokCMPfCQmrE+5TUraMmPdNmduZHiqnnfpNV7iB0IEWVe
+   n7SCCafggitfQQHwwSoXRMqizozn0GvL3AJXxHKc2Xq2rfCiO9bAExypi
+   qtPxw7+d2AtTSEDTzzHifSQpyLnmb/aeaZt3Iph9kdqu4KmLVgbbvgq6x
+   FZ9KjKjoRAZNjHzXpcej3v1nEAGj5pC1Eh/C44k1+yYr06zckwx1R2rqc
+   QtdzphzcY5vFcS0TqthYUS322YFNiksLXDHBsbB89pOW5WgZmhvwwnn6M
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268136050"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="268136050"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 09:54:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="633013528"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 06 May 2022 09:54:46 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nn1E6-000Dfy-7m;
+	Fri, 06 May 2022 16:54:46 +0000
+Date: Sat, 7 May 2022 00:54:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liang Chen <liangchen.linux@gmail.com>, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, hch@infradead.org,
+	jmoyer@redhat.com, jack@suse.cz, lczerner@redhat.com,
+	Liang Chen <liangchen.linux@gmail.com>
+Subject: Re: [PATCH] fs: Fix page cache inconsistency when mixing buffered
+ and AIO DIO for bdev
+Message-ID: <202205070030.wgFHZ8hk-lkp@intel.com>
+References: <20220506135709.46872-1-lchen@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,103 +48,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnL/BVvd78zIkwil@dev-arch.thelio-3990X>
+In-Reply-To: <20220506135709.46872-1-lchen@localhost.localdomain>
 
-On Wed, May 04, 2022 at 03:32:37PM -0700, Nathan Chancellor wrote:
-> Hi Leo,
-> 
-> On Wed, May 04, 2022 at 03:13:56PM -0300, Leonardo Bras Soares Passos wrote:
-> > On Wed, May 4, 2022 at 2:55 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-> > > > commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
-> > > > date:   2 months ago
-> > > > config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
-> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
-> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > >         git fetch --no-tags linus master
-> > > >         git checkout ba1f77c546966c12d86220d078e5838dcaeab348
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > > >> ld.lld: error: inline assembly requires more registers than available at line 523
-> > > > >> ld.lld: error: inline assembly requires more registers than available at line 523
-> > > >
-> > >
-> > > I don't think this bisection result is correct; this error is visible at
-> > > v5.17-rc3, which this commit is based on. This is likely the same root
-> > > cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
-> > > LTO. I'll reduce something down and comment there if it turns out to be
-> > > different.
-> > >
-> > > Cheers,
-> > > Nathan
-> > >
-> > 
-> > Hello Nathan,
-> > I went down on this issue, but I have no idea how to proceed. These
-> > are my findings:
-> > - This commit (ba1f77c546966c12d86220d078e5838dcaeab348) fixes the
-> > build, thus allowing this error to happen later (in LTO stage)
-> > - The commit that introduced this issue was 69d0db01e210, due to removing :
-> >    ubsan-cflags-$(CONFIG_UBSAN_OBJECT_SIZE)       += -fsanitize=object-size
-> > - Only by having this flag enabled in ubsan-cflags-y on
-> > torvalds/master causes the build to succeed
-> 
-> Ah, thanks for that investigation!
-> 
-> > At this point, given the commit message in 69d0db01e210 I was thinking
-> > of finding & fixing the code that causes the ld.lld error to happen,
-> > but I was lacking the skills to extract any filename from LTO step.
-> 
-> Right, this is not always easy with full LTO :( unfortunately, this
-> issue is not reproducible with either no LTO or ThinLTO... When issues
-> like this have come up in the past, I have had success linking
-> individual object files/archives but that has not worked for this issue.
-> I am going to try and bisect this randconfig against a defconfig and see
-> if there is a minimal set of configs that reproduces this issue, which
-> might make it easier to see what is going on here.
-> 
-> > But it's also possible to create a patch just adding
-> > 'ubsan-cflags-$(CONFIG_SOMETHING)      += -fsanitize=object-size'
-> > and fix this build.
-> 
-> Right, although that is basically reverting 69d0db01e210 for just that
-> configuration, which we don't want to do for the reasons outlined in
-> that commit message.
-> 
-> I'll see what comes of this config bisect.
+Hi Liang,
 
-i386_defconfig + CONFIG_LTO_CLANG_FULL=y + CONFIG_X86_GENERIC=y is
-enough to reproduce this:
+Thank you for the patch! Perhaps something to improve:
 
-$ make -skj"$(nproc)" ARCH=i386 LLVM=1 mrproper defconfig
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-$ scripts/config -d LTO_NONE -e LTO_CLANG_FULL -e X86_GENERIC
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-Chen/fs-Fix-page-cache-inconsistency-when-mixing-buffered-and-AIO-DIO-for-bdev/20220506-215958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: riscv-randconfig-r024-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070030.wgFHZ8hk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2b2bda510e6c93a57581021c675b023d2f43e81e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liang-Chen/fs-Fix-page-cache-inconsistency-when-mixing-buffered-and-AIO-DIO-for-bdev/20220506-215958
+        git checkout 2b2bda510e6c93a57581021c675b023d2f43e81e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-$ make -skj"$(nproc)" ARCH=i386 LLVM=1 olddefconfig all
-ld.lld: error: inline assembly requires more registers than available at line 538
-ld.lld: error: inline assembly requires more registers than available at line 538
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-We have a known issue with 32-bit x86 '-march='/'-mtune=' and running
-out of registers can be reproduced without LTO:
+All warnings (new ones prefixed by >>):
 
-https://github.com/ClangBuiltLinux/linux/issues/1589
+>> block/fops.c:423:5: warning: no previous prototype for function 'blkdev_sb_init_dio_done_wq' [-Wmissing-prototypes]
+   int blkdev_sb_init_dio_done_wq(struct super_block *sb)
+       ^
+   block/fops.c:423:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int blkdev_sb_init_dio_done_wq(struct super_block *sb)
+   ^
+   static 
+   1 warning generated.
 
-Until there is a fix for that, I don't think that it is worth
-investigating this further.
 
-Cheers,
-Nathan
+vim +/blkdev_sb_init_dio_done_wq +423 block/fops.c
+
+   422	
+ > 423	int blkdev_sb_init_dio_done_wq(struct super_block *sb)
+   424	{
+   425		struct workqueue_struct *old;
+   426		struct workqueue_struct *wq = alloc_workqueue("dio/%s",
+   427							     WQ_MEM_RECLAIM, 0,
+   428							     sb->s_id);
+   429		if (!wq)
+   430		       return -ENOMEM;
+   431		/*
+   432		 * This has to be atomic as more DIOs can race to create the workqueue
+   433		 */
+   434		old = cmpxchg(&sb->s_dio_done_wq, NULL, wq);
+   435		/* Someone created workqueue before us? Free ours... */
+   436		if (old)
+   437			destroy_workqueue(wq);
+   438	       return 0;
+   439	}
+   440	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
