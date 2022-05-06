@@ -1,43 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50E833C4
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 19:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF95A33C4
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 20:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651867037; x=1683403037;
+  t=1651867698; x=1683403698;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uYRkZxq284hBgLYVBBOMExlEwOFRqIM06/cOZnkT7fg=;
-  b=csNxO+t1CYkZukQYvNnELqcDN758fgwJEvuWyg2lWL6lYTBlTUDR28K1
-   nDlJA+2Nc8dDe0MpDlA9OGMwhKzP1NgG9uH5vUrACL5+dzoFQDyvFlUkk
-   HNwTXPXVhNPT0QGLcgC8CJiFrTraPLtRifLz2Fc7UwV+4MSty2gXdZ8XA
-   qyrnwQdqW2QLdYnhzZBiO6aJo/MCC5/gnMRk2F2II0ZaNDo4jaqRIOS8t
-   WX+p1YRpRydWiptd5Ain/e7P4LnJPyQ8Ry6lNppExUkHy0xYL0y7W5GAp
-   pxHZ2ZTJdcrQQNxALsquHsx367pUfVSzGEb3Ao738tpVVBASG0m4Iku9Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268181596"
+  bh=36tOLME8tLydXyELJoXPs6Juu6fr2MpYy+50gIjcGTc=;
+  b=E0DQw4HGHTEvlQHjPGrQACXhRHWjfeDQiQPZa3m58g9pxolCCvk+VUPA
+   3O6OYlpl1hYC1td/pwlBGYRIuVHbp7FelAuBI6aGYg40UHfUPqTQi4ga+
+   KwnissqhG8Ol6BDWdiAI7E9sOM+oxshs/PDR2BQ4C3BeVq40rV2KLymc7
+   4JcprhQdnf21FJVnWFd99+ZxOUNH2cVlPo2nyGmAu2+Ed0vTLvV9RONTf
+   vf6o9kthlTsRuBy+kPFDxbfk9x3OecYCryy5/AJfFPz6avSoeAr/WGQSi
+   4VwUfNTVdsBGZ6jWUlsC7P3XAGo1+JDMryaO5tRcgg/fJpxlt1KaeUbjB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267402979"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="268181596"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:57:17 -0700
+   d="scan'208";a="267402979"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:08:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="621960221"
+   d="scan'208";a="812532872"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 May 2022 12:57:15 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 13:08:16 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nn44g-000DpV-Ud;
-	Fri, 06 May 2022 19:57:14 +0000
-Date: Sat, 7 May 2022 03:57:05 +0800
+	id 1nn4FM-000DqZ-9w;
+	Fri, 06 May 2022 20:08:16 +0000
+Date: Sat, 7 May 2022 04:07:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
 Subject: [krzk-github:n/qcom-ufs-opp-cleanups-v2-drv-owner-wip 7/7]
- drivers/scsi/hosts.c:380: warning: expecting prototype for
- scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
-Message-ID: <202205070318.9CFPkpJP-lkp@intel.com>
+ drivers/target/loopback/tcm_loop.c:314:3: error: field designator 'module'
+ does not refer to any field in type 'struct scsi_host_template'
+Message-ID: <202205070341.800VDMqg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,197 +50,57 @@ Content-Disposition: inline
 tree:   https://github.com/krzk/linux n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
 head:   17609caecd53df20f631703ea084a70e7735b5d7
 commit: 17609caecd53df20f631703ea084a70e7735b5d7 [7/7] WIP
-config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20220507/202205070318.9CFPkpJP-lkp@intel.com/config)
+config: hexagon-randconfig-r026-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070341.800VDMqg-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/krzk/linux/commit/17609caecd53df20f631703ea084a70e7735b5d7
         git remote add krzk-github https://github.com/krzk/linux
         git fetch --no-tags krzk-github n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
         git checkout 17609caecd53df20f631703ea084a70e7735b5d7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/target/loopback/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/scsi/hosts.c:380: warning: Function parameter or member 'owner' not described in '__scsi_host_alloc'
->> drivers/scsi/hosts.c:380: warning: expecting prototype for scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
+>> drivers/target/loopback/tcm_loop.c:314:3: error: field designator 'module' does not refer to any field in type 'struct scsi_host_template'
+           .module                 = THIS_MODULE,
+            ^
+   1 error generated.
 
 
-vim +380 drivers/scsi/hosts.c
+vim +314 drivers/target/loopback/tcm_loop.c
 
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  364  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  365  /**
-^1da177e4c3f41 Linus Torvalds      2005-04-16  366   * scsi_host_alloc - register a scsi host adapter instance.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  367   * @sht:	pointer to scsi host template
-^1da177e4c3f41 Linus Torvalds      2005-04-16  368   * @privsize:	extra bytes to allocate for driver
-^1da177e4c3f41 Linus Torvalds      2005-04-16  369   *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  370   * Note:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  371   * 	Allocate a new Scsi_Host and perform basic initialization.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  372   * 	The host is not published to the scsi midlayer until scsi_add_host
-^1da177e4c3f41 Linus Torvalds      2005-04-16  373   * 	is called.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  374   *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  375   * Return value:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  376   * 	Pointer to a new Scsi_Host
-^1da177e4c3f41 Linus Torvalds      2005-04-16  377   **/
-17609caecd53df Krzysztof Kozlowski 2022-05-06  378  struct Scsi_Host *__scsi_host_alloc(struct scsi_host_template *sht, int privsize,
-17609caecd53df Krzysztof Kozlowski 2022-05-06  379  				    struct module *owner)
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @380  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  381  	struct Scsi_Host *shost;
-0a84486d6c1da1 Bart Van Assche     2021-11-16  382  	int index;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  383  
-aaff5ebaa2694f Christoph Hellwig   2021-03-31  384  	shost = kzalloc(sizeof(struct Scsi_Host) + privsize, GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  385  	if (!shost)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  386  		return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  387  
-4f777ed2608645 Christoph Hellwig   2006-11-04  388  	shost->host_lock = &shost->default_lock;
-4f777ed2608645 Christoph Hellwig   2006-11-04  389  	spin_lock_init(shost->host_lock);
-d3301874083874 Mike Anderson       2005-06-16  390  	shost->shost_state = SHOST_CREATED;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  391  	INIT_LIST_HEAD(&shost->__devices);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  392  	INIT_LIST_HEAD(&shost->__targets);
-5ae17501bc62a4 Ewan D. Milne       2021-10-29  393  	INIT_LIST_HEAD(&shost->eh_abort_list);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  394  	INIT_LIST_HEAD(&shost->eh_cmd_q);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  395  	INIT_LIST_HEAD(&shost->starved_list);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  396  	init_waitqueue_head(&shost->host_wait);
-0b9506723826c6 Arjan van de Ven    2006-01-11  397  	mutex_init(&shost->scan_mutex);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  398  
-126a4fe010fd86 Lee Duncan          2016-01-20  399  	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
-66a834d092930c Ming Lei            2021-06-02  400  	if (index < 0) {
-66a834d092930c Ming Lei            2021-06-02  401  		kfree(shost);
-66a834d092930c Ming Lei            2021-06-02  402  		return NULL;
-66a834d092930c Ming Lei            2021-06-02  403  	}
-126a4fe010fd86 Lee Duncan          2016-01-20  404  	shost->host_no = index;
-126a4fe010fd86 Lee Duncan          2016-01-20  405  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  406  	shost->dma_channel = 0xff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  407  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  408  	/* These three are default values which can be overridden */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  409  	shost->max_channel = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  410  	shost->max_id = 8;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  411  	shost->max_lun = 8;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  412  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  413  	/* Give each shost a default transportt */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  414  	shost->transportt = &blank_transport_template;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  415  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  416  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  417  	 * All drivers right now should be able to handle 12 byte
-^1da177e4c3f41 Linus Torvalds      2005-04-16  418  	 * commands.  Every so often there are requests for 16 byte
-^1da177e4c3f41 Linus Torvalds      2005-04-16  419  	 * commands, but individual low-level drivers need to certify that
-^1da177e4c3f41 Linus Torvalds      2005-04-16  420  	 * they actually do something sensible with such commands.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  421  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  422  	shost->max_cmd_len = 12;
-17609caecd53df Krzysztof Kozlowski 2022-05-06  423  	shost->owner = owner;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  424  	shost->hostt = sht;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  425  	shost->this_id = sht->this_id;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  426  	shost->can_queue = sht->can_queue;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  427  	shost->sg_tablesize = sht->sg_tablesize;
-13f05c8d8e98bb Martin K. Petersen  2010-09-10  428  	shost->sg_prot_tablesize = sht->sg_prot_tablesize;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  429  	shost->cmd_per_lun = sht->cmd_per_lun;
-54b2b50c20a61b Martin K. Petersen  2013-10-23  430  	shost->no_write_same = sht->no_write_same;
-bdb01301f3ea51 Hannes Reinecke     2020-08-19  431  	shost->host_tagset = sht->host_tagset;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  432  
-ad469a57643b32 Hannes Reinecke     2014-01-17  433  	if (shost_eh_deadline == -1 || !sht->eh_host_reset_handler)
-bb3b621a33d60f Ren Mingxin         2013-11-11  434  		shost->eh_deadline = -1;
-bb3b621a33d60f Ren Mingxin         2013-11-11  435  	else if ((ulong) shost_eh_deadline * HZ > INT_MAX) {
-bb3b621a33d60f Ren Mingxin         2013-11-11  436  		shost_printk(KERN_WARNING, shost,
-bb3b621a33d60f Ren Mingxin         2013-11-11  437  			     "eh_deadline %u too large, setting to %u\n",
-bb3b621a33d60f Ren Mingxin         2013-11-11  438  			     shost_eh_deadline, INT_MAX / HZ);
-bb3b621a33d60f Ren Mingxin         2013-11-11  439  		shost->eh_deadline = INT_MAX;
-bb3b621a33d60f Ren Mingxin         2013-11-11  440  	} else
-bb3b621a33d60f Ren Mingxin         2013-11-11  441  		shost->eh_deadline = shost_eh_deadline * HZ;
-bb3b621a33d60f Ren Mingxin         2013-11-11  442  
-7a39ac3f25bef0 James Bottomley     2007-09-25  443  	if (sht->supported_mode == MODE_UNKNOWN)
-7a39ac3f25bef0 James Bottomley     2007-09-25  444  		/* means we didn't set it ... default to INITIATOR */
-7a39ac3f25bef0 James Bottomley     2007-09-25  445  		shost->active_mode = MODE_INITIATOR;
-7a39ac3f25bef0 James Bottomley     2007-09-25  446  	else
-7a39ac3f25bef0 James Bottomley     2007-09-25  447  		shost->active_mode = sht->supported_mode;
-7a39ac3f25bef0 James Bottomley     2007-09-25  448  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  449  	if (sht->max_host_blocked)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  450  		shost->max_host_blocked = sht->max_host_blocked;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  451  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  452  		shost->max_host_blocked = SCSI_DEFAULT_HOST_BLOCKED;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  453  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  454  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  455  	 * If the driver imposes no hard sector transfer limit, start at
-^1da177e4c3f41 Linus Torvalds      2005-04-16  456  	 * machine infinity initially.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  457  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  458  	if (sht->max_sectors)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  459  		shost->max_sectors = sht->max_sectors;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  460  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  461  		shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  462  
-50c2e9107f176a Christoph Hellwig   2018-12-13  463  	if (sht->max_segment_size)
-50c2e9107f176a Christoph Hellwig   2018-12-13  464  		shost->max_segment_size = sht->max_segment_size;
-50c2e9107f176a Christoph Hellwig   2018-12-13  465  	else
-50c2e9107f176a Christoph Hellwig   2018-12-13  466  		shost->max_segment_size = BLK_MAX_SEGMENT_SIZE;
-50c2e9107f176a Christoph Hellwig   2018-12-13  467  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  468  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  469  	 * assume a 4GB boundary, if not set
-^1da177e4c3f41 Linus Torvalds      2005-04-16  470  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  471  	if (sht->dma_boundary)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  472  		shost->dma_boundary = sht->dma_boundary;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  473  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  474  		shost->dma_boundary = 0xffffffff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  475  
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  476  	if (sht->virt_boundary_mask)
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  477  		shost->virt_boundary_mask = sht->virt_boundary_mask;
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  478  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  479  	device_initialize(&shost->shost_gendev);
-71610f55fa4db6 Kay Sievers         2008-12-03  480  	dev_set_name(&shost->shost_gendev, "host%d", shost->host_no);
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  481  	shost->shost_gendev.bus = &scsi_bus_type;
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  482  	shost->shost_gendev.type = &scsi_host_type;
-a19a93e4c6a98c Bart Van Assche     2021-10-06  483  	scsi_enable_async_suspend(&shost->shost_gendev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  484  
-ee959b00c335d7 Tony Jones          2008-02-22  485  	device_initialize(&shost->shost_dev);
-ee959b00c335d7 Tony Jones          2008-02-22  486  	shost->shost_dev.parent = &shost->shost_gendev;
-ee959b00c335d7 Tony Jones          2008-02-22  487  	shost->shost_dev.class = &shost_class;
-71610f55fa4db6 Kay Sievers         2008-12-03  488  	dev_set_name(&shost->shost_dev, "host%d", shost->host_no);
-0a84486d6c1da1 Bart Van Assche     2021-11-16  489  	shost->shost_dev.groups = sht->shost_groups;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  490  
-c5478def7a3a2d Christoph Hellwig   2005-09-06  491  	shost->ehandler = kthread_run(scsi_error_handler, shost,
-c5478def7a3a2d Christoph Hellwig   2005-09-06  492  			"scsi_eh_%d", shost->host_no);
-c5478def7a3a2d Christoph Hellwig   2005-09-06  493  	if (IS_ERR(shost->ehandler)) {
-91921e016a2199 Hannes Reinecke     2014-06-25  494  		shost_printk(KERN_WARNING, shost,
-91921e016a2199 Hannes Reinecke     2014-06-25  495  			"error handler thread failed to spawn, error = %ld\n",
-91921e016a2199 Hannes Reinecke     2014-06-25  496  			PTR_ERR(shost->ehandler));
-93aa71ad737990 Tyrel Datwyler      2021-07-01  497  		shost->ehandler = NULL;
-66a834d092930c Ming Lei            2021-06-02  498  		goto fail;
-c5478def7a3a2d Christoph Hellwig   2005-09-06  499  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  500  
-e494f6a728394a Hannes Reinecke     2013-11-11  501  	shost->tmf_work_q = alloc_workqueue("scsi_tmf_%d",
-6292130093c5d1 Bob Liu             2020-07-01  502  					WQ_UNBOUND | WQ_MEM_RECLAIM | WQ_SYSFS,
-e494f6a728394a Hannes Reinecke     2013-11-11  503  					   1, shost->host_no);
-e494f6a728394a Hannes Reinecke     2013-11-11  504  	if (!shost->tmf_work_q) {
-a222b1e2fe4299 Hannes Reinecke     2014-10-24  505  		shost_printk(KERN_WARNING, shost,
-a222b1e2fe4299 Hannes Reinecke     2014-10-24  506  			     "failed to create tmf workq\n");
-66a834d092930c Ming Lei            2021-06-02  507  		goto fail;
-e494f6a728394a Hannes Reinecke     2013-11-11  508  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  509  	scsi_proc_hostdir_add(shost->hostt);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  510  	return shost;
-66a834d092930c Ming Lei            2021-06-02  511   fail:
-66a834d092930c Ming Lei            2021-06-02  512  	/*
-66a834d092930c Ming Lei            2021-06-02  513  	 * Host state is still SHOST_CREATED and that is enough to release
-66a834d092930c Ming Lei            2021-06-02  514  	 * ->shost_gendev. scsi_host_dev_release() will free
-66a834d092930c Ming Lei            2021-06-02  515  	 * dev_name(&shost->shost_dev).
-66a834d092930c Ming Lei            2021-06-02  516  	 */
-66a834d092930c Ming Lei            2021-06-02  517  	put_device(&shost->shost_gendev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  518  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  519  	return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  520  }
-17609caecd53df Krzysztof Kozlowski 2022-05-06  521  EXPORT_SYMBOL(__scsi_host_alloc);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  522  
+8f4a1fb0d029fe Hannes Reinecke    2013-10-16  300  
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  301  static struct scsi_host_template tcm_loop_driver_template = {
+8946b077ca385a Al Viro            2013-03-31  302  	.show_info		= tcm_loop_show_info,
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  303  	.proc_name		= "tcm_loopback",
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  304  	.name			= "TCM_Loopback",
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  305  	.queuecommand		= tcm_loop_queuecommand,
+db5ed4dfd5dd01 Christoph Hellwig  2014-11-13  306  	.change_queue_depth	= scsi_change_queue_depth,
+969871cdc2d0f5 Hannes Reinecke    2013-10-16  307  	.eh_abort_handler = tcm_loop_abort_task,
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  308  	.eh_device_reset_handler = tcm_loop_device_reset,
+8f4a1fb0d029fe Hannes Reinecke    2013-10-16  309  	.eh_target_reset_handler = tcm_loop_target_reset,
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  310  	.this_id		= -1,
+2e88efd3aaafa0 Christoph Hellwig  2011-11-29  311  	.sg_tablesize		= 256,
+2e88efd3aaafa0 Christoph Hellwig  2011-11-29  312  	.max_sectors		= 0xFFFF,
+4af14d113bcf95 Christoph Hellwig  2018-12-13  313  	.dma_boundary		= PAGE_SIZE - 1,
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18 @314  	.module			= THIS_MODULE,
+c40ecc12cfdb63 Christoph Hellwig  2014-11-13  315  	.track_queue_depth	= 1,
+e0eb5d38b732b0 Mike Christie      2021-02-27  316  	.cmd_size		= sizeof(struct tcm_loop_cmd),
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  317  };
+3703b2c5d041a6 Nicholas Bellinger 2011-03-18  318  
 
-:::::: The code at line 380 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+:::::: The code at line 314 was first introduced by commit
+:::::: 3703b2c5d041a68095cdd22380c23ce27d449ad7 [SCSI] tcm_loop: Add multi-fabric Linux/SCSI LLD fabric module
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: TO: Nicholas Bellinger <nab@linux-iscsi.org>
+:::::: CC: James Bottomley <James.Bottomley@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
