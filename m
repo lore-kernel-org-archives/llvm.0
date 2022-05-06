@@ -1,151 +1,97 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46C07EE
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 07:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39EA7E8
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 08:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651822647; x=1683358647;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6GnqrL7EBjLLoEykq8Y0CQn9hVDmg7VJnwlaAXrMM4I=;
-  b=K6LhcqFP8DawOjoIoPQxqWrOpupeqpYCZYo8okaGEDb4IDXO+upbap6M
-   K/0HqeS7AVJTp72Sw4khgHFoeYxW0COn6Cq8mUea/0UvZrWAoyTwyu3BU
-   GyByz66s7M1Yw0XqcI1jaK/MI2oehWYEsVl2jaHD6oaPS6bV4KNIlHh22
-   4occxNsTo0LRxfoesFyH6buOea+vat/HvJ1tJKZyUaNsQRjgLGwTl0+Im
-   ckkF7uooL10+6d1owT/caAk8jtlw8L4C8qdJr2xGEWKh/n7M04Sw/q3iP
-   95lHLhKPjhApcbHt23j9K5bfRjIauJpTeaHw1fUoi5xuAggW9qT5ODkY8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354817322"
+  t=1651825103; x=1683361103;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=Y9zLQtTXy0kZKf6yRCTG3Y8geAb6dG1MDrIKHxcp2nA=;
+  b=KYD67PJP4VZD525EC3z7cSBo5+HaKUisSBV34SHBDMKWM1ebWzJaIYLJ
+   iD4a3JcUE9YJTEBiiIIlnvbHk2ysWyKH3fgwzbsxXXdv4oYfuqe9h+90g
+   f5rgVTWHq9xEmsvfO/kY9pRSgaWqM+dHIlo5QRKWPdHFi9BbmzbLRb/GD
+   h2OTeLrFccvr49q5EGG9big4RgjVlgZ61DeFT7lQDkbmSDYQAACWGez+e
+   JMdvxA14WoFa9QAmmfsi97iEwltZhv5yFn7qBHKGa+tPZSjzwAwsmGLwt
+   MWUsqb3fLqavs8hmhgtph8f0jtfqPGk5/4wqj2Een9U8+tZujACu2gkfn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331379489"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="354817322"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:37:27 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="331379489"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:18:23 -0700
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="709333660"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 May 2022 00:37:25 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nmsWi-000DFy-MY;
-	Fri, 06 May 2022 07:37:24 +0000
-Date: Fri, 6 May 2022 15:36:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tom <support@vamrs.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 22/55] drivers/soc/sifive/sifive_l2_cache.c:152:3:
- error: call to undeclared function 'writeq'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205061511.HSxGnz59-lkp@intel.com>
+   d="scan'208";a="585850283"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.170.35]) ([10.249.170.35])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:18:21 -0700
+Subject: Re: [kbuild-all] Re: ld.lld: error: inline assembly requires more
+ registers than available at line 523
+To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: Leonardo Bras <leobras@redhat.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+ Paolo Bonzini <pbonzini@redhat.com>
+References: <202205020637.JVJo3blw-lkp@intel.com>
+ <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
+From: "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <01ecf3b7-570f-f36a-9555-25071ab5f336@intel.com>
+Date: Fri, 6 May 2022 16:18:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/esmil/linux visionfive
-head:   f568ecc24aebec8ce1c59b86f2a85098675a4091
-commit: 7fa12d2f832a42a37ff0d8f4dd7569cee4b0b82f [22/55] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-config: riscv-randconfig-r031-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061511.HSxGnz59-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/7fa12d2f832a42a37ff0d8f4dd7569cee4b0b82f
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 7fa12d2f832a42a37ff0d8f4dd7569cee4b0b82f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
-   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   3 warnings and 1 error generated.
+In-Reply-To: <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
 
-vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
 
-   123	
-   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
-   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-   126	{
-   127		unsigned long line;
-   128	
-   129		if(!l2_base) {
-   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-   131			return;
-   132		}
-   133	
-   134		/* TODO: if (len == 0), skipping flush or going on? */
-   135		if(!len) {
-   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-   137			return;
-   138		}
-   139	
-   140		/* make sure the address is in the range */
-   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-   145				start, len);
-   146			return;
-   147		}
-   148	
-   149		mb();	/* sync */
-   150		for (line = start; line < start + len;
-   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
- > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-   153			mb();
-   154		}
-   155	}
-   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-   157	#endif
-   158	
+On 5/5/2022 1:48 AM, Nathan Chancellor wrote:
+> On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+>> commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
+>> date:   2 months ago
+>> config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
+>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout ba1f77c546966c12d86220d078e5838dcaeab348
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>>> ld.lld: error: inline assembly requires more registers than available at line 523
+>>>> ld.lld: error: inline assembly requires more registers than available at line 523
+>>
+> 
+> I don't think this bisection result is correct; this error is visible at
+> v5.17-rc3, which this commit is based on. This is likely the same root
+> cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
+> LTO. I'll reduce something down and comment there if it turns out to be
+> different.
+> 
+> Cheers,
+> Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hi Nathan,
+
+Thanks for your detailed explanation, we have added the error to the
+ignore list.
+
+Best Regards,
+Rong Chen
