@@ -1,95 +1,89 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9027F
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 15:09:44 +0000 (UTC)
-Received: by mail-pj1-f45.google.com with SMTP id iq10so7297964pjb.0
-        for <llvm@lists.linux.dev>; Fri, 06 May 2022 08:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
-        b=LASvZd/kr+O0L5A3bEKuR8CTk3fHm5Tsd9lUjfYwpqn33d7k3Q1zsMSLxqM2Wvmjfi
-         U9X9eV7HuBPN5VQdn6QkXC7TyhZPYAzEmjTJjpaD5GIOeD6QowBVqIADEj4QvOrPEVtg
-         ixMVdzrHVAvfbZZWmaW4tVERpTCm8iDa/gmWxbCttBjaVWUI+z2M45U6eU6/izM7UmEw
-         06W6+xGWjrV9ntNXVSJcxZeWZPlDMQeHyRKnhuxcRvfzKtHy8hThyvLAr/AALg2Mc12H
-         wnFPOPC2IlEl29O2OH/A+ASOIh9PPps0VTvp/TnkmuOcnlQwc43q1Oz0o8B4VKCBOUQ8
-         GpDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
-        b=UrEbYjO64FAy/xnaaL0ugsCa7Fc1cqRC3BiH4erP51SOl41Cg4YcBAtBupjjHO9G21
-         5jNKDtpEedooLbuUkOl4mEwohsHNqozR5rtN3cPF5Dn9yUAFgJO5XWlN4CRaaYWiTJx1
-         9bdF+Vq83NvAgfdOMemVAw4usssE4Y94GJJoWcKf8/pKASyf1GfYylLFqe1XqQ1lA1su
-         UMK8wOm+iWdkt8auvSwbsDpwwTQo+tnXXwFNA6z/mwk/0xOnd6lrO3YXgmOXWtR2jO9r
-         ybYUcy3NW2/TRrdi9rHhaZMYTjVal/YZ72fIA0uL2MBmFGB/idsq9X+aQy+9pbjReGgV
-         sXag==
-X-Gm-Message-State: AOAM530fcSgZzv94D+EmUCfSQhP6AEXTtCMAHxX3g48fTFN70ofo27UR
-	Z6XqVTCKSWs80UaI2LKm1Nczug==
-X-Google-Smtp-Source: ABdhPJyXNCnjMbf233x1TRm9Ax9LXKujaxCcbwMHpOtAWrTw2hiA71j0kvmsMI4qbPaIDzeMtLIaSQ==
-X-Received: by 2002:a17:902:ec83:b0:15e:b5d2:a81b with SMTP id x3-20020a170902ec8300b0015eb5d2a81bmr4083716plg.64.1651849783670;
-        Fri, 06 May 2022 08:09:43 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902b70f00b0015ea0a679ddsm1868392pls.251.2022.05.06.08.09.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 08:09:43 -0700 (PDT)
-Message-ID: <4a87c2d9-89fa-2cec-7707-08fc78c88bf8@kernel.dk>
-Date: Fri, 6 May 2022 09:09:41 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCFB7F
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 15:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651852302; x=1683388302;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5FPkw2I6ge2rxTy6Ex5XdLKTC0G489tNVAA2zVBuPfg=;
+  b=bWTuLkZECX4ndl2O5dPi8/QPPmiOL1G1CbimqA1ZL6yy/qdZMXsjwWrF
+   dmfPl3oiA8bu7pPxWkQyr/ALGoqKYIiYC9u6paUNEkDhEkyx2i5B/7P04
+   Q3n57NuAK3Yz9uomKPgjBmvL5gevUzy3FYb3zhswY9PGj/iKRhKCGjWRW
+   l8UeSdLxPlwKH6/2s0DauXUU7AF5d4Jl5zR/dH5HUVff6IwcFZt42k8OO
+   19rFqVcXm9JJdwTgbhlFU4c9IqXXXhD7cWmjIpP+EJkq7YP+/l0ncZMDs
+   MH6CcbmCwLHg62VWWpiZp8li883yj1njgxSEUvULYmH2FGT1NHV6HxA+w
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="255985857"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255985857"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:51:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="600606577"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 06 May 2022 08:51:39 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nn0F0-000Dcm-W2;
+	Fri, 06 May 2022 15:51:38 +0000
+Date: Fri, 6 May 2022 23:51:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 153/1129]
+ drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00'
+Message-ID: <202205062304.4tdEZj6Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] nvme: Ensure ret is always initialized in
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, Jens Axboe <axboe@fb.com>,
- Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
- Sagi Grimberg <sagi@grimberg.me>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Kanchan Joshi <joshi.k@samsung.com>, Anuj Gupta <anuj20.g@samsung.com>,
- linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-References: <20220506150357.2443040-1-nathan@kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220506150357.2443040-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/6/22 9:03 AM, Nathan Chancellor wrote:
-> Clang warns:
-> 
->   drivers/nvme/host/ioctl.c:674:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (ns)
->               ^~
->   drivers/nvme/host/ioctl.c:677:9: note: uninitialized use occurs here
->           return ret;
->                  ^~~
->   drivers/nvme/host/ioctl.c:674:2: note: remove the 'if' if its condition is always true
->           if (ns)
->           ^~~~~~~
->   drivers/nvme/host/ioctl.c:672:9: note: initialize the variable 'ret' to silence this warning
->           int ret;
->                  ^
->                   = 0
->   1 error generated.
-> 
-> Initialize ret to zero so that it cannot be used uninitialized.
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   3076249fc30bf463f8390f89009de928ad3e95ff
+commit: 441d1827ed31ab142ec4531999461466c6866f1d [153/1129] i2c: xiic: Switch to Xiic standard mode for i2c-read
+config: hexagon-randconfig-r045-20220506 (https://download.01.org/0day-ci/archive/20220506/202205062304.4tdEZj6Y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/441d1827ed31ab142ec4531999461466c6866f1d
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout 441d1827ed31ab142ec4531999461466c6866f1d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i2c/busses/ drivers/media/mc/
 
-Thanks, will fold this in.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Or alternatively, remove the 'if (ns)' if ns can never be NULL; I tried
-> going down the rabbit hole to see if that is possible but I got a little
-> lost :^)
+All warnings (new ones prefixed by >>):
 
-For the admin queue, ns can be NULL.
+>> drivers/i2c/busses/i2c-xiic.c:1134:39: warning: unused variable 'xiic_2_00' [-Wunused-const-variable]
+   static const struct xiic_version_data xiic_2_00 = {
+                                         ^
+   1 warning generated.
+
+
+vim +/xiic_2_00 +1134 drivers/i2c/busses/i2c-xiic.c
+
+  1133	
+> 1134	static const struct xiic_version_data xiic_2_00 = {
+  1135		.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
+  1136	};
+  1137	
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
