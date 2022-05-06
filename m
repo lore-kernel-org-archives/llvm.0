@@ -1,155 +1,215 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E46807
-	for <llvm@lists.linux.dev>; Fri,  6 May 2022 11:16:03 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-141-5bFZsmBPMJaCVZ5XX50WZg-1; Fri, 06 May 2022 12:15:26 +0100
-X-MC-Unique: 5bFZsmBPMJaCVZ5XX50WZg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 6 May 2022 12:15:23 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 6 May 2022 12:15:23 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Johannes Berg' <johannes@sipsolutions.net>, Keith Packard
-	<keithp@keithp.com>, Kees Cook <keescook@chromium.org>
-CC: "Gustavo A . R . Silva" <gustavoars@kernel.org>, Francis Laniel
-	<laniel_francis@privacyrequired.com>, Daniel Axtens <dja@axtens.net>, "Dan
- Williams" <dan.j.williams@intel.com>, Vincenzo Frascino
-	<vincenzo.frascino@arm.com>, Guenter Roeck <linux@roeck-us.net>, "Daniel
- Vetter" <daniel.vetter@ffwll.ch>, Tadeusz Struk <tadeusz.struk@linaro.org>,
-	Alexei Starovoitov <ast@kernel.org>, "alsa-devel@alsa-project.org"
-	<alsa-devel@alsa-project.org>, Al Viro <viro@zeniv.linux.org.uk>, "Andrew
- Gabbasov" <andrew_gabbasov@mentor.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Andy Gross <agross@kernel.org>, Andy Lavr
-	<andy.lavr@gmail.com>, Arend van Spriel <aspriel@gmail.com>, Baowen Zheng
-	<baowen.zheng@corigine.com>, Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Bradley Grove
-	<linuxdrivers@attotech.com>, "brcm80211-dev-list.pdl@broadcom.com"
-	<brcm80211-dev-list.pdl@broadcom.com>, Christian Brauner
-	<brauner@kernel.org>, =?utf-8?B?Q2hyaXN0aWFuIEfDtnR0c2NoZQ==?=
-	<cgzones@googlemail.com>, Christian Lamparter <chunkeey@googlemail.com>,
-	Chris Zankel <chris@zankel.net>, Cong Wang <cong.wang@bytedance.com>, "David
- Gow" <davidgow@google.com>, David Howells <dhowells@redhat.com>, "David S.
- Miller" <davem@davemloft.net>, Dennis Dalessandro
-	<dennis.dalessandro@cornelisnetworks.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, Dexuan Cui <decui@microsoft.com>, "Dmitry
- Kasatkin" <dmitry.kasatkin@gmail.com>, Eli Cohen <elic@nvidia.com>, "Eric
- Dumazet" <edumazet@google.com>, Eric Paris <eparis@parisplace.org>, "Eugeniu
- Rosca" <erosca@de.adit-jv.com>, Felipe Balbi <balbi@kernel.org>, Frank Rowand
-	<frowand.list@gmail.com>, Franky Lin <franky.lin@broadcom.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Gregory Greenman
-	<gregory.greenman@intel.com>, Haiyang Zhang <haiyangz@microsoft.com>, "Hante
- Meuleman" <hante.meuleman@broadcom.com>, Herbert Xu
-	<herbert@gondor.apana.org.au>, Hulk Robot <hulkci@huawei.com>, Jakub Kicinski
-	<kuba@kernel.org>, "James E.J. Bottomley" <jejb@linux.ibm.com>, James Morris
-	<jmorris@namei.org>, Jarkko Sakkinen <jarkko@kernel.org>, Jaroslav Kysela
-	<perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe
-	<axboe@kernel.dk>, Johan Hedberg <johan.hedberg@gmail.com>, John Keeping
-	<john@metanate.com>, Juergen Gross <jgross@suse.com>, Kalle Valo
-	<kvalo@kernel.org>, "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-	"kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>, Kuniyuki Iwashima
-	<kuniyu@amazon.co.jp>, "K. Y. Srinivasan" <kys@microsoft.com>, "Lars-Peter
- Clausen" <lars@metafoo.de>, Lee Jones <lee.jones@linaro.org>, Leon Romanovsky
-	<leon@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	"linux1394-devel@lists.sourceforge.net"
-	<linux1394-devel@lists.sourceforge.net>, "linux-afs@lists.infradead.org"
-	<linux-afs@lists.infradead.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>, "linux-bluetooth@vger.kernel.org"
-	<linux-bluetooth@vger.kernel.org>, "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "linux-integrity@vger.kernel.org"
-	<linux-integrity@vger.kernel.org>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "linux-scsi@vger.kernel.org"
-	<linux-scsi@vger.kernel.org>, "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-wireless@vger.kernel.org"
-	<linux-wireless@vger.kernel.org>, "linux-xtensa@linux-xtensa.org"
-	<linux-xtensa@linux-xtensa.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Loic Poulain <loic.poulain@linaro.org>, Louis Peens
-	<louis.peens@corigine.com>, Luca Coelho <luciano.coelho@intel.com>, "Luiz
- Augusto von Dentz" <luiz.dentz@gmail.com>, Marc Dionne
-	<marc.dionne@auristor.com>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown
-	<broonie@kernel.org>, "Martin K. Petersen" <martin.petersen@oracle.com>, "Max
- Filippov" <jcmvbkbc@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>, Muchun Song
-	<songmuchun@bytedance.com>, Nathan Chancellor <nathan@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, =?utf-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-	Paolo Abeni <pabeni@redhat.com>, Paul Moore <paul@paul-moore.com>, "Rich
- Felker" <dalias@aerifal.cx>, Rob Herring <robh+dt@kernel.org>, Russell King
-	<linux@armlinux.org.uk>, "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, "SHA-cyfmac-dev-list@infineon.com"
-	<SHA-cyfmac-dev-list@infineon.com>, Simon Horman <simon.horman@corigine.com>,
-	Stefano Stabellini <sstabellini@kernel.org>, Stefan Richter
-	<stefanr@s5r6.in-berlin.de>, Steffen Klassert <steffen.klassert@secunet.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>, Stephen Smalley
-	<stephen.smalley.work@gmail.com>, Takashi Iwai <tiwai@suse.com>, Tom Rix
-	<trix@redhat.com>, Udipto Goswami <quic_ugoswami@quicinc.com>,
-	"wcn36xx@lists.infradead.org" <wcn36xx@lists.infradead.org>, Wei Liu
-	<wei.liu@kernel.org>, "xen-devel@lists.xenproject.org"
-	<xen-devel@lists.xenproject.org>, Xiu Jianfeng <xiujianfeng@huawei.com>,
-	"Yang Yingliang" <yangyingliang@huawei.com>
-Subject: RE: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-Thread-Topic: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
-Thread-Index: AQHYYLyA1R9dSzYVM0KNCrE+uTLPFK0RsSYw
-Date: Fri, 6 May 2022 11:15:23 +0000
-Message-ID: <46ec2f1d6e9347eaba1feeb00e8c508a@AcuMS.aculab.com>
-References: <20220504014440.3697851-1-keescook@chromium.org>
-         <20220504014440.3697851-3-keescook@chromium.org>
-         <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
-         <202205040819.DEA70BD@keescook>
-         <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
-         <871qx8qabo.fsf@keithp.com> <202205051228.4D5B8CD624@keescook>
-         <87pmkrpwrs.fsf@keithp.com>
- <e1ea4926f105b456f6a86ce30a0380ee5f48fe6d.camel@sipsolutions.net>
-In-Reply-To: <e1ea4926f105b456f6a86ce30a0380ee5f48fe6d.camel@sipsolutions.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632AD807
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 11:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651836357; x=1683372357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kyfzg+1FMV7p3SGw9zcFubkJsd+r/h4xK7eZfqId260=;
+  b=E722gsuaVpr0914oJJy+Q24LS2+YK9Atw9YMGkBoI2w7UKmaCbPO09gq
+   rTkp7VJcN5ZZpSDozAjLrd5LgiML00ivUEx+KeBAZu5RyD9jqgW2YxLBq
+   w16/XqfpJXe09IAL6VKcG08fYMcph7gFJQ4swsmyjcnhisZLUz70NimeB
+   prutlEAtzikdiOjpt1zagZC11CRxRBgWFStPAbztp7sVi2yRmJ+JivNZ5
+   hTcTpi6fvPv5suyTbYd2HiaEkoU5K7ZjAYTvBxI13+I5snAN+Z4HAGMDF
+   oL/Yn5sERSfyr0nnmG+bNCIJ6ZPRGsrkyHTJklBbOKS13DJWKfdGMh86w
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="266032798"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="266032798"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:25:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="709423885"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 06 May 2022 04:25:53 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nmw5o-000DPn-M6;
+	Fri, 06 May 2022 11:25:52 +0000
+Date: Fri, 6 May 2022 19:25:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qin Jian <qinjian@cqplus1.com>, krzysztof.kozlowski@linaro.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+	maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+	arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
+Subject: Re: [PATCH v14 8/9] ARM: sunplus: Add initial support for Sunplus
+ SP7021 SoC
+Message-ID: <202205061902.b3IMQRUc-lkp@intel.com>
+References: <e15ca64a9c62fe8cae970d6fe2b73f8a73966dd3.1651805790.git.qinjian@cqplus1.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e15ca64a9c62fe8cae970d6fe2b73f8a73966dd3.1651805790.git.qinjian@cqplus1.com>
 
-RnJvbTogSm9oYW5uZXMgQmVyZw0KPiBTZW50OiAwNSBNYXkgMjAyMiAyMToxMw0KPiBPbiBUaHUs
-IDIwMjItMDUtMDUgYXQgMTM6MDggLTA3MDAsIEtlaXRoIFBhY2thcmQgd3JvdGU6DQo+IA0KPiAN
-Cj4gPiBJIGJldCB5b3UndmUgYWxyZWFkeSBjb25zaWRlcmVkIHRoZSBzaW1wbGVyIGZvcm06DQo+
-ID4NCj4gPiAgICAgICAgIHN0cnVjdCBzb21ldGhpbmcgKmluc3RhbmNlID0gbWVtX3RvX2ZsZXhf
-ZHVwKGJ5dGVfYXJyYXksIGNvdW50LCBHRlBfS0VSTkVMKTsNCj4gPiAgICAgICAgIGlmIChJU19F
-UlIoaW5zdGFuY2UpKQ0KPiA+ICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKGluc3RhbmNlKTsN
-Cj4gPg0KPiANCj4gU2FkbHksIHRoaXMgZG9lc24ndCB3b3JrIGluIGFueSB3YXkgYmVjYXVzZSBt
-ZW1fdG9fZmxleF9kdXAoKSBuZWVkcyB0bw0KPiBrbm93IGF0IGxlYXN0IHRoZSB0eXBlLCBoZW5j
-ZSBwYXNzaW5nICdpbnN0YW5jZScsIHdoaWNoIGlzIHNpbXBsZXIgdGhhbg0KPiBwYXNzaW5nICdz
-dHJ1Y3Qgc29tZXRoaW5nJy4NCg0KWW91IGNhbiB1c2U6DQogICAgICAgICBzdHJ1Y3Qgc29tZXRo
-aW5nICppbnN0YW5jZTsNCiAgICAgICAgIG1lbV90b19mbGV4X2R1cChpbnN0YW5jZSwgYnl0ZV9h
-cnJheSwgY291bnQsIEdGUF9LRVJORUwpOw0KICAgICAgICAgaWYgKElTX0VSUihpbnN0YW5jZSkp
-DQogICAgICAgICAgICAgcmV0dXJuIFBUUl9FUlIoaW5zdGFuY2UpOw0KYW5kIGhhdmUgbWVtX3Rv
-X2ZsZXhfZHVwKCkgKHdoaWNoIG11c3QgYmUgYSAjZGVmaW5lKSB1cGRhdGUgJ2luc3RhbmNlJy4N
-CihZb3UgY2FuIHJlcXVpcmUgJmluc3RhbmNlIC0gYW5kIGp1c3QgcHJlY2VkZSBhbGwgdGhlIHVz
-ZXMgd2l0aA0KYW4gZXh0cmEgJyonIHRvIG1ha2UgaXQgbW9yZSBvYnZpb3VzIHRoZSB2YXJpYWJs
-ZSBpcyB1cGRhdGVkLg0KQnV0IHRoZXJlIGlzIGxpdHRsZSBwb2ludCByZXF1aXJpbmcgaXQgYmUg
-TlVMTC4pDQoNCklmIHlvdSByZWFsbHkgd2FudCB0byBkZWZpbmUgdGhlIHZhcmlhYmxlIG1pZC1i
-bG9jayB5b3UgY2FuIHVzZToNCiAgICAgICAgIG1lbV90b19mbGV4X2R1cChzdHJ1Y3Qgc29tZXRo
-aW5nICosIGluc3RhbmNlLCBieXRlX2FycmF5LCBjb3VudCwgR0ZQX0tFUk5FTCk7DQoNCmJ1dCBJ
-IHJlYWxseSBoYXRlIGhhdmluZyBkZWNsYXJhdGlvbnMgYW55d2hlcmUgb3RoZXIgdGhhbiB0aGUg
-dG9wIG9mDQphIGZ1bmN0aW9uIGJlY2F1c2UgaXQgbWFrZXMgdGhlbSBoYXJkIGZvciB0aGUgJ21r
-MSBleWViYWxsJyB0byBzcG90Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi Qin,
 
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on clk/clk-next tip/irq/core linus/master v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220506/202205061902.b3IMQRUc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/5e6762b3fc12b5c86bf345c0c3bbfa788ed1bda7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
+        git checkout 5e6762b3fc12b5c86bf345c0c3bbfa788ed1bda7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/clk-sp7021.c:325:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           reg  = HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
+           (m << 16) | FIELD_PREP(m, value);       \
+                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:326:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           reg |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
+           (m << 16) | FIELD_PREP(m, value);       \
+                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:327:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           reg |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
+           (m << 16) | FIELD_PREP(m, value);       \
+                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:328:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           reg |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
+           (m << 16) | FIELD_PREP(m, value);       \
+                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:331:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           reg  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:53:14: note: expanded from macro 'HWM_FIELD_PREP'
+           (m << 16) | FIELD_PREP(m, value);       \
+                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+
+
+vim +325 drivers/clk/clk-sp7021.c
+
+835254e31aec3c Qin Jian 2022-05-06  320  
+835254e31aec3c Qin Jian 2022-05-06  321  static void plltv_set_rate(struct sp_pll *clk)
+835254e31aec3c Qin Jian 2022-05-06  322  {
+835254e31aec3c Qin Jian 2022-05-06  323  	u32 reg;
+835254e31aec3c Qin Jian 2022-05-06  324  
+835254e31aec3c Qin Jian 2022-05-06 @325  	reg  = HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+835254e31aec3c Qin Jian 2022-05-06  326  	reg |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+835254e31aec3c Qin Jian 2022-05-06  327  	reg |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+835254e31aec3c Qin Jian 2022-05-06  328  	reg |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+835254e31aec3c Qin Jian 2022-05-06  329  	writel(reg, clk->reg);
+835254e31aec3c Qin Jian 2022-05-06  330  
+835254e31aec3c Qin Jian 2022-05-06  331  	reg  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+835254e31aec3c Qin Jian 2022-05-06  332  	writel(reg, clk->reg + 4);
+835254e31aec3c Qin Jian 2022-05-06  333  
+835254e31aec3c Qin Jian 2022-05-06  334  	reg  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
+835254e31aec3c Qin Jian 2022-05-06  335  	reg |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
+835254e31aec3c Qin Jian 2022-05-06  336  	writel(reg, clk->reg + 8);
+835254e31aec3c Qin Jian 2022-05-06  337  }
+835254e31aec3c Qin Jian 2022-05-06  338  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
