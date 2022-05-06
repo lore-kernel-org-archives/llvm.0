@@ -1,64 +1,48 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819FC29A1;
-	Fri,  6 May 2022 18:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CADE2FAE
+	for <llvm@lists.linux.dev>; Fri,  6 May 2022 19:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651860236; x=1683396236;
+  t=1651865237; x=1683401237;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8fFvGdzoG/rA8+1UZY/4PHel/cIyIvtKdIsOtXJKLw8=;
-  b=ghje38WhRgbP2/XSTxhc5nHUP9IhisnGwxZcliu6lD3GK3yxohg/D9dX
-   /oViruOyKQWDIco09YYXk9CElF0gcwRQLEhPb7nG4FyCI3UnRIckzrvKP
-   NIX4PMtSRtRCaFtopDuCXKP93Ek/sgSL6PevBC9Mi35bflbx74Ybz8n3a
-   jy1ETV/oqqdJH3tXouzrrRJSbV/fTKmX0Pffr79GgmxJR8mXSsUVTrNlH
-   PkmBelg18w2MQVvUyrDXxZUKdZcg4SkuXh9b+xzpLuMyvQXhSO8iuEOVE
-   2swLKLJq+bDzy+mQvHLTUudHgLud7uGvDsY/KJPaY5/p6s9pbhHKzGsZJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="293748768"
+  bh=AW906yaOruqYoLxGe4BkeNY7iQOHYqZeONTXC8+tXQs=;
+  b=YSZFr13g9XzTRQkxfSVWFSZX4WEKjJoq/k+Eq0J/67wAHB/F8xNPKrWQ
+   jzOXFg/Pw7EH82RJulfTOro30vAGUhu5OOWeAbeDrLY5syZUwiZfZswkH
+   hF7oP+Sq2jONyLmlpGgF+cGkk5gOfRz7CKGKxQtEIM3sJKxhJketXB2QF
+   i61I1xZ2+2cbngBVT1E1xnlcbYajnslw8iU9uW8nkpgwcTB3+BRiDi5Oy
+   Z00hEqfJSjEVm7r7rL7RQllEwFiEJo+2Re91B899g97hmTDgeUoZCKDtz
+   noW6APW8kbtRm9E/rpbeYli+QSNL1Whnn0xJs6CCUwYwLNq3ktQlV72tG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="293768772"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="293748768"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:03:31 -0700
+   d="scan'208";a="293768772"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:27:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="735870259"
+   d="scan'208";a="586155393"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 11:03:24 -0700
+  by orsmga008.jf.intel.com with ESMTP; 06 May 2022 12:27:01 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nn2IV-000DjU-Ps;
-	Fri, 06 May 2022 18:03:23 +0000
-Date: Sat, 7 May 2022 02:02:39 +0800
+	id 1nn3bQ-000Dnw-GL;
+	Fri, 06 May 2022 19:27:00 +0000
+Date: Sat, 7 May 2022 03:26:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Enric Balletbo i Serra <eballetbo@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	usama.anjum@collabora.com,
-	Collabora Kernel ML <kernel@collabora.com>, groeck@chromium.org,
-	dtor@chromium.org, gwendal@chromium.org, vbendeb@chromium.org,
-	andy@infradead.org, Ayman Bagabas <ayman.bagabas@gmail.com>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	=?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-	Darren Hart <dvhart@infradead.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jeremy Soller <jeremy@system76.com>, Mattias Jacobsson <2pi@mok.nu>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Rajat Jain <rajatja@google.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v9] platform/chrome: Add ChromeOS ACPI device driver
-Message-ID: <202205070117.SW4TyTN4-lkp@intel.com>
-References: <YnTw/iQ1Asjjmsb9@debian-BULLSEYE-live-builder-AMD64>
+To: Qin Jian <qinjian@cqplus1.com>, krzysztof.kozlowski@linaro.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+	maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+	arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
+Subject: Re: [PATCH v14 7/9] irqchip: Add Sunplus SP7021 interrupt controller
+ driver
+Message-ID: <202205070356.RRuPT69d-lkp@intel.com>
+References: <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,66 +51,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnTw/iQ1Asjjmsb9@debian-BULLSEYE-live-builder-AMD64>
+In-Reply-To: <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
 
-Hi Muhammad,
+Hi Qin,
 
 I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on chrome-platform/for-next v5.18-rc5 next-20220506]
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on clk/clk-next tip/irq/core linus/master v5.18-rc5 next-20220506]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/platform-chrome-Add-ChromeOS-ACPI-device-driver/20220506-175951
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205070117.SW4TyTN4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205070356.RRuPT69d-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4f6407962feddc57bc7c80e5b29d5d339a1dba6c
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/e4d57016693163887d81dfa4c0b0db3e4437cf2b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/platform-chrome-Add-ChromeOS-ACPI-device-driver/20220506-175951
-        git checkout 4f6407962feddc57bc7c80e5b29d5d339a1dba6c
+        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
+        git checkout e4d57016693163887d81dfa4c0b0db3e4437cf2b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/chrome/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/platform/chrome/chromeos_acpi.c:254:5: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                            (ARRAY_SIZE(chromeos_acpi_all_groups) - 2), chromeos_acpi_gpio_groups);
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning generated.
+>> drivers/irqchip/irq-sp7021-intc.c:170:16: warning: cast to smaller integer type 'int' from 'void *' [-Wvoid-pointer-to-int-cast]
+           int ext_num = (int)irq_desc_get_handler_data(desc);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/irqchip/irq-sp7021-intc.c:218:69: warning: cast to 'void *' from smaller integer type 'int' [-Wint-to-void-pointer-cast]
+           irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
+                                                                              ^~~~~~~~~
+   2 warnings generated.
 
 
-vim +254 drivers/platform/chrome/chromeos_acpi.c
+vim +170 drivers/irqchip/irq-sp7021-intc.c
 
-   244	
-   245	static int chromeos_acpi_device_probe(struct platform_device *pdev)
-   246	{
-   247		chromeos_acpi_gpio_groups = get_gpio_pkg_num(&pdev->dev);
-   248	
-   249		/* If platform has more GPIO attribute groups than the number of
-   250		 * groups this driver supports, give out a warning message.
-   251		 */
-   252		if (chromeos_acpi_gpio_groups > (ARRAY_SIZE(chromeos_acpi_all_groups) - 2))
-   253			dev_warn(&(pdev->dev), "Only %ld GPIO attr groups supported by the driver out of total %d.\n",
- > 254				 (ARRAY_SIZE(chromeos_acpi_all_groups) - 2), chromeos_acpi_gpio_groups);
-   255		return 0;
-   256	}
-   257	
+   166	
+   167	static void sp_intc_handle_ext_cascaded(struct irq_desc *desc)
+   168	{
+   169		struct irq_chip *chip = irq_desc_get_chip(desc);
+ > 170		int ext_num = (int)irq_desc_get_handler_data(desc);
+   171		int hwirq;
+   172	
+   173		chained_irq_enter(chip, desc);
+   174	
+   175		while ((hwirq = sp_intc_get_ext_irq(ext_num)) >= 0) {
+   176			if (unlikely(IS_GPIO_INT(hwirq) && TEST_STATE(hwirq, _IS_ACTIVE))) { // WORKAROUND
+   177				ASSIGN_STATE(hwirq, _IS_ACTIVE, false);
+   178				sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, TEST_STATE(hwirq, _IS_LOW));
+   179			} else {
+   180				generic_handle_domain_irq(sp_intc.domain, hwirq);
+   181			}
+   182		}
+   183	
+   184		chained_irq_exit(chip, desc);
+   185	}
+   186	
+   187	static struct irq_chip sp_intc_chip = {
+   188		.name = "sp_intc",
+   189		.irq_ack = sp_intc_ack_irq,
+   190		.irq_mask = sp_intc_mask_irq,
+   191		.irq_unmask = sp_intc_unmask_irq,
+   192		.irq_set_type = sp_intc_set_type,
+   193	};
+   194	
+   195	static int sp_intc_irq_domain_map(struct irq_domain *domain,
+   196					  unsigned int irq, irq_hw_number_t hwirq)
+   197	{
+   198		irq_set_chip_and_handler(irq, &sp_intc_chip, handle_level_irq);
+   199		irq_set_chip_data(irq, &sp_intc_chip);
+   200		irq_set_noprobe(irq);
+   201	
+   202		return 0;
+   203	}
+   204	
+   205	static const struct irq_domain_ops sp_intc_dm_ops = {
+   206		.xlate = irq_domain_xlate_twocell,
+   207		.map = sp_intc_irq_domain_map,
+   208	};
+   209	
+   210	static int sp_intc_irq_map(struct device_node *node, int i)
+   211	{
+   212		unsigned int irq;
+   213	
+   214		irq = irq_of_parse_and_map(node, i);
+   215		if (!irq)
+   216			return -ENOENT;
+   217	
+ > 218		irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
+   219	
+   220		return 0;
+   221	}
+   222	
 
 -- 
 0-DAY CI Kernel Test Service
