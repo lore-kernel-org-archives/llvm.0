@@ -1,155 +1,108 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A10EA8
-	for <llvm@lists.linux.dev>; Sat,  7 May 2022 18:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651946766; x=1683482766;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=gfummZkNA0oquaF09Uf4O+Z3aazmns9yxEzQ0blgZAk=;
-  b=TJcf9VWAoT0hp+2BSMu3KUXn85x+RN1o3OLBqWCYalu3IwkHyxIv5/Xe
-   JB7nDko9zdzy5NMthDnmdgf3WHLA62m5d5TLvkB4OjKcxnILDWbD9N9M6
-   /QqgRr2jcNwLWhoWIOaIgWV+i/QE8r85smyNATi6dpSWrRWukeCEtR+dk
-   fbh5HNxrCShhZS0JvNiC6M5rvL3z3SLXgt6CLi+Oe2NRY3lnK5/z3ZMlA
-   6fZ4/zi9pZU5Fl0ABo8GD44G+VQ8x3p2G/9FHqFe6fhb63dSwp4WbXHhC
-   mxyzFtKfbhQ0IXOzb3tcwMkaLXtPAyL4joW8n2F9EujKDkCr/JqPGjKF+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="293955854"
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="293955854"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 11:06:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="518541225"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 May 2022 11:06:03 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nnOod-000EqF-2C;
-	Sat, 07 May 2022 18:06:03 +0000
-Date: Sun, 8 May 2022 02:05:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH 11/16] drm/i915: Drop has_pxp from device info
-Message-ID: <202205080138.2kBqKQTb-lkp@intel.com>
-References: <20220507132850.10272-11-jose.souza@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46190EC1
+	for <llvm@lists.linux.dev>; Sat,  7 May 2022 18:41:58 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so6145877wme.4
+        for <llvm@lists.linux.dev>; Sat, 07 May 2022 11:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kewTTWx9DrsoNkFyYPFpRhSoXTo723KMXBl58gCLpBA=;
+        b=HknaJKY79dBIY1D6VMFQLWs/WIhEgTfNuz3aI6k+tQd9aE8MMxrbCef1C/yUII7xHN
+         JMqZ4mWeav2euIn+1sTGGS36vGdaSkoEV0ZoJj6tdyksJNIcsQjebk6QkYhpJkIdP+To
+         hQjzgKi+EkJFEP2D67BbeYbAct4F/Ke/Rg0UUtSmVBGVDI9p5yroeXA4ehdPe/EJXP/f
+         U2tsU/A1R96w85Rw/7HXno5FEAQ72UpbuoeZC4JgG1Gdmk4bJLTUjlCPJVtIWMYrb3qg
+         PVTzgk0TOW3uxKqI/C+yNNs9XyR7Pn01N40Az7SZZWnLW+fbu06z1IX/bpi807y1shS8
+         efFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kewTTWx9DrsoNkFyYPFpRhSoXTo723KMXBl58gCLpBA=;
+        b=cY8IWz+Lc9o/PQCDfTbCAxf9c+r8OVS8Jaivx5XF4CGJ1XEBBTYT9sd7gONhqY292l
+         BNZKnoWDCcjX1VcPJaPRE0Ruh0sGbk9Mz+PmXBKsoR/2TUJALNuS8QCCnfRR7tlpCyJc
+         4p8LbmAC2N+iJ2Ibo9LaSG1jqZkpwRKSCdUC34LhtEyWRXSAH1YO3Z2zvpxwaQf5GmbF
+         3v5wdPMPNOWRX6E3uiSkpWj2SlGj2LXUuflx5a9pUCCNjIh+QVz38w2QG0sB15WLHz0x
+         sYsZCAQl8wV3LYiCbzpWQeS3I+7GE7SxM8U4TD5tRlLQujYkjuEIoCH9pPl7rA/qX9Rv
+         qNkQ==
+X-Gm-Message-State: AOAM5331SH2GYkY6dTq3eGnXj2lmq4//kUw+1iC1hfue8SKHefrQ9Q8s
+	+4bFYMNxlWg4x49i+dWWv/A=
+X-Google-Smtp-Source: ABdhPJzEhN7/ba6cBlDyUJyzxLGhN8q+DeRTHlhT4eK4i4nAt0Dp7nhCYEOoDXLCHHDpm1NuWdSmzg==
+X-Received: by 2002:a05:600c:1992:b0:394:826a:d40d with SMTP id t18-20020a05600c199200b00394826ad40dmr3928485wmq.146.1651948916519;
+        Sat, 07 May 2022 11:41:56 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id q1-20020adff501000000b0020c5253d8cdsm6617330wro.25.2022.05.07.11.41.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 May 2022 11:41:56 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Kalle Valo <kvalo@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	ath11k@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] ath11k: remove redundant assignment to variables vht_mcs and he_mcs
+Date: Sat,  7 May 2022 19:41:55 +0100
+Message-Id: <20220507184155.26939-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220507132850.10272-11-jose.souza@intel.com>
 
-Hi "José,
+The variables vht_mcs and he_mcs are being initialized in the
+start of for-loops however they are re-assigned new values in
+the loop and not used outside the loop. The initializations
+are redundant and can be removed.
 
-Thank you for the patch! Yet something to improve:
+Cleans up clang scan warnings:
 
-[auto build test ERROR on drm-tip/drm-tip]
-[cannot apply to drm-intel/for-linux-next linus/master v5.18-rc5 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+warning: Although the value stored to 'vht_mcs' is used in the
+enclosing expression, the value is never actually read from
+'vht_mcs' [deadcode.DeadStores]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Roberto-de-Souza/drm-i915-Drop-has_llc-from-device-info/20220507-213117
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220508/202205080138.2kBqKQTb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c1a7677ed60d6907adf2824e35480433cde736ce
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jos-Roberto-de-Souza/drm-i915-Drop-has_llc-from-device-info/20220507-213117
-        git checkout c1a7677ed60d6907adf2824e35480433cde736ce
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+warning: Although the value stored to 'he_mcs' is used in the
+enclosing expression, the value is never actually read from
+'he_mcs' [deadcode.DeadStores]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/wireless/ath/ath11k/mac.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/pxp/intel_pxp.c:115:3: error: expected ')'
-                   return;
-                   ^
-   drivers/gpu/drm/i915/pxp/intel_pxp.c:114:2: note: to match this '('
-           if (!HAS_PXP(gt->i915))
-           ^
-   include/linux/compiler.h:56:26: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                            ^
-   1 error generated.
---
->> drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:73:3: error: expected ')'
-                   return;
-                   ^
-   drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:72:2: note: to match this '('
-           if (!HAS_PXP((pxp_to_gt(pxp)->i915)))
-           ^
-   include/linux/compiler.h:56:26: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                            ^
-   drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:61:6: warning: no previous prototype for function 'intel_pxp_debugfs_register' [-Wmissing-prototypes]
-   void intel_pxp_debugfs_register(struct intel_pxp *pxp, struct dentry *gt_root)
-        ^
-   drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:61:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void intel_pxp_debugfs_register(struct intel_pxp *pxp, struct dentry *gt_root)
-   ^
-   static 
-   1 warning and 1 error generated.
-
-
-vim +115 drivers/gpu/drm/i915/pxp/intel_pxp.c
-
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  108  
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  109  void intel_pxp_init(struct intel_pxp *pxp)
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  110  {
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  111  	struct intel_gt *gt = pxp_to_gt(pxp);
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  112  	int ret;
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  113  
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  114  	if (!HAS_PXP(gt->i915))
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24 @115  		return;
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  116  
-cbbd3764b2399a Huang, Sean Z          2021-09-24  117  	mutex_init(&pxp->tee_mutex);
-cbbd3764b2399a Huang, Sean Z          2021-09-24  118  
-2ae096872a2c61 Huang, Sean Z          2021-09-24  119  	/*
-2ae096872a2c61 Huang, Sean Z          2021-09-24  120  	 * we'll use the completion to check if there is a termination pending,
-2ae096872a2c61 Huang, Sean Z          2021-09-24  121  	 * so we start it as completed and we reinit it when a termination
-2ae096872a2c61 Huang, Sean Z          2021-09-24  122  	 * is triggered.
-2ae096872a2c61 Huang, Sean Z          2021-09-24  123  	 */
-2ae096872a2c61 Huang, Sean Z          2021-09-24  124  	init_completion(&pxp->termination);
-2ae096872a2c61 Huang, Sean Z          2021-09-24  125  	complete_all(&pxp->termination);
-2ae096872a2c61 Huang, Sean Z          2021-09-24  126  
-32271ecd6596e6 Daniele Ceraolo Spurio 2021-09-24  127  	mutex_init(&pxp->arb_mutex);
-2ae096872a2c61 Huang, Sean Z          2021-09-24  128  	INIT_WORK(&pxp->session_work, intel_pxp_session_work);
-2ae096872a2c61 Huang, Sean Z          2021-09-24  129  
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  130  	ret = create_vcs_context(pxp);
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  131  	if (ret)
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  132  		return;
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  133  
-0436ac1b008d48 Huang, Sean Z          2021-09-24  134  	ret = intel_pxp_tee_component_init(pxp);
-0436ac1b008d48 Huang, Sean Z          2021-09-24  135  	if (ret)
-0436ac1b008d48 Huang, Sean Z          2021-09-24  136  		goto out_context;
-0436ac1b008d48 Huang, Sean Z          2021-09-24  137  
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  138  	drm_info(&gt->i915->drm, "Protected Xe Path (PXP) protected content support initialized\n");
-0436ac1b008d48 Huang, Sean Z          2021-09-24  139  
-0436ac1b008d48 Huang, Sean Z          2021-09-24  140  	return;
-0436ac1b008d48 Huang, Sean Z          2021-09-24  141  
-0436ac1b008d48 Huang, Sean Z          2021-09-24  142  out_context:
-0436ac1b008d48 Huang, Sean Z          2021-09-24  143  	destroy_vcs_context(pxp);
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  144  }
-3ad2dd9c4caa73 Daniele Ceraolo Spurio 2021-09-24  145  
-
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 1957e1713548..014eaabb3af4 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -1951,7 +1951,7 @@ static void ath11k_peer_assoc_h_vht(struct ath11k *ar,
+ 	/* Calculate peer NSS capability from VHT capabilities if STA
+ 	 * supports VHT.
+ 	 */
+-	for (i = 0, max_nss = 0, vht_mcs = 0; i < NL80211_VHT_NSS_MAX; i++) {
++	for (i = 0, max_nss = 0; i < NL80211_VHT_NSS_MAX; i++) {
+ 		vht_mcs = __le16_to_cpu(vht_cap->vht_mcs.rx_mcs_map) >>
+ 			  (2 * i) & 3;
+ 
+@@ -2272,7 +2272,7 @@ static void ath11k_peer_assoc_h_he(struct ath11k *ar,
+ 	/* Calculate peer NSS capability from HE capabilities if STA
+ 	 * supports HE.
+ 	 */
+-	for (i = 0, max_nss = 0, he_mcs = 0; i < NL80211_HE_NSS_MAX; i++) {
++	for (i = 0, max_nss = 0; i < NL80211_HE_NSS_MAX; i++) {
+ 		he_mcs = he_tx_mcs >> (2 * i) & 3;
+ 
+ 		/* In case of fixed rates, MCS Range in he_tx_mcs might have
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
