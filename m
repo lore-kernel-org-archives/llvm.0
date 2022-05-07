@@ -1,108 +1,116 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46190EC1
-	for <llvm@lists.linux.dev>; Sat,  7 May 2022 18:41:58 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so6145877wme.4
-        for <llvm@lists.linux.dev>; Sat, 07 May 2022 11:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kewTTWx9DrsoNkFyYPFpRhSoXTo723KMXBl58gCLpBA=;
-        b=HknaJKY79dBIY1D6VMFQLWs/WIhEgTfNuz3aI6k+tQd9aE8MMxrbCef1C/yUII7xHN
-         JMqZ4mWeav2euIn+1sTGGS36vGdaSkoEV0ZoJj6tdyksJNIcsQjebk6QkYhpJkIdP+To
-         hQjzgKi+EkJFEP2D67BbeYbAct4F/Ke/Rg0UUtSmVBGVDI9p5yroeXA4ehdPe/EJXP/f
-         U2tsU/A1R96w85Rw/7HXno5FEAQ72UpbuoeZC4JgG1Gdmk4bJLTUjlCPJVtIWMYrb3qg
-         PVTzgk0TOW3uxKqI/C+yNNs9XyR7Pn01N40Az7SZZWnLW+fbu06z1IX/bpi807y1shS8
-         efFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kewTTWx9DrsoNkFyYPFpRhSoXTo723KMXBl58gCLpBA=;
-        b=cY8IWz+Lc9o/PQCDfTbCAxf9c+r8OVS8Jaivx5XF4CGJ1XEBBTYT9sd7gONhqY292l
-         BNZKnoWDCcjX1VcPJaPRE0Ruh0sGbk9Mz+PmXBKsoR/2TUJALNuS8QCCnfRR7tlpCyJc
-         4p8LbmAC2N+iJ2Ibo9LaSG1jqZkpwRKSCdUC34LhtEyWRXSAH1YO3Z2zvpxwaQf5GmbF
-         3v5wdPMPNOWRX6E3uiSkpWj2SlGj2LXUuflx5a9pUCCNjIh+QVz38w2QG0sB15WLHz0x
-         sYsZCAQl8wV3LYiCbzpWQeS3I+7GE7SxM8U4TD5tRlLQujYkjuEIoCH9pPl7rA/qX9Rv
-         qNkQ==
-X-Gm-Message-State: AOAM5331SH2GYkY6dTq3eGnXj2lmq4//kUw+1iC1hfue8SKHefrQ9Q8s
-	+4bFYMNxlWg4x49i+dWWv/A=
-X-Google-Smtp-Source: ABdhPJzEhN7/ba6cBlDyUJyzxLGhN8q+DeRTHlhT4eK4i4nAt0Dp7nhCYEOoDXLCHHDpm1NuWdSmzg==
-X-Received: by 2002:a05:600c:1992:b0:394:826a:d40d with SMTP id t18-20020a05600c199200b00394826ad40dmr3928485wmq.146.1651948916519;
-        Sat, 07 May 2022 11:41:56 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id q1-20020adff501000000b0020c5253d8cdsm6617330wro.25.2022.05.07.11.41.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 11:41:56 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Kalle Valo <kvalo@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	ath11k@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA71136F
+	for <llvm@lists.linux.dev>; Sat,  7 May 2022 20:55:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651956911; x=1683492911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IW5GA9KY5fGNk8pn2J9fOJ9P5JzlJf02ctQI0dsVQ/U=;
+  b=K8WniyiRhyhIp0k+dxXJF0+Kl3ufn9riUB1KzWsgcXs8e+FO5zeTVA7c
+   /+DjGO5k5KZwDLdrl+fpBC3vRw1tqCrSiVIl03M/adg9G9gHVfOSkEtNh
+   GKNNyadRA4dhm8vLVtXtxApPl/SpE/nN/Gv56gCuJudqW5iJFq/zSVpqr
+   4dxee55VT/bjX7u0WTP1JBWJiC0pmovfKxKS/edySW0ozuAqb+71M97lM
+   ZeKvn5EdwZySoLhH9Amx8jpvqETgdUCdwlebPRxvkjnstC4BJTTZg0jlc
+   WVNvMdMKnsl31P36XJChQF06hlHS7dNWjMwFeAN/sK175ClhZVQOKQIIz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="248657120"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="248657120"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 13:55:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="622361229"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 May 2022 13:55:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nnRSG-000Ext-7v;
+	Sat, 07 May 2022 20:55:08 +0000
+Date: Sun, 8 May 2022 04:54:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] ath11k: remove redundant assignment to variables vht_mcs and he_mcs
-Date: Sat,  7 May 2022 19:41:55 +0100
-Message-Id: <20220507184155.26939-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function
+ 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205080416.vzIXy16B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The variables vht_mcs and he_mcs are being initialized in the
-start of for-loops however they are re-assigned new values in
-the loop and not used outside the loop. The initializations
-are redundant and can be removed.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   30c8e80f79329617012f07b09b70114592092ea4
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   8 weeks ago
+config: mips-randconfig-r022-20220507 (https://download.01.org/0day-ci/archive/20220508/202205080416.vzIXy16B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Cleans up clang scan warnings:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-warning: Although the value stored to 'vht_mcs' is used in the
-enclosing expression, the value is never actually read from
-'vht_mcs' [deadcode.DeadStores]
+All errors (new ones prefixed by >>):
 
-warning: Although the value stored to 'he_mcs' is used in the
-enclosing expression, the value is never actually read from
-'he_mcs' [deadcode.DeadStores]
+>> drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+           ^
+>> drivers/hwmon/ltq-cputemp.c:23:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+                       ^
+   drivers/hwmon/ltq-cputemp.c:28:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+           ^
+   drivers/hwmon/ltq-cputemp.c:28:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+                       ^
+   drivers/hwmon/ltq-cputemp.c:39:12: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   value = (ltq_cgu_r32(CGU_GPHY1_CR) >> 9) & 0x01FF;
+                            ^
+   drivers/hwmon/ltq-cputemp.c:92:24: error: use of undeclared identifier 'SOC_TYPE_VR9_2'
+           if (ltq_soc_type() != SOC_TYPE_VR9_2)
+                                 ^
+   6 errors generated.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/ath/ath11k/mac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 1957e1713548..014eaabb3af4 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -1951,7 +1951,7 @@ static void ath11k_peer_assoc_h_vht(struct ath11k *ar,
- 	/* Calculate peer NSS capability from VHT capabilities if STA
- 	 * supports VHT.
- 	 */
--	for (i = 0, max_nss = 0, vht_mcs = 0; i < NL80211_VHT_NSS_MAX; i++) {
-+	for (i = 0, max_nss = 0; i < NL80211_VHT_NSS_MAX; i++) {
- 		vht_mcs = __le16_to_cpu(vht_cap->vht_mcs.rx_mcs_map) >>
- 			  (2 * i) & 3;
- 
-@@ -2272,7 +2272,7 @@ static void ath11k_peer_assoc_h_he(struct ath11k *ar,
- 	/* Calculate peer NSS capability from HE capabilities if STA
- 	 * supports HE.
- 	 */
--	for (i = 0, max_nss = 0, he_mcs = 0; i < NL80211_HE_NSS_MAX; i++) {
-+	for (i = 0, max_nss = 0; i < NL80211_HE_NSS_MAX; i++) {
- 		he_mcs = he_tx_mcs >> (2 * i) & 3;
- 
- 		/* In case of fixed rates, MCS Range in he_tx_mcs might have
+vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
+
+7074d0a9275860 Florian Eckert 2017-09-01  20  
+7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
+7074d0a9275860 Florian Eckert 2017-09-01  22  {
+7074d0a9275860 Florian Eckert 2017-09-01 @23  	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+7074d0a9275860 Florian Eckert 2017-09-01  24  }
+7074d0a9275860 Florian Eckert 2017-09-01  25  
+
+:::::: The code at line 23 was first introduced by commit
+:::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
+
+:::::: TO: Florian Eckert <fe@dev.tdt.de>
+:::::: CC: Guenter Roeck <linux@roeck-us.net>
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
