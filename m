@@ -1,44 +1,47 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5BC7F
-	for <llvm@lists.linux.dev>; Sat,  7 May 2022 03:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF177F
+	for <llvm@lists.linux.dev>; Sat,  7 May 2022 03:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651892923; x=1683428923;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xg/+15Z6oUDHgf/80gewwBoPHGeXBM6xzdqhzC2o6ng=;
-  b=HQoK8KD+0aTy5YGUl4oJ5SXMvXfpulstqZ+QmUiFp5KJLK+yYnNebyFn
-   q+pMCoRg7HsDIm2f2+jcPiMavl9Lvlkr9b1tIyVvIaezUP3sGEUA52+Z3
-   h/CTsUhcN9LEciVucRSJgxwPeIlVG89iwG/GlTQrWaA/fYXMju2yHCO9H
-   Li/8K9VETdH6H10r3QUL1fkM6i38a+2f3jGM0Hnx1Tn+ZQGyb+0QS5FQg
-   xBLgFxmh03Ek2SBf189qsimw5J1X47hC1ac0j83nzwI7tYOu03HAULSmQ
-   yRKEOg29tGz0aems1Go/o3/jdznN+WFKNRoZSL9wzfLncJNF9+PMsQn1u
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267478689"
+  t=1651894368; x=1683430368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yUWM/E07ObxFrPxqWHC8qXKS7ssjAX/Ep6WMvbDeYAI=;
+  b=djWGXNILOp6XhbbgsBzf+ubxwCn+SuDJdOvkBTzHUd01pgLL4rL2R2u7
+   2fjS9jeMzgLUT9gKWed1WDwSLckNI+BYUfXBWL2MeFHKgnQSHIOjELJCD
+   zy50fPCzVuDr/4iQYo3TSH8p+xb7g8W67Y1x5HIFkKvQYV2UHwTG7LulK
+   xbr/8yQmxXgO19iyc1z+sQynpzdpBsVDBUE1/D+lQmUeVaGwdy6SmzInk
+   ypn0I4P1kQuLXWiKre42/bSClx5GxlDKbqBDz6iXKKJ/NY1/dFXgg/+ea
+   Pl9B4JWRPH3Jm4jFeOcWKk2Lc89IPvDLfoFPUleSu4OyOWqVPn4n+lDsB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="249179224"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="267478689"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 20:08:42 -0700
+   d="scan'208";a="249179224"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 20:32:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="695459926"
+   d="scan'208";a="633226287"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 May 2022 20:08:41 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 06 May 2022 20:32:45 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nnAoC-000EA6-GT;
-	Sat, 07 May 2022 03:08:40 +0000
-Date: Sat, 7 May 2022 11:07:47 +0800
+	id 1nnBBU-000EBY-MQ;
+	Sat, 07 May 2022 03:32:44 +0000
+Date: Sat, 7 May 2022 11:31:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 6350/9759]
- drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c:342:9: error: call to
- undeclared function 'ptp_find_pin_unlocked'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205071105.X9CbIhTA-lkp@intel.com>
+To: Yihao Han <hanyihao@vivo.com>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-i2c@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kernel@vivo.com,
+	Yihao Han <hanyihao@vivo.com>
+Subject: Re: [PATCH v2] i2c: s3c2410: change return type of
+ 'i2c_s3c_irq_nextbyte' from 'int' to 'void'
+Message-ID: <202205071109.36SjNuHG-lkp@intel.com>
+References: <20220506122639.2544-1-hanyihao@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,99 +50,222 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220506122639.2544-1-hanyihao@vivo.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   38a288f5941ef03752887ad86f2d85442358c99a
-commit: f3d8e0a9c28ba0bb3716dd5e8697a075ea36fdd8 [6350/9759] net: lan966x: Add support for PTP_PF_EXTTS
-config: arm64-randconfig-r011-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071105.X9CbIhTA-lkp@intel.com/config)
+Hi Yihao,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yihao-Han/i2c-s3c2410-change-return-type-of-i2c_s3c_irq_nextbyte-from-int-to-void/20220506-202923
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+config: arm-randconfig-c002-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071109.36SjNuHG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=f3d8e0a9c28ba0bb3716dd5e8697a075ea36fdd8
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout f3d8e0a9c28ba0bb3716dd5e8697a075ea36fdd8
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/fdefdf435e27cd445a10a77f475e6d316245ed2b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yihao-Han/i2c-s3c2410-change-return-type-of-i2c_s3c_irq_nextbyte-from-int-to-void/20220506-202923
+        git checkout fdefdf435e27cd445a10a77f475e6d316245ed2b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/microchip/lan966x/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/i2c/busses/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the linux-next/master HEAD 38a288f5941ef03752887ad86f2d85442358c99a builds fine.
-      It may have been fixed somewhere.
-
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c:342:9: error: call to undeclared function 'ptp_find_pin_unlocked'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   pin = ptp_find_pin_unlocked(phc->clock, PTP_PF_EXTTS, 0);
-                         ^
+>> drivers/i2c/busses/i2c-s3c2410.c:384:13: error: conflicting types for 'i2c_s3c_irq_nextbyte'
+   static void i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
+               ^
+   drivers/i2c/busses/i2c-s3c2410.c:140:12: note: previous declaration is here
+   static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat);
+              ^
    1 error generated.
 
 
-vim +/ptp_find_pin_unlocked +342 drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c
+vim +/i2c_s3c_irq_nextbyte +384 drivers/i2c/busses/i2c-s3c2410.c
 
-   323	
-   324	irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args)
-   325	{
-   326		struct lan966x *lan966x = args;
-   327		struct lan966x_phc *phc;
-   328		unsigned long flags;
-   329		u64 time = 0;
-   330		time64_t s;
-   331		int pin, i;
-   332		s64 ns;
-   333	
-   334		if (!(lan_rd(lan966x, PTP_PIN_INTR)))
-   335			return IRQ_NONE;
-   336	
-   337		/* Go through all domains and see which pin generated the interrupt */
-   338		for (i = 0; i < LAN966X_PHC_COUNT; ++i) {
-   339			struct ptp_clock_event ptp_event = {0};
-   340	
-   341			phc = &lan966x->phc[i];
- > 342			pin = ptp_find_pin_unlocked(phc->clock, PTP_PF_EXTTS, 0);
-   343			if (pin == -1)
-   344				continue;
-   345	
-   346			if (!(lan_rd(lan966x, PTP_PIN_INTR) & BIT(pin)))
-   347				continue;
-   348	
-   349			spin_lock_irqsave(&lan966x->ptp_clock_lock, flags);
-   350	
-   351			/* Enable to get the new interrupt.
-   352			 * By writing 1 it clears the bit
-   353			 */
-   354			lan_wr(BIT(pin), lan966x, PTP_PIN_INTR);
-   355	
-   356			/* Get current time */
-   357			s = lan_rd(lan966x, PTP_TOD_SEC_MSB(pin));
-   358			s <<= 32;
-   359			s |= lan_rd(lan966x, PTP_TOD_SEC_LSB(pin));
-   360			ns = lan_rd(lan966x, PTP_TOD_NSEC(pin));
-   361			ns &= PTP_TOD_NSEC_TOD_NSEC;
-   362	
-   363			spin_unlock_irqrestore(&lan966x->ptp_clock_lock, flags);
-   364	
-   365			if ((ns & 0xFFFFFFF0) == 0x3FFFFFF0) {
-   366				s--;
-   367				ns &= 0xf;
-   368				ns += 999999984;
-   369			}
-   370			time = ktime_set(s, ns);
-   371	
-   372			ptp_event.index = pin;
-   373			ptp_event.timestamp = time;
-   374			ptp_event.type = PTP_CLOCK_EXTTS;
-   375			ptp_clock_event(phc->clock, &ptp_event);
-   376		}
-   377	
-   378		return IRQ_HANDLED;
-   379	}
    380	
+   381	/*
+   382	 * process an interrupt and work out what to do
+   383	 */
+ > 384	static void i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
+   385	{
+   386		unsigned long tmp;
+   387		unsigned char byte;
+   388	
+   389		switch (i2c->state) {
+   390	
+   391		case STATE_IDLE:
+   392			dev_err(i2c->dev, "%s: called in STATE_IDLE\n", __func__);
+   393			return;
+   394	
+   395		case STATE_STOP:
+   396			dev_err(i2c->dev, "%s: called in STATE_STOP\n", __func__);
+   397			s3c24xx_i2c_disable_irq(i2c);
+   398			goto out_ack;
+   399	
+   400		case STATE_START:
+   401			/*
+   402			 * last thing we did was send a start condition on the
+   403			 * bus, or started a new i2c message
+   404			 */
+   405			if (iicstat & S3C2410_IICSTAT_LASTBIT &&
+   406			    !(i2c->msg->flags & I2C_M_IGNORE_NAK)) {
+   407				/* ack was not received... */
+   408				dev_dbg(i2c->dev, "ack was not received\n");
+   409				s3c24xx_i2c_stop(i2c, -ENXIO);
+   410				goto out_ack;
+   411			}
+   412	
+   413			if (i2c->msg->flags & I2C_M_RD)
+   414				i2c->state = STATE_READ;
+   415			else
+   416				i2c->state = STATE_WRITE;
+   417	
+   418			/*
+   419			 * Terminate the transfer if there is nothing to do
+   420			 * as this is used by the i2c probe to find devices.
+   421			 */
+   422			if (is_lastmsg(i2c) && i2c->msg->len == 0) {
+   423				s3c24xx_i2c_stop(i2c, 0);
+   424				goto out_ack;
+   425			}
+   426	
+   427			if (i2c->state == STATE_READ)
+   428				goto prepare_read;
+   429	
+   430			/*
+   431			 * fall through to the write state, as we will need to
+   432			 * send a byte as well
+   433			 */
+   434			fallthrough;
+   435		case STATE_WRITE:
+   436			/*
+   437			 * we are writing data to the device... check for the
+   438			 * end of the message, and if so, work out what to do
+   439			 */
+   440			if (!(i2c->msg->flags & I2C_M_IGNORE_NAK)) {
+   441				if (iicstat & S3C2410_IICSTAT_LASTBIT) {
+   442					dev_dbg(i2c->dev, "WRITE: No Ack\n");
+   443	
+   444					s3c24xx_i2c_stop(i2c, -ECONNREFUSED);
+   445					goto out_ack;
+   446				}
+   447			}
+   448	
+   449	 retry_write:
+   450	
+   451			if (!is_msgend(i2c)) {
+   452				byte = i2c->msg->buf[i2c->msg_ptr++];
+   453				writeb(byte, i2c->regs + S3C2410_IICDS);
+   454	
+   455				/*
+   456				 * delay after writing the byte to allow the
+   457				 * data setup time on the bus, as writing the
+   458				 * data to the register causes the first bit
+   459				 * to appear on SDA, and SCL will change as
+   460				 * soon as the interrupt is acknowledged
+   461				 */
+   462				ndelay(i2c->tx_setup);
+   463	
+   464			} else if (!is_lastmsg(i2c)) {
+   465				/* we need to go to the next i2c message */
+   466	
+   467				dev_dbg(i2c->dev, "WRITE: Next Message\n");
+   468	
+   469				i2c->msg_ptr = 0;
+   470				i2c->msg_idx++;
+   471				i2c->msg++;
+   472	
+   473				/* check to see if we need to do another message */
+   474				if (i2c->msg->flags & I2C_M_NOSTART) {
+   475	
+   476					if (i2c->msg->flags & I2C_M_RD) {
+   477						/*
+   478						 * cannot do this, the controller
+   479						 * forces us to send a new START
+   480						 * when we change direction
+   481						 */
+   482						dev_dbg(i2c->dev,
+   483							"missing START before write->read\n");
+   484						s3c24xx_i2c_stop(i2c, -EINVAL);
+   485						break;
+   486					}
+   487	
+   488					goto retry_write;
+   489				} else {
+   490					/* send the new start */
+   491					s3c24xx_i2c_message_start(i2c, i2c->msg);
+   492					i2c->state = STATE_START;
+   493				}
+   494	
+   495			} else {
+   496				/* send stop */
+   497				s3c24xx_i2c_stop(i2c, 0);
+   498			}
+   499			break;
+   500	
+   501		case STATE_READ:
+   502			/*
+   503			 * we have a byte of data in the data register, do
+   504			 * something with it, and then work out whether we are
+   505			 * going to do any more read/write
+   506			 */
+   507			byte = readb(i2c->regs + S3C2410_IICDS);
+   508			i2c->msg->buf[i2c->msg_ptr++] = byte;
+   509	
+   510			/* Add actual length to read for smbus block read */
+   511			if (i2c->msg->flags & I2C_M_RECV_LEN && i2c->msg->len == 1)
+   512				i2c->msg->len += byte;
+   513	 prepare_read:
+   514			if (is_msglast(i2c)) {
+   515				/* last byte of buffer */
+   516	
+   517				if (is_lastmsg(i2c))
+   518					s3c24xx_i2c_disable_ack(i2c);
+   519	
+   520			} else if (is_msgend(i2c)) {
+   521				/*
+   522				 * ok, we've read the entire buffer, see if there
+   523				 * is anything else we need to do
+   524				 */
+   525				if (is_lastmsg(i2c)) {
+   526					/* last message, send stop and complete */
+   527					dev_dbg(i2c->dev, "READ: Send Stop\n");
+   528	
+   529					s3c24xx_i2c_stop(i2c, 0);
+   530				} else {
+   531					/* go to the next transfer */
+   532					dev_dbg(i2c->dev, "READ: Next Transfer\n");
+   533	
+   534					i2c->msg_ptr = 0;
+   535					i2c->msg_idx++;
+   536					i2c->msg++;
+   537				}
+   538			}
+   539	
+   540			break;
+   541		}
+   542	
+   543		/* acknowlegde the IRQ and get back on with the work */
+   544	
+   545	 out_ack:
+   546		tmp = readl(i2c->regs + S3C2410_IICCON);
+   547		tmp &= ~S3C2410_IICCON_IRQPEND;
+   548		writel(tmp, i2c->regs + S3C2410_IICCON);
+   549	}
+   550	
 
 -- 
 0-DAY CI Kernel Test Service
