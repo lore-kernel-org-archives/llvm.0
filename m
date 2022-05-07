@@ -1,30 +1,30 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A869D7E
-	for <llvm@lists.linux.dev>; Sat,  7 May 2022 06:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC0181C
+	for <llvm@lists.linux.dev>; Sat,  7 May 2022 09:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1651905414;
+	s=mimecast20190719; t=1651916563;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=NsufiTWxTE6monKln+G5j9lBmuI7Ttm82N2bjVAZVT0=;
-	b=GW3gcr4tzZB5br2lAG8VAm4PFXWctywqjju8vLQh0srOBn5MswZdt73qjP2N3xnsOzYJ4C
-	rdUDI2JUF1KTvdAfuL+MmWXAiZZl8UyIVGDuJSEX3Zw25b28HTR3ru6DI/b3cUi2T42YAv
-	/DaPfIfP7PR0N83+yQ96ogUm1V+wRac=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=ZHjhpEkbZEFCQ/ikeUyEmgWO73go0z/VNjx44cbOpEw=;
+	b=Zfyj0wsNUYEj77CcUiAJtioic6ZpJobg5WJx9B0pDElGRl3U0r9Ywc4QA7xtKPDUiPvv4t
+	7ZFJ7Hm6ZSUlJH8NaFiCP1q+lr+9GTwrsz2HmE9NdH5lYQkaHZ5T6Ggn7NKeqqA2gqaDjv
+	gjeXC9tZaWxSz1VOLf7TQwNCNnTK8JA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-362-mrXkDyW3O5ib3YPnSCsqcA-1; Sat, 07 May 2022 02:36:52 -0400
-X-MC-Unique: mrXkDyW3O5ib3YPnSCsqcA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-177--VhWN-PAPG2FZnUodw6PfA-1; Sat, 07 May 2022 05:42:41 -0400
+X-MC-Unique: -VhWN-PAPG2FZnUodw6PfA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21E0F80A0B5
-	for <llvm@lists.linux.dev>; Sat,  7 May 2022 06:36:52 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 901A12800980
+	for <llvm@lists.linux.dev>; Sat,  7 May 2022 09:42:41 +0000 (UTC)
 Received: from [172.64.5.14] (unknown [10.30.32.252])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8B4A47AD9;
-	Sat,  7 May 2022 06:36:44 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 33BA0401012B;
+	Sat,  7 May 2022 09:42:41 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,24 +34,25 @@ MIME-Version: 1.0
 From: CKI Project <cki-project@redhat.com>
 To: skt-results-master@redhat.com, llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.18.0-rc5
- (mainline.kernel.org-clang, 4df22ca8)
-Date: Sat, 07 May 2022 06:36:43 -0000
-CC: Yi Zhang <yizhan@redhat.com>, Zorro Lang <zlang@redhat.com>,
- Jianlin Shi <jishi@redhat.com>, Jianwen Ji <jiji@redhat.com>,
- Hangbin Liu <haliu@redhat.com>, Guangwu Zhang <guazhang@redhat.com>,
- Fendy Tjahjadi <ftjahjad@redhat.com>, Yi Chen <yiche@redhat.com>,
+ (mainline.kernel.org-clang, adcffc17)
+Date: Sat, 07 May 2022 09:42:39 -0000
+CC: Yi Zhang <yizhan@redhat.com>, Memory Management <mm-qe@redhat.com>,
+ Li Wang <liwang@redhat.com>, Jan Stancek <jstancek@redhat.com>,
+ Zorro Lang <zlang@redhat.com>, Jianlin Shi <jishi@redhat.com>,
+ Jianwen Ji <jiji@redhat.com>, Hangbin Liu <haliu@redhat.com>,
+ Guangwu Zhang <guazhang@redhat.com>, Fendy Tjahjadi <ftjahjad@redhat.com>,
+ Xiong Zhou <xzhou@redhat.com>, Yi Chen <yiche@redhat.com>,
  Jaroslav Kysela <jkysela@redhat.com>, Fine Fan <ffan@redhat.com>,
  Jiri Dluhos <jdluhos@redhat.com>, Bruno Goncalves <bgoncalv@redhat.com>,
- Xiong Zhou <xzhou@redhat.com>, Stephen Bertram <sbertram@redhat.com>,
- Memory Management <mm-qe@redhat.com>, Changhui Zhong <czhong@redhat.com>,
- Jeff Bastian <jbastian@redhat.com>
-Message-ID: <cki.3KJYS4DX0HLNT3Y2QI7R@redhat.com>
-X-Gitlab-Pipeline-ID: 533246144
+ Changhui Zhong <czhong@redhat.com>, Jeff Bastian <jbastian@redhat.com>,
+ Stephen Bertram <sbertram@redhat.com>
+Message-ID: <cki.4J0UOTGDRV9QPEBG8CXM@redhat.com>
+X-Gitlab-Pipeline-ID: 533358221
 X-Gitlab-Url: https://gitlab.com
 X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/533246144?=
-X-DataWarehouse-Checkout-IID: 41267
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/533358221?=
+X-DataWarehouse-Checkout-IID: 41293
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -62,7 +63,7 @@ Content-Transfer-Encoding: quoted-printable
 
 
 Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/41267
+    https://datawarehouse.cki-project.org/kcidb/checkouts/41293
 
 Hello,
 
@@ -70,8 +71,8 @@ We ran automated tests on a recent commit from this kernel tree:
 
        Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
 s/linux.git
-            Commit: 4df22ca85d3d - Merge tag 'for-linus' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/rdma/rdma
+            Commit: adcffc1716f8 - Merge tag 'nfs-for-5.18-3' of git://git.=
+linux-nfs.org/projects/trondmy/linux-nfs
 
 The results of these automated tests are provided below.
 
@@ -86,24 +87,27 @@ All kernel binaries, config files, and logs are available for download here=
 :
 
   https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/05/06/533246144
+fix=3Ddatawarehouse-public/2022/05/06/533358221
 
 One or more kernel tests failed:
 
     s390x:
+     =E2=9D=8C LTP - syscalls
      =E2=9D=8C POSIX pjd-fstest suites
      =E2=9D=8C Networking tunnel: gre basic
      =E2=9D=8C storage: dm/common
 
     aarch64:
+     =E2=9D=8C xfstests - ext4
+     =E2=9D=8C LTP - syscalls
      =E2=9D=8C POSIX pjd-fstest suites
      =E2=9D=8C Networking cki netfilter test
      =E2=9D=8C ALSA PCM loopback test
      =E2=9D=8C storage: dm/common
      =E2=9D=8C storage: software RAID testing
      =E2=9D=8C Reboot test
-     =E2=9D=8C xfstests - ext4
      =E2=9D=8C Storage blktests - blk
+     =F0=9F=92=A5 stress: stress-ng - os
 
     x86_64 (debug):
      =E2=9D=8C POSIX pjd-fstest suites
@@ -113,8 +117,7 @@ One or more kernel tests failed:
      =E2=9D=8C xfstests - nfsv4.2
 
     x86_64:
-     =F0=9F=92=A5 stress: stress-ng - os
-     =E2=9D=8C xfstests - nfsv4.2
+     =E2=9D=8C Storage blktests - blk
      =E2=9D=8C POSIX pjd-fstest suites
      =E2=9D=8C Networking tunnel: gre basic
      =E2=9D=8C storage: dm/common
@@ -179,20 +182,21 @@ We booted each kernel and ran the following tests:
 
   aarch64:
     Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
+       =E2=9D=8C xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
 
     Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 Reboot test
-
-    Host 3:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
@@ -200,7 +204,7 @@ We booted each kernel and ran the following tests:
        =E2=9C=85 ACPI enabled test
        =E2=9C=85 LTP - cve
        =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
+       =E2=9D=8C LTP - syscalls
        =E2=9C=85 LTP - can
        =E2=9C=85 LTP - commands
        =E2=9C=85 LTP - containers
@@ -271,29 +275,7 @@ We booted each kernel and ran the following tests:
        =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
        =E2=9D=8C Reboot test
 
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvmeof-mp
-       =E2=9C=85 Reboot test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9D=8C xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 6:
+    Host 3:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
@@ -305,53 +287,33 @@ We booted each kernel and ran the following tests:
        =E2=9C=85 stress: stress-ng - cpu-cache
        =E2=9C=85 stress: stress-ng - memory
        =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9C=85 Storage block - storage fio numa
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
+       =F0=9F=9A=A7 =F0=9F=92=A5 stress: stress-ng - os
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvmeof-mp
+       =E2=9C=85 Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 Reboot test
+
+    Host 6:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 selinux-policy: serge-testsuite
        =E2=9C=85 Reboot test
 
   ppc64le:
     Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 4:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -428,6 +390,47 @@ r
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
 
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
     Host 5:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
@@ -438,8 +441,8 @@ r
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
        =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
 
     Host 6:
@@ -524,16 +527,42 @@ r
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvmeof-mp
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
        =E2=9C=85 Reboot test
 
     Host 2:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+       =E2=9C=85 Reboot test
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Reboot test
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvmeof-mp
+       =E2=9C=85 Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
        =E2=9C=85 LTP - cve
        =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
+       =E2=9D=8C LTP - syscalls
        =E2=9C=85 LTP - can
        =E2=9C=85 LTP - commands
        =E2=9C=85 LTP - containers
@@ -594,74 +623,15 @@ r
        =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
        =E2=9C=85 Reboot test
 
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
-       =E2=9C=85 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 kdump - file-load
-       =E2=9C=85 Reboot test
-
-    Host 5:
+  x86_64 (debug):
+    Host 1:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
        =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-  x86_64 (debug):
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 CPU: Die Test
-       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
-test - upstream
        =E2=9C=85 Reboot test
 
     Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 4:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
@@ -728,19 +698,7 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 storage: targetcli basic
        =E2=9D=8C Reboot test
 
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9D=8C xfstests - nfsv4.2
-       =E2=9C=85 xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9C=85 Reboot test
-
-  x86_64:
-    Host 1:
+    Host 3:
 
        =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
  (marked
@@ -751,33 +709,8 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
        =E2=9C=85 CPU: Die Test
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
        =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
 test - upstream
-       =F0=9F=9A=A7 =F0=9F=92=A5 stress: stress-ng - os
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 kdump - file-load
-       =E2=9C=85 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
        =E2=9C=85 Reboot test
 
     Host 4:
@@ -791,14 +724,48 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
        =E2=9C=85 Reboot test
 
-    Host 5:
+  x86_64:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 kdump - file-load
+       =E2=9C=85 Reboot test
+
+    Host 2:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
        =E2=9C=85 selinux-policy: serge-testsuite
        =E2=9C=85 Reboot test
 
-    Host 6:
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9D=8C Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: lvm device-mapper =
+test - upstream
+       =F0=9F=9A=A7 =E2=9C=85 stress: stress-ng - os
+       =E2=9C=85 Reboot test
+
+    Host 4:
        =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
        =F0=9F=9A=A7 =E2=9C=85 machineinfo
        =E2=9C=85 Boot test
@@ -876,6 +843,24 @@ test - upstream
        =F0=9F=9A=A7 =E2=9C=85 storage: targetcli basic
        =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
        =E2=9D=8C Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+       =E2=9C=85 Reboot test
+
+    Host 6:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 xfstests - ext4
+       =E2=9C=85 xfstests - xfs
+       =E2=9C=85 xfstests - nfsv4.2
+       =E2=9C=85 xfstests - cifsv3.11
+       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
+       =E2=9C=85 Reboot test
 
   Test sources: https://gitlab.com/cki-project/kernel-tests
     =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
