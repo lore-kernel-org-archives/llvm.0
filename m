@@ -1,117 +1,132 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333541859
-	for <llvm@lists.linux.dev>; Sun,  8 May 2022 17:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8774D7E
+	for <llvm@lists.linux.dev>; Sun,  8 May 2022 18:39:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652032084; x=1683568084;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kw8BRvmapQWWRIscmnjVECXlHEtYY3SzO2+15W0R9ug=;
-  b=F6yPvX08vLqENf8C28zTzxAtmOQyGS/8zRiDudFDW2yXtp0b5mGwiveN
-   yGK3ZpyHJNW4dOZQY/Ie78hjg62XThPzPpNSiDoo2Pch73ln6eg30R2R8
-   St3JSQI2g/sxUmmI9zgj2m+Sg5kS3Sm8/5jOZ/LPr7E1WxKofQxXp8nnB
-   2UCxBiIIu6k7C3bWNvqkde55ceveySPQSM4YCsVtQr5nWZ1bFkl+3HLNM
-   fNIdMns5+jbPk1UZcmFwtklIELIyfNgxfZap2WUz5F9xt0rBHijjooQYT
-   BWVIvu0fBIo/ikITdmUL+1zDd9+53M32M6/mx/c5UewIKS4G58ZfJyWIo
+  t=1652035193; x=1683571193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ku5z9ZOYUJh+GqggbRmp5uymILKAy+CEwjEQNBeO+Ps=;
+  b=XUJx8lHMyqA2k5b7Qrsnz6HO/Zq22aZFKqN4JMq5oFOXu2oykx4mPQRz
+   +0TXGNFMnSk1Ey4hm895eH9b52Evs5QCaq7eDougnAkMAIo+hToLAB9U7
+   dRPqgsLYDHVZrQFEIP8vUFyM09r46y+0CBEYmpx7976oXnxvSNAac+y/r
+   cevDd9Fm8a23AFgGsRhoqzNEoRk4BWBnVDkc4x6XTiYh5m/yu6PGXir4N
+   OIlq0LUspBbnEWbqtV2TFph/COos81pnvnp6AP8RYmH8kFXqMiXZ1Clry
+   Pr7CiRNgI7xLPziXCKQjFmE30yu5RbN4cbJWKNIOByjw3VDeXcbx3e+i5
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="355295836"
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267710172"
 X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="355295836"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 10:48:03 -0700
+   d="scan'208";a="267710172"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 11:39:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="622613572"
+   d="scan'208";a="601650575"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 10:48:01 -0700
+  by orsmga001.jf.intel.com with ESMTP; 08 May 2022 11:39:48 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nnl0j-000FfF-8T;
-	Sun, 08 May 2022 17:48:01 +0000
-Date: Mon, 9 May 2022 01:47:48 +0800
+	id 1nnloq-000Fic-7M;
+	Sun, 08 May 2022 18:39:48 +0000
+Date: Mon, 9 May 2022 02:39:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+	jikos@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
-	Junwen Wu <wudaemon@163.com>
-Subject: drivers/thermal/thermal_sysfs.c:794:9: warning: mixing declarations
- and code is a C99 extension
-Message-ID: <202205090117.wVvKlfFv-lkp@intel.com>
+	benjamin.tissoires@redhat.com, spbnick@gmail.com,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stefanberzl@gmail.com, albertofanjul@gmail.com,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH for-5.19/uclogic 1/7] HID: uclogic: Move param printing
+ to a function
+Message-ID: <202205090241.d7Xmt8GT-lkp@intel.com>
+References: <20220508160146.13004-2-jose.exposito89@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220508160146.13004-2-jose.exposito89@gmail.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
-head:   a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
-commit: a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7 thermal/core: change mm alloc method to avoid kernel warning
-date:   2 hours ago
-config: riscv-randconfig-r042-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090117.wVvKlfFv-lkp@intel.com/config)
+Hi "José,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on hid/for-next]
+[cannot apply to v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+config: x86_64-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220509/202205090241.d7Xmt8GT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+        # https://github.com/intel-lab-lkp/linux/commit/4c0671e4ce0687136ff71aa65539cd3a2798d99d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
-        git checkout a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+        git fetch --no-tags linux-review Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+        git checkout 4c0671e4ce0687136ff71aa65539cd3a2798d99d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/thermal/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/thermal/thermal_sysfs.c:794:9: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-       int l = min, r = max, mid, cnt = 0;
-           ^
-   1 warning generated.
+>> drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+   drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface frame parameters with hid_dbg(), indented with two
+   drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface parameters with hid_dbg().
 
 
-vim +794 drivers/thermal/thermal_sysfs.c
+vim +48 drivers/hid/hid-uclogic-params.c
 
-   785	
-   786	static int find_show_state( int *nums, int numsSize, int k, unsigned int *max_value)
-   787	{
-   788	    int i, min = INT_MAX, max = 0;
-   789	    for( i = 0; i < numsSize; ++i )
-   790	    {
-   791	        min = nums[i] < min ? nums[i] : min;
-   792	        max = nums[i] > max ? nums[i] : max;
-   793	    }
- > 794	    int l = min, r = max, mid, cnt = 0;
-   795	    while( l < r )
-   796	    {
-   797	        mid = r - (r - l) / 2;
-   798	        for( i = 0; i < numsSize; ++i )
-   799	        {
-   800	            if( nums[i] >= mid )
-   801	                ++cnt;
-   802	        }
-   803	        if( cnt < k )
-   804	        {
-   805	            r = mid - 1;
-   806	            cnt = 0;
-   807	        }
-   808	        else
-   809	        {
-   810	            l = mid;
-   811	            cnt = 0;
-   812	        }
-   813	    }
-   814	     *max_value = max;
-   815	    return l;
-   816	}
-   817	
+    46	
+    47	/**
+  > 48	 * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+    49	 *
+    50	 * @hdev:	The HID device the pen parameters describe.
+    51	 * @pen:	The pen parameters to dump.
+    52	 */
+    53	static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
+    54						const struct uclogic_params_pen *pen)
+    55	{
+    56		size_t i;
+    57	
+    58		hid_dbg(hdev, "\t.usage_invalid = %s\n",
+    59			(pen->usage_invalid ? "true" : "false"));
+    60		hid_dbg(hdev, "\t.desc_ptr = %p\n", pen->desc_ptr);
+    61		hid_dbg(hdev, "\t.desc_size = %u\n", pen->desc_size);
+    62		hid_dbg(hdev, "\t.id = %u\n", pen->id);
+    63		hid_dbg(hdev, "\t.subreport_list = {\n");
+    64		for (i = 0; i < ARRAY_SIZE(pen->subreport_list); i++) {
+    65			hid_dbg(hdev, "\t\t{0x%02hhx, %hhu}%s\n",
+    66				pen->subreport_list[i].value,
+    67				pen->subreport_list[i].id,
+    68				i < (ARRAY_SIZE(pen->subreport_list) - 1) ? "," : "");
+    69		}
+    70		hid_dbg(hdev, "\t}\n");
+    71		hid_dbg(hdev, "\t.inrange = %s\n",
+    72			uclogic_params_pen_inrange_to_str(pen->inrange));
+    73		hid_dbg(hdev, "\t.fragmented_hires = %s\n",
+    74			(pen->fragmented_hires ? "true" : "false"));
+    75		hid_dbg(hdev, "\t.tilt_y_flipped = %s\n",
+    76			(pen->tilt_y_flipped ? "true" : "false"));
+    77	}
+    78	
 
 -- 
 0-DAY CI Kernel Test Service
