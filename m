@@ -1,44 +1,39 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1DA1879
-	for <llvm@lists.linux.dev>; Sun,  8 May 2022 21:42:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652046152; x=1683582152;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gAfLF8CFVZ/vW71EH8Bx4/JhmuMGckhfC5tTLQ3bB00=;
-  b=LHc+iJ+R8rddNCqN6XFaandleajEuRT43p4ziCart/SHHwTopnjQi0BT
-   Gd4RJD79Njgnf/bPZz9ecMAGBgLXf+RGN6CaRNIb1FBTAK/4OfhHJx7Q4
-   UHK1H6pygd2c2ZnrYsCgFzOGRFxStLOKZddkTut2cVKsEB9uAvkOp2R2W
-   oZfYsrYDi18gAP7AMRYoH6PdTJ2whZSJ64CCKUXFx/ZhXe+nqDRaURR+0
-   VpPGFglal4S3RcqgvSdxc9atsh+2FhXiGsaasY0GiCPvBMqeqNcUUcWeT
-   Lr3V/UlV3yp7gGp0KcVNAdeboZYUO8ID3FH9adbwhmACrQZI67gMKv+2b
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="256407986"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="256407986"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="539528989"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 May 2022 14:42:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nnofd-000FrT-Na;
-	Sun, 08 May 2022 21:42:29 +0000
-Date: Mon, 9 May 2022 05:41:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/fastpoll-mshot 97/98]
- fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used
- here
-Message-ID: <202205090529.AQs5GOej-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE07B2F4C
+	for <llvm@lists.linux.dev>; Sun,  8 May 2022 23:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C35C9C385A4;
+	Sun,  8 May 2022 23:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652053894;
+	bh=JxIt81fSqlUqVYbyW1jrVBaOtkLCBHv625E414LbXt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CDLgSUrLYZD1UGkGluaOyvl+lDnASzFx1zpwANIkYSR3VbgaAR9+4+V1lLklDxpWY
+	 seL1wBh4N/t8BGTLexCx8ykiDZsxKrmwlhiE0EupkEgy2yObbM+V08FoFxxWhMj3fm
+	 mTciTAWrn32A8vLbSrsPD9cuA8yb8wuMH4MQ1qTR/RMlTjpGxBgkbgP4vWxTPSmrgK
+	 4N+kqvYVgEIztYD/umyondYo1oB66CTKZajvOM6EHN9FAzME1nYjoBev6LpHgYH2pa
+	 +dV8BECUVFuH5ilGApbVdaxImoFGDskSxsJCt2O67tJgmiPFjK25/oNAuyIgz9fEWO
+	 lZj3FNAfB2CKg==
+Date: Sun, 8 May 2022 16:51:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: Arnd Bergmann <arnd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent
+ shadowing
+Message-ID: <YnhXgzhghfi17vMX@dev-arch.thelio-3990X>
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr>
+ <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,76 +42,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/fastpoll-mshot
-head:   883f288d64ca56518398dfa59bbdbfae1215ec03
-commit: 8e0d731f259198aac32de79f7059d34b94fc0fb3 [97/98] io_uring: allow allocated fixed files for openat/openat2
-config: riscv-buildonly-randconfig-r005-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090529.AQs5GOej-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/8e0d731f259198aac32de79f7059d34b94fc0fb3
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/fastpoll-mshot
-        git checkout 8e0d731f259198aac32de79f7059d34b94fc0fb3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sun, May 08, 2022 at 09:37:14PM +0900, Vincent MAILHOL wrote:
+> Hi Arnd,
+> 
+> +CC: Kees Cook
+> 
+> On Sun. 8 May 2022 at 19:27, Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Sun, May 8, 2022 at 12:09 PM Vincent Mailhol
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > >
+> > > Aside of the __builtin_foo() ones, x86 does not directly rely on any
+> > > builtin functions.
+> > >
+> > > However, such builtin functions are not explicitly deactivated,
+> > > creating some collisions, concrete example being ffs() from bitops.h,
+> > > c.f.:
+> > >
+> > > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+> > > |   283 | static __always_inline int ffs(int x)
+> > >
+> > > This patch adds -fno-builtin to KBUILD_CFLAGS for the x86
+> > > architectures in order to prevent shadowing of builtin functions.
+> > >
+> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > ---
+> > > FYI, I tested this patch on a "make allyesconfig" for both x86_32 and
+> > > x86_64.
+> > >
+> > > This is a resend. Only difference is that I dropped the RFC flag and
+> > > added Arnd in CC because he did a similar patch to fix ffs shadow
+> > > warnings in the past:
+> > >
+> > > https://lore.kernel.org/all/20201026160006.3704027-1-arnd@kernel.org/
+> >
+> > I think this is a correct change, but unfortunately it exposes a clang bug
+> >  with -mregparm=3. Nick should be able to provide more details, I think
+> > he has a plan.
+> 
+> Interesting. I admittedly did not do extensive tests on clang
+> but I would have expected the Linux kernel bot to have warned me
+> on my previous patch.
+> 
+> I did research on mregparm and clang. I found this thread:
+> https://lore.kernel.org/r/20220208225350.1331628-9-keescook@chromium.org
+> 
+> and the associated LLVM issue:
+> https://github.com/llvm/llvm-project/issues/53645
+> 
+> Those threads mention that some clang builtins become unusable
+> when combining -mregparm=3 and -m32. But I could not find a
+> bug reference about -mregparm=3 and -fno-builtin combination.
+> 
+> Could you just double confirm that you indeed saw the issue with
+> -fno-builtin? If that the case, I am really curious to get the
+> details :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-ffreestanding implies -fno-builtin; removing -ffreestanding from
+arch/x86/Makefile for 32-bit x86 caused the problem so I don't think
+that your patch would cause any issue but I could be missing something.
 
-All warnings (new ones prefixed by >>):
+However, doesn't -fno-builtin remove the ability for GCC and clang to
+perform certain libcall optimizations? I seem to recall this coming up
+in previous threads but I am having a hard time finding the exact
+language that I was looking for. This thread seems to be the most recent
+one that I can remember:
 
->> fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                           return ret;
-                                  ^~~
-   fs/io_uring.c:4736:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   fs/io_uring.c:6174:2: error: call to undeclared function '__io_poll_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           __io_poll_clean(req);
-           ^
-   fs/io_uring.c:6174:2: note: did you mean '__io_fill_cqe'?
-   fs/io_uring.c:2166:20: note: '__io_fill_cqe' declared here
-   static inline bool __io_fill_cqe(struct io_ring_ctx *ctx, u64 user_data,
-                      ^
-   1 warning and 1 error generated.
+https://lore.kernel.org/CAHk-=whn91ar+EbcBXQb9UXad00Q5WjU-TCB6UBzVba682a4ew@mail.gmail.com/
 
-
-vim +/ret +4743 fs/io_uring.c
-
-  4730	
-  4731	static int io_fixed_file_install(struct io_kiocb *req, unsigned int issue_flags,
-  4732					 struct file *file, unsigned int file_slot)
-  4733	{
-  4734		int alloc_slot = file_slot == UINT_MAX;
-  4735		struct io_ring_ctx *ctx = req->ctx;
-  4736		int ret;
-  4737	
-  4738		if (alloc_slot) {
-  4739			io_ring_submit_lock(ctx, issue_flags);
-  4740			file_slot = io_file_bitmap_get(ctx);
-  4741			if (unlikely(file_slot < 0)) {
-  4742				io_ring_submit_unlock(ctx, issue_flags);
-> 4743				return ret;
-  4744			}
-  4745		}
-  4746	
-  4747		ret = io_install_fixed_file(req, file, issue_flags, file_slot);
-  4748		if (alloc_slot) {
-  4749			io_ring_submit_unlock(ctx, issue_flags);
-  4750			return file_slot;
-  4751		}
-  4752	
-  4753		return ret;
-  4754	}
-  4755	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
