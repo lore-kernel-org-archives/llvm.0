@@ -1,97 +1,329 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EFC7F
-	for <llvm@lists.linux.dev>; Sun,  8 May 2022 10:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D3EC385B4
-	for <llvm@lists.linux.dev>; Sun,  8 May 2022 10:28:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652005687;
-	bh=lTqCp5J7KZYPMfSCve/gMBXjy4K1hDRCCDO9pSAkrCY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jhm+liNuNsbsvNmvCYcx5p+Lt1dXtcVhg5oh5d9dnlbbrAyI+VIXxC5RNVnC5hiPy
-	 uDDWLcmtoMgqPvsgPlp9Y1Pz+L5szViBph1p66PawV2TDLp8r34OSESKNH45HCLUWS
-	 4jfmiT7kqfZNKFMKt95hpmk2myPCcTIXrT+RZJbibNA+KHHtvVFj9qKVAnXTWD40Rh
-	 9O7TvS4JtJ2abyxECgYZYsON3O++JsJpE3hrFD+SaBNcQBOOTkBiaxa35l5Sax5Mbc
-	 RWBK5JP82/A6c007XwSnBtQObSNS+4OD25hCjSJW9yWDjZKp4Hqc1Sj3kLKpCu05LH
-	 x0LuiLhfZgOuA==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2ef5380669cso118447937b3.9
-        for <llvm@lists.linux.dev>; Sun, 08 May 2022 03:28:07 -0700 (PDT)
-X-Gm-Message-State: AOAM533NUOf3JN5jJ92ZTjfBBnU80+f1/wlPJRNaWU3EIRbgCdDJgKo9
-	3CzfZLeQywgB5kDXSKzmUC0BD11VYUkp34315m8=
-X-Google-Smtp-Source: ABdhPJx1enxRFFVVUEhNzg0zrvmj8KrLesGxusj+Va47XXliX8c5Gdd3wKWfovwycjdDspSk70LOhFKJwYet7yHXbOU=
-X-Received: by 2002:a81:2305:0:b0:2f7:dadb:2162 with SMTP id
- j5-20020a812305000000b002f7dadb2162mr9219506ywj.42.1652005686253; Sun, 08 May
- 2022 03:28:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E097E
+	for <llvm@lists.linux.dev>; Sun,  8 May 2022 12:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652011916; x=1683547916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R4DAXyuGs9glGY930Yuuv0OPb/qcHtgFsYO0YLL/VWc=;
+  b=B3/2golYh6Ej08Qcmz1JItIcplzomj/8tfmCHbj6H7GHozvJ6csafte/
+   pBW7tltOk0MTFB3mbsSWj/3XfZQwEO/qz4CJxp3fcGg4Gp4OgiLcbziTp
+   NFzKh6m+z/NiMFX2esBjbaZaA/Edkv+2X0m+zykwSaB/Dk9OYnUzTs6NP
+   xt1yZGLlyGnqL4o+tQHbKFThX6IJi2RXjoW2OxLBL2edqkL9IsXEVig2f
+   8reAPCgfW/79HoqgAQVvuRTmZvN8RgoEj95Oe4YePyP9Ya5EKmMn1PEjT
+   ybpL9amTQeEh5MCeUQLHWJFGs9QWwO83fb6dexDg/zemasf5HSzNn4W4d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="268736957"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="268736957"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 05:11:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="622549952"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 05:11:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nnflM-000FTB-5l;
+	Sun, 08 May 2022 12:11:48 +0000
+Date: Sun, 8 May 2022 20:11:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>, akpm@linux-foundation.org,
+	mike.kravetz@oracle.com, catalin.marinas@arm.com, will@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+	deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+	paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+	agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+	svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+	davem@davemloft.net, arnd@arndb.de, baolin.wang@linux.alibaba.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue
+ when migration
+Message-ID: <202205081950.IpKFNYip-lkp@intel.com>
+References: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr> <20220508100907.61231-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220508100907.61231-1-mailhol.vincent@wanadoo.fr>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sun, 8 May 2022 12:27:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
-Message-ID: <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
 
-On Sun, May 8, 2022 at 12:09 PM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> Aside of the __builtin_foo() ones, x86 does not directly rely on any
-> builtin functions.
->
-> However, such builtin functions are not explicitly deactivated,
-> creating some collisions, concrete example being ffs() from bitops.h,
-> c.f.:
->
-> | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-> |   283 | static __always_inline int ffs(int x)
->
-> This patch adds -fno-builtin to KBUILD_CFLAGS for the x86
-> architectures in order to prevent shadowing of builtin functions.
->
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> FYI, I tested this patch on a "make allyesconfig" for both x86_32 and
-> x86_64.
->
-> This is a resend. Only difference is that I dropped the RFC flag and
-> added Arnd in CC because he did a similar patch to fix ffs shadow
-> warnings in the past:
->
-> https://lore.kernel.org/all/20201026160006.3704027-1-arnd@kernel.org/
+Hi Baolin,
 
-I think this is a correct change, but unfortunately it exposes a clang bug
- with -mregparm=3. Nick should be able to provide more details, I think
-he has a plan.
+I love your patch! Yet something to improve:
 
-> ---
->  arch/x86/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index e84cdd409b64..5ff7b6571dd2 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -53,6 +53,8 @@ export REALMODE_CFLAGS
->  # e.g.: obj-y += foo_$(BITS).o
->  export BITS
->
-> +KBUILD_CFLAGS += -fno-builtin
-> +
->  #
->  # Prevent GCC from generating any FP code by mistake.
->  #
-> --
-> 2.34.1
->
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20220506]
+[cannot apply to hnaz-mm/master arm64/for-next/core linus/master v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220508/202205081950.IpKFNYip-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/907981b27213707fdb2f8a24c107d6752a09a773
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
+        git checkout 907981b27213707fdb2f8a24c107d6752a09a773
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/rmap.c:1931:13: error: call to undeclared function 'huge_ptep_clear_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                    ^
+   mm/rmap.c:1931:13: note: did you mean 'ptep_clear_flush'?
+   include/linux/pgtable.h:431:14: note: 'ptep_clear_flush' declared here
+   extern pte_t ptep_clear_flush(struct vm_area_struct *vma,
+                ^
+>> mm/rmap.c:1931:11: error: assigning to 'pte_t' from incompatible type 'int'
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/rmap.c:2023:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   mm/rmap.c:2035:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   4 errors generated.
+
+
+vim +/huge_ptep_clear_flush +1931 mm/rmap.c
+
+  1883	
+  1884			/* Unexpected PMD-mapped THP? */
+  1885			VM_BUG_ON_FOLIO(!pvmw.pte, folio);
+  1886	
+  1887			subpage = folio_page(folio,
+  1888					pte_pfn(*pvmw.pte) - folio_pfn(folio));
+  1889			address = pvmw.address;
+  1890			anon_exclusive = folio_test_anon(folio) &&
+  1891					 PageAnonExclusive(subpage);
+  1892	
+  1893			if (folio_test_hugetlb(folio)) {
+  1894				/*
+  1895				 * huge_pmd_unshare may unmap an entire PMD page.
+  1896				 * There is no way of knowing exactly which PMDs may
+  1897				 * be cached for this mm, so we must flush them all.
+  1898				 * start/end were already adjusted above to cover this
+  1899				 * range.
+  1900				 */
+  1901				flush_cache_range(vma, range.start, range.end);
+  1902	
+  1903				if (!folio_test_anon(folio)) {
+  1904					/*
+  1905					 * To call huge_pmd_unshare, i_mmap_rwsem must be
+  1906					 * held in write mode.  Caller needs to explicitly
+  1907					 * do this outside rmap routines.
+  1908					 */
+  1909					VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+  1910	
+  1911					if (huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
+  1912						flush_tlb_range(vma, range.start, range.end);
+  1913						mmu_notifier_invalidate_range(mm, range.start,
+  1914									      range.end);
+  1915	
+  1916						/*
+  1917						 * The ref count of the PMD page was dropped
+  1918						 * which is part of the way map counting
+  1919						 * is done for shared PMDs.  Return 'true'
+  1920						 * here.  When there is no other sharing,
+  1921						 * huge_pmd_unshare returns false and we will
+  1922						 * unmap the actual page and drop map count
+  1923						 * to zero.
+  1924						 */
+  1925						page_vma_mapped_walk_done(&pvmw);
+  1926						break;
+  1927					}
+  1928				}
+  1929	
+  1930				/* Nuke the hugetlb page table entry */
+> 1931				pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+  1932			} else {
+  1933				flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+  1934				/* Nuke the page table entry. */
+  1935				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+  1936			}
+  1937	
+  1938			/* Set the dirty flag on the folio now the pte is gone. */
+  1939			if (pte_dirty(pteval))
+  1940				folio_mark_dirty(folio);
+  1941	
+  1942			/* Update high watermark before we lower rss */
+  1943			update_hiwater_rss(mm);
+  1944	
+  1945			if (folio_is_zone_device(folio)) {
+  1946				unsigned long pfn = folio_pfn(folio);
+  1947				swp_entry_t entry;
+  1948				pte_t swp_pte;
+  1949	
+  1950				if (anon_exclusive)
+  1951					BUG_ON(page_try_share_anon_rmap(subpage));
+  1952	
+  1953				/*
+  1954				 * Store the pfn of the page in a special migration
+  1955				 * pte. do_swap_page() will wait until the migration
+  1956				 * pte is removed and then restart fault handling.
+  1957				 */
+  1958				entry = pte_to_swp_entry(pteval);
+  1959				if (is_writable_device_private_entry(entry))
+  1960					entry = make_writable_migration_entry(pfn);
+  1961				else if (anon_exclusive)
+  1962					entry = make_readable_exclusive_migration_entry(pfn);
+  1963				else
+  1964					entry = make_readable_migration_entry(pfn);
+  1965				swp_pte = swp_entry_to_pte(entry);
+  1966	
+  1967				/*
+  1968				 * pteval maps a zone device page and is therefore
+  1969				 * a swap pte.
+  1970				 */
+  1971				if (pte_swp_soft_dirty(pteval))
+  1972					swp_pte = pte_swp_mksoft_dirty(swp_pte);
+  1973				if (pte_swp_uffd_wp(pteval))
+  1974					swp_pte = pte_swp_mkuffd_wp(swp_pte);
+  1975				set_pte_at(mm, pvmw.address, pvmw.pte, swp_pte);
+  1976				trace_set_migration_pte(pvmw.address, pte_val(swp_pte),
+  1977							compound_order(&folio->page));
+  1978				/*
+  1979				 * No need to invalidate here it will synchronize on
+  1980				 * against the special swap migration pte.
+  1981				 *
+  1982				 * The assignment to subpage above was computed from a
+  1983				 * swap PTE which results in an invalid pointer.
+  1984				 * Since only PAGE_SIZE pages can currently be
+  1985				 * migrated, just set it to page. This will need to be
+  1986				 * changed when hugepage migrations to device private
+  1987				 * memory are supported.
+  1988				 */
+  1989				subpage = &folio->page;
+  1990			} else if (PageHWPoison(subpage)) {
+  1991				pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+  1992				if (folio_test_hugetlb(folio)) {
+  1993					hugetlb_count_sub(folio_nr_pages(folio), mm);
+  1994					set_huge_swap_pte_at(mm, address,
+  1995							     pvmw.pte, pteval,
+  1996							     vma_mmu_pagesize(vma));
+  1997				} else {
+  1998					dec_mm_counter(mm, mm_counter(&folio->page));
+  1999					set_pte_at(mm, address, pvmw.pte, pteval);
+  2000				}
+  2001	
+  2002			} else if (pte_unused(pteval) && !userfaultfd_armed(vma)) {
+  2003				/*
+  2004				 * The guest indicated that the page content is of no
+  2005				 * interest anymore. Simply discard the pte, vmscan
+  2006				 * will take care of the rest.
+  2007				 * A future reference will then fault in a new zero
+  2008				 * page. When userfaultfd is active, we must not drop
+  2009				 * this page though, as its main user (postcopy
+  2010				 * migration) will not expect userfaults on already
+  2011				 * copied pages.
+  2012				 */
+  2013				dec_mm_counter(mm, mm_counter(&folio->page));
+  2014				/* We have to invalidate as we cleared the pte */
+  2015				mmu_notifier_invalidate_range(mm, address,
+  2016							      address + PAGE_SIZE);
+  2017			} else {
+  2018				swp_entry_t entry;
+  2019				pte_t swp_pte;
+  2020	
+  2021				if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+  2022					if (folio_test_hugetlb(folio))
+> 2023						set_huge_pte_at(mm, address, pvmw.pte, pteval);
+  2024					else
+  2025						set_pte_at(mm, address, pvmw.pte, pteval);
+  2026					ret = false;
+  2027					page_vma_mapped_walk_done(&pvmw);
+  2028					break;
+  2029				}
+  2030				VM_BUG_ON_PAGE(pte_write(pteval) && folio_test_anon(folio) &&
+  2031					       !anon_exclusive, subpage);
+  2032				if (anon_exclusive &&
+  2033				    page_try_share_anon_rmap(subpage)) {
+  2034					if (folio_test_hugetlb(folio))
+  2035						set_huge_pte_at(mm, address, pvmw.pte, pteval);
+  2036					else
+  2037						set_pte_at(mm, address, pvmw.pte, pteval);
+  2038					ret = false;
+  2039					page_vma_mapped_walk_done(&pvmw);
+  2040					break;
+  2041				}
+  2042	
+  2043				/*
+  2044				 * Store the pfn of the page in a special migration
+  2045				 * pte. do_swap_page() will wait until the migration
+  2046				 * pte is removed and then restart fault handling.
+  2047				 */
+  2048				if (pte_write(pteval))
+  2049					entry = make_writable_migration_entry(
+  2050								page_to_pfn(subpage));
+  2051				else if (anon_exclusive)
+  2052					entry = make_readable_exclusive_migration_entry(
+  2053								page_to_pfn(subpage));
+  2054				else
+  2055					entry = make_readable_migration_entry(
+  2056								page_to_pfn(subpage));
+  2057	
+  2058				swp_pte = swp_entry_to_pte(entry);
+  2059				if (pte_soft_dirty(pteval))
+  2060					swp_pte = pte_swp_mksoft_dirty(swp_pte);
+  2061				if (pte_uffd_wp(pteval))
+  2062					swp_pte = pte_swp_mkuffd_wp(swp_pte);
+  2063				if (folio_test_hugetlb(folio))
+  2064					set_huge_swap_pte_at(mm, address, pvmw.pte,
+  2065							     swp_pte, vma_mmu_pagesize(vma));
+  2066				else
+  2067					set_pte_at(mm, address, pvmw.pte, swp_pte);
+  2068				trace_set_migration_pte(address, pte_val(swp_pte),
+  2069							compound_order(&folio->page));
+  2070				/*
+  2071				 * No need to invalidate here it will synchronize on
+  2072				 * against the special swap migration pte.
+  2073				 */
+  2074			}
+  2075	
+  2076			/*
+  2077			 * No need to call mmu_notifier_invalidate_range() it has be
+  2078			 * done above for all cases requiring it to happen under page
+  2079			 * table lock before mmu_notifier_invalidate_range_end()
+  2080			 *
+  2081			 * See Documentation/vm/mmu_notifier.rst
+  2082			 */
+  2083			page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
+  2084			if (vma->vm_flags & VM_LOCKED)
+  2085				mlock_page_drain_local();
+  2086			folio_put(folio);
+  2087		}
+  2088	
+  2089		mmu_notifier_invalidate_range_end(&range);
+  2090	
+  2091		return ret;
+  2092	}
+  2093	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
