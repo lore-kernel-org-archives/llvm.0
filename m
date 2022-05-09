@@ -1,37 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABDB1FAA;
-	Mon,  9 May 2022 22:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66627C385BF;
-	Mon,  9 May 2022 22:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652135429;
-	bh=S4LlAC3mq9UwT3aVcFvei7z5RLy77IDpLFogiagAZRw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ROriFizndG1JVwB+g+LmD2wDW1hsya3caWFBI13xqdTrT3ih4e+Pheu1ylGCQljWB
-	 kWpq5G81W90UiKXa7ZtzHVUpaflS/3ZT84aIhU+nXvkP5CaxBhmwwBjSxcKhIVccNv
-	 /teCmFMAMI0KiqMFbl/MuzTCcrN3p0acwW7tEGO4+rIfUlXQLmsqpDD61s+5fRgfXc
-	 wuaBp3h9k7IziSmI0pPPwiTJKvhxWBvA3sgK+kqkftmC84HPhYTk0ZW/twpvx41Bnf
-	 YjZ2EZKU61IFSj8fcxX7weoo011wPP101pT/ycO/N2TDQs+Hdj9A5/snfoLGt5ei+M
-	 Sb072K/QY3dyA==
-Date: Mon, 9 May 2022 15:30:26 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Alexey Kardashevskiy <aik@ozlabs.ru>, Tom Rix <trix@redhat.com>,
-	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH 2/2] powerpc/vdso: Link with ld.lld when requested
-Message-ID: <YnmWAsVPyMsBoWQU@dev-arch.thelio-3990X>
-References: <20220509204635.2539549-1-nathan@kernel.org>
- <20220509204635.2539549-3-nathan@kernel.org>
- <CAKwvOdkvF8AJudCcu=CVmU42eyVMJwUjQFnX+rpVF45bTR86Mg@mail.gmail.com>
- <YnmL6a8eObtstNjZ@dev-arch.thelio-3990X>
- <CAKwvOdnbTGpNvXsum-cM8i5sWuATLHouaURE1vkjuOj5rzTuqw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FFE320C
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 23:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652137204; x=1683673204;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wb4kQzIr687GOHBkN/UzAQ1V5VME/8twWG/lEtQPEnw=;
+  b=AtXKLnARHJahGmL94Fwdz1B2qzTR1+O/lVFkmRXVGIFMXnaZvWAEcn47
+   /wYOPUiD6/H3p6BY7usX0guv6L5Q0jbVdEf33OpbbcAru8F4lxX49yDQ4
+   NG/kGImAft4uJjO5J+MFkSU2fGO2dHgkUtiAjc5BfI1v0HS/IWnfaoF+c
+   g7dYhVyBOqj3ykcneftACYUmLrfy8VW9SW072owYageS138kb8aOA7nGL
+   k0fi8MY4FXDUvq/dYNHGozhuW09w5CZjctI11JdsHwL6VUCxcPV8cZdpR
+   NOx0Z7MvP9t5dulVteQT1ENuryWcz6NOttmR0HxeNMWTWXXWSu/9etuI2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294419577"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="294419577"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 16:00:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="696794373"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 May 2022 16:00:00 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1noCMC-000Gz4-1D;
+	Mon, 09 May 2022 23:00:00 +0000
+Date: Tue, 10 May 2022 06:59:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Likun Gao <Likun.Gao@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [linux-next:master 9592/10218]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3467:29: warning: incompatible
+ integer to pointer conversion assigning to 'char *' from 'int'
+Message-ID: <202205100612.ZAcTYE6P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,130 +49,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOdnbTGpNvXsum-cM8i5sWuATLHouaURE1vkjuOj5rzTuqw@mail.gmail.com>
 
-On Mon, May 09, 2022 at 02:58:09PM -0700, Nick Desaulniers wrote:
-> On Mon, May 9, 2022 at 2:47 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Mon, May 09, 2022 at 02:24:40PM -0700, Nick Desaulniers wrote:
-> > > On Mon, May 9, 2022 at 1:47 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > The PowerPC vDSO is linked with $(CC) instead of $(LD), which means the
-> > > > default linker of the compiler is used instead of the linker requested
-> > > > by the builder.
-> > > >
-> > > >   $ make ARCH=powerpc LLVM=1 mrproper defconfig arch/powerpc/kernel/vdso/
-> > > >   ...
-> > > >
-> > > >   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
-> > > >
-> > > >   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
-> > > >   String dump of section '.comment':
-> > > >   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
-> > > >
-> > > >   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
-> > > >   String dump of section '.comment':
-> > > >   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
-> > > >
-> > > > The compiler option '-fuse-ld' tells the compiler which linker to use
-> > > > when it is invoked as both the compiler and linker. Use '-fuse-ld=lld'
-> > > > when LD=ld.lld has been specified (CONFIG_LD_IS_LLD) so that the vDSO is
-> > > > linked with the same linker as the rest of the kernel.
-> > > >
-> > > >   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
-> > > >
-> > > >   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
-> > > >   String dump of section '.comment':
-> > > >   [     0] Linker: LLD 14.0.0
-> > > >   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
-> > > >
-> > > >   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
-> > > >   String dump of section '.comment':
-> > > >   [     0] Linker: LLD 14.0.0
-> > > >   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
-> > > >
-> > > > LD can be a full path to ld.lld, which will not be handled properly by
-> > > > '-fuse-ld=lld' if the full path to ld.lld is outside of the compiler's
-> > > > search path. '-fuse-ld' can take a path to the linker but it is
-> > > > deprecated in clang 12.0.0; '--ld-path' is preferred for this scenario.
-> > > >
-> > > > Use '--ld-path' if it is supported, as it will handle a full path or
-> > > > just 'ld.lld' properly. See the LLVM commit below for the full details
-> > > > of '--ld-path'.
-> > >
-> > > Perhaps worth adding some additional background from the cover letter
-> > > to the commit message that will actually go into the kernel,
-> > > particularly:
-> > > 1. Kbuild mostly invokes the compiler and linker distinctly; the ppc
-> > > vdso code uses the compiler as the linker driver though.
-> > > 2. When doing so, depending on how the compiler was configured, the
-> > > implicit default linker the compiler invokes might not match $LD.
-> >
-> > Sure, I think I can clear up these two points with something like:
-> >
-> > "The PowerPC vDSO uses $(CC) to link, which differs from the rest of the
-> > kernel, which uses $(LD) directly. As a result, the default linker of
-> > the compiler is used, which may differ from the linker requested by the
-> > builder. For example:
-> >
-> > <example above>
-> >
-> > LLVM=1 sets LD=ld.lld but ld.lld is not used to link the vDSO; GNU ld is
-> > because "ld" is the default linker for clang on most Linux platforms."
-> >
-> > Thoughts?
-> 
-> SGTM
-> 
-> >
-> > > 3. This is a problem for LTO since clang may try to invoke ld.gold,
-> > > which is not supported as of
-> > > commit 75959d44f9dc ("kbuild: Fail if gold linker is detected")
-> >
-> > Technically, it seemed like ld.bfd was being invoked but the LLVMgold
-> > plugin did not exist. Regardless, moving to ld.lld will resolve that,
-> > since the LLVMgold plugin won't be needed.
-> 
-> Oh indeed, invoking clang with `-flto -###` shows it does invoke the
-> system's linker with `-plugin path/to/LLVMgold.so`, not `ld.gold`
-> itself.  I don't think we should use or depend on the LLVMgold.so
-> plugin either (I suspect it will invoke ld.gold, but as you noticed, I
-> don't bother to build LLVMgold.so).  So, perhaps reworded (feel free
-> to reword further):
-> 
-> 3. This is a problem for LTO since clang may try to invoke ld.bfd with
-> the LLVMgold.so plugin.
-> https://llvm.org/docs/GoldPlugin.html states that "usage of the LLVM
-> gold plugin with ld.bfd is not tested and therefore not officially
-> supported or recommended." Users should instead use ld.lld to drive
-> linking for LTO with clang.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ab38272e99730375c5db3db1c4cebf691a0550ab
+commit: 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa [9592/10218] drm/amdgpu/psp: Add vbflash sysfs interface support
+config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100612.ZAcTYE6P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=31aad22e2b3cfe89aef45015a9c7e4f7c0646daa
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-I'll stick this blurb above "The compiler option":
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-"This is a problem for Clang's Link Time Optimization as implemented in
-the kernel because use of GNU ld with LTO requires the LLVMgold plugin,
-which is not technically supported for ld.bfd per
-https://llvm.org/docs/GoldPlugin.html. Furthermore, if LLVMgold.so is
-missing from a user's system, the build will fail, even though LTO as it
-is implemented in the kernel requires ld.lld to avoid this dependency in
-the first place."
+All warnings (new ones prefixed by >>):
 
-Yell if there is something I should change!
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3459:3: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+                   vfree(adev->psp.vbflash_tmp_buf);
+                   ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3467:31: error: implicit declaration of function 'vmalloc' [-Werror,-Wimplicit-function-declaration]
+                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+                                               ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3467:29: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+                                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3514:2: error: implicit declaration of function 'vfree' [-Werror,-Wimplicit-function-declaration]
+           vfree(adev->psp.vbflash_tmp_buf);
+           ^
+   1 warning and 3 errors generated.
 
-> > > 4. Using the linker as the driver can cause ld.bfd 2.26 to crash.
-> > > https://lore.kernel.org/all/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup.eu/
-> > > (Though, I wonder if that's because I was trying to add
-> > > --orphan-handling=warn, which we're not yet doing for the ppc vdso
-> > > AFAICT).
-> >
-> > I can add this if necessary but it seemed like there might have been
-> > other problems reported? I could just add a blanket "linker driver had
-> > issues, we'll try again later" or something of that effect?
-> 
-> Sure.
 
-Sounds good, I'll make these changes and send v2 on Wednesday to give
-other folks a chance to chime in.
+vim +3467 drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
 
-Cheers,
-Nathan
+  3447	
+  3448	static ssize_t amdgpu_psp_vbflash_write(struct file *filp, struct kobject *kobj,
+  3449						struct bin_attribute *bin_attr,
+  3450						char *buffer, loff_t pos, size_t count)
+  3451	{
+  3452		struct device *dev = kobj_to_dev(kobj);
+  3453		struct drm_device *ddev = dev_get_drvdata(dev);
+  3454		struct amdgpu_device *adev = drm_to_adev(ddev);
+  3455	
+  3456		/* Safeguard against memory drain */
+  3457		if (adev->psp.vbflash_image_size > AMD_VBIOS_FILE_MAX_SIZE_B) {
+  3458			dev_err(adev->dev, "File size cannot exceed %u", AMD_VBIOS_FILE_MAX_SIZE_B);
+  3459			vfree(adev->psp.vbflash_tmp_buf);
+  3460			adev->psp.vbflash_tmp_buf = NULL;
+  3461			adev->psp.vbflash_image_size = 0;
+  3462			return -ENOMEM;
+  3463		}
+  3464	
+  3465		/* TODO Just allocate max for now and optimize to realloc later if needed */
+  3466		if (!adev->psp.vbflash_tmp_buf) {
+> 3467			adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+  3468			if (!adev->psp.vbflash_tmp_buf)
+  3469				return -ENOMEM;
+  3470		}
+  3471	
+  3472		mutex_lock(&adev->psp.mutex);
+  3473		memcpy(adev->psp.vbflash_tmp_buf + pos, buffer, count);
+  3474		adev->psp.vbflash_image_size += count;
+  3475		mutex_unlock(&adev->psp.mutex);
+  3476	
+  3477		dev_info(adev->dev, "VBIOS flash write PSP done");
+  3478	
+  3479		return count;
+  3480	}
+  3481	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
