@@ -1,198 +1,93 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB46E1858
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 07:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652082815; x=1683618815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ino11uijCuvYEBBiCsBGTBzxkPq0irZ5o3V4YaCc+Eo=;
-  b=Vrd58eDqh8YeA6qWh5iJkZ26d7HVfiDFlImtdyxPOyllNwH49Lf5MjJ/
-   mIGEWwUaRdE2PbZlm+qMIF6P8XmTEokdM8huYvYyzSArlS1EfthAGh7iE
-   EI46Om/U9Hktu+Ds0hv65cO16v7dHYd8wg1lgFfR2tgBuu/JR5sjqne8Y
-   +gdE7/y42JdjFNIMuNbVg9os3GqXzhlxEm48ee1L6f3cC7sLcPUtZud1b
-   IcJPAQheiRFBlgArfyijp848yyjmt4EfKkTmTuk5NglZ1qMvfGYOxgBvJ
-   VLYK2BIoxtN9bZBhfrGTIRBLPNG6zXHpDIKzW0LPi2EsbH3M1ZctDrfrE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266563282"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="266563282"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 00:53:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="668848352"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 00:53:31 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nnyCw-000GJq-Jm;
-	Mon, 09 May 2022 07:53:30 +0000
-Date: Mon, 9 May 2022 15:52:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Holland <samuel@sholland.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Samuel Holland <samuel@sholland.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Guo Ren <guoren@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Russell King <linux@armlinux.org.uk>, Wei Xu <xuwei5@hisilicon.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 3/5] genirq: Provide an IRQ affinity mask in non-SMP
- configs
-Message-ID: <202205091545.QhhCDxVm-lkp@intel.com>
-References: <20220509034333.60017-4-samuel@sholland.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6377B
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 08:37:08 +0000 (UTC)
+Received: from [127.0.0.1] (helo=localhost)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=71422e7e6f=fe@dev.tdt.de>)
+	id 1nnyag-0005Ez-Tx; Mon, 09 May 2022 10:18:02 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1nnyae-000XIX-Nv; Mon, 09 May 2022 10:18:00 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id 2ABEB24004B;
+	Mon,  9 May 2022 10:18:00 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id 7B958240040;
+	Mon,  9 May 2022 10:17:59 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+	by mail.dev.tdt.de (Postfix) with ESMTP id E20EE27512;
+	Mon,  9 May 2022 10:17:58 +0200 (CEST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509034333.60017-4-samuel@sholland.org>
-
-Hi Samuel,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on tip/irq/core]
-[also build test ERROR on soc/for-next linus/master v5.18-rc6 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
-config: mips-randconfig-r024-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091545.QhhCDxVm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/4bca5b436c97eb2ee232dd23f262ebad05fa183c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
-        git checkout 4bca5b436c97eb2ee232dd23f262ebad05fa183c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> kernel/irq/ipi.c:94:30: error: no member named 'affinity' in 'struct irq_common_data'
-                   cpumask_copy(data->common->affinity, dest);
-                                ~~~~~~~~~~~~  ^
-   1 error generated.
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Mon, 09 May 2022 10:17:58 +0200
+From: Florian Eckert <fe@dev.tdt.de>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+ llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+ Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared
+ function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
+ declarations
+In-Reply-To: <65c92404-1d6f-6969-89bf-20b8eefaeff6@infradead.org>
+References: <202205080416.vzIXy16B-lkp@intel.com>
+ <65c92404-1d6f-6969-89bf-20b8eefaeff6@infradead.org>
+Message-ID: <81b9b2cd3f981b6206e9d8c52b3306b3@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,
+	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_ZEN_BLOCKED_OPENDNS
+	autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dev.tdt.de
+X-purgate-ID: 151534::1652084281-000005E4-CE3BF94B/0/0
+X-purgate-type: clean
+X-purgate: clean
 
 
-vim +94 kernel/irq/ipi.c
+>> 
+>> vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
+>> 
+>> 7074d0a9275860 Florian Eckert 2017-09-01  20
+>> 7074d0a9275860 Florian Eckert 2017-09-01  21  static void 
+>> ltq_cputemp_enable(void)
+>> 7074d0a9275860 Florian Eckert 2017-09-01  22  {
+>> 7074d0a9275860 Florian Eckert 2017-09-01 @23  
+>> 	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+>> 7074d0a9275860 Florian Eckert 2017-09-01  24  }
+>> 7074d0a9275860 Florian Eckert 2017-09-01  25
+>> 
+>> :::::: The code at line 23 was first introduced by commit
+>> :::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) 
+>> add cpu temp sensor driver
+>> 
+>> :::::: TO: Florian Eckert <fe@dev.tdt.de>
+>> :::::: CC: Guenter Roeck <linux@roeck-us.net>
+> 
+> This driver builds fine if I change it from SOC_FALCON to SOC_XWAY.
+> Maybe its Kconfig entry should be stronger?
+> 
+> config SENSORS_LTQ_CPUTEMP
+> 	bool "Lantiq cpu temperature sensor driver"
+> -	depends on LANTIQ
+> +	depends on SOC_XWAY
 
-d17bf24e695290 Qais Yousef     2015-12-08   13  
-d17bf24e695290 Qais Yousef     2015-12-08   14  /**
-d17bf24e695290 Qais Yousef     2015-12-08   15   * irq_reserve_ipi() - Setup an IPI to destination cpumask
-d17bf24e695290 Qais Yousef     2015-12-08   16   * @domain:	IPI domain
-3b35e7e6daef5a Randy Dunlap    2021-08-10   17   * @dest:	cpumask of CPUs which can receive the IPI
-d17bf24e695290 Qais Yousef     2015-12-08   18   *
-d17bf24e695290 Qais Yousef     2015-12-08   19   * Allocate a virq that can be used to send IPI to any CPU in dest mask.
-d17bf24e695290 Qais Yousef     2015-12-08   20   *
-3b35e7e6daef5a Randy Dunlap    2021-08-10   21   * Return: Linux IRQ number on success or error code on failure
-d17bf24e695290 Qais Yousef     2015-12-08   22   */
-7cec18a3906b52 Matt Redfearn   2016-04-25   23  int irq_reserve_ipi(struct irq_domain *domain,
-d17bf24e695290 Qais Yousef     2015-12-08   24  			     const struct cpumask *dest)
-d17bf24e695290 Qais Yousef     2015-12-08   25  {
-d17bf24e695290 Qais Yousef     2015-12-08   26  	unsigned int nr_irqs, offset;
-d17bf24e695290 Qais Yousef     2015-12-08   27  	struct irq_data *data;
-d17bf24e695290 Qais Yousef     2015-12-08   28  	int virq, i;
-d17bf24e695290 Qais Yousef     2015-12-08   29  
-d17bf24e695290 Qais Yousef     2015-12-08   30  	if (!domain ||!irq_domain_is_ipi(domain)) {
-d17bf24e695290 Qais Yousef     2015-12-08   31  		pr_warn("Reservation on a non IPI domain\n");
-7cec18a3906b52 Matt Redfearn   2016-04-25   32  		return -EINVAL;
-d17bf24e695290 Qais Yousef     2015-12-08   33  	}
-d17bf24e695290 Qais Yousef     2015-12-08   34  
-d17bf24e695290 Qais Yousef     2015-12-08   35  	if (!cpumask_subset(dest, cpu_possible_mask)) {
-d17bf24e695290 Qais Yousef     2015-12-08   36  		pr_warn("Reservation is not in possible_cpu_mask\n");
-7cec18a3906b52 Matt Redfearn   2016-04-25   37  		return -EINVAL;
-d17bf24e695290 Qais Yousef     2015-12-08   38  	}
-d17bf24e695290 Qais Yousef     2015-12-08   39  
-d17bf24e695290 Qais Yousef     2015-12-08   40  	nr_irqs = cpumask_weight(dest);
-d17bf24e695290 Qais Yousef     2015-12-08   41  	if (!nr_irqs) {
-d17bf24e695290 Qais Yousef     2015-12-08   42  		pr_warn("Reservation for empty destination mask\n");
-7cec18a3906b52 Matt Redfearn   2016-04-25   43  		return -EINVAL;
-d17bf24e695290 Qais Yousef     2015-12-08   44  	}
-d17bf24e695290 Qais Yousef     2015-12-08   45  
-d17bf24e695290 Qais Yousef     2015-12-08   46  	if (irq_domain_is_ipi_single(domain)) {
-d17bf24e695290 Qais Yousef     2015-12-08   47  		/*
-d17bf24e695290 Qais Yousef     2015-12-08   48  		 * If the underlying implementation uses a single HW irq on
-d17bf24e695290 Qais Yousef     2015-12-08   49  		 * all cpus then we only need a single Linux irq number for
-d17bf24e695290 Qais Yousef     2015-12-08   50  		 * it. We have no restrictions vs. the destination mask. The
-d17bf24e695290 Qais Yousef     2015-12-08   51  		 * underlying implementation can deal with holes nicely.
-d17bf24e695290 Qais Yousef     2015-12-08   52  		 */
-d17bf24e695290 Qais Yousef     2015-12-08   53  		nr_irqs = 1;
-d17bf24e695290 Qais Yousef     2015-12-08   54  		offset = 0;
-d17bf24e695290 Qais Yousef     2015-12-08   55  	} else {
-d17bf24e695290 Qais Yousef     2015-12-08   56  		unsigned int next;
-d17bf24e695290 Qais Yousef     2015-12-08   57  
-d17bf24e695290 Qais Yousef     2015-12-08   58  		/*
-c5f48c0a7aa1a8 Ingo Molnar     2018-12-03   59  		 * The IPI requires a separate HW irq on each CPU. We require
-d17bf24e695290 Qais Yousef     2015-12-08   60  		 * that the destination mask is consecutive. If an
-d17bf24e695290 Qais Yousef     2015-12-08   61  		 * implementation needs to support holes, it can reserve
-d17bf24e695290 Qais Yousef     2015-12-08   62  		 * several IPI ranges.
-d17bf24e695290 Qais Yousef     2015-12-08   63  		 */
-d17bf24e695290 Qais Yousef     2015-12-08   64  		offset = cpumask_first(dest);
-d17bf24e695290 Qais Yousef     2015-12-08   65  		/*
-d17bf24e695290 Qais Yousef     2015-12-08   66  		 * Find a hole and if found look for another set bit after the
-d17bf24e695290 Qais Yousef     2015-12-08   67  		 * hole. For now we don't support this scenario.
-d17bf24e695290 Qais Yousef     2015-12-08   68  		 */
-d17bf24e695290 Qais Yousef     2015-12-08   69  		next = cpumask_next_zero(offset, dest);
-d17bf24e695290 Qais Yousef     2015-12-08   70  		if (next < nr_cpu_ids)
-d17bf24e695290 Qais Yousef     2015-12-08   71  			next = cpumask_next(next, dest);
-d17bf24e695290 Qais Yousef     2015-12-08   72  		if (next < nr_cpu_ids) {
-d17bf24e695290 Qais Yousef     2015-12-08   73  			pr_warn("Destination mask has holes\n");
-7cec18a3906b52 Matt Redfearn   2016-04-25   74  			return -EINVAL;
-d17bf24e695290 Qais Yousef     2015-12-08   75  		}
-d17bf24e695290 Qais Yousef     2015-12-08   76  	}
-d17bf24e695290 Qais Yousef     2015-12-08   77  
-06ee6d571f0e35 Thomas Gleixner 2016-07-04   78  	virq = irq_domain_alloc_descs(-1, nr_irqs, 0, NUMA_NO_NODE, NULL);
-d17bf24e695290 Qais Yousef     2015-12-08   79  	if (virq <= 0) {
-d17bf24e695290 Qais Yousef     2015-12-08   80  		pr_warn("Can't reserve IPI, failed to alloc descs\n");
-7cec18a3906b52 Matt Redfearn   2016-04-25   81  		return -ENOMEM;
-d17bf24e695290 Qais Yousef     2015-12-08   82  	}
-d17bf24e695290 Qais Yousef     2015-12-08   83  
-d17bf24e695290 Qais Yousef     2015-12-08   84  	virq = __irq_domain_alloc_irqs(domain, virq, nr_irqs, NUMA_NO_NODE,
-eb0dc47ab6810c Vincent Stehle  2016-07-18   85  				       (void *) dest, true, NULL);
-d17bf24e695290 Qais Yousef     2015-12-08   86  
-d17bf24e695290 Qais Yousef     2015-12-08   87  	if (virq <= 0) {
-d17bf24e695290 Qais Yousef     2015-12-08   88  		pr_warn("Can't reserve IPI, failed to alloc hw irqs\n");
-d17bf24e695290 Qais Yousef     2015-12-08   89  		goto free_descs;
-d17bf24e695290 Qais Yousef     2015-12-08   90  	}
-d17bf24e695290 Qais Yousef     2015-12-08   91  
-d17bf24e695290 Qais Yousef     2015-12-08   92  	for (i = 0; i < nr_irqs; i++) {
-d17bf24e695290 Qais Yousef     2015-12-08   93  		data = irq_get_irq_data(virq + i);
-d17bf24e695290 Qais Yousef     2015-12-08  @94  		cpumask_copy(data->common->affinity, dest);
-d17bf24e695290 Qais Yousef     2015-12-08   95  		data->common->ipi_offset = offset;
-4589f450fb285a Matt Redfearn   2016-04-21   96  		irq_set_status_flags(virq + i, IRQ_NO_BALANCING);
-d17bf24e695290 Qais Yousef     2015-12-08   97  	}
-d17bf24e695290 Qais Yousef     2015-12-08   98  	return virq;
-d17bf24e695290 Qais Yousef     2015-12-08   99  
-d17bf24e695290 Qais Yousef     2015-12-08  100  free_descs:
-d17bf24e695290 Qais Yousef     2015-12-08  101  	irq_free_descs(virq, nr_irqs);
-7cec18a3906b52 Matt Redfearn   2016-04-25  102  	return -EBUSY;
-d17bf24e695290 Qais Yousef     2015-12-08  103  }
-d17bf24e695290 Qais Yousef     2015-12-08  104  
+Fine with me. I think it's better to narrow it down.
+Because this macro is only available for the SOC_TYPE_XWAY [1]
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h?h=v5.17.6#n10
+
+Best regards
+-- Florian
