@@ -1,372 +1,258 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390C2184A
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 02:53:54 +0000 (UTC)
-Received: by mail-qk1-f171.google.com with SMTP id j9so9905829qkg.1
-        for <llvm@lists.linux.dev>; Sun, 08 May 2022 19:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=AV0eCAcM4dwQEL2GYa+8ylnliPw/IllGlpfo370R8veFGqCZINAxqbvS7tANJ2s101
-         hqpowH7o2P1pFracXHKx/CFSSdKuDTQXovwowr4M2wabCy9szm+KmIlFL3q2XVP9aSFD
-         euwnuzZhA0WJTHPb7z/Uyl6lOIjxAQRO6XfiogAA1qmX/hRLF+RfjujPcVeU9N47JyqJ
-         OyE28U2bGJlE8aYPrC0FVFBZYKdD3vZwr6JNPThX8buSxKqGRR3MZbWEWSvMminsWp6l
-         xjgximImsPkhRHnAnBBDRdfAWOBekT+9n9Dd5qkxMLoEch5PPmEkKAUNCoElVpTo+Kkh
-         SPPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=YMrA8074VW/wXBCcKJzKEBFvaj4oLYWcOkc8ZLLUxwfE+uJdqldRaFiPAWildvweK5
-         SxU0Jbid2bw1c63str+YzeCiVdfQ9P9qIo2G//w0GgqfnM/vlI62Bl4tDAfnKM/Q+I5Z
-         2ek5hfrYy5lpTCHT+I+yxPj03QALZ08pz1BCbPTNlCByrP1vyxS9F739purmrjr56XJW
-         2Cn+1k/utiw1kf0h9TIavaxQGZTfey8Me5VdiJDBYLPuAXllaGUq+bMVFD0CuFCi/HnG
-         EU/bxYanaHReGozdi0Xci3kkrUFDi8JeKlg8fFty9Qhb1z3EpbPt4kULd31NKtZWtfmY
-         fE3A==
-X-Gm-Message-State: AOAM533oRZxuHgwjdtyDq40JPVoFzu4VKYWJvRojvJnTs5bcseOetPUa
-	3kepWc4Hpq8bnDSYTdllNZpw83xvg3nAT9E7ces=
-X-Google-Smtp-Source: ABdhPJxcLQ/dM1ItCcc01DCsbquqlE4w8IbwGnFnYAlwRZQbOLCKc6tQdBjxm5j6pTgbELgQk1Va1n/i48Ro1zrORrM=
-X-Received: by 2002:a37:ad16:0:b0:6a0:1468:4513 with SMTP id
- f22-20020a37ad16000000b006a014684513mr10207672qkm.96.1652064833037; Sun, 08
- May 2022 19:53:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593B0184A
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 02:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652064885; x=1683600885;
+  h=message-id:date:subject:references:to:cc:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6TG55oMch1iZopwvqYlYuV7nAvf2RZFPb1Q3+HjW2Go=;
+  b=HMiBvYf8Nl1TjZSaXrWQ+KiQNWyxEYJgrZPYQwZuIl2i1bAG7I6b/ZUo
+   I2CjBOgn/ZKuTm1VJ9+8935Q/n2rxrQ9eIn+F0QLug9fWoOXoUR6ZzAIl
+   fN/5+jwQITPJPWdVTtt0MskthPsfoJs3eVVhwPN8dRrSC6Zdcqh2cRs4+
+   Zh10uVwuI2Sh62Q1FpTtNnjqXuAFWGLJYlXJ3p584oHmqN39l/xNIbvYP
+   8IbZmSnGa7iduHdzleDK/TLGd0V861I9qx4NXF5t6hTpRTx0dam8+le5G
+   SA9qEnhON108WkAFgyyXQT7DwF5j4u0/a+EIrqFYCmq6e+MxrbZaV44sN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="294142819"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="294142819"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 19:54:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="622734204"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 19:54:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 8 May 2022 19:54:43 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 8 May 2022 19:54:43 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Sun, 8 May 2022 19:54:43 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.177)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Sun, 8 May 2022 19:54:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NFzrz0cLMwEMtNYdaqt5UUEXfv4891/awNxfM7E1COzhkQ09Wn52MzTkMlJX8juj+KzwCjoFlKfsIhY390T79yYz2zmDhOdBbTysfY44/NmkW93i3jcFGTh/36pfAXEFRWJqvWUfkKFLWghoZCu3IuMCuVw3/nyjmuDLZiq28wERSUuhm30r9MiKho82M4kB4AU9FzfEYa6EuTo8rT8uvef0FE2uboZTzO8cwlzQ1xCEdiAMxSrdCJxMdyAXl4YaQdiOWV3pwqZa/DMdATftBmxZM5945AWuN3/FJUdkUz2B/KOaUS0lhrRWureNN/0FnSi6r0YP9glVZIqNDSg44w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kPIxSZRQ3zwdzMW9dP0ESyr5vtHvDDhYfILFx6dYUk4=;
+ b=NjCUGZWzrTPETHRYh+CQ9jEuPF6K4lNTEO9MJshf+Fqrmki+mh0oiw1Y6+Yot6vQQypyZ+nffmSw6MuSAEV0i/Mqbgq/Bmp39GuwX5dMsA04lCUVmFJGwQMaJ8p5ox+8QzSEr8VjyImCE8Tbd9cSwXvvvFsTrzauygIZfe4MSaj3HltBIyNxRvnmcjyrtsaVqryRtAW275KTz2Ma2UmC8xuMS7FdQxrYx3xaHXId7ryAPWiK3dWBp3yWbTPeA/BMdc5B6wy4aiKOjn3ABAAuuUOryG+yG3lX0Rr+Ct5HYw1b9UlCn6mAOxJLRDxB9EQ6o7lZIKih0TPSGP8DO6vv9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15)
+ by CH0PR11MB5315.namprd11.prod.outlook.com (2603:10b6:610:be::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
+ 2022 02:54:41 +0000
+Received: from MW4PR11MB5933.namprd11.prod.outlook.com
+ ([fe80::91fc:35fb:9ebc:81ec]) by MW4PR11MB5933.namprd11.prod.outlook.com
+ ([fe80::91fc:35fb:9ebc:81ec%5]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 02:54:41 +0000
+Message-ID: <e9b69a15-a680-06f4-11ef-3fa5060e5430@intel.com>
+Date: Mon, 9 May 2022 10:53:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 225/1129]
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1044:2: warning: Value
+ stored to 'tail_p' is never read [clang-analyzer-deadcode.DeadStores]
+References: <202205090439.ddmmSvqz-lkp@intel.com>
+Content-Language: en-US
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-arm-kernel@lists.infradead.org>, Michal Simek <monstr@monstr.eu>,
+	Appana Durga Kedareswara Rao <appana.durga.rao@xilinx.com>, "Radhey Shyam
+ Pandey" <radhey.shyam.pandey@xilinx.com>, Sarath Babu Naidu Gaddam
+	<sarath.babu.naidu.gaddam@xilinx.com>, Swati Agarwal
+	<swati.agarwal@xilinx.com>
+From: kernel test robot <yujie.liu@intel.com>
+In-Reply-To: <202205090439.ddmmSvqz-lkp@intel.com>
+X-Forwarded-Message-Id: <202205090439.ddmmSvqz-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR03CA0044.apcprd03.prod.outlook.com
+ (2603:1096:202:17::14) To MW4PR11MB5933.namprd11.prod.outlook.com
+ (2603:10b6:303:16a::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
- <202204271737.oAuTwqZH-lkp@intel.com> <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
- <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com> <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-Reply-To: cwchoi00@gmail.com
-From: Chanwoo Choi <cwchoi00@gmail.com>
-Date: Mon, 9 May 2022 11:53:16 +0900
-Message-ID: <CAGTfZH2Oc6ADQtFiNqa+R=rDPPrKAyEUw_9DY54trr7kU34_Rw@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce
- MediaTek CCI devfreq driver
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: "Chen, Rong A" <rong.a.chen@intel.com>, Johnson Wang <johnson.wang@mediatek.com>, 
-	kernel test robot <lkp@intel.com>, Chanwoo Choi <cw00.choi@samsung.com>, krzk+dt@kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Linux PM list <linux-pm@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, devicetree <devicetree@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, linux-mediatek@lists.infradead.org, 
-	jia-wei.chang@mediatek.com, Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5292d071-360f-4250-fdc8-08da31674353
+X-MS-TrafficTypeDiagnostic: CH0PR11MB5315:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <CH0PR11MB531504B73DD022A34ED73636FBC69@CH0PR11MB5315.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 57oe+LjzBJFpN9x7hgXC93Ga6yX7grKtxZuLQRmPYQNCTJRTeuUxpwAIo+dnrD0cJ/lKmqU4iaQ+CVZvzYhTcV5ewTJdFk/Bv9i+Epx60CVeUnMg/qeJXoj5TD3iN0MpX716hH4Kg+VNdv/lkMkAlD/+MRi57kN5n8a2x0MmdnvUMQg8n795toABEbVAu8sk21f3maTfKYbb8i7lrjESgGXfQSg916MyxrTrLz4Rz538BHT4NHCt5r9DWjMGAaG49z2VOk0ZEGlPlwySKgnGB5xRUXyMnpQn/qSPFbuiHDJ/pbfaXMpVPJgvH/O2Eb/8bjXwHhACmBYyrAiZUFBPSkW+67SCXRqUq0QFRnGZ21EMoW74Q4GXAL3dOQUiGiA8VwTvycJxSP5k4/sbAc3PXQEEeFJUaPoQYusN6jyp3deFGgyYPNA9j9kVfysH19BJvjrlj7HFT1EbDdoL982DDPALCESTQlHEIVaNBO6hCdG45K3ZQTgOsgD6EkzaPcYLtKteTYg7lSLnSuWTnfn2lI97J/sNPE8fNh6Xk7JaepokQQgxHCjwbAdeeagwCtiwG4h2vO9+tbpXtFDZY2nGDAtXhfsfbmr4AxOMipkLDirAUqjNUOPeSoGp3Od+eexZiK7XxDRA/jIn+aM7KPMNT5PD+5kNl3DFbvaafck0bSCkpX4+R6/jRfiQMPvi4yZSNbIU2uZGzt5Y6M9mrOM7foHFb3Bj25MPggdJGLiVmyDhg279BVjD30Ue3zf3Tz/Ht/ymAZ36nj5/2wuo63EyJWMMYUe7atlpxozHQorsTtcMZo2XcWnf/pknzRJlRFecyHU7W0zKTNRJzIXBOBN54TvCC1PgTz9Y4sTtYgX8PV4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31696002)(8936002)(2616005)(4326008)(54906003)(6916009)(66476007)(66946007)(66556008)(2906002)(8676002)(316002)(86362001)(6666004)(6512007)(82960400001)(6506007)(26005)(508600001)(966005)(36756003)(31686004)(83380400001)(186003)(5660300002)(6486002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VEJlMDVFUzFLSlVTN0M4a2wyQ2FzOGNMemtRMTRFYXFLU2xOcURQc0lxMkd0?=
+ =?utf-8?B?Q08rTm1Iem1TM3ptU0diOVFiMXdkRFk3bHA3QnpNYjVXOVA5MitUM0Y4TzQy?=
+ =?utf-8?B?dDQxWEdRRFdKQ3N4OGVJUldSZ0IvYldmVUZLUXJEcHdYcjZtZ0NFNmpTaDA0?=
+ =?utf-8?B?dGFZdzg0QjZVaXoveGlhakMzU1ZTaGt0Vks0TFZnT1c5bUdFU0RnMFJvUHVJ?=
+ =?utf-8?B?dGcyQkVVUjFDV241YUFKQ01JUjhzN0FHbkt2UzBiRVJVdkhoM0VNNTdVUTRG?=
+ =?utf-8?B?OE04R1Y4Wnk3TmdnTnBmK3JxbTNKRnREcmEzSU1GT3hQRnFyQ1BmeGlqRG9x?=
+ =?utf-8?B?b3ZDTm52UDR1Z3g1bkZ0MzZScWw3bTR0eVR5SzdGdVNmMkEwZy9uK0pCSENq?=
+ =?utf-8?B?aFd3NHQ4TVZ6WU9pMjB5VUFqMkhlZ3lTNUhlV0ZjeUNtb0UrNWhuem9hZ2Yz?=
+ =?utf-8?B?QnA2dDd4OSs3NGMrQ3hVYnp2M0hVa05Uem8xMUZCV2YvU0xINVZGS2cxUXVE?=
+ =?utf-8?B?dEtidkpwR0pleU9RdHN6M3NFL0VWS2ZiUzQwY0Q2M3RiU1N4Z05RV3RSM2hC?=
+ =?utf-8?B?RWcramRqWEpCMnZqR01yaldZL2I5NHBsWXhNSFhtVmwvU0d5V2FJNGFxeEU5?=
+ =?utf-8?B?U0lLS2dVRGhTTVN1YTFwNDF6ZkNLZFh2SHdPdGI0K25pcjFTejhQNk40MExh?=
+ =?utf-8?B?amVWR2FKWjZTdXkvMjF1RDk3NHlleXl4R3BZTlA4Ny9YTUUyUzhDOXgvRVlu?=
+ =?utf-8?B?OFZqOTEwSmkvNXo5TmZ1dGdVYUNRb1ZDdVRoQ2Q3OWw5MldPRE85alU0VTF5?=
+ =?utf-8?B?M2JnOVk2aTNJVWI5RXZxYWtyaHRzMW1kbExRby9ZZENLcWNvbGMwMWkzeUFP?=
+ =?utf-8?B?UzF4QWFhbnpKZVIzUi9rRzdlbWRoV2ZCU1VKZ2VZc1BCbVpwUUErVXY1aHdy?=
+ =?utf-8?B?anFVSzVSOGtITWI4V3I2bmRxcHpzb3ZlYU1LK3RielVvSmxTOW1aZERXR0Jj?=
+ =?utf-8?B?SkxQTzljZE4vcDRRUitTb2swWFZKTSt4UkNtb21td3ZPYUZJUllTU2N2OW11?=
+ =?utf-8?B?WDQxVHcxa1pTMlBuSC85TFBJeVczTCtKc1FSbjJ5NGEvaUdCREg5ZXR6Nm5r?=
+ =?utf-8?B?RDI1SmM4MUNQbHJVaml4Y05MTGxyYU0vWHdrVGhPV3lRKzk2NWRpQmhiSjIz?=
+ =?utf-8?B?QmRHR2JMNXpPMUgwNWdiODJ1THZqRFJibGNqYW1qRkRyRmZUaDA5YmNVZjJF?=
+ =?utf-8?B?VlA0VnpISUtpaktzM0hNWXgyVkV3V0dDZ1FIckMyK3YyWlViSGIwS0pheG1M?=
+ =?utf-8?B?Z0k5N294anU2b1ZIbVhzRVNTVjNKTElJK1UwMTVrNGcyL2pUYmxNK3NOS1k2?=
+ =?utf-8?B?cWlpd2JCb0x3VDgzTXg5QnAyWnNrZ1NBZFRoblJ2QVhzL3UvV29BVXhQWGg3?=
+ =?utf-8?B?eXVZalI5dHlTaFlkUlA1SVBITTRvSytWalRUaG9EM29ZVjNTdkpOYnBXb2pI?=
+ =?utf-8?B?S0xMVE00Ykw0SWJYR1daVzhyMXV0MnBDcXUrdHFZb2E3RlBmLysyM01lT2RS?=
+ =?utf-8?B?K3dNQmV3YkZkTWUxdmtNRVdTanY0K3ZucTNQOWhRclJXc0I5ZzE0aTVrUTZr?=
+ =?utf-8?B?aW9QM3dPbm5OU1p6REJNQ1JHa2ladEdONmkrNDllcHZ2c0daREJrQ2QvalFU?=
+ =?utf-8?B?VHlwVVF4cXFINE9WYjN1Vnc1dTRtYjM0T0F0VEFPQ3doSFc5aCtGSjZqUWxu?=
+ =?utf-8?B?SFpSWk9qZEkzbkZyNWxtNVk2QzVzMjBwbzI1UTk1ektHTGV3WEM3S1BqZlM1?=
+ =?utf-8?B?N3hFUjBoOEtYQjZEeWkrNXU4U3JPa2pmY3htNXgybGFTQThUNzNCQnI5Ykky?=
+ =?utf-8?B?M20xdWhnMnpOenFpOXFSTnBaaDRlRi9kclhUZjMzL3lmOGhLU3dpT1dzVkVH?=
+ =?utf-8?B?Szc2anVGL013NnRka1lMTVJxc0xJQ3lHSkNDQi81djlDZW1EaU1tMmlXM3dm?=
+ =?utf-8?B?UllBVUFweGlkMW52N1Z3ekd0amZFY0w3ajJ0bXM5WFlFZi9tcWpOQ1VpM0g3?=
+ =?utf-8?B?d0wyS25tVE9ZQTFVbzRpVkFGa2lBNGoxT0doaVFwQm5idmYwVEFOQkI0M2I3?=
+ =?utf-8?B?S1FXK1ZPYTk3bDZNL2huRWpGcTY4TmdtcVhqRmRGSUdhNEhrL0VFOXdOcjhN?=
+ =?utf-8?B?d3IxVm1lUElXR1kwZ05Wc04vVURTVmRZa3VsUmRlN1llVmpzUFNQUUJSbDFF?=
+ =?utf-8?B?YlJ6aCtNb1JoNXB1VTdZWUdFVUFrT1RPN2Y2S2tVUWQzcUlUZlZrMGV2QWky?=
+ =?utf-8?B?LzJoZHRIZTdjOHpWZy8zVjRkT255K1NxTnpMRm5VamQ1SkNFSFE5Zz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5292d071-360f-4250-fdc8-08da31674353
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5933.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 02:54:41.0284
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LyxP7Hkq2b0yTs8C3mcsd28mqNXEnNGawU6ZH+cFGB+1F8EMG5FsFPfW9xPgWDmkf8SIOHtbyPrDWYROluszpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5315
+X-OriginatorOrg: intel.com
 
-Hi Chen-Yu,
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   3076249fc30bf463f8390f89009de928ad3e95ff
+commit: ee94241b2118ddd38a456b2b805fc584b57de58f [225/1129] net: axienet: added multichannel DMA support
+config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220509/202205090439.ddmmSvqz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # https://github.com/Xilinx/linux-xlnx/commit/ee94241b2118ddd38a456b2b805fc584b57de58f
+         git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+         git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+         git checkout ee94241b2118ddd38a456b2b805fc584b57de58f
+         # save the config file
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
 
-On Mon, May 9, 2022 at 10:53 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Thu, Apr 28, 2022 at 7:39 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
-> > On 4/27/2022 6:11 PM, Johnson Wang wrote:
-> > > On Wed, 2022-04-27 at 17:25 +0800, kernel test robot wrote:
-> > >> Hi Johnson,
-> > >>
-> > >> Thank you for the patch! Perhaps something to improve:
-> > >>
-> > >> [auto build test WARNING on robh/for-next]
-> > >> [also build test WARNING on linus/master v5.18-rc4 next-20220427]
-> > >> [If your patch is applied to the wrong git tree, kindly drop us a
-> > >> note.
-> > >> And when submitting patch, we suggest to use '--base' as documented
-> > >> in
-> > >>
-> > > https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMS_s9zEZ$
-> > >>   ]
-> > >>
-> > >> url:
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMc1U_tqz$
-> > >>
-> > >> base:
-> > >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMUzTprof$
-> > >>    for-next
-> > >> config: hexagon-allyesconfig (
-> > >> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMaVRzbSL$
-> > >>   )
-> > >> compiler: clang version 15.0.0 (
-> > >> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMRqw5IY-$
-> > >> $  1cddcfdc3c683b393df1a5c9063252eb60e52818)
-> > >> reproduce (this is a W=1 build):
-> > >>          wget
-> > >> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMQLiD-i9$
-> > >>    -O ~/bin/make.cross
-> > >>          chmod +x ~/bin/make.cross
-> > >>          #
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMU5yd7Y2$
-> > >>
-> > >>          git remote add linux-review
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMW4ldtnH$
-> > >>
-> > >>          git fetch --no-tags linux-review Johnson-Wang/Introduce-
-> > >> MediaTek-CCI-devfreq-driver/20220425-205820
-> > >>          git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
-> > >>          # save the config file
-> > >>          mkdir build_dir && cp config build_dir/.config
-> > >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
-> > >> W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/
-> > >> drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
-> > >>
-> > >> If you fix the issue, kindly add following tag as appropriate
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >>
-> > >> All warnings (new ones prefixed by >>):
-> > >>
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named
-> > >> 'parent_type' in 'struct devfreq_passive_data'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>             ~~~~~~~~~~~~  ^
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared
-> > >> identifier 'CPUFREQ_PARENT_DEV'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>                                         ^
-> > >>>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format
-> > >>>> specifies type 'int' but the argument has type 'long' [-Wformat]
-> > >>
-> > >>                             PTR_ERR(drv->devfreq));
-> > >>                             ^~~~~~~~~~~~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:144:65: note: expanded from macro
-> > >> 'dev_err'
-> > >>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev,
-> > >> dev_fmt(fmt), ##__VA_ARGS__)
-> > >>                                                                    ~~~
-> > >>       ^~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:110:23: note: expanded from macro
-> > >> 'dev_printk_index_wrap'
-> > >>                     _p_func(dev, fmt,
-> > >> ##__VA_ARGS__);                       \
-> > >>                                  ~~~    ^~~~~~~~~~~
-> > >>     1 warning and 2 errors generated.
-> > >>
-> > >>
-> > >> vim +379 drivers/devfreq/mtk-cci-devfreq.c
-> > >>
-> > >>     255
-> > >>     256      static int mtk_ccifreq_probe(struct platform_device
-> > >> *pdev)
-> > >>     257      {
-> > >>     258              struct device *dev = &pdev->dev;
-> > >>     259              struct mtk_ccifreq_drv *drv;
-> > >>     260              struct devfreq_passive_data *passive_data;
-> > >>     261              struct dev_pm_opp *opp;
-> > >>     262              unsigned long rate, opp_volt;
-> > >>     263              int ret;
-> > >>     264
-> > >>     265              drv = devm_kzalloc(dev, sizeof(*drv),
-> > >> GFP_KERNEL);
-> > >>     266              if (!drv)
-> > >>     267                      return -ENOMEM;
-> > >>     268
-> > >>     269              drv->dev = dev;
-> > >>     270              drv->soc_data = (const struct
-> > >> mtk_ccifreq_platform_data *)
-> > >>     271                                      of_device_get_match_dat
-> > >> a(&pdev->dev);
-> > >>     272              mutex_init(&drv->reg_lock);
-> > >>     273              platform_set_drvdata(pdev, drv);
-> > >>     274
-> > >>     275              drv->cci_clk = devm_clk_get(dev, "cci");
-> > >>     276              if (IS_ERR(drv->cci_clk)) {
-> > >>     277                      ret = PTR_ERR(drv->cci_clk);
-> > >>     278                      return dev_err_probe(dev, ret,
-> > >>     279                                           "failed to get cci
-> > >> clk: %d\n", ret);
-> > >>     280              }
-> > >>     281
-> > >>     282              drv->inter_clk = devm_clk_get(dev,
-> > >> "intermediate");
-> > >>     283              if (IS_ERR(drv->inter_clk)) {
-> > >>     284                      ret = PTR_ERR(drv->inter_clk);
-> > >>     285                      dev_err_probe(dev, ret,
-> > >>     286                                    "failed to get
-> > >> intermediate clk: %d\n", ret);
-> > >>     287                      goto out_free_resources;
-> > >>     288              }
-> > >>     289
-> > >>     290              drv->proc_reg =
-> > >> devm_regulator_get_optional(dev, "proc");
-> > >>     291              if (IS_ERR(drv->proc_reg)) {
-> > >>     292                      ret = PTR_ERR(drv->proc_reg);
-> > >>     293                      dev_err_probe(dev, ret,
-> > >>     294                                    "failed to get proc
-> > >> regulator: %d\n", ret);
-> > >>     295                      goto out_free_resources;
-> > >>     296              }
-> > >>     297
-> > >>     298              ret = regulator_enable(drv->proc_reg);
-> > >>     299              if (ret) {
-> > >>     300                      dev_err(dev, "failed to enable proc
-> > >> regulator\n");
-> > >>     301                      goto out_free_resources;
-> > >>     302              }
-> > >>     303
-> > >>     304              drv->sram_reg = regulator_get_optional(dev,
-> > >> "sram");
-> > >>     305              if (IS_ERR(drv->sram_reg))
-> > >>     306                      drv->sram_reg = NULL;
-> > >>     307              else {
-> > >>     308                      ret = regulator_enable(drv->sram_reg);
-> > >>     309                      if (ret) {
-> > >>     310                              dev_err(dev, "failed to enable
-> > >> sram regulator\n");
-> > >>     311                              goto out_free_resources;
-> > >>     312                      }
-> > >>     313              }
-> > >>     314
-> > >>     315              /*
-> > >>     316               * We assume min voltage is 0 and tracking
-> > >> target voltage using
-> > >>     317               * min_volt_shift for each iteration.
-> > >>     318               * The retry_max is 3 times of expeted
-> > >> iteration count.
-> > >>     319               */
-> > >>     320              drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv-
-> > >>> soc_data->sram_max_volt,
-> > >>     321                                                     drv-
-> > >>> soc_data->proc_max_volt),
-> > >>     322                                                 drv-
-> > >>> soc_data->min_volt_shift);
-> > >>     323
-> > >>     324              ret = clk_prepare_enable(drv->cci_clk);
-> > >>     325              if (ret)
-> > >>     326                      goto out_free_resources;
-> > >>     327
-> > >>     328              ret = clk_prepare_enable(drv->inter_clk);
-> > >>     329              if (ret)
-> > >>     330                      goto out_disable_cci_clk;
-> > >>     331
-> > >>     332              ret = dev_pm_opp_of_add_table(dev);
-> > >>     333              if (ret) {
-> > >>     334                      dev_err(dev, "failed to add opp table:
-> > >> %d\n", ret);
-> > >>     335                      goto out_disable_inter_clk;
-> > >>     336              }
-> > >>     337
-> > >>     338              rate = clk_get_rate(drv->inter_clk);
-> > >>     339              opp = dev_pm_opp_find_freq_ceil(dev, &rate);
-> > >>     340              if (IS_ERR(opp)) {
-> > >>     341                      ret = PTR_ERR(opp);
-> > >>     342                      dev_err(dev, "failed to get
-> > >> intermediate opp: %d\n", ret);
-> > >>     343                      goto out_remove_opp_table;
-> > >>     344              }
-> > >>     345              drv->inter_voltage =
-> > >> dev_pm_opp_get_voltage(opp);
-> > >>     346              dev_pm_opp_put(opp);
-> > >>     347
-> > >>     348              rate = U32_MAX;
-> > >>     349              opp = dev_pm_opp_find_freq_floor(drv->dev,
-> > >> &rate);
-> > >>     350              if (IS_ERR(opp)) {
-> > >>     351                      dev_err(dev, "failed to get opp\n");
-> > >>     352                      ret = PTR_ERR(opp);
-> > >>     353                      goto out_remove_opp_table;
-> > >>     354              }
-> > >>     355
-> > >>     356              opp_volt = dev_pm_opp_get_voltage(opp);
-> > >>     357              dev_pm_opp_put(opp);
-> > >>     358              ret = mtk_ccifreq_set_voltage(drv, opp_volt);
-> > >>     359              if (ret) {
-> > >>     360                      dev_err(dev, "failed to scale to
-> > >> highest voltage %lu in proc_reg\n",
-> > >>     361                              opp_volt);
-> > >>     362                      goto out_remove_opp_table;
-> > >>     363              }
-> > >>     364
-> > >>     365              passive_data = devm_kzalloc(dev, sizeof(struct
-> > >> devfreq_passive_data),
-> > >>     366                                          GFP_KERNEL);
-> > >>     367              if (!passive_data) {
-> > >>     368                      ret = -ENOMEM;
-> > >>     369                      goto out_remove_opp_table;
-> > >>     370              }
-> > >>     371
-> > >>     372              passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>     373              drv->devfreq = devm_devfreq_add_device(dev,
-> > >> &mtk_ccifreq_profile,
-> > >>     374                                                     DEVFREQ_
-> > >> GOV_PASSIVE,
-> > >>     375                                                     passive_
-> > >> data);
-> > >>     376              if (IS_ERR(drv->devfreq)) {
-> > >>     377                      ret = -EPROBE_DEFER;
-> > >>     378                      dev_err(dev, "failed to add devfreq
-> > >> device: %d\n",
-> > >>   > 379                              PTR_ERR(drv->devfreq));
-> > >>     380                      goto out_remove_opp_table;
-> > >>     381              }
-> > >>     382
-> > >>     383              drv->opp_nb.notifier_call =
-> > >> mtk_ccifreq_opp_notifier;
-> > >>     384              ret = dev_pm_opp_register_notifier(dev, &drv-
-> > >>> opp_nb);
-> > >>     385              if (ret) {
-> > >>     386                      dev_err(dev, "failed to register opp
-> > >> notifier: %d\n", ret);
-> > >>     387                      goto out_remove_devfreq_device;
-> > >>     388              }
-> > >>     389              return 0;
-> > >>     390
-> > >>     391      out_remove_devfreq_device:
-> > >>     392              devm_devfreq_remove_device(dev, drv->devfreq);
-> > >>     393
-> > >>     394      out_remove_opp_table:
-> > >>     395              dev_pm_opp_of_remove_table(dev);
-> > >>     396
-> > >>     397      out_disable_inter_clk:
-> > >>     398              clk_disable_unprepare(drv->inter_clk);
-> > >>     399
-> > >>     400      out_disable_cci_clk:
-> > >>     401              clk_disable_unprepare(drv->cci_clk);
-> > >>     402
-> > >>     403      out_free_resources:
-> > >>     404              if (regulator_is_enabled(drv->proc_reg))
-> > >>     405                      regulator_disable(drv->proc_reg);
-> > >>     406              if (drv->sram_reg && regulator_is_enabled(drv-
-> > >>> sram_reg))
-> > >>     407                      regulator_disable(drv->sram_reg);
-> > >>     408
-> > >>     409              if (!IS_ERR(drv->proc_reg))
-> > >>     410                      regulator_put(drv->proc_reg);
-> > >>     411              if (!IS_ERR(drv->sram_reg))
-> > >>     412                      regulator_put(drv->sram_reg);
-> > >>     413              if (!IS_ERR(drv->cci_clk))
-> > >>     414                      clk_put(drv->cci_clk);
-> > >>     415              if (!IS_ERR(drv->inter_clk))
-> > >>     416                      clk_put(drv->inter_clk);
-> > >>     417
-> > >>     418              return ret;
-> > >>     419      }
-> > >>     420
-> > >>
-> > >
-> > > Hi "kernel test robot",
-> > >
-> > > Thanks for your review.
-> > >
-> > > This patch is based on chanwoo/devfreq-testing[1]
-> > > [1]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
-> >
-> > Hi Johnson,
-> >
-> > Thanks for the feedback, we'll take a look too.
->
-> I think the last patch on that branch might be broken.
-
-You mean the patch[1]. Without this patch[1], there are no problems?
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=ea1011fba665b95fc28f682c9b131799a88b11ae
-
-When you tested these patches with patchset[2] without last patch[1]
-if there are no problems, please reply to patchset[2] with your Tested-by tag.
-[2] https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
 
---
-Best Regards,
-Chanwoo Choi
+clang-analyzer warnings: (new ones prefixed by >>)
+
+ >> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1044:2: warning: Value stored to 'tail_p' is never read [clang-analyzer-deadcode.DeadStores]
+            tail_p = q->tx_bd_p + sizeof(*q->tx_bd_v) * q->tx_bd_tail;
+            ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+vim +/tail_p +1044 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+
+ee94241b2118dd Saurabh Sengar               2021-01-22   998
+ee94241b2118dd Saurabh Sengar               2021-01-22   999  	if (!q->eth_hasdre &&
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1000  	    (((phys_addr_t)skb->data & 0x3) || num_frag > 0)) {
+ee94241b2118dd Saurabh Sengar               2021-01-22  1001  		skb_copy_and_csum_dev(skb, q->tx_buf[q->tx_bd_tail]);
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1002
+ee94241b2118dd Saurabh Sengar               2021-01-22  1003  		cur_p->phys = q->tx_bufs_dma +
+ee94241b2118dd Saurabh Sengar               2021-01-22  1004  			      (q->tx_buf[q->tx_bd_tail] - q->tx_bufs);
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1005
+ee94241b2118dd Saurabh Sengar               2021-01-22  1006  #ifdef CONFIG_AXIENET_HAS_MCDMA
+ee94241b2118dd Saurabh Sengar               2021-01-22  1007  		cur_p->cntrl = skb_pagelen(skb) | XMCDMA_BD_CTRL_TXSOF_MASK;
+ee94241b2118dd Saurabh Sengar               2021-01-22  1008  #else
+ee94241b2118dd Saurabh Sengar               2021-01-22  1009  		cur_p->cntrl = skb_pagelen(skb) | XAXIDMA_BD_CTRL_TXSOF_MASK;
+ee94241b2118dd Saurabh Sengar               2021-01-22  1010  #endif
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1011  		goto out;
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1012  	} else {
+9dce88e232cf19 Appana Durga Kedareswara Rao 2020-01-24  1013  		cur_p->phys = dma_map_single(ndev->dev.parent, skb->data,
+9dce88e232cf19 Appana Durga Kedareswara Rao 2020-01-24  1014  					     skb_headlen(skb), DMA_TO_DEVICE);
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1015  	}
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1016  	cur_p->tx_desc_mapping = DESC_DMA_MAP_SINGLE;
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1017
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1018  	for (ii = 0; ii < num_frag; ii++) {
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1019  		u32 len;
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1020  		skb_frag_t *frag;
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1021
+ee94241b2118dd Saurabh Sengar               2021-01-22  1022  		if (++q->tx_bd_tail >= lp->tx_bd_num)
+ee94241b2118dd Saurabh Sengar               2021-01-22  1023  			q->tx_bd_tail = 0;
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1024
+ee94241b2118dd Saurabh Sengar               2021-01-22  1025  #ifdef CONFIG_AXIENET_HAS_MCDMA
+ee94241b2118dd Saurabh Sengar               2021-01-22  1026  		cur_p = &q->txq_bd_v[q->tx_bd_tail];
+ee94241b2118dd Saurabh Sengar               2021-01-22  1027  #else
+ee94241b2118dd Saurabh Sengar               2021-01-22  1028  		cur_p = &q->tx_bd_v[q->tx_bd_tail];
+ee94241b2118dd Saurabh Sengar               2021-01-22  1029  #endif
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1030  		frag = &skb_shinfo(skb)->frags[ii];
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1031  		len = skb_frag_size(frag);
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1032  		cur_p->phys = skb_frag_dma_map(ndev->dev.parent, frag, 0, len,
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1033  					       DMA_TO_DEVICE);
+ee94241b2118dd Saurabh Sengar               2021-01-22  1034  		cur_p->cntrl = len;
+396a9512783188 Appana Durga Kedareswara Rao 2021-01-22  1035  		cur_p->tx_desc_mapping = DESC_DMA_MAP_PAGE;
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1036  	}
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1037
+ce8edb4cf93f17 Appana Durga Kedareswara Rao 2021-01-22  1038  out:
+ee94241b2118dd Saurabh Sengar               2021-01-22  1039  #ifdef CONFIG_AXIENET_HAS_MCDMA
+ee94241b2118dd Saurabh Sengar               2021-01-22  1040  	cur_p->cntrl |= XMCDMA_BD_CTRL_TXEOF_MASK;
+ee94241b2118dd Saurabh Sengar               2021-01-22 @1041  	tail_p = q->tx_bd_p + sizeof(*q->txq_bd_v) * q->tx_bd_tail;
+ee94241b2118dd Saurabh Sengar               2021-01-22  1042  #else
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1043  	cur_p->cntrl |= XAXIDMA_BD_CTRL_TXEOF_MASK;
+ee94241b2118dd Saurabh Sengar               2021-01-22 @1044  	tail_p = q->tx_bd_p + sizeof(*q->tx_bd_v) * q->tx_bd_tail;
+ee94241b2118dd Saurabh Sengar               2021-01-22  1045  #endif
+ee94241b2118dd Saurabh Sengar               2021-01-22  1046  	cur_p->tx_skb = (phys_addr_t)skb;
+bf05571deda79b Appana Durga Kedareswara Rao 2020-01-24  1047  	cur_p->tx_skb = (phys_addr_t)skb;
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1048
+ee94241b2118dd Saurabh Sengar               2021-01-22 *1049  	tail_p = q->tx_bd_p + sizeof(*q->tx_bd_v) * q->tx_bd_tail;
+244a92b6cc6f9a Appana Durga Kedareswara Rao 2020-01-24  1050  	/* Ensure BD write before starting transfer */
+244a92b6cc6f9a Appana Durga Kedareswara Rao 2020-01-24  1051  	wmb();
+244a92b6cc6f9a Appana Durga Kedareswara Rao 2020-01-24  1052
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1053  	/* Start the transfer */
+ee94241b2118dd Saurabh Sengar               2021-01-22  1054  #ifdef CONFIG_AXIENET_HAS_MCDMA
+ee94241b2118dd Saurabh Sengar               2021-01-22  1055  	axienet_dma_bdout(q, XMCDMA_CHAN_TAILDESC_OFFSET(q->chan_id),
+ee94241b2118dd Saurabh Sengar               2021-01-22  1056  			  tail_p);
+ee94241b2118dd Saurabh Sengar               2021-01-22  1057  #else
+ee94241b2118dd Saurabh Sengar               2021-01-22  1058  	axienet_dma_bdout(q, XAXIDMA_TX_TDESC_OFFSET, tail_p);
+ee94241b2118dd Saurabh Sengar               2021-01-22  1059  #endif
+ee94241b2118dd Saurabh Sengar               2021-01-22  1060  	if (++q->tx_bd_tail >= lp->tx_bd_num)
+ee94241b2118dd Saurabh Sengar               2021-01-22  1061  		q->tx_bd_tail = 0;
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1062
+ee94241b2118dd Saurabh Sengar               2021-01-22  1063  	spin_unlock_irqrestore(&q->tx_lock, flags);
+dcbca0a74b25f9 Appana Durga Kedareswara Rao 2020-01-24  1064
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1065  	return NETDEV_TX_OK;
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1066  }
+8a3b7a252dca9f Daniel Borkmann              2012-01-19  1067
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
