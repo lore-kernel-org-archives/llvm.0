@@ -1,45 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133BE7B
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 18:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B86A1FD4
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 18:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652122255; x=1683658255;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G49Hulu3ioqnykK7y88D6Yayvp+sdPAw6mjkylAaETI=;
-  b=DAI8OuD3zfO5xj+kEArrkSH6QGoGpGOf4+CRc0PzYdni3t1YToTo+ixT
-   fS3KB1ZxrIBfHs+OY/Tt3ofTwxQ0Nsrxkkh3XelCyKI7gAdIE3DmDN/wf
-   QPLLgmL0TC17db2FudYBmBFPkRkQI+v8LzqPYCljnw1SBDhUcFgUsYONF
-   k+WNfCuWsaR6CBbQEe1jsvKKWpTqZSE0+yFoW6KBUmworgusyW1d+eQQ4
-   CQGLwOmr33qwUDctvNG/YSDs0l3bdzELMNYPJ10aWs87PvQcOtxr4SZFb
-   Zr27vHvAEXMu4NyaR7RFzbrMfbYgj3w5BPlA35lMPzuBUSvvbHZ9qxpM3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266732180"
+  t=1652122256; x=1683658256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bPFox0Qva+4I21dxyRS/dYCprSTnwFX2nf6DY0aKm+8=;
+  b=L+t/YLX4gyNcB48V1udakINjYeJjUWDjT8Av/OKdmx7wikCYtUQxG61Y
+   pYQ6QZzFi7N+RUiLtCSQX5T2zj/jJ7MfiAfHUimBLERgwjl6blLfwJPa2
+   mD5r7p1irtR+QslKO1YspmcnT/Zs75Wvzz2Ho/yPxJopFGQQySRl14HWD
+   Us5SQiPpbe0y9kyUeAtl+xqmUhl4zaaQNDWHjuqFgwL2qhFAMbIJqhv1o
+   UBDh1c2GSVi6bnyDOuhcWDb/TD6xtQ1OQycoI32IMR8IH9um0trIIW8yQ
+   Y0zbFktkJCdqB2L3DU7NfAUutNjTSYLT6t8eZB4uvkS6SPs9ErOza9/bU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="355568868"
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="266732180"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:50:54 -0700
+   d="scan'208";a="355568868"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:50:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="570296319"
+   d="scan'208";a="519367514"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 May 2022 11:50:52 -0700
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2022 11:50:52 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1no8T6-000Gn6-0D;
+	id 1no8T6-000GnE-3P;
 	Mon, 09 May 2022 18:50:52 +0000
-Date: Tue, 10 May 2022 02:50:17 +0800
+Date: Tue, 10 May 2022 02:50:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ricky WU <ricky_wu@realtek.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ricky Wu <Ricky_wu@realtek.com>
-Subject: [char-misc:char-misc-testing 2/25]
- drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2'
- is used uninitialized whenever 'if' condition is false
-Message-ID: <202205100220.WyAyhKap-lkp@intel.com>
+To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
+	lars@metafoo.de, mchehab+huawei@kernel.org, ardeleanalex@gmail.com,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH V1 4/5] iio: accel: bmi088: Make it possible to config
+ scales.
+Message-ID: <202205100238.ZzT44bv1-lkp@intel.com>
+References: <20220509134629.440965-5-Qing-wu.Li@leica-geosystems.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,162 +48,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220509134629.440965-5-Qing-wu.Li@leica-geosystems.com.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-testing
-head:   33a1c6618677fe33f8e84cb7bedc45abbce89a50
-commit: b1c5f3085149e9643b125eb10aae0e74644d7dcc [2/25] misc: rtsx: add rts5261 efuse function
-config: riscv-randconfig-c006-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100220.WyAyhKap-lkp@intel.com/config)
+Hi LI,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220509-215750
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: x86_64-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100238.ZzT44bv1-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=b1c5f3085149e9643b125eb10aae0e74644d7dcc
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch --no-tags char-misc char-misc-testing
-        git checkout b1c5f3085149e9643b125eb10aae0e74644d7dcc
+        # https://github.com/intel-lab-lkp/linux/commit/70883e96ff4d7433fa8974815aba932f8bb2e8e7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220509-215750
+        git checkout 70883e96ff4d7433fa8974815aba932f8bb2e8e7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/cardreader/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/accel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (efuse_valid == 0) {
-                      ^~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rts5261.c:412:30: note: uninitialized use occurs here
-           pci_read_config_dword(pdev, setting_reg2, &lval2);
-                                       ^~~~~~~~~~~~
-   drivers/misc/cardreader/rts5261.c:406:9: note: remove the 'if' if its condition is always true
-           } else if (efuse_valid == 0) {
-                  ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable 'setting_reg2' to silence this warning
-           u16 setting_reg1, setting_reg2;
-                                         ^
-                                          = 0
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+>> drivers/iio/accel/bmi088-accel-core.c:243:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret;
+               ^
+>> drivers/iio/accel/bmi088-accel-core.c:244:6: warning: unused variable 'reg' [-Wunused-variable]
+           int reg;
+               ^
+   2 warnings generated.
 
 
-vim +406 drivers/misc/cardreader/rts5261.c
+vim +/ret +243 drivers/iio/accel/bmi088-accel-core.c
 
-   359	
-   360	static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
-   361	{
-   362		struct pci_dev *pdev = pcr->pci;
-   363		u32 lval1, lval2, i;
-   364		u16 setting_reg1, setting_reg2;
-   365		u8 valid, efuse_valid, tmp;
-   366	
-   367		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
-   368			REG_EFUSE_POR | REG_EFUSE_POWER_MASK,
-   369			REG_EFUSE_POR | REG_EFUSE_POWERON);
-   370		udelay(1);
-   371		rtsx_pci_write_register(pcr, RTS5261_EFUSE_ADDR,
-   372			RTS5261_EFUSE_ADDR_MASK, 0x00);
-   373		rtsx_pci_write_register(pcr, RTS5261_EFUSE_CTL,
-   374			RTS5261_EFUSE_ENABLE | RTS5261_EFUSE_MODE_MASK,
-   375			RTS5261_EFUSE_ENABLE);
-   376	
-   377		/* Wait transfer end */
-   378		for (i = 0; i < MAX_RW_REG_CNT; i++) {
-   379			rtsx_pci_read_register(pcr, RTS5261_EFUSE_CTL, &tmp);
-   380			if ((tmp & 0x80) == 0)
-   381				break;
-   382		}
-   383		rtsx_pci_read_register(pcr, RTS5261_EFUSE_READ_DATA, &tmp);
-   384		efuse_valid = ((tmp & 0x0C) >> 2);
-   385		pcr_dbg(pcr, "Load efuse valid: 0x%x\n", efuse_valid);
-   386	
-   387		pci_read_config_dword(pdev, PCR_SETTING_REG2, &lval2);
-   388		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, lval2);
-   389		/* 0x816 */
-   390		valid = (u8)((lval2 >> 16) & 0x03);
-   391	
-   392		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
-   393			REG_EFUSE_POR, 0);
-   394		pcr_dbg(pcr, "Disable efuse por!\n");
-   395	
-   396		if (efuse_valid == 2 || efuse_valid == 3) {
-   397			if (valid == 3) {
-   398				/* Bypass efuse */
-   399				setting_reg1 = PCR_SETTING_REG1;
-   400				setting_reg2 = PCR_SETTING_REG2;
-   401			} else {
-   402				/* Use efuse data */
-   403				setting_reg1 = PCR_SETTING_REG4;
-   404				setting_reg2 = PCR_SETTING_REG5;
-   405			}
- > 406		} else if (efuse_valid == 0) {
-   407			// default
-   408			setting_reg1 = PCR_SETTING_REG1;
-   409			setting_reg2 = PCR_SETTING_REG2;
-   410		}
-   411	
-   412		pci_read_config_dword(pdev, setting_reg2, &lval2);
-   413		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg2, lval2);
-   414	
-   415		if (!rts5261_vendor_setting_valid(lval2)) {
-   416			/* Not support MMC default */
-   417			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
-   418			pcr_dbg(pcr, "skip fetch vendor setting\n");
-   419			return;
-   420		}
-   421	
-   422		if (!rts5261_reg_check_mmc_support(lval2))
-   423			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
-   424	
-   425		pcr->rtd3_en = rts5261_reg_to_rtd3(lval2);
-   426	
-   427		if (rts5261_reg_check_reverse_socket(lval2))
-   428			pcr->flags |= PCR_REVERSE_SOCKET;
-   429	
-   430		pci_read_config_dword(pdev, setting_reg1, &lval1);
-   431		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg1, lval1);
-   432	
-   433		pcr->aspm_en = rts5261_reg_to_aspm(lval1);
-   434		pcr->sd30_drive_sel_1v8 = rts5261_reg_to_sd30_drive_sel_1v8(lval1);
-   435		pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(lval1);
-   436	
-   437		if (setting_reg1 == PCR_SETTING_REG1) {
-   438			/* store setting */
-   439			rtsx_pci_write_register(pcr, 0xFF0C, 0xFF, (u8)(lval1 & 0xFF));
-   440			rtsx_pci_write_register(pcr, 0xFF0D, 0xFF, (u8)((lval1 >> 8) & 0xFF));
-   441			rtsx_pci_write_register(pcr, 0xFF0E, 0xFF, (u8)((lval1 >> 16) & 0xFF));
-   442			rtsx_pci_write_register(pcr, 0xFF0F, 0xFF, (u8)((lval1 >> 24) & 0xFF));
-   443			rtsx_pci_write_register(pcr, 0xFF10, 0xFF, (u8)(lval2 & 0xFF));
-   444			rtsx_pci_write_register(pcr, 0xFF11, 0xFF, (u8)((lval2 >> 8) & 0xFF));
-   445			rtsx_pci_write_register(pcr, 0xFF12, 0xFF, (u8)((lval2 >> 16) & 0xFF));
-   446	
-   447			pci_write_config_dword(pdev, PCR_SETTING_REG4, lval1);
-   448			lval2 = lval2 & 0x00FFFFFF;
-   449			pci_write_config_dword(pdev, PCR_SETTING_REG5, lval2);
-   450		}
-   451	}
-   452	
+   239	
+   240	static int bmi088_accel_set_scale(struct bmi088_accel_data *data, int val, int val2)
+   241	{
+   242		unsigned int i;
+ > 243		int ret;
+ > 244		int reg;
+   245	
+   246		for (i = 0; i < 4; i++)
+   247			if (val == data->chip_info->scale_table[i][0] &&
+   248			    val2 == data->chip_info->scale_table[i][1])
+   249				break;
+   250	
+   251		if (i >= 4)
+   252			return -EINVAL;
+   253	
+   254		return regmap_write(data->regmap, BMI088_ACCEL_REG_ACC_RANGE, i);
+   255	}
+   256	
 
 -- 
 0-DAY CI Kernel Test Service
