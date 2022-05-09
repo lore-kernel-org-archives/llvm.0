@@ -1,143 +1,145 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE3523A8
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 21:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652130421; x=1683666421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VKvqRsEht8WO9u19u7rR3KhtPWXPpAb/houKG04Ee2k=;
-  b=gXNN6xYqf59/J3qCE9sPi579hx5SpYA9Pqp1NJqXAvTmO2AOWN/xj6l2
-   UKZ6zd/48dI/obishjD4M4hoGRMRDVto1+9LFWpDx4e7LYorhs4ekwKXJ
-   C4V+b1UaRyHwTFl1yi6O5x+4Vw0xCzQLu2E8mytA55EI30oYQFeIck8pi
-   oWyixUjOGJCfYeMKQhPr8IkvMLocsqqj08+lLtddMO3ZF8fq9/imIKf+5
-   UxhY6qqbSK1VK+dYBLRfPD8rlMhPdX//M9/gaQsPJQvCNpqOTdVJfLlqB
-   Vw+7dO4+Par3qcJw4vS97Wx/i58IUxYnNfNZJ7haY8jFfLOm3pqxDR5qi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266760060"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="266760060"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 14:07:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="710709223"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 May 2022 14:06:58 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noAan-000Guq-QT;
-	Mon, 09 May 2022 21:06:57 +0000
-Date: Tue, 10 May 2022 05:05:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aloka Dixit <quic_alokad@quicinc.com>, johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-wireless@vger.kernel.org,
-	Aloka Dixit <quic_alokad@quicinc.com>
-Subject: Re: [PATCH v3 1/2] nl80211: process additional attributes in
- NL80211_CMD_SET_BEACON
-Message-ID: <202205100426.MpSAZv4b-lkp@intel.com>
-References: <20220509173354.2482-2-quic_alokad@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C9923C4
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 21:24:54 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id b18so26023649lfv.9
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 14:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f1ZKCNhZxORq8c7EgaL4dVwnuRxBSTms81kX0yogN9o=;
+        b=rnUNDFnvWbpL/h8Vf3izjlnms8lBTpny2gdCnHOxqB2MEGjnQ0lcLXPO+4vHqI7B9c
+         //N55s0emMp69g6AwrRl461noDFhya5c61TVnRUPS9vn0djdsBQGwRV2o8pSuEaVVdX1
+         RjxQYrD85ZPw7uCGi3fdbKwpemkp3qhK2YAQKPOjoPSaqDdVrRZ6Oq29cTAcskq6B8iT
+         KpFbcQeJcuNw9pJFKhoypmWObaWomuzk4bIYfYoL2Q0flenXImaomkousTnAE7/gQfFf
+         xE7jGrNTrS1xMdjQJv/q28vx69R7YgfucnQnAXcTyAzYy8gqcE/sTxMUD+jVf2MKUgaU
+         OOPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f1ZKCNhZxORq8c7EgaL4dVwnuRxBSTms81kX0yogN9o=;
+        b=J5fupEbaG1rbDqXGQKhASQjp3xDt8FaTXjeOeVlVJFknB9KAZdOCbQsYbdXDivov3G
+         dHmZ/q2DlgKeYcxBThqfKNBm657Wfe8rqVEJCrFSjutTmZqbOI4aALJLPbKo/30mE32a
+         tUgfpeRN+S0cXumXd/d3UQOEQ/7C110z/uk5RidVVdFztIi96u1cveexQMNMG/xR7deu
+         QKtTS+Awfn459OzpIg4LTVTvNECxh2B4cIXIg6/kkw4Wlf2hjR2p62p2Jv0gLweL91Ml
+         71IVxo3NeEv96c8MMQfwIdMYKkRbQw99YD1LVsgliN+4E6VBcqN5RwJzGF2HLkkRsWdC
+         /DWg==
+X-Gm-Message-State: AOAM530qJauLjJi5snhUvPIij0Q0JGVtto0vWdF8b5C0u0T3SkjYVHeL
+	0FK6PQXA9zxagDR2GfPwwK9tAptgkVsbNGdlNzp0tw==
+X-Google-Smtp-Source: ABdhPJzlVJ4LdtgzZNGGoTW71AqVYfRQLEXQr1oqfWVq1fwCpHO+N4JyBlIGF/GxtN25yMeZ/G9OTyQPpYIokXa9cz0=
+X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
+ v15-20020a056512048f00b004723c4794a0mr13987721lfq.579.1652131492458; Mon, 09
+ May 2022 14:24:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509173354.2482-2-quic_alokad@quicinc.com>
+References: <20220509204635.2539549-1-nathan@kernel.org> <20220509204635.2539549-3-nathan@kernel.org>
+In-Reply-To: <20220509204635.2539549-3-nathan@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 9 May 2022 14:24:40 -0700
+Message-ID: <CAKwvOdkvF8AJudCcu=CVmU42eyVMJwUjQFnX+rpVF45bTR86Mg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] powerpc/vdso: Link with ld.lld when requested
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
+	Paul Mackerras <paulus@samba.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Alexey Kardashevskiy <aik@ozlabs.ru>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Aloka,
+On Mon, May 9, 2022 at 1:47 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> The PowerPC vDSO is linked with $(CC) instead of $(LD), which means the
+> default linker of the compiler is used instead of the linker requested
+> by the builder.
+>
+>   $ make ARCH=powerpc LLVM=1 mrproper defconfig arch/powerpc/kernel/vdso/
+>   ...
+>
+>   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
+>
+>   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
+>   String dump of section '.comment':
+>   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
+>
+>   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
+>   String dump of section '.comment':
+>   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
+>
+> The compiler option '-fuse-ld' tells the compiler which linker to use
+> when it is invoked as both the compiler and linker. Use '-fuse-ld=lld'
+> when LD=ld.lld has been specified (CONFIG_LD_IS_LLD) so that the vDSO is
+> linked with the same linker as the rest of the kernel.
+>
+>   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
+>
+>   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
+>   String dump of section '.comment':
+>   [     0] Linker: LLD 14.0.0
+>   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
+>
+>   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
+>   String dump of section '.comment':
+>   [     0] Linker: LLD 14.0.0
+>   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
+>
+> LD can be a full path to ld.lld, which will not be handled properly by
+> '-fuse-ld=lld' if the full path to ld.lld is outside of the compiler's
+> search path. '-fuse-ld' can take a path to the linker but it is
+> deprecated in clang 12.0.0; '--ld-path' is preferred for this scenario.
+>
+> Use '--ld-path' if it is supported, as it will handle a full path or
+> just 'ld.lld' properly. See the LLVM commit below for the full details
+> of '--ld-path'.
 
-Thank you for the patch! Yet something to improve:
+Perhaps worth adding some additional background from the cover letter
+to the commit message that will actually go into the kernel,
+particularly:
+1. Kbuild mostly invokes the compiler and linker distinctly; the ppc
+vdso code uses the compiler as the linker driver though.
+2. When doing so, depending on how the compiler was configured, the
+implicit default linker the compiler invokes might not match $LD.
+3. This is a problem for LTO since clang may try to invoke ld.gold,
+which is not supported as of
+commit 75959d44f9dc ("kbuild: Fail if gold linker is detected")
+4. Using the linker as the driver can cause ld.bfd 2.26 to crash.
+https://lore.kernel.org/all/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup.eu/
+(Though, I wonder if that's because I was trying to add
+--orphan-handling=warn, which we're not yet doing for the ppc vdso
+AFAICT).
 
-[auto build test ERROR on fc20106d6e2086dd37bf286605c28b28b4f2492c]
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aloka-Dixit/Additional-processing-in-NL80211_CMD_SET_BEACON/20220510-013948
-base:   fc20106d6e2086dd37bf286605c28b28b4f2492c
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220510/202205100426.MpSAZv4b-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/4b2583148641664d3a44d750efff98707ea07b23
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aloka-Dixit/Additional-processing-in-NL80211_CMD_SET_BEACON/20220510-013948
-        git checkout 4b2583148641664d3a44d750efff98707ea07b23
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/774
+> Link: https://github.com/llvm/llvm-project/commit/1bc5c84710a8c73ef21295e63c19d10a8c71f2f5
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/powerpc/kernel/vdso/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> index 954974287ee7..096b0bf1335f 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -48,6 +48,7 @@ UBSAN_SANITIZE := n
+>  KASAN_SANITIZE := n
+>
+>  ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
+> +ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
+>
+>  CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
+>  AS32FLAGS := -D__VDSO32__ -s
+> --
+> 2.36.1
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:5577:19: error: incompatible function pointer types initializing 'int (*)(struct wiphy *, struct net_device *, struct cfg80211_ap_settings *)' with an expression of type 's32 (struct wiphy *, struct net_device *, struct cfg80211_beacon_data *)' (aka 'int (struct wiphy *, struct net_device *, struct cfg80211_beacon_data *)') [-Werror,-Wincompatible-function-pointer-types]
-           .change_beacon = brcmf_cfg80211_change_beacon,
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +5577 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-
-2526ff21aa77c2 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Arend van Spriel 2017-06-09  5549  
-5c22fb85102a75 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Hante Meuleman   2016-02-17  5550  static struct cfg80211_ops brcmf_cfg80211_ops = {
-9f440b7bc78688 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2013-02-08  5551  	.add_virtual_intf = brcmf_cfg80211_add_iface,
-9f440b7bc78688 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2013-02-08  5552  	.del_virtual_intf = brcmf_cfg80211_del_iface,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5553  	.change_virtual_intf = brcmf_cfg80211_change_iface,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5554  	.scan = brcmf_cfg80211_scan,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5555  	.set_wiphy_params = brcmf_cfg80211_set_wiphy_params,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5556  	.join_ibss = brcmf_cfg80211_join_ibss,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5557  	.leave_ibss = brcmf_cfg80211_leave_ibss,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5558  	.get_station = brcmf_cfg80211_get_station,
-bf2a7e0499b922 drivers/net/wireless/brcm80211/brcmfmac/cfg80211.c          Hante Meuleman   2015-10-08  5559  	.dump_station = brcmf_cfg80211_dump_station,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5560  	.set_tx_power = brcmf_cfg80211_set_tx_power,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5561  	.get_tx_power = brcmf_cfg80211_get_tx_power,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5562  	.add_key = brcmf_cfg80211_add_key,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5563  	.del_key = brcmf_cfg80211_del_key,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5564  	.get_key = brcmf_cfg80211_get_key,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5565  	.set_default_key = brcmf_cfg80211_config_default_key,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5566  	.set_default_mgmt_key = brcmf_cfg80211_config_default_mgmt_key,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5567  	.set_power_mgmt = brcmf_cfg80211_set_power_mgmt,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5568  	.connect = brcmf_cfg80211_connect,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5569  	.disconnect = brcmf_cfg80211_disconnect,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5570  	.suspend = brcmf_cfg80211_suspend,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5571  	.resume = brcmf_cfg80211_resume,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5572  	.set_pmksa = brcmf_cfg80211_set_pmksa,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5573  	.del_pmksa = brcmf_cfg80211_del_pmksa,
-cbaa177d2b2f93 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2012-08-30  5574  	.flush_pmksa = brcmf_cfg80211_flush_pmksa,
-1a87334239757b drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2012-09-27  5575  	.start_ap = brcmf_cfg80211_start_ap,
-1a87334239757b drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2012-09-27  5576  	.stop_ap = brcmf_cfg80211_stop_ap,
-a0f07959ee6e7f drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2013-02-08 @5577  	.change_beacon = brcmf_cfg80211_change_beacon,
-1a87334239757b drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2012-09-27  5578  	.del_station = brcmf_cfg80211_del_station,
-6b89dcb35bfc78 drivers/net/wireless/brcm80211/brcmfmac/cfg80211.c          Hante Meuleman   2014-12-21  5579  	.change_station = brcmf_cfg80211_change_station,
-e58060723c91a2 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2012-09-19  5580  	.sched_scan_start = brcmf_cfg80211_sched_scan_start,
-e58060723c91a2 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2012-09-19  5581  	.sched_scan_stop = brcmf_cfg80211_sched_scan_stop,
-6cd536fe62ef58 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Johannes Berg    2020-04-17  5582  	.update_mgmt_frame_registrations =
-6cd536fe62ef58 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Johannes Berg    2020-04-17  5583  		brcmf_cfg80211_update_mgmt_frame_registrations,
-0de8aace0ff499 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2013-02-08  5584  	.mgmt_tx = brcmf_cfg80211_mgmt_tx,
-7dd56ea45a6686 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Alvin Šipraga    2021-02-08  5585  	.set_cqm_rssi_range_config = brcmf_cfg80211_set_cqm_rssi_range_config,
-0de8aace0ff499 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2013-02-08  5586  	.remain_on_channel = brcmf_p2p_remain_on_channel,
-0de8aace0ff499 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Hante Meuleman   2013-02-08  5587  	.cancel_remain_on_channel = brcmf_cfg80211_cancel_remain_on_channel,
-ee6e7aa383944c drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Rafał Miłecki    2016-05-20  5588  	.get_channel = brcmf_cfg80211_get_channel,
-27f10e380ad912 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2013-04-05  5589  	.start_p2p_device = brcmf_p2p_start_device,
-27f10e380ad912 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2013-04-05  5590  	.stop_p2p_device = brcmf_p2p_stop_device,
-61730d4dfffc2c drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Piotr Haber      2013-04-23  5591  	.crit_proto_start = brcmf_cfg80211_crit_proto_start,
-61730d4dfffc2c drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Piotr Haber      2013-04-23  5592  	.crit_proto_stop = brcmf_cfg80211_crit_proto_stop,
-89c2f382fff4ec drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2013-08-10  5593  	.tdls_oper = brcmf_cfg80211_tdls_oper,
-2a2a5d1835b6f0 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Arend Van Spriel 2017-01-27  5594  	.update_connect_params = brcmf_cfg80211_update_conn_params,
-2526ff21aa77c2 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Arend van Spriel 2017-06-09  5595  	.set_pmk = brcmf_cfg80211_set_pmk,
-2526ff21aa77c2 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c Arend van Spriel 2017-06-09  5596  	.del_pmk = brcmf_cfg80211_del_pmk,
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5597  };
-5b435de0d78686 drivers/net/wireless/brcm80211/brcmfmac/wl_cfg80211.c       Arend van Spriel 2011-10-05  5598  
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
