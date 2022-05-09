@@ -1,145 +1,137 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C9923C4
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 21:24:54 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id b18so26023649lfv.9
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 14:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f1ZKCNhZxORq8c7EgaL4dVwnuRxBSTms81kX0yogN9o=;
-        b=rnUNDFnvWbpL/h8Vf3izjlnms8lBTpny2gdCnHOxqB2MEGjnQ0lcLXPO+4vHqI7B9c
-         //N55s0emMp69g6AwrRl461noDFhya5c61TVnRUPS9vn0djdsBQGwRV2o8pSuEaVVdX1
-         RjxQYrD85ZPw7uCGi3fdbKwpemkp3qhK2YAQKPOjoPSaqDdVrRZ6Oq29cTAcskq6B8iT
-         KpFbcQeJcuNw9pJFKhoypmWObaWomuzk4bIYfYoL2Q0flenXImaomkousTnAE7/gQfFf
-         xE7jGrNTrS1xMdjQJv/q28vx69R7YgfucnQnAXcTyAzYy8gqcE/sTxMUD+jVf2MKUgaU
-         OOPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f1ZKCNhZxORq8c7EgaL4dVwnuRxBSTms81kX0yogN9o=;
-        b=J5fupEbaG1rbDqXGQKhASQjp3xDt8FaTXjeOeVlVJFknB9KAZdOCbQsYbdXDivov3G
-         dHmZ/q2DlgKeYcxBThqfKNBm657Wfe8rqVEJCrFSjutTmZqbOI4aALJLPbKo/30mE32a
-         tUgfpeRN+S0cXumXd/d3UQOEQ/7C110z/uk5RidVVdFztIi96u1cveexQMNMG/xR7deu
-         QKtTS+Awfn459OzpIg4LTVTvNECxh2B4cIXIg6/kkw4Wlf2hjR2p62p2Jv0gLweL91Ml
-         71IVxo3NeEv96c8MMQfwIdMYKkRbQw99YD1LVsgliN+4E6VBcqN5RwJzGF2HLkkRsWdC
-         /DWg==
-X-Gm-Message-State: AOAM530qJauLjJi5snhUvPIij0Q0JGVtto0vWdF8b5C0u0T3SkjYVHeL
-	0FK6PQXA9zxagDR2GfPwwK9tAptgkVsbNGdlNzp0tw==
-X-Google-Smtp-Source: ABdhPJzlVJ4LdtgzZNGGoTW71AqVYfRQLEXQr1oqfWVq1fwCpHO+N4JyBlIGF/GxtN25yMeZ/G9OTyQPpYIokXa9cz0=
-X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
- v15-20020a056512048f00b004723c4794a0mr13987721lfq.579.1652131492458; Mon, 09
- May 2022 14:24:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ACB23C4
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 21:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652132281; x=1683668281;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4ro9ql15BLhrTmeok9yadR63yNmc4qb+qAbU3by+dsU=;
+  b=atw9WpRNLEjPffUI8/wZK3mDv3gdM23f/BPItmmIMYJpVteszIO/eGsg
+   PBOMJ0ZQj2bEr8mn+/apVY8N58Jz+6NHRdO+PH5QUgvWE0OJHf0VGUMXr
+   SOOwkQ7Bp6adPF8N9r6yHquPWHWc36M/iT05xodL4iV9z9ny4A/0si+TE
+   x/RbJo+1J7FBDkXVndPRUQgyibcr9OBjGM6QNODAMjzTQvEWnEAD3ePXF
+   kzlALOZwT3CoRigcPJn5ZqRnCE6hqmzyxxwl7hO0ZDMW5M/CYa+lYeAjE
+   1j1Qoubc4cSBzHjqUoEX+z7CI/GEMB4hNyq4hhl69yvR603K7b9OTYopw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268842028"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="268842028"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 14:38:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="710717069"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 09 May 2022 14:37:58 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1noB4o-000Gvw-Bm;
+	Mon, 09 May 2022 21:37:58 +0000
+Date: Tue, 10 May 2022 05:37:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+	lyude@redhat.com, tzimmermann@suse.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, michel@daenzer.net,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH] mgag200: Enable atomic gamma lut update
+Message-ID: <202205100516.IJQ7MRHW-lkp@intel.com>
+References: <20220509094930.44613-1-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220509204635.2539549-1-nathan@kernel.org> <20220509204635.2539549-3-nathan@kernel.org>
-In-Reply-To: <20220509204635.2539549-3-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 14:24:40 -0700
-Message-ID: <CAKwvOdkvF8AJudCcu=CVmU42eyVMJwUjQFnX+rpVF45bTR86Mg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] powerpc/vdso: Link with ld.lld when requested
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
-	Paul Mackerras <paulus@samba.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Alexey Kardashevskiy <aik@ozlabs.ru>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509094930.44613-1-jfalempe@redhat.com>
 
-On Mon, May 9, 2022 at 1:47 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> The PowerPC vDSO is linked with $(CC) instead of $(LD), which means the
-> default linker of the compiler is used instead of the linker requested
-> by the builder.
->
->   $ make ARCH=powerpc LLVM=1 mrproper defconfig arch/powerpc/kernel/vdso/
->   ...
->
->   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
->
->   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
->   String dump of section '.comment':
->   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->
->   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
->   String dump of section '.comment':
->   [     0] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->
-> The compiler option '-fuse-ld' tells the compiler which linker to use
-> when it is invoked as both the compiler and linker. Use '-fuse-ld=lld'
-> when LD=ld.lld has been specified (CONFIG_LD_IS_LLD) so that the vDSO is
-> linked with the same linker as the rest of the kernel.
->
->   $ llvm-readelf -p .comment arch/powerpc/kernel/vdso/vdso{32,64}.so.dbg
->
->   File: arch/powerpc/kernel/vdso/vdso32.so.dbg
->   String dump of section '.comment':
->   [     0] Linker: LLD 14.0.0
->   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->
->   File: arch/powerpc/kernel/vdso/vdso64.so.dbg
->   String dump of section '.comment':
->   [     0] Linker: LLD 14.0.0
->   [    14] clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->
-> LD can be a full path to ld.lld, which will not be handled properly by
-> '-fuse-ld=lld' if the full path to ld.lld is outside of the compiler's
-> search path. '-fuse-ld' can take a path to the linker but it is
-> deprecated in clang 12.0.0; '--ld-path' is preferred for this scenario.
->
-> Use '--ld-path' if it is supported, as it will handle a full path or
-> just 'ld.lld' properly. See the LLVM commit below for the full details
-> of '--ld-path'.
+Hi Jocelyn,
 
-Perhaps worth adding some additional background from the cover letter
-to the commit message that will actually go into the kernel,
-particularly:
-1. Kbuild mostly invokes the compiler and linker distinctly; the ppc
-vdso code uses the compiler as the linker driver though.
-2. When doing so, depending on how the compiler was configured, the
-implicit default linker the compiler invokes might not match $LD.
-3. This is a problem for LTO since clang may try to invoke ld.gold,
-which is not supported as of
-commit 75959d44f9dc ("kbuild: Fail if gold linker is detected")
-4. Using the linker as the driver can cause ld.bfd 2.26 to crash.
-https://lore.kernel.org/all/b2066ccd-2b81-6032-08e3-41105b400f75@csgroup.eu/
-(Though, I wonder if that's because I was trying to add
---orphan-handling=warn, which we're not yet doing for the ppc vdso
-AFAICT).
+Thank you for the patch! Yet something to improve:
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[auto build test ERROR on tegra-drm/drm/tegra/for-next]
+[also build test ERROR on v5.18-rc6]
+[cannot apply to drm/drm-next drm-tip/drm-tip airlied/drm-next next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/774
-> Link: https://github.com/llvm/llvm-project/commit/1bc5c84710a8c73ef21295e63c19d10a8c71f2f5
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/powerpc/kernel/vdso/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-> index 954974287ee7..096b0bf1335f 100644
-> --- a/arch/powerpc/kernel/vdso/Makefile
-> +++ b/arch/powerpc/kernel/vdso/Makefile
-> @@ -48,6 +48,7 @@ UBSAN_SANITIZE := n
->  KASAN_SANITIZE := n
->
->  ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
-> +ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
->
->  CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
->  AS32FLAGS := -D__VDSO32__ -s
-> --
-> 2.36.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220509-175430
+base:   git://anongit.freedesktop.org/tegra/linux.git drm/tegra/for-next
+config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100516.IJQ7MRHW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c0e0a39a5acd3aa9d0cd6f25679bd16930233491
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220509-175430
+        git checkout c0e0a39a5acd3aa9d0cd6f25679bd16930233491
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/mgag200/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/mgag200/mgag200_mode.c:97:3: error: void function 'mga_crtc_update_lut' should not return a value [-Wreturn-type]
+                   return
+                   ^
+   1 error generated.
+
+
+vim +/mga_crtc_update_lut +97 drivers/gpu/drm/mgag200/mgag200_mode.c
+
+    88	
+    89	static void mga_crtc_update_lut(struct mga_device *mdev,
+    90					struct drm_crtc_state *state,
+    91					u8 depth)
+    92	{
+    93		struct drm_color_lut * lut;
+    94		int i;
+    95		
+    96		if (!state->color_mgmt_changed || !state->gamma_lut)
+  > 97			return
+    98	
+    99		lut = (struct drm_color_lut *) state->gamma_lut->data;
+   100		WREG8(DAC_INDEX + MGA1064_INDEX, 0);
+   101	
+   102		if (depth == 15) {
+   103			/* 16 bits r5g5b5a1 */
+   104			for (i = 0; i < MGAG200_LUT_SIZE; i += 8) {
+   105				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].red >> 8);
+   106				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].green >> 8);
+   107				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].blue >> 8);
+   108			}
+   109		} else if (depth == 16) {
+   110			/* 16 bits r5g6b5, as green has one more bit, 
+   111			 * add padding with 0 for red and blue. */
+   112			for (i = 0; i < MGAG200_LUT_SIZE; i += 4) {
+   113				u8 red = 2 * i < MGAG200_LUT_SIZE ? lut[2 * i].red >> 8 : 0;
+   114				u8 blue = 2 * i < MGAG200_LUT_SIZE ? lut[2 * i].red >> 8 : 0;
+   115				WREG8(DAC_INDEX + MGA1064_COL_PAL, red);
+   116				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].green >> 8);
+   117				WREG8(DAC_INDEX + MGA1064_COL_PAL, blue);
+   118			}
+   119		} else {
+   120			/* 24 bits r8g8b8 */
+   121			for (i = 0; i < MGAG200_LUT_SIZE; i++) {
+   122				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].red >> 8);
+   123				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].green >> 8);
+   124				WREG8(DAC_INDEX + MGA1064_COL_PAL, lut[i].blue >> 8);
+   125			}
+   126		}
+   127	}
+   128	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
