@@ -1,187 +1,170 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE361FA0
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 15:01:00 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ec42eae76bso147529127b3.10
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 08:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DNn5pADeSTEeIqgaMpExgJfErrD9ld+adA+VZngH5Qk=;
-        b=2J1MeSh7s/l3SKmjZrNoQohCDFCc4Ti/DaapjeC1yzNMoPltc0TZl4/XjGLAcdtNwl
-         IQ3FWV6MrH8SYUjQa/KxRg0jIPcPvgwQi1KKg4XMLcSFySzVKzQsQ2s2rZvdnjMjxKUL
-         EYSotrZxJp7sigZ8RNdOwMnzCbWxRhOHH3Ds/HSud+MbjzuVhCvcHXYe+7bwYW1v+SyT
-         YJbpuZHKjRVFjc90KpclQk3/q6GeEcu84CGw17G1Kt6ZjqawjLAVshs+qk/xAOR5qNdA
-         0ehL6Am16mdUbjuwgyeMkUFqzWWVX9kdeTIp4Nv4iB/doZctwWY5r6pI+L4Ac3PuaJBX
-         b6wg==
-X-Gm-Message-State: AOAM531UofWTFu+a/BvvW0Y6uxLckq9fBzqYbZwXWuq9xNOc+UuC8MYA
-	TtCtELmco2A7sOmOc/GDNrdDn3Z6U4MDM9ZQluk=
-X-Google-Smtp-Source: ABdhPJyUY4icHT63L6LWy80zsvn+CHkz/Ny7UxZ9DY8uY29DUI2O7NtRvr2guftQozVuG55DmBrb/jwCYyzLZYw2AOc=
-X-Received: by 2002:a81:34f:0:b0:2f7:bbb1:1576 with SMTP id
- 76-20020a81034f000000b002f7bbb11576mr14564264ywd.45.1652108459058; Mon, 09
- May 2022 08:00:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D618D1FA0
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 16:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652112808; x=1683648808;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QbP6qqb6nRewydwlAAGi0onfGm51kHMVECSNbBIu3n8=;
+  b=lZ9mezfzhQceFpCrfF4WVU00kG3QHn0b7IMomULIXHWNBd82g8pRQzR1
+   M0/kXwIlC3sDTvZVlE2zzwn8Zf9JcW/Sk2HLYh7Z3SMrAFMGvnaMoMXBH
+   fh2XLgs8LuNj0PebquriUU7y8UC0sld9aHb+Hps78UbJW6LCk8agq9jiY
+   XjFLXvdogQP0/BpHSgW+CCaWL4Vn+4w1OnPztyaxPKxQM3zjJ2NGEXLrg
+   510zBuZX+RGm1QX79yTApLhxPKhUMCunumOtZcFYNfN/PHuRh5fMbe60B
+   vOzWpklFSjghegJNwtnNCv8rFkFiEf1n4cu59yttWoM686CCNrQAvUngS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="267938388"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="267938388"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 09:13:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="738243827"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 09:13:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1no60i-000GeE-KI;
+	Mon, 09 May 2022 16:13:24 +0000
+Date: Tue, 10 May 2022 00:13:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v3 10/13] drivers/opp/core.c:1297:8:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202205100055.CcUduSmT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com> <YnhXgzhghfi17vMX@dev-arch.thelio-3990X>
-In-Reply-To: <YnhXgzhghfi17vMX@dev-arch.thelio-3990X>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Tue, 10 May 2022 00:00:48 +0900
-Message-ID: <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"the arch/x86 maintainers" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon. 9 May 2022 at 08:51, Nathan Chancellor <nathan@kernel.org> wrote:
-> On Sun, May 08, 2022 at 09:37:14PM +0900, Vincent MAILHOL wrote:
-> > Hi Arnd,
-> >
-> > +CC: Kees Cook
-> >
-> > On Sun. 8 May 2022 at 19:27, Arnd Bergmann <arnd@kernel.org> wrote:
-> > > On Sun, May 8, 2022 at 12:09 PM Vincent Mailhol
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > >
-> > > > Aside of the __builtin_foo() ones, x86 does not directly rely on any
-> > > > builtin functions.
-> > > >
-> > > > However, such builtin functions are not explicitly deactivated,
-> > > > creating some collisions, concrete example being ffs() from bitops.h,
-> > > > c.f.:
-> > > >
-> > > > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-> > > > |   283 | static __always_inline int ffs(int x)
-> > > >
-> > > > This patch adds -fno-builtin to KBUILD_CFLAGS for the x86
-> > > > architectures in order to prevent shadowing of builtin functions.
-> > > >
-> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > > ---
-> > > > FYI, I tested this patch on a "make allyesconfig" for both x86_32 and
-> > > > x86_64.
-> > > >
-> > > > This is a resend. Only difference is that I dropped the RFC flag and
-> > > > added Arnd in CC because he did a similar patch to fix ffs shadow
-> > > > warnings in the past:
-> > > >
-> > > > https://lore.kernel.org/all/20201026160006.3704027-1-arnd@kernel.org/
-> > >
-> > > I think this is a correct change, but unfortunately it exposes a clang bug
-> > >  with -mregparm=3. Nick should be able to provide more details, I think
-> > > he has a plan.
-> >
-> > Interesting. I admittedly did not do extensive tests on clang
-> > but I would have expected the Linux kernel bot to have warned me
-> > on my previous patch.
-> >
-> > I did research on mregparm and clang. I found this thread:
-> > https://lore.kernel.org/r/20220208225350.1331628-9-keescook@chromium.org
-> >
-> > and the associated LLVM issue:
-> > https://github.com/llvm/llvm-project/issues/53645
-> >
-> > Those threads mention that some clang builtins become unusable
-> > when combining -mregparm=3 and -m32. But I could not find a
-> > bug reference about -mregparm=3 and -fno-builtin combination.
-> >
-> > Could you just double confirm that you indeed saw the issue with
-> > -fno-builtin? If that the case, I am really curious to get the
-> > details :)
->
-> -ffreestanding implies -fno-builtin; removing -ffreestanding from
-> arch/x86/Makefile for 32-bit x86 caused the problem so I don't think
-> that your patch would cause any issue but I could be missing something.
->
-> However, doesn't -fno-builtin remove the ability for GCC and clang to
-> perform certain libcall optimizations? I seem to recall this coming up
-> in previous threads but I am having a hard time finding the exact
-> language that I was looking for.
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
+head:   22a49fd92d5e31234d4174cdf1fdade79f38ae3d
+commit: ff3c34983e1cca80d8c081ea99e0117c5c38c6c3 [10/13] PM: opp: allow control of multiple clocks
+config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100055.CcUduSmT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/krzk/linux/commit/ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
+        git checkout ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
 
-I was not aware. I did the test with a dummy memset implementation:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-| void foo(char *s, unsigned int count)
-| {
-|     while (count--)
-|         *s++ = 0;
-| }
+All warnings (new ones prefixed by >>):
 
-Before this patch (i.e. with builtins), GCC does this:
-
-| foo:
-|     testl    %esi, %esi    # count
-|     je    .L7    #,
-|     pushq    %rbp    #
-|     movl    %esi, %edx    # count, count
-|     xorl    %esi, %esi    #
-|     movq    %rsp, %rbp    #,
-|     call    memset    #
-|     popq    %rbp    #
-|     ret
-| .L7:
-|     ret
-
-Here, we can clearly see that the function is optimized to a call
-to memset.
-
-After this patch (i.e. without builtins), the call disappears:
-
-| foo:
-|     testl    %esi, %esi    # count
-|     je    .L1    #,
-|     movl    %esi, %esi    # count, count
-|     leaq    (%rdi,%rsi), %rax    #, _12
-| .L3:
-|     addq    $1, %rdi    #, s
-|     movb    $0, -1(%rdi)    #, MEM[(char *)s_8 + -1B]
-|     cmpq    %rax, %rdi    # _12, s
-|     jne    .L3    #,
-| .L1:
-|     ret
-
-So yes, the -fno-builtin will remove the optimizations at least
-for GCC (not tested for clang).
-
-> This thread seems to be the most recent
-> one that I can remember:
->
-> https://lore.kernel.org/CAHk-=whn91ar+EbcBXQb9UXad00Q5WjU-TCB6UBzVba682a4ew@mail.gmail.com/
-
-What is funny is that the thread you are pointing at mostly
-complains about the compiler doing optimization in the user's
-back.
-
-There will be some cases in which the compiler will find valid
-optimizations and some cases it will do some silly
-one (e.g. transform a very small loop to a function call). The
-problem is to know whether the clever optimizations outweigh the silly
-ones or not. I wonder if any benchmark exists on that.
-
-If compiler optimizations are indeed worth it, we should then have
-a look at the other architecture which uses the -fno-builtin flag
-(or the -ffreestanding).
-
-Regarding this patch, I do not think it should be applied anymore
-unless proven that "optimizations" are detrimental and thus
-unwanted.
-
-Instead, I am thinking of just using -fno-builtin-ffs to remove
-the annoying -Wshadow warning. Would that make more sense?
-
-Thank you.
+>> drivers/opp/core.c:1297:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (opp_table->clks)
+                               ^~~~~~~~~~~~~~~
+   drivers/opp/core.c:1335:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/opp/core.c:1297:4: note: remove the 'if' if its condition is always true
+                           if (opp_table->clks)
+                           ^~~~~~~~~~~~~~~~~~~~
+   drivers/opp/core.c:1280:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-Yours sincerely,
-Vincent Mailhol
+vim +1297 drivers/opp/core.c
+
+  1263	
+  1264	/**
+  1265	 * dev_pm_opp_set_rate() - Configure new OPP based on frequency
+  1266	 * @dev:	 device for which we do this operation
+  1267	 * @target_freq: frequency to achieve
+  1268	 *
+  1269	 * This configures the power-supplies to the levels specified by the OPP
+  1270	 * corresponding to the target_freq, and programs the clock to a value <=
+  1271	 * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
+  1272	 * provided by the opp, should have already rounded to the target OPP's
+  1273	 * frequency.
+  1274	 */
+  1275	int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+  1276	{
+  1277		struct opp_table *opp_table;
+  1278		unsigned long freq = 0, temp_freq;
+  1279		struct dev_pm_opp *opp = NULL;
+  1280		int ret;
+  1281	
+  1282		opp_table = _find_opp_table(dev);
+  1283		if (IS_ERR(opp_table)) {
+  1284			dev_err(dev, "%s: device's opp table doesn't exist\n", __func__);
+  1285			return PTR_ERR(opp_table);
+  1286		}
+  1287	
+  1288		if (target_freq) {
+  1289			/*
+  1290			 * For IO devices which require an OPP on some platforms/SoCs
+  1291			 * while just needing to scale the clock on some others
+  1292			 * we look for empty OPP tables with just a clock handle and
+  1293			 * scale only the clk. This makes dev_pm_opp_set_rate()
+  1294			 * equivalent to a clk_set_rate()
+  1295			 */
+  1296			if (!_get_opp_count(opp_table)) {
+> 1297				if (opp_table->clks)
+  1298					ret = _generic_set_opp_clk_only(dev,
+  1299									opp_table->clks[0],
+  1300									target_freq);
+  1301				goto put_opp_table;
+  1302			}
+  1303	
+  1304			if (opp_table->clks)
+  1305				freq = clk_round_rate(opp_table->clks[0], target_freq);
+  1306			if ((long)freq <= 0)
+  1307				freq = target_freq;
+  1308	
+  1309			/*
+  1310			 * The clock driver may support finer resolution of the
+  1311			 * frequencies than the OPP table, don't update the frequency we
+  1312			 * pass to clk_set_rate() here.
+  1313			 */
+  1314			temp_freq = freq;
+  1315			opp = _find_freq_ceil(opp_table, &temp_freq);
+  1316			if (IS_ERR(opp)) {
+  1317				ret = PTR_ERR(opp);
+  1318				dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
+  1319					__func__, freq, ret);
+  1320				goto put_opp_table;
+  1321			}
+  1322			/*
+  1323			 * opp->rates are used for scaling clocks, so be sure accurate
+  1324			 * 'freq' is used, instead what was defined via e.g. Devicetree.
+  1325			 */
+  1326			opp->rates[0] = freq;
+  1327		}
+  1328	
+  1329		ret = _set_opp(dev, opp_table, opp, freq);
+  1330	
+  1331		if (target_freq)
+  1332			dev_pm_opp_put(opp);
+  1333	put_opp_table:
+  1334		dev_pm_opp_put_opp_table(opp_table);
+  1335		return ret;
+  1336	}
+  1337	EXPORT_SYMBOL_GPL(dev_pm_opp_set_rate);
+  1338	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
