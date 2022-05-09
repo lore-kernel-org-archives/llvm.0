@@ -1,236 +1,100 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9021865
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 12:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652098754; x=1683634754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=852D0WTiV+2Du4Tu2T0YU4FDc+Luix7a5hJXfT75Uas=;
-  b=erKgUhjGvneOxY4ZcHyD704wfwc5VBIt2LSAXviLKDelz7G7dHYiNHEx
-   uvV3PePpqw3uxmDk3V5opEXcObhTNNtHbahcOjpVj5ignHwRukheGEtvN
-   a7k/4pQrSBu4XfPtUs/uhZzizoO+ESvGgx//uQqQAhzMSafevGetKOIoU
-   o5V/fG327pUXMJrIhISY+2r6rtcLDCbpJmEtTj7bZCBbvWwOsCXMamhqF
-   S6o9bnQlV701nWe2RAz1wrAa5XY4ClIKZ+K8zqZxXRcdLBaIb+kyANmP1
-   J/6rEJ2VlX/OhbX0N1z0j5xBan4CVKnEkF4l/hCLzHnP9g9Lyr72W73/D
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="294257212"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="294257212"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:19:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="550997607"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 05:19:10 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1no2M2-000GUq-4h;
-	Mon, 09 May 2022 12:19:10 +0000
-Date: Mon, 9 May 2022 20:18:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1] vdpa: Do not count the pages that were already pinned
- in the vhost-vDPA
-Message-ID: <202205092017.ywsnJTzp-lkp@intel.com>
-References: <20220509071426.155941-1-lulu@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8937E
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 12:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1652099493;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gEOVNDDSpKASfNP7Ge49MOGYJd/s6CThQbdN++TPQOc=;
+	b=acTMg3p/3bjAcOM8TzAzviGHgy6li3VzjDn6iPepjVxeBk718zKqOTTD+BLhH18HmDywX1
+	B2jEh/NFZEWWf1p97CBBTlZEn+Zvm1eGv3KoUX7B8le1X7x1NerAYdLTrzdEDcy+NwiBqh
+	e/H5FYq2usztnoKTq8G4X5AXNXo5Hgs=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-7T1RgE8qMleWhjuUmchFfQ-1; Mon, 09 May 2022 08:31:32 -0400
+X-MC-Unique: 7T1RgE8qMleWhjuUmchFfQ-1
+Received: by mail-qv1-f70.google.com with SMTP id d13-20020a05621421cd00b0045a99874ae5so11649571qvh.14
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 05:31:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gEOVNDDSpKASfNP7Ge49MOGYJd/s6CThQbdN++TPQOc=;
+        b=JtomHNg22srElB2GOgU0Ze/ra2FrupT42zw6ZTmAzgSEQlKxn03MZSJgpq5prXerFg
+         rkO50I3cXk/D7eOG3Rl9m4v9RBHeRBKh4aVXQtXEESof5timrRelRDhnKSLfQ+WsL2Je
+         wx7MsXtBQ8ITvd/8IZygK8LA2KFI1Cdgdz5PIWw8avryzxoOJE+OBDC7YBokLt+K/y32
+         wEVeuF1WUMEVwQeBW96lfU/VP1RZ2ELJLrBDJ12OL1NHuG24POtnb076LjYlwwJS4CrA
+         Iek9SO7n8fRZGasq/N/xoT0Im+xl1B28sOCHwsc5D3aM7oEeBelL8K/C1wrielkqFVoC
+         efig==
+X-Gm-Message-State: AOAM531IiDdkr1zc1H4x3WZYeLwX+tdBlvr4EFcpigIdAM/axqoia7MC
+	EN1I0MFsdrgnoj4TPDALIlbHdG/SresTESClxO+90RhVMQiIcB9HOPMst/6kc2PnhezztxUyBd9
+	+Dov9008WH27SXQ==
+X-Received: by 2002:ac8:5954:0:b0:2f3:7d71:869e with SMTP id 20-20020ac85954000000b002f37d71869emr14705071qtz.183.1652099491278;
+        Mon, 09 May 2022 05:31:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzxHsEqi5MAo7TiJ6W+7CBlLKlZqhZAzL8aK4UMWuppI0cXur/TKjXyNde7+COugsYcZctc+w==
+X-Received: by 2002:ac8:5954:0:b0:2f3:7d71:869e with SMTP id 20-20020ac85954000000b002f37d71869emr14705046qtz.183.1652099491002;
+        Mon, 09 May 2022 05:31:31 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o27-20020a05620a15db00b0069fc13ce203sm6736097qkm.52.2022.05.09.05.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 05:31:30 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: hughd@google.com,
+	akpm@linux-foundation.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	willy@infradead.org
+Cc: linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] mm/shmem: initialize folio to NULL
+Date: Mon,  9 May 2022 08:31:16 -0400
+Message-Id: <20220509123116.3169267-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509071426.155941-1-lulu@redhat.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Cindy,
+The clang build fails with
+mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+  if (!page) {
+       ^~~~~
+The error handler for !page jumps to an if-check for an unset folio.
+So initialize folio to NULL.
 
-Thank you for the patch! Perhaps something to improve:
+Fixes: 2b58b3f33ba2 ("mm/shmem: convert shmem_swapin_page() to shmem_swapin_folio()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ mm/shmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linux/master linus/master v5.18-rc6]
-[cannot apply to next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: x86_64-randconfig-c007-20220509 (https://download.01.org/0day-ci/archive/20220509/202205092017.ywsnJTzp-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4225cc2a756b75d1e0ff7ca2a593bada42def380
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-        git checkout 4225cc2a756b75d1e0ff7ca2a593bada42def380
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/vhost/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/vhost/vdpa.c:542:5: warning: no previous prototype for function 'vhost_vdpa_add_range_ctx' [-Wmissing-prototypes]
-   int vhost_vdpa_add_range_ctx(struct rb_root_cached *root, u64 start, u64 last)
-       ^
-   drivers/vhost/vdpa.c:542:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vhost_vdpa_add_range_ctx(struct rb_root_cached *root, u64 start, u64 last)
-   ^
-   static 
->> drivers/vhost/vdpa.c:571:6: warning: no previous prototype for function 'vhost_vdpa_del_range' [-Wmissing-prototypes]
-   void vhost_vdpa_del_range(struct rb_root_cached *root, u64 start, u64 last)
-        ^
-   drivers/vhost/vdpa.c:571:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void vhost_vdpa_del_range(struct rb_root_cached *root, u64 start, u64 last)
-   ^
-   static 
->> drivers/vhost/vdpa.c:581:28: warning: no previous prototype for function 'vhost_vdpa_search_range' [-Wmissing-prototypes]
-   struct interval_tree_node *vhost_vdpa_search_range(struct rb_root_cached *root,
-                              ^
-   drivers/vhost/vdpa.c:581:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct interval_tree_node *vhost_vdpa_search_range(struct rb_root_cached *root,
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/vhost_vdpa_add_range_ctx +542 drivers/vhost/vdpa.c
-
-   464	
-   465	static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-   466					      unsigned int cmd, unsigned long arg)
-   467	{
-   468		struct vhost_vdpa *v = filep->private_data;
-   469		struct vhost_dev *d = &v->vdev;
-   470		void __user *argp = (void __user *)arg;
-   471		u64 __user *featurep = argp;
-   472		u64 features;
-   473		long r = 0;
-   474	
-   475		if (cmd == VHOST_SET_BACKEND_FEATURES) {
-   476			if (copy_from_user(&features, featurep, sizeof(features)))
-   477				return -EFAULT;
-   478			if (features & ~VHOST_VDPA_BACKEND_FEATURES)
-   479				return -EOPNOTSUPP;
-   480			vhost_set_backend_features(&v->vdev, features);
-   481			return 0;
-   482		}
-   483	
-   484		mutex_lock(&d->mutex);
-   485	
-   486		switch (cmd) {
-   487		case VHOST_VDPA_GET_DEVICE_ID:
-   488			r = vhost_vdpa_get_device_id(v, argp);
-   489			break;
-   490		case VHOST_VDPA_GET_STATUS:
-   491			r = vhost_vdpa_get_status(v, argp);
-   492			break;
-   493		case VHOST_VDPA_SET_STATUS:
-   494			r = vhost_vdpa_set_status(v, argp);
-   495			break;
-   496		case VHOST_VDPA_GET_CONFIG:
-   497			r = vhost_vdpa_get_config(v, argp);
-   498			break;
-   499		case VHOST_VDPA_SET_CONFIG:
-   500			r = vhost_vdpa_set_config(v, argp);
-   501			break;
-   502		case VHOST_GET_FEATURES:
-   503			r = vhost_vdpa_get_features(v, argp);
-   504			break;
-   505		case VHOST_SET_FEATURES:
-   506			r = vhost_vdpa_set_features(v, argp);
-   507			break;
-   508		case VHOST_VDPA_GET_VRING_NUM:
-   509			r = vhost_vdpa_get_vring_num(v, argp);
-   510			break;
-   511		case VHOST_SET_LOG_BASE:
-   512		case VHOST_SET_LOG_FD:
-   513			r = -ENOIOCTLCMD;
-   514			break;
-   515		case VHOST_VDPA_SET_CONFIG_CALL:
-   516			r = vhost_vdpa_set_config_call(v, argp);
-   517			break;
-   518		case VHOST_GET_BACKEND_FEATURES:
-   519			features = VHOST_VDPA_BACKEND_FEATURES;
-   520			if (copy_to_user(featurep, &features, sizeof(features)))
-   521				r = -EFAULT;
-   522			break;
-   523		case VHOST_VDPA_GET_IOVA_RANGE:
-   524			r = vhost_vdpa_get_iova_range(v, argp);
-   525			break;
-   526		case VHOST_VDPA_GET_CONFIG_SIZE:
-   527			r = vhost_vdpa_get_config_size(v, argp);
-   528			break;
-   529		case VHOST_VDPA_GET_VQS_COUNT:
-   530			r = vhost_vdpa_get_vqs_count(v, argp);
-   531			break;
-   532		default:
-   533			r = vhost_dev_ioctl(&v->vdev, cmd, argp);
-   534			if (r == -ENOIOCTLCMD)
-   535				r = vhost_vdpa_vring_ioctl(v, cmd, argp);
-   536			break;
-   537		}
-   538	
-   539		mutex_unlock(&d->mutex);
-   540		return r;
-   541	}
- > 542	int vhost_vdpa_add_range_ctx(struct rb_root_cached *root, u64 start, u64 last)
-   543	{
-   544		struct interval_tree_node *new_node;
-   545	
-   546		if (last < start)
-   547			return -EFAULT;
-   548	
-   549		/* If the range being mapped is [0, ULONG_MAX], split it into two entries
-   550		 * otherwise its size would overflow u64.
-   551		 */
-   552		if (start == 0 && last == ULONG_MAX) {
-   553			u64 mid = last / 2;
-   554	
-   555			vhost_vdpa_add_range_ctx(root, start, mid);
-   556			start = mid + 1;
-   557		}
-   558	
-   559		new_node = kmalloc(sizeof(struct interval_tree_node), GFP_ATOMIC);
-   560		if (!new_node)
-   561			return -ENOMEM;
-   562	
-   563		new_node->start = start;
-   564		new_node->last = last;
-   565	
-   566		interval_tree_insert(new_node, root);
-   567	
-   568		return 0;
-   569	}
-   570	
- > 571	void vhost_vdpa_del_range(struct rb_root_cached *root, u64 start, u64 last)
-   572	{
-   573		struct interval_tree_node *new_node;
-   574	
-   575		while ((new_node = interval_tree_iter_first(root, start, last))) {
-   576			interval_tree_remove(new_node, root);
-   577			kfree(new_node);
-   578		}
-   579	}
-   580	
- > 581	struct interval_tree_node *vhost_vdpa_search_range(struct rb_root_cached *root,
-   582							   u64 start, u64 last)
-   583	{
-   584		return interval_tree_iter_first(root, start, last);
-   585	}
-   586	
-
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 107f1e4dd0aa..7faaa61ff7fa 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1682,7 +1682,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+ 	struct shmem_inode_info *info = SHMEM_I(inode);
+ 	struct mm_struct *charge_mm = vma ? vma->vm_mm : NULL;
+ 	struct page *page;
+-	struct folio *folio;
++	struct folio *folio = NULL;
+ 	swp_entry_t swap;
+ 	int error;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+
