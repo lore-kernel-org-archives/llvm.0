@@ -1,113 +1,101 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6717B
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 19:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652126040; x=1683662040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TQPJMVgr8Y0+pWZ1dG23nKFgTtXv/p/Uqh4dA7ld2SY=;
-  b=e0EheOJiI74jhMylzHiUmbJnuTYjsKvNNBWAI/j4Bv1GsbCA0X20PXgv
-   bVxAB11ykd/UkPBRGbWYWgHfknsi74oM7Zza5Ns6g5DSiKAcniewruYUX
-   /AoJxdLXvbKU6tJuo/2HZkSFgrLTpdn3HCnzzd153qHZvBygSjHYGFAgb
-   IKL0Qqx/+nFHRSBVLZdkkURKoOvgEaZsgtLQvsWY5wo5M6WNoXH+8yC4p
-   hUtD9gmubJ/i/JIFT5Gp0PBzoA5oJ+qjKoE6nL6rHzwtMGVFzvcYfvrzt
-   +pIn/RrATc5gSczOg+BBYrTK85sY0EBWrg+gz1CSzxcpG9zaFd7ribwgJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="355583694"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="355583694"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 12:53:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="669507546"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 12:53:55 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1no9S7-000GqY-6u;
-	Mon, 09 May 2022 19:53:55 +0000
-Date: Tue, 10 May 2022 03:53:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	daniel.lezcano@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tglx@linutronix.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
-	marijn.suijten@somainline.org, martin.botka@somainline.org,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	paul.bouchara@somainline.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 2/2] clocksource/drivers/timer-mediatek: Implement
- CPUXGPT timers
-Message-ID: <202205100325.mvo9fxmN-lkp@intel.com>
-References: <20220509102058.3064215-3-angelogioacchino.delregno@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84CA23A8
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 20:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=DJvkssOcF8+m+Ove9gLIwYNOA7vpMPRTcC342WLSizg=; b=KpKgCLBfutwIM6QfTn7oZ1fOI0
+	4JX2oo2OGp9VpO65yNS70YWgPPl2q/IFttVJGj0CVQFLyhmV1r+2gRtv3HAV4S+u0CieG/zjo4P8Y
+	blDSX62zTFAlDAlkTZl1CXE76IQNtzkrL8JC1JDgk1I8+07hYV8aCE9RrwvmXf9QfYwDimhRsbaxd
+	dHtm5sw3m9ASqeh+A5Hv0sN6/00XJwItWJE1lM24uaQDGHjwGved8yQHp36+JaJlyc9RQBG15TYBt
+	G1a4Q0yOaTaqh3CT2r8O6Srku4lEE7Knihuq5qMwcSIXCyy6CczW3ujT39EfdcMYxuATc+Z6yyy1V
+	j2SOz2YA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1noA7F-00GBNP-Uk; Mon, 09 May 2022 20:36:25 +0000
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: ast@kernel.org,
+	daniel@iogearbox.net
+Cc: songliubraving@fb.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	mcgrof@kernel.org
+Subject: [PATCH] bpf.h: fix clang compiler warning with unpriv_ebpf_notify()
+Date: Mon,  9 May 2022 13:36:23 -0700
+Message-Id: <20220509203623.3856965-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509102058.3064215-3-angelogioacchino.delregno@collabora.com>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Hi AngeloGioacchino,
+The recent commit "bpf: Move BPF sysctls from kernel/sysctl.c to BPF core"
+triggered 0-day to issue an email for what seems to have been an old
+clang warning. So this issue should have existed before as well, from
+what I can tell. The issue is that clang expects a forward declaration
+for routines declared as weak while gcc does not.
 
-Thank you for the patch! Perhaps something to improve:
+This can be reproduced with 0-day's x86_64-randconfig-c007
+https://download.01.org/0day-ci/archive/20220424/202204240008.JDntM9cU-lkp@intel.com/config
 
-[auto build test WARNING on tip/timers/core]
-[also build test WARNING on robh/for-next v5.18-rc6 next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+And using:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-SoC-ARM-ARM64-System-Timer/20220509-182806
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git f4b62e1e1137507268c2c63dc4e6da279dc58e9f
-config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100325.mvo9fxmN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/cd08992dd0c0e2c02229be62ecb2a51da4c1d315
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-SoC-ARM-ARM64-System-Timer/20220509-182806
-        git checkout cd08992dd0c0e2c02229be62ecb2a51da4c1d315
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clocksource/ drivers/gpu/drm/mgag200/
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+Compiler will be installed in /home/mcgrof/0day
+make --keep-going HOSTCC=/home/mcgrof/0day/clang/bin/clang CC=/home/mcgrof/0day/clang/bin/clang LD=/home/mcgrof/0day/clang/bin/ld.lld HOSTLD=/home/mcgrof/0day/clang/bin/ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar CROSS_COMPILE=x86_64-linux-gnu- --jobs=24 W=1 ARCH=x86_64 SHELL=/bin/bash kernel/bpf/syscall.o
+  DESCEND objtool
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CC      kernel/bpf/syscall.o
+kernel/bpf/syscall.c:4944:13: warning: no previous prototype for function 'unpriv_ebpf_notify' [-Wmissing-prototypes]
+void __weak unpriv_ebpf_notify(int new_state)
+            ^
+kernel/bpf/syscall.c:4944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+void __weak unpriv_ebpf_notify(int new_state)
+^
+static
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
 
-All warnings (new ones prefixed by >>):
+Daniel,
 
->> drivers/clocksource/timer-mediatek.c:103:6: warning: variable 'val' set but not used [-Wunused-but-set-variable]
-           u32 val;
-               ^
-   1 warning generated.
+Given what we did fore 2900005ea287 ("bpf: Move BPF sysctls from
+kernel/sysctl.c to BPF core") where I had pulled pr/bpf-sysctl a
+while ago into sysctl-next and then merged the patch in question,
+should I just safely carry this patch onto sysctl-next? Let me know
+how you'd like to proceed.
 
+Also, it wasn't clear if putting this forward declaration on
+bpf.h was your ideal preference.
 
-vim +/val +103 drivers/clocksource/timer-mediatek.c
+  Luis
 
-    99	
-   100	static void mtk_cpux_disable_irq(struct timer_of *to)
-   101	{
-   102		const unsigned long *irq_mask = cpumask_bits(cpu_possible_mask);
- > 103		u32 val;
-   104	
-   105		val = mtk_cpux_readl(CPUX_IDX_GLOBAL_IRQ, to);
-   106		val &= ~(*irq_mask);
-   107	}
-   108	
+ include/linux/bpf.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..bd3e17a9f821 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1551,6 +1551,9 @@ bpf_map_alloc_percpu(const struct bpf_map *map, size_t size, size_t align,
+ #endif
+ 
+ extern int sysctl_unprivileged_bpf_disabled;
++#ifdef CONFIG_SYSCTL
++void unpriv_ebpf_notify(int new_state);
++#endif
+ 
+ static inline bool bpf_allow_ptr_leaks(void)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
