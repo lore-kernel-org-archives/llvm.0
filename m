@@ -1,164 +1,180 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC7C7E
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 06:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652076664; x=1683612664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q/+TWUhk9UE5aPgQPz4SwR0O7CR+cRK/KszfoagCEiE=;
-  b=aiMwkV9k3ESryZHD1a8tUq6yXa4TNi5HvduxyMNMuI2a6a0Hw2JsoEj2
-   GXYZwrF7rIfFE/sskxqRzE7eR51letlhmBJacYrpqbCnAdp+McgrmuMrY
-   gVmr2dgGYSKpCfj/tE4mebf6YEeMrJtQd6YvaHdEKuTzQVaj49JuyG9bl
-   n3bVBWEP3ReQ6+Ky168gdBHsTm+tDdYvmtLrk/xtOYjWG2Artjf2RUvIG
-   wueuJUQ9fQq0T4cc1SWeCJoM/luz4noSZEA9cd8C+1dmJ24Yns0WorzoS
-   vgVPR5KDO6XXZazKf96yIaK3Kthj8nG5KJSse70bbHZl5RO5D4DeV0yl5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="268609451"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="268609451"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 23:11:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="633885902"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 May 2022 23:11:02 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nnwbl-000GEI-D3;
-	Mon, 09 May 2022 06:11:01 +0000
-Date: Mon, 9 May 2022 14:10:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linyu Yuan <quic_linyyuan@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-usb@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
-	Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: Re: [PATCH] usb: gadget: update DECLARE_USB_FUNCTION(_INIT) macro
-Message-ID: <202205091426.o1eXthPp-lkp@intel.com>
-References: <1652069653-6961-1-git-send-email-quic_linyyuan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF0F46A9
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 07:43:06 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id x18so13090102plg.6
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 00:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=ehuXX1FBMkXSxSIO1nrsalxMQ5cS613ljbe6bhV7rSM=;
+        b=KZ5PzAABnM7rZuNaEf3eccRR5cnr2G94ZV1XwtYplLCKyR7Q59KUGxguJ34iH486OD
+         HEDUAM2ilO8WK9tEaa1ANMzauRzjKj0RbCNHtZ0SYoraprpNC2WD3MtEQzQtQYHeVt4m
+         rMwT1Xue9YNWdTLjZQvLgNkFguieLN4YXPTP2v3BcKltwIAO9LlDInW7XG93PR4zzILt
+         CaM3xTwlATa+Kn9xRkIa6l8+V7BugxU0TdpJUetZsBK8+g1TKI6xOcmhu6+5agvM4he3
+         Kemu/c/+dpU1Rouv4Fp1Mg3Db9qmgMWsE0LkgjZyx9ukdGGN7uDy2pVFuoR7H5aBX5xw
+         MtpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=ehuXX1FBMkXSxSIO1nrsalxMQ5cS613ljbe6bhV7rSM=;
+        b=0MSv0Pa+zVw1c0CIljodaNhhFO3NKvuRJVPgPOvxa9JeSXIRKHx7bJD8r3bmzXFwm5
+         el9k91iMRm58K5bGlz/VSySCqILuURzRrPUuTCckIDsRCMgs0soQnvfUoNhIkVnpD1WX
+         kRlaeRR9I2U7euMBCbVbHge3FOi4K3N7mvDeJe5sW/5VGqAJ17k4xcVcxfVgZfYzK3T2
+         eNKU6Hq1tA1rnL+tTuydCUMsCn4UybysPBvJQp1eNO2NbGRr2GqOiQo3/aYJJJWnLsW0
+         b4THRw1KTnQihSLS7Dot7DAQ/TBzcxaIYkdOqaMx8NqoC9cpjKetFJKa7GB2fou5/zwo
+         MWnA==
+X-Gm-Message-State: AOAM531hqF2Hq6PqYUOCgWd2ZiD7q8v6ruyurNMCbrUShAwbozcKooTn
+	lnupW9NTYhmTUM4rI5FWsf2lKw==
+X-Google-Smtp-Source: ABdhPJwMgzoh3Y2fXnk2/wstyuVnsZF2oNgkzIUibycLookoAo0VhhE5CajSIyQyjfIXih4W8ze5qQ==
+X-Received: by 2002:a17:90b:1d10:b0:1dc:dea8:d2ad with SMTP id on16-20020a17090b1d1000b001dcdea8d2admr15400232pjb.174.1652082185680;
+        Mon, 09 May 2022 00:43:05 -0700 (PDT)
+Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id c80-20020a621c53000000b0050dc7628132sm8161048pfc.12.2022.05.09.00.43.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 00:43:05 -0700 (PDT)
+Message-ID: <de7ae055-8cbb-1fd3-e1d7-93f51c2d3f4b@ozlabs.ru>
+Date: Mon, 9 May 2022 17:42:59 +1000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652069653-6961-1-git-send-email-quic_linyyuan@quicinc.com>
-
-Hi Linyu,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on v5.18-rc6 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Linyu-Yuan/usb-gadget-update-DECLARE_USB_FUNCTION-_INIT-macro/20220509-122915
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-randconfig-r045-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091426.o1eXthPp-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ce4965d3f282c0e6971a978b6b892f2f8352553d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Linyu-Yuan/usb-gadget-update-DECLARE_USB_FUNCTION-_INIT-macro/20220509-122915
-        git checkout ce4965d3f282c0e6971a978b6b892f2f8352553d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/gadget/function/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/gadget/function/f_loopback.c:590:32: error: use of undeclared identifier 'Loopbackusb_func'; did you mean 'Loopback_usb_func'?
-           return usb_function_register(&Loopbackusb_func);
-                                         ^~~~~~~~~~~~~~~~
-                                         Loopback_usb_func
-   drivers/usb/gadget/function/f_loopback.c:586:1: note: 'Loopback_usb_func' declared here
-   DECLARE_USB_FUNCTION(Loopback, loopback_alloc_instance, loopback_alloc);
-   ^
-   include/linux/usb/composite.h:614:36: note: expanded from macro 'DECLARE_USB_FUNCTION'
-           static struct usb_function_driver _name ## _usb_func = {        \
-                                             ^
-   <scratch space>:94:1: note: expanded from here
-   Loopback_usb_func
-   ^
-   drivers/usb/gadget/function/f_loopback.c:595:27: error: use of undeclared identifier 'Loopbackusb_func'; did you mean 'Loopback_usb_func'?
-           usb_function_unregister(&Loopbackusb_func);
-                                    ^~~~~~~~~~~~~~~~
-                                    Loopback_usb_func
-   drivers/usb/gadget/function/f_loopback.c:586:1: note: 'Loopback_usb_func' declared here
-   DECLARE_USB_FUNCTION(Loopback, loopback_alloc_instance, loopback_alloc);
-   ^
-   include/linux/usb/composite.h:614:36: note: expanded from macro 'DECLARE_USB_FUNCTION'
-           static struct usb_function_driver _name ## _usb_func = {        \
-                                             ^
-   <scratch space>:94:1: note: expanded from here
-   Loopback_usb_func
-   ^
-   2 errors generated.
---
->> drivers/usb/gadget/function/f_sourcesink.c:1273:31: error: use of undeclared identifier 'SourceSinkusb_func'; did you mean 'SourceSink_usb_func'?
-           ret = usb_function_register(&SourceSinkusb_func);
-                                        ^~~~~~~~~~~~~~~~~~
-                                        SourceSink_usb_func
-   drivers/usb/gadget/function/f_sourcesink.c:1266:1: note: 'SourceSink_usb_func' declared here
-   DECLARE_USB_FUNCTION(SourceSink, source_sink_alloc_inst,
-   ^
-   include/linux/usb/composite.h:614:36: note: expanded from macro 'DECLARE_USB_FUNCTION'
-           static struct usb_function_driver _name ## _usb_func = {        \
-                                             ^
-   <scratch space>:136:1: note: expanded from here
-   SourceSink_usb_func
-   ^
-   drivers/usb/gadget/function/f_sourcesink.c:1278:28: error: use of undeclared identifier 'SourceSinkusb_func'; did you mean 'SourceSink_usb_func'?
-                   usb_function_unregister(&SourceSinkusb_func);
-                                            ^~~~~~~~~~~~~~~~~~
-                                            SourceSink_usb_func
-   drivers/usb/gadget/function/f_sourcesink.c:1266:1: note: 'SourceSink_usb_func' declared here
-   DECLARE_USB_FUNCTION(SourceSink, source_sink_alloc_inst,
-   ^
-   include/linux/usb/composite.h:614:36: note: expanded from macro 'DECLARE_USB_FUNCTION'
-           static struct usb_function_driver _name ## _usb_func = {        \
-                                             ^
-   <scratch space>:136:1: note: expanded from here
-   SourceSink_usb_func
-   ^
-   drivers/usb/gadget/function/f_sourcesink.c:1283:27: error: use of undeclared identifier 'SourceSinkusb_func'; did you mean 'SourceSink_usb_func'?
-           usb_function_unregister(&SourceSinkusb_func);
-                                    ^~~~~~~~~~~~~~~~~~
-                                    SourceSink_usb_func
-   drivers/usb/gadget/function/f_sourcesink.c:1266:1: note: 'SourceSink_usb_func' declared here
-   DECLARE_USB_FUNCTION(SourceSink, source_sink_alloc_inst,
-   ^
-   include/linux/usb/composite.h:614:36: note: expanded from macro 'DECLARE_USB_FUNCTION'
-           static struct usb_function_driver _name ## _usb_func = {        \
-                                             ^
-   <scratch space>:136:1: note: expanded from here
-   SourceSink_usb_func
-   ^
-   3 errors generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [PATCH kernel] powerpc/llvm/lto: Allow LLVM LTO builds
+Content-Language: en-US
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ Nicholas Piggin <npiggin@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Sathvika Vasireddy
+ <sv@linux.ibm.com>, Russell Currey <ruscur@russell.cc>,
+ "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+ Sami Tolvanen <samitolvanen@google.com>
+References: <20220429064547.2334280-1-aik@ozlabs.ru>
+ <CAKwvOdmUMhqhQhDCpWjMNiQQPvwOJB9MbUkF3RR0BL+H+DagmA@mail.gmail.com>
+ <efe4ec7b-e1ec-84fc-cc49-7e22597ff417@ozlabs.ru>
+In-Reply-To: <efe4ec7b-e1ec-84fc-cc49-7e22597ff417@ozlabs.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +590 drivers/usb/gadget/function/f_loopback.c
 
-cf9a08ae5aece8 drivers/usb/gadget/f_loopback.c          Sebastian Andrzej Siewior 2012-12-23  587  
-cf9a08ae5aece8 drivers/usb/gadget/f_loopback.c          Sebastian Andrzej Siewior 2012-12-23  588  int __init lb_modinit(void)
-cf9a08ae5aece8 drivers/usb/gadget/f_loopback.c          Sebastian Andrzej Siewior 2012-12-23  589  {
-5387c920372a3a drivers/usb/gadget/function/f_loopback.c Colin Ian King            2016-09-08 @590  	return usb_function_register(&Loopbackusb_func);
-e5760fdac8c8ae drivers/usb/gadget/f_loopback.c          David Brownell            2008-06-19  591  }
-5387c920372a3a drivers/usb/gadget/function/f_loopback.c Colin Ian King            2016-09-08  592  
+On 5/9/22 15:18, Alexey Kardashevskiy wrote:
+> 
+> 
+> On 5/4/22 07:21, Nick Desaulniers wrote:
+>> On Thu, Apr 28, 2022 at 11:46 PM Alexey Kardashevskiy <aik@ozlabs.ru> 
+>> wrote:
+>>>
+>>> This enables LTO_CLANG builds on POWER with the upstream version of
+>>> LLVM.
+>>>
+>>> LTO optimizes the output vmlinux binary and this may affect the FTP
+>>> alternative section if alt branches use "bc" (Branch Conditional) which
+>>> is limited by 16 bit offsets. This shows up in errors like:
+>>>
+>>> ld.lld: error: InputSection too large for range extension thunk 
+>>> vmlinux.o:(__ftr_alt_97+0xF0)
+>>>
+>>> This works around the issue by replacing "bc" in FTR_SECTION_ELSE with
+>>> "b" which allows 26 bit offsets.
+>>>
+>>> This catches the problem instructions in vmlinux.o before it LTO'ed:
+>>>
+>>> $ objdump -d -M raw -j __ftr_alt_97 vmlinux.o | egrep '\S+\s*\<bc\>'
+>>>    30:   00 00 82 40     bc      4,eq,30 <__ftr_alt_97+0x30>
+>>>    f0:   00 00 82 40     bc      4,eq,f0 <__ftr_alt_97+0xf0>
+>>>
+>>> This allows LTO builds for ppc64le_defconfig plus LTO options.
+>>> Note that DYNAMIC_FTRACE/FUNCTION_TRACER is not supported by LTO builds
+>>> but this is not POWERPC-specific.
+>>
+>> $ ARCH=powerpc make LLVM=1 -j72 ppc64le_defconfig
+>> $ ARCH=powerpc make LLVM=1 -j72 menuconfig
+>> <disable FTRACE, enable LTO_CLANG_THIN>
+>> $ ARCH=powerpc make LLVM=1 -j72
+>> ...
+>>    VDSO64L arch/powerpc/kernel/vdso/vdso64.so.dbg
+>> /usr/bin/powerpc64le-linux-gnu-ld:
+>> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: error
+>> loading plugin:
+>> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: cannot open
+>> shared object file: No such file or directory
+>> clang-15: error: linker command failed with exit code 1 (use -v to see
+>> invocation)
+>> make[1]: *** [arch/powerpc/kernel/vdso/Makefile:67:
+>> arch/powerpc/kernel/vdso/vdso64.so.dbg] Error 1
+>>
+>> Looks like LLD isn't being invoked correctly to link the vdso.
+>> Probably need to revisit
+>> https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google.com/
+>>
+>> How were you working around this issue? Perhaps you built clang to
+>> default to LLD? (there's a cmake option for that)
+> 
+> 
+> What option is that? I only add  -DLLVM_ENABLE_LLD=ON  which (I think) 
+> tells cmake to use lld to link the LLVM being built but does not seem to 
+> tell what the built clang should do.
+> 
+> Without -DLLVM_ENABLE_LLD=ON, building just fails:
+> 
+> [fstn1-p1 ~/pbuild/llvm/llvm-lto-latest-cleanbuild]$ ninja -j 100
+> [619/3501] Linking CXX executable bin/not
+> FAILED: bin/not
+> : && /usr/bin/clang++ -fPIC -fvisibility-inlines-hidden 
+> -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra 
+> -Wno-unused-parameter -Wwrite-strings -Wcast-qual 
+> -Wmissing-field-initializers -pedantic -Wno-long-long 
+> -Wc++98-compat-extra-semi -Wimplicit-fallthrough 
+> -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor 
+> -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion 
+> -Wmisleading-indentation -fdiagnostics-color -ffunction-sections 
+> -fdata-sections -flto -O3 -DNDEBUG -flto 
+> -Wl,-rpath-link,/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/./lib 
+> -Wl,--gc-sections utils/not/CMakeFiles/not.dir/not.cpp.o -o bin/not 
+> -Wl,-rpath,"\$ORIGIN/../lib"  -lpthread  lib/libLLVMSupport.a  -lrt 
+> -ldl  -lpthread  -lm  /usr/lib/powerpc64le-linux-gnu/libz.so 
+> /usr/lib/powerpc64le-linux-gnu/libtinfo.so  lib/libLLVMDemangle.a && :
+> /usr/bin/ld: lib/libLLVMSupport.a: error adding symbols: archive has no 
+> index; run ranlib to add one
+> clang: error: linker command failed with exit code 1 (use -v to see 
+> invocation)
+> [701/3501] Building CXX object 
+> utils/TableGen/CMakeFiles/llvm-tblgen.dir/GlobalISelEmitter.cpp.o
+> ninja: build stopped: subcommand failed.
+> 
+> 
+> 
+> My head hurts :(
+> The above example is running on PPC. Now I am trying x86 box:
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+A bit of progress.
+
+cmake -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lld" 
+-DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC 
+~/llvm-project//llvm -DLLVM_ENABLE_LTO=ON 
+-DLLVM_BINUTILS_INCDIR=/usr/lib/gcc/powerpc64le-linux-gnu/11/plugin/include/ 
+-DCMAKE_BUILD_TYPE=Release
+
+produces:
+
+-- Native target architecture is PowerPC 
+
+....
+-- LLVM host triple: x86_64-unknown-linux-gnu
+-- LLVM default target triple: x86_64-unknown-linux-gnu
+
+
+and the resulting "clang" can only to "Target: 
+x86_64-unknown-linux-gnu", how do you build LLVM exactly? Thanks,
+
+
