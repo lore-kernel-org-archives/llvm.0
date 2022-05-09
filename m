@@ -1,92 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF527B
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 00:07:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F74CC385AC;
-	Mon,  9 May 2022 00:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652054844;
-	bh=bHmScepPN7hiopWGp4Kksweb2MJZ9UmfSD6aznw0bIQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QWziOI/mxznBq6oexsLOCR4AhVWh+JvIbO7TsfylwMPxv6ZNycNSqGW8E5XfuvAB3
-	 8mjOvyNDBEPnA52h1dSX1sJWZfsNugYJomO+bov+1M5CSsPlug8KU5cyUAo4DPPupM
-	 D47fkVLkscKkMJk5ZOgKKLPX0xOoheg/wPo0WM6u917gHYtizntQsyTa3ESY3aA7ES
-	 XELPW3DvXI3Y+Id/EdxhJZSdfU9kJMoIGad69ni47JHQ3phPwDyspF8FSr3LEBK3fY
-	 7R1H7YhcwtFg6VvxenzWvQKavKDz+vj2xSuHnosmirIBhxYE6MYjaCT0j8Ee8mtUGY
-	 nnaHkrTI7lHjQ==
-Date: Sun, 8 May 2022 17:07:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mauro Rossi <issor.oruam@gmail.com>
-Cc: luto@kernel.org, Chih-Wei Huang <cwhuang@android-x86.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
- llvm 11.0.2 internal assembler
-Message-ID: <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X>
-References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
- <Ym2qdHAB6BMMlegB@thelio-3990X>
- <CAEQFVGZB6eAetmt1kk+TYbGxpfrDut37DEO_-1HECqM6FEERww@mail.gmail.com>
- <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79A47B
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 00:28:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=UER95YhL/LdSDTOz/ulO8m1XkwQ4O0+2EBlTjF/ksUc=; b=ov63tU4N3g/lMAU9V7LrP+vhfa
+	iJdiZomwAYWqTcm6mrl/mT25qG6BE5WoNCQ/SBnPGJdw9Mk2wkcpY08+8xNVi0FgqacZ7MsJl2Sja
+	IXMSwW9v4+Bc9smCeKr7X/DxrQUFbGPaTi9LP/r+R7kzFtN4J5zEVaCIPIGieIn7ygKRtuNwo7qmp
+	knKqv20dxmrvqr3Qup2PUm49b0pheF3oCEqXVTqvyij3EwlOPlnb02zk85MAWlbhhgU6tML3O/q7r
+	CgZeoxeYwscxuLcvi9RSOfQ3jPPbJlp4tzTG/lOafR1SpJ/VsHmvqnunCsLarCd09KxDhflyfIQEQ
+	//QBuf5w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nnqrz-002whA-Ar; Mon, 09 May 2022 00:03:23 +0000
+Message-ID: <65c92404-1d6f-6969-89bf-20b8eefaeff6@infradead.org>
+Date: Sun, 8 May 2022 17:03:16 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared
+ function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
+ declarations
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+ Florian Eckert <fe@dev.tdt.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ Alex Shi <alexs@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>
+References: <202205080416.vzIXy16B-lkp@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202205080416.vzIXy16B-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 07, 2022 at 02:19:00PM +0200, Mauro Rossi wrote:
-> > > Alternatively, you could apply the hack that Nick inserted into Android
-> > > for this issue if upgrading your toolchain or turning off the integrated
-> > > assembler is not possible:
-> > >
-> > > https://android.googlesource.com/kernel/common/+/e58f084735b8abf744d61083b92172ee23d45aae
-> > >
-> > > I really do not mean to sound dismissive or rude, I apologize if it
-> > > comes off that way, but we have worked quite hard to avoid inserting
-> > > unnecessary workarounds, as they are ultimately technical debt that can
-> > > be hard to manage over the long term.
-> > >
-> > > Cheers,
-> > > Nathan
-> >
-> > Thanks a lot Nathan
-> >
-> > It is definitely the clang version 11.0.x which is not updated in aosp
-> > Android 11 production tags
-> >
-> > I will use Nick's workaround which works since only lsl %rax, %rax is
-> > currently happening
-> >
-> > Many thanks, problem solved
+Hi--
+
+Adding TO: and CC: that are at end of message but are not
+included originally.
+
+
+On 5/7/22 13:54, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   30c8e80f79329617012f07b09b70114592092ea4
+> commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+> date:   8 weeks ago
+> config: mips-randconfig-r022-20220507 (https://download.01.org/0day-ci/archive/20220508/202205080416.vzIXy16B-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 > 
-> Hello,
-> I'm back again because I was assuming that Nick's workaround was working ok,
-> but I have found that ARCH=x86_64 i.e. 64bit built kernel is causing
-> an immediate hard reboot at initrd execution,
-> just after hitting [ENTER] at grub/efi menu.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+>            ^
+>>> drivers/hwmon/ltq-cputemp.c:23:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+>                        ^
+>    drivers/hwmon/ltq-cputemp.c:28:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+>            ^
+>    drivers/hwmon/ltq-cputemp.c:28:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+>                        ^
+>    drivers/hwmon/ltq-cputemp.c:39:12: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                    value = (ltq_cgu_r32(CGU_GPHY1_CR) >> 9) & 0x01FF;
+>                             ^
+>    drivers/hwmon/ltq-cputemp.c:92:24: error: use of undeclared identifier 'SOC_TYPE_VR9_2'
+>            if (ltq_soc_type() != SOC_TYPE_VR9_2)
+>                                  ^
+>    6 errors generated.
+> 
+> 
+> vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
+> 
+> 7074d0a9275860 Florian Eckert 2017-09-01  20  
+> 7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
+> 7074d0a9275860 Florian Eckert 2017-09-01  22  {
+> 7074d0a9275860 Florian Eckert 2017-09-01 @23  	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+> 7074d0a9275860 Florian Eckert 2017-09-01  24  }
+> 7074d0a9275860 Florian Eckert 2017-09-01  25  
+> 
+> :::::: The code at line 23 was first introduced by commit
+> :::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
+> 
+> :::::: TO: Florian Eckert <fe@dev.tdt.de>
+> :::::: CC: Guenter Roeck <linux@roeck-us.net>
 
-It looks like there was a follow up fix for that workaround, maybe that
-resolves this issue as well?
+This driver builds fine if I change it from SOC_FALCON to SOC_XWAY.
+Maybe its Kconfig entry should be stronger?
 
-https://android.googlesource.com/kernel/common/+/cc7f7a84191f5defc2ea4633eeea4acb4486b549
+config SENSORS_LTQ_CPUTEMP
+	bool "Lantiq cpu temperature sensor driver"
+-	depends on LANTIQ
++	depends on SOC_XWAY
 
-> ARCh=x86 i.e. 32bit kernel binary is not affected, but is Nick's
-> workaround targeting 32 bit kernel builds?
+?
 
-No, the file that the build error originates from (entry_64.S) is only
-built on x86_64.
-
-> How do aosp android-mailine kernels avoid this instantaneous hard reboot issue?
-
-That hack was reverted once the toolchain was upgraded:
-
-https://android.googlesource.com/kernel/common/+/ff0216d09fd31802537f2d1702ec2f3e9be73aa3
-https://android.googlesource.com/kernel/common/+/3c2c8d8f7f2639e319212d10cb8df5bd13098dae
-
-Cheers,
-Nathan
+-- 
+~Randy
