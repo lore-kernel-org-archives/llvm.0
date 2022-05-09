@@ -1,71 +1,113 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4707B
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 19:50:16 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id y32so25663839lfa.6
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 12:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lUw4VaKIzxrbYNwvojWVRe8W2wHxEMMJeCH5HQ+Oo5w=;
-        b=RjU5sRMW3dnGEQjLoVoh4aJgCLuyLKWdPccKJsojGEtVqmZdIWkuXQWc9cF7Ej/2zB
-         HHBnEjo99v2jfWA+f/P7jQnzyexM6xakAs3aIrOnzRgfKtuGeHzQS3SbhFzdm7S50A3n
-         CCt1j4XXaSI71WLPsEoU+4V1qUNuSDxf0GOQG3PMYwyljAmf5EHaLuATgVBaCvoKesTp
-         oKSRvrU6Cu287E6FaG2f6Z4zpZnAJM+BixQ0Ttko8R8KvNTVwvRnaH9bPHU3fbH0HU95
-         guFNGhyt9baLgCmsZ781fRIugm3e8RB6RjXGultZMfiuIG3cf/X8T+7P/8p+jI6gfCNF
-         GTYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lUw4VaKIzxrbYNwvojWVRe8W2wHxEMMJeCH5HQ+Oo5w=;
-        b=HFe3foe6VKtB7LShxKeAWYJqdSjwl1/rTyi4qXpiO6oWVHBJxtSfiB8pmxJkDUR6g0
-         C5v7/kj3EkKy7wfPVYBAX4rd6RcB3LLJNnGAb3exTFdFTeKc92GzUUllPSegfKYTS4sm
-         OLWL7rPNgjpKulxI2kbH5di6pup5J6eeZHJMwzzEYwLnaKi6U9oU2PGAL0QBEjeEplNO
-         zuhLjzB+7WwZpFFVjaIMxB7z91zUczQbYeFBECAIoMFjR4MZNWCyRTsso+MHlnLgfUkX
-         IoaPm8Vkf4o97FIZVfEGoM+ZEV0GXhPvX2LIKoDHJXhgWUAVOdWe0lcE4+iShzh4La9H
-         3YEA==
-X-Gm-Message-State: AOAM533E7kPhojN4syHPBwxXrzqX1zFtb9bgt19uu5n/ilGuatj4oPCE
-	ZrZjQHqO4h1yodpZjzjFSMmGqKDdmckufg8xCp6dYw==
-X-Google-Smtp-Source: ABdhPJywhFfJnbeomWArH6XEZjkjyPnKkE+73BynU3wttwwSJWub8YJXqwbxg5a4RUAhdOQKKz5bS9lQAR0Di7Rvhzg=
-X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
- v15-20020a056512048f00b004723c4794a0mr13708380lfq.579.1652125814206; Mon, 09
- May 2022 12:50:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6717B
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 19:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652126040; x=1683662040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TQPJMVgr8Y0+pWZ1dG23nKFgTtXv/p/Uqh4dA7ld2SY=;
+  b=e0EheOJiI74jhMylzHiUmbJnuTYjsKvNNBWAI/j4Bv1GsbCA0X20PXgv
+   bVxAB11ykd/UkPBRGbWYWgHfknsi74oM7Zza5Ns6g5DSiKAcniewruYUX
+   /AoJxdLXvbKU6tJuo/2HZkSFgrLTpdn3HCnzzd153qHZvBygSjHYGFAgb
+   IKL0Qqx/+nFHRSBVLZdkkURKoOvgEaZsgtLQvsWY5wo5M6WNoXH+8yC4p
+   hUtD9gmubJ/i/JIFT5Gp0PBzoA5oJ+qjKoE6nL6rHzwtMGVFzvcYfvrzt
+   +pIn/RrATc5gSczOg+BBYrTK85sY0EBWrg+gz1CSzxcpG9zaFd7ribwgJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="355583694"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="355583694"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 12:53:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="669507546"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 12:53:55 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1no9S7-000GqY-6u;
+	Mon, 09 May 2022 19:53:55 +0000
+Date: Tue, 10 May 2022 03:53:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	daniel.lezcano@linaro.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tglx@linutronix.de,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
+	marijn.suijten@somainline.org, martin.botka@somainline.org,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	paul.bouchara@somainline.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 2/2] clocksource/drivers/timer-mediatek: Implement
+ CPUXGPT timers
+Message-ID: <202205100325.mvo9fxmN-lkp@intel.com>
+References: <20220509102058.3064215-3-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
- <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
-In-Reply-To: <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 12:50:01 -0700
-Message-ID: <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Tom Rix <trix@redhat.com>, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509102058.3064215-3-angelogioacchino.delregno@collabora.com>
 
-On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> Instead, I am thinking of just using -fno-builtin-ffs to remove
-> the annoying -Wshadow warning. Would that make more sense?
+Hi AngeloGioacchino,
 
-Perhaps a pragma would be the best tool to silence this instance of
--Wshadow?  I understand what GCC is trying to express, but the kernel
-does straddle a weird place between -ffreestanding and a "hosted" env.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tip/timers/core]
+[also build test WARNING on robh/for-next v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-SoC-ARM-ARM64-System-Timer/20220509-182806
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git f4b62e1e1137507268c2c63dc4e6da279dc58e9f
+config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100325.mvo9fxmN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cd08992dd0c0e2c02229be62ecb2a51da4c1d315
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-SoC-ARM-ARM64-System-Timer/20220509-182806
+        git checkout cd08992dd0c0e2c02229be62ecb2a51da4c1d315
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clocksource/ drivers/gpu/drm/mgag200/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clocksource/timer-mediatek.c:103:6: warning: variable 'val' set but not used [-Wunused-but-set-variable]
+           u32 val;
+               ^
+   1 warning generated.
+
+
+vim +/val +103 drivers/clocksource/timer-mediatek.c
+
+    99	
+   100	static void mtk_cpux_disable_irq(struct timer_of *to)
+   101	{
+   102		const unsigned long *irq_mask = cpumask_bits(cpu_possible_mask);
+ > 103		u32 val;
+   104	
+   105		val = mtk_cpux_readl(CPUX_IDX_GLOBAL_IRQ, to);
+   106		val &= ~(*irq_mask);
+   107	}
+   108	
+
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
