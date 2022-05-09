@@ -1,180 +1,198 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF0F46A9
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 07:43:06 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id x18so13090102plg.6
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 00:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=ehuXX1FBMkXSxSIO1nrsalxMQ5cS613ljbe6bhV7rSM=;
-        b=KZ5PzAABnM7rZuNaEf3eccRR5cnr2G94ZV1XwtYplLCKyR7Q59KUGxguJ34iH486OD
-         HEDUAM2ilO8WK9tEaa1ANMzauRzjKj0RbCNHtZ0SYoraprpNC2WD3MtEQzQtQYHeVt4m
-         rMwT1Xue9YNWdTLjZQvLgNkFguieLN4YXPTP2v3BcKltwIAO9LlDInW7XG93PR4zzILt
-         CaM3xTwlATa+Kn9xRkIa6l8+V7BugxU0TdpJUetZsBK8+g1TKI6xOcmhu6+5agvM4he3
-         Kemu/c/+dpU1Rouv4Fp1Mg3Db9qmgMWsE0LkgjZyx9ukdGGN7uDy2pVFuoR7H5aBX5xw
-         MtpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=ehuXX1FBMkXSxSIO1nrsalxMQ5cS613ljbe6bhV7rSM=;
-        b=0MSv0Pa+zVw1c0CIljodaNhhFO3NKvuRJVPgPOvxa9JeSXIRKHx7bJD8r3bmzXFwm5
-         el9k91iMRm58K5bGlz/VSySCqILuURzRrPUuTCckIDsRCMgs0soQnvfUoNhIkVnpD1WX
-         kRlaeRR9I2U7euMBCbVbHge3FOi4K3N7mvDeJe5sW/5VGqAJ17k4xcVcxfVgZfYzK3T2
-         eNKU6Hq1tA1rnL+tTuydCUMsCn4UybysPBvJQp1eNO2NbGRr2GqOiQo3/aYJJJWnLsW0
-         b4THRw1KTnQihSLS7Dot7DAQ/TBzcxaIYkdOqaMx8NqoC9cpjKetFJKa7GB2fou5/zwo
-         MWnA==
-X-Gm-Message-State: AOAM531hqF2Hq6PqYUOCgWd2ZiD7q8v6ruyurNMCbrUShAwbozcKooTn
-	lnupW9NTYhmTUM4rI5FWsf2lKw==
-X-Google-Smtp-Source: ABdhPJwMgzoh3Y2fXnk2/wstyuVnsZF2oNgkzIUibycLookoAo0VhhE5CajSIyQyjfIXih4W8ze5qQ==
-X-Received: by 2002:a17:90b:1d10:b0:1dc:dea8:d2ad with SMTP id on16-20020a17090b1d1000b001dcdea8d2admr15400232pjb.174.1652082185680;
-        Mon, 09 May 2022 00:43:05 -0700 (PDT)
-Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
-        by smtp.gmail.com with ESMTPSA id c80-20020a621c53000000b0050dc7628132sm8161048pfc.12.2022.05.09.00.43.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:43:05 -0700 (PDT)
-Message-ID: <de7ae055-8cbb-1fd3-e1d7-93f51c2d3f4b@ozlabs.ru>
-Date: Mon, 9 May 2022 17:42:59 +1000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB46E1858
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 07:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652082815; x=1683618815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ino11uijCuvYEBBiCsBGTBzxkPq0irZ5o3V4YaCc+Eo=;
+  b=Vrd58eDqh8YeA6qWh5iJkZ26d7HVfiDFlImtdyxPOyllNwH49Lf5MjJ/
+   mIGEWwUaRdE2PbZlm+qMIF6P8XmTEokdM8huYvYyzSArlS1EfthAGh7iE
+   EI46Om/U9Hktu+Ds0hv65cO16v7dHYd8wg1lgFfR2tgBuu/JR5sjqne8Y
+   +gdE7/y42JdjFNIMuNbVg9os3GqXzhlxEm48ee1L6f3cC7sLcPUtZud1b
+   IcJPAQheiRFBlgArfyijp848yyjmt4EfKkTmTuk5NglZ1qMvfGYOxgBvJ
+   VLYK2BIoxtN9bZBhfrGTIRBLPNG6zXHpDIKzW0LPi2EsbH3M1ZctDrfrE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266563282"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="266563282"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 00:53:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="668848352"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 00:53:31 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nnyCw-000GJq-Jm;
+	Mon, 09 May 2022 07:53:30 +0000
+Date: Mon, 9 May 2022 15:52:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Holland <samuel@sholland.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Samuel Holland <samuel@sholland.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Guo Ren <guoren@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Russell King <linux@armlinux.org.uk>, Wei Xu <xuwei5@hisilicon.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 3/5] genirq: Provide an IRQ affinity mask in non-SMP
+ configs
+Message-ID: <202205091545.QhhCDxVm-lkp@intel.com>
+References: <20220509034333.60017-4-samuel@sholland.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
- Thunderbird/100.0
-Subject: Re: [PATCH kernel] powerpc/llvm/lto: Allow LLVM LTO builds
-Content-Language: en-US
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- Nicholas Piggin <npiggin@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Michael Ellerman <mpe@ellerman.id.au>, Sathvika Vasireddy
- <sv@linux.ibm.com>, Russell Currey <ruscur@russell.cc>,
- "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
- Sami Tolvanen <samitolvanen@google.com>
-References: <20220429064547.2334280-1-aik@ozlabs.ru>
- <CAKwvOdmUMhqhQhDCpWjMNiQQPvwOJB9MbUkF3RR0BL+H+DagmA@mail.gmail.com>
- <efe4ec7b-e1ec-84fc-cc49-7e22597ff417@ozlabs.ru>
-In-Reply-To: <efe4ec7b-e1ec-84fc-cc49-7e22597ff417@ozlabs.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509034333.60017-4-samuel@sholland.org>
+
+Hi Samuel,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on soc/for-next linus/master v5.18-rc6 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
+config: mips-randconfig-r024-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091545.QhhCDxVm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/4bca5b436c97eb2ee232dd23f262ebad05fa183c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
+        git checkout 4bca5b436c97eb2ee232dd23f262ebad05fa183c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/irq/ipi.c:94:30: error: no member named 'affinity' in 'struct irq_common_data'
+                   cpumask_copy(data->common->affinity, dest);
+                                ~~~~~~~~~~~~  ^
+   1 error generated.
 
 
+vim +94 kernel/irq/ipi.c
 
-On 5/9/22 15:18, Alexey Kardashevskiy wrote:
-> 
-> 
-> On 5/4/22 07:21, Nick Desaulniers wrote:
->> On Thu, Apr 28, 2022 at 11:46 PM Alexey Kardashevskiy <aik@ozlabs.ru> 
->> wrote:
->>>
->>> This enables LTO_CLANG builds on POWER with the upstream version of
->>> LLVM.
->>>
->>> LTO optimizes the output vmlinux binary and this may affect the FTP
->>> alternative section if alt branches use "bc" (Branch Conditional) which
->>> is limited by 16 bit offsets. This shows up in errors like:
->>>
->>> ld.lld: error: InputSection too large for range extension thunk 
->>> vmlinux.o:(__ftr_alt_97+0xF0)
->>>
->>> This works around the issue by replacing "bc" in FTR_SECTION_ELSE with
->>> "b" which allows 26 bit offsets.
->>>
->>> This catches the problem instructions in vmlinux.o before it LTO'ed:
->>>
->>> $ objdump -d -M raw -j __ftr_alt_97 vmlinux.o | egrep '\S+\s*\<bc\>'
->>>    30:   00 00 82 40     bc      4,eq,30 <__ftr_alt_97+0x30>
->>>    f0:   00 00 82 40     bc      4,eq,f0 <__ftr_alt_97+0xf0>
->>>
->>> This allows LTO builds for ppc64le_defconfig plus LTO options.
->>> Note that DYNAMIC_FTRACE/FUNCTION_TRACER is not supported by LTO builds
->>> but this is not POWERPC-specific.
->>
->> $ ARCH=powerpc make LLVM=1 -j72 ppc64le_defconfig
->> $ ARCH=powerpc make LLVM=1 -j72 menuconfig
->> <disable FTRACE, enable LTO_CLANG_THIN>
->> $ ARCH=powerpc make LLVM=1 -j72
->> ...
->>    VDSO64L arch/powerpc/kernel/vdso/vdso64.so.dbg
->> /usr/bin/powerpc64le-linux-gnu-ld:
->> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: error
->> loading plugin:
->> /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: cannot open
->> shared object file: No such file or directory
->> clang-15: error: linker command failed with exit code 1 (use -v to see
->> invocation)
->> make[1]: *** [arch/powerpc/kernel/vdso/Makefile:67:
->> arch/powerpc/kernel/vdso/vdso64.so.dbg] Error 1
->>
->> Looks like LLD isn't being invoked correctly to link the vdso.
->> Probably need to revisit
->> https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google.com/
->>
->> How were you working around this issue? Perhaps you built clang to
->> default to LLD? (there's a cmake option for that)
-> 
-> 
-> What option is that? I only add  -DLLVM_ENABLE_LLD=ON  which (I think) 
-> tells cmake to use lld to link the LLVM being built but does not seem to 
-> tell what the built clang should do.
-> 
-> Without -DLLVM_ENABLE_LLD=ON, building just fails:
-> 
-> [fstn1-p1 ~/pbuild/llvm/llvm-lto-latest-cleanbuild]$ ninja -j 100
-> [619/3501] Linking CXX executable bin/not
-> FAILED: bin/not
-> : && /usr/bin/clang++ -fPIC -fvisibility-inlines-hidden 
-> -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra 
-> -Wno-unused-parameter -Wwrite-strings -Wcast-qual 
-> -Wmissing-field-initializers -pedantic -Wno-long-long 
-> -Wc++98-compat-extra-semi -Wimplicit-fallthrough 
-> -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor 
-> -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion 
-> -Wmisleading-indentation -fdiagnostics-color -ffunction-sections 
-> -fdata-sections -flto -O3 -DNDEBUG -flto 
-> -Wl,-rpath-link,/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/./lib 
-> -Wl,--gc-sections utils/not/CMakeFiles/not.dir/not.cpp.o -o bin/not 
-> -Wl,-rpath,"\$ORIGIN/../lib"  -lpthread  lib/libLLVMSupport.a  -lrt 
-> -ldl  -lpthread  -lm  /usr/lib/powerpc64le-linux-gnu/libz.so 
-> /usr/lib/powerpc64le-linux-gnu/libtinfo.so  lib/libLLVMDemangle.a && :
-> /usr/bin/ld: lib/libLLVMSupport.a: error adding symbols: archive has no 
-> index; run ranlib to add one
-> clang: error: linker command failed with exit code 1 (use -v to see 
-> invocation)
-> [701/3501] Building CXX object 
-> utils/TableGen/CMakeFiles/llvm-tblgen.dir/GlobalISelEmitter.cpp.o
-> ninja: build stopped: subcommand failed.
-> 
-> 
-> 
-> My head hurts :(
-> The above example is running on PPC. Now I am trying x86 box:
-> 
+d17bf24e695290 Qais Yousef     2015-12-08   13  
+d17bf24e695290 Qais Yousef     2015-12-08   14  /**
+d17bf24e695290 Qais Yousef     2015-12-08   15   * irq_reserve_ipi() - Setup an IPI to destination cpumask
+d17bf24e695290 Qais Yousef     2015-12-08   16   * @domain:	IPI domain
+3b35e7e6daef5a Randy Dunlap    2021-08-10   17   * @dest:	cpumask of CPUs which can receive the IPI
+d17bf24e695290 Qais Yousef     2015-12-08   18   *
+d17bf24e695290 Qais Yousef     2015-12-08   19   * Allocate a virq that can be used to send IPI to any CPU in dest mask.
+d17bf24e695290 Qais Yousef     2015-12-08   20   *
+3b35e7e6daef5a Randy Dunlap    2021-08-10   21   * Return: Linux IRQ number on success or error code on failure
+d17bf24e695290 Qais Yousef     2015-12-08   22   */
+7cec18a3906b52 Matt Redfearn   2016-04-25   23  int irq_reserve_ipi(struct irq_domain *domain,
+d17bf24e695290 Qais Yousef     2015-12-08   24  			     const struct cpumask *dest)
+d17bf24e695290 Qais Yousef     2015-12-08   25  {
+d17bf24e695290 Qais Yousef     2015-12-08   26  	unsigned int nr_irqs, offset;
+d17bf24e695290 Qais Yousef     2015-12-08   27  	struct irq_data *data;
+d17bf24e695290 Qais Yousef     2015-12-08   28  	int virq, i;
+d17bf24e695290 Qais Yousef     2015-12-08   29  
+d17bf24e695290 Qais Yousef     2015-12-08   30  	if (!domain ||!irq_domain_is_ipi(domain)) {
+d17bf24e695290 Qais Yousef     2015-12-08   31  		pr_warn("Reservation on a non IPI domain\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   32  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   33  	}
+d17bf24e695290 Qais Yousef     2015-12-08   34  
+d17bf24e695290 Qais Yousef     2015-12-08   35  	if (!cpumask_subset(dest, cpu_possible_mask)) {
+d17bf24e695290 Qais Yousef     2015-12-08   36  		pr_warn("Reservation is not in possible_cpu_mask\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   37  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   38  	}
+d17bf24e695290 Qais Yousef     2015-12-08   39  
+d17bf24e695290 Qais Yousef     2015-12-08   40  	nr_irqs = cpumask_weight(dest);
+d17bf24e695290 Qais Yousef     2015-12-08   41  	if (!nr_irqs) {
+d17bf24e695290 Qais Yousef     2015-12-08   42  		pr_warn("Reservation for empty destination mask\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   43  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   44  	}
+d17bf24e695290 Qais Yousef     2015-12-08   45  
+d17bf24e695290 Qais Yousef     2015-12-08   46  	if (irq_domain_is_ipi_single(domain)) {
+d17bf24e695290 Qais Yousef     2015-12-08   47  		/*
+d17bf24e695290 Qais Yousef     2015-12-08   48  		 * If the underlying implementation uses a single HW irq on
+d17bf24e695290 Qais Yousef     2015-12-08   49  		 * all cpus then we only need a single Linux irq number for
+d17bf24e695290 Qais Yousef     2015-12-08   50  		 * it. We have no restrictions vs. the destination mask. The
+d17bf24e695290 Qais Yousef     2015-12-08   51  		 * underlying implementation can deal with holes nicely.
+d17bf24e695290 Qais Yousef     2015-12-08   52  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   53  		nr_irqs = 1;
+d17bf24e695290 Qais Yousef     2015-12-08   54  		offset = 0;
+d17bf24e695290 Qais Yousef     2015-12-08   55  	} else {
+d17bf24e695290 Qais Yousef     2015-12-08   56  		unsigned int next;
+d17bf24e695290 Qais Yousef     2015-12-08   57  
+d17bf24e695290 Qais Yousef     2015-12-08   58  		/*
+c5f48c0a7aa1a8 Ingo Molnar     2018-12-03   59  		 * The IPI requires a separate HW irq on each CPU. We require
+d17bf24e695290 Qais Yousef     2015-12-08   60  		 * that the destination mask is consecutive. If an
+d17bf24e695290 Qais Yousef     2015-12-08   61  		 * implementation needs to support holes, it can reserve
+d17bf24e695290 Qais Yousef     2015-12-08   62  		 * several IPI ranges.
+d17bf24e695290 Qais Yousef     2015-12-08   63  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   64  		offset = cpumask_first(dest);
+d17bf24e695290 Qais Yousef     2015-12-08   65  		/*
+d17bf24e695290 Qais Yousef     2015-12-08   66  		 * Find a hole and if found look for another set bit after the
+d17bf24e695290 Qais Yousef     2015-12-08   67  		 * hole. For now we don't support this scenario.
+d17bf24e695290 Qais Yousef     2015-12-08   68  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   69  		next = cpumask_next_zero(offset, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   70  		if (next < nr_cpu_ids)
+d17bf24e695290 Qais Yousef     2015-12-08   71  			next = cpumask_next(next, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   72  		if (next < nr_cpu_ids) {
+d17bf24e695290 Qais Yousef     2015-12-08   73  			pr_warn("Destination mask has holes\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   74  			return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   75  		}
+d17bf24e695290 Qais Yousef     2015-12-08   76  	}
+d17bf24e695290 Qais Yousef     2015-12-08   77  
+06ee6d571f0e35 Thomas Gleixner 2016-07-04   78  	virq = irq_domain_alloc_descs(-1, nr_irqs, 0, NUMA_NO_NODE, NULL);
+d17bf24e695290 Qais Yousef     2015-12-08   79  	if (virq <= 0) {
+d17bf24e695290 Qais Yousef     2015-12-08   80  		pr_warn("Can't reserve IPI, failed to alloc descs\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   81  		return -ENOMEM;
+d17bf24e695290 Qais Yousef     2015-12-08   82  	}
+d17bf24e695290 Qais Yousef     2015-12-08   83  
+d17bf24e695290 Qais Yousef     2015-12-08   84  	virq = __irq_domain_alloc_irqs(domain, virq, nr_irqs, NUMA_NO_NODE,
+eb0dc47ab6810c Vincent Stehle  2016-07-18   85  				       (void *) dest, true, NULL);
+d17bf24e695290 Qais Yousef     2015-12-08   86  
+d17bf24e695290 Qais Yousef     2015-12-08   87  	if (virq <= 0) {
+d17bf24e695290 Qais Yousef     2015-12-08   88  		pr_warn("Can't reserve IPI, failed to alloc hw irqs\n");
+d17bf24e695290 Qais Yousef     2015-12-08   89  		goto free_descs;
+d17bf24e695290 Qais Yousef     2015-12-08   90  	}
+d17bf24e695290 Qais Yousef     2015-12-08   91  
+d17bf24e695290 Qais Yousef     2015-12-08   92  	for (i = 0; i < nr_irqs; i++) {
+d17bf24e695290 Qais Yousef     2015-12-08   93  		data = irq_get_irq_data(virq + i);
+d17bf24e695290 Qais Yousef     2015-12-08  @94  		cpumask_copy(data->common->affinity, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   95  		data->common->ipi_offset = offset;
+4589f450fb285a Matt Redfearn   2016-04-21   96  		irq_set_status_flags(virq + i, IRQ_NO_BALANCING);
+d17bf24e695290 Qais Yousef     2015-12-08   97  	}
+d17bf24e695290 Qais Yousef     2015-12-08   98  	return virq;
+d17bf24e695290 Qais Yousef     2015-12-08   99  
+d17bf24e695290 Qais Yousef     2015-12-08  100  free_descs:
+d17bf24e695290 Qais Yousef     2015-12-08  101  	irq_free_descs(virq, nr_irqs);
+7cec18a3906b52 Matt Redfearn   2016-04-25  102  	return -EBUSY;
+d17bf24e695290 Qais Yousef     2015-12-08  103  }
+d17bf24e695290 Qais Yousef     2015-12-08  104  
 
-A bit of progress.
-
-cmake -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lld" 
--DLLVM_TARGET_ARCH=PowerPC -DLLVM_TARGETS_TO_BUILD=PowerPC 
-~/llvm-project//llvm -DLLVM_ENABLE_LTO=ON 
--DLLVM_BINUTILS_INCDIR=/usr/lib/gcc/powerpc64le-linux-gnu/11/plugin/include/ 
--DCMAKE_BUILD_TYPE=Release
-
-produces:
-
--- Native target architecture is PowerPC 
-
-....
--- LLVM host triple: x86_64-unknown-linux-gnu
--- LLVM default target triple: x86_64-unknown-linux-gnu
-
-
-and the resulting "clang" can only to "Target: 
-x86_64-unknown-linux-gnu", how do you build LLVM exactly? Thanks,
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
