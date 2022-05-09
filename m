@@ -1,50 +1,50 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E3A1FC0
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 17:09:11 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id b18so24932422lfv.9
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 10:09:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DD41FC0
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 17:20:01 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id d19so3387908lfj.4
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 10:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qmNh/UlR00KzKm2embL/8KXGrDJlEF5LNSh8Qse0tHI=;
-        b=XlxYVyti/+Q7NqrSdb22SAIl6Y2j55Yg5g2k37ctvzV1ktFvUd3+GBrrXaqN+9NFeY
-         6EJHldsP4pwcrjQ2xzBRUlRSmr1Qray+IZ0Azb6pH9oGWAA6cH1MqKDYqSoobESAB3Tt
-         eRGYGGgOM/icKjcAIArV0t0cRsOS98O3uc3oCmKTiATpvxAJt2dw7pFRGKnsUp5Fy6+q
-         XIPCiWfYfE/TS6cBhvExSO/fG7/pxV+Gc6ing+pOzWL/ysqhEjHBgLIYNRnpXIBuNHwt
-         4ZGKV+R/g8mxG2EAM+mfZqER4WmDuwtD4WjdICN3razEbRrdkjkeh/S/AOCAatbdqrDm
-         dp9g==
+        bh=Xq5ml2d/MeiCgCuvTz1iX/vBFJV/Zf5wkHsF94chv1Q=;
+        b=FoDLMQ1CUcXkPH5YH2WUvQkrh4wyHkUUHZHcdPJapmG1T0eHAY1wc8brR60ppGMa5J
+         MvFXF3tuoDWJ6lkuzwDg+uXRKK1dpjzfA/uB5GQC4TIBsPxsrPlb2FDEA+M+F9oDz5r4
+         vtrjLZL3T3cOwM7JK/DHccrk8RMKefToEtmE3ezQ84jzYnAtOuLgLmSS8SPIbwmYpL8e
+         +569UZLjUuKlLJxuLia9HvqCZWJPaqW6wxZ2wKVmnB6sIpUzIEuoLVasYEAtGywHS+dy
+         NOLgCVKyfJ/Tlp9jDY6Jr3DzFF11gOShM2S20Pm+kw6ankpEDU3X7veoarlOtuIzCHqv
+         rMIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qmNh/UlR00KzKm2embL/8KXGrDJlEF5LNSh8Qse0tHI=;
-        b=jRDZigOFWYrp0BCun1UfjVkd8mFXGOoD8a1wjU29aohnur4yPayR8MnDTrURvUBqLT
-         j8MWJ6Tv0WIT4+9ooHJEjAMWZxf4dPMKZaQQt8i9TactO/JD1nKuM/AhW0sUx5KwClM9
-         cL3elIDEwJPAyh3qbdH+TI6cr0Ktaq+UsRUHFeT/1Glcs9Tcv5N/MLJ8C2SrdyOBWtL3
-         hRTOKc3piN56tZrFWbzAA6lUITM25QhF5E0Uyn6s7i6syIG8X3QsaQ3lbKJniit5xzm1
-         yBgf+15UjF6bheCdWvGoc5QqZMnvgg3iI+2USLnnJj6AMclKjaumr4hObs7UUBCUotSR
-         SLaQ==
-X-Gm-Message-State: AOAM531lmjZmE44SBttpib1OqVneZCK9hJDH0skc9PGgjQeGkNBhnjNn
-	X4Vw3UadcwdVADgKwak58+8hNZZDgPq0ljWy5Rm7hQ==
-X-Google-Smtp-Source: ABdhPJwxw3I1e8oaAvfUjbq5Ev4Yd8NjV0buUyZoAzr7cbILcvl2TRmROPbsKEb/6HUIdbYLzAigXpP3dNIEtdsX6aE=
-X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
- f17-20020a05651201d100b00471f63ab182mr13052968lfp.392.1652116149145; Mon, 09
- May 2022 10:09:09 -0700 (PDT)
+        bh=Xq5ml2d/MeiCgCuvTz1iX/vBFJV/Zf5wkHsF94chv1Q=;
+        b=CaCHfj2GnqHSXAweLoH0hILgKCuUjGXONVQ3dvW0EffinixBcjvKtdUnGqtmPTgZCC
+         vGoeiFcy+x3CfkE48ocZUdW5r9U5CxWU89CoQTkcJgDFGDw6URTPFtKt/hXZVMUy4Cpa
+         auQI5XF3aApC+LMWK5yxevniVYTvNpJL84e5rc8C7ZfC5ofGugYQWpAZwhq8Q/izUdiG
+         4rm0zL1/gzcHWPjhwxL5szlkuL2rXyhQQprsjKinkVV9KgJpYO3ohyVf6nnFV3oYYfwq
+         6uXJ7wXyTfUq+AD9xEKuXrK+Nx9HLDp+YG2+fDEJnMZTMS8GQY/vIuTfXCBgGDCiR8qO
+         9Iyw==
+X-Gm-Message-State: AOAM531IczrNeS1F7zQ1S7gs4fDn5Mdm5c747CZMtZwLn54j10jBRNhr
+	2YbSfpt6bBQRkfllt7iT2JrOYu2Czbx3WAC2ajoEbg==
+X-Google-Smtp-Source: ABdhPJz9taxhLV4YRudjP7JD9rlg95k5LEcou1gLMLiVH/oLNlkumRLOmW/IlL/tmn/lb4A3bbzyo1/l2F7YyG1FIcQ=
+X-Received: by 2002:a19:4303:0:b0:473:f5fb:27b2 with SMTP id
+ q3-20020a194303000000b00473f5fb27b2mr12343182lfa.626.1652116799064; Mon, 09
+ May 2022 10:19:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-2-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-2-masahiroy@kernel.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-4-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-4-masahiroy@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 10:08:57 -0700
-Message-ID: <CAKwvOdnawYY05Boy6FNUtBoi11z8yyMnfDzGUw0CDMT3vKuP5w@mail.gmail.com>
-Subject: Re: [PATCH v4 01/14] modpost: remove left-over cross_compile declaration
+Date: Mon, 9 May 2022 10:19:47 -0700
+Message-ID: <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
+Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into section-check.c
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
@@ -54,39 +54,61 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, May 8, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> This is a remnant of commit 6543becf26ff ("mod/file2alias: make
-> modalias generation safe for cross compiling").
+> modpost.c is too big, and the half of the code is for section checks.
+> Split it.
+>
+> I fixed some style issues in the moved code.
+
+It would be helpful for review if the split and restyle were distinct
+patches.  Otherwise I can't tell what has changed.
+
+This does lose the ability to use git blame to get more context on
+some of the oddities in modpost (which I have found useful in the
+past).  I don't feel strongly though.
+
 >
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-
-Thanks for the patch! (I wonder if we should put our old mailing list
-in .mailmap?)
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
 > ---
 >
 > Changes in v4:
 >   - New patch
 >
->  scripts/mod/modpost.h | 1 -
->  1 file changed, 1 deletion(-)
+>  scripts/mod/Makefile        |    2 +-
+>  scripts/mod/modpost.c       | 1202 +---------------------------------
+>  scripts/mod/modpost.h       |   34 +-
+>  scripts/mod/section-check.c | 1222 +++++++++++++++++++++++++++++++++++
+>  4 files changed, 1240 insertions(+), 1220 deletions(-)
+>  create mode 100644 scripts/mod/section-check.c
 >
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index cfa127d2bb8f..d9daeff07b83 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -174,7 +174,6 @@ static inline unsigned int get_secindex(const struct elf_info *info,
->  }
+> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
+> index c9e38ad937fd..ca739c6c68a1 100644
+> --- a/scripts/mod/Makefile
+> +++ b/scripts/mod/Makefile
+> @@ -5,7 +5,7 @@ CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
+>  hostprogs-always-y     += modpost mk_elfconfig
+>  always-y               += empty.o
 >
->  /* file2alias.c */
-> -extern unsigned int cross_build;
->  void handle_moddevtable(struct module *mod, struct elf_info *info,
->                         Elf_Sym *sym, const char *symname);
->  void add_moddevtable(struct buffer *buf, struct module *mod);
-> --
+> -modpost-objs   := modpost.o file2alias.o sumversion.o
+> +modpost-objs   := modpost.o section-check.o file2alias.o sumversion.o
+>
+>  devicetable-offsets-file := devicetable-offsets.h
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index a78b75f0eeb0..e7e2c70a98f5 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -31,7 +31,7 @@ static bool external_module;
+>  /* Only warn about unresolved symbols */
+>  static bool warn_unresolved;
+>
+> -static int sec_mismatch_count;
+> +int sec_mismatch_count;
 
+^ this should go in modpost.h if it is to be used in two translation
+units, rather than forward declaring it in section-check.c.  You did
+this for the functions.
 -- 
 Thanks,
 ~Nick Desaulniers
