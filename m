@@ -1,87 +1,88 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC3A4694
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 03:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2554697
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 03:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652066186; x=1683602186;
+  t=1652066771; x=1683602771;
   h=message-id:date:subject:references:to:cc:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=y8hg6Z0pQCwm2AuOSpnqS1eCmmZZk+J4VXWO1w3mZT8=;
-  b=I2QzwA3fLLE+/k/VZyvAa4pXou+J0A1pHkeRtupPhi/yzqWQ86tXyCqF
-   8vFIv+TwwPk1Y7Fc8ee6wv1y8A5TAZapWSZVynpPm13MU2WX4holMzz72
-   bsJUhcUBYeTcxKCZ6wURqt1VX6udiTvkjaQffRRN/3IDN52OSEWr+wFkH
-   sYvYr1cyPrhdjkPEgfY2nzBYbyN9HWdLqi7U+ersJNON8cXSDzlMIEnw6
-   Ar4zfw3EcypuB7ZiJF8leqSG9ENNaWncBPoCST4WyXE8xKazytCQphz4S
-   6Z7NCWh3riFMN4JQqhzIHQHQgSxeU1pvPkYSZa4YBAfYFR9OfvKrKl09W
+  bh=V0KVKSpjdQAle7FAEJjDRRMw3Xr+uI2E6tS1O3h3twA=;
+  b=JY1PuC3EqjjFWyoJSTHfiQ7Y2pfijqxRNHsMNr5Fr1LkSL49DBA0k/Zn
+   JnkyyGVLHaOIz6STIQLTprZqMy3ls4sn/cxP5tANET90s5kyAgvyV5Hce
+   uQFd4pvlsOnFZm5c4GPZD1ngKtVBzHAPYSGg9aDXt7TdxNN85US5FRXAk
+   9PBzLJyGcCCjxLt3HBx7yMwES7bqWPKSP0/imVxZ89euXjaGLeHn3JzsN
+   bHzSMMTkm3iBSW3jVNxvdYEo9nMWhDY8I/CYPW4AaE2PyIZL5n9bjOBTz
+   QA4RmJApao6EUgj8aPawX7kCyYBFZ9LyLQEPZ+0Dj+HfhdvpIJNqMth63
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="250965876"
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="248828126"
 X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="250965876"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:16:26 -0700
+   d="scan'208";a="248828126"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:26:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="564826027"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 08 May 2022 20:16:25 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+   d="scan'208";a="550810424"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga002.jf.intel.com with ESMTP; 08 May 2022 20:26:07 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 8 May 2022 20:26:07 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 8 May 2022 20:26:06 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
  fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 8 May 2022 20:16:25 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 8 May 2022 20:16:24 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 8 May 2022 20:16:24 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2308.27 via Frontend Transport; Sun, 8 May 2022 20:26:06 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 8 May 2022 20:16:24 -0700
+ 15.1.2308.27; Sun, 8 May 2022 20:26:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHl6SD0jwEGaWvbuB3tJRwnXznwIFJERA49zWRpGSXIT3fVbWisCsRY0s+E4Mo5FJYqMrZSXgEwW2Jobchi1Fc+SMfCpVhrQKaPfxIKlglmNdnTGR6qCpsRT9l4YXKiHu+cHPTAHvvGaKgBMEpbZGLYeIuFUhrmoc7KagE220mo9g7j3NhCwGjCmW6Oam0c+A9josPgZnhmCM/Lg6Fu0KHZAccRtM1MdOam/hA3cW7wPG1buKQFwlIpG9rcuM/QTOXXjBFcwToC8vjxw+4lyhq+75cjkY3zXAkj7q1u4MhBxcUXNQhukEpfEh/vB/K/WEgYWKWWW6M6OHwR+6OtuoQ==
+ b=mQVQGnRcmVHulesxH4P+fEdiKxP8+vdg5wIx0rGo86faZmc5ifajNzj7v3kWdBopKUw9Ahla91VAT7p3ybDtigaMB6c9L+teSZ2XsnENUmCt1lKvt85K+GYaucshDjVo9Alx0dT2Yx2/im5WoGtp5Vfl0VlZAtu/M1I0e4EfTRucY+2E/ETn+OY6+ngpKC7BWRbKO2P6c9WDL4gwxzIogPSWOnR6+x/9ZDOonyqfo5/DjD/RNPRjTpBgRaQBiJMajqstPfE2jVTUtvwDQrlv8s9zbhbajFa5rMJHt07elBYMsab73+1RzHMKSD8gXl2ubyC5B4QmSBwhLvgwzxM3Eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UoRInyM4uICI6qPkFEa+lAkLt+ziueZ8kyTeyPP+DI8=;
- b=FcJdgjvReI4zlig6HyQeTgfwiw2QoL66CyFD/wV+VtwEzIdqENsudH3Uucnqf9nb8h7Fd6UOAzym/gpyIPbdEkQSEbf1RzTDSGgZ2jZnW4DGgXGupa+9jdhW7mJeveRSHakHsscfLOS7oRxoktUA0TEG11vnxzsma3YNsUotD3f8J/pvI0Wb8uqaffM1C921b2Y01wfn9eB6BAsR4lZeyOnrmDTZQr+IwSWU5D1oMUWe3mytQ5qxXkG44qwmZ414zhaQ1xoWh9zWHP8GnU5lDPZC4rLXXMPjIKBh4b3+aL0WRxacux3RDeV/l2Yd6lmU/Qnt7Ls86sbF1/a/EYgYeg==
+ bh=3tX8UVsyUCEIfxaHHBLiWVGw3TM/VJtVuzCKIHBb7Wc=;
+ b=ZNqqz4u3awH0DyLsFn8d7vlT3nTEsYLonuolfnlKdDKZpYmE0TKMvRf3q+b1+kTACzfvB7BvID9S7Z5bca0XI+VTF3nXBr6kuo6g4TuE8aTsnyO9TnzgLO50FhLNQQbcNUi0y3uYDrLUxVK5U02Yd505g32pqyirays726iIIr9du0VFEQqHeJ1Lk+tkC6pcl+1cMNd3pepMQPOPuK+49CWNWMi8u3Cc9MY60mgMLQzCtHkZIFSv2qT9TMBGehAN113tFlSTZhvMV4dEc2dNKVhD3tZXXMdrWNqQ7KeoSc/s8jBtaPpnqtTirKJM6TqC6BZJVZ7ub9yUDPamGNWu5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15)
- by DM6PR11MB4564.namprd11.prod.outlook.com (2603:10b6:5:2a0::7) with
+ by BYAPR11MB2806.namprd11.prod.outlook.com (2603:10b6:a02:c7::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Mon, 9 May
- 2022 03:16:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
+ 2022 03:26:04 +0000
 Received: from MW4PR11MB5933.namprd11.prod.outlook.com
  ([fe80::91fc:35fb:9ebc:81ec]) by MW4PR11MB5933.namprd11.prod.outlook.com
  ([fe80::91fc:35fb:9ebc:81ec%5]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 03:16:22 +0000
-Message-ID: <225cbd32-09f4-3052-32f5-c61bca07c829@intel.com>
-Date: Mon, 9 May 2022 11:16:15 +0800
+ 03:26:04 +0000
+Message-ID: <028fae20-bb0e-183c-e0f9-041a0b50bbb3@intel.com>
+Date: Mon, 9 May 2022 11:25:54 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.9.0
-Subject: [allisonhenderson-xfs-work:xfs-5.19-compose_pptrs 25/32]
- fs/xfs/libxfs/xfs_attr.c:556:21: warning: Value stored to 'dp' during its
- initialization is never read [clang-analyzer-deadcode.DeadStores]
-References: <202205081904.eWJa1zBF-lkp@intel.com>
+Subject: [linux-next:master 9659/9759] drivers/nvme/host/ioctl.c:693:2:
+ warning: Undefined or garbage value returned to caller
+ [clang-analyzer-core.uninitialized.UndefReturn]
+References: <202205081711.ssgxsL9Z-lkp@intel.com>
 Content-Language: en-US
-To: Allison Henderson <allison.henderson@oracle.com>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux Kernel Mailing
- List" <linux-kernel@vger.kernel.org>, Dave Chinner <dchinner@redhat.com>
+To: Kanchan Joshi <joshi.k@samsung.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux Memory
+ Management List" <linux-mm@kvack.org>, Jens Axboe <axboe@kernel.dk>, "Anuj
+ Gupta" <anuj20.g@samsung.com>, Christoph Hellwig <hch@lst.de>
 From: kernel test robot <yujie.liu@intel.com>
-In-Reply-To: <202205081904.eWJa1zBF-lkp@intel.com>
-X-Forwarded-Message-Id: <202205081904.eWJa1zBF-lkp@intel.com>
+In-Reply-To: <202205081711.ssgxsL9Z-lkp@intel.com>
+X-Forwarded-Message-Id: <202205081711.ssgxsL9Z-lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR04CA0077.apcprd04.prod.outlook.com
- (2603:1096:202:15::21) To MW4PR11MB5933.namprd11.prod.outlook.com
+X-ClientProxiedBy: HK2P15301CA0002.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::12) To MW4PR11MB5933.namprd11.prod.outlook.com
  (2603:10b6:303:16a::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -90,81 +91,81 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d434135d-6a78-4a88-ce44-08da316a4adc
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4564:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57ea8c79-e829-4949-7146-08da316ba5ab
+X-MS-TrafficTypeDiagnostic: BYAPR11MB2806:EE_
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR11MB45644B8AFFD2073673EDE24FFBC69@DM6PR11MB4564.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BYAPR11MB28060A06978CBD737EAFD01EFBC69@BYAPR11MB2806.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZidESFdNPDBL8wZWO2jVDgL6Z2nbSV20AXztGG3AIpwmg/RQLjmmf4i02Xep/Z6a9pWCXSh+9+ScFPX80oOhg5OhooOXBANCfhRyID8nXeZ2LmnUo4ex0/e+rIPZ1mjlu1e0VPwooSzJk6sgXcoH9YQ54gmNNKAHBrF2S6a44cLWtoLYZ/rDQ45b8xRUYzysRqJf87/xPJLtK9IFOcjORCuyEOKGvUKKTUZtdk2I0ZUQaS4NXAXdHMeX4zA33EJM9GxtZLPq7HwHm2ezyvgJnJBufNClSui0x6t7ZZI0bS64Kd11i7kDkyGSxhb7LatF9x4W+2f1rJC3aza4VbmrQT4KBRdVeIyHEUT4Ebl2hEcAzEWgFu9ZBHE1za2c5Qy/LyP2SfSjeg8rVvzIcXwo0SFudbhu1HwKwOCuUsd2u77yFnvCDR64nT2vKVgXoeaKqY9YI/iaCsA30oFWSEMOfW6XIF8TrTa635TgMGsbyERGP5gEm5ktHW7rtKkIYewCXXY+Y4YA6roUvCql6JQyFPeawpZhoegl0ETfmVxHbS3zMoS+i1eLbeQgW7q+hwQZ9thy5bCoDxTOJ/FdCHFfRP8DGAidPfblmcuNysSgiu2W8pMk8czUFhLpoRX77BZo+pH8CsprpWROSvorhqtoLwoJ07vwq8QOBh5PfP6DMgZqphPW3ZzBXPbh4XitQ42n6QQu4Ltr+Zq08v4he+6rijLG3nJEpXol9ud3LkjZMr85Y2oMRBg4AFIEdB+fE/hLsesujEpITqvCHWvPeIWE3cPQT9/1NgTGxg1fIxoHJqVQFbJ/RNhVBk5KnKHDxM3AHzqWkbrXAbkdgI2ymvB9vxg15VtPr8zK8rA/90E2dng=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(6666004)(6512007)(2906002)(8936002)(8676002)(4326008)(36756003)(4001150100001)(5660300002)(86362001)(66556008)(66476007)(26005)(2616005)(31696002)(66946007)(30864003)(31686004)(508600001)(6486002)(966005)(38100700002)(54906003)(82960400001)(186003)(316002)(6916009)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: esH86PI1eXOnPesfv4GiZr+Kh3py1xmpPIPwMOQqXlGIumMo4NEH8SYcZHV3jZwgllxQFpdgtfVcXnhHScJuygTXbuo1qwYIaYnCopS0GTCOSDJXLfXfnVspydA4I7HmIIvuDevdf5keg2notK9d84zwSARFjcK4U4Ckgws92RX01iG1xBU4p6EKXVtoWS2DPmuhjiMxOn4B7n6QnWBwUFM5gATUA+Vf7Av66mVBcaQZLPVLUY86tPm+h3pTwoyk9+a87P/ie2mGSTatRMYfCph20JJT50UG1npaNyETiQKVqOA0s5dqqbvu6Fu2TKan7pAFy+fc6lL9RJ73dbay0vDxrgjBqMTeAclMvI8EpyOwuVlzaBWgEP3g2rTJw7sDJnc3MbuiDuB4qrpq4v7iPfROaKnMnG9sTx9WculBAR6xL63DWCmt/Vkbkd7LYEawBebHgXTxhRX9jCNZJz+k/MWipv7YSSajhdrkGLlOrf1GJqVkZJfAaoNm4+5Ebu2D/2uczdNjIVoNhhKDs/cqwfbY7BOukhr9gm0UNf1d3TxKrWICpC2P79jx1DlasqUKx4ZVeeElGOMKIphDkg8tuc4do1UOAm49gRS7A06dWh7F0I9Ce+e+FbgcuL2YNZbT0gC+Vm7IdKIG5C/h8DKh5k3kcv7lsQxK/FOuJuXqoZzvzSw3AGOlm7agqPfHF8B72Z4bf5Yc83tZBxZ1dOnUuGnYsUXMhWtEqWTMFEqWZJQlNI1kg9gqPU9ITk464tqGfrVw4V+ihzg9nAaYwqJZj/m6v8ZaJhMBltz713jb69iQfQXblwttgCcgUvqvwMOASKmAYZ2hgUDxh+WrQFuoMsfXGKZbwM2HdckX2Ualxgg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(86362001)(38100700002)(5660300002)(36756003)(82960400001)(83380400001)(8936002)(6506007)(31686004)(26005)(6512007)(66556008)(6486002)(66476007)(508600001)(66946007)(316002)(966005)(54906003)(8676002)(31696002)(4326008)(6916009)(186003)(2906002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R3RCS0l6OFo0aDRML2RSRWdjclM2elM3eUd5T2o1T25UZTJMWXpPRHVZRjNu?=
- =?utf-8?B?ODNxNFhPRXhJbEN6V3JQOUx6NDlQL0xLMEkvOVg4OXdnM05QZWxRUVhKQTVz?=
- =?utf-8?B?TmJtUXpCVm95aGhmLzNHejJWQkRmVTQrQkRnalJpOUhadmFyRG9YZWJPVjZQ?=
- =?utf-8?B?eWloNkVtaXBqaWVvamxOVVZEVnFibHZhN3pTZWNsVWJLRmpKMWZ3b01GZXRF?=
- =?utf-8?B?d0NlNXRoSGM0ZkxxRkZtM05mM1Fjbi82TlZTeXhCMTJSVnIvWXFBLzNnWlE0?=
- =?utf-8?B?WVJIcDI0UXN4cDVsaU42RnYwSFBsUGpxR2J5VnBIQ0VGd21sZnlMS3BZNkFJ?=
- =?utf-8?B?bFN6YWJzZXRNV0QzdEdYUXpyaFdQT2NZUmkzdERzdENQQXVZcFNCZ2VoamY1?=
- =?utf-8?B?bi9sS2R1WFFyL3RiU3Y1TVF3UzFqT3EzcDJKbkF3T0Y3YTcrSER4bE1aZkZM?=
- =?utf-8?B?SjViTDdmZ051ZnpnenNZelRrWmlMRHVRU0Z3ck5XVkd1RDhpRlNHWHZqcm5x?=
- =?utf-8?B?N3dlTjZrWEE5WkdCeE54dGdFUlVTTmpZS29CcnVVbENJWnhRVks5NEtza2pn?=
- =?utf-8?B?Ynp4UGs0WjhaM0hQTUc3Wm4zVzZldGtvVFAvc2ZlZkFoRXpQbnhHZnFSWmxn?=
- =?utf-8?B?MkE0NnI0cnB4YkhNWVJ2dnJuWG5GQ1N4R1U2OGZUaGhKYjdKaUZ5cGVyMHpl?=
- =?utf-8?B?NjhXaSswODdjVUhrbDMyU1VuOHBmSlJoVnBkRFpYOHNrbFl3ODkzT0VnSmxL?=
- =?utf-8?B?Ulp0WmdvUzgvS05qLzh0U3ByQUVuVGwzd3lFcUM1cEQ5MUtXdzdHdkxnbmZO?=
- =?utf-8?B?dVhCWlNob1puemFEcVV6aUZIbS95RENERk1ZeDJ0bGNwd2R5b1Fna2pxeU1n?=
- =?utf-8?B?cWoxM1kyTENLTzdITXJtZTBITHJtanJkYkNhSFVGdHlFWGRLNnNzVlpBMC8v?=
- =?utf-8?B?dGY2YiszdkdQUU1SMVY1bXlGeFhZaWZXMXRxVW0wQVcvUkNnR2tTOGdjTkRU?=
- =?utf-8?B?NTIyRXVrVU1adlBHR0ExYUNHQ2JBWk41b21EbUZFY2Z1TXF6WVVUN1puTU5t?=
- =?utf-8?B?a1V6K1R2bWdhK084cG91UEN3cHd4MEh6K1ZYc0gxM0xKZStmT3g5UThvTlhj?=
- =?utf-8?B?UGREVkQ2U2lldlF6R3FFV2RaZnloeGJVSFJxOTA3cW9TU045Z2lyUDNMMGQy?=
- =?utf-8?B?MHpuaWE1MEM1WGhpTU1oQmlUcVQ4amNvK3g0THQxSUJua1UyVUN4bEErOS9T?=
- =?utf-8?B?M2NKNnZocS9nN2lIV0NpRDlaWUhIdUp6ZUtKbVU4amoxN25KeTMweUNDeTRS?=
- =?utf-8?B?czVSUUtNTGRyWVhpVXJ3bXF5Qm1EV0pVcitncjhtUnJTU01wTWdGUmVic2p0?=
- =?utf-8?B?Y0xnWVBoOFlVMEdjbks1V0JmOHRuY1dyYzJvaG5pcXBTUTNpUkt2SmpENUEy?=
- =?utf-8?B?QU9RUTdmR2I4L08yTnpIVGNFaERVcXI0SDZBQy9nMlJqRnBNSGhCRzdVdWxa?=
- =?utf-8?B?YU5NQy9oVzljVWVkMmxzR3lGTUJrZExHbDdkNktQaXRCOWZDSHBoYzdGa0hQ?=
- =?utf-8?B?RS9jUkVLZktmQU1yRC9GT0FFcWlsMDBKYkc4MG5helhHOTBxV2lTUkZ4eWF2?=
- =?utf-8?B?S0FTM0hSbGgvelE4NVJLRk5nUGoycnpiMlIzVkZmWUpXNFZsampTNHlEaWpo?=
- =?utf-8?B?aG13WWxseFF5aXNZckpTRHlOYm9CeU1NU2ovL3hQS2RDZXNQR2hPSFl2WEt0?=
- =?utf-8?B?eCtFMkwzdkpoTU1nb2h1bnlPay9WbUVZU2pVM0EyT3k4ckRIaUlPbVpkWjlw?=
- =?utf-8?B?RVJhK29HTWxTWTFXYUZkRHk3KytXSkZ6RmdmOVhoWTB1YVZHZm9waVZ5Y0Q1?=
- =?utf-8?B?bGNpN3V1Yk9pYWJMalQ5MjRCOUJQUE1YNWR5VytzT0JLSzNmSjN3TjVZci9P?=
- =?utf-8?B?dllsS0ZubXZhaGpGS3VaOWNzOWZHc1d5M3VwQ041b0ViZS9sbXd2UnVWR1p3?=
- =?utf-8?B?bnVWMk5QM0paekkvaUlROTR4T3RNc1BrdDMzVE10NGIrZDM2eSt0K01renZj?=
- =?utf-8?B?WWZyWURRSlFVUU1XYlpXRjFCN1RKN1VhU1BVd0NRdUZndGNKSms2cmNienJ6?=
- =?utf-8?B?clpsbnZ6WU9ETy9wKytxT2xjeVBFRnY2S3ZPbk96NTlwZld0R3BuTXQzbTBk?=
- =?utf-8?B?dWRJb0VOWmpybFA1T3pFTDQyUERSejM3cFErcCtwd0FZV2RIWlZMUFBGT0Fu?=
- =?utf-8?B?TFNtbS9iT255OFhrNU5lRWh0MW11cGhybmVma0srcDhmS3k0aVh6ZmhnQWhO?=
- =?utf-8?B?VytBWStuSzFOSEh3cDVDdTV5WUZQeWFGdS94cktyUTcvTkxLSU9IUT09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d434135d-6a78-4a88-ce44-08da316a4adc
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjVqUzk1UGVMREdOYmdTYmVTMWFBVFJWa0lETm5mdUF2WktvTVRHeTJTRkNX?=
+ =?utf-8?B?cHE4bUVxcnNrODlGM2JRMWg4Mk1xWkdOTnRWakVrN21HVFBrL1dMWm43Z2s3?=
+ =?utf-8?B?TThTNnVkdzJWbml5ekhPTUR0cXFKbkk0WlhFME53dHhpRWR1OS9pY2UwcWlr?=
+ =?utf-8?B?K1Urb3l6ZmgzRUlMNzBKcEV5aVRhNWZuN3RmK0FGODNhMjk0UHpXc211ZmV4?=
+ =?utf-8?B?R1pmajhvR1hlSEVtbEovZjZWLzNVUklXL1QvYkRUdUVjZ2treG81OVFUemla?=
+ =?utf-8?B?bUVrNWxnSmhmbG82TFBCTmR6V0E2M2RvTTBzOWs4RmFwbWFET3oyWXRETUw3?=
+ =?utf-8?B?ZzVIbklNNjVod1VIS2ZSUW9ZR0tDOGtWY1c1RE5MMUJGbzNrSXZyQ01JVWFC?=
+ =?utf-8?B?M08zK2YxdzRBdDJhRVJ2akg5c2creHppWkhiZ28yVFIwK2V3NmxiVWNoK1BW?=
+ =?utf-8?B?QnViZ0llK0d1WEVuZmdRZ01ybUtWN2puZUNiYVV0VlNZdDJXdDgvYldmVDNF?=
+ =?utf-8?B?VURZZlRLUUxZMTEwSzJxQzgrWXFnTjg5UTJhMklsR1p5UFhZdHU1LzM0VHJR?=
+ =?utf-8?B?aUp5Y0lmV3BweWVMcXY1TCtLaksyRmJpV3RGeGoyc2ltSk9BS2pXQituVUp3?=
+ =?utf-8?B?R0EwRlNsTEJPTmY3ZXNWOURrWENJNlE1a3d3R3EwK253Z1JIMk9yVE4rR01N?=
+ =?utf-8?B?eHM2b0R0ZWtqYmZDL09welRNVXBncWNhbWFrdWdVbDNJUzRmdmU3b1I3Nm9n?=
+ =?utf-8?B?UjhmZkFoOGFFVUU0RFREcWl1dk5Ub3N2ZXdxZTZHY3dEaFBxM0t1MzRkSnky?=
+ =?utf-8?B?aWRUQWZSMkp6bkQ2QjBTalQ3eUVtL0NZdlgrcWxaVk5KY3VjREpJMHQ5S240?=
+ =?utf-8?B?eVk3RzVzN1VxOGEySElSKzJrZmlDeUZxck0xTGtCYWsxRE8ycW9oZEFvS0pv?=
+ =?utf-8?B?N1pqbmkwdjJQeFRNbFd6OW5HUW15Q21KcXNGd1RHbWU5UjYxOE5CZFFmdDRa?=
+ =?utf-8?B?ZDgwMDR1VzhhWXhzZGtIMHlLYm16ZlFRekl0am1rRW5YdFpqelFWZ25jYXIw?=
+ =?utf-8?B?cTJWQ3JoVVIrcUFkamROazRWcGFxN09vMzVtZStBcDhhdkg2eFVmWmg1cjI0?=
+ =?utf-8?B?elpoV2hoRjhZaGxybFNwWk9Td21aN0g0UGhuU2d1akpXZEhsNlFCdzJqSlVJ?=
+ =?utf-8?B?ZnhQNTVFcW1aaE5sSkxtUU1aWEd2RnZrbVF6enczbXFKTUFXM3h0K3I0MWlM?=
+ =?utf-8?B?UUtUY3Jha0psaTA3SHF2dmY1Uis4S1N5bVVaVkZLdE03Y1ZoaWxCWVVLaWMy?=
+ =?utf-8?B?cEsvTDhhb2RwbUZGcGhwK2o5UGM2ZEtrT3kvVWhNalpqbnRxaUxnWTNCZzUr?=
+ =?utf-8?B?aFR2L1dleWxnTDJTOGRKMDdBZ0paTlJRRDZ1b2FkOTdoRFQ0U1A1Y05PU216?=
+ =?utf-8?B?MndUalcyOG1VcGtSSzd3dCtrVDJncWk5Yk1XZXhhWk54czV6cWNBTzc3bUZI?=
+ =?utf-8?B?bjlBQ0JNVXdqc05kOUNHQmJLendFUzlLZnFqSzcxYzFrbW9WU3dPdDZsVXZz?=
+ =?utf-8?B?Qm1qL2VpOFUxTjB6QURodmRTZlgrOHRaMC9SNXpoRUlNQXRPTytUUjNCY1Bn?=
+ =?utf-8?B?T1lCNWJrS09vdmFlS0JNYTZDd0N0MHZCY2N1WjVaeWVQbFUxYnQwNVRNU3dp?=
+ =?utf-8?B?M0M5L3A4NnRjZzFBRHVCVkpLTWV3aC9LeXE1OExZSmdxZnJKTXdyK3BkRzNI?=
+ =?utf-8?B?RTh3R3UwZ2l3elhnNi8xeENTNzFaVHNYWGw1cnp3aDVIMlhkRzJyNDVVRkdR?=
+ =?utf-8?B?ZkxiczI5RXpTc2trTFVBRG9wTTZEZUJvK2VySjdZVkhDcnNBS05nWnhzZHRx?=
+ =?utf-8?B?Y2xTNGtoWTh4Y3dlWVZrNDJFOWtRSDk0Z1ZjQ0FHdk9lVVozLy94RnB5TTVM?=
+ =?utf-8?B?K1plS052SURVSDd1Mmo1MmI5ekk1NnVIcVBFeEZ6L05DWVVrdlVLSUx5NnpD?=
+ =?utf-8?B?WjdJT29LQzVvTWF5SWZqUWFIQnVpYjdlZkJWQlpCUkVzazNJa1E5ZG5tQndM?=
+ =?utf-8?B?RFkvaUxSdlIwNGxtYytGUlJ2NXFIU1lMOWtiSUpaRXJibDhCeGJ1OWtDTWFM?=
+ =?utf-8?B?enNYZGI2RVhNUGt5M2w2M2t0WTRwSnVhdG5paThrdFc0eXVDeDA3bUNYUXdU?=
+ =?utf-8?B?VnpUUmF1aGpvWU44ODdMZUgvN3JoM29WQmNyRDc4QitSVlErVzAxQ0ZtdVY3?=
+ =?utf-8?B?RUdvdk1FV0RlZ0RHNEJGRVpnMUpHZ2J1enpINmtZVjR2WGdXVDBpSEkyK2hm?=
+ =?utf-8?B?OVZvdDlQMDUwcncrVDkyUjVPR09tTHAzbzV1Q3k5NkFtWFFPUENxQT09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57ea8c79-e829-4949-7146-08da316ba5ab
 X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5933.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 03:16:22.1124
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 03:26:04.1771
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jH7r4X0L7s5diZPnvzQpzg2KK2LwkM6dyMdMEAjb05q/FZd/xedEHNRPmyIryDWpMX0e/OO+xJdxUd/fqv2iHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4564
+X-MS-Exchange-CrossTenant-UserPrincipalName: Egihd0Wug9oNvy2EaZUG3x9JcdyB0mh0AutLi2Gu3VkTxMm3QxRk5ht5OyuDgKAu1oMTcNeZfnvmjtnIQA0BFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2806
 X-OriginatorOrg: intel.com
 
-tree:   https://github.com/allisonhenderson/xfs_work.git xfs-5.19-compose_pptrs
-head:   74ecccf0e89a132c2490f3a63661c535974c6a08
-commit: 7a5d447970de2d3b003b9015e2bce3bf0d15e3db [25/32] xfs: parent pointer attribute creation
-config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220508/202205081904.eWJa1zBF-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   38a288f5941ef03752887ad86f2d85442358c99a
+commit: 86116c2f6fee81a0be72a71cc2f1f7c087df8efa [9659/9759] nvme: wire-up uring-cmd support for io-passthru on char-device.
+config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220508/202205081711.ssgxsL9Z-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
          chmod +x ~/bin/make.cross
-         # https://github.com/allisonhenderson/xfs_work/commit/7a5d447970de2d3b003b9015e2bce3bf0d15e3db
-         git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
-         git fetch --no-tags allisonhenderson-xfs-work xfs-5.19-compose_pptrs
-         git checkout 7a5d447970de2d3b003b9015e2bce3bf0d15e3db
+         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=86116c2f6fee81a0be72a71cc2f1f7c087df8efa
+         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+         git fetch --no-tags linux-next master
+         git checkout 86116c2f6fee81a0be72a71cc2f1f7c087df8efa
          # save the config file
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 clang-analyzer
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <yujie.liu@intel.com>
@@ -172,175 +173,41 @@ Reported-by: kernel test robot <yujie.liu@intel.com>
 
 clang-analyzer warnings: (new ones prefixed by >>)
 
- >> fs/xfs/libxfs/xfs_attr.c:556:21: warning: Value stored to 'dp' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-            struct xfs_inode                *dp = args->dp;
-                                             ^~   ~~~~~~~~
- >> fs/xfs/libxfs/xfs_attr.c:559:21: warning: Value stored to 'mp' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-            struct xfs_mount                *mp = args->dp->i_mount;
-                                             ^~   ~~~~~~~~~~~~~~~~~
+ >> drivers/nvme/host/ioctl.c:693:2: warning: Undefined or garbage value returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
+            return ret;
+            ^      ~~~
+    drivers/nvme/host/ioctl.c:688:2: note: 'ret' declared without an initial value
+            int ret;
+            ^~~~~~~
+    drivers/nvme/host/ioctl.c:690:2: note: Assuming 'ns' is null
+            if (ns)
+            ^
+    drivers/nvme/host/ioctl.c:690:2: note: Taking false branch
+            if (ns)
+            ^
+    drivers/nvme/host/ioctl.c:693:2: note: Undefined or garbage value returned to caller
+            return ret;
+            ^      ~~~
 
-vim +/dp +556 fs/xfs/libxfs/xfs_attr.c
+vim +693 drivers/nvme/host/ioctl.c
 
-e683cdbb8baf82 Dave Chinner      2022-04-14  542
-db1a28cc591c1a Allison Collins   2020-07-20  543  /*
-d56c93997e96ed Dave Chinner      2022-04-14  544   * Run the attribute operation specified in @attr.
-d56c93997e96ed Dave Chinner      2022-04-14  545   *
-d56c93997e96ed Dave Chinner      2022-04-14  546   * This routine is meant to function as a delayed operation and will set the
-d56c93997e96ed Dave Chinner      2022-04-14  547   * state to XFS_DAS_DONE when the operation is complete.  Calling functions will
-d56c93997e96ed Dave Chinner      2022-04-14  548   * need to handle this, and recall the function until either an error or
-d56c93997e96ed Dave Chinner      2022-04-14  549   * XFS_DAS_DONE is detected.
-db1a28cc591c1a Allison Collins   2020-07-20  550   */
-db1a28cc591c1a Allison Collins   2020-07-20  551  int
-8f502a4009822a Allison Henderson 2021-05-21  552  xfs_attr_set_iter(
-133b4f4350cc51 Allison Henderson 2022-04-11  553  	struct xfs_attr_item		*attr)
-db1a28cc591c1a Allison Collins   2020-07-20  554  {
-133b4f4350cc51 Allison Henderson 2022-04-11  555  	struct xfs_da_args              *args = attr->xattri_da_args;
-7a5d447970de2d Allison Henderson 2022-03-22 @556  	struct xfs_inode		*dp = args->dp;
-7a5d447970de2d Allison Henderson 2022-03-22  557  	struct xfs_buf			*bp = NULL;
-7a5d447970de2d Allison Henderson 2022-03-22  558  	int				sf_size, forkoff, error = 0;
-7a5d447970de2d Allison Henderson 2022-03-22 @559  	struct xfs_mount		*mp = args->dp->i_mount;
-7a5d447970de2d Allison Henderson 2022-03-22  560
-db1a28cc591c1a Allison Collins   2020-07-20  561
-8f502a4009822a Allison Henderson 2021-05-21  562  	/* State machine switch */
-100ba63970eed9 Dave Chinner      2022-04-14  563  next_state:
-133b4f4350cc51 Allison Henderson 2022-04-11  564  	switch (attr->xattri_dela_state) {
-8f502a4009822a Allison Henderson 2021-05-21  565  	case XFS_DAS_UNINIT:
-7a5d447970de2d Allison Henderson 2022-03-22  566  		sf_size = sizeof(struct xfs_attr_sf_hdr) +
-7a5d447970de2d Allison Henderson 2022-03-22  567  			  xfs_attr_sf_entsize_byname(args->namelen,
-7a5d447970de2d Allison Henderson 2022-03-22  568  							     args->valuelen);
-7a5d447970de2d Allison Henderson 2022-03-22  569  		xfs_bmap_set_attrforkoff(args->dp, sf_size, NULL);
-7a5d447970de2d Allison Henderson 2022-03-22  570  		args->dp->i_afp = kmem_cache_zalloc(xfs_ifork_cache, 0);
-7a5d447970de2d Allison Henderson 2022-03-22  571  		args->dp->i_afp->if_format = XFS_DINODE_FMT_EXTENTS;
-5a7bf541843b13 Dave Chinner      2022-04-14  572  	case XFS_DAS_SF_ADD:
-133b4f4350cc51 Allison Henderson 2022-04-11  573  		return xfs_attr_sf_addname(attr);
-5a7bf541843b13 Dave Chinner      2022-04-14  574  	case XFS_DAS_LEAF_ADD:
-133b4f4350cc51 Allison Henderson 2022-04-11  575  		return xfs_attr_leaf_addname(attr);
-5a7bf541843b13 Dave Chinner      2022-04-14  576  	case XFS_DAS_NODE_ADD:
-5a7bf541843b13 Dave Chinner      2022-04-14  577  		return xfs_attr_node_addname(attr);
-3f562d092bb1ed Allison Henderson 2021-02-12  578
-b8d9a2124c0193 Dave Chinner      2022-04-14  579  	case XFS_DAS_SF_REMOVE:
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  580  		error = xfs_attr_sf_removename(args);
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  581  		attr->xattri_dela_state = xfs_attr_complete_op(attr,
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  582  						xfs_attr_init_add_state(args));
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  583  		break;
-b8d9a2124c0193 Dave Chinner      2022-04-14  584  	case XFS_DAS_LEAF_REMOVE:
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  585  		error = xfs_attr_leaf_removename(args);
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  586  		attr->xattri_dela_state = xfs_attr_complete_op(attr,
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  587  						xfs_attr_init_add_state(args));
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  588  		break;
-b8d9a2124c0193 Dave Chinner      2022-04-14  589  	case XFS_DAS_NODE_REMOVE:
-b8d9a2124c0193 Dave Chinner      2022-04-14  590  		error = xfs_attr_node_removename_setup(attr);
-b8d9a2124c0193 Dave Chinner      2022-04-14  591  		if (error)
-b8d9a2124c0193 Dave Chinner      2022-04-14  592  			return error;
-b8d9a2124c0193 Dave Chinner      2022-04-14  593  		attr->xattri_dela_state = XFS_DAS_NODE_REMOVE_RMT;
-b8d9a2124c0193 Dave Chinner      2022-04-14  594  		if (args->rmtblkno == 0)
-b8d9a2124c0193 Dave Chinner      2022-04-14  595  			attr->xattri_dela_state++;
-b8d9a2124c0193 Dave Chinner      2022-04-14  596  		break;
-b8d9a2124c0193 Dave Chinner      2022-04-14  597
-020dee1bf99e76 Dave Chinner      2022-04-14  598  	case XFS_DAS_LEAF_SET_RMT:
-020dee1bf99e76 Dave Chinner      2022-04-14  599  	case XFS_DAS_NODE_SET_RMT:
-37e7bb8434f8b2 Allison Henderson 2022-04-11  600  		error = xfs_attr_rmtval_find_space(attr);
-83c6e70789ff37 Allison Henderson 2021-04-19  601  		if (error)
-83c6e70789ff37 Allison Henderson 2021-04-19  602  			return error;
-100ba63970eed9 Dave Chinner      2022-04-14  603  		attr->xattri_dela_state++;
-f1fdd499537724 Dave Chinner      2022-04-14  604  		fallthrough;
-020dee1bf99e76 Dave Chinner      2022-04-14  605
-f1fdd499537724 Dave Chinner      2022-04-14  606  	case XFS_DAS_LEAF_ALLOC_RMT:
-100ba63970eed9 Dave Chinner      2022-04-14  607  	case XFS_DAS_NODE_ALLOC_RMT:
-020dee1bf99e76 Dave Chinner      2022-04-14  608  		error = xfs_attr_rmtval_alloc(attr);
-8f502a4009822a Allison Henderson 2021-05-21  609  		if (error)
-8f502a4009822a Allison Henderson 2021-05-21  610  			return error;
-f027184d93cf76 Dave Chinner      2022-04-14  611  		/*
-f027184d93cf76 Dave Chinner      2022-04-14  612  		 * If there is still more to allocate we need to roll the
-f027184d93cf76 Dave Chinner      2022-04-14  613  		 * transaction so we have a full transaction reservation for
-f027184d93cf76 Dave Chinner      2022-04-14  614  		 * the next allocation.
-f027184d93cf76 Dave Chinner      2022-04-14  615  		 */
-f027184d93cf76 Dave Chinner      2022-04-14  616  		if (attr->xattri_blkcnt > 0)
-f027184d93cf76 Dave Chinner      2022-04-14  617  			break;
-020dee1bf99e76 Dave Chinner      2022-04-14  618  		if (attr->xattri_dela_state == XFS_DAS_DONE)
-020dee1bf99e76 Dave Chinner      2022-04-14  619  			break;
-f027184d93cf76 Dave Chinner      2022-04-14  620
-f027184d93cf76 Dave Chinner      2022-04-14  621  		goto next_state;
-83c6e70789ff37 Allison Henderson 2021-04-19  622
-020dee1bf99e76 Dave Chinner      2022-04-14  623  	case XFS_DAS_LEAF_REPLACE:
-020dee1bf99e76 Dave Chinner      2022-04-14  624  	case XFS_DAS_NODE_REPLACE:
-83c6e70789ff37 Allison Henderson 2021-04-19  625  		/*
-f027184d93cf76 Dave Chinner      2022-04-14  626  		 * We must "flip" the incomplete flags on the "new" and "old"
-f027184d93cf76 Dave Chinner      2022-04-14  627  		 * attribute/value pairs so that one disappears and one appears
-6e971e92677394 Dave Chinner      2022-04-14  628  		 * atomically.
-83c6e70789ff37 Allison Henderson 2021-04-19  629  		 */
-83c6e70789ff37 Allison Henderson 2021-04-19  630  		error = xfs_attr3_leaf_flipflags(args);
-83c6e70789ff37 Allison Henderson 2021-04-19  631  		if (error)
-83c6e70789ff37 Allison Henderson 2021-04-19  632  			return error;
-83c6e70789ff37 Allison Henderson 2021-04-19  633  		/*
-6e971e92677394 Dave Chinner      2022-04-14  634  		 * We must commit the flag value change now to make it atomic
-6e971e92677394 Dave Chinner      2022-04-14  635  		 * and then we can start the next trans in series at REMOVE_OLD.
-83c6e70789ff37 Allison Henderson 2021-04-19  636  		 */
-100ba63970eed9 Dave Chinner      2022-04-14  637  		attr->xattri_dela_state++;
-020dee1bf99e76 Dave Chinner      2022-04-14  638  		break;
-f2d5674061121e Allison Henderson 2022-04-11  639
-f027184d93cf76 Dave Chinner      2022-04-14  640  	case XFS_DAS_LEAF_REMOVE_OLD:
-f027184d93cf76 Dave Chinner      2022-04-14  641  	case XFS_DAS_NODE_REMOVE_OLD:
-83c6e70789ff37 Allison Henderson 2021-04-19  642  		/*
-6e971e92677394 Dave Chinner      2022-04-14  643  		 * If we have a remote attr, start the process of removing it
-6e971e92677394 Dave Chinner      2022-04-14  644  		 * by invalidating any cached buffers.
-6e971e92677394 Dave Chinner      2022-04-14  645  		 *
-6e971e92677394 Dave Chinner      2022-04-14  646  		 * If we don't have a remote attr, we skip the remote block
-6e971e92677394 Dave Chinner      2022-04-14  647  		 * removal state altogether with a second state increment.
-83c6e70789ff37 Allison Henderson 2021-04-19  648  		 */
-83c6e70789ff37 Allison Henderson 2021-04-19  649  		xfs_attr_restore_rmt_blk(args);
-6e971e92677394 Dave Chinner      2022-04-14  650  		if (args->rmtblkno) {
-83c6e70789ff37 Allison Henderson 2021-04-19  651  			error = xfs_attr_rmtval_invalidate(args);
-83c6e70789ff37 Allison Henderson 2021-04-19  652  			if (error)
-83c6e70789ff37 Allison Henderson 2021-04-19  653  				return error;
-6e971e92677394 Dave Chinner      2022-04-14  654  		} else {
-6e971e92677394 Dave Chinner      2022-04-14  655  			attr->xattri_dela_state++;
-6e971e92677394 Dave Chinner      2022-04-14  656  		}
-83c6e70789ff37 Allison Henderson 2021-04-19  657
-100ba63970eed9 Dave Chinner      2022-04-14  658  		attr->xattri_dela_state++;
-6e971e92677394 Dave Chinner      2022-04-14  659  		goto next_state;
-6e971e92677394 Dave Chinner      2022-04-14  660
-6e971e92677394 Dave Chinner      2022-04-14  661  	case XFS_DAS_LEAF_REMOVE_RMT:
-6e971e92677394 Dave Chinner      2022-04-14  662  	case XFS_DAS_NODE_REMOVE_RMT:
-37e7bb8434f8b2 Allison Henderson 2022-04-11  663  		error = xfs_attr_rmtval_remove(attr);
-d56c93997e96ed Dave Chinner      2022-04-14  664  		if (error == -EAGAIN) {
-d56c93997e96ed Dave Chinner      2022-04-14  665  			error = 0;
-6e971e92677394 Dave Chinner      2022-04-14  666  			break;
-d56c93997e96ed Dave Chinner      2022-04-14  667  		}
-83c6e70789ff37 Allison Henderson 2021-04-19  668  		if (error)
-83c6e70789ff37 Allison Henderson 2021-04-19  669  			return error;
-8f502a4009822a Allison Henderson 2021-05-21  670
-100ba63970eed9 Dave Chinner      2022-04-14  671  		/*
-6e971e92677394 Dave Chinner      2022-04-14  672  		 * We've finished removing the remote attr blocks, so commit the
-6e971e92677394 Dave Chinner      2022-04-14  673  		 * transaction and move on to removing the attr name from the
-6e971e92677394 Dave Chinner      2022-04-14  674  		 * leaf/node block. Removing the attr might require a full
-6e971e92677394 Dave Chinner      2022-04-14  675  		 * transaction reservation for btree block freeing, so we
-6e971e92677394 Dave Chinner      2022-04-14  676  		 * can't do that in the same transaction where we removed the
-6e971e92677394 Dave Chinner      2022-04-14  677  		 * remote attr blocks.
-100ba63970eed9 Dave Chinner      2022-04-14  678  		 */
-100ba63970eed9 Dave Chinner      2022-04-14  679  		attr->xattri_dela_state++;
-6e971e92677394 Dave Chinner      2022-04-14  680  		break;
-100ba63970eed9 Dave Chinner      2022-04-14  681
-e683cdbb8baf82 Dave Chinner      2022-04-14  682  	case XFS_DAS_LEAF_REMOVE_ATTR:
-e683cdbb8baf82 Dave Chinner      2022-04-14  683  		error = xfs_attr_leaf_remove_attr(attr);
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  684  		attr->xattri_dela_state = xfs_attr_complete_op(attr,
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  685  						xfs_attr_init_add_state(args));
-e683cdbb8baf82 Dave Chinner      2022-04-14  686  		break;
-5d954cc09f6bae Allison Henderson 2021-04-26  687
-e683cdbb8baf82 Dave Chinner      2022-04-14  688  	case XFS_DAS_NODE_REMOVE_ATTR:
-e683cdbb8baf82 Dave Chinner      2022-04-14  689  		error = xfs_attr_node_remove_attr(attr);
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  690  		attr->xattri_dela_state = xfs_attr_complete_op(attr,
-f589c4f3a7a7d6 Dave Chinner      2022-04-14  691  						xfs_attr_init_add_state(args));
-8f502a4009822a Allison Henderson 2021-05-21  692  		break;
-8f502a4009822a Allison Henderson 2021-05-21  693  	default:
-4a4957c16dc674 Allison Henderson 2021-05-21  694  		ASSERT(0);
-8f502a4009822a Allison Henderson 2021-05-21  695  		break;
-8f502a4009822a Allison Henderson 2021-05-21  696  	}
-020dee1bf99e76 Dave Chinner      2022-04-14  697
-020dee1bf99e76 Dave Chinner      2022-04-14  698  	trace_xfs_attr_set_iter_return(attr->xattri_dela_state, args->dp);
-6ca5a4a1f52952 Allison Henderson 2021-04-12  699  	return error;
-2f3cd809196381 Allison Henderson 2018-10-18  700  }
-2f3cd809196381 Allison Henderson 2018-10-18  701
+86116c2f6fee81 Kanchan Joshi     2022-05-05  680
+86116c2f6fee81 Kanchan Joshi     2022-05-05  681  int nvme_ns_head_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+86116c2f6fee81 Kanchan Joshi     2022-05-05  682  		unsigned int issue_flags)
+86116c2f6fee81 Kanchan Joshi     2022-05-05  683  {
+86116c2f6fee81 Kanchan Joshi     2022-05-05  684  	struct cdev *cdev = file_inode(ioucmd->file)->i_cdev;
+86116c2f6fee81 Kanchan Joshi     2022-05-05  685  	struct nvme_ns_head *head = container_of(cdev, struct nvme_ns_head, cdev);
+86116c2f6fee81 Kanchan Joshi     2022-05-05  686  	int srcu_idx = srcu_read_lock(&head->srcu);
+86116c2f6fee81 Kanchan Joshi     2022-05-05  687  	struct nvme_ns *ns = nvme_find_path(head);
+86116c2f6fee81 Kanchan Joshi     2022-05-05  688  	int ret;
+86116c2f6fee81 Kanchan Joshi     2022-05-05  689
+86116c2f6fee81 Kanchan Joshi     2022-05-05  690  	if (ns)
+86116c2f6fee81 Kanchan Joshi     2022-05-05  691  		ret = nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+86116c2f6fee81 Kanchan Joshi     2022-05-05  692  	srcu_read_unlock(&head->srcu, srcu_idx);
+86116c2f6fee81 Kanchan Joshi     2022-05-05 @693  	return ret;
+86116c2f6fee81 Kanchan Joshi     2022-05-05  694  }
+2405252a680e21 Christoph Hellwig 2021-04-10  695  #endif /* CONFIG_NVME_MULTIPATH */
+2405252a680e21 Christoph Hellwig 2021-04-10  696
 
 -- 
 0-DAY CI Kernel Test Service
