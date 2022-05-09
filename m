@@ -1,50 +1,50 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DD41FC0
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 17:20:01 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id d19so3387908lfj.4
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 10:20:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F7E1FC0
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 17:51:04 +0000 (UTC)
+Received: by mail-lj1-f175.google.com with SMTP id y19so17986705ljd.4
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 10:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Xq5ml2d/MeiCgCuvTz1iX/vBFJV/Zf5wkHsF94chv1Q=;
-        b=FoDLMQ1CUcXkPH5YH2WUvQkrh4wyHkUUHZHcdPJapmG1T0eHAY1wc8brR60ppGMa5J
-         MvFXF3tuoDWJ6lkuzwDg+uXRKK1dpjzfA/uB5GQC4TIBsPxsrPlb2FDEA+M+F9oDz5r4
-         vtrjLZL3T3cOwM7JK/DHccrk8RMKefToEtmE3ezQ84jzYnAtOuLgLmSS8SPIbwmYpL8e
-         +569UZLjUuKlLJxuLia9HvqCZWJPaqW6wxZ2wKVmnB6sIpUzIEuoLVasYEAtGywHS+dy
-         NOLgCVKyfJ/Tlp9jDY6Jr3DzFF11gOShM2S20Pm+kw6ankpEDU3X7veoarlOtuIzCHqv
-         rMIA==
+        bh=Z6h/UbBcSsy6Cwv/zRBUg+8oIkiwnR5qcB1QDqTp6w8=;
+        b=lOajRfE7fyP+ep3MKFGW9mQh4e9I1Uiq21usbZezTUhM7EFdhg1SnvvNjY4eG59ULs
+         V4Owko+szwUqUWwUMOPZ7L4L7x5m3g1Mm7rbCdqAjqtaLm5FvW/K5dfZdN0XW5hf65HO
+         78imLtJfT6cP2hesjWXVSZsQU4pIUmnZcKDPw9almOyM+aeGj7565UrKRLWpVcmNrEwe
+         xJkgCcUXrlopAOgqZYayw1LQ0mSuw5EChiwGNUaBuTsB3BXNrjGOYu+K76TLXsRGHsBe
+         eQK1QSxvGw/P89SyjP0B19ZHce6iDYv7Nz+kMtnMo+aOblb0/ntvWz3HsYVV84q3HMkk
+         YVZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Xq5ml2d/MeiCgCuvTz1iX/vBFJV/Zf5wkHsF94chv1Q=;
-        b=CaCHfj2GnqHSXAweLoH0hILgKCuUjGXONVQ3dvW0EffinixBcjvKtdUnGqtmPTgZCC
-         vGoeiFcy+x3CfkE48ocZUdW5r9U5CxWU89CoQTkcJgDFGDw6URTPFtKt/hXZVMUy4Cpa
-         auQI5XF3aApC+LMWK5yxevniVYTvNpJL84e5rc8C7ZfC5ofGugYQWpAZwhq8Q/izUdiG
-         4rm0zL1/gzcHWPjhwxL5szlkuL2rXyhQQprsjKinkVV9KgJpYO3ohyVf6nnFV3oYYfwq
-         6uXJ7wXyTfUq+AD9xEKuXrK+Nx9HLDp+YG2+fDEJnMZTMS8GQY/vIuTfXCBgGDCiR8qO
-         9Iyw==
-X-Gm-Message-State: AOAM531IczrNeS1F7zQ1S7gs4fDn5Mdm5c747CZMtZwLn54j10jBRNhr
-	2YbSfpt6bBQRkfllt7iT2JrOYu2Czbx3WAC2ajoEbg==
-X-Google-Smtp-Source: ABdhPJz9taxhLV4YRudjP7JD9rlg95k5LEcou1gLMLiVH/oLNlkumRLOmW/IlL/tmn/lb4A3bbzyo1/l2F7YyG1FIcQ=
-X-Received: by 2002:a19:4303:0:b0:473:f5fb:27b2 with SMTP id
- q3-20020a194303000000b00473f5fb27b2mr12343182lfa.626.1652116799064; Mon, 09
- May 2022 10:19:59 -0700 (PDT)
+        bh=Z6h/UbBcSsy6Cwv/zRBUg+8oIkiwnR5qcB1QDqTp6w8=;
+        b=qapOMdMNDs49ZWzbQb/ny1+pAYmswYVjYVL8aw8GyertlzNnJLTIsSRa9zY1PkZisB
+         QInDN26TSJBmFQRkqSpz7AxAfrsUnMvQDUx86B0Vv6tnJIyeJ514lIzObz49shBrwg3F
+         8mlBNYwGamHRP92saJDrOMNMR8Tergoz0tofVwEzQztiQ4dq2IO1meuVohRGy+A9YKi7
+         Bmg2BIcdZH6VmJyrP8hfiYm/OcPRXUYPwxZeRPmvKnVhtEq0rxbMd5EfBxUoubrWduH+
+         uhgnxbCmiaUHuEYOwB+SmGU/k1v62sMt9Ged9oxSv73ZE4MZSg8nwJj+Lpbdz7Ak6ESG
+         S4/g==
+X-Gm-Message-State: AOAM5302f9+Xr30gzBjm3ksbtEiI2iK9YQ/vfmiOj6YTm3lMBmD0NS3X
+	StQsIxNAAMF0xiETzQfvAE6T08Q6CK2icTY/GEc/yA==
+X-Google-Smtp-Source: ABdhPJzH0GFY+4K8szx4KHcz2z6G62DNfHvef1hX/KTMFMx//VA0v3aill5VeXt5HmS0uJd9IHn4xVPu7N0kN8BJZnI=
+X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
+ x8-20020a2ea7c8000000b0024f700a4df5mr11176691ljp.472.1652118662391; Mon, 09
+ May 2022 10:51:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-4-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-4-masahiroy@kernel.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-7-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-7-masahiroy@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 10:19:47 -0700
-Message-ID: <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into section-check.c
+Date: Mon, 9 May 2022 10:50:50 -0700
+Message-ID: <CAKwvOdm_oSLHddWWSzF5UuYrLCsAwF8AwbUGotUnPvV+6JkSkg@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
@@ -54,61 +54,107 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+ On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> modpost.c is too big, and the half of the code is for section checks.
-> Split it.
+> diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+> index 07a36a874dca..51ce72ce80fa 100644
+> --- a/include/asm-generic/export.h
+> +++ b/include/asm-generic/export.h
+> @@ -2,6 +2,14 @@
+>  #ifndef __ASM_GENERIC_EXPORT_H
+>  #define __ASM_GENERIC_EXPORT_H
 >
-> I fixed some style issues in the moved code.
+> +/*
+> + * This comment block is used by fixdep. Please do not remove.
 
-It would be helpful for review if the split and restyle were distinct
-patches.  Otherwise I can't tell what has changed.
+I don't know much about fixdep. How does that work, if you could summarize?
 
-This does lose the ability to use git blame to get more context on
-some of the oddities in modpost (which I have found useful in the
-past).  I don't feel strongly though.
+> + *
+> + * When CONFIG_MODVERSIONS is changed from n to y, all source files having
+> + * EXPORT_SYMBOL variants must be re-compiled because genksyms is run as a
+> + * side effect of the .o build rule.
+> + */
+> +
+>  #ifndef KSYM_FUNC
+>  #define KSYM_FUNC(x) x
+>  #endif
+> @@ -12,9 +20,6 @@
+>  #else
+>  #define KSYM_ALIGN 4
+>  #endif
+> -#ifndef KCRC_ALIGN
+> -#define KCRC_ALIGN 4
+> -#endif
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v4:
->   - New patch
->
->  scripts/mod/Makefile        |    2 +-
->  scripts/mod/modpost.c       | 1202 +---------------------------------
->  scripts/mod/modpost.h       |   34 +-
->  scripts/mod/section-check.c | 1222 +++++++++++++++++++++++++++++++++++
->  4 files changed, 1240 insertions(+), 1220 deletions(-)
->  create mode 100644 scripts/mod/section-check.c
->
-> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> index c9e38ad937fd..ca739c6c68a1 100644
-> --- a/scripts/mod/Makefile
-> +++ b/scripts/mod/Makefile
-> @@ -5,7 +5,7 @@ CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
->  hostprogs-always-y     += modpost mk_elfconfig
->  always-y               += empty.o
->
-> -modpost-objs   := modpost.o file2alias.o sumversion.o
-> +modpost-objs   := modpost.o section-check.o file2alias.o sumversion.o
->
->  devicetable-offsets-file := devicetable-offsets.h
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index a78b75f0eeb0..e7e2c70a98f5 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -31,7 +31,7 @@ static bool external_module;
->  /* Only warn about unresolved symbols */
->  static bool warn_unresolved;
->
-> -static int sec_mismatch_count;
-> +int sec_mismatch_count;
+The #ifndef is there because arch/m68k/include/asm/export.h:1 defines
+KCRC_ALIGN. You should delete that, too.
 
-^ this should go in modpost.h if it is to be used in two translation
-units, rather than forward declaring it in section-check.c.  You did
-this for the functions.
+> diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
+> index 4827c5abe5b7..6e6933ae7911 100644
+> --- a/scripts/genksyms/genksyms.c
+> +++ b/scripts/genksyms/genksyms.c
+> @@ -33,7 +33,7 @@ char *cur_filename;
+>  int in_source_file;
+>
+>  static int flag_debug, flag_dump_defs, flag_reference, flag_dump_types,
+> -          flag_preserve, flag_warnings, flag_rel_crcs;
+> +          flag_preserve, flag_warnings;
+>
+>  static int errors;
+>  static int nsyms;
+> @@ -681,10 +681,7 @@ void export_symbol(const char *name)
+>                         fputs(">\n", debugfile);
+>
+>                 /* Used as a linker script. */
+
+^ Does this comment still apply?
+
+> -               printf(!flag_rel_crcs ? "__crc_%s = 0x%08lx;\n" :
+> -                      "SECTIONS { .rodata : ALIGN(4) { "
+> -                      "__crc_%s = .; LONG(0x%08lx); } }\n",
+> -                      name, crc);
+> +               printf("__crc_%s = 0x%08lx;\n", name, crc);
+>         }
+>  }
+>
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index eceb3ee7ec06..6aee2401f3ad 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -88,11 +88,6 @@ modpost_link()
+>                 gen_initcalls
+>                 lds="-T .tmp_initcalls.lds"
+>
+> -               if is_enabled CONFIG_MODVERSIONS; then
+> -                       gen_symversions
+
+^ this is the only caller of gen_symversions, right? Then
+gen_symversions can be cleaned up, too?
+
+> -                       lds="${lds} -T .tmp_symversions.lds"
+> -               fi
+> -
+>                 # This might take a while, so indicate that we're doing
+>                 # an LTO link
+>                 info LTO ${1}
+> @@ -183,6 +178,10 @@ vmlinux_link()
+>                 libs="${KBUILD_VMLINUX_LIBS}"
+>         fi
+>
+> +       if is_enabled CONFIG_MODULES; then
+> +               objs="${objs} .vmlinux.export.o"
+> +       fi
+> +
+>         if [ "${SRCARCH}" = "um" ]; then
+>                 wl=-Wl,
+>                 ld="${CC}"
+> @@ -312,6 +311,7 @@ cleanup()
+>         rm -f vmlinux.o
+>         rm -f .vmlinux.d
+>         rm -f .vmlinux.objs
+> +       rm -f .vmlinux.export.c
+
+Probably can drop the `rm -f .tmp_symversions.lds` here, too?
 -- 
 Thanks,
 ~Nick Desaulniers
