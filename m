@@ -1,70 +1,187 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940581FA0
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 14:54:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=mouIEtj76vKUUk31EBLG/iOWGo2/UyaQmgKTXKtrLoA=; b=Ar2deOFC+ZDQ8WgkdlKuls35H7
-	UwIY7pQVOfuQ16yaLcp8jVBq6Y5ukhGNGuYx6XQ09CKzF4jz+0FV13un2sSLrXznWoP/WSPf9OdJ4
-	XOSgVtdiU4I3x6aYy1BxRSMyLO3V7HZoaW7nJYn/fL+h0X0mTIauMd492RS8uPW6QzSY+u5FYAQhN
-	xtWQaymXLdiqTzy+uIJ2XMY6DcDUY745xYZpInNcd7RMn9tNb41UF7Vxly1N8dbGzXsluAOejzQQ1
-	S+mHacRLTz1L1hOcYhfT1lLzbaarZ4wNbceavpIRNfAIOrvm7p5KsCHgkdfOchOj+7zO4LVKT93rV
-	/OhIz5vQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1no4lo-003Xg5-LJ; Mon, 09 May 2022 14:53:56 +0000
-Date: Mon, 9 May 2022 15:53:56 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Tom Rix <trix@redhat.com>
-Cc: hughd@google.com, akpm@linux-foundation.org, nathan@kernel.org,
-	ndesaulniers@google.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/shmem: initialize folio to NULL
-Message-ID: <YnkrBA0RTNdP+GX0@casper.infradead.org>
-References: <20220509123116.3169267-1-trix@redhat.com>
- <YnkeUz0Z2O9Xd5O+@casper.infradead.org>
- <0f066c75-121e-05f2-41ed-0d029bf70221@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE361FA0
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 15:01:00 +0000 (UTC)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ec42eae76bso147529127b3.10
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 08:00:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DNn5pADeSTEeIqgaMpExgJfErrD9ld+adA+VZngH5Qk=;
+        b=2J1MeSh7s/l3SKmjZrNoQohCDFCc4Ti/DaapjeC1yzNMoPltc0TZl4/XjGLAcdtNwl
+         IQ3FWV6MrH8SYUjQa/KxRg0jIPcPvgwQi1KKg4XMLcSFySzVKzQsQ2s2rZvdnjMjxKUL
+         EYSotrZxJp7sigZ8RNdOwMnzCbWxRhOHH3Ds/HSud+MbjzuVhCvcHXYe+7bwYW1v+SyT
+         YJbpuZHKjRVFjc90KpclQk3/q6GeEcu84CGw17G1Kt6ZjqawjLAVshs+qk/xAOR5qNdA
+         0ehL6Am16mdUbjuwgyeMkUFqzWWVX9kdeTIp4Nv4iB/doZctwWY5r6pI+L4Ac3PuaJBX
+         b6wg==
+X-Gm-Message-State: AOAM531UofWTFu+a/BvvW0Y6uxLckq9fBzqYbZwXWuq9xNOc+UuC8MYA
+	TtCtELmco2A7sOmOc/GDNrdDn3Z6U4MDM9ZQluk=
+X-Google-Smtp-Source: ABdhPJyUY4icHT63L6LWy80zsvn+CHkz/Ny7UxZ9DY8uY29DUI2O7NtRvr2guftQozVuG55DmBrb/jwCYyzLZYw2AOc=
+X-Received: by 2002:a81:34f:0:b0:2f7:bbb1:1576 with SMTP id
+ 76-20020a81034f000000b002f7bbb11576mr14564264ywd.45.1652108459058; Mon, 09
+ May 2022 08:00:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f066c75-121e-05f2-41ed-0d029bf70221@redhat.com>
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com> <YnhXgzhghfi17vMX@dev-arch.thelio-3990X>
+In-Reply-To: <YnhXgzhghfi17vMX@dev-arch.thelio-3990X>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Tue, 10 May 2022 00:00:48 +0900
+Message-ID: <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"the arch/x86 maintainers" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, May 09, 2022 at 07:51:25AM -0700, Tom Rix wrote:
-> 
-> On 5/9/22 6:59 AM, Matthew Wilcox wrote:
-> > On Mon, May 09, 2022 at 08:31:16AM -0400, Tom Rix wrote:
-> > > The clang build fails with
-> > > mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-> > >    if (!page) {
-> > >         ^~~~~
-> > > The error handler for !page jumps to an if-check for an unset folio.
-> > > So initialize folio to NULL.
-> > I appreciate you're trying to help, but the fourth report of a problem
-> > adds more noise than utility.
-> > 
-> > https://lore.kernel.org/linux-mm/?q=shmem+folio
-> > 
-> > shows emails about this from the cgelbot, Dan Carpenter, SeongJae Park,
-> > Colin King, Nathan Chancellor and Sebastian Siewior.  So actually you
-> > were seventh, not fourth.
-> 
-> From my point of view, the build has been broken for a week.
+On Mon. 9 May 2022 at 08:51, Nathan Chancellor <nathan@kernel.org> wrote:
+> On Sun, May 08, 2022 at 09:37:14PM +0900, Vincent MAILHOL wrote:
+> > Hi Arnd,
+> >
+> > +CC: Kees Cook
+> >
+> > On Sun. 8 May 2022 at 19:27, Arnd Bergmann <arnd@kernel.org> wrote:
+> > > On Sun, May 8, 2022 at 12:09 PM Vincent Mailhol
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > >
+> > > > Aside of the __builtin_foo() ones, x86 does not directly rely on any
+> > > > builtin functions.
+> > > >
+> > > > However, such builtin functions are not explicitly deactivated,
+> > > > creating some collisions, concrete example being ffs() from bitops.h,
+> > > > c.f.:
+> > > >
+> > > > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+> > > > |   283 | static __always_inline int ffs(int x)
+> > > >
+> > > > This patch adds -fno-builtin to KBUILD_CFLAGS for the x86
+> > > > architectures in order to prevent shadowing of builtin functions.
+> > > >
+> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > > ---
+> > > > FYI, I tested this patch on a "make allyesconfig" for both x86_32 and
+> > > > x86_64.
+> > > >
+> > > > This is a resend. Only difference is that I dropped the RFC flag and
+> > > > added Arnd in CC because he did a similar patch to fix ffs shadow
+> > > > warnings in the past:
+> > > >
+> > > > https://lore.kernel.org/all/20201026160006.3704027-1-arnd@kernel.org/
+> > >
+> > > I think this is a correct change, but unfortunately it exposes a clang bug
+> > >  with -mregparm=3. Nick should be able to provide more details, I think
+> > > he has a plan.
+> >
+> > Interesting. I admittedly did not do extensive tests on clang
+> > but I would have expected the Linux kernel bot to have warned me
+> > on my previous patch.
+> >
+> > I did research on mregparm and clang. I found this thread:
+> > https://lore.kernel.org/r/20220208225350.1331628-9-keescook@chromium.org
+> >
+> > and the associated LLVM issue:
+> > https://github.com/llvm/llvm-project/issues/53645
+> >
+> > Those threads mention that some clang builtins become unusable
+> > when combining -mregparm=3 and -m32. But I could not find a
+> > bug reference about -mregparm=3 and -fno-builtin combination.
+> >
+> > Could you just double confirm that you indeed saw the issue with
+> > -fno-builtin? If that the case, I am really curious to get the
+> > details :)
+>
+> -ffreestanding implies -fno-builtin; removing -ffreestanding from
+> arch/x86/Makefile for 32-bit x86 caused the problem so I don't think
+> that your patch would cause any issue but I could be missing something.
+>
+> However, doesn't -fno-builtin remove the ability for GCC and clang to
+> perform certain libcall optimizations? I seem to recall this coming up
+> in previous threads but I am having a hard time finding the exact
+> language that I was looking for.
 
-Yeah, shit happens when you're trying to fix patches and attend a
-conference at the same time.
+I was not aware. I did the test with a dummy memset implementation:
 
-> It would be good if this and the other folio issue was fixed in linux-next
-> soon.
+| void foo(char *s, unsigned int count)
+| {
+|     while (count--)
+|         *s++ = 0;
+| }
 
-As you can see, I sent a replacement patch series on the 4th which fixes
-far more than the two problems you noticed.
-https://lore.kernel.org/linux-mm/20220504182857.4013401-1-willy@infradead.org/
+Before this patch (i.e. with builtins), GCC does this:
 
-I can do no more than this.
+| foo:
+|     testl    %esi, %esi    # count
+|     je    .L7    #,
+|     pushq    %rbp    #
+|     movl    %esi, %edx    # count, count
+|     xorl    %esi, %esi    #
+|     movq    %rsp, %rbp    #,
+|     call    memset    #
+|     popq    %rbp    #
+|     ret
+| .L7:
+|     ret
+
+Here, we can clearly see that the function is optimized to a call
+to memset.
+
+After this patch (i.e. without builtins), the call disappears:
+
+| foo:
+|     testl    %esi, %esi    # count
+|     je    .L1    #,
+|     movl    %esi, %esi    # count, count
+|     leaq    (%rdi,%rsi), %rax    #, _12
+| .L3:
+|     addq    $1, %rdi    #, s
+|     movb    $0, -1(%rdi)    #, MEM[(char *)s_8 + -1B]
+|     cmpq    %rax, %rdi    # _12, s
+|     jne    .L3    #,
+| .L1:
+|     ret
+
+So yes, the -fno-builtin will remove the optimizations at least
+for GCC (not tested for clang).
+
+> This thread seems to be the most recent
+> one that I can remember:
+>
+> https://lore.kernel.org/CAHk-=whn91ar+EbcBXQb9UXad00Q5WjU-TCB6UBzVba682a4ew@mail.gmail.com/
+
+What is funny is that the thread you are pointing at mostly
+complains about the compiler doing optimization in the user's
+back.
+
+There will be some cases in which the compiler will find valid
+optimizations and some cases it will do some silly
+one (e.g. transform a very small loop to a function call). The
+problem is to know whether the clever optimizations outweigh the silly
+ones or not. I wonder if any benchmark exists on that.
+
+If compiler optimizations are indeed worth it, we should then have
+a look at the other architecture which uses the -fno-builtin flag
+(or the -ffreestanding).
+
+Regarding this patch, I do not think it should be applied anymore
+unless proven that "optimizations" are detrimental and thus
+unwanted.
+
+Instead, I am thinking of just using -fno-builtin-ffs to remove
+the annoying -Wshadow warning. Would that make more sense?
+
+Thank you.
+
+
+Yours sincerely,
+Vincent Mailhol
