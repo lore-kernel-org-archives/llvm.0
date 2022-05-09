@@ -1,194 +1,210 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED621FC0
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 18:20:09 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id t25so25250497lfg.7
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 11:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QmiOXHZzB0rtLFZwWWd63/Q6COhsqprxMnxqGszSfWg=;
-        b=FKw96Gs6ccmBPZpSqeb6e8R8VWl/oEHndi8e4ISoHwv/PaGTrNlLNQPNmN9eKaQgFE
-         6HdwVIia48oOjKrwBYPGbN06aH6ugyLWDabmtXrs85uKeTCINyBHLcyaQjz+US0cg+/q
-         3lxkOuBNJ/i0yMFEnr0hxBLgCJoWgW3OSP+LBPXYQuWlKGSBEilkzwrB28SGoPSEloMG
-         sMPqW8+sVonOf8Md9YO0GkmI5tKQKS/BBkrk/Q6RWCxKu3w75UwiYYcm2F+asoY1DnCJ
-         bZboAwVcWljvB7BMIjA1PziHxRvndVc8tqqean5UQ1Ljt331WNzVlBglioCZ3W9w4+3O
-         lVlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QmiOXHZzB0rtLFZwWWd63/Q6COhsqprxMnxqGszSfWg=;
-        b=yG1quXZP+cxvZM0IOM5/awPZYxMHYbcQE2Z/9m1ZSi+Fm9MVqiSDJ2Kan6xcsN+SSY
-         xpFENtErBa4AJoUTRZxAj5WzMb+nQEqxikudDwSD9PZD8MIjXHnCXLjQVOnmco2pacBw
-         6egAh+SX3zSYOptxBZ32LoUn4sTcqEUZOA7QF+Plz7aWiiqXz0G4/OREJUzarpQNGjbR
-         orBtO8NnClETREIq8zM7oE+Hg2uuA/ceC2tuFmmO8FK2ythgiz/HrMjGyHZQaWc0XDId
-         muRJmFQt5YWYt6IkhQqC3YrXHMDaizUvL5FhWszsxa6ae0YwrSNvmsGT6JJ46GEnSx2/
-         0/2w==
-X-Gm-Message-State: AOAM531FvykqV7PMwaWUVKNVmjyKdjlqo2EtLKdqNYf5uXnR4aRLJv6W
-	q3oq52KA36eSOwDNbZiBbQl9W3eNzWi/3yo43USw/g==
-X-Google-Smtp-Source: ABdhPJwVc9Jh+/Mt41BKpIuxKRwJkx3HZj9u+KodRqNNFBcdlCKis9ORYHLsXID7LPy0GSv+6CEMUHGf4PfDjjHWhvI=
-X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
- f17-20020a05651201d100b00471f63ab182mr13278392lfp.392.1652120406979; Mon, 09
- May 2022 11:20:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133BE7B
+	for <llvm@lists.linux.dev>; Mon,  9 May 2022 18:50:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652122255; x=1683658255;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G49Hulu3ioqnykK7y88D6Yayvp+sdPAw6mjkylAaETI=;
+  b=DAI8OuD3zfO5xj+kEArrkSH6QGoGpGOf4+CRc0PzYdni3t1YToTo+ixT
+   fS3KB1ZxrIBfHs+OY/Tt3ofTwxQ0Nsrxkkh3XelCyKI7gAdIE3DmDN/wf
+   QPLLgmL0TC17db2FudYBmBFPkRkQI+v8LzqPYCljnw1SBDhUcFgUsYONF
+   k+WNfCuWsaR6CBbQEe1jsvKKWpTqZSE0+yFoW6KBUmworgusyW1d+eQQ4
+   CQGLwOmr33qwUDctvNG/YSDs0l3bdzELMNYPJ10aWs87PvQcOtxr4SZFb
+   Zr27vHvAEXMu4NyaR7RFzbrMfbYgj3w5BPlA35lMPzuBUSvvbHZ9qxpM3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266732180"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="266732180"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:50:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="570296319"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 May 2022 11:50:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1no8T6-000Gn6-0D;
+	Mon, 09 May 2022 18:50:52 +0000
+Date: Tue, 10 May 2022 02:50:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ricky WU <ricky_wu@realtek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ricky Wu <Ricky_wu@realtek.com>
+Subject: [char-misc:char-misc-testing 2/25]
+ drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202205100220.WyAyhKap-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220429064547.2334280-1-aik@ozlabs.ru> <CAKwvOdmUMhqhQhDCpWjMNiQQPvwOJB9MbUkF3RR0BL+H+DagmA@mail.gmail.com>
- <efe4ec7b-e1ec-84fc-cc49-7e22597ff417@ozlabs.ru> <de7ae055-8cbb-1fd3-e1d7-93f51c2d3f4b@ozlabs.ru>
- <YnlYemdzBDCobK/d@dev-arch.thelio-3990X>
-In-Reply-To: <YnlYemdzBDCobK/d@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 11:19:55 -0700
-Message-ID: <CAKwvOdk_wNfo1GA1MsOehTuTpBQqNi3xhHHyLmkpyTr0wPj1Tg@mail.gmail.com>
-Subject: Re: [PATCH kernel] powerpc/llvm/lto: Allow LLVM LTO builds
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexey Kardashevskiy <aik@ozlabs.ru>, llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	Nicholas Piggin <npiggin@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Sathvika Vasireddy <sv@linux.ibm.com>, Russell Currey <ruscur@russell.cc>, 
-	"Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>, Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 9, 2022 at 11:08 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Alexey,
->
-> On Mon, May 09, 2022 at 05:42:59PM +1000, Alexey Kardashevskiy wrote:
-> >
-> >
-> > On 5/9/22 15:18, Alexey Kardashevskiy wrote:
-> > >
-> > >
-> > > On 5/4/22 07:21, Nick Desaulniers wrote:
-> > > > On Thu, Apr 28, 2022 at 11:46 PM Alexey Kardashevskiy
-> > > > <aik@ozlabs.ru> wrote:
-> > > > >
-> > > > > This enables LTO_CLANG builds on POWER with the upstream version of
-> > > > > LLVM.
-> > > > >
-> > > > > LTO optimizes the output vmlinux binary and this may affect the FTP
-> > > > > alternative section if alt branches use "bc" (Branch Conditional) which
-> > > > > is limited by 16 bit offsets. This shows up in errors like:
-> > > > >
-> > > > > ld.lld: error: InputSection too large for range extension thunk
-> > > > > vmlinux.o:(__ftr_alt_97+0xF0)
-> > > > >
-> > > > > This works around the issue by replacing "bc" in FTR_SECTION_ELSE with
-> > > > > "b" which allows 26 bit offsets.
-> > > > >
-> > > > > This catches the problem instructions in vmlinux.o before it LTO'ed:
-> > > > >
-> > > > > $ objdump -d -M raw -j __ftr_alt_97 vmlinux.o | egrep '\S+\s*\<bc\>'
-> > > > >    30:   00 00 82 40     bc      4,eq,30 <__ftr_alt_97+0x30>
-> > > > >    f0:   00 00 82 40     bc      4,eq,f0 <__ftr_alt_97+0xf0>
-> > > > >
-> > > > > This allows LTO builds for ppc64le_defconfig plus LTO options.
-> > > > > Note that DYNAMIC_FTRACE/FUNCTION_TRACER is not supported by LTO builds
-> > > > > but this is not POWERPC-specific.
-> > > >
-> > > > $ ARCH=powerpc make LLVM=1 -j72 ppc64le_defconfig
-> > > > $ ARCH=powerpc make LLVM=1 -j72 menuconfig
-> > > > <disable FTRACE, enable LTO_CLANG_THIN>
-> > > > $ ARCH=powerpc make LLVM=1 -j72
-> > > > ...
-> > > >    VDSO64L arch/powerpc/kernel/vdso/vdso64.so.dbg
-> > > > /usr/bin/powerpc64le-linux-gnu-ld:
-> > > > /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: error
-> > > > loading plugin:
-> > > > /android0/llvm-project/llvm/build/bin/../lib/LLVMgold.so: cannot open
-> > > > shared object file: No such file or directory
-> > > > clang-15: error: linker command failed with exit code 1 (use -v to see
-> > > > invocation)
-> > > > make[1]: *** [arch/powerpc/kernel/vdso/Makefile:67:
-> > > > arch/powerpc/kernel/vdso/vdso64.so.dbg] Error 1
-> > > >
-> > > > Looks like LLD isn't being invoked correctly to link the vdso.
-> > > > Probably need to revisit
-> > > > https://lore.kernel.org/lkml/20200901222523.1941988-1-ndesaulniers@google.com/
-> > > >
-> > > > How were you working around this issue? Perhaps you built clang to
-> > > > default to LLD? (there's a cmake option for that)
-> > >
-> > >
-> > > What option is that? I only add  -DLLVM_ENABLE_LLD=ON  which (I think)
->
-> The option Nick is referring to here is CLANG_DEFAULT_LINKER, which sets
-> the default linker when clang is invoked as the linker driver, which the
-> PowerPC vDSO Makefile does. We have been trying to move all parts of the
-> kernel to compile with $(CC) and link with $(LD) so that the default
-> linker invoked by the compiler is taken out of the equation.
->
-> For what it's worth, I think that the error Nick is seeing is due to a
-> lack of the LLVMgold.so plugin on his system, which is built when
-> -DLLVM_BINUTILS_INCDIR=... is included in the list of CMake variables,
-> which you have. The LLVMgold.so plugin is needed when doing LTO with
-> GNU ld, which is the case with the vDSO currently for the reason I
-> mentioned above. We could work around this with Nick's proposed
-> '-fuse-ld=lld' patch or just disable LTO for the vDSO.
->
-> https://llvm.org/docs/GoldPlugin.html
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-testing
+head:   33a1c6618677fe33f8e84cb7bedc45abbce89a50
+commit: b1c5f3085149e9643b125eb10aae0e74644d7dcc [2/25] misc: rtsx: add rts5261 efuse function
+config: riscv-randconfig-c006-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100220.WyAyhKap-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=b1c5f3085149e9643b125eb10aae0e74644d7dcc
+        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+        git fetch --no-tags char-misc char-misc-testing
+        git checkout b1c5f3085149e9643b125eb10aae0e74644d7dcc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/cardreader/
 
-Ah, and ld.gold is currently banned by
-commit 75959d44f9dc ("kbuild: Fail if gold linker is detected")
-which landed in v5.4-rc1. So the ppc vdso build isn't quite as
-hermetic as we'd like.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> My version of the hack would probably be:
->
-> ccflags-$(CONFIG_LD_IS_LLD) += -fuse-ld=lld
-> asflags-$(CONFIG_LD_IS_LLD) += -fuse-ld=lld
+All warnings (new ones prefixed by >>):
 
-LGTM; want to send that as a formal patch? That would also address
-https://github.com/ClangBuiltLinux/linux/issues/774.
+>> drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (efuse_valid == 0) {
+                      ^~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:412:30: note: uninitialized use occurs here
+           pci_read_config_dword(pdev, setting_reg2, &lval2);
+                                       ^~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:406:9: note: remove the 'if' if its condition is always true
+           } else if (efuse_valid == 0) {
+                  ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable 'setting_reg2' to silence this warning
+           u16 setting_reg1, setting_reg2;
+                                         ^
+                                          = 0
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
->
-> > > tells cmake to use lld to link the LLVM being built but does not seem to
-> > > tell what the built clang should do.
->
-> Right, -DLLVM_ENABLE_LLD=ON is equivalent to -DLLVM_USE_LINKER=lld,
-> except when doing a multi-stage build:
->
-> https://llvm.org/docs/CMake.html#llvm-related-variables
->
-> > >
-> > > Without -DLLVM_ENABLE_LLD=ON, building just fails:
-> > >
-> > > [fstn1-p1 ~/pbuild/llvm/llvm-lto-latest-cleanbuild]$ ninja -j 100
-> > > [619/3501] Linking CXX executable bin/not
-> > > FAILED: bin/not
-> > > : && /usr/bin/clang++ -fPIC -fvisibility-inlines-hidden
-> > > -Werror=date-time -Werror=unguarded-availability-new -Wall -Wextra
-> > > -Wno-unused-parameter -Wwrite-strings -Wcast-qual
-> > > -Wmissing-field-initializers -pedantic -Wno-long-long
-> > > -Wc++98-compat-extra-semi -Wimplicit-fallthrough
-> > > -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor
-> > > -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion
-> > > -Wmisleading-indentation -fdiagnostics-color -ffunction-sections
-> > > -fdata-sections -flto -O3 -DNDEBUG -flto
-> > > -Wl,-rpath-link,/home/aik/pbuild/llvm/llvm-lto-latest-cleanbuild/./lib
-> > > -Wl,--gc-sections utils/not/CMakeFiles/not.dir/not.cpp.o -o bin/not
-> > > -Wl,-rpath,"\$ORIGIN/../lib"  -lpthread  lib/libLLVMSupport.a  -lrt
-> > > -ldl  -lpthread  -lm  /usr/lib/powerpc64le-linux-gnu/libz.so
-> > > /usr/lib/powerpc64le-linux-gnu/libtinfo.so  lib/libLLVMDemangle.a && :
-> > > /usr/bin/ld: lib/libLLVMSupport.a: error adding symbols: archive has no
-> > > index; run ranlib to add one
 
-Sounds like a bug with llvm cmake on ppc hosts.
+vim +406 drivers/misc/cardreader/rts5261.c
 
-The other error about
+   359	
+   360	static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
+   361	{
+   362		struct pci_dev *pdev = pcr->pci;
+   363		u32 lval1, lval2, i;
+   364		u16 setting_reg1, setting_reg2;
+   365		u8 valid, efuse_valid, tmp;
+   366	
+   367		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
+   368			REG_EFUSE_POR | REG_EFUSE_POWER_MASK,
+   369			REG_EFUSE_POR | REG_EFUSE_POWERON);
+   370		udelay(1);
+   371		rtsx_pci_write_register(pcr, RTS5261_EFUSE_ADDR,
+   372			RTS5261_EFUSE_ADDR_MASK, 0x00);
+   373		rtsx_pci_write_register(pcr, RTS5261_EFUSE_CTL,
+   374			RTS5261_EFUSE_ENABLE | RTS5261_EFUSE_MODE_MASK,
+   375			RTS5261_EFUSE_ENABLE);
+   376	
+   377		/* Wait transfer end */
+   378		for (i = 0; i < MAX_RW_REG_CNT; i++) {
+   379			rtsx_pci_read_register(pcr, RTS5261_EFUSE_CTL, &tmp);
+   380			if ((tmp & 0x80) == 0)
+   381				break;
+   382		}
+   383		rtsx_pci_read_register(pcr, RTS5261_EFUSE_READ_DATA, &tmp);
+   384		efuse_valid = ((tmp & 0x0C) >> 2);
+   385		pcr_dbg(pcr, "Load efuse valid: 0x%x\n", efuse_valid);
+   386	
+   387		pci_read_config_dword(pdev, PCR_SETTING_REG2, &lval2);
+   388		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, lval2);
+   389		/* 0x816 */
+   390		valid = (u8)((lval2 >> 16) & 0x03);
+   391	
+   392		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
+   393			REG_EFUSE_POR, 0);
+   394		pcr_dbg(pcr, "Disable efuse por!\n");
+   395	
+   396		if (efuse_valid == 2 || efuse_valid == 3) {
+   397			if (valid == 3) {
+   398				/* Bypass efuse */
+   399				setting_reg1 = PCR_SETTING_REG1;
+   400				setting_reg2 = PCR_SETTING_REG2;
+   401			} else {
+   402				/* Use efuse data */
+   403				setting_reg1 = PCR_SETTING_REG4;
+   404				setting_reg2 = PCR_SETTING_REG5;
+   405			}
+ > 406		} else if (efuse_valid == 0) {
+   407			// default
+   408			setting_reg1 = PCR_SETTING_REG1;
+   409			setting_reg2 = PCR_SETTING_REG2;
+   410		}
+   411	
+   412		pci_read_config_dword(pdev, setting_reg2, &lval2);
+   413		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg2, lval2);
+   414	
+   415		if (!rts5261_vendor_setting_valid(lval2)) {
+   416			/* Not support MMC default */
+   417			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
+   418			pcr_dbg(pcr, "skip fetch vendor setting\n");
+   419			return;
+   420		}
+   421	
+   422		if (!rts5261_reg_check_mmc_support(lval2))
+   423			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
+   424	
+   425		pcr->rtd3_en = rts5261_reg_to_rtd3(lval2);
+   426	
+   427		if (rts5261_reg_check_reverse_socket(lval2))
+   428			pcr->flags |= PCR_REVERSE_SOCKET;
+   429	
+   430		pci_read_config_dword(pdev, setting_reg1, &lval1);
+   431		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg1, lval1);
+   432	
+   433		pcr->aspm_en = rts5261_reg_to_aspm(lval1);
+   434		pcr->sd30_drive_sel_1v8 = rts5261_reg_to_sd30_drive_sel_1v8(lval1);
+   435		pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(lval1);
+   436	
+   437		if (setting_reg1 == PCR_SETTING_REG1) {
+   438			/* store setting */
+   439			rtsx_pci_write_register(pcr, 0xFF0C, 0xFF, (u8)(lval1 & 0xFF));
+   440			rtsx_pci_write_register(pcr, 0xFF0D, 0xFF, (u8)((lval1 >> 8) & 0xFF));
+   441			rtsx_pci_write_register(pcr, 0xFF0E, 0xFF, (u8)((lval1 >> 16) & 0xFF));
+   442			rtsx_pci_write_register(pcr, 0xFF0F, 0xFF, (u8)((lval1 >> 24) & 0xFF));
+   443			rtsx_pci_write_register(pcr, 0xFF10, 0xFF, (u8)(lval2 & 0xFF));
+   444			rtsx_pci_write_register(pcr, 0xFF11, 0xFF, (u8)((lval2 >> 8) & 0xFF));
+   445			rtsx_pci_write_register(pcr, 0xFF12, 0xFF, (u8)((lval2 >> 16) & 0xFF));
+   446	
+   447			pci_write_config_dword(pdev, PCR_SETTING_REG4, lval1);
+   448			lval2 = lval2 & 0x00FFFFFF;
+   449			pci_write_config_dword(pdev, PCR_SETTING_REG5, lval2);
+   450		}
+   451	}
+   452	
 
-> /usr/bin/ld: lib/libLLVMObject.a: error adding symbols: file format not
-recognized
-
-Is likely because GNU ld doesn't recognize LLVM IR, which is what's
-passed to the linker when you build LLVM itself with LTO via
-`-DLLVM_ENABLE_LTO=ON`.
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
