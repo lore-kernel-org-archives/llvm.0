@@ -1,227 +1,133 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9A32C9C
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 20:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652216075; x=1683752075;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sWidDDlaxXBpIrGdGBuJPNof+cMW68Ey+lvsFm+Kw04=;
-  b=hp3QPprPCxKh9RD+lWj+NrMRGW4Isx7F1AXBsKwLjlPWs+T+6ml0WoYk
-   Gno8+WIkGblYrd88vKZjtsH4Mx05gZR3+FQkITSRqNABSqK6Df5bjKLE+
-   wKtdy4m47NtDdMJp0L4WR/UUFJlzlMWfoCfxYnF9f3C9SMSburC7BsPFS
-   wEBMRenwxYQ0kAOf0dPu1Mn7swEG9+5sxchOmU8jQuINhH32cc4dz1kFs
-   qRv17HM3rJyqUkUqpABtKlIE3uc8d734l8CRJ0TDnZKkW+uvkQcLNTY/1
-   qZ+BKgh3XhxiaKPdmuUUW0Az+69qzJrgC5h2RWjAW7CLN0q/5l7JAxXHQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330099641"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="330099641"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 13:54:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="593753531"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 May 2022 13:54:33 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noWsK-000IMu-Ca;
-	Tue, 10 May 2022 20:54:32 +0000
-Date: Wed, 11 May 2022 04:54:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: [akpm-mm:mm-unstable 175/431] mm/madvise.c:632:8: error: call to
- undeclared function 'is_swapin_error_entry'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205110431.fazG1wsY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528452F42
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 22:14:57 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id d15so453726lfk.5
+        for <llvm@lists.linux.dev>; Tue, 10 May 2022 15:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SOgaTsnX6kepYSuoDyzZHRKBXThHWTHTtRY7fC7kcaM=;
+        b=s1y/ht2yi/2zxNHXLvPXx7iQ0XuULH38UHyRhwN6QVL9z87v/qpo3S2OWCRXlI98b5
+         TL6M3YqOKxRQ4GYP2ZfDKKw6IOd/bL0nxeiIJSsz9dCUdKsc9rlVmg5aRHXuKmcrDAef
+         GD3aABaMl+pOPlGnj7qLPxZD6t1zdpHZ8dHtRgR+ae7z30avXe4IPOA+a8Gga5Unzzl6
+         q9JbX+0vFJ6ruK0M013yV3bn31tMuSHC3JXezBi11lmkq8SA+vQmoNGIaKLJ0eMR0Fg9
+         VeFoFxxVbmmcJP7rE91hYyoXY+PFjY6Bcn9rODtWN7pzSn7cvh1I2k5t2Ye1HNL6ZSDR
+         +ViA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SOgaTsnX6kepYSuoDyzZHRKBXThHWTHTtRY7fC7kcaM=;
+        b=WwmsWmmFW89/lk111oIUV1RxiktQd+Ya5dDU7r5FjSsMn2rQeXpE3QOIshZfuZ8UO4
+         fADTPCmUiGj2f+vV8pyKGi/bSxs1R9IfSoFwBTzaxafaPqbAyGx1MafiOOc3Bdv5TIaY
+         5+ayseiG4/bOJopH+yQywBG8cA/2QzifqaMC+P6NNe3NH1vsy8E2xv6XJ3OLZtudNU0/
+         qh1SJQ2AtNUFcUvudFgdC3r+qoPCfoVs3HV/JGvJYJMnIRYu2lVsaIiAJxdEXZxrsC7G
+         RFBFm1v3JnEpiAI/81At9ptRdEMpvInYHMSeR9NTE2eu/jyAgk1j9cJUoHG8UL1oyp1b
+         cc8Q==
+X-Gm-Message-State: AOAM531c/DGThDIBypsxe1rGi+gmyNoPQZi6Lo9ajUV/WsoDdE0cJRTA
+	EtW8gCXkbQ1/U4G9JmZWJzUlIGKqagOr1JAcYqfx/Q==
+X-Google-Smtp-Source: ABdhPJxpoMjT+YF2n2eAaW5Yd1bxoaZoOWOwRnJE6lNtIt3rJlDv1tzFoHDV25WVVMfbNYRinG4W6EDDNrQGJ/t4uIk=
+X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
+ v15-20020a056512048f00b004723c4794a0mr17686928lfq.579.1652220895068; Tue, 10
+ May 2022 15:14:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 10 May 2022 15:14:43 -0700
+Message-ID: <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   584a50635cc1deee2eeab5a17dfdcf9db7add21b
-commit: 8296b60c4ec05505344455818a30cb2774304acd [175/431] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
-config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220511/202205110431.fazG1wsY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=8296b60c4ec05505344455818a30cb2774304acd
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 8296b60c4ec05505344455818a30cb2774304acd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> The compilers provides some builtin expression equivalent to the
+> ffs(), __ffs() and ffz() function of the kernel. The kernel uses
+> optimized assembly which produces better code than the builtin
+> functions. However, such assembly code can not be optimized when used
+> on constant expression.
+>
+> This series relies on __builtin_constant_p to select the optimal solution:
+>
+>   * use kernel assembly for non constant expressions
+>
+>   * use compiler's __builtin function for constant expressions.
+>
+> I also think that the fls() and fls64() can be optimized in a similar
+> way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
+> trivial so I want to focus on this series first. If it get accepted, I
+> will then work on those two additionnal function.
+>
+>
+> ** Statistics **
+>
+> On a allyesconfig, before applying this series, I get:
+>
+> | $ objdump -d vmlinux.o | grep bsf | wc -l
+> | 1081
+>
+> After applying this series:
+>
+> | $ objdump -d vmlinux.o | grep bsf | wc -l
+> | 792
+>
+> So, roughly 26.7% of the call to either ffs() or __ffs() were using
+> constant expression and can be optimized (I did not produce the
+> figures for ffz()).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+These stats are interesting; consider putting them on patch 1/2 commit
+message though (in addition to the cover letter). (Sending thoughts on
+1/2 next).
 
-Note: the akpm-mm/mm-unstable HEAD 584a50635cc1deee2eeab5a17dfdcf9db7add21b builds fine.
-      It only hurts bisectability.
+>
+> (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
 
-All errors (new ones prefixed by >>):
+Here's the same measure of x86_64 allyesconfig (./scripts/config -d
+CONFIG_HINIC) at 9be9ed2612b5aedb52a2c240edb1630b6b743cb6 with ToT
+LLVM (~clang-15):
 
->> mm/madvise.c:632:8: error: call to undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                      is_swapin_error_entry(entry)) {
-                                      ^
-   1 error generated.
+Before:
+$ objdump -d vmlinux.o | grep bsf | wc -l
+1454
+
+After:
+$ objdump -d vmlinux.o | grep bsf | wc -l
+1070
+
+-26.4% :)
 
 
-vim +/is_swapin_error_entry +632 mm/madvise.c
+>
+>
+> Vincent Mailhol (2):
+>   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+>     expressions
+>   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+>     expressions
+>
+>  arch/x86/include/asm/bitops.h | 65 +++++++++++++++++++++--------------
+>  1 file changed, 40 insertions(+), 25 deletions(-)
+>
+> --
+> 2.35.1
+>
 
-   587	
-   588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
-   589					unsigned long end, struct mm_walk *walk)
-   590	
-   591	{
-   592		struct mmu_gather *tlb = walk->private;
-   593		struct mm_struct *mm = tlb->mm;
-   594		struct vm_area_struct *vma = walk->vma;
-   595		spinlock_t *ptl;
-   596		pte_t *orig_pte, *pte, ptent;
-   597		struct page *page;
-   598		int nr_swap = 0;
-   599		unsigned long next;
-   600	
-   601		next = pmd_addr_end(addr, end);
-   602		if (pmd_trans_huge(*pmd))
-   603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
-   604				goto next;
-   605	
-   606		if (pmd_trans_unstable(pmd))
-   607			return 0;
-   608	
-   609		tlb_change_page_size(tlb, PAGE_SIZE);
-   610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
-   611		flush_tlb_batched_pending(mm);
-   612		arch_enter_lazy_mmu_mode();
-   613		for (; addr != end; pte++, addr += PAGE_SIZE) {
-   614			ptent = *pte;
-   615	
-   616			if (pte_none(ptent))
-   617				continue;
-   618			/*
-   619			 * If the pte has swp_entry, just clear page table to
-   620			 * prevent swap-in which is more expensive rather than
-   621			 * (page allocation + zeroing).
-   622			 */
-   623			if (!pte_present(ptent)) {
-   624				swp_entry_t entry;
-   625	
-   626				entry = pte_to_swp_entry(ptent);
-   627				if (!non_swap_entry(entry)) {
-   628					nr_swap--;
-   629					free_swap_and_cache(entry);
-   630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-   631				} else if (is_hwpoison_entry(entry) ||
- > 632					   is_swapin_error_entry(entry)) {
-   633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
-   634				}
-   635				continue;
-   636			}
-   637	
-   638			page = vm_normal_page(vma, addr, ptent);
-   639			if (!page)
-   640				continue;
-   641	
-   642			/*
-   643			 * If pmd isn't transhuge but the page is THP and
-   644			 * is owned by only this process, split it and
-   645			 * deactivate all pages.
-   646			 */
-   647			if (PageTransCompound(page)) {
-   648				if (page_mapcount(page) != 1)
-   649					goto out;
-   650				get_page(page);
-   651				if (!trylock_page(page)) {
-   652					put_page(page);
-   653					goto out;
-   654				}
-   655				pte_unmap_unlock(orig_pte, ptl);
-   656				if (split_huge_page(page)) {
-   657					unlock_page(page);
-   658					put_page(page);
-   659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
-   660					goto out;
-   661				}
-   662				unlock_page(page);
-   663				put_page(page);
-   664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
-   665				pte--;
-   666				addr -= PAGE_SIZE;
-   667				continue;
-   668			}
-   669	
-   670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
-   671	
-   672			if (PageSwapCache(page) || PageDirty(page)) {
-   673				if (!trylock_page(page))
-   674					continue;
-   675				/*
-   676				 * If page is shared with others, we couldn't clear
-   677				 * PG_dirty of the page.
-   678				 */
-   679				if (page_mapcount(page) != 1) {
-   680					unlock_page(page);
-   681					continue;
-   682				}
-   683	
-   684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
-   685					unlock_page(page);
-   686					continue;
-   687				}
-   688	
-   689				ClearPageDirty(page);
-   690				unlock_page(page);
-   691			}
-   692	
-   693			if (pte_young(ptent) || pte_dirty(ptent)) {
-   694				/*
-   695				 * Some of architecture(ex, PPC) don't update TLB
-   696				 * with set_pte_at and tlb_remove_tlb_entry so for
-   697				 * the portability, remap the pte with old|clean
-   698				 * after pte clearing.
-   699				 */
-   700				ptent = ptep_get_and_clear_full(mm, addr, pte,
-   701								tlb->fullmm);
-   702	
-   703				ptent = pte_mkold(ptent);
-   704				ptent = pte_mkclean(ptent);
-   705				set_pte_at(mm, addr, pte, ptent);
-   706				tlb_remove_tlb_entry(tlb, pte, addr);
-   707			}
-   708			mark_page_lazyfree(page);
-   709		}
-   710	out:
-   711		if (nr_swap) {
-   712			if (current->mm == mm)
-   713				sync_mm_rss(mm);
-   714	
-   715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
-   716		}
-   717		arch_leave_lazy_mmu_mode();
-   718		pte_unmap_unlock(orig_pte, ptl);
-   719		cond_resched();
-   720	next:
-   721		return 0;
-   722	}
-   723	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+Thanks,
+~Nick Desaulniers
