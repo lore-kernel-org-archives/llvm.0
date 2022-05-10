@@ -1,165 +1,237 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3281223B5
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 12:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652187161; x=1683723161;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bm2lo75Y8U82TesofbKiy9P6Lga824nihfJpemUvpXg=;
-  b=i/Z7tXbYYuFEevTJSsW+6jDqQ5z2dKR2edjqRNvyuT6qk/Ls5pqWWpvh
-   Bfb1VVrbsKG50z5DMv5wdcrfs4YWRiXR8YlnUfzqARItdyh78H9W6aS4l
-   VGDSUI+T2rQRyOKzNmNNSArFSHBZofr6hqNpc0XEqhWuBwc373alzjvWr
-   8LlPb1QNFva/SXgDc1g/LGsgF/hYrLaNzzqeV1VbOg6/HNly5PJPt6qU6
-   2ct1ChK4dLmswKNJpuSZnGloNsq9GVWWTq1y8zbzqqXjzZjp58BLATYLh
-   gzrPvRDjgkW9N1oekSEF/f+r8lXnlfHY9hKBQYsadQMAmKsep5/av+GA5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256900559"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="256900559"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 05:52:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="711005142"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 May 2022 05:52:38 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noPLy-000Hu2-3E;
-	Tue, 10 May 2022 12:52:38 +0000
-Date: Tue, 10 May 2022 20:52:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 338/431] mm/nommu.c:579:2: error: call to
- undeclared function 'vma_mas_store'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202205102024.jnJMagOr-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B985628EB
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 13:19:04 +0000 (UTC)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-05.nifty.com with ESMTP id 24AD4v9N017744
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 22:04:57 +0900
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 24AD4gZj008125
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 22:04:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 24AD4gZj008125
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1652187883;
+	bh=qBEayftl5ZwYSJPRCuQSWMNdT3wNrCO/ZLylUnM9Pos=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nLq/5ipHudJNOcGUJsWwdYUfl6xYm9Kx/LfCF2DY/yWhpE2Mctf32CiOyfNIQ2gBC
+	 bGdfW9kjNaCML706UPRh8nLD1Lny1Azy1bLZ2h1RpS3RhbdZZDMMkc5uqHLDsQXABC
+	 envI7kUNL04QM+8N4XW1CfSxf0scjWNceOPOA2a/dAh+pxD7eITqXbziVw5bIEp4xH
+	 2WKVeNfb8PcpdVWBZW4CJg29uml36zc9AIKtqgWMVaQO517fRQOnyxwr53ndEVRIVV
+	 5STEVG0h72KmyM63AeINzu91D9azv4AP8JWDJmYj1EIjvtwg4wchFlg47xQzbS9eVJ
+	 p5TsaotGJk1Pg==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id q4so13795595plr.11
+        for <llvm@lists.linux.dev>; Tue, 10 May 2022 06:04:43 -0700 (PDT)
+X-Gm-Message-State: AOAM5312rDnDP9EYcwSBpeV1rXlFo4MCcEwBWip4JBBqtjcC377Nlqer
+	YSWyFje4hliqGylDKdyHlgZJvSDQx0c6Q2+ljRk=
+X-Google-Smtp-Source: ABdhPJyavnWgf46gRQwW/3BEwUehZ9JzWKuqbx9T+L5WacD6flQsWB/O7++u6qzJBiUbBulyt3k71693TE6NXQEFYOk=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr20893636plh.99.1652187882421; Tue, 10
+ May 2022 06:04:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220508190631.2386038-1-masahiroy@kernel.org>
+ <20220508190631.2386038-7-masahiroy@kernel.org> <CAKwvOdm_oSLHddWWSzF5UuYrLCsAwF8AwbUGotUnPvV+6JkSkg@mail.gmail.com>
+In-Reply-To: <CAKwvOdm_oSLHddWWSzF5UuYrLCsAwF8AwbUGotUnPvV+6JkSkg@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 10 May 2022 22:03:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASb40kWgvOM42WyS82p42HQ7Mqhwo3GDffg4yHcKgJk0w@mail.gmail.com>
+Message-ID: <CAK7LNASb40kWgvOM42WyS82p42HQ7Mqhwo3GDffg4yHcKgJk0w@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   584a50635cc1deee2eeab5a17dfdcf9db7add21b
-commit: a245f2ec995564195c1956813ff4fee7a894f099 [338/431] mm: remove rb tree.
-config: arm-randconfig-r012-20220509 (https://download.01.org/0day-ci/archive/20220510/202205102024.jnJMagOr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=a245f2ec995564195c1956813ff4fee7a894f099
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout a245f2ec995564195c1956813ff4fee7a894f099
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> mm/nommu.c:579:2: error: call to undeclared function 'vma_mas_store'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vma_mas_store(vma, &mas);
-           ^
-   mm/nommu.c:579:2: note: did you mean 'mas_store'?
-   include/linux/maple_tree.h:454:7: note: 'mas_store' declared here
-   void *mas_store(struct ma_state *mas, void *entry);
-         ^
->> mm/nommu.c:615:2: error: call to undeclared function 'vma_mas_remove'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vma_mas_remove(vma, &mas);
-           ^
-   2 errors generated.
+On Tue, May 10, 2022 at 2:51 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+>  On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+> > index 07a36a874dca..51ce72ce80fa 100644
+> > --- a/include/asm-generic/export.h
+> > +++ b/include/asm-generic/export.h
+> > @@ -2,6 +2,14 @@
+> >  #ifndef __ASM_GENERIC_EXPORT_H
+> >  #define __ASM_GENERIC_EXPORT_H
+> >
+> > +/*
+> > + * This comment block is used by fixdep. Please do not remove.
+>
+> I don't know much about fixdep. How does that work, if you could summarize?
 
 
-vim +/vma_mas_store +579 mm/nommu.c
+You can find detailed explanation in scripts/basic/fixdep.c
 
-   547	
-   548	/*
-   549	 * add a VMA into a process's mm_struct in the appropriate place in the list
-   550	 * and tree and add to the address space's page tree also if not an anonymous
-   551	 * page
-   552	 * - should be called with mm->mmap_lock held writelocked
-   553	 */
-   554	static void add_vma_to_mm(struct mm_struct *mm, struct vm_area_struct *vma)
-   555	{
-   556		struct address_space *mapping;
-   557		struct vm_area_struct *prev;
-   558		MA_STATE(mas, &mm->mm_mt, vma->vm_start, vma->vm_end);
-   559	
-   560		BUG_ON(!vma->vm_region);
-   561	
-   562		mm->map_count++;
-   563		vma->vm_mm = mm;
-   564	
-   565		/* add the VMA to the mapping */
-   566		if (vma->vm_file) {
-   567			mapping = vma->vm_file->f_mapping;
-   568	
-   569			i_mmap_lock_write(mapping);
-   570			flush_dcache_mmap_lock(mapping);
-   571			vma_interval_tree_insert(vma, &mapping->i_mmap);
-   572			flush_dcache_mmap_unlock(mapping);
-   573			i_mmap_unlock_write(mapping);
-   574		}
-   575	
-   576		prev = mas_prev(&mas, 0);
-   577		mas_reset(&mas);
-   578		/* add the VMA to the tree */
- > 579		vma_mas_store(vma, &mas);
-   580		__vma_link_list(mm, vma, prev);
-   581	}
-   582	
-   583	/*
-   584	 * delete a VMA from its owning mm_struct and address space
-   585	 */
-   586	static void delete_vma_from_mm(struct vm_area_struct *vma)
-   587	{
-   588		int i;
-   589		struct address_space *mapping;
-   590		struct mm_struct *mm = vma->vm_mm;
-   591		struct task_struct *curr = current;
-   592		MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
-   593	
-   594		mm->map_count--;
-   595		for (i = 0; i < VMACACHE_SIZE; i++) {
-   596			/* if the vma is cached, invalidate the entire cache */
-   597			if (curr->vmacache.vmas[i] == vma) {
-   598				vmacache_invalidate(mm);
-   599				break;
-   600			}
-   601		}
-   602	
-   603		/* remove the VMA from the mapping */
-   604		if (vma->vm_file) {
-   605			mapping = vma->vm_file->f_mapping;
-   606	
-   607			i_mmap_lock_write(mapping);
-   608			flush_dcache_mmap_lock(mapping);
-   609			vma_interval_tree_remove(vma, &mapping->i_mmap);
-   610			flush_dcache_mmap_unlock(mapping);
-   611			i_mmap_unlock_write(mapping);
-   612		}
-   613	
-   614		/* remove from the MM's tree and list */
- > 615		vma_mas_remove(vma, &mas);
-   616		__vma_unlink_list(mm, vma);
-   617	}
-   618	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In short, it works like this:
+
+fixdep parses every source (including headers).
+If it finds "CONFIG_MODVERSIONS", it adds a dependency
+on $(wildcard include/config/MODVERSIONS)
+to the .cmd files.
+
+If CONFIG_MODVERSIONS is toggled in Kconfig,
+it touches include/config/MODVERSIONS.    [1]
+
+In the next run of Make, all the sources depending on
+CONFIG_MODVERSIONS will be re-compiled because the
+timestamp of include/config/MODVERSIONS is up-to-date.
+
+
+[1]: https://github.com/torvalds/linux/blob/v5.17/scripts/kconfig/confdata.c#L141
+
+
+
+
+
+> > + *
+> > + * When CONFIG_MODVERSIONS is changed from n to y, all source files having
+> > + * EXPORT_SYMBOL variants must be re-compiled because genksyms is run as a
+> > + * side effect of the .o build rule.
+> > + */
+> > +
+> >  #ifndef KSYM_FUNC
+> >  #define KSYM_FUNC(x) x
+> >  #endif
+> > @@ -12,9 +20,6 @@
+> >  #else
+> >  #define KSYM_ALIGN 4
+> >  #endif
+> > -#ifndef KCRC_ALIGN
+> > -#define KCRC_ALIGN 4
+> > -#endif
+>
+> The #ifndef is there because arch/m68k/include/asm/export.h:1 defines
+> KCRC_ALIGN. You should delete that, too.
+
+Nice catch! I will clean it up too.
+
+
+
+
+>
+> > diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
+> > index 4827c5abe5b7..6e6933ae7911 100644
+> > --- a/scripts/genksyms/genksyms.c
+> > +++ b/scripts/genksyms/genksyms.c
+> > @@ -33,7 +33,7 @@ char *cur_filename;
+> >  int in_source_file;
+> >
+> >  static int flag_debug, flag_dump_defs, flag_reference, flag_dump_types,
+> > -          flag_preserve, flag_warnings, flag_rel_crcs;
+> > +          flag_preserve, flag_warnings;
+> >
+> >  static int errors;
+> >  static int nsyms;
+> > @@ -681,10 +681,7 @@ void export_symbol(const char *name)
+> >                         fputs(">\n", debugfile);
+> >
+> >                 /* Used as a linker script. */
+>
+> ^ Does this comment still apply?
+
+No.  From this commit going forward,
+the genksyms output will not be used as a linker script.
+
+08/14 will delete this comment anyway, but
+it is possible to remove it in this commit.
+
+
+
+
+
+
+
+
+>
+> > -               printf(!flag_rel_crcs ? "__crc_%s = 0x%08lx;\n" :
+> > -                      "SECTIONS { .rodata : ALIGN(4) { "
+> > -                      "__crc_%s = .; LONG(0x%08lx); } }\n",
+> > -                      name, crc);
+> > +               printf("__crc_%s = 0x%08lx;\n", name, crc);
+> >         }
+> >  }
+> >
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index eceb3ee7ec06..6aee2401f3ad 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -88,11 +88,6 @@ modpost_link()
+> >                 gen_initcalls
+> >                 lds="-T .tmp_initcalls.lds"
+> >
+> > -               if is_enabled CONFIG_MODVERSIONS; then
+> > -                       gen_symversions
+>
+> ^ this is the only caller of gen_symversions, right? Then
+> gen_symversions can be cleaned up, too?
+
+
+We can keep it in this commit.
+
+The follow-up cleaning is done in 07/14.
+
+To avoid too big commit,
+I separated the build flow change and
+trivial cleanups.
+
+
+
+>
+> > -                       lds="${lds} -T .tmp_symversions.lds"
+> > -               fi
+> > -
+> >                 # This might take a while, so indicate that we're doing
+> >                 # an LTO link
+> >                 info LTO ${1}
+> > @@ -183,6 +178,10 @@ vmlinux_link()
+> >                 libs="${KBUILD_VMLINUX_LIBS}"
+> >         fi
+> >
+> > +       if is_enabled CONFIG_MODULES; then
+> > +               objs="${objs} .vmlinux.export.o"
+> > +       fi
+> > +
+> >         if [ "${SRCARCH}" = "um" ]; then
+> >                 wl=-Wl,
+> >                 ld="${CC}"
+> > @@ -312,6 +311,7 @@ cleanup()
+> >         rm -f vmlinux.o
+> >         rm -f .vmlinux.d
+> >         rm -f .vmlinux.objs
+> > +       rm -f .vmlinux.export.c
+>
+> Probably can drop the `rm -f .tmp_symversions.lds` here, too?
+
+It will be cleaned up by 07/14.
+
+
+
+
+
+
+
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--
+Best Regards
+Masahiro Yamada
