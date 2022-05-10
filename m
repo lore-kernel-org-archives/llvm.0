@@ -1,137 +1,187 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70C83D92
-	for <llvm@lists.linux.dev>; Mon,  9 May 2022 23:26:36 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id h29so26445608lfj.2
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 16:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tmpHn2BifttucGqVA2pQs88xKMtymtLvsGI+R2fbwOs=;
-        b=cOKhyOqtfZHFU1rIBufqPH++gfALfVaWS9hxxxqHxcJiWSnSp+3UesqltlLsWmilqJ
-         LlkskAOKr4q0eUh9MVTjgmBO8LuItY4gEAlICuo9yVPcX94q0pnPU7UOgPkUpAEp1VE0
-         xu03M5t7EV3GgUxEYIBjchesd0kgyDXAldI/citHwCv1vEM7uqe80cimWhI52YLoGNJ4
-         ji2mqCPweXbJzrlz5rmEXpaWyqWIjpd5HDOfKuprKgt7GIoAAoGjftXnTD+8Dp5dlZEP
-         iHB+w9HkAu/jwIIDm/xQ/H/xMOFESUdcH7+hekIFuPCJBfyw9HW7eQUR4YNnjRpCf/PI
-         2QrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tmpHn2BifttucGqVA2pQs88xKMtymtLvsGI+R2fbwOs=;
-        b=qA5o0WJUNOyc8HKfEqTbJD2cMcDR6Q4oPIBQji+v5kQj4j5nt65bnf+mCNmnPx3PKQ
-         AsvBf9gBoEH8lItrSAgmtDwMfqnI7olkYgLrjhj/TmNaRX3pfjQo9z311WuHJIR6z5NS
-         qDjltFQYxr4T0ooPqFVi8dZjdN0+9Mt8twQHHLYW/xExamDHUpRsloloUBRvIcTFolD5
-         smgGuJdJu4nlOWPnfCKmXqr92UT211qBTCGGOzDTJltEIKChDgOYP+DrlGCLeWJvnFFI
-         nr9rDJ3pIEFhmcfT2VCM4DkPCJc5t7/b5pIrYG9/T1BbNCmzVhireYVx2Mt6ijlaKDO5
-         uGuQ==
-X-Gm-Message-State: AOAM530HQan4dDjN1j825zZv+oi+H4vY4rGxo7+lo7ZUF1NGNHnSA63n
-	53nGVWxKYhHUqfYPbjHPKZ5+0KsBfu1wzrtdBxX3Wg==
-X-Google-Smtp-Source: ABdhPJymMNS66JLXGGCR+OLOK0DR4DpjHCz8PaaZEoPhRhnszwx+FlHC/8/jhTqfJxnqXWGdYF1kceupZleASshkevA=
-X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
- v15-20020a056512048f00b004723c4794a0mr14343921lfq.579.1652138794681; Mon, 09
- May 2022 16:26:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22971FA0
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 00:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652142907; x=1683678907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ws6RuJwZ5f3e7nMk3f5y6a+++iD9RCQTt1KaPqd40aE=;
+  b=OGav8uwtxbtM5zMD2NzeTWIWHG5mm8YBgIZrI9IRU1V+IUOxXzl/zCRe
+   o3KPzThgfMcIBSpRj5c2+jRoiMuuqc8sShaJDC4hEV1CvvQSGw/c0o6ig
+   zah3IfL+BO9+RvXrVA/MSQHQjDStk7cFa+MqrD4NjDjs2wN7eyA/XHExR
+   JpkiNEoaNDlnPK8FwzlNfQkXDOp5Hy1AMGUsxRdd+jCnYTrJOH+wfdBKF
+   7y1ErIcsyiz4LfgHoBfFJOUUK1eC0ZczgwkmNVCZy196aUxW/ttTSuJaa
+   bCPPb5qRgtpPKK9Fy1xP0owLlsUFZ6YfPTKwIPfoI+ysk11rkXUkzdnpa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256749631"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="256749631"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:35:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="552268142"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 17:35:04 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1noDqB-000H3S-NV;
+	Tue, 10 May 2022 00:35:03 +0000
+Date: Tue, 10 May 2022 08:34:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haimin Zhang <tcs.kernel@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	David Howells <dhowells@redhat.com>,
+	"Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Haimin Zhang <tcs_kernel@tencent.com>,
+	TCS Robot <tcs_robot@tencent.com>
+Subject: Re: [PATCH v2] fs/pipe: Deinitialize the watch_queue when pipe is
+ freed
+Message-ID: <202205100814.M4Aiy8hF-lkp@intel.com>
+References: <20220509131726.59664-1-tcs.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
- <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
- <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com> <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 May 2022 16:26:22 -0700
-Message-ID: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Tom Rix <trix@redhat.com>, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509131726.59664-1-tcs.kernel@gmail.com>
 
-On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> Hi Nick,
->
-> On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
-> > <mailhol.vincent@wanadoo.fr> wrote:
-> > >
-> > > Instead, I am thinking of just using -fno-builtin-ffs to remove
-> > > the annoying -Wshadow warning. Would that make more sense?
-> >
-> > Perhaps a pragma would be the best tool to silence this instance of
-> > -Wshadow?  I understand what GCC is trying to express, but the kernel
-> > does straddle a weird place between -ffreestanding and a "hosted" env.
->
-> I was a bit reluctant to propose the use of pragma because I received
-> negative feedback in another patch for using the __diag_ignore()
-> c.f.:
-> https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
->
-> But the context here is a bit different, I guess. If I receive your support, I
-> am fully OK to silence this with some #pragma.
->
-> The patch would look as below (I just need to test with clang
-> before submitting).
+Hi Haimin,
 
-Do you have a sense for how many other functions trigger -Wshadow? For
-example, one question I have is:
-Why does ffs() trigger this, but not any of the functions defined in
-lib/string.c (or declared in include/linux/string.h) which surely also
-shadow existing builtins?  I can't see your example being sprinkled
-all over include/linux/string.h as being ok.
+Thank you for the patch! Yet something to improve:
 
-If it's more than just ffs(), perhaps the GCC developers can split the
-shadowing of builtins into a sub flag under -Wshadow that can then be
-disabled; we do want to shadow these functions, but -Wno-shadow would
-miss warnings on variables being shadowed due to scope.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-We've done this in the past with various flags in clang. Rather than
-having semantic analysis trigger the same warning flag for different
-concerns, we split the flag into distinct concerns, and reuse the
-original flag as a group that enables the new flags. This gives
-developers fine grain control over enabling/disabling distinct
-concerns.
+url:    https://github.com/intel-lab-lkp/linux/commits/Haimin-Zhang/fs-pipe-Deinitialize-the-watch_queue-when-pipe-is-freed/20220509-212415
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
+config: s390-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100814.M4Aiy8hF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/22e9d0a2c66d49444376e55348c8a6fa26e6d150
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Haimin-Zhang/fs-pipe-Deinitialize-the-watch_queue-when-pipe-is-freed/20220509-212415
+        git checkout 22e9d0a2c66d49444376e55348c8a6fa26e6d150
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
->
-> diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-> index a288ecd230ab..e44911253bdf 100644
-> --- a/arch/x86/include/asm/bitops.h
-> +++ b/arch/x86/include/asm/bitops.h
-> @@ -269,6 +269,9 @@ static __always_inline unsigned long
-> __fls(unsigned long word)
->  #undef ADDR
->
->  #ifdef __KERNEL__
-> +__diag_push();
-> +__diag_ignore_all("-Wshadow",
-> +                  "-fno-builtin-foo would remove optimization, just
-> silence it instead");
->  /**
->   * ffs - find first set bit in word
->   * @x: the word to search
-> @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
->  #endif
->         return r + 1;
->  }
-> +__diag_pop(); /* ignore -Wshadow */
->
->  /**
->   * fls - find last set bit in word
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
+   <inline asm>:5:5: error: expected absolute expression
+   .if 6651b-6641b > 254
+       ^
+   <inline asm>:6:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:8:5: error: expected absolute expression
+   .if (6651b-6641b) % 2
+       ^
+   <inline asm>:9:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   <inline asm>:15:5: error: expected absolute expression
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+>> <inline asm>:18:8: error: unexpected token in '.rept' directive
+           .rept (-(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) - (6620b-662b)) / 2
+                 ^
+   <inline asm>:21:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) / 6
+                 ^
+>> <inline asm>:22:2: error: unknown directive
+           .brcl 0,0
+           ^
+>> <inline asm>:23:7: error: unmatched '.endr' directive
+           .endr
+                ^
+   <inline asm>:24:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 / 4
+                 ^
+   <inline asm>:26:7: error: unmatched '.endr' directive
+           .endr
+                ^
+   <inline asm>:27:8: error: unexpected token in '.rept' directive
+           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 % 4 / 2
+                 ^
+   <inline asm>:29:6: error: unmatched '.endr' directive
+   .endr
+        ^
+   <inline asm>:32:5: error: expected absolute expression
+   .if 662b-661b > 254
+       ^
+   <inline asm>:33:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:35:5: error: expected absolute expression
+   .if (662b-661b) % 2
+       ^
+   <inline asm>:36:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   In file included from kernel/watch_queue.c:11:
+   In file included from include/linux/module.h:14:
+   In file included from include/linux/buildid.h:5:
+   In file included from include/linux/mm_types.h:8:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:5:5: note: instantiated into assembly here
+   .if 6651b-6641b > 254
+       ^
+   In file included from kernel/watch_queue.c:11:
+   In file included from include/linux/module.h:14:
+   In file included from include/linux/buildid.h:5:
+   In file included from include/linux/mm_types.h:8:
+   In file included from include/linux/kref.h:16:
+   In file included from include/linux/spinlock.h:93:
+   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
