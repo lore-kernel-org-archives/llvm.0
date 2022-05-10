@@ -1,155 +1,152 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFD21FA0
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 00:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652143506; x=1683679506;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GeIgOnwBjoETAQHmucQ7R/kDKLxgAt3Z9vGZ1wlwYj8=;
-  b=aGeN75ozK6X7i7Om8hMM9gFil4Xz0eOjDw4VvJOKUJuvcvHWd36lrclB
-   IfAVpePzcH91Mg91400QTp1KqoDxqzGDcuiWb6tXB6l3wn76SZ97zL9lm
-   SZv3DWvK2UF8YalrrX47n7u+moofHqGLqo1QwotJCxbKibi2XTvhhMMpl
-   uv9ExorXSI1y9CL019ZRONyzQhkelXz2+BJ6Ws4gX9ezfMNH7+un/MJZ3
-   fySDlPEEgxZ9TnTaQmGfSA8KBKuIoGxcmX72T/WyYT/TXhk1wPEazUY2w
-   MZrr7ZnAAb8nwxKsjWeCEnOToAFyPh5H3h6nLxQN2CyjzyihVWSdeXdJT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268055685"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="268055685"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:45:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="657382336"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2022 17:45:04 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noDzs-000H44-38;
-	Tue, 10 May 2022 00:45:04 +0000
-Date: Tue, 10 May 2022 08:44:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 34/35] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202205100811.BAMM4bPO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9DC1FA0
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 01:10:55 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id i38so27996975ybj.13
+        for <llvm@lists.linux.dev>; Mon, 09 May 2022 18:10:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pu2anZ+R3B06nqhjgv9ISwTVomKwIVTtmDdQYWCLtaU=;
+        b=2tqi2fUioYQ/GKQQI5DWpUocM4vE13xUM2Xtpznhk0kXUxuqR0XqxPFsYKbq/U9g2Y
+         sLI4S8V1YwVnmBtlpOFDe1ehe90ZFWh3TfVpSjJflH6OjS5tupXTBxwkh2vp6NoBFxaq
+         024Xf1bIrKVPS2YjHuYsLTtJNhAcPqZHaQjA8ONsZaVx3BG+pzF72ZYaYvs/B3HK3rHA
+         BhHGTHeL2UXwKwBeYaHBWmEHTgMLcgGPAfQ+oQKGqa1V5+2xIgOBhol3jeJgpBDuJ+35
+         8+UiLb6LLwy15bwhuLo65KFLBqWz5ZY7O7Hidg4QiSGuPMHViioTMLVrdp5P0e/Q7Yjv
+         o+VQ==
+X-Gm-Message-State: AOAM531ot82B51OHlImbe/yfzRyJ5L00i70QePb6B9dr6LxbJP/WEFjE
+	rDnVm5oqPurtEUdTepbl9soSXn+Q7Xqk+uh7y5Y=
+X-Google-Smtp-Source: ABdhPJxt8ljHX+a7Cku4rMKwAxeR+LFa7WwyvBewPPYp9BYbLUHVF00V/WCIrRFQ9WDFNtfesjm+bdIYzcxLt6dyA0s=
+X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
+ n17-20020a5b0491000000b0064af42f6973mr3469601ybp.20.1652145054084; Mon, 09
+ May 2022 18:10:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
+ <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
+ <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
+ <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com> <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Tue, 10 May 2022 10:10:43 +0900
+Message-ID: <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Tom Rix <trix@redhat.com>, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   2622f5aa2f4ccb93fdd771e7503ca364c6a290d4
-commit: cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436 [34/35] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100811.BAMM4bPO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Tue. 10 May 2022 at 08:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > Hi Nick,
+> >
+> > On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > >
+> > > > Instead, I am thinking of just using -fno-builtin-ffs to remove
+> > > > the annoying -Wshadow warning. Would that make more sense?
+> > >
+> > > Perhaps a pragma would be the best tool to silence this instance of
+> > > -Wshadow?  I understand what GCC is trying to express, but the kernel
+> > > does straddle a weird place between -ffreestanding and a "hosted" env.
+> >
+> > I was a bit reluctant to propose the use of pragma because I received
+> > negative feedback in another patch for using the __diag_ignore()
+> > c.f.:
+> > https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
+> >
+> > But the context here is a bit different, I guess. If I receive your support, I
+> > am fully OK to silence this with some #pragma.
+> >
+> > The patch would look as below (I just need to test with clang
+> > before submitting).
+>
+> Do you have a sense for how many other functions trigger -Wshadow?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I only witnessed such -Wshadow warnings for ffs().
 
-All warnings (new ones prefixed by >>):
+> For
+> example, one question I have is:
+> Why does ffs() trigger this, but not any of the functions defined in
+> lib/string.c (or declared in include/linux/string.h) which surely also
+> shadow existing builtins?  I can't see your example being sprinkled
+> all over include/linux/string.h as being ok.
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+Thanks, you are touching on a really interesting point.
 
+After checking, the other builtin functions declare the function with
+two leading underscores (e.g. __foo(...)) and then do:
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+#define foo(...) __foo(...)
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+Or alternatively, if using the builtin function:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+#define foo(...) __builtin_foo(...)
+
+Compilers do not trigger the -Wshadow for such patterns.
+
+Example with memcpy():
+https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/string_64.h#L75
+
+So, in light of your comment doing this would be more consistent:
+
+#define ffs(x) _ffs(x)
+
+> If it's more than just ffs(), perhaps the GCC developers can split the
+> shadowing of builtins into a sub flag under -Wshadow that can then be
+> disabled; we do want to shadow these functions, but -Wno-shadow would
+> miss warnings on variables being shadowed due to scope.
+>
+> We've done this in the past with various flags in clang. Rather than
+> having semantic analysis trigger the same warning flag for different
+> concerns, we split the flag into distinct concerns, and reuse the
+> original flag as a group that enables the new flags. This gives
+> developers fine grain control over enabling/disabling distinct
+> concerns.
+>
+> >
+> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> > index a288ecd230ab..e44911253bdf 100644
+> > --- a/arch/x86/include/asm/bitops.h
+> > +++ b/arch/x86/include/asm/bitops.h
+> > @@ -269,6 +269,9 @@ static __always_inline unsigned long
+> > __fls(unsigned long word)
+> >  #undef ADDR
+> >
+> >  #ifdef __KERNEL__
+> > +__diag_push();
+> > +__diag_ignore_all("-Wshadow",
+> > +                  "-fno-builtin-foo would remove optimization, just
+> > silence it instead");
+> >  /**
+> >   * ffs - find first set bit in word
+> >   * @x: the word to search
+> > @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
+> >  #endif
+> >         return r + 1;
+> >  }
+> > +__diag_pop(); /* ignore -Wshadow */
+> >
+> >  /**
+> >   * fls - find last set bit in word
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
