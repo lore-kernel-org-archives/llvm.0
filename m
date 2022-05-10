@@ -1,152 +1,137 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9DC1FA0
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 01:10:55 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id i38so27996975ybj.13
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 18:10:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pu2anZ+R3B06nqhjgv9ISwTVomKwIVTtmDdQYWCLtaU=;
-        b=2tqi2fUioYQ/GKQQI5DWpUocM4vE13xUM2Xtpznhk0kXUxuqR0XqxPFsYKbq/U9g2Y
-         sLI4S8V1YwVnmBtlpOFDe1ehe90ZFWh3TfVpSjJflH6OjS5tupXTBxwkh2vp6NoBFxaq
-         024Xf1bIrKVPS2YjHuYsLTtJNhAcPqZHaQjA8ONsZaVx3BG+pzF72ZYaYvs/B3HK3rHA
-         BhHGTHeL2UXwKwBeYaHBWmEHTgMLcgGPAfQ+oQKGqa1V5+2xIgOBhol3jeJgpBDuJ+35
-         8+UiLb6LLwy15bwhuLo65KFLBqWz5ZY7O7Hidg4QiSGuPMHViioTMLVrdp5P0e/Q7Yjv
-         o+VQ==
-X-Gm-Message-State: AOAM531ot82B51OHlImbe/yfzRyJ5L00i70QePb6B9dr6LxbJP/WEFjE
-	rDnVm5oqPurtEUdTepbl9soSXn+Q7Xqk+uh7y5Y=
-X-Google-Smtp-Source: ABdhPJxt8ljHX+a7Cku4rMKwAxeR+LFa7WwyvBewPPYp9BYbLUHVF00V/WCIrRFQ9WDFNtfesjm+bdIYzcxLt6dyA0s=
-X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
- n17-20020a5b0491000000b0064af42f6973mr3469601ybp.20.1652145054084; Mon, 09
- May 2022 18:10:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182D523A4
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 02:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652149665; x=1683685665;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KM8YLnkzjHCMmkO7kc10LY5EzGN3SgpC6D2ZJXRhoqI=;
+  b=mXPSYjDmgfSWIvbr9d+x50zuzvqnQMM1P/b6PTH2U97mcp1IyHru7DpN
+   oMokoYM7NUTsztBbcJABJDe6PlGQhF66RqsotTBdfoofml4VlyMPdLBbm
+   PIAWBBOF46VqFKW+rSHfg13PXVhOKUX7gWhHj5ebsx+BJ8iCvlSGQcK9j
+   SD+oiURTlyTWnpIktN9pz8rpv0akL5igZ4cb59Q0SsBWWwCYxDamDADRN
+   XdMTxkHRHT/mS5yB0iBje7Bls2vkapNZWkE2tyCB73Xn+ePGAAC5FUkp8
+   t2+ublgfgfN5Wz22VMPyCCOUB3n7oNy/Rvn4Uqf5anem4J1u9MuESWGxd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294463774"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="294463774"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 19:27:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="519520329"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 May 2022 19:27:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1noFat-000HBc-HP;
+	Tue, 10 May 2022 02:27:23 +0000
+Date: Tue, 10 May 2022 10:27:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 10120/10218]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3461:3: error: call to undeclared
+ function 'vfree'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205101016.RrkUuGWK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
- <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
- <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
- <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com> <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
-In-Reply-To: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Tue, 10 May 2022 10:10:43 +0900
-Message-ID: <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Tom Rix <trix@redhat.com>, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue. 10 May 2022 at 08:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > Hi Nick,
-> >
-> > On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > >
-> > > > Instead, I am thinking of just using -fno-builtin-ffs to remove
-> > > > the annoying -Wshadow warning. Would that make more sense?
-> > >
-> > > Perhaps a pragma would be the best tool to silence this instance of
-> > > -Wshadow?  I understand what GCC is trying to express, but the kernel
-> > > does straddle a weird place between -ffreestanding and a "hosted" env.
-> >
-> > I was a bit reluctant to propose the use of pragma because I received
-> > negative feedback in another patch for using the __diag_ignore()
-> > c.f.:
-> > https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
-> >
-> > But the context here is a bit different, I guess. If I receive your support, I
-> > am fully OK to silence this with some #pragma.
-> >
-> > The patch would look as below (I just need to test with clang
-> > before submitting).
->
-> Do you have a sense for how many other functions trigger -Wshadow?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ab38272e99730375c5db3db1c4cebf691a0550ab
+commit: d5a442f3ad3079cb23913c1a0cdd2ef6642145df [10120/10218] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
+config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101016.RrkUuGWK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d5a442f3ad3079cb23913c1a0cdd2ef6642145df
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d5a442f3ad3079cb23913c1a0cdd2ef6642145df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-I only witnessed such -Wshadow warnings for ffs().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> For
-> example, one question I have is:
-> Why does ffs() trigger this, but not any of the functions defined in
-> lib/string.c (or declared in include/linux/string.h) which surely also
-> shadow existing builtins?  I can't see your example being sprinkled
-> all over include/linux/string.h as being ok.
+All errors (new ones prefixed by >>):
 
-Thanks, you are touching on a really interesting point.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3461:3: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   vfree(adev->psp.vbflash_tmp_buf);
+                   ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3469:31: error: call to undeclared function 'vmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+                                               ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3469:29: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+                                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3516:2: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           vfree(adev->psp.vbflash_tmp_buf);
+           ^
+   1 warning and 3 errors generated.
 
-After checking, the other builtin functions declare the function with
-two leading underscores (e.g. __foo(...)) and then do:
 
-#define foo(...) __foo(...)
+vim +/vfree +3461 drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
 
-Or alternatively, if using the builtin function:
+57430471e2fa60 Andrey Grodzovsky 2019-12-19  3447  
+31aad22e2b3cfe Likun Gao         2022-02-22  3448  static ssize_t amdgpu_psp_vbflash_write(struct file *filp, struct kobject *kobj,
+31aad22e2b3cfe Likun Gao         2022-02-22  3449  					struct bin_attribute *bin_attr,
+31aad22e2b3cfe Likun Gao         2022-02-22  3450  					char *buffer, loff_t pos, size_t count)
+31aad22e2b3cfe Likun Gao         2022-02-22  3451  {
+31aad22e2b3cfe Likun Gao         2022-02-22  3452  	struct device *dev = kobj_to_dev(kobj);
+31aad22e2b3cfe Likun Gao         2022-02-22  3453  	struct drm_device *ddev = dev_get_drvdata(dev);
+31aad22e2b3cfe Likun Gao         2022-02-22  3454  	struct amdgpu_device *adev = drm_to_adev(ddev);
+31aad22e2b3cfe Likun Gao         2022-02-22  3455  
+81bd7fe019e195 Likun Gao         2022-05-05  3456  	adev->psp.vbflash_done = false;
+81bd7fe019e195 Likun Gao         2022-05-05  3457  
+31aad22e2b3cfe Likun Gao         2022-02-22  3458  	/* Safeguard against memory drain */
+31aad22e2b3cfe Likun Gao         2022-02-22  3459  	if (adev->psp.vbflash_image_size > AMD_VBIOS_FILE_MAX_SIZE_B) {
+31aad22e2b3cfe Likun Gao         2022-02-22  3460  		dev_err(adev->dev, "File size cannot exceed %u", AMD_VBIOS_FILE_MAX_SIZE_B);
+31aad22e2b3cfe Likun Gao         2022-02-22 @3461  		vfree(adev->psp.vbflash_tmp_buf);
+31aad22e2b3cfe Likun Gao         2022-02-22  3462  		adev->psp.vbflash_tmp_buf = NULL;
+31aad22e2b3cfe Likun Gao         2022-02-22  3463  		adev->psp.vbflash_image_size = 0;
+31aad22e2b3cfe Likun Gao         2022-02-22  3464  		return -ENOMEM;
+31aad22e2b3cfe Likun Gao         2022-02-22  3465  	}
+31aad22e2b3cfe Likun Gao         2022-02-22  3466  
+31aad22e2b3cfe Likun Gao         2022-02-22  3467  	/* TODO Just allocate max for now and optimize to realloc later if needed */
+31aad22e2b3cfe Likun Gao         2022-02-22  3468  	if (!adev->psp.vbflash_tmp_buf) {
+31aad22e2b3cfe Likun Gao         2022-02-22 @3469  		adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
+31aad22e2b3cfe Likun Gao         2022-02-22  3470  		if (!adev->psp.vbflash_tmp_buf)
+31aad22e2b3cfe Likun Gao         2022-02-22  3471  			return -ENOMEM;
+31aad22e2b3cfe Likun Gao         2022-02-22  3472  	}
+31aad22e2b3cfe Likun Gao         2022-02-22  3473  
+31aad22e2b3cfe Likun Gao         2022-02-22  3474  	mutex_lock(&adev->psp.mutex);
+31aad22e2b3cfe Likun Gao         2022-02-22  3475  	memcpy(adev->psp.vbflash_tmp_buf + pos, buffer, count);
+31aad22e2b3cfe Likun Gao         2022-02-22  3476  	adev->psp.vbflash_image_size += count;
+31aad22e2b3cfe Likun Gao         2022-02-22  3477  	mutex_unlock(&adev->psp.mutex);
+31aad22e2b3cfe Likun Gao         2022-02-22  3478  
+31aad22e2b3cfe Likun Gao         2022-02-22  3479  	dev_info(adev->dev, "VBIOS flash write PSP done");
+31aad22e2b3cfe Likun Gao         2022-02-22  3480  
+31aad22e2b3cfe Likun Gao         2022-02-22  3481  	return count;
+31aad22e2b3cfe Likun Gao         2022-02-22  3482  }
+31aad22e2b3cfe Likun Gao         2022-02-22  3483  
 
-#define foo(...) __builtin_foo(...)
+:::::: The code at line 3461 was first introduced by commit
+:::::: 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa drm/amdgpu/psp: Add vbflash sysfs interface support
 
-Compilers do not trigger the -Wshadow for such patterns.
+:::::: TO: Likun Gao <Likun.Gao@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
-Example with memcpy():
-https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/string_64.h#L75
-
-So, in light of your comment doing this would be more consistent:
-
-#define ffs(x) _ffs(x)
-
-> If it's more than just ffs(), perhaps the GCC developers can split the
-> shadowing of builtins into a sub flag under -Wshadow that can then be
-> disabled; we do want to shadow these functions, but -Wno-shadow would
-> miss warnings on variables being shadowed due to scope.
->
-> We've done this in the past with various flags in clang. Rather than
-> having semantic analysis trigger the same warning flag for different
-> concerns, we split the flag into distinct concerns, and reuse the
-> original flag as a group that enables the new flags. This gives
-> developers fine grain control over enabling/disabling distinct
-> concerns.
->
-> >
-> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-> > index a288ecd230ab..e44911253bdf 100644
-> > --- a/arch/x86/include/asm/bitops.h
-> > +++ b/arch/x86/include/asm/bitops.h
-> > @@ -269,6 +269,9 @@ static __always_inline unsigned long
-> > __fls(unsigned long word)
-> >  #undef ADDR
-> >
-> >  #ifdef __KERNEL__
-> > +__diag_push();
-> > +__diag_ignore_all("-Wshadow",
-> > +                  "-fno-builtin-foo would remove optimization, just
-> > silence it instead");
-> >  /**
-> >   * ffs - find first set bit in word
-> >   * @x: the word to search
-> > @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
-> >  #endif
-> >         return r + 1;
-> >  }
-> > +__diag_pop(); /* ignore -Wshadow */
-> >
-> >  /**
-> >   * fls - find last set bit in word
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
