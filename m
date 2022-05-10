@@ -1,94 +1,141 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C962F4E
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 22:47:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652222872; x=1683758872;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oCorWBDZgyr85ZjU4xVV0U2n3wx9Gdw1/P9F/jPxx84=;
-  b=T/Nj0+HqJsJEkFEZadRwelsnBokkXigNyoPN1YnnbgqFzbSIkLzEP6fv
-   eTaVpnYtVyDE61dwybpakAebm6yFKL+ookzmxteBx1mVOtKyhD9SEiYCt
-   LhfjIx65lIUyUub+BUjViawygir+BLkV5F25t0KOvCQciRg7exlpotw4f
-   O7CSRxVZhh1yWzO/y3dwfMLk5mHeIONNH3ZJ97HWs6mpUjEytuMgJwrFe
-   013uwDUx5+vI4mTxAcSQkoDlUtYF8AwXMoXsey8wcJG/ElQsOvLavIVJq
-   NR5hedAWPKb6/krqvf6buc83GoIkKhdsMG4SiOprsQgnC2e9Xwr+9sI6+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330119964"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="330119964"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 15:47:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="602681924"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 May 2022 15:47:49 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noYdx-000ISQ-1e;
-	Tue, 10 May 2022 22:47:49 +0000
-Date: Wed, 11 May 2022 06:47:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [linux-next:master 10107/10661] libbpf.c:4954:8: error: variable 'i'
- set but not used
-Message-ID: <202205110646.qxnrqHzi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32793D9F
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 23:24:46 +0000 (UTC)
+Received: by mail-yb1-f176.google.com with SMTP id w187so770082ybe.2
+        for <llvm@lists.linux.dev>; Tue, 10 May 2022 16:24:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GokfEYQ6AnMfT1CyMpbI+Gftvn5q5QVicSRCEy9ThmQ=;
+        b=KWCH6r0vimy26dO9c4bnpc0LXdNv431Duk31s6icPffCtCoy8KbOG5YQl+7L+RSsFy
+         wtjF4q/SNZMeTeAPSDO/kstmwZg3DcdltRM74a7K8jTDNZhjuahnSR5X/PKw2tXM0Bi4
+         f9Ob1xD8+arizyNmHuq7avi+v0GSaDQhfgFie11K9KuUmVVnwNACD6FCHpGm5wm/TU5f
+         JCmwaBZOLzbwlxaTpdSb0otS0q0d6e6f4dd/GUTeeZHhBj5sEjypucdJQqG68UE0yfPA
+         VgHZ7SI6yGo5MBlpQKwGdUSafkYZIEB239C02WqkiMx0sNeO47SuCOZawAJlb2oztSQI
+         z2qg==
+X-Gm-Message-State: AOAM533kX13W24U9mHw3ggTisTjsaoCKGzRDe3j8EIhsRxy9WHz9/lJr
+	EVaep29Pur0x5h13LOSpnBo2IOQut3yHAytzJg4=
+X-Google-Smtp-Source: ABdhPJwE8F5hcuKqkn4TMhkA3oM9+LLKYIdOYQg8ptuz+R9ZAxiIkoj9TzqpxOc5KyK8ccrijzGmHwh61Ye2VR+W/pc=
+X-Received: by 2002:a25:76c6:0:b0:648:5616:ca50 with SMTP id
+ r189-20020a2576c6000000b006485616ca50mr22374768ybc.423.1652225085812; Tue, 10
+ May 2022 16:24:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr> <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Wed, 11 May 2022 08:24:34 +0900
+Message-ID: <CAMZ6RqKD9O8OHVUGCOYK1BXm7SCOkWbxCsSb=6jjfzgKn61JEw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3bf222d317a20170ee17f082626c1e0f83537e13
-commit: 0087a681fa8c22f719a567317e8f8f894d734b9c [10107/10661] libbpf: Automatically fix up BPF_MAP_TYPE_RINGBUF size, if necessary
-config: hexagon-randconfig-r036-20220510 (https://download.01.org/0day-ci/archive/20220511/202205110646.qxnrqHzi-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=0087a681fa8c22f719a567317e8f8f894d734b9c
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 0087a681fa8c22f719a567317e8f8f894d734b9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+On Wed. 11 May 2022 at 07:14, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > The compilers provides some builtin expression equivalent to the
+> > ffs(), __ffs() and ffz() function of the kernel. The kernel uses
+> > optimized assembly which produces better code than the builtin
+> > functions. However, such assembly code can not be optimized when used
+> > on constant expression.
+> >
+> > This series relies on __builtin_constant_p to select the optimal solution:
+> >
+> >   * use kernel assembly for non constant expressions
+> >
+> >   * use compiler's __builtin function for constant expressions.
+> >
+> > I also think that the fls() and fls64() can be optimized in a similar
+> > way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
+> > trivial so I want to focus on this series first. If it get accepted, I
+> > will then work on those two additionnal function.
+> >
+> >
+> > ** Statistics **
+> >
+> > On a allyesconfig, before applying this series, I get:
+> >
+> > | $ objdump -d vmlinux.o | grep bsf | wc -l
+> > | 1081
+> >
+> > After applying this series:
+> >
+> > | $ objdump -d vmlinux.o | grep bsf | wc -l
+> > | 792
+> >
+> > So, roughly 26.7% of the call to either ffs() or __ffs() were using
+> > constant expression and can be optimized (I did not produce the
+> > figures for ffz()).
+>
+> These stats are interesting; consider putting them on patch 1/2 commit
+> message though (in addition to the cover letter). (Sending thoughts on
+> 1/2 next).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The fact is that patch 1/2 changes ffs() and patch 2/2 changes
+__ffs(). For v2, I will run the stats on each patch separately in
+order not to mix the results.
 
-All errors (new ones prefixed by >>):
+> >
+> > (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+>
+> Here's the same measure of x86_64 allyesconfig (./scripts/config -d
+> CONFIG_HINIC) at 9be9ed2612b5aedb52a2c240edb1630b6b743cb6 with ToT
+> LLVM (~clang-15):
+>
+> Before:
+> $ objdump -d vmlinux.o | grep bsf | wc -l
+> 1454
+>
+> After:
+> $ objdump -d vmlinux.o | grep bsf | wc -l
+> 1070
+>
+> -26.4% :)
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> libbpf.c:4954:8: error: variable 'i' set but not used [-Werror,-Wunused-but-set-variable]
-           __u32 i, mul;
-                 ^
-   1 error generated.
-   make[5]: *** [tools/build/Makefile.build:96: tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
-   make[5]: *** Waiting for unfinished jobs....
-   make[4]: *** [Makefile:157: tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2
-   make[3]: *** [Makefile:55: tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2
-   make[2]: *** [Makefile:72: bpf/resolve_btfids] Error 2
-   make[1]: *** [Makefile:1337: tools/bpf/resolve_btfids] Error 2
-   <stdin>:1517:2: warning: syscall clone3 not implemented [-W#warnings]
-   #warning syscall clone3 not implemented
-    ^
-   1 warning generated.
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Roughly same ratio. I am just surprise that the absolute number
+are different:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  * GCC before: 1081, after 792
+  * clang before 1454, after 1070
+
+I wonder why clang produces more bsf instructions than GCC?
+
+Also, on a side note, I am not the first one to realize that
+__builtin_ffs() is able to optimize the constant variable. Some
+people already used it to locally:
+
+| $ git grep __builtin_ffs | wc -l
+| 80
+
+> >
+> >
+> > Vincent Mailhol (2):
+> >   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+> >     expressions
+> >   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+> >     expressions
+> >
+> >  arch/x86/include/asm/bitops.h | 65 +++++++++++++++++++++--------------
+> >  1 file changed, 40 insertions(+), 25 deletions(-)
+> >
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
