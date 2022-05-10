@@ -1,43 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35D623C2
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 08:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0C323C2
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 08:54:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652172261; x=1683708261;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rWbe2fRVPllrAjYURz1X0g9OX3W8yMh9tncdPnUQRJA=;
-  b=Cd5VDIcqiiIImoDGpBJ2AZ0nZF4o6zOV15sI8TPKrfGnUXkKs1rj4yaZ
-   WVjogqc3GRjD/MiIC1xM6l5o8kOtYlzDvSWEmbFE19IqiKuq5ng+Y3Yzj
-   y+xVe1yeZdcTy5UNppigoNSqCDefZubENR7P2t8btQvucxxjc/6MxaF8E
-   p8TmbTVM/KaPGxbIPblaCzlv4tf1m144n8ABkJydEIYoFibb4uJTBnwhA
-   nsNwG1ejGFfJ+nQTibx/+ezc2YDK0izS9n6KahrZs9PQVSFZCyunnXMNt
-   aSEyo1b6i/7gyQTvx+IidbQzHW3Eomnrja7Oa02pShp9vMOkNCw9HjD7U
+  t=1652172862; x=1683708862;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zn3+X+4vScHq8KS4AFj8dx1EOvz3spNQ9LYMz0V62VI=;
+  b=FKtCVKuWkTlQQkjt6Lvg5DSU9rI/Aw6CUBJlqA6yhjIJMhzYj+PFrhyF
+   lgL/+nq9/p/uBiMyPasS5Ot+m/ByxEZSPAyPfcVJOCWR2R1nJ8Y1DYo3j
+   Op8NIAdA3oYNuEZo1z7GW62xOo26JvK+9vSqwwMuZEvFt0x+TGSxagLUJ
+   fjWNYyiV5oLukY8vAq2gGN83LNTama3lVqR1yoYQIhhhXD9mGRv7R1OsT
+   ayN59KFfHX4255OIQ0IWbynntQ10WIwilrzBA0m7c4M8Pb3Fops7uAdn9
+   HvBgjz4DJdHchV8s14xPtedCb+tyPRkkdQsryIMXPVl7PGBbON6USoFAV
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269445420"
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268975396"
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="269445420"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 01:44:21 -0700
+   d="scan'208";a="268975396"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 01:54:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="552728259"
+   d="scan'208";a="696985915"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 10 May 2022 01:44:19 -0700
+  by orsmga004.jf.intel.com with ESMTP; 10 May 2022 01:54:20 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1noLTe-000HaM-Vc;
-	Tue, 10 May 2022 08:44:18 +0000
-Date: Tue, 10 May 2022 16:43:54 +0800
+	id 1noLdL-000HbC-B9;
+	Tue, 10 May 2022 08:54:19 +0000
+Date: Tue, 10 May 2022 16:54:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH bpf-next 7/9] cgroup: Add cgroup_put() in
- !CONFIG_CGROUPS case
-Message-ID: <202205101623.w91YVtfT-lkp@intel.com>
-References: <20220510001807.4132027-8-yosryahmed@google.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/6]
+ fs/cifs/smb2pdu.c:4058:31: error: no member named 'pages' in 'struct
+ cifs_readdata'
+Message-ID: <202205101619.kEs4YxeR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,224 +47,318 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510001807.4132027-8-yosryahmed@google.com>
 
-Hi Yosry,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on bpf/master]
-[also build test ERROR on tj-cgroup/for-next v5.18-rc6]
-[cannot apply to bpf-next/master next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-cgroup-hierarchical-stats-collection/20220510-082111
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: arm-pcm027_defconfig (https://download.01.org/0day-ci/archive/20220510/202205101623.w91YVtfT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
+head:   627ce4da99bb612945366770c5604019fb74b653
+commit: e4b60df6a12099568c671591d36a9fa16515f6eb [5/6] cifs: Change the I/O paths to use an iterator rather than a page list
+config: i386-randconfig-r006-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101619.kEs4YxeR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/9875d89daad0e55350e2dc6e5876806be99d29a8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yosry-Ahmed/bpf-cgroup-hierarchical-stats-collection/20220510-082111
-        git checkout 9875d89daad0e55350e2dc6e5876806be99d29a8
+        # https://github.com/ammarfaizi2/linux-block/commit/e4b60df6a12099568c671591d36a9fa16515f6eb
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
+        git checkout e4b60df6a12099568c671591d36a9fa16515f6eb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/ethernet/eth.c:45:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   1 error generated.
+>> fs/cifs/smb2pdu.c:4058:31: error: no member named 'pages' in 'struct cifs_readdata'
+                                   server->smbd_conn, rdata->pages,
+                                                      ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4059:12: error: no member named 'nr_pages' in 'struct cifs_readdata'
+                                   rdata->nr_pages, rdata->page_offset,
+                                   ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4059:29: error: no member named 'page_offset' in 'struct cifs_readdata'
+                                   rdata->nr_pages, rdata->page_offset,
+                                                    ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4060:12: error: no member named 'tailsz' in 'struct cifs_readdata'
+                                   rdata->tailsz, true, need_invalidate);
+                                   ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4481:31: error: no member named 'pages' in 'struct cifs_writedata'
+                                   server->smbd_conn, wdata->pages,
+                                                      ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4482:12: error: no member named 'nr_pages' in 'struct cifs_writedata'
+                                   wdata->nr_pages, wdata->page_offset,
+                                   ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4482:29: error: no member named 'page_offset' in 'struct cifs_writedata'
+                                   wdata->nr_pages, wdata->page_offset,
+                                                    ~~~~~  ^
+>> fs/cifs/smb2pdu.c:4483:12: error: no member named 'tailsz' in 'struct cifs_writedata'
+                                   wdata->tailsz, false, need_invalidate);
+                                   ~~~~~  ^
+   fs/cifs/smb2pdu.c:4490:14: error: no member named 'nr_pages' in 'struct cifs_writedata'
+                   if (wdata->nr_pages > 1)
+                       ~~~~~  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   fs/cifs/smb2pdu.c:4490:14: error: no member named 'nr_pages' in 'struct cifs_writedata'
+                   if (wdata->nr_pages > 1)
+                       ~~~~~  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   fs/cifs/smb2pdu.c:4490:14: error: no member named 'nr_pages' in 'struct cifs_writedata'
+                   if (wdata->nr_pages > 1)
+                       ~~~~~  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   fs/cifs/smb2pdu.c:4493:14: error: no member named 'nr_pages' in 'struct cifs_writedata'
+                                           (wdata->nr_pages - 1) * wdata->pagesz -
+                                            ~~~~~  ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+>> fs/cifs/smb2pdu.c:4493:37: error: no member named 'pagesz' in 'struct cifs_writedata'
+                                           (wdata->nr_pages - 1) * wdata->pagesz -
+                                                                   ~~~~~  ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   fs/cifs/smb2pdu.c:4494:13: error: no member named 'page_offset' in 'struct cifs_writedata'
+                                           wdata->page_offset + wdata->tailsz
+                                           ~~~~~  ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   fs/cifs/smb2pdu.c:4494:34: error: no member named 'tailsz' in 'struct cifs_writedata'
+                                           wdata->page_offset + wdata->tailsz
+                                                                ~~~~~  ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   fs/cifs/smb2pdu.c:4497:45: error: no member named 'tailsz' in 'struct cifs_writedata'
+                           req->RemainingBytes = cpu_to_le32(wdata->tailsz);
+                                                             ~~~~~  ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+>> fs/cifs/smb2pdu.c:4520:8: error: no member named 'rq_npages' in 'struct smb_rqst'
+                   rqst.rq_npages = 0;
+                   ~~~~ ^
+   17 errors generated.
 --
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:20:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   kernel/bpf/core.c:1645:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-              ^
-   kernel/bpf/core.c:1645:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-   ^
-   static 
-   kernel/bpf/core.c:2088:6: warning: no previous prototype for function 'bpf_patch_call_args' [-Wmissing-prototypes]
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-        ^
-   kernel/bpf/core.c:2088:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-   ^
-   static 
-   2 warnings and 1 error generated.
---
-   In file included from net/ipv4/route.c:72:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   net/ipv4/route.c:879:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
-           int log_martians;
-               ^
-   1 warning and 1 error generated.
---
-   In file included from net/ipv4/ip_output.c:60:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   In file included from net/ipv4/ip_output.c:82:
-   In file included from include/linux/netfilter_bridge.h:5:
-   In file included from include/uapi/linux/netfilter_bridge.h:12:
-   In file included from include/linux/if_pppox.h:19:
-   include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'struct sockaddr_pppox' is less aligned than 'union (unnamed union at include/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } sa_addr;
-             ^
-   1 warning and 1 error generated.
---
-   In file included from net/ipv4/igmp.c:80:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   net/ipv4/igmp.c:1905:6: warning: variable 'changerec' set but not used [-Wunused-but-set-variable]
-           int     changerec = 0;
+>> fs/cifs/smbdirect.c:2037:36: error: no member named 'rq_npages' in 'struct smb_rqst'
+                     rqst_idx, rqst->rq_nvec, rqst->rq_npages, rqst->rq_pagesz,
+                                              ~~~~  ^
+   fs/cifs/smbdirect.c:146:74: note: expanded from macro 'log_write'
+   #define log_write(level, fmt, args...)  log_rdma(level, LOG_WRITE, fmt, ##args)
+                                                                             ^~~~
+   fs/cifs/smbdirect.c:138:53: note: expanded from macro 'log_rdma'
+                   cifs_dbg(VFS, "%s:%d " fmt, __func__, __LINE__, ##args);\
+                                                                     ^~~~
+   fs/cifs/cifs_debug.h:140:19: note: expanded from macro 'cifs_dbg'
+                   pr_debug(fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+>> fs/cifs/smbdirect.c:2037:53: error: no member named 'rq_pagesz' in 'struct smb_rqst'
+                     rqst_idx, rqst->rq_nvec, rqst->rq_npages, rqst->rq_pagesz,
+                                                               ~~~~  ^
+   fs/cifs/smbdirect.c:146:74: note: expanded from macro 'log_write'
+   #define log_write(level, fmt, args...)  log_rdma(level, LOG_WRITE, fmt, ##args)
+                                                                             ^~~~
+   fs/cifs/smbdirect.c:138:53: note: expanded from macro 'log_rdma'
+                   cifs_dbg(VFS, "%s:%d " fmt, __func__, __LINE__, ##args);\
+                                                                     ^~~~
+   fs/cifs/cifs_debug.h:140:19: note: expanded from macro 'cifs_dbg'
+                   pr_debug(fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+>> fs/cifs/smbdirect.c:2038:11: error: no member named 'rq_tailsz' in 'struct smb_rqst'
+                     rqst->rq_tailsz, smb_rqst_len(server, rqst));
+                     ~~~~  ^
+   fs/cifs/smbdirect.c:146:74: note: expanded from macro 'log_write'
+   #define log_write(level, fmt, args...)  log_rdma(level, LOG_WRITE, fmt, ##args)
+                                                                             ^~~~
+   fs/cifs/smbdirect.c:138:53: note: expanded from macro 'log_rdma'
+                   cifs_dbg(VFS, "%s:%d " fmt, __func__, __LINE__, ##args);\
+                                                                     ^~~~
+   fs/cifs/cifs_debug.h:140:19: note: expanded from macro 'cifs_dbg'
+                   pr_debug(fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
+                              pr_fmt(fmt), ##__VA_ARGS__)
+                                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+   fs/cifs/smbdirect.c:2107:24: error: no member named 'rq_npages' in 'struct smb_rqst'
+           for (i = 0; i < rqst->rq_npages; i++) {
+                           ~~~~  ^
+>> fs/cifs/smbdirect.c:2110:3: error: call to undeclared function 'rqst_page_get_length'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   rqst_page_get_length(rqst, i, &buflen, &offset);
                    ^
-   1 warning and 1 error generated.
---
-   In file included from fs/proc/meminfo.c:6:
-   In file included from include/linux/hugetlb.h:9:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   fs/proc/meminfo.c:22:28: warning: no previous prototype for function 'arch_report_meminfo' [-Wmissing-prototypes]
-   void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
-                              ^
-   fs/proc/meminfo.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from drivers/net/ethernet/smsc/smc91x.c:74:
-   In file included from include/linux/netdevice.h:42:
-   In file included from include/net/netprio_cgroup.h:11:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   drivers/net/ethernet/smsc/smc91x.c:634:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
-           unsigned long flags;
-                         ^
-   1 warning and 1 error generated.
---
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:59:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   init/main.c:769:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-                      ^
-   init/main.c:769:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-   ^
-   static 
-   init/main.c:781:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:781:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
-   init/main.c:783:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
-   void __init __weak poking_init(void) { }
-                      ^
-   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak poking_init(void) { }
-   ^
-   static 
-   3 warnings and 1 error generated.
---
-   In file included from arch/arm/mm/fault.c:19:
-   In file included from include/linux/perf_event.h:59:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   arch/arm/mm/fault.c:535:1: warning: no previous prototype for function 'do_DataAbort' [-Wmissing-prototypes]
-   do_DataAbort(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
-   ^
-   arch/arm/mm/fault.c:534:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void
-              ^
-              static 
-   arch/arm/mm/fault.c:565:1: warning: no previous prototype for function 'do_PrefetchAbort' [-Wmissing-prototypes]
-   do_PrefetchAbort(unsigned long addr, unsigned int ifsr, struct pt_regs *regs)
-   ^
-   arch/arm/mm/fault.c:564:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void
-              ^
-              static 
-   2 warnings and 1 error generated.
---
-   In file included from arch/arm/mm/init.c:9:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   arch/arm/mm/init.c:97:13: warning: no previous prototype for function 'setup_dma_zone' [-Wmissing-prototypes]
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-               ^
-   arch/arm/mm/init.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from arch/arm/mm/flush.c:17:
-   In file included from include/linux/hugetlb.h:9:
->> include/linux/cgroup.h:764:2: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   {}
-    ^
-   arch/arm/mm/flush.c:357:6: warning: no previous prototype for function '__flush_anon_page' [-Wmissing-prototypes]
-   void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned long vmaddr)
-        ^
-   arch/arm/mm/flush.c:357:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned long vmaddr)
-   ^
-   static 
-   1 warning and 1 error generated.
-..
+>> fs/cifs/smbdirect.c:2123:17: error: no member named 'rq_pages' in 'struct smb_rqst'
+                                   info, rqst->rq_pages[i],
+                                         ~~~~  ^
+   6 errors generated.
 
 
-vim +764 include/linux/cgroup.h
+vim +4058 fs/cifs/smb2pdu.c
 
-   762	
-   763	static inline struct cgroup *cgroup_put(void)
- > 764	{}
-   765	#endif /* !CONFIG_CGROUPS */
-   766	
+09a4707e763824 Pavel Shilovsky 2012-09-18  4007  
+09a4707e763824 Pavel Shilovsky 2012-09-18  4008  /*
+09a4707e763824 Pavel Shilovsky 2012-09-18  4009   * To form a chain of read requests, any read requests after the first should
+09a4707e763824 Pavel Shilovsky 2012-09-18  4010   * have the end_of_chain boolean set to true.
+09a4707e763824 Pavel Shilovsky 2012-09-18  4011   */
+09a4707e763824 Pavel Shilovsky 2012-09-18  4012  static int
+738f9de5cdb917 Pavel Shilovsky 2016-11-23  4013  smb2_new_read_req(void **buf, unsigned int *total_len,
+2dabfd5baba641 Long Li         2017-11-07  4014  	struct cifs_io_parms *io_parms, struct cifs_readdata *rdata,
+2dabfd5baba641 Long Li         2017-11-07  4015  	unsigned int remaining_bytes, int request_type)
+09a4707e763824 Pavel Shilovsky 2012-09-18  4016  {
+09a4707e763824 Pavel Shilovsky 2012-09-18  4017  	int rc = -EACCES;
+d8d9de532de9fa Ronnie Sahlberg 2021-09-08  4018  	struct smb2_read_req *req = NULL;
+0d35e382e4e96a Ronnie Sahlberg 2021-11-05  4019  	struct smb2_hdr *shdr;
+352d96f3acc6e0 Aurelien Aptel  2020-05-31  4020  	struct TCP_Server_Info *server = io_parms->server;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4021  
+352d96f3acc6e0 Aurelien Aptel  2020-05-31  4022  	rc = smb2_plain_req_init(SMB2_READ, io_parms->tcon, server,
+352d96f3acc6e0 Aurelien Aptel  2020-05-31  4023  				 (void **) &req, total_len);
+09a4707e763824 Pavel Shilovsky 2012-09-18  4024  	if (rc)
+09a4707e763824 Pavel Shilovsky 2012-09-18  4025  		return rc;
+2dabfd5baba641 Long Li         2017-11-07  4026  
+2dabfd5baba641 Long Li         2017-11-07  4027  	if (server == NULL)
+09a4707e763824 Pavel Shilovsky 2012-09-18  4028  		return -ECONNABORTED;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4029  
+0d35e382e4e96a Ronnie Sahlberg 2021-11-05  4030  	shdr = &req->hdr;
+0d35e382e4e96a Ronnie Sahlberg 2021-11-05  4031  	shdr->Id.SyncId.ProcessId = cpu_to_le32(io_parms->pid);
+09a4707e763824 Pavel Shilovsky 2012-09-18  4032  
+351a59dace0e0e Paulo Alcantara 2022-03-21  4033  	req->PersistentFileId = io_parms->persistent_fid;
+351a59dace0e0e Paulo Alcantara 2022-03-21  4034  	req->VolatileFileId = io_parms->volatile_fid;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4035  	req->ReadChannelInfoOffset = 0; /* reserved */
+09a4707e763824 Pavel Shilovsky 2012-09-18  4036  	req->ReadChannelInfoLength = 0; /* reserved */
+09a4707e763824 Pavel Shilovsky 2012-09-18  4037  	req->Channel = 0; /* reserved */
+09a4707e763824 Pavel Shilovsky 2012-09-18  4038  	req->MinimumCount = 0;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4039  	req->Length = cpu_to_le32(io_parms->length);
+09a4707e763824 Pavel Shilovsky 2012-09-18  4040  	req->Offset = cpu_to_le64(io_parms->offset);
+d323c24617527f Steve French    2019-02-25  4041  
+d323c24617527f Steve French    2019-02-25  4042  	trace_smb3_read_enter(0 /* xid */,
+d323c24617527f Steve French    2019-02-25  4043  			io_parms->persistent_fid,
+d323c24617527f Steve French    2019-02-25  4044  			io_parms->tcon->tid, io_parms->tcon->ses->Suid,
+d323c24617527f Steve French    2019-02-25  4045  			io_parms->offset, io_parms->length);
+bd3dcc6a22a918 Long Li         2017-11-22  4046  #ifdef CONFIG_CIFS_SMB_DIRECT
+bd3dcc6a22a918 Long Li         2017-11-22  4047  	/*
+bd3dcc6a22a918 Long Li         2017-11-22  4048  	 * If we want to do a RDMA write, fill in and append
+bd3dcc6a22a918 Long Li         2017-11-22  4049  	 * smbd_buffer_descriptor_v1 to the end of read request
+bd3dcc6a22a918 Long Li         2017-11-22  4050  	 */
+bb4c0419476bd3 Long Li         2018-04-17  4051  	if (server->rdma && rdata && !server->sign &&
+bd3dcc6a22a918 Long Li         2017-11-22  4052  		rdata->bytes >= server->smbd_conn->rdma_readwrite_threshold) {
+bd3dcc6a22a918 Long Li         2017-11-22  4053  
+bd3dcc6a22a918 Long Li         2017-11-22  4054  		struct smbd_buffer_descriptor_v1 *v1;
+352d96f3acc6e0 Aurelien Aptel  2020-05-31  4055  		bool need_invalidate = server->dialect == SMB30_PROT_ID;
+bd3dcc6a22a918 Long Li         2017-11-22  4056  
+bd3dcc6a22a918 Long Li         2017-11-22  4057  		rdata->mr = smbd_register_mr(
+bd3dcc6a22a918 Long Li         2017-11-22 @4058  				server->smbd_conn, rdata->pages,
+7cf20bce77581b Long Li         2018-05-30 @4059  				rdata->nr_pages, rdata->page_offset,
+7cf20bce77581b Long Li         2018-05-30 @4060  				rdata->tailsz, true, need_invalidate);
+bd3dcc6a22a918 Long Li         2017-11-22  4061  		if (!rdata->mr)
+b7972092199f6d Long Li         2019-04-05  4062  			return -EAGAIN;
+bd3dcc6a22a918 Long Li         2017-11-22  4063  
+bd3dcc6a22a918 Long Li         2017-11-22  4064  		req->Channel = SMB2_CHANNEL_RDMA_V1_INVALIDATE;
+bd3dcc6a22a918 Long Li         2017-11-22  4065  		if (need_invalidate)
+bd3dcc6a22a918 Long Li         2017-11-22  4066  			req->Channel = SMB2_CHANNEL_RDMA_V1;
+bd3dcc6a22a918 Long Li         2017-11-22  4067  		req->ReadChannelInfoOffset =
+d8d9de532de9fa Ronnie Sahlberg 2021-09-08  4068  			cpu_to_le16(offsetof(struct smb2_read_req, Buffer));
+bd3dcc6a22a918 Long Li         2017-11-22  4069  		req->ReadChannelInfoLength =
+2026b06e9ce852 Steve French    2018-01-24  4070  			cpu_to_le16(sizeof(struct smbd_buffer_descriptor_v1));
+bd3dcc6a22a918 Long Li         2017-11-22  4071  		v1 = (struct smbd_buffer_descriptor_v1 *) &req->Buffer[0];
+2026b06e9ce852 Steve French    2018-01-24  4072  		v1->offset = cpu_to_le64(rdata->mr->mr->iova);
+2026b06e9ce852 Steve French    2018-01-24  4073  		v1->token = cpu_to_le32(rdata->mr->mr->rkey);
+2026b06e9ce852 Steve French    2018-01-24  4074  		v1->length = cpu_to_le32(rdata->mr->mr->length);
+bd3dcc6a22a918 Long Li         2017-11-22  4075  
+bd3dcc6a22a918 Long Li         2017-11-22  4076  		*total_len += sizeof(*v1) - 1;
+bd3dcc6a22a918 Long Li         2017-11-22  4077  	}
+bd3dcc6a22a918 Long Li         2017-11-22  4078  #endif
+09a4707e763824 Pavel Shilovsky 2012-09-18  4079  	if (request_type & CHAINED_REQUEST) {
+09a4707e763824 Pavel Shilovsky 2012-09-18  4080  		if (!(request_type & END_OF_CHAIN)) {
+b8f57ee8aad414 Pavel Shilovsky 2016-11-23  4081  			/* next 8-byte aligned request */
+b8f57ee8aad414 Pavel Shilovsky 2016-11-23  4082  			*total_len = DIV_ROUND_UP(*total_len, 8) * 8;
+b8f57ee8aad414 Pavel Shilovsky 2016-11-23  4083  			shdr->NextCommand = cpu_to_le32(*total_len);
+09a4707e763824 Pavel Shilovsky 2012-09-18  4084  		} else /* END_OF_CHAIN */
+31473fc4f9653b Pavel Shilovsky 2016-10-24  4085  			shdr->NextCommand = 0;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4086  		if (request_type & RELATED_REQUEST) {
+31473fc4f9653b Pavel Shilovsky 2016-10-24  4087  			shdr->Flags |= SMB2_FLAGS_RELATED_OPERATIONS;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4088  			/*
+09a4707e763824 Pavel Shilovsky 2012-09-18  4089  			 * Related requests use info from previous read request
+09a4707e763824 Pavel Shilovsky 2012-09-18  4090  			 * in chain.
+09a4707e763824 Pavel Shilovsky 2012-09-18  4091  			 */
+0d35e382e4e96a Ronnie Sahlberg 2021-11-05  4092  			shdr->SessionId = cpu_to_le64(0xFFFFFFFFFFFFFFFF);
+0d35e382e4e96a Ronnie Sahlberg 2021-11-05  4093  			shdr->Id.SyncId.TreeId = cpu_to_le32(0xFFFFFFFF);
+351a59dace0e0e Paulo Alcantara 2022-03-21  4094  			req->PersistentFileId = (u64)-1;
+351a59dace0e0e Paulo Alcantara 2022-03-21  4095  			req->VolatileFileId = (u64)-1;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4096  		}
+09a4707e763824 Pavel Shilovsky 2012-09-18  4097  	}
+09a4707e763824 Pavel Shilovsky 2012-09-18  4098  	if (remaining_bytes > io_parms->length)
+09a4707e763824 Pavel Shilovsky 2012-09-18  4099  		req->RemainingBytes = cpu_to_le32(remaining_bytes);
+09a4707e763824 Pavel Shilovsky 2012-09-18  4100  	else
+09a4707e763824 Pavel Shilovsky 2012-09-18  4101  		req->RemainingBytes = 0;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4102  
+738f9de5cdb917 Pavel Shilovsky 2016-11-23  4103  	*buf = req;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4104  	return rc;
+09a4707e763824 Pavel Shilovsky 2012-09-18  4105  }
+09a4707e763824 Pavel Shilovsky 2012-09-18  4106  
+
+:::::: The code at line 4058 was first introduced by commit
+:::::: bd3dcc6a22a9186ed78da51ce09e889803552189 CIFS: SMBD: Upper layer performs SMB read via RDMA write through memory registration
+
+:::::: TO: Long Li <longli@microsoft.com>
+:::::: CC: Steve French <smfrench@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
