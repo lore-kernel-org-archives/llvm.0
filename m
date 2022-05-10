@@ -1,49 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22971FA0
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 00:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFD21FA0
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 00:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652142907; x=1683678907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ws6RuJwZ5f3e7nMk3f5y6a+++iD9RCQTt1KaPqd40aE=;
-  b=OGav8uwtxbtM5zMD2NzeTWIWHG5mm8YBgIZrI9IRU1V+IUOxXzl/zCRe
-   o3KPzThgfMcIBSpRj5c2+jRoiMuuqc8sShaJDC4hEV1CvvQSGw/c0o6ig
-   zah3IfL+BO9+RvXrVA/MSQHQjDStk7cFa+MqrD4NjDjs2wN7eyA/XHExR
-   JpkiNEoaNDlnPK8FwzlNfQkXDOp5Hy1AMGUsxRdd+jCnYTrJOH+wfdBKF
-   7y1ErIcsyiz4LfgHoBfFJOUUK1eC0ZczgwkmNVCZy196aUxW/ttTSuJaa
-   bCPPb5qRgtpPKK9Fy1xP0owLlsUFZ6YfPTKwIPfoI+ysk11rkXUkzdnpa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256749631"
+  t=1652143506; x=1683679506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GeIgOnwBjoETAQHmucQ7R/kDKLxgAt3Z9vGZ1wlwYj8=;
+  b=aGeN75ozK6X7i7Om8hMM9gFil4Xz0eOjDw4VvJOKUJuvcvHWd36lrclB
+   IfAVpePzcH91Mg91400QTp1KqoDxqzGDcuiWb6tXB6l3wn76SZ97zL9lm
+   SZv3DWvK2UF8YalrrX47n7u+moofHqGLqo1QwotJCxbKibi2XTvhhMMpl
+   uv9ExorXSI1y9CL019ZRONyzQhkelXz2+BJ6Ws4gX9ezfMNH7+un/MJZ3
+   fySDlPEEgxZ9TnTaQmGfSA8KBKuIoGxcmX72T/WyYT/TXhk1wPEazUY2w
+   MZrr7ZnAAb8nwxKsjWeCEnOToAFyPh5H3h6nLxQN2CyjzyihVWSdeXdJT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268055685"
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="256749631"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:35:07 -0700
+   d="scan'208";a="268055685"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:45:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="552268142"
+   d="scan'208";a="657382336"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 17:35:04 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2022 17:45:04 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1noDqB-000H3S-NV;
-	Tue, 10 May 2022 00:35:03 +0000
-Date: Tue, 10 May 2022 08:34:09 +0800
+	id 1noDzs-000H44-38;
+	Tue, 10 May 2022 00:45:04 +0000
+Date: Tue, 10 May 2022 08:44:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haimin Zhang <tcs.kernel@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	David Howells <dhowells@redhat.com>,
-	"Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Haimin Zhang <tcs_kernel@tencent.com>,
-	TCS Robot <tcs_robot@tencent.com>
-Subject: Re: [PATCH v2] fs/pipe: Deinitialize the watch_queue when pipe is
- freed
-Message-ID: <202205100814.M4Aiy8hF-lkp@intel.com>
-References: <20220509131726.59664-1-tcs.kernel@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 34/35] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202205100811.BAMM4bPO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,135 +46,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509131726.59664-1-tcs.kernel@gmail.com>
 
-Hi Haimin,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc6 next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haimin-Zhang/fs-pipe-Deinitialize-the-watch_queue-when-pipe-is-freed/20220509-212415
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
-config: s390-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100814.M4Aiy8hF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   2622f5aa2f4ccb93fdd771e7503ca364c6a290d4
+commit: cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436 [34/35] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100811.BAMM4bPO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/22e9d0a2c66d49444376e55348c8a6fa26e6d150
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Haimin-Zhang/fs-pipe-Deinitialize-the-watch_queue-when-pipe-is-freed/20220509-212415
-        git checkout 22e9d0a2c66d49444376e55348c8a6fa26e6d150
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   <inline asm>:5:5: error: expected absolute expression
-   .if 6651b-6641b > 254
-       ^
-   <inline asm>:6:2: error: cpu alternatives does not support instructions blocks > 254 bytes
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   <inline asm>:8:5: error: expected absolute expression
-   .if (6651b-6641b) % 2
-       ^
-   <inline asm>:9:2: error: cpu alternatives instructions length is odd
-           .error "cpu alternatives instructions length is odd"
-           ^
-   <inline asm>:15:5: error: expected absolute expression
-   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
-       ^
->> <inline asm>:18:8: error: unexpected token in '.rept' directive
-           .rept (-(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) - (6620b-662b)) / 2
-                 ^
-   <inline asm>:21:8: error: unexpected token in '.rept' directive
-           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) / 6
-                 ^
->> <inline asm>:22:2: error: unknown directive
-           .brcl 0,0
-           ^
->> <inline asm>:23:7: error: unmatched '.endr' directive
-           .endr
-                ^
-   <inline asm>:24:8: error: unexpected token in '.rept' directive
-           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 / 4
-                 ^
-   <inline asm>:26:7: error: unmatched '.endr' directive
-           .endr
-                ^
-   <inline asm>:27:8: error: unexpected token in '.rept' directive
-           .rept -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) % 6 % 4 / 2
-                 ^
-   <inline asm>:29:6: error: unmatched '.endr' directive
-   .endr
-        ^
-   <inline asm>:32:5: error: expected absolute expression
-   .if 662b-661b > 254
-       ^
-   <inline asm>:33:2: error: cpu alternatives does not support instructions blocks > 254 bytes
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   <inline asm>:35:5: error: expected absolute expression
-   .if (662b-661b) % 2
-       ^
-   <inline asm>:36:2: error: cpu alternatives instructions length is odd
-           .error "cpu alternatives instructions length is odd"
-           ^
-   In file included from kernel/watch_queue.c:11:
-   In file included from include/linux/module.h:14:
-   In file included from include/linux/buildid.h:5:
-   In file included from include/linux/mm_types.h:8:
-   In file included from include/linux/kref.h:16:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: expected absolute expression
-                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if " len " > 254\n"                                           \
-            ^
-   <inline asm>:5:5: note: instantiated into assembly here
-   .if 6651b-6641b > 254
-       ^
-   In file included from kernel/watch_queue.c:11:
-   In file included from include/linux/module.h:14:
-   In file included from include/linux/buildid.h:5:
-   In file included from include/linux/mm_types.h:8:
-   In file included from include/linux/kref.h:16:
-   In file included from include/linux/spinlock.h:93:
-   arch/s390/include/asm/spinlock.h:81:3: error: cpu alternatives does not support instructions blocks > 254 bytes
-                   ALTERNATIVE("", ".insn rre,0xb2fa0000,7,0", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:118:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives does not support instructions "    \
-            ^
-   <inline asm>:6:2: note: instantiated into assembly here
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +264 arch/riscv/kvm/aia_aplic.c
+
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
 
 -- 
 0-DAY CI Kernel Test Service
