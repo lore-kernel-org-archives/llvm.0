@@ -1,30 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B808028E9
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 15:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F22FC385A6;
-	Tue, 10 May 2022 15:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652196872;
-	bh=gXpekzy4uBt4nU42ofB5utDj8nYivN+u/Zv2X1uquuU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kh1UUMSGkZQA/4LCFg4q9672pKCHz8Kn2mCa5inyzOvzX3mpiDDZd7zQTUHuO35xH
-	 b8r6TaU8tYCAOL+3XOCN4tzPAlPKU58h1Fcu+CTmlzWyOpxG5lZgMNOjxJUV/2Ao6t
-	 1pXatPbILLytDClzGW+dWCFFY7x37IZDis7y0LlBKX+GaajpUaLhXs63/Jbcjh2iLm
-	 JhSxgXLSYTe1W06Kso19DoEq7ETNL2WzD9GBNjKMcv+BeuVyzRxKbkTOMeAuCk/Lf1
-	 8mV9zZLs47mk/zgH9zC9ctJ4mpAj0f/bB9OCSJY8zX84iXrXpyUG0SesBY4xvQlkE+
-	 egUXZMsg3o3TQ==
-Date: Tue, 10 May 2022 08:34:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	kernel-team@fb.com, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next 8/9] libbpf: automatically fix up
- BPF_MAP_TYPE_RINGBUF size, if necessary
-Message-ID: <YnqGBmOHIZhrZBFJ@dev-arch.thelio-3990X>
-References: <20220509004148.1801791-1-andrii@kernel.org>
- <20220509004148.1801791-9-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5056F28E9
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 16:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652198907; x=1683734907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bAh3WJmCp5NTIqxc6IUYDZLmG+5NOa+aaHz6HMfWXqM=;
+  b=L2/8Nqkz45fCoA+lK18Qsr5IDceZVWJl0a8YZrVZLePlOk24UpQWRHaL
+   8XnfcsfhuPtkX1quMrDCjp3r9bVRoqS/wYudL257qWZDrEDNyIHJAd9x3
+   4E0Km068yfC/i/DztVMEgdJh8GpXeKz9i3Wdjv3BS2jCtKvDGBbzTOkUk
+   35oxu+N6pnSezhoIpWXYNN1GOO8ZpwPBVnANNXty+H4b3BRFY8MHOz1+x
+   Ey29HmtM1chHK8mhMk4QPuLA7wAIq673B4q0+dPsj1aUZl2GWNcb7fkSg
+   eggmWfh4Ud5GSwfCgBf+GgtI0StYsEGzCA/QtJ1qsjmxkfsu2hT55faXl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="268262364"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="268262364"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 09:07:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="552905905"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 10 May 2022 09:07:10 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1noSOE-000I7A-3o;
+	Tue, 10 May 2022 16:07:10 +0000
+Date: Wed, 11 May 2022 00:06:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
+	mani@kernel.org, jassisinghbrar@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	agross@kernel.org, Prasad Sodagudi <quic_psodagud@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>
+Subject: Re: [PATCH] mailbox: qcom-ipcc: Log the pending interrupt during
+ resume
+Message-ID: <202205102334.mtvIIqAz-lkp@intel.com>
+References: <1652168893-11814-1-git-send-email-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,77 +50,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509004148.1801791-9-andrii@kernel.org>
+In-Reply-To: <1652168893-11814-1-git-send-email-quic_sibis@quicinc.com>
 
-Hi Andrii,
+Hi Sibi,
 
-On Sun, May 08, 2022 at 05:41:47PM -0700, Andrii Nakryiko wrote:
-> Kernel imposes a pretty particular restriction on ringbuf map size. It
-> has to be a power-of-2 multiple of page size. While generally this isn't
-> hard for user to satisfy, sometimes it's impossible to do this
-> declaratively in BPF source code or just plain inconvenient to do at
-> runtime.
-> 
-> One such example might be BPF libraries that are supposed to work on
-> different architectures, which might not agree on what the common page
-> size is.
-> 
-> Let libbpf find the right size for user instead, if it turns out to not
-> satisfy kernel requirements. If user didn't set size at all, that's most
-> probably a mistake so don't upsize such zero size to one full page,
-> though. Also we need to be careful about not overflowing __u32
-> max_entries.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Thank you for the patch! Yet something to improve:
 
-<snip>
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> +static size_t adjust_ringbuf_sz(size_t sz)
-> +{
-> +	__u32 page_sz = sysconf(_SC_PAGE_SIZE);
-> +	__u32 i, mul;
-> +
-> +	/* if user forgot to set any size, make sure they see error */
-> +	if (sz == 0)
-> +		return 0;
-> +	/* Kernel expects BPF_MAP_TYPE_RINGBUF's max_entries to be
-> +	 * a power-of-2 multiple of kernel's page size. If user diligently
-> +	 * satisified these conditions, pass the size through.
-> +	 */
-> +	if ((sz % page_sz) == 0 && is_pow_of_2(sz / page_sz))
-> +		return sz;
-> +
-> +	/* Otherwise find closest (page_sz * power_of_2) product bigger than
-> +	 * user-set size to satisfy both user size request and kernel
-> +	 * requirements and substitute correct max_entries for map creation.
-> +	 */
-> +	for (i = 0, mul = 1; ; i++, mul <<= 1) {
-> +		if (mul > UINT_MAX / page_sz) /* prevent __u32 overflow */
-> +			break;
-> +		if (mul * page_sz > sz)
-> +			return mul * page_sz;
-> +	}
-> +
-> +	/* if it's impossible to satisfy the conditions (i.e., user size is
-> +	 * very close to UINT_MAX but is not a power-of-2 multiple of
-> +	 * page_size) then just return original size and let kernel reject it
-> +	 */
-> +	return sz;
-> +}
+url:    https://github.com/intel-lab-lkp/linux/commits/Sibi-Sankar/mailbox-qcom-ipcc-Log-the-pending-interrupt-during-resume/20220510-155032
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9be9ed2612b5aedb52a2c240edb1630b6b743cb6
+config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205102334.mtvIIqAz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/5389a3f93e441ca9fed19981d15d5e74708aaa4f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sibi-Sankar/mailbox-qcom-ipcc-Log-the-pending-interrupt-during-resume/20220510-155032
+        git checkout 5389a3f93e441ca9fed19981d15d5e74708aaa4f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-This patch in -next as commit 0087a681fa8c ("libbpf: Automatically fix
-up BPF_MAP_TYPE_RINGBUF size, if necessary") breaks the build with tip
-of tree LLVM due to [1] strengthening -Wunused-but-set-variable:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-libbpf.c:4954:8: error: variable 'i' set but not used [-Werror,-Wunused-but-set-variable]
-        __u32 i, mul;
-              ^
-1 error generated.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Should i be removed or was it intended to be used somewhere that it is
-not?
+>> ERROR: modpost: "irq_to_desc" [drivers/mailbox/qcom-ipcc.ko] undefined!
 
-[1]: https://github.com/llvm/llvm-project/commit/2af845a6519c9cde5c8f58db5554f8b1084ce1ed
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
