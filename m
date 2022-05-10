@@ -1,45 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2B77B
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 04:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A60023B7
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 05:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652155856; x=1683691856;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=icJDa2iLnHPRI9zTuKl758rXgrH0MpnOxbAYD3W4ZEY=;
-  b=iCZqjFuZkaOEAH/lsMBSe5YFEOcPJt4A4Vlwq5NbdXPan00Kw3wuegmG
-   jNGUIPfFYjn8snPoFpOqWRPE5VRBkuNlGNe8QKB7qvqhGwluq+C/ocG9n
-   vDXsyCkWHD0RJlPGOOhGJIyLIrWgjDXZPrhg/AnHcfAN8bVol91mh7Ifk
-   5WBedp9AWCoowtm3gFLP226WKDfq/Fr7ZYvlGGT1furBBjtNyqFkqf4NK
-   h2/+2hvWq/bqmCP1A4zqIJmh3ip/tdoNwOcjflf2U6pqDCZcqNUQ5h8dE
-   kZ/o507lTJqRjtDv/jmTL+x2Bnps73bq7wY5RE2nXpX3nyavyigniRT++
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249785378"
+  t=1652160038; x=1683696038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3D1KkDB8H2YeX+I6eWdOKF6XIFgljL4fDHk1tvjSEhI=;
+  b=cXxcHalOEYen0qZSiJqSRL4C9FbWlYoxvyPv7ZAryseH7LbRaFyJPYc9
+   P/d/ayEW8ubtjid2JLX5D+oyyDdbJtAschSmv3ZD3ZujcfefGZDjy8zRM
+   RJCuP4kho9VjVXEkUW01oko6Rvw7UfBrpZpHKt3h0uO6JLemBTYNSldjY
+   4ukmMN1hKFnFszNdqsfNxHbLjfgAsQ5wE8BECFyPbmSZHjxssOGw7flLm
+   Wvp/T0/KgmaBu5XZLIC9PBl7cQtNyWoL8Zclt/tlVIwUEWJQiNKBmVlSX
+   +ACwfVPqqyxagj6N4eqqdQ4zDfDvboQg9cvymc7d05h3tXX5Cph6uNY4v
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294493104"
 X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="249785378"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 21:10:36 -0700
+   d="scan'208";a="294493104"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 22:20:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="738492077"
+   d="scan'208";a="710857935"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 21:10:34 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 09 May 2022 22:20:36 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1noHCj-000HHT-NX;
-	Tue, 10 May 2022 04:10:33 +0000
-Date: Tue, 10 May 2022 12:09:39 +0800
+	id 1noIIV-000HN2-U5;
+	Tue, 10 May 2022 05:20:35 +0000
+Date: Tue, 10 May 2022 13:20:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+	intel-wired-lan@osuosl.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/6]
- fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types
- ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof ((1UL << 18))
- *' (aka 'unsigned long *'))
-Message-ID: <202205101239.HjP2nwNj-lkp@intel.com>
+	muhammad.husaini.zulkifli@intel.com
+Subject: Re: [Intel-wired-lan] [PATCH] igc: Correct the launchtime offset
+Message-ID: <202205101357.46oBdnm7-lkp@intel.com>
+References: <20220509010847.17492-1-muhammad.husaini.zulkifli@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,150 +47,233 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220509010847.17492-1-muhammad.husaini.zulkifli@intel.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
-head:   627ce4da99bb612945366770c5604019fb74b653
-commit: e4b60df6a12099568c671591d36a9fa16515f6eb [5/6] cifs: Change the I/O paths to use an iterator rather than a page list
-config: hexagon-randconfig-r005-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101239.HjP2nwNj-lkp@intel.com/config)
+Hi Muhammad,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tnguy-next-queue/dev-queue]
+[also build test WARNING on v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Husaini-Zulkifli/igc-Correct-the-launchtime-offset/20220509-091028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220510/202205101357.46oBdnm7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e4b60df6a12099568c671591d36a9fa16515f6eb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
-        git checkout e4b60df6a12099568c671591d36a9fa16515f6eb
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/819e4648eaccdeaf40643fd0fe7cd735a584c251
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Husaini-Zulkifli/igc-Correct-the-launchtime-offset/20220509-091028
+        git checkout 819e4648eaccdeaf40643fd0fe7cd735a584c251
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/ drivers/net/ethernet/stmicro/stmmac/ drivers/net/ethernet/xilinx/ drivers/net/netdevsim/ drivers/net/wan/ fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/net/ethernet/intel/igc/ drivers/rtc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof ((1UL << 18)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                   seg = min(size - copied, PAGE_SIZE);
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4961:3: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4993:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4961:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/cifs/smb2ops.c:4860:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   2 warnings generated.
+>> drivers/net/ethernet/intel/igc/igc_tsn.c:102:2: warning: variable 'tx_offset' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+           default:
+           ^~~~~~~
+   drivers/net/ethernet/intel/igc/igc_tsn.c:106:22: note: uninitialized use occurs here
+           wr32(IGC_GTXOFFSET, tx_offset);
+                               ^~~~~~~~~
+   drivers/net/ethernet/intel/igc/igc_regs.h:310:10: note: expanded from macro 'wr32'
+           writel((val), &hw_addr[(reg)]); \
+                   ^~~
+   arch/arm64/include/asm/io.h:142:52: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed((v),(c)); })
+                                                                 ^
+   arch/arm64/include/asm/io.h:127:74: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+                                                                                ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/intel/igc/igc_tsn.c:87:15: note: initialize the variable 'tx_offset' to silence this warning
+           u16 tx_offset;
+                        ^
+                         = 0
+   1 warning generated.
 
 
-vim +4752 fs/cifs/smb2ops.c
+vim +/tx_offset +102 drivers/net/ethernet/intel/igc/igc_tsn.c
 
-  4702	
-  4703	/*
-  4704	 * This function will initialize new_rq and encrypt the content.
-  4705	 * The first entry, new_rq[0], only contains a single iov which contains
-  4706	 * a smb2_transform_hdr and is pre-allocated by the caller.
-  4707	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
-  4708	 *
-  4709	 * The end result is an array of smb_rqst structures where the first structure
-  4710	 * only contains a single iov for the transform header which we then can pass
-  4711	 * to crypt_message().
-  4712	 *
-  4713	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
-  4714	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
-  4715	 */
-  4716	static int
-  4717	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
-  4718			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
-  4719	{
-  4720		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-  4721		struct page *page;
-  4722		unsigned int orig_len = 0;
-  4723		int i, j;
-  4724		int rc = -ENOMEM;
-  4725	
-  4726		for (i = 1; i < num_rqst; i++) {
-  4727			struct smb_rqst *old = &old_rq[i - 1];
-  4728			struct smb_rqst *new = &new_rq[i];
-  4729			struct xarray *buffer = &new->rq_buffer;
-  4730			unsigned int npages;
-  4731			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
-  4732	
-  4733			xa_init(buffer);
-  4734	
-  4735			if (size > 0) {
-  4736				npages = DIV_ROUND_UP(size, PAGE_SIZE);
-  4737				for (j = 0; j < npages; j++) {
-  4738					void *o;
-  4739	
-  4740					rc = -ENOMEM;
-  4741					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-  4742					if (!page)
-  4743						goto err_free;
-  4744					page->index = j;
-  4745					o = xa_store(buffer, j, page, GFP_KERNEL);
-  4746					if (xa_is_err(o)) {
-  4747						rc = xa_err(o);
-  4748						put_page(page);
-  4749						goto err_free;
-  4750					}
-  4751	
-> 4752					seg = min(size - copied, PAGE_SIZE);
-  4753					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-  4754						rc = -EFAULT;
-  4755						goto err_free;
-  4756					}
-  4757					copied += seg;
-  4758				}
-  4759				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
-  4760						buffer, 0, size);
-  4761			}
-  4762			new->rq_iov = old->rq_iov;
-  4763			new->rq_nvec = old->rq_nvec;
-  4764			orig_len += smb_rqst_len(server, new);
-  4765		}
-  4766	
-  4767		/* fill the 1st iov with a transform header */
-  4768		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
-  4769	
-  4770		rc = crypt_message(server, num_rqst, new_rq, 1);
-  4771		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
-  4772		if (rc)
-  4773			goto err_free;
-  4774	
-  4775		return rc;
-  4776	
-  4777	err_free:
-  4778		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
-  4779		return rc;
-  4780	}
-  4781	
+    81	
+    82	static int igc_tsn_enable_offload(struct igc_adapter *adapter)
+    83	{
+    84		struct igc_hw *hw = &adapter->hw;
+    85		u32 tqavctrl, baset_l, baset_h;
+    86		u32 sec, nsec, cycle;
+    87		u16 tx_offset;
+    88		ktime_t base_time, systim;
+    89		int i;
+    90	
+    91		cycle = adapter->cycle_time;
+    92		base_time = adapter->base_time;
+    93	
+    94		switch (adapter->link_speed) {
+    95		/* TODO: This code use same transmit offset across all link speed as for now. */
+    96		case SPEED_10:
+    97		case SPEED_100:
+    98		case SPEED_1000:
+    99		case SPEED_2500:
+   100			tx_offset = 1500;
+   101			break;
+ > 102		default:
+   103			break;
+   104		}
+   105	
+   106		wr32(IGC_GTXOFFSET, tx_offset);
+   107		wr32(IGC_TSAUXC, 0);
+   108		wr32(IGC_DTXMXPKTSZ, IGC_DTXMXPKTSZ_TSN);
+   109		wr32(IGC_TXPBS, IGC_TXPBSIZE_TSN);
+   110	
+   111		tqavctrl = rd32(IGC_TQAVCTRL);
+   112		tqavctrl |= IGC_TQAVCTRL_TRANSMIT_MODE_TSN | IGC_TQAVCTRL_ENHANCED_QAV;
+   113		wr32(IGC_TQAVCTRL, tqavctrl);
+   114	
+   115		wr32(IGC_QBVCYCLET_S, cycle);
+   116		wr32(IGC_QBVCYCLET, cycle);
+   117	
+   118		for (i = 0; i < adapter->num_tx_queues; i++) {
+   119			struct igc_ring *ring = adapter->tx_ring[i];
+   120			u32 txqctl = 0;
+   121			u16 cbs_value;
+   122			u32 tqavcc;
+   123	
+   124			wr32(IGC_STQT(i), ring->start_time);
+   125			wr32(IGC_ENDQT(i), ring->end_time);
+   126	
+   127			if (adapter->base_time) {
+   128				/* If we have a base_time we are in "taprio"
+   129				 * mode and we need to be strict about the
+   130				 * cycles: only transmit a packet if it can be
+   131				 * completed during that cycle.
+   132				 */
+   133				txqctl |= IGC_TXQCTL_STRICT_CYCLE |
+   134					IGC_TXQCTL_STRICT_END;
+   135			}
+   136	
+   137			if (ring->launchtime_enable)
+   138				txqctl |= IGC_TXQCTL_QUEUE_MODE_LAUNCHT;
+   139	
+   140			/* Skip configuring CBS for Q2 and Q3 */
+   141			if (i > 1)
+   142				goto skip_cbs;
+   143	
+   144			if (ring->cbs_enable) {
+   145				if (i == 0)
+   146					txqctl |= IGC_TXQCTL_QAV_SEL_CBS0;
+   147				else
+   148					txqctl |= IGC_TXQCTL_QAV_SEL_CBS1;
+   149	
+   150				/* According to i225 datasheet section 7.5.2.7, we
+   151				 * should set the 'idleSlope' field from TQAVCC
+   152				 * register following the equation:
+   153				 *
+   154				 * value = link-speed   0x7736 * BW * 0.2
+   155				 *         ---------- *  -----------------         (E1)
+   156				 *          100Mbps            2.5
+   157				 *
+   158				 * Note that 'link-speed' is in Mbps.
+   159				 *
+   160				 * 'BW' is the percentage bandwidth out of full
+   161				 * link speed which can be found with the
+   162				 * following equation. Note that idleSlope here
+   163				 * is the parameter from this function
+   164				 * which is in kbps.
+   165				 *
+   166				 *     BW =     idleSlope
+   167				 *          -----------------                      (E2)
+   168				 *          link-speed * 1000
+   169				 *
+   170				 * That said, we can come up with a generic
+   171				 * equation to calculate the value we should set
+   172				 * it TQAVCC register by replacing 'BW' in E1 by E2.
+   173				 * The resulting equation is:
+   174				 *
+   175				 * value = link-speed * 0x7736 * idleSlope * 0.2
+   176				 *         -------------------------------------   (E3)
+   177				 *             100 * 2.5 * link-speed * 1000
+   178				 *
+   179				 * 'link-speed' is present in both sides of the
+   180				 * fraction so it is canceled out. The final
+   181				 * equation is the following:
+   182				 *
+   183				 *     value = idleSlope * 61036
+   184				 *             -----------------                   (E4)
+   185				 *                  2500000
+   186				 *
+   187				 * NOTE: For i225, given the above, we can see
+   188				 *       that idleslope is represented in
+   189				 *       40.959433 kbps units by the value at
+   190				 *       the TQAVCC register (2.5Gbps / 61036),
+   191				 *       which reduces the granularity for
+   192				 *       idleslope increments.
+   193				 *
+   194				 * In i225 controller, the sendSlope and loCredit
+   195				 * parameters from CBS are not configurable
+   196				 * by software so we don't do any
+   197				 * 'controller configuration' in respect to
+   198				 * these parameters.
+   199				 */
+   200				cbs_value = DIV_ROUND_UP_ULL(ring->idleslope
+   201							     * 61036ULL, 2500000);
+   202	
+   203				tqavcc = rd32(IGC_TQAVCC(i));
+   204				tqavcc &= ~IGC_TQAVCC_IDLESLOPE_MASK;
+   205				tqavcc |= cbs_value | IGC_TQAVCC_KEEP_CREDITS;
+   206				wr32(IGC_TQAVCC(i), tqavcc);
+   207	
+   208				wr32(IGC_TQAVHC(i),
+   209				     0x80000000 + ring->hicredit * 0x7735);
+   210			} else {
+   211				/* Disable any CBS for the queue */
+   212				txqctl &= ~(IGC_TXQCTL_QAV_SEL_MASK);
+   213	
+   214				/* Set idleSlope to zero. */
+   215				tqavcc = rd32(IGC_TQAVCC(i));
+   216				tqavcc &= ~(IGC_TQAVCC_IDLESLOPE_MASK |
+   217					    IGC_TQAVCC_KEEP_CREDITS);
+   218				wr32(IGC_TQAVCC(i), tqavcc);
+   219	
+   220				/* Set hiCredit to zero. */
+   221				wr32(IGC_TQAVHC(i), 0);
+   222			}
+   223	skip_cbs:
+   224			wr32(IGC_TXQCTL(i), txqctl);
+   225		}
+   226	
+   227		nsec = rd32(IGC_SYSTIML);
+   228		sec = rd32(IGC_SYSTIMH);
+   229	
+   230		systim = ktime_set(sec, nsec);
+   231	
+   232		if (ktime_compare(systim, base_time) > 0) {
+   233			s64 n;
+   234	
+   235			n = div64_s64(ktime_sub_ns(systim, base_time), cycle);
+   236			base_time = ktime_add_ns(base_time, (n + 1) * cycle);
+   237		}
+   238	
+   239		baset_h = div_s64_rem(base_time, NSEC_PER_SEC, &baset_l);
+   240	
+   241		wr32(IGC_BASET_H, baset_h);
+   242		wr32(IGC_BASET_L, baset_l);
+   243	
+   244		return 0;
+   245	}
+   246	
 
 -- 
 0-DAY CI Kernel Test Service
