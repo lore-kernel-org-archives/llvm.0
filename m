@@ -1,44 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182D523A4
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 02:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D847B
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 03:08:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652149665; x=1683685665;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KM8YLnkzjHCMmkO7kc10LY5EzGN3SgpC6D2ZJXRhoqI=;
-  b=mXPSYjDmgfSWIvbr9d+x50zuzvqnQMM1P/b6PTH2U97mcp1IyHru7DpN
-   oMokoYM7NUTsztBbcJABJDe6PlGQhF66RqsotTBdfoofml4VlyMPdLBbm
-   PIAWBBOF46VqFKW+rSHfg13PXVhOKUX7gWhHj5ebsx+BJ8iCvlSGQcK9j
-   SD+oiURTlyTWnpIktN9pz8rpv0akL5igZ4cb59Q0SsBWWwCYxDamDADRN
-   XdMTxkHRHT/mS5yB0iBje7Bls2vkapNZWkE2tyCB73Xn+ePGAAC5FUkp8
-   t2+ublgfgfN5Wz22VMPyCCOUB3n7oNy/Rvn4Uqf5anem4J1u9MuESWGxd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294463774"
+  t=1652152112; x=1683688112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kdFOIkTh1cFfiFZjB/bGr5DGUxpuaQPCbERir24oWNc=;
+  b=lhLb0Pmi0fEOkE7b+PK2OrePVvtIH+BcMg/LCB3CA1DXb5JIY89b0Orl
+   aFXHC11ed5QuH+GKv2lYXJ9LXpHC/RUCcYKX/20dfvvw879O0fujVlrAd
+   KaHnUBZr6kmwXRBqEo6vwH5Wj0yYqp6C7RVEvD+L7UicF5ZD9ZciA2DiR
+   1A7cG3ehq/uUgnf+Bg1ocYuNsws2PIoJssD0bAmIAo3q6Pv5p+xIvvguA
+   ruIP1Ycr2XAC23bocz1tt3MJVJc0HDdMRay8WuKUPKFT7ubdvjkgcjcwP
+   DRUPY+Zz4hnrFe7sK8PblgZDfCgTgwZ2Oc2kAexV9tcOemNm6EOkrzR/D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256780961"
 X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="294463774"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 19:27:25 -0700
+   d="scan'208";a="256780961"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:08:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="519520329"
+   d="scan'208";a="541550824"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 May 2022 19:27:24 -0700
+  by orsmga006.jf.intel.com with ESMTP; 09 May 2022 20:08:29 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1noFat-000HBc-HP;
-	Tue, 10 May 2022 02:27:23 +0000
-Date: Tue, 10 May 2022 10:27:22 +0800
+	id 1noGEe-000HDw-VX;
+	Tue, 10 May 2022 03:08:28 +0000
+Date: Tue, 10 May 2022 11:08:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
+To: Eric Dumazet <eric.dumazet@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 10120/10218]
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3461:3: error: call to undeclared
- function 'vfree'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205101016.RrkUuGWK-lkp@intel.com>
+	netdev <netdev@vger.kernel.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Coco Li <lixiaoyan@google.com>, Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v5 net-next 02/13] net: allow gso_max_size to exceed 65536
+Message-ID: <202205101045.zaceqBiC-lkp@intel.com>
+References: <20220509222149.1763877-3-eric.dumazet@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,90 +50,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220509222149.1763877-3-eric.dumazet@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ab38272e99730375c5db3db1c4cebf691a0550ab
-commit: d5a442f3ad3079cb23913c1a0cdd2ef6642145df [10120/10218] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
-config: mips-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101016.RrkUuGWK-lkp@intel.com/config)
+Hi Eric,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/tcp-BIG-TCP-implementation/20220510-062530
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 9c095bd0d4c451d31d0fd1131cc09d3b60de815d
+config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20220510/202205101045.zaceqBiC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d5a442f3ad3079cb23913c1a0cdd2ef6642145df
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout d5a442f3ad3079cb23913c1a0cdd2ef6642145df
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/8f9b47ee99f57d1747010d002315092bfa17ed50
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eric-Dumazet/tcp-BIG-TCP-implementation/20220510-062530
+        git checkout 8f9b47ee99f57d1747010d002315092bfa17ed50
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3461:3: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   vfree(adev->psp.vbflash_tmp_buf);
-                   ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3469:31: error: call to undeclared function 'vmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-                                               ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3469:29: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
-                   adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-                                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3516:2: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vfree(adev->psp.vbflash_tmp_buf);
-           ^
-   1 warning and 3 errors generated.
+>> net/core/sock.c:2317:51: error: no member named 'skc_v6_rcv_saddr' in 'struct sock_common'; did you mean 'skc_rcv_saddr'?
+                                !sk_is_tcp(sk) || ipv6_addr_v4mapped(&sk->sk_v6_rcv_saddr)))
+                                                                          ^
+   include/net/sock.h:389:37: note: expanded from macro 'sk_v6_rcv_saddr'
+   #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
+                                       ^
+   include/net/sock.h:171:11: note: 'skc_rcv_saddr' declared here
+                           __be32  skc_rcv_saddr;
+                                   ^
+   1 error generated.
 
 
-vim +/vfree +3461 drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+vim +2317 net/core/sock.c
 
-57430471e2fa60 Andrey Grodzovsky 2019-12-19  3447  
-31aad22e2b3cfe Likun Gao         2022-02-22  3448  static ssize_t amdgpu_psp_vbflash_write(struct file *filp, struct kobject *kobj,
-31aad22e2b3cfe Likun Gao         2022-02-22  3449  					struct bin_attribute *bin_attr,
-31aad22e2b3cfe Likun Gao         2022-02-22  3450  					char *buffer, loff_t pos, size_t count)
-31aad22e2b3cfe Likun Gao         2022-02-22  3451  {
-31aad22e2b3cfe Likun Gao         2022-02-22  3452  	struct device *dev = kobj_to_dev(kobj);
-31aad22e2b3cfe Likun Gao         2022-02-22  3453  	struct drm_device *ddev = dev_get_drvdata(dev);
-31aad22e2b3cfe Likun Gao         2022-02-22  3454  	struct amdgpu_device *adev = drm_to_adev(ddev);
-31aad22e2b3cfe Likun Gao         2022-02-22  3455  
-81bd7fe019e195 Likun Gao         2022-05-05  3456  	adev->psp.vbflash_done = false;
-81bd7fe019e195 Likun Gao         2022-05-05  3457  
-31aad22e2b3cfe Likun Gao         2022-02-22  3458  	/* Safeguard against memory drain */
-31aad22e2b3cfe Likun Gao         2022-02-22  3459  	if (adev->psp.vbflash_image_size > AMD_VBIOS_FILE_MAX_SIZE_B) {
-31aad22e2b3cfe Likun Gao         2022-02-22  3460  		dev_err(adev->dev, "File size cannot exceed %u", AMD_VBIOS_FILE_MAX_SIZE_B);
-31aad22e2b3cfe Likun Gao         2022-02-22 @3461  		vfree(adev->psp.vbflash_tmp_buf);
-31aad22e2b3cfe Likun Gao         2022-02-22  3462  		adev->psp.vbflash_tmp_buf = NULL;
-31aad22e2b3cfe Likun Gao         2022-02-22  3463  		adev->psp.vbflash_image_size = 0;
-31aad22e2b3cfe Likun Gao         2022-02-22  3464  		return -ENOMEM;
-31aad22e2b3cfe Likun Gao         2022-02-22  3465  	}
-31aad22e2b3cfe Likun Gao         2022-02-22  3466  
-31aad22e2b3cfe Likun Gao         2022-02-22  3467  	/* TODO Just allocate max for now and optimize to realloc later if needed */
-31aad22e2b3cfe Likun Gao         2022-02-22  3468  	if (!adev->psp.vbflash_tmp_buf) {
-31aad22e2b3cfe Likun Gao         2022-02-22 @3469  		adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-31aad22e2b3cfe Likun Gao         2022-02-22  3470  		if (!adev->psp.vbflash_tmp_buf)
-31aad22e2b3cfe Likun Gao         2022-02-22  3471  			return -ENOMEM;
-31aad22e2b3cfe Likun Gao         2022-02-22  3472  	}
-31aad22e2b3cfe Likun Gao         2022-02-22  3473  
-31aad22e2b3cfe Likun Gao         2022-02-22  3474  	mutex_lock(&adev->psp.mutex);
-31aad22e2b3cfe Likun Gao         2022-02-22  3475  	memcpy(adev->psp.vbflash_tmp_buf + pos, buffer, count);
-31aad22e2b3cfe Likun Gao         2022-02-22  3476  	adev->psp.vbflash_image_size += count;
-31aad22e2b3cfe Likun Gao         2022-02-22  3477  	mutex_unlock(&adev->psp.mutex);
-31aad22e2b3cfe Likun Gao         2022-02-22  3478  
-31aad22e2b3cfe Likun Gao         2022-02-22  3479  	dev_info(adev->dev, "VBIOS flash write PSP done");
-31aad22e2b3cfe Likun Gao         2022-02-22  3480  
-31aad22e2b3cfe Likun Gao         2022-02-22  3481  	return count;
-31aad22e2b3cfe Likun Gao         2022-02-22  3482  }
-31aad22e2b3cfe Likun Gao         2022-02-22  3483  
-
-:::::: The code at line 3461 was first introduced by commit
-:::::: 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa drm/amdgpu/psp: Add vbflash sysfs interface support
-
-:::::: TO: Likun Gao <Likun.Gao@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+  2295	
+  2296	void sk_setup_caps(struct sock *sk, struct dst_entry *dst)
+  2297	{
+  2298		u32 max_segs = 1;
+  2299	
+  2300		sk_dst_set(sk, dst);
+  2301		sk->sk_route_caps = dst->dev->features;
+  2302		if (sk_is_tcp(sk))
+  2303			sk->sk_route_caps |= NETIF_F_GSO;
+  2304		if (sk->sk_route_caps & NETIF_F_GSO)
+  2305			sk->sk_route_caps |= NETIF_F_GSO_SOFTWARE;
+  2306		if (unlikely(sk->sk_gso_disabled))
+  2307			sk->sk_route_caps &= ~NETIF_F_GSO_MASK;
+  2308		if (sk_can_gso(sk)) {
+  2309			if (dst->header_len && !xfrm_dst_offload_ok(dst)) {
+  2310				sk->sk_route_caps &= ~NETIF_F_GSO_MASK;
+  2311			} else {
+  2312				sk->sk_route_caps |= NETIF_F_SG | NETIF_F_HW_CSUM;
+  2313				/* pairs with the WRITE_ONCE() in netif_set_gso_max_size() */
+  2314				sk->sk_gso_max_size = READ_ONCE(dst->dev->gso_max_size);
+  2315				if (sk->sk_gso_max_size > GSO_LEGACY_MAX_SIZE &&
+  2316				    (!IS_ENABLED(CONFIG_IPV6) || sk->sk_family != AF_INET6 ||
+> 2317				     !sk_is_tcp(sk) || ipv6_addr_v4mapped(&sk->sk_v6_rcv_saddr)))
+  2318					sk->sk_gso_max_size = GSO_LEGACY_MAX_SIZE;
+  2319				sk->sk_gso_max_size -= (MAX_TCP_HEADER + 1);
+  2320				/* pairs with the WRITE_ONCE() in netif_set_gso_max_segs() */
+  2321				max_segs = max_t(u32, READ_ONCE(dst->dev->gso_max_segs), 1);
+  2322			}
+  2323		}
+  2324		sk->sk_gso_max_segs = max_segs;
+  2325	}
+  2326	EXPORT_SYMBOL_GPL(sk_setup_caps);
+  2327	
 
 -- 
 0-DAY CI Kernel Test Service
