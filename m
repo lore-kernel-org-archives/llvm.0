@@ -1,163 +1,121 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314D428F2
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 14:26:47 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2314954pjg.0
-        for <llvm@lists.linux.dev>; Tue, 10 May 2022 07:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4L5S8FVGf1sMR35eidZeiyVG8JnT7nykUFphbiRbJOE=;
-        b=D0yJ+81QhdVQKnSC1cDM6q74m4kyDY226rltceKQLyqMl5nkiLbFIHHfkt4vev55oW
-         NEZwe8kry7HmVjGb/vG2Nu0ZcuYX0x7LFy+G4hFriF3LEMQH3PKlgWP0ZGvqkUFewTfj
-         OafwLSMF6qHvoe8gK0SR7SkAWbuHRH/jz7wbyYP/YBo34GSypmopha4d7WYQoUgFGoxG
-         t1m8X9h8n6Muqg7J/cSVg9b7PkA4Rc2I/drY2YCZ7Xnq2ltx62MCVYofFSk1RMY+Nlo/
-         SAq9cJA6fjxDVryf2skE0anV/isCzIG6kkwf158Qc0SxWnghXfRxMP7oVSnmA27L78QC
-         Rv4w==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505AD23C1
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 14:33:26 +0000 (UTC)
+Received: by mail-yb1-f180.google.com with SMTP id e12so31016736ybc.11
+        for <llvm@lists.linux.dev>; Tue, 10 May 2022 07:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=4L5S8FVGf1sMR35eidZeiyVG8JnT7nykUFphbiRbJOE=;
-        b=sr/S9QL2bZC/tpYNlGBOpLL0DQvav7GaGiqFHw0KRCI5/tqLxsRpOVlApTAlwWzdoz
-         IVvE3AlRuqU5zKcg0uS+wCFGzMGrezM1Km89hoJSVcIjKTcVzkaoQ1sHbou9pahZRzyF
-         eSuJiazed50vR0bG0ERo45jHEC40fyhVvKhmHEZR7ZW+gy/lgllVn5WPNHg9OoOa6aBZ
-         dy04shnuz/wHa879gznVOlhL0eT6Qss7WcbGJ7SbNq1N2BpmYpY8sATe7QoxRCXBXOc8
-         bMMGwkuV5z7Ngvii6dak+B6WQFBP3MOaCEQLAsUDeWpYkBtGKXH1F4uXqcRDwa/kHs4k
-         ovyw==
-X-Gm-Message-State: AOAM530lIpofrR4Jyb7UcelXKRuC7jI8NeXcY8pzvHHc1AakZk65Z/Lp
-	yL6+xAJt1pkyQNrZ1IYdNVA=
-X-Google-Smtp-Source: ABdhPJyBqsurrR904pcspa44t3Se2r7m2fHOr/QA5JhLtVn5m+o0oMztQhsUUErQLkVErJJHrhwIZA==
-X-Received: by 2002:a17:903:22d2:b0:15e:a3a4:918c with SMTP id y18-20020a17090322d200b0015ea3a4918cmr20284232plg.36.1652192806635;
-        Tue, 10 May 2022 07:26:46 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709028eca00b0015ea8b4b8f3sm2057568plo.263.2022.05.10.07.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 07:26:46 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date: Tue, 10 May 2022 23:25:50 +0900
-Message-Id: <20220510142550.1686866-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
-References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mx7jkXBBdOIkJsGSW9sVzyIselbqrtRZw2WUonRIsCM=;
+        b=QQ6BzmD6AYZcXbdExCLlFCaDk0WtBA8w8256tp60r7pyJppm/6qVOhJsWbz6awebfL
+         T77j4V1EdRU8NO9/yXJiSPYYMAQYOqafDvDmbe+/H3hUqlEMVAlWsPpN/eyG/3apFS5Z
+         XzbejJZQAA8JhS6r/BTZ1pX14vL/8/G74TSytfwdTCnrGr5v7h9Ttwdswe/l9a1bVo7T
+         irfhKGaklpX7Sd/r0PGIk2/g5ypQ2d7s0FdNr5kV6cWI+XLvJDRHb17ow90CS9bkmtxF
+         ebh/aQcWij0NAVFsqUXx0hX2rm/x7eVXMHEqc2+gZahPVT4KypC+BiTO6uBUgnWPTqhz
+         capg==
+X-Gm-Message-State: AOAM532P180DRnC+YMCIWkKNPsRrhPi8bzD3Lljf9cKhTwUcNoxTGChC
+	D/MvRwuJYspgiO3/gMQidhozdWwOPZtKnXjx4wM=
+X-Google-Smtp-Source: ABdhPJy3Uvp+D2AneUT5l7gTpn9VYrLB+IUai+5w9pwWufj0Ww56cSOPIr2Y94RdD35Oxp6LTgqxmzGrtKOiRNWq+7o=
+X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
+ n17-20020a5b0491000000b0064af42f6973mr6000334ybp.20.1652193205241; Tue, 10
+ May 2022 07:33:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
+ <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
+ <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
+ <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
+ <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com> <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Tue, 10 May 2022 23:33:13 +0900
+Message-ID: <CAMZ6RqKZOtHiQB4edYaXMUw7SMTKnvFGcisX0edx1om7NR+g7g@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Tom Rix <trix@redhat.com>, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+On Tue. 10 May 2022 at 10:10, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Tue. 10 May 2022 at 08:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > >
+> > > Hi Nick,
+> > >
+> > > On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
+> > > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > > >
+> > > > > Instead, I am thinking of just using -fno-builtin-ffs to remove
+> > > > > the annoying -Wshadow warning. Would that make more sense?
+> > > >
+> > > > Perhaps a pragma would be the best tool to silence this instance of
+> > > > -Wshadow?  I understand what GCC is trying to express, but the kernel
+> > > > does straddle a weird place between -ffreestanding and a "hosted" env.
+> > >
+> > > I was a bit reluctant to propose the use of pragma because I received
+> > > negative feedback in another patch for using the __diag_ignore()
+> > > c.f.:
+> > > https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
+> > >
+> > > But the context here is a bit different, I guess. If I receive your support, I
+> > > am fully OK to silence this with some #pragma.
+> > >
+> > > The patch would look as below (I just need to test with clang
+> > > before submitting).
+> >
+> > Do you have a sense for how many other functions trigger -Wshadow?
+>
+> I only witnessed such -Wshadow warnings for ffs().
+>
+> > For
+> > example, one question I have is:
+> > Why does ffs() trigger this, but not any of the functions defined in
+> > lib/string.c (or declared in include/linux/string.h) which surely also
+> > shadow existing builtins?  I can't see your example being sprinkled
+> > all over include/linux/string.h as being ok.
+>
+> Thanks, you are touching on a really interesting point.
+>
+> After checking, the other builtin functions declare the function with
+> two leading underscores (e.g. __foo(...)) and then do:
+>
+> #define foo(...) __foo(...)
+>
+> Or alternatively, if using the builtin function:
+>
+> #define foo(...) __builtin_foo(...)
+>
+> Compilers do not trigger the -Wshadow for such patterns.
+>
+> Example with memcpy():
+> https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/string_64.h#L75
+>
+> So, in light of your comment doing this would be more consistent:
+>
+> #define ffs(x) _ffs(x)
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() gets simplified into a single
-instruction.
+I created this patch:
+https://lore.kernel.org/all/20220510142550.1686866-1-mailhol.vincent@wanadoo.fr/T/#m55da229f67d2c84470a55df32e71d8600c581024
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
-
-This patch uses the __builtin_constant_p() to select between the
-kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
-the argument is constant or not.
+This solves the -Wshadow and also adds some optimizations for when
+ffs() is called with constant variables.
 
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Usually, helper functions are prefixed by two underscores. But here,
-__ffs() is already prefixed, instead of creating an ____ffs(), I
-renamed it instead to __ffs_asm_not_zero(). The _not_zero() suffix is
-to differentiate it from the __ffs_asm() helper function of the
-previous patch.
-
-If someone has better inspiration of the naming for this patch and the
-previous one, please let me know().
----
- arch/x86/include/asm/bitops.h | 36 ++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 535a7a358c14..694d0d100399 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long __ffs_asm_not_zero(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -239,12 +233,17 @@ static __always_inline unsigned long __ffs(unsigned long word)
- }
- 
- /**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 __ffs_asm_not_zero(word))
-+
-+static __always_inline unsigned long __ffz_asm(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 __ffz_asm(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
--- 
-2.35.1
-
+Yours sincerely,
+Vincent Mailhol
