@@ -1,153 +1,193 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF6023C2
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 06:41:07 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id p8so14142565pfh.8
-        for <llvm@lists.linux.dev>; Mon, 09 May 2022 23:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/R+BdsTsM0mS0BJ099mIwAuGA4DmGK3MfyL1tsHDy88=;
-        b=nR1unFNNL1Eu03i3ou8IfrgVFIKZGS6y8ycxMlqK7mWPArORl3ugMcJOdXGJBGNpS9
-         xwcx7T+TagvrwtOKBZDuE++qmcknw4S+oyv28BiIYLs6wCJDubWGyGxAc/BMGN4deE0l
-         3ZZEu7GhKyQtk5WhYIFkaPkJ3YcJxj6zz9fQJnvSFWQyTc2HnYuII/tkqc1bBHPFuX0d
-         /xNpON7BvlHLKgljUZ+f5PTXeaGHDf84HNUmp+FcK3XI1F5u8lm3B5Boky+dNAMQugja
-         aINmQH7M3Wuu37O1ZL3U9KxSVrYCx3C9dgoX3XOkCVMQeIVmDRMSfYSqCUJpPtF4p8eV
-         DTCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/R+BdsTsM0mS0BJ099mIwAuGA4DmGK3MfyL1tsHDy88=;
-        b=F5iTJ3hqGxwJDEglApsdcGvQNWAEy2qOY70GIoLIh8v4GCjPb3NBHBPHakpaL5a5Mp
-         ixyZ9YClXKWUvewDTnN91h2kVoYSFlA3nOyQsxXB4NDFYfsPOBtoJgwgr1aJlLpunrmu
-         ZpQNKRc3tFHgFnHhLk6/Sz5CGti30V57vnKteIWxwxwmBmhXT37lJypYxZAjw8q+zGHs
-         Q/7vNmxwz2AemgBMIaioOHKRfBX0IL7DOXAjJiehAB2Rtj02ZlZ1njkv9xCwn3g0EvaM
-         VZDN1tQTcmuCn3Bb/zsF2FRFC+H75Ttdo3iOkzoxyoJOnP3UvjhVJYbhgCvD9vlmLJVc
-         V4EA==
-X-Gm-Message-State: AOAM533fvNFSwvT0GidADxNOcl+8KJzwDRBMVo07Ay/G0WPIR0u8qhAs
-	o9huT5lD0eIzOv5bzpnAmWbBBw==
-X-Google-Smtp-Source: ABdhPJwMh3hdgkArGl0lsMSGCf/c/FWcT/W63T69K0ggo5K+yprCQbawWGx2A2ypR1pBvqgzRy5v/Q==
-X-Received: by 2002:a63:da13:0:b0:3c6:4c0:e2f9 with SMTP id c19-20020a63da13000000b003c604c0e2f9mr15718593pgh.493.1652164866540;
-        Mon, 09 May 2022 23:41:06 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:200:9543:36e:1e36:a909])
-        by smtp.gmail.com with ESMTPSA id g12-20020a17090a4b0c00b001cd498dc153sm1602382pjh.3.2022.05.09.23.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 23:41:06 -0700 (PDT)
-Date: Mon, 9 May 2022 23:41:02 -0700
-From: Fangrui Song <maskray@google.com>
-To: Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Paul Mackerras <paulus@samba.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 1/2] powerpc/vdso: Remove unused ENTRY in linker scripts
-Message-ID: <20220510064102.pvk3dvqnpihgo3bd@google.com>
-References: <20220509204635.2539549-1-nathan@kernel.org>
- <20220509204635.2539549-2-nathan@kernel.org>
- <ea0096e5-e1cb-a25d-e5b1-1774c0614397@ozlabs.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2020023C2
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 06:53:56 +0000 (UTC)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky7wb5SJ4zGpXV;
+	Tue, 10 May 2022 14:50:55 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 14:53:42 +0800
+Date: Tue, 10 May 2022 14:53:36 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Steven Rostedt
+	<rostedt@goodmis.org>
+CC: <changbin.du@huawei.com>, <hw.huiwang@huawei.com>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <codegen-riscv@discourse.llvm.org>,
+	<llvmproject@discourse.llvm.org>
+Subject: riscv: llvm-compiler: calling convention violation: temporary
+ register $t2 is used to pass the ninth function parameter
+Message-ID: <20220510065336.hlfjrc25ajed5zj4@M910t>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ea0096e5-e1cb-a25d-e5b1-1774c0614397@ozlabs.ru>
+X-Originating-IP: [10.110.54.157]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 
-On 2022-05-10, Alexey Kardashevskiy wrote:
->
->
->On 5/10/22 06:46, Nathan Chancellor wrote:
->>When linking vdso{32,64}.so.dbg with ld.lld, there is a warning about
->>not finding _start for the starting address:
->>
->>   ld.lld: warning: cannot find entry symbol _start; not setting start address
->>   ld.lld: warning: cannot find entry symbol _start; not setting start address
->>
->>Looking at GCC + GNU ld, the entry point address is 0x0:
->>
->>   $ llvm-readelf -h vdso{32,64}.so.dbg &| rg "(File|Entry point address):"
->>   File: vdso32.so.dbg
->>     Entry point address:               0x0
->>   File: vdso64.so.dbg
->>     Entry point address:               0x0
->>
->>This matches what ld.lld emits:
->>
->>   $ powerpc64le-linux-gnu-readelf -p .comment vdso{32,64}.so.dbg
->>
->>   File: vdso32.so.dbg
->>
->>   String dump of section '.comment':
->>     [     0]  Linker: LLD 14.0.0
->>     [    14]  clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->>
->>   File: vdso64.so.dbg
->>
->>   String dump of section '.comment':
->>     [     0]  Linker: LLD 14.0.0
->>     [    14]  clang version 14.0.0 (Fedora 14.0.0-1.fc37)
->>
->>   $ llvm-readelf -h vdso{32,64}.so.dbg &| rg "(File|Entry point address):"
->>   File: vdso32.so.dbg
->>     Entry point address:               0x0
->>   File: vdso64.so.dbg
->>     Entry point address:               0x0
->>
->>Remove ENTRY to remove the warning, as it is unnecessary for the vDSO to
->>function correctly.
+[This is a resent to correct llvm mailist.]
 
-LGTM. e_entry for the vDSO (generally all shared objects, unless invoked
-directly as the main executable) is unnecessary.
+Hello, folks,
 
->Sounds more like a bugfix to me - _start is simply not defined, I 
->wonder why ld is not complaining.
+Recently I encountered a kernel crash problem when using ftrace with 'perf ftrace'
+command on risc-v kernel built with llvm.
 
-This is a loose behavior in GNU ld. I know this but did not bother
-filing a feature request.
+This crash only exists on llvm build, not reproducable with GCC. So I hope llvm
+guys can take a look :)
 
-Now that you mentioned it:) https://sourceware.org/bugzilla/show_bug.cgi?id=29136 (ld: ENTRY(no_such_symbol) in -shared mode does not report a warning)
+The llvm versions I have tried are llvm-13.0.0 and mainline (commit 102bc634cb
+("[runtime] Build compiler-rt with --unwindlib=none")).
 
->
->Tested-by: Alexey Kardashevskiy <aik@ozlabs.ru>
->Reviewed-by: Alexey Kardashevskiy <aik@ozlabs.ru>
->
->
->>
->>Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->>---
->>  arch/powerpc/kernel/vdso/vdso32.lds.S | 1 -
->>  arch/powerpc/kernel/vdso/vdso64.lds.S | 1 -
->>  2 files changed, 2 deletions(-)
->>
->>diff --git a/arch/powerpc/kernel/vdso/vdso32.lds.S b/arch/powerpc/kernel/vdso/vdso32.lds.S
->>index 58e0099f70f4..e0d19d74455f 100644
->>--- a/arch/powerpc/kernel/vdso/vdso32.lds.S
->>+++ b/arch/powerpc/kernel/vdso/vdso32.lds.S
->>@@ -13,7 +13,6 @@ OUTPUT_FORMAT("elf32-powerpcle", "elf32-powerpcle", "elf32-powerpcle")
->>  OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
->>  #endif
->>  OUTPUT_ARCH(powerpc:common)
->>-ENTRY(_start)
->>  SECTIONS
->>  {
->>diff --git a/arch/powerpc/kernel/vdso/vdso64.lds.S b/arch/powerpc/kernel/vdso/vdso64.lds.S
->>index 0288cad428b0..1a4a7bc4c815 100644
->>--- a/arch/powerpc/kernel/vdso/vdso64.lds.S
->>+++ b/arch/powerpc/kernel/vdso/vdso64.lds.S
->>@@ -13,7 +13,6 @@ OUTPUT_FORMAT("elf64-powerpcle", "elf64-powerpcle", "elf64-powerpcle")
->>  OUTPUT_FORMAT("elf64-powerpc", "elf64-powerpc", "elf64-powerpc")
->>  #endif
->>  OUTPUT_ARCH(powerpc:common64)
->>-ENTRY(_start)
->>  SECTIONS
->>  {
->
+[  612.947887][  T496] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
+[  613.050789][  T496] Hardware name: riscv-virtio,qemu (DT)
+[  613.087976][  T496] epc : __find_rr_leaf+0x128/0x220
+[  613.107493][  T496]  ra : return_to_handler+0x22/0x24
+[  613.125322][  T496] epc : ffffffff80a1915a ra : ffffffff80009506 sp : ff20000011e43860
+[  613.150124][  T496]  gp : ffffffff81812f40 tp : ff6000008bb01580 t0 : ff600000806cf0f0
+[  613.173657][  T496]  t1 : 000000000001b29a t2 : 0000000000000001 s0 : ff20000011e43920
+[  613.187311][  T496]  s1 : ff600000848c2a00 a0 : 0000000000000002 a1 : 0000000000000002
+[  613.202731][  T496]  a2 : fffffffffffffffd a3 : ff6000009d287000 a4 : 00000000000002c0
+[  613.213723][  T496]  a5 : ff6000009d259b40 a6 : ffffffffffffff9c a7 : ffffffffffffffff
+[  613.226648][  T496]  s2 : 0000000000000001 s3 : ff20000011e439d8 s4 : ffffffff8160d140
+[  613.246571][  T496]  s5 : 0000000000000002 s6 : 0000000000000000 s7 : 0000000000000000
+[  613.264681][  T496]  s8 : 0000000000000064 s9 : 0000000000000000 s10: 0000000000400000
+[  613.277999][  T496]  s11: ff600000848c2aa8 t3 : 0000000000000290 t4 : 00000000004002c0
+[  613.303729][  T496]  t5 : 00000000ffffffff t6 : ff6000009d2872d0
+[  613.322145][  T496] status: 0000000200000120 badaddr: 0000000000000001 cause: 000000000000000d
+[  613.346228][  T496] [<ffffffff80a12526>] ip6_pol_route+0xb6/0x602
+[  613.365722][  T496] [<ffffffff80a1321a>] ip6_pol_route_output+0x2c/0x34
+[  613.386374][  T496] [<ffffffff80a1c028>] fib6_rule_lookup+0x36/0xa0
+[  613.401865][  T496] [<ffffffff80a131da>] ip6_route_output_flags_noref+0xd6/0xea
+[  613.412776][  T496] [<ffffffff80a13274>] ip6_route_output_flags+0x52/0xd4
+[  613.432013][  T496] [<ffffffff809ffb3a>] ip6_dst_lookup_tail+0x68/0x23a
+[  613.456198][  T496] [<ffffffff809ffec6>] ip6_sk_dst_lookup_flow+0x132/0x1cc
+[  613.513174][  T496] [<ffffffff80003cd8>] ret_from_syscall+0x0/0x2
+[  613.518973][  T496] [<ffffffff800094e4>] return_to_handler+0x0/0x24
+[  613.563961][  T496] Kernel panic - not syncing: Fatal exception
+[  613.572278][  T496] SMP: stopping secondary CPUs
+[  613.587449][  T496] ---[ end Kernel panic - not syncing: Fatal exception ]---
+
+The crash happened when dereferencing the point 'mpri' at route.c:758.
+
+(gdb) l *__find_rr_leaf+0x128
+0xffffffff809da9c4 is in __find_rr_leaf (net/ipv6/route.c:758).
+753
+754             if (strict & RT6_LOOKUP_F_REACHABLE)
+755                     rt6_probe(nh);
+756
+757             /* note that m can be RT6_NUD_FAIL_PROBE at this point */
+758             if (m > *mpri) {
+759                     *do_rr = match_do_rr;
+760                     *mpri = m;
+761                     rc = true;
+762             }
+
+Adding some logs, I found the problem. The ninth passed parameter of function
+__find_rr_leaf() which is the address of local variable 'mpri', is changed to
+value '0x1' when inside the function __find_rr_leaf.
+Here is the code snippet and full link
+https://github.com/torvalds/linux/blob/9cb7c013420f98fa6fd12fc6a5dc055170c108db/net/ipv6/route.c.
+
+static void find_rr_leaf(struct fib6_node *fn, struct fib6_info *leaf,
+			 struct fib6_info *rr_head, int oif, int strict,
+			 bool *do_rr, struct fib6_result *res)
+{
+	u32 metric = rr_head->fib6_metric;
+	struct fib6_info *cont = NULL;
+	int mpri = -1;
+
+	__find_rr_leaf(rr_head, NULL, metric, res, &cont,
+		       oif, strict, do_rr, &mpri);
+	...
+}
+
+Then debugging with gdb, I found this probably is a compiler bug. We can see the
+local function __find_rr_leaf() is not optimized out and the compiler generates
+a local symbol for it. The find_rr_leaf() (inlined by fib6_table_lookup) invokes
+this function with 'jalr' instruction.
+
+(gdb) disassemble fib6_table_lookup
+Dump of assembler code for function fib6_table_lookup:
+   [snip]
+   0xffffffff80a1240e <+412>:   beqz    a1,0xffffffff80a12436 <fib6_table_lookup+452>
+   0xffffffff80a12410 <+414>:   slli    a1,s9,0x20
+   0xffffffff80a12414 <+418>:   srli    a1,a1,0x20
+   0xffffffff80a12416 <+420>:   sext.w  a2,a1
+   0xffffffff80a1241a <+424>:   addi    a7,s0,-125
+   0xffffffff80a1241e <+428>:   addi    t2,s0,-124
+   0xffffffff80a12422 <+432>:   li      a1,0
+   0xffffffff80a12424 <+434>:   mv      a3,s10
+   0xffffffff80a12426 <+436>:   li      a4,0
+   0xffffffff80a12428 <+438>:   ld      a5,-152(s0)
+   0xffffffff80a1242c <+442>:   mv      a6,s8
+   0xffffffff80a1242e <+444>:   auipc   ra,0x7
+   0xffffffff80a12432 <+448>:   jalr    -686(ra) # 0xffffffff80a19180 <__find_rr_leaf>
+   [snip]
+
+And at line route.c:758, the value of point 'mpri' is stored in temporary register
+$t2 and $s3 (copied from $t2).
+
+(gdb) info scope __find_rr_leaf
+[snip]
+Symbol mpri is multi-location:
+  Base address 0xffffffff80a10564  Range 0xffffffff80a19190-0xffffffff80a191ae: a variable in $t2
+  Range 0xffffffff80a191c0-0xffffffff80a191d6: a variable in $s3
+  Range 0xffffffff80a19200-0xffffffff80a19208: a variable in $s3
+  Range 0xffffffff80a1921e-0xffffffff80a192fe: a variable in $s3
+  Range 0xffffffff80a1930a-0xffffffff80a19356: a variable in $s3
+
+Let's see when register $t2 is corrupted with single-step mode. Obviously, register
+$t2 is changed by mcount function ftrace_caller(). This is why the bug happens
+to ftrace.
+
+Dump of assembler code for function __find_rr_leaf:
+   0xffffffff80a19180 <+0>:     sd      ra,-8(sp)   #  $t2 = 0xff200000120db7b4
+   0xffffffff80a19184 <+4>:     auipc   ra,0xff5f1
+   0xffffffff80a19188 <+8>:     jalr    -1744(ra) # 0xffffffff80009ab4 <ftrace_caller> #  $t2 = 0xff200000120db7b4
+=> 0xffffffff80a1918c <+12>:    ld      ra,-8(sp)    #  $t2 = 0x1, bug, $t2 is corrupted!!
+   0xffffffff80a19190 <+16>:    addi    sp,sp,-176
+   [snip]
+
+So now we can come to a conclusion. The generated local function __find_rr_leaf()
+violates the risc-v calling convention and leads to the panic. It should use stack
+but *not* temporary register $t2 to pass the ninth parameter! It's okay if the
+callsite can take care of local symbol callees, but the Function Instrumentation
+features should be considerated carefully.
+
+For comparison, here is the result from gcc (9.2.0):
+(gdb) info scope __find_rr_leaf
+[snip]
+Symbol mpri is a complex DWARF expression:
+     0: DW_OP_fbreg 0, length 8.
+
+I also built a simple test function with 9 parameters by clang and same cflags,
+but cannot reproduce it. Maybe it is conditional?
+
+Simple test code:
+__attribute__ ((noinline))
+void test_func(int *a, int *b, int *c, int *d, int *e, int *f, int *g, int *h, int *i)
+{
+        printf("__find_rr_leaf: %d\n", *i);
+}
+
+int main(void)
+{
+        int a,b,c,d,e,f,g,h,i = 100;
+
+        test_func(&a,&b,&c,&d,&e,&f,&g,&h,&i);
+        return 0;
+}
+
+-- 
+Cheers,
+Changbin Du
