@@ -1,136 +1,274 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32793D9F
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 23:24:46 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id w187so770082ybe.2
-        for <llvm@lists.linux.dev>; Tue, 10 May 2022 16:24:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0868B3D9F
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 23:54:47 +0000 (UTC)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2fb965b34easo3538767b3.1
+        for <llvm@lists.linux.dev>; Tue, 10 May 2022 16:54:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GokfEYQ6AnMfT1CyMpbI+Gftvn5q5QVicSRCEy9ThmQ=;
-        b=KWCH6r0vimy26dO9c4bnpc0LXdNv431Duk31s6icPffCtCoy8KbOG5YQl+7L+RSsFy
-         wtjF4q/SNZMeTeAPSDO/kstmwZg3DcdltRM74a7K8jTDNZhjuahnSR5X/PKw2tXM0Bi4
-         f9Ob1xD8+arizyNmHuq7avi+v0GSaDQhfgFie11K9KuUmVVnwNACD6FCHpGm5wm/TU5f
-         JCmwaBZOLzbwlxaTpdSb0otS0q0d6e6f4dd/GUTeeZHhBj5sEjypucdJQqG68UE0yfPA
-         VgHZ7SI6yGo5MBlpQKwGdUSafkYZIEB239C02WqkiMx0sNeO47SuCOZawAJlb2oztSQI
-         z2qg==
-X-Gm-Message-State: AOAM533kX13W24U9mHw3ggTisTjsaoCKGzRDe3j8EIhsRxy9WHz9/lJr
-	EVaep29Pur0x5h13LOSpnBo2IOQut3yHAytzJg4=
-X-Google-Smtp-Source: ABdhPJwE8F5hcuKqkn4TMhkA3oM9+LLKYIdOYQg8ptuz+R9ZAxiIkoj9TzqpxOc5KyK8ccrijzGmHwh61Ye2VR+W/pc=
-X-Received: by 2002:a25:76c6:0:b0:648:5616:ca50 with SMTP id
- r189-20020a2576c6000000b006485616ca50mr22374768ybc.423.1652225085812; Tue, 10
- May 2022 16:24:45 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LkB9VCPYUQ49GiWWHtqF1JmJ6O5/FOWFNNGNAFI6V7c=;
+        b=4dpkNw9rv6yQ4UOJ+2zsfv+yIfPCR9jDdcBpikJWRzmv00n8WVz63zw9BIyGAU/Q1y
+         RYIGJxtNJr0GQXUOMozMIfUUxhQDzZzaTCXok/rPtrosDyU5tTTeHiJKT831a7iS4J/5
+         pr08J/nZKc0BC5Q54acNcy3DB8lJSNuLAOWptTWtm4Spfe5YiJfKH0dr5UkSz70Fcfa6
+         /+o08AqYoVqoJbeWYzGaq/X0RiGxKmXGAdNk1nMC7RUrkKNCctsz+wZp2fnhTDt1myiC
+         Uia9KieQPNJD5ujLjX1qNWPW9RLwoOzzO91clLd0WBjucBUWL4pmrphjfYfkq19wWrXj
+         gvxA==
+X-Gm-Message-State: AOAM531tnV+Uyk3KIFg9CVu7bY5JpL/QsPKEGHy4l233cxkWZsaFwIEy
+	YmZbA2wkdfHCUg0Tt2k/x3QbxizLZSuctXv75R4=
+X-Google-Smtp-Source: ABdhPJwmLEBrNtBIymZv1ulZmq0Azwymw08e46QNccwsL2pRkKx/sT7xjezagG+nae9yPT7xmDh0BenPUREkMdC/Zgk=
+X-Received: by 2002:a81:8cf:0:b0:2f4:da59:9eef with SMTP id
+ 198-20020a8108cf000000b002f4da599eefmr22674416ywi.78.1652226886870; Tue, 10
+ May 2022 16:54:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr> <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com>
-In-Reply-To: <CAKwvOdnShyGvW9cuDuqQS+uvY7DHSmh8-55R1Bx_dxej8YQRHg@mail.gmail.com>
+References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
+ <20220510142550.1686866-2-mailhol.vincent@wanadoo.fr> <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
 From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Wed, 11 May 2022 08:24:34 +0900
-Message-ID: <CAMZ6RqKD9O8OHVUGCOYK1BXm7SCOkWbxCsSb=6jjfzgKn61JEw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+Date: Wed, 11 May 2022 08:54:35 +0900
+Message-ID: <CAMZ6RqLTNQnFantEoUToNPKitHr6A-9y88McDdwv83xwpFoekw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
  constant expressions
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	David Howells <dhowells@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed. 11 May 2022 at 07:14, Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Wed. 11 May 2022 at 07:29, Nick Desaulniers <ndesaulniers@google.com> wr=
+ote:
 > On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
 > <mailhol.vincent@wanadoo.fr> wrote:
 > >
-> > The compilers provides some builtin expression equivalent to the
-> > ffs(), __ffs() and ffz() function of the kernel. The kernel uses
-> > optimized assembly which produces better code than the builtin
-> > functions. However, such assembly code can not be optimized when used
-> > on constant expression.
+> > For x86_64, the current ffs() implementation does not produce
+> > optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ffs() function of both GCC and clang is able
+> > to simplify the expression into a single instruction.
 > >
-> > This series relies on __builtin_constant_p to select the optimal solution:
+> > * Example *
 > >
-> >   * use kernel assembly for non constant expressions
+> > Let's consider two dummy functions foo() and bar() as below:
 > >
-> >   * use compiler's __builtin function for constant expressions.
+> > | #include <linux/bitops.h>
+> > | #define CONST 0x01000000
+> > |
+> > | unsigned int foo(void)
+> > | {
+> > |       return ffs(CONST);
+> > | }
+> > |
+> > | unsigned int bar(void)
+> > | {
+> > |       return __builtin_ffs(CONST);
+> > | }
 > >
-> > I also think that the fls() and fls64() can be optimized in a similar
-> > way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
-> > trivial so I want to focus on this series first. If it get accepted, I
-> > will then work on those two additionnal function.
+> > GCC would produce below assembly code:
 > >
+> > | 0000000000000000 <foo>:
+> > |    0: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> > |    5: 0f bc c7                bsf    %edi,%eax
+> > |    8: 83 c0 01                add    $0x1,%eax
+> > |    b: c3                      ret
+> > |    c: 0f 1f 40 00             nopl   0x0(%rax)
+> > |
+> > | 0000000000000010 <bar>:
+> > |   10: b8 19 00 00 00          mov    $0x19,%eax
+> > |   15: c3                      ret
 > >
-> > ** Statistics **
+> > And clang would produce:
 > >
-> > On a allyesconfig, before applying this series, I get:
-> >
-> > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > | 1081
-> >
-> > After applying this series:
-> >
-> > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > | 792
-> >
-> > So, roughly 26.7% of the call to either ffs() or __ffs() were using
-> > constant expression and can be optimized (I did not produce the
-> > figures for ffz()).
+> > | 0000000000000000 <foo>:
+> > |    0: 55                      push   %rbp
+> > |    1: 48 89 e5                mov    %rsp,%rbp
+> > |    4: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> > |    9: 0f bc 05 00 00 00 00    bsf    0x0(%rip),%eax        # 10 <foo+=
+0x10>
+> > |   10: ff c0                   inc    %eax
+> > |   12: 5d                      pop    %rbp
+> > |   13: c3                      ret
+> > |   14: 66 2e 0f 1f 84 00 00    cs nopw 0x0(%rax,%rax,1)
+> > |   1b: 00 00 00
+> > |   1e: 66 90                   xchg   %ax,%ax
+> > |
+> > | 0000000000000020 <bar>:
+> > |   20: 55                      push   %rbp
+> > |   21: 48 89 e5                mov    %rsp,%rbp
+> > |   24: b8 19 00 00 00          mov    $0x19,%eax
+> > |   29: 5d                      pop    %rbp
+> > |   2a: c3                      ret
 >
-> These stats are interesting; consider putting them on patch 1/2 commit
-> message though (in addition to the cover letter). (Sending thoughts on
-> 1/2 next).
-
-The fact is that patch 1/2 changes ffs() and patch 2/2 changes
-__ffs(). For v2, I will run the stats on each patch separately in
-order not to mix the results.
-
-> >
-> > (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+> Right, we need to allocate registers to move the inputs into the asm
+> block, and the results back out. Inline asm is analogous to a call
+> with a custom calling convention, where we don't look into the body of
+> the inline asm.
 >
-> Here's the same measure of x86_64 allyesconfig (./scripts/config -d
-> CONFIG_HINIC) at 9be9ed2612b5aedb52a2c240edb1630b6b743cb6 with ToT
-> LLVM (~clang-15):
+> Does -fomit-frame-pointer clean make these snippets clearer, or did
+> you not build with -O2?  Consider using those flags if so, since we
+> generally prefer the ORC unwinder on x86, not the frame pointer
+> unwinder.  If the compilers are forcing a frame pointer when using the
+> builtins once optimizations are enabled, that's a problem (that we've
+> seen in the past with the builtins for reading eflags with clang; now
+> fixed).
+
+I have not played with those parameters yet, so short answer, I
+am using the kernel default (above assembly was compiled with
+Kbuild).  You are touching a few topics I am not familiar with, I
+need some research on this before answering you in more detail.
+
+> >
+> > For both examples, we clearly see the benefit of using __builtin_ffs()
+> > instead of the kernel's asm implementation for constant expressions.
+> >
+> > However, for non constant expressions, the ffs() asm version of the
+> > kernel remains better for x86_64 because, contrary to GCC, it doesn't
+> > emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+> > able optimize out the CMOV call).
+> >
+> > This patch uses the __builtin_constant_p() to select between the
+> > kernel's ffs() and the __builtin_ffs() depending on whether the
+> > argument is constant or not.
+> >
+> >
+> > As a side benefit, this patch also removes below -Wshadow warning:
+> >
+> > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs'=
+ shadows a built-in function [-Wshadow]
+> > |   283 | static __always_inline int ffs(int x)
 >
-> Before:
-> $ objdump -d vmlinux.o | grep bsf | wc -l
-> 1454
+> Nice! :)
+
+Thanks.
+
+For the record, fixing the -Wshadow is my real motivation. I am
+pissed when the header files through some W=3D12 warnings.  Once
+this patch is applied, there will be one last annoying W=3D2
+warning to clear in order to only see local warnings and not
+random spam from headers when doing a W=3D12 (at least on x86_64).
+
+But because those kinds of W=3D2 fixes aren't so popular, I figured
+it would be better to offer something else. I first checked if
+GCC produces less optimized code than the kernel assembly: that
+was still the case. I then looked at the GCC mailing list to see
+if discussion on this topic existed. Didn't find it but found
+instead that GCC could optimize constant expressions. And voil=C3=A0
+how I came to the creation of this patch.
+
+> >
+> > [1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64(=
+)")
+> > http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procy=
+on.org.uk
 >
-> After:
-> $ objdump -d vmlinux.o | grep bsf | wc -l
-> 1070
+> + David, author of ca3d30cc02f7.  I was wondering if this applied to
+> more than just x86, but I see now that some architectures just include
+> include/asm-generic/bitops/builtin-ffs.h into their
+> arch/*/include/asm/bitops.h. It's only when we want to beat the
+> compiler for non-ICE expressions.
+
+Yes, I did a quick research, the majority of the architectures already
+rely on the builtin function.
+Would need to give a deeper look to track if anyone else other than
+x86 also uses assembly.
+
+Also, this potentially may apply to builtin functions other than
+the ffs family. Just did not find any other cases so far.
+
+> Patch LGTM; just minor comments on commit message, naming, and formatting=
+.
 >
-> -26.4% :)
-
-Roughly same ratio. I am just surprise that the absolute number
-are different:
-
-  * GCC before: 1081, after 792
-  * clang before 1454, after 1070
-
-I wonder why clang produces more bsf instructions than GCC?
-
-Also, on a side note, I am not the first one to realize that
-__builtin_ffs() is able to optimize the constant variable. Some
-people already used it to locally:
-
-| $ git grep __builtin_ffs | wc -l
-| 80
-
 > >
 > >
-> > Vincent Mailhol (2):
-> >   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
-> >     expressions
-> >   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
-> >     expressions
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  arch/x86/include/asm/bitops.h | 29 +++++++++++++++++------------
+> >  1 file changed, 17 insertions(+), 12 deletions(-)
 > >
-> >  arch/x86/include/asm/bitops.h | 65 +++++++++++++++++++++--------------
-> >  1 file changed, 40 insertions(+), 25 deletions(-)
+> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitop=
+s.h
+> > index a288ecd230ab..535a7a358c14 100644
+> > --- a/arch/x86/include/asm/bitops.h
+> > +++ b/arch/x86/include/asm/bitops.h
+> > @@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigne=
+d long word)
+> >  #undef ADDR
 > >
+> >  #ifdef __KERNEL__
+> > -/**
+> > - * ffs - find first set bit in word
+> > - * @x: the word to search
+> > - *
+> > - * This is defined the same way as the libc and compiler builtin ffs
+> > - * routines, therefore differs in spirit from the other bitops.
+> > - *
+> > - * ffs(value) returns 0 if value is 0 or the position of the first
+> > - * set bit if value is nonzero. The first (least significant) bit
+> > - * is at position 1.
+> > - */
+> > -static __always_inline int ffs(int x)
+> > +static __always_inline int __ffs_asm(int x)
+>
+> How about variable_ffs rather than __ffs_asm? Let's try to stick with
+> the convention used by test_bit?
+
+ACK. I will also follow this comment for path 2/2 and use
+__variable_ffs instead of __ffs_asm_not_zero there.
+
+> >  {
+> >         int r;
+> >
+> > @@ -310,6 +299,22 @@ static __always_inline int ffs(int x)
+> >         return r + 1;
+> >  }
+> >
+> > +/**
+> > + * ffs - find first set bit in word
+> > + * @x: the word to search
+> > + *
+> > + * This is defined the same way as the libc and compiler builtin ffs
+> > + * routines, therefore differs in spirit from the other bitops.
+> > + *
+> > + * ffs(value) returns 0 if value is 0 or the position of the first
+> > + * set bit if value is nonzero. The first (least significant) bit
+> > + * is at position 1.
+> > + */
+> > +#define ffs(x)                                 \
+> > +        (__builtin_constant_p(x) ?             \
+> > +         __builtin_ffs(x) :                    \
+> > +         __ffs_asm(x))
+> > +
+>
+> I think this whole #define can fit on one line?
+
+I split it into multiple lines to be consistent with other macros
+in the file. I have no objections to doing it on a single line (I
+will just check if this is within the 80 characters limit and if
+so, will do a single line in v2).
+
+> If not, perhaps the
+> BCP can start on the initial line?  Otherwise it looks like the
+> then/else clauses are indented by 1 tab followed by 1 space. Consider
+> just using tabs.
+
+Right, I inadvertently added a space after the tab of the first
+line and the editor auto indentation repeated the patterns on the
+other lines.
+
+With that said, I will prepare the v2. I will send it within two
+days I think (can not do it right now).
+
+> >  /**
+> >   * fls - find last set bit in word
+> >   * @x: the word to search
 > > --
 > > 2.35.1
 > >
