@@ -1,332 +1,251 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870EA2912
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 17:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50B1C385A6;
-	Tue, 10 May 2022 17:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652202931;
-	bh=3SPKoFOYyuffaMVZSlMvPXlXDdyS0LlwxMHm/X8w98o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mEjd+r9TyxI2QYloyZt/IOLRi1Uc3qkqE+h/42Rj+nicsqBuAAhbHBNCJNobVPYpG
-	 A6p8Sa7JTlWJJHnw66z7OIQ5R2732mGzrzr7m8VzhEsz7QQKNXCa3f//G5xHh+RSGz
-	 ZSPym+/V22XfuqW4sdl2iBd4l827N6SYipwiTlXUAIyMVy3rdghL/G6PPX87+5SwS/
-	 p4Rdw9b6Am95+slXJLktUcx7JpBGsZaaEEf+RofsIbqw2WXPyOMfA9r1NiP1uv8gBt
-	 H/angUjO0bwJlmxlnsVZDSueWsGGLNDutFyNqAzg6Wfn17zlJ4coNhArefawvNuc1c
-	 84l3W4lqfQ1BA==
-From: Mike Rapoport <rppt@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Mike Rapoport <rppt@linux.ibm.com>,
-	Russell King <linux@armlinux.org.uk>,
-	kbuild-all@lists.01.org,
-	kernel test robot <lkp@intel.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH 5.10] arm: remove CONFIG_ARCH_HAS_HOLES_MEMORYMODEL
-Date: Tue, 10 May 2022 20:15:23 +0300
-Message-Id: <20220510171523.98999-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB0A2912
+	for <llvm@lists.linux.dev>; Tue, 10 May 2022 17:35:56 +0000 (UTC)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AFLmHa027467;
+	Tue, 10 May 2022 17:35:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=QiSXegfv0KNKYkz8Tag65+Aa/zYE9aNLprkfbZjc8vM=;
+ b=ywD+5BTTmr6ZM25/aOV2I1o1fFfGWEaZ4pt5GLtGMp4cRQPPRQCN73I7KHDVYNpDCtv0
+ j8iE+awPEIWj3DEBlmLQQ0yNCxTP2TghHlb1ByQgHaibpc1C2zu4wl1RRaunv7QvNR9o
+ m3Ckn21QtFMvISITSP/eRSyY3AWHYl5jGzy6JYfvoueqz+H1LBb9Ue6Nuo1kOksKKFlk
+ AmonWnaJY+qnj0ZArfoWHc4k7wUalro9bEPB8y6oDPZll7aMt8Jm9STpd8tc7n43iwMl
+ 0gXTa/lwuDiid81Eq4A6M/5qXO/jHFaOIuzX5noSmqP2g5tY5fDcZ5q45eerLv0DVS7q Gg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fwfj2fh7s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 May 2022 17:35:26 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24AHZN6g016824;
+	Tue, 10 May 2022 17:35:25 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fwf72k3fv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 May 2022 17:35:25 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NSrL9wAHyo1d84rgfpbonr/wYhgqfXH7Ff0N+J+yCSkLQgi3l4U4vjzYGXRPKArGeMj3s6YxYm6hdxii/GnpzqM/PbcKoNek7IsZosDkvSXo8w69qQ/BaDlYIDHgZM+SL2SZ4xvwCh8lLkdQb0MlXkhWSvPewIvJ3DF07Fm7i9PuqjePdUHDCSqaqwlnrp5foYYeV1MpqCYIuc7d/+aOaF5AIUR4IU07IOVADw6J4AftAeY2IcMiGq4i2hRUWjQL/c0anwYO+CilOZFY+mNWpQhNVdPn8w6wBvyfgyAmYEgaOPogtzSmHpol/QDrtCSk73WdixY13M5BvSDPoKiNnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QiSXegfv0KNKYkz8Tag65+Aa/zYE9aNLprkfbZjc8vM=;
+ b=F/hN8Dcw48502ivI+GnXpOfKdU3MfcwxXZKzlqWNMx7no65DCedNMMhZa1vAYp36xtNpVPdjzWugiZnkkSYuuFj5uv4pRK5joFbdLrslOsM9otEHJ6rdtlvJx9PIvcGn5YwoMg5zK+m1xcjhxsOri0qdcOZjIG/rquL3Objdh5s1vJK3AY8HKdivlisImxAY+0qg966Ypie7LAQm4CgNeAQUSZ6qOnITkMvr9RCM82+xIXYA7Dhr6dDUDQTmaDuIPnjs1JRov0wlpW4DRI4xy9LXVgnN8Uw3P0nwIK3ZHUpxqH7jAnXwjH/gKUcEIgZI46KZV8ZQ+Qddx/m9IIf5GA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QiSXegfv0KNKYkz8Tag65+Aa/zYE9aNLprkfbZjc8vM=;
+ b=t6c+RYv3POXAZIw9pAwWg2IMt4ZKRWNnGU0Vewv/Z1VX9QT8B7RGev4yAh4WTOHvZRvmJgSXd7YJi1Oq5Idn7EF9pUg4qb5+qvX3FCuS509wEM+e5BfBaoymz1hj0lU6OSznMZvBotLVjZ7ISlRUPu5Xh51JDipKr5ZDn7TXseA=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM6PR10MB3226.namprd10.prod.outlook.com (2603:10b6:5:1a4::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Tue, 10 May
+ 2022 17:35:18 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::318c:d02:2280:c2c]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::318c:d02:2280:c2c%7]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 17:35:18 +0000
+From: Liam Howlett <liam.howlett@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+CC: kernel test robot <lkp@intel.com>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Memory
+ Management List <linux-mm@kvack.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [akpm-mm:mm-unstable 338/431] mm/nommu.c:579:2: error: call to
+ undeclared function 'vma_mas_store'; ISO C99 and later do not support
+ implicit function declarations
+Thread-Topic: [akpm-mm:mm-unstable 338/431] mm/nommu.c:579:2: error: call to
+ undeclared function 'vma_mas_store'; ISO C99 and later do not support
+ implicit function declarations
+Thread-Index: AQHYZGzcLoOvwAbW8U2cmZ1bZLmega0YWFYAgAAHX4A=
+Date: Tue, 10 May 2022 17:35:18 +0000
+Message-ID: <20220510173503.abz4t3y3nyg4ndmz@revolver>
+References: <202205102024.jnJMagOr-lkp@intel.com>
+ <20220510100840.2914b21473ac5fe774a5d44a@linux-foundation.org>
+In-Reply-To: <20220510100840.2914b21473ac5fe774a5d44a@linux-foundation.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cb7f4db2-4308-4a08-af9f-08da32ab736c
+x-ms-traffictypediagnostic: DM6PR10MB3226:EE_
+x-microsoft-antispam-prvs: 
+ <DM6PR10MB3226BAE889FF03C3FBC86E27FDC99@DM6PR10MB3226.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ ItoH2QgBoonI2OTwH7zVd7wyUYTxUmjNebsnTJwCN8PDFG+U0FknEyY9w92ErBvASeMWFDm0zyh4binbyglM3FcNUkhFA5LBim4Wb+pfyatZsX+4VHd4VUfxNsUEDnXBW5qh00tIa89masS4qUE7MJaqx25jXBB/nGOjqJX59FsfrcVVl8pP/ji2ccjxBmHNbFhAAR2KaqjvuI9z7K0jBa1HtWOCNcUHm2xdyI7uBMKJzBe0u9caMJttjKe4xfMh8vPHkSLV27ZKmBCFxpWFdz/PJQKtIoXvG+gdOUvqGVeV7yKf+hBIkyteFjbeAN6Meo42S+QNjwWey7RVmwbjZBy7k5sGYIKaLvz2fdluqXiPrkxvmNasNx1sRBi/lK/GGSlKYfoht5YEVGov4wi3iLjNHzl1j72+YkA8bTGRpa94nSQF9xgAFoHD0thbcBuULl99JClLupv2JwlIso4NfbSM+efHy6Ru6F+YHlIju8/Cpzmn5sV0617pCPigLFR0/fuvIpduSQibDrs/8CIasB5AR1Lkg+nSay3nw7n2bEKPTbfXQk7WR7+E1/iLFSUVA00xYxrgEZPheCmYrekIkba75n8hhWxv5ZctAWk2IGHInGCcyhpquhbQ7VjiTejyOTDozAkcJjl+LZobpUzSQBcOQYGyT4dbC6LEfiiQLy2l4vH5t6WM+xDU0ng114XG+0a921I9EuiWt980hvxKgA==
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(44832011)(33716001)(91956017)(6486002)(122000001)(8676002)(8936002)(316002)(66556008)(6916009)(64756008)(54906003)(66946007)(66446008)(66476007)(4326008)(76116006)(38070700005)(38100700002)(83380400001)(9686003)(26005)(6512007)(508600001)(71200400001)(2906002)(5660300002)(186003)(1076003)(6506007)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?YgTgR3FHlUjnKAAOHeuc8MQzR0PCMnn/eTgQt1LhePgnqRQcuvi8BVAtbCnY?=
+ =?us-ascii?Q?DvyT9PcBfVSauSLdFHddwAB3+8UuPItoVGCmCY0jKg45TdesboQgECjmXEx4?=
+ =?us-ascii?Q?LPMVpxV63vWlHlA8RLI7AYh6wnLoGl7HFdSC/Y3b5yzm2x8ombKXuNRbbxvI?=
+ =?us-ascii?Q?5F4JOS7S5APAybQDzZlVwLPS5YD7DBydefEoDDDbd4EJzgWm4MN1djBsd4rE?=
+ =?us-ascii?Q?ERTBtQeGfT35DcLbxY0b1DoCmLXi01k/WWzTMVi16HTYfEcKot8zm1Hf1BjG?=
+ =?us-ascii?Q?i/gR1yHJgyirOFOLUGPpUSzbxkqCL5GDJyKcI8+c4Ffh08ZFltFg+hk2X+vl?=
+ =?us-ascii?Q?FvOYkCloy34gXaTZbG3ADMfu5fz8XBDV3gUUGcqnLHbDP0ZpTuNDyuEpQDRk?=
+ =?us-ascii?Q?MNAFinZiGZNA7bsiLmgOYjtwA9ijCKNQzrklkVWAhKyH6p0up31mOxXYGJKC?=
+ =?us-ascii?Q?00H2J+QsUhzEzexUvcQQG55dUUXwMWJ1vhkfqAdVQ9o9Ibd6ij2kL40dMcjV?=
+ =?us-ascii?Q?wzEldu5bqdPmgqPrkNPM02Qgi8vOekeiwIXL4b2fe2hBctJKf7ym6GafxOGH?=
+ =?us-ascii?Q?H9kD85AKeFhoQNuRE1BU+3ej0BB5R+BuMO/IOmDucwhPHRnsUOv3XnI7mhDr?=
+ =?us-ascii?Q?yonZS2E5Hq7ZTJO2wzSmMsKRgvOup4ffPdp9fQnpomCp8NGkanWysbZTPUI7?=
+ =?us-ascii?Q?v8RCU/jp+Rlv0lMugnrKp/ZfUboyIdVSsmIe9D/vqVJU9z1iT/OEmNIqbTo8?=
+ =?us-ascii?Q?RB5MwnVuMhBogx5gdsN03/FboqR/lcG4RU43p0xBJ8EaY3EgXaMXrq085SDG?=
+ =?us-ascii?Q?xGDYmPBUCDJwSeo+TaJTg4fLQFSanJHLYqySVxkD9spUoWf3gwCgYM6tATOE?=
+ =?us-ascii?Q?VWVsGRFuJBKnW+B1KPNt8DhJe18IuN8fNW88CWmauXmyZe6o45Km+fzGlys7?=
+ =?us-ascii?Q?LkhSb8GykXQTWRni2QNajUEn+81As+oGlqTxxEcMnfwWjGRlUoA6YxVqQsJx?=
+ =?us-ascii?Q?LKzZzMl0aMxcO8xIPTeKrfX9coVS9yPq410T6Jz4zoSM1tNo+cFe881fSdOt?=
+ =?us-ascii?Q?U9vB+MacMZkPMRCSpxsbp345GI8gpOV9d1NjzoXULcZpkxXtEmIH6ZzMvhLm?=
+ =?us-ascii?Q?c6V1vcGiKOvkiZ2jgJM/l9dHvJFE4rCYdnQERHfmdR+rKxTsQZQQIH+oQ3JM?=
+ =?us-ascii?Q?J4LS92vMWA6Z5IkCzfcsMq+T7vbUUFqrJmG3v2dyRj3ydchqkRSuAeGAEpvZ?=
+ =?us-ascii?Q?qGtD910nVz/3UkPD0KzKrbAm9SwXMfMzluw8tymCfRQR+icHTmpDgViORtv7?=
+ =?us-ascii?Q?lSnRrNkmuAs1f1uK/VOJ+g/sL7xFHIFZWp22ABSuwGV5Xery3jr+Udaham0b?=
+ =?us-ascii?Q?GCrrtxtOV/s9VKGaGIqSL1EufdTNPSoTQQsMCOSeQdtEdbhtT0iaW7Yw8w9W?=
+ =?us-ascii?Q?l57TjOvApKGHmN4vuUEBeuCaNyxIaWZPnTcsVZAKDyh0QVrRxl8SOCziCBiO?=
+ =?us-ascii?Q?8HFEBb8GVHb29zI1QGNyN+Y+d6QmoHjoyBWje96X7UpqQMm5GmceyNL6zUSl?=
+ =?us-ascii?Q?sl1uIKX/PMsGQKEegwwmht2GJm4aXR8j23A9VZXgz7lai0LcNytU3MwgzQKI?=
+ =?us-ascii?Q?UWGvulQ1jjZaEiN9UzDAUTgTawDMp1SMRwKYzIZL6eUsHNL4c/z3couSHYoq?=
+ =?us-ascii?Q?XVFGaUrW9ely4kmOALJWfYT1ZsfqTnoJijbPppoqGNL2SXTyG2Z08FKUGYqF?=
+ =?us-ascii?Q?zgPY0GT8QslImItnbcr5tDhrMJzxYto=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <975F33B6DAC1DB4E901529CFA88DFD30@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb7f4db2-4308-4a08-af9f-08da32ab736c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 17:35:18.3489
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y2cMY94FQBPExL4T5N6qYsWKPHwvKLoFemp7CBEx3B1DRIlIc/i5zXmWx9aJ594xUZEHjayIUNubl8c2gV2g0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3226
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-10_05:2022-05-09,2022-05-10 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205100076
+X-Proofpoint-ORIG-GUID: Qlbf716GavT-riuwUw-8zXyAgrR5PFJX
+X-Proofpoint-GUID: Qlbf716GavT-riuwUw-8zXyAgrR5PFJX
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+* Andrew Morton <akpm@linux-foundation.org> [220510 10:08]:
+> On Tue, 10 May 2022 20:52:04 +0800 kernel test robot <lkp@intel.com> wrot=
+e:
+>=20
+> > >> mm/nommu.c:579:2: error: call to undeclared function 'vma_mas_store'=
+; ISO C99 and later do not support implicit function declarations [-Wimplic=
+it-function-declaration]
+> >            vma_mas_store(vma, &mas);
+>=20
+> Thanks.
+>=20
+> I queued the below temp fix for now.   Hopefully it makes sense for nommu=
+.
 
-commit 5e545df3292fbd3d5963c68980f1527ead2a2b3f upstream.
+Yes that works.  I'm trying to figure out the best way to keep my
+tracepoints in the mmap.c version and I think this is probably better
+than yet-another-underscore or dropping tracepoints all together.
 
-ARM is the only architecture that defines CONFIG_ARCH_HAS_HOLES_MEMORYMODEL
-which in turn enables memmap_valid_within() function that is intended to
-verify existence  of struct page associated with a pfn when there are holes
-in the memory map.
+I think in the long run, it might be better to put these prototypes into
+mm/internal.h to limit the users.
 
-However, the ARCH_HAS_HOLES_MEMORYMODEL also enables HAVE_ARCH_PFN_VALID
-and arch-specific pfn_valid() implementation that also deals with the holes
-in the memory map.
-
-The only two users of memmap_valid_within() call this function after
-a call to pfn_valid() so the memmap_valid_within() check becomes redundant.
-
-Remove CONFIG_ARCH_HAS_HOLES_MEMORYMODEL and memmap_valid_within() and rely
-entirely on ARM's implementation of pfn_valid() that is now enabled
-unconditionally.
-
-Link: https://lkml.kernel.org/r/20201101170454.9567-9-rppt@kernel.org
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Greg Ungerer <gerg@linux-m68k.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Meelis Roos <mroos@linux.ee>
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 8dd559d53b3b ("arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM")
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- Documentation/vm/memory-model.rst |  3 +--
- arch/arm/Kconfig                  |  8 ++------
- arch/arm/mach-bcm/Kconfig         |  1 -
- arch/arm/mach-davinci/Kconfig     |  1 -
- arch/arm/mach-exynos/Kconfig      |  1 -
- arch/arm/mach-highbank/Kconfig    |  1 -
- arch/arm/mach-omap2/Kconfig       |  1 -
- arch/arm/mach-s5pv210/Kconfig     |  1 -
- arch/arm/mach-tango/Kconfig       |  1 -
- fs/proc/kcore.c                   |  2 --
- include/linux/mmzone.h            | 31 -------------------------------
- mm/mmzone.c                       | 14 --------------
- mm/vmstat.c                       |  4 ----
- 13 files changed, 3 insertions(+), 66 deletions(-)
-
-diff --git a/Documentation/vm/memory-model.rst b/Documentation/vm/memory-model.rst
-index 9daadf9faba1..ce398a7dc6cd 100644
---- a/Documentation/vm/memory-model.rst
-+++ b/Documentation/vm/memory-model.rst
-@@ -51,8 +51,7 @@ call :c:func:`free_area_init` function. Yet, the mappings array is not
- usable until the call to :c:func:`memblock_free_all` that hands all the
- memory to the page allocator.
- 
--If an architecture enables `CONFIG_ARCH_HAS_HOLES_MEMORYMODEL` option,
--it may free parts of the `mem_map` array that do not cover the
-+An architecture may free parts of the `mem_map` array that do not cover the
- actual physical pages. In such case, the architecture specific
- :c:func:`pfn_valid` implementation should take the holes in the
- `mem_map` into account.
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index a0eac00e2c81..b587ecc6f949 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -25,7 +25,7 @@ config ARM
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAS_GCOV_PROFILE_ALL
--	select ARCH_KEEP_MEMBLOCK if HAVE_ARCH_PFN_VALID || KEXEC
-+	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_NO_SG_CHAIN if !ARM_HAS_SG_CHAIN
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
-@@ -521,7 +521,6 @@ config ARCH_S3C24XX
- config ARCH_OMAP1
- 	bool "TI OMAP1"
- 	depends on MMU
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARCH_OMAP
- 	select CLKDEV_LOOKUP
- 	select CLKSRC_MMIO
-@@ -1481,9 +1480,6 @@ config OABI_COMPAT
- 	  UNPREDICTABLE (in fact it can be predicted that it won't work
- 	  at all). If in doubt say N.
- 
--config ARCH_HAS_HOLES_MEMORYMODEL
--	bool
--
- config ARCH_SELECT_MEMORY_MODEL
- 	bool
- 
-@@ -1495,7 +1491,7 @@ config ARCH_SPARSEMEM_ENABLE
- 	select SPARSEMEM_STATIC if SPARSEMEM
- 
- config HAVE_ARCH_PFN_VALID
--	def_bool ARCH_HAS_HOLES_MEMORYMODEL || !SPARSEMEM
-+	def_bool y
- 
- config HIGHMEM
- 	bool "High Memory Support"
-diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
-index ae790908fc74..9b594ae98153 100644
---- a/arch/arm/mach-bcm/Kconfig
-+++ b/arch/arm/mach-bcm/Kconfig
-@@ -211,7 +211,6 @@ config ARCH_BRCMSTB
- 	select BCM7038_L1_IRQ
- 	select BRCMSTB_L2_IRQ
- 	select BCM7120_L2_IRQ
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ZONE_DMA if ARM_LPAE
- 	select SOC_BRCMSTB
- 	select SOC_BUS
-diff --git a/arch/arm/mach-davinci/Kconfig b/arch/arm/mach-davinci/Kconfig
-index f56ff8c24043..de11030748d0 100644
---- a/arch/arm/mach-davinci/Kconfig
-+++ b/arch/arm/mach-davinci/Kconfig
-@@ -5,7 +5,6 @@ menuconfig ARCH_DAVINCI
- 	depends on ARCH_MULTI_V5
- 	select DAVINCI_TIMER
- 	select ZONE_DMA
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select PM_GENERIC_DOMAINS if PM
- 	select PM_GENERIC_DOMAINS_OF if PM && OF
- 	select REGMAP_MMIO
-diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-index 56314b1c7408..b5df98ee5d17 100644
---- a/arch/arm/mach-exynos/Kconfig
-+++ b/arch/arm/mach-exynos/Kconfig
-@@ -8,7 +8,6 @@
- menuconfig ARCH_EXYNOS
- 	bool "Samsung Exynos"
- 	depends on ARCH_MULTI_V7
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARCH_SUPPORTS_BIG_ENDIAN
- 	select ARM_AMBA
- 	select ARM_GIC
-diff --git a/arch/arm/mach-highbank/Kconfig b/arch/arm/mach-highbank/Kconfig
-index 1bc68913d62c..9de38ce8124f 100644
---- a/arch/arm/mach-highbank/Kconfig
-+++ b/arch/arm/mach-highbank/Kconfig
-@@ -2,7 +2,6 @@
- config ARCH_HIGHBANK
- 	bool "Calxeda ECX-1000/2000 (Highbank/Midway)"
- 	depends on ARCH_MULTI_V7
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARCH_SUPPORTS_BIG_ENDIAN
- 	select ARM_AMBA
- 	select ARM_ERRATA_764369 if SMP
-diff --git a/arch/arm/mach-omap2/Kconfig b/arch/arm/mach-omap2/Kconfig
-index 3f62a0c9450d..164985505f9e 100644
---- a/arch/arm/mach-omap2/Kconfig
-+++ b/arch/arm/mach-omap2/Kconfig
-@@ -93,7 +93,6 @@ config SOC_DRA7XX
- config ARCH_OMAP2PLUS
- 	bool
- 	select ARCH_HAS_BANDGAP
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_OMAP
- 	select CLKSRC_MMIO
-diff --git a/arch/arm/mach-s5pv210/Kconfig b/arch/arm/mach-s5pv210/Kconfig
-index 95d4e8284866..d644b45bc29d 100644
---- a/arch/arm/mach-s5pv210/Kconfig
-+++ b/arch/arm/mach-s5pv210/Kconfig
-@@ -8,7 +8,6 @@
- config ARCH_S5PV210
- 	bool "Samsung S5PV210/S5PC110"
- 	depends on ARCH_MULTI_V7
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARM_VIC
- 	select CLKSRC_SAMSUNG_PWM
- 	select COMMON_CLK_SAMSUNG
-diff --git a/arch/arm/mach-tango/Kconfig b/arch/arm/mach-tango/Kconfig
-index 25b2fd434861..a9eeda36aeb1 100644
---- a/arch/arm/mach-tango/Kconfig
-+++ b/arch/arm/mach-tango/Kconfig
-@@ -3,7 +3,6 @@ config ARCH_TANGO
- 	bool "Sigma Designs Tango4 (SMP87xx)"
- 	depends on ARCH_MULTI_V7
- 	# Cortex-A9 MPCore r3p0, PL310 r3p2
--	select ARCH_HAS_HOLES_MEMORYMODEL
- 	select ARM_ERRATA_754322
- 	select ARM_ERRATA_764369 if SMP
- 	select ARM_ERRATA_775420
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index e502414b3556..4d2e64e9016c 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -193,8 +193,6 @@ kclist_add_private(unsigned long pfn, unsigned long nr_pages, void *arg)
- 		return 1;
- 
- 	p = pfn_to_page(pfn);
--	if (!memmap_valid_within(pfn, p, page_zone(p)))
--		return 1;
- 
- 	ent = kmalloc(sizeof(*ent), GFP_KERNEL);
- 	if (!ent)
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index f3016b8e698a..b2e4599b8883 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1443,37 +1443,6 @@ struct mminit_pfnnid_cache {
- #define pfn_valid_within(pfn) (1)
- #endif
- 
--#ifdef CONFIG_ARCH_HAS_HOLES_MEMORYMODEL
--/*
-- * pfn_valid() is meant to be able to tell if a given PFN has valid memmap
-- * associated with it or not. This means that a struct page exists for this
-- * pfn. The caller cannot assume the page is fully initialized in general.
-- * Hotplugable pages might not have been onlined yet. pfn_to_online_page()
-- * will ensure the struct page is fully online and initialized. Special pages
-- * (e.g. ZONE_DEVICE) are never onlined and should be treated accordingly.
-- *
-- * In FLATMEM, it is expected that holes always have valid memmap as long as
-- * there is valid PFNs either side of the hole. In SPARSEMEM, it is assumed
-- * that a valid section has a memmap for the entire section.
-- *
-- * However, an ARM, and maybe other embedded architectures in the future
-- * free memmap backing holes to save memory on the assumption the memmap is
-- * never used. The page_zone linkages are then broken even though pfn_valid()
-- * returns true. A walker of the full memmap must then do this additional
-- * check to ensure the memmap they are looking at is sane by making sure
-- * the zone and PFN linkages are still valid. This is expensive, but walkers
-- * of the full memmap are extremely rare.
-- */
--bool memmap_valid_within(unsigned long pfn,
--					struct page *page, struct zone *zone);
--#else
--static inline bool memmap_valid_within(unsigned long pfn,
--					struct page *page, struct zone *zone)
--{
--	return true;
--}
--#endif /* CONFIG_ARCH_HAS_HOLES_MEMORYMODEL */
--
- #endif /* !__GENERATING_BOUNDS.H */
- #endif /* !__ASSEMBLY__ */
- #endif /* _LINUX_MMZONE_H */
-diff --git a/mm/mmzone.c b/mm/mmzone.c
-index 4686fdc23bb9..f337831affc2 100644
---- a/mm/mmzone.c
-+++ b/mm/mmzone.c
-@@ -72,20 +72,6 @@ struct zoneref *__next_zones_zonelist(struct zoneref *z,
- 	return z;
- }
- 
--#ifdef CONFIG_ARCH_HAS_HOLES_MEMORYMODEL
--bool memmap_valid_within(unsigned long pfn,
--					struct page *page, struct zone *zone)
--{
--	if (page_to_pfn(page) != pfn)
--		return false;
--
--	if (page_zone(page) != zone)
--		return false;
--
--	return true;
--}
--#endif /* CONFIG_ARCH_HAS_HOLES_MEMORYMODEL */
--
- void lruvec_init(struct lruvec *lruvec)
- {
- 	enum lru_list lru;
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 698bc0bc18d1..e292e63afebf 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1503,10 +1503,6 @@ static void pagetypeinfo_showblockcount_print(struct seq_file *m,
- 		if (!page)
- 			continue;
- 
--		/* Watch for unexpected holes punched in the memmap */
--		if (!memmap_valid_within(pfn, page, zone))
--			continue;
--
- 		if (page_zone(page) != zone)
- 			continue;
- 
--- 
-2.34.1
-
+>=20
+>=20
+>=20
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mapletree: build fix
+>=20
+> Fix the vma_mas_store/vma_mas_remove issues.  Missing prototypes, missing
+> implementation on nommu.
+>=20
+> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>=20
+>  include/linux/mm.h |    3 +++
+>  mm/mmap.c          |    4 ++--
+>  mm/nommu.c         |   13 +++++++++++++
+>  3 files changed, 18 insertions(+), 2 deletions(-)
+>=20
+> --- a/mm/nommu.c~mapletree-build-fix
+> +++ a/mm/nommu.c
+> @@ -544,6 +544,19 @@ static void put_nommu_region(struct vm_r
+>  	__put_nommu_region(region);
+>  }
+> =20
+> +void vma_mas_store(struct vm_area_struct *vma, struct ma_state *mas)
+> +{
+> +	mas_set_range(mas, vma->vm_start, vma->vm_end - 1);
+> +	mas_store_prealloc(mas, vma);
+> +}
+> +
+> +void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
+> +{
+> +	mas->index =3D vma->vm_start;
+> +	mas->last =3D vma->vm_end - 1;
+> +	mas_store_prealloc(mas, NULL);
+> +}
+> +
+>  /*
+>   * add a VMA into a process's mm_struct in the appropriate place in the =
+list
+>   * and tree and add to the address space's page tree also if not an anon=
+ymous
+> --- a/mm/mmap.c~mapletree-build-fix
+> +++ a/mm/mmap.c
+> @@ -475,7 +475,7 @@ static void __vma_link_file(struct vm_ar
+>   *
+>   * Note: the end address is inclusive in the maple tree.
+>   */
+> -inline void vma_mas_store(struct vm_area_struct *vma, struct ma_state *m=
+as)
+> +void vma_mas_store(struct vm_area_struct *vma, struct ma_state *mas)
+>  {
+>  	trace_vma_store(mas->tree, vma);
+>  	mas_set_range(mas, vma->vm_start, vma->vm_end - 1);
+> @@ -491,7 +491,7 @@ inline void vma_mas_store(struct vm_area
+>   * been established and points to the correct location.
+>   * Note: the end address is inclusive in the maple tree.
+>   */
+> -static inline void vma_mas_remove(struct vm_area_struct *vma, struct ma_=
+state *mas)
+> +void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
+>  {
+>  	trace_vma_mas_szero(mas->tree, vma->vm_start, vma->vm_end - 1);
+>  	mas->index =3D vma->vm_start;
+> --- a/include/linux/mm.h~mapletree-build-fix
+> +++ a/include/linux/mm.h
+> @@ -2669,6 +2669,9 @@ extern struct vm_area_struct *copy_vma(s
+>  	bool *need_rmap_locks);
+>  extern void exit_mmap(struct mm_struct *);
+> =20
+> +void vma_mas_store(struct vm_area_struct *vma, struct ma_state *mas);
+> +void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas);
+> +
+>  static inline int check_data_rlimit(unsigned long rlim,
+>  				    unsigned long new,
+>  				    unsigned long start,
+> _
+> =
