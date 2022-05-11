@@ -1,62 +1,95 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929E72F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:46:02 +0000 (UTC)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D6611EC0535;
-	Wed, 11 May 2022 18:45:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1652287556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=FGkN+pgwoH3lcFfR2LvkS/139fj7xrKIIH7QmQPBYXk=;
-	b=XRNkHo7jdhufEhi/XWBzJPKQ24r1ZITjET8quNbVN39633Vpe/H6zD0LU8lVZEVb9uNr/t
-	8jwnGC+D6lxPjCxmq+0aLD5aCE+O3DISg5vD0MuvpugoiKqy63WkmJDz4DU1etNV3q9ea8
-	Of1qmwYLSSGlJ4uvl7GWdS5rL5fEsu4=
-Date: Wed, 11 May 2022 18:45:58 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] bpf.h: fix clang compiler warning with
- unpriv_ebpf_notify()
-Message-ID: <YnvoRsxEc+FsLcAj@zn.tnic>
-References: <20220509203623.3856965-1-mcgrof@kernel.org>
- <YnvdOAaYmhNiA5WN@bombadil.infradead.org>
- <CAADnVQLCvjqphpJDkz-5bpJLs3k_PRH1JcwehCRLrWYvsA9ENw@mail.gmail.com>
- <YnvflsM1t5vL/ViP@bombadil.infradead.org>
- <3e3ed3d1-937b-a715-376d-43a8b7485f68@iogearbox.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4632CA9
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:49:44 +0000 (UTC)
+Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+	by conuserg-08.nifty.com with ESMTP id 24BGlWc7031975;
+	Thu, 12 May 2022 01:47:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc7031975
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1652287665;
+	bh=lwhcZwty1WSqzMwcqIa4FpY71JgLgetW2nQZRkklH+o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Vbl4SEiYvvF37f1IoBEjasxAsVDVSQV8iEM8Mi1h0FEwr6nbrD3P3UYOZTcXB+dwW
+	 P4z9VJ4VCWJvC1cJ1pmve8jsN9WLx+eVX79Xl6TrT24LXAougV9Awt53/UrOSkZd43
+	 X5EErlnVqv3GL29CA/j+CRK/e3buKnMpnmqT6knIllg7DKJ7KcmM/wga5P7pkHiye6
+	 7Ntd8KWojBuvIyoY6awGSQNZfD7l35B6l5NF8xgdOhRDKMrTfKY1D5UlWG6fqVCJ0C
+	 yVqCAChqiTv/BoII/V6PNLSr8f0DT6kA6jxx/hAq260ykEre9DLp5hGZYDAkUG3GK/
+	 a6HnJhQ6XrVqA==
+X-Nifty-SrcIP: [133.32.177.133]
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org,
+        llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH v5 12/12] kbuild: rebuild multi-object modules when objtool is updated
+Date: Thu, 12 May 2022 01:45:14 +0900
+Message-Id: <20220511164514.2741934-13-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
+References: <20220511164514.2741934-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3e3ed3d1-937b-a715-376d-43a8b7485f68@iogearbox.net>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 11, 2022 at 06:17:26PM +0200, Daniel Borkmann wrote:
-> Borislav was planning to route it via tip tree, maybe confusion was that the
-> fix in the link below is from Josh:
-> 
-> https://lore.kernel.org/bpf/CAADnVQKjfQMG_zFf9F9P7m0UzqESs7XoRy=udqrDSodxa8yBpg@mail.gmail.com/
-> 
-> But I presume this is routed as fix to Linus,
+When CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT is enabled, objtool for
+multi-object modules is postponed until the objects are linked together.
 
-Yap: https://git.kernel.org/tip/2147c438fde135d6c145a96e373d9348e7076f7f
+Make sure to re-run objtool and re-link multi-object modules when
+objtool is updated.
 
-Will go to Linus in the next merge window.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
 
+(no changes since v4)
+
+Changes in v4:
+  - New
+    Resent of my previous submission
+    https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
+
+ scripts/Makefile.build | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index f546b5f1f33f..4e6902e099e8 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -404,13 +404,18 @@ $(obj)/modules.order: $(obj-m) FORCE
+ $(obj)/lib.a: $(lib-y) FORCE
+ 	$(call if_changed,ar)
+ 
+-quiet_cmd_link_multi-m = LD [M]  $@
+-      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
++quiet_cmd_ld_multi_m = LD [M]  $@
++      cmd_ld_multi_m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
++
++define rule_ld_multi_m
++	$(call cmd_and_savecmd,ld_multi_m)
++	$(call cmd,gen_objtooldep)
++endef
+ 
+ $(multi-obj-m): objtool-enabled := $(delay-objtool)
+ $(multi-obj-m): part-of-module := y
+ $(multi-obj-m): %.o: %.mod FORCE
+-	$(call if_changed,link_multi-m)
++	$(call if_changed_rule,ld_multi_m)
+ $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+ 
+ targets := $(filter-out $(PHONY), $(targets))
 -- 
-Regards/Gruss,
-    Boris.
+2.32.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
