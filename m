@@ -1,123 +1,97 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F153207
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:01:27 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id y32so5427598lfa.6
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 13:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aIr7kufHqh1aklBFT48PcfwiGgRwuFks7DI5SiM+9Q0=;
-        b=aDFV+CNgCaB8HAuXCMaTOeqfz3Euqlc9UfykqEg/M7trT+lMOcwb6NTqEGZJ7SsVNZ
-         wKPGERgQdDUkJumgL37urxFlDsGkmX7PqdKJaBJZ9MZbdtLV8cQTIpE0yfVn6cMSgZyZ
-         GDcUvdJSKIpdCHdovd/rPOddBCdGdf7Tcs7gNO1JNMXTpaAKmIBz3TFWivhPzhsqWiWP
-         vJ/31TdyTBLQqry7t/YKe6QWlgU/ihp+YfVohSDDCIs1NWIXVc6t8SiZYJv7SQNHxS8u
-         uvm0zjVSH3yCGxEApXJnHd78LwJfVPsGlD2n86/VBo9AQNLgEv62rjfzxd444XLv3wC4
-         k+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aIr7kufHqh1aklBFT48PcfwiGgRwuFks7DI5SiM+9Q0=;
-        b=iVfyozSSTxlARM5b6WNPiNfGTUwECB0FEkFDkDdcQwGHFi9+Ka01sbvzLBeH+8BlWE
-         jv9xEAAxlCkvhYANKc4v40+VQFXzU2rutjz/nlYdtAeKUUDpTS52FBi/HUmeHiIJp+0Q
-         AUopwJRjOCucEI0R/B5gNDvjs8HgpDwnahvRGw+v67STg1buje53zk/LPF5LDbMGSzBe
-         h1jWqP9WpFBInXJCC5VHwHO84hh1jvT/9RYIxRKclvbsQdnOv9ZWdltnNxm4StEJpy5E
-         EgvJKS3uiIe3G4dskZ+DoQEQg/aEM6fmqXSnZhak0hNAHOZn399l+0UwopgyDazZ5nXT
-         nhYg==
-X-Gm-Message-State: AOAM533mBqdbpMNLp5vcXHXTf5gjWQsVAWuM9+bW2LIwHIARBBcovaFG
-	nY7FUpwcwOPf31wkbYCwXy+3FAiWEbTP2O2b3iiSOw==
-X-Google-Smtp-Source: ABdhPJyw+NM/b0aVOHtc066BYz2oDYf2ffAEKshIqZZZ77ExFAqpVJecq3d8qHUAeYUdPNE/gr7l7Cdi4Emgrt5UzVw=
-X-Received: by 2002:a19:4303:0:b0:473:f5fb:27b2 with SMTP id
- q3-20020a194303000000b00473f5fb27b2mr20127658lfa.626.1652299285108; Wed, 11
- May 2022 13:01:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF04F3207
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E272C340EE;
+	Wed, 11 May 2022 20:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652299443;
+	bh=QECFIEHeP/akX/1+3OaCSi9J5B/pyZpp7SXlX0Z6nz0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n3Fj/G3MKPzS6rMAsbssX2HaIxxOk+A5/lQ0DznlPwU6NTQUz+Xq7IKOPR2iyOko5
+	 Hv1B1q7FeZV2nPk0CSQ4PJi8oY9TDOxSEuNXuCs5U6OMKlV9JwnDpPn53VcafyLyex
+	 21tSGxJ2MNcCSD0W3vDSdQylmuHWqhxujIy8noIFI+yWr0bxj4v6s/ek/TxpELzymB
+	 4OafBMH1wxK67FmKKfv78D0lmdSD9bEhyBMGgovIFRnlBbVreX94uj5ICcNs9cfW37
+	 ieRpRbWgy1sc1xk8qGARVWPv0LZM8qXp1/hNvCWOosNTiRntZh+FgLyXI0NiuBCMyB
+	 Doh9lNyrtUtRA==
+Date: Wed, 11 May 2022 13:04:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v5 00/12] kbuild: yet another series of cleanups
+ (modpost, LTO, MODULE_REL_CRCS, export.h)
+Message-ID: <YnwWsYdL2khCikSY@dev-arch.thelio-3990X>
+References: <20220511164514.2741934-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
- <20220508190631.2386038-4-masahiroy@kernel.org> <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
- <CAK7LNARGNEDzPPUsPjDXsXUUUPSFK2erQRuyPocR_v5hTYRihg@mail.gmail.com>
- <CAKwvOdmK4oH0t8Q6F19sWKX1fT=AgS=kfvn05FT01HffLJwgMQ@mail.gmail.com>
- <CAK7LNAR5preB59HJH1-F_ZfEmoF3N8b9z4eRhYzsEVwu_XUH4Q@mail.gmail.com> <8babc23b-5e24-f662-6c4a-eb1c30e0e6da@quicinc.com>
-In-Reply-To: <8babc23b-5e24-f662-6c4a-eb1c30e0e6da@quicinc.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 11 May 2022 13:01:13 -0700
-Message-ID: <CAKwvOdk1z6jnTA79W8qyy1sWuoa29YxppU1gAkHkQ=g6UiVvCw@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into section-check.c
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-modules <linux-modules@vger.kernel.org>, linux-s390 <linux-s390@vger.kernel.org>, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
 
-On Wed, May 11, 2022 at 12:51 PM Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
->
-> On 5/11/2022 12:27 PM, Masahiro Yamada wrote:
-> > On Thu, May 12, 2022 at 3:48 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> >>
-> >> On Mon, May 9, 2022 at 11:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >>>
-> >>>>> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> >>>>> index a78b75f0eeb0..e7e2c70a98f5 100644
-> >>>>> --- a/scripts/mod/modpost.c
-> >>>>> +++ b/scripts/mod/modpost.c
-> >>>>> @@ -31,7 +31,7 @@ static bool external_module;
-> >>>>>   /* Only warn about unresolved symbols */
-> >>>>>   static bool warn_unresolved;
-> >>>>>
-> >>>>> -static int sec_mismatch_count;
-> >>>>> +int sec_mismatch_count;
-> >>>>
-> >>>> ^ this should go in modpost.h if it is to be used in two translation
-> >>>> units, rather than forward declaring it in section-check.c.  You did
-> >>>> this for the functions.
-> >>>
-> >>>
-> >>> Sorry, I do not understand.
-> >>>
-> >>>
-> >>> In modpost.h, I put the declaration:
-> >>>
-> >>>    extern int sec_mismatch_count;
-> >>>
-> >>> If I moved it to the header without 'extern'
-> >>> I would get multiple definitions.
-> >>
-> >> Yeah, you need to _declare_ it w/ extern in the header, then _define_
-> >> it in one source file.
-> >>
-> >> That way, if the type ever changes, the sources will agree on type in
-> >> all source files. You will get a redefinition error if the definition
-> >> changes the type of the variable since the last declaration.
-> >>
-> >> What you're doing is forward declaring, which works, and is a common
-> >> pattern for (bloated) C++, but is less type safe than sharing a single
-> >> common declaration between multiple source files via a single common
-> >> shared header. (Sorry I didn't respond before you sent v5)
-> >
-> > Sorry, I still do not understand your suggestion.
-> >
-> >
-> > Could you provide me with a code diff
-> > showing how to do this better?
->
-> I think you are doing exactly what he's asking for:
-> declare it with extern in the header (modpost.h change)
-> define it in one source file (modpost.c change)
->
+Hi Masahiro,
 
-Oh! Indeed, sorry, I'm getting lost here in the review. Sorry for the
-noise then.
--- 
-Thanks,
-~Nick Desaulniers
+On Thu, May 12, 2022 at 01:45:02AM +0900, Masahiro Yamada wrote:
+> 
+> This is the third batch of cleanups in this development cycle.
+> 
+> Major changes in v5:
+>  - Fix build errors
+>  - More cleanups
+> 
+> Major changes in v4:
+>  - Move static EXPORT_SYMBOL check to a script
+>  - Some refactoring
+> 
+> Major changes in v3:
+> 
+>  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
+> 
+> Major changes in v2:
+> 
+>  - V1 did not work with CONFIG_MODULE_REL_CRCS.
+>    I fixed this for v2.
+> 
+>  - Reflect some review comments in v1
+> 
+>  - Refactor the code more
+> 
+>  - Avoid too long argument error
+> 
+> 
+> 
+> Masahiro Yamada (12):
+>   modpost: split the section mismatch checks into section-check.c
+>   modpost: add sym_find_with_module() helper
+>   modpost: extract symbol versions from *.cmd files
+>   kbuild: link symbol CRCs at final link, removing
+>     CONFIG_MODULE_REL_CRCS
+>   kbuild: stop merging *.symversions
+>   genksyms: adjust the output format to modpost
+>   kbuild: do not create *.prelink.o for Clang LTO or IBT
+>   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+>   kbuild: make built-in.a rule robust against too long argument error
+>   kbuild: make *.mod rule robust against too long argument error
+>   kbuild: add cmd_and_savecmd macro
+>   kbuild: rebuild multi-object modules when objtool is updated
+
+I applied this series to your latest kbuild branch, built an Arch
+Linux x86_64 config and Fedora aarch64 config with
+CONFIG_LTO_CLANG_FULL=y then CONFIG_LTO_CLANG_THIN=y, and boot tested
+each kernel in QEMU with a full userspace. I did not notice any new
+warnings/errors and everything appears to work fine.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+Cheers,
+Nathan
