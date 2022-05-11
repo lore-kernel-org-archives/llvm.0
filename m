@@ -1,41 +1,41 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB7C2F43
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:03:51 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id p8so2364925pfh.8
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 09:03:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215402F43
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:03:56 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id c11so2285335plg.13
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 09:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qCk9G2cMF/SICHI8ao9nOv/XHwNyqHuD3L/gqBqavrY=;
-        b=Jb+K99Cb+7nxhYnfUAhHLzW7+vUWuxV6Kf0/rR3ZSUpywfQa2f0Qv6HS3km/PVCdqu
-         pAh/XkEMKdnieUol2I2IMdLbThGsSHTRt9L7srPIEiSdgADymqSFzoTpYDBvJuo5q7Qd
-         Wko3GGDAaMtPyShp5qgaAz38Jc/J4oetIsbcEcMcAhXncDeKgjjH4StDv2F4s/wB7Kdl
-         7Cnd76NrobAFKklidqp/jtkZszqNfUujZx5T6Dnmxx7+Dkxj1gBUBujZpQCOvAvL9wj8
-         RdjTvsnIXn8MUGZpPFmrppdzwdQJwQ86aAWXXB0RCQFclcNbKg28Pqs/LVVnLCnSHPHO
-         0vkA==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vuLyis0cozB0HH3xDqQBXVh/FgY1uFVWgKAFWAeIWvM=;
+        b=hhVPLl9jZ2ypnIaMCtBrwRQ4MD1YdrdEuYR/XyRJ2cz2URMLWcQbvVOHcAcJIUDqqh
+         KlYavh4iDSxiPIVuLaGm7hExlyARUyFBGfw+LZROEaSo4UoNF7xEEmJl5dehfx8+octD
+         OM+wh/70MPIZcCZ+wobJd+lCCLG5SWsICcfjp9jXT9fDNrzTrAAUEc9aZhScirSFlh7b
+         U+0DvC6+FowLArpf4ER7XRHbllK+2yvfz+FcDoZL28yndF6a1i+BSJ7ButQUPGpbs2Ug
+         lDsne26hSlf9dzvCaj+qVPa5QBZCLpW01k4xxvpTBhh3GB/ac7IaC2nEl41WTL19aLZG
+         YWDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=qCk9G2cMF/SICHI8ao9nOv/XHwNyqHuD3L/gqBqavrY=;
-        b=Zg6LTrL7ISK4SIdFLeX/leN2vF3W9IL7T+MwBJ1KZiGB+XhlcJqpla9LOK+FTkPogf
-         Ia5heMVnkpNk4ZGyqA4Nlwz1dqfju76Rg5edYTGZcGPcZMKY7gFxCEUGfVMFNYkz9b9o
-         1CiorfMk6o4ej4qYzX4rkCsztb37E0wBDEMIGCMzR+An8fQKSWCZo7204mG1ngoQByaW
-         maos8jLIkFxoVlAimkm4Bo5t86LkoRo9b97xGqQdqVoIvNpzNZQ2vtD1v4+FNJCMm4/e
-         efsGju3wp15jJ2aY1YCWGjSMwrUEFbT4hiutpZr3eLfJ5+FuuxzZkpICE6WfJ/kLjg9f
-         axrw==
-X-Gm-Message-State: AOAM533AJUirR7CTg+N36ZCySlVREbnFx05RtjmDD4bLvqPE7JL9yLBT
-	LhpkU04JsM4/+PjaUuJTLck=
-X-Google-Smtp-Source: ABdhPJwDwa3EeRhPSh3wZNtTpQRSsX/wuSkDCgVa1eB8kFVLzoEbYADPoQgefeD/7eS30ImXym4+FQ==
-X-Received: by 2002:a63:751d:0:b0:3db:2e7b:f93 with SMTP id q29-20020a63751d000000b003db2e7b0f93mr2560049pgc.496.1652285030554;
-        Wed, 11 May 2022 09:03:50 -0700 (PDT)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=vuLyis0cozB0HH3xDqQBXVh/FgY1uFVWgKAFWAeIWvM=;
+        b=6IQy2GoEbgAeaqbwINcAUbOWW6D1/OyaoTTaluIjnIx5ne1H3JfqRclV5n2Pf6RaGj
+         35KwybcbOn1/b8jRJMjRQ17kU3bam/UimyLkjMdPShTO+DqHJhZg88jIZJhWFA8IOw+q
+         YW6GcpY3vFW1RShBgj4fb20hDaeXjQ8egqeKUEwDCcYSvoctFEJ32K7UCSqfaoRa0fA1
+         Zwf/+VKDjt9IMkTY9ZJidHULh54z0X+FFDPuw+4HUfgGBbAAtF6bhMtNh64af9iiuGl+
+         a+ZyJX8ywXXr4Tti87NmyFysBvFJKAbnqZlgDZK5kl3HAfPtj+0Lyyn299AtVDEUvxAj
+         HI6A==
+X-Gm-Message-State: AOAM5323PabnGzZDwIRWNgQeML4zDMUB9H5gzqkbJb4ij7Do7pYI0E2H
+	FvB8i9HS1pV7OYFSBThH6kA=
+X-Google-Smtp-Source: ABdhPJxWqrFU+wrf1f3fcmudbr5H+AxqToGCpCuwHOM5wSjMkxBiclhBPlICHx+V9Z0uhmMF3z6nRA==
+X-Received: by 2002:a17:903:189:b0:15e:9584:fbe7 with SMTP id z9-20020a170903018900b0015e9584fbe7mr26565542plg.65.1652285035170;
+        Wed, 11 May 2022 09:03:55 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id w11-20020a63c10b000000b003c14af50624sm42825pgf.60.2022.05.11.09.03.46
+        by smtp.gmail.com with ESMTPSA id w11-20020a63c10b000000b003c14af50624sm42825pgf.60.2022.05.11.09.03.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 09:03:49 -0700 (PDT)
+        Wed, 11 May 2022 09:03:54 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: Nick Desaulniers <ndesaulniers@google.com>,
@@ -52,10 +52,12 @@ Cc: Dave Hansen <dave.hansen@linux.intel.com>,
 	David Howells <dhowells@redhat.com>,
 	Jan Beulich <JBeulich@suse.com>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
-Date: Thu, 12 May 2022 01:03:17 +0900
-Message-Id: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
+Date: Thu, 12 May 2022 01:03:18 +0900
+Message-Id: <20220511160319.1045812-2-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,56 +66,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The compilers provide some builtin expression equivalent to the ffs(),
-__ffs() and ffz() function of the kernel. The kernel uses optimized
-assembly which produces better code than the builtin
-functions. However, such assembly code can not be optimized when used
-on constant expression.
+For x86_64, the current ffs() implementation does not produce
+optimized code when called with a constant expression. On the
+contrary, the __builtin_ffs() function of both GCC and clang is able
+to simplify the expression into a single instruction.
 
-This series relies on __builtin_constant_p to select the optimal solution:
+* Example *
 
-  * use kernel assembly for non constant expressions
+Let's consider two dummy functions foo() and bar() as below:
 
-  * use compiler's __builtin function for constant expressions.
+| #include <linux/bitops.h>
+| #define CONST 0x01000000
+|
+| unsigned int foo(void)
+| {
+| 	return ffs(CONST);
+| }
+|
+| unsigned int bar(void)
+| {
+| 	return __builtin_ffs(CONST);
+| }
 
-I also think that the fls() and fls64() can be optimized in a similar
-way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
-trivial so I want to focus on this series first. If it get accepted, I
-will then work on those two additionnal function.
+GCC would produce below assembly code:
 
+| 0000000000000000 <foo>:
+|    0:	ba 00 00 00 01       	mov    $0x1000000,%edx
+|    5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+|    a:	0f bc c2             	bsf    %edx,%eax
+|    d:	83 c0 01             	add    $0x1,%eax
+|   10:	c3                   	ret
+|   11:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+|   18:	00 00 00 00
+|   1c:	0f 1f 40 00          	nopl   0x0(%rax)
+|
+| 0000000000000020 <bar>:
+|   20:	b8 19 00 00 00       	mov    $0x19,%eax
+|   25:	c3                   	ret
+
+And clang would produce:
+
+| 0000000000000000 <foo>:
+|    0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+|    5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
+|    c:	83 c0 01             	add    $0x1,%eax
+|    f:	c3                   	ret
+|
+| 0000000000000010 <bar>:
+|   10:	b8 19 00 00 00       	mov    $0x19,%eax
+|   15:	c3                   	ret
+
+For both example, we clearly see the benefit of using __builtin_ffs()
+instead of the kernel's asm implementation for constant
+expressions.
+
+However, for non constant expressions, the ffs() asm version of the
+kernel remains better for x86_64 because, contrary to GCC, it doesn't
+emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+able optimize out the CMOV call).
+
+This patch uses the __builtin_constant_p() to select between the
+kernel's ffs() and the __builtin_ffs() depending on whether the
+argument is constant or not.
+
+As a side benefit, this patch also removes below -Wshadow warning:
+
+| ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
+|   283 | static __always_inline int ffs(int x)
 
 ** Statistics **
 
-Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-of __ffs() and ffz() calls (details of the calculation in each patch).
+On a allyesconfig, before applying this patch...:
 
+| $ objdump -d vmlinux.o | grep bsf | wc -l
+| 3607
 
-** Changelog **
+...and after:
 
-v1 -> v2:
+| $ objdump -d vmlinux.o | grep bsf | wc -l
+| 792
 
-  * Use the ORC unwinder for the produced assembly code in patch 1.
+So, roughly 26.7% of the call to ffs() were using constant expression
+and were optimized out.
 
-  * Rename the functions as follow:
-     - __ffs_asm() -> variable_ffs()
-     - __ffs_asm_not_zero() -> __variable_ffs()
-     - ffz_asm() -> variable_ffs()
+(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
 
-  * fit #define ffs(x) in a single line.
+[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
+http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
 
-  * Correct the statistics for ffs() in patch 1 and add the statistics
-    for __ffs() and ffz() in patch 2.
+CC: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-
-Vincent Mailhol (2):
-  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
-    expressions
-  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
-    expressions
-
- arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
- 1 file changed, 38 insertions(+), 26 deletions(-)
-
+diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+index a288ecd230ab..6ed979547086 100644
+--- a/arch/x86/include/asm/bitops.h
++++ b/arch/x86/include/asm/bitops.h
+@@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigned long word)
+ #undef ADDR
+ 
+ #ifdef __KERNEL__
+-/**
+- * ffs - find first set bit in word
+- * @x: the word to search
+- *
+- * This is defined the same way as the libc and compiler builtin ffs
+- * routines, therefore differs in spirit from the other bitops.
+- *
+- * ffs(value) returns 0 if value is 0 or the position of the first
+- * set bit if value is nonzero. The first (least significant) bit
+- * is at position 1.
+- */
+-static __always_inline int ffs(int x)
++static __always_inline int variable_ffs(int x)
+ {
+ 	int r;
+ 
+@@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
+ 	return r + 1;
+ }
+ 
++/**
++ * ffs - find first set bit in word
++ * @x: the word to search
++ *
++ * This is defined the same way as the libc and compiler builtin ffs
++ * routines, therefore differs in spirit from the other bitops.
++ *
++ * ffs(value) returns 0 if value is 0 or the position of the first
++ * set bit if value is nonzero. The first (least significant) bit
++ * is at position 1.
++ */
++#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
++
+ /**
+  * fls - find last set bit in word
+  * @x: the word to search
 -- 
 2.35.1
 
