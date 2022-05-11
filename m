@@ -1,227 +1,198 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0CD28F2
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 18:39:21 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id bu29so5184367lfb.0
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 11:39:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336612F33
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 18:43:37 +0000 (UTC)
+Received: by mail-qk1-f174.google.com with SMTP id 185so2959630qke.7
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 11:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WZrrRWWnKYCGWmQ+Q5VAgBLIrXxu/TL0XFvGr+F6p4Q=;
-        b=VHJwVCB1dKro4DgAW7K4W6tBjY8N+M80NYTT5vBdxstE2C8oefPBk7hXLGmpUoYx0+
-         N8vMUDZz7WPoul0qiH2DEuoCgIgVYYU7hCp+dyoOzEwXNoyLZdnw8Zz/PCOlj6jC5wWR
-         6XbHmTeg1/3e2tMLGDNHUVUY75gHKQLw8AYg1exA4BDNB9izH7rKBR3M48fofh9pIKY7
-         qDPc3b3epetEmOrFCqn1D9mnvwbONUi18UjWmQujxn+99DfWCH9K60F03FX3Dwwld94e
-         O92vX57H/RPsvDl8PgRVn84qkdMJd9IhMaKHH28G6vrZsImk1SjiOVclJCNa8Cug8Xr3
-         fP7Q==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EVcIbC3os2R84jxSHafkWfG0RgEPBNH134Le4XDoVnc=;
+        b=5S0tuXmhycTuBnMCTLgz6njqVsnNK34gbNgZ817Qe0cDBcZOwoC4fpkcAInEpb9OEd
+         USQnRxfeUlfFMK698Ku6N3oSuITk/8uaNJLIeOQ4i0HdWT9qAQV/2jGibWeTV5ab1OsQ
+         lbsLkcKUKask/6L6L28sf0MameP1rYZTWI/owjziRSBIXOW3P0dVz70Qq5ZWk83ErrR7
+         MB3PBU3rxSKk0nl9izDKudEoZJXmEkKlLPsHES6kirTvkIoy9H66Vqn2ZL7Z7TwLcw9n
+         J89MqKgCGlCWRVDuk18CUGpDiaQHfNT/4asynHuLJE3vWEcCoLPQL27Mgo2Hrb4WZhIn
+         Hpug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WZrrRWWnKYCGWmQ+Q5VAgBLIrXxu/TL0XFvGr+F6p4Q=;
-        b=GlL6qaV5+0ifzbNPDFAt8kTDzoSmXSjT4TyK/riTMCDse1tEtabp6M7YI3qHfYwDC3
-         C25jrY4T+2eXZyD4YPoKkkZj3nQ0/tfa6iwaaaTsP5LWe7rlWY9tBnXPa0/qg2F6IveP
-         bVx4ZWhIv14OAyICW3EwuBAgXyz/RKimcdPMEpZoZ5eLxDgOUK90Fhapve1vw9nCvkjS
-         5/wAxoCutfSs8ZWLrWsAU2NQN1Wg90ys0TiqRu22dLHcJyGm0WqawCIiYoYbRbbv8/6L
-         tk5p6psDsfOT0NZ1FyFsibchHyR7Ih+/Zn6L2d2W3vMe+6+8Hq5qCvAA7DRuXbgaOIHY
-         QL0Q==
-X-Gm-Message-State: AOAM532SrPVWrjoKuJjNcI5dVHX7w2QhHeOmgs1k48o1KssTZi2onVXn
-	K6tuotm5bGYZ6JA+8wGe/ZLPMVHJb9nzeq/nfFFK9A==
-X-Google-Smtp-Source: ABdhPJwDiGaYEeuwcoTROEsK0+cljIqKjOORbI+w6etJDBdPW6qbFNKV8L6LhpsEbCNVqX740tnAN/qbGip4C7Px4z4=
-X-Received: by 2002:ac2:4646:0:b0:472:108e:51af with SMTP id
- s6-20020ac24646000000b00472108e51afmr21199577lfo.184.1652294359560; Wed, 11
- May 2022 11:39:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EVcIbC3os2R84jxSHafkWfG0RgEPBNH134Le4XDoVnc=;
+        b=sJxnyVV0YHfiTOS1Kz/0FubpQ6lV/fMlzzv7OycCY8FlsadWl3aNpTLJwyALDuSHpF
+         OsxFu/z9rTh9oVvzg3S8IU3IxbiYiIW0HzcgY3F2J1EZNOkzQiO89R7sxBvy0+8WmJE7
+         T/RuGqEJ6ATDcx7fNjhgJnCmVnS2OHF+enM3eV0MusvIZZ45BAupfvxUpFjr1vH81QCU
+         U7uB4xtGW3fJAZzh8Atl/NMLIwuFONhsM6xuxkeeRBDmlgeFnc8zhXtHThJBhi8H2haw
+         BTm/7l9KOhat7CbneMowFMxTlAa/4BRohfjt714zXT0dimSEtST4wf98ldu0WBc8ycO0
+         pfeA==
+X-Gm-Message-State: AOAM531hajfXPESanNHeFvoqHBRRSVyUeJ2/pfwlwKEcE7t2ydMqhP8N
+	/nmecF9fq6YlQe7MKeIQXnvfHw==
+X-Google-Smtp-Source: ABdhPJxgkihNXs6NLUcbgv8u3OcoleK8XIgeZZ5LNOpVgu3RqBooCduyZ+zN2QhyDmQKGqYPw7yc3g==
+X-Received: by 2002:a05:620a:170f:b0:6a0:41dc:8f6c with SMTP id az15-20020a05620a170f00b006a041dc8f6cmr20846493qkb.191.1652294616918;
+        Wed, 11 May 2022 11:43:36 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:14fe])
+        by smtp.gmail.com with ESMTPSA id y11-20020ac85f4b000000b002f3e2435ee2sm1692779qta.63.2022.05.11.11.43.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 11:43:36 -0700 (PDT)
+Date: Wed, 11 May 2022 14:43:35 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [linux-next:master 10902/11094] mm/memcontrol.c:7467:6: error:
+ redefinition of 'obj_cgroup_may_zswap'
+Message-ID: <YnwD14zxYjUJPc2w@cmpxchg.org>
+References: <202205120115.D6nVZNke-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220510065336.hlfjrc25ajed5zj4@M910t>
-In-Reply-To: <20220510065336.hlfjrc25ajed5zj4@M910t>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 11 May 2022 11:39:07 -0700
-Message-ID: <CAKwvOd=OnJ=ZhsbX+epzbhg3sWg9yOaR=zQ4jF_Deo=B8Nx9Og@mail.gmail.com>
-Subject: Re: riscv: llvm-compiler: calling convention violation: temporary
- register $t2 is used to pass the ninth function parameter
-To: Changbin Du <changbin.du@huawei.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Steven Rostedt <rostedt@goodmis.org>, hw.huiwang@huawei.com, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, codegen-riscv@discourse.llvm.org, 
-	llvmproject@discourse.llvm.org, craig.topper@sifive.com, asb@asbradbury.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202205120115.D6nVZNke-lkp@intel.com>
 
-On Mon, May 9, 2022 at 11:54 PM Changbin Du <changbin.du@huawei.com> wrote:
->
-> [This is a resent to correct llvm mailist.]
->
-> Hello, folks,
->
-> Recently I encountered a kernel crash problem when using ftrace with 'perf ftrace'
-> command on risc-v kernel built with llvm.
->
-> This crash only exists on llvm build, not reproducable with GCC. So I hope llvm
-> guys can take a look :)
->
-> The llvm versions I have tried are llvm-13.0.0 and mainline (commit 102bc634cb
-> ("[runtime] Build compiler-rt with --unwindlib=none")).
->
-> [  612.947887][  T496] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
-> [  613.050789][  T496] Hardware name: riscv-virtio,qemu (DT)
-> [  613.087976][  T496] epc : __find_rr_leaf+0x128/0x220
-> [  613.107493][  T496]  ra : return_to_handler+0x22/0x24
-> [  613.125322][  T496] epc : ffffffff80a1915a ra : ffffffff80009506 sp : ff20000011e43860
-> [  613.150124][  T496]  gp : ffffffff81812f40 tp : ff6000008bb01580 t0 : ff600000806cf0f0
-> [  613.173657][  T496]  t1 : 000000000001b29a t2 : 0000000000000001 s0 : ff20000011e43920
-> [  613.187311][  T496]  s1 : ff600000848c2a00 a0 : 0000000000000002 a1 : 0000000000000002
-> [  613.202731][  T496]  a2 : fffffffffffffffd a3 : ff6000009d287000 a4 : 00000000000002c0
-> [  613.213723][  T496]  a5 : ff6000009d259b40 a6 : ffffffffffffff9c a7 : ffffffffffffffff
-> [  613.226648][  T496]  s2 : 0000000000000001 s3 : ff20000011e439d8 s4 : ffffffff8160d140
-> [  613.246571][  T496]  s5 : 0000000000000002 s6 : 0000000000000000 s7 : 0000000000000000
-> [  613.264681][  T496]  s8 : 0000000000000064 s9 : 0000000000000000 s10: 0000000000400000
-> [  613.277999][  T496]  s11: ff600000848c2aa8 t3 : 0000000000000290 t4 : 00000000004002c0
-> [  613.303729][  T496]  t5 : 00000000ffffffff t6 : ff6000009d2872d0
-> [  613.322145][  T496] status: 0000000200000120 badaddr: 0000000000000001 cause: 000000000000000d
-> [  613.346228][  T496] [<ffffffff80a12526>] ip6_pol_route+0xb6/0x602
-> [  613.365722][  T496] [<ffffffff80a1321a>] ip6_pol_route_output+0x2c/0x34
-> [  613.386374][  T496] [<ffffffff80a1c028>] fib6_rule_lookup+0x36/0xa0
-> [  613.401865][  T496] [<ffffffff80a131da>] ip6_route_output_flags_noref+0xd6/0xea
-> [  613.412776][  T496] [<ffffffff80a13274>] ip6_route_output_flags+0x52/0xd4
-> [  613.432013][  T496] [<ffffffff809ffb3a>] ip6_dst_lookup_tail+0x68/0x23a
-> [  613.456198][  T496] [<ffffffff809ffec6>] ip6_sk_dst_lookup_flow+0x132/0x1cc
-> [  613.513174][  T496] [<ffffffff80003cd8>] ret_from_syscall+0x0/0x2
-> [  613.518973][  T496] [<ffffffff800094e4>] return_to_handler+0x0/0x24
-> [  613.563961][  T496] Kernel panic - not syncing: Fatal exception
-> [  613.572278][  T496] SMP: stopping secondary CPUs
-> [  613.587449][  T496] ---[ end Kernel panic - not syncing: Fatal exception ]---
->
-> The crash happened when dereferencing the point 'mpri' at route.c:758.
->
-> (gdb) l *__find_rr_leaf+0x128
-> 0xffffffff809da9c4 is in __find_rr_leaf (net/ipv6/route.c:758).
-> 753
-> 754             if (strict & RT6_LOOKUP_F_REACHABLE)
-> 755                     rt6_probe(nh);
-> 756
-> 757             /* note that m can be RT6_NUD_FAIL_PROBE at this point */
-> 758             if (m > *mpri) {
-> 759                     *do_rr = match_do_rr;
-> 760                     *mpri = m;
-> 761                     rc = true;
-> 762             }
->
-> Adding some logs, I found the problem. The ninth passed parameter of function
-> __find_rr_leaf() which is the address of local variable 'mpri', is changed to
-> value '0x1' when inside the function __find_rr_leaf.
-> Here is the code snippet and full link
-> https://github.com/torvalds/linux/blob/9cb7c013420f98fa6fd12fc6a5dc055170c108db/net/ipv6/route.c.
->
-> static void find_rr_leaf(struct fib6_node *fn, struct fib6_info *leaf,
->                          struct fib6_info *rr_head, int oif, int strict,
->                          bool *do_rr, struct fib6_result *res)
-> {
->         u32 metric = rr_head->fib6_metric;
->         struct fib6_info *cont = NULL;
->         int mpri = -1;
->
->         __find_rr_leaf(rr_head, NULL, metric, res, &cont,
->                        oif, strict, do_rr, &mpri);
->         ...
-> }
->
-> Then debugging with gdb, I found this probably is a compiler bug. We can see the
-> local function __find_rr_leaf() is not optimized out and the compiler generates
-> a local symbol for it. The find_rr_leaf() (inlined by fib6_table_lookup) invokes
-> this function with 'jalr' instruction.
->
-> (gdb) disassemble fib6_table_lookup
-> Dump of assembler code for function fib6_table_lookup:
->    [snip]
->    0xffffffff80a1240e <+412>:   beqz    a1,0xffffffff80a12436 <fib6_table_lookup+452>
->    0xffffffff80a12410 <+414>:   slli    a1,s9,0x20
->    0xffffffff80a12414 <+418>:   srli    a1,a1,0x20
->    0xffffffff80a12416 <+420>:   sext.w  a2,a1
->    0xffffffff80a1241a <+424>:   addi    a7,s0,-125
->    0xffffffff80a1241e <+428>:   addi    t2,s0,-124
->    0xffffffff80a12422 <+432>:   li      a1,0
->    0xffffffff80a12424 <+434>:   mv      a3,s10
->    0xffffffff80a12426 <+436>:   li      a4,0
->    0xffffffff80a12428 <+438>:   ld      a5,-152(s0)
->    0xffffffff80a1242c <+442>:   mv      a6,s8
->    0xffffffff80a1242e <+444>:   auipc   ra,0x7
->    0xffffffff80a12432 <+448>:   jalr    -686(ra) # 0xffffffff80a19180 <__find_rr_leaf>
->    [snip]
->
-> And at line route.c:758, the value of point 'mpri' is stored in temporary register
-> $t2 and $s3 (copied from $t2).
->
-> (gdb) info scope __find_rr_leaf
-> [snip]
-> Symbol mpri is multi-location:
->   Base address 0xffffffff80a10564  Range 0xffffffff80a19190-0xffffffff80a191ae: a variable in $t2
->   Range 0xffffffff80a191c0-0xffffffff80a191d6: a variable in $s3
->   Range 0xffffffff80a19200-0xffffffff80a19208: a variable in $s3
->   Range 0xffffffff80a1921e-0xffffffff80a192fe: a variable in $s3
->   Range 0xffffffff80a1930a-0xffffffff80a19356: a variable in $s3
->
-> Let's see when register $t2 is corrupted with single-step mode. Obviously, register
-> $t2 is changed by mcount function ftrace_caller(). This is why the bug happens
-> to ftrace.
->
-> Dump of assembler code for function __find_rr_leaf:
->    0xffffffff80a19180 <+0>:     sd      ra,-8(sp)   #  $t2 = 0xff200000120db7b4
->    0xffffffff80a19184 <+4>:     auipc   ra,0xff5f1
->    0xffffffff80a19188 <+8>:     jalr    -1744(ra) # 0xffffffff80009ab4 <ftrace_caller> #  $t2 = 0xff200000120db7b4
-> => 0xffffffff80a1918c <+12>:    ld      ra,-8(sp)    #  $t2 = 0x1, bug, $t2 is corrupted!!
->    0xffffffff80a19190 <+16>:    addi    sp,sp,-176
->    [snip]
->
-> So now we can come to a conclusion. The generated local function __find_rr_leaf()
-> violates the risc-v calling convention and leads to the panic. It should use stack
-> but *not* temporary register $t2 to pass the ninth parameter! It's okay if the
-> callsite can take care of local symbol callees, but the Function Instrumentation
-> features should be considerated carefully.
->
-> For comparison, here is the result from gcc (9.2.0):
-> (gdb) info scope __find_rr_leaf
-> [snip]
-> Symbol mpri is a complex DWARF expression:
->      0: DW_OP_fbreg 0, length 8.
->
-> I also built a simple test function with 9 parameters by clang and same cflags,
-> but cannot reproduce it. Maybe it is conditional?
->
-> Simple test code:
-> __attribute__ ((noinline))
-> void test_func(int *a, int *b, int *c, int *d, int *e, int *f, int *g, int *h, int *i)
-> {
->         printf("__find_rr_leaf: %d\n", *i);
-> }
->
-> int main(void)
-> {
->         int a,b,c,d,e,f,g,h,i = 100;
->
->         test_func(&a,&b,&c,&d,&e,&f,&g,&h,&i);
->         return 0;
-> }
+On Thu, May 12, 2022 at 01:49:04AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   6107040c99d5dfc920721c198d45ed2d639b113a
+> commit: bf7930005b547c94d4cd312a2e0400cb8cf76d2a [10902/11094] zswap: memcg accounting
+> config: i386-randconfig-a001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120115.D6nVZNke-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=bf7930005b547c94d4cd312a2e0400cb8cf76d2a
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout bf7930005b547c94d4cd312a2e0400cb8cf76d2a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> mm/memcontrol.c:7467:6: error: redefinition of 'obj_cgroup_may_zswap'
+>    bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+>         ^
+>    include/linux/memcontrol.h:1816:20: note: previous definition is here
+>    static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
 
-Hmm...any chance you could come up with a more concise test case then
-using creduce [0] or cvise [1]?
-[0] https://embed.cs.utah.edu/creduce/
-[1] https://github.com/marxin/cvise
+This is a slob configuration! I'll probably NOT test this routinely in
+the future ;) But there is opportunity to simplify the underlying
+complication that caused this, which is CONFIG_MEMCG_KMEM. I need to
+dust off that patch and send it...
 
+For now, this delta fix addresses the problem.
 
->
-> --
-> Cheers,
-> Changbin Du
->
+Runtime tested with slob and slub.
 
+---
+From f6029bc8676d990b3915b815dd6d15759ce6b1b1 Mon Sep 17 00:00:00 2001
+From: Johannes Weiner <hannes@cmpxchg.org>
+Date: Wed, 11 May 2022 14:26:59 -0400
+Subject: [PATCH] zswap: memcg accounting fix
 
+Fix for CONFIG_SLOB builds:
+
+>> mm/memcontrol.c:7467:6: error: redefinition of 'obj_cgroup_may_zswap'
+   bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+	^
+   include/linux/memcontrol.h:1816:20: note: previous definition is here
+   static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+
+The header file uses CONFIG_MEMCG_KMEM && CONFIG_ZSWAP to decide on
+implementation vs dummies; the .c file uses CONFIG_ZSWAP. SLOB builds
+don't have CONFIG_MEMCG_KMEM (for historical reasons).
+
+Gate everything in the code file on CONFIG_MEMCG_KMEM as well for
+now. Eventually, CONFIG_MEMCG_KMEM should be removed and folded into
+CONFIG_MEMCG.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ include/linux/memcontrol.h |  2 +-
+ mm/memcontrol.c            | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 3385ce81ecf3..b0685d01570f 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -254,7 +254,7 @@ struct mem_cgroup {
+ 	/* Range enforcement for interrupt charges */
+ 	struct work_struct high_work;
+ 
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ 	unsigned long zswap_max;
+ #endif
+ 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index cbb9b43bdb80..350012b93a95 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1398,7 +1398,7 @@ static const struct memory_stat memory_stats[] = {
+ 	{ "sock",			MEMCG_SOCK			},
+ 	{ "vmalloc",			MEMCG_VMALLOC			},
+ 	{ "shmem",			NR_SHMEM			},
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ 	{ "zswap",			MEMCG_ZSWAP_B			},
+ 	{ "zswapped",			MEMCG_ZSWAPPED			},
+ #endif
+@@ -1517,7 +1517,7 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
+ 	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
+ 		       memcg_events(memcg, PGLAZYFREED));
+ 
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ 	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
+ 		       memcg_events(memcg, ZSWPIN));
+ 	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
+@@ -5184,7 +5184,7 @@ mem_cgroup_css_alloc(struct cgroup_subsys_state *parent_css)
+ 
+ 	page_counter_set_high(&memcg->memory, PAGE_COUNTER_MAX);
+ 	memcg->soft_limit = PAGE_COUNTER_MAX;
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ 	memcg->zswap_max = PAGE_COUNTER_MAX;
+ #endif
+ 	page_counter_set_high(&memcg->swap, PAGE_COUNTER_MAX);
+@@ -7451,7 +7451,7 @@ static struct cftype memsw_files[] = {
+ 	{ },	/* terminate */
+ };
+ 
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ /**
+  * obj_cgroup_may_zswap - check if this cgroup can zswap
+  * @objcg: the object cgroup
+@@ -7582,7 +7582,7 @@ static struct cftype zswap_files[] = {
+ 	},
+ 	{ }	/* terminate */
+ };
+-#endif /* CONFIG_ZSWAP */
++#endif /* CONFIG_MEMCG_KMEM && CONFIG_ZSWAP */
+ 
+ /*
+  * If mem_cgroup_swap_init() is implemented as a subsys_initcall()
+@@ -7602,7 +7602,7 @@ static int __init mem_cgroup_swap_init(void)
+ 
+ 	WARN_ON(cgroup_add_dfl_cftypes(&memory_cgrp_subsys, swap_files));
+ 	WARN_ON(cgroup_add_legacy_cftypes(&memory_cgrp_subsys, memsw_files));
+-#ifdef CONFIG_ZSWAP
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+ 	WARN_ON(cgroup_add_dfl_cftypes(&memory_cgrp_subsys, zswap_files));
+ #endif
+ 	return 0;
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.3
+
