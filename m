@@ -1,40 +1,32 @@
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3116D2F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:56:41 +0000 (UTC)
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-09.nifty.com with ESMTP id 24BGnJnI027965
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:49:19 +0900
-Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-08.nifty.com with ESMTP id 24BGlWc5031975;
-	Thu, 12 May 2022 01:47:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc5031975
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652287663;
-	bh=OcOEuS6jEbLubdZRYm9mI6nzM08ugGxo0tuefY4hIgE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jXi1gJPHIE2xagfeR2MNcfLTDFlg9D5O9cnkBMlaoyva8Do8oJfp6T+S9S4xs+LXI
-	 mbrFTqdzrHF0wP0OVeZc1gHvb856yx+ZfDsW6UnXoSwnaZLi6xTmLkkNem16UBBP7G
-	 Mv9n97/BoZmFifFt7YxrYZJQzzWpLiqvfELN1kUyI23LFUQWDtOBBq+cP+7B+29kaS
-	 heJui4xv66QP7cK5llyJUm9hDLvTD/WnVJAdHb5C1xVoNZfo0IQHttkWQBZvPgU0k4
-	 LhNu07C+jWfwR7Z1xyAiP00Tzt2EkDe7UTV97+1Ytkg7hTmnpbuDpNBg7j27PDMu7c
-	 tiqDnu6ifEqMQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 10/12] kbuild: make *.mod rule robust against too long argument error
-Date: Thu, 12 May 2022 01:45:12 +0900
-Message-Id: <20220511164514.2741934-11-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF782F25
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:58:25 +0000 (UTC)
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay11.hostedemail.com (Postfix) with ESMTP id 65AD681BB5;
+	Wed, 11 May 2022 15:41:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 3C7BD2002C;
+	Wed, 11 May 2022 15:41:01 +0000 (UTC)
+Message-ID: <e40f779c7de2f9abe5fdd76d0a77477e4bf1fe32.camel@perches.com>
+Subject: Re: [PATCH v2 5/5] clang-format: Fix space after for_each macros
+From: Joe Perches <joe@perches.com>
+To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, Miguel Ojeda
+	 <ojeda@kernel.org>
+Cc: Andy Whitcroft <apw@canonical.com>, Brian Norris
+ <briannorris@chromium.org>,  Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>, Kees Cook <keescook@chromium.org>,
+ Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,  Lukas Bulwahn
+ <lukas.bulwahn@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Paul Moore <paul@paul-moore.com>,
+ Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Date: Wed, 11 May 2022 08:40:59 -0700
+In-Reply-To: <20220506160106.522341-6-mic@digikod.net>
+References: <20220506160106.522341-1-mic@digikod.net>
+	 <20220506160106.522341-6-mic@digikod.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,52 +34,21 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.17
+X-Stat-Signature: 8kumfz8y6hktaiyao8dktthgs9c8gdp3
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 3C7BD2002C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19QUncDomXjqcJxWxSLRvMhUCb8dD0BNIs=
+X-HE-Tag: 1652283661-184094
 
-Like built-in.a, the command length of the *.mod rule scales with
-the depth of the directory times the number of objects in the Makefile.
+On Fri, 2022-05-06 at 18:01 +0200, Mickaël Salaün wrote:
+> Set SpaceBeforeParens to ControlStatementsExceptForEachMacros to not add
+> space between a for_each macro and the following parenthesis.  This
+> option is available since clang-format-11 [1] and is in line with the
+> checkpatch.pl rules [2].
 
-Add $(obj)/ by the shell command (awk) instead of by Make's builtin
-function.
+If this is applied, could the .clang_format ForEachMacros:
+block be removed?
 
-In-tree modules still have some room to the limit (ARG_MAX=2097152),
-but this is more future-proof for big modules in a deep directory.
-
-For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
-compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
-
-The issue is more critical for external modules because the M= path
-can be very long as Jeff Johnson reported before [1].
-
-[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
----
-
-(no changes since v2)
-
-Changes in v2:
-  - New patch
-
- scripts/Makefile.build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 8f1a355df7aa..f546b5f1f33f 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -270,8 +270,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
- 	$(call if_changed_rule,cc_o_c)
- 	$(call cmd,force_checksrc)
- 
--cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
--	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
-+cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
-+	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
- 
- $(obj)/%.mod: FORCE
- 	$(call if_changed,mod)
--- 
-2.32.0
 
