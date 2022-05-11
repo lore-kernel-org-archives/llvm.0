@@ -1,108 +1,61 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96882F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 17:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652290144; x=1683826144;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bhnfCNtIOXA3pWntWcwwVfFEZU9diSfyJB8QnfCwTDI=;
-  b=VrN4Csy6oJ3nFxl7DSiTFWcO1mFu9VxFkkdxgDy5ZR/Qd4CScD/n8b/W
-   OxdKcgrsB4e1Tfl+xTUJqbItD2Y7bXQDDFCc9EeD87QoQFSqu+XQYKf7Z
-   v+fjyEnjcFicgTNf027lQjmh3hRG+zCuyDzp8cwoaU8Ke8UW5pvcsOfV3
-   ZbCZYzdhG92rOebtsygOnVd3qVsz0sOAaIXq16piv/ERwPHApbq0NFTGA
-   xr47pc5Gw25m4UkroNOunynx+w2yeD+HQ9O6jiF+NhYqS42+VQUs4QW5y
-   1uMw4lYMWcpCKUpU8nTwNnMeBO2hp7Z7viS7zjQYh35JBVBJyi936S/On
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269435197"
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="269435197"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 10:29:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,217,1647327600"; 
-   d="scan'208";a="658250318"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2022 10:29:01 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noq8z-000JMm-9E;
-	Wed, 11 May 2022 17:29:01 +0000
-Date: Thu, 12 May 2022 01:28:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Greentime Hu <greentime.hu@sifive.com>, palmer@dabbelt.com,
-	paul.walmsley@sifive.com, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v10 08/16] riscv: Add task switch support for vector
-Message-ID: <202205120146.F7wGCoud-lkp@intel.com>
-References: <3f544b952369e55f72a8771d0bec387c2ff49ae0.1652257230.git.greentime.hu@sifive.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6722F25
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 17:34:19 +0000 (UTC)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Kz28M3JKMzMq1PY;
+	Wed, 11 May 2022 19:34:11 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+	by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Kz28L0d0vzljsVB;
+	Wed, 11 May 2022 19:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1652290451;
+	bh=G0hs62nfpGjWlOuhAXhBiuFTtxkNwrbiWL50GjtiUpg=;
+	h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+	b=H1xdyS6uzExUVTleMkgRO/LnlzqZH0UkHhcSUl/P7DycKdX3FBXmhmiMpe98X8JWp
+	 rOpuHAD34t4L7thf6KiYS++C91oc+jvZR6orUtn3xDhnQikA8a97nKW9DHAF2xsCA6
+	 ESoYTb3ST4n7MF/bcjlDug8kdiKGaNebcfcFcI+8=
+Message-ID: <d519b20b-694a-d8a7-66ed-1c5961590d4b@digikod.net>
+Date: Wed, 11 May 2022 19:34:09 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f544b952369e55f72a8771d0bec387c2ff49ae0.1652257230.git.greentime.hu@sifive.com>
-
-Hi Greentime,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.18-rc6]
-[cannot apply to kees/for-next/execve next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Greentime-Hu/riscv-Add-vector-ISA-support/20220511-163610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
-config: riscv-randconfig-r031-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120146.F7wGCoud-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/dcb5b4bc0fc33bba0eb3219b9a8d29ddff58bbef
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Greentime-Hu/riscv-Add-vector-ISA-support/20220511-163610
-        git checkout dcb5b4bc0fc33bba0eb3219b9a8d29ddff58bbef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kernel/process.c:149:6: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
-   void arch_release_task_struct(struct task_struct *tsk)
-        ^
-   arch/riscv/kernel/process.c:149:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void arch_release_task_struct(struct task_struct *tsk)
-   ^
-   static 
-   1 warning generated.
+User-Agent:
+Content-Language: en-US
+To: Joe Perches <joe@perches.com>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Andy Whitcroft <apw@canonical.com>,
+ Brian Norris <briannorris@chromium.org>,
+ Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>, Kees Cook <keescook@chromium.org>,
+ Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Paul Moore
+ <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220506160106.522341-1-mic@digikod.net>
+ <20220506160106.522341-6-mic@digikod.net>
+ <e40f779c7de2f9abe5fdd76d0a77477e4bf1fe32.camel@perches.com>
+From: =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v2 5/5] clang-format: Fix space after for_each macros
+In-Reply-To: <e40f779c7de2f9abe5fdd76d0a77477e4bf1fe32.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/arch_release_task_struct +149 arch/riscv/kernel/process.c
+On 11/05/2022 17:40, Joe Perches wrote:
+> On Fri, 2022-05-06 at 18:01 +0200, Mickaël Salaün wrote:
+>> Set SpaceBeforeParens to ControlStatementsExceptForEachMacros to not add
+>> space between a for_each macro and the following parenthesis.  This
+>> option is available since clang-format-11 [1] and is in line with the
+>> checkpatch.pl rules [2].
+> 
+> If this is applied, could the .clang_format ForEachMacros:
+> block be removed?
 
-   148	
- > 149	void arch_release_task_struct(struct task_struct *tsk)
-   150	{
-   151		/* Free the vector context of datap. */
-   152		if (has_vector() && tsk->thread.vstate.datap)
-   153			kfree(tsk->thread.vstate.datap);
-   154	}
-   155	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The ForEachMacros block is still required to not put the " {" on the 
+next line.
