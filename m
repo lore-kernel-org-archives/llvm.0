@@ -1,24 +1,24 @@
-Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188BF2F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:55:03 +0000 (UTC)
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-08.nifty.com with ESMTP id 24BGnJem020463
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:49:19 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CDD2F25
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:55:09 +0000 (UTC)
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-06.nifty.com with ESMTP id 24BGnPYS027288
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:49:25 +0900
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-08.nifty.com with ESMTP id 24BGlWbv031975;
-	Thu, 12 May 2022 01:47:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWbv031975
+	by conuserg-08.nifty.com with ESMTP id 24BGlWc6031975;
+	Thu, 12 May 2022 01:47:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc6031975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652287655;
-	bh=nPFeNb7zcOn5IuqqOUBw3aAC983zUVDbQ5TFg7R+mlQ=;
+	s=dec2015msa; t=1652287664;
+	bh=PfsqhsCBk5DMJKQrgxjPrt4cR290nXSjW4ewrtsP89A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gkESwt0tgX74oapFqHSCwWI/Bk8Ad4YZ8SrAbF7yZTsg2uxWwzhaWocVBJyzR0cnk
-	 0K/qmOJdf1rNWwm3+EJQgBN7lGD+/6KmK6ukb613+nVKaNI20dpP2i/pC0oei1N8lW
-	 nYcbSUfk0eUbIhd6kmm1elHieqjRN8kXKOn1E2408ZMc+BLwrqRCYOqh/tZLiRC+gk
-	 /QasUWfa/8wjt0WSJZv8yk3rEk2IwA7c6zZCKPe7Iwso0wrfwuzjhDpsmggvTA0bXF
-	 0ofYM6whQAGxcha+sJpZZ+XVltmAPe+wJyQuvYnK9krcypZso6n2TCvfol7/h+YrpJ
-	 m7fjJTaJN6h1g==
+	b=KGPJJDyaNocbo6ncNt90Q/OY7ihHW9tXr3BUWHXD4rjMD3KkrdCuYQZTTVomseqSK
+	 +XTfWkakm1H4RwK0EbAITtDKkiiAWjT8O/6BZqBXHN/rVs4Q1szUu/FPRyrbwrrzV0
+	 eh/ATsHp2W7mHqysKrYp5SE61AiXtfsPnEra23WGRjfzpMzlwUP6MYeY1NoYNI4utk
+	 pZV5zT4e++CpCbsBFhvg07OMQ1FdS0zgT72+Ne+un4xKMRHYZBz2fyEsurC8zCVL1j
+	 4THxnWfD6Pa3WElSRT+CekpOBnMwVZMMCbvzWIiwwQJLolqwlbnXUralfrpajp7JYT
+	 YrzXYa2EGODug==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -28,10 +28,11 @@ Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org,
         llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 02/12] modpost: add sym_find_with_module() helper
-Date: Thu, 12 May 2022 01:45:04 +0900
-Message-Id: <20220511164514.2741934-3-masahiroy@kernel.org>
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v5 11/12] kbuild: add cmd_and_savecmd macro
+Date: Thu, 12 May 2022 01:45:13 +0900
+Message-Id: <20220511164514.2741934-12-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
 References: <20220511164514.2741934-1-masahiroy@kernel.org>
@@ -43,65 +44,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-find_symbol() returns the first symbol found in the hash table. This
-table is global, so it may return a symbol from an unexpected module.
+Separate out the command execution part of if_changed, as we did
+for if_changed_dep.
 
-There is a case where we want to search for a symbol with a given name
-in a specified module.
+This allows us to reuse it in if_changed_rule.
 
-Add sym_find_with_module(), which receives the module pointer as the
-second argument. It is equivalent to find_module() if NULL is passed
-as the module pointer.
+  define rule_foo
+          $(call cmd_and_savecmd,foo)
+          $(call cmd,bar)
+  endef
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
 
 (no changes since v4)
 
 Changes in v4:
-  - Only takes the new helper from
-    https://patchwork.kernel.org/project/linux-kbuild/patch/20220505072244.1155033-2-masahiroy@kernel.org/
+  - New.
+    Resent of my previous submission.
+    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
 
-Changes in v2:
-  - Rename the new func to sym_find_with_module()
+ scripts/Kbuild.include | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- scripts/mod/modpost.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index e7e2c70a98f5..fc5db1f73cf1 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -266,7 +266,7 @@ static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
- 	list_add_tail(&sym->list, &mod->unresolved_symbols);
- }
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index 455a0a6ce12d..ece44b735061 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -142,9 +142,11 @@ check-FORCE = $(if $(filter FORCE, $^),,$(warning FORCE prerequisite is missing)
+ if-changed-cond = $(newer-prereqs)$(cmd-check)$(check-FORCE)
  
--static struct symbol *find_symbol(const char *name)
-+static struct symbol *sym_find_with_module(const char *name, struct module *mod)
- {
- 	struct symbol *s;
- 
-@@ -275,12 +275,17 @@ static struct symbol *find_symbol(const char *name)
- 		name++;
- 
- 	for (s = symbolhash[tdb_hash(name) % SYMBOL_HASH_SIZE]; s; s = s->next) {
--		if (strcmp(s->name, name) == 0)
-+		if (strcmp(s->name, name) == 0 && (!mod || s->module == mod))
- 			return s;
- 	}
- 	return NULL;
- }
- 
-+static struct symbol *find_symbol(const char *name)
-+{
-+	return sym_find_with_module(name, NULL);
-+}
+ # Execute command if command has changed or prerequisite(s) are updated.
+-if_changed = $(if $(if-changed-cond),                                        \
++if_changed = $(if $(if-changed-cond),$(cmd_and_savecmd),@:)
 +
- struct namespace_list {
- 	struct list_head list;
- 	char namespace[];
++cmd_and_savecmd =                                                            \
+ 	$(cmd);                                                              \
+-	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
++	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
+ 
+ # Execute the command and also postprocess generated .d dependencies file.
+ if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
 -- 
 2.32.0
 
