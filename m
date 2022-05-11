@@ -1,298 +1,180 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145C43207
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:07:16 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so5901819pjb.3
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 13:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=IZ67w/mh933XiD19vlG6O7B4SYRWnOVzoIExpzyMUE0=;
-        b=g7UmHFS/LA2KGK9m6aKmUe1JQl60PJ06dQ7r5CAX7xMSNCw9tpdOpx9Aig9fcTU+ug
-         7UK1Vg0N16rhaYBNrQ5vduoDtmOGZt/5yTUpmJpgIiMHSNqEqwipINdxP55PgDfBPt+U
-         1Tu1J14t6o8MKU59QeIm4Z9FJXYzWJv0yRRyn5kFIWNXcPSbIFz3Fza/PEFfV5GfI8wk
-         +c26A0nbMt5Wn7GANVzEm6kO8JNNRDaAltFn9ty0MX5eJ98syDFSWy66Z2aF1W6IX3PT
-         +RGUNvIawY5r9hQS01eArNokDJCkKiH/hOi6J0r9F9zyt4OM4fUCCeDshuq+DogvxrTs
-         Io2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=IZ67w/mh933XiD19vlG6O7B4SYRWnOVzoIExpzyMUE0=;
-        b=IOg0RzRpVt2TNaZ+640EFrskAXOF8SZ46kbUxOrYBibeUFWS9hq50hDU/B1dKcrZTz
-         wEX7lObW6QqK1pr2YSSERul6O7KSJ24LeYSx0KgkMK2hH3vyu21auatsrcvGKmZh9byI
-         NKv/XeNH25UIsX5UPqRG5XknFZYQP+jJUM6PRIQ5FvQgMdNhrWUI6IAP89zBntSJahSj
-         hr0DpgNSSKPOKvSiFrOhPzz+S2/BkxLjPuKoBsWSqCNkLGo6Xm7GTlWEOAwGscyxYu4F
-         8Va0wVvHkRE/AU+pc6eXhJF0wMEYSpJtCzbLY6IOpUG6Y+vL2w0ayiv9mHRJSVHId8xC
-         MIiw==
-X-Gm-Message-State: AOAM530R8lZ2p/93/jZTXN+qU7kR4m6iSyT3Kyk0xx5WPNjqG4e+GN5c
-	PBKqBvzQGR7ZVvX7p94Fm9Rs4w==
-X-Google-Smtp-Source: ABdhPJxLJe31QIcOOnwIRWdz+kNjZVtljkSMtGxZxRiKYxf+nhdigC4qKSGw0NxEWOvUa5CU+0D0rA==
-X-Received: by 2002:a17:90b:3843:b0:1dc:3da2:7fd8 with SMTP id nl3-20020a17090b384300b001dc3da27fd8mr7016266pjb.219.1652299636416;
-        Wed, 11 May 2022 13:07:16 -0700 (PDT)
-Received: from smtpclient.apple ([50.39.129.137])
-        by smtp.gmail.com with ESMTPSA id n3-20020a622703000000b0050e0a43712esm2176777pfn.63.2022.05.11.13.07.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 May 2022 13:07:15 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3DC3208
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652301863; x=1683837863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DhBsQKPFvNppevZbx5OxSYuIu8dvRbDM3tm9jFewAR0=;
+  b=YsIQ328MrYzCVK5/fqDIiRpKukkrGDiWTEhxPWixrPqNqr+RirbIKykm
+   cPIwUyWKjRx6zfLZIXMn7dpK7u/kRoG/cQ6f+tOxscbqj2/rYsR7GETMh
+   qK1dTUVJxKIXVSYjAzAHlLsY9KXebVGmPRE4vbUCn8Vfp3ph/MGPYuQYX
+   UXHHznW4nUDLPuIxoi8nCaPdOb3UaeOv+0B52tZfyEzmW8CZDh5AF9dwG
+   WLOjrn/TJmMlsHiF7EWmEVl+kFX9KLQUDp6eUHxuydqggJSaSGOrEIs3D
+   1gISM5PNps+IqoGk3jyeTP0AwZ8ZAmGgRZtatf1JDcNR3lg6NNXKOfiAK
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269940497"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="269940497"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 13:44:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="603086242"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 11 May 2022 13:44:19 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1notBz-000JYj-3P;
+	Wed, 11 May 2022 20:44:19 +0000
+Date: Thu, 12 May 2022 04:43:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bernard Zhao <zhaojunkui2008@126.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	bernard@vivo.com
+Subject: Re: [PATCH v2] usb/peak_usb: cleanup code
+Message-ID: <202205120402.hmn6WJGb-lkp@intel.com>
+References: <20220511130240.790771-1-zhaojunkui2008@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: riscv: llvm-compiler: calling convention violation: temporary
- register $t2 is used to pass the ninth function parameter
-From: Craig Topper <craig.topper@sifive.com>
-In-Reply-To: <CAKwvOd=OnJ=ZhsbX+epzbhg3sWg9yOaR=zQ4jF_Deo=B8Nx9Og@mail.gmail.com>
-Date: Wed, 11 May 2022 13:07:14 -0700
-Cc: Changbin Du <changbin.du@huawei.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Steven Rostedt <rostedt@goodmis.org>,
- hw.huiwang@huawei.com,
- linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev,
- codegen-riscv@discourse.llvm.org,
- llvmproject@discourse.llvm.org,
- asb@asbradbury.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <10BD31AB-C9F3-45FD-9A4A-EF7DC07C94D5@sifive.com>
-References: <20220510065336.hlfjrc25ajed5zj4@M910t>
- <CAKwvOd=OnJ=ZhsbX+epzbhg3sWg9yOaR=zQ4jF_Deo=B8Nx9Og@mail.gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511130240.790771-1-zhaojunkui2008@126.com>
 
-I=E2=80=99m guessing that because the function is static, the calling =
-convention was changed to fastcall which allows us to ignore the ABI.
+Hi Bernard,
 
-> On May 11, 2022, at 11:39 AM, Nick Desaulniers =
-<ndesaulniers@google.com> wrote:
->=20
-> On Mon, May 9, 2022 at 11:54 PM Changbin Du <changbin.du@huawei.com> =
-wrote:
->>=20
->> [This is a resent to correct llvm mailist.]
->>=20
->> Hello, folks,
->>=20
->> Recently I encountered a kernel crash problem when using ftrace with =
-'perf ftrace'
->> command on risc-v kernel built with llvm.
->>=20
->> This crash only exists on llvm build, not reproducable with GCC. So I =
-hope llvm
->> guys can take a look :)
->>=20
->> The llvm versions I have tried are llvm-13.0.0 and mainline (commit =
-102bc634cb
->> ("[runtime] Build compiler-rt with --unwindlib=3Dnone")).
->>=20
->> [  612.947887][  T496] Unable to handle kernel NULL pointer =
-dereference at virtual address 0000000000000001
->> [  613.050789][  T496] Hardware name: riscv-virtio,qemu (DT)
->> [  613.087976][  T496] epc : __find_rr_leaf+0x128/0x220
->> [  613.107493][  T496]  ra : return_to_handler+0x22/0x24
->> [  613.125322][  T496] epc : ffffffff80a1915a ra : ffffffff80009506 =
-sp : ff20000011e43860
->> [  613.150124][  T496]  gp : ffffffff81812f40 tp : ff6000008bb01580 =
-t0 : ff600000806cf0f0
->> [  613.173657][  T496]  t1 : 000000000001b29a t2 : 0000000000000001 =
-s0 : ff20000011e43920
->> [  613.187311][  T496]  s1 : ff600000848c2a00 a0 : 0000000000000002 =
-a1 : 0000000000000002
->> [  613.202731][  T496]  a2 : fffffffffffffffd a3 : ff6000009d287000 =
-a4 : 00000000000002c0
->> [  613.213723][  T496]  a5 : ff6000009d259b40 a6 : ffffffffffffff9c =
-a7 : ffffffffffffffff
->> [  613.226648][  T496]  s2 : 0000000000000001 s3 : ff20000011e439d8 =
-s4 : ffffffff8160d140
->> [  613.246571][  T496]  s5 : 0000000000000002 s6 : 0000000000000000 =
-s7 : 0000000000000000
->> [  613.264681][  T496]  s8 : 0000000000000064 s9 : 0000000000000000 =
-s10: 0000000000400000
->> [  613.277999][  T496]  s11: ff600000848c2aa8 t3 : 0000000000000290 =
-t4 : 00000000004002c0
->> [  613.303729][  T496]  t5 : 00000000ffffffff t6 : ff6000009d2872d0
->> [  613.322145][  T496] status: 0000000200000120 badaddr: =
-0000000000000001 cause: 000000000000000d
->> [  613.346228][  T496] [<ffffffff80a12526>] ip6_pol_route+0xb6/0x602
->> [  613.365722][  T496] [<ffffffff80a1321a>] =
-ip6_pol_route_output+0x2c/0x34
->> [  613.386374][  T496] [<ffffffff80a1c028>] =
-fib6_rule_lookup+0x36/0xa0
->> [  613.401865][  T496] [<ffffffff80a131da>] =
-ip6_route_output_flags_noref+0xd6/0xea
->> [  613.412776][  T496] [<ffffffff80a13274>] =
-ip6_route_output_flags+0x52/0xd4
->> [  613.432013][  T496] [<ffffffff809ffb3a>] =
-ip6_dst_lookup_tail+0x68/0x23a
->> [  613.456198][  T496] [<ffffffff809ffec6>] =
-ip6_sk_dst_lookup_flow+0x132/0x1cc
->> [  613.513174][  T496] [<ffffffff80003cd8>] ret_from_syscall+0x0/0x2
->> [  613.518973][  T496] [<ffffffff800094e4>] =
-return_to_handler+0x0/0x24
->> [  613.563961][  T496] Kernel panic - not syncing: Fatal exception
->> [  613.572278][  T496] SMP: stopping secondary CPUs
->> [  613.587449][  T496] ---[ end Kernel panic - not syncing: Fatal =
-exception ]---
->>=20
->> The crash happened when dereferencing the point 'mpri' at =
-route.c:758.
->>=20
->> (gdb) l *__find_rr_leaf+0x128
->> 0xffffffff809da9c4 is in __find_rr_leaf (net/ipv6/route.c:758).
->> 753
->> 754             if (strict & RT6_LOOKUP_F_REACHABLE)
->> 755                     rt6_probe(nh);
->> 756
->> 757             /* note that m can be RT6_NUD_FAIL_PROBE at this =
-point */
->> 758             if (m > *mpri) {
->> 759                     *do_rr =3D match_do_rr;
->> 760                     *mpri =3D m;
->> 761                     rc =3D true;
->> 762             }
->>=20
->> Adding some logs, I found the problem. The ninth passed parameter of =
-function
->> __find_rr_leaf() which is the address of local variable 'mpri', is =
-changed to
->> value '0x1' when inside the function __find_rr_leaf.
->> Here is the code snippet and full link
->> =
-https://github.com/torvalds/linux/blob/9cb7c013420f98fa6fd12fc6a5dc055170c=
-108db/net/ipv6/route.c.
->>=20
->> static void find_rr_leaf(struct fib6_node *fn, struct fib6_info =
-*leaf,
->>                         struct fib6_info *rr_head, int oif, int =
-strict,
->>                         bool *do_rr, struct fib6_result *res)
->> {
->>        u32 metric =3D rr_head->fib6_metric;
->>        struct fib6_info *cont =3D NULL;
->>        int mpri =3D -1;
->>=20
->>        __find_rr_leaf(rr_head, NULL, metric, res, &cont,
->>                       oif, strict, do_rr, &mpri);
->>        ...
->> }
->>=20
->> Then debugging with gdb, I found this probably is a compiler bug. We =
-can see the
->> local function __find_rr_leaf() is not optimized out and the compiler =
-generates
->> a local symbol for it. The find_rr_leaf() (inlined by =
-fib6_table_lookup) invokes
->> this function with 'jalr' instruction.
->>=20
->> (gdb) disassemble fib6_table_lookup
->> Dump of assembler code for function fib6_table_lookup:
->>   [snip]
->>   0xffffffff80a1240e <+412>:   beqz    a1,0xffffffff80a12436 =
-<fib6_table_lookup+452>
->>   0xffffffff80a12410 <+414>:   slli    a1,s9,0x20
->>   0xffffffff80a12414 <+418>:   srli    a1,a1,0x20
->>   0xffffffff80a12416 <+420>:   sext.w  a2,a1
->>   0xffffffff80a1241a <+424>:   addi    a7,s0,-125
->>   0xffffffff80a1241e <+428>:   addi    t2,s0,-124
->>   0xffffffff80a12422 <+432>:   li      a1,0
->>   0xffffffff80a12424 <+434>:   mv      a3,s10
->>   0xffffffff80a12426 <+436>:   li      a4,0
->>   0xffffffff80a12428 <+438>:   ld      a5,-152(s0)
->>   0xffffffff80a1242c <+442>:   mv      a6,s8
->>   0xffffffff80a1242e <+444>:   auipc   ra,0x7
->>   0xffffffff80a12432 <+448>:   jalr    -686(ra) # 0xffffffff80a19180 =
-<__find_rr_leaf>
->>   [snip]
->>=20
->> And at line route.c:758, the value of point 'mpri' is stored in =
-temporary register
->> $t2 and $s3 (copied from $t2).
->>=20
->> (gdb) info scope __find_rr_leaf
->> [snip]
->> Symbol mpri is multi-location:
->>  Base address 0xffffffff80a10564  Range =
-0xffffffff80a19190-0xffffffff80a191ae: a variable in $t2
->>  Range 0xffffffff80a191c0-0xffffffff80a191d6: a variable in $s3
->>  Range 0xffffffff80a19200-0xffffffff80a19208: a variable in $s3
->>  Range 0xffffffff80a1921e-0xffffffff80a192fe: a variable in $s3
->>  Range 0xffffffff80a1930a-0xffffffff80a19356: a variable in $s3
->>=20
->> Let's see when register $t2 is corrupted with single-step mode. =
-Obviously, register
->> $t2 is changed by mcount function ftrace_caller(). This is why the =
-bug happens
->> to ftrace.
->>=20
->> Dump of assembler code for function __find_rr_leaf:
->>   0xffffffff80a19180 <+0>:     sd      ra,-8(sp)   #  $t2 =3D =
-0xff200000120db7b4
->>   0xffffffff80a19184 <+4>:     auipc   ra,0xff5f1
->>   0xffffffff80a19188 <+8>:     jalr    -1744(ra) # 0xffffffff80009ab4 =
-<ftrace_caller> #  $t2 =3D 0xff200000120db7b4
->> =3D> 0xffffffff80a1918c <+12>:    ld      ra,-8(sp)    #  $t2 =3D =
-0x1, bug, $t2 is corrupted!!
->>   0xffffffff80a19190 <+16>:    addi    sp,sp,-176
->>   [snip]
->>=20
->> So now we can come to a conclusion. The generated local function =
-__find_rr_leaf()
->> violates the risc-v calling convention and leads to the panic. It =
-should use stack
->> but *not* temporary register $t2 to pass the ninth parameter! It's =
-okay if the
->> callsite can take care of local symbol callees, but the Function =
-Instrumentation
->> features should be considerated carefully.
->>=20
->> For comparison, here is the result from gcc (9.2.0):
->> (gdb) info scope __find_rr_leaf
->> [snip]
->> Symbol mpri is a complex DWARF expression:
->>     0: DW_OP_fbreg 0, length 8.
->>=20
->> I also built a simple test function with 9 parameters by clang and =
-same cflags,
->> but cannot reproduce it. Maybe it is conditional?
->>=20
->> Simple test code:
->> __attribute__ ((noinline))
->> void test_func(int *a, int *b, int *c, int *d, int *e, int *f, int =
-*g, int *h, int *i)
->> {
->>        printf("__find_rr_leaf: %d\n", *i);
->> }
->>=20
->> int main(void)
->> {
->>        int a,b,c,d,e,f,g,h,i =3D 100;
->>=20
->>        test_func(&a,&b,&c,&d,&e,&f,&g,&h,&i);
->>        return 0;
->> }
->=20
-> Hmm...any chance you could come up with a more concise test case then
-> using creduce [0] or cvise [1]?
-> [0] https://embed.cs.utah.edu/creduce/
-> [1] https://github.com/marxin/cvise
->=20
->=20
->>=20
->> --
->> Cheers,
->> Changbin Du
->>=20
->=20
->=20
-> --=20
-> Thanks,
-> ~Nick Desaulniers
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on mkl-can-next/testing]
+[also build test ERROR on v5.18-rc6 next-20220511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bernard-Zhao/usb-peak_usb-cleanup-code/20220511-210544
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
+config: hexagon-randconfig-r023-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120402.hmn6WJGb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/126e94285ae6302c0b5ef6ec5174ebc2685ff220
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bernard-Zhao/usb-peak_usb-cleanup-code/20220511-210544
+        git checkout 126e94285ae6302c0b5ef6ec5174ebc2685ff220
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/can/usb/peak_usb/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:914:8: error: use of undeclared identifier 'bi'
+           kfree(bi);
+                 ^
+>> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:915:8: error: use of undeclared identifier 'fi'
+           kfree(fi);
+                 ^
+   2 errors generated.
+
+
+vim +/bi +914 drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+
+d8a199355f8f8a Stephane Grosjean 2012-03-02  843  
+126e94285ae630 Bernard Zhao      2022-05-11  844  static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
+d8a199355f8f8a Stephane Grosjean 2012-03-02  845  {
+126e94285ae630 Bernard Zhao      2022-05-11  846  	struct pcan_usb_pro_interface *pusb_if = NULL;
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  847  	int err;
+d8a199355f8f8a Stephane Grosjean 2012-03-02  848  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  849  	/* do this for 1st channel only */
+d8a199355f8f8a Stephane Grosjean 2012-03-02  850  	if (!dev->prev_siblings) {
+126e94285ae630 Bernard Zhao      2022-05-11  851  		struct pcan_usb_pro_fwinfo *fi = NULL;
+126e94285ae630 Bernard Zhao      2022-05-11  852  		struct pcan_usb_pro_blinfo *bi = NULL;
+126e94285ae630 Bernard Zhao      2022-05-11  853  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  854  		/* allocate netdevices common structure attached to first one */
+126e94285ae630 Bernard Zhao      2022-05-11  855  		pusb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
+d8a199355f8f8a Stephane Grosjean 2012-03-02  856  				 GFP_KERNEL);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  857  		fi = kmalloc(sizeof(struct pcan_usb_pro_fwinfo), GFP_KERNEL);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  858  		bi = kmalloc(sizeof(struct pcan_usb_pro_blinfo), GFP_KERNEL);
+126e94285ae630 Bernard Zhao      2022-05-11  859  		if (!pusb_if || !fi || !bi) {
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  860  			err = -ENOMEM;
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  861  			goto err_out;
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  862  		}
+d8a199355f8f8a Stephane Grosjean 2012-03-02  863  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  864  		/* number of ts msgs to ignore before taking one into account */
+126e94285ae630 Bernard Zhao      2022-05-11  865  		pusb_if->cm_ignore_count = 5;
+d8a199355f8f8a Stephane Grosjean 2012-03-02  866  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  867  		/*
+d8a199355f8f8a Stephane Grosjean 2012-03-02  868  		 * explicit use of dev_xxx() instead of netdev_xxx() here:
+d8a199355f8f8a Stephane Grosjean 2012-03-02  869  		 * information displayed are related to the device itself, not
+d8a199355f8f8a Stephane Grosjean 2012-03-02  870  		 * to the canx netdevices.
+d8a199355f8f8a Stephane Grosjean 2012-03-02  871  		 */
+d8a199355f8f8a Stephane Grosjean 2012-03-02  872  		err = pcan_usb_pro_send_req(dev, PCAN_USBPRO_REQ_INFO,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  873  					    PCAN_USBPRO_INFO_FW,
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  874  					    fi, sizeof(*fi));
+d8a199355f8f8a Stephane Grosjean 2012-03-02  875  		if (err) {
+d8a199355f8f8a Stephane Grosjean 2012-03-02  876  			dev_err(dev->netdev->dev.parent,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  877  				"unable to read %s firmware info (err %d)\n",
+d8a199355f8f8a Stephane Grosjean 2012-03-02  878  				pcan_usb_pro.name, err);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  879  			goto err_out;
+d8a199355f8f8a Stephane Grosjean 2012-03-02  880  		}
+d8a199355f8f8a Stephane Grosjean 2012-03-02  881  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  882  		err = pcan_usb_pro_send_req(dev, PCAN_USBPRO_REQ_INFO,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  883  					    PCAN_USBPRO_INFO_BL,
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  884  					    bi, sizeof(*bi));
+d8a199355f8f8a Stephane Grosjean 2012-03-02  885  		if (err) {
+d8a199355f8f8a Stephane Grosjean 2012-03-02  886  			dev_err(dev->netdev->dev.parent,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  887  				"unable to read %s bootloader info (err %d)\n",
+d8a199355f8f8a Stephane Grosjean 2012-03-02  888  				pcan_usb_pro.name, err);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  889  			goto err_out;
+d8a199355f8f8a Stephane Grosjean 2012-03-02  890  		}
+d8a199355f8f8a Stephane Grosjean 2012-03-02  891  
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  892  		/* tell the device the can driver is running */
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  893  		err = pcan_usb_pro_drv_loaded(dev, 1);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  894  		if (err)
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  895  			goto err_out;
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  896  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  897  		dev_info(dev->netdev->dev.parent,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  898  		     "PEAK-System %s hwrev %u serial %08X.%08X (%u channels)\n",
+d8a199355f8f8a Stephane Grosjean 2012-03-02  899  		     pcan_usb_pro.name,
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  900  		     bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
+d8a199355f8f8a Stephane Grosjean 2012-03-02  901  		     pcan_usb_pro.ctrl_count);
+d8a199355f8f8a Stephane Grosjean 2012-03-02  902  
+20fb4eb96fb035 Marc Kleine-Budde 2013-12-14  903  		kfree(bi);
+20fb4eb96fb035 Marc Kleine-Budde 2013-12-14  904  		kfree(fi);
+126e94285ae630 Bernard Zhao      2022-05-11  905  	} else {
+126e94285ae630 Bernard Zhao      2022-05-11  906  		pusb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
+126e94285ae630 Bernard Zhao      2022-05-11  907  	}
+126e94285ae630 Bernard Zhao      2022-05-11  908  
+126e94285ae630 Bernard Zhao      2022-05-11  909  	*usb_if = pusb_if;
+20fb4eb96fb035 Marc Kleine-Budde 2013-12-14  910  
+d8a199355f8f8a Stephane Grosjean 2012-03-02  911  	return 0;
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  912  
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  913   err_out:
+f14e22435a27ef Marc Kleine-Budde 2013-05-16 @914  	kfree(bi);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16 @915  	kfree(fi);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  916  	kfree(usb_if);
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  917  
+f14e22435a27ef Marc Kleine-Budde 2013-05-16  918  	return err;
+d8a199355f8f8a Stephane Grosjean 2012-03-02  919  }
+d8a199355f8f8a Stephane Grosjean 2012-03-02  920  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
