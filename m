@@ -1,131 +1,172 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638F93208
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 21:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652304325; x=1683840325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1+a7DNiywUmPaaNlwD3yArXgVS80s2+Fd3PmJ/XuGic=;
-  b=k+nLWTNeBiZcergohTAR4qqjTLaKrA5tAyQ2fo5BOlqb7uwhCsfn2V8a
-   6XMTzhRhYTggMl/X3n9oGvsDKXd4nwM2RH+P5sj7UIO39nmw+4zjicgeU
-   9mtAuCO//hDHo4auJ70pA/yQe9/cpvFC/sniYgUK3zt5o+bjXw7TP9cO+
-   c9TwfXB4r7uxdoe3XPN1qqCKY2Oe0JAvn6an364TLG5Q68ZiWICHAJwwE
-   e/Mb6b7cyS7PG1v2s97aGWvecLfQwEWUjncZrRqPnWTHAE+DmDY4fgEyk
-   s+sRUcYiL+wqMnKED7Yrm4IQrZXX7WAnF18zdbpoY0iN+Jo4adoMmQTYL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269950338"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="269950338"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 14:25:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="636580599"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 14:25:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1notph-000JbL-7D;
-	Wed, 11 May 2022 21:25:21 +0000
-Date: Thu, 12 May 2022 05:25:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <maxime@cerno.tech>,
-	Mike Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Yassine Oudjana <y.oudjana@protonmail.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Tony Lindgren <tony@atomide.com>, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v3 22/28] clk: Stop forwarding clk_rate_requests to the
- parent
-Message-ID: <202205120547.M8CYJHbN-lkp@intel.com>
-References: <20220511144249.354775-23-maxime@cerno.tech>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A773208
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 21:36:06 +0000 (UTC)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-d39f741ba0so4386728fac.13
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 14:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fPq2AbbbZIM39erlXhLvSJXeCk2n871q31CGu/Ibwec=;
+        b=ehW/kiZNsk24rzrHmeW5h7Ia8WjxcfH2YRCchxhJDVe8O2xTTTacmlzvxq0Zrrnijj
+         auX3m8zQqjN+DE94aAxSWA1hJUNw1QaGcb59b7WwKVmnYSttb5W+MQMAXNiqLcJQuzd1
+         SRLYJK4u1YVdJPFejj5zqZYRYVzYy3Lkn4MxWbNv9NKf0K336OHXGmrN5RXTMClSYKWx
+         PMlX+d1x+tOsKCSfir7spBJLf+kmXNwUHaKVrBY05O2DNNMzx9fzrKLs5qJ+28dQwxwB
+         13WyPUGa5mf5R5PzMElgpK2qDGirPRjlpFjJe3H1rfotgga+vWJSlG7HI9JWUyb6vmNV
+         qkZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fPq2AbbbZIM39erlXhLvSJXeCk2n871q31CGu/Ibwec=;
+        b=6upJoRy1sQ2t7nHPU+npSNFpKFjIudblws97fz/oBpZmaR4F12c6Thsybx22t/Hybt
+         fyqNMNyN+PqV/FpJYrPLeWxI2xSPRjPVXVvHt46pky9dzF5oGeomuNlNpBa0SPZktkRy
+         N+UwqPQ+Td8ICX7C2agy4WOCWBNYB7U6J/D81sWWzQ+hQcQo1subFGdBfJz7d+MrsGKJ
+         bVqYredU76KjVklaxb+IOqxGD8im8eM68Wz9EgSt4RqAWgeZ+x4gHdleNXPBv1C/t+Mv
+         mrNcwCWRYqk4LUbv9go4rWSZ/VAj963P1t0x3U7QCGrb9uwFgtNVYak3VG9jjDSayMdV
+         XF9w==
+X-Gm-Message-State: AOAM531OhUiSLLfL6mFMb0Z6k0W1Z1r4OyZSODGhsfYepLxluIZxVZtE
+	EhmPs6WKhIFTsejWrmmFXjnh3xechDDuQ4z43Spxnw==
+X-Google-Smtp-Source: ABdhPJzOekQzpQE4AytFB7X33FNub2z2DKztqYSBZow0H7kBktl/OX9nt2UdjSVTlSmSUsOf1rDgp4Gt5jsqyoVOmZk=
+X-Received: by 2002:a05:6870:c598:b0:ed:a1c0:f810 with SMTP id
+ ba24-20020a056870c59800b000eda1c0f810mr4054919oab.289.1652304965462; Wed, 11
+ May 2022 14:36:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511144249.354775-23-maxime@cerno.tech>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220511160319.1045812-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220511160319.1045812-2-mailhol.vincent@wanadoo.fr>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 11 May 2022 14:35:54 -0700
+Message-ID: <CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
+ constant expressions
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Maxime,
+On Wed, May 11, 2022 at 9:03 AM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> For x86_64, the current ffs() implementation does not produce
+> optimized code when called with a constant expression. On the
+> contrary, the __builtin_ffs() function of both GCC and clang is able
+> to simplify the expression into a single instruction.
+>
+> * Example *
+>
+> Let's consider two dummy functions foo() and bar() as below:
+>
+> | #include <linux/bitops.h>
+> | #define CONST 0x01000000
+> |
+> | unsigned int foo(void)
+> | {
+> |       return ffs(CONST);
+> | }
+> |
+> | unsigned int bar(void)
+> | {
+> |       return __builtin_ffs(CONST);
+> | }
+>
+> GCC would produce below assembly code:
 
-I love your patch! Yet something to improve:
+Thanks for the patch! LGTM.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>
+> | 0000000000000000 <foo>:
+> |    0: ba 00 00 00 01          mov    $0x1000000,%edx
+> |    5: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> |    a: 0f bc c2                bsf    %edx,%eax
+> |    d: 83 c0 01                add    $0x1,%eax
+> |   10: c3                      ret
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/clk-More-clock-rate-fixes-and-tests/20220511-224533
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: i386-randconfig-r006-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120547.M8CYJHbN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/32af2a918274a92da86089672d5d7adba63dc0cf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Maxime-Ripard/clk-More-clock-rate-fixes-and-tests/20220511-224533
-        git checkout 32af2a918274a92da86089672d5d7adba63dc0cf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+This should be the end of foo.  I...actually don't know what's at the
+end here. But I don't think the region from here...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> |   11: 66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
+> |   18: 00 00 00 00
+> |   1c: 0f 1f 40 00             nopl   0x0(%rax)
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/clk.c:1502:38: error: passing 'const struct clk_rate_request *' to parameter of type 'struct clk_rate_request *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           clk_core_forward_rate_req(hw->core, old_req,
-                                               ^~~~~~~
-   drivers/clk/clk.c:568:38: note: passing argument to parameter 'old_req' here
-                             struct clk_rate_request * const old_req,
-                                                             ^
-   1 error generated.
+...to here is relevant.
 
 
-vim +1502 drivers/clk/clk.c
+> |
+> | 0000000000000020 <bar>:
+> |   20: b8 19 00 00 00          mov    $0x19,%eax
+> |   25: c3                      ret
+>
+> And clang would produce:
+>
+> | 0000000000000000 <foo>:
+> |    0: b8 ff ff ff ff          mov    $0xffffffff,%eax
+> |    5: 0f bc 05 00 00 00 00    bsf    0x0(%rip),%eax        # c <foo+0xc>
+> |    c: 83 c0 01                add    $0x1,%eax
+> |    f: c3                      ret
 
-  1481	
-  1482	/**
-  1483	 * clk_hw_forward_rate_request - Forwards a clk_rate_request to a clock's parent
-  1484	 * @hw: the original clock that got the rate request
-  1485	 * @old_req: the original clk_rate_request structure we want to forward
-  1486	 * @parent: the clk we want to forward @old_req to
-  1487	 * @req: the clk_rate_request structure we want to initialise
-  1488	 * @parent_rate: The rate which is to be requested to @parent
-  1489	 *
-  1490	 * Initializes a clk_rate_request structure to submit to a clock parent
-  1491	 * in __clk_determine_rate() or similar functions.
-  1492	 */
-  1493	void clk_hw_forward_rate_request(const struct clk_hw *hw,
-  1494					 const struct clk_rate_request *old_req,
-  1495					 const struct clk_hw *parent,
-  1496					 struct clk_rate_request *req,
-  1497					 unsigned long parent_rate)
-  1498	{
-  1499		if (WARN_ON(!hw || !old_req || !parent || !req))
-  1500			return;
-  1501	
-> 1502		clk_core_forward_rate_req(hw->core, old_req,
-  1503					  parent->core, req,
-  1504					  parent_rate);
-  1505	}
-  1506	
+Weird, so I just tried this:
+```
+$ cat /tmp/x.c
+#define CONST 0x01000000
 
+unsigned ffs (int x) {
+  int r;
+  asm("bsfl %1,%0"
+      : "=r" (r)
+      : "rm" (x), "0" (-1));
+  return r;
+}
+
+unsigned int foo(void) {
+  return ffs(CONST);
+}
+
+unsigned int bar(void) {
+  return __builtin_ffs(CONST);
+}
+$ clang /tmp/x.c -O2 -o /tmp/x.o -c && llvm-objdump -dr /tmp/x.o
+--disassemble-symbols=foo
+...
+0000000000000010 <foo>:
+      10: b8 19 00 00 00                movl    $25, %eax
+      15: c3                            retq
+      16: 66 2e 0f 1f 84 00 00 00 00 00 nopw    %cs:(%rax,%rax)
+```
+but if we make `ffs` `static`, we get:
+```
+0000000000000000 <foo>:
+       0: b8 ff ff ff ff                movl    $4294967295, %eax
+ # imm = 0xFFFFFFFF
+       5: 0f bc 05 00 00 00 00          bsfl    (%rip), %eax
+ # 0xc <foo+0xc>
+                0000000000000008:  R_X86_64_PC32        .LCPI0_0-0x4
+       c: c3                            retq
+       d: 0f 1f 00                      nopl    (%rax)
+```
+Which is very interesting to me; it looks like constant propagation
+actually hurt optimization, we lost that this was a libcall which we
+could have optimized.
+
+As in LLVM does:
+1. sink CONST into ffs; it's static and has one caller
+2. delete x parameter; it's unused
+3. now libcall optimization just sees a call to ffs with no params,
+that doesn't match the signature of libc.
+
+Your change should fix that since we don't even call a function named
+ffs if we have a constant (explicitly, or via optimization). Filed
+https://github.com/llvm/llvm-project/issues/55394
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
