@@ -1,150 +1,186 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C653218
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 22:31:21 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id w19so5931511lfu.11
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 15:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fbUOy/LO7pce3syrWgaW4CEkFhXFi5vc0wZxMBvogMQ=;
-        b=b252l7y6kIta/PlC/sxvJu7dt3E+UghECcSvUXYwF4kkihtszWpLzwdXtBPGpv5Y6j
-         P1rdxKBxSO7vcvrTcBuE7FapkycaYlYze9EOHE9VPJbL4KMZgx2dtHF8MpxxlqxLp0EE
-         DoJuYppCH6NfeB3ZHBWd9BvozYAA+tVIcOaJNbvz5ejIJh/yqF1DZ6Sb07UJGUgLb8Kb
-         ZexJRIcTGCi7/R6ZGcE+prpQ5SUtlZCq53XEtdnuRmC5KVNRt3nDps6lDgzUVvSIB0xr
-         ahjfrP5z+rRM5kNK+cD4e9om1Pj7E5GC+IlIybW5nCwwUYIcTUKV/xfOuBrvQ5V22s3k
-         CADQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063993218
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 23:24:10 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id r1so6759221ybo.7
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fbUOy/LO7pce3syrWgaW4CEkFhXFi5vc0wZxMBvogMQ=;
-        b=unMfOXZq3nCn+aHvWX7ZaFRR3Z59EYz+yD6qmWMTYgZ9FtvGUyUKmWkabOulqP0may
-         xPoWGbsl+6SMTxVFEc8QMuYRf8uaBw0bvpPq0WaDWxmVelIxNw2/CyXW2R2ny+4yUgOH
-         mdNfb7Ehw1rX8WLEXZ8ro9GqrsONr2iqLbPCyyMRKuuWDVzUTz0F7y+PCkkymb3YppLR
-         wpWPGwz7OzD3VM6tHxaLs68oLdbD7ZhY05/3S/iWhiJbY0K7o1xPWOiqgUTX4vtcYITW
-         KE8S2tEEueeXKVnVDfntCqcSQOq3AlaQXJwhXqGu0tLCqetfFrRxMKxXYangEBD1vV6C
-         dXIg==
-X-Gm-Message-State: AOAM530ia061qACW5Jn48439QIDRnyCaZROCkUaaNgmL/uAjvwfQ3Y5r
-	sgPmJw4xOooUAOm3LmHfo1z8pqupJVzoq8fzOzjiUA==
-X-Google-Smtp-Source: ABdhPJyrwg+caXPdLDJxrd+N/bnHoW3wXGl79dd3Ws8+i8WDRdA2wjLtLJ9Q7N0Q+nZdmhVnty5QrvsXc+kvgfzIxnA=
-X-Received: by 2002:a19:4303:0:b0:473:f5fb:27b2 with SMTP id
- q3-20020a194303000000b00473f5fb27b2mr20535287lfa.626.1652308279822; Wed, 11
- May 2022 15:31:19 -0700 (PDT)
+        bh=oy3Pm5sCLuohvb8vkD/fkUbAx0+U5niUi5E5iwOTC80=;
+        b=JRxSBCm0nXXJHaBWqxbiMHeKZAexYeIo9T9MW7BYFLF5Fm7zGTTU8ugcnXSrY0OXlG
+         TxkADkurVdAVqqsfJIZjzvHGuM6nX5PV53Z1h5dGekkDBYYx1fgSz4aiq/++cZHDjARR
+         CmAO4Zl6/oVSCzGUdkuMG+it+NnwB76hAw82A39h/6KaZBNJNAoG0aEXt2M0+Ju3R2nn
+         aoOkYZCDZYmxAxtTvK1R6fhAVAE1OhuCsai2VkbwsR/96v/8nNj0sjhdcwQ5hX92wK0X
+         4FsR6Xg7+MKNc9pLn7tByODyq2pzyZR5dkCBW55ooV9dvHBv05TPFzYD4rwu1h6Xd1/w
+         WD/g==
+X-Gm-Message-State: AOAM530FEX2104cyXM8tJ32XhGThVSQpUFP1vA8Av7jFgFSS328msU8o
+	ZTXG+9Vj9tYAFT0Nf3GjFdN+26TQxSZeRnx4g/A=
+X-Google-Smtp-Source: ABdhPJyVDRbFRlLmXJHpnwBSAwDxCMiSkisNBqSmSTztcJmphl3CHpb5Ya+K6Txjjw+vGr104VZX3qvLzgIdCyttuZ4=
+X-Received: by 2002:a25:cb4b:0:b0:645:d702:eb15 with SMTP id
+ b72-20020a25cb4b000000b00645d702eb15mr24152368ybg.500.1652311449899; Wed, 11
+ May 2022 16:24:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org> <20220511164514.2741934-2-masahiroy@kernel.org>
-In-Reply-To: <20220511164514.2741934-2-masahiroy@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 11 May 2022 15:31:08 -0700
-Message-ID: <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org, llvm@lists.linux.dev, 
-	Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220511160319.1045812-3-mailhol.vincent@wanadoo.fr> <CAKwvOdmDL3CiL11TCXQDJ2tKDbLC+72-TxXOvyO9kA6KKiruKQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmDL3CiL11TCXQDJ2tKDbLC+72-TxXOvyO9kA6KKiruKQ@mail.gmail.com>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Thu, 12 May 2022 08:23:58 +0900
+Message-ID: <CAMZ6RqJjYEpSL3bR59G4h74F_xGhns2cv_mHiG_yeLSgqrhjuQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Thu. 12 May 2022 at 07:20, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Wed, May 11, 2022 at 9:04 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+> > is equivalent to (unsigned long)__builtin_ctzl(~x). Because
+> > __builting_ctzl() returns an int, a cast to (unsigned long) is
+> > necessary to avoid potential warnings on implicit casts.
+> >
+> > For x86_64, the current __ffs() and ffz() implementations do not
+> > produce optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ctzl() gets simplified into a single
+> > instruction.
+> >
+> > However, for non constant expressions, the __ffs() and ffz() asm
+> > versions of the kernel remains slightly better than the code produced
+> > by GCC (it produces a useless instruction to clear eax).
+> >
+> > This patch uses the __builtin_constant_p() to select between the
+> > kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
+> > the argument is constant or not.
+> >
+> > ** Statistics **
+> >
+> > On a allyesconfig, before applying this patch...:
+> >
+> > | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> > | 3607
+> >
+> > ...and after:
+> >
+> > | $ objdump -d vmlinux.o | grep tzcnt | wc -l
+> > | 2600
+> >
+> > So, roughly 27.9% of the call to either __ffs() or ffz() were using
+> > constant expression and were optimized out.
+> >
+> > (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+> >
+> > Note: on x86_64, the asm bsf instruction produces tzcnt when used with
+> > the ret prefix (which is why we grep tzcnt instead of bsf in above
+> > benchmark). c.f. [1]
+> >
+> > [1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
+> > http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
+> >
+> > CC: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >
-> -/* sections that we do not want to do full section mismatch check on */
-> -static const char *const section_white_list[] =
-> -{
-> -       ".comment*",
-> -       ".debug*",
-> -       ".cranges",             /* sh64 */
-> -       ".zdebug*",             /* Compressed debug sections. */
-> -       ".GCC.command.line",    /* record-gcc-switches */
-> -       ".mdebug*",        /* alpha, score, mips etc. */
-> -       ".pdr",            /* alpha, score, mips etc. */
-> -       ".stab*",
-> -       ".note*",
-> -       ".got*",
-> -       ".toc*",
-> -       ".xt.prop",                              /* xtensa */
-> -       ".xt.lit",         /* xtensa */
-> -       ".arcextmap*",                  /* arc */
-> -       ".gnu.linkonce.arcext*",        /* arc : modules */
-> -       ".cmem*",                       /* EZchip */
-> -       ".fmt_slot*",                   /* EZchip */
-> -       ".gnu.lto*",
-> -       ".discard.*",
-> -       NULL
-> -};
+> Patch LGTM, though I find the location of the double unscores in the
+> names slightly against my taste.
+>
+> > ---
+> >  arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
+> >  1 file changed, 24 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> > index 6ed979547086..7cf5374ce403 100644
+> > --- a/arch/x86/include/asm/bitops.h
+> > +++ b/arch/x86/include/asm/bitops.h
+> > @@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
+> >          ? constant_test_bit((nr), (addr))      \
+> >          : variable_test_bit((nr), (addr)))
+> >
+> > -/**
+> > - * __ffs - find first set bit in word
+> > - * @word: The word to search
+> > - *
+> > - * Undefined if no bit exists, so code should check against 0 first.
+> > - */
+> > -static __always_inline unsigned long __ffs(unsigned long word)
+> > +static __always_inline unsigned long __variable_ffs(unsigned long word)
+>
+> How about `variable___ffs`? Patch 1/2 used `variable_ffs` for `ffs`?
 
+On a first glance, having the triple underscores in the middle of the
+name seemed odd. On second thought, it is more consistent with the
+rest, and I finally like the idea. Will be adopted in v3.
 
-> -/**
-> - * Whitelist to allow certain references to pass with no warning.
-> - *
-> - * Pattern 1:
-> - *   If a module parameter is declared __initdata and permissions=0
-> - *   then this is legal despite the warning generated.
-> - *   We cannot see value of permissions here, so just ignore
-> - *   this pattern.
-> - *   The pattern is identified by:
-> - *   tosec   = .init.data
-> - *   fromsec = .data*
-> - *   atsym   =__param*
-> - *
-> - * Pattern 1a:
-> - *   module_param_call() ops can refer to __init set function if permissions=0
-> - *   The pattern is identified by:
-> - *   tosec   = .init.text
-> - *   fromsec = .data*
-> - *   atsym   = __param_ops_*
-> - *
-> - * Pattern 2:
-> - *   Many drivers utilise a *driver container with references to
-> - *   add, remove, probe functions etc.
-> - *   the pattern is identified by:
-> - *   tosec   = init or exit section
-> - *   fromsec = data section
-> - *   atsym = *driver, *_template, *_sht, *_ops, *_probe,
-> - *           *probe_one, *_console, *_timer
-> - *
-> - * Pattern 3:
-> - *   Whitelist all references from .head.text to any init section
-> - *
-> - * Pattern 4:
-> - *   Some symbols belong to init section but still it is ok to reference
-> - *   these from non-init sections as these symbols don't have any memory
-> - *   allocated for them and symbol address and value are same. So even
-> - *   if init section is freed, its ok to reference those symbols.
-> - *   For ex. symbols marking the init section boundaries.
-> - *   This pattern is identified by
-> - *   refsymname = __init_begin, _sinittext, _einittext
-> - *
-> - * Pattern 5:
-> - *   GCC may optimize static inlines when fed constant arg(s) resulting
-> - *   in functions like cpumask_empty() -- generating an associated symbol
-> - *   cpumask_empty.constprop.3 that appears in the audit.  If the const that
-> - *   is passed in comes from __init, like say nmi_ipi_mask, we get a
-> - *   meaningless section warning.  May need to add isra symbols too...
-> - *   This pattern is identified by
-> - *   tosec   = init section
-> - *   fromsec = text section
-> - *   refsymname = *.constprop.*
-> - *
-> - * Pattern 6:
-> - *   Hide section mismatch warnings for ELF local symbols.  The goal
-> - *   is to eliminate false positive modpost warnings caused by
-> - *   compiler-generated ELF local symbol names such as ".LANCHOR1".
-> - *   Autogenerated symbol names bypass modpost's "Pattern 2"
-> - *   whitelisting, which relies on pattern-matching against symbol
-> - *   names to work.  (One situation where gcc can autogenerate ELF
-> - *   local symbols is when "-fsection-anchors" is used.)
-> - **/
+> >  {
+> >         asm("rep; bsf %1,%0"
+> >                 : "=r" (word)
+> > @@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
+> >         return word;
+> >  }
+> >
+> > -/**
+> > - * ffz - find first zero bit in word
+> > - * @word: The word to search
+> > - *
+> > - * Undefined if no zero exists, so code should check against ~0UL first.
+> > - */
+> > -static __always_inline unsigned long ffz(unsigned long word)
+> > +/**
+> > + * __ffs - find first set bit in word
+> > + * @word: The word to search
+> > + *
+> > + * Undefined if no bit exists, so code should check against 0 first.
+> > + */
+> > +#define __ffs(word)                            \
+> > +       (__builtin_constant_p(word) ?           \
+> > +        (unsigned long)__builtin_ctzl(word) :  \
+> > +        __variable_ffs(word))
+> > +
+> > +static __always_inline unsigned long __variable_ffz(unsigned long word)
+>
+> `ffz` had no underscore. Regardless of `__ffs`, this should definitely
+> be `variable_ffz` IMO.
 
-Losing the ability to git blame (from the top level) the above lines
-does cause me grief and mental anguish though. It's not gone, just
-buried a bit deeper.
--- 
-Thanks,
-~Nick Desaulniers
+ACK.
+
+> >  {
+> >         asm("rep; bsf %1,%0"
+> >                 : "=r" (word)
+> > @@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
+> >         return word;
+> >  }
+> >
+> > +/**
+> > + * ffz - find first zero bit in word
+> > + * @word: The word to search
+> > + *
+> > + * Undefined if no zero exists, so code should check against ~0UL first.
+> > + */
+> > +#define ffz(word)                              \
+> > +       (__builtin_constant_p(word) ?           \
+> > +        (unsigned long)__builtin_ctzl(~word) : \
+> > +        __variable_ffz(word))
+> > +
+> >  /*
+> >   * __fls: find last set bit in word
+> >   * @word: The word to search
+> > --
+> > 2.35.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
