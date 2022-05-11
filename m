@@ -1,189 +1,148 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808823208
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 22:21:09 +0000 (UTC)
-Received: by mail-lf1-f41.google.com with SMTP id d15so5962638lfk.5
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 15:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Gq1+NP4bVcZsTpgmI3ILx7iZ+3jeAijEccWu0b0YoYI=;
-        b=WI+1aqUxBTsltz4N1yePfUuV4TnoYW7RSHWwCcL/LA0aBuyeeAM3G1TSkAaGAZAkB0
-         YXtY97TfzPxFad/utToWChFQ7m+zJShzMu9135dqbNrwuj1fSgHysz4G9l3hDJW3Lx04
-         3dn9OE+1heT4hXm0ej8Rni52gkm6vqHImRKAaMhlaTPJ2MJuvldiA19hm8Tf6D8EiXCa
-         FShtU7hYmLnANb50ThA+HRgaCxAClNZEnHl5XSLw/5QE+ngyAs8ZGEQYYNKMCVYqsVC8
-         s4L1QEqJpFjC9PcIyucQpMAdAY19CO0yj9qUMlWacP/6IOxrzDY3eKmDT2UCQa52+EK1
-         b2VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Gq1+NP4bVcZsTpgmI3ILx7iZ+3jeAijEccWu0b0YoYI=;
-        b=kb7s4TWyaqOEruCV3T+Qd9nKkbMVyRwlqEsTTdIfpQJzYSJR5CAZDJfx7RCNVxnrtx
-         I5QBMzW0+YeOT89SZT8rdpDBh6klvJJlTWaRMSnn6hMknHhwq8QIYOhrCD3FVejvPevs
-         wv4LQBXZfbUS6qX77iyUxfDyBLkBqVTjp6jNqOnmhM+ObLW7geYCxz+aKBhayTXfalmg
-         41/h23LY0kl/4kfQT6wpLeopT5ipWpslugT/9LXnwrB5m17YfNLQpt8g43EV388VPYFD
-         bcATwvzMUQ7PLCiZ/7wJaUZTXVzdAmcpsxlMupzctOqT8E4Sh4sr8Xlqi352gs7vlKXb
-         xsag==
-X-Gm-Message-State: AOAM531aInSFgiNyaQd5u8pWNK9OOluZgZthTU4gf0JNUa1rBnVgasoo
-	oZdlh/vl52JJ02qNCSGJ3G6kWNmqSAbVMxfiLD/5Ww==
-X-Google-Smtp-Source: ABdhPJxnq/Mno8gj8OXg+JSR2ofs+6YCGnScuRp2exZBfsKfOZiEzAzdOB0OFAzd2W2XZCTHnvYJGntHkJIBDoBmnms=
-X-Received: by 2002:a05:6512:3047:b0:473:cf43:6d8f with SMTP id
- b7-20020a056512304700b00473cf436d8fmr22589970lfb.380.1652307667340; Wed, 11
- May 2022 15:21:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A3A3208
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 22:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652307986; x=1683843986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jE1UyGvLFFFLH6yYJw3asEf+q1Uvmml70c+XecdjABU=;
+  b=KGNs+5ShH8KGQ+s+gVvgvVc7pjXt7Z4Jglxqlp+IZhyPuWCvVyb563iL
+   VSv8WttY+khxFc12/bRy2we8y0afEpJ/71NgTAyt50P2VFRX43K3jJxOQ
+   w1i089114ScyRhECjf1gUihbnRWRuIIYyGwd3uzojoPeKap8gQibNXnED
+   sD2r3N/2eF5/lyfyeJgWFMceNOJTUNZFQrSasSan2fHy3EgU90jYbJyd6
+   F/MSZ1R77A+EW8Cez2MS59GM+/d6ynY807gG7MWp+kQPQlzgNwJvPvqKy
+   o7yY2IRBMXxL17XglmZQezrSyXD17H+dVypFFor70Itz1/gvzRYrdYqI7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269499975"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="269499975"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 15:26:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="572271298"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 11 May 2022 15:26:23 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nouml-000Jdg-4X;
+	Wed, 11 May 2022 22:26:23 +0000
+Date: Thu, 12 May 2022 06:26:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+	lyude@redhat.com, tzimmermann@suse.de
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, michel@daenzer.net,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH v2] mgag200: Enable atomic gamma lut update
+Message-ID: <202205120649.U2yM0PXz-lkp@intel.com>
+References: <20220511152815.892562-1-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220511160319.1045812-3-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220511160319.1045812-3-mailhol.vincent@wanadoo.fr>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 11 May 2022 15:20:55 -0700
-Message-ID: <CAKwvOdmDL3CiL11TCXQDJ2tKDbLC+72-TxXOvyO9kA6KKiruKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511152815.892562-1-jfalempe@redhat.com>
 
-On Wed, May 11, 2022 at 9:04 AM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-> is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-> __builting_ctzl() returns an int, a cast to (unsigned long) is
-> necessary to avoid potential warnings on implicit casts.
->
-> For x86_64, the current __ffs() and ffz() implementations do not
-> produce optimized code when called with a constant expression. On the
-> contrary, the __builtin_ctzl() gets simplified into a single
-> instruction.
->
-> However, for non constant expressions, the __ffs() and ffz() asm
-> versions of the kernel remains slightly better than the code produced
-> by GCC (it produces a useless instruction to clear eax).
->
-> This patch uses the __builtin_constant_p() to select between the
-> kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
-> the argument is constant or not.
->
-> ** Statistics **
->
-> On a allyesconfig, before applying this patch...:
->
-> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
-> | 3607
->
-> ...and after:
->
-> | $ objdump -d vmlinux.o | grep tzcnt | wc -l
-> | 2600
->
-> So, roughly 27.9% of the call to either __ffs() or ffz() were using
-> constant expression and were optimized out.
->
-> (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
->
-> Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-> the ret prefix (which is why we grep tzcnt instead of bsf in above
-> benchmark). c.f. [1]
->
-> [1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-> http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
->
-> CC: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Hi Jocelyn,
 
-Patch LGTM, though I find the location of the double unscores in the
-names slightly against my taste.
+Thank you for the patch! Perhaps something to improve:
 
-> ---
->  arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-> index 6ed979547086..7cf5374ce403 100644
-> --- a/arch/x86/include/asm/bitops.h
-> +++ b/arch/x86/include/asm/bitops.h
-> @@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
->          ? constant_test_bit((nr), (addr))      \
->          : variable_test_bit((nr), (addr)))
->
-> -/**
-> - * __ffs - find first set bit in word
-> - * @word: The word to search
-> - *
-> - * Undefined if no bit exists, so code should check against 0 first.
-> - */
-> -static __always_inline unsigned long __ffs(unsigned long word)
-> +static __always_inline unsigned long __variable_ffs(unsigned long word)
+[auto build test WARNING on tegra-drm/drm/tegra/for-next]
+[also build test WARNING on v5.18-rc6]
+[cannot apply to drm/drm-next drm-tip/drm-tip airlied/drm-next next-20220511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-How about `variable___ffs`? Patch 1/2 used `variable_ffs` for `ffs`?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220511-233134
+base:   git://anongit.freedesktop.org/tegra/linux.git drm/tegra/for-next
+config: i386-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120649.U2yM0PXz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0831f1db9ae8814796efea603749709e80d2808c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220511-233134
+        git checkout 0831f1db9ae8814796efea603749709e80d2808c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mgag200/
 
->  {
->         asm("rep; bsf %1,%0"
->                 : "=r" (word)
-> @@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
->         return word;
->  }
->
-> -/**
-> - * ffz - find first zero bit in word
-> - * @word: The word to search
-> - *
-> - * Undefined if no zero exists, so code should check against ~0UL first.
-> - */
-> -static __always_inline unsigned long ffz(unsigned long word)
-> +/**
-> + * __ffs - find first set bit in word
-> + * @word: The word to search
-> + *
-> + * Undefined if no bit exists, so code should check against 0 first.
-> + */
-> +#define __ffs(word)                            \
-> +       (__builtin_constant_p(word) ?           \
-> +        (unsigned long)__builtin_ctzl(word) :  \
-> +        __variable_ffs(word))
-> +
-> +static __always_inline unsigned long __variable_ffz(unsigned long word)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-`ffz` had no underscore. Regardless of `__ffs`, this should definitely
-be `variable_ffz` IMO.
+All warnings (new ones prefixed by >>):
 
->  {
->         asm("rep; bsf %1,%0"
->                 : "=r" (word)
-> @@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
->         return word;
->  }
->
-> +/**
-> + * ffz - find first zero bit in word
-> + * @word: The word to search
-> + *
-> + * Undefined if no zero exists, so code should check against ~0UL first.
-> + */
-> +#define ffz(word)                              \
-> +       (__builtin_constant_p(word) ?           \
-> +        (unsigned long)__builtin_ctzl(~word) : \
-> +        __variable_ffz(word))
-> +
->  /*
->   * __fls: find last set bit in word
->   * @word: The word to search
-> --
-> 2.35.1
->
+>> drivers/gpu/drm/mgag200/mgag200_mode.c:972:5: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                                   crtc_state->gamma_lut->length);
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:438:46: note: expanded from macro 'drm_err'
+           __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
+                                                ~~~    ^~~~~~~~~~~
+   include/drm/drm_print.h:425:48: note: expanded from macro '__drm_printk'
+           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+                                                  ~~~    ^~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
+
+vim +972 drivers/gpu/drm/mgag200/mgag200_mode.c
+
+   937	
+   938	static int
+   939	mgag200_simple_display_pipe_check(struct drm_simple_display_pipe *pipe,
+   940					  struct drm_plane_state *plane_state,
+   941					  struct drm_crtc_state *crtc_state)
+   942	{
+   943		struct drm_plane *plane = plane_state->plane;
+   944		struct drm_device *dev = plane->dev;
+   945		struct mga_device *mdev = to_mga_device(dev);
+   946		struct mgag200_pll *pixpll = &mdev->pixpll;
+   947		struct mgag200_crtc_state *mgag200_crtc_state = to_mgag200_crtc_state(crtc_state);
+   948		struct drm_framebuffer *new_fb = plane_state->fb;
+   949		struct drm_framebuffer *fb = NULL;
+   950		int ret;
+   951	
+   952		if (!new_fb)
+   953			return 0;
+   954	
+   955		if (plane->state)
+   956			fb = plane->state->fb;
+   957	
+   958		if (!fb || (fb->format != new_fb->format))
+   959			crtc_state->mode_changed = true; /* update PLL settings */
+   960	
+   961		if (crtc_state->mode_changed) {
+   962			ret = pixpll->funcs->compute(pixpll, crtc_state->mode.clock,
+   963						     &mgag200_crtc_state->pixpllc);
+   964			if (ret)
+   965				return ret;
+   966		}
+   967	
+   968		if (crtc_state->color_mgmt_changed && crtc_state->gamma_lut) {
+   969			if (crtc_state->gamma_lut->length !=
+   970			    MGAG200_LUT_SIZE * sizeof(struct drm_color_lut)) {
+   971				drm_err(dev, "Wrong size for gamma_lut %ld\n",
+ > 972					crtc_state->gamma_lut->length);
+   973				return -EINVAL;
+   974			}
+   975		}
+   976		return 0;
+   977	}
+   978	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
