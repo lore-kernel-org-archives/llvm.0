@@ -1,24 +1,24 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0AF2F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:54:40 +0000 (UTC)
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-07.nifty.com with ESMTP id 24BGnJsG029942
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188BF2F25
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:55:03 +0000 (UTC)
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-08.nifty.com with ESMTP id 24BGnJem020463
 	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:49:19 +0900
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-08.nifty.com with ESMTP id 24BGlWc0031975;
-	Thu, 12 May 2022 01:47:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc0031975
+	by conuserg-08.nifty.com with ESMTP id 24BGlWbv031975;
+	Thu, 12 May 2022 01:47:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWbv031975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652287658;
-	bh=cga2j3/RnX95UXo6+4HyPv/WWKGxfQZ0xpYK4BVs9G8=;
+	s=dec2015msa; t=1652287655;
+	bh=nPFeNb7zcOn5IuqqOUBw3aAC983zUVDbQ5TFg7R+mlQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GdvD1dXtHHjlc81z6WeX1zZzwaMcqZHFeFqOQLIbP0Gqz0Cn/Q9Q4yURc9g4PlXs4
-	 HimDPcY35Lre7OznD7JTvCHNbJGvJKQCwvxzy0Le8GkxqQaG7oeedg2GxCfwn57754
-	 SikCqgASO1nzN94iVAI2CZaGiaU78q2Xn8QTWyHM8DNOkHRDMi6bcHueuhuMu3gIUN
-	 31TtNTA1QAlZvf/8H7VE7dq4ymlUy0+Vwnwrw1m3F4WmjQSWvIOu7NMolHY5hrBtq2
-	 6N9o2Pwlgw4XwWlVedDtUCmx2AliUCsiCJ1vuVkVW7x+mWMiOL7OK+K9pCoIDunCiU
-	 mlzjMcBgavDGQ==
+	b=gkESwt0tgX74oapFqHSCwWI/Bk8Ad4YZ8SrAbF7yZTsg2uxWwzhaWocVBJyzR0cnk
+	 0K/qmOJdf1rNWwm3+EJQgBN7lGD+/6KmK6ukb613+nVKaNI20dpP2i/pC0oei1N8lW
+	 nYcbSUfk0eUbIhd6kmm1elHieqjRN8kXKOn1E2408ZMc+BLwrqRCYOqh/tZLiRC+gk
+	 /QasUWfa/8wjt0WSJZv8yk3rEk2IwA7c6zZCKPe7Iwso0wrfwuzjhDpsmggvTA0bXF
+	 0ofYM6whQAGxcha+sJpZZ+XVltmAPe+wJyQuvYnK9krcypZso6n2TCvfol7/h+YrpJ
+	 m7fjJTaJN6h1g==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -29,9 +29,9 @@ Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 05/12] kbuild: stop merging *.symversions
-Date: Thu, 12 May 2022 01:45:07 +0900
-Message-Id: <20220511164514.2741934-6-masahiroy@kernel.org>
+Subject: [PATCH v5 02/12] modpost: add sym_find_with_module() helper
+Date: Thu, 12 May 2022 01:45:04 +0900
+Message-Id: <20220511164514.2741934-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
 References: <20220511164514.2741934-1-masahiroy@kernel.org>
@@ -43,118 +43,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now modpost reads symbol versions from .*.cmd files.
+find_symbol() returns the first symbol found in the hash table. This
+table is global, so it may return a symbol from an unexpected module.
 
-The merged *.symversions are no longer needed.
+There is a case where we want to search for a symbol with a given name
+in a specified module.
+
+Add sym_find_with_module(), which receives the module pointer as the
+second argument. It is equivalent to find_module() if NULL is passed
+as the module pointer.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-(no changes since v1)
+(no changes since v4)
 
- scripts/Makefile.build  | 21 ++-------------------
- scripts/link-vmlinux.sh | 19 -------------------
- 2 files changed, 2 insertions(+), 38 deletions(-)
+Changes in v4:
+  - Only takes the new helper from
+    https://patchwork.kernel.org/project/linux-kbuild/patch/20220505072244.1155033-2-masahiroy@kernel.org/
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index ddd9080fc028..dff9220135c4 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -390,17 +390,6 @@ $(obj)/%.asn1.c $(obj)/%.asn1.h: $(src)/%.asn1 $(objtree)/scripts/asn1_compiler
- $(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
- $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
- 
--# combine symversions for later processing
--ifeq ($(CONFIG_LTO_CLANG) $(CONFIG_MODVERSIONS),y y)
--      cmd_update_lto_symversions =					\
--	rm -f $@.symversions						\
--	$(foreach n, $(filter-out FORCE,$^),				\
--		$(if $(shell test -s $(n).symversions && echo y),	\
--			; cat $(n).symversions >> $@.symversions))
--else
--      cmd_update_lto_symversions = echo >/dev/null
--endif
--
- #
- # Rule to compile a set of .o files into one .a file (without symbol table)
- #
-@@ -408,11 +397,8 @@ endif
- quiet_cmd_ar_builtin = AR      $@
-       cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
- 
--quiet_cmd_ar_and_symver = AR      $@
--      cmd_ar_and_symver = $(cmd_update_lto_symversions); $(cmd_ar_builtin)
--
- $(obj)/built-in.a: $(real-obj-y) FORCE
--	$(call if_changed,ar_and_symver)
-+	$(call if_changed,ar_builtin)
- 
- #
- # Rule to create modules.order file
-@@ -432,16 +418,13 @@ $(obj)/modules.order: $(obj-m) FORCE
- #
- # Rule to compile a set of .o files into one .a file (with symbol table)
- #
--quiet_cmd_ar_lib = AR      $@
--      cmd_ar_lib = $(cmd_update_lto_symversions); $(cmd_ar)
- 
- $(obj)/lib.a: $(lib-y) FORCE
--	$(call if_changed,ar_lib)
-+	$(call if_changed,ar)
- 
- ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- quiet_cmd_link_multi-m = AR [M]  $@
- cmd_link_multi-m =						\
--	$(cmd_update_lto_symversions);				\
- 	rm -f $@; 						\
- 	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
- else
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 7313cbd755df..47e5336d0c75 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -56,20 +56,6 @@ gen_initcalls()
- 		> .tmp_initcalls.lds
+Changes in v2:
+  - Rename the new func to sym_find_with_module()
+
+ scripts/mod/modpost.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index e7e2c70a98f5..fc5db1f73cf1 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -266,7 +266,7 @@ static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
+ 	list_add_tail(&sym->list, &mod->unresolved_symbols);
  }
  
--# If CONFIG_LTO_CLANG is selected, collect generated symbol versions into
--# .tmp_symversions.lds
--gen_symversions()
--{
--	info GEN .tmp_symversions.lds
--	rm -f .tmp_symversions.lds
--
--	for o in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
--		if [ -f ${o}.symversions ]; then
--			cat ${o}.symversions >> .tmp_symversions.lds
--		fi
--	done
--}
--
- # Link of vmlinux.o used for section mismatch analysis
- # ${1} output file
- modpost_link()
-@@ -88,10 +74,6 @@ modpost_link()
- 		gen_initcalls
- 		lds="-T .tmp_initcalls.lds"
+-static struct symbol *find_symbol(const char *name)
++static struct symbol *sym_find_with_module(const char *name, struct module *mod)
+ {
+ 	struct symbol *s;
  
--		if is_enabled CONFIG_MODVERSIONS; then
--			gen_symversions
--		fi
--
- 		# This might take a while, so indicate that we're doing
- 		# an LTO link
- 		info LTO ${1}
-@@ -307,7 +289,6 @@ cleanup()
- 	rm -f .btf.*
- 	rm -f .tmp_System.map
- 	rm -f .tmp_initcalls.lds
--	rm -f .tmp_symversions.lds
- 	rm -f .tmp_vmlinux*
- 	rm -f System.map
- 	rm -f vmlinux
+@@ -275,12 +275,17 @@ static struct symbol *find_symbol(const char *name)
+ 		name++;
+ 
+ 	for (s = symbolhash[tdb_hash(name) % SYMBOL_HASH_SIZE]; s; s = s->next) {
+-		if (strcmp(s->name, name) == 0)
++		if (strcmp(s->name, name) == 0 && (!mod || s->module == mod))
+ 			return s;
+ 	}
+ 	return NULL;
+ }
+ 
++static struct symbol *find_symbol(const char *name)
++{
++	return sym_find_with_module(name, NULL);
++}
++
+ struct namespace_list {
+ 	struct list_head list;
+ 	char namespace[];
 -- 
 2.32.0
 
