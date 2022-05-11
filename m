@@ -1,279 +1,146 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0868B3D9F
-	for <llvm@lists.linux.dev>; Tue, 10 May 2022 23:54:47 +0000 (UTC)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2fb965b34easo3538767b3.1
-        for <llvm@lists.linux.dev>; Tue, 10 May 2022 16:54:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LkB9VCPYUQ49GiWWHtqF1JmJ6O5/FOWFNNGNAFI6V7c=;
-        b=4dpkNw9rv6yQ4UOJ+2zsfv+yIfPCR9jDdcBpikJWRzmv00n8WVz63zw9BIyGAU/Q1y
-         RYIGJxtNJr0GQXUOMozMIfUUxhQDzZzaTCXok/rPtrosDyU5tTTeHiJKT831a7iS4J/5
-         pr08J/nZKc0BC5Q54acNcy3DB8lJSNuLAOWptTWtm4Spfe5YiJfKH0dr5UkSz70Fcfa6
-         /+o08AqYoVqoJbeWYzGaq/X0RiGxKmXGAdNk1nMC7RUrkKNCctsz+wZp2fnhTDt1myiC
-         Uia9KieQPNJD5ujLjX1qNWPW9RLwoOzzO91clLd0WBjucBUWL4pmrphjfYfkq19wWrXj
-         gvxA==
-X-Gm-Message-State: AOAM531tnV+Uyk3KIFg9CVu7bY5JpL/QsPKEGHy4l233cxkWZsaFwIEy
-	YmZbA2wkdfHCUg0Tt2k/x3QbxizLZSuctXv75R4=
-X-Google-Smtp-Source: ABdhPJwmLEBrNtBIymZv1ulZmq0Azwymw08e46QNccwsL2pRkKx/sT7xjezagG+nae9yPT7xmDh0BenPUREkMdC/Zgk=
-X-Received: by 2002:a81:8cf:0:b0:2f4:da59:9eef with SMTP id
- 198-20020a8108cf000000b002f4da599eefmr22674416ywi.78.1652226886870; Tue, 10
- May 2022 16:54:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B45115A7
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 01:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652232634; x=1683768634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UW71ROxh/GRIENA4xUhIZy4ExcjISc8wvAjEj5jPNTE=;
+  b=GLI8qlvoOtHaArf7qA98vUc53Ifvbn0DsF070pQPg9rQfsFjWYw/q5Vp
+   SYn2uxztk6xvM2rq5pcpojBvCHjZob+2SfgTt6zhDXO8jroc4fzmMat3c
+   GQ5f//7GZMU9W7/6BLWeWSjP4BTfiheldiZ9tlKVXL7Vm8Dht2Xaup0ZD
+   O+XbntprSEecaxdJpAIky3FKqzPtIy9v8yuuBCDKMvT7WRT32W899v9aY
+   RYZ78klcEALWuneX97WCOW5j3pUiA2pUuh4VXPRXHg8l6EvqNQt0D57gF
+   odFDpesof2aTnYV1qh1jGSqBPyBgjhUgF1SRJitE9JTQfqe6RgyeafHLr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250083182"
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="250083182"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 18:30:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
+   d="scan'208";a="738988213"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 May 2022 18:30:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nobBN-000IZB-CU;
+	Wed, 11 May 2022 01:30:29 +0000
+Date: Wed, 11 May 2022 09:29:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Binding <sbinding@opensource.cirrus.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	patches@opensource.cirrus.com,
+	Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v1 1/3] ALSA: hda/cs8409: Support new Odin Variants
+Message-ID: <202205110948.6wfXVVvs-lkp@intel.com>
+References: <20220510161701.851260-2-sbinding@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
- <20220510142550.1686866-2-mailhol.vincent@wanadoo.fr> <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Wed, 11 May 2022 08:54:35 +0900
-Message-ID: <CAMZ6RqLTNQnFantEoUToNPKitHr6A-9y88McDdwv83xwpFoekw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
- constant expressions
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510161701.851260-2-sbinding@opensource.cirrus.com>
 
-On Wed. 11 May 2022 at 07:29, Nick Desaulniers <ndesaulniers@google.com> wr=
-ote:
-> On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > For x86_64, the current ffs() implementation does not produce
-> > optimized code when called with a constant expression. On the
-> > contrary, the __builtin_ffs() function of both GCC and clang is able
-> > to simplify the expression into a single instruction.
-> >
-> > * Example *
-> >
-> > Let's consider two dummy functions foo() and bar() as below:
-> >
-> > | #include <linux/bitops.h>
-> > | #define CONST 0x01000000
-> > |
-> > | unsigned int foo(void)
-> > | {
-> > |       return ffs(CONST);
-> > | }
-> > |
-> > | unsigned int bar(void)
-> > | {
-> > |       return __builtin_ffs(CONST);
-> > | }
-> >
-> > GCC would produce below assembly code:
-> >
-> > | 0000000000000000 <foo>:
-> > |    0: b8 ff ff ff ff          mov    $0xffffffff,%eax
-> > |    5: 0f bc c7                bsf    %edi,%eax
-> > |    8: 83 c0 01                add    $0x1,%eax
-> > |    b: c3                      ret
-> > |    c: 0f 1f 40 00             nopl   0x0(%rax)
-> > |
-> > | 0000000000000010 <bar>:
-> > |   10: b8 19 00 00 00          mov    $0x19,%eax
-> > |   15: c3                      ret
-> >
-> > And clang would produce:
-> >
-> > | 0000000000000000 <foo>:
-> > |    0: 55                      push   %rbp
-> > |    1: 48 89 e5                mov    %rsp,%rbp
-> > |    4: b8 ff ff ff ff          mov    $0xffffffff,%eax
-> > |    9: 0f bc 05 00 00 00 00    bsf    0x0(%rip),%eax        # 10 <foo+=
-0x10>
-> > |   10: ff c0                   inc    %eax
-> > |   12: 5d                      pop    %rbp
-> > |   13: c3                      ret
-> > |   14: 66 2e 0f 1f 84 00 00    cs nopw 0x0(%rax,%rax,1)
-> > |   1b: 00 00 00
-> > |   1e: 66 90                   xchg   %ax,%ax
-> > |
-> > | 0000000000000020 <bar>:
-> > |   20: 55                      push   %rbp
-> > |   21: 48 89 e5                mov    %rsp,%rbp
-> > |   24: b8 19 00 00 00          mov    $0x19,%eax
-> > |   29: 5d                      pop    %rbp
-> > |   2a: c3                      ret
->
-> Right, we need to allocate registers to move the inputs into the asm
-> block, and the results back out. Inline asm is analogous to a call
-> with a custom calling convention, where we don't look into the body of
-> the inline asm.
->
-> Does -fomit-frame-pointer clean make these snippets clearer, or did
-> you not build with -O2?  Consider using those flags if so, since we
-> generally prefer the ORC unwinder on x86, not the frame pointer
-> unwinder.  If the compilers are forcing a frame pointer when using the
-> builtins once optimizations are enabled, that's a problem (that we've
-> seen in the past with the builtins for reading eflags with clang; now
-> fixed).
+Hi Stefan,
 
-I have not played with those parameters yet, so short answer, I
-am using the kernel default (above assembly was compiled with
-Kbuild).  You are touching a few topics I am not familiar with, I
-need some research on this before answering you in more detail.
+Thank you for the patch! Perhaps something to improve:
 
-> >
-> > For both examples, we clearly see the benefit of using __builtin_ffs()
-> > instead of the kernel's asm implementation for constant expressions.
-> >
-> > However, for non constant expressions, the ffs() asm version of the
-> > kernel remains better for x86_64 because, contrary to GCC, it doesn't
-> > emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-> > able optimize out the CMOV call).
-> >
-> > This patch uses the __builtin_constant_p() to select between the
-> > kernel's ffs() and the __builtin_ffs() depending on whether the
-> > argument is constant or not.
-> >
-> >
-> > As a side benefit, this patch also removes below -Wshadow warning:
-> >
-> > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs'=
- shadows a built-in function [-Wshadow]
-> > |   283 | static __always_inline int ffs(int x)
->
-> Nice! :)
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on v5.18-rc6 next-20220510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/ALSA-hda-cs8409-Add-support-for-Odin-Laptop-Variants/20220511-001936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: i386-randconfig-c001-20220509 (https://download.01.org/0day-ci/archive/20220511/202205110948.6wfXVVvs-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e834cdf9c71c45212904ba82b5b7e49d45810deb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Binding/ALSA-hda-cs8409-Add-support-for-Odin-Laptop-Variants/20220511-001936
+        git checkout e834cdf9c71c45212904ba82b5b7e49d45810deb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/pci/hda/
 
-For the record, fixing the -Wshadow is my real motivation. I am
-pissed when the header files through some W=3D12 warnings.  Once
-this patch is applied, there will be one last annoying W=3D2
-warning to clear in order to only see local warnings and not
-random spam from headers when doing a W=3D12 (at least on x86_64).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But because those kinds of W=3D2 fixes aren't so popular, I figured
-it would be better to offer something else. I first checked if
-GCC produces less optimized code than the kernel assembly: that
-was still the case. I then looked at the GCC mailing list to see
-if discussion on this topic existed. Didn't find it but found
-instead that GCC could optimize constant expressions. And voil=C3=A0
-how I came to the creation of this patch.
+All warnings (new ones prefixed by >>):
 
-> >
-> > [1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64(=
-)")
-> > http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procy=
-on.org.uk
->
-> + David, author of ca3d30cc02f7.  I was wondering if this applied to
-> more than just x86, but I see now that some architectures just include
-> include/asm-generic/bitops/builtin-ffs.h into their
-> arch/*/include/asm/bitops.h. It's only when we want to beat the
-> compiler for non-ICE expressions.
+>> sound/pci/hda/patch_cs8409.c:1033:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   sound/pci/hda/patch_cs8409.c:1033:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
 
-Yes, I did a quick research, the majority of the architectures already
-rely on the builtin function.
-Would need to give a deeper look to track if anyone else other than
-x86 also uses assembly.
 
-Also, this potentially may apply to builtin functions other than
-the ffs family. Just did not find any other cases so far.
+vim +1033 sound/pci/hda/patch_cs8409.c
 
-> Patch LGTM; just minor comments on commit message, naming, and formatting=
-.
->
-> >
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  arch/x86/include/asm/bitops.h | 29 +++++++++++++++++------------
-> >  1 file changed, 17 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitop=
-s.h
-> > index a288ecd230ab..535a7a358c14 100644
-> > --- a/arch/x86/include/asm/bitops.h
-> > +++ b/arch/x86/include/asm/bitops.h
-> > @@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigne=
-d long word)
-> >  #undef ADDR
-> >
-> >  #ifdef __KERNEL__
-> > -/**
-> > - * ffs - find first set bit in word
-> > - * @x: the word to search
-> > - *
-> > - * This is defined the same way as the libc and compiler builtin ffs
-> > - * routines, therefore differs in spirit from the other bitops.
-> > - *
-> > - * ffs(value) returns 0 if value is 0 or the position of the first
-> > - * set bit if value is nonzero. The first (least significant) bit
-> > - * is at position 1.
-> > - */
-> > -static __always_inline int ffs(int x)
-> > +static __always_inline int __ffs_asm(int x)
->
-> How about variable_ffs rather than __ffs_asm? Let's try to stick with
-> the convention used by test_bit?
+8c70461bbb83cf Lucas Tanure   2021-08-11   996  
+8c70461bbb83cf Lucas Tanure   2021-08-11   997  /* Vendor specific HW configuration
+8c70461bbb83cf Lucas Tanure   2021-08-11   998   * PLL, ASP, I2C, SPI, GPIOs, DMIC etc...
+8c70461bbb83cf Lucas Tanure   2021-08-11   999   */
+8c70461bbb83cf Lucas Tanure   2021-08-11  1000  static void cs8409_cs42l42_hw_init(struct hda_codec *codec)
+8c70461bbb83cf Lucas Tanure   2021-08-11  1001  {
+8c70461bbb83cf Lucas Tanure   2021-08-11  1002  	const struct cs8409_cir_param *seq = cs8409_cs42l42_hw_cfg;
+8c70461bbb83cf Lucas Tanure   2021-08-11  1003  	const struct cs8409_cir_param *seq_bullseye = cs8409_cs42l42_bullseye_atn;
+8c70461bbb83cf Lucas Tanure   2021-08-11  1004  	struct cs8409_spec *spec = codec->spec;
+24f7ac3d3b6b70 Lucas Tanure   2021-08-11  1005  	struct sub_codec *cs42l42 = spec->scodecs[CS8409_CODEC0];
+8c70461bbb83cf Lucas Tanure   2021-08-11  1006  
+8c70461bbb83cf Lucas Tanure   2021-08-11  1007  	if (spec->gpio_mask) {
+ccff0064a7ce8e Stefan Binding 2021-08-11  1008  		snd_hda_codec_write(codec, CS8409_PIN_AFG, 0, AC_VERB_SET_GPIO_MASK,
+ccff0064a7ce8e Stefan Binding 2021-08-11  1009  			spec->gpio_mask);
+ccff0064a7ce8e Stefan Binding 2021-08-11  1010  		snd_hda_codec_write(codec, CS8409_PIN_AFG, 0, AC_VERB_SET_GPIO_DIRECTION,
+ccff0064a7ce8e Stefan Binding 2021-08-11  1011  			spec->gpio_dir);
+ccff0064a7ce8e Stefan Binding 2021-08-11  1012  		snd_hda_codec_write(codec, CS8409_PIN_AFG, 0, AC_VERB_SET_GPIO_DATA,
+ccff0064a7ce8e Stefan Binding 2021-08-11  1013  			spec->gpio_data);
+8c70461bbb83cf Lucas Tanure   2021-08-11  1014  	}
+8c70461bbb83cf Lucas Tanure   2021-08-11  1015  
+8c70461bbb83cf Lucas Tanure   2021-08-11  1016  	for (; seq->nid; seq++)
+8c70461bbb83cf Lucas Tanure   2021-08-11  1017  		cs8409_vendor_coef_set(codec, seq->cir, seq->coeff);
+8c70461bbb83cf Lucas Tanure   2021-08-11  1018  
+24f7ac3d3b6b70 Lucas Tanure   2021-08-11  1019  	if (codec->fixup_id == CS8409_BULLSEYE) {
+8c70461bbb83cf Lucas Tanure   2021-08-11  1020  		for (; seq_bullseye->nid; seq_bullseye++)
+8c70461bbb83cf Lucas Tanure   2021-08-11  1021  			cs8409_vendor_coef_set(codec, seq_bullseye->cir, seq_bullseye->coeff);
+24f7ac3d3b6b70 Lucas Tanure   2021-08-11  1022  	}
+8c70461bbb83cf Lucas Tanure   2021-08-11  1023  
+6581a045d54c6a Stefan Binding 2022-03-28  1024  	switch (codec->fixup_id) {
+6581a045d54c6a Stefan Binding 2022-03-28  1025  	case CS8409_CYBORG:
+6581a045d54c6a Stefan Binding 2022-03-28  1026  	case CS8409_WARLOCK_MLK_DUAL_MIC:
+8c70461bbb83cf Lucas Tanure   2021-08-11  1027  		/* DMIC1_MO=00b, DMIC1/2_SR=1 */
+8a7724535bacbb Stefan Binding 2022-03-28  1028  		cs8409_vendor_coef_set(codec, CS8409_DMIC_CFG, 0x0003);
+6581a045d54c6a Stefan Binding 2022-03-28  1029  		break;
+e834cdf9c71c45 Stefan Binding 2022-05-10  1030  	case CS8409_ODIN:
+e834cdf9c71c45 Stefan Binding 2022-05-10  1031  		/* ASP1/2_xxx_EN=1, ASP1/2_MCLK_EN=0, DMIC1_SCL_EN=0 */
+e834cdf9c71c45 Stefan Binding 2022-05-10  1032  		cs8409_vendor_coef_set(codec, CS8409_PAD_CFG_SLW_RATE_CTRL, 0xfc00);
+6581a045d54c6a Stefan Binding 2022-03-28 @1033  	default:
+6581a045d54c6a Stefan Binding 2022-03-28  1034  		break;
+6581a045d54c6a Stefan Binding 2022-03-28  1035  	}
+8c70461bbb83cf Lucas Tanure   2021-08-11  1036  
+24f7ac3d3b6b70 Lucas Tanure   2021-08-11  1037  	cs42l42_resume(cs42l42);
+8c70461bbb83cf Lucas Tanure   2021-08-11  1038  
+8c70461bbb83cf Lucas Tanure   2021-08-11  1039  	/* Enable Unsolicited Response */
+8c70461bbb83cf Lucas Tanure   2021-08-11  1040  	cs8409_enable_ur(codec, 1);
+8c70461bbb83cf Lucas Tanure   2021-08-11  1041  }
+8c70461bbb83cf Lucas Tanure   2021-08-11  1042  
 
-ACK. I will also follow this comment for path 2/2 and use
-__variable_ffs instead of __ffs_asm_not_zero there.
-
-> >  {
-> >         int r;
-> >
-> > @@ -310,6 +299,22 @@ static __always_inline int ffs(int x)
-> >         return r + 1;
-> >  }
-> >
-> > +/**
-> > + * ffs - find first set bit in word
-> > + * @x: the word to search
-> > + *
-> > + * This is defined the same way as the libc and compiler builtin ffs
-> > + * routines, therefore differs in spirit from the other bitops.
-> > + *
-> > + * ffs(value) returns 0 if value is 0 or the position of the first
-> > + * set bit if value is nonzero. The first (least significant) bit
-> > + * is at position 1.
-> > + */
-> > +#define ffs(x)                                 \
-> > +        (__builtin_constant_p(x) ?             \
-> > +         __builtin_ffs(x) :                    \
-> > +         __ffs_asm(x))
-> > +
->
-> I think this whole #define can fit on one line?
-
-I split it into multiple lines to be consistent with other macros
-in the file. I have no objections to doing it on a single line (I
-will just check if this is within the 80 characters limit and if
-so, will do a single line in v2).
-
-> If not, perhaps the
-> BCP can start on the initial line?  Otherwise it looks like the
-> then/else clauses are indented by 1 tab followed by 1 space. Consider
-> just using tabs.
-
-Right, I inadvertently added a space after the tab of the first
-line and the editor auto indentation repeated the patterns on the
-other lines.
-
-With that said, I will prepare the v2. I will send it within two
-days I think (can not do it right now).
-
-> >  /**
-> >   * fls - find last set bit in word
-> >   * @x: the word to search
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
