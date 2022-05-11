@@ -1,86 +1,227 @@
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CFB2F25
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 17:52:39 +0000 (UTC)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Kyxqh0RDQzMqHtD;
-	Wed, 11 May 2022 16:19:28 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-	by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Kyxqd6C0Lzlj4cK;
-	Wed, 11 May 2022 16:19:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1652278768;
-	bh=/n5oEC4CvxILBZQp6ChxximF4mWD7I5QTdFgyCOlYJY=;
-	h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-	b=h36XxvDcJBu2sTf7wBmxnAMEehwmVxMmhHKFTptP/LIZsqf5FuDGv21jJRbdukTH1
-	 UjD0Vu6rGibTzYk/3q+3g9c8NVI/S6oNeLJZ08bF9Ks7g+L2BRuDkE9Yk/0kSh2ZCE
-	 igV3+abVFVmazKYhYyCl8ju9vWlU5ztV3HAtmGLk=
-Message-ID: <152da06a-330d-3125-6f41-262e0751f41b@digikod.net>
-Date: Wed, 11 May 2022 16:19:10 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0CD28F2
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 18:39:21 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id bu29so5184367lfb.0
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 11:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WZrrRWWnKYCGWmQ+Q5VAgBLIrXxu/TL0XFvGr+F6p4Q=;
+        b=VHJwVCB1dKro4DgAW7K4W6tBjY8N+M80NYTT5vBdxstE2C8oefPBk7hXLGmpUoYx0+
+         N8vMUDZz7WPoul0qiH2DEuoCgIgVYYU7hCp+dyoOzEwXNoyLZdnw8Zz/PCOlj6jC5wWR
+         6XbHmTeg1/3e2tMLGDNHUVUY75gHKQLw8AYg1exA4BDNB9izH7rKBR3M48fofh9pIKY7
+         qDPc3b3epetEmOrFCqn1D9mnvwbONUi18UjWmQujxn+99DfWCH9K60F03FX3Dwwld94e
+         O92vX57H/RPsvDl8PgRVn84qkdMJd9IhMaKHH28G6vrZsImk1SjiOVclJCNa8Cug8Xr3
+         fP7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WZrrRWWnKYCGWmQ+Q5VAgBLIrXxu/TL0XFvGr+F6p4Q=;
+        b=GlL6qaV5+0ifzbNPDFAt8kTDzoSmXSjT4TyK/riTMCDse1tEtabp6M7YI3qHfYwDC3
+         C25jrY4T+2eXZyD4YPoKkkZj3nQ0/tfa6iwaaaTsP5LWe7rlWY9tBnXPa0/qg2F6IveP
+         bVx4ZWhIv14OAyICW3EwuBAgXyz/RKimcdPMEpZoZ5eLxDgOUK90Fhapve1vw9nCvkjS
+         5/wAxoCutfSs8ZWLrWsAU2NQN1Wg90ys0TiqRu22dLHcJyGm0WqawCIiYoYbRbbv8/6L
+         tk5p6psDsfOT0NZ1FyFsibchHyR7Ih+/Zn6L2d2W3vMe+6+8Hq5qCvAA7DRuXbgaOIHY
+         QL0Q==
+X-Gm-Message-State: AOAM532SrPVWrjoKuJjNcI5dVHX7w2QhHeOmgs1k48o1KssTZi2onVXn
+	K6tuotm5bGYZ6JA+8wGe/ZLPMVHJb9nzeq/nfFFK9A==
+X-Google-Smtp-Source: ABdhPJwDiGaYEeuwcoTROEsK0+cljIqKjOORbI+w6etJDBdPW6qbFNKV8L6LhpsEbCNVqX740tnAN/qbGip4C7Px4z4=
+X-Received: by 2002:ac2:4646:0:b0:472:108e:51af with SMTP id
+ s6-20020ac24646000000b00472108e51afmr21199577lfo.184.1652294359560; Wed, 11
+ May 2022 11:39:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent:
-Content-Language: en-US
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Andy Whitcroft <apw@canonical.com>,
- Brian Norris <briannorris@chromium.org>,
- Dwaipayan Ray <dwaipayanray1@gmail.com>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>, Joe Perches <joe@perches.com>,
- Kees Cook <keescook@chromium.org>,
- Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Paul Moore
- <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220506160106.522341-1-mic@digikod.net>
-From: =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v2 0/5] Fix clang-format configuration according to
- checkpatch.pl
-In-Reply-To: <20220506160106.522341-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220510065336.hlfjrc25ajed5zj4@M910t>
+In-Reply-To: <20220510065336.hlfjrc25ajed5zj4@M910t>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 11 May 2022 11:39:07 -0700
+Message-ID: <CAKwvOd=OnJ=ZhsbX+epzbhg3sWg9yOaR=zQ4jF_Deo=B8Nx9Og@mail.gmail.com>
+Subject: Re: riscv: llvm-compiler: calling convention violation: temporary
+ register $t2 is used to pass the ninth function parameter
+To: Changbin Du <changbin.du@huawei.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Steven Rostedt <rostedt@goodmis.org>, hw.huiwang@huawei.com, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, codegen-riscv@discourse.llvm.org, 
+	llvmproject@discourse.llvm.org, craig.topper@sifive.com, asb@asbradbury.org
+Content-Type: text/plain; charset="UTF-8"
 
-Miguel, what do you think about this series? Do you plan to take it for 
-the next merge window? FYI, I plan to use it for Landlock [1] and send 
-it for the next merge window. Could you publish your pending 
-clang-format changes so that I can make sure everything is OK?
+On Mon, May 9, 2022 at 11:54 PM Changbin Du <changbin.du@huawei.com> wrote:
+>
+> [This is a resent to correct llvm mailist.]
+>
+> Hello, folks,
+>
+> Recently I encountered a kernel crash problem when using ftrace with 'perf ftrace'
+> command on risc-v kernel built with llvm.
+>
+> This crash only exists on llvm build, not reproducable with GCC. So I hope llvm
+> guys can take a look :)
+>
+> The llvm versions I have tried are llvm-13.0.0 and mainline (commit 102bc634cb
+> ("[runtime] Build compiler-rt with --unwindlib=none")).
+>
+> [  612.947887][  T496] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000001
+> [  613.050789][  T496] Hardware name: riscv-virtio,qemu (DT)
+> [  613.087976][  T496] epc : __find_rr_leaf+0x128/0x220
+> [  613.107493][  T496]  ra : return_to_handler+0x22/0x24
+> [  613.125322][  T496] epc : ffffffff80a1915a ra : ffffffff80009506 sp : ff20000011e43860
+> [  613.150124][  T496]  gp : ffffffff81812f40 tp : ff6000008bb01580 t0 : ff600000806cf0f0
+> [  613.173657][  T496]  t1 : 000000000001b29a t2 : 0000000000000001 s0 : ff20000011e43920
+> [  613.187311][  T496]  s1 : ff600000848c2a00 a0 : 0000000000000002 a1 : 0000000000000002
+> [  613.202731][  T496]  a2 : fffffffffffffffd a3 : ff6000009d287000 a4 : 00000000000002c0
+> [  613.213723][  T496]  a5 : ff6000009d259b40 a6 : ffffffffffffff9c a7 : ffffffffffffffff
+> [  613.226648][  T496]  s2 : 0000000000000001 s3 : ff20000011e439d8 s4 : ffffffff8160d140
+> [  613.246571][  T496]  s5 : 0000000000000002 s6 : 0000000000000000 s7 : 0000000000000000
+> [  613.264681][  T496]  s8 : 0000000000000064 s9 : 0000000000000000 s10: 0000000000400000
+> [  613.277999][  T496]  s11: ff600000848c2aa8 t3 : 0000000000000290 t4 : 00000000004002c0
+> [  613.303729][  T496]  t5 : 00000000ffffffff t6 : ff6000009d2872d0
+> [  613.322145][  T496] status: 0000000200000120 badaddr: 0000000000000001 cause: 000000000000000d
+> [  613.346228][  T496] [<ffffffff80a12526>] ip6_pol_route+0xb6/0x602
+> [  613.365722][  T496] [<ffffffff80a1321a>] ip6_pol_route_output+0x2c/0x34
+> [  613.386374][  T496] [<ffffffff80a1c028>] fib6_rule_lookup+0x36/0xa0
+> [  613.401865][  T496] [<ffffffff80a131da>] ip6_route_output_flags_noref+0xd6/0xea
+> [  613.412776][  T496] [<ffffffff80a13274>] ip6_route_output_flags+0x52/0xd4
+> [  613.432013][  T496] [<ffffffff809ffb3a>] ip6_dst_lookup_tail+0x68/0x23a
+> [  613.456198][  T496] [<ffffffff809ffec6>] ip6_sk_dst_lookup_flow+0x132/0x1cc
+> [  613.513174][  T496] [<ffffffff80003cd8>] ret_from_syscall+0x0/0x2
+> [  613.518973][  T496] [<ffffffff800094e4>] return_to_handler+0x0/0x24
+> [  613.563961][  T496] Kernel panic - not syncing: Fatal exception
+> [  613.572278][  T496] SMP: stopping secondary CPUs
+> [  613.587449][  T496] ---[ end Kernel panic - not syncing: Fatal exception ]---
+>
+> The crash happened when dereferencing the point 'mpri' at route.c:758.
+>
+> (gdb) l *__find_rr_leaf+0x128
+> 0xffffffff809da9c4 is in __find_rr_leaf (net/ipv6/route.c:758).
+> 753
+> 754             if (strict & RT6_LOOKUP_F_REACHABLE)
+> 755                     rt6_probe(nh);
+> 756
+> 757             /* note that m can be RT6_NUD_FAIL_PROBE at this point */
+> 758             if (m > *mpri) {
+> 759                     *do_rr = match_do_rr;
+> 760                     *mpri = m;
+> 761                     rc = true;
+> 762             }
+>
+> Adding some logs, I found the problem. The ninth passed parameter of function
+> __find_rr_leaf() which is the address of local variable 'mpri', is changed to
+> value '0x1' when inside the function __find_rr_leaf.
+> Here is the code snippet and full link
+> https://github.com/torvalds/linux/blob/9cb7c013420f98fa6fd12fc6a5dc055170c108db/net/ipv6/route.c.
+>
+> static void find_rr_leaf(struct fib6_node *fn, struct fib6_info *leaf,
+>                          struct fib6_info *rr_head, int oif, int strict,
+>                          bool *do_rr, struct fib6_result *res)
+> {
+>         u32 metric = rr_head->fib6_metric;
+>         struct fib6_info *cont = NULL;
+>         int mpri = -1;
+>
+>         __find_rr_leaf(rr_head, NULL, metric, res, &cont,
+>                        oif, strict, do_rr, &mpri);
+>         ...
+> }
+>
+> Then debugging with gdb, I found this probably is a compiler bug. We can see the
+> local function __find_rr_leaf() is not optimized out and the compiler generates
+> a local symbol for it. The find_rr_leaf() (inlined by fib6_table_lookup) invokes
+> this function with 'jalr' instruction.
+>
+> (gdb) disassemble fib6_table_lookup
+> Dump of assembler code for function fib6_table_lookup:
+>    [snip]
+>    0xffffffff80a1240e <+412>:   beqz    a1,0xffffffff80a12436 <fib6_table_lookup+452>
+>    0xffffffff80a12410 <+414>:   slli    a1,s9,0x20
+>    0xffffffff80a12414 <+418>:   srli    a1,a1,0x20
+>    0xffffffff80a12416 <+420>:   sext.w  a2,a1
+>    0xffffffff80a1241a <+424>:   addi    a7,s0,-125
+>    0xffffffff80a1241e <+428>:   addi    t2,s0,-124
+>    0xffffffff80a12422 <+432>:   li      a1,0
+>    0xffffffff80a12424 <+434>:   mv      a3,s10
+>    0xffffffff80a12426 <+436>:   li      a4,0
+>    0xffffffff80a12428 <+438>:   ld      a5,-152(s0)
+>    0xffffffff80a1242c <+442>:   mv      a6,s8
+>    0xffffffff80a1242e <+444>:   auipc   ra,0x7
+>    0xffffffff80a12432 <+448>:   jalr    -686(ra) # 0xffffffff80a19180 <__find_rr_leaf>
+>    [snip]
+>
+> And at line route.c:758, the value of point 'mpri' is stored in temporary register
+> $t2 and $s3 (copied from $t2).
+>
+> (gdb) info scope __find_rr_leaf
+> [snip]
+> Symbol mpri is multi-location:
+>   Base address 0xffffffff80a10564  Range 0xffffffff80a19190-0xffffffff80a191ae: a variable in $t2
+>   Range 0xffffffff80a191c0-0xffffffff80a191d6: a variable in $s3
+>   Range 0xffffffff80a19200-0xffffffff80a19208: a variable in $s3
+>   Range 0xffffffff80a1921e-0xffffffff80a192fe: a variable in $s3
+>   Range 0xffffffff80a1930a-0xffffffff80a19356: a variable in $s3
+>
+> Let's see when register $t2 is corrupted with single-step mode. Obviously, register
+> $t2 is changed by mcount function ftrace_caller(). This is why the bug happens
+> to ftrace.
+>
+> Dump of assembler code for function __find_rr_leaf:
+>    0xffffffff80a19180 <+0>:     sd      ra,-8(sp)   #  $t2 = 0xff200000120db7b4
+>    0xffffffff80a19184 <+4>:     auipc   ra,0xff5f1
+>    0xffffffff80a19188 <+8>:     jalr    -1744(ra) # 0xffffffff80009ab4 <ftrace_caller> #  $t2 = 0xff200000120db7b4
+> => 0xffffffff80a1918c <+12>:    ld      ra,-8(sp)    #  $t2 = 0x1, bug, $t2 is corrupted!!
+>    0xffffffff80a19190 <+16>:    addi    sp,sp,-176
+>    [snip]
+>
+> So now we can come to a conclusion. The generated local function __find_rr_leaf()
+> violates the risc-v calling convention and leads to the panic. It should use stack
+> but *not* temporary register $t2 to pass the ninth parameter! It's okay if the
+> callsite can take care of local symbol callees, but the Function Instrumentation
+> features should be considerated carefully.
+>
+> For comparison, here is the result from gcc (9.2.0):
+> (gdb) info scope __find_rr_leaf
+> [snip]
+> Symbol mpri is a complex DWARF expression:
+>      0: DW_OP_fbreg 0, length 8.
+>
+> I also built a simple test function with 9 parameters by clang and same cflags,
+> but cannot reproduce it. Maybe it is conditional?
+>
+> Simple test code:
+> __attribute__ ((noinline))
+> void test_func(int *a, int *b, int *c, int *d, int *e, int *f, int *g, int *h, int *i)
+> {
+>         printf("__find_rr_leaf: %d\n", *i);
+> }
+>
+> int main(void)
+> {
+>         int a,b,c,d,e,f,g,h,i = 100;
+>
+>         test_func(&a,&b,&c,&d,&e,&f,&g,&h,&i);
+>         return 0;
+> }
 
-[1] https://lore.kernel.org/r/20220506160513.523257-1-mic@digikod.net
+Hmm...any chance you could come up with a more concise test case then
+using creduce [0] or cvise [1]?
+[0] https://embed.cs.utah.edu/creduce/
+[1] https://github.com/marxin/cvise
 
-On 06/05/2022 18:01, Mickaël Salaün wrote:
-> Hi,
-> 
-> This series brings some improvements to the clang-format configuration
-> to make it compatible with the checkpatch.pl rules:
-> https://lore.kernel.org/r/8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net
-> 
-> I also found that the for_each issue has already been talk about here:
-> https://lore.kernel.org/lkml/CAHmME9ofzanQTBD_WYBRW49d+gM77rCdh8Utdk4+PM9n_bmKwA@mail.gmail.com/
-> 
-> I use these changes for Landlock.
-> 
-> This is based on v5.18-rc5.
-> 
-> Previous version:
-> https://lore.kernel.org/r/20220412153906.428179-1-mic@digikod.net
-> 
-> Regards,
-> 
-> Mickaël Salaün (5):
->    clang-format: Update and extend the for_each list with tools/
->    clang-format: Update to clang-format >= 6
->    clang-format: Fix goto labels indentation
->    clang-format: Fix empty curly braces
->    clang-format: Fix space after for_each macros
-> 
->   .clang-format | 216 +++++++++++++++++++++++++++++++++++++++-----------
->   1 file changed, 169 insertions(+), 47 deletions(-)
-> 
-> 
-> base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+
+>
+> --
+> Cheers,
+> Changbin Du
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
