@@ -1,148 +1,85 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A3A3208
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 22:26:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652307986; x=1683843986;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jE1UyGvLFFFLH6yYJw3asEf+q1Uvmml70c+XecdjABU=;
-  b=KGNs+5ShH8KGQ+s+gVvgvVc7pjXt7Z4Jglxqlp+IZhyPuWCvVyb563iL
-   VSv8WttY+khxFc12/bRy2we8y0afEpJ/71NgTAyt50P2VFRX43K3jJxOQ
-   w1i089114ScyRhECjf1gUihbnRWRuIIYyGwd3uzojoPeKap8gQibNXnED
-   sD2r3N/2eF5/lyfyeJgWFMceNOJTUNZFQrSasSan2fHy3EgU90jYbJyd6
-   F/MSZ1R77A+EW8Cez2MS59GM+/d6ynY807gG7MWp+kQPQlzgNwJvPvqKy
-   o7yY2IRBMXxL17XglmZQezrSyXD17H+dVypFFor70Itz1/gvzRYrdYqI7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269499975"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="269499975"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 15:26:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="572271298"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 11 May 2022 15:26:23 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nouml-000Jdg-4X;
-	Wed, 11 May 2022 22:26:23 +0000
-Date: Thu, 12 May 2022 06:26:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
-	lyude@redhat.com, tzimmermann@suse.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, michel@daenzer.net,
-	Jocelyn Falempe <jfalempe@redhat.com>
-Subject: Re: [PATCH v2] mgag200: Enable atomic gamma lut update
-Message-ID: <202205120649.U2yM0PXz-lkp@intel.com>
-References: <20220511152815.892562-1-jfalempe@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0250A3D65
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 22:28:21 +0000 (UTC)
+Received: by mail-lj1-f178.google.com with SMTP id t25so4346419ljd.6
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 15:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xyMWC5Ce+DbHvHrRZbNzybIooKs941ovMuRT8zwal6o=;
+        b=ODldyIJbQoAyYDC5pjX9b20HROQqklkQThQUFGX3eTahhXsBHBH4CJlIDCBgttiogS
+         MmA3Oo84KlyqrtjbK76zj9ibCUeLYihWEyQSxtQhG2lX8Far/bwtzC0hVK668HMlqWfe
+         ia5ZuUTYVcKzSzX1Fa0FUl/4sh4+GA+p4bgK9NIL1dBZh1A2NpMc0sBPArJlyLn+Bi07
+         pNjdkORNwQcm1WoWkJEtRjnibWydx+fLZclqKH+O93fNK+BclfQPzuJmqUALA0f9wzvn
+         7tZI+ql9/KioXlR48gTW8io/0g5EQV67uS6bfAZu2AJa2jTe+8daQMNT+xmEpiX22eeF
+         wv1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xyMWC5Ce+DbHvHrRZbNzybIooKs941ovMuRT8zwal6o=;
+        b=pXtC0J/N7ggGIII3LDix5uEesA2kiRp/V4u83maSv9T1xuMn5M53s3tkpNuhaL5O1e
+         yRJrtbELh7wTrIoZND4jVDnIJy3PLH95amOWgKofk9WF+G47nX0NODlwYdL1ifj4LzUY
+         PYAkIV0JtJAjb7nOJXwQ3F/HlN9s36HBsAhpekeEpJUaXyCerJTpnfl/LWebPAsXN3Aa
+         4A6Ufhs0HM4YwMP0TcyzEuQcyucqHysmg1I/ssMwYdUvcVYWahsRR74tBQ5UDun2NTMm
+         mkdr8ixZ6cw1jGyeDGqibawibt3NDfigK4DzXRgRvegGip5d00QYFWk3WCoI39YiEiqn
+         ne6A==
+X-Gm-Message-State: AOAM532wUQSJBiml2lU2kK3POogEwcIU2E0o8pmRjerOE0MjiJGoJLTa
+	ByZzvii5PxMGAHd4B20SuYy3N37z1a8+GlRwYPeilg==
+X-Google-Smtp-Source: ABdhPJyv+O/HArEJ1Z0AyIFHlWgXlGM/PbFI2as6NgGfHYb60UnmpCiC8VUkn1r037kAgnW3UIkA20t6ZlFJ8Xt5iqs=
+X-Received: by 2002:a05:651c:552:b0:250:5c23:d0f2 with SMTP id
+ q18-20020a05651c055200b002505c23d0f2mr18636863ljp.239.1652308099695; Wed, 11
+ May 2022 15:28:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511152815.892562-1-jfalempe@redhat.com>
+References: <20220511164514.2741934-1-masahiroy@kernel.org> <20220511164514.2741934-2-masahiroy@kernel.org>
+In-Reply-To: <20220511164514.2741934-2-masahiroy@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 11 May 2022 15:28:07 -0700
+Message-ID: <CAKwvOd=SZYO0344rrJWP+JvmuZmQ9N6VM9UgMwrb9fH3MaNLMQ@mail.gmail.com>
+Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org, llvm@lists.linux.dev, 
+	Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jocelyn,
+On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> modpost.c is too big, and the half of the code is for section checks.
+> Split it.
+>
+> Also, move some related typedefs and macros from modpost.h to
+> section-check.c
+>
+> Copy Sam's Copyright there. Commit b39927cf4cc5 ("kbuild: check for
+> section mismatch during modpost stage") is the initial work for the
+> section checks.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test WARNING on tegra-drm/drm/tegra/for-next]
-[also build test WARNING on v5.18-rc6]
-[cannot apply to drm/drm-next drm-tip/drm-tip airlied/drm-next next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Sorry again for my "brain fart" in reviewing the global var in v4. :(
+I think my blood sugar was getting low or something...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220511-233134
-base:   git://anongit.freedesktop.org/tegra/linux.git drm/tegra/for-next
-config: i386-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120649.U2yM0PXz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0831f1db9ae8814796efea603749709e80d2808c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jocelyn-Falempe/mgag200-Enable-atomic-gamma-lut-update/20220511-233134
-        git checkout 0831f1db9ae8814796efea603749709e80d2808c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mgag200/
+> ---
+>
+> Changes in v5:
+>    - Fix the build error  (spotted by Nathan)
+>    - Do not do codying style changes  (Suggested by Nick)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/mgag200/mgag200_mode.c:972:5: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                                   crtc_state->gamma_lut->length);
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:438:46: note: expanded from macro 'drm_err'
-           __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-                                                ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:425:48: note: expanded from macro '__drm_printk'
-           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-                                                  ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +972 drivers/gpu/drm/mgag200/mgag200_mode.c
-
-   937	
-   938	static int
-   939	mgag200_simple_display_pipe_check(struct drm_simple_display_pipe *pipe,
-   940					  struct drm_plane_state *plane_state,
-   941					  struct drm_crtc_state *crtc_state)
-   942	{
-   943		struct drm_plane *plane = plane_state->plane;
-   944		struct drm_device *dev = plane->dev;
-   945		struct mga_device *mdev = to_mga_device(dev);
-   946		struct mgag200_pll *pixpll = &mdev->pixpll;
-   947		struct mgag200_crtc_state *mgag200_crtc_state = to_mgag200_crtc_state(crtc_state);
-   948		struct drm_framebuffer *new_fb = plane_state->fb;
-   949		struct drm_framebuffer *fb = NULL;
-   950		int ret;
-   951	
-   952		if (!new_fb)
-   953			return 0;
-   954	
-   955		if (plane->state)
-   956			fb = plane->state->fb;
-   957	
-   958		if (!fb || (fb->format != new_fb->format))
-   959			crtc_state->mode_changed = true; /* update PLL settings */
-   960	
-   961		if (crtc_state->mode_changed) {
-   962			ret = pixpll->funcs->compute(pixpll, crtc_state->mode.clock,
-   963						     &mgag200_crtc_state->pixpllc);
-   964			if (ret)
-   965				return ret;
-   966		}
-   967	
-   968		if (crtc_state->color_mgmt_changed && crtc_state->gamma_lut) {
-   969			if (crtc_state->gamma_lut->length !=
-   970			    MGAG200_LUT_SIZE * sizeof(struct drm_color_lut)) {
-   971				drm_err(dev, "Wrong size for gamma_lut %ld\n",
- > 972					crtc_state->gamma_lut->length);
-   973				return -EINVAL;
-   974			}
-   975		}
-   976		return 0;
-   977	}
-   978	
-
+I'm surprised the style changes didn't show up in v5 as a later patch
+in the series. I wasn't against them in general, just thought it would
+be easier to review if they were distinct commits.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
