@@ -1,44 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D1E320D
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 19:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C793207
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 19:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652298794; x=1683834794;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ygwFKm2hYAkHxpXKCsLdxfsomBVbN67A7xdvGAqeEH4=;
-  b=CUpXpJa8BUP7mr+YIZUfCLTbAn/BJVlkdADFfRuOEZdAEMom9nSIQEC+
-   Wioc18TglCjWJ39hGHGofIQeqpZY70w6/JJdCUWUrzd3VofFQPckj3MUF
-   zrqsCU/djM2OGaC/IGHO3GbU5FKzItvcU/ba/DdLQFVqKcOUjueqHYPZ3
-   /DfRsvUdIPNIABC9qANWw2g8x//gogAA/RMbqcOMe5KF0F3Sik9SiUTnx
-   9QU4iw9m7/SF4SDOF9RRKwn6ulyUA5/ZEhg32mxEhlsg5MFkTobYyjQ0t
-   0h+ntpAfNWarcngLLWWCK8n5/849/tu9c+5oaj81zVpNigNh8R49cZMRD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="250327179"
+  bh=xK0Eukk7VSWdIHg/43+hYhiSqrcgXg46IKQhLyMLnaw=;
+  b=bg4k0ghjBskuBF+7wrkR2WalwqYbwbyT0DU+Qx1Yw8uGWb+4In2HvlIh
+   jKiIfhKEhTochHxiZHuv65ZzfUZdDGXth+q6+FOimkxYdO4u48EFHO49D
+   AW+c1H9EA8QtHjjACTpj2Va08B+rmUy1ywCEb2rKK/xcstBrxawoX9etZ
+   EHI/ay6q67G+nbuJiYo2YkyavqVZ+A4e7QczDGmLeCfqHjbL0E/tgGn6R
+   9Bi8+Q1VpjizbF0o0PWTaxdGJzMkgdEXRzSI+1jLDcgRC0uhSH5Hy+2S0
+   JSujmiG49EFjPszPXkSvRXBsIX5IOiTJAT9HtbsVp9NTCEdSQF0dKxmfj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249695943"
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="250327179"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:53:14 -0700
+   d="scan'208";a="249695943"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:53:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="566335101"
+   d="scan'208";a="636549100"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 May 2022 12:53:12 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 12:53:12 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nosOV-000JVv-GH;
+	id 1nosOV-000JVs-DK;
 	Wed, 11 May 2022 19:53:11 +0000
-Date: Thu, 12 May 2022 03:52:23 +0800
+Date: Thu, 12 May 2022 03:52:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brian Norris <briannorris@chromium.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Douglas Anderson <dianders@chromium.org>
-Subject: [linux-next:master 9518/11094] ERROR: modpost:
- "rockchip_pmu_unblock" [drivers/devfreq/rk3399_dmc.ko] undefined!
-Message-ID: <202205120335.LzAksOZI-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v3 30/31]
+ drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0
+ for success, non(). Prototype was for ufshcd_set_opp() instead
+Message-ID: <202205120302.UplNopuT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,34 +47,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6107040c99d5dfc920721c198d45ed2d639b113a
-commit: 2e691421a2c9e0462175fe98171afa632861b199 [9518/11094] PM / devfreq: rk3399_dmc: Block PMU during transitions
-config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120335.LzAksOZI-lkp@intel.com/config)
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
+head:   a37fb33a00889e90edd1c74de967b3315980a65d
+commit: 83f52b94e7d208a3d1570fb3e8d6684186ac996f [30/31] ifss
+config: x86_64-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120302.UplNopuT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=2e691421a2c9e0462175fe98171afa632861b199
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 2e691421a2c9e0462175fe98171afa632861b199
+        # https://github.com/krzk/linux/commit/83f52b94e7d208a3d1570fb3e8d6684186ac996f
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
+        git checkout 83f52b94e7d208a3d1570fb3e8d6684186ac996f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/ufs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the linux-next/master HEAD 6107040c99d5dfc920721c198d45ed2d639b113a builds fine.
-      It may have been fixed somewhere.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+   drivers/scsi/ufs/ufshcd.c:1039: warning: cannot understand function prototype: '/* static int ufshcd_set_clk_freq(struct ufs_hba *hba, unsigned long freq) '
+   drivers/scsi/ufs/ufshcd.c:1056: warning: Function parameter or member 'data' not described in 'ufshcd_set_opp'
+>> drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0 for success, non(). Prototype was for ufshcd_set_opp() instead
 
->> ERROR: modpost: "rockchip_pmu_unblock" [drivers/devfreq/rk3399_dmc.ko] undefined!
->> ERROR: modpost: "rockchip_pmu_block" [drivers/devfreq/rk3399_dmc.ko] undefined!
+
+vim +1056 drivers/scsi/ufs/ufshcd.c
+
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1051  
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1052  /**
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1053   * Returns 0 for success, non-zero error value for errors.
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1054   */
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1055  int ufshcd_set_opp(struct dev_pm_set_opp_data *data)
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11 @1056  {
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1057  	struct ufs_hba *hba = dev_get_drvdata(data->dev);
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1058  	unsigned long old_freq = data->old_opp.rate;
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1059  	unsigned long freq = data->new_opp.rate;
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1060  	bool scale_up;
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1061  
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1062  	scale_up = (freq > old_freq);
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1063  
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1064  	pr_err("AAAA ufs %s %s %lu->%lu\n", __func__,
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1065  	       (scale_up ? "up" : "down"),
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1066  	       old_freq, freq);
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1067  
+e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1068  	return ufshcd_set_clk_freq_direct(hba, scale_up);
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1069  }
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1070  EXPORT_SYMBOL_GPL(ufshcd_set_opp);
+868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1071  
+
+:::::: The code at line 1056 was first introduced by commit
+:::::: 868147b0e847f596b8fff395a553c423f32ab7db wip
+
+:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
