@@ -1,108 +1,118 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+	(using TLSv1.2 with cipher AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C793207
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 19:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652298794; x=1683834794;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xK0Eukk7VSWdIHg/43+hYhiSqrcgXg46IKQhLyMLnaw=;
-  b=bg4k0ghjBskuBF+7wrkR2WalwqYbwbyT0DU+Qx1Yw8uGWb+4In2HvlIh
-   jKiIfhKEhTochHxiZHuv65ZzfUZdDGXth+q6+FOimkxYdO4u48EFHO49D
-   AW+c1H9EA8QtHjjACTpj2Va08B+rmUy1ywCEb2rKK/xcstBrxawoX9etZ
-   EHI/ay6q67G+nbuJiYo2YkyavqVZ+A4e7QczDGmLeCfqHjbL0E/tgGn6R
-   9Bi8+Q1VpjizbF0o0PWTaxdGJzMkgdEXRzSI+1jLDcgRC0uhSH5Hy+2S0
-   JSujmiG49EFjPszPXkSvRXBsIX5IOiTJAT9HtbsVp9NTCEdSQF0dKxmfj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249695943"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="249695943"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:53:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="636549100"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 12:53:12 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nosOV-000JVs-DK;
-	Wed, 11 May 2022 19:53:11 +0000
-Date: Thu, 12 May 2022 03:52:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v3 30/31]
- drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0
- for success, non(). Prototype was for ufshcd_set_opp() instead
-Message-ID: <202205120302.UplNopuT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF833207
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 19:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652298828; x=1683834828;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tJUoH32r2DhYogH9Td6X47AQDJfM19sTpFtOpSyDiTg=;
+  b=aiAIPoYpcQZQxpZ3R56Sa1iiBOlsfvp70lNOEoNf6Wf0Efmar9kRL2eY
+   D54mhhcCYDwAyVivY3ZygobYRC1n+b/ArxSwPVrrD9tcDUD9UbnamTcp8
+   eDtwsU1P7+zbkEF+sQ1HWt/Y34SsEA7BfpU0fjpEsrRlbzV9O5eaT2esN
+   0=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 May 2022 12:51:39 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:51:38 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 12:51:38 -0700
+Received: from [10.110.84.131] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 11 May
+ 2022 12:51:37 -0700
+Message-ID: <8babc23b-5e24-f662-6c4a-eb1c30e0e6da@quicinc.com>
+Date: Wed, 11 May 2022 12:51:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into
+ section-check.c
+Content-Language: en-US
+To: Masahiro Yamada <masahiroy@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>
+CC: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, "Linux Kernel
+ Mailing List" <linux-kernel@vger.kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Peter Zijlstra
+	<peterz@infradead.org>, linux-modules <linux-modules@vger.kernel.org>,
+	linux-s390 <linux-s390@vger.kernel.org>, linuxppc-dev
+	<linuxppc-dev@lists.ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, clang-built-linux <llvm@lists.linux.dev>
+References: <20220508190631.2386038-1-masahiroy@kernel.org>
+ <20220508190631.2386038-4-masahiroy@kernel.org>
+ <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
+ <CAK7LNARGNEDzPPUsPjDXsXUUUPSFK2erQRuyPocR_v5hTYRihg@mail.gmail.com>
+ <CAKwvOdmK4oH0t8Q6F19sWKX1fT=AgS=kfvn05FT01HffLJwgMQ@mail.gmail.com>
+ <CAK7LNAR5preB59HJH1-F_ZfEmoF3N8b9z4eRhYzsEVwu_XUH4Q@mail.gmail.com>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <CAK7LNAR5preB59HJH1-F_ZfEmoF3N8b9z4eRhYzsEVwu_XUH4Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
-head:   a37fb33a00889e90edd1c74de967b3315980a65d
-commit: 83f52b94e7d208a3d1570fb3e8d6684186ac996f [30/31] ifss
-config: x86_64-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120302.UplNopuT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/83f52b94e7d208a3d1570fb3e8d6684186ac996f
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
-        git checkout 83f52b94e7d208a3d1570fb3e8d6684186ac996f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/ufs/
+On 5/11/2022 12:27 PM, Masahiro Yamada wrote:
+> On Thu, May 12, 2022 at 3:48 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> On Mon, May 9, 2022 at 11:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>>>
+>>>>> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+>>>>> index a78b75f0eeb0..e7e2c70a98f5 100644
+>>>>> --- a/scripts/mod/modpost.c
+>>>>> +++ b/scripts/mod/modpost.c
+>>>>> @@ -31,7 +31,7 @@ static bool external_module;
+>>>>>   /* Only warn about unresolved symbols */
+>>>>>   static bool warn_unresolved;
+>>>>>
+>>>>> -static int sec_mismatch_count;
+>>>>> +int sec_mismatch_count;
+>>>>
+>>>> ^ this should go in modpost.h if it is to be used in two translation
+>>>> units, rather than forward declaring it in section-check.c.  You did
+>>>> this for the functions.
+>>>
+>>>
+>>> Sorry, I do not understand.
+>>>
+>>>
+>>> In modpost.h, I put the declaration:
+>>>
+>>>    extern int sec_mismatch_count;
+>>>
+>>> If I moved it to the header without 'extern'
+>>> I would get multiple definitions.
+>>
+>> Yeah, you need to _declare_ it w/ extern in the header, then _define_
+>> it in one source file.
+>>
+>> That way, if the type ever changes, the sources will agree on type in
+>> all source files. You will get a redefinition error if the definition
+>> changes the type of the variable since the last declaration.
+>>
+>> What you're doing is forward declaring, which works, and is a common
+>> pattern for (bloated) C++, but is less type safe than sharing a single
+>> common declaration between multiple source files via a single common
+>> shared header. (Sorry I didn't respond before you sent v5)
+> 
+> Sorry, I still do not understand your suggestion.
+> 
+> 
+> Could you provide me with a code diff
+> showing how to do this better?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think you are doing exactly what he's asking for:
+declare it with extern in the header (modpost.h change)
+define it in one source file (modpost.c change)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/scsi/ufs/ufshcd.c:1039: warning: cannot understand function prototype: '/* static int ufshcd_set_clk_freq(struct ufs_hba *hba, unsigned long freq) '
-   drivers/scsi/ufs/ufshcd.c:1056: warning: Function parameter or member 'data' not described in 'ufshcd_set_opp'
->> drivers/scsi/ufs/ufshcd.c:1056: warning: expecting prototype for Returns 0 for success, non(). Prototype was for ufshcd_set_opp() instead
-
-
-vim +1056 drivers/scsi/ufs/ufshcd.c
-
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1051  
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1052  /**
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1053   * Returns 0 for success, non-zero error value for errors.
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1054   */
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1055  int ufshcd_set_opp(struct dev_pm_set_opp_data *data)
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11 @1056  {
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1057  	struct ufs_hba *hba = dev_get_drvdata(data->dev);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1058  	unsigned long old_freq = data->old_opp.rate;
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1059  	unsigned long freq = data->new_opp.rate;
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1060  	bool scale_up;
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1061  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1062  	scale_up = (freq > old_freq);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1063  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1064  	pr_err("AAAA ufs %s %s %lu->%lu\n", __func__,
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1065  	       (scale_up ? "up" : "down"),
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1066  	       old_freq, freq);
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1067  
-e9b0ff4416ed23 Krzysztof Kozlowski 2022-05-11  1068  	return ufshcd_set_clk_freq_direct(hba, scale_up);
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1069  }
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1070  EXPORT_SYMBOL_GPL(ufshcd_set_opp);
-868147b0e847f5 Krzysztof Kozlowski 2022-05-11  1071  
-
-:::::: The code at line 1056 was first introduced by commit
-:::::: 868147b0e847f596b8fff395a553c423f32ab7db wip
-
-:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
