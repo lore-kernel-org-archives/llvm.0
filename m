@@ -1,96 +1,140 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB4D3FE0
-	for <llvm@lists.linux.dev>; Wed, 11 May 2022 23:30:57 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id i38so6732748ybj.13
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 16:30:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=82LtQvcmXEI9bSU6aE32LRoQ75jfHNnbnp/OWfCob4A=;
-        b=JmmK2sf0lFyUuVKQJ8Ih3HoRHztv9krN48SclJaHLi1NxYEknUFWTnYLrApY6jdZ5b
-         O8CUWxRDyYh51H70kkZqzYMkxg2UbTFvLoD4RF3kxIFfVp/GQPJeDH2ihZvqcny8Vyd9
-         wWGOL6Jy/5ve5bdR4HIdwwtnFJAj6ud5UDMkyaQ59QjWtmkJazia2ylituN1rQs30PUG
-         l7oqzzGZL21eCGjKI7S6GFgwlKOuIKrGRsahermH+WjwMbDbvNw9g7bb0XryhtDId03s
-         EuP609s2dRrqTJ1hxLqOCtvyT6L64avu4j/HEdsF0d+IwOsuV42W9579L5ZB9PchrK7d
-         wQVA==
-X-Gm-Message-State: AOAM532Nrfcn1nYMbixkKat0Avn3LuUk9oeA8jdF7+woCv26iCEiMF8j
-	F28DcpHsCaraNa4LHSzV3xxW9oOldEXCb78fCx0=
-X-Google-Smtp-Source: ABdhPJy6L7LndQLIhm/RpB8v7sd4uAh7ABfVk1w7xt0uCtyO2bIyQJnNwA8Gu9veZKKBbC2qShJmh6PD9uKoehe0cTU=
-X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
- n17-20020a5b0491000000b0064af42f6973mr12909923ybp.20.1652311856106; Wed, 11
- May 2022 16:30:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC77C3FE0
+	for <llvm@lists.linux.dev>; Wed, 11 May 2022 23:37:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652312254; x=1683848254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1zPZoSy4GOhUCMK98kqlAl8S1W2p1KV3hnFjaM+5ZeY=;
+  b=CsQdVowwgqcTrFUn3A0kVL6LmyH3YJc8WoXhk3nZq5umeNFm/oZ1XidK
+   0nF51sKMsWlU/Eq8zBN09F5kHIIspuoFp2/BQdfqme+uqU+y2MHI98Dsy
+   ugbkKWX6jEPFu3ttgruWbQGU406NTcTKKQdn6eULDbUBsDRHKmqiFzlBt
+   1x6iWaUHgJVd0FZXAvWbUDiyBGObrZQY0nM4jRwIAEcYOhKRjeFF/1FoU
+   NmL8wVdxv0hYCbaTpDCRpmIfwaVWXnn4HM5lUwm2tEKqhYOzqEa7luqp/
+   bB+fpEb8TCp9tEtFnFeHMe/ybSto6X7035PlHlb/edLt+TXGDCjAQ33CA
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249735961"
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="249735961"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 16:37:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
+   d="scan'208";a="697788811"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 11 May 2022 16:37:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1novtb-000JgS-Im;
+	Wed, 11 May 2022 23:37:31 +0000
+Date: Thu, 12 May 2022 07:37:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Phil Sutter <phil@nwl.cc>, Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	netfilter-devel@vger.kernel.org
+Subject: Re: [nf-next PATCH 2/2] netfilter: nf_tables: Annotate reduced
+ expressions
+Message-ID: <202205120725.1P767GEv-lkp@intel.com>
+References: <20220511165453.22425-3-phil@nwl.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220511160319.1045812-2-mailhol.vincent@wanadoo.fr> <324f245e-15e2-a1f2-bc8a-46255a1a859f@wanadoo.fr>
-In-Reply-To: <324f245e-15e2-a1f2-bc8a-46255a1a859f@wanadoo.fr>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Thu, 12 May 2022 08:30:45 +0900
-Message-ID: <CAMZ6Rq+d_eKXQQZ1p-yUpqC-SOjpa83o_QpZci-GN9qd9UKa5g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
- constant expressions
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511165453.22425-3-phil@nwl.cc>
 
-On Thu. 12 May 2022 at 05:56, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> Le 11/05/2022 =C3=A0 18:03, Vincent Mailhol a =C3=A9crit :
-> > For x86_64, the current ffs() implementation does not produce
-> > optimized code when called with a constant expression. On the
-> > contrary, the __builtin_ffs() function of both GCC and clang is able
-> > to simplify the expression into a single instruction.
-> >
->
-> [...]
->
-> >
-> > ** Statistics **
-> >
-> > On a allyesconfig, before applying this patch...:
-> >
-> > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > | 3607
-> >
-> > ...and after:
-> >
-> > | $ objdump -d vmlinux.o | grep bsf | wc -l
-> > | 792
-> >
-> > So, roughly 26.7% of the call to ffs() were using constant expression
-> > and were optimized out.
-> >
-> >
-> nitpicking: numbers look odd.
+Hi Phil,
 
-And they are. Thanks for spotting the issue.
+Thank you for the patch! Yet something to improve:
 
->     3607 is the exact same number as in patch 2/2. (ok, could be)
->     26.7% is surprising with these numbers. (I guess it is (total_before
-> - remaining) / total_before x 100 =3D (3607-792)/36.07 =3D 78.0%)
+[auto build test ERROR on nf-next/master]
 
-The 3607 is incorrect (copy/paste issue, sorry). The correct figure is
-1081. And:
+url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Sutter/nf_tables-Export-rule-optimizer-results-to-user-space/20220512-005642
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf-next.git master
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220512/202205120725.1P767GEv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/831b99f09285d0cc3a4fb0fcb6fd7c74aaea988a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Phil-Sutter/nf_tables-Export-rule-optimizer-results-to-user-space/20220512-005642
+        git checkout 831b99f09285d0cc3a4fb0fcb6fd7c74aaea988a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
 
-(1081-792)/1081 =3D 26.7%
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Will amend the comment and send v3 right away.
+All errors (new ones prefixed by >>):
 
-> (but patch looks great to me :)
+>> net/netfilter/nft_bitwise.c:306:14: error: assigning to 'struct nft_expr *' from 'const struct nft_expr *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   track->cur = expr;
+                              ^ ~~~~
+   net/netfilter/nft_bitwise.c:454:14: error: assigning to 'struct nft_expr *' from 'const struct nft_expr *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                   track->cur = expr;
+                              ^ ~~~~
+   2 errors generated.
 
-Thanks! :)
 
-> CJ
+vim +306 net/netfilter/nft_bitwise.c
+
+bd8699e9e29287 Pablo Neira Ayuso 2019-07-30  281  
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  282  static bool nft_bitwise_reduce(struct nft_regs_track *track,
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  283  			       const struct nft_expr *expr)
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  284  {
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  285  	const struct nft_bitwise *priv = nft_expr_priv(expr);
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  286  	const struct nft_bitwise *bitwise;
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  287  	unsigned int regcount;
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  288  	u8 dreg;
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  289  	int i;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  290  
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  291  	if (!track->regs[priv->sreg].selector)
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  292  		return false;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  293  
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  294  	bitwise = nft_expr_priv(expr);
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  295  	if (track->regs[priv->sreg].selector == track->regs[priv->dreg].selector &&
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  296  	    track->regs[priv->sreg].num_reg == 0 &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  297  	    track->regs[priv->dreg].bitwise &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  298  	    track->regs[priv->dreg].bitwise->ops == expr->ops &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  299  	    priv->sreg == bitwise->sreg &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  300  	    priv->dreg == bitwise->dreg &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  301  	    priv->op == bitwise->op &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  302  	    priv->len == bitwise->len &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  303  	    !memcmp(&priv->mask, &bitwise->mask, sizeof(priv->mask)) &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  304  	    !memcmp(&priv->xor, &bitwise->xor, sizeof(priv->xor)) &&
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  305  	    !memcmp(&priv->data, &bitwise->data, sizeof(priv->data))) {
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09 @306  		track->cur = expr;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  307  		return true;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  308  	}
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  309  
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  310  	if (track->regs[priv->sreg].bitwise ||
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  311  	    track->regs[priv->sreg].num_reg != 0) {
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  312  		nft_reg_track_cancel(track, priv->dreg, priv->len);
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  313  		return false;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  314  	}
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  315  
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  316  	if (priv->sreg != priv->dreg) {
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  317  		nft_reg_track_update(track, track->regs[priv->sreg].selector,
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  318  				     priv->dreg, priv->len);
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  319  	}
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  320  
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  321  	dreg = priv->dreg;
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  322  	regcount = DIV_ROUND_UP(priv->len, NFT_REG32_SIZE);
+34cc9e52884a16 Pablo Neira Ayuso 2022-03-14  323  	for (i = 0; i < regcount; i++, dreg++)
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  324  		track->regs[priv->dreg].bitwise = expr;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  325  
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  326  	return false;
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  327  }
+be5650f8f47e8c Pablo Neira Ayuso 2022-01-09  328  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
