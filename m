@@ -1,47 +1,57 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E2F190
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D7C190
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 01:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652319001; x=1683855001;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yBicI1ozOS+8JBXjAVPpem5ndTeksvMr59sNnu5jwNs=;
-  b=NUZ6hrtt0qpkhng0jsFbJVCYrq95O5IN/pBVNCNWitVSpyCSCzNJ5wTr
-   dacU10N90E+F6fe7AYrIOu2dQqRZTMguNDcfXwL1pQwKVRDl6Y316RmsH
-   mteKXkBOQdb25hE0MJl3CtRYwigistWFQ0HhajtpL3BqV3i7qnyyK3i6F
-   JJJii723JsYRO3Hwc6XSf8ux9Pr1DfioZE9iUxEMWIsWaBj3G8+C8Q0Ir
-   fRAbMNbPNyejJsRvlhJXXE0Umje1lte9xoMdqGhSlqpun4axEooLwSekZ
-   lOSJTnIkgwXPLpIdOlChg/HEryIz1XW0CiuvPT1Zp7dsxMXytkIhPRJp6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249752651"
+  t=1652319004; x=1683855004;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FmzxLobn0K8eUJokt43bdYb1Kp6hZ00M7lRWrjyhUwY=;
+  b=FXGBwSNGjkJpdbfBtZUQGFs1wWftmJpPMc/4jKgLdSy9otjLnMyTyHAA
+   Puqo5jYttBkLidBZwXcli7p92LzkoBE9hUInGkcx7WpVE1KHvB+wEHzV9
+   xkM//3yYDOSzkklRnJ1Ag2mzm9sWpUqEGhzBgvbCqCbYbpoBJNNtTH//h
+   xRbH1i7hG/0RqhAHcXI4AxslmqYt6tJDTGZKWvzQ0WcJMD9Ywx9Xsm4JT
+   xYmxo1A2TpHuTyn10DTMVqhVfNSO6ENudze5le5y/H0P69PKEOHHj3CIv
+   HlQ5/bNrPc7lPv+KwOsZlz6XqAR3C+7mXbdESD/T9O1TmIshI6SHDkM7c
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269529469"
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="249752651"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:30:01 -0700
+   d="scan'208";a="269529469"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 18:30:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="658397468"
+   d="scan'208";a="542554715"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2022 18:29:58 -0700
+  by orsmga006.jf.intel.com with ESMTP; 11 May 2022 18:29:58 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1noxeQ-000Jmn-3Z;
+	id 1noxeQ-000Jmk-2Z;
 	Thu, 12 May 2022 01:29:58 +0000
-Date: Thu, 12 May 2022 09:29:27 +0800
+Date: Thu, 12 May 2022 09:29:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Doug Anderson <dianders@chromium.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Vinod Koul <vkoul@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-	Tony Luck <tony.luck@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [pdx86-platform-drivers-x86:review-hans 46/59]
- kernel/stop_machine.c:638:35: error: call to undeclared function
- 'cpu_smt_mask'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205120904.Gr9HEY5E-lkp@intel.com>
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+	Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: Re: [v4 2/3] phy: qcom-snps: Add support for overriding phy tuning
+ parameters
+Message-ID: <202205120931.JrA2orb3-lkp@intel.com>
+References: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,63 +60,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1652282793-5580-3-git-send-email-quic_kriskura@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-head:   57709a27d9744f5af4bbeec3ba3105c6aa1075eb
-commit: 104355bf96bb985c40f8f8da43f70b935d59fb61 [46/59] stop_machine: Add stop_core_cpuslocked() for per-core operations
-config: hexagon-randconfig-r045-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120904.Gr9HEY5E-lkp@intel.com/config)
+Hi Krishna,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on krzk/for-next linus/master v5.18-rc6 next-20220511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: riscv-randconfig-r033-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120931.JrA2orb3-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=104355bf96bb985c40f8f8da43f70b935d59fb61
-        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
-        git checkout 104355bf96bb985c40f8f8da43f70b935d59fb61
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/48c46f24873c92d3e16904af9e654962d0b923f1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220511-232858
+        git checkout 48c46f24873c92d3e16904af9e654962d0b923f1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/stop_machine.c:638:35: error: call to undeclared function 'cpu_smt_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           const struct cpumask *smt_mask = cpu_smt_mask(cpu);
-                                            ^
-   kernel/stop_machine.c:638:35: note: did you mean 'cpu_cpu_mask'?
-   include/linux/topology.h:250:37: note: 'cpu_cpu_mask' declared here
-   static inline const struct cpumask *cpu_cpu_mask(int cpu)
-                                       ^
->> kernel/stop_machine.c:638:24: warning: incompatible integer to pointer conversion initializing 'const struct cpumask *' with an expression of type 'int' [-Wint-conversion]
-           const struct cpumask *smt_mask = cpu_smt_mask(cpu);
-                                 ^          ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:541:29: error: initializing 'struct override_param_map *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct override_param_map *cfg = of_device_get_match_data(dev);
+                                      ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/cpu_smt_mask +638 kernel/stop_machine.c
+vim +541 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
 
-   635	
-   636	int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
-   637	{
- > 638		const struct cpumask *smt_mask = cpu_smt_mask(cpu);
-   639	
-   640		struct multi_stop_data msdata = {
-   641			.fn = fn,
-   642			.data = data,
-   643			.num_threads = cpumask_weight(smt_mask),
-   644			.active_cpus = smt_mask,
-   645		};
-   646	
-   647		lockdep_assert_cpus_held();
-   648	
-   649		/* Set the initial state and stop all online cpus. */
-   650		set_state(&msdata, MULTI_STOP_PREPARE);
-   651		return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
-   652	}
-   653	EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
-   654	
+   534	
+   535	static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
+   536	{
+   537		struct device_node *node = dev->of_node;
+   538		s32 val;
+   539		int ret, i;
+   540		struct qcom_snps_hsphy *hsphy;
+ > 541		struct override_param_map *cfg = of_device_get_match_data(dev);
+   542	
+   543		hsphy = dev_get_drvdata(dev);
+   544	
+   545		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
+   546			ret = of_property_read_s32(node, phy_seq_props[i], &val);
+   547			if (!ret) {
+   548				dev_dbg(&hsphy->phy->dev, "Read param: %s val: %d\n",
+   549							phy_seq_props[i], val);
+   550				qcom_snps_hsphy_override_param_update_val(cfg[i], val,
+   551							&hsphy->update_seq_cfg[i]);
+   552			}
+   553		}
+   554	}
+   555	
 
 -- 
 0-DAY CI Kernel Test Service
