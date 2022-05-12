@@ -1,129 +1,109 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2517C1
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 20:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652388652; x=1683924652;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ir3jumVTPsEtVAlCCzru3GvFR8Ccn6TVtNrXTCoC+2M=;
-  b=J/4M+Gvm+V04f8tD9UeVkI9p0/KdrNvlrTFn+fdOUwXxbd9bs2d32sTT
-   6xR9yWZcEaqYPZicrWvoKPKI7JcZb8h5phDV+AdN+3V/fILWHFnA/E1yO
-   q5NRPNmPKQA1qTii3nYOFgfIueSDyknVi3h23+4Ipcbx3DTSCSlgerHUQ
-   Rbmbtm/sMRasP5fKE1VLyiRe2Ef5aX8hNYOUET54lQIvhLW6MN8SM3t1O
-   8uz1R1bluLRKlJzJDk74DmS2RmDir71mPPKhwqV0Bjr8O8K7Sfnrw9phV
-   0ewK2+yej1a9EFAqhoOTZKlXi1VI6rbK8QgP0ROB4w14NsCPEs8YJZ7km
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="356563475"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="356563475"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 13:50:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="603546303"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 13:50:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1npFlp-000Kue-Kb;
-	Thu, 12 May 2022 20:50:49 +0000
-Date: Fri, 13 May 2022 04:50:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steve Wahl <steve.wahl@hpe.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: include/linux/intel-iommu.h:531:28: error: use of undeclared
- identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-Message-ID: <202205130438.4S9ZxIkJ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2752F2C
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 20:56:10 +0000 (UTC)
+Received: by mail-pf1-f178.google.com with SMTP id a11so5904719pff.1
+        for <llvm@lists.linux.dev>; Thu, 12 May 2022 13:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P/Ac7JONYQRbqYr75B8cPwknKxer6j9wwthXWi5R/P0=;
+        b=a9vzilDVBWK31znRhkyZYpN3fhm2ncMeaUJqBg+1Cpjx8PT05UuCERtREHvRj5BHZY
+         Qb+gUvYtymqMI+8FsdrWl5qJaHIb9D8nY6hw+JhhW9OK3h0faS05sGiyNkahpMmBRmGA
+         8QDus7tX6d4JAuz8co/q2DLC6yAObwIO7HHwzsZw1JQhclpVIotCG0HYwgwn5pTJY6gt
+         ZAq0zNpe0o7wb0GOe0d4/l2FuMHzZ/5sO7chV6AxbUX9YPJqMDeVParVYbCyIBQq52aJ
+         oWzRcnakW25XwwMmpRl2YtoK0PdhjncL4T87XixUuikhuN8FGDxwpoMFAPRsV4gFyCdE
+         HK1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P/Ac7JONYQRbqYr75B8cPwknKxer6j9wwthXWi5R/P0=;
+        b=ZcfxReKiJmTmt1OsPtaeoATuXTNcQAxhfp6hTtaMCWutwyh9h5N7w51O8MJA/unwqt
+         hyFN0p5tRIGUvSA+npnNZJbWOwaTqW+qtBkxfPC21W1KYRRXohCWDi2yWvM59FeNj6DH
+         GDcPP1+9uSVcgKKoMMOCah0RVetkTcV2RfBcELLYA+2SAv883woO/+3VWcIfGG0ONwdQ
+         TQKKsDUkUkVxlP85U7INIZS53lFR4dZcXiK+0DXmNnGTzed6j64idCj5R/SsXAoW31Uw
+         PuL8pPCKV6IHarH4fnNqUySaBc8irn0y265Jj6MOHc6uusGUh12DXW9GqKqI0fdFOSVK
+         UxBw==
+X-Gm-Message-State: AOAM5304lI+YXRVQKPE8WI/VmEaec3UCKtvpybdil4S/c9QGKbHwMBKl
+	7QMZ3Nd96r7FpLrY21+UinA=
+X-Google-Smtp-Source: ABdhPJwGz4p76paZX1fTS49cyppG95kskcfcQitNZXrNm+Ea3iZqgsWKNzmM6+/+tz57/l3BGKh8gQ==
+X-Received: by 2002:a63:d90c:0:b0:3c6:4ab4:fbfe with SMTP id r12-20020a63d90c000000b003c64ab4fbfemr1129133pgg.499.1652388970134;
+        Thu, 12 May 2022 13:56:10 -0700 (PDT)
+Received: from localhost.localdomain ([2604:a880:1:20::1f:7001])
+        by smtp.gmail.com with ESMTPSA id t189-20020a635fc6000000b003c14af5060dsm139955pgb.37.2022.05.12.13.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 13:56:09 -0700 (PDT)
+From: Wende Tan <twd2.me@gmail.com>
+To: palmer@dabbelt.com,
+	paul.walmsley@sifive.com,
+	aou@eecs.berkeley.edu,
+	linux-riscv@lists.infradead.org
+Cc: Wende Tan <twd2.me@gmail.com>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] RISC-V: build: Allow LTO to be selected
+Date: Thu, 12 May 2022 20:55:45 +0000
+Message-Id: <20220512205545.992288-1-twd2.me@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-head:   70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-commit: 70fc6f8ca45b69a710b82d38ef61ac43a73fef24 iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-date:   5 hours ago
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220513/202205130438.4S9ZxIkJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
-        git checkout 70fc6f8ca45b69a710b82d38ef61ac43a73fef24
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/char/agp/
+Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
+issue [1] in prior LLD versions that prevents LLD to generate proper
+machine code for RISC-V when writing `nop`s.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
+on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
+can boot to shell using an archriscv rootfs on QEMU.
 
-All errors (new ones prefixed by >>):
+I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
+image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
+`BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
+separate patch further.
 
-   In file included from drivers/char/agp/intel-gtt.c:23:
->> include/linux/intel-iommu.h:531:28: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-           unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
-                                     ^
-   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
-   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
-                                   ^
-   In file included from drivers/char/agp/intel-gtt.c:23:
-   include/linux/intel-iommu.h:535:17: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
-           u16             iommu_did[DMAR_UNITS_SUPPORTED];
-                                     ^
-   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
-   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
-                                   ^
-   2 errors generated.
+[1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
+    commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
 
+Tested-by: Wende Tan <twd2.me@gmail.com>
+Signed-off-by: Wende Tan <twd2.me@gmail.com>
+---
+v2:
+- Some textual changes suggested by Nick.
+- Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is filed
+  and resolved.
+- Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
 
-vim +/CONFIG_DMAR_UNITS_SUPPORTED +531 include/linux/intel-iommu.h
+v1: https://lore.kernel.org/linux-riscv/20210719205208.1023221-1-twd2.me@gmail.com/
+---
+ arch/riscv/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-b0d1f8741b8123 Jacob Pan       2020-05-16  527  
-9ddbfb42138d84 Lu Baolu        2018-07-14  528  struct dmar_domain {
-9ddbfb42138d84 Lu Baolu        2018-07-14  529  	int	nid;			/* node id */
-9ddbfb42138d84 Lu Baolu        2018-07-14  530  
-9739ba327c01e2 Parav Pandit    2021-06-10 @531  	unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
-9ddbfb42138d84 Lu Baolu        2018-07-14  532  					/* Refcount of devices per iommu */
-9ddbfb42138d84 Lu Baolu        2018-07-14  533  
-9ddbfb42138d84 Lu Baolu        2018-07-14  534  
-9ddbfb42138d84 Lu Baolu        2018-07-14  535  	u16		iommu_did[DMAR_UNITS_SUPPORTED];
-9ddbfb42138d84 Lu Baolu        2018-07-14  536  					/* Domain ids per IOMMU. Use u16 since
-9ddbfb42138d84 Lu Baolu        2018-07-14  537  					 * domain ids are 16 bit wide according
-9ddbfb42138d84 Lu Baolu        2018-07-14  538  					 * to VT-d spec, section 9.3 */
-9ddbfb42138d84 Lu Baolu        2018-07-14  539  
-1f106ff0ea2782 Parav Pandit    2021-06-10  540  	u8 has_iotlb_device: 1;
-1f106ff0ea2782 Parav Pandit    2021-06-10  541  	u8 iommu_coherency: 1;		/* indicate coherency of iommu access */
-6043257b1de069 Jason Gunthorpe 2022-04-11  542  	u8 force_snooping : 1;		/* Create IOPTEs with snoop control */
-1f106ff0ea2782 Parav Pandit    2021-06-10  543  
-9ddbfb42138d84 Lu Baolu        2018-07-14  544  	struct list_head devices;	/* all devices' list */
-9ddbfb42138d84 Lu Baolu        2018-07-14  545  	struct iova_domain iovad;	/* iova's that belong to this domain */
-9ddbfb42138d84 Lu Baolu        2018-07-14  546  
-9ddbfb42138d84 Lu Baolu        2018-07-14  547  	struct dma_pte	*pgd;		/* virtual address */
-9ddbfb42138d84 Lu Baolu        2018-07-14  548  	int		gaw;		/* max guest address width */
-9ddbfb42138d84 Lu Baolu        2018-07-14  549  
-9ddbfb42138d84 Lu Baolu        2018-07-14  550  	/* adjusted guest address width, 0 is level 2 30-bit */
-9ddbfb42138d84 Lu Baolu        2018-07-14  551  	int		agaw;
-9ddbfb42138d84 Lu Baolu        2018-07-14  552  
-9ddbfb42138d84 Lu Baolu        2018-07-14  553  	int		flags;		/* flags to find out type of domain */
-9ddbfb42138d84 Lu Baolu        2018-07-14  554  	int		iommu_superpage;/* Level of superpages supported:
-9ddbfb42138d84 Lu Baolu        2018-07-14  555  					   0 == 4KiB (no superpages), 1 == 2MiB,
-9ddbfb42138d84 Lu Baolu        2018-07-14  556  					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
-9ddbfb42138d84 Lu Baolu        2018-07-14  557  	u64		max_addr;	/* maximum mapped address */
-9ddbfb42138d84 Lu Baolu        2018-07-14  558  
-9ddbfb42138d84 Lu Baolu        2018-07-14  559  	struct iommu_domain domain;	/* generic domain data structure for
-9ddbfb42138d84 Lu Baolu        2018-07-14  560  					   iommu core */
-9ddbfb42138d84 Lu Baolu        2018-07-14  561  };
-9ddbfb42138d84 Lu Baolu        2018-07-14  562  
-
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 00fd9c548f26..c55f6b95e5af 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -38,6 +38,10 @@ config RISCV
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+ 	select ARCH_SUPPORTS_HUGETLBFS if MMU
++	# LLD >= 14:
++	# - https://github.com/llvm/llvm-project/issues/50505
++	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
++	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+ 	select ARCH_USE_MEMTEST
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+ 	select ARCH_WANT_FRAME_POINTERS
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
