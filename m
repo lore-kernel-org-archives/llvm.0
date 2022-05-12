@@ -1,43 +1,48 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0944B17FB
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 08:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A88720E1
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 09:22:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652345409; x=1683881409;
+  t=1652347332; x=1683883332;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BP5YD06y/O3Sw9t3ytaTO/BdhrPRV/VfhyJt+TilrsM=;
-  b=Srw9LerPCatelqFatshSHKdQ7jw7pl49OUqAi8oRUVQyTkNPs9C6x00s
-   lCiUhA8rjBje/8YGE6IELdDingtDVOCSw6fa0rOTAxqvosRU8CzVGd6Pu
-   jVcCxafs4m13UYqOfW0GqCgVl95g0nms/FZGDEojUxr/UlcFZQXsXiOmh
-   3R9eCvdP9m6AxQJ6pNxvBqlDmE9GJbfDX67tfpHqk4+3KsQryMOHOUwUC
-   RKLuHi3P9s1gUjQ0ba8iHVuzBU+YaaQ80rnf+oG7f6acHSo2N4mxxHFPZ
-   0D97arH7F1rwBT+g1BfDp9NIB2itQWPLTsCFNPmAvqy6WUTmHuSfVUYqp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269878672"
+  bh=y4aqSKG+Qdhrrlw+VzjpUHVoxZf0QQKL3LP5SMTVV2c=;
+  b=NUQgOhEvD366kC+kxDh3auIQg1u0UbHpqXsY2TT2JEOlPKJ2/Y5DwLVb
+   +91csG9kNEYyJpcOmNCFiU7ZSVVvgU2wnNT2NmKgVRf4cuVkirb6f7s04
+   usjOltXHCKx3RBpmPeCRwKLHYHMUYGnL7WUliP+ax6IzY+wwCa2gDeQvT
+   5hnkJ5i1CmwM7ZgPOqkITvcQ3PbrGghMvhQtiTCitYjAvNzjecRT6G1j6
+   kjYK5mPWaAvmr83jwsd/SsUfr9PnDnpXktDvMUIH6FxAY5ViLuV9LT1dp
+   BO1052T9ILJj+YvCZFLGwH0zAWIw/ykZknfchUD5MGZQE0LHg4q7m23wW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269887000"
 X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="269878672"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 01:50:08 -0700
+   d="scan'208";a="269887000"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:22:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="739598351"
+   d="scan'208";a="603301156"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 May 2022 01:50:06 -0700
+  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 02:22:09 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1np4WM-000KDc-6n;
-	Thu, 12 May 2022 08:50:06 +0000
-Date: Thu, 12 May 2022 16:50:04 +0800
+	id 1np51M-000KFI-Gu;
+	Thu, 12 May 2022 09:22:08 +0000
+Date: Thu, 12 May 2022 17:21:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
+To: Dan Williams <dan.j.williams@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
 	linux-kernel@vger.kernel.org
-Subject: [mszyprow:v5.18-next-20220511-dsi-rework 30/35]
- drivers/gpu/drm/drm_mipi_dsi.c:1233: warning: expecting prototype for
- mipi_dsi_init(). Prototype was for mipi_dsi_host_init() instead
-Message-ID: <202205121652.A7CaHuUB-lkp@intel.com>
+Subject: [cxl:preview 40/67] drivers/cxl/core/pci.c:137:14: error: call to
+ undeclared function 'readq'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202205121731.lbcgjrP6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,52 +52,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/mszyprow/linux.git v5.18-next-20220511-dsi-rework
-head:   d29c9c083847e486080eaa98808c232b9937f85f
-commit: b34dc79ad31fa0497197519a9060be3ef2e72484 [30/35] drm/mipi-dsi: add support for host initialize callbacks
-config: x86_64-randconfig-a001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121652.A7CaHuUB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   9c642abd8b31d895f34186bd72b7360083b58492
+commit: e7ed4a0688738b1f47a6b500444942d4dfa1035d [40/67] cxl/pci: Move cxl_await_media_ready() to the core
+config: i386-randconfig-c001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121731.lbcgjrP6-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/mszyprow/linux/commit/b34dc79ad31fa0497197519a9060be3ef2e72484
-        git remote add mszyprow https://github.com/mszyprow/linux.git
-        git fetch --no-tags mszyprow v5.18-next-20220511-dsi-rework
-        git checkout b34dc79ad31fa0497197519a9060be3ef2e72484
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=e7ed4a0688738b1f47a6b500444942d4dfa1035d
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout e7ed4a0688738b1f47a6b500444942d4dfa1035d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_mipi_dsi.c:1233: warning: expecting prototype for mipi_dsi_init(). Prototype was for mipi_dsi_host_init() instead
+>> drivers/cxl/core/pci.c:137:14: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
+                       ^
+   1 error generated.
 
 
-vim +1233 drivers/gpu/drm/drm_mipi_dsi.c
+vim +/readq +137 drivers/cxl/core/pci.c
 
-  1225	
-  1226	/**
-  1227	 * mipi_dsi_init() - initialize MIPI DSI host
-  1228	 * @dsi: DSI peripheral device
-  1229	 *
-  1230	 * Return: 0 on success or a negative error code on failure.
-  1231	 */
-  1232	int mipi_dsi_host_init(struct mipi_dsi_device *dsi)
-> 1233	{
-  1234		const struct mipi_dsi_host_ops *ops = dsi->host->ops;
-  1235	
-  1236		if (!ops)
-  1237			return -ENOSYS;
-  1238		if (!ops->init)
-  1239			return 0;
-  1240	
-  1241		return ops->init(dsi->host);
-  1242	}
-  1243	EXPORT_SYMBOL(mipi_dsi_host_init);
-  1244	
+   103	
+   104	/*
+   105	 * Wait up to @media_ready_timeout for the device to report memory
+   106	 * active.
+   107	 */
+   108	int cxl_await_media_ready(struct cxl_dev_state *cxlds)
+   109	{
+   110		struct pci_dev *pdev = to_pci_dev(cxlds->dev);
+   111		int d = cxlds->cxl_dvsec;
+   112		bool active = false;
+   113		u64 md_status;
+   114		int rc, i;
+   115	
+   116		for (i = media_ready_timeout; i; i--) {
+   117			u32 temp;
+   118	
+   119			rc = pci_read_config_dword(
+   120				pdev, d + CXL_DVSEC_RANGE_SIZE_LOW(0), &temp);
+   121			if (rc)
+   122				return rc;
+   123	
+   124			active = FIELD_GET(CXL_DVSEC_MEM_ACTIVE, temp);
+   125			if (active)
+   126				break;
+   127			msleep(1000);
+   128		}
+   129	
+   130		if (!active) {
+   131			dev_err(&pdev->dev,
+   132				"timeout awaiting memory active after %d seconds\n",
+   133				media_ready_timeout);
+   134			return -ETIMEDOUT;
+   135		}
+   136	
+ > 137		md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
 
 -- 
 0-DAY CI Kernel Test Service
