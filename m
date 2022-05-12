@@ -1,122 +1,100 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A88720E1
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 09:22:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652347332; x=1683883332;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y4aqSKG+Qdhrrlw+VzjpUHVoxZf0QQKL3LP5SMTVV2c=;
-  b=NUQgOhEvD366kC+kxDh3auIQg1u0UbHpqXsY2TT2JEOlPKJ2/Y5DwLVb
-   +91csG9kNEYyJpcOmNCFiU7ZSVVvgU2wnNT2NmKgVRf4cuVkirb6f7s04
-   usjOltXHCKx3RBpmPeCRwKLHYHMUYGnL7WUliP+ax6IzY+wwCa2gDeQvT
-   5hnkJ5i1CmwM7ZgPOqkITvcQ3PbrGghMvhQtiTCitYjAvNzjecRT6G1j6
-   kjYK5mPWaAvmr83jwsd/SsUfr9PnDnpXktDvMUIH6FxAY5ViLuV9LT1dp
-   BO1052T9ILJj+YvCZFLGwH0zAWIw/ykZknfchUD5MGZQE0LHg4q7m23wW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="269887000"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="269887000"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 02:22:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="603301156"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 02:22:09 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1np51M-000KFI-Gu;
-	Thu, 12 May 2022 09:22:08 +0000
-Date: Thu, 12 May 2022 17:21:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Ben Widawsky <ben.widawsky@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [cxl:preview 40/67] drivers/cxl/core/pci.c:137:14: error: call to
- undeclared function 'readq'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202205121731.lbcgjrP6-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9B528F3
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 09:24:37 +0000 (UTC)
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1652347475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5jcKtldk0WOKNaTgVC8yTdE9lAVcyBOlHloXurBqbWM=;
+	b=l/KS11AxDRJwet+ggUp0GCbuN+tUBNaNQbTd4glxlHoxdHMdLlA+CyqjkAMZgUpSJC3cOS
+	9KD0gl6V00xqIiuzhFGd/KO4ziyiDc/sFqLpepQuwX7pfqogBbBlA5NmQWBUrPWCbrHn0a
+	k8w0MlC5XyPvWSg718Yt15XtCnOPNVnUYhHiwUCBaL5UafQWBn1IN5v+gr7hI3QOeBLzOZ
+	DsqqLPX1G0un2f7N2B8D3ReiFWvBv8NnSJ4OhSz37LGR8iSnZ8JyXLs9L1ilQXbf2mdJLd
+	gT99SQ01BGt1pDnlsPF4FavOjH7vplYHrDMtEG7HKpWe55T0NqJ5VjrnY93Kdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1652347475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5jcKtldk0WOKNaTgVC8yTdE9lAVcyBOlHloXurBqbWM=;
+	b=x5X6Awd6fY2gyIwuXJMyuzN0Jju7ct7vU2gD0TbrdlAn/YW/8KlHtMnVgTRVYkKTdyW0ki
+	wOedVGw9iz/OFnAw==
+To: kernel test robot <lkp@intel.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Hans de Goede <hdegoede@redhat.com>,
+ linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>
+Subject: Re: [pdx86-platform-drivers-x86:review-hans 46/59]
+ kernel/stop_machine.c:638:35: error: call to undeclared function
+ 'cpu_smt_mask'; ISO C99 and later do not support implicit function
+ declarations
+In-Reply-To: <202205120904.Gr9HEY5E-lkp@intel.com>
+References: <202205120904.Gr9HEY5E-lkp@intel.com>
+Date: Thu, 12 May 2022 11:24:35 +0200
+Message-ID: <87zgjnw1bg.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   9c642abd8b31d895f34186bd72b7360083b58492
-commit: e7ed4a0688738b1f47a6b500444942d4dfa1035d [40/67] cxl/pci: Move cxl_await_media_ready() to the core
-config: i386-randconfig-c001-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121731.lbcgjrP6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=e7ed4a0688738b1f47a6b500444942d4dfa1035d
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout e7ed4a0688738b1f47a6b500444942d4dfa1035d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
+On Thu, May 12 2022 at 09:29, kernel test robot wrote:
+>>> kernel/stop_machine.c:638:35: error: call to undeclared function 'cpu_smt_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            const struct cpumask *smt_mask = cpu_smt_mask(cpu);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This warning with W=1 is not the worst of the problems.
 
-All errors (new ones prefixed by >>):
+The build will simply fail for CONFIG_SMP=y && CONFIG_SCHED_SMT=n
+because cpu_smt_mask() cannot be resolved.
 
->> drivers/cxl/core/pci.c:137:14: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
-                       ^
-   1 error generated.
+The other issue is CONFIG_SMP=n. This will fail to build the IFS driver
+because stop_core_cpuslocked() is not available for SMP=n.
+
+Something like the below should work as x86 selects SCHED_SMT when
+SMP=y.
+
+Thanks,
+
+        tglx
+---
+--- a/include/linux/stop_machine.h
++++ b/include/linux/stop_machine.h
+@@ -156,6 +156,12 @@ static __always_inline int stop_machine_
+ }
+ 
+ static __always_inline int
++stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
++{
++	return stop_machine_cpuslocked(fn, data, NULL);
++}
++
++static __always_inline int
+ stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
+ {
+ 	return stop_machine_cpuslocked(fn, data, cpus);
+--- a/kernel/stop_machine.c
++++ b/kernel/stop_machine.c
+@@ -631,6 +631,7 @@ int stop_machine(cpu_stop_fn_t fn, void
+ }
+ EXPORT_SYMBOL_GPL(stop_machine);
+ 
++#ifdef CONFIG_SCHED_SMT
+ int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
+ {
+ 	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
+@@ -649,6 +650,7 @@ int stop_core_cpuslocked(unsigned int cp
+ 	return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
+ }
+ EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
++#endif
+ 
+ /**
+  * stop_machine_from_inactive_cpu - stop_machine() from inactive CPU
 
 
-vim +/readq +137 drivers/cxl/core/pci.c
 
-   103	
-   104	/*
-   105	 * Wait up to @media_ready_timeout for the device to report memory
-   106	 * active.
-   107	 */
-   108	int cxl_await_media_ready(struct cxl_dev_state *cxlds)
-   109	{
-   110		struct pci_dev *pdev = to_pci_dev(cxlds->dev);
-   111		int d = cxlds->cxl_dvsec;
-   112		bool active = false;
-   113		u64 md_status;
-   114		int rc, i;
-   115	
-   116		for (i = media_ready_timeout; i; i--) {
-   117			u32 temp;
-   118	
-   119			rc = pci_read_config_dword(
-   120				pdev, d + CXL_DVSEC_RANGE_SIZE_LOW(0), &temp);
-   121			if (rc)
-   122				return rc;
-   123	
-   124			active = FIELD_GET(CXL_DVSEC_MEM_ACTIVE, temp);
-   125			if (active)
-   126				break;
-   127			msleep(1000);
-   128		}
-   129	
-   130		if (!active) {
-   131			dev_err(&pdev->dev,
-   132				"timeout awaiting memory active after %d seconds\n",
-   133				media_ready_timeout);
-   134			return -ETIMEDOUT;
-   135		}
-   136	
- > 137		md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
