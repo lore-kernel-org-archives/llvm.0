@@ -1,180 +1,102 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3252F2C
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652389254; x=1683925254;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e4jQKep7r8+EurMhXfxPV0jLfPxTV/UjYpAHlsYVU/8=;
-  b=mV6pwltWUMUNwo471AxCRBhNjVd8hJlJQUi4gZLPirC9xvcrQ0aKtzGp
-   F6XECBndumNl9jmNlP7Vfxyb7yE7SNm8K7H7DBRFWVAqYRXu0gqfq+N2v
-   m/wxKPBS0n4Tx+WzKVx2r85p7+dl08PS1n6lQpg0oiaEQLGI72FVpi/eh
-   Ai1RfwyvzW3JF6FJ5WRmxbLW0puqY+yCFsKArjkDxB+kzOELHnfTJH+8W
-   f6CnBf3m8tg3NXK1YCVvAGTxVSkPRC796/KJxwYuPgkPnpNQCs6MlMo3X
-   XWw16nopu8orhjsO+depSvOAaggmc/VMt0Txk5ewNaqgy5Dbs3X+UoFKG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="356565300"
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="356565300"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 14:00:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="815087845"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 May 2022 14:00:52 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1npFvX-000Kw4-It;
-	Thu, 12 May 2022 21:00:51 +0000
-Date: Fri, 13 May 2022 05:00:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Anderson <sean.anderson@seco.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C6F2F2C;
+	Thu, 12 May 2022 21:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868CDC385B8;
+	Thu, 12 May 2022 21:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652390241;
+	bh=LqARVq2lcGKNOIxt7wFh53bt74j0X8rRusVOxvkYpqc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rZ3+EgEYyfYagLTq+TdC4pKBLiDez079XtAYlgTUYUFuMa0Ux2wykWoHakFcl66NP
+	 DMM1LrO2Go1ZGCa7NvfLFPw1ZYpSvu+jnRIwlnyL0VtGR4+ZciJKYE6w8DA0kKhZzP
+	 i/RzliIrkgPlOmyGRbUm3B8O/d+XccJEXp5059+ctKavd4qXTtyMJxGG/MRjQSCSHj
+	 +1BIlMiDFc4YvnrGGbcyFsKig6kZVxRxf5RiDeSxoS1tj/Ye9jf4MBVpGltSCHdpN6
+	 mqIJBjcYU+gvxi0cNXDsYkzK64SkUtAOPO0leSOiYbA1pQEMH3NmxuQ3j7Ao1SDAv+
+	 jGYAbhzxC8eDg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:linux-5.10.y 5435/5609]
- drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of
- function 'devm_regulator_get_exclusive'
-Message-ID: <202205130402.6UESZaCw-lkp@intel.com>
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
+Date: Thu, 12 May 2022 14:17:04 -0700
+Message-Id: <20220512211704.3158759-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   e61686bb77c441d8e5f10dc063e2cea799e4aae6
-commit: d22d92230ffbbfb696f3800bf53391bb2ef6a688 [5435/5609] usb: phy: generic: Get the vbus supply
-config: arm64-buildonly-randconfig-r004-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130402.6UESZaCw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d22d92230ffbbfb696f3800bf53391bb2ef6a688
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout d22d92230ffbbfb696f3800bf53391bb2ef6a688
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/phy/
+When an attribute group is created with sysfs_create_group(), the
+->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
+get the ->show() callback from the attribute it was passed, meaning the
+->show() callback needs to be the same type as the ->show() callback in
+'struct kobj_attribute'.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+However, show_dynamic_id() has the type of the ->show() callback in
+'struct device_attribute', which causes a CFI violation when opening the
+'id' sysfs node under drm/card0/metrics. This happens to work because
+the layout of 'struct kobj_attribute' and 'struct device_attribute' are
+the same, so the container_of() cast happens to allow the ->show()
+callback to still work.
 
-All error/warnings (new ones prefixed by >>):
+Change the type of show_dynamic_id() to match the ->show() callback in
+'struct kobj_attributes' and update the type of sysfs_metric_id to
+match, which resolves the CFI violation.
 
->> drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of function 'devm_regulator_get_exclusive' [-Werror,-Wimplicit-function-declaration]
-           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-                            ^
-   drivers/usb/phy/phy-generic.c:271:19: note: did you mean 'regulator_get_exclusive'?
-   include/linux/regulator/consumer.h:329:1: note: 'regulator_get_exclusive' declared here
-   regulator_get_exclusive(struct device *dev, const char *id)
-   ^
->> drivers/usb/phy/phy-generic.c:271:17: warning: incompatible integer to pointer conversion assigning to 'struct regulator *' from 'int' [-Wint-conversion]
-           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
+ drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+index 0a9c3fcc09b1..1577ab6754db 100644
+--- a/drivers/gpu/drm/i915/i915_perf.c
++++ b/drivers/gpu/drm/i915/i915_perf.c
+@@ -4050,8 +4050,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
+ 	return ERR_PTR(err);
+ }
+ 
+-static ssize_t show_dynamic_id(struct device *dev,
+-			       struct device_attribute *attr,
++static ssize_t show_dynamic_id(struct kobject *kobj,
++			       struct kobj_attribute *attr,
+ 			       char *buf)
+ {
+ 	struct i915_oa_config *oa_config =
+diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
+index 473a3c0544bb..05cb9a335a97 100644
+--- a/drivers/gpu/drm/i915/i915_perf_types.h
++++ b/drivers/gpu/drm/i915/i915_perf_types.h
+@@ -55,7 +55,7 @@ struct i915_oa_config {
+ 
+ 	struct attribute_group sysfs_metric;
+ 	struct attribute *attrs[2];
+-	struct device_attribute sysfs_metric_id;
++	struct kobj_attribute sysfs_metric_id;
+ 
+ 	struct kref ref;
+ 	struct rcu_head rcu;
 
-vim +/devm_regulator_get_exclusive +271 drivers/usb/phy/phy-generic.c
-
-   205	
-   206	int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
-   207	{
-   208		enum usb_phy_type type = USB_PHY_TYPE_USB2;
-   209		int err = 0;
-   210	
-   211		u32 clk_rate = 0;
-   212		bool needs_vcc = false, needs_clk = false;
-   213	
-   214		if (dev->of_node) {
-   215			struct device_node *node = dev->of_node;
-   216	
-   217			if (of_property_read_u32(node, "clock-frequency", &clk_rate))
-   218				clk_rate = 0;
-   219	
-   220			needs_vcc = of_property_read_bool(node, "vcc-supply");
-   221			needs_clk = of_property_read_bool(node, "clocks");
-   222		}
-   223		nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
-   224							   GPIOD_ASIS);
-   225		err = PTR_ERR_OR_ZERO(nop->gpiod_reset);
-   226		if (!err) {
-   227			nop->gpiod_vbus = devm_gpiod_get_optional(dev,
-   228							 "vbus-detect",
-   229							 GPIOD_ASIS);
-   230			err = PTR_ERR_OR_ZERO(nop->gpiod_vbus);
-   231		}
-   232	
-   233		if (err == -EPROBE_DEFER)
-   234			return -EPROBE_DEFER;
-   235		if (err) {
-   236			dev_err(dev, "Error requesting RESET or VBUS GPIO\n");
-   237			return err;
-   238		}
-   239		if (nop->gpiod_reset)
-   240			gpiod_direction_output(nop->gpiod_reset, 1);
-   241	
-   242		nop->phy.otg = devm_kzalloc(dev, sizeof(*nop->phy.otg),
-   243				GFP_KERNEL);
-   244		if (!nop->phy.otg)
-   245			return -ENOMEM;
-   246	
-   247		nop->clk = devm_clk_get(dev, "main_clk");
-   248		if (IS_ERR(nop->clk)) {
-   249			dev_dbg(dev, "Can't get phy clock: %ld\n",
-   250						PTR_ERR(nop->clk));
-   251			if (needs_clk)
-   252				return PTR_ERR(nop->clk);
-   253		}
-   254	
-   255		if (!IS_ERR(nop->clk) && clk_rate) {
-   256			err = clk_set_rate(nop->clk, clk_rate);
-   257			if (err) {
-   258				dev_err(dev, "Error setting clock rate\n");
-   259				return err;
-   260			}
-   261		}
-   262	
-   263		nop->vcc = devm_regulator_get(dev, "vcc");
-   264		if (IS_ERR(nop->vcc)) {
-   265			dev_dbg(dev, "Error getting vcc regulator: %ld\n",
-   266						PTR_ERR(nop->vcc));
-   267			if (needs_vcc)
-   268				return -EPROBE_DEFER;
-   269		}
-   270	
- > 271		nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
-   272		if (PTR_ERR(nop->vbus_draw) == -ENODEV)
-   273			nop->vbus_draw = NULL;
-   274		if (IS_ERR(nop->vbus_draw))
-   275			return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
-   276					     "could not get vbus regulator\n");
-   277	
-   278		nop->dev		= dev;
-   279		nop->phy.dev		= nop->dev;
-   280		nop->phy.label		= "nop-xceiv";
-   281		nop->phy.set_suspend	= nop_set_suspend;
-   282		nop->phy.type		= type;
-   283	
-   284		nop->phy.otg->state		= OTG_STATE_UNDEFINED;
-   285		nop->phy.otg->usb_phy		= &nop->phy;
-   286		nop->phy.otg->set_host		= nop_set_host;
-   287		nop->phy.otg->set_peripheral	= nop_set_peripheral;
-   288	
-   289		return 0;
-   290	}
-   291	EXPORT_SYMBOL_GPL(usb_phy_gen_create_phy);
-   292	
-
+base-commit: 7ecc3cc8a7b39f08eee9aea7b718187583342a70
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
