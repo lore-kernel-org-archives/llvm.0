@@ -1,109 +1,180 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2752F2C
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 20:56:10 +0000 (UTC)
-Received: by mail-pf1-f178.google.com with SMTP id a11so5904719pff.1
-        for <llvm@lists.linux.dev>; Thu, 12 May 2022 13:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P/Ac7JONYQRbqYr75B8cPwknKxer6j9wwthXWi5R/P0=;
-        b=a9vzilDVBWK31znRhkyZYpN3fhm2ncMeaUJqBg+1Cpjx8PT05UuCERtREHvRj5BHZY
-         Qb+gUvYtymqMI+8FsdrWl5qJaHIb9D8nY6hw+JhhW9OK3h0faS05sGiyNkahpMmBRmGA
-         8QDus7tX6d4JAuz8co/q2DLC6yAObwIO7HHwzsZw1JQhclpVIotCG0HYwgwn5pTJY6gt
-         ZAq0zNpe0o7wb0GOe0d4/l2FuMHzZ/5sO7chV6AxbUX9YPJqMDeVParVYbCyIBQq52aJ
-         oWzRcnakW25XwwMmpRl2YtoK0PdhjncL4T87XixUuikhuN8FGDxwpoMFAPRsV4gFyCdE
-         HK1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P/Ac7JONYQRbqYr75B8cPwknKxer6j9wwthXWi5R/P0=;
-        b=ZcfxReKiJmTmt1OsPtaeoATuXTNcQAxhfp6hTtaMCWutwyh9h5N7w51O8MJA/unwqt
-         hyFN0p5tRIGUvSA+npnNZJbWOwaTqW+qtBkxfPC21W1KYRRXohCWDi2yWvM59FeNj6DH
-         GDcPP1+9uSVcgKKoMMOCah0RVetkTcV2RfBcELLYA+2SAv883woO/+3VWcIfGG0ONwdQ
-         TQKKsDUkUkVxlP85U7INIZS53lFR4dZcXiK+0DXmNnGTzed6j64idCj5R/SsXAoW31Uw
-         PuL8pPCKV6IHarH4fnNqUySaBc8irn0y265Jj6MOHc6uusGUh12DXW9GqKqI0fdFOSVK
-         UxBw==
-X-Gm-Message-State: AOAM5304lI+YXRVQKPE8WI/VmEaec3UCKtvpybdil4S/c9QGKbHwMBKl
-	7QMZ3Nd96r7FpLrY21+UinA=
-X-Google-Smtp-Source: ABdhPJwGz4p76paZX1fTS49cyppG95kskcfcQitNZXrNm+Ea3iZqgsWKNzmM6+/+tz57/l3BGKh8gQ==
-X-Received: by 2002:a63:d90c:0:b0:3c6:4ab4:fbfe with SMTP id r12-20020a63d90c000000b003c64ab4fbfemr1129133pgg.499.1652388970134;
-        Thu, 12 May 2022 13:56:10 -0700 (PDT)
-Received: from localhost.localdomain ([2604:a880:1:20::1f:7001])
-        by smtp.gmail.com with ESMTPSA id t189-20020a635fc6000000b003c14af5060dsm139955pgb.37.2022.05.12.13.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 13:56:09 -0700 (PDT)
-From: Wende Tan <twd2.me@gmail.com>
-To: palmer@dabbelt.com,
-	paul.walmsley@sifive.com,
-	aou@eecs.berkeley.edu,
-	linux-riscv@lists.infradead.org
-Cc: Wende Tan <twd2.me@gmail.com>,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] RISC-V: build: Allow LTO to be selected
-Date: Thu, 12 May 2022 20:55:45 +0000
-Message-Id: <20220512205545.992288-1-twd2.me@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3252F2C
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652389254; x=1683925254;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e4jQKep7r8+EurMhXfxPV0jLfPxTV/UjYpAHlsYVU/8=;
+  b=mV6pwltWUMUNwo471AxCRBhNjVd8hJlJQUi4gZLPirC9xvcrQ0aKtzGp
+   F6XECBndumNl9jmNlP7Vfxyb7yE7SNm8K7H7DBRFWVAqYRXu0gqfq+N2v
+   m/wxKPBS0n4Tx+WzKVx2r85p7+dl08PS1n6lQpg0oiaEQLGI72FVpi/eh
+   Ai1RfwyvzW3JF6FJ5WRmxbLW0puqY+yCFsKArjkDxB+kzOELHnfTJH+8W
+   f6CnBf3m8tg3NXK1YCVvAGTxVSkPRC796/KJxwYuPgkPnpNQCs6MlMo3X
+   XWw16nopu8orhjsO+depSvOAaggmc/VMt0Txk5ewNaqgy5Dbs3X+UoFKG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="356565300"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="356565300"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 14:00:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="815087845"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 12 May 2022 14:00:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npFvX-000Kw4-It;
+	Thu, 12 May 2022 21:00:51 +0000
+Date: Fri, 13 May 2022 05:00:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Anderson <sean.anderson@seco.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:linux-5.10.y 5435/5609]
+ drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of
+ function 'devm_regulator_get_exclusive'
+Message-ID: <202205130402.6UESZaCw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
-issue [1] in prior LLD versions that prevents LLD to generate proper
-machine code for RISC-V when writing `nop`s.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   e61686bb77c441d8e5f10dc063e2cea799e4aae6
+commit: d22d92230ffbbfb696f3800bf53391bb2ef6a688 [5435/5609] usb: phy: generic: Get the vbus supply
+config: arm64-buildonly-randconfig-r004-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130402.6UESZaCw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d22d92230ffbbfb696f3800bf53391bb2ef6a688
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout d22d92230ffbbfb696f3800bf53391bb2ef6a688
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/phy/
 
-I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
-on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
-can boot to shell using an archriscv rootfs on QEMU.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
-KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
-successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
-image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
-`BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
-separate patch further.
+All error/warnings (new ones prefixed by >>):
 
-[1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
-    commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
+>> drivers/usb/phy/phy-generic.c:271:19: error: implicit declaration of function 'devm_regulator_get_exclusive' [-Werror,-Wimplicit-function-declaration]
+           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
+                            ^
+   drivers/usb/phy/phy-generic.c:271:19: note: did you mean 'regulator_get_exclusive'?
+   include/linux/regulator/consumer.h:329:1: note: 'regulator_get_exclusive' declared here
+   regulator_get_exclusive(struct device *dev, const char *id)
+   ^
+>> drivers/usb/phy/phy-generic.c:271:17: warning: incompatible integer to pointer conversion assigning to 'struct regulator *' from 'int' [-Wint-conversion]
+           nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
+                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
-Tested-by: Wende Tan <twd2.me@gmail.com>
-Signed-off-by: Wende Tan <twd2.me@gmail.com>
----
-v2:
-- Some textual changes suggested by Nick.
-- Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is filed
-  and resolved.
-- Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
 
-v1: https://lore.kernel.org/linux-riscv/20210719205208.1023221-1-twd2.me@gmail.com/
----
- arch/riscv/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+vim +/devm_regulator_get_exclusive +271 drivers/usb/phy/phy-generic.c
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 00fd9c548f26..c55f6b95e5af 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -38,6 +38,10 @@ config RISCV
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
-+	# LLD >= 14:
-+	# - https://github.com/llvm/llvm-project/issues/50505
-+	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-+	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
- 	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
+   205	
+   206	int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+   207	{
+   208		enum usb_phy_type type = USB_PHY_TYPE_USB2;
+   209		int err = 0;
+   210	
+   211		u32 clk_rate = 0;
+   212		bool needs_vcc = false, needs_clk = false;
+   213	
+   214		if (dev->of_node) {
+   215			struct device_node *node = dev->of_node;
+   216	
+   217			if (of_property_read_u32(node, "clock-frequency", &clk_rate))
+   218				clk_rate = 0;
+   219	
+   220			needs_vcc = of_property_read_bool(node, "vcc-supply");
+   221			needs_clk = of_property_read_bool(node, "clocks");
+   222		}
+   223		nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
+   224							   GPIOD_ASIS);
+   225		err = PTR_ERR_OR_ZERO(nop->gpiod_reset);
+   226		if (!err) {
+   227			nop->gpiod_vbus = devm_gpiod_get_optional(dev,
+   228							 "vbus-detect",
+   229							 GPIOD_ASIS);
+   230			err = PTR_ERR_OR_ZERO(nop->gpiod_vbus);
+   231		}
+   232	
+   233		if (err == -EPROBE_DEFER)
+   234			return -EPROBE_DEFER;
+   235		if (err) {
+   236			dev_err(dev, "Error requesting RESET or VBUS GPIO\n");
+   237			return err;
+   238		}
+   239		if (nop->gpiod_reset)
+   240			gpiod_direction_output(nop->gpiod_reset, 1);
+   241	
+   242		nop->phy.otg = devm_kzalloc(dev, sizeof(*nop->phy.otg),
+   243				GFP_KERNEL);
+   244		if (!nop->phy.otg)
+   245			return -ENOMEM;
+   246	
+   247		nop->clk = devm_clk_get(dev, "main_clk");
+   248		if (IS_ERR(nop->clk)) {
+   249			dev_dbg(dev, "Can't get phy clock: %ld\n",
+   250						PTR_ERR(nop->clk));
+   251			if (needs_clk)
+   252				return PTR_ERR(nop->clk);
+   253		}
+   254	
+   255		if (!IS_ERR(nop->clk) && clk_rate) {
+   256			err = clk_set_rate(nop->clk, clk_rate);
+   257			if (err) {
+   258				dev_err(dev, "Error setting clock rate\n");
+   259				return err;
+   260			}
+   261		}
+   262	
+   263		nop->vcc = devm_regulator_get(dev, "vcc");
+   264		if (IS_ERR(nop->vcc)) {
+   265			dev_dbg(dev, "Error getting vcc regulator: %ld\n",
+   266						PTR_ERR(nop->vcc));
+   267			if (needs_vcc)
+   268				return -EPROBE_DEFER;
+   269		}
+   270	
+ > 271		nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
+   272		if (PTR_ERR(nop->vbus_draw) == -ENODEV)
+   273			nop->vbus_draw = NULL;
+   274		if (IS_ERR(nop->vbus_draw))
+   275			return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
+   276					     "could not get vbus regulator\n");
+   277	
+   278		nop->dev		= dev;
+   279		nop->phy.dev		= nop->dev;
+   280		nop->phy.label		= "nop-xceiv";
+   281		nop->phy.set_suspend	= nop_set_suspend;
+   282		nop->phy.type		= type;
+   283	
+   284		nop->phy.otg->state		= OTG_STATE_UNDEFINED;
+   285		nop->phy.otg->usb_phy		= &nop->phy;
+   286		nop->phy.otg->set_host		= nop_set_host;
+   287		nop->phy.otg->set_peripheral	= nop_set_peripheral;
+   288	
+   289		return 0;
+   290	}
+   291	EXPORT_SYMBOL_GPL(usb_phy_gen_create_phy);
+   292	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
