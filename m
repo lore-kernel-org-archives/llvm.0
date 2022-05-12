@@ -1,31 +1,33 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB4F17C1
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 03:33:47 +0000 (UTC)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 24C3XR4s032166
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 12:33:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24C3XR4s032166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FA217C1
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 03:40:46 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 24C3ahjI028003
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 12:36:43 +0900
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 24C3aGpg020265
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 12:36:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24C3aGpg020265
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652326407;
-	bh=dbNwEvZYw1fjRFSQZy5q9B2R8hJHj2WYVFlICWwM6Oc=;
+	s=dec2015msa; t=1652326576;
+	bh=VfPskzDmMntcl9mOqDJFkJyKAm5vxKV4Z3wLx5ippe8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s1HuTe8UfZdDhcbAtMfhGnh602XNDnJrWAZjDq1eXSgH83LURXTiO+twVc9QSx/Sk
-	 6VC+f2jUae4aZTd5Ssw0HIHfFYomAWAdDYb0P1TIvZqe+Nkp+ieO+zaJq3+Hh5l82/
-	 XqlADjjruNJJBtQhiCmE2jElPQev1GDHCYgUNOMNQ78JS5grR/X4V+VLdMYcl7DZ4X
-	 DVOJQZEoNeeez1uIXAcPdwRw5gvhiM8NxtxXxv6V/KC/q42s1bJt3/9HpJ76S/9KmJ
-	 IO/8y+SV3i5TilxIWRrqUeNKgfXXSN7AQu7PVVMuAExvDGZBRUBWVTLhaA2OHnqXQd
-	 MAp0P7x0pjbvg==
-X-Nifty-SrcIP: [209.85.215.179]
-Received: by mail-pg1-f179.google.com with SMTP id x12so3447383pgj.7
-        for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:33:27 -0700 (PDT)
-X-Gm-Message-State: AOAM531hnfhlUQdg36X8yoSN3AKGnjcnbtR/ys+KKZjqznOFQ3LfTL/4
-	6wQwoopdWdyQSe0FSG64+vesKWCGQKdP/Jysji0=
-X-Google-Smtp-Source: ABdhPJwG0xbZVE9S3odmeddiK5smlXhc5MfRFuwXPi0gSLw2Nm0SAMreZzrCHdbMunbY06F+fLSoK5TjQygOQdUrI6I=
+	b=wczmTP5mRu9Q317XJvLADN30/rapQ66Vfla6MIyrp18RHxIaKFeAT4+xr4zeIISQq
+	 oGFMJr+2+heyZtd3YgKLMEbPMOBkiN6nQptq+2B3WvQQdXRhulos+pFiuVp2N5HV0E
+	 R/sGhpELffEpxbJfvkejvFoaD/raChJoWGo0ojHfZai5Tsx0alQMNhUZCLI9vkuxhk
+	 bydVjwohwSrac2NzoG9lrJDJvopGWUxlLRNkQXkvddB2aMgya3T0WlRKIWXa4wDEI7
+	 HZLJQi923Fv3P0XSIH3QQXAQURvpmPmIcLeK26RbFEIANAizUGnltOaGFZMtREQYCV
+	 tvc17ZeCQB7zw==
+X-Nifty-SrcIP: [209.85.210.175]
+Received: by mail-pf1-f175.google.com with SMTP id y41so3622058pfw.12
+        for <llvm@lists.linux.dev>; Wed, 11 May 2022 20:36:16 -0700 (PDT)
+X-Gm-Message-State: AOAM533KSJay3hTLXEtNrDndG/4or2iVgD2UFTjtXwxG6FV6R4MuJcYD
+	R25kXdt0FKkJCWUp92dC+BA3O+Q6HO8dwWW/NkQ=
+X-Google-Smtp-Source: ABdhPJwUO93A4rM+aSh1Xly4NyDaW5KDkFVzu77d9cJuQFpEQOKPBQtyfzCWZaOT5taGjU3JP75XcJ9pj9AegKGofJA=
 X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id
- e131-20020a636989000000b003c23c19d661mr23412597pgc.352.1652326406909; Wed, 11
- May 2022 20:33:26 -0700 (PDT)
+ e131-20020a636989000000b003c23c19d661mr23420542pgc.352.1652326575675; Wed, 11
+ May 2022 20:36:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,12 +35,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220511164514.2741934-1-masahiroy@kernel.org>
- <20220511164514.2741934-2-masahiroy@kernel.org> <CAKwvOd=SZYO0344rrJWP+JvmuZmQ9N6VM9UgMwrb9fH3MaNLMQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=SZYO0344rrJWP+JvmuZmQ9N6VM9UgMwrb9fH3MaNLMQ@mail.gmail.com>
+ <20220511164514.2741934-2-masahiroy@kernel.org> <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 12 May 2022 12:32:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASsnrxu1BvtR9aq6oeOvmTX8jr4Wum=+7qemKzcLpSRWQ@mail.gmail.com>
-Message-ID: <CAK7LNASsnrxu1BvtR9aq6oeOvmTX8jr4Wum=+7qemKzcLpSRWQ@mail.gmail.com>
+Date: Thu, 12 May 2022 12:35:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
+Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
 Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
 To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
@@ -52,51 +54,121 @@ Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 12, 2022 at 7:28 AM Nick Desaulniers
+On Thu, May 12, 2022 at 7:31 AM Nick Desaulniers
 <ndesaulniers@google.com> wrote:
 >
 > On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > >
-> > modpost.c is too big, and the half of the code is for section checks.
-> > Split it.
-> >
-> > Also, move some related typedefs and macros from modpost.h to
-> > section-check.c
-> >
-> > Copy Sam's Copyright there. Commit b39927cf4cc5 ("kbuild: check for
-> > section mismatch during modpost stage") is the initial work for the
-> > section checks.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > -/* sections that we do not want to do full section mismatch check on */
+> > -static const char *const section_white_list[] =
+> > -{
+> > -       ".comment*",
+> > -       ".debug*",
+> > -       ".cranges",             /* sh64 */
+> > -       ".zdebug*",             /* Compressed debug sections. */
+> > -       ".GCC.command.line",    /* record-gcc-switches */
+> > -       ".mdebug*",        /* alpha, score, mips etc. */
+> > -       ".pdr",            /* alpha, score, mips etc. */
+> > -       ".stab*",
+> > -       ".note*",
+> > -       ".got*",
+> > -       ".toc*",
+> > -       ".xt.prop",                              /* xtensa */
+> > -       ".xt.lit",         /* xtensa */
+> > -       ".arcextmap*",                  /* arc */
+> > -       ".gnu.linkonce.arcext*",        /* arc : modules */
+> > -       ".cmem*",                       /* EZchip */
+> > -       ".fmt_slot*",                   /* EZchip */
+> > -       ".gnu.lto*",
+> > -       ".discard.*",
+> > -       NULL
+> > -};
 >
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 >
-> Sorry again for my "brain fart" in reviewing the global var in v4. :(
-> I think my blood sugar was getting low or something...
-
-Never mind.
-Thanks for the close review all the time!
-
+> > -/**
+> > - * Whitelist to allow certain references to pass with no warning.
+> > - *
+> > - * Pattern 1:
+> > - *   If a module parameter is declared __initdata and permissions=0
+> > - *   then this is legal despite the warning generated.
+> > - *   We cannot see value of permissions here, so just ignore
+> > - *   this pattern.
+> > - *   The pattern is identified by:
+> > - *   tosec   = .init.data
+> > - *   fromsec = .data*
+> > - *   atsym   =__param*
+> > - *
+> > - * Pattern 1a:
+> > - *   module_param_call() ops can refer to __init set function if permissions=0
+> > - *   The pattern is identified by:
+> > - *   tosec   = .init.text
+> > - *   fromsec = .data*
+> > - *   atsym   = __param_ops_*
+> > - *
+> > - * Pattern 2:
+> > - *   Many drivers utilise a *driver container with references to
+> > - *   add, remove, probe functions etc.
+> > - *   the pattern is identified by:
+> > - *   tosec   = init or exit section
+> > - *   fromsec = data section
+> > - *   atsym = *driver, *_template, *_sht, *_ops, *_probe,
+> > - *           *probe_one, *_console, *_timer
+> > - *
+> > - * Pattern 3:
+> > - *   Whitelist all references from .head.text to any init section
+> > - *
+> > - * Pattern 4:
+> > - *   Some symbols belong to init section but still it is ok to reference
+> > - *   these from non-init sections as these symbols don't have any memory
+> > - *   allocated for them and symbol address and value are same. So even
+> > - *   if init section is freed, its ok to reference those symbols.
+> > - *   For ex. symbols marking the init section boundaries.
+> > - *   This pattern is identified by
+> > - *   refsymname = __init_begin, _sinittext, _einittext
+> > - *
+> > - * Pattern 5:
+> > - *   GCC may optimize static inlines when fed constant arg(s) resulting
+> > - *   in functions like cpumask_empty() -- generating an associated symbol
+> > - *   cpumask_empty.constprop.3 that appears in the audit.  If the const that
+> > - *   is passed in comes from __init, like say nmi_ipi_mask, we get a
+> > - *   meaningless section warning.  May need to add isra symbols too...
+> > - *   This pattern is identified by
+> > - *   tosec   = init section
+> > - *   fromsec = text section
+> > - *   refsymname = *.constprop.*
+> > - *
+> > - * Pattern 6:
+> > - *   Hide section mismatch warnings for ELF local symbols.  The goal
+> > - *   is to eliminate false positive modpost warnings caused by
+> > - *   compiler-generated ELF local symbol names such as ".LANCHOR1".
+> > - *   Autogenerated symbol names bypass modpost's "Pattern 2"
+> > - *   whitelisting, which relies on pattern-matching against symbol
+> > - *   names to work.  (One situation where gcc can autogenerate ELF
+> > - *   local symbols is when "-fsection-anchors" is used.)
+> > - **/
 >
-> > ---
-> >
-> > Changes in v5:
-> >    - Fix the build error  (spotted by Nathan)
-> >    - Do not do codying style changes  (Suggested by Nick)
->
-> I'm surprised the style changes didn't show up in v5 as a later patch
-> in the series. I wasn't against them in general, just thought it would
-> be easier to review if they were distinct commits.
+> Losing the ability to git blame (from the top level) the above lines
+> does cause me grief and mental anguish though. It's not gone, just
+> buried a bit deeper.
 
 
-I just postponed the coding style fixes
-because they are not essential for my main goal
-in this patch set.
+According to 'man git-blame', -C option is needed
+to follow the code move between files.
 
-A lot of old code exists in modpost.
-We can improve it later.
+git blame -C  scripts/mod/section-check.c
+
+showed me the origin commit of each line.
 
 
--- 
+
+
+
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--
 Best Regards
 Masahiro Yamada
