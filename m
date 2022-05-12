@@ -1,46 +1,26 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470673232
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 13:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652361391; x=1683897391;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogSFe5+N4nfpX2ISTaJnUttdGEDRDowhdMQWekK35GQ=;
-  b=e0v1mxOLAAWQF8/r2qdsw8a+XQjPjNFkzhQdItQq8Y8PYNmh8pIJhplc
-   TilnX4FNjdj1qC0NYj5BTwZTUa3buFkYTE64oqHXZcEEtJnsX1iydycTS
-   +MqrXd6YCAUXL/cxC/+oPhHFigh9SP+tYA2pFjWyuvEArKsV5Kx+/uW97
-   tP9z2llsBYSrKdXy+EziPF/fcLYKSDnYlpV3Cnp6FjJVwHueTCCBcVxgg
-   ly/sbFnKB6Ec7jMZf+6FyrWMPcBgor6KbZ3lfdUPYxLhxyXVx5VAn4cfC
-   2evS6KFr+Y50IRQzyhqBYsmI7t3NNUUy33l8jYVUwNKkbLmIJZb8fOH6W
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="252048773"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="252048773"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 06:15:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="711912032"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 May 2022 06:15:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1np8f2-000KSQ-Ho;
-	Thu, 12 May 2022 13:15:20 +0000
-Date: Thu, 12 May 2022 21:15:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <eric.dumazet@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	netdev <netdev@vger.kernel.org>, Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 10/10] inet: add READ_ONCE(sk->sk_bound_dev_if)
- in INET_MATCH()
-Message-ID: <202205122132.HUrst9JA-lkp@intel.com>
-References: <20220511233757.2001218-11-eric.dumazet@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211B93232
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 13:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8FAC385B8;
+	Thu, 12 May 2022 13:36:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1652362578;
+	bh=vtNyACv1GDds57wk0/3xK+KFuOW2R4mH4WQUTyTX3os=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WNgeKpSYwdR77+nHeQ9LpSy5EY8F43n4EIp/8pLqhiJcJWrovNweOB/YK9olf8nYV
+	 EoVDawe+xf+ZiCjSoQ4f94P52z51DUexp2Hj/kLGpq/0U7OYBz6FFYB7+YVkEOlhKx
+	 GAwLr5HMbVm/yri4wzYFlF4OwWly9sGb9Tc13XxU=
+Date: Thu, 12 May 2022 15:36:16 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Subject: Re: Warning fixes for clang + x86_64 allmodconfig on 5.10 and 5.4
+Message-ID: <Yn0NUKoWB2V87R4G@kroah.com>
+References: <YnqlnFWCrEz11T5Y@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,136 +29,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511233757.2001218-11-eric.dumazet@gmail.com>
+In-Reply-To: <YnqlnFWCrEz11T5Y@dev-arch.thelio-3990X>
 
-Hi Eric,
+On Tue, May 10, 2022 at 10:49:16AM -0700, Nathan Chancellor wrote:
+> Hi Greg and Sasha,
+> 
+> A recent change in LLVM [1] strengthened -Wenum-conversion, which
+> revealed a couple of instances in 5.10 and 5.4 (the oldest release that
+> I personally build test). They are fixed with the following changes,
+> please consider applying them wherever they apply cleanly (I have
+> included the release they first appeared in):
+> 
+> 1f1e87b4dc45 ("block: drbd: drbd_nl: Make conversion to 'enum drbd_ret_code' explicit") [5.13]
+> 353f7f3a9dd5 ("drm/amd/display/dc/gpio/gpio_service: Pass around correct dce_{version, environment} types") [5.14]
+> 
+> Since I am here already, please consider applying the following
+> additional changes where they cleanly apply, as they resolve other
+> warnings present in x86_64 allmodconfig with clang:
+> 
+> 7bf03e7504e4 ("drm/i915: Cast remain to unsigned long in eb_relocate_vma") [5.8]
+> 8a64ef042eab ("nfp: bpf: silence bitwise vs. logical OR warning") [5.15]
+> 
+> If there are any problems or questions, please let me know!
+> 
+> [1]: https://github.com/llvm/llvm-project/commit/882915df61e33f3a2b7f58e52f572717e1c11499
 
-I love your patch! Perhaps something to improve:
+All now queued up, thanks.
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-add-annotations-for-sk-sk_bound_dev_if/20220512-073914
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b57c7e8b76c646cf77ce4353a779a8b781592209
-config: hexagon-randconfig-r035-20220512 (https://download.01.org/0day-ci/archive/20220512/202205122132.HUrst9JA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c92cfd9f3ecb483ff055edb02f7498494b96ba68
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eric-Dumazet/net-add-annotations-for-sk-sk_bound_dev_if/20220512-073914
-        git checkout c92cfd9f3ecb483ff055edb02f7498494b96ba68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv4/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/inet_hashtables.c:413:34: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
-                   if (likely(INET_MATCH(sk, net, acookie,
-                                                  ^~~~~~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   net/ipv4/inet_hashtables.c:398:2: note: variable 'acookie' is declared here
-           INET_ADDR_COOKIE(acookie, saddr, daddr);
-           ^
-   include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
-           const int __name __deprecated __always_unused
-           ^
-   net/ipv4/inet_hashtables.c:468:35: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
-                   if (likely(INET_MATCH(sk2, net, acookie,
-                                                   ^~~~~~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   net/ipv4/inet_hashtables.c:452:2: note: variable 'acookie' is declared here
-           INET_ADDR_COOKIE(acookie, saddr, daddr);
-           ^
-   include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
-           const int __name __deprecated __always_unused
-           ^
-   net/ipv4/inet_hashtables.c:535:38: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
-                           if (unlikely(INET_MATCH(esk, net, acookie,
-                                                             ^~~~~~~
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   net/ipv4/inet_hashtables.c:529:2: note: variable 'acookie' is declared here
-           INET_ADDR_COOKIE(acookie, sk->sk_daddr, sk->sk_rcv_saddr);
-           ^
-   include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
-           const int __name __deprecated __always_unused
-           ^
-   3 warnings generated.
---
->> net/ipv4/udp.c:2566:27: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
-                   if (INET_MATCH(sk, net, acookie, rmt_addr,
-                                           ^~~~~~~
-   net/ipv4/udp.c:2561:2: note: variable 'acookie' is declared here
-           INET_ADDR_COOKIE(acookie, rmt_addr, loc_addr);
-           ^
-   include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
-           const int __name __deprecated __always_unused
-           ^
-   1 warning generated.
-
-
-vim +/acookie +413 net/ipv4/inet_hashtables.c
-
-2c13270b441054 Eric Dumazet     2015-03-15  391  
-c67499c0e77206 Pavel Emelyanov  2008-01-31  392  struct sock *__inet_lookup_established(struct net *net,
-c67499c0e77206 Pavel Emelyanov  2008-01-31  393  				  struct inet_hashinfo *hashinfo,
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  394  				  const __be32 saddr, const __be16 sport,
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  395  				  const __be32 daddr, const u16 hnum,
-3fa6f616a7a4d0 David Ahern      2017-08-07  396  				  const int dif, const int sdif)
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  397  {
-c7228317441f4d Joe Perches      2014-05-13  398  	INET_ADDR_COOKIE(acookie, saddr, daddr);
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  399  	const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  400  	struct sock *sk;
-3ab5aee7fe840b Eric Dumazet     2008-11-16  401  	const struct hlist_nulls_node *node;
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  402  	/* Optimize here for direct hit, only listening connections can
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  403  	 * have wildcards anyways.
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  404  	 */
-9f26b3add3783c Pavel Emelyanov  2008-06-16  405  	unsigned int hash = inet_ehashfn(net, daddr, hnum, saddr, sport);
-f373b53b5fe67a Eric Dumazet     2009-10-09  406  	unsigned int slot = hash & hashinfo->ehash_mask;
-3ab5aee7fe840b Eric Dumazet     2008-11-16  407  	struct inet_ehash_bucket *head = &hashinfo->ehash[slot];
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  408  
-3ab5aee7fe840b Eric Dumazet     2008-11-16  409  begin:
-3ab5aee7fe840b Eric Dumazet     2008-11-16  410  	sk_nulls_for_each_rcu(sk, node, &head->chain) {
-ce43b03e888947 Eric Dumazet     2012-11-30  411  		if (sk->sk_hash != hash)
-ce43b03e888947 Eric Dumazet     2012-11-30  412  			continue;
-ce43b03e888947 Eric Dumazet     2012-11-30 @413  		if (likely(INET_MATCH(sk, net, acookie,
-3fa6f616a7a4d0 David Ahern      2017-08-07  414  				      saddr, daddr, ports, dif, sdif))) {
-41c6d650f6537e Reshetova, Elena 2017-06-30  415  			if (unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-05dbc7b59481ca Eric Dumazet     2013-10-03  416  				goto out;
-ce43b03e888947 Eric Dumazet     2012-11-30  417  			if (unlikely(!INET_MATCH(sk, net, acookie,
-3fa6f616a7a4d0 David Ahern      2017-08-07  418  						 saddr, daddr, ports,
-3fa6f616a7a4d0 David Ahern      2017-08-07  419  						 dif, sdif))) {
-05dbc7b59481ca Eric Dumazet     2013-10-03  420  				sock_gen_put(sk);
-3ab5aee7fe840b Eric Dumazet     2008-11-16  421  				goto begin;
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  422  			}
-05dbc7b59481ca Eric Dumazet     2013-10-03  423  			goto found;
-3ab5aee7fe840b Eric Dumazet     2008-11-16  424  		}
-3ab5aee7fe840b Eric Dumazet     2008-11-16  425  	}
-3ab5aee7fe840b Eric Dumazet     2008-11-16  426  	/*
-3ab5aee7fe840b Eric Dumazet     2008-11-16  427  	 * if the nulls value we got at the end of this lookup is
-3ab5aee7fe840b Eric Dumazet     2008-11-16  428  	 * not the expected one, we must restart lookup.
-3ab5aee7fe840b Eric Dumazet     2008-11-16  429  	 * We probably met an item that was moved to another chain.
-3ab5aee7fe840b Eric Dumazet     2008-11-16  430  	 */
-3ab5aee7fe840b Eric Dumazet     2008-11-16  431  	if (get_nulls_value(node) != slot)
-3ab5aee7fe840b Eric Dumazet     2008-11-16  432  		goto begin;
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  433  out:
-05dbc7b59481ca Eric Dumazet     2013-10-03  434  	sk = NULL;
-05dbc7b59481ca Eric Dumazet     2013-10-03  435  found:
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  436  	return sk;
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  437  }
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  438  EXPORT_SYMBOL_GPL(__inet_lookup_established);
-77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  439  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h
