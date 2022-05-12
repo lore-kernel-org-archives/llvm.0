@@ -1,107 +1,85 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC7D15BE
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 02:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652323938; x=1683859938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iPovg244m5lB0ST8KaA8boWcMETie163IiQLz7k5qJk=;
-  b=L/GI1HzsMa+cDzMLOz2EEBMihyRofAgS3/RsuNCniY2dbqGrcB+MkQuW
-   Rh0h13dH1EDfRNvG+1GtAr1QKJ0hY462ZRj+EGypDQp5KBTcSwQztkFrz
-   /LshXxd5vloSHVdp6xVifxFeloGPjJ3ui5mCX9SzxgLInCAqPch+Q7Zi8
-   TTMv+IV+gCTjhblsRMvdbie3z8tv17MI2QxwGtEP+zYzlA3KwBs2t2v+l
-   y5EndX1Fq8hGHBWQQ0eFo7pBLqtVt0zOHrvV3i5bDxRYA8c6+ihNuLav3
-   ctC7NGsg5AR2dUiWxpnEsDzfla96E+gRnzICJyl3JX92c1y8MLiJfFesx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="268705636"
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="268705636"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 19:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="636662834"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 May 2022 19:52:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1noyw2-000Jrz-Oi;
-	Thu, 12 May 2022 02:52:14 +0000
-Date: Thu, 12 May 2022 10:51:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Henning Schild <henning.schild@siemens.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Mark Gross <markgross@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-	Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-	Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v2 2/4] watchdog: simatic-ipc-wdt: convert to use P2SB
- accessor
-Message-ID: <202205121056.jp0pcxHa-lkp@intel.com>
-References: <20220511153905.13980-3-henning.schild@siemens.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CA215BE
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 03:02:34 +0000 (UTC)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id E7D8B36F;
+	Thu, 12 May 2022 03:02:31 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id EDF332002B;
+	Thu, 12 May 2022 03:02:28 +0000 (UTC)
+Message-ID: <154f41707c58acdac26c3300c5b429f381c45708.camel@perches.com>
+Subject: Re: [PATCH v4 1/2] x86/asm/bitops: ffs: use __builtin_ffs to
+ evaluate constant expressions
+From: Joe Perches <joe@perches.com>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Nick Desaulniers
+ <ndesaulniers@google.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H . Peter
+ Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix
+ <trix@redhat.com>,  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Date: Wed, 11 May 2022 20:02:28 -0700
+In-Reply-To: <20220512011855.1189653-2-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+	 <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
+	 <20220512011855.1189653-2-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511153905.13980-3-henning.schild@siemens.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.64
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: EDF332002B
+X-Stat-Signature: s3ny7ydgms8u5bhpy6dseb6xt83hmmrk
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/YVM8TxruqLdoykQoTANU1GScIYiXrWm4=
+X-HE-Tag: 1652324548-95630
 
-Hi Henning,
+On Thu, 2022-05-12 at 10:18 +0900, Vincent Mailhol wrote:
+> For x86_64, the current ffs() implementation does not produce
+> optimized code when called with a constant expression. On the
+> contrary, the __builtin_ffs() function of both GCC and clang is able
+> to simplify the expression into a single instruction.
+[]
+> -static __always_inline int ffs(int x)
+> +static __always_inline int variable_ffs(int x)
+>  {
+>  	int r;
+>  
+> @@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
+>  	return r + 1;
+>  }
+>  
+> +/**
+> + * ffs - find first set bit in word
+> + * @x: the word to search
+> + *
+> + * This is defined the same way as the libc and compiler builtin ffs
+> + * routines, therefore differs in spirit from the other bitops.
+> + *
+> + * ffs(value) returns 0 if value is 0 or the position of the first
+> + * set bit if value is nonzero. The first (least significant) bit
+> + * is at position 1.
+> + */
+> +#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
 
-Thank you for the patch! Yet something to improve:
+How about not defining another function and using parentheses around
+the function definition to avoid the macro expansion like:
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : ffs(x))
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Henning-Schild/simatic-ipc-additions-to-p2sb-apl-lake-gpio/20220511-234148
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: i386-randconfig-a004-20220509 (https://download.01.org/0day-ci/archive/20220512/202205121056.jp0pcxHa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f9374205615fb91a7d289a6acaeafcd5f9c16ac4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Henning-Schild/simatic-ipc-additions-to-p2sb-apl-lake-gpio/20220511-234148
-        git checkout f9374205615fb91a7d289a6acaeafcd5f9c16ac4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+and
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/watchdog/simatic-ipc-wdt.c:19:10: fatal error: 'linux/platform_data/x86/p2sb.h' file not found
-   #include <linux/platform_data/x86/p2sb.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+static __always_inline int (ffs)(int x)
+{
+	etc...
+}
 
 
-vim +19 drivers/watchdog/simatic-ipc-wdt.c
-
-  > 19	#include <linux/platform_data/x86/p2sb.h>
-    20	#include <linux/platform_data/x86/simatic-ipc-base.h>
-    21	#include <linux/platform_device.h>
-    22	#include <linux/sizes.h>
-    23	#include <linux/util_macros.h>
-    24	#include <linux/watchdog.h>
-    25	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
