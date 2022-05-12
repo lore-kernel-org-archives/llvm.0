@@ -1,95 +1,118 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B112F2C
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:30:19 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id j6so5925266pfe.13
-        for <llvm@lists.linux.dev>; Thu, 12 May 2022 14:30:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31152F2C
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:31:30 +0000 (UTC)
+Received: by mail-yb1-f170.google.com with SMTP id j84so1301288ybc.3
+        for <llvm@lists.linux.dev>; Thu, 12 May 2022 14:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=BIPrJxqbXAd+295s29/rrMW5CvpwBx6wdUxINV63DAg=;
-        b=Zg5truXSUHQKziPjOTc4E2O6KDJH+6qHbxL+9Law57qzVH6SVKpT2voeDHzzyvzj5b
-         uggFLFxEqgtXYEb9pQplsYNKt0VUIvBSB/e/jlS+B4YlmJCuXVMoilgQjYogEfO1ShEk
-         8oRI17+p6b147utmqg5HMg+CqdgII9RBkSRNc=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3GME8g6CPueWMd7lO8qXn1DRp2ceHlUdCzpOykCHbrg=;
+        b=sZeZsptj07txPT3pe6bg85WLBogL/niFdujvXhGmvGHvUMdf+ubK/UMpNHCLyogLwJ
+         1SzO61ddJPTl2rtfw/kEWCzbP/eORv0uCHNC9PQeJyNGrGAE73x2lB0kWBr2Kjmq3xRa
+         mHwmaWFkL87Lq1cgfh194/MR4V/+H09KgB3y8gzFiALIbiGBD1RimwncOW3qBHBZ2PVs
+         UJ6FI/VP/MEHjwSS79k9qDB+GAXe0Ehg7pg7yN/vCBgUpTkurP3pNm1JUOvBj2epSt4W
+         zK35VaXeUyV2ai5LhbEjWsjFjQ7WQtGm92S5pR09fzSj8A5IT67/CPetqREViJP8tMHW
+         dVyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=BIPrJxqbXAd+295s29/rrMW5CvpwBx6wdUxINV63DAg=;
-        b=zczqqsRcnPnfezcwt1Lv12o927I/rLl2DNMmKXzkjR63EkIGsAoHk6KUOgpQ0HaQbl
-         XRFRSczfF477aSw4l/fTuwtzI55Ag6JHWyizpWsbS4L8x/azkV/SZA1qkDnJCvk3es9F
-         cMMBOicU+m4AbCOCHL0rwzTPpq90LoJVcdZ9FmrggpOUdJNtVc3Rx6/AO6oR/UmPcCO7
-         Fsi8Y/L5Q6GNLdIFDHWi8xt72ibxwugrRZTKwlK4tvYfAE4woUk2dqtjl60aFUfOPB2G
-         2/LwF+oJZAg3Vugu+j98tYCjXAK4BBAoCnU1GIMDNCnEZAS6uQstNnRUeD02QUppArfw
-         xWhw==
-X-Gm-Message-State: AOAM532pBRwtwZ6KUmbEisDuE9htm/Ot8CUycgeSendWbGeVB31jlZOR
-	yLrYaXmMCljlWO/wyx+vUtxInQ==
-X-Google-Smtp-Source: ABdhPJzDDlG5ka/o2WcllRfswJSM7NjDXKFvt55zHZ+GNjiCVBiiEna26O0pZFz3O+Zji3jW2c7Ibw==
-X-Received: by 2002:a05:6a00:c8f:b0:510:60cf:55fa with SMTP id a15-20020a056a000c8f00b0051060cf55famr1314141pfv.37.1652391019468;
-        Thu, 12 May 2022 14:30:19 -0700 (PDT)
-Received: from [127.0.0.1] (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902edd000b0015f3d8759e4sm350899plk.167.2022.05.12.14.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 14:30:19 -0700 (PDT)
-Date: Thu, 12 May 2022 14:30:17 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-CC: Sami Tolvanen <samitolvanen@google.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220512211704.3158759-1-nathan@kernel.org>
-References: <20220512211704.3158759-1-nathan@kernel.org>
-Message-ID: <DEB6A9AC-845E-4656-A596-E6341D3C287F@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3GME8g6CPueWMd7lO8qXn1DRp2ceHlUdCzpOykCHbrg=;
+        b=PTOQpeYrS+fftfewMVR1nrDaBFNy1nb2vmx+xG/v6YQ+j6P9l9q90Mhe1GlKbZw2A/
+         e5nMRex1C1khYlov6uTNYhEWEs+wwJFwKPtzbj0NBc/UD1wRen3gJp6yJcoA9rlBLWtF
+         sstsoDdaCRDmmB8p+U821yGz3CaS9YvAg/ZGWjia54xvjNlFN8R2XgIrxI4OfvKJeDu6
+         0cb0R9tKQvdFmCpsNPhFol5H3oTmER8uilh7Ln/+yIfci3UrpwJW4Mj/+ZaF+1yFAIUS
+         zL4nOnZOpW1KlqEXXl28kZobpTaZ7ic+byhvmkB+fhUuLWlCbht+lrl8oB6iGMB2Qllm
+         L0MA==
+X-Gm-Message-State: AOAM533KB8uYU/Ryfo3mI04YmcryC/iFLRAXN4m5ckWe6NlBgZB/Jkil
+	QmojBbu+cEBhUSNYoaW0EAzoLT9irE/6s06BH2+Gyg==
+X-Google-Smtp-Source: ABdhPJzRP9OzjWdpg6cI3ylhn4k+6QO0736A21gHd6fEDFV4tnKVbdWhReuAz2gSne+SFZ3750d7D1xL3b8UC7zpu2M=
+X-Received: by 2002:a25:84c3:0:b0:64a:de2c:2b75 with SMTP id
+ x3-20020a2584c3000000b0064ade2c2b75mr1889370ybm.70.1652391089597; Thu, 12 May
+ 2022 14:31:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220512211704.3158759-1-nathan@kernel.org>
+In-Reply-To: <20220512211704.3158759-1-nathan@kernel.org>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 12 May 2022 14:30:53 -0700
+Message-ID: <CABCJKucbETQeRHx4bLG1fWZBnpszbrS9N+Ryp9sr2AcAY=9sxA@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On May 12, 2022 2:17:04 PM PDT, Nathan Chancellor <nathan@kernel=2Eorg> wr=
-ote:
->When an attribute group is created with sysfs_create_group(), the
->->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
->callback to kobj_attr_show()=2E kobj_attr_show() uses container_of() to
->get the ->show() callback from the attribute it was passed, meaning the
->->show() callback needs to be the same type as the ->show() callback in
->'struct kobj_attribute'=2E
+On Thu, May 12, 2022 at 2:17 PM Nathan Chancellor <nathan@kernel.org> wrote:
 >
->However, show_dynamic_id() has the type of the ->show() callback in
->'struct device_attribute', which causes a CFI violation when opening the
->'id' sysfs node under drm/card0/metrics=2E This happens to work because
->the layout of 'struct kobj_attribute' and 'struct device_attribute' are
->the same, so the container_of() cast happens to allow the ->show()
->callback to still work=2E
+> When an attribute group is created with sysfs_create_group(), the
+> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+> callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
+> get the ->show() callback from the attribute it was passed, meaning the
+> ->show() callback needs to be the same type as the ->show() callback in
+> 'struct kobj_attribute'.
 >
->Change the type of show_dynamic_id() to match the ->show() callback in
->'struct kobj_attributes' and update the type of sysfs_metric_id to
->match, which resolves the CFI violation=2E
+> However, show_dynamic_id() has the type of the ->show() callback in
+> 'struct device_attribute', which causes a CFI violation when opening the
+> 'id' sysfs node under drm/card0/metrics. This happens to work because
+> the layout of 'struct kobj_attribute' and 'struct device_attribute' are
+> the same, so the container_of() cast happens to allow the ->show()
+> callback to still work.
 >
->Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFI=
-G interface")
->Signed-off-by: Nathan Chancellor <nathan@kernel=2Eorg>
+> Change the type of show_dynamic_id() to match the ->show() callback in
+> 'struct kobj_attributes' and update the type of sysfs_metric_id to
+> match, which resolves the CFI violation.
+>
+> Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
+>  drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+> index 0a9c3fcc09b1..1577ab6754db 100644
+> --- a/drivers/gpu/drm/i915/i915_perf.c
+> +++ b/drivers/gpu/drm/i915/i915_perf.c
+> @@ -4050,8 +4050,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
+>         return ERR_PTR(err);
+>  }
+>
+> -static ssize_t show_dynamic_id(struct device *dev,
+> -                              struct device_attribute *attr,
+> +static ssize_t show_dynamic_id(struct kobject *kobj,
+> +                              struct kobj_attribute *attr,
+>                                char *buf)
+>  {
+>         struct i915_oa_config *oa_config =
+> diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
+> index 473a3c0544bb..05cb9a335a97 100644
+> --- a/drivers/gpu/drm/i915/i915_perf_types.h
+> +++ b/drivers/gpu/drm/i915/i915_perf_types.h
+> @@ -55,7 +55,7 @@ struct i915_oa_config {
+>
+>         struct attribute_group sysfs_metric;
+>         struct attribute *attrs[2];
+> -       struct device_attribute sysfs_metric_id;
+> +       struct kobj_attribute sysfs_metric_id;
+>
+>         struct kref ref;
+>         struct rcu_head rcu;
 
-This matches my own investigation into the error=2E Thanks for putting the=
- patch together! :)
+This looks correct to me. Thanks for testing this and fixing the issue!
 
-Reviewed-by: Kees Cook <keescook@chromium=2Eorg>
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-
---=20
-Kees Cook
+Sami
