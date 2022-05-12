@@ -1,118 +1,144 @@
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31152F2C
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:31:30 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id j84so1301288ybc.3
-        for <llvm@lists.linux.dev>; Thu, 12 May 2022 14:31:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73E02F2C
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 21:34:53 +0000 (UTC)
+Received: by mail-lj1-f181.google.com with SMTP id l19so8081003ljb.7
+        for <llvm@lists.linux.dev>; Thu, 12 May 2022 14:34:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3GME8g6CPueWMd7lO8qXn1DRp2ceHlUdCzpOykCHbrg=;
-        b=sZeZsptj07txPT3pe6bg85WLBogL/niFdujvXhGmvGHvUMdf+ubK/UMpNHCLyogLwJ
-         1SzO61ddJPTl2rtfw/kEWCzbP/eORv0uCHNC9PQeJyNGrGAE73x2lB0kWBr2Kjmq3xRa
-         mHwmaWFkL87Lq1cgfh194/MR4V/+H09KgB3y8gzFiALIbiGBD1RimwncOW3qBHBZ2PVs
-         UJ6FI/VP/MEHjwSS79k9qDB+GAXe0Ehg7pg7yN/vCBgUpTkurP3pNm1JUOvBj2epSt4W
-         zK35VaXeUyV2ai5LhbEjWsjFjQ7WQtGm92S5pR09fzSj8A5IT67/CPetqREViJP8tMHW
-         dVyQ==
+        bh=ZQ7XWRC9DHBCbnMYIg75BjuOh+AqnlsxWLkBLw38gMg=;
+        b=RyvRBJqJ6A/80crvldPh+nyT51ONhyhj2H6A8d7bimHMuIlw7t236lI8FZ1x5sI7yo
+         yecpm4AvtMfKa0ky8m4KWcfldVBnM+/jkS7rbn540P1gpzOkgDe/MNI5+7/Of4L0y/fx
+         hUZrwUyiOHhsCAMP6t9xIKrbXsLAAP1yCdAenGft1xt7Gc4kFHjLu0CINeOAIdMMIl2r
+         koQrhfmkYLuha/SpqrAH11rswzaH6Qw2sXOs3CUWytX2xxoxYT+NfwvOLTE9faNMzpyO
+         naWtrKPMPuDZLzmY9oRapbK1L7miKvc/Nx2HxoxuERy/KNqDbk7hgcS3xnn+2rfUzdPP
+         2qMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3GME8g6CPueWMd7lO8qXn1DRp2ceHlUdCzpOykCHbrg=;
-        b=PTOQpeYrS+fftfewMVR1nrDaBFNy1nb2vmx+xG/v6YQ+j6P9l9q90Mhe1GlKbZw2A/
-         e5nMRex1C1khYlov6uTNYhEWEs+wwJFwKPtzbj0NBc/UD1wRen3gJp6yJcoA9rlBLWtF
-         sstsoDdaCRDmmB8p+U821yGz3CaS9YvAg/ZGWjia54xvjNlFN8R2XgIrxI4OfvKJeDu6
-         0cb0R9tKQvdFmCpsNPhFol5H3oTmER8uilh7Ln/+yIfci3UrpwJW4Mj/+ZaF+1yFAIUS
-         zL4nOnZOpW1KlqEXXl28kZobpTaZ7ic+byhvmkB+fhUuLWlCbht+lrl8oB6iGMB2Qllm
-         L0MA==
-X-Gm-Message-State: AOAM533KB8uYU/Ryfo3mI04YmcryC/iFLRAXN4m5ckWe6NlBgZB/Jkil
-	QmojBbu+cEBhUSNYoaW0EAzoLT9irE/6s06BH2+Gyg==
-X-Google-Smtp-Source: ABdhPJzRP9OzjWdpg6cI3ylhn4k+6QO0736A21gHd6fEDFV4tnKVbdWhReuAz2gSne+SFZ3750d7D1xL3b8UC7zpu2M=
-X-Received: by 2002:a25:84c3:0:b0:64a:de2c:2b75 with SMTP id
- x3-20020a2584c3000000b0064ade2c2b75mr1889370ybm.70.1652391089597; Thu, 12 May
- 2022 14:31:29 -0700 (PDT)
+        bh=ZQ7XWRC9DHBCbnMYIg75BjuOh+AqnlsxWLkBLw38gMg=;
+        b=jhA2UnnyH7lMGeqLv5qBWEhivqIlYdiViRTwhkDK4oGiXKwavsE95H3iceQtuwuKT2
+         Uavi45CpdjQv9WVwifwLqzr6NQCSNy7tAXjsxKYY5cas6Ais52abVWy8VSsmLGYJgslV
+         0aohOCtdgYti3L8FgahaBlLH+TMUhpUnL4ReWn24AbCf6bH5G7cU4WFDRMonmAF5f2K+
+         2WXbQqAqgvZq5Fl8RIZAuyXSV3Ji0wOe9TcewAJKOUBHvWPwm/Hnp8xvMGH/5LOATVl/
+         lVe3XV2kRDA9A1EUzcZSRdeCHRz+gMPsnHyA2oXxW3jzHfpeeDhrNCkMGv+XTkfIEFlH
+         yiYA==
+X-Gm-Message-State: AOAM531MQbewe+cNg+5a7V5oebm9EZCxkBg4bIzX3vRMlrGi01Nh3J+Z
+	SZbdMUbds+veb3gmLrLI5u2KVyiM8ppcXes8+TVM3A==
+X-Google-Smtp-Source: ABdhPJzR3FWSdYG+QG5HFvSiewtwfQztKLWDP3xQpQ+zlszBDRabO8sM7sQnvjzTjgI/rOHcfyTW54Hx4W5/HYZYibk=
+X-Received: by 2002:a2e:aa8e:0:b0:251:f929:3e7d with SMTP id
+ bj14-20020a2eaa8e000000b00251f9293e7dmr1163096ljb.352.1652391291632; Thu, 12
+ May 2022 14:34:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220512211704.3158759-1-nathan@kernel.org>
-In-Reply-To: <20220512211704.3158759-1-nathan@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 12 May 2022 14:30:53 -0700
-Message-ID: <CABCJKucbETQeRHx4bLG1fWZBnpszbrS9N+Ryp9sr2AcAY=9sxA@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Fix CFI violation with show_dynamic_id()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	patches@lists.linux.dev
+References: <20220512205545.992288-1-twd2.me@gmail.com>
+In-Reply-To: <20220512205545.992288-1-twd2.me@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 12 May 2022 14:34:40 -0700
+Message-ID: <CAKwvOdmJ26h4L=3+42xeWG0_mZmZXkye=+mNWgFOHbo59ZVz1w@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: build: Allow LTO to be selected
+To: Wende Tan <twd2.me@gmail.com>
+Cc: palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu, 
+	linux-riscv@lists.infradead.org, nathan@kernel.org, llvm@lists.linux.dev, 
+	Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 12, 2022 at 2:17 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, May 12, 2022 at 1:56 PM Wende Tan <twd2.me@gmail.com> wrote:
 >
-> When an attribute group is created with sysfs_create_group(), the
-> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-> callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
-> get the ->show() callback from the attribute it was passed, meaning the
-> ->show() callback needs to be the same type as the ->show() callback in
-> 'struct kobj_attribute'.
+> Allow LTO to be selected for RISC-V, only when LLD >= 14, since there is an
+> issue [1] in prior LLD versions that prevents LLD to generate proper
+> machine code for RISC-V when writing `nop`s.
 >
-> However, show_dynamic_id() has the type of the ->show() callback in
-> 'struct device_attribute', which causes a CFI violation when opening the
-> 'id' sysfs node under drm/card0/metrics. This happens to work because
-> the layout of 'struct kobj_attribute' and 'struct device_attribute' are
-> the same, so the container_of() cast happens to allow the ->show()
-> callback to still work.
+> I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3GiB
+> on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The image
+> can boot to shell using an archriscv rootfs on QEMU.
 >
-> Change the type of show_dynamic_id() to match the ->show() callback in
-> 'struct kobj_attributes' and update the type of sysfs_metric_id to
-> match, which resolves the CFI violation.
+> I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+> KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+
+Haha! That's ok, allyesconfig is not expected to boot for any
+architectures AFAIK. For CI, we simply verify we can build them; we
+boot test everything but allyesconfig and allmodconfig (and
+architectures which don't yet have qemu ports).  It helps detect when
+assembler sources don't use enough encoding space when referenced
+external symbols are too far away for larger images, IME.
+
+That's a long time; first time I've seen a number from someone trying
+to LTO allyesconfig!
+
+> successfully producing a 1.7GiB Image. Unfortunately, we cannot boot this
+> image because the `create_kernel_page_table()` -> `alloc_pmd_early()` ->
+> `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in a
+> separate patch further.
 >
-> Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLVM
+>     commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops")
+
+So looking at that change, it doesn't look like it touches LLD at all.
+To me it touches both the assembler and the object streamer, which is
+used by the compiler (and assembler) to stream instructions directly
+into an object file (without the need for an external assembler).
+
+That makes me think that
+CLANG_VERSION >= 140000
+would be more appropriate than
+LLD_VERSION >= 140000
+
+WDYT?
+
+Also, I'm curious if the LLVM patch you had me commit for you recently
+is at all related or necessary for this? If so, then the version check
+should probably be against clang-15, not clang-14.
+https://github.com/llvm/llvm-project/commit/6baaad740a5abb4bfcff022a8114abb4eea66a2d
+
+Anyways, I just did a build+boot (in qemu) test of defconfig+thinlto
+and defconfig+lto. LGTM
+
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Tested-by: Wende Tan <twd2.me@gmail.com>
+> Signed-off-by: Wende Tan <twd2.me@gmail.com>
 > ---
->  drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
->  drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> v2:
+> - Some textual changes suggested by Nick.
+> - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is filed
+>   and resolved.
+> - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
 >
-> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-> index 0a9c3fcc09b1..1577ab6754db 100644
-> --- a/drivers/gpu/drm/i915/i915_perf.c
-> +++ b/drivers/gpu/drm/i915/i915_perf.c
-> @@ -4050,8 +4050,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
->         return ERR_PTR(err);
->  }
+> v1: https://lore.kernel.org/linux-riscv/20210719205208.1023221-1-twd2.me@gmail.com/
+> ---
+>  arch/riscv/Kconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> -static ssize_t show_dynamic_id(struct device *dev,
-> -                              struct device_attribute *attr,
-> +static ssize_t show_dynamic_id(struct kobject *kobj,
-> +                              struct kobj_attribute *attr,
->                                char *buf)
->  {
->         struct i915_oa_config *oa_config =
-> diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
-> index 473a3c0544bb..05cb9a335a97 100644
-> --- a/drivers/gpu/drm/i915/i915_perf_types.h
-> +++ b/drivers/gpu/drm/i915/i915_perf_types.h
-> @@ -55,7 +55,7 @@ struct i915_oa_config {
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 00fd9c548f26..c55f6b95e5af 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -38,6 +38,10 @@ config RISCV
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+>         select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>         select ARCH_SUPPORTS_HUGETLBFS if MMU
+> +       # LLD >= 14:
+> +       # - https://github.com/llvm/llvm-project/issues/50505
+> +       select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
+> +       select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+>         select ARCH_USE_MEMTEST
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>         select ARCH_WANT_FRAME_POINTERS
+> --
+> 2.25.1
 >
->         struct attribute_group sysfs_metric;
->         struct attribute *attrs[2];
-> -       struct device_attribute sysfs_metric_id;
-> +       struct kobj_attribute sysfs_metric_id;
->
->         struct kref ref;
->         struct rcu_head rcu;
 
-This looks correct to me. Thanks for testing this and fixing the issue!
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
+-- 
+Thanks,
+~Nick Desaulniers
