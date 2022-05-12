@@ -1,41 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0961C33FB
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 19:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2517C1
+	for <llvm@lists.linux.dev>; Thu, 12 May 2022 20:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652384691; x=1683920691;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=otmMAyzQcL2fOqGoDL2m5hNAcsXvAkWzfDxmNB9yaqE=;
-  b=icdl6IH2gJeG9hSd1iVLtzvEVUnfZu2Xsd35yG+pjCWmjgkN809OxH2l
-   BKSl9HTC+poNvxBdt1B0dQqHrArlUPItfHEW+NbuIh9Y2/V/VR9FI9Ka3
-   Mo0SdbfLC4Cv7Wsf8LF6qVGVY7ibyY7poz1IautqUV1p+C1tjVSkoGTWi
-   kZkOUUuHKinAJaO/s4UyseNMQRg0Dqgu/5OMbIX5T9pAjpVOIbSQNXkOP
-   3kYYl8O/sX0kGyxSRA4WBkiCPajd7kfICf1BTEOu7xHePA9e4e0YDLNjJ
-   SXUlaaD4uQVNbqD1OMD7DHG7/W1Vx+7CFyef9Yg5orUOzR5E51ZrroH/a
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257664600"
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="257664600"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 12:44:49 -0700
+  t=1652388652; x=1683924652;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ir3jumVTPsEtVAlCCzru3GvFR8Ccn6TVtNrXTCoC+2M=;
+  b=J/4M+Gvm+V04f8tD9UeVkI9p0/KdrNvlrTFn+fdOUwXxbd9bs2d32sTT
+   6xR9yWZcEaqYPZicrWvoKPKI7JcZb8h5phDV+AdN+3V/fILWHFnA/E1yO
+   q5NRPNmPKQA1qTii3nYOFgfIueSDyknVi3h23+4Ipcbx3DTSCSlgerHUQ
+   Rbmbtm/sMRasP5fKE1VLyiRe2Ef5aX8hNYOUET54lQIvhLW6MN8SM3t1O
+   8uz1R1bluLRKlJzJDk74DmS2RmDir71mPPKhwqV0Bjr8O8K7Sfnrw9phV
+   0ewK2+yej1a9EFAqhoOTZKlXi1VI6rbK8QgP0ROB4w14NsCPEs8YJZ7km
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="356563475"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="356563475"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 13:50:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,220,1647327600"; 
-   d="scan'208";a="739843166"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="603546303"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 May 2022 12:44:47 -0700
+  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 13:50:50 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1npEjv-000Kre-Av;
-	Thu, 12 May 2022 19:44:47 +0000
-Date: Fri, 13 May 2022 03:43:53 +0800
+	id 1npFlp-000Kue-Kb;
+	Thu, 12 May 2022 20:50:49 +0000
+Date: Fri, 13 May 2022 04:50:13 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [frederic-dynticks:rcu/context-tracking-v2 11/21] vmlinux.o:
- warning: objtool: irqentry_exit()+0x7f: call to ct_irq_exit() leaves
- .noinstr.text section
-Message-ID: <202205130320.YdNwURYC-lkp@intel.com>
+To: Steve Wahl <steve.wahl@hpe.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: include/linux/intel-iommu.h:531:28: error: use of undeclared
+ identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
+Message-ID: <202205130438.4S9ZxIkJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,50 +46,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking-v2
-head:   0364ddb8830db4d4b78f7bfd9344e12d22e9cd32
-commit: 8b2cc5b380c41378648f60f114cc088d109f7de3 [11/21] context_tracking: Take IRQ eqs entrypoints over RCU
-config: x86_64-randconfig-a004-20220509 (https://download.01.org/0day-ci/archive/20220513/202205130320.YdNwURYC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
+head:   70fc6f8ca45b69a710b82d38ef61ac43a73fef24
+commit: 70fc6f8ca45b69a710b82d38ef61ac43a73fef24 iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
+date:   5 hours ago
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220513/202205130438.4S9ZxIkJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=8b2cc5b380c41378648f60f114cc088d109f7de3
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/context-tracking-v2
-        git checkout 8b2cc5b380c41378648f60f114cc088d109f7de3
+        # https://github.com/intel-lab-lkp/linux/commit/70fc6f8ca45b69a710b82d38ef61ac43a73fef24
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220512-231415/Steve-Wahl/iommu-vt-d-Increase-DMAR_UNITS_SUPPORTED/20220506-035321
+        git checkout 70fc6f8ca45b69a710b82d38ef61ac43a73fef24
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/char/agp/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: do_syscall_64()+0x1a: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x34: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x32: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs()+0x1f: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_stack_page() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack()+0x9: call to cpu_entry_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi()+0x6: call to sev_es_nmi_complete() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: default_do_nmi()+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_rdmsrl()+0x3: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_wrmsrl()+0x7: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0x7dd: call to pentium_machine_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags()+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_page_fault()+0x6e: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_on()+0xa0: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_off()+0x9d: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_exit()+0x7f: call to ct_irq_exit() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x5f: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit()+0x34: call to rcu_nmi_exit() leaves .noinstr.text section
+   In file included from drivers/char/agp/intel-gtt.c:23:
+>> include/linux/intel-iommu.h:531:28: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
+           unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
+                                     ^
+   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
+   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
+                                   ^
+   In file included from drivers/char/agp/intel-gtt.c:23:
+   include/linux/intel-iommu.h:535:17: error: use of undeclared identifier 'CONFIG_DMAR_UNITS_SUPPORTED'
+           u16             iommu_did[DMAR_UNITS_SUPPORTED];
+                                     ^
+   include/linux/dmar.h:21:30: note: expanded from macro 'DMAR_UNITS_SUPPORTED'
+   #define DMAR_UNITS_SUPPORTED    CONFIG_DMAR_UNITS_SUPPORTED
+                                   ^
+   2 errors generated.
+
+
+vim +/CONFIG_DMAR_UNITS_SUPPORTED +531 include/linux/intel-iommu.h
+
+b0d1f8741b8123 Jacob Pan       2020-05-16  527  
+9ddbfb42138d84 Lu Baolu        2018-07-14  528  struct dmar_domain {
+9ddbfb42138d84 Lu Baolu        2018-07-14  529  	int	nid;			/* node id */
+9ddbfb42138d84 Lu Baolu        2018-07-14  530  
+9739ba327c01e2 Parav Pandit    2021-06-10 @531  	unsigned int iommu_refcnt[DMAR_UNITS_SUPPORTED];
+9ddbfb42138d84 Lu Baolu        2018-07-14  532  					/* Refcount of devices per iommu */
+9ddbfb42138d84 Lu Baolu        2018-07-14  533  
+9ddbfb42138d84 Lu Baolu        2018-07-14  534  
+9ddbfb42138d84 Lu Baolu        2018-07-14  535  	u16		iommu_did[DMAR_UNITS_SUPPORTED];
+9ddbfb42138d84 Lu Baolu        2018-07-14  536  					/* Domain ids per IOMMU. Use u16 since
+9ddbfb42138d84 Lu Baolu        2018-07-14  537  					 * domain ids are 16 bit wide according
+9ddbfb42138d84 Lu Baolu        2018-07-14  538  					 * to VT-d spec, section 9.3 */
+9ddbfb42138d84 Lu Baolu        2018-07-14  539  
+1f106ff0ea2782 Parav Pandit    2021-06-10  540  	u8 has_iotlb_device: 1;
+1f106ff0ea2782 Parav Pandit    2021-06-10  541  	u8 iommu_coherency: 1;		/* indicate coherency of iommu access */
+6043257b1de069 Jason Gunthorpe 2022-04-11  542  	u8 force_snooping : 1;		/* Create IOPTEs with snoop control */
+1f106ff0ea2782 Parav Pandit    2021-06-10  543  
+9ddbfb42138d84 Lu Baolu        2018-07-14  544  	struct list_head devices;	/* all devices' list */
+9ddbfb42138d84 Lu Baolu        2018-07-14  545  	struct iova_domain iovad;	/* iova's that belong to this domain */
+9ddbfb42138d84 Lu Baolu        2018-07-14  546  
+9ddbfb42138d84 Lu Baolu        2018-07-14  547  	struct dma_pte	*pgd;		/* virtual address */
+9ddbfb42138d84 Lu Baolu        2018-07-14  548  	int		gaw;		/* max guest address width */
+9ddbfb42138d84 Lu Baolu        2018-07-14  549  
+9ddbfb42138d84 Lu Baolu        2018-07-14  550  	/* adjusted guest address width, 0 is level 2 30-bit */
+9ddbfb42138d84 Lu Baolu        2018-07-14  551  	int		agaw;
+9ddbfb42138d84 Lu Baolu        2018-07-14  552  
+9ddbfb42138d84 Lu Baolu        2018-07-14  553  	int		flags;		/* flags to find out type of domain */
+9ddbfb42138d84 Lu Baolu        2018-07-14  554  	int		iommu_superpage;/* Level of superpages supported:
+9ddbfb42138d84 Lu Baolu        2018-07-14  555  					   0 == 4KiB (no superpages), 1 == 2MiB,
+9ddbfb42138d84 Lu Baolu        2018-07-14  556  					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
+9ddbfb42138d84 Lu Baolu        2018-07-14  557  	u64		max_addr;	/* maximum mapped address */
+9ddbfb42138d84 Lu Baolu        2018-07-14  558  
+9ddbfb42138d84 Lu Baolu        2018-07-14  559  	struct iommu_domain domain;	/* generic domain data structure for
+9ddbfb42138d84 Lu Baolu        2018-07-14  560  					   iommu core */
+9ddbfb42138d84 Lu Baolu        2018-07-14  561  };
+9ddbfb42138d84 Lu Baolu        2018-07-14  562  
 
 -- 
 0-DAY CI Kernel Test Service
