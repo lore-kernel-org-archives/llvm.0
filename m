@@ -1,24 +1,24 @@
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594E13232
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:44:58 +0000 (UTC)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-10.nifty.com with ESMTP id 24DBfpQK021596
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:41:51 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124723232
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:45:23 +0000 (UTC)
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-03.nifty.com with ESMTP id 24DBfo98018465
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:41:50 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-07.nifty.com with ESMTP id 24DBeEwf008349;
-	Fri, 13 May 2022 20:40:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwf008349
+	by conuserg-07.nifty.com with ESMTP id 24DBeEwd008349;
+	Fri, 13 May 2022 20:40:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwd008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652442021;
-	bh=cqElzDKYpcUrgO4yHYvWdPTzjbjG7knRZ4i2745IA+I=;
+	s=dec2015msa; t=1652442019;
+	bh=9Q6mTn1bAGbkjgZhALJ6nTHBDHzsRRSkgxWQCfuUF6o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Sc3Y3caE/J1wed4rFYZnaCpQhbTPOPyo6Eo0nM+FrQSyiMx9UMcAK4hL4C/M5w8Ze
-	 oLEckYtJTNT6qK4yaUuHkqrpjubN5bDQ47zCTsArPk352eWo2JqJVkCejliOY0ZDAQ
-	 a5jNXw0kyOkiYbsbMQKHs9i1LjATm9v7pj0z5/1aXLsZxDhNNV3ViOdeG8S1jZrodG
-	 bxHebxebti4fji1Czx/yAHQSgu6OMbfYJzhpyhLUBtwrEgt4lcrFcDhjA7rZs8RvLa
-	 ba2itORo7C46mX1ysaHXHu73CYPEcGlmaXkBJs8//kpYZyYQYsqtLiLKtrHey91YRo
-	 P7yxqNo9PrLsQ==
+	b=whFtsEspc/QO7yhgWHzcrhF8CSTpr4/K7GubZ1k3pXPHngIOmWX1Bg3G3E9BT4G9r
+	 vDeq+KtUyMHJrUQ2RXmTnWl7x4Q0J+gBTbmDWLOXqm0/eyW70pi6CydWhjWMnbTOR5
+	 LXln7JkIpyWBgqy+4Wr14rjvy5vF44LDFeEVCtkFGmP/xVHhoRc0UdKYSFRxQBb6LE
+	 tExxXn0tiIRu2Oqt5frj98+5mgfKw4kcHfI+CXZIrle/imk4dKBi0gRMX2Wq2z0kk8
+	 G8xgM/60nUIb5oxj6Onyc4jifXi23ZJ0NxCENT7C4BC2AA3k+g2462IvHOUh5WmF7S
+	 iv4XkKxDnM6lw==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -29,9 +29,9 @@ Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script instead of modpost
-Date: Fri, 13 May 2022 20:39:26 +0900
-Message-Id: <20220513113930.10488-7-masahiroy@kernel.org>
+Subject: [PATCH v6 04/10] genksyms: adjust the output format to modpost
+Date: Fri, 13 May 2022 20:39:24 +0900
+Message-Id: <20220513113930.10488-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
 References: <20220513113930.10488-1-masahiroy@kernel.org>
@@ -43,236 +43,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+Make genksyms output symbol versions in the format modpost expects,
+so the 'sed' is unneeded.
 
-Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
-functions") tried to detect it, but this check has false negatives.
+This commit makes *.symversions completely unneeded.
 
-Here is the sample code.
-
-  Makefile:
-
-    obj-y += foo1.o foo2.o
-
-  foo1.c:
-
-    #include <linux/export.h>
-    static void foo(void) {}
-    EXPORT_SYMBOL(foo);
-
-  foo2.c:
-
-    void foo(void) {}
-
-foo1.c exports the static symbol 'foo', but modpost cannot catch it
-because it is fooled by foo2.c, which has a global symbol with the
-same name.
-
-s->is_static is cleared if a global symbol with the same name is found
-somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
-belong to the same compilation unit.
-
-This check should be done per compilation unit, but I do not know how
-to do it in modpost. modpost runs against vmlinux.o or modules, which
-merges multiple objects, then forgets their origin.
-
-It is true modpost gets access to the lists of all the member objects
-(.vmlinux.objs and *.mod), but modpost cannot parse individual objects
-because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
-
-Add a simple bash script to parse the output from ${NM}. This works for
-CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
-
-Revert 15bfc2348d54.
+I will keep *.symversions in .gitignore and 'make clean' for a while.
+Otherwise, 'git status' might be surprising.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-(no changes since v5)
+(no changes since v2)
 
-Changes in v5:
-  - Add more comments in the script
-
-Changes in v4:
+Changes in v2:
   - New patch
 
- scripts/Makefile.build     |  4 +++
- scripts/check-local-export | 64 ++++++++++++++++++++++++++++++++++++++
- scripts/mod/modpost.c      | 28 +----------------
- 3 files changed, 69 insertions(+), 27 deletions(-)
- create mode 100755 scripts/check-local-export
+ scripts/Makefile.build      | 6 ------
+ scripts/genksyms/genksyms.c | 2 +-
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 838ea5e83174..c2a173b3fd60 100644
+index dff9220135c4..461998a2ad2b 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -244,9 +244,12 @@ cmd_gen_ksymdeps = \
- 	$(CONFIG_SHELL) $(srctree)/scripts/gen_ksymdeps.sh $@ >> $(dot-target).cmd
- endif
+@@ -165,16 +165,10 @@ ifdef CONFIG_MODVERSIONS
+ # o modpost will extract versions from that file and create *.c files that will
+ #   be compiled and linked to the kernel and/or modules.
  
-+cmd_check_local_export = $(srctree)/scripts/check-local-export $@
-+
- define rule_cc_o_c
- 	$(call cmd_and_fixdep,cc_o_c)
- 	$(call cmd,gen_ksymdeps)
-+	$(call cmd,check_local_export)
- 	$(call cmd,checksrc)
- 	$(call cmd,checkdoc)
- 	$(call cmd,gen_objtooldep)
-@@ -257,6 +260,7 @@ endef
- define rule_as_o_S
- 	$(call cmd_and_fixdep,as_o_S)
- 	$(call cmd,gen_ksymdeps)
-+	$(call cmd,check_local_export)
- 	$(call cmd,gen_objtooldep)
- 	$(call cmd,gen_symversions_S)
- endef
-diff --git a/scripts/check-local-export b/scripts/check-local-export
-new file mode 100755
-index 000000000000..829e0591c0be
---- /dev/null
-+++ b/scripts/check-local-export
-@@ -0,0 +1,64 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2022 Masahiro Yamada <masahiroy@kernel.org>
-+#
-+# Exit with error if a local exported symbol is found.
-+# EXPORT_SYMBOL should be used for global symbols.
-+
-+set -e
-+
-+declare -A symbol_types
-+declare -a export_symbols
-+
-+exit_code=0
-+
-+while read value type name
-+do
-+	# Exceptional case for Clang LTO.
-+	# llvm-nm outputs this:
-+	#   "---------------- t"
-+	# Skip this line because the name is empty.
-+	if [[ ${value} = -* && -z ${name} ]]; then
-+		continue
-+	fi
-+
-+	# For undefined symbols, the first field (value) is empty.
-+	# The outout looks like this:
-+	#   "                 U _printk"
-+	# Shift the fields.
-+	if [[ -z ${name} ]]; then
-+	   name=${type}
-+	   type=${value}
-+	fi
-+
-+	# save (name, type) in the associative array
-+	symbol_types[${name}]=${type}
-+
-+	# append the exported symbol to the array
-+	if [[ ${name} == __ksymtab_* ]]; then
-+		export_symbols+=(${name#__ksymtab_})
-+	fi
-+
-+	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
-+	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
-+	# hidden by '2>/dev/null'. However, it suppresses real error messages
-+	# as well. Add a hand-crafted error message here.
-+	#
-+	# Use -q instead of 2>/dev/null when we upgrade the minimum version of
-+	# binutils to 2.37, llvm to 13.0.0.
-+done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
-+
-+# Catch error in the process substitution
-+wait $!
-+
-+for name in "${export_symbols[@]}"
-+do
-+	# nm(3) says "If lowercase, the symbol is usually local"
-+	if [[ ${symbol_types[$name]} =~ [a-z] ]]; then
-+		echo "$@: error: local symbol '${name}' was exported" >&2
-+		exit_code=1
-+	fi
-+done
-+
-+exit ${exit_code}
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 27c45427d989..2328522f8a78 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -212,7 +212,6 @@ struct symbol {
- 	unsigned int crc;
- 	bool crc_valid;
- 	bool weak;
--	bool is_static;		/* true if symbol is not global */
- 	bool is_gpl_only;	/* exported by EXPORT_SYMBOL_GPL */
- 	char name[];
- };
-@@ -242,7 +241,7 @@ static struct symbol *alloc_symbol(const char *name)
+-genksyms_format := __crc_\(.*\) = \(.*\);
+-
+ gen_symversions =								\
+ 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
+ 		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+-		    > $@.symversions;						\
+-		sed -n 's/$(genksyms_format)/$(pound)SYMVER \1 \2/p' $@.symversions \
+ 			>> $(dot-target).cmd;					\
+-	else									\
+-		rm -f $@.symversions;						\
+ 	fi
  
- 	memset(s, 0, sizeof(*s));
- 	strcpy(s->name, name);
--	s->is_static = true;
-+
- 	return s;
+ cmd_gen_symversions_c =	$(call gen_symversions,c)
+diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
+index 67b23cc0df0f..f5dfdb9d80e9 100644
+--- a/scripts/genksyms/genksyms.c
++++ b/scripts/genksyms/genksyms.c
+@@ -680,7 +680,7 @@ void export_symbol(const char *name)
+ 		if (flag_dump_defs)
+ 			fputs(">\n", debugfile);
+ 
+-		printf("__crc_%s = 0x%08lx;\n", name, crc);
++		printf("#SYMVER %s 0x%08lx\n", name, crc);
+ 	}
  }
  
-@@ -877,20 +876,6 @@ static void read_symbols(const char *modname)
- 					     sym_get_data(&info, sym));
- 	}
- 
--	// check for static EXPORT_SYMBOL_* functions && global vars
--	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
--		unsigned char bind = ELF_ST_BIND(sym->st_info);
--
--		if (bind == STB_GLOBAL || bind == STB_WEAK) {
--			struct symbol *s =
--				find_symbol(remove_dot(info.strtab +
--						       sym->st_name));
--
--			if (s)
--				s->is_static = false;
--		}
--	}
--
- 	check_sec_ref(mod, modname, &info);
- 
- 	if (!mod->is_vmlinux) {
-@@ -1320,7 +1305,6 @@ static void read_dump(const char *fname)
- 			mod->from_dump = true;
- 		}
- 		s = sym_add_exported(symname, mod, gpl_only);
--		s->is_static = false;
- 		sym_set_crc(s, crc);
- 		sym_update_namespace(symname, namespace);
- 	}
-@@ -1385,7 +1369,6 @@ int main(int argc, char **argv)
- 	char *missing_namespace_deps = NULL;
- 	char *dump_write = NULL, *files_source = NULL;
- 	int opt;
--	int n;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
- 
-@@ -1461,15 +1444,6 @@ int main(int argc, char **argv)
- 	if (sec_mismatch_count && !sec_mismatch_warn_only)
- 		error("Section mismatches detected.\n"
- 		      "Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.\n");
--	for (n = 0; n < SYMBOL_HASH_SIZE; n++) {
--		struct symbol *s;
--
--		for (s = symbolhash[n]; s; s = s->next) {
--			if (s->is_static)
--				error("\"%s\" [%s] is a static EXPORT_SYMBOL\n",
--				      s->name, s->module->name);
--		}
--	}
- 
- 	if (nr_unresolved > MAX_UNRESOLVED_REPORTS)
- 		warn("suppressed %u unresolved symbol warnings because there were too many)\n",
 -- 
 2.32.0
 
