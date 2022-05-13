@@ -1,42 +1,42 @@
 Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7437A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:33 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id i17-20020a259d11000000b0064cd3084085so812036ybp.9
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A00F7A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:35 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id d188-20020a25cdc5000000b00648429e5ab9so8233327ybf.13
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=A+7QPiSqoa8uHCAaz7cWSuhzWOaNl1zZwhVwOmSdW3Q=;
-        b=eoneec1qCPJ+mzeLTO/26o4Gge0cWT5SAiGzbalPj2kajo6F/0cY+hXNaJV6/r+1ew
-         Y6uGiwZLXUyodzZ8UYO/n8YLOsl89RGDclgPhS6fxgoPf/o7am8+mqu4bw/b3L+/Yuyi
-         Cc/OaxzJLjKECCzrQRpdRnOuumBxE4idnbmxYj0GGrcjayFmVVo2gRU+pSIAIGWkmF0a
-         3GrUoXzWAOrstvsKGj3Hh/ia4A/Gbuk8XwS8MbQH/z19h/yMUcGvuCm84jFLSCi6XCzG
-         qcVtZMwaKqUWyqXG9PrxZtGErnPUmFAsNBu4fvRjKv6v93XufMYo0X2ugGmnuiRsSDsp
-         gASQ==
+        bh=ZCzpPwz0WdrY6BfkeL81XAsKV8wn1SlQoxjmwZ5/Gig=;
+        b=HceXmTaEkp+ZKV12vL4SdGdkWcvgFkun09LtngiucUo4uOaqteWrC89nSX8n8KF4Mf
+         zbFQUygsTyJ/9cwGEdvi8CB+UnSn1AFgPq0r43pT0ibJpLVodVsxquLgyGcsVsujaOSG
+         H+4SDyFdBebZKV0i5cPpZFFV8XZbJ6ILCp6VFWVPxYYiTMv2PnZ7GkElEQEcxyCLaem2
+         gHZ1kSHq2SaN8UpO6x3mbvHgvKrmQwvQnZQNCh89RrLMZptVGCOTgCtXmsjtL4HQ01M2
+         wb+wm2+HBcRXx8kcsZslS2kTnasITkIwT25vPWYX5Bi9iZ7iAdVT+LYMv9R5Gw/JPljd
+         d3Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=A+7QPiSqoa8uHCAaz7cWSuhzWOaNl1zZwhVwOmSdW3Q=;
-        b=iIhSXBJq9zwbsgnzVgStNwPPb3TcXtbkD3kkzwQy3mHJw06b2uax8KTo0eCBUCNmEJ
-         5I+DzXtqtkaIiuiHzNEABFSRhn0IG381A0awmffTstTIO2YRfcWo4iujLQj1b7LcP+ZI
-         w3l9XqF/Qi63Zsonj3c0IIP+AtHFXZy1ugyvVqmlQj3J7yWlCcynixTbgPnjAie65ORM
-         WlHoFNblychRe42D+4TIoCl5q+sIEYsBkmGhjfbXR4MTA8+FEg1IcIwSuj21t4YfgQq8
-         A4s7bl/YcXTF037/BapTLbFJiAtyx+BkSkYjc+/iaT2c3T/677bIdj42Af3AuArL8tcb
-         lK7w==
-X-Gm-Message-State: AOAM532rEr6CrVsDceafL1cnlGuKUOoOA7cTQ0g4T9csmrUjyLt3/BWn
-	FdSNyXqFqfZleYUw8kj+kGvZEPaT/R8kTAqiE/U=
-X-Google-Smtp-Source: ABdhPJzvGknJQJvJIOdsshYzjyQxItMWAOO5KzitzyEuNvSreyd+VCQrAAW9GnGKTwHoKx86rGgma5rzRyc5taV0BnQ=
+        bh=ZCzpPwz0WdrY6BfkeL81XAsKV8wn1SlQoxjmwZ5/Gig=;
+        b=gkmE6jF9/U3lI2ZtlxyIKhxCbyB5NB6021nuWmdHd3v00QxWjCURt9sr/gZUZQtYPS
+         6Kmy85D+8T8kKvjTMkFam9kzE0zhplqJLjyL829QYV44N7gbfG5k7Q6n1sZbC5UYu1P9
+         +mVMxw5io1Ca/1hLS66XoWSg1Mo2daReM1ajccuovP+icqEvns8ijnBunCijqdizcr40
+         gbSrNbcr5/tPH6bDVUaMGq1RvLILIxEVuoDys+97OKjaJEHJbv/61IB1YxULb63WBHby
+         xCUHc52EXIawkb9mzzguu+JAO9RmZJWUaT0THUKRpRgOjrL+pfGqRK+tAq+Mf/4Eb+Ox
+         D4PA==
+X-Gm-Message-State: AOAM532m0wrffJLkF1EU5NngOzbr/Cszau4FkmwaDAdEM9zT/qqTzUAt
+	M1Bku9kWnQdALUV37LXN3+2x1EghDVxL0ExZdUs=
+X-Google-Smtp-Source: ABdhPJwjkOWXgmy/JxzpSMehnJkSuFF0D3wmLwLqRyg1T3zp4KGNDNlpSVncsIY2Ja7kEm5CrMJ4V6Sh37EDs4qk3Tk=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e0:c17e:c2dc:13eb])
- (user=samitolvanen job=sendgmr) by 2002:a81:3685:0:b0:2fb:947b:5247 with SMTP
- id d127-20020a813685000000b002fb947b5247mr7593917ywa.64.1652473352269; Fri,
- 13 May 2022 13:22:32 -0700 (PDT)
-Date: Fri, 13 May 2022 13:21:51 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a81:1545:0:b0:2f7:b6d6:c486 with SMTP
+ id 66-20020a811545000000b002f7b6d6c486mr7693703ywv.261.1652473354343; Fri, 13
+ May 2022 13:22:34 -0700 (PDT)
+Date: Fri, 13 May 2022 13:21:52 -0700
 In-Reply-To: <20220513202159.1550547-1-samitolvanen@google.com>
-Message-Id: <20220513202159.1550547-14-samitolvanen@google.com>
+Message-Id: <20220513202159.1550547-15-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220513202159.1550547-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2492; h=from:subject;
- bh=O+VMkemg5E90usG6SsfLEV+HTvQnGaBlMMBcrxqTesI=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3kE9sw78o8+eJw34YnMmYuK157n4APskm6j4x8
- RWFsHcaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn695AAKCRBMtfaEi7xW7nURC/
- wOdNWBO3UhCkvlEOcn4eL9iiDgGLHqd+ms7km80Bh8LZzW9sOnnlG3t3vRb52kdG5VEXtgkxioGv41
- xDP0vHe/60Dqza8pTAK6oUDwZ9oravnzAdveNeysGT+iWwn6o+1PlLzaJmMM1WHiNJunt64I1Frt7l
- MG+kykOaX8IOtuUHQGbZHWos22oiPy9qAluaUwvZuPOkfOfDaZILICUJ+aOVo0YsM8pziu05P1lMyZ
- S6JU5H6j9BiCebv0Fc2EqSsSN5gNHjaRWhPBzA5au10tr+30q+wOqa1BHCK8mMAkmGTFUQZsKOfVyJ
- OcIxdboVGgRVBnDBRJCMZ8aytWoWx0G6HlaYhqS/WvOC1C4QDVu1DaIIC7FFX3v7KJB+D8zmwf7Tzo
- BbojzcBBfnmu6tJIxx1uUPt69XNi1OBt4xpbkBA8+eLJ4X7gmJouTVZo8KFUFQJeB6mF8MYQ1ttzhr
- h0OWEF+nFaDfGtzLvSL23nOGQJx8DP5aI9DLAbnTGhKs8=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2028; h=from:subject;
+ bh=Btj3XbJhA+i2nr8WkfyzaSMc7F2qnUf9voEPafSbHsA=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3lBRhm69f1gMiDJ9ChWdlEwjDHcutOztiRSiWd
+ fHu6Rt2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn695QAKCRBMtfaEi7xW7khWC/
+ 9DJejYBF4x70seHry7Yoz1+q2B5Kox5SdltfPtwsecQsxFcy4h5MQApJMlXdNaqyRQBiMdZ+NZ6WZr
+ FFeaM1NATYX1I2v40aekvK8Y3DrMLfLqHyeh6b/6Td2ThG0FVX9xox+sbvNNgdd4oB7QUKlQHTLGhJ
+ KkhsGb1eHUM0BAJXuL8UFnaMmR5SKWnHGk5ddNXgO/M4Kgt70iZYY8QdjS2FNRE/fsBrBb2f4FSVso
+ +V4Z9MavzM8TkF6i2a0maWtI1R9EJTWioq/ppno0q36dBGTx+KUHpGsc6Jb8QQ0i/kwc+MNzEacy7u
+ b5gU0t6+N1QBu1zpBj/NwgNFSsfVWPPHVKnJrfZC0hXMWa9Dz4ShzwhdiNIYYhCo/7awGZfdfPk9j6
+ mbCe5BZBHOMd5zXf5zDRGH/eV1z2P+dxCeUSlndkKrwKYfjIBXAJOaMBrrwszg6NzP0QCiYZDluLKX
+ DFBRz/Brl+FE12I0FWpbGPaAYnZN0/uoF7o/8C7lAGqpw=
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC PATCH v2 13/21] treewide: Drop WARN_ON_FUNCTION_MISMATCH
+Subject: [RFC PATCH v2 14/21] treewide: Drop __cficanonical
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -69,71 +69,62 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-CONFIG_CFI_CLANG no longer breaks cross-module function address
-equality, which makes WARN_ON_FUNCTION_MISMATCH unnecessary. Remove
-the definition and switch back to WARN_ON_ONCE.
+CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
+won't change function references to point elsewhere. Remove the
+__cficanonical attribute and all uses of it.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- include/asm-generic/bug.h | 16 ----------------
- kernel/kthread.c          |  3 +--
- kernel/workqueue.c        |  2 +-
- 3 files changed, 2 insertions(+), 19 deletions(-)
+ include/linux/compiler_types.h | 4 ----
+ include/linux/init.h           | 4 ++--
+ include/linux/pci.h            | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index ba1f860af38b..4050b191e1a9 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -220,22 +220,6 @@ extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
- # define WARN_ON_SMP(x)			({0;})
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 1c2c33ae1b37..bdd2526af46a 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -263,10 +263,6 @@ struct ftrace_likely_data {
+ # define __nocfi
  #endif
  
--/*
-- * WARN_ON_FUNCTION_MISMATCH() warns if a value doesn't match a
-- * function address, and can be useful for catching issues with
-- * callback functions, for example.
-- *
-- * With CONFIG_CFI_CLANG, the warning is disabled because the
-- * compiler replaces function addresses taken in C code with
-- * local jump table addresses, which breaks cross-module function
-- * address equality.
-- */
--#if defined(CONFIG_CFI_CLANG) && defined(CONFIG_MODULES)
--# define WARN_ON_FUNCTION_MISMATCH(x, fn) ({ 0; })
--#else
--# define WARN_ON_FUNCTION_MISMATCH(x, fn) WARN_ON_ONCE((x) != (fn))
+-#ifndef __cficanonical
+-# define __cficanonical
 -#endif
 -
- #endif /* __ASSEMBLY__ */
+ /*
+  * Any place that could be marked with the "alloc_size" attribute is also
+  * a place to be marked with the "malloc" attribute. Do this as part of the
+diff --git a/include/linux/init.h b/include/linux/init.h
+index baf0b29a7010..76058c9e0399 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -220,8 +220,8 @@ extern bool initcall_debug;
+ 	__initcall_name(initstub, __iid, id)
  
- #endif
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 50265f69a135..dfeb87876b4a 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -1050,8 +1050,7 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
- 	struct timer_list *timer = &dwork->timer;
- 	struct kthread_work *work = &dwork->work;
- 
--	WARN_ON_FUNCTION_MISMATCH(timer->function,
--				  kthread_delayed_work_timer_fn);
-+	WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
- 
- 	/*
- 	 * If @delay is 0, queue @dwork->work immediately.  This is for
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 0d2514b4ff0d..18c1a1c09684 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1651,7 +1651,7 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
- 	struct work_struct *work = &dwork->work;
- 
- 	WARN_ON_ONCE(!wq);
--	WARN_ON_FUNCTION_MISMATCH(timer->function, delayed_work_timer_fn);
-+	WARN_ON_ONCE(timer->function != delayed_work_timer_fn);
- 	WARN_ON_ONCE(timer_pending(timer));
- 	WARN_ON_ONCE(!list_empty(&work->entry));
- 
+ #define __define_initcall_stub(__stub, fn)			\
+-	int __init __cficanonical __stub(void);			\
+-	int __init __cficanonical __stub(void)			\
++	int __init __stub(void);				\
++	int __init __stub(void)					\
+ 	{ 							\
+ 		return fn();					\
+ 	}							\
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 60adf42460ab..3cc50c4e3c64 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2021,8 +2021,8 @@ enum pci_fixup_pass {
+ #ifdef CONFIG_LTO_CLANG
+ #define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+ 				  class_shift, hook, stub)		\
+-	void __cficanonical stub(struct pci_dev *dev);			\
+-	void __cficanonical stub(struct pci_dev *dev)			\
++	void stub(struct pci_dev *dev);					\
++	void stub(struct pci_dev *dev)					\
+ 	{ 								\
+ 		hook(dev); 						\
+ 	}								\
 -- 
 2.36.0.550.gb090851708-goog
 
