@@ -1,42 +1,42 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76657A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:04 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id t42-20020a25aaad000000b00649d5b19ee3so8223662ybi.4
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3937A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:07 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2f8bbaa6b16so81055237b3.14
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=7dzNFqFFreuuGTeKc8mtJ6zzQ7MnT/UZgCYnwegkikw=;
-        b=n4tHKOJgDtPcp400cFfhloKlxJotstNLkDrF4z8JP1rzR6HPjAR9HOs6jJBLmYOB5l
-         4+Y2KlsHR5sfl8hlG5Y2YO+uXY1XI0e2TXINNjhFpaz3QIuWawMkTRTCBrjaopQyaxLa
-         cBhG2HDKSrXaUfoLLBgPjgOcp482uo/oyH92PRBXhbRR9yF3onu8TOJ/ZGaqiFzX2+MA
-         ZJ5mlRUuYytvGHLeEX/wYO5xCTnb4kuxxKZm18if4rlYDNnia3kdXzS5XA/U0nmH95AC
-         ve41FgmB9bTufogbJdpviDZ/EZU3vVH7ccMM08Dtf8J1ylIz0SSX0V+uQLGdW5GTIavt
-         KFMA==
+        bh=dq5ya0HLbqhoGaxybMwD+u455UO61ysiO/Cn6SCUV4E=;
+        b=QhvLqyQ7SGkhcJcmlPcAMvH4X9HlQFOiCjtBh/sxV7YFuCJ87i5PkY99k8mpn88Z7L
+         bAJHA6Yi+ZPZn6RvkqV/eFGCG1px4tIYEl7/NiOpU+6qbrDMEZhC+SRZjcWXz+crVMyB
+         k89fvJN/FDgzHnNowBikxn+RDEi5rz5cjkFzu4OdcmLuH5qG5wD0z0VtWR17tHJLAXz6
+         D/UCknaW80Q18TX1vss3qORW2jhII4B6rQkGv+V6pGg9zIzJdJU8oSKhfhM1q13nyTu0
+         RtKAlKqIMYJgUOayt2WSeBxXLwmjgEC/4qZ7cyJ+5su7ftJjYIt4dwxMI94GP5ohXkvi
+         VOKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=7dzNFqFFreuuGTeKc8mtJ6zzQ7MnT/UZgCYnwegkikw=;
-        b=FXpspzO79tamkt4SLa5v64/XPxd/HNlRf/LRMBSpow2uxrZ2eymL12w8LJqgdj2qVh
-         3Z/f1uCsUsL5r/UXI32R+sSgcvxn7p+3nvAvmqJi+s1/dA18wNZ4kgOSxnwqePupJtDX
-         ZGLneq5n7NSwlruKYz+QSUzxpoI//xCWoIRWehrhsNSwfWBVQaJGGypvPOo+AP+ezrNO
-         vD8yt+xaAJsWMw/bbNZKLF8mq2qq9e159DM9z1dxiUXFIVKtJDROOPrxupTNuXCmXd8p
-         5MwpBNfqT8xrgkkVBnmexEwggTM8z9MMADwQ7WTyrr6JN7nAUoM6MwdUL0KEHel2ERnt
-         BsgA==
-X-Gm-Message-State: AOAM530zdF3jhqZFREmEPUp9IJl2krk81o9qzxqpzT3xKXwTbmkzFXls
-	4L/2ZU19+m4Dmtm2Ca8y1oHmEPHAL4dUyR8qEj4=
-X-Google-Smtp-Source: ABdhPJx1JJ0XmShhi74TIbh32BtvTGVhISwacttcRGpIVP/D3e+Li9khIRUZk3Job+crje8gCf5m3Gtudj8ga74RriM=
+        bh=dq5ya0HLbqhoGaxybMwD+u455UO61ysiO/Cn6SCUV4E=;
+        b=psfIYoFl6K7/ZYMMd9EynT73vfmaH8TNmeTxD8qe4EOpRMVSmSe/lGulL6/XY6e/m0
+         eGctLfWM/C7qZOUKtFooeU7T5+CqmHy7swIzxwBVpDbZ8FY2icxnd2qQuzSTYPiwI6F6
+         cKrSLQr9abQoixojHG8OAJkhrR9EznA1tRMCpd7IwJsyw8aaPo+S0ls0xBIVm0/wzNRI
+         OMS0cBu40GmML8an8LRbvNCyCWX2QaSDa1R/WoadRK/+gR7duv/Q2CwqgXS5cID85d6Y
+         H7is63n8AB3VlIu7iZLSZl5a6rvcGLamwRnEGODp07QJdFgJ/tGY5YmgElgcFprTeZeJ
+         EFkQ==
+X-Gm-Message-State: AOAM5306zGrTcAulyVxuBJxD/nuv6Z2YPIOdmxHAgoggirpjzvqidHQH
+	+Xd69LgIU1BQWkuxQt6MUktrSicsOyhEnf+A/hA=
+X-Google-Smtp-Source: ABdhPJx6nPe/UG4ioi9xxrUNrDLMncxESewxC/vESjwPAZ8T0UiRXU3Rn9QJIYSuvrV9TPZrXKmlIeVohGiRmaBJe18=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e0:c17e:c2dc:13eb])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:704:b0:649:cadc:bcf0 with
- SMTP id k4-20020a056902070400b00649cadcbcf0mr6772144ybt.537.1652473323920;
- Fri, 13 May 2022 13:22:03 -0700 (PDT)
-Date: Fri, 13 May 2022 13:21:39 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:d1d7:0:b0:64b:6193:cd6d with SMTP
+ id i206-20020a25d1d7000000b0064b6193cd6dmr6849614ybg.149.1652473326244; Fri,
+ 13 May 2022 13:22:06 -0700 (PDT)
+Date: Fri, 13 May 2022 13:21:40 -0700
 In-Reply-To: <20220513202159.1550547-1-samitolvanen@google.com>
-Message-Id: <20220513202159.1550547-2-samitolvanen@google.com>
+Message-Id: <20220513202159.1550547-3-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220513202159.1550547-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=880; h=from:subject;
- bh=EZLomphfIH08U3z4yVCd/QNb6Zb3C1icGxpk/OdeOrs=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3ix9PIgN+KybiMjc7a7S4+3nkZ58mRwAo49nTd
- DGA2iOSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7vTLC/
- 9hgHRRO5928cbJy0Lj4dyh/HzCmTIsX5aRyNv3FaExai4tXtGIkEc9t07OQsdSHwe+vOQ4GaN0K0Yo
- Ez6WpASKIqAWw1CeqAT9mb8YffUPQZ15oosx922RKgOBLn7W0GuI+uzyNSW4zK4l0XtGaSzZaCx+bO
- VwwGaaThKY0gplbHU9YXLsLgqQFHuUD4yvfaAmhmWNeltzIlMqEj5P7eTYsqRATnkmvNGQL5jBJkGw
- 8MYNAlP6T/iaCDs7BeP0sPlgm3fIItcqzRKbtCg8953xYBCXp7UcapXhQYFZ+1fZ6g0txkD3HYt7bv
- /gdeVagNoIHK12tbnXliT67mMG/k2TufwaqBB4HbMNE6B51ElwuEdXvLY/cQftfGrkMKDn3/0c4UPI
- D5vLLZP1Z9I1is5YqP9C/K2jOqD2gPEXFjVPRK21z5UWzZe53fEZM39HScCeOsPT5AHuN9wQXQhzzD
- LW8o4It0Oany72uLq2n4E1wVX7ylkcng+6S6YFDEngVsM=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=988; h=from:subject;
+ bh=RNVQHrlEA9fX91aGJUv17nzO52aQ646VsAxq7TYCVmE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3isUdSjjLVv9wzgpsbojWEfNbcYqclULDOWDcw
+ kQXpx/yJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7p9EC/
+ 9JO2MwCu1MjbT8Exc52X4QzT9yYK9ojOtmr6WsnYMtpgxHa2q1EE6j+R5DjIqzA+m2ZWPHkY8SrMeG
+ ZrpJnTHJPvFOmOV9L+KDF1UT+Vgo2YVrHJuQqxkraewUIudUDq4Bab1FpnWkPZ4QtwJ9xuzKjcnA12
+ rUIsUKiEhUi1G12cNkjH+aGc4Ny0YP4T2rz89dMrdARLVOHhRPupWfkUNfNVLrIlXbnof/ZCCjhJz1
+ /gosCtk/66Q2tgY9KlHpacjuBslmTAN6blKpml6eqY1jRO1Hqa6ScjNXsr7+p5muSKkIRmxw1nPydt
+ uEjXwjPlU5Ruc4YYTkRQ1SHEvAY/KmfK1bxhTW2zqyS909mhqMUEKaAw+n3DCzcCfosyD9GzAspMLK
+ SZA/KsxdlXzjUxfsDSQMVqyc7AOnO30FS+TtKeAMlZU6kbhpl6I1yJyRW4cejjllmWB/ynZIDhDZTJ
+ mZiNpwrFr0PQBQTYS1f63TSat1c1BfyDD5IZxeq1F4sM0=
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC PATCH v2 01/21] efi/libstub: Filter out CC_FLAGS_CFI
+Subject: [RFC PATCH v2 02/21] arm64/vdso: Filter out CC_FLAGS_CFI
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -74,22 +74,23 @@ removed from CC_FLAGS_LTO.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- drivers/firmware/efi/libstub/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/kernel/vdso/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index d0537573501e..234fb2910622 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -39,6 +39,8 @@ KBUILD_CFLAGS			:= $(cflags-y) -Os -DDISABLE_BRANCH_PROFILING \
- 
- # remove SCS flags from all objects in this directory
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
-+# disable CFI
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
- # disable LTO
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
- 
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 172452f79e46..6c26e0a76a06 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -33,7 +33,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+ # the CFLAGS of vgettimeofday.c to make possible to build the
+ # kernel with CONFIG_WERROR enabled.
+ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
+-				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
++				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
++				-Wmissing-prototypes -Wmissing-declarations
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
+ UBSAN_SANITIZE			:= n
 -- 
 2.36.0.550.gb090851708-goog
 
