@@ -1,43 +1,47 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EAA17E7
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 00:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF1817E7
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 01:00:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652403020; x=1683939020;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A2aJ5SqD8hDUqDEJpwPaJOH+D4WKfhA/Srqy6HnNnVs=;
-  b=cgxvgQQcUwp/gPfY37lqthJjWIWnBt/TFgh+Q9nlLVFLhJxwhnzawty3
-   vJE2OpUIe4MH0INUJD7+WVBMsZSW5P3mG+UyOp0CPsTEI0FWun0Lc8I1u
-   akSxhhmJttBkvFT/olQp2L0bh+XrhDkrZzilaVO1DdXeuEQN9/MIoNPZ9
-   gZ9gkH4u2R2HK9gxMMIwYiqzBEfYaOURsYg69e6Nv7UeE0qwNpFwpV4i/
-   w9SvQB46n08njUQq/b/lwLVXCYxJwH880qiwrlSuu+uCX/fxOr8oIFBbk
-   bn4fMFRXAVIjM/iGnWevp5cQEUAXxLotxINzcujQaNDHzyvYRLAWMuPsR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257721484"
+  t=1652403628; x=1683939628;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a+1Fqogl6MRxCjd5uyzI3/s5nb7F3MKz0w+tdYBiDPk=;
+  b=U7xO3zTBYaeINxqRx8NCAu0WYQltTV1/sAp5R6ov6eSdntWkZyBn5dtZ
+   ESz9aBEYtcKvBARUOJ5QRlRIT/vzO0eSA1/RfJBenFcoF9vkKHiRYghXP
+   EoNMaCEE5v3QQT2PbzFqZQNFN5DkziCxJr9n+wzH/0tFU4U7htEMyVWHZ
+   me2QpnHwD/+IhWXGHAfd2eMPvTa1c8LRFKNYDv6wZNR+Ik72WiJbPQCzU
+   9X7u/f2CNqmyQ6Xneu5xrGq/I44KgWWOkUMaG5E/GQ5RHJMC22vAvyXRB
+   mMgoOMpCXSUAngizqn6yCyn6p3V1gkPdUKT1cv7V6RSBr0N7bMP77PLEr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="257722911"
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="257721484"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 17:50:20 -0700
+   d="scan'208";a="257722911"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 18:00:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="554013498"
+   d="scan'208";a="603623377"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 12 May 2022 17:50:18 -0700
+  by orsmga001.jf.intel.com with ESMTP; 12 May 2022 18:00:24 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1npJVa-000L7M-2R;
-	Fri, 13 May 2022 00:50:18 +0000
-Date: Fri, 13 May 2022 08:49:51 +0800
+	id 1npJfH-000L7m-5u;
+	Fri, 13 May 2022 01:00:19 +0000
+Date: Fri, 13 May 2022 09:00:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
+	lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
+	andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 30/36] arch/arm64/kvm/mmu.c:767:55:
- warning: incompatible pointer to integer conversion initializing 'gfp_t'
- (aka 'unsigned int') with an expression of type 'void *'
-Message-ID: <202205130807.jiF3WnPH-lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH V5 3/5] iio: accel: sca3300: modified to support multi
+ chips
+Message-ID: <202205130824.ObRAkagG-lkp@intel.com>
+References: <20220512160312.3880433-4-Qing-wu.Li@leica-geosystems.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,94 +50,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220512160312.3880433-4-Qing-wu.Li@leica-geosystems.com.cn>
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   59b7f8e2f5ff4f5506a6d781179f42abd758faaa
-commit: 2e1468f8a505d8b65cf6e3e77348690d9b167923 [30/36] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-buildonly-randconfig-r003-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130807.jiF3WnPH-lkp@intel.com/config)
+Hi LI,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on v5.18-rc6 next-20220512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-sca3300-add-compatible-for-scl3300/20220513-000857
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: hexagon-randconfig-r041-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130824.ObRAkagG-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/avpatel/linux/commit/2e1468f8a505d8b65cf6e3e77348690d9b167923
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout 2e1468f8a505d8b65cf6e3e77348690d9b167923
+        # https://github.com/intel-lab-lkp/linux/commit/15579266e58d7cdf4ff8e7ad7a4fa30a0bd3a589
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review LI-Qingwu/iio-accel-sca3300-add-compatible-for-scl3300/20220513-000857
+        git checkout 15579266e58d7cdf4ff8e7ad7a4fa30a0bd3a589
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/accel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kvm/mmu.c:767:55: warning: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
-           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-                                                                ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
+>> drivers/iio/accel/sca3300.c:288:54: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
+                   if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   drivers/iio/accel/sca3300.c:288:54: note: place parentheses around the '==' expression to silence this warning
+                   if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+                                                                      ^
+                       (                                              )
+   drivers/iio/accel/sca3300.c:288:54: note: place parentheses around the & expression to evaluate it first
+                   if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+                                                                      ^
+                                                               (           )
    1 warning generated.
 
 
-vim +767 arch/arm64/kvm/mmu.c
+vim +288 drivers/iio/accel/sca3300.c
 
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  752  
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  753  /**
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  754   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  755   *
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  756   * @kvm:	The KVM pointer
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  757   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  758   * @pa:		The physical address of the device
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  759   * @size:	The size of the mapping
-c9c0279cc02b4e arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  760   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  761   */
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  762  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  763  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  764  {
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  765  	phys_addr_t addr;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  766  	int ret = 0;
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @767  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  768  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  769  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  770  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  771  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  772  
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  773  	if (is_protected_kvm_enabled())
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  774  		return -EPERM;
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  775  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  776  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  777  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  778  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  779  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  780  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  781  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  782  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  783  			break;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  784  
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  785  		write_lock(&kvm->mmu_lock);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  786  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  					     &cache);
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  788  		write_unlock(&kvm->mmu_lock);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  789  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  			break;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  791  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  		pa += PAGE_SIZE;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  793  	}
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  795  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  796  	return ret;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  797  }
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  798  
-
-:::::: The code at line 767 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+   276	
+   277	static int sca3300_get_op_mode(struct sca3300_data *sca_data, int *index)
+   278	{
+   279		int reg_val;
+   280		int ret;
+   281		int i;
+   282	
+   283		ret = sca3300_read_reg(sca_data, SCA3300_REG_MODE, &reg_val);
+   284		if (ret)
+   285			return ret;
+   286	
+   287		for (i = 0; i < sca_data->chip->num_avail_modes; i++) {
+ > 288			if (sca_data->chip->avail_modes_table[i] == reg_val&0x03)
+   289				break;
+   290		}
+   291	
+   292		if (i >= sca_data->chip->num_avail_modes)
+   293			return -EINVAL;
+   294	
+   295		*index = i;
+   296		return 0;
+   297	}
+   298	
 
 -- 
 0-DAY CI Kernel Test Service
