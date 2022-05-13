@@ -1,106 +1,257 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8AF210B
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 09:03:34 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id t1-20020a056602140100b0065393cc1dc3so4480487iov.5
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 02:03:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2GlMZnYxijH94fTbKUpN79sdxDswAdSkrn/du52tVoY=;
-        b=ao/JEeVKbpPRNQIfk9CeDjtTNALsetKYr24+RFqfuXEEbyc/Irbous3oKhP2LO9Pc4
-         rFvE6sYqqGlRpo4ja31URrq3waNKYbFOScgEaWKsxwBzlcXfJXzI1N5faqiSUzQS3BiS
-         SEgzX+ODHMyyAKk2O9axXa+87ZG86TxiOmzrFHbcp3MddaBryjYP2B4Freei8J1aNdUR
-         g7Kuq62lENv5BRYU6LiWTvEA0EBTlWhGkv7Vd3GFLpq3xbl0T0qqXE6JbP+w8d/VOor7
-         tr0acX3d4gSVOMfJZTYnXevhTDDbeJSMCYqnp0tx+aQvGfvES4NY7M0ryB1AUnFMzgR5
-         K9pg==
-X-Gm-Message-State: AOAM533Ad/V0YJLzVEtndrx8gvqJSAWoWFoUDJAdiKxQnx1twJ/hSMnm
-	Tr+wyWhYqRjZkQtCwA/7doPs9xhhCX9BXSAB743knpRn7RAR
-X-Google-Smtp-Source: ABdhPJynGTL8/5Q/8NR1hAOJFB7G1fSxlpFxF6og5RTxW++PwV8gnaWdtb5mLP1F56DeNg7PMy6/LpagdSU3E7R2Vd2Vn2euD1qB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3E4210B
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 09:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652433033; x=1683969033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Veu5m7iYXG6x7nYTAQ0GJ7hDoiNSOwM4QvNljALKRcc=;
+  b=Wq0dqnV038Ydar0cUN7LF7ZJrFpJMsY8mzshuEbiSPOHznHse+o80xuq
+   3NbkOF2UN3EAKHlNOXcrUfWyEfYmCtPBLUMLa/OP9UHgcFCBwMnBEF9FL
+   qL4o/3nga/jUamZmMVztUUCJKZAHDzhVRMFu3GKXO9t/8rM24MedQYuNb
+   WZhK58qEQn+Ou41l237SHrwLNXW0eEMu6nvG8kAwcuGg5AdAuzC6hf0x+
+   vgDWZD6BfSJUVHEC2FYBrTofO3H45VFXIpeg6LKfKfzFtv28GJWnCG841
+   uzWIq/XZfFDHF6mD3wq4P91xKRCVS1XYeey8bGoJgleu976VLqt6wAD2Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270393449"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="270393449"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 02:10:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="671260310"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 13 May 2022 02:10:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npRJb-000LZU-Do;
+	Fri, 13 May 2022 09:10:27 +0000
+Date: Fri, 13 May 2022 17:09:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Cruz Zhao <CruzZhao@linux.alibaba.com>, Tejun Heo <tj@kernel.org>,
+	Josh Don <joshdon@google.com>
+Subject: Re: [PATCH] sched/core: add forced idle accounting for cgroups
+Message-ID: <202205131630.fQphKrzY-lkp@intel.com>
+References: <20220513005427.2507335-1-joshdon@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:204c:b0:32b:688f:e05e with SMTP id
- t12-20020a056638204c00b0032b688fe05emr2036381jaj.106.1652432613358; Fri, 13
- May 2022 02:03:33 -0700 (PDT)
-Date: Fri, 13 May 2022 02:03:33 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef451a05dee0f2b1@google.com>
-Subject: [syzbot] WARNING in follow_hugetlb_page
-From: syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513005427.2507335-1-joshdon@google.com>
 
-Hello,
+Hi Josh,
 
-syzbot found the following issue on:
+Thank you for the patch! Yet something to improve:
 
-HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1480e611f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
-dashboard link: https://syzkaller.appspot.com/bug?extid=acf65ca584991f3cc447
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on tip/master linux/master linus/master v5.18-rc6 next-20220512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220513-085621
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 734387ec2f9d77b00276042b1fa7c95f48ee879d
+config: s390-randconfig-r003-20220512 (https://download.01.org/0day-ci/archive/20220513/202205131630.fQphKrzY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/21dca7763777c1985d6f5ac289e6e0c20d429d05
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Josh-Don/sched-core-add-forced-idle-accounting-for-cgroups/20220513-085621
+        git checkout 21dca7763777c1985d6f5ac289e6e0c20d429d05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6653 at mm/hugetlb.c:6250 follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
-Modules linked in:
-CPU: 1 PID: 6653 Comm: syz-executor.1 Not tainted 5.18.0-rc6-next-20220513-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
-Code: 89 44 24 70 e8 2b 1d b7 ff 48 8b 44 24 70 48 85 c0 0f 84 f1 07 00 00 e8 88 1a b7 ff 48 83 ed 01 e9 09 fb ff ff e8 7a 1a b7 ff <0f> 0b 48 8b 7c 24 30 bb f4 ff ff ff e8 69 74 b8 07 4c 8b a4 24 b8
-RSP: 0018:ffffc9000d04f7e0 EFLAGS: 00010212
-RAX: 00000000000030f2 RBX: ffff88807eb336c0 RCX: ffffc90003331000
-RDX: 0000000000040000 RSI: ffffffff81c38f76 RDI: 0000000000000003
-RBP: ffffea0001fd8080 R08: 0000000000000000 R09: 0000000000000003
-R10: ffffffff81b128fb R11: 0000000000000057 R12: 0000000000000002
-R13: ffff88807eb336c0 R14: ffff88807eb33d80 R15: 0000000000000001
-FS:  00007f59bc2a1700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f59bb0d6720 CR3: 000000001eaf8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __get_user_pages+0x27a/0xfa0 mm/gup.c:1146
- __get_user_pages_locked mm/gup.c:1365 [inline]
- __gup_longterm_locked+0x1d5/0xfe0 mm/gup.c:1985
- pin_user_pages+0x8e/0xe0 mm/gup.c:3118
- io_sqe_buffer_register+0x254/0x1710 fs/io_uring.c:10537
- io_sqe_buffers_register.cold+0x28e/0x443 fs/io_uring.c:10664
- __io_uring_register fs/io_uring.c:12682 [inline]
- __do_sys_io_uring_register+0xd21/0x1930 fs/io_uring.c:12816
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f59bb0890e9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f59bc2a1168 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
-RAX: ffffffffffffffda RBX: 00007f59bb19bf60 RCX: 00007f59bb0890e9
-RDX: 0000000020000080 RSI: 0000000000000000 RDI: 0000000000000005
-RBP: 00007f59bb0e308d R08: 0000000000000000 R09: 0000000000000000
-R10: 1000000000000239 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd53b6ab6f R14: 00007f59bc2a1300 R15: 0000000000022000
- </TASK>
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   In file included from kernel/sched/build_utility.c:93:
+>> kernel/sched/core_sched.c:306:28: error: incomplete definition of type 'struct task_group'
+           struct cfs_rq *cfs_rq = tg->cfs_rq[cpu];
+                                   ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:307:32: error: incomplete definition of type 'struct task_group'
+           struct task_group *parent = tg->parent;
+                                       ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:319:12: error: incomplete definition of type 'struct task_group'
+           delta = tg->forceidle_sum_pending;
+                   ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:321:5: error: incomplete definition of type 'struct task_group'
+                   tg->forceidle_sum_pending = 0;
+                   ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:333:4: error: incomplete definition of type 'struct task_group'
+           tg->forceidle_sum += delta;
+           ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:334:8: error: incomplete definition of type 'struct task_group'
+           parent->forceidle_sum_pending += delta;
+           ~~~~~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:340:9: error: incomplete definition of type 'struct task_group'
+           if (!tg->parent) {
+                ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   In file included from kernel/sched/build_utility.c:93:
+   kernel/sched/core_sched.c:353:12: error: incomplete definition of type 'struct task_group'
+                   return tg->forceidle_sum;
+                          ~~^
+   include/linux/sched.h:69:8: note: forward declaration of 'struct task_group'
+   struct task_group;
+          ^
+   12 warnings and 8 errors generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +306 kernel/sched/core_sched.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+   303	
+   304	void sched_core_rstat_flush(struct task_group *tg, int cpu)
+   305	{
+ > 306		struct cfs_rq *cfs_rq = tg->cfs_rq[cpu];
+   307		struct task_group *parent = tg->parent;
+   308		u64 delta, curr_sum;
+   309	
+   310		/* root uses cpustat */
+   311		if (!parent)
+   312			return;
+   313	
+   314		/*
+   315		 * Note: cgroup_rstat_lock protects cfs_rq->forceidle_sum_prev and
+   316		 * tg->{forceidle_sum, forceidle_sum_pending}.
+   317		 */
+   318	
+   319		delta = tg->forceidle_sum_pending;
+   320		if (delta)
+   321			tg->forceidle_sum_pending = 0;
+   322	
+   323		/* rq lock not held; value may change concurrently */
+   324		curr_sum = READ_ONCE(cfs_rq->forceidle_sum);
+   325		if (curr_sum != cfs_rq->forceidle_sum_prev) {
+   326			delta += curr_sum - cfs_rq->forceidle_sum_prev;
+   327			cfs_rq->forceidle_sum_prev = curr_sum;
+   328		}
+   329	
+   330		if (!delta)
+   331			return;
+   332	
+   333		tg->forceidle_sum += delta;
+   334		parent->forceidle_sum_pending += delta;
+   335	}
+   336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
