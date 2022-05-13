@@ -1,22 +1,24 @@
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE1F259D
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4053232
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:43:53 +0000 (UTC)
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-01.nifty.com with ESMTP id 24DBfqar009588
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:41:52 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-07.nifty.com with ESMTP id 24DBeEwi008349;
-	Fri, 13 May 2022 20:40:23 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwi008349
+	by conuserg-07.nifty.com with ESMTP id 24DBeEwc008349;
+	Fri, 13 May 2022 20:40:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwc008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652442024;
-	bh=tWubGKl01wW+DNljh3UjfGXWoQ6mtZdfdLtoxs2fSmI=;
+	s=dec2015msa; t=1652442018;
+	bh=cga2j3/RnX95UXo6+4HyPv/WWKGxfQZ0xpYK4BVs9G8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KbXwfWVjakJu02uXsXnx36SE59nU4vsPwBw/CfSyj5v6M6t4/Avd9B2x0smijLCSx
-	 84p7T8j5EDL1A32qvR5whd8+tM+uwi51xgKXoiNknaj1cBr4UTe20kKDqcvKNKtfME
-	 MLvJL+kquJpKTvaZ5n9XEZ7EIcebLJtol8doAnt4gWg90Q8a3Pwua4/AXSFzv4B2eC
-	 O/okFmfD/nPHQdfI/bYqR/TAMoMwkAPeM6XWPZp1oznKpH3JJ0X2KufoD4QRDR2eve
-	 1ugmGWoj29n2dhL8UFsDvfj0SXRfxhTU7XedZtQR92eVpNm4agtvLFTE45qetVL/XX
-	 1iCu2QxxAwhZg==
+	b=p5ftmnST03FxjYRjjdJDBeXs1RhWVX7sEj20o6h2lFkAVs15LD1gYUdS+kWEJMdL5
+	 MLb11fpAipT++S44EFXq3/PS6tTfaBrqtn75TgVO0yORnZoqj8I4topwBsyynYgYr2
+	 MkT68Pxjy0ae+j/tZcpYGZzPmFuB7yVd4ulEip6sX2Zm9V8OyvUtoe7/7rN1gBovqk
+	 sYlkruGLARitLMDo/zZwMuqKEUQfPksHfRv7c5VxaRH5iTO6CJUy+hxYw2VAPlDWZY
+	 TJQE0xnYgcTEsNQF+b8WM9Sr6xPJSG7QP1df1B1kifECu8jVFRo8s6fCEBE4PxdR2c
+	 aXWgWnQ/ledng==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -26,11 +28,10 @@ Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org,
         llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH v6 09/10] kbuild: add cmd_and_savecmd macro
-Date: Fri, 13 May 2022 20:39:29 +0900
-Message-Id: <20220513113930.10488-10-masahiroy@kernel.org>
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v6 03/10] kbuild: stop merging *.symversions
+Date: Fri, 13 May 2022 20:39:23 +0900
+Message-Id: <20220513113930.10488-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
 References: <20220513113930.10488-1-masahiroy@kernel.org>
@@ -42,49 +43,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Separate out the command execution part of if_changed, as we did
-for if_changed_dep.
+Now modpost reads symbol versions from .*.cmd files.
 
-This allows us to reuse it in if_changed_rule.
-
-  define rule_foo
-          $(call cmd_and_savecmd,foo)
-          $(call cmd,bar)
-  endef
+The merged *.symversions are no longer needed.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-(no changes since v4)
+(no changes since v1)
 
-Changes in v4:
-  - New.
-    Resent of my previous submission.
-    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+ scripts/Makefile.build  | 21 ++-------------------
+ scripts/link-vmlinux.sh | 19 -------------------
+ 2 files changed, 2 insertions(+), 38 deletions(-)
 
- scripts/Kbuild.include | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index 455a0a6ce12d..ece44b735061 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -142,9 +142,11 @@ check-FORCE = $(if $(filter FORCE, $^),,$(warning FORCE prerequisite is missing)
- if-changed-cond = $(newer-prereqs)$(cmd-check)$(check-FORCE)
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index ddd9080fc028..dff9220135c4 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -390,17 +390,6 @@ $(obj)/%.asn1.c $(obj)/%.asn1.h: $(src)/%.asn1 $(objtree)/scripts/asn1_compiler
+ $(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
+ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
  
- # Execute command if command has changed or prerequisite(s) are updated.
--if_changed = $(if $(if-changed-cond),                                        \
-+if_changed = $(if $(if-changed-cond),$(cmd_and_savecmd),@:)
-+
-+cmd_and_savecmd =                                                            \
- 	$(cmd);                                                              \
--	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-+	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
+-# combine symversions for later processing
+-ifeq ($(CONFIG_LTO_CLANG) $(CONFIG_MODVERSIONS),y y)
+-      cmd_update_lto_symversions =					\
+-	rm -f $@.symversions						\
+-	$(foreach n, $(filter-out FORCE,$^),				\
+-		$(if $(shell test -s $(n).symversions && echo y),	\
+-			; cat $(n).symversions >> $@.symversions))
+-else
+-      cmd_update_lto_symversions = echo >/dev/null
+-endif
+-
+ #
+ # Rule to compile a set of .o files into one .a file (without symbol table)
+ #
+@@ -408,11 +397,8 @@ endif
+ quiet_cmd_ar_builtin = AR      $@
+       cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
  
- # Execute the command and also postprocess generated .d dependencies file.
- if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
+-quiet_cmd_ar_and_symver = AR      $@
+-      cmd_ar_and_symver = $(cmd_update_lto_symversions); $(cmd_ar_builtin)
+-
+ $(obj)/built-in.a: $(real-obj-y) FORCE
+-	$(call if_changed,ar_and_symver)
++	$(call if_changed,ar_builtin)
+ 
+ #
+ # Rule to create modules.order file
+@@ -432,16 +418,13 @@ $(obj)/modules.order: $(obj-m) FORCE
+ #
+ # Rule to compile a set of .o files into one .a file (with symbol table)
+ #
+-quiet_cmd_ar_lib = AR      $@
+-      cmd_ar_lib = $(cmd_update_lto_symversions); $(cmd_ar)
+ 
+ $(obj)/lib.a: $(lib-y) FORCE
+-	$(call if_changed,ar_lib)
++	$(call if_changed,ar)
+ 
+ ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+ quiet_cmd_link_multi-m = AR [M]  $@
+ cmd_link_multi-m =						\
+-	$(cmd_update_lto_symversions);				\
+ 	rm -f $@; 						\
+ 	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+ else
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 7313cbd755df..47e5336d0c75 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -56,20 +56,6 @@ gen_initcalls()
+ 		> .tmp_initcalls.lds
+ }
+ 
+-# If CONFIG_LTO_CLANG is selected, collect generated symbol versions into
+-# .tmp_symversions.lds
+-gen_symversions()
+-{
+-	info GEN .tmp_symversions.lds
+-	rm -f .tmp_symversions.lds
+-
+-	for o in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
+-		if [ -f ${o}.symversions ]; then
+-			cat ${o}.symversions >> .tmp_symversions.lds
+-		fi
+-	done
+-}
+-
+ # Link of vmlinux.o used for section mismatch analysis
+ # ${1} output file
+ modpost_link()
+@@ -88,10 +74,6 @@ modpost_link()
+ 		gen_initcalls
+ 		lds="-T .tmp_initcalls.lds"
+ 
+-		if is_enabled CONFIG_MODVERSIONS; then
+-			gen_symversions
+-		fi
+-
+ 		# This might take a while, so indicate that we're doing
+ 		# an LTO link
+ 		info LTO ${1}
+@@ -307,7 +289,6 @@ cleanup()
+ 	rm -f .btf.*
+ 	rm -f .tmp_System.map
+ 	rm -f .tmp_initcalls.lds
+-	rm -f .tmp_symversions.lds
+ 	rm -f .tmp_vmlinux*
+ 	rm -f System.map
+ 	rm -f vmlinux
 -- 
 2.32.0
 
