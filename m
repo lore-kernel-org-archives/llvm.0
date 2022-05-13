@@ -1,143 +1,190 @@
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742CC3236
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 12:22:27 +0000 (UTC)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
-	by conssluserg-01.nifty.com with ESMTP id 24DCMAxa031900
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 21:22:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24DCMAxa031900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652444531;
-	bh=N9bbKmHP6POe42Fa+GkW40EBGebzX8tThTjuBWdq8ig=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iTUSZMXFn0b0ySQUWXG+bN57jeWcY/6TqbY5S5aZcQ/kCoZfP7nRnS7sHgViAZRNN
-	 wDaiei0KZlaKsN1DmBPtcqARjKtLh8u07vqbDgot1zXlPVl8ozeINxWNhKT78anmeD
-	 MQsMYS3nDed1y34788+wUVXLLyUtHPQcemLYtcO3lWOjouuXJK5KAuaFkVsgLpiRHk
-	 5EPCMq/z3k46EHOXHAjomlBB+N/bIGiCpnFZq5SuOTa/brRI6+YlJqlwhtj1BF0veO
-	 c3ZcdRLraUhwKE/pE0JRarqZEMxev0+S3ZhiPXMpvvMPFVRpa7GrNHeQS9hPkyFUJv
-	 JtwfNw6AsK7/A==
-X-Nifty-SrcIP: [209.85.216.43]
-Received: by mail-pj1-f43.google.com with SMTP id x88so7958967pjj.1
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 05:22:11 -0700 (PDT)
-X-Gm-Message-State: AOAM532tQTQfTGoOLC2PpR8nJpJ4Z9N6y29sCiLINx30cZ8dCWp+7MXe
-	qpOtT9szyODAZDddNjQs1TfVcEgSAhe8qPrfnmc=
-X-Google-Smtp-Source: ABdhPJxD5Hnw/BzpOuoc03CTdnOknz232P4SJXD9vQoGZjeOfKjWtDeamnUaHXxR78Q1KZ637m8h49Kf8LDy4D9zobk=
-X-Received: by 2002:a17:90a:e517:b0:1d7:5bbd:f9f0 with SMTP id
- t23-20020a17090ae51700b001d75bbdf9f0mr4634068pjy.77.1652444530238; Fri, 13
- May 2022 05:22:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4433D7
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652449025; x=1683985025;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QNFJJcpU+Hbk46LlfyqdHGQZ31m431RxZ8vFi6VDvns=;
+  b=AUnmZuC7jQ+sGGeJJbQLNJUB4LuBwa/Y3UPhIzW3zsJRszSMvJS6F/4M
+   HHTM1DzuIVjCGZeWtXo/qDtqe/11cqfK8MoGU2ar72pxrrP0WnljEHjJ4
+   Ze5x2VPbz2LMpGQOo+W9CSYX2cMd54mH9tvQUI4xKqUVDK4aaA2rldo8I
+   Q3lzDUZjNMwuNJQGXt6yoUauYsXY83w8D0OoldnFgCmCkphQlFon4Dkvw
+   hrRhSX95Td9qVahvzwqFy0nF8MU9DMk8ORfSMA+nUQJDvmkG+3+WpZkt9
+   DBHBSWi0nS7ah92NuK53D6mLCDzdGKvCLkWp49ZtpIEmSDSPQDcUW/4tj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295564825"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="295564825"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 06:36:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="543262659"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 13 May 2022 06:36:44 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npVTH-000LnS-H1;
+	Fri, 13 May 2022 13:36:43 +0000
+Date: Fri, 13 May 2022 21:35:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/6]
+ fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types
+ ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
+ (12))) *' (aka 'unsigned long *'))
+Message-ID: <202205132109.23GgU6Kd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org>
-In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 13 May 2022 21:20:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
-Message-ID: <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->
-> This is the third batch of cleanups in this development cycle.
->
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
+head:   627ce4da99bb612945366770c5604019fb74b653
+commit: e4b60df6a12099568c671591d36a9fa16515f6eb [5/6] cifs: Change the I/O paths to use an iterator rather than a page list
+config: riscv-randconfig-c006-20220510 (https://download.01.org/0day-ci/archive/20220513/202205132109.23GgU6Kd-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/e4b60df6a12099568c671591d36a9fa16515f6eb
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
+        git checkout e4b60df6a12099568c671591d36a9fa16515f6eb
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                                   seg = min(size - copied, PAGE_SIZE);
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4961:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (rdata->result != 0) {
+                       ^~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4993:9: note: uninitialized use occurs here
+           return length;
+                  ^~~~~~
+   fs/cifs/smb2ops.c:4961:3: note: remove the 'if' if its condition is always true
+                   if (rdata->result != 0) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/cifs/smb2ops.c:4860:12: note: initialize the variable 'length' to silence this warning
+           int length;
+                     ^
+                      = 0
+   2 warnings generated.
 
 
-This series is available at
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
- lto-cleanup-v6
+vim +4752 fs/cifs/smb2ops.c
 
-
->
-> Changes in v6:
->   - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
->
-> Changes in v5:
->   - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by Nathan)
->   - Clean up arch/m68k/include/asm/export.h (Nick)
->   - Keep gen_symversions (and will be removed by a later patch)
->   - Add more comments in the script
->
-> Changes in v4:
->   - Rename .vmlinux-symver.c to .vmlinux.export.c
->     because I notice this approach is useful for further cleanups,
->     not only for modversioning but also for overall EXPORT_SYMBOL.
->   - New patch
->   - New.
->     Resent of my previous submission.
->     https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
->   - New
->     Resent of my previous submission
->     https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
->
-> Changes in v3:
->   - New patch
->
-> Changes in v2:
->   - Simplify the implementation (parse .cmd files after ELF)
->   - New patch
->  - replace the chain of $(if ...) with $(and )
->   - New patch
->   - New patch
->
-> Masahiro Yamada (10):
->   modpost: extract symbol versions from *.cmd files
->   kbuild: link symbol CRCs at final link, removing
->     CONFIG_MODULE_REL_CRCS
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format to modpost
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
->   kbuild: add cmd_and_savecmd macro
->   kbuild: rebuild multi-object modules when objtool is updated
->
->  arch/m68k/include/asm/Kbuild    |   1 +
->  arch/m68k/include/asm/export.h  |   2 -
->  arch/powerpc/Kconfig            |   1 -
->  arch/s390/Kconfig               |   1 -
->  arch/um/Kconfig                 |   1 -
->  include/asm-generic/export.h    |  22 ++-
->  include/linux/export-internal.h |  16 +++
->  include/linux/export.h          |  30 ++--
->  init/Kconfig                    |   4 -
->  kernel/module.c                 |  10 +-
->  scripts/Kbuild.include          |  10 +-
->  scripts/Makefile.build          | 134 ++++++------------
->  scripts/Makefile.lib            |   7 -
->  scripts/Makefile.modfinal       |   5 +-
->  scripts/Makefile.modpost        |   9 +-
->  scripts/check-local-export      |  64 +++++++++
->  scripts/genksyms/genksyms.c     |  18 +--
->  scripts/link-vmlinux.sh         |  33 ++---
->  scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
->  19 files changed, 320 insertions(+), 284 deletions(-)
->  delete mode 100644 arch/m68k/include/asm/export.h
->  create mode 100644 include/linux/export-internal.h
->  create mode 100755 scripts/check-local-export
->
-> --
-> 2.32.0
->
-
+  4702	
+  4703	/*
+  4704	 * This function will initialize new_rq and encrypt the content.
+  4705	 * The first entry, new_rq[0], only contains a single iov which contains
+  4706	 * a smb2_transform_hdr and is pre-allocated by the caller.
+  4707	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
+  4708	 *
+  4709	 * The end result is an array of smb_rqst structures where the first structure
+  4710	 * only contains a single iov for the transform header which we then can pass
+  4711	 * to crypt_message().
+  4712	 *
+  4713	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
+  4714	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
+  4715	 */
+  4716	static int
+  4717	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
+  4718			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
+  4719	{
+  4720		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
+  4721		struct page *page;
+  4722		unsigned int orig_len = 0;
+  4723		int i, j;
+  4724		int rc = -ENOMEM;
+  4725	
+  4726		for (i = 1; i < num_rqst; i++) {
+  4727			struct smb_rqst *old = &old_rq[i - 1];
+  4728			struct smb_rqst *new = &new_rq[i];
+  4729			struct xarray *buffer = &new->rq_buffer;
+  4730			unsigned int npages;
+  4731			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
+  4732	
+  4733			xa_init(buffer);
+  4734	
+  4735			if (size > 0) {
+  4736				npages = DIV_ROUND_UP(size, PAGE_SIZE);
+  4737				for (j = 0; j < npages; j++) {
+  4738					void *o;
+  4739	
+  4740					rc = -ENOMEM;
+  4741					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
+  4742					if (!page)
+  4743						goto err_free;
+  4744					page->index = j;
+  4745					o = xa_store(buffer, j, page, GFP_KERNEL);
+  4746					if (xa_is_err(o)) {
+  4747						rc = xa_err(o);
+  4748						put_page(page);
+  4749						goto err_free;
+  4750					}
+  4751	
+> 4752					seg = min(size - copied, PAGE_SIZE);
+  4753					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
+  4754						rc = -EFAULT;
+  4755						goto err_free;
+  4756					}
+  4757					copied += seg;
+  4758				}
+  4759				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
+  4760						buffer, 0, size);
+  4761			}
+  4762			new->rq_iov = old->rq_iov;
+  4763			new->rq_nvec = old->rq_nvec;
+  4764			orig_len += smb_rqst_len(server, new);
+  4765		}
+  4766	
+  4767		/* fill the 1st iov with a transform header */
+  4768		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
+  4769	
+  4770		rc = crypt_message(server, num_rqst, new_rq, 1);
+  4771		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
+  4772		if (rc)
+  4773			goto err_free;
+  4774	
+  4775		return rc;
+  4776	
+  4777	err_free:
+  4778		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
+  4779		return rc;
+  4780	}
+  4781	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
