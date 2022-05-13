@@ -1,105 +1,117 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B01A7A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 21:50:50 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id m12so9185235plb.4
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 14:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iJuobBmIBVSaPMk+qVzEvo4csdqwj8fKf0FwNOb+7M0=;
-        b=hSTJioLxFfDdpKmJuQTSCJBtlSTNQhan5vYhQrx77bAOMLNw1zLzEe2Br0xFAf8gjz
-         /CzK+jK3YXtyOzQtBd+X6jlhTuMj/chjrbeHazEKUXqcl4+UhVP44kpOKxOtQoM1LQ4X
-         kHJVRrLsRQzDlgFtopPZkdMz/eUvATdd6hky18DZrScoyx9WuX4Dg6JAcJAtJb8yOove
-         kU6uQFPrk4rdN532S9aGreECmTpbYeLe7SKoBF577A2UMy4z+ENSH/U8ZgVgBbtMVUax
-         CImMP1I2VdTRuJlHaQQnbtN6G67c+ShUIrQvI0VEOozDIQYEdPDVcnJO437d1bOpQK92
-         0Chg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iJuobBmIBVSaPMk+qVzEvo4csdqwj8fKf0FwNOb+7M0=;
-        b=u6S4Kyrfrd5EGX+kKf6NmcDZqBHa7ZCyycHpF9pY5UF/VMdy7uFhTtTxcQgg/pXHyl
-         unrDFuJTOV+WwAUf4JI1ZZGCQFRXfEE8GP7KnVoWo806lyuwdvwLFesSHhfMrBZo766s
-         cx5e59KD6G1aDo8CgjVhJhBM1vK0/YTS1rmoeWTye10VmHHq+3vl0SPrONJ8UOBX2a4x
-         O6n5r9TQIvnTWEFj66l/axgAgsEPusTXC+s/9R/uc78LLI5kQVxXauG1zVNGUOXcMnNE
-         6+lnCrd0r+I5WcfPIU1/r58Y1ks3y2rWZ0Dj/982dnPcRmxrJz8ksZGHTCxvyyBbVmXR
-         /dSg==
-X-Gm-Message-State: AOAM530r0tOZT0zspg3p7ZsypJMJC09r7ukGrD3prenF/G3tQIZo2OhA
-	TjwiVMaz0T6UN6L3hMGeGl1uU6Rjk9MJPXmrS1uHdQ==
-X-Google-Smtp-Source: ABdhPJyU4g+3eCS7Fxllab5e0ETM04Rki3xFhVv7p/mB+jsYuPnBcvUXAfOdh2kWOTGfT3M+MbSh0PFnPgzDvBALmNA=
-X-Received: by 2002:a17:902:ea57:b0:15a:6173:87dd with SMTP id
- r23-20020a170902ea5700b0015a617387ddmr6665568plg.147.1652478650479; Fri, 13
- May 2022 14:50:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C157A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 22:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652479278; x=1684015278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6W9kIUxVEytkIlePIUvHWEfOUUtB7d0gmWYOO/wGDro=;
+  b=aP2t8BWuwkeAcPC7AcyyWSJRv87h0bYuTsPbdZ7klNzaL/th89pvjCc6
+   2aGOUGVSHmjvoTQZ2QohpS+0QHQFTXGhy+8v0BysRYV1IgZ9OHuig3qP2
+   ZF8S/lrQ0wo3Juxb6FMApSd8+7wiHuLd9Kga79tD7KM1BP7KuDXSuxD9m
+   UC31ioGh++HqSmOJpyT1cUmgj2jnr0nl8+qubYcTz/G2FOop3jDGlEbtE
+   EvYjahQGAlOLDhQ0vNJF3oJnrNB0d6YJhBXMB3ErxJxv2GQ5apdIudQrp
+   o0cEDTxcDEAJqZ4tv4Kso9eLBb70fyd4QmQyclDq7gQCjBCXrBIjfGFLe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250328852"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="250328852"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 15:01:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="625042653"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 13 May 2022 15:01:10 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npdLS-000M9U-0W;
+	Fri, 13 May 2022 22:01:10 +0000
+Date: Sat, 14 May 2022 06:00:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	robh+dt@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+	y.oudjana@protonmail.com, angelogioacchino.delregno@collabora.com,
+	jason-jh.lin@mediatek.com, ck.hu@mediatek.com, fparent@baylibre.com,
+	rex-bc.chen@mediatek.com, tinghan.shen@mediatek.com,
+	chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
+	ikjn@chromium.org, miles.chen@mediatek.com, sam.shih@mediatek.com,
+	wenst@chromium.org, bgolaszewski@baylibre.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+	konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+	martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org
+Subject: Re: [PATCH 5/5] clk: mediatek: Add MediaTek Helio X10 MT6795 clock
+ drivers
+Message-ID: <202205140535.hQjmJtwR-lkp@intel.com>
+References: <20220513165050.500831-6-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202205132308.wrD99x33-lkp@intel.com> <4960152c-4bff-4749-1dfa-61f2b2b1fd3f@oracle.com>
-In-Reply-To: <4960152c-4bff-4749-1dfa-61f2b2b1fd3f@oracle.com>
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Fri, 13 May 2022 14:50:39 -0700
-Message-ID: <CAPcyv4j4=V_Rhg=oDoMKgVcaOQgoWNBNOu4-F1wwtfxkfn-aRA@mail.gmail.com>
-Subject: Re: [nvdimm:libnvdimm-for-next 8/11] fs/fuse/virtio_fs.c:784:19:
- error: incompatible function pointer types initializing 'long (*)(struct
- dax_device *, unsigned long, long, enum dax_access_mode, void **, pfn_t *)'
- with an expression of type 'long (stru...
-To: Jane Chu <jane.chu@oracle.com>
-Cc: "llvm@lists.linux.dev" <llvm@lists.linux.dev>, Christoph Hellwig <hch@lst.de>, 
-	Linux NVDIMM <nvdimm@lists.linux.dev>, Vivek Goyal <vgoyal@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513165050.500831-6-angelogioacchino.delregno@collabora.com>
 
-On Fri, May 13, 2022 at 11:50 AM Jane Chu <jane.chu@oracle.com> wrote:
->
-> Sorry again, and I'm scratching my head how could my build not complain
-> when I missed this change?
->
-> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-> index 86b7dbb6a0d4..c9faa5f2587c 100644
-> --- a/fs/fuse/virtio_fs.c
-> +++ b/fs/fuse/virtio_fs.c
-> @@ -773,6 +773,8 @@ static int virtio_fs_zero_page_range(struct
-> dax_device *dax_dev,
->          void *kaddr;
->
->          rc = dax_direct_access(dax_dev, pgoff, nr_pages, &kaddr, NULL);
-> +       rc = dax_direct_access(dax_dev, pgoff, nr_pages, DAX_ACCESS,
-> +                       &kaddr, NULL);
->          if (rc < 0)
->                  return rc;
->          memset(kaddr, 0, nr_pages << PAGE_SHIFT);
->
-> Please let me know if you prefer a patch sent your way.
+Hi AngeloGioacchino,
 
-Also needed to fixup the virtio_fs_direct_access() function signature:
+Thank you for the patch! Yet something to improve:
 
-diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-index 86b7dbb6a0d4..8db53fa67359 100644
---- a/fs/fuse/virtio_fs.c
-+++ b/fs/fuse/virtio_fs.c
-@@ -752,7 +752,8 @@ static void virtio_fs_cleanup_vqs(struct
-virtio_device *vdev,
-  * offset.
-  */
- static long virtio_fs_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
--                                   long nr_pages, void **kaddr, pfn_t *pfn)
-+                                   long nr_pages, enum dax_access_mode mode,
-+                                   void **kaddr, pfn_t *pfn)
- {
-        struct virtio_fs *fs = dax_get_private(dax_dev);
-        phys_addr_t offset = PFN_PHYS(pgoff);
-@@ -772,7 +773,8 @@ static int virtio_fs_zero_page_range(struct
-dax_device *dax_dev,
-        long rc;
-        void *kaddr;
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on next-20220513]
+[cannot apply to clk/clk-next pza/reset/next mbgg-mediatek/for-next v5.18-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--       rc = dax_direct_access(dax_dev, pgoff, nr_pages, &kaddr, NULL);
-+       rc = dax_direct_access(dax_dev, pgoff, nr_pages, DAX_ACCESS, &kaddr,
-+                              NULL);
-        if (rc < 0)
-                return rc;
-        memset(kaddr, 0, nr_pages << PAGE_SHIFT);
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-Clock-drivers/20220514-005314
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-buildonly-randconfig-r004-20220512 (https://download.01.org/0day-ci/archive/20220514/202205140535.hQjmJtwR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/991f92f26cc545a1836a3120408ce27ba7ddadab
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-Clock-drivers/20220514-005314
+        git checkout 991f92f26cc545a1836a3120408ce27ba7ddadab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/mediatek/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/mediatek/clk-mt6795-infracfg.c:14:10: fatal error: 'reset.h' file not found
+   #include "reset.h"
+            ^~~~~~~~~
+   1 error generated.
+--
+>> drivers/clk/mediatek/clk-mt6795-pericfg.c:13:10: fatal error: 'reset.h' file not found
+   #include "reset.h"
+            ^~~~~~~~~
+   1 error generated.
+
+
+vim +14 drivers/clk/mediatek/clk-mt6795-infracfg.c
+
+  > 14	#include "reset.h"
+    15	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
