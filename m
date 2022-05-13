@@ -1,45 +1,45 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4433D7
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2674C3D6A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 15:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652449025; x=1683985025;
+  t=1652456033; x=1683992033;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QNFJJcpU+Hbk46LlfyqdHGQZ31m431RxZ8vFi6VDvns=;
-  b=AUnmZuC7jQ+sGGeJJbQLNJUB4LuBwa/Y3UPhIzW3zsJRszSMvJS6F/4M
-   HHTM1DzuIVjCGZeWtXo/qDtqe/11cqfK8MoGU2ar72pxrrP0WnljEHjJ4
-   Ze5x2VPbz2LMpGQOo+W9CSYX2cMd54mH9tvQUI4xKqUVDK4aaA2rldo8I
-   Q3lzDUZjNMwuNJQGXt6yoUauYsXY83w8D0OoldnFgCmCkphQlFon4Dkvw
-   hrRhSX95Td9qVahvzwqFy0nF8MU9DMk8ORfSMA+nUQJDvmkG+3+WpZkt9
-   DBHBSWi0nS7ah92NuK53D6mLCDzdGKvCLkWp49ZtpIEmSDSPQDcUW/4tj
+  bh=bxCOHTgMjPRivEwKVkz9qMuvmQqtSeJ5mXCRrkbJZ0I=;
+  b=S/Fj+D4KgEW7O2L5df/YyKHOA2wb8sJvQrVHaoOBJdQv/5c1TSWVoat9
+   qOvE15Mitptwbg56WFk/y6gMQ+M9cRR8KFiupNIEM+VEaxPZtjXmPNuWt
+   MNSNAAQsascvtgAZswUGicQopSpVwqkR2IEJ8Y0EyjjW+T/nPNmA7hliO
+   lFY6bO3gfhSK9HkDl9bKM7x9adHcUwG7NCak2SyCWxB8li/gVbu2ENhr1
+   ImfEcUEuVl6rGLhLmKOQeNcivySL5uaq9fh+uWX05JmKPZ1s+r/U0CzJR
+   ea74YbV5oFiUKXulVAzVbzwUjvoNI9uipN7yJYig5QRu1sfWk7pt/0KdN
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="295564825"
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="252377596"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="295564825"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 06:36:46 -0700
+   d="scan'208";a="252377596"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 08:33:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="543262659"
+   d="scan'208";a="637325262"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 May 2022 06:36:44 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 13 May 2022 08:33:50 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1npVTH-000LnS-H1;
-	Fri, 13 May 2022 13:36:43 +0000
-Date: Fri, 13 May 2022 21:35:53 +0800
+	id 1npXIb-000LsI-Pr;
+	Fri, 13 May 2022 15:33:49 +0000
+Date: Fri, 13 May 2022 23:33:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Jane Chu <jane.chu@oracle.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/6]
- fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types
- ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
- (12))) *' (aka 'unsigned long *'))
-Message-ID: <202205132109.23GgU6Kd-lkp@intel.com>
+	linux-nvdimm@lists.01.org, Dan Williams <dan.j.williams@intel.com>,
+	Christoph Hellwig <hch@lst.de>
+Subject: [nvdimm:libnvdimm-for-next 8/11] fs/fuse/virtio_fs.c:784:19: error:
+ incompatible function pointer types initializing 'long (*)(struct dax_device
+ *, unsigned long, long, enum dax_access_mode, void **, pfn_t *)' with an
+ expression of type 'long (struct dax_device *, unsigned long, long, vo...
+Message-ID: <202205132308.wrD99x33-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,141 +49,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
-head:   627ce4da99bb612945366770c5604019fb74b653
-commit: e4b60df6a12099568c671591d36a9fa16515f6eb [5/6] cifs: Change the I/O paths to use an iterator rather than a page list
-config: riscv-randconfig-c006-20220510 (https://download.01.org/0day-ci/archive/20220513/202205132109.23GgU6Kd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git libnvdimm-for-next
+head:   866f841d312b95a3a0b2de104e8d9c02006e7953
+commit: 4676339a70746434e1acb678ffaea164d24dfc9c [8/11] dax: introduce DAX_RECOVERY_WRITE dax access mode
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220513/202205132308.wrD99x33-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/e4b60df6a12099568c671591d36a9fa16515f6eb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
-        git checkout e4b60df6a12099568c671591d36a9fa16515f6eb
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git/commit/?id=4676339a70746434e1acb678ffaea164d24dfc9c
+        git remote add nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git
+        git fetch --no-tags nvdimm libnvdimm-for-next
+        git checkout 4676339a70746434e1acb678ffaea164d24dfc9c
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                   seg = min(size - copied, PAGE_SIZE);
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4961:7: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                       ^~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4993:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4961:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4860:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   2 warnings generated.
+>> fs/fuse/virtio_fs.c:775:63: error: too few arguments to function call, expected 6, have 5
+           rc = dax_direct_access(dax_dev, pgoff, nr_pages, &kaddr, NULL);
+                ~~~~~~~~~~~~~~~~~                                       ^
+   include/linux/dax.h:185:6: note: 'dax_direct_access' declared here
+   long dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff, long nr_pages,
+        ^
+>> fs/fuse/virtio_fs.c:784:19: error: incompatible function pointer types initializing 'long (*)(struct dax_device *, unsigned long, long, enum dax_access_mode, void **, pfn_t *)' with an expression of type 'long (struct dax_device *, unsigned long, long, void **, pfn_t *)' [-Werror,-Wincompatible-function-pointer-types]
+           .direct_access = virtio_fs_direct_access,
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +4752 fs/cifs/smb2ops.c
+vim +784 fs/fuse/virtio_fs.c
 
-  4702	
-  4703	/*
-  4704	 * This function will initialize new_rq and encrypt the content.
-  4705	 * The first entry, new_rq[0], only contains a single iov which contains
-  4706	 * a smb2_transform_hdr and is pre-allocated by the caller.
-  4707	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
-  4708	 *
-  4709	 * The end result is an array of smb_rqst structures where the first structure
-  4710	 * only contains a single iov for the transform header which we then can pass
-  4711	 * to crypt_message().
-  4712	 *
-  4713	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
-  4714	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
-  4715	 */
-  4716	static int
-  4717	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
-  4718			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
-  4719	{
-  4720		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-  4721		struct page *page;
-  4722		unsigned int orig_len = 0;
-  4723		int i, j;
-  4724		int rc = -ENOMEM;
-  4725	
-  4726		for (i = 1; i < num_rqst; i++) {
-  4727			struct smb_rqst *old = &old_rq[i - 1];
-  4728			struct smb_rqst *new = &new_rq[i];
-  4729			struct xarray *buffer = &new->rq_buffer;
-  4730			unsigned int npages;
-  4731			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
-  4732	
-  4733			xa_init(buffer);
-  4734	
-  4735			if (size > 0) {
-  4736				npages = DIV_ROUND_UP(size, PAGE_SIZE);
-  4737				for (j = 0; j < npages; j++) {
-  4738					void *o;
-  4739	
-  4740					rc = -ENOMEM;
-  4741					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-  4742					if (!page)
-  4743						goto err_free;
-  4744					page->index = j;
-  4745					o = xa_store(buffer, j, page, GFP_KERNEL);
-  4746					if (xa_is_err(o)) {
-  4747						rc = xa_err(o);
-  4748						put_page(page);
-  4749						goto err_free;
-  4750					}
-  4751	
-> 4752					seg = min(size - copied, PAGE_SIZE);
-  4753					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-  4754						rc = -EFAULT;
-  4755						goto err_free;
-  4756					}
-  4757					copied += seg;
-  4758				}
-  4759				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
-  4760						buffer, 0, size);
-  4761			}
-  4762			new->rq_iov = old->rq_iov;
-  4763			new->rq_nvec = old->rq_nvec;
-  4764			orig_len += smb_rqst_len(server, new);
-  4765		}
-  4766	
-  4767		/* fill the 1st iov with a transform header */
-  4768		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
-  4769	
-  4770		rc = crypt_message(server, num_rqst, new_rq, 1);
-  4771		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
-  4772		if (rc)
-  4773			goto err_free;
-  4774	
-  4775		return rc;
-  4776	
-  4777	err_free:
-  4778		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
-  4779		return rc;
-  4780	}
-  4781	
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  768  
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  769  static int virtio_fs_zero_page_range(struct dax_device *dax_dev,
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  770  				     pgoff_t pgoff, size_t nr_pages)
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  771  {
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  772  	long rc;
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  773  	void *kaddr;
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  774  
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19 @775  	rc = dax_direct_access(dax_dev, pgoff, nr_pages, &kaddr, NULL);
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  776  	if (rc < 0)
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  777  		return rc;
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  778  	memset(kaddr, 0, nr_pages << PAGE_SHIFT);
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  779  	dax_flush(dax_dev, kaddr, nr_pages << PAGE_SHIFT);
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  780  	return 0;
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  781  }
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  782  
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  783  static const struct dax_operations virtio_fs_dax_ops = {
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19 @784  	.direct_access = virtio_fs_direct_access,
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  785  	.zero_page_range = virtio_fs_zero_page_range,
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  786  };
+22f3787e9d95e7 Stefan Hajnoczi 2020-08-19  787  
+
+:::::: The code at line 784 was first introduced by commit
+:::::: 22f3787e9d95e72d1f09795f294fb010e2998f43 virtiofs: set up virtio_fs dax_device
+
+:::::: TO: Stefan Hajnoczi <stefanha@redhat.com>
+:::::: CC: Miklos Szeredi <mszeredi@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
