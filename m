@@ -1,119 +1,92 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BBB3232
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:49:22 +0000 (UTC)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-07.nifty.com with ESMTP id 24DBfoRC020348
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:41:50 +0900
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-07.nifty.com with ESMTP id 24DBeEwZ008349;
-	Fri, 13 May 2022 20:40:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwZ008349
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652442015;
-	bh=mZnH7vlFKLT7FEGBr7iAv5DRO4vduuM0Ets3Kz9Jvhc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eBlvAJYSjmMcKgi8G34ggTIB8DLZKAWpu/qnpZRI9LrpD8IX0NZI161d4KPni9kip
-	 OsHIZuCJOOVkQWDzMRvNkbB02FC6qYwzQqzkHtwY8+2/H/vtAKbVNrfwUCt398DSXD
-	 qsT23bRXyCVHrEb4FnHcy6MjSeby4IuMH8xU6YpmAG/WigzvQywqFqPhfRZzXh+XJS
-	 VFoZ15+mw896qyOvCUSSBlZskUqUdkplXJo9aCB/nKwjvKdFSI3ig7fJgB3Jve0en/
-	 yVS8gRw+ybImV4ughl4umgqzuVfKD8Lu64oR42w8dnAw2foPz+rbVY+nwp2bOQeScn
-	 uWsgfe2fYCSow==
-X-Nifty-SrcIP: [133.32.177.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost, LTO, MODULE_REL_CRCS, export.h)
-Date: Fri, 13 May 2022 20:39:20 +0900
-Message-Id: <20220513113930.10488-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFE73232
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:50:03 +0000 (UTC)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Fri, 13 May 2022 13:40:21 +0200 (CEST)
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+	by mail-auth.avm.de (Postfix) with ESMTPA id 1B42A81D50;
+	Fri, 13 May 2022 13:40:22 +0200 (CEST)
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+	id 10653182996; Fri, 13 May 2022 13:40:22 +0200 (CEST)
+Date: Fri, 13 May 2022 13:40:22 +0200
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v5 11/12] kbuild: add cmd_and_savecmd macro
+Message-ID: <Yn5DpnC1auUe2B4e@buildd.core.avm.de>
+References: <20220511164514.2741934-1-masahiroy@kernel.org>
+ <20220511164514.2741934-12-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220511164514.2741934-12-masahiroy@kernel.org>
+X-purgate-ID: 149429::1652442021-000003AF-7723183B/0/0
+X-purgate-type: clean
+X-purgate-size: 1806
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 
+On Thu, May 12, 2022 at 01:45:13AM +0900, Masahiro Yamada wrote:
+> Separate out the command execution part of if_changed, as we did
+> for if_changed_dep.
+> 
+> This allows us to reuse it in if_changed_rule.
+> 
+>   define rule_foo
+>           $(call cmd_and_savecmd,foo)
+>           $(call cmd,bar)
+>   endef
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+> 
+> (no changes since v4)
+> 
+> Changes in v4:
+>   - New.
+>     Resent of my previous submission.
+>     https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+> 
+>  scripts/Kbuild.include | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> index 455a0a6ce12d..ece44b735061 100644
+> --- a/scripts/Kbuild.include
+> +++ b/scripts/Kbuild.include
+> @@ -142,9 +142,11 @@ check-FORCE = $(if $(filter FORCE, $^),,$(warning FORCE prerequisite is missing)
+>  if-changed-cond = $(newer-prereqs)$(cmd-check)$(check-FORCE)
+>  
+>  # Execute command if command has changed or prerequisite(s) are updated.
+> -if_changed = $(if $(if-changed-cond),                                        \
+> +if_changed = $(if $(if-changed-cond),$(cmd_and_savecmd),@:)
+> +
+> +cmd_and_savecmd =                                                            \
+>  	$(cmd);                                                              \
+> -	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+> +	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
+>  
+>  # Execute the command and also postprocess generated .d dependencies file.
+>  if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
+> -- 
+> 2.32.0
+> 
 
-This is the third batch of cleanups in this development cycle.
-
-
-
-Changes in v6:
-  - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
-
-Changes in v5:
-  - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by Nathan)
-  - Clean up arch/m68k/include/asm/export.h (Nick)
-  - Keep gen_symversions (and will be removed by a later patch)
-  - Add more comments in the script
-
-Changes in v4:
-  - Rename .vmlinux-symver.c to .vmlinux.export.c
-    because I notice this approach is useful for further cleanups,
-    not only for modversioning but also for overall EXPORT_SYMBOL.
-  - New patch
-  - New.
-    Resent of my previous submission.
-    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
-  - New
-    Resent of my previous submission
-    https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
-
-Changes in v3:
-  - New patch
-
-Changes in v2:
-  - Simplify the implementation (parse .cmd files after ELF)
-  - New patch
- - replace the chain of $(if ...) with $(and )
-  - New patch
-  - New patch
-
-Masahiro Yamada (10):
-  modpost: extract symbol versions from *.cmd files
-  kbuild: link symbol CRCs at final link, removing
-    CONFIG_MODULE_REL_CRCS
-  kbuild: stop merging *.symversions
-  genksyms: adjust the output format to modpost
-  kbuild: do not create *.prelink.o for Clang LTO or IBT
-  kbuild: check static EXPORT_SYMBOL* by script instead of modpost
-  kbuild: make built-in.a rule robust against too long argument error
-  kbuild: make *.mod rule robust against too long argument error
-  kbuild: add cmd_and_savecmd macro
-  kbuild: rebuild multi-object modules when objtool is updated
-
- arch/m68k/include/asm/Kbuild    |   1 +
- arch/m68k/include/asm/export.h  |   2 -
- arch/powerpc/Kconfig            |   1 -
- arch/s390/Kconfig               |   1 -
- arch/um/Kconfig                 |   1 -
- include/asm-generic/export.h    |  22 ++-
- include/linux/export-internal.h |  16 +++
- include/linux/export.h          |  30 ++--
- init/Kconfig                    |   4 -
- kernel/module.c                 |  10 +-
- scripts/Kbuild.include          |  10 +-
- scripts/Makefile.build          | 134 ++++++------------
- scripts/Makefile.lib            |   7 -
- scripts/Makefile.modfinal       |   5 +-
- scripts/Makefile.modpost        |   9 +-
- scripts/check-local-export      |  64 +++++++++
- scripts/genksyms/genksyms.c     |  18 +--
- scripts/link-vmlinux.sh         |  33 ++---
- scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
- 19 files changed, 320 insertions(+), 284 deletions(-)
- delete mode 100644 arch/m68k/include/asm/export.h
- create mode 100644 include/linux/export-internal.h
- create mode 100755 scripts/check-local-export
-
--- 
-2.32.0
-
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
