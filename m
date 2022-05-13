@@ -1,58 +1,62 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F5D7A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:02 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-2f7dbceab08so80859997b3.10
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76657A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:04 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id t42-20020a25aaad000000b00649d5b19ee3so8223662ybi.4
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6CD2+63H+3oTXjdPkyITKV8H4giwswt8mB7LxNoXRYo=;
-        b=r5EVvXQzvk5eeQ4XlSJKfwGgANH0BdQwZRjaHHspPEGd/UcpZ1b+p/8Op17mjXBG5B
-         UcgVZwJ5FSAz4mYqsfTlF1djzNN482V8ywnJZCKUyxH5fcayYMuZVx/xzzsow1u428aP
-         rY9zVOEl97Yhu+WgmabAaI95fvlWhW0amOdHtf0P1RgSPXUqo7yujhe5u0jcwXtfAUoN
-         pbARbf7Xgsr9e+APQ8y7txcpe+VK39r8ASkwIWJO4920xmEhxFC4hL1jGf8cUEw0pymm
-         1Z+FrPtkUzeQHNNBxxbR4A9JRHS4ZuRIlKi1sF+NHM3jSvYeGoE9PrWzK49N5G2jhpQd
-         vRug==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=7dzNFqFFreuuGTeKc8mtJ6zzQ7MnT/UZgCYnwegkikw=;
+        b=n4tHKOJgDtPcp400cFfhloKlxJotstNLkDrF4z8JP1rzR6HPjAR9HOs6jJBLmYOB5l
+         4+Y2KlsHR5sfl8hlG5Y2YO+uXY1XI0e2TXINNjhFpaz3QIuWawMkTRTCBrjaopQyaxLa
+         cBhG2HDKSrXaUfoLLBgPjgOcp482uo/oyH92PRBXhbRR9yF3onu8TOJ/ZGaqiFzX2+MA
+         ZJ5mlRUuYytvGHLeEX/wYO5xCTnb4kuxxKZm18if4rlYDNnia3kdXzS5XA/U0nmH95AC
+         ve41FgmB9bTufogbJdpviDZ/EZU3vVH7ccMM08Dtf8J1ylIz0SSX0V+uQLGdW5GTIavt
+         KFMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6CD2+63H+3oTXjdPkyITKV8H4giwswt8mB7LxNoXRYo=;
-        b=rbuhmTlbifQ2WUHbzK4ExT5v2rsiwyF8uPXDYsX29il7CMXpWeqwYaN3Atgu2RmCu8
-         F8o29fRwC6HVix8p3RtwQVsJdVJfpLtouOY5WiMzNCRGuSUu2hQ8XT8GsyVyNDGsQ3lg
-         9vb8I3E2NOb1nKsVsHSoQE8gRgryS82AInQLkD0ephtp3o73iYhj9s/prMEn12qLRHOx
-         f9IioU2QNHQQ6DqTDHWCKmIav/03L5awGi19pCxaI2nF4h079AXcKdyCa2Z5HAVyOmtv
-         z84Lp2KhMWpR9Z0v/A6DzW6En5pJgyiOReFHZxfls0q2/5m4BPzQQ3JnQuhv0xMvzKY4
-         7mxA==
-X-Gm-Message-State: AOAM530tmUbRpYoqVNRibiHphlEFqFCzo9hO4GxpWDa+w7AllaszQF6C
-	8RhyZOmHj0GuwAbdRDHeA5Q5rgt+N+gKySKWsyg=
-X-Google-Smtp-Source: ABdhPJyWzTcZ6z5vhWY6N9lWbzhGW/eIh1xUAaFPidwLygala9vxOMwfoNufG+ccSq0CvYF/3FNqw512rdJUpKJ4V4U=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=7dzNFqFFreuuGTeKc8mtJ6zzQ7MnT/UZgCYnwegkikw=;
+        b=FXpspzO79tamkt4SLa5v64/XPxd/HNlRf/LRMBSpow2uxrZ2eymL12w8LJqgdj2qVh
+         3Z/f1uCsUsL5r/UXI32R+sSgcvxn7p+3nvAvmqJi+s1/dA18wNZ4kgOSxnwqePupJtDX
+         ZGLneq5n7NSwlruKYz+QSUzxpoI//xCWoIRWehrhsNSwfWBVQaJGGypvPOo+AP+ezrNO
+         vD8yt+xaAJsWMw/bbNZKLF8mq2qq9e159DM9z1dxiUXFIVKtJDROOPrxupTNuXCmXd8p
+         5MwpBNfqT8xrgkkVBnmexEwggTM8z9MMADwQ7WTyrr6JN7nAUoM6MwdUL0KEHel2ERnt
+         BsgA==
+X-Gm-Message-State: AOAM530zdF3jhqZFREmEPUp9IJl2krk81o9qzxqpzT3xKXwTbmkzFXls
+	4L/2ZU19+m4Dmtm2Ca8y1oHmEPHAL4dUyR8qEj4=
+X-Google-Smtp-Source: ABdhPJx1JJ0XmShhi74TIbh32BtvTGVhISwacttcRGpIVP/D3e+Li9khIRUZk3Job+crje8gCf5m3Gtudj8ga74RriM=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e0:c17e:c2dc:13eb])
- (user=samitolvanen job=sendgmr) by 2002:a81:7746:0:b0:2fe:b79e:dd21 with SMTP
- id s67-20020a817746000000b002feb79edd21mr4376368ywc.97.1652473321844; Fri, 13
- May 2022 13:22:01 -0700 (PDT)
-Date: Fri, 13 May 2022 13:21:38 -0700
-Message-Id: <20220513202159.1550547-1-samitolvanen@google.com>
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:704:b0:649:cadc:bcf0 with
+ SMTP id k4-20020a056902070400b00649cadcbcf0mr6772144ybt.537.1652473323920;
+ Fri, 13 May 2022 13:22:03 -0700 (PDT)
+Date: Fri, 13 May 2022 13:21:39 -0700
+In-Reply-To: <20220513202159.1550547-1-samitolvanen@google.com>
+Message-Id: <20220513202159.1550547-2-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20220513202159.1550547-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5033; h=from:subject;
- bh=QQHZw+nNC3sat5hCbK/dHVOrwEpFv/dcBv8rUGfmodE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3izuj6onoCVuVAqVb7kGKi7/2NqgwMnFWBknHE
- pazR+TaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7nTvC/
- 0YeKprfOIH2lFwOEA0eV7IhrhzJnfzOacgxhF8m4gP3pX12d+c0mbY6LaI2TeqHUzmQ/qQVJCbUzed
- qYGHRtsqq5a1hWR34gMu84GY/VOmXf4HVNCY9Mr0EXKJGFRCORkGxwj5VgShEctPN7xlpzWhj9FSYQ
- TQpw7TbpV4gvBIzmJ6HlBPMeXAjn8Rw2OsKEmUTiLuTeHD8JNqWopZZiMLs7NptwBdLB5oirOM4hTH
- fPZ7LcF8aoBKDxQDK583B3fZQ39VGvUEKZSYsiEoGgMQ5ZGbwk84gmyuFzhwCztm16peP2twyeVgD3
- WAlgpVrY79VA3j63rGjXh0dj9nAhe6vyQJMm13fOSGcAs1+kYBAxIlFIVhdqoHnLUgXqNMkb7KTzy4
- wnCKrZHKvkMRSI4wZR6WdCSPkDWfq5GZMeziUruqhuc5vWqbSN21sjy3udNEPn/iebzu6GOUi6i5cv
- Vl4j8vDNBqAfPbc0owmH9iQAna1UfIaw1ochzhxveFUDI=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=880; h=from:subject;
+ bh=EZLomphfIH08U3z4yVCd/QNb6Zb3C1icGxpk/OdeOrs=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3ix9PIgN+KybiMjc7a7S4+3nkZ58mRwAo49nTd
+ DGA2iOSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7vTLC/
+ 9hgHRRO5928cbJy0Lj4dyh/HzCmTIsX5aRyNv3FaExai4tXtGIkEc9t07OQsdSHwe+vOQ4GaN0K0Yo
+ Ez6WpASKIqAWw1CeqAT9mb8YffUPQZ15oosx922RKgOBLn7W0GuI+uzyNSW4zK4l0XtGaSzZaCx+bO
+ VwwGaaThKY0gplbHU9YXLsLgqQFHuUD4yvfaAmhmWNeltzIlMqEj5P7eTYsqRATnkmvNGQL5jBJkGw
+ 8MYNAlP6T/iaCDs7BeP0sPlgm3fIItcqzRKbtCg8953xYBCXp7UcapXhQYFZ+1fZ6g0txkD3HYt7bv
+ /gdeVagNoIHK12tbnXliT67mMG/k2TufwaqBB4HbMNE6B51ElwuEdXvLY/cQftfGrkMKDn3/0c4UPI
+ D5vLLZP1Z9I1is5YqP9C/K2jOqD2gPEXFjVPRK21z5UWzZe53fEZM39HScCeOsPT5AHuN9wQXQhzzD
+ LW8o4It0Oany72uLq2n4E1wVX7ylkcng+6S6YFDEngVsM=
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC PATCH v2 00/21] KCFI support
+Subject: [RFC PATCH v2 01/21] efi/libstub: Filter out CC_FLAGS_CFI
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -65,113 +69,27 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-KCFI is a proposed forward-edge control-flow integrity scheme for
-Clang, which is more suitable for kernel use than the existing CFI
-scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-alter function references to point to a jump table, and won't break
-function address equality. The latest LLVM patch is here:
+Explicitly filter out CC_FLAGS_CFI in preparation for the flags being
+removed from CC_FLAGS_LTO.
 
-  https://reviews.llvm.org/D119296
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ drivers/firmware/efi/libstub/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This RFC series replaces the current arm64 CFI implementation with
-KCFI and adds support for x86_64.
-
-KCFI requires assembly functions that are indirectly called from C
-code to be annotated with type identifiers. As type information is
-only available in C, the compiler emits expected type identifiers into
-the symbol table, so they can be referenced from assembly without
-having to hardcode type hashes. Patch 7 adds helper macros for
-annotating functions, and patches 9 and 17 add annotations.
-
-In case of a type mismatch, KCFI always traps. To support error
-handling, the compiler generates a .kcfi_traps section for x86_64,
-which contains the locations of each trap, and for arm64, encodes
-the necessary register information to the ESR. Patches 10 and 20 add
-arch-specific error handlers.
-
-To test this series, you'll need to compile your own Clang toolchain
-with the patches linked above. You can also find the complete source
-tree here:
-
-  https://github.com/samitolvanen/llvm-project/commits/kcfi-rfc-v2
-
-This series is also available in GitHub:
-
-  https://github.com/samitolvanen/linux/commits/kcfi-rfc-v2
-
-Sami Tolvanen (21):
-  efi/libstub: Filter out CC_FLAGS_CFI
-  arm64/vdso: Filter out CC_FLAGS_CFI
-  kallsyms: Ignore __kcfi_typeid_
-  cfi: Remove CONFIG_CFI_CLANG_SHADOW
-  cfi: Drop __CFI_ADDRESSABLE
-  cfi: Switch to -fsanitize=kcfi
-  cfi: Add type helper macros
-  psci: Fix the function type for psci_initcall_t
-  arm64: Add types to indirect called assembly functions
-  arm64: Add CFI error handling
-  arm64: Drop unneeded __nocfi attributes
-  treewide: Drop function_nocfi
-  treewide: Drop WARN_ON_FUNCTION_MISMATCH
-  treewide: Drop __cficanonical
-  objtool: Don't warn about __cfi_ preambles falling through
-  x86/tools/relocs: Ignore __kcfi_typeid_ relocations
-  x86: Add types to indirectly called assembly functions
-  x86/purgatory: Disable CFI
-  x86/vdso: Disable CFI
-  x86: Add support for CONFIG_CFI_CLANG
-  init: Drop __nocfi from __init
-
- Makefile                                  |  13 +-
- arch/Kconfig                              |  21 +-
- arch/arm64/crypto/ghash-ce-core.S         |   5 +-
- arch/arm64/crypto/sm3-ce-core.S           |   3 +-
- arch/arm64/include/asm/brk-imm.h          |   6 +
- arch/arm64/include/asm/compiler.h         |  16 -
- arch/arm64/include/asm/ftrace.h           |   2 +-
- arch/arm64/include/asm/mmu_context.h      |   4 +-
- arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
- arch/arm64/kernel/alternative.c           |   2 +-
- arch/arm64/kernel/cpu-reset.S             |   5 +-
- arch/arm64/kernel/cpufeature.c            |   4 +-
- arch/arm64/kernel/ftrace.c                |   2 +-
- arch/arm64/kernel/machine_kexec.c         |   2 +-
- arch/arm64/kernel/psci.c                  |   2 +-
- arch/arm64/kernel/smp_spin_table.c        |   2 +-
- arch/arm64/kernel/traps.c                 |  46 ++-
- arch/arm64/kernel/vdso/Makefile           |   3 +-
- arch/arm64/mm/proc.S                      |   5 +-
- arch/x86/Kconfig                          |   2 +
- arch/x86/crypto/blowfish-x86_64-asm_64.S  |   5 +-
- arch/x86/entry/vdso/Makefile              |   3 +-
- arch/x86/include/asm/linkage.h            |  12 +
- arch/x86/kernel/traps.c                   |  60 +++-
- arch/x86/lib/memcpy_64.S                  |   3 +-
- arch/x86/purgatory/Makefile               |   4 +
- arch/x86/tools/relocs.c                   |   1 +
- drivers/firmware/efi/libstub/Makefile     |   2 +
- drivers/firmware/psci/psci.c              |   6 +-
- drivers/misc/lkdtm/usercopy.c             |   2 +-
- include/asm-generic/bug.h                 |  16 -
- include/asm-generic/vmlinux.lds.h         |  37 +--
- include/linux/cfi.h                       |  65 ++--
- include/linux/cfi_types.h                 |  57 ++++
- include/linux/compiler-clang.h            |   6 +-
- include/linux/compiler.h                  |  16 +-
- include/linux/compiler_types.h            |   4 -
- include/linux/init.h                      |   6 +-
- include/linux/module.h                    |  10 +-
- include/linux/pci.h                       |   4 +-
- kernel/cfi.c                              | 343 ++++------------------
- kernel/kthread.c                          |   3 +-
- kernel/module.c                           |  49 +---
- kernel/workqueue.c                        |   2 +-
- scripts/kallsyms.c                        |   1 +
- scripts/module.lds.S                      |  23 +-
- tools/objtool/check.c                     |   4 +
- 47 files changed, 357 insertions(+), 534 deletions(-)
- create mode 100644 include/linux/cfi_types.h
-
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index d0537573501e..234fb2910622 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -39,6 +39,8 @@ KBUILD_CFLAGS			:= $(cflags-y) -Os -DDISABLE_BRANCH_PROFILING \
+ 
+ # remove SCS flags from all objects in this directory
+ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
++# disable CFI
++KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
+ # disable LTO
+ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+ 
 -- 
 2.36.0.550.gb090851708-goog
 
