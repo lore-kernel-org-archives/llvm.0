@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3937A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:07 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-2f8bbaa6b16so81055237b3.14
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730817A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:22:09 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id b33-20020a25aea1000000b0064588c45fbaso8147081ybj.16
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 13:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dq5ya0HLbqhoGaxybMwD+u455UO61ysiO/Cn6SCUV4E=;
-        b=QhvLqyQ7SGkhcJcmlPcAMvH4X9HlQFOiCjtBh/sxV7YFuCJ87i5PkY99k8mpn88Z7L
-         bAJHA6Yi+ZPZn6RvkqV/eFGCG1px4tIYEl7/NiOpU+6qbrDMEZhC+SRZjcWXz+crVMyB
-         k89fvJN/FDgzHnNowBikxn+RDEi5rz5cjkFzu4OdcmLuH5qG5wD0z0VtWR17tHJLAXz6
-         D/UCknaW80Q18TX1vss3qORW2jhII4B6rQkGv+V6pGg9zIzJdJU8oSKhfhM1q13nyTu0
-         RtKAlKqIMYJgUOayt2WSeBxXLwmjgEC/4qZ7cyJ+5su7ftJjYIt4dwxMI94GP5ohXkvi
-         VOKA==
+        bh=IxHEer1R7aVI+23m0/FmYa+I+TASlrgBBKCjzC35/is=;
+        b=OxMA8KuHb8XyzEjNcQew0ArZPh+FVcPLuUudPe8Jic4JWJ2qN0iVlwiAZZSV9Gtzwv
+         7HrYwsvduCROdph8yijbuUGSiOimDaejwPHZbVJ1M734lxldw057vMrtMmT4JDtTWicN
+         LFtVcyF/iv6fifWYUO8WReZUA0eigVeQwl1sgTgmQEQ2c5FaP2Mr+ePC13K4wuaZayO1
+         d8+lzT59gwHtCXP+id4mRPGTa9D7RNmpX55+YjUZbLnUUDJp3++JVBGJgL1r3FL1rFgD
+         9c/LZv5mImy0vO1Qkn8xvEDuDTkaHE5SP9oiguHQSFWAB0RU+W3gKv3DkAA64d0G0jNq
+         TI0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dq5ya0HLbqhoGaxybMwD+u455UO61ysiO/Cn6SCUV4E=;
-        b=psfIYoFl6K7/ZYMMd9EynT73vfmaH8TNmeTxD8qe4EOpRMVSmSe/lGulL6/XY6e/m0
-         eGctLfWM/C7qZOUKtFooeU7T5+CqmHy7swIzxwBVpDbZ8FY2icxnd2qQuzSTYPiwI6F6
-         cKrSLQr9abQoixojHG8OAJkhrR9EznA1tRMCpd7IwJsyw8aaPo+S0ls0xBIVm0/wzNRI
-         OMS0cBu40GmML8an8LRbvNCyCWX2QaSDa1R/WoadRK/+gR7duv/Q2CwqgXS5cID85d6Y
-         H7is63n8AB3VlIu7iZLSZl5a6rvcGLamwRnEGODp07QJdFgJ/tGY5YmgElgcFprTeZeJ
-         EFkQ==
-X-Gm-Message-State: AOAM5306zGrTcAulyVxuBJxD/nuv6Z2YPIOdmxHAgoggirpjzvqidHQH
-	+Xd69LgIU1BQWkuxQt6MUktrSicsOyhEnf+A/hA=
-X-Google-Smtp-Source: ABdhPJx6nPe/UG4ioi9xxrUNrDLMncxESewxC/vESjwPAZ8T0UiRXU3Rn9QJIYSuvrV9TPZrXKmlIeVohGiRmaBJe18=
+        bh=IxHEer1R7aVI+23m0/FmYa+I+TASlrgBBKCjzC35/is=;
+        b=L2hsMwkzo6h1M3+QcPVeeSNck1p8AzToEKnc6mUvH5AM0q9buG71ONC/EY9H8lhIfW
+         27JXJtlQOClcZ2KEWh2jgKNdtnkD3YlqeVGsYy+pwkrXxBhUc/75YMJLlWw6xVJSJhGb
+         qyJ0zSDoJ78qtBcy1H2aaL6S1RFT3gLiv1HxY6mpbUtLJS2q5xE0ZlZtylfawPgl0+Un
+         V72076xDtHJiJayWkhvEnLI/0v2LIJG7YBBbMM5HJdhUMNAgv/ZwBcbJzW4JJ24cFdfB
+         EKji0LbHz1FgXSQjekUQ1inSFWEzJ8imKotCbhz8pG22qoF3FN8VXgt8wDYKwTqhzytW
+         f2cg==
+X-Gm-Message-State: AOAM531oafM/ae90RizvVmMd8Y7Pe9gLth2Cv0g5Qzd+i3ZGMZQcmlNW
+	YVbxBMrh/HYQwdhWG3SNVQ0RK3YqZWuA3k1ey+s=
+X-Google-Smtp-Source: ABdhPJzUS09TySpKZNXM6m4ea8HNMDMOfILnzeEqlsd04WIi/iMakGhB41x1yNg+3tqOE5zhpyksH9HH+6A5s0pmUMM=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e0:c17e:c2dc:13eb])
- (user=samitolvanen job=sendgmr) by 2002:a25:d1d7:0:b0:64b:6193:cd6d with SMTP
- id i206-20020a25d1d7000000b0064b6193cd6dmr6849614ybg.149.1652473326244; Fri,
- 13 May 2022 13:22:06 -0700 (PDT)
-Date: Fri, 13 May 2022 13:21:40 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a81:5607:0:b0:2db:c245:5ff4 with SMTP
+ id k7-20020a815607000000b002dbc2455ff4mr7860740ywb.244.1652473328452; Fri, 13
+ May 2022 13:22:08 -0700 (PDT)
+Date: Fri, 13 May 2022 13:21:41 -0700
 In-Reply-To: <20220513202159.1550547-1-samitolvanen@google.com>
-Message-Id: <20220513202159.1550547-3-samitolvanen@google.com>
+Message-Id: <20220513202159.1550547-4-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220513202159.1550547-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=988; h=from:subject;
- bh=RNVQHrlEA9fX91aGJUv17nzO52aQ646VsAxq7TYCVmE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3isUdSjjLVv9wzgpsbojWEfNbcYqclULDOWDcw
- kQXpx/yJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7p9EC/
- 9JO2MwCu1MjbT8Exc52X4QzT9yYK9ojOtmr6WsnYMtpgxHa2q1EE6j+R5DjIqzA+m2ZWPHkY8SrMeG
- ZrpJnTHJPvFOmOV9L+KDF1UT+Vgo2YVrHJuQqxkraewUIudUDq4Bab1FpnWkPZ4QtwJ9xuzKjcnA12
- rUIsUKiEhUi1G12cNkjH+aGc4Ny0YP4T2rz89dMrdARLVOHhRPupWfkUNfNVLrIlXbnof/ZCCjhJz1
- /gosCtk/66Q2tgY9KlHpacjuBslmTAN6blKpml6eqY1jRO1Hqa6ScjNXsr7+p5muSKkIRmxw1nPydt
- uEjXwjPlU5Ruc4YYTkRQ1SHEvAY/KmfK1bxhTW2zqyS909mhqMUEKaAw+n3DCzcCfosyD9GzAspMLK
- SZA/KsxdlXzjUxfsDSQMVqyc7AOnO30FS+TtKeAMlZU6kbhpl6I1yJyRW4cejjllmWB/ynZIDhDZTJ
- mZiNpwrFr0PQBQTYS1f63TSat1c1BfyDD5IZxeq1F4sM0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=669; h=from:subject;
+ bh=nqUrm2wetpzQHlcH5NE19NaoXqu5E22beF1fMMwNKYU=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBifr3iMv7g14dMbgfDCXDLb8bbUgmfd0gW8V9AeL1O
+ zzXtTTuJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYn694gAKCRBMtfaEi7xW7iEdDA
+ CI6z4FnJ7PlqvcN6HOYf/c+XXnT7MWbgCS2HoVv2P8QoFQ7TpgbvN9zIdJ2RqY6xEuuz3emRk6Ah6L
+ m3BDCj8zH2JvuDhGU8CvazPYASgz94v/HBmS7NVikbjwkqCaqgwWglXdD2apJxu5anZhqnCpft8QPP
+ bsIYUu1URvNbcxZKEGTmZ+CfaHo8s7SG6cXjrxevYWrVVsTwtujQ9JyLn0OoTcm/Fz7e+vQTkJ8h83
+ tVq2x9/I247t3sHmmcB9KPidgRSvcn1f9jJq0P1G7rSEDpVyZu2g0xj0mridXoViXt4rnsB3q1jmCE
+ BVikAZnVI/yfasdkpS9g3uH/FygOBkKSfIT27/K+DLNc7XcLJJfDlhBepjYoQ2RwC0/vfOhr+7iq8Z
+ S6gs/HjMHr5L+Y77qMjwRSwMNE2rdV+mTed4i9qBwlRWYaCWx3uwygO/JhgxJmegZ36M5eaQI+mxtd
+ OYZMFi5iejcuHT5TOPjKY0v8Ia7ODn5SOlEwOFOqDPNMs=
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC PATCH v2 02/21] arm64/vdso: Filter out CC_FLAGS_CFI
+Subject: [RFC PATCH v2 03/21] kallsyms: Ignore __kcfi_typeid_
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -69,28 +69,26 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Explicitly filter out CC_FLAGS_CFI in preparation for the flags being
-removed from CC_FLAGS_LTO.
+The compiler generates CFI type identifier symbols for annotating
+assembly functions at link time. Ignore them in kallsyms.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- arch/arm64/kernel/vdso/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ scripts/kallsyms.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index 172452f79e46..6c26e0a76a06 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -33,7 +33,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- # the CFLAGS of vgettimeofday.c to make possible to build the
- # kernel with CONFIG_WERROR enabled.
- CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
--				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
-+				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
-+				-Wmissing-prototypes -Wmissing-declarations
- KASAN_SANITIZE			:= n
- KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 8caabddf817c..eebd02e4b832 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -118,6 +118,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		"__ThumbV7PILongThunk_",
+ 		"__LA25Thunk_",		/* mips lld */
+ 		"__microLA25Thunk_",
++		"__kcfi_typeid_",	/* CFI type identifiers */
+ 		NULL
+ 	};
+ 
 -- 
 2.36.0.550.gb090851708-goog
 
