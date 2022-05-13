@@ -1,84 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5906F33F4
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 16:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E38C34100;
-	Fri, 13 May 2022 16:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652460646;
-	bh=/SJ3ynd9dz9LD1HOGD+pWoI3QNdCc8TOcMx8HqshsiA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FWx8hycsPbrgaLFKWt2JwzZY0bYAb1+FpugiFBuLm+BnsqE0Llq7YizVun+Rk8yE4
-	 1OOP+YSbHF7FgLKyFoqhPQhNFHGhE+j+2ODKShLe8eRUC90CEnsrP2R3mvusn93PGd
-	 SNR0LyUfowfqZXQbk6Sd126/qk+Qo0Lbf5VlDonh41sx4p1ryEFvEMTrbdIHyWf1C1
-	 v1BYUIgPpEbh9An+KR1i48Cb+RoGhBLDNljvSYefiH4kqRBjOjcNWSUuSsC24wSsM2
-	 X3E8IP8pq1idp/1xat/7JO5/hbpEbNw5Ma92fLnQw1sVfV31PC3anNgD+z0xek+f2C
-	 3yoBg9azSKDxw==
-Date: Fri, 13 May 2022 09:50:43 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Wolfram Sang <wsa@kernel.org>, Michael Walle <michael@walle.cc>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
-Message-ID: <Yn6MYxzY1zo8Ln0X@dev-arch.thelio-3990X>
-References: <20220505152738.1440249-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E740C33F4
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 17:16:47 +0000 (UTC)
+Received: by mail-oo1-f50.google.com with SMTP id c22-20020a4ad216000000b0035f13ae7646so2836063oos.9
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 10:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=17XIQCN9HbjdH4lGYv9BZgUeaBs5X8MuvFgeV6MIHSM=;
+        b=erVEE23WczJeSpgLclTLAQXK//buxM37l0dzLtn8veqXh7R22zWSbBG/kR1IxPo8P2
+         wZjOXEt3l0G7xVbRuoBZFwb+5h2lqpC2Gh03+57jEzl+nFMc2lr6MpejHolJCJ52VNss
+         L2zwV/OdFXIXN79UP3/H4eJ/+QUr/A1/DWOGleeFmq5NFXrV9tBYapoQIuwOBeN0gAfk
+         cM1kpOgZp3XslPlPUjhP2mQi9I6RXChxMZQgOokZQnhwd9XxSCXPgkwykQyr2VIhbpJ6
+         w7Pyy/Dz8xrD6g39W47MySgr0VKvbe4FRjd/oH1oh9AHIrMy6IdGq+HuotXVlj31+MOh
+         bjMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=17XIQCN9HbjdH4lGYv9BZgUeaBs5X8MuvFgeV6MIHSM=;
+        b=xoORABWQI5+Jb2YoI2JpjPBNrYPxqku3LY9BRlgMumel58nNw7y28JGdBZM1pcMlWI
+         RBvs2p+STs8mGnXrQF0efjnLKu30N/aFYo+KTZuwcAnizHBb99ukYii5bbr9HfbLDulS
+         ZC+oj62F5kVTzslQlF2XH0Qg0P06pUDLrMA/wnUVp9Kxz+U7HHnHZx13I5QNRz0jFzOA
+         1L5/VKdGPm1monT5wogY5UtrfzYU+NnUhxE1Xj2ZfbImIskHw4RxmBvJWiuxV4bVlM0/
+         GaWhp/4Zc3JVRIZHCvfsj8hFzgNHIdrGXNyO9rpWgmHvJOeYEbLW8aZ7FJqbCFs6jlpU
+         ZLFw==
+X-Gm-Message-State: AOAM533lEU08XXPjgcDkz46WE1GFCC5oYgiWSpx4Aiw5HywxLhfS8yO/
+	9gN5g+VSsIqHVp/B5k9HPYiLn7NboSaFLiA5AK0=
+X-Google-Smtp-Source: ABdhPJwLnyoKJxKyDeZ2OcDJ/kFUZNq0etrdSRCBA3E3rqDcgAeopBJ04bDChWjaWe/0W3KQymvIWGzpGm2yV5Xkw/4=
+X-Received: by 2002:a4a:eb10:0:b0:35e:b454:40ec with SMTP id
+ f16-20020a4aeb10000000b0035eb45440ecmr2300614ooj.49.1652462206949; Fri, 13
+ May 2022 10:16:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505152738.1440249-1-nathan@kernel.org>
+References: <20220217141858.71281-1-cgzones@googlemail.com>
+ <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com> <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
+ <CAHC9VhR-Xk65iSfZxVvaK+mJoFszxT2E8vF=cus1aAKcB0EgYg@mail.gmail.com>
+In-Reply-To: <CAHC9VhR-Xk65iSfZxVvaK+mJoFszxT2E8vF=cus1aAKcB0EgYg@mail.gmail.com>
+From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Fri, 13 May 2022 19:16:36 +0200
+Message-ID: <CAJ2a_Ddy8Kkp6SHxktguSQ4WqHwpA=zrQUz8UYkajF5-YtPerw@mail.gmail.com>
+Subject: Re: [PATCH] security: declare member holding string literal const
+To: Paul Moore <paul@paul-moore.com>
+Cc: Casey Schaufler <casey@schaufler-ca.com>, SElinux list <selinux@vger.kernel.org>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Xin Long <lucien.xin@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>, 
+	Todd Kjos <tkjos@google.com>, Olga Kornievskaia <kolga@netapp.com>, 
+	Linux kernel mailing list <linux-kernel@vger.kernel.org>, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ping? This is a pretty obvious fix and this warning turns into an error
-with CONFIG_WERROR so some of our -next builds have been broken for over
-a week now.
+On Tue, 3 May 2022 at 22:02, Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Mon, May 2, 2022 at 9:38 AM Christian G=C3=B6ttsche
+> <cgzones@googlemail.com> wrote:
+> > On Thu, 17 Feb 2022 at 23:50, Casey Schaufler <casey@schaufler-ca.com> =
+wrote:
+> > > On 2/17/2022 6:18 AM, Christian G=C3=B6ttsche wrote:
+> > > > The struct security_hook_list member lsm is assigned in
+> > > > security_add_hooks() with string literals passed from the individua=
+l
+> > > > security modules.  Declare the function parameter and the struct me=
+mber
+> > > > const to signal their immutability.
+> > > >
+> > > > Reported by Clang [-Wwrite-strings]:
+> > > >
+> > > >      security/selinux/hooks.c:7388:63: error: passing 'const char [=
+8]' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatib=
+le-pointer-types-discards-qualifiers]
+> > > >              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_h=
+ooks), selinux);
+> > > >                                                                    =
+       ^~~~~~~~~
+> > > >      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to=
+ parameter 'lsm' here
+> > > >                                      char *lsm);
+> > > >                                            ^
+> > > >
+> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > >
+> > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > >
+> >
+> > Kindly ping;
+> > any progress on this one?
+>
+> I've already added my Reviewed-by tag, as has Casey, so I think it's
+> pretty "safe" at this point.  The next step is for James to pull this
+> into the LSM tree.  If it is still collecting dust at the end of this
+> week, ping us again and I can just go ahead and pull it into the
+> SELinux tree, it's small enough that it shouldn't cause any problems.
 
-On Thu, May 05, 2022 at 08:27:38AM -0700, Nathan Chancellor wrote:
-> Clang warns:
-> 
->   drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->           if (dev->use_dma) {
->               ^~~~~~~~~~~~
->   drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
->           i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->                                    ^~~~~~~
-> 
-> Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
-> when the first argument is NULL, which will work for the !dev->use_dma
-> case.
-> 
-> Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1629
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-at91-master.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index 5eca3b3bb609..c0c35785a0dc 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -656,7 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	unsigned int_addr_flag = 0;
->  	struct i2c_msg *m_start = msg;
->  	bool is_read;
-> -	u8 *dma_buf;
-> +	u8 *dma_buf = NULL;
->  
->  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
->  
-> 
-> base-commit: a181b8d187319bf265a2019ddde856a3d2f107a6
-> -- 
-> 2.36.0
-> 
-> 
+end-of-the-week-ping
+
+>
+> --
+> paul-moore.com
