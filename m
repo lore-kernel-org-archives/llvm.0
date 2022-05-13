@@ -1,143 +1,181 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE707A
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 19:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652470143; x=1684006143;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jxyF+pUkOhXeP3sURtGIsbWu1ZHHNg6clR3K8RRCTgA=;
-  b=L46H8JPivRQqjBtmUpYcZc8ap0IuFUUieKrAoDGW50XoMFONtmCsUE6U
-   dYNqmkFCp0ZKdce+rSOd8XJfs5pQJEhXQ5+AHIVo8LZHjG1lQKXWr5rQu
-   UouUI1qy9ABcPxhNpVkN6bf6fegwccEH/6BM3d3JoSZjiO3ZsTF78P5QT
-   avzCzbiePdwjlbMPHX22J+b2XvVte/HljDW1IAZztC2SwjMnXiTNN1wPr
-   HNQ+QjGoHbXSxG3zkttcQK7EPCKfyx9iapX39X0m1f6HjUNz+ZRzjLZMh
-   QxFOEGOVrrtkbV6c8rAa/CsUKfNpxAccyCZttcbupq/czDrRCBMZLyX8f
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="257941483"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="257941483"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 12:29:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="637409143"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 May 2022 12:29:01 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1npayC-000M3M-SD;
-	Fri, 13 May 2022 19:29:00 +0000
-Date: Sat, 14 May 2022 03:28:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [PATCH 3/3] mac80211: mlme: use local SSID copy
-Message-ID: <202205140341.A1zkqlx2-lkp@intel.com>
-References: <20220513154805.89b855fd46f3.Ibdacb74eb4f9b21bc473072605df05bfd8bb2d75@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0754A7A
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 19:30:20 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id bu29so16257320lfb.0
+        for <llvm@lists.linux.dev>; Fri, 13 May 2022 12:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ar+dw9fAea7bQ3SHq+kWJAt66RPA5xbB0v3ZBs4MJwg=;
+        b=WxTFPhweBSE1PWB/VIT9UQR7xj1k/ocSfH8Pb2lmrTp/zn89g7gyeCr6hLNE3PvrZR
+         qYo1U99ADBDVm4PQFMLhqns9oiipIZThd8AM5j/EC6e7HJkbVHHhmeT3QyxpeGCGlZZa
+         ZKSETl5bAOJRdWcGBmtqOEDT+brRslPbXHGUxAqq4aZMSvpTzFi9WncpurVcGVTczs7j
+         vTlYYl5BYmaCMmjssgCYFjMc/dMq+QPlwefz0vBS36FRKEWvxF0m7+BGJmuo85OSF96X
+         qz8NAeAcOmf/prvUboqS41zVjZCFyEww0KR7YH93MD8rfLiVcM+PqCRm2KQzVbD9uwhV
+         lzfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ar+dw9fAea7bQ3SHq+kWJAt66RPA5xbB0v3ZBs4MJwg=;
+        b=7R9jKiKc+kKrCRU7crLvm5ceZdUUIAZ2FSs9Irg1+KqlMZuV0J38zzzFBe6RWIPvqF
+         p+feyD5ixQvmNbZKPcqtmmF8Ey3oxGDB9JwKFwbqhMD/j2XD3fpLegYRC6/cZNIh8a3q
+         ivfcsIU4i+9gjVM/c7vc1hIa7yZSIDpOiiG7tS1GjaxgfZ/AdhI3hL+fLbXKMybyM7bM
+         Ot6ee+MuFjsQHm3g9xlcQO+GMcTKiVh+tPqRYcnWxn+3XoYeteV6mIJTa/ULUtKdSJXp
+         1Yb8TNNeW9BVkkS8nZ43jHJFsR3bA1sdY8njDRzSbEn8Oay3HXJbp4yqTe3CGpqunC0U
+         HMNQ==
+X-Gm-Message-State: AOAM531MkbCuqMLFyT1ymEkc3BtGJBFGsWFVb/bzjMKvhM7ghjb8N228
+	WpCC7A2OZalhZyytDB/bNE2Bd5iuQqfEUdah29jJ3A==
+X-Google-Smtp-Source: ABdhPJyjlyY+s0JtPO0F6CaJzdoAEHnIpOLCO36FJwBmROUJqm1LbtwBv81mL0SQ7e5s7SJ88MFR83YxZypSKf2r3Ik=
+X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
+ f17-20020a05651201d100b00471f63ab182mr4442378lfp.392.1652470218742; Fri, 13
+ May 2022 12:30:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513154805.89b855fd46f3.Ibdacb74eb4f9b21bc473072605df05bfd8bb2d75@changeid>
+References: <20220512205545.992288-1-twd2.me@gmail.com> <CAKwvOdmJ26h4L=3+42xeWG0_mZmZXkye=+mNWgFOHbo59ZVz1w@mail.gmail.com>
+ <30f9c99e-9bc4-9369-a533-7b454a213403@gmail.com>
+In-Reply-To: <30f9c99e-9bc4-9369-a533-7b454a213403@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 13 May 2022 12:30:06 -0700
+Message-ID: <CAKwvOdnSRA_1wO8bb3tuGCunPjx_pQDi2_0O9yQLbk-TRR3dyA@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: build: Allow LTO to be selected
+To: twd2 <twd2.me@gmail.com>
+Cc: palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu, 
+	linux-riscv@lists.infradead.org, nathan@kernel.org, llvm@lists.linux.dev, 
+	Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Johannes,
+On Fri, May 13, 2022 at 11:28 AM twd2 <twd2.me@gmail.com> wrote:
+>
+> =E5=9C=A8 2022/5/13 5:34, Nick Desaulniers =E5=86=99=E9=81=93:
+> > On Thu, May 12, 2022 at 1:56 PM Wende Tan <twd2.me@gmail.com> wrote:
+> >> Allow LTO to be selected for RISC-V, only when LLD >=3D 14, since ther=
+e is an
+> >> issue [1] in prior LLD versions that prevents LLD to generate proper
+> >> machine code for RISC-V when writing `nop`s.
+> >>
+> >> I have tested enabling LTO for `defconfig`. The LLD took ~2m21s and ~3=
+GiB
+> >> on our Intel Xeon Gold 6140 server and produced an 18MiB Image. The im=
+age
+> >> can boot to shell using an archriscv rootfs on QEMU.
+> >>
+> >> I have also tested it for `allyesconfig` without COMPILE_TEST, FTRACE,
+> >> KASAN, and GCOV. The LLD took ~7h03m and ~335GiB on the server,
+> > Haha! That's ok, allyesconfig is not expected to boot for any
+> > architectures AFAIK. For CI, we simply verify we can build them; we
+> > boot test everything but allyesconfig and allmodconfig (and
+> > architectures which don't yet have qemu ports).  It helps detect when
+> > assembler sources don't use enough encoding space when referenced
+> > external symbols are too far away for larger images, IME.
+> >
+> > That's a long time; first time I've seen a number from someone trying
+> > to LTO allyesconfig!
+> >
+> >> successfully producing a 1.7GiB Image. Unfortunately, we cannot boot t=
+his
+> >> image because the `create_kernel_page_table()` -> `alloc_pmd_early()` =
+->
+> >> `BUG_ON()` logic limits the image to be < 1GiB. Maybe we can fix it in=
+ a
+> >> separate patch further.
+> >>
+> >> [1] https://github.com/llvm/llvm-project/issues/50505, resolved by LLV=
+M
+> >>     commit e63455d5e0e5 ("[MC] Use local MCSubtargetInfo in writeNops"=
+)
+> > So looking at that change, it doesn't look like it touches LLD at all.
+> > To me it touches both the assembler and the object streamer, which is
+> > used by the compiler (and assembler) to stream instructions directly
+> > into an object file (without the need for an external assembler).
+> >
+> > That makes me think that
+> > CLANG_VERSION >=3D 140000
+> > would be more appropriate than
+> > LLD_VERSION >=3D 140000
+> >
+> > WDYT?
+>
+>
+> It seems that when LTO is enabled, the compiler (clang) only generates bi=
+tcode, and LLD collects all the bitcode, does LTO, and generates machine co=
+de (assembly) and ELF object files? Actually, the error message in #50505 w=
+as originally reported by LLD. So I'd like to check LLD_VERSION here.
 
-I love your patch! Yet something to improve:
+Ah, that's right. Ok, LGTM.
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main v5.18-rc6 next-20220513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/mac80211-mlme-move-in-RSSI-reporting-code/20220513-215204
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: hexagon-randconfig-r041-20220512 (https://download.01.org/0day-ci/archive/20220514/202205140341.A1zkqlx2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/64db83d0f7472324be9dce953061d4219b420e1c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Johannes-Berg/mac80211-mlme-move-in-RSSI-reporting-code/20220513-215204
-        git checkout 64db83d0f7472324be9dce953061d4219b420e1c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/mac80211/
+>
+>
+> >
+> > Also, I'm curious if the LLVM patch you had me commit for you recently
+> > is at all related or necessary for this? If so, then the version check
+> > should probably be against clang-15, not clang-14.
+> > https://github.com/llvm/llvm-project/commit/6baaad740a5abb4bfcff022a811=
+4abb4eea66a2d
+>
+>
+> Aha, that patch is for enabling LTO for allyesconfig (especially, with xf=
+s and overlayfs). I think that patch is not mandatory for enabling LTO for =
+RISC-V.
+>
+>
+> > Anyways, I just did a build+boot (in qemu) test of defconfig+thinlto
+> > and defconfig+lto. LGTM
+> >
+> > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+>
+> Thanks,
+> Wende
+>
+>
+> >> Tested-by: Wende Tan <twd2.me@gmail.com>
+> >> Signed-off-by: Wende Tan <twd2.me@gmail.com>
+> >> ---
+> >> v2:
+> >> - Some textual changes suggested by Nick.
+> >> - Drop the changes to `arch/riscv/Makefile`, since the LLVM issue is f=
+iled
+> >>   and resolved.
+> >> - Drop the unnecessary changes to `arch/riscv/kernel/vdso/Makefile`.
+> >>
+> >> v1: https://lore.kernel.org/linux-riscv/20210719205208.1023221-1-twd2.=
+me@gmail.com/
+> >> ---
+> >>  arch/riscv/Kconfig | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> >> index 00fd9c548f26..c55f6b95e5af 100644
+> >> --- a/arch/riscv/Kconfig
+> >> +++ b/arch/riscv/Kconfig
+> >> @@ -38,6 +38,10 @@ config RISCV
+> >>         select ARCH_SUPPORTS_ATOMIC_RMW
+> >>         select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+> >>         select ARCH_SUPPORTS_HUGETLBFS if MMU
+> >> +       # LLD >=3D 14:
+> >> +       # - https://github.com/llvm/llvm-project/issues/50505
+> >> +       select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >=3D 140000
+> >> +       select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >=3D 140000
+> >>         select ARCH_USE_MEMTEST
+> >>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+> >>         select ARCH_WANT_FRAME_POINTERS
+> >> --
+> >> 2.25.1
+> >>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/mac80211/mlme.c:2645:23: error: no member named 'cfg' in 'struct ieee80211_vif'
-                                                 sdata->vif.cfg.ssid,
-                                                 ~~~~~~~~~~ ^
-   net/mac80211/mlme.c:2646:23: error: no member named 'cfg' in 'struct ieee80211_vif'
-                                                 sdata->vif.cfg.ssid_len,
-                                                 ~~~~~~~~~~ ^
-   2 errors generated.
 
 
-vim +2645 net/mac80211/mlme.c
-
-  2607	
-  2608	static void ieee80211_mgd_probe_ap_send(struct ieee80211_sub_if_data *sdata)
-  2609	{
-  2610		struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
-  2611		u8 *dst = ifmgd->bssid;
-  2612		u8 unicast_limit = max(1, max_probe_tries - 3);
-  2613		struct sta_info *sta;
-  2614	
-  2615		/*
-  2616		 * Try sending broadcast probe requests for the last three
-  2617		 * probe requests after the first ones failed since some
-  2618		 * buggy APs only support broadcast probe requests.
-  2619		 */
-  2620		if (ifmgd->probe_send_count >= unicast_limit)
-  2621			dst = NULL;
-  2622	
-  2623		/*
-  2624		 * When the hardware reports an accurate Tx ACK status, it's
-  2625		 * better to send a nullfunc frame instead of a probe request,
-  2626		 * as it will kick us off the AP quickly if we aren't associated
-  2627		 * anymore. The timeout will be reset if the frame is ACKed by
-  2628		 * the AP.
-  2629		 */
-  2630		ifmgd->probe_send_count++;
-  2631	
-  2632		if (dst) {
-  2633			mutex_lock(&sdata->local->sta_mtx);
-  2634			sta = sta_info_get(sdata, dst);
-  2635			if (!WARN_ON(!sta))
-  2636				ieee80211_check_fast_rx(sta);
-  2637			mutex_unlock(&sdata->local->sta_mtx);
-  2638		}
-  2639	
-  2640		if (ieee80211_hw_check(&sdata->local->hw, REPORTS_TX_ACK_STATUS)) {
-  2641			ifmgd->nullfunc_failed = false;
-  2642			ieee80211_send_nullfunc(sdata->local, sdata, false);
-  2643		} else {
-  2644			ieee80211_mlme_send_probe_req(sdata, sdata->vif.addr, dst,
-> 2645						      sdata->vif.cfg.ssid,
-  2646						      sdata->vif.cfg.ssid_len,
-  2647						      ifmgd->associated->channel);
-  2648		}
-  2649	
-  2650		ifmgd->probe_timeout = jiffies + msecs_to_jiffies(probe_wait_ms);
-  2651		run_again(sdata, ifmgd->probe_timeout);
-  2652	}
-  2653	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Thanks,
+~Nick Desaulniers
