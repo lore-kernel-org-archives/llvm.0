@@ -1,43 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB5F2F28
-	for <llvm@lists.linux.dev>; Thu, 12 May 2022 22:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346A919B
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 00:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652395978; x=1683931978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KesB9TkFdl9cmnTv7mRpkD//DnYASuepMhknEjHthiQ=;
-  b=NkpKVio4EfjNeshi7X7WkcBDDbaRdLm8P/4DFxSQm8uNdvMIThXrDWjz
-   yI0HlCDNpenXOPCdNZtGAevEuBKqupUhjDJSPHSDlnE4403mudVA4yaWX
-   BLaFe38Ntv54O21rTVWz2iRTTWzUytRZHKx0qWov6JBeNwcuSHtskjRcU
-   +ngWj/oKNnoWsl2edbsiZYORIj81A2fO0fEdgppGB9k+PYpGGCr8qQkVu
-   WwKu9gSQeuud9luSduh/hWURfdzwuktbEGr7smd/rQo2ahQB7SdlFPw+C
-   Fzi+yz8d4a/UXtV/90VhEphFGpAvkgfjANrVhKuS6Stkn7sofcLT9qFOU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267747569"
+  t=1652401810; x=1683937810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=orlb0ncJgJClud3H9qKLlbyLViKgSYsLoRo7/EE0OCQ=;
+  b=Bg6MYdwIYA9AAhwmHeRCCb5CdOmebsVrJBxSj4yFFfIgDZKohxKfmkJG
+   3w2Yat8OvW2RYS0PnSMS2jmiUlA+g0ddT/TCd2l5nh1hRW6loxpXDzmHJ
+   gpTbNlW8aCP9MAc2n91Ek1VlbtAqmqttdu5RBBwPr2A2olO4kMRm8DktJ
+   j5xjw3B/zjrFlg3EJVEq/a7TngodoWnftDtySyxjrGQrIbSPAwXX1BaTA
+   VJfZ+17cmpVlt4DJ6IGzAxcjW4NINdqDPE2iyvpAQ/6HoSTXoMWeRNILs
+   YG1yp6Be5KHh/pfuyr3IlI8wATqhnRBV64JT44RZrIAiYj70ux9ro0dtE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250705063"
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="267747569"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 15:52:57 -0700
+   d="scan'208";a="250705063"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 17:30:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="624605132"
+   d="scan'208";a="521197730"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 May 2022 15:52:56 -0700
+  by orsmga003.jf.intel.com with ESMTP; 12 May 2022 17:30:08 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1npHfz-000L12-Lt;
-	Thu, 12 May 2022 22:52:55 +0000
-Date: Fri, 13 May 2022 06:52:46 +0800
+	id 1npJC3-000L6Q-H2;
+	Fri, 13 May 2022 00:30:07 +0000
+Date: Fri, 13 May 2022 08:29:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagan Teki <jagan@amarulasolutions.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [mszyprow:v5.18-next-20220511-dsi-rework 14/35] ERROR: modpost:
- "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
-Message-ID: <202205130603.OtcbHnd9-lkp@intel.com>
+To: Mikhail Zhilkin <csharper2005@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v4 3/3] mtd: parsers: add support for Sercomm partitions
+Message-ID: <202205130802.ScXfu9JP-lkp@intel.com>
+References: <20220510162655.21011-1-csharper2005@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,31 +45,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220510162655.21011-1-csharper2005@gmail.com>
 
-tree:   https://github.com/mszyprow/linux.git v5.18-next-20220511-dsi-rework
-head:   65cb4959430021041f1e68ef98a6ec541d5891aa
-commit: 395cab08cbac6e4028dafce068414ea43244a592 [14/35] drm: bridge: Add Samsung DSIM bridge driver
-config: arm64-randconfig-r034-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130603.OtcbHnd9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+Hi Mikhail,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on mtd/mtd/fixes v5.18-rc6 next-20220512]
+[cannot apply to mtd/mtd/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikhail-Zhilkin/Add-support-for-Sercomm-partitions/20220511-003050
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm-buildonly-randconfig-r004-20220512 (https://download.01.org/0day-ci/archive/20220513/202205130802.ScXfu9JP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/mszyprow/linux/commit/395cab08cbac6e4028dafce068414ea43244a592
-        git remote add mszyprow https://github.com/mszyprow/linux.git
-        git fetch --no-tags mszyprow v5.18-next-20220511-dsi-rework
-        git checkout 395cab08cbac6e4028dafce068414ea43244a592
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/4e746c022f0e23b585b21e8b9f42a1ee6a75471f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mikhail-Zhilkin/Add-support-for-Sercomm-partitions/20220511-003050
+        git checkout 4e746c022f0e23b585b21e8b9f42a1ee6a75471f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "dsi_driver" [drivers/gpu/drm/exynos/exynosdrm.ko] undefined!
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: __aeabi_uldivmod
+   >>> referenced by scpart.c:72 (drivers/mtd/parsers/scpart.c:72)
+   >>>               mtd/parsers/scpart.o:(scpart_parse) in archive drivers/built-in.a
+   >>> did you mean: __aeabi_uidivmod
+   >>> defined in: arch/arm/lib/lib.a(lib1funcs.o)
 
 -- 
 0-DAY CI Kernel Test Service
