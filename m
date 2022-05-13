@@ -1,24 +1,24 @@
 Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2BC3232
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:46:11 +0000 (UTC)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-07.nifty.com with ESMTP id 24DBgGjW020382
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:42:16 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BBB3232
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 11:49:22 +0000 (UTC)
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-07.nifty.com with ESMTP id 24DBfoRC020348
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 20:41:50 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-07.nifty.com with ESMTP id 24DBeEwh008349;
-	Fri, 13 May 2022 20:40:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwh008349
+	by conuserg-07.nifty.com with ESMTP id 24DBeEwZ008349;
+	Fri, 13 May 2022 20:40:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwZ008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1652442023;
-	bh=OcOEuS6jEbLubdZRYm9mI6nzM08ugGxo0tuefY4hIgE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bp9jvRuF56C6r43GNXjG6BX+TvZHLTbdTLlR34dCXZg/oW32238SNreYsd6ecrnG6
-	 PWr/NUZR0Fj64xkX3yxzCkcDwm8BUtpOQer8MUJE0kfUxAXrmqhHXhUVBDO1eaFvmZ
-	 Zd2DgWMNXGj/fTUiZ/fP4rrMZ0P/EShz6FzQ0fejjM7Fk5Mk+4x3zIAjw7LvNr3l8P
-	 6RqksiC0umDQhSOQrTIO45Q7vzc3cdAd1y7uI/ao5m/kB6w/+AoM6bRZyfIpfL/JKy
-	 BLmQpIaa0h1Ej7NhYPC3vBgHWU9i3BlD07Dxm/NP3Kvu3JsIm6e+nmrjotY7EuCyv8
-	 GgKFtSPjQ+KrA==
+	s=dec2015msa; t=1652442015;
+	bh=mZnH7vlFKLT7FEGBr7iAv5DRO4vduuM0Ets3Kz9Jvhc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eBlvAJYSjmMcKgi8G34ggTIB8DLZKAWpu/qnpZRI9LrpD8IX0NZI161d4KPni9kip
+	 OsHIZuCJOOVkQWDzMRvNkbB02FC6qYwzQqzkHtwY8+2/H/vtAKbVNrfwUCt398DSXD
+	 qsT23bRXyCVHrEb4FnHcy6MjSeby4IuMH8xU6YpmAG/WigzvQywqFqPhfRZzXh+XJS
+	 VFoZ15+mw896qyOvCUSSBlZskUqUdkplXJo9aCB/nKwjvKdFSI3ig7fJgB3Jve0en/
+	 yVS8gRw+ybImV4ughl4umgqzuVfKD8Lu64oR42w8dnAw2foPz+rbVY+nwp2bOQeScn
+	 uWsgfe2fYCSow==
 X-Nifty-SrcIP: [133.32.177.133]
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
@@ -29,12 +29,10 @@ Cc: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 08/10] kbuild: make *.mod rule robust against too long argument error
-Date: Fri, 13 May 2022 20:39:28 +0900
-Message-Id: <20220513113930.10488-9-masahiroy@kernel.org>
+Subject: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost, LTO, MODULE_REL_CRCS, export.h)
+Date: Fri, 13 May 2022 20:39:20 +0900
+Message-Id: <20220513113930.10488-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,51 +41,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Like built-in.a, the command length of the *.mod rule scales with
-the depth of the directory times the number of objects in the Makefile.
 
-Add $(obj)/ by the shell command (awk) instead of by Make's builtin
-function.
+This is the third batch of cleanups in this development cycle.
 
-In-tree modules still have some room to the limit (ARG_MAX=2097152),
-but this is more future-proof for big modules in a deep directory.
 
-For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
-compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
 
-The issue is more critical for external modules because the M= path
-can be very long as Jeff Johnson reported before [1].
+Changes in v6:
+  - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
 
-[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
+Changes in v5:
+  - Fix the build error when CONFIG_DEBUG_INFO_BTF=y (reported by Nathan)
+  - Clean up arch/m68k/include/asm/export.h (Nick)
+  - Keep gen_symversions (and will be removed by a later patch)
+  - Add more comments in the script
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
----
+Changes in v4:
+  - Rename .vmlinux-symver.c to .vmlinux.export.c
+    because I notice this approach is useful for further cleanups,
+    not only for modversioning but also for overall EXPORT_SYMBOL.
+  - New patch
+  - New.
+    Resent of my previous submission.
+    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+  - New
+    Resent of my previous submission
+    https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
 
-(no changes since v2)
-
-Changes in v2:
+Changes in v3:
   - New patch
 
- scripts/Makefile.build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+  - Simplify the implementation (parse .cmd files after ELF)
+  - New patch
+ - replace the chain of $(if ...) with $(and )
+  - New patch
+  - New patch
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 8f1a355df7aa..f546b5f1f33f 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -270,8 +270,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
- 	$(call if_changed_rule,cc_o_c)
- 	$(call cmd,force_checksrc)
- 
--cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
--	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
-+cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
-+	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
- 
- $(obj)/%.mod: FORCE
- 	$(call if_changed,mod)
+Masahiro Yamada (10):
+  modpost: extract symbol versions from *.cmd files
+  kbuild: link symbol CRCs at final link, removing
+    CONFIG_MODULE_REL_CRCS
+  kbuild: stop merging *.symversions
+  genksyms: adjust the output format to modpost
+  kbuild: do not create *.prelink.o for Clang LTO or IBT
+  kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+  kbuild: make built-in.a rule robust against too long argument error
+  kbuild: make *.mod rule robust against too long argument error
+  kbuild: add cmd_and_savecmd macro
+  kbuild: rebuild multi-object modules when objtool is updated
+
+ arch/m68k/include/asm/Kbuild    |   1 +
+ arch/m68k/include/asm/export.h  |   2 -
+ arch/powerpc/Kconfig            |   1 -
+ arch/s390/Kconfig               |   1 -
+ arch/um/Kconfig                 |   1 -
+ include/asm-generic/export.h    |  22 ++-
+ include/linux/export-internal.h |  16 +++
+ include/linux/export.h          |  30 ++--
+ init/Kconfig                    |   4 -
+ kernel/module.c                 |  10 +-
+ scripts/Kbuild.include          |  10 +-
+ scripts/Makefile.build          | 134 ++++++------------
+ scripts/Makefile.lib            |   7 -
+ scripts/Makefile.modfinal       |   5 +-
+ scripts/Makefile.modpost        |   9 +-
+ scripts/check-local-export      |  64 +++++++++
+ scripts/genksyms/genksyms.c     |  18 +--
+ scripts/link-vmlinux.sh         |  33 ++---
+ scripts/mod/modpost.c           | 236 +++++++++++++++++++++-----------
+ 19 files changed, 320 insertions(+), 284 deletions(-)
+ delete mode 100644 arch/m68k/include/asm/export.h
+ create mode 100644 include/linux/export-internal.h
+ create mode 100755 scripts/check-local-export
+
 -- 
 2.32.0
 
