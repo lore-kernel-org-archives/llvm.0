@@ -1,62 +1,45 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC0A256E
-	for <llvm@lists.linux.dev>; Fri, 13 May 2022 23:54:10 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so9133899pji.3
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 16:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YqXCGyPsp5ArB5dqL4pL5ev2vTjEI3622aS8uMXTUU8=;
-        b=DwM4B8SfDuhyFXUnZbAL/ZY/DcRWWDHSvQn+FjKOPeOJaj4vRugCoD4Q6EyH8ejoNp
-         c5GkcuheJ6uVTHxI1r/k46H944JxYU2cO8FvvYHaov0k/7zKxkRLm2uii1ka82lbkE8y
-         kkXQkFIqfcn7EHZE9r+UQEnd7O8o/kzC45WvCZlcvIZwJlt2aFz0IOCOkx/EStnddHfo
-         YbwZRpt1F/PeXQg5dgEPIDUOlrpBwRxdVdVZ9YtmBNphMaKKFfk/yqyGyQCTBbmZ69gL
-         awkai/OcYtvaBdC4OJtVvUdk/yevN6l6nrdMuf+6SZD+pFqf3pm9Fq6lnjFqIUKmiTlx
-         L6KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=YqXCGyPsp5ArB5dqL4pL5ev2vTjEI3622aS8uMXTUU8=;
-        b=Fjo6OBNn+aFIonc0pZ3M5XUAWqApcGpZOVJcKnd30yF4YUSuZisGjvQWKACfMP8j35
-         ld70YpSP/x9QbUlRxpYmYzRtP6P1TshKj8W1fPY2rfky6sgTRJdAZo2k6MTtJUpuOlzI
-         MSDnw6hI3vv1vRtP9Sw8EUtUJEsx2TDtxDMJTMmxqMitme3Ad60heBNi9u3lrT2ejCm1
-         1a6f9WoqY/hO//TYF4ePufqL+aXqx2kvxh0YprszvLow76n386ZdJf1ni/+3f5yIq3wP
-         JITXTcsn1muSLfxv5ABgp+alJRqs6WsdrGA2G+txhmkwfS6IcKkVgpDwU36Fh/dq7uEH
-         6iWw==
-X-Gm-Message-State: AOAM531ksLhDiYAFkzCxSlahUK/r7f4D3BiLLBM/1zzgymoLbS1C4sli
-	OEMJrxHYz+0a8ZD7E7Wsu+Q=
-X-Google-Smtp-Source: ABdhPJz+2AgJW+UNcOEnQyMmoDiDLnajAAFPWMpiflOrjAp91f9dxcR/08AkhNhPCCw2na7Tk8dLFQ==
-X-Received: by 2002:a17:903:246:b0:153:87f0:a93e with SMTP id j6-20020a170903024600b0015387f0a93emr7165067plh.171.1652486048731;
-        Fri, 13 May 2022 16:54:08 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:1969:9b8a:5056:897b])
-        by smtp.gmail.com with ESMTPSA id z25-20020a62d119000000b0050dc762816fsm2326286pfg.73.2022.05.13.16.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 16:54:08 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date: Fri, 13 May 2022 16:54:06 -0700
-From: Minchan Kim <minchan@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>,
-	syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com,
-	Matthew Wilcox <willy@infradead.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	John Hubbard <jhubbard@nvidia.com>,
-	David Hildenbrand <david@redhat.com>
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Message-ID: <Yn7vnpXwX50J3K+7@google.com>
-References: <000000000000ef451a05dee0f2b1@google.com>
- <00000000000077377c05dee75f63@google.com>
- <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
- <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
- <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
- <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A426256E
+	for <llvm@lists.linux.dev>; Fri, 13 May 2022 23:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652486249; x=1684022249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UHb+Z3gXa3pZmXHcXfu/0b/a5HtzS/8HbYUNrVPuelU=;
+  b=cWsAnC48rYxA0ogODbsUxvvcUYX1anxvxs5iU68rZuj2iMasMmvxsJud
+   y1l8A6RfCE3rD/uBENswPPYmcndPkMncW+a1ASsb8A+MoBN7UBdfd20fg
+   fjCaw+lY0VNGrHZGYdH3C2zhXdxqdTmbZVV7lCOEJSnzekwbt9R9MOUxT
+   6ez0Ai83dRLlv/cI6ivHNBdsBpHdNIblxgpGCsqvJ4dUS3NW2NWLAjl42
+   PkVkoJtNQKcdc/KZ1xEmcW/9di5IlqPrOESZOPjyHTFmgSpBo7bkOoDa5
+   naDomweWucUW9sgjQlOct1SO0zHsF4zPG8DoTSyJIWzzVEpVwx5NtnTxf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="270373586"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="270373586"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 16:57:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="521624917"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 May 2022 16:57:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npf9w-000MEK-E5;
+	Fri, 13 May 2022 23:57:24 +0000
+Date: Sat, 14 May 2022 07:56:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Piyush Mehta <piyush.mehta@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Manish Narani <manish.narani@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 404/1093]
+ drivers/usb/dwc3/dwc3-xilinx.c:508:6: warning: no previous prototype for
+ function 'dwc3_xilinx_wakeup_capable'
+Message-ID: <202205140742.L4RaDuSY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,58 +48,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
 
-On Fri, May 13, 2022 at 04:19:10PM -0700, Andrew Morton wrote:
-> On Fri, 13 May 2022 15:48:15 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> 
-> > On 5/13/22 11:09, Mike Kravetz wrote:
-> > > On 5/13/22 10:26, Andrew Morton wrote:
-> > >> On Fri, 13 May 2022 09:43:24 -0700 syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com> wrote:
-> > >>
-> > >>> syzbot has found a reproducer for the following issue on:
-> > >>
-> > >> Thanks.
-> > >>
-> > >>> HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
-> > >>> git tree:       linux-next
-> > >>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=174ae715f00000
-> > >>> kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
-> > >>> dashboard link: https://syzkaller.appspot.com/bug?extid=acf65ca584991f3cc447
-> > >>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > >>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11531766f00000
-> > >>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ce5a9ef00000
-> > >>>
-> > >>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > >>> Reported-by: syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com
-> > >>>
-> > >>> ------------[ cut here ]------------
-> > >>> WARNING: CPU: 1 PID: 3611 at mm/hugetlb.c:6250 follow_hugetlb_page+0x1326/0x1c80 mm/hugetlb.c:6250
-> > >>
-> > >> The try_grab_folio() added by 822951d84684d ("mm/hugetlb: Use
-> > >> try_grab_folio() instead of try_grab_compound_head()").  That commit
-> > >> has been there over a month so I guess it's something else.  Does
-> > >> someone have the time to bisect?
-> > > 
-> > > I can recreate in my 'easy to debug' environment, so I can bisect in
-> > > parallel with other things I need to do today.
-> > > 
-> > 
-> > I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
-> > page".  Yes, the fat finger fix is in next-20220513.
-> > 
-> > I don't have time to analyze right now, but can confirm that in the
-> > reproducer is_pinnable_page is returning false after this change when it
-> > previously returned true.
-> 
-> OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
+Hi Piyush,
 
-Seems like bug of the patch v5 due to change of this
+FYI, the error/warning still remains.
 
-    if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+head:   5ead03b6e64b5072737c653bb20ebcd88704e3d1
+commit: db6b55a74c709a27fdf6d175f890568dc8945424 [404/1093] usb: dwc3: Added remote wake-up in xilinx glue driver
+config: arm64-randconfig-r031-20220512 (https://download.01.org/0day-ci/archive/20220514/202205140742.L4RaDuSY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/Xilinx/linux-xlnx/commit/db6b55a74c709a27fdf6d175f890568dc8945424
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+        git checkout db6b55a74c709a27fdf6d175f890568dc8945424
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/dwc3/
 
-The migration type is not bit type so it shold be 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
+All warnings (new ones prefixed by >>):
 
-Ccing just in case if I miss other thing for HugeTLB
+>> drivers/usb/dwc3/dwc3-xilinx.c:508:6: warning: no previous prototype for function 'dwc3_xilinx_wakeup_capable' [-Wmissing-prototypes]
+   void dwc3_xilinx_wakeup_capable(struct device *dev, bool wakeup)
+        ^
+   drivers/usb/dwc3/dwc3-xilinx.c:508:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dwc3_xilinx_wakeup_capable(struct device *dev, bool wakeup)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/dwc3_xilinx_wakeup_capable +508 drivers/usb/dwc3/dwc3-xilinx.c
+
+   506	
+   507	/* xilinx feature support functions */
+ > 508	void dwc3_xilinx_wakeup_capable(struct device *dev, bool wakeup)
+   509	{
+   510		struct device_node *node = of_node_get(dev->parent->of_node);
+   511	
+   512		/* check for valid parent node */
+   513		while (node) {
+   514			if (of_device_is_compatible(node, "xlnx,zynqmp-dwc3") ||
+   515			    of_device_is_compatible(node, "xlnx,versal-dwc3"))
+   516				break;
+   517	
+   518			/* get the next parent node */
+   519			node = of_get_next_parent(node);
+   520		}
+   521	
+   522		if (node) {
+   523			struct platform_device *pdev_parent;
+   524			struct dwc3_xlnx *priv_data;
+   525	
+   526			pdev_parent = of_find_device_by_node(node);
+   527			priv_data = platform_get_drvdata(pdev_parent);
+   528	
+   529			/* Set wakeup capable as true or false */
+   530			priv_data->wakeup_capable = wakeup;
+   531	
+   532			/* Allow D3 state if wakeup capable only */
+   533			priv_data->enable_d3_suspend = wakeup;
+   534		}
+   535	}
+   536	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
