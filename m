@@ -1,44 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF2236C
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 02:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BEB36C
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 03:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652496251; x=1684032251;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CecKbC9KT0mTel1/jpOCk/iWskQYfAj+/FF+BkysK9g=;
-  b=UvAvgliLn+ZlKvvrHK84BxOodkkTbnId5usNH/7xhzzQJo0VafKZmfXk
-   0SiYoX8IJw4maag5JJw/zeMjnWSwE+WczfiioG2OYK+YURGB9NFPmY/Jl
-   /VhsV5kDetjpam0Gp4ZvpCT5fahajX66VlsOYvew2bMtZ2gjaOCwK4KfX
-   yEi8eNHRpoHoFcq0QPCJ0VXGiRFNJCgvNG4QD5btQ6WFtWE1H8yHQaKUc
-   6I1EV9uOp22RHo4gHv/RFtBuyvWqqWYqwR+FDD85Z69K8LybfuPI8Fv+w
-   RipGb5khQEkwaltsFLsv2A5ZFgYjiNKz0hf08iFzgkM79szATQB2DqmdP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="250983271"
+  t=1652498419; x=1684034419;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=SqK2pGD7kgDlOx5Ht/sPBxqt01luzn29sPamatVtUxE=;
+  b=YM17cMNWvrKDeNUlmh+w8Hz99OOpQOzYEdQxaGhlbdHc/Ve0EuDmsAOs
+   W4oT5ByVuB2y4u98BNerBQ8jWdUneRWJguatqZ6GwLk+8bDjz9vNAQnyq
+   qOwZLI35q0+aLKLzVpb3FcaPvBcGGzO16OzV7p+yipLYNlIz2NxJ77aez
+   y0z+/Am7bId/RA2fWheQ0DPvZpqSOcqdfw4pTYKLZa1OpW5Iysen1m/iv
+   3bKGfcyo4+GxKxpuTKUoqm1Y9YUhvpCS2bi0j6Hy1RJW2A80tuRXQHKfR
+   7BceawonGFMqoEsODa1EwVlyqzkFA4kiHVoFhuO0sA5DZChbInkCxkvax
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="333497666"
 X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="250983271"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 19:44:10 -0700
+   d="scan'208";a="333497666"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 20:20:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,225,1647327600"; 
-   d="scan'208";a="659365132"
+   d="scan'208";a="567463077"
 Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 May 2022 19:44:08 -0700
+  by orsmga007.jf.intel.com with ESMTP; 13 May 2022 20:20:15 -0700
 Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nphlI-00003Z-8n;
-	Sat, 14 May 2022 02:44:08 +0000
-Date: Sat, 14 May 2022 10:43:30 +0800
+	id 1npiKE-00009h-C4;
+	Sat, 14 May 2022 03:20:14 +0000
+Date: Sat, 14 May 2022 11:19:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Piyush Mehta <piyush.mehta@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Manish Narani <manish.narani@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 404/1093] ld.lld:
- error: undefined symbol: dwc3_host_wakeup_register
-Message-ID: <202205141053.QhyVchkb-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 10425/11651] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol:
+ .text+0x214): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in
+ [-524288, 524287]; references kallsyms_token_index
+Message-ID: <202205141122.qihFGUem-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,34 +46,58 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-head:   5ead03b6e64b5072737c653bb20ebcd88704e3d1
-commit: db6b55a74c709a27fdf6d175f890568dc8945424 [404/1093] usb: dwc3: Added remote wake-up in xilinx glue driver
-config: arm64-randconfig-r031-20220512 (https://download.01.org/0day-ci/archive/20220514/202205141053.QhyVchkb-lkp@intel.com/config)
+BCC: lkp@intel.com
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Jiri Olsa <jolsa@kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>
+CC: Masami Hiramatsu <mhiramat@kernel.org>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1e1b28b936aed946122b4e0991e7144fdbbfd77e
+commit: d721def7392a7348ffb9f3583b264239cbd3702c [10425/11651] kallsyms: Make kallsyms_on_each_symbol generally available
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220514/202205141122.qihFGUem-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/Xilinx/linux-xlnx/commit/db6b55a74c709a27fdf6d175f890568dc8945424
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-        git checkout db6b55a74c709a27fdf6d175f890568dc8945424
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d721def7392a7348ffb9f3583b264239cbd3702c
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d721def7392a7348ffb9f3583b264239cbd3702c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: dwc3_host_wakeup_register
-   >>> referenced by dwc3-xilinx.c
-   >>>               usb/dwc3/dwc3-xilinx.o:(dwc3_xlnx_probe) in archive drivers/built-in.a
-   >>> referenced by dwc3-xilinx.c
-   >>>               usb/dwc3/dwc3-xilinx.o:(dwc3_xlnx_remove) in archive drivers/built-in.a
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x214): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x21c): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x1e0): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_num_syms
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x1f8): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x204): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_on_each_symbol: .text+0x20c): relocation R_RISCV_PCREL_HI20 out of range: -524378 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
 -- 
 0-DAY CI Kernel Test Service
