@@ -1,39 +1,39 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97C72F25
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:56:03 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id gg20so975074pjb.1
-        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:56:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027FD2F25
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:56:51 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id n18so11114132plg.5
+        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=FRz+GXXZaKOMrKydUY42JkbUz0KXbswZCunobIsh+ok=;
-        b=EMGxS7CubkSoRXJvbmCOUMnABXzcITd5+nEUdRyvBWZr0Ejfu0faLMdmwYhOM8pXx4
-         qOvD2ibBSHZJuEbw1khfAuvievTdhMLKWyGiMShRtK8Ll3XYbrif7r38L2UQePBNmqGc
-         wDzdnSTxfK8uDgCLXMc/+iLNVxeUASGOOeNys=
+        bh=t9B0ELg8h6PY+Vl2TDucjtXSCma3zXaus6HyZVuhPIE=;
+        b=W1eubUSb/5LGT0PX48eWAAjFP3e+45qNMMJH5elMun/Sun50qtQzJU6DnSdp6Eg/+a
+         sZUGxqEPzvzsqRpYUlnPpUwqsnDjU3f8F0t6paJwsZDv37wZBcBScTKMeytTqcg+gQ85
+         fq0u+JX10bVU5Nl4qNuwnXTR65D2Gmk7mjZv4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FRz+GXXZaKOMrKydUY42JkbUz0KXbswZCunobIsh+ok=;
-        b=L2AWtGc5A3zdegD68K1/wwhLTVy7Jm+kw0je/j2hLmnjhtC5y5MVabRMduOQ9AbcKK
-         BC9mrkSj0FaOlpRjTNIyoEsEG6q4KyYHUBc2UbLBakPDMtC5pZkfSRoqDFupK1Jt3N/m
-         ChKDnwJGAPRuNwX7bAef3rFmQC/hRlnBkEZReIt45e+VmduTwL8uDtFNaiW+ag+x1lNi
-         xBBZEjIG2SIeqf9ivA0elNtpdapkvg2RC93CF9mLYgqtshVV55kw2G19MPSfnxQByc9P
-         XgwDiiPlFHn3ts7oKW9XaldfH6x20oPV5yybQpaRRrZ3Wf1cMzOgmykeSUbw2RhoNn+z
-         6gOA==
-X-Gm-Message-State: AOAM533CbgHUGxfxgUVpEEYn5LwvpvIcMek1qrU/aHrd49CECylR6PfJ
-	1Gx3fnmrbE5OKk6eiDA2BPVQMw==
-X-Google-Smtp-Source: ABdhPJwN6qwi59HdCtNsN1hdnIt3qawy44T1UkLBIVUFePlqWn8+tMNJ68vLHuPdKrk2BA5cYKH36g==
-X-Received: by 2002:a17:90b:3510:b0:1dc:88d2:6a1b with SMTP id ls16-20020a17090b351000b001dc88d26a1bmr23153588pjb.158.1652565363278;
-        Sat, 14 May 2022 14:56:03 -0700 (PDT)
+        bh=t9B0ELg8h6PY+Vl2TDucjtXSCma3zXaus6HyZVuhPIE=;
+        b=UzEc79j8AjgmtnYhq+y/+BW9R9AHQWOyNxKvlH84T77p76qCcgLZr+RqrnT3keHhho
+         DiLaIe0k/hNWGEZypRSPn4/z8Jg2JRc5CwJ5cWE4MfVZ2MdgDyEM+589tIqWbQ+XqCMv
+         K6kmwngwufHPXDLXEgGxjve8EXMULoY41pKWBpFR/+xUwfqSw3LVb14s3Gd7JB9wAEH2
+         1rXHMrmB3b/9niH2ht/e9D6jQJ2usvY7pJz6KeLu/Rt1MqzawL9qBmtWjbja52Fjf4QL
+         NUuMvRGTQ0VthNLFKN5CJ7hWLGyWtteUwc1J2MSVCSRGtoEiBOkhzoVDxmQoZZU/8nNR
+         5AaQ==
+X-Gm-Message-State: AOAM533SXSOs6O6h8Gr9UFnJ1GRDOI7eieRKGauMUdseWVtaJ8ol2MsE
+	8JcyYe2HYv8teHdASBH+AMOsHP6Sovcdxw==
+X-Google-Smtp-Source: ABdhPJxYql9CKgnQAH/6nysRco+nTc9rw86pT4JEKLv1mVouDl0G3T6mTm3JsTqv8m6tl1+a5OAhsw==
+X-Received: by 2002:a17:90b:4f81:b0:1dc:69a0:432b with SMTP id qe1-20020a17090b4f8100b001dc69a0432bmr22733023pjb.203.1652565411533;
+        Sat, 14 May 2022 14:56:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v9-20020a170902b7c900b0016162e01553sm495864plz.168.2022.05.14.14.56.02
+        by smtp.gmail.com with ESMTPSA id s16-20020a63f050000000b003c14af5060fsm3886055pgj.39.2022.05.14.14.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 14:56:03 -0700 (PDT)
-Date: Sat, 14 May 2022 14:56:02 -0700
+        Sat, 14 May 2022 14:56:51 -0700 (PDT)
+Date: Sat, 14 May 2022 14:56:50 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -47,10 +47,11 @@ Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 14/21] treewide: Drop __cficanonical
-Message-ID: <202205141455.0A6F409@keescook>
+Subject: Re: [RFC PATCH v2 15/21] objtool: Don't warn about __cfi_ preambles
+ falling through
+Message-ID: <202205141456.72950C77B@keescook>
 References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-15-samitolvanen@google.com>
+ <20220513202159.1550547-16-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,23 +60,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513202159.1550547-15-samitolvanen@google.com>
+In-Reply-To: <20220513202159.1550547-16-samitolvanen@google.com>
 
-On Fri, May 13, 2022 at 01:21:52PM -0700, Sami Tolvanen wrote:
-> CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
-> won't change function references to point elsewhere. Remove the
-> __cficanonical attribute and all uses of it.
+On Fri, May 13, 2022 at 01:21:53PM -0700, Sami Tolvanen wrote:
+> The __cfi_ preambles contain valid instructions, which embed KCFI
+> type information in the following format:
+> 
+>   __cfi_function:
+>     int3
+>     int3
+>     mov <id>, %eax
+>     int3
+>     int3
+>   function:
+>     ...
+> 
+> While the preambles are STT_FUNC and contain valid instructions,
+> they are not executed and always fall through. Skip the warning for
+> them.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  include/linux/compiler_types.h | 4 ----
->  include/linux/init.h           | 4 ++--
->  include/linux/pci.h            | 4 ++--
->  3 files changed, 4 insertions(+), 8 deletions(-)
-
-I think this is missing removing it from include/linux/compiler-clang.h ?
-
-With that done (or explained why not):
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
