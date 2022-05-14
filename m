@@ -1,39 +1,39 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76B62F25
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:44:44 +0000 (UTC)
-Received: by mail-pj1-f49.google.com with SMTP id b12so1718496pju.3
-        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:44:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67F02F25
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:46:51 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id m12so11112019plb.4
+        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=1kwcy74YlztxWF5D6kkYQbaOPu8Yx3i8Twa6E2rtWI4=;
-        b=heJeUZ0XTY4GUls4GZuegGii5t/VwuhS1ZpQ37mLZwfCDKDm207g1xsj8JBCk2bIrS
-         aNjlGwo9LlONQauWo+z/yeNmUVPWAY1F26BDhdC/o/qVf3CI2gOFdgEkH/GZhaehv6/3
-         Dmfe/noGcr5iWvP/+oMw+4wEkUZvgRyFHIKFg=
+        bh=e29OYJF0Cr34NWXtjSnWsGpG9iO/e7RRuuLzidaM53E=;
+        b=iLL3cfRMy+bNRF6yJMjDw3XvgwGT5nul36IUUc3BfjbVqT/89mvtX0Y9OzZeN0R4Gu
+         W178b+kjzr8Lf53lXiq7GHB/hfPD1hgiN4QTbUs3bRLflRujC0OJjNTHm2LZ3xS18mLX
+         NRFhidoGxgqGZWfBgeQ3q0MvXRxhcwrfDkb+8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1kwcy74YlztxWF5D6kkYQbaOPu8Yx3i8Twa6E2rtWI4=;
-        b=Ly8E79KRGU9dE1v0SJfvCvDGfhe59FtcMvliabhtFBL2I/HU6a0bPE6dapUvSaDSof
-         +moPZDni/4dxGbiSfPCiStjOQjB79DMNR9ky9gx77XZtoJFMIMQYrQmgh8t3tnJEAyD6
-         L7nolcNJIQCmJqWaMHdNrr6Q32n0WxsxBwstcNm2wZEtcWNIH9MnCg1wXHBgafDrBGdd
-         vVMMhcl9EpIBAV51agsQdkF98nW6zTL9aXWOWFWS2lP4uaZsYfyGd7aec4JD+85ppX2b
-         Hia4m5uBiUxzoW/ojWc+dVv/NhCjxzYZkGsqrad+xupUpqrd2+SgQAjG0jPdIv9xfiSA
-         w1Ng==
-X-Gm-Message-State: AOAM531Kv3u2vGGq99wys08KElOiIbWkkNP/3BUuLsvGrMwMKsqXAkF0
-	NP/l3XZM2dv0LHlfoSejihc8BjxtmNusBg==
-X-Google-Smtp-Source: ABdhPJyYU70G1FRfxpgzmsNw6UDgPZOqMteS5Gy+WK+6rpMWNA2Cp5ca2EEFT2ryVSs0JXIcUkTZhQ==
-X-Received: by 2002:a17:902:e746:b0:15e:b4f3:72e7 with SMTP id p6-20020a170902e74600b0015eb4f372e7mr10953716plf.8.1652564684488;
-        Sat, 14 May 2022 14:44:44 -0700 (PDT)
+        bh=e29OYJF0Cr34NWXtjSnWsGpG9iO/e7RRuuLzidaM53E=;
+        b=b35zi4nD+foagK+zg0KwkzM2JOLGBzUWF3Wm/QmUggMGwOFswhCIZEEva/VeK3Bm4J
+         YmtWd9B+JEtgAoqdstHVu0vRFjLba2P4K2CICEkaaB3yjIp4jkH8Ag0h9kY5vURXE1jL
+         s+HITHvg3w/2bLJHXHSBCgp4E7DgrKWvnHqEzYckAj5PaHRaKpJ4ZzmgIyUwICAc39Tw
+         zfX+w7V8t09qjf9byKbUMlTdayo7lYUeSLy3NS8LMh217c01VTXzF7/uRdzbZLXd4TQ0
+         zSq8xn2w/jWd/Ae/8Atnh2zmBCl7E1sSUDCpOwYpnNDWEEKWd8M6zu1/u/ZPYRE4Dzm7
+         r4aQ==
+X-Gm-Message-State: AOAM531N3v63UenJC4AtE8MAo8zo1Xz2wsS4oG+eVmjMLutdPMGvnhfs
+	TVU9v3PIU89hNuxWX7lN7ns2gw==
+X-Google-Smtp-Source: ABdhPJwsCXmSC41w6NBmUyzu0g9wSnZn8nG1i4Pdwc6BWgonq72IR1wz8hyIaB0bEBdZVZ1mnem53A==
+X-Received: by 2002:a17:903:189:b0:15e:9584:fbe7 with SMTP id z9-20020a170903018900b0015e9584fbe7mr10635100plg.65.1652564811104;
+        Sat, 14 May 2022 14:46:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902a38c00b0015e8d4eb1d2sm4121582pla.28.2022.05.14.14.44.44
+        by smtp.gmail.com with ESMTPSA id j11-20020a056a00174b00b0050dc76281bfsm4049680pfc.153.2022.05.14.14.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 14:44:44 -0700 (PDT)
-Date: Sat, 14 May 2022 14:44:43 -0700
+        Sat, 14 May 2022 14:46:50 -0700 (PDT)
+Date: Sat, 14 May 2022 14:46:50 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -47,10 +47,10 @@ Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 05/21] cfi: Drop __CFI_ADDRESSABLE
-Message-ID: <202205141444.0C1A3ABD1@keescook>
+Subject: Re: [RFC PATCH v2 06/21] cfi: Switch to -fsanitize=kcfi
+Message-ID: <202205141444.9F32C94D9@keescook>
 References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-6-samitolvanen@google.com>
+ <20220513202159.1550547-7-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,19 +59,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513202159.1550547-6-samitolvanen@google.com>
+In-Reply-To: <20220513202159.1550547-7-samitolvanen@google.com>
 
-On Fri, May 13, 2022 at 01:21:43PM -0700, Sami Tolvanen wrote:
-> The __CFI_ADDRESSABLE macro is used for init_module and cleanup_module
-> to ensure we have the address of the CFI jump table, and with
-> CONFIG_X86_KERNEL_IBT to ensure LTO won't optimize away the symbols.
-> As __CFI_ADDRESSABLE is no longer necessary with -fsanitize=kcfi, add
-> a more flexible version of the __ADDRESSABLE macro and always ensure
-> these symbols won't be dropped.
+On Fri, May 13, 2022 at 01:21:44PM -0700, Sami Tolvanen wrote:
+> Switch from Clang's original forward-edge control-flow integrity
+> implementation to -fsanitize=kcfi, which is better suited for the
+> kernel, as it doesn't require LTO, doesn't use a jump table that
+> requires altering function references, and won't break cross-module
+> function address equality.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-These macros were so fun to build, though! ;)
+Yes please. And just to note it somewhere: landing the KCFI
+implementation on Clang depends on this series being accepted (i.e. if
+the arm64 and x86 maintainers are happy with this series, then that'll
+unblock landing it in Clang (no reason to land something that won't get
+used.)
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
