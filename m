@@ -1,64 +1,46 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1EE362
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 00:26:10 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so8824133pjb.1
-        for <llvm@lists.linux.dev>; Fri, 13 May 2022 17:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y+n1fPZT1zdS+lAHwbtnaHu3tkmXjTbbjBa7vPYlABo=;
-        b=O6V92x54nhsbw+iIsi5VHLqlpU/25LrFdzgZySWoN2Jrfjv/G3KftonhcTmUy8+al1
-         WFE6Q+tE0l2iBl25sRgpQbo9qhWdx+7LQtZft6V5k/h/7WOZNGlG35S3sPrBgkgQs9hp
-         3tvilCQ/lgFTZeOe6BIxP5p34eS2/nfLcGGBAlSpH5WKPoPzQueO4EBtjraJShnZ0Puj
-         JNLJIYxMRvMTsSMvBtIVlwZO5+dGqyE0RJY+fJ51cHSBbBgakP4QrXQDkjvt2Ofq5IbP
-         6iFY+2AcNfxSZg9S+opPYsWSgCUOx9dixE2DVScTOtJ1u5b9h9LKzZ0w8nUmMAEI9TQQ
-         QhnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=y+n1fPZT1zdS+lAHwbtnaHu3tkmXjTbbjBa7vPYlABo=;
-        b=JT1AsE2WnIqjbT08eh2gj2WruRkUipvIk1taUzW/6NPTFVGNJak/+h/eLQlhXuOX5B
-         8Yk7OFsCKQejoDjzWCaeBcWsWHEYRTEN/EphlFGUCsBi3EUbYwELuLbSLKbbHnGFZwog
-         o4svfNvVbN9Mpx8wKbarTAx+5Rwf9ShlhAIj4apChbAMv3ZKCOcqm4BE4EwT4qL5gfWl
-         Wx/x/a+qqK2QiXVKccXuQ1J5ZEcWveG/puiH0tTkjJExDnCBOhhL+wjv/ro5QJ2jtnI/
-         +m9n/WUc1RrafSgFjeMSKkDM449O3GH+62siSokOsqHYTw5dDTn4zpEYB8ZRwOmbO+yh
-         09Ew==
-X-Gm-Message-State: AOAM531ZljG07CpzpJAidN/BaKvZKxxZ9nBodNcVoLbuLqNfht5NRC12
-	Fg/lnjuxqpQqyQ0z9+t95fQ=
-X-Google-Smtp-Source: ABdhPJyOeXl2fFGTzg0iG/6FpetLkDcmdjOHsoeI13uUcbQHA6nOkjFHKMo1BhP97JPHpR+hLyq8fg==
-X-Received: by 2002:a17:90b:3e8a:b0:1dc:9d7e:1e12 with SMTP id rj10-20020a17090b3e8a00b001dc9d7e1e12mr7400387pjb.58.1652487969532;
-        Fri, 13 May 2022 17:26:09 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:1969:9b8a:5056:897b])
-        by smtp.gmail.com with ESMTPSA id n16-20020a6563d0000000b003c14af50607sm2160677pgv.31.2022.05.13.17.26.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 17:26:09 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date: Fri, 13 May 2022 17:26:07 -0700
-From: Minchan Kim <minchan@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com,
-	Matthew Wilcox <willy@infradead.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	David Hildenbrand <david@redhat.com>
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Message-ID: <Yn73Hz7LkSUv7ycw@google.com>
-References: <000000000000ef451a05dee0f2b1@google.com>
- <00000000000077377c05dee75f63@google.com>
- <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
- <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
- <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
- <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
- <Yn7vnpXwX50J3K+7@google.com>
- <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B79436D
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 00:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652488289; x=1684024289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4ZbrGrP7cxNMuGCiRcEz9C5bHEQF1KFXcDuzuJA6vYk=;
+  b=mOyJDNXirwFghXD+g8ltW/q5CWFeJ1Ejob8ivVpeuVtvZ5VS0++FrVfx
+   xiscLeHz/UvWdDBvCwPPC7BWz+8F8FU7QuFZM5gymM/1mc0hETrDdgf+a
+   mlHy7fW7lJ08Tp/PfIIBNTs+dSmlEjl8E9E1+dBjOaCsyN4xfgi/qJVSu
+   wsRX44DQucGGRK1J8FD4sACGKPMgD+6SKZCpHbWrM7MrRGDW585zRoHsg
+   fmfwL93c3ZIsBA3t4B49TaHoEGnC8L+AKXoAomk0vVRjIP2mAIOeqTDtL
+   e5MlFCE5CYHQLfaApP+2ynmN62Sl/uFXB6wYclGD/cNnTZUT5YH3tkncP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="333479188"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="333479188"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 17:31:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="604048939"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 May 2022 17:31:26 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npfgr-000MFY-Sf;
+	Sat, 14 May 2022 00:31:25 +0000
+Date: Sat, 14 May 2022 08:30:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH] kbuild: copy scripts/atomic/atomic-*.h to
+ include/generated/atomic-*.h
+Message-ID: <202205140803.I96fumS7-lkp@intel.com>
+References: <20220513185340.239753-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,37 +49,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+In-Reply-To: <20220513185340.239753-1-masahiroy@kernel.org>
 
-On Fri, May 13, 2022 at 05:09:11PM -0700, John Hubbard wrote:
-> On 5/13/22 16:54, Minchan Kim wrote:
-> > > > I isolated this to Minchan Kim's "mm: fix is_pinnable_page against on cma
-> > > > page".  Yes, the fat finger fix is in next-20220513.
-> > > > 
-> > > > I don't have time to analyze right now, but can confirm that in the
-> > > > reproducer is_pinnable_page is returning false after this change when it
-> > > > previously returned true.
-> > > 
-> > > OK, thanks, I dropped mm-fix-is_pinnable_page-against-on-cma-page.patch
-> > 
-> > Seems like bug of the patch v5 due to change of this
-> > 
-> >      if (mt & (MIGRATE_CMA | MIGRATE_ISOLATE))
-> > 
-> > The migration type is not bit type so it shold be
-> > 
-> > if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
-> > 
-> 
-> Sorry for leading you astray by recommending the bitwise OR, Minchan.
-> I overlooked that point even though it was right in front of me.
+Hi Masahiro,
 
-No worry, John.
+I love your patch! Yet something to improve:
 
-Anything else further can we get insight from the warning?
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on linux/master linus/master v5.18-rc6 next-20220513]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-For example, pin_user_pages going on against a hugetlb page
-which are concurrently running alloc_contig_range(it's
-exported function so anyone can call randomly) so
-alloc_contig_range changes pageblock type as MIGRATE_ISOLATE
-under us so the hit at the warning?
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbuild-copy-scripts-atomic-atomic-h-to-include-generated-atomic-h/20220514-025623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220514/202205140803.I96fumS7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3f6dd60121830fdd3733dd804d9ae163d88acc98
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Masahiro-Yamada/kbuild-copy-scripts-atomic-atomic-h-to-include-generated-atomic-h/20220514-025623
+        git checkout 3f6dd60121830fdd3733dd804d9ae163d88acc98
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from scripts/mod/devicetable-offsets.c:3:
+   In file included from include/linux/mod_devicetable.h:13:
+   In file included from include/linux/uuid.h:12:
+   In file included from include/linux/string.h:20:
+   In file included from arch/x86/include/asm/string.h:5:
+   In file included from arch/x86/include/asm/string_64.h:6:
+   In file included from include/linux/jump_label.h:256:
+   In file included from include/linux/atomic.h:80:
+>> include/linux/atomic/atomic-arch-fallback.h:2:10: fatal error: 'generated/atomic-arch-fallback.h' file not found
+   #include <generated/atomic-arch-fallback.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: scripts/mod/devicetable-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +2 include/linux/atomic/atomic-arch-fallback.h
+
+   > 2	#include <generated/atomic-arch-fallback.h>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
