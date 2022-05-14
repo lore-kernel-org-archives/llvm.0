@@ -1,105 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4979F7A
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 13:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257E9C340EE;
-	Sat, 14 May 2022 13:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652535735;
-	bh=lc8FNAHPs8PxV63QLAnbUlmnFyHQVfR9JmDEpWwz4lI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T/iMzL+CCIm9x7+Jl4noxSph+mudNjl8X2sOVQkvn5FyBHl96k51cU66l5vpRLnIU
-	 UeXp7rlbynzHSGZZcTyIh7D68IvTdOcCELtP7okrfGpAfTTZV2+PLqB/bHIvoz9r6j
-	 4WppvK1cWa2QxbpLtKDKxStnqEQ0DtLPq/cWjw8lfIU/f9SoUarB0mAjtmI0mZ1TRY
-	 Cm5EWCHLiQLH46AlJ1ZhSlNgixjQ4tfsAj17pqAJK/tm/nx2CY3sqlhNeTIDJqTsV5
-	 AkF19anc9HKM2siOhJT2yYPj4QAAxbMRUazRnC10fdvQ9TIbWf81zm2jWoGTJ1gSeg
-	 T4ds3E7wT+Zrw==
-Date: Sat, 14 May 2022 15:42:08 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Michael Walle <michael@walle.cc>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
-Message-ID: <Yn+xsNqFyRMTu+5X@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Michael Walle <michael@walle.cc>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <20220505152738.1440249-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE3F362
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652538619; x=1684074619;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l8Umuf3SuqvhyBt8dkzAa4QPJtRZJLLyK5CjOFYtC5g=;
+  b=POvjBXlR2Rx4mEy0yQ34KOBe7DTYgm9Olyi/kIbbOSEbFu+cjKjO5Oko
+   v4q41i0TqAziTC6LFApgoT9yOo0KrjncQH4EyLw7/v+ZFFB25YpbzEMFJ
+   goipzu53o1pJyMfH7IU6TXWU2kbiHct1QU/0xPqlH7hzCKmU+M6NlHADp
+   maLAyFiJyalmSUAZpIRrjLbvd81iQSvNwpg0ivIXMBvTEcilTmIxJN3PL
+   26vSrtCAWPbgJBzIbQf5Fe6F0rUB/VNdKPTCsWf7T8NwR7ItUTQlygYrj
+   RBrc/ySJjUruBjdpL/jWkBYv0Tm0vhJfGE9GwajBEyJl2rRcpqigOrB3I
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="295776700"
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="295776700"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 07:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="740569057"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 14 May 2022 07:30:17 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1npsme-0000jx-Bs;
+	Sat, 14 May 2022 14:30:16 +0000
+Date: Sat, 14 May 2022 22:30:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:ct-work-defer-wip 25/25]
+ arch/x86/mm/pat/set_memory.c:351:26: error: use of undeclared identifier
+ 'CONTEXT_WORK_CACHEI'
+Message-ID: <202205142203.hnkoIxTp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VjAemlvi6p7tG2no"
-Content-Disposition: inline
-In-Reply-To: <20220505152738.1440249-1-nathan@kernel.org>
-
-
---VjAemlvi6p7tG2no
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 05, 2022 at 08:27:38AM -0700, Nathan Chancellor wrote:
-> Clang warns:
->=20
->   drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf'=
- is used uninitialized whenever 'if' condition is false [-Wsometimes-uninit=
-ialized]
->           if (dev->use_dma) {
->               ^~~~~~~~~~~~
->   drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use oc=
-curs here
->           i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->                                    ^~~~~~~
->=20
-> Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
-> when the first argument is NULL, which will work for the !dev->use_dma
-> case.
->=20
-> Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1629
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
+head:   ed63029652239a6befad96dd473b16332913f889
+commit: ed63029652239a6befad96dd473b16332913f889 [25/25] context_tracking,x86: Fix Kernel cachei vs NOHZ_FULL
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220514/202205142203.hnkoIxTp-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ed63029652239a6befad96dd473b16332913f889
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
+        git checkout ed63029652239a6befad96dd473b16332913f889
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Applied to for-next, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/mm/pat/set_memory.c:351:6: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                           CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+                                           ^
+>> arch/x86/mm/pat/set_memory.c:351:26: error: use of undeclared identifier 'CONTEXT_WORK_CACHEI'
+                                           CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+                                                               ^
+   arch/x86/mm/pat/set_memory.c:373:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                                 CONTEXT_WORK_TLBI);
+                                                 ^
+   3 errors generated.
 
 
---VjAemlvi6p7tG2no
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/CONTEXT_WORK_CACHEI +351 arch/x86/mm/pat/set_memory.c
 
------BEGIN PGP SIGNATURE-----
+   347	
+   348	static bool __cpa_flush_all_cond(int cpu, void *info)
+   349	{
+   350		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
+ > 351						CONTEXT_WORK_TLBI | CONTEXT_WORK_CACHEI);
+   352	}
+   353	
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJ/sawACgkQFA3kzBSg
-KbaJ9xAAkyq+RHZZN08/YGayyvwrJU1NXYylBVY92QwWcNK4qyUjdNLIz2YJn4kC
-SPBPTdyWbeG46f609FHc8aCAJE8P695jSZh9yOPQZ1HUZWx2MXsraYXcGtdAzwKv
-Qwt3O7Mal47TcqyI5iwWcsKlsKKiQCjN7QeQ7EiTBTrVB3DL/K6E+5urM1ew837c
-6Eht4geOYLc/GMc9usSaG4SDXXnEBsFMvzIa9qCImZ6NBeZmeD3fCZA6ylw2ztlr
-Fd8/nx4tVigiE8TGxcZiduBt4BuYbAUMOUeOHcNAkMNu1HdzkA05UXGbRvkW+0yT
-jGg32HRrEWr45OVmAX2jCpKAW8hC8rFbtR5DPwMW/1ZmShkq0w+3BV3AmsFpu44P
-gssSPLLktq+n8rRT/ze7Zht80LebklQ3mI57+kP2/ZjnyGHyMLmXY8GSCUEv5+AZ
-FPeUMOcbi8CqZDnIOmRk7RN7uX7p1BJotYOh2pHnFEvpIB8coVTd1yn6SV/+mIqi
-j5bW2CzRRZg1MBUDI+LGyczHDH47mUOtYjEVKRMNdiVwmNcSsO7QneGoJo+MUr7z
-RRX0kOy3JAp6VuPhmDY/fK22+q1qZQeCWaBFldsSYDTWz1fFxwqWUOEV020DS20v
-1zhMYk9WipGr7ymzVgTGG7s/5IMXs6qdlG3+7lAciaOPU8RRaHc=
-=GQAz
------END PGP SIGNATURE-----
-
---VjAemlvi6p7tG2no--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
