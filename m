@@ -1,110 +1,179 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B79436D
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 00:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652488289; x=1684024289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4ZbrGrP7cxNMuGCiRcEz9C5bHEQF1KFXcDuzuJA6vYk=;
-  b=mOyJDNXirwFghXD+g8ltW/q5CWFeJ1Ejob8ivVpeuVtvZ5VS0++FrVfx
-   xiscLeHz/UvWdDBvCwPPC7BWz+8F8FU7QuFZM5gymM/1mc0hETrDdgf+a
-   mlHy7fW7lJ08Tp/PfIIBNTs+dSmlEjl8E9E1+dBjOaCsyN4xfgi/qJVSu
-   wsRX44DQucGGRK1J8FD4sACGKPMgD+6SKZCpHbWrM7MrRGDW585zRoHsg
-   fmfwL93c3ZIsBA3t4B49TaHoEGnC8L+AKXoAomk0vVRjIP2mAIOeqTDtL
-   e5MlFCE5CYHQLfaApP+2ynmN62Sl/uFXB6wYclGD/cNnTZUT5YH3tkncP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10346"; a="333479188"
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="333479188"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 17:31:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="604048939"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 May 2022 17:31:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1npfgr-000MFY-Sf;
-	Sat, 14 May 2022 00:31:25 +0000
-Date: Sat, 14 May 2022 08:30:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH] kbuild: copy scripts/atomic/atomic-*.h to
- include/generated/atomic-*.h
-Message-ID: <202205140803.I96fumS7-lkp@intel.com>
-References: <20220513185340.239753-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA7536D
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 00:57:04 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bOdnhcNR62AxUL1yNvYMSFruHqgKEJFXR+xMXD4gfq9yAjouMg5VSzw9PUz3IkeaAeqbmQEU3jxciD5D7XF9Ecqrd3owHr0aIEl08xvBPnjI/0mZBX45TssNH+e4XGqL8m01FeNmkJpFD4Gn50lAie0stNCKRFoq9fYS6YDpObXyJfiQOoVh4zO2I+8zi2nbioAJgtqXiFhjz6yJgnr6WXqMBMiPmtqnI96ALpq5alr0ywYauGBxEAMoogqisSxZM+fyXTNs+Uig9TtvFjZ4KTwIWBnrxcCxB8FPpahDAJgKOn/kPI7egf0AW7bBZ47Zv0P9Nz2oP5RapsP68Ny/7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sqammOmC/7TpzofefPy4xPHLYmdCKCI+5BDfICvGUJo=;
+ b=NLD60EITK7st7pnpJI+Dte5S75jNUCAivoZ5l/CxnEhCfSPljm0frzFxCNFjNIn9AxSClWGvtUS6dKtpVMgCbl+EvZM4a5HSsqL9zh+OQgGxBVVJUmjlHlF6TUJkSq47fTJUY395C5jwa16+V9u1U8CYcgb/HMGIotVzSziui9nXbgoz0gtH60NsnrjlKf7jYDpqb000hulkLmHKVBZ3PSTSuCXtfG85TRKW6h3Ed0b7cHzQvUi+vIj0Wst9ve3+VlkCVGEuAtHD5X6s4HdDBVugkgW9ElcY+PTZBlQ+dYKLmnGGEE8tHo8LfeiF1W4mczWU7w08HjLwJw4PQSX1bQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sqammOmC/7TpzofefPy4xPHLYmdCKCI+5BDfICvGUJo=;
+ b=AXlHzNroPu2v3GWFKPNA5heDVixpk5UFwlRpyC5RUL65H8oFNcw4fLkhDYAgB6os1/sL/GL9rcXJIyxLEjHzwJj/2YlNTXk1DnocZaPFI3U8TIqaHsHBoPgfKMOg0phnbfAxvdfrMJ+VA4f2I6cf1xjU/PrgeE+L36/1D97ZzwHjprhqwR5G4MJoiO5Ul946jyru0QdZsD0gbajcKrWcZc9r45+hNChQdVxcrb+C09pcstM1EzAIjcpwY4oIsUMXdiGJvfxjmhFcObA9Ljv/PG5KQ7odUhWIU/iTqt3c88TbUC5/fpbk4QBiEPlxrPWp7LqIq+1RK+1zM+OKW4PivA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BL1PR12MB5351.namprd12.prod.outlook.com (2603:10b6:208:317::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Sat, 14 May
+ 2022 00:57:02 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0%7]) with mapi id 15.20.5250.017; Sat, 14 May 2022
+ 00:57:01 +0000
+Message-ID: <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
+Date: Fri, 13 May 2022 17:56:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Content-Language: en-US
+To: Minchan Kim <minchan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Mike Kravetz <mike.kravetz@oracle.com>,
+ syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+ trix@redhat.com, Matthew Wilcox <willy@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, David Hildenbrand <david@redhat.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+ <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+ <Yn7vnpXwX50J3K+7@google.com>
+ <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+ <Yn73Hz7LkSUv7ycw@google.com>
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Yn73Hz7LkSUv7ycw@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR06CA0062.namprd06.prod.outlook.com
+ (2603:10b6:a03:14b::39) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513185340.239753-1-masahiroy@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7a4c8d5b-7406-42ed-d505-08da3544a7df
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5351:EE_
+X-Microsoft-Antispam-PRVS:
+	<BL1PR12MB5351AD7392BAD33E321208CAA8CD9@BL1PR12MB5351.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	ao6fCeKWGYg7qrTk/DP1U1Kd00O6wDUMFLyLlcViigGQG19DS+WebB4htD8BtN9MmFUk51xDoDSedApIANCMgJYtIB2I7lDN9vdgGRJUiRSh0ZucCjqBLnESDkBVXH62pjClV2Yn1WJMZehHjiINuxxO1Y4lrq6xXDDx41xwMb3aqGtQWxKz1/r8ntjsUZMjzKAPlus5l1CmxEIzChmqka6OGgpqR8hlpHThpdDdc9v7mICjJTheVybPO1H0VKbx6Z+wWff3bGkJOOJGo9Lea1jGpKGYYPoGf19qBvj11QTyjx4+ZyYvL9yoeeTrURw4GfSDjlb1jtdQo14m+xz4+Xhal7QB0sY0Az1oi9DZ1pdUr3oLQFYlAbZw6mX44LtfVncRNLaj2veUnvE6cGnbaDl2HYhARAxBKCZ0GX5f4NitUcD0/eOrSrW7lE09yX0T0N//QOVr8s1xqIhB1S99ziQ5FaJnLPudF19DMRkz70SgAa1f3J8B2G6XcipDeytQK7Y4KUWWtJ8W4yi1QSOfZhLZgOa0ca9sAvqEF93cHbWymDVQM3YPDnpdh61U1iDSoS+J0b46OEpV1330TG5NoPc4tPyqZIyClnFrtuk32Z3U3ZMPceWz3bgJCM/YDsksBFTsexU88eiOyCghlJvFghPlMCJLuJx549I58wcSpm9GrjU/vD+kSLfbOEr+7L04nyQY4nfq0p0MLS5T1glnm8e32G8ekIxHcR9CMf9Kl9fcx/gXGloKP6jIyeRDNznq
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(26005)(38100700002)(6916009)(36756003)(6506007)(6486002)(316002)(54906003)(53546011)(508600001)(6512007)(4326008)(66476007)(31686004)(186003)(31696002)(2616005)(66946007)(8676002)(66556008)(86362001)(2906002)(7416002)(5660300002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OFRvZDFWNGppQ2h0QlpWNFBpTlJCcDNSWjg5UjYwancxeGZpN0lqQWdIVllC?=
+ =?utf-8?B?eFdQMklsT2d3QkU3dFVTZXpYcmh0SkVFVTJkU1l4bWZJd1Jna0h3SkVWY2dI?=
+ =?utf-8?B?SnRKWEhHTC9IR0NQK3ZXUkdlNzdtZ0xEMlhuVWNXWVR6TmZ0Wk9aZWNnRUlu?=
+ =?utf-8?B?R2dGdE1Na1RUcmZEVlFzcDF4SEtDU0g0cy9IZkdMVGwyNXJ0VnMvYUNXaTJu?=
+ =?utf-8?B?d0FPRmJFQVR1YVFpWVZwVWZGRTNKSGV5MTNMR1hkZ1ZsdFBZS1V5a2prODlF?=
+ =?utf-8?B?a29ZN29VTWEvclYvNzdmd1R5eUdueko5ZTN1czRwcExxV3BveW8rTElMamxm?=
+ =?utf-8?B?UWpXSWdDQTZ5RUM1NXlQeDB1V2daYzd0TGd2N3lQOG5teXh0blZ1ZHhPc0lY?=
+ =?utf-8?B?UFhHVFN2TEFqWVJrcUZwODRKNFlZdnZYQXhtYkxLVUd0SWhKbS9WWHpBODVC?=
+ =?utf-8?B?MS9SK1NFazd1RG95TzJnSDBEQmIrYjh1YzljbThWYno4VFlPelFRTFBNWk05?=
+ =?utf-8?B?eUoxVHhxcXBEM0pHRTMzM1R6aHJ2bEpJU2xNMEZ0OGE5MDkyWlhUUFZjSzRJ?=
+ =?utf-8?B?eFNKaXltbTg2V0FsV25pM0NqbHFmbWl2dkJjRjlNOG53RmtrY291WnpscjRq?=
+ =?utf-8?B?dEx1OXJSVU9qMTRheUluaFh4Skc5SzNuVXJISzRHSGZ1R1ltUUlHWmk2YU5v?=
+ =?utf-8?B?YnloeGIwbXBpbTBldEVzN0k0eUYxc013WnVpT3hhRVN0ZHNGWGl2a2xMcURl?=
+ =?utf-8?B?MEJoNHBqRUhaTTlnSkhWQmNTOHY4R2szNDhpN2p6NTVXb3BBZWZ2UjVFRGls?=
+ =?utf-8?B?RTNGTTY0R2ppVFNCZng3QnE4amszck43dmVWOEhCcHdSODY2NXBRY3pnQ0FN?=
+ =?utf-8?B?UVk0VHR4ek82NDFTWkZZdEx3VERsTkZmSjgxT3RCUm90cDE0YzdwU3FQZkhx?=
+ =?utf-8?B?UDlNdmNmQUtrK2VzWHcxV0c3bWhhZFl5b0dWVGxtNGtwZlRvanlKQWdhWDBk?=
+ =?utf-8?B?Y01VY3I5Ly9NY1BkeDJpbjdqSE10WUdpMDIyYlJ1NDNnMGNNZWdTNHl0WmtT?=
+ =?utf-8?B?TThnQ2NrSFQwYlQrUUc3OENQa21nM2lWRkpLaElCWU9aT2YxOC8xYzBESlRo?=
+ =?utf-8?B?b3YzNlR0QjRaelVEZGoxeGhzUUhQbkhtQUpWUzBIU3UvQzFxUkFhdE9sS0Vu?=
+ =?utf-8?B?cU01WkRmNFcwNC9TWFdIZ3h3K0Q5VitZZUhIdkMyVWxzNU14QkZkVjVZRkxB?=
+ =?utf-8?B?blo1U2FUcWdLdlpCTXQ4MlRRbXRuZzROb1VGL2NEMmVqZWY2Y2Uzamo0c0FS?=
+ =?utf-8?B?dVBZRDVxemM4OU5GSmhNSENlYUV6YkIxc0tnUjR2dkQ3OTNibGZ2bjFVRlo1?=
+ =?utf-8?B?TzlXcGhTenQ4cnhQUU5ZTk1LWjJNN3FwWVd2djFBMFNNSnlnMEFrVVA4NXYz?=
+ =?utf-8?B?THJRYTM1bGFkV2tHc0NTODJwVUlCU1BVWmhYeENUMkp3Nkplc1pFcUFoSkUw?=
+ =?utf-8?B?TlFGNkQzMk9sbjBkTEgza0hyemtFa3hhOVJ3NlJMMUwrMjJPZnRsdS8rTlcz?=
+ =?utf-8?B?b1dFVzN0bm1oRU4xbjMvTE1IQ1R0aThkaHZtT0xJUng3TUZyYk9TcGhvMHoz?=
+ =?utf-8?B?ODQ3TVc2N0wrTjk1UE5aV2YybFhyMEMzYXZ2M3BFcS9STS9GQ3QzUGZpN0VK?=
+ =?utf-8?B?WkE5WkJzeEFxZFdrekthSHdPWUJpVUxWQzlwWjB1TEU3c3c2bDBtWnA3SFow?=
+ =?utf-8?B?cktSZDMyTnlocTJaM2hQdzRoa2Z6YmlrejFXMW02ejBJeTcrWEFBZ2hSUDR6?=
+ =?utf-8?B?MFNqRE0wNXZqaWQramVLNGhGWFU0b3FTODNHNmp5Njk4T3RmZ21TMHp4anNU?=
+ =?utf-8?B?ZkxsQTZMOHhlZGNvbklyNEZpOXF4YkxaWDR4TW4rY3Zob2RTMTVvUk9wMk1N?=
+ =?utf-8?B?ck1XSmwzRTVSdVBRZnA4dWZrc05aQTlaVFRhUm14Ly9Ld1p3QmhjbDlveTFs?=
+ =?utf-8?B?VTFQQUpDSjN1YndqcjlHaWpMZHY5Q0F4U2t2ZldSZDJVbzZzb1ZtZkh5Nksy?=
+ =?utf-8?B?QjBiTWM3Sng2SGtYb1lpTWFuL1hjTFpoa01IRDh4czl1amlOQXBzWGhIM2dS?=
+ =?utf-8?B?dGh1Mzc4Y09aUjhrRk5TY04xSVl4cjJSUnpyNVpZMWE0UjFHTnJzWVlydUwx?=
+ =?utf-8?B?STZXSFNIMUIrV3NsT0ptUzNNR24rQmRuTis1R1BpemFXaUVwL2Uvb25kaWpC?=
+ =?utf-8?B?TVI1YXBxYldQMEd3QmxlMHRyU3BEQlNnYmNOaFYwazRaeWNGSFYyVW54dkg0?=
+ =?utf-8?B?Z2MrckJoMkdvTFptdXNqeXNRY0RhU1RkNW1TVjk5RThaU2kzcmJrQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4c8d5b-7406-42ed-d505-08da3544a7df
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2022 00:57:01.8265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LvLLynT3NSkTQU8qQyFO6Q4/OWgFNINRaviRLQksDJUk7WrdobyrypqjSH/BXnXf0aYgJ80J3C0CnD85DLcxVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5351
 
-Hi Masahiro,
+On 5/13/22 17:26, Minchan Kim wrote:
+> Anything else further can we get insight from the warning?
+> 
+> For example, pin_user_pages going on against a hugetlb page
+> which are concurrently running alloc_contig_range(it's
+> exported function so anyone can call randomly) so
+> alloc_contig_range changes pageblock type as MIGRATE_ISOLATE
+> under us so the hit at the warning?
 
-I love your patch! Yet something to improve:
+Well, yes. First of all, the comments above the warning that fired have
+gone a little bit stale: they claim that we can only hit the warning if
+the page refcount overflows. However, we almost certainly got here via:
 
-[auto build test ERROR on masahiroy-kbuild/for-next]
-[also build test ERROR on linux/master linus/master v5.18-rc6 next-20220513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+try_grab_folio()
+	/*
+	 * Can't do FOLL_LONGTERM + FOLL_PIN gup fast path if not in a
+	 * right zone, so fail and let the caller fall back to the slow
+	 * path.
+	 */
+	if (unlikely((flags & FOLL_LONGTERM) &&
+		     !is_pinnable_page(page))) /* which we just changed */
+		return NULL;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbuild-copy-scripts-atomic-atomic-h-to-include-generated-atomic-h/20220514-025623
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220514/202205140803.I96fumS7-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3f6dd60121830fdd3733dd804d9ae163d88acc98
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masahiro-Yamada/kbuild-copy-scripts-atomic-atomic-h-to-include-generated-atomic-h/20220514-025623
-        git checkout 3f6dd60121830fdd3733dd804d9ae163d88acc98
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+...and now I'm starting to think that this warning might fire even with
+the corrected check for MIGRATE_CMA || MIGRATE_ISOLATE. Because
+try_grab_folio() didn't always have this early exit and it is starting
+to look wrong.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Simply attempting to pin a non-pinnable huge page would hit this
+warning. Adding additional reasons that a page is not pinnable (which
+the patch does) could make this more likely to fire.
 
-All errors (new ones prefixed by >>):
+I need to look at this a little more closely, it is making me wonder
+whether the is_pinnable_page() check is a problem in this path. The
+comment in try_grab_folio() indicates that the early return is a hack
+(it assumes that the caller is in the gup fast path), and maybe the hack
+is just wrong here--I think we're actually on the slow gup path. Not
+good.
 
-   In file included from scripts/mod/devicetable-offsets.c:3:
-   In file included from include/linux/mod_devicetable.h:13:
-   In file included from include/linux/uuid.h:12:
-   In file included from include/linux/string.h:20:
-   In file included from arch/x86/include/asm/string.h:5:
-   In file included from arch/x86/include/asm/string_64.h:6:
-   In file included from include/linux/jump_label.h:256:
-   In file included from include/linux/atomic.h:80:
->> include/linux/atomic/atomic-arch-fallback.h:2:10: fatal error: 'generated/atomic-arch-fallback.h' file not found
-   #include <generated/atomic-arch-fallback.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: scripts/mod/devicetable-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Mike, any thoughts here?
 
 
-vim +2 include/linux/atomic/atomic-arch-fallback.h
 
-   > 2	#include <generated/atomic-arch-fallback.h>
-
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+John Hubbard
+NVIDIA
