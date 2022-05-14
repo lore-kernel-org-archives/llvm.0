@@ -1,39 +1,39 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67F02F25
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:46:51 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id m12so11112019plb.4
-        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:46:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AE72F25
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 21:49:38 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id h24so5367505pgh.12
+        for <llvm@lists.linux.dev>; Sat, 14 May 2022 14:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=e29OYJF0Cr34NWXtjSnWsGpG9iO/e7RRuuLzidaM53E=;
-        b=iLL3cfRMy+bNRF6yJMjDw3XvgwGT5nul36IUUc3BfjbVqT/89mvtX0Y9OzZeN0R4Gu
-         W178b+kjzr8Lf53lXiq7GHB/hfPD1hgiN4QTbUs3bRLflRujC0OJjNTHm2LZ3xS18mLX
-         NRFhidoGxgqGZWfBgeQ3q0MvXRxhcwrfDkb+8=
+        bh=s6gyFIzNx3uPs0E9QTdHeabUUHOLCiS5BRmtEkTrJ0M=;
+        b=c7bt5Yyim6jXKVU+nad9I6JP2/SU4szhm6beG8K9aijDODZgSy0Agoa/TRIPhM8F1M
+         rmYwZd8/LYOr0N85MfiL1hP82YXqGevzNXXADwKiS+C2Z1EidmmFYt0rEWxDNpDTeDfz
+         isXaa8uHnFoI1HAe6xmc8AxSjWofOHnUnKFTc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=e29OYJF0Cr34NWXtjSnWsGpG9iO/e7RRuuLzidaM53E=;
-        b=b35zi4nD+foagK+zg0KwkzM2JOLGBzUWF3Wm/QmUggMGwOFswhCIZEEva/VeK3Bm4J
-         YmtWd9B+JEtgAoqdstHVu0vRFjLba2P4K2CICEkaaB3yjIp4jkH8Ag0h9kY5vURXE1jL
-         s+HITHvg3w/2bLJHXHSBCgp4E7DgrKWvnHqEzYckAj5PaHRaKpJ4ZzmgIyUwICAc39Tw
-         zfX+w7V8t09qjf9byKbUMlTdayo7lYUeSLy3NS8LMh217c01VTXzF7/uRdzbZLXd4TQ0
-         zSq8xn2w/jWd/Ae/8Atnh2zmBCl7E1sSUDCpOwYpnNDWEEKWd8M6zu1/u/ZPYRE4Dzm7
-         r4aQ==
-X-Gm-Message-State: AOAM531N3v63UenJC4AtE8MAo8zo1Xz2wsS4oG+eVmjMLutdPMGvnhfs
-	TVU9v3PIU89hNuxWX7lN7ns2gw==
-X-Google-Smtp-Source: ABdhPJwsCXmSC41w6NBmUyzu0g9wSnZn8nG1i4Pdwc6BWgonq72IR1wz8hyIaB0bEBdZVZ1mnem53A==
-X-Received: by 2002:a17:903:189:b0:15e:9584:fbe7 with SMTP id z9-20020a170903018900b0015e9584fbe7mr10635100plg.65.1652564811104;
-        Sat, 14 May 2022 14:46:51 -0700 (PDT)
+        bh=s6gyFIzNx3uPs0E9QTdHeabUUHOLCiS5BRmtEkTrJ0M=;
+        b=zuaKyOFPMsoVch7Ax/7qmL5K39iQW8MIYxhcer0l+8ZDpipSJg2iZX8B5dg7SlGj5l
+         oiJZApFVpTW1/F9Mlc56OQAXbuxUWo7mffk/kiJyh+DFGjX3pIZ6V1fHUXMJPGJJtDFD
+         0fKhbVwQU4xp6mHi0PVuAJXmYsorJbdh4COfT5oPqf1TXkmSkvQVAOrXTIzdAL7gjRfr
+         W8qzsat9yk0sFCIe5XrMiyI4dOvBQiHucQp0v/loRAqKT5ltkyvoVBI1LvGOmH7Ijz3D
+         lVTbDsRpEvpSTsZL82LEXzgQlOTPXDUWzqOwLhNdFggPtuhVuRt7VkH3+MoQraYRqCRc
+         TVzw==
+X-Gm-Message-State: AOAM530yTHb141/VScgE7j7mBT0j6K4V7eebyzy3LMzqSkzg7P+SAubY
+	+SoPd5w7e4dy4iexU6KSxRcMJQ==
+X-Google-Smtp-Source: ABdhPJwk8CcBX6QnXuAE6iXMXjeE8Vq7UImMhCQwh4Vg8IjNOXTMawTzaFXfXJRgS9HCVdGKlVDekA==
+X-Received: by 2002:a65:4ccd:0:b0:3c2:428d:d13b with SMTP id n13-20020a654ccd000000b003c2428dd13bmr9330640pgt.425.1652564977729;
+        Sat, 14 May 2022 14:49:37 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j11-20020a056a00174b00b0050dc76281bfsm4049680pfc.153.2022.05.14.14.46.50
+        by smtp.gmail.com with ESMTPSA id f1-20020a170902ff0100b0015e8d4eb26asm4114685plj.180.2022.05.14.14.49.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 14:46:50 -0700 (PDT)
-Date: Sat, 14 May 2022 14:46:50 -0700
+        Sat, 14 May 2022 14:49:37 -0700 (PDT)
+Date: Sat, 14 May 2022 14:49:36 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -47,10 +47,10 @@ Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	linux-hardening@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 06/21] cfi: Switch to -fsanitize=kcfi
-Message-ID: <202205141444.9F32C94D9@keescook>
+Subject: Re: [RFC PATCH v2 07/21] cfi: Add type helper macros
+Message-ID: <202205141447.E3B5A29@keescook>
 References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-7-samitolvanen@google.com>
+ <20220513202159.1550547-8-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,22 +59,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513202159.1550547-7-samitolvanen@google.com>
+In-Reply-To: <20220513202159.1550547-8-samitolvanen@google.com>
 
-On Fri, May 13, 2022 at 01:21:44PM -0700, Sami Tolvanen wrote:
-> Switch from Clang's original forward-edge control-flow integrity
-> implementation to -fsanitize=kcfi, which is better suited for the
-> kernel, as it doesn't require LTO, doesn't use a jump table that
-> requires altering function references, and won't break cross-module
-> function address equality.
+On Fri, May 13, 2022 at 01:21:45PM -0700, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, assembly functions called indirectly
+> from C code must be annotated with type identifiers to pass CFI
+> checking. The compiler emits a __kcfi_typeid_<function> symbol for
+> each address-taken function declaration in C, which contains the
+> expected type identifier. Add typed versions of SYM_FUNC_START and
+> SYM_FUNC_START_ALIAS, which emit the type identifier before the
+> function.
 > 
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-Yes please. And just to note it somewhere: landing the KCFI
-implementation on Clang depends on this series being accepted (i.e. if
-the arm64 and x86 maintainers are happy with this series, then that'll
-unblock landing it in Clang (no reason to land something that won't get
-used.)
+And the reason to not make this change universally (i.e. directly in
+SYM_FUNC_START) is to minimize how many of these symbol annotations get
+emitted? (And to more directly indicate which asm is called indirectly?)
+
+What happens if an asm function is called indirectly and it doesn't have
+this annotation? (Is this case detectable at compile-time?)
+
+Regardless:
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
