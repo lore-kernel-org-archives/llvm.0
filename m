@@ -1,56 +1,93 @@
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA88624
-	for <llvm@lists.linux.dev>; Sat, 14 May 2022 11:25:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by mail.enpas.org (Postfix) with ESMTPSA id A8421FF959;
-	Sat, 14 May 2022 11:17:29 +0000 (UTC)
-Date: Sat, 14 May 2022 13:17:26 +0200
-From: Max Staudt <max@enpas.org>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: kernel test robot <lkp@intel.com>, Marc Kleine-Budde
- <mkl@pengutronix.de>, llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220514131726.55fbbcdb.max@enpas.org>
-In-Reply-To: <CAMZ6RqLU-Wg0Cau3cM=QsU-t-7Lyzmo1nJ_VAA4Mbw3u0jnNtw@mail.gmail.com>
-References: <20220513153606.302464-2-mailhol.vincent@wanadoo.fr>
-	<202205141221.H0aZXRak-lkp@intel.com>
-	<CAMZ6RqLU-Wg0Cau3cM=QsU-t-7Lyzmo1nJ_VAA4Mbw3u0jnNtw@mail.gmail.com>
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584F7A
+	for <llvm@lists.linux.dev>; Sat, 14 May 2022 13:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652535617; x=1684071617;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ATOwkom89fRH40zG0QcAYWcTUk7vSqR49LMlHjMCims=;
+  b=WVeZmDBXf09mtTJhM4V3uwkTA3QdViENQNVJfPvZl8A1FRqS+4eqlkTF
+   JEvQjrSYDd+rnp1Mvd+0fVbJ6cwiBdlFbAA4m6iN4k5zsVc3lxIaqF7Tp
+   +H+l29cH4oK/AMXTAtuoJQGJWdGqdnGCyP0n6QPPHQzQhgcYMtJHhzo+g
+   09WGxTe5vABpAg7896gmaXb5h0SjLx9vkZGTHgPgfCwwtLDD7DT/mWz0+
+   v+KwWRtndmbvds8uAvJNbM9QYvh1n7mwvqj2zFjzuS6cX4ZZXAA9YXXzD
+   wPswetjx4nqXHlaPN6gLHA7Xihl9FhCmvbXpqfcc0TngO8FZG5AwaUoYU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="270451683"
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="270451683"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2022 06:40:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,226,1647327600"; 
+   d="scan'208";a="521793037"
+Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 14 May 2022 06:40:15 -0700
+Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nps0E-0000h3-Ij;
+	Sat, 14 May 2022 13:40:14 +0000
+Date: Sat, 14 May 2022 21:39:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:ct-work-defer-wip 24/25] arch/x86/mm/tlb.c:1010:12:
+ error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+Message-ID: <202205142105.ZgamkxvX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, 14 May 2022 14:16:09 +0900
-Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git ct-work-defer-wip
+head:   ed63029652239a6befad96dd473b16332913f889
+commit: ac6fd7356ff9f2e0f040ef337d3eb731454ce49f [24/25] context_tracking,x86: Fix Kernel TLBi vs NOHZ_FULL
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20220514/202205142105.ZgamkxvX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 38189438b69ca27b4c6ce707c52dbd217583d046)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi ct-work-defer-wip
+        git checkout ac6fd7356ff9f2e0f040ef337d3eb731454ce49f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> OK, so the issue is that VCAN and VXCAN are users of
-> can_dropped_invalid_skb() but do not depend on CAN_DEV. Above error
-> will appear if CONFIG_CAN_DEV is not set (or if CONFIG_V{,X}CAN is set
-> to "yes" and CAN_DEV is set to "module").
-> I see three choices here:
->   1. move can_dropped_invalid_skb() outside of drivers/net/can (i.e.
-> move it somewhere in net/can).
->   2. split CAN_DEV into one additional sub module: CAN_SKB and add a
-> dependency to it in VCAN and VXCAN.
->   3. Add a dependency to CAN_DEV in VCAN and VXCAN
-> 
-> 1. is I think the worse, 2. the best, 3. is the laziest option and is
-> kind of acceptable.
-> @Marc (and anyone else), what are your thoughts?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think that having v(x)can depend on can-dev isn't half bad - for the
-user, they are CAN devices, anyway, and modprobe does the dependency
-resolution magic.
+All errors (new ones prefixed by >>):
 
-Splitting into too many modules is something I'd avoid because of the
-overhead involved.
+>> arch/x86/mm/tlb.c:1010:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                                 CONTEXT_WORK_TLBI);
+                                                 ^
+   1 error generated.
+--
+>> arch/x86/mm/pat/set_memory.c:367:12: error: use of undeclared identifier 'CONTEXT_WORK_TLBI'
+                                                 CONTEXT_WORK_TLBI);
+                                                 ^
+   1 error generated.
 
 
+vim +/CONTEXT_WORK_TLBI +1010 arch/x86/mm/tlb.c
 
-Max
+  1006	
+  1007	static bool do_kernel_flush_cond(int cpu, void *info)
+  1008	{
+  1009		return !context_tracking_set_cpu_work(cpu, CONTEXT_USER | CONTEXT_GUEST,
+> 1010						      CONTEXT_WORK_TLBI);
+  1011	}
+  1012	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
