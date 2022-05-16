@@ -1,125 +1,79 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FEE1376
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652727109; x=1684263109;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Oa/CBKFnhtFD0QwGGES1TErn9njc6jYJ9b/JNevHKWc=;
-  b=E2QZoIjjS1+JnhNBsDuNDOCnwkjaAgVKyjxAfxiQzQgZN2cp3Ng571Oc
-   ik766yI5KgqVUCzxR1ZxUxNg1f7juZvKXtcQWxZoRzF12evJUzHTaJA1r
-   VuQT+0dScqNChUsGe8g/dzYZktZDCCudNnT0+rzD4I4Vy5IC+IS0L2nbv
-   Y8INXOP5zy7d2J/f4C8AxA14BWV+VVgfXRBzgnsUx0kCt43217gT1f+yD
-   QgkQNXX5WRoVBlOWHNmj3p+6rFW6xJiDFHvrjb9dhVXjnvPT7KOZJDZL4
-   L6XT1jzj/smvmDOWxQor97s2U10IWFC5g8fpt0aQoajeeG4GA1UYggIrN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258493622"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="258493622"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:51:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="699673694"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 May 2022 11:51:45 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqfom-0000Gq-GH;
-	Mon, 16 May 2022 18:51:44 +0000
-Date: Tue, 17 May 2022 02:51:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/infiniband/core/device.c:2857:2: error: call to
- __compiletime_assert_526 declared with 'error' attribute: Please avoid
- flushing system_unbound_wq.
-Message-ID: <202205170247.XQQJv8KQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1E11376
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:57:53 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso164085497b3.6
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 11:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
+        b=OtkZKug+pHgQ2UZ/72x5bHwTEdoqxCQfEkm1QUCKIEgRffjKW3KbMb3c/K0hbgw8Hh
+         4snt1OZnOFAGl+LpQ4hpHFIJxYGrgyUHb3MpltCQAyohc4EBc2K3cVdSQIPXWZTMCpAo
+         xvkF6YXXSdLtGnt7ynxNOqwGwVVTZspuksDC6xnRRp98ABNh0U+IV0ZaF0Dke8RLQ2hY
+         0zwsUzPrYM4NS77Te/aQXLi3uZ8/Pe1REWifevXQA7rgTj6p6tmReRBxgn3R2O7hm2fZ
+         OJ6CVb4R6Yse/fCzJP36XXgjWUGVUJLUzzJC39/+B4Yu2HI44XK9AEZhZ/l6VNqETlCG
+         d/dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
+        b=eKGxYCI41gbCKu3VKMdEahAxMnPEyW2YX5S5132NVpZbYXrJkAF08SzmlJ0dCFtUxI
+         nOiw57fbruqVg59huTE4A6/iP6pgTfJcYq47vNSy4aAnQZvS8dp286aktvjKSnPSBY24
+         paNhP1DgdwB4FXqfKelO47ocviAWv83hIHZdj8WVKFmg7/AaLdSH4BM/bhvk2ZYmrTfu
+         LYXGCVaxxfJGdK2q6ukU+DiuGOFFVWdWlL0iz9Ht59UTkpjBhO/wMWZML0yXfJU0IXZ5
+         7vwurds+cFIoYH/hBkO53/sqsiYFfkg3sJFXrPSr3GoLmi2hdJI0rTUm5LwsGJyv9gFU
+         iBew==
+X-Gm-Message-State: AOAM531vo/ySAnpLTu0uEWko+5m3pBWfdFwfrX7L4l237jreBAWA8vdt
+	Ry+mAEcc0DHBCpa4nKEE9Jz+sFG+ihrdY4ABJPPDWQ==
+X-Google-Smtp-Source: ABdhPJyxnegSHSL4esR4Y8T2LGVa+WGgTYoK2/N/07nmR8fbjF1kDUJlLs7zXniWb3x4daFZGwyj8JCag7XedUMNBVU=
+X-Received: by 2002:a81:7953:0:b0:2fe:f8a9:7e45 with SMTP id
+ u80-20020a817953000000b002fef8a97e45mr7139331ywc.23.1652727472248; Mon, 16
+ May 2022 11:57:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <202205141501.92A22264B4@keescook>
+In-Reply-To: <202205141501.92A22264B4@keescook>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 16 May 2022 11:57:16 -0700
+Message-ID: <CABCJKudiLBjsNHUTH6zqhYik0WQZwsM4OceYJadYKoDQYOFRXw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220516-130223/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
-head:   db9b183910399bd93ea36329bfef7228a09c96ec
-commit: db9b183910399bd93ea36329bfef7228a09c96ec workqueue: Wrap flush_workqueue() using a macro
-date:   14 hours ago
-config: mips-randconfig-r026-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170247.XQQJv8KQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/db9b183910399bd93ea36329bfef7228a09c96ec
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220516-130223/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
-        git checkout db9b183910399bd93ea36329bfef7228a09c96ec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/infiniband/core/
+On Sat, May 14, 2022 at 3:03 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > +#ifdef CONFIG_CFI_CLANG
+> > +static void decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
+> > +                         unsigned long *type)
+> > +{
+> > +     char buffer[MAX_INSN_SIZE];
+> > +     struct insn insn;
+> > +     int offset;
+> > +
+> > +     *target = *type = 0;
+>
+> Should report_cfi_failure() have some additional hinting for the case
+> where target/type are zero? Like, "hey, got an inexplicable CFI failure
+> here, but preamble decode failed. Yikes!"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Good point, I'll add an error message here.
 
-All errors (new ones prefixed by >>):
-
->> drivers/infiniband/core/device.c:2857:2: error: call to __compiletime_assert_526 declared with 'error' attribute: Please avoid flushing system_unbound_wq.
-           flush_workqueue(system_unbound_wq);
-           ^
-   include/linux/workqueue.h:682:2: note: expanded from macro 'flush_workqueue'
-           BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
-           ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:150:1: note: expanded from here
-   __compiletime_assert_526
-   ^
-   1 error generated.
-
-
-vim +/error +2857 drivers/infiniband/core/device.c
-
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2840  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2841  static void __exit ib_core_cleanup(void)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2842  {
-5ef8c0c180a631 Jason Gunthorpe   2018-05-28  2843  	roce_gid_mgmt_cleanup();
-6c80b41abe22ae Leon Romanovsky   2017-06-20  2844  	nldev_exit();
-c9901724a2f141 Leon Romanovsky   2017-06-05  2845  	rdma_nl_unregister(RDMA_NL_LS);
-4e0f7b9070726a Parav Pandit      2019-02-26  2846  	unregister_pernet_device(&rdma_dev_net_ops);
-42df744c4166af Janne Karhunen    2019-06-14  2847  	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
-c2e49c92326f9b Mark Bloch        2016-05-19  2848  	ib_sa_cleanup();
-4c2cb4220431cb Mark Bloch        2016-05-19  2849  	ib_mad_cleanup();
-e3f20f02864f6d Leon Romanovsky   2016-05-19  2850  	addr_cleanup();
-c9901724a2f141 Leon Romanovsky   2017-06-05  2851  	rdma_nl_exit();
-55aeed06544f67 Jason Gunthorpe   2015-08-04  2852  	class_unregister(&ib_class);
-f794809a7259df Jack Morgenstein  2018-08-27  2853  	destroy_workqueue(ib_comp_unbound_wq);
-14d3a3b2498eda Christoph Hellwig 2015-12-11  2854  	destroy_workqueue(ib_comp_wq);
-f7c6a7b5d59980 Roland Dreier     2007-03-04  2855  	/* Make sure that any pending umem accounting work is done. */
-f06267104dd911 Tejun Heo         2010-10-19  2856  	destroy_workqueue(ib_wq);
-d0899892edd089 Jason Gunthorpe   2019-02-12 @2857  	flush_workqueue(system_unbound_wq);
-e59178d895afa2 Jason Gunthorpe   2019-02-06  2858  	WARN_ON(!xa_empty(&clients));
-0df91bb67334ee Jason Gunthorpe   2019-02-06  2859  	WARN_ON(!xa_empty(&devices));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2860  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2861  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sami
