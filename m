@@ -1,45 +1,47 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49767ED1
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 13:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11CCED1
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 13:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652707009; x=1684243009;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kOG2koXHHlK1B7NCZ+NommhNn0mVCBaSptO+1W1gZEs=;
-  b=Cgjp/eDFFTkzHzzlRK+cWIe53tRgmozx4CibFTp5QJkl8j0brhzk4Eav
-   dAn3RCy5JAHvczaRLjNHzblKg7TOQVVw7wn2tcPb2RARZ/XYXDEgbiKJv
-   jb7bf0qTA9GMaDRDtn8yvx3NyOT+gu06P8rSgjIk3nYSkQeLrrR2twUif
-   lxp0sxjS/IAJP2s0PNW4HrRtzkZDPZ/aC7PJWsTged1sXRMx7AimarJNV
-   K9jtKhP638ZjK8kt5HhyLJi81qIY/BNOResyXVgNCjRZl3mZsik649zjI
-   FRMa2tmMSdfdfVj41foKBQYFz7eLFPd2fknF53bBSTBZeKRk62fSISwlM
+  t=1652707592; x=1684243592;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lur/3NOqlYo8OA4XcGOZZynoHlfOsUsH13GiiFM9Bx8=;
+  b=YfRcDfmdFbdO9pbDiFYoMv/ARRa/5013KPiCJ5PJfpfWW11sMsxj83k4
+   2gWvtA9ddAxrKitVx2E19cScaIs/YxoTJy9ZQhpKpzjd8RPI2Na5TJNre
+   neajkWQU1tZAf/MAD5YNij+S4RirA90Q3KXmCSKBQKjZ1kv3EX34JP3HN
+   E0nedN/Fwkbd3WlBtauQvPAVHnroj/rtCcpcvaRq6UupH00S9wGJ6F8xf
+   AMvnjR05cDby8dRaRS6nxNhuFgm5RyHuMSpBTceP9zj7xSwmv07AiHKI0
+   Kj3C99DLwNxIIARsyoi6CMsbv76vD4tlDxu+6e28h6U4akGTXAbn+v+4O
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270777754"
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="251345066"
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="270777754"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 06:16:30 -0700
+   d="scan'208";a="251345066"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 06:26:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="555249309"
+   d="scan'208";a="604854114"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 06:16:28 -0700
+  by orsmga001.jf.intel.com with ESMTP; 16 May 2022 06:26:28 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nqaaJ-00002D-Rf;
-	Mon, 16 May 2022 13:16:27 +0000
-Date: Mon, 16 May 2022 21:15:34 +0800
+	id 1nqak0-00002b-1p;
+	Mon, 16 May 2022 13:26:28 +0000
+Date: Mon, 16 May 2022 21:25:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tong Tiangen <tongtiangen@huawei.com>
+To: Yunke Cao <yunkec@google.com>, Hans Verkuil <hverkuil@xs4all.nl>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>
-Subject: [linux-next:master 11556/12195]
- arch/riscv/include/asm/pgtable.h:662:9: error: call to undeclared function
- 'pud_leaf'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202205162125.ZhvoOFZf-lkp@intel.com>
+	Tomasz Figa <tfiga@chromium.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Ricardo Ribalda <ribalda@chromium.org>, linux-media@vger.kernel.org,
+	Yunke Cao <yunkec@google.com>
+Subject: Re: [PATCH v1 5/6] media: uvcvideo: Initialize roi to default value
+Message-ID: <202205162134.uZvFM4c1-lkp@intel.com>
+References: <20220516092209.1801656-6-yunkec@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,145 +50,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220516092209.1801656-6-yunkec@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1e1b28b936aed946122b4e0991e7144fdbbfd77e
-commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 [11556/12195] riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
-config: riscv-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162125.ZhvoOFZf-lkp@intel.com/config)
+Hi Yunke,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v5.18-rc7 next-20220513]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunke-Cao/media-Implement-UVC-v1-5-ROI/20220516-172509
+base:   git://linuxtv.org/media_tree.git master
+config: i386-buildonly-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162134.uZvFM4c1-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # https://github.com/intel-lab-lkp/linux/commit/453e68b0e012e424659c3fd4c4c7824ad768f440
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yunke-Cao/media-Implement-UVC-v1-5-ROI/20220516-172509
+        git checkout 453e68b0e012e424659c3fd4c4c7824ad768f440
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/usb/uvc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:662:9: error: call to undeclared function 'pud_leaf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return pud_leaf(pud) && pud_user(pud);
-                  ^
-   arch/riscv/include/asm/pgtable.h:662:9: note: did you mean 'pmd_leaf'?
-   arch/riscv/include/asm/pgtable.h:239:19: note: 'pmd_leaf' declared here
-   static inline int pmd_leaf(pmd_t pmd)
-                     ^
-   arch/riscv/include/asm/pgtable.h:238:18: note: expanded from macro 'pmd_leaf'
-   #define pmd_leaf        pmd_leaf
-                           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
+>> drivers/media/usb/uvc/uvc_ctrl.c:2587:44: error: use of undeclared identifier 'camera_entity'
+                               uvc_entity_match_guid(ctrl->entity, camera_entity))
+                                                                   ^
+   1 error generated.
 
 
-vim +/pud_leaf +662 arch/riscv/include/asm/pgtable.h
+vim +/camera_entity +2587 drivers/media/usb/uvc/uvc_ctrl.c
 
-   659	
-   660	static inline bool pud_user_accessible_page(pud_t pud)
-   661	{
- > 662		return pud_leaf(pud) && pud_user(pud);
-   663	}
-   664	#endif
-   665	
+  2551	
+  2552	/*
+  2553	 * Add control information and hardcoded stock control mappings to the given
+  2554	 * device.
+  2555	 */
+  2556	static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
+  2557				       struct uvc_control *ctrl)
+  2558	{
+  2559		const struct uvc_control_info *info = uvc_ctrls;
+  2560		const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
+  2561		const struct uvc_control_mapping *mapping = uvc_ctrl_mappings;
+  2562		const struct uvc_control_mapping *mend =
+  2563			mapping + ARRAY_SIZE(uvc_ctrl_mappings);
+  2564	
+  2565		/* XU controls initialization requires querying the device for control
+  2566		 * information. As some buggy UVC devices will crash when queried
+  2567		 * repeatedly in a tight loop, delay XU controls initialization until
+  2568		 * first use.
+  2569		 */
+  2570		if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
+  2571			return;
+  2572	
+  2573		for (; info < iend; ++info) {
+  2574			if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+  2575			    ctrl->index == info->index) {
+  2576				uvc_ctrl_add_info(chain->dev, ctrl, info);
+  2577				/*
+  2578				 * Retrieve control flags from the device. Ignore errors
+  2579				 * and work with default flag values from the uvc_ctrl
+  2580				 * array when the device doesn't properly implement
+  2581				 * GET_INFO on standard controls.
+  2582				 */
+  2583				uvc_ctrl_get_flags(chain->dev, ctrl, &ctrl->info);
+  2584	
+  2585				if (ctrl->info.selector ==
+  2586					UVC_CT_REGION_OF_INTEREST_CONTROL &&
+> 2587				    uvc_entity_match_guid(ctrl->entity, camera_entity))
+  2588					uvc_ctrl_init_roi(chain->dev, ctrl);
+  2589				break;
+  2590			 }
+  2591		}
+  2592	
+  2593		if (!ctrl->initialized)
+  2594			return;
+  2595	
+  2596		for (; mapping < mend; ++mapping) {
+  2597			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+  2598			    ctrl->info.selector == mapping->selector)
+  2599				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+  2600		}
+  2601	}
+  2602	
 
 -- 
 0-DAY CI Kernel Test Service
