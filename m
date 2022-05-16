@@ -1,45 +1,48 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91907FC
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 12:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369F6ED1
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 12:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652704488; x=1684240488;
+  t=1652705732; x=1684241732;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gkwJB3FC+w/sAIG0GdnTROrSAhvxYi63fkLJ9hK9U2g=;
-  b=KOk8fSEmewEIr4stMydJr17Nj3X+t2k2M16/pgcASglGoInPGbzwN9G6
-   GNXojGIoR+xiqgURLx/0WH1VDZ42wb7/TvOxgV1jJBXykoyoHoiwNeuCq
-   0jorbx3NVcC1AlHJRbjBJWa6drGDC10EcnbRCw96mQ7yz/neudj4PwhbZ
-   EErJRLaG9axW6MfCrB5Uu+FY02WEi+WRaWkX2/omZaHSnRLQl548mTfF/
-   +/jEyffQDs7vCWEID47uokqQx2dlRJka1vbRSMOH331f+DS3Ols5smKgv
-   zx/7RWkivA4NpBTW/CrIFmegMwXrfZud67RDuFQotaRbso61S+O9DFqj1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="269642231"
+  bh=ihR8n83hg4hum2AepYoqi5H6j9yxUnLz0RKLrq4qGbI=;
+  b=jx1zh4yePd8wexfjombZPzyyHpW2p5gWAec+UAAxyA6aYGeP3L4+uXnI
+   uu2252fZzB0EieWeDmMlh/RG/xE6w8RoAYsiKtfYJSAHLqdv9J//axlVA
+   pOjQEYpvaGglIK3hlGjkkgy08rdPi2gk0Q+etCuP2CASi9G4+D5xl6l1S
+   dD/mzz0hzT4sVO5te6uvDS9Epi208OPHjr0Dpc91gln5SUIkZqzlF/Dgt
+   muPJmAw1r9vl++P3a88CcctUywxlOHbYbyhxloGqY+/vgwDaT8/3ImTEi
+   MHAXr/LzTjAnwJgBjavcHNiLdYcJO9tEC0LzAawJv9Xdvf9zXUwHZuJMq
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270948438"
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="269642231"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 05:34:33 -0700
+   d="scan'208";a="270948438"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 05:55:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="699511964"
-Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 May 2022 05:34:31 -0700
-Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
+   d="scan'208";a="574002285"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 16 May 2022 05:55:27 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nqZvi-00005l-Ny;
-	Mon, 16 May 2022 12:34:30 +0000
-Date: Mon, 16 May 2022 20:34:29 +0800
+	id 1nqaFy-00001V-UL;
+	Mon, 16 May 2022 12:55:26 +0000
+Date: Mon, 16 May 2022 20:54:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kyle Swenson <kyle.swenson@est.tech>, pavel@ucw.cz, robh+dt@kernel.org,
-	krzk+dt@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	Kyle Swenson <kyle.swenson@est.tech>
-Subject: Re: [PATCH 1/2] leds: aw21024: Add support for Awinic's AW21024
-Message-ID: <202205162025.GEAQ50Y7-lkp@intel.com>
-References: <20220513190409.3682501-1-kyle.swenson@est.tech>
+To: menglong8.dong@gmail.com, edumazet@google.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rostedt@goodmis.org,
+	mingo@redhat.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	imagedong@tencent.com, kafai@fb.com, talalahmad@google.com,
+	keescook@chromium.org, dongli.zhang@oracle.com,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 7/9] net: tcp: add skb drop reasons to tcp
+ connect requesting
+Message-ID: <202205162057.owcP29LO-lkp@intel.com>
+References: <20220516034519.184876-8-imagedong@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,53 +51,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513190409.3682501-1-kyle.swenson@est.tech>
+In-Reply-To: <20220516034519.184876-8-imagedong@tencent.com>
 
-Hi Kyle,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on pavel-leds/for-next]
-[also build test WARNING on robh/for-next v5.18-rc7 next-20220513]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Swenson/leds-aw21024-Add-support-for-Awinic-s-AW21024/20220514-030705
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: hexagon-randconfig-r014-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162025.GEAQ50Y7-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/net-tcp-add-skb-drop-reasons-to-tcp-state-change/20220516-114934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git d9713088158b23973266e07fdc85ff7d68791a8c
+config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220516/202205162057.owcP29LO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/38eeda60299918b5599f4a58714dc91f9741677c
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d93679590223760e685126e344dfddd7d7c08cc3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kyle-Swenson/leds-aw21024-Add-support-for-Awinic-s-AW21024/20220514-030705
-        git checkout 38eeda60299918b5599f4a58714dc91f9741677c
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/net-tcp-add-skb-drop-reasons-to-tcp-state-change/20220516-114934
+        git checkout d93679590223760e685126e344dfddd7d7c08cc3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/leds/leds-aw21024.c:295:34: warning: unused variable 'of_aw21024_leds_match' [-Wunused-const-variable]
-   static const struct of_device_id of_aw21024_leds_match[] = {
-                                    ^
-   1 warning generated.
+>> net/dccp/ipv4.c:584:5: error: conflicting types for 'dccp_v4_conn_request'
+   int dccp_v4_conn_request(struct sock *sk, struct sk_buff *skb,
+       ^
+   net/dccp/dccp.h:258:5: note: previous declaration is here
+   int dccp_v4_conn_request(struct sock *sk, struct sk_buff *skb);
+       ^
+>> net/dccp/ipv4.c:921:21: error: incompatible function pointer types initializing 'int (*)(struct sock *, struct sk_buff *, enum skb_drop_reason *)' with an expression of type 'int (struct sock *, struct sk_buff *)' [-Werror,-Wincompatible-function-pointer-types]
+           .conn_request      = dccp_v4_conn_request,
+                                ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/of_aw21024_leds_match +295 drivers/leds/leds-aw21024.c
+vim +/dccp_v4_conn_request +584 net/dccp/ipv4.c
 
-   294	
- > 295	static const struct of_device_id of_aw21024_leds_match[] = {
-   296		{ .compatible = "awinic,aw21024", },
-   297		{},
-   298	};
-   299	MODULE_DEVICE_TABLE(of, of_aw21024_leds_match);
-   300	
+   583	
+ > 584	int dccp_v4_conn_request(struct sock *sk, struct sk_buff *skb,
+   585				 enum skb_drop_reason *reason)
+   586	{
+   587		struct inet_request_sock *ireq;
+   588		struct request_sock *req;
+   589		struct dccp_request_sock *dreq;
+   590		const __be32 service = dccp_hdr_request(skb)->dccph_req_service;
+   591		struct dccp_skb_cb *dcb = DCCP_SKB_CB(skb);
+   592	
+   593		/* Never answer to DCCP_PKT_REQUESTs send to broadcast or multicast */
+   594		if (skb_rtable(skb)->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
+   595			return 0;	/* discard, don't send a reset here */
+   596	
+   597		if (dccp_bad_service_code(sk, service)) {
+   598			dcb->dccpd_reset_code = DCCP_RESET_CODE_BAD_SERVICE_CODE;
+   599			goto drop;
+   600		}
+   601		/*
+   602		 * TW buckets are converted to open requests without
+   603		 * limitations, they conserve resources and peer is
+   604		 * evidently real one.
+   605		 */
+   606		dcb->dccpd_reset_code = DCCP_RESET_CODE_TOO_BUSY;
+   607		if (inet_csk_reqsk_queue_is_full(sk))
+   608			goto drop;
+   609	
+   610		if (sk_acceptq_is_full(sk))
+   611			goto drop;
+   612	
+   613		req = inet_reqsk_alloc(&dccp_request_sock_ops, sk, true);
+   614		if (req == NULL)
+   615			goto drop;
+   616	
+   617		if (dccp_reqsk_init(req, dccp_sk(sk), skb))
+   618			goto drop_and_free;
+   619	
+   620		dreq = dccp_rsk(req);
+   621		if (dccp_parse_options(sk, dreq, skb))
+   622			goto drop_and_free;
+   623	
+   624		if (security_inet_conn_request(sk, skb, req))
+   625			goto drop_and_free;
+   626	
+   627		ireq = inet_rsk(req);
+   628		sk_rcv_saddr_set(req_to_sk(req), ip_hdr(skb)->daddr);
+   629		sk_daddr_set(req_to_sk(req), ip_hdr(skb)->saddr);
+   630		ireq->ir_mark = inet_request_mark(sk, skb);
+   631		ireq->ireq_family = AF_INET;
+   632		ireq->ir_iif = sk->sk_bound_dev_if;
+   633	
+   634		/*
+   635		 * Step 3: Process LISTEN state
+   636		 *
+   637		 * Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookie
+   638		 *
+   639		 * Setting S.SWL/S.SWH to is deferred to dccp_create_openreq_child().
+   640		 */
+   641		dreq->dreq_isr	   = dcb->dccpd_seq;
+   642		dreq->dreq_gsr	   = dreq->dreq_isr;
+   643		dreq->dreq_iss	   = dccp_v4_init_sequence(skb);
+   644		dreq->dreq_gss     = dreq->dreq_iss;
+   645		dreq->dreq_service = service;
+   646	
+   647		if (dccp_v4_send_response(sk, req))
+   648			goto drop_and_free;
+   649	
+   650		inet_csk_reqsk_queue_hash_add(sk, req, DCCP_TIMEOUT_INIT);
+   651		reqsk_put(req);
+   652		return 0;
+   653	
+   654	drop_and_free:
+   655		reqsk_free(req);
+   656	drop:
+   657		__DCCP_INC_STATS(DCCP_MIB_ATTEMPTFAILS);
+   658		return -1;
+   659	}
+   660	EXPORT_SYMBOL_GPL(dccp_v4_conn_request);
+   661	
 
 -- 
 0-DAY CI Kernel Test Service
