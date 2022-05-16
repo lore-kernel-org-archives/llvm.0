@@ -1,30 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6792577
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 22:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8A5C385B8;
-	Mon, 16 May 2022 22:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652741337;
-	bh=0a/C5Zh/EyYXf/vzC/E/LwVLfqbJzBzn8Mkz0TSW/yQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tWnzV72+IpwctV6Br6FbM1QcIOfi5j/S+mo0+UkMggtP03es0EHoIIM8FXr80ydlN
-	 pU/iMMX7IiiFYYkMPykUzjkQ/rBELVMBM3ZgczPG+Df+Xf4JvmqeWRpnaplIQXADV3
-	 ljdR/DzH36ziJ14mg/fQgOQZwpA3aKGJuMytrgVFUjcupuZ8L8ly4T0fUGHclcClJC
-	 uPWzkwAkQXg19m1TXk/9yigHK8Xi9f+zd5bIi2u4bEOR6QyRG/pF3pV/l72MQ1UwKC
-	 eHOfs3Jli4RLCkx7MhuwaX9PwWg82TqD6ZK3Q3XRji8jma+x6Jbeey+zHX9LgHn+r2
-	 xIr0STsCpLCAA==
-Date: Mon, 16 May 2022 15:48:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E2A2577
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 22:59:42 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so378746pjf.5
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 15:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qH80CkGInLvkMX2JFapXe6/mirbCbTT5IsB0Ewh+rp8=;
+        b=TOCV1Wq+ft6PCF6l/iA42zY/3oD/IM0GOcYS+7TP3YJrbCBQoBpGYcRJ4FxvAYjGS8
+         Gg7ZH626PyNKxe6gsPGFcJ6V3ZdRL/vPUeoqYVEMEWtWXHFCjfx4Ox5QLjjGI8779p5h
+         T+G2RVdvA3BaNACIhLLpoN8MhXMLEVheXyyvU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qH80CkGInLvkMX2JFapXe6/mirbCbTT5IsB0Ewh+rp8=;
+        b=OTq2zUHGmZl46kAImQtaJDLzPgQxAhFin7Q5e1939t7oNlq+qcKf6celJExay5NgLe
+         SuB6AdOEmxr8W8Jf55TCp2Q2f4mYagPMgSCGLU+oj5rXg9BmQCZ5SFoADv74WtlYD9kh
+         /JFk+kPN/Bal4Qz9ib1bDBL4rEd6HiIga9HatW/1METS7aegTZ5lN8sE4XT+3OzfcRd2
+         Mj1HODSApSQDH+lmrB3D0LusJyjsh7l/DzluGQnaXl+8Urp0FUTMwNenBiaYih6aTa0j
+         Uoe5lQLxoNuDuXvuKLezx/KJ588iUgQQpTI8nzZSrfsP57cQzuAzDb/n+3ILEIMVuSe9
+         bhmg==
+X-Gm-Message-State: AOAM532wxGzKtRQCQYYwyTpWc3si4BC9f4oYxyIbzvgjgayFcifi2Gmb
+	JgYINJ1PMFGfT2MT4hEmUbntRA==
+X-Google-Smtp-Source: ABdhPJyxSU6G5TXN+v5ykRQusfkdTnOToZozkVk2taUe7UjHwkwJqQkJiQdCp59lbUQJKd1uM61/1Q==
+X-Received: by 2002:a17:90b:3b42:b0:1dc:5cdf:5649 with SMTP id ot2-20020a17090b3b4200b001dc5cdf5649mr33105926pjb.239.1652741982280;
+        Mon, 16 May 2022 15:59:42 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e16-20020a17090301d000b0015f2d549b46sm7535303plh.237.2022.05.16.15.59.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 15:59:41 -0700 (PDT)
+Date: Mon, 16 May 2022 15:59:41 -0700
+From: Kees Cook <keescook@chromium.org>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <YoLU10rW+EZCDEfI@dev-arch.thelio-3990X>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <202205161531.3339CA95@keescook>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+ <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+ <20220516183047.GM76023@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,113 +62,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220516183047.GM76023@worktop.programming.kicks-ass.net>
 
-On Mon, May 16, 2022 at 11:40:05PM +0200, Peter Zijlstra wrote:
-> On Mon, May 16, 2022 at 01:47:15PM -0700, Nathan Chancellor wrote:
-> > Hi Josh and Peter,
+On Mon, May 16, 2022 at 08:30:47PM +0200, Peter Zijlstra wrote:
+> On Mon, May 16, 2022 at 10:15:00AM -0700, Sami Tolvanen wrote:
+> > On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > > > With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> > > > immediately before each function and a check to validate the target
+> > > > function type before indirect calls:
+> > > >
+> > > >   ; type preamble
+> > > >   __cfi_function:
+> > > >     int3
+> > > >     int3
+> > > >     mov <id>, %eax
+> > > >     int3
+> > > >     int3
+> > > >   function:
+> > > >     ...
+> > >
+> > > When I enable CFI_CLANG and X86_KERNEL_IBT I get:
+> > >
+> > > 0000000000000c80 <__cfi_io_schedule_timeout>:
+> > > c80:   cc                      int3
+> > > c81:   cc                      int3
+> > > c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
+> > > c87:   cc                      int3
+> > > c88:   cc                      int3
+> > >
+> > > 0000000000000c89 <io_schedule_timeout>:
+> > > c89:   f3 0f 1e fa             endbr64
+> > >
+> > >
+> > > That seems unfortunate. Would it be possible to get an additional
+> > > compiler option to suppress the endbr for all symbols that get a __cfi_
+> > > preaamble?
 > > 
-> > After a recent change in LLVM [1], I see warnings (errors?) from objtool
-> > when building x86_64 allmodconfig on 5.15 and 5.17:
-> > 
-> >   $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
-> >   ...
-> >   mm/highmem.o: warning: objtool: no non-local symbols !?
-> >   mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
-> >   ...
-> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-> >   ...
-> > 
-> > I don't see the same errors on x86_64 allmodconfig on mainline so I
-> > bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
-> > Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
-> > missing and came to commit ed53a0d97192 ("x86/alternative: Use
-> > .ibt_endbr_seal to seal indirect calls") in mainline, which I think just
-> > hides the issue for allmodconfig. I can reproduce this problem with a
-> > more selective set of config values on mainline:
-> > 
-> >   $ make -skj"$(nproc)" LLVM=1 defconfig
-> > 
-> >   $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
-> > 
-> >   $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
-> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-> >   ...
-> > 
-> > Looking at the object file, the '.text.asan.module_ctor' section has
-> > disappeared.
-> > 
-> > Before:
-> > 
-> >   $ llvm-nm -S security/tomoyo/load_policy.o
-> >   0000000000000000 0000000000000001 t asan.module_ctor
-> > 
-> >   $ llvm-readelf -s security/tomoyo/load_policy.o
-> > 
-> >   Symbol table '.symtab' contains 4 entries:
-> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
-> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-> >        2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
-> >        3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> > 
-> > After:
-> > 
-> >   $ llvm-nm -S security/tomoyo/load_policy.o
-> >   0000000000000000 0000000000000001 t asan.module_ctor
-> > 
-> >   $ llvm-readelf -s security/tomoyo/load_policy.o
-> > 
-> >   Symbol table '.symtab' contains 3 entries:
-> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
-> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-> >        2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-> > 
+> > What's the concern with the endbr? Dropping it would currently break
+> > the CFI+IBT combination on newer hardware, no?
 > 
-> The problem seems to be that we need to add a local symbols because LLVM
-> helpfully stripped all unused section symbols.
+> Well, yes, but also that combination isn't very interesting. See,
 > 
-> The way we do that, is by moving a the first non-local symbol to the
-> end, thereby creating a hole where we can insert a new local symbol.
-> Because ELF very helpfully mandates that local symbols must come before
-> non-local symbols and keeps the symbols index of the first non-local in
-> sh_info.
+>   https://lore.kernel.org/all/20220420004241.2093-1-joao@overdrivepizza.com/T/#m5d67fb010d488b2f8eee33f1eb39d12f769e4ad2
 > 
-> Thing is, the above object files don't appear to have a non-local symbol
-> so the swizzle thing isn't needed, and apparently the value in sh_info
-> isn't valid either.
+> and the patch I did down-thread:
 > 
-> Does something simple like this work? If not, I'll try and reproduce
-> tomorrow, it shouldn't be too hard to fix.
+>   https://lkml.kernel.org/r/YoJKhHluN4n0kZDm@hirez.programming.kicks-ass.net
+> 
+> If we have IBT, then FineIBT is a much better option than kCFI+IBT.
 
-That diff obviously gets rid of the "no non-local symbols" message but I
-still see the "invalid section index" message. I'll be offline tomorrow
-but if you have issues reproducing it, I'll be happy to help on
-Wednesday. At the time I am writing this, apt.llvm.org packages have not
-been updated to include that LLVM change I mentioned; hopefully they
-will be soon.
+I'm still not convinced about this, but I'm on the fence.
 
-Thanks for the quick response!
-Nathan
+Cons:
+- FineIBT does callee-based hash verification, which means any
+  attacker-constructed memory region just has to have an endbr and nops at
+  "shellcode - 9". KCFI would need the region to have the hash at
+  "shellcode - 6" and an endbr at "shellcode". However, that hash is well
+  known, so it's not much protection.
+- Potential performance hit due to making an additional "call" outside
+  the cache lines of both caller and callee.
 
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index 583a3ec987b5..baabf38a2a11 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -618,8 +618,7 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
->  
->  	sym = find_symbol_by_index(elf, first_non_local);
->  	if (!sym) {
-> -		WARN("no non-local symbols !?");
-> -		return first_non_local;
-> +		return symtab->sh.sh_size / sizeof(sym->sym);
->  	}
->  
->  	s = elf_getscn(elf->elf, symtab->idx);
+Pros:
+- FineIBT can be done without read access to the kernel text, which will
+  be nice in the exec-only future.
+
+I'd kind of like the "dynamic FineIBT conversion" to be a config option,
+at least at first. We could at least do performance comparisons between
+them.
+
+> Removing that superfluous endbr also shrinks the whole thing by 4 bytes.
 > 
+> So I'm fine with the compiler generating working code for that
+> combination; but please get me an option to supress it in order to save
+> those pointless bytes. All this CFI stuff is enough bloat as it is.
+
+So, in the case of "built for IBT but running on a system without IBT",
+no rewrite happens, and no endbr is present (i.e. address-taken
+functions have endbr emission suppressed)?
+
+Stock kernel build:
+	function:
+		[normal code]
+	caller:
+		call    __x86_indirect_thunk_r11
+
+IBT kernel build:
+	function:
+		endbr
+		[normal code]
+	caller:
+		call    __x86_indirect_thunk_r11
+
+CFI kernel build:
+
+	__cfi_function:
+		[int3/mov/int3 preamble]
+	function:
+		[normal code]
+	caller:
+		cmpl    \hash, -6(%r11)
+		je      .Ltmp1
+		ud2
+	.Ltmp1:
+		call    __x86_indirect_thunk_r11
+
+CFI+IBT kernel build:
+
+	__cfi_function:
+		[int3/mov/int3 preamble]
+	function:
+		endbr
+		[normal code]
+	caller:
+		cmpl    \hash, -6(%r11)
+		je      .Ltmp1
+		ud2
+	.Ltmp1:
+		call    __x86_indirect_thunk_r11
+
+CFI+IBT+FineIBT kernel build:
+
+	__cfi_function:
+		[int3/mov/int3 preamble]
+	function:
+		/* no endbr emitted */
+		[normal code]
+	caller:
+		cmpl    \hash, -6(%r11)
+		je      .Ltmp1
+		ud2
+	.Ltmp1:
+		call    __x86_indirect_thunk_r11
+
+	at boot, if IBT is detected:
+	- replace __cfi_function with:
+		endbr
+		call __fineibt_\hash
+	- replace caller with:
+		movl    \hash, %r10d
+		sub     $9, %r11
+		nop2
+		call    *%r11
+	- inject all the __fineibt_\hash elements via module_alloc()
+		__fineibt_\hash:
+			xor     \hash, %r10
+			jz      1f
+			ud2
+		1:	ret
+			int3
+
+
+
+-- 
+Kees Cook
