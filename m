@@ -1,43 +1,43 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC971376
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:31:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+8+afjaY3BKlHOSP79HK/qVp1CiDmSymT4MdofQ8IZ4=; b=q5xCbm4UH9jAMw10q00U9nl9fj
-	KFfw+45+4Ggx4ZuRGbGIeBDWL5TE5EcKIheQZ2HOcD65sqSiIJSKWVcm/alk5iPqH8nIHyuoX2Q1D
-	0aBYvGEmDA++xrFn7XpzW5GE/RMldzEZTDzod7CKCiofXw9cSy/uvAsduoZy9pzdYtPF2KMZpn4S5
-	Bke46GD3RlhLsRiOYndBdsYizCEF9XKawVbKWaZqVWT7Wy0StoGuSLfn2434+wBNK4FK+a7PqP+pc
-	Pi3ws4dWkxHA7vo9Gcziiim2MLThS/eXzQRC3Ex4YQg630x8f9zgXJU6jLDJNHGDTXF/3T52t/ZUg
-	CoLNqxyQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nqfUX-00A7XG-Vy; Mon, 16 May 2022 18:30:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4BC17980DCC; Mon, 16 May 2022 20:30:47 +0200 (CEST)
-Date: Mon, 16 May 2022 20:30:47 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Message-ID: <20220516183047.GM76023@worktop.programming.kicks-ass.net>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
- <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
- <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FEE1376
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652727109; x=1684263109;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Oa/CBKFnhtFD0QwGGES1TErn9njc6jYJ9b/JNevHKWc=;
+  b=E2QZoIjjS1+JnhNBsDuNDOCnwkjaAgVKyjxAfxiQzQgZN2cp3Ng571Oc
+   ik766yI5KgqVUCzxR1ZxUxNg1f7juZvKXtcQWxZoRzF12evJUzHTaJA1r
+   VuQT+0dScqNChUsGe8g/dzYZktZDCCudNnT0+rzD4I4Vy5IC+IS0L2nbv
+   Y8INXOP5zy7d2J/f4C8AxA14BWV+VVgfXRBzgnsUx0kCt43217gT1f+yD
+   QgkQNXX5WRoVBlOWHNmj3p+6rFW6xJiDFHvrjb9dhVXjnvPT7KOZJDZL4
+   L6XT1jzj/smvmDOWxQor97s2U10IWFC5g8fpt0aQoajeeG4GA1UYggIrN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="258493622"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="258493622"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 11:51:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="699673694"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 May 2022 11:51:45 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqfom-0000Gq-GH;
+	Mon, 16 May 2022 18:51:44 +0000
+Date: Tue, 17 May 2022 02:51:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/infiniband/core/device.c:2857:2: error: call to
+ __compiletime_assert_526 declared with 'error' attribute: Please avoid
+ flushing system_unbound_wq.
+Message-ID: <202205170247.XQQJv8KQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,92 +46,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
 
-On Mon, May 16, 2022 at 10:15:00AM -0700, Sami Tolvanen wrote:
-> On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
-> > > With CONFIG_CFI_CLANG, the compiler injects a type preamble
-> > > immediately before each function and a check to validate the target
-> > > function type before indirect calls:
-> > >
-> > >   ; type preamble
-> > >   __cfi_function:
-> > >     int3
-> > >     int3
-> > >     mov <id>, %eax
-> > >     int3
-> > >     int3
-> > >   function:
-> > >     ...
-> >
-> > When I enable CFI_CLANG and X86_KERNEL_IBT I get:
-> >
-> > 0000000000000c80 <__cfi_io_schedule_timeout>:
-> > c80:   cc                      int3
-> > c81:   cc                      int3
-> > c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
-> > c87:   cc                      int3
-> > c88:   cc                      int3
-> >
-> > 0000000000000c89 <io_schedule_timeout>:
-> > c89:   f3 0f 1e fa             endbr64
-> >
-> >
-> > That seems unfortunate. Would it be possible to get an additional
-> > compiler option to suppress the endbr for all symbols that get a __cfi_
-> > preaamble?
-> 
-> What's the concern with the endbr? Dropping it would currently break
-> the CFI+IBT combination on newer hardware, no?
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220516-130223/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+head:   db9b183910399bd93ea36329bfef7228a09c96ec
+commit: db9b183910399bd93ea36329bfef7228a09c96ec workqueue: Wrap flush_workqueue() using a macro
+date:   14 hours ago
+config: mips-randconfig-r026-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170247.XQQJv8KQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/db9b183910399bd93ea36329bfef7228a09c96ec
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220516-130223/Tetsuo-Handa/checkpatch-warn-about-flushing-system-wide-workqueues/20220425-073327
+        git checkout db9b183910399bd93ea36329bfef7228a09c96ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/infiniband/core/
 
-Well, yes, but also that combination isn't very interesting. See,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  https://lore.kernel.org/all/20220420004241.2093-1-joao@overdrivepizza.com/T/#m5d67fb010d488b2f8eee33f1eb39d12f769e4ad2
+All errors (new ones prefixed by >>):
 
-and the patch I did down-thread:
+>> drivers/infiniband/core/device.c:2857:2: error: call to __compiletime_assert_526 declared with 'error' attribute: Please avoid flushing system_unbound_wq.
+           flush_workqueue(system_unbound_wq);
+           ^
+   include/linux/workqueue.h:682:2: note: expanded from macro 'flush_workqueue'
+           BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:150:1: note: expanded from here
+   __compiletime_assert_526
+   ^
+   1 error generated.
 
-  https://lkml.kernel.org/r/YoJKhHluN4n0kZDm@hirez.programming.kicks-ass.net
 
-If we have IBT, then FineIBT is a much better option than kCFI+IBT.
-Removing that superfluous endbr also shrinks the whole thing by 4 bytes.
+vim +/error +2857 drivers/infiniband/core/device.c
 
-So I'm fine with the compiler generating working code for that
-combination; but please get me an option to supress it in order to save
-those pointless bytes. All this CFI stuff is enough bloat as it is.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2840  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2841  static void __exit ib_core_cleanup(void)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2842  {
+5ef8c0c180a631 Jason Gunthorpe   2018-05-28  2843  	roce_gid_mgmt_cleanup();
+6c80b41abe22ae Leon Romanovsky   2017-06-20  2844  	nldev_exit();
+c9901724a2f141 Leon Romanovsky   2017-06-05  2845  	rdma_nl_unregister(RDMA_NL_LS);
+4e0f7b9070726a Parav Pandit      2019-02-26  2846  	unregister_pernet_device(&rdma_dev_net_ops);
+42df744c4166af Janne Karhunen    2019-06-14  2847  	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
+c2e49c92326f9b Mark Bloch        2016-05-19  2848  	ib_sa_cleanup();
+4c2cb4220431cb Mark Bloch        2016-05-19  2849  	ib_mad_cleanup();
+e3f20f02864f6d Leon Romanovsky   2016-05-19  2850  	addr_cleanup();
+c9901724a2f141 Leon Romanovsky   2017-06-05  2851  	rdma_nl_exit();
+55aeed06544f67 Jason Gunthorpe   2015-08-04  2852  	class_unregister(&ib_class);
+f794809a7259df Jack Morgenstein  2018-08-27  2853  	destroy_workqueue(ib_comp_unbound_wq);
+14d3a3b2498eda Christoph Hellwig 2015-12-11  2854  	destroy_workqueue(ib_comp_wq);
+f7c6a7b5d59980 Roland Dreier     2007-03-04  2855  	/* Make sure that any pending umem accounting work is done. */
+f06267104dd911 Tejun Heo         2010-10-19  2856  	destroy_workqueue(ib_wq);
+d0899892edd089 Jason Gunthorpe   2019-02-12 @2857  	flush_workqueue(system_unbound_wq);
+e59178d895afa2 Jason Gunthorpe   2019-02-06  2858  	WARN_ON(!xa_empty(&clients));
+0df91bb67334ee Jason Gunthorpe   2019-02-06  2859  	WARN_ON(!xa_empty(&devices));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2860  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2861  
 
-> > >   ; indirect call check
-> > >     cmpl    <id>, -6(%r11)
-> > >     je      .Ltmp1
-> > >     ud2
-> > >   .Ltmp1:
-> > >     call    __x86_indirect_thunk_r11
-> >
-> > The first one I try and find looks like:
-> >
-> > 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
-> > 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
-> > 30:       0f 0b                   ud2
-> > 32:       4c 89 f6                mov    %r14,%rsi
-> > 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
-> >
-> > This must not be. If I'm to rewrite that lot to:
-> >
-> >   movl  $\hash, %r10d
-> >   sub   $9, %r11
-> >   call  *%r11
-> >   .nop  4
-> >
-> > Then there must not be spurious instruction in between the ud2 and the
-> > indirect call/retpoline thing.
-> 
-> With the current compiler patch, LLVM sets up function arguments after
-> the CFI check. if it's a problem, we can look into changing that.
-
-Yes, please fix that. Again see that same patch for why this is a
-problem. Objtool can trivially find retpoline calls, but finding this
-kCFI gadget is going to be hard work. If you ensure they're
-unconditionally stuck together, then the problem goes away find one,
-finds the other.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
