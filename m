@@ -1,130 +1,161 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18829EC5
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 11:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=MjT6Lh2fWnIRqcyu9+fU8ljp/f9ciDwE1jZdLagfUro=; b=DIyr6/C/OlBvy/oySvPFldi/21
-	rOpTYtej3bizi+u7/K16YCrPzqB2hqe+RX9d6p7xbu3sp6GMJhzpq0v/JLqUod/xTtmlAv35QLUEj
-	/wInc/XEfEZq+E70DWAPyASnQmaV5dqmdCGSjZ2qhGSgY/85J8I/gN1+hIvaHSDg5ST8in3v8iDwj
-	jcMnpAa6C+r98QB7QvCCIFBAR5G2Vs/dsvb5tzsnEPYZosIs6GhIodV1v/BQ8U2audosn96Y/k164
-	gWZ+2yLr1TKifY4KPI4zoecKJmS+RdcxtOvj2eV1CHP8EH1qgoKQ3Wn8fSSV/h9Can4XPg/um6NB+
-	cXl0RWjA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nqZA8-000w7T-0G; Mon, 16 May 2022 11:45:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 53103300268;
-	Mon, 16 May 2022 13:45:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 12EC620225E64; Mon, 16 May 2022 13:45:17 +0200 (CEST)
-Date: Mon, 16 May 2022 13:45:17 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-hardening@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Message-ID: <YoI5TbDfw/88vf1f@hirez.programming.kicks-ass.net>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
- <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC425EC5
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 12:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652703281; x=1684239281;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7Q8f1JvyHhUxmG26SWRNtSo7rrD6kouF7yvqy7cOjJY=;
+  b=FtYPGcZteqIlwdpYvaHV/8axBG3RFRQDvgriVJjQdoQRFRrIr3neAT2m
+   gtwkYewHsF1rSybjFee8ZhoYTAuroI0IO3Mh2YuQsVKHmZjmiKl2lhwpy
+   IUmkxjSJsS8UuNVuh7hLLpG1fmFLTmNB10bckUtpZaX5FmlJqxt78a7PQ
+   4HgWqnaBta3EdRZhQNrJs3ITIM8I57JYs6KqNiaCD6xGKRO8RkYPdxuBA
+   z+FPSAYxD+xqQe5faczesLfA4IxarW3dt6CS4GJBPMKanpqkAt3glSOFI
+   goFTbf2fdMTtXvedhf1fdcFPvrgzaApalXQuwCiwGwASKGFuUQFpnb2iX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258382342"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="258382342"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 05:14:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="568289295"
+Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 May 2022 05:14:30 -0700
+Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqZcM-00004y-3p;
+	Mon, 16 May 2022 12:14:30 +0000
+Date: Mon, 16 May 2022 20:14:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@google.com>
+Subject: [arm-platforms:kvm-arm64/per-vcpu-host-pmu-data 3/4]
+ arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with
+ internal linkage has incomplete non-array type 'typeof(struct
+ kvm_pmu_events)' (aka 'struct kvm_pmu_events')
+Message-ID: <202205162042.UpDGm191-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
 
-On Mon, May 16, 2022 at 11:54:33AM +0200, Peter Zijlstra wrote:
-> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
-> > With CONFIG_CFI_CLANG, the compiler injects a type preamble
-> > immediately before each function and a check to validate the target
-> > function type before indirect calls:
-> > 
-> >   ; type preamble
-> >   __cfi_function:
-> >     int3
-> >     int3
-> >     mov <id>, %eax
-> >     int3
-> >     int3
-> >   function:
-> >     ...
-> 
-> When I enable CFI_CLANG and X86_KERNEL_IBT I get:
-> 
-> 0000000000000c80 <__cfi_io_schedule_timeout>:
-> c80:   cc                      int3
-> c81:   cc                      int3
-> c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
-> c87:   cc                      int3
-> c88:   cc                      int3
-> 
-> 0000000000000c89 <io_schedule_timeout>:
-> c89:   f3 0f 1e fa             endbr64
-> 
-> 
-> That seems unfortunate. Would it be possible to get an additional
-> compiler option to suppress the endbr for all symbols that get a __cfi_
-> preaamble?
-> 
-> Also, perhaps s/CFI_CLANG/KERNEL_CFI/ or somesuch, so that GCC might
-> also implement this same scheme (in time)?
-> 
-> >   ; indirect call check
-> >     cmpl    <id>, -6(%r11)
-> >     je      .Ltmp1
-> >     ud2
-> >   .Ltmp1:
-> >     call    __x86_indirect_thunk_r11
-> 
-> The first one I try and find looks like:
-> 
-> 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
-> 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
-> 30:       0f 0b                   ud2
-> 32:       4c 89 f6                mov    %r14,%rsi
-> 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
-> 
-> This must not be. If I'm to rewrite that lot to:
-> 
->   movl	$\hash, %r10d
->   sub	$9, %r11
->   call	*%r11
->   .nop  4
-> 
-> Then there must not be spurious instruction in between the ud2 and the
-> indirect call/retpoline thing.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/per-vcpu-host-pmu-data
+head:   722625c6f4c5b6a9953d6af04c7bb1a6e12830b3
+commit: 84d751a019a9792f5b4884e1d598b603c360ec22 [3/4] KVM: arm64: Pass pmu events to hyp via vcpu
+config: arm64-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162042.UpDGm191-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=84d751a019a9792f5b4884e1d598b603c360ec22
+        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
+        git fetch --no-tags arm-platforms kvm-arm64/per-vcpu-host-pmu-data
+        git checkout 84d751a019a9792f5b4884e1d598b603c360ec22
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ kernel/sched/
 
-Hmmm.. when I replace it with:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-   movl	$\hash, %r10d
-   sub	$9, %r11
-   .nops 2
+All warnings (new ones prefixed by >>):
 
-That would work, that has the added benefit of nicely co-existing with
-the current retpoline patching.
+>> arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with internal linkage has incomplete non-array type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') [-Wtentative-definition-incomplete-type]
+   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
+                                                ^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:31:9: error: arithmetic on a pointer to an incomplete type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events')
+           return this_cpu_ptr(&kvm_pmu_events);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:252:27: note: expanded from macro 'this_cpu_ptr'
+   #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+                             ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:241:2: note: expanded from macro 'raw_cpu_ptr'
+           __verify_pcpu_ptr(ptr);                                         \
+           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:52: note: expanded from macro '__verify_pcpu_ptr'
+           const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+                                                       ~~~~~ ^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:46:6: error: incomplete definition of type 'struct kvm_pmu_events'
+                   pmu->events_host |= set;
+                   ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:48:6: error: incomplete definition of type 'struct kvm_pmu_events'
+                   pmu->events_guest |= set;
+                   ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:61:5: error: incomplete definition of type 'struct kvm_pmu_events'
+           pmu->events_host &= ~clr;
+           ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:62:5: error: incomplete definition of type 'struct kvm_pmu_events'
+           pmu->events_guest &= ~clr;
+           ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:186:20: error: incomplete definition of type 'struct kvm_pmu_events'
+           events_guest = pmu->events_guest;
+                          ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:187:19: error: incomplete definition of type 'struct kvm_pmu_events'
+           events_host = pmu->events_host;
+                         ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:206:20: error: incomplete definition of type 'struct kvm_pmu_events'
+           events_guest = pmu->events_guest;
+                          ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:207:19: error: incomplete definition of type 'struct kvm_pmu_events'
+           events_host = pmu->events_host;
+                         ~~~^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   arch/arm64/kvm/pmu.c:9:46: error: tentative definition has type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') that is never completed
+   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
+                                                ^
+   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
+   struct kvm_pmu_events *kvm_get_pmu_events(void);
+          ^
+   1 warning and 10 errors generated.
 
-The only remaining problem is how to find this; the .retpoline_sites is
-fairly concenient, but if the compiler can put arbitrary amounts of code
-in between this is going to be somewhat tedious.
 
+vim +9 arch/arm64/kvm/pmu.c
+
+     8	
+   > 9	static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
+    10	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
