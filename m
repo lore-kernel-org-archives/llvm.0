@@ -1,43 +1,33 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205CB139D
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:46:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652737614; x=1684273614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j4xjSha5UVOWHZknOHLGr1sRSmJRm39L+H8fkW5gfNQ=;
-  b=JBqukCsgn8lbv6/NTKJcn7wD1uYyUc9d+uSoDwS24Iq1J7xxptSDzBB4
-   Vqtg5rfRu1DyFOqNqsL0xx45KfwyuZEJEdkwXrReG5kunOC+a7IVj0VDN
-   N55MqKuWFTC1Igh6bQDBQfYMVYE2qqEOHP+4/HslLqphYpdeKfTq83Hxa
-   k2gMc5mELxd1XnCOW//MTs9aaq9LxjuD2wuOmLlxpzMSg2xSqi0ezl9lt
-   L4ZS+Dhyt/z5wa+zkkKTI2li4P7rdHGADa6rNIgnCRzU9vgyhNofDlBLq
-   4Z953W2Pb3l7vcgay+pJASbNZv8CZmdLLPWPwScn06kKi5saVr0SY05WG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="296246714"
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="296246714"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:46:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="741444404"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 May 2022 14:46:51 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqiYF-0000M5-8T;
-	Mon, 16 May 2022 21:46:51 +0000
-Date: Tue, 17 May 2022 05:46:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v3 3/6] [PATCH 3/6] mm: add migration waiting and
- rmap locking to pagewalk
-Message-ID: <202205170503.NtlPaLY6-lkp@intel.com>
-References: <20220516125405.1675-4-matenajakub@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30911843
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E395AC385AA;
+	Mon, 16 May 2022 21:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652738234;
+	bh=2UX7VEgWXWplRyuYdw1siYA11iPaD+OUY4Jd+8EeMa0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JDmKHFOu9IFpLO2Wyz/Hx0s2TDB4CJS6B9cKO7EHAKBz4GNJR5e2sVf3Tr2akBjcE
+	 Uq0qyjaONDDsWYkqLqXBmqNQSV5HWBokg53FFZ1c6vbv9aJReqfGhHoJsGOxNF0+w+
+	 lMEoq/gnk2V2gy96ns7i1qVlD0o5c7rL3hR7snvS36rgKB2qTye7gyLaBDrBOX370U
+	 M93q7aT4S/Ul5BiaGn9Wzm+PguIGzQe/OsoHps0RFkXCizs8niVZ0urQHuqFg0rueq
+	 53xB1n+amXVZy9Soj4spMPxkwVXo2IbR5ZH83Fcx+b/Gn3JBUgx2Yzpqyqhtv5tnaS
+	 Q81R7FbGnXhIw==
+Date: Mon, 16 May 2022 14:57:12 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	arnd@arndb.de, gregkh@linuxfoundation.org, ricky_wu@realtek.com,
+	kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
+Message-ID: <YoLIuKf/1OcRtjdX@dev-arch.thelio-3990X>
+References: <20220516130047.3887590-1-trix@redhat.com>
+ <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
+ <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
+ <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,78 +36,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516125405.1675-4-matenajakub@gmail.com>
+In-Reply-To: <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
 
-Hi "Jakub,
+On Mon, May 16, 2022 at 02:22:50PM -0700, Nick Desaulniers wrote:
+> On Mon, May 16, 2022 at 10:06 AM Tom Rix <trix@redhat.com> wrote:
+> >
+> >
+> > On 5/16/22 8:56 AM, Nathan Chancellor wrote:
+> > > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
+> > >> The clang build fails with
+> > >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> > >>          } else if (efuse_valid == 0) {
+> > >>                     ^~~~~~~~~~~~~~~~
+> > >>
+> > >> setting_reg2 is set in this block
+> > >>    if (efuse_valid == 2 || efuse_valid == 3) {
+> > >> ..
+> > >>    } else if (efuse_valid == 0) {
+> > >>      // default
+> > >> ..
+> > >>    }
+> > >> But efuse_valid can also have a value of 1.
+> > >> Change the 'else if' to 'else' to make the second block the default.
+> > >>
+> > >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
+> > >> Signed-off-by: Tom Rix <trix@redhat.com>
+> > > I am not sure if this fix is correct from a functional standpoint (i.e.
+> > > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
+> > > it is better than not handling this value altogether. For what it's
+> > > worth:
+> >
+> > I looked at how the code used to work, this seemed better than
+> > initializing to NULL.
+> >
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > As a side note, it is unfortunate that this change made it into -next
+> > > when there was an outstanding report about this warning:
+> >
+> >  From the clang side, this is a build break and my static analysis infra
+> > goes down.
+> >
+> > These build breaks seem to happening every week, is there a precommit
+> > clang gating test that could be done for -next ?
+> 
+> Probably worth asking Stephen, though I don't think there's _any_
+> gating (i.e. presubmit testing) for -next, since that'd increase the
+> build capacity needed. -next is tested post-merge (i.e. post submit
+> testing) IIUC.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on kees/for-next/execve]
-[also build test WARNING on linux/master linus/master v5.18-rc7]
-[cannot apply to next-20220516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Stephen does do build testing during the merges ("Between each merge,
+the tree was built with a ppc64_defconfig for powerpc, an allmodconfig
+for x86_64, a multi_v7_defconfig for arm and a native build of
+tools/perf"), in addition to testing after the final tree is done.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Mat-na/Removing-limitations-of-merging-anonymous-VMAs/20220516-205637
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
-config: x86_64-buildonly-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170503.NtlPaLY6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9ba7cddd9f98f457552e5e427c68718c4603b6fd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jakub-Mat-na/Removing-limitations-of-merging-anonymous-VMAs/20220516-205637
-        git checkout 9ba7cddd9f98f457552e5e427c68718c4603b6fd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+https://lore.kernel.org/20220516205718.2c5a52f9@canb.auug.org.au/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Increasing the "during merge" testing is not a reasonable request (IMO)
+due to the additional time it would add to the entire -next process.  I
+am not sure that having Stephen do builds with clang post merge is any
+different from all the existing build coverage that we already have (the
+tree is already done at that point), other than maybe people listen to a
+human complaining more than a robot... :)
 
-All warnings (new ones prefixed by >>):
-
->> mm/pagewalk.c:104:52: warning: variable 'ptl' is uninitialized when used here [-Wuninitialized]
-                   err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
-                                                                    ^~~
-   mm/pagewalk.c:97:17: note: initialize the variable 'ptl' to silence this warning
-           spinlock_t *ptl;
-                          ^
-                           = NULL
-   1 warning generated.
-
-
-vim +/ptl +104 mm/pagewalk.c
-
-    91	
-    92	static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
-    93				  struct mm_walk *walk)
-    94	{
-    95		pte_t *pte;
-    96		int err = 0;
-    97		spinlock_t *ptl;
-    98	
-    99		if (walk->flags & WALK_LOCK_RMAP)
-   100			take_rmap_locks(walk->vma);
-   101	
-   102		if (walk->no_vma) {
-   103			pte = pte_offset_map(pmd, addr);
- > 104			err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
-   105			pte_unmap(pte);
-   106		} else {
-   107			pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-   108			err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
-   109			pte_unmap_unlock(pte, ptl);
-   110		}
-   111	
-   112		if (walk->flags & WALK_LOCK_RMAP)
-   113			drop_rmap_locks(walk->vma);
-   114	
-   115		return err;
-   116	}
-   117	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
