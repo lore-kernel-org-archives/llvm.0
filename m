@@ -1,89 +1,193 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794C3ED1;
-	Mon, 16 May 2022 13:10:26 +0000 (UTC)
-Received: by mail-oi1-f173.google.com with SMTP id j12so18538419oie.1;
-        Mon, 16 May 2022 06:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
-        b=q0OW4Ll0d1esJg4Bsi1gSdlTXNns+dyRXpjhWwy3TYP4n4qr8/NV4nZJZKjjduBKRi
-         cA/1ac5Z/Sme7x9B3srXyZPtmX5SKG2ovm3cO9mWg1RmnkOoPJ3oT1jhhOpvYVxSxOtK
-         EETC7rAwge3lFdAza0DWk9nk5BgdUO+u4Mgw7bEh4ZYJNK3Aeh9oPPg2Ig7eRjDoosqU
-         UzYV1++XIwCfe0WO0MlnNE9IF9nupMaem9yK2ia5n1v/9WBmbIxEnxV0yjVXGEaFXtPd
-         F/Q36d9JPkZFcTSysTH5PQ0es9AeN0p4TfoGPkBlB9oAT02H+Hc1mjA9INBnW3qT0TLE
-         TCwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
-        b=15BGK3THufYmJ0Xoz4alc+eUkawIwvw3ei3kp8UP7njKNLLjxsq+PYFPjwJF0WMwa5
-         diAtyu6cGhON8KCOL/+f4IZWpswvlF+Vqc1d49lq37MvVWE2XV4NsmtgI5dgK6RrGeAJ
-         B0/fAFD7Had21V+Yh31OXxUL3uUcSNdGNAfX4DWuRbRXzErWAax+nTQaUbS5/bpaX1gj
-         QbKsN0hcvm+A2+d6uA0cj3O8DcKP0CB3vOuz5fnQDy4zi6FO/H/isKsUE+ke8fXQG502
-         3jCy65wsUBszJJbiJr4H4L7xnYk2sKJ7/hEIrDbGUhAynwkAe8YtSLu0qpwQme1op20c
-         SjHw==
-X-Gm-Message-State: AOAM530n0AOq5cqEv9HvndJs6zPilyu+EjU62CyWIVJOQWEGGXftKc5b
-	Wjnx6SAMLyJo/TwAsAtporM=
-X-Google-Smtp-Source: ABdhPJzuSlHddEfPdlSooNCiKn9gKqW9iethwrrpTKVRacgUq5xfLq0fJvrzlLVkrWbJmB72AUE4Hw==
-X-Received: by 2002:a05:6808:148a:b0:326:c71a:f33c with SMTP id e10-20020a056808148a00b00326c71af33cmr12758233oiw.153.1652706625572;
-        Mon, 16 May 2022 06:10:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r3-20020acac103000000b00325cda1ff95sm3795450oif.20.2022.05.16.06.10.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 06:10:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 16 May 2022 06:10:23 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Federico Vaga <federico.vaga@vaga.pv.it>,
-	Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc-tw-discuss@lists.sourceforge.net,
-	linux-arm-kernel@lists.infradead.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-	linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-Message-ID: <20220516131023.GA2329080@roeck-us.net>
-References: <20220228103142.3301082-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49767ED1
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 13:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652707009; x=1684243009;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kOG2koXHHlK1B7NCZ+NommhNn0mVCBaSptO+1W1gZEs=;
+  b=Cgjp/eDFFTkzHzzlRK+cWIe53tRgmozx4CibFTp5QJkl8j0brhzk4Eav
+   dAn3RCy5JAHvczaRLjNHzblKg7TOQVVw7wn2tcPb2RARZ/XYXDEgbiKJv
+   jb7bf0qTA9GMaDRDtn8yvx3NyOT+gu06P8rSgjIk3nYSkQeLrrR2twUif
+   lxp0sxjS/IAJP2s0PNW4HrRtzkZDPZ/aC7PJWsTged1sXRMx7AimarJNV
+   K9jtKhP638ZjK8kt5HhyLJi81qIY/BNOResyXVgNCjRZl3mZsik649zjI
+   FRMa2tmMSdfdfVj41foKBQYFz7eLFPd2fknF53bBSTBZeKRk62fSISwlM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270777754"
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="270777754"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 06:16:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
+   d="scan'208";a="555249309"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 06:16:28 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqaaJ-00002D-Rf;
+	Mon, 16 May 2022 13:16:27 +0000
+Date: Mon, 16 May 2022 21:15:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: [linux-next:master 11556/12195]
+ arch/riscv/include/asm/pgtable.h:662:9: error: call to undeclared function
+ 'pud_leaf'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202205162125.ZhvoOFZf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
 
-On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> During a patch discussion, Linus brought up the option of changing
-> the C standard version from gnu89 to gnu99, which allows using variable
-> declaration inside of a for() loop. While the C99, C11 and later standards
-> introduce many other features, most of these are already available in
-> gnu89 as GNU extensions as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1e1b28b936aed946122b4e0991e7144fdbbfd77e
+commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 [11556/12195] riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+config: riscv-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162125.ZhvoOFZf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
-The downside is that backporting affected patches to older kernel branches
-now fails with error messages such as
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-mm/kfence/core.c: In function ‘kfence_init_pool’:
-mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+All errors (new ones prefixed by >>):
 
-Just something to keep in mind when writing patches.
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+>> arch/riscv/include/asm/pgtable.h:662:9: error: call to undeclared function 'pud_leaf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return pud_leaf(pud) && pud_user(pud);
+                  ^
+   arch/riscv/include/asm/pgtable.h:662:9: note: did you mean 'pmd_leaf'?
+   arch/riscv/include/asm/pgtable.h:239:19: note: 'pmd_leaf' declared here
+   static inline int pmd_leaf(pmd_t pmd)
+                     ^
+   arch/riscv/include/asm/pgtable.h:238:18: note: expanded from macro 'pmd_leaf'
+   #define pmd_leaf        pmd_leaf
+                           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigorsets, _sig_or)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+                        ^      ~
 
-Guenter
+
+vim +/pud_leaf +662 arch/riscv/include/asm/pgtable.h
+
+   659	
+   660	static inline bool pud_user_accessible_page(pud_t pud)
+   661	{
+ > 662		return pud_leaf(pud) && pud_user(pud);
+   663	}
+   664	#endif
+   665	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
