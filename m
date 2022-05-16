@@ -1,108 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1FFED1
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 13:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1652706054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2uT7yQARA8zTV6HO5pae5HfOKv/Dq0SyPUtl99rYMNU=;
-	b=OEHl8+DR8NWzB8NfNwrACUem0BPfSbmQOx7kmN7rdOANtPgraUwFHxFOTtuB6OLl84V3Go
-	BbiKWdKcAhKbWY74sQAQW4nYPexCXoAUumO2HE979HQVlbuXikH57Mj16+ra95NorCS6F1
-	o63vfArYOSbz2T16E5+ZSoclH2GiLJM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-144-PWR7FwaYM_mxn4Iwy4Xf5g-1; Mon, 16 May 2022 09:00:53 -0400
-X-MC-Unique: PWR7FwaYM_mxn4Iwy4Xf5g-1
-Received: by mail-qt1-f199.google.com with SMTP id a6-20020ac81086000000b002f65fd83048so5610812qtj.6
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 06:00:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794C3ED1;
+	Mon, 16 May 2022 13:10:26 +0000 (UTC)
+Received: by mail-oi1-f173.google.com with SMTP id j12so18538419oie.1;
+        Mon, 16 May 2022 06:10:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
+        b=q0OW4Ll0d1esJg4Bsi1gSdlTXNns+dyRXpjhWwy3TYP4n4qr8/NV4nZJZKjjduBKRi
+         cA/1ac5Z/Sme7x9B3srXyZPtmX5SKG2ovm3cO9mWg1RmnkOoPJ3oT1jhhOpvYVxSxOtK
+         EETC7rAwge3lFdAza0DWk9nk5BgdUO+u4Mgw7bEh4ZYJNK3Aeh9oPPg2Ig7eRjDoosqU
+         UzYV1++XIwCfe0WO0MlnNE9IF9nupMaem9yK2ia5n1v/9WBmbIxEnxV0yjVXGEaFXtPd
+         F/Q36d9JPkZFcTSysTH5PQ0es9AeN0p4TfoGPkBlB9oAT02H+Hc1mjA9INBnW3qT0TLE
+         TCwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2uT7yQARA8zTV6HO5pae5HfOKv/Dq0SyPUtl99rYMNU=;
-        b=LJGLdQwaup44Gxyd72rb9h/pcj31mao6bL9h9vcevphbQSWn2sh3/w7dqV0YJ9FG2K
-         lSghcj9YDoRbRiKo6PtmgdfRgFFLWsRxadr084nFYU3bNuBBQr1UXGjpTt6Z9ELewnNP
-         1ux1Kuze7qSded0KftM58wcu0EK3DeZMxGCxYagJHadqLyeDhe6jHPvJ24tRyv8uhf7U
-         FxEgpkQVS5R3SuYxUG6G4LC4/0dPgQB775+6S78eMds9kAdisaDcGYN9q4xOhiHYzhFh
-         xBM3EEWPwmSPo6bS2dcPYFxqN7p8zOrd6Jjmai7VdU4+0rbluXdctPTZGFizM6Ypm3/u
-         fqQA==
-X-Gm-Message-State: AOAM5320F3a1BDPx/yhIv50jWcYhrQIE6kruCtAZ9GnUBU2L77oFfMLL
-	IQI6f3WLe3a63GfX4dsza14tDxIevjE7rmuw7bUeQ48YLm9z0FtOUi89OabLI4hPMmKOmLtLwB+
-	A9U+LeP2UonjMcg==
-X-Received: by 2002:a05:622a:1007:b0:2f3:ce52:25cb with SMTP id d7-20020a05622a100700b002f3ce5225cbmr14709125qte.575.1652706052276;
-        Mon, 16 May 2022 06:00:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNht8rGcaLaO05BcV93CYZW69Np2z7XC2tycEAx59FmOgMOIeugmyXFY/sA9nHZmHtxk6cqw==
-X-Received: by 2002:a05:622a:1007:b0:2f3:ce52:25cb with SMTP id d7-20020a05622a100700b002f3ce5225cbmr14709098qte.575.1652706051876;
-        Mon, 16 May 2022 06:00:51 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id g18-20020a05620a13d200b0069fd9de088esm5485582qkl.93.2022.05.16.06.00.51
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=CaF92eBKzl8YhqaTS1Tzg7cnBN+wgBVFhVH+tqOT7PI=;
+        b=15BGK3THufYmJ0Xoz4alc+eUkawIwvw3ei3kp8UP7njKNLLjxsq+PYFPjwJF0WMwa5
+         diAtyu6cGhON8KCOL/+f4IZWpswvlF+Vqc1d49lq37MvVWE2XV4NsmtgI5dgK6RrGeAJ
+         B0/fAFD7Had21V+Yh31OXxUL3uUcSNdGNAfX4DWuRbRXzErWAax+nTQaUbS5/bpaX1gj
+         QbKsN0hcvm+A2+d6uA0cj3O8DcKP0CB3vOuz5fnQDy4zi6FO/H/isKsUE+ke8fXQG502
+         3jCy65wsUBszJJbiJr4H4L7xnYk2sKJ7/hEIrDbGUhAynwkAe8YtSLu0qpwQme1op20c
+         SjHw==
+X-Gm-Message-State: AOAM530n0AOq5cqEv9HvndJs6zPilyu+EjU62CyWIVJOQWEGGXftKc5b
+	Wjnx6SAMLyJo/TwAsAtporM=
+X-Google-Smtp-Source: ABdhPJzuSlHddEfPdlSooNCiKn9gKqW9iethwrrpTKVRacgUq5xfLq0fJvrzlLVkrWbJmB72AUE4Hw==
+X-Received: by 2002:a05:6808:148a:b0:326:c71a:f33c with SMTP id e10-20020a056808148a00b00326c71af33cmr12758233oiw.153.1652706625572;
+        Mon, 16 May 2022 06:10:25 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r3-20020acac103000000b00325cda1ff95sm3795450oif.20.2022.05.16.06.10.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 06:00:51 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ricky_wu@realtek.com,
-	kai.heng.feng@canonical.com
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] misc: rtsx: Set setting_reg2 before use.
-Date: Mon, 16 May 2022 09:00:47 -0400
-Message-Id: <20220516130047.3887590-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 16 May 2022 06:10:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 16 May 2022 06:10:23 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Federico Vaga <federico.vaga@vaga.pv.it>,
+	Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc-tw-discuss@lists.sourceforge.net,
+	linux-arm-kernel@lists.infradead.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+Message-ID: <20220516131023.GA2329080@roeck-us.net>
+References: <20220228103142.3301082-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+In-Reply-To: <20220228103142.3301082-1-arnd@kernel.org>
 
-The clang build fails with
-rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        } else if (efuse_valid == 0) {
-                   ^~~~~~~~~~~~~~~~
+On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standards
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
 
-setting_reg2 is set in this block
-  if (efuse_valid == 2 || efuse_valid == 3) {
-..
-  } else if (efuse_valid == 0) {
-    // default
-..
-  }
-But efuse_valid can also have a value of 1.
-Change the 'else if' to 'else' to make the second block the default.
+The downside is that backporting affected patches to older kernel branches
+now fails with error messages such as
 
-Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/misc/cardreader/rts5261.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+mm/kfence/core.c: In function ‘kfence_init_pool’:
+mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
 
-diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-index 749cc5a46d13..f22634b14dc8 100644
---- a/drivers/misc/cardreader/rts5261.c
-+++ b/drivers/misc/cardreader/rts5261.c
-@@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
- 			setting_reg1 = PCR_SETTING_REG4;
- 			setting_reg2 = PCR_SETTING_REG5;
- 		}
--	} else if (efuse_valid == 0) {
-+	} else {
- 		// default
- 		setting_reg1 = PCR_SETTING_REG1;
- 		setting_reg2 = PCR_SETTING_REG2;
--- 
-2.27.0
+Just something to keep in mind when writing patches.
 
+Guenter
