@@ -1,125 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B83138F;
-	Mon, 16 May 2022 21:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EAE0C385AA;
-	Mon, 16 May 2022 21:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652737536;
-	bh=zN3GIOBzpH9pP/0yJi427+Aqc4nfKhALIaFtl/JNTRk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XqKxUKFIyW+1J/94sZx+Odzy1zf2mUD0dzXHCf8ffIvqHa1PaH2dhf49DUuHUN5Vv
-	 gZNKY5J3iL5GBlQeqPhZmc2Mk/KQKezdvJIgklIoe120fEX7N6HLxY3ZElR4NVEqfV
-	 FIVWSPBSgu5MilkLHcSyGSZ98LWzKNR4pTicIQKBEDxC3VapGY94HaYmH8mc7eXIHq
-	 wTevjZA0MKX5Ge1eXtWpzIMwOqyjkGuwO0huwXyyJVJan8cI7Lc0mBFdmZYv4/nVtJ
-	 C+WXue543uBp8bbEkcxk6xGe1W10D4ZsnBRr28tMcGb05ghtRmrr7Zi4vfsCrz/imE
-	 ZztMr31JfR2zg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] riscv: Move alternative length validation into subsection
-Date: Mon, 16 May 2022 14:45:21 -0700
-Message-Id: <20220516214520.3252074-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205CB139D
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652737614; x=1684273614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j4xjSha5UVOWHZknOHLGr1sRSmJRm39L+H8fkW5gfNQ=;
+  b=JBqukCsgn8lbv6/NTKJcn7wD1uYyUc9d+uSoDwS24Iq1J7xxptSDzBB4
+   Vqtg5rfRu1DyFOqNqsL0xx45KfwyuZEJEdkwXrReG5kunOC+a7IVj0VDN
+   N55MqKuWFTC1Igh6bQDBQfYMVYE2qqEOHP+4/HslLqphYpdeKfTq83Hxa
+   k2gMc5mELxd1XnCOW//MTs9aaq9LxjuD2wuOmLlxpzMSg2xSqi0ezl9lt
+   L4ZS+Dhyt/z5wa+zkkKTI2li4P7rdHGADa6rNIgnCRzU9vgyhNofDlBLq
+   4Z953W2Pb3l7vcgay+pJASbNZv8CZmdLLPWPwScn06kKi5saVr0SY05WG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="296246714"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="296246714"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:46:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="741444404"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 May 2022 14:46:51 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqiYF-0000M5-8T;
+	Mon, 16 May 2022 21:46:51 +0000
+Date: Tue, 17 May 2022 05:46:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH v3 3/6] [PATCH 3/6] mm: add migration waiting and
+ rmap locking to pagewalk
+Message-ID: <202205170503.NtlPaLY6-lkp@intel.com>
+References: <20220516125405.1675-4-matenajakub@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516125405.1675-4-matenajakub@gmail.com>
 
-After commit 49b290e430d3 ("riscv: prevent compressed instructions in
-alternatives"), builds with LLVM's integrated assembler fail:
+Hi "Jakub,
 
-  In file included from arch/riscv/mm/init.c:10:
-  In file included from ./include/linux/mm.h:29:
-  In file included from ./include/linux/pgtable.h:6:
-  In file included from ./arch/riscv/include/asm/pgtable.h:108:
-  ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
-          ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
-          ^
-  ./arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-  asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
-      ^
-  ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
-          _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
-          __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
-          ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-          ^
-  ./arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
-          ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-           ^
-  <inline asm>:26:6: note: instantiated into assembly here
-  .org    . - (889b - 888b) + (887b - 886b)
-          ^
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on kees/for-next/execve]
+[also build test WARNING on linux/master linus/master v5.18-rc7]
+[cannot apply to next-20220516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This error happens because LLVM's integrated assembler has a one-pass
-design, which means it cannot figure out the instruction lengths when
-the .org directive is outside of the subsection that contains the
-instructions, which was changed by the .option directives added by the
-above change.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Mat-na/Removing-limitations-of-merging-anonymous-VMAs/20220516-205637
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
+config: x86_64-buildonly-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170503.NtlPaLY6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9ba7cddd9f98f457552e5e427c68718c4603b6fd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jakub-Mat-na/Removing-limitations-of-merging-anonymous-VMAs/20220516-205637
+        git checkout 9ba7cddd9f98f457552e5e427c68718c4603b6fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Move the .org directives before the .previous directive so that these
-directives are always within the same subsection, which resolves the
-failures and does not introduce any new issues with GNU as. This was
-done for arm64 in commit 966a0acce2fc ("arm64/alternatives: move length
-validation inside the subsection") and commit 22315a2296f4 ("arm64:
-alternatives: Move length validation in alternative_{insn, endif}").
-
-While there is no error from the assembly versions of the macro, they
-appear to have the same problem so just make the same change there as
-well so that there are no problems in the future.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1640
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/include/asm/alternative-macros.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-index e13b1f6bb400..ec2f3f1b836f 100644
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -27,9 +27,9 @@
- 	\new_c
- 	.option pop
- 889 :
--	.previous
- 	.org    . - (889b - 888b) + (887b - 886b)
- 	.org    . - (887b - 886b) + (889b - 888b)
-+	.previous
- 	.endif
- .endm
- 
-@@ -94,9 +94,9 @@
- 	new_c "\n"							\
- 	".option pop\n"							\
- 	"889 :\n"							\
--	".previous\n"							\
- 	".org	. - (887b - 886b) + (889b - 888b)\n"			\
- 	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-+	".previous\n"							\
- 	".endif\n"
- 
- #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
+All warnings (new ones prefixed by >>):
 
-base-commit: 93c0651617a62a69717299f1464dda798af8bebb
+>> mm/pagewalk.c:104:52: warning: variable 'ptl' is uninitialized when used here [-Wuninitialized]
+                   err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
+                                                                    ^~~
+   mm/pagewalk.c:97:17: note: initialize the variable 'ptl' to silence this warning
+           spinlock_t *ptl;
+                          ^
+                           = NULL
+   1 warning generated.
+
+
+vim +/ptl +104 mm/pagewalk.c
+
+    91	
+    92	static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+    93				  struct mm_walk *walk)
+    94	{
+    95		pte_t *pte;
+    96		int err = 0;
+    97		spinlock_t *ptl;
+    98	
+    99		if (walk->flags & WALK_LOCK_RMAP)
+   100			take_rmap_locks(walk->vma);
+   101	
+   102		if (walk->no_vma) {
+   103			pte = pte_offset_map(pmd, addr);
+ > 104			err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
+   105			pte_unmap(pte);
+   106		} else {
+   107			pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+   108			err = walk_pte_range_inner(pte, addr, end, walk, ptl, pmd);
+   109			pte_unmap_unlock(pte, ptl);
+   110		}
+   111	
+   112		if (walk->flags & WALK_LOCK_RMAP)
+   113			drop_rmap_locks(walk->vma);
+   114	
+   115		return err;
+   116	}
+   117	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
