@@ -1,38 +1,38 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6684C1361
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 16:29:00 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id j2so28041224ybu.0
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 09:29:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041551361
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 16:33:04 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id v71so2904891ybi.4
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 09:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0bOl+fIEQwkyHpsAzPSpEA4t7EJjG4W9SophqswqviQ=;
-        b=bdD+55o79GwcDBvWafpfYRSlZ2cIsVtsEzWN8lNQZowpdfgforgqMt8qYsM397aVOm
-         YiVGsBjyCQ4/nzJb8pjgE6jjFdcKLpF5wOOcJodQ1RZ4iNIvX0CENTxmrtn9+/UciHyW
-         EKnHHqZErG9LECr8b32WdjMLnN2pXB4+B7zMmAvfkaPu7l6jzIfy0MhMILwvn73/9VQ/
-         MkHv6wCf5C5mFtWTtxiMgZBPV2qCW1bp6lyYTE56bmlfFrfQylzrQZmpH8+PR5FUV1/R
-         OxVBsmGQ396NviKrlt0o6WZ5PsTDAzdbxxcSej5Osw7CXNEecq4EKHR7E8NkFpIkBOAc
-         v+/A==
+        bh=uVOWBi2MNBuehei9huBnd/8loFbnwhqAiuOC/hCYUtE=;
+        b=UMpVvjAskWnfR6g3ci4cMkPkNEchbPVQCDFZURqGgdGBGtyEU0+pfkHuIEsLxzzdxa
+         B18bBKbFeo2JcX6Nz0IkEdagX64XxF2YEDcGnalbPkbzsdXHnZZGaCAZvltIUt8sXuPo
+         zc+e8B4SuenU8MISBWZpTrjTRFvYcwbYxq6tk/fA+vLgbNtNdpbpv9n/FFbrhrGyS4/A
+         hl891Clm6zzMg1ByvOjCgkYC1CBLqqCMd5UMKl7fYoxLVwfMTVOj3WL8d9fGHLWJxHp1
+         HFHt9MPjqwqb5TyctUJdvK/tYMZpC5GtaKZHEttGWXNLnXoDb1+0WTqUO3MYlQIJ76Hw
+         42MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0bOl+fIEQwkyHpsAzPSpEA4t7EJjG4W9SophqswqviQ=;
-        b=EC36s/sYNdhIQssVBLmiHJUpXzNCJTk0bZm+FqJr5SHojGi43tkARPHa3qj/l2fP9u
-         SPSs1SKvKmzyYwVkU3lTsAqej7/z8do6kVFfF5kR4ODWOcUJX0fQQrt/Jl27E0yJCRGa
-         1Bi1DdoL1BlwdvMRlKK5DVoT35TIdhJeBjCDgnYCAwpRFPrOG4vEAkHaWQdlmQY8wQSb
-         bzNreVap0yMbnmHqufV4VpnXcCTpB8VYIzLim0z0mbQYa2RMU4TyXsTnbWJyXm7U2WHt
-         rbcY61u57f1i4FxkcOyrl8UrM/WWijm99kbrLdql+TMb0uxCO/KP32zHpI91hJhYk64T
-         6s1A==
-X-Gm-Message-State: AOAM532qTSUhx/OkqHl7cbJWbOWXJmA6HwUny7n9R0JTQJC3S/BWnbxz
-	a/U9t12JT1jalYOJ9rMQsURab2sWs58CpJCyycZymA==
-X-Google-Smtp-Source: ABdhPJwCEGLuNBoujfx+BIv6GEik4LbJeGm6Fda7U5MlIv3LPv1HXUgO10cPIMseX62+HYUEsnBRjf+KqqvWact8dkE=
+        bh=uVOWBi2MNBuehei9huBnd/8loFbnwhqAiuOC/hCYUtE=;
+        b=0X3OhiHo7fFLJyL6QO/bLZ4q01Ne2xd+kn+LeOjG1LqU9HD4TvZ2VNbWe0zgxUoYl7
+         vqvW2UPrVJ7e1m2rjnMPnwW5xhRMQL/VQZthEdqfMhD2XQqmYe3KxcQu7AZDVIWp9fUl
+         WciEmZskVZOnz+clEuvG/70TVDcN0rWEmpymypEEtKwp826XGZu0OD+9xP1YiWqgWVNO
+         WVGmFhD6q3LU2fAIkhkuo5HS3gx0ZAk/yjJZIclUDeA5xslancoQHtw5J+U0x3QOPzvZ
+         Wn9CkLvo6eEM/5aK05geT4p3Uj2D5qjuaX70jmLrHWzqg0JCp3oio/PZxiTWj9xRDQLX
+         cKow==
+X-Gm-Message-State: AOAM530idtov0cuNZx1u4zxTqRPy7y2a8Bihkv/ex9Mdj6bgwIyQC7y8
+	2EuRUAJM1RFaDwjvrns/RBsC56i16KoslpoXRSnsLA==
+X-Google-Smtp-Source: ABdhPJxnm0eijYHOVmrixfo245yISpWoVL7JodzT9EqGHwvEuWoWte/Watn8vMd89vUvUVL2y2IhRQzqqpGLJpOURZA=
 X-Received: by 2002:a05:6902:90b:b0:64b:233d:8e03 with SMTP id
- bu11-20020a056902090b00b0064b233d8e03mr18071522ybb.428.1652718539243; Mon, 16
- May 2022 09:28:59 -0700 (PDT)
+ bu11-20020a056902090b00b0064b233d8e03mr18090305ybb.428.1652718783727; Mon, 16
+ May 2022 09:33:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,12 +40,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-12-samitolvanen@google.com> <202205141453.44171359E3@keescook>
-In-Reply-To: <202205141453.44171359E3@keescook>
+ <20220513202159.1550547-15-samitolvanen@google.com> <202205141455.0A6F409@keescook>
+In-Reply-To: <202205141455.0A6F409@keescook>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 16 May 2022 09:28:23 -0700
-Message-ID: <CABCJKudJZUsRjwAEzWszOGY6G5igwWVpEy1OsAWrhyKr3csUSA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 11/21] arm64: Drop unneeded __nocfi attributes
+Date: Mon, 16 May 2022 09:32:27 -0700
+Message-ID: <CABCJKudyuB3doGwcRpYNm-LrdEzjgwR3MTys3MmSs+vMkxhsPg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 14/21] treewide: Drop __cficanonical
 To: Kees Cook <keescook@chromium.org>
 Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
 	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
@@ -57,20 +57,26 @@ Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, May 14, 2022 at 2:54 PM Kees Cook <keescook@chromium.org> wrote:
+On Sat, May 14, 2022 at 2:56 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Fri, May 13, 2022 at 01:21:49PM -0700, Sami Tolvanen wrote:
-> > With -fsanitize=kcfi, CONFIG_CFI_CLANG no longer has issues
-> > with address space confusion in functions that switch to linear
-> > mapping. Now that the indirectly called assembly functions have
-> > type annotations, drop the __nocfi attributes.
+> On Fri, May 13, 2022 at 01:21:52PM -0700, Sami Tolvanen wrote:
+> > CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
+> > won't change function references to point elsewhere. Remove the
+> > __cficanonical attribute and all uses of it.
 > >
-> > Suggested-by: Mark Rutland <mark.rutland@arm.com>
 > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > ---
+> >  include/linux/compiler_types.h | 4 ----
+> >  include/linux/init.h           | 4 ++--
+> >  include/linux/pci.h            | 4 ++--
+> >  3 files changed, 4 insertions(+), 8 deletions(-)
 >
-> It looks like there are still other cases that continue to require
-> __nocfi, yes? It looks like after this series, it's still BPF?
+> I think this is missing removing it from include/linux/compiler-clang.h ?
 
-Yes, BPF is the only remaining user of __nocfi after this series.
+That was removed in the earlier patch that switched the CFI implementation.
+
+> With that done (or explained why not):
+
+I'll add a note about it to the commit message.
 
 Sami
