@@ -1,160 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4E92577;
-	Mon, 16 May 2022 22:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D5B1C385B8;
-	Mon, 16 May 2022 22:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6792577
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 22:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8A5C385B8;
+	Mon, 16 May 2022 22:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652740708;
-	bh=in1Km6RSLomipU4gTgXzsU0c+0UDtzLUVm/5QFxXPAs=;
+	s=k20201202; t=1652741337;
+	bh=0a/C5Zh/EyYXf/vzC/E/LwVLfqbJzBzn8Mkz0TSW/yQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q44gTyJitNhYGT9BlIj0tHJ0AOrWd2jqV2H4o5SUez1iPGy874golGzim6ifaqXv+
-	 d6Cc3ob6UDv9GTtQgPI3epkH5Jqg38BCcMzM+wYGEglRk8al8id+Mzm3EaVzhO7v4D
-	 UIcR5nj/qqVGmAngKpjx3hKiOv87aIZTroYai92stRrITsuWgGoke2m+M6fse4iMlC
-	 Ud5PSYy5Ue9h2Fbc16jMRwa0mBA/mFPA3QWJUTD2InbZ2cNzqXQAw61gHobcCnaVHO
-	 zXmt3WrStPg3aQPQuUosI29qbOzoWec1D916+VMbK0GJ8QMwzu9wf5xsm1MOtRHqwN
-	 MmN+NzdlMPC6A==
-Date: Mon, 16 May 2022 15:38:25 -0700
+	b=tWnzV72+IpwctV6Br6FbM1QcIOfi5j/S+mo0+UkMggtP03es0EHoIIM8FXr80ydlN
+	 pU/iMMX7IiiFYYkMPykUzjkQ/rBELVMBM3ZgczPG+Df+Xf4JvmqeWRpnaplIQXADV3
+	 ljdR/DzH36ziJ14mg/fQgOQZwpA3aKGJuMytrgVFUjcupuZ8L8ly4T0fUGHclcClJC
+	 uPWzkwAkQXg19m1TXk/9yigHK8Xi9f+zd5bIi2u4bEOR6QyRG/pF3pV/l72MQ1UwKC
+	 eHOfs3Jli4RLCkx7MhuwaX9PwWg82TqD6ZK3Q3XRji8jma+x6Jbeey+zHX9LgHn+r2
+	 xIr0STsCpLCAA==
+Date: Mon, 16 May 2022 15:48:55 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] riscv: Move alternative length validation into subsection
-Message-ID: <YoLSYSmLV0+7Pcqa@dev-arch.thelio-3990X>
-References: <20220516214520.3252074-1-nathan@kernel.org>
- <2827138.e9J7NaK4W3@diego>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <YoLU10rW+EZCDEfI@dev-arch.thelio-3990X>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2827138.e9J7NaK4W3@diego>
+In-Reply-To: <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
 
-Hi Heiko,
-
-On Mon, May 16, 2022 at 11:55:47PM +0200, Heiko Stübner wrote:
-> Hi,
-> 
-> Am Montag, 16. Mai 2022, 23:45:21 CEST schrieb Nathan Chancellor:
-> > After commit 49b290e430d3 ("riscv: prevent compressed instructions in
-> > alternatives"), builds with LLVM's integrated assembler fail:
-> 
-> the commit in question didn't change anything there, so I guess
-> the issue itself was present before that already and the
-> commit only triggered the different buildbots?
-
-Sort of. I am not super knowledgeable on the internals of LLVM's
-integrated assembler but as far as I understand it, the use of the
-'.option' directive creates a new fragment within this subsection, which
-messes up the integrated assembler's ability to resolve the differences
-between these labels outside of the subsection. Moving the directives
-into the subsection allows it to do this. So your patch did not really
-do anything wrong, it just exposed existing brittleness (hence why I
-did not add a Fixes tag).
-
-> >   In file included from arch/riscv/mm/init.c:10:
-> >   In file included from ./include/linux/mm.h:29:
-> >   In file included from ./include/linux/pgtable.h:6:
-> >   In file included from ./arch/riscv/include/asm/pgtable.h:108:
-> >   ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
-> >           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
-> >           ^
-> >   ./arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-> >   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
-> >       ^
-> >   ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
-> >           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-> >           ^
-> >   ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
-> >           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-> >           ^
-> >   ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
-> >           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-> >           ^
-> >   ./arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
-> >           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-> >            ^
-> >   <inline asm>:26:6: note: instantiated into assembly here
-> >   .org    . - (889b - 888b) + (887b - 886b)
-> >           ^
+On Mon, May 16, 2022 at 11:40:05PM +0200, Peter Zijlstra wrote:
+> On Mon, May 16, 2022 at 01:47:15PM -0700, Nathan Chancellor wrote:
+> > Hi Josh and Peter,
 > > 
-> > This error happens because LLVM's integrated assembler has a one-pass
-> > design, which means it cannot figure out the instruction lengths when
-> > the .org directive is outside of the subsection that contains the
-> > instructions, which was changed by the .option directives added by the
-> > above change.
+> > After a recent change in LLVM [1], I see warnings (errors?) from objtool
+> > when building x86_64 allmodconfig on 5.15 and 5.17:
 > > 
-> > Move the .org directives before the .previous directive so that these
-> > directives are always within the same subsection, which resolves the
-> > failures and does not introduce any new issues with GNU as. This was
-> > done for arm64 in commit 966a0acce2fc ("arm64/alternatives: move length
-> > validation inside the subsection") and commit 22315a2296f4 ("arm64:
-> > alternatives: Move length validation in alternative_{insn, endif}").
+> >   $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
+> >   ...
+> >   mm/highmem.o: warning: objtool: no non-local symbols !?
+> >   mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
+> >   make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
+> >   ...
+> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+> >   ...
 > > 
-> > While there is no error from the assembly versions of the macro, they
-> > appear to have the same problem so just make the same change there as
-> > well so that there are no problems in the future.
+> > I don't see the same errors on x86_64 allmodconfig on mainline so I
+> > bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
+> > Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
+> > missing and came to commit ed53a0d97192 ("x86/alternative: Use
+> > .ibt_endbr_seal to seal indirect calls") in mainline, which I think just
+> > hides the issue for allmodconfig. I can reproduce this problem with a
+> > more selective set of config values on mainline:
 > > 
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1640
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >   $ make -skj"$(nproc)" LLVM=1 defconfig
+> > 
+> >   $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
+> > 
+> >   $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
+> >   security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
+> >   security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
+> >   make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
+> >   ...
+> > 
+> > Looking at the object file, the '.text.asan.module_ctor' section has
+> > disappeared.
+> > 
+> > Before:
+> > 
+> >   $ llvm-nm -S security/tomoyo/load_policy.o
+> >   0000000000000000 0000000000000001 t asan.module_ctor
+> > 
+> >   $ llvm-readelf -s security/tomoyo/load_policy.o
+> > 
+> >   Symbol table '.symtab' contains 4 entries:
+> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
+> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+> >        2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
+> >        3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+> > 
+> > After:
+> > 
+> >   $ llvm-nm -S security/tomoyo/load_policy.o
+> >   0000000000000000 0000000000000001 t asan.module_ctor
+> > 
+> >   $ llvm-readelf -s security/tomoyo/load_policy.o
+> > 
+> >   Symbol table '.symtab' contains 3 entries:
+> >      Num:    Value          Size Type    Bind   Vis       Ndx Name
+> >        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
+> >        1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
+> >        2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
+> > 
 > 
-> In any case, on my svpbmt testcases (qemu + d1-nezha):
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> The problem seems to be that we need to add a local symbols because LLVM
+> helpfully stripped all unused section symbols.
 > 
-> Thanks for looking into that
-> Heiko
+> The way we do that, is by moving a the first non-local symbol to the
+> end, thereby creating a hole where we can insert a new local symbol.
+> Because ELF very helpfully mandates that local symbols must come before
+> non-local symbols and keeps the symbols index of the first non-local in
+> sh_info.
+> 
+> Thing is, the above object files don't appear to have a non-local symbol
+> so the swizzle thing isn't needed, and apparently the value in sh_info
+> isn't valid either.
+> 
+> Does something simple like this work? If not, I'll try and reproduce
+> tomorrow, it shouldn't be too hard to fix.
 
-Thank you a lot for the quick testing and review!
+That diff obviously gets rid of the "no non-local symbols" message but I
+still see the "invalid section index" message. I'll be offline tomorrow
+but if you have issues reproducing it, I'll be happy to help on
+Wednesday. At the time I am writing this, apt.llvm.org packages have not
+been updated to include that LLVM change I mentioned; hopefully they
+will be soon.
 
-Cheers,
+Thanks for the quick response!
 Nathan
 
-> > ---
-> >  arch/riscv/include/asm/alternative-macros.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> > index e13b1f6bb400..ec2f3f1b836f 100644
-> > --- a/arch/riscv/include/asm/alternative-macros.h
-> > +++ b/arch/riscv/include/asm/alternative-macros.h
-> > @@ -27,9 +27,9 @@
-> >  	\new_c
-> >  	.option pop
-> >  889 :
-> > -	.previous
-> >  	.org    . - (889b - 888b) + (887b - 886b)
-> >  	.org    . - (887b - 886b) + (889b - 888b)
-> > +	.previous
-> >  	.endif
-> >  .endm
-> >  
-> > @@ -94,9 +94,9 @@
-> >  	new_c "\n"							\
-> >  	".option pop\n"							\
-> >  	"889 :\n"							\
-> > -	".previous\n"							\
-> >  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
-> >  	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-> > +	".previous\n"							\
-> >  	".endif\n"
-> >  
-> >  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
-> > 
-> > base-commit: 93c0651617a62a69717299f1464dda798af8bebb
-> > 
-> 
-> 
-> 
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index 583a3ec987b5..baabf38a2a11 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -618,8 +618,7 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+>  
+>  	sym = find_symbol_by_index(elf, first_non_local);
+>  	if (!sym) {
+> -		WARN("no non-local symbols !?");
+> -		return first_non_local;
+> +		return symtab->sh.sh_size / sizeof(sym->sym);
+>  	}
+>  
+>  	s = elf_getscn(elf->elf, symtab->idx);
 > 
