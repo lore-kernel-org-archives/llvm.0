@@ -1,81 +1,97 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBCB7A
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 06:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652682884; x=1684218884;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=bU9N5vWuOm8/HcrBuvzPEua2XgnlPCmU6XK9h6GCSzo=;
-  b=Qrdk1kPxXt9DnzP6cWwFu+I7NPc74Z5gAGDaIJ9O5NrFAMOP7Gu75oXV
-   S5purdlQMpK7wv4szAjEkPmi7EKZ352NdzWpSw9/9+EzGC2180+0FltTC
-   vXBYjYf8dn3/t/lgO2K6ZO2BSpI23adY80m2nZz1NMbqtqByNUwCnf99s
-   dkWePZBLDyEqGK6jrEDDUQZvJBsup8f2RQ8AVywzrI+7H9rr+bpEM0CBg
-   aCBQzatAYIs1CbWzc5COT50BLYYffrKt+3DzDvVfM6dJ95Mj7jID3zHci
-   KPPlb0WwOOBdheTHObJ9+NimJiYCdxYJAz244YdqKDtkAMRUVgsNBTxZl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="270443298"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="270443298"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 23:34:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="573869882"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 15 May 2022 23:34:41 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqUJU-0002Co-Sq;
-	Mon, 16 May 2022 06:34:40 +0000
-Date: Mon, 16 May 2022 14:33:50 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool:
- sumo_dpm_set_power_state() falls through to next function
- sumo_set_forced_mode_enabled()
-Message-ID: <202205161453.9bnOipkM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D6DA2A
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 08:32:22 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-170-zoDI43liMzmQsfEc1mcSeQ-1; Mon, 16 May 2022 09:32:19 +0100
+X-MC-Unique: zoDI43liMzmQsfEc1mcSeQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 16 May 2022 09:32:18 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 16 May 2022 09:32:18 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Sami Tolvanen' <samitolvanen@google.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+CC: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, "x86@kernel.org" <x86@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira
+	<joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Topic: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Index: AQHYZwdlgt4N7xLw0EK8voqNmmoVIa0hK0vA
+Date: Mon, 16 May 2022 08:32:18 +0000
+Message-ID: <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+In-Reply-To: <20220513202159.1550547-21-samitolvanen@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
-CC: Marco Elver <elver@google.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
+RnJvbTogU2FtaSBUb2x2YW5lbg0KPiBTZW50OiAxMyBNYXkgMjAyMiAyMToyMg0KPiANCj4gV2l0
+aCBDT05GSUdfQ0ZJX0NMQU5HLCB0aGUgY29tcGlsZXIgaW5qZWN0cyBhIHR5cGUgcHJlYW1ibGUN
+Cj4gaW1tZWRpYXRlbHkgYmVmb3JlIGVhY2ggZnVuY3Rpb24gYW5kIGEgY2hlY2sgdG8gdmFsaWRh
+dGUgdGhlIHRhcmdldA0KPiBmdW5jdGlvbiB0eXBlIGJlZm9yZSBpbmRpcmVjdCBjYWxsczoNCj4g
+DQo+ICAgOyB0eXBlIHByZWFtYmxlDQo+ICAgX19jZmlfZnVuY3Rpb246DQo+ICAgICBpbnQzDQo+
+ICAgICBpbnQzDQo+ICAgICBtb3YgPGlkPiwgJWVheA0KDQpJbnRlcmVzdGluZyAtIHNpbmNlIHRo
+aXMgY29kZSBjYW4ndCBiZSBleGVjdXRlZCB0aGVyZSBpcyBubw0KcG9pbnQgYWRkaW5nIGFuIGlu
+c3RydWN0aW9uICdwcmVmaXgnIHRvIHRoZSAzMmJpdCBjb25zdGFudC4NCiANCj4gICAgIGludDMN
+Cj4gICAgIGludDMNCj4gICBmdW5jdGlvbjoNCj4gICAgIC4uLg0KPiAgIDsgaW5kaXJlY3QgY2Fs
+bCBjaGVjaw0KPiAgICAgY21wbMKgIMKgIDxpZD4sIC02KCVyMTEpDQo+ICAgICBqZSAgICAgIC5M
+dG1wMQ0KPiAgICAgdWQyDQo+ICAgLkx0bXAxOg0KPiAgICAgY2FsbCAgICBfX3g4Nl9pbmRpcmVj
+dF90aHVua19yMTENCj4gDQo+IERlZmluZSB0aGUgX19DRklfVFlQRSBoZWxwZXIgbWFjcm8gZm9y
+IG1hbnVhbCB0eXBlIGFubm90YXRpb25zIGluDQo+IGFzc2VtYmx5IGNvZGUsIGFkZCBlcnJvciBo
+YW5kbGluZyBmb3IgdGhlIENGSSB1ZDIgdHJhcHMsIGFuZCBhbGxvdw0KPiBDT05GSUdfQ0ZJX0NM
+QU5HIHRvIGJlIHNlbGVjdGVkIG9uIHg4Nl82NC4NCj4gDQouLi4NCj4gKw0KPiArCS8qDQo+ICsJ
+ICogVGhlIGNvbXBpbGVyIGdlbmVyYXRlcyB0aGUgZm9sbG93aW5nIGluc3RydWN0aW9uIHNlcXVl
+bmNlDQo+ICsJICogZm9yIGluZGlyZWN0IGNhbGwgY2hlY2tzOg0KPiArCSAqDQo+ICsJICogwqAg
+Y21wbMKgIMKgIDxpZD4sIC02KCVyZWcpCTsgNyBieXRlcw0KDQpJZiB0aGUgPGlkPiBpcyBiZXR3
+ZWVuIC0xMjggYW5kIDEyNyB0aGVuIGFuIDhiaXQgY29uc3RhbnQNCihzaWduIGV4dGVuZGVkKSBt
+aWdodCBiZSB1c2VkLg0KUG9zc2libHkgdGhlIGNvbXBpbGVyIGZvcmNlcyB0aGUgYXNzZW1ibGVy
+IHRvIGdlbmVyYXRlIHRoZQ0KbG9uZyBmb3JtLg0KDQpUaGVyZSBjb3VsZCBhbHNvIGJlIGEgUkVY
+IHByZWZpeC4NClRoYXQgd2lsbCBicmVhayBhbnkgY29kZSB0aGF0IHRyaWVzIHRvIHVzZSAlcmVn
+Lg0KDQo+ICsJICogICBqZSAgICAgIC5MdG1wMQkJOyAyIGJ5dGVzDQo+ICsJICogICB1ZDIJCQk7
+IDwtIGFkZHINCj4gKwkgKiAgIC5MdG1wMToNCj4gKwkgKg0KPiArCSAqIEJvdGggdGhlIHR5cGUg
+YW5kIHRoZSB0YXJnZXQgYWRkcmVzcyBjYW4gYmUgZGVjb2RlZCBmcm9tIHRoZQ0KPiArCSAqIGNt
+cGwgaW5zdHJ1Y3Rpb24uDQo+ICsJICovDQo+ICsJaWYgKGNvcHlfZnJvbV9rZXJuZWxfbm9mYXVs
+dChidWZmZXIsICh2b2lkICopcmVncy0+aXAgLSA5LCBNQVhfSU5TTl9TSVpFKSkNCj4gKwkJcmV0
+dXJuOw0KPiArCWlmIChpbnNuX2RlY29kZV9rZXJuZWwoJmluc24sIGJ1ZmZlcikpDQo+ICsJCXJl
+dHVybjsNCj4gKwlpZiAoaW5zbi5vcGNvZGUudmFsdWUgIT0gMHg4MSB8fCBYODZfTU9EUk1fUkVH
+KGluc24ubW9kcm0udmFsdWUpICE9IDcpDQo+ICsJCXJldHVybjsNCg0KU2luY2UgeW91IGFyZSBs
+b29raW5nIGZvciBhIHZlcnkgc3BlY2lmaWMgb3Bjb2RlIHdoeSBib3RoZXINCmNhbGxpbmcgaW5z
+bl9kZWNvZGVfa2VybmVsKCkgLSBqdXN0IGNoZWNrIGZvciB0aGUgcmVxdWlyZWQgKG1hc2tlZCkN
+CmJ5dGUgdmFsdWVzLg0KDQo+ICsNCj4gKwkqdHlwZSA9IGluc24uaW1tZWRpYXRlLnZhbHVlOw0K
+PiArDQo+ICsJb2Zmc2V0ID0gaW5zbl9nZXRfbW9kcm1fcm1fb2ZmKCZpbnNuLCByZWdzKTsNCg0K
+R2l2ZW4gdGhlIGV4cGVjdGVkIGluc3RydWN0aW9uLCBpc24ndCB0aGF0IC02ID8/DQo+ICsJaWYg
+KG9mZnNldCA8IDApDQo+ICsJCXJldHVybjsNCj4gKw0KPiArCSp0YXJnZXQgPSAqKHVuc2lnbmVk
+IGxvbmcgKikoKHZvaWQgKilyZWdzICsgb2Zmc2V0KTsNCg0KV1RGIGlzIHRoYXQgY2FsY3VsYXRp
+bmc/Pw0KDQo+ICt9DQouLi4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
+c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
+Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   42226c989789d8da4af1de0c31070c96726d990c
-commit: 69d0db01e210e07fe915e5da91b54a867cda040f ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-date:   4 months ago
-config: x86_64-buildonly-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161453.9bnOipkM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d0db01e210e07fe915e5da91b54a867cda040f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 69d0db01e210e07fe915e5da91b54a867cda040f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_power_state() falls through to next function sumo_set_forced_mode_enabled()
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
