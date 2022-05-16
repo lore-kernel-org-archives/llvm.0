@@ -1,74 +1,90 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0202110E0
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 15:45:20 +0000 (UTC)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ef5380669cso157872867b3.9
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 08:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fnKHIkN0TU++izapmIFi8Ty+LNPCPzgGOdIpl087eMA=;
-        b=iTcoOlahc6mNkkH9KN1UbL8/FqrKWmwWC3yXua2GycFg92x6rtngNdWTVZd0vbWmvo
-         IS31fC3vbQgVufrjL9knZDTJqUptFr2aaqDFIneUmpWLvFJa+Wu+UxrjhyP7Rgj7bYw6
-         zGYLwfOJbeMXxZZo4hcNGWPwaUtzNrt3Su/koMOjF0/lJfcxtgYk49vf4uomzBQ/y5my
-         1yNpaUl8mO2poMKwfULV989QV1N1BB5iZDEFJA+CXZ4MAPWqN9ygMf71IFgVuS2VYweH
-         bgcJ++RWpGXf45WXPIGOJztqFDbRlw5pqIk7yfMCXeIH15TdPWKecQfiVFMacIT+G95P
-         EkFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fnKHIkN0TU++izapmIFi8Ty+LNPCPzgGOdIpl087eMA=;
-        b=SQ0ZZ7bmROjbyYET34pe9kLvQ+k/NJHQeEDG6IYztCUZuTr4GczW49HjA4tAbulZ38
-         mKSTpLGxRt1ShQZiYzRtYBqtOKgvAhJ98jISGqrFU8UW9YEWjUPUeyM6LKBVwoElMxyk
-         E96Ly8e5cReLgu8sTbxahnNkg0OFtIhJF3ARf0SkOvCK0wmS9jd5CCCIKvLN8u4LgXmt
-         BuZjZXTMFT3jZwUpVu6ponVVDXgvVq00KhEKPqZ7FiQiYzYIk16kepaGDtLKa20IWK7t
-         q26H1foZ6fk9mkPU7DPVWVZqik93RaL01wncj0ws0gK15Q9ENVmhujBc5U+2A2SJhDZV
-         Wipw==
-X-Gm-Message-State: AOAM531v9wzclwow2NjuTtIEJwQ1gfFQRS6FkpmoECZ0hLWNHev9z1Sq
-	z4awRhwcIT82P41lN/Sroik1ZnDmIUh4e4mle96t6Q==
-X-Google-Smtp-Source: ABdhPJwi/PDSBCPu8w13weeGP3GKG4Kc/dHnqpDwTulTE1xr8903vsYGeGb18xGWe7Di7/TDqqAZCDtrmcivBggYEX4=
-X-Received: by 2002:a81:4ecf:0:b0:2fe:d9f2:15b3 with SMTP id
- c198-20020a814ecf000000b002fed9f215b3mr10749397ywb.305.1652715919792; Mon, 16
- May 2022 08:45:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E40210E0
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 15:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A1BC34113;
+	Mon, 16 May 2022 15:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652716581;
+	bh=pwSfhH/HA5ZWdWjfwL705LozCp1iZETX4zwonXvMW/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V7CtKaEyAB8ODvl7ny9zrvtVhJK+Pl5lMh0P1rsukAk5RWs1K6KfkNv/vH2Awf7OF
+	 EA0Hc8HpnO7w7xSsl4RlQxpU4MApGVJeYisEZzXd8bN9buQ+U4ha0G0KZ45ygIePC3
+	 gQycdxuqZHpP5w6pXQ3sjeWRVGnJXdbva7+JhV0kOBM7uK+Cej6RVnEQyLUrycg1+e
+	 CQKPfvOW2I5DKIs6nhLbTbmL+3aX1BFPGQHu0FzVzT2jS2m5QsYDEZK5pkRH2JpjVP
+	 recO/Al2ZQ27MmwGbXbW3B/ZYC7Z0uxo+kdQxCoW134be3ANFq78C1gQpby+TqBC2n
+	 bWXSrDiBEuEUA==
+Date: Mon, 16 May 2022 08:56:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: arnd@arndb.de, gregkh@linuxfoundation.org, ndesaulniers@google.com,
+	ricky_wu@realtek.com, kai.heng.feng@canonical.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
+Message-ID: <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
+References: <20220516130047.3887590-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-9-samitolvanen@google.com> <202205141449.87738FDF@keescook>
-In-Reply-To: <202205141449.87738FDF@keescook>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 16 May 2022 08:44:44 -0700
-Message-ID: <CABCJKuc82+92BEjPU+5_7Y45cBAZ_J0Nyjvn_FtFroqsJjs_Gg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 08/21] psci: Fix the function type for psci_initcall_t
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516130047.3887590-1-trix@redhat.com>
 
-On Sat, May 14, 2022 at 2:50 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, May 13, 2022 at 01:21:46PM -0700, Sami Tolvanen wrote:
-> > Functions called through a psci_initcall_t pointer all have
-> > non-const arguments. Fix the type definition to avoid tripping
-> > indirect call checks with CFI_CLANG.
-> >
-> > Reported-by: Mark Rutland <mark.rutland@arm.com>
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->
-> This could land separately from this series, too, yes?
+On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
+> The clang build fails with
+> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>         } else if (efuse_valid == 0) {
+>                    ^~~~~~~~~~~~~~~~
+> 
+> setting_reg2 is set in this block
+>   if (efuse_valid == 2 || efuse_valid == 3) {
+> ..
+>   } else if (efuse_valid == 0) {
+>     // default
+> ..
+>   }
+> But efuse_valid can also have a value of 1.
+> Change the 'else if' to 'else' to make the second block the default.
+> 
+> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Correct.
+I am not sure if this fix is correct from a functional standpoint (i.e.
+is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
+it is better than not handling this value altogether. For what it's
+worth:
 
-Sami
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+As a side note, it is unfortunate that this change made it into -next
+when there was an outstanding report about this warning:
+
+https://lore.kernel.org/202205100220.WyAyhKap-lkp@intel.com/
+
+> ---
+>  drivers/misc/cardreader/rts5261.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
+> index 749cc5a46d13..f22634b14dc8 100644
+> --- a/drivers/misc/cardreader/rts5261.c
+> +++ b/drivers/misc/cardreader/rts5261.c
+> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
+>  			setting_reg1 = PCR_SETTING_REG4;
+>  			setting_reg2 = PCR_SETTING_REG5;
+>  		}
+> -	} else if (efuse_valid == 0) {
+> +	} else {
+>  		// default
+>  		setting_reg1 = PCR_SETTING_REG1;
+>  		setting_reg2 = PCR_SETTING_REG2;
+> -- 
+> 2.27.0
+> 
+
+Cheers,
+Nathan
