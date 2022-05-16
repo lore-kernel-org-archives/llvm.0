@@ -1,161 +1,108 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC425EC5
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 12:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652703281; x=1684239281;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7Q8f1JvyHhUxmG26SWRNtSo7rrD6kouF7yvqy7cOjJY=;
-  b=FtYPGcZteqIlwdpYvaHV/8axBG3RFRQDvgriVJjQdoQRFRrIr3neAT2m
-   gtwkYewHsF1rSybjFee8ZhoYTAuroI0IO3Mh2YuQsVKHmZjmiKl2lhwpy
-   IUmkxjSJsS8UuNVuh7hLLpG1fmFLTmNB10bckUtpZaX5FmlJqxt78a7PQ
-   4HgWqnaBta3EdRZhQNrJs3ITIM8I57JYs6KqNiaCD6xGKRO8RkYPdxuBA
-   z+FPSAYxD+xqQe5faczesLfA4IxarW3dt6CS4GJBPMKanpqkAt3glSOFI
-   goFTbf2fdMTtXvedhf1fdcFPvrgzaApalXQuwCiwGwASKGFuUQFpnb2iX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258382342"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="258382342"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 05:14:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="568289295"
-Received: from lkp-server02.sh.intel.com (HELO 0628dcddc537) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 16 May 2022 05:14:30 -0700
-Received: from kbuild by 0628dcddc537 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqZcM-00004y-3p;
-	Mon, 16 May 2022 12:14:30 +0000
-Date: Mon, 16 May 2022 20:14:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@google.com>
-Subject: [arm-platforms:kvm-arm64/per-vcpu-host-pmu-data 3/4]
- arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with
- internal linkage has incomplete non-array type 'typeof(struct
- kvm_pmu_events)' (aka 'struct kvm_pmu_events')
-Message-ID: <202205162042.UpDGm191-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D82CEC5
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 12:28:26 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id d19so25477020lfj.4
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 05:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=l7Fo0NeV7YueiEmkqNM4ZujNOBF0kyGi5nhK9D38CaE=;
+        b=iiwL2Jqvlxyr2hAuSFDNP8tiNHrlQxAX6X5eXc/cmjVuAYKf/iJzMy3/a+Qcm5JmQL
+         ANO+Qp7/aXRFbYOyyTTLldnKd18zxolxl4isMaGC4vJQu/+9sbuJytY3Ypx90mj8zQC4
+         tzNBayxdsgod0IQH/BUq/qfbBMJ0FzLwTtHS4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l7Fo0NeV7YueiEmkqNM4ZujNOBF0kyGi5nhK9D38CaE=;
+        b=qbyYvIUVw2z37hDgtWiDG0ZWGQSO0q9F9DniAKoaS3bkxNojpkMGt8u67goGyRkB0q
+         mfRlMkQNtdPoaf8srujYDYgyAHpbRamoWql01QGrMtyiOmww/nlJQwSGGeKfjVjFmYVZ
+         T7LbFpPLEnL+nK0Kmeh5ULzxb1HPd5HOuO48oC/ES1pFctVr3uTcayxI2D/NWxt/TQXB
+         3BNRIvYMTI7GkjspOwMNcACwlbYv5EaF1qEneiveik13oXwZH9aCwzVmVhbvtHJAqn4J
+         FuAvbATczKxvtJPFxAkHjINPMwFk+QbKybYq6akVkX/wHwdW/38nGeO9R4acj/qFqUb4
+         i9OA==
+X-Gm-Message-State: AOAM5337T9HPJnamRXnZz9C6niKrQf1eRHXZ7ZUg0cOqXGe3AanhU+6M
+	tBNB+lPQ4+c2f6BmqdT3Klg/pQ==
+X-Google-Smtp-Source: ABdhPJw4BLL5Yn4P0JiAebR1HlqACpRsi83Tuc5vArRTpPHSHMnS0jRcMj9vnWN/D0VLd8H8S3aGnA==
+X-Received: by 2002:a05:6512:2391:b0:473:ac1e:f2ce with SMTP id c17-20020a056512239100b00473ac1ef2cemr12881841lfv.297.1652704104659;
+        Mon, 16 May 2022 05:28:24 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id 27-20020ac25f5b000000b0047255d210desm1296280lfz.13.2022.05.16.05.28.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 05:28:24 -0700 (PDT)
+Message-ID: <9bd2db3e-2955-66ba-574e-7976bdd95a8e@rasmusvillemoes.dk>
+Date: Mon, 16 May 2022 14:28:22 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v2 07/21] cfi: Add type helper macros
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-8-samitolvanen@google.com>
+ <202205141447.E3B5A29@keescook>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <202205141447.E3B5A29@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/per-vcpu-host-pmu-data
-head:   722625c6f4c5b6a9953d6af04c7bb1a6e12830b3
-commit: 84d751a019a9792f5b4884e1d598b603c360ec22 [3/4] KVM: arm64: Pass pmu events to hyp via vcpu
-config: arm64-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220516/202205162042.UpDGm191-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=84d751a019a9792f5b4884e1d598b603c360ec22
-        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
-        git fetch --no-tags arm-platforms kvm-arm64/per-vcpu-host-pmu-data
-        git checkout 84d751a019a9792f5b4884e1d598b603c360ec22
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ kernel/sched/
+On 14/05/2022 23.49, Kees Cook wrote:
+> On Fri, May 13, 2022 at 01:21:45PM -0700, Sami Tolvanen wrote:
+>> With CONFIG_CFI_CLANG, assembly functions called indirectly
+>> from C code must be annotated with type identifiers to pass CFI
+>> checking. The compiler emits a __kcfi_typeid_<function> symbol for
+>> each address-taken function declaration in C, which contains the
+>> expected type identifier. Add typed versions of SYM_FUNC_START and
+>> SYM_FUNC_START_ALIAS, which emit the type identifier before the
+>> function.
+>>
+>> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> 
+> And the reason to not make this change universally (i.e. directly in
+> SYM_FUNC_START) is to minimize how many of these symbol annotations get
+> emitted? (And to more directly indicate which asm is called indirectly?)
+> 
+> What happens if an asm function is called indirectly and it doesn't have
+> this annotation? 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Presumably that's a fail.
 
-All warnings (new ones prefixed by >>):
+I'm also interested in how this works at the asm/linker level. I assume
+that the .o file generated from the asm input has
+__kcfi_typeid_<function> as an undefined symbol; the compiler emits that
+symbol as an absolute one upon taking the address of <function>, and the
+linker then has the info it needs to patch things up.
 
->> arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with internal linkage has incomplete non-array type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') [-Wtentative-definition-incomplete-type]
-   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-                                                ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:31:9: error: arithmetic on a pointer to an incomplete type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events')
-           return this_cpu_ptr(&kvm_pmu_events);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:252:27: note: expanded from macro 'this_cpu_ptr'
-   #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
-                             ^~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:241:2: note: expanded from macro 'raw_cpu_ptr'
-           __verify_pcpu_ptr(ptr);                                         \
-           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:219:52: note: expanded from macro '__verify_pcpu_ptr'
-           const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
-                                                       ~~~~~ ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:46:6: error: incomplete definition of type 'struct kvm_pmu_events'
-                   pmu->events_host |= set;
-                   ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:48:6: error: incomplete definition of type 'struct kvm_pmu_events'
-                   pmu->events_guest |= set;
-                   ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:61:5: error: incomplete definition of type 'struct kvm_pmu_events'
-           pmu->events_host &= ~clr;
-           ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:62:5: error: incomplete definition of type 'struct kvm_pmu_events'
-           pmu->events_guest &= ~clr;
-           ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:186:20: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_guest = pmu->events_guest;
-                          ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:187:19: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_host = pmu->events_host;
-                         ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:206:20: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_guest = pmu->events_guest;
-                          ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:207:19: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_host = pmu->events_host;
-                         ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:9:46: error: tentative definition has type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') that is never completed
-   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-                                                ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   1 warning and 10 errors generated.
+But what then happens if we have some function implemented in assembly
+which for whatever .config reason never has its address taken in any .c
+translation unit that gets linked in? Does the __kcfi_typeid_<function>
+symbol silently resolve to 0, or does the link fail?
 
+I can't really imagine the compiler emitting __kcfi_typeid_<function>
+symbols for each and every function it sees merely declared in some header.
 
-vim +9 arch/arm64/kvm/pmu.c
+Two different .c files both taking the address of <function> should of
+course emit the same value for __kcfi_typeid_<function>. Is there any
+sanity check anywhere that that's actually the case?
 
-     8	
-   > 9	static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-    10	
+Can we please have some objdump/readelf output from some .o files
+involved here?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rasmus
