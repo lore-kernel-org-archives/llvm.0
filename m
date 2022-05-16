@@ -1,79 +1,76 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1E11376
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:57:53 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso164085497b3.6
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 11:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
-        b=OtkZKug+pHgQ2UZ/72x5bHwTEdoqxCQfEkm1QUCKIEgRffjKW3KbMb3c/K0hbgw8Hh
-         4snt1OZnOFAGl+LpQ4hpHFIJxYGrgyUHb3MpltCQAyohc4EBc2K3cVdSQIPXWZTMCpAo
-         xvkF6YXXSdLtGnt7ynxNOqwGwVVTZspuksDC6xnRRp98ABNh0U+IV0ZaF0Dke8RLQ2hY
-         0zwsUzPrYM4NS77Te/aQXLi3uZ8/Pe1REWifevXQA7rgTj6p6tmReRBxgn3R2O7hm2fZ
-         OJ6CVb4R6Yse/fCzJP36XXgjWUGVUJLUzzJC39/+B4Yu2HI44XK9AEZhZ/l6VNqETlCG
-         d/dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X0lDvgtygkUQt/MUd8knhUulQHn3vRN7wQxbpMX/7kc=;
-        b=eKGxYCI41gbCKu3VKMdEahAxMnPEyW2YX5S5132NVpZbYXrJkAF08SzmlJ0dCFtUxI
-         nOiw57fbruqVg59huTE4A6/iP6pgTfJcYq47vNSy4aAnQZvS8dp286aktvjKSnPSBY24
-         paNhP1DgdwB4FXqfKelO47ocviAWv83hIHZdj8WVKFmg7/AaLdSH4BM/bhvk2ZYmrTfu
-         LYXGCVaxxfJGdK2q6ukU+DiuGOFFVWdWlL0iz9Ht59UTkpjBhO/wMWZML0yXfJU0IXZ5
-         7vwurds+cFIoYH/hBkO53/sqsiYFfkg3sJFXrPSr3GoLmi2hdJI0rTUm5LwsGJyv9gFU
-         iBew==
-X-Gm-Message-State: AOAM531vo/ySAnpLTu0uEWko+5m3pBWfdFwfrX7L4l237jreBAWA8vdt
-	Ry+mAEcc0DHBCpa4nKEE9Jz+sFG+ihrdY4ABJPPDWQ==
-X-Google-Smtp-Source: ABdhPJyxnegSHSL4esR4Y8T2LGVa+WGgTYoK2/N/07nmR8fbjF1kDUJlLs7zXniWb3x4daFZGwyj8JCag7XedUMNBVU=
-X-Received: by 2002:a81:7953:0:b0:2fe:f8a9:7e45 with SMTP id
- u80-20020a817953000000b002fef8a97e45mr7139331ywc.23.1652727472248; Mon, 16
- May 2022 11:57:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5901376
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 19:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652729570; x=1684265570;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UyeIsvzafhmjCzob4EXOOMUZUZqxT0Y/3G8Xu5JTXxo=;
+  b=ST9i0czV0SAMxVekyTbrgYHzaHEW9q5XAcHhfMRibU6QiFHrzTDmmHLe
+   5ESwLuhWvxHwe+k0oAvZGZkFukIT1wpDH2LS6blW+BYGwtPbPhlNziiu4
+   aQu5GVhjYMGW0VNtliEMIzc229SDNpeydZ5qDYFpXAw9leXA1XbLCMwi4
+   nPtuCPs7fEK6HoVu4aq2+j99X0CM/ARV7m/KKLFhSDG4T6N59NJCeIDJu
+   c0VNhqBGQosrRiJMwc2ZNT7AIMYdnIW6eJcDFdAj9x0NWE51exY6w4SSt
+   4h6MCJw7uzt/yGMkMYgqSCLPyCl0UMuenOnDaUQssbai47w9aGQTEUX/L
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251458400"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="251458400"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 12:32:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="897351678"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 16 May 2022 12:32:47 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqgSV-0000IL-3P;
+	Mon, 16 May 2022 19:32:47 +0000
+Date: Tue, 17 May 2022 03:32:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mikhail Zhilkin <csharper2005@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	NOGUCHI Hiroshi <drvlabo@gmail.com>
+Subject: [linux-next:master 10956/12195] ERROR: modpost: "__udivdi3"
+ [drivers/mtd/parsers/scpart.ko] undefined!
+Message-ID: <202205170327.TVBbIsh2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com> <202205141501.92A22264B4@keescook>
-In-Reply-To: <202205141501.92A22264B4@keescook>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 16 May 2022 11:57:16 -0700
-Message-ID: <CABCJKudiLBjsNHUTH6zqhYik0WQZwsM4OceYJadYKoDQYOFRXw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, May 14, 2022 at 3:03 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
-> > +#ifdef CONFIG_CFI_CLANG
-> > +static void decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
-> > +                         unsigned long *type)
-> > +{
-> > +     char buffer[MAX_INSN_SIZE];
-> > +     struct insn insn;
-> > +     int offset;
-> > +
-> > +     *target = *type = 0;
->
-> Should report_cfi_failure() have some additional hinting for the case
-> where target/type are zero? Like, "hey, got an inexplicable CFI failure
-> here, but preamble decode failed. Yikes!"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   3f7bdc402fb06f897ff1f492a2d42e1f7c2efedb
+commit: 4213e556fe2a18782e91a87fec70d98c48f1ee41 [10956/12195] mtd: parsers: add support for Sercomm partitions
+config: i386-randconfig-r004-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170327.TVBbIsh2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4213e556fe2a18782e91a87fec70d98c48f1ee41
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 4213e556fe2a18782e91a87fec70d98c48f1ee41
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Good point, I'll add an error message here.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sami
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__udivdi3" [drivers/mtd/parsers/scpart.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
