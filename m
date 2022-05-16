@@ -1,104 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30911843
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E395AC385AA;
-	Mon, 16 May 2022 21:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652738234;
-	bh=2UX7VEgWXWplRyuYdw1siYA11iPaD+OUY4Jd+8EeMa0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JDmKHFOu9IFpLO2Wyz/Hx0s2TDB4CJS6B9cKO7EHAKBz4GNJR5e2sVf3Tr2akBjcE
-	 Uq0qyjaONDDsWYkqLqXBmqNQSV5HWBokg53FFZ1c6vbv9aJReqfGhHoJsGOxNF0+w+
-	 lMEoq/gnk2V2gy96ns7i1qVlD0o5c7rL3hR7snvS36rgKB2qTye7gyLaBDrBOX370U
-	 M93q7aT4S/Ul5BiaGn9Wzm+PguIGzQe/OsoHps0RFkXCizs8niVZ0urQHuqFg0rueq
-	 53xB1n+amXVZy9Soj4spMPxkwVXo2IbR5ZH83Fcx+b/Gn3JBUgx2Yzpqyqhtv5tnaS
-	 Q81R7FbGnXhIw==
-Date: Mon, 16 May 2022 14:57:12 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-	arnd@arndb.de, gregkh@linuxfoundation.org, ricky_wu@realtek.com,
-	kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
-Message-ID: <YoLIuKf/1OcRtjdX@dev-arch.thelio-3990X>
-References: <20220516130047.3887590-1-trix@redhat.com>
- <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
- <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
- <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335861843
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 22:03:39 +0000 (UTC)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f83983782fso168814577b3.6
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 15:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IjaOHrJPxQNUMk++gKnFcKFfTSw8FlwW+UyobtzjVj0=;
+        b=CmIEj5n1Rl0HWNhLuhDFskWScqMt8sTZf+nhjXYfnm9nlgr/YXq9h82Fae9Y2KTq1g
+         KryZOd70RTA6tPdFd6uEglWV6hKFFIZmg7ZFv30zU1JzLwvckRRLR0MEMdF00hjHIHDf
+         hVEuQ8BqEIRE3mG//CqcrOWdJM1NQz8jL2LfiBTS0Uvbwue/yEjA0leJcwc3aoJbKFUo
+         HsYsHIyfIVblYlpHWWLtcT5unFYiki04NZBQO/jfec+mhGllAxhTLo9QATAqOOLauq7u
+         ckKDPDyG+lHdQjd1OuL/8h39HKfWcmiAhNYRkNnJwcWE1smI+GnPF/PAEkdRN2Dzzitq
+         q0nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IjaOHrJPxQNUMk++gKnFcKFfTSw8FlwW+UyobtzjVj0=;
+        b=DKr+8nbndIjodho1Os/9duXoZQXUvO1YxMtU7oWhfrTnolATbnmiZuxElFDJjW9gk7
+         zIGIfhxOr8wHVyvlADJKhUWRDxbD82T5CnALWy6301lZi8ZB1vuLuiw+0Dcz4MNs/U6V
+         Q9e6dB9JC69Yo4xJqq5lTOi4euYBg876P2kxgP8mogizJ/eMBJKWNXOyNuB7rWhn4x9t
+         DFCxaS3PB5PCOWdP+azoVMxvgpUmlb/AHjoNQ866iJIRJ4GkSS5wCzDwItDjLWERgXD2
+         76RX/o3qpHM10/xtna1OywBHxVSCX3vKGAmnbk6BYjw0coHnB1XMU7aZH5y6qkOzbIO4
+         kcIA==
+X-Gm-Message-State: AOAM532zj8/DJrpYK92eLb9Hu4SW9+B2kxwEHbBJmgVzV2kFKsWHplD2
+	fy7s42dlpIX9BRpD9foSTS6YRkSeDUco8g998jPjRA==
+X-Google-Smtp-Source: ABdhPJw3sBkLaeksICo+46rO2UaS3Fk7vsTQRrcZQqDXNASr5C339hIh2SUj2o4+spHZoBL4AtjH3f55xJ+hksTEK84=
+X-Received: by 2002:a0d:d747:0:b0:2ff:22b9:9281 with SMTP id
+ z68-20020a0dd747000000b002ff22b99281mr1573852ywd.305.1652738618031; Mon, 16
+ May 2022 15:03:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=-H+rvt83rgrR3GyXdSDe+n0aG8CFLEshij9jNAzCQtw@mail.gmail.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+ <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com> <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 16 May 2022 15:03:02 -0700
+Message-ID: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Laight <David.Laight@aculab.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, "x86@kernel.org" <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, May 16, 2022 at 02:22:50PM -0700, Nick Desaulniers wrote:
-> On Mon, May 16, 2022 at 10:06 AM Tom Rix <trix@redhat.com> wrote:
+On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
+>
+> > > The compiler always generates this specific instruction sequence.
 > >
-> >
-> > On 5/16/22 8:56 AM, Nathan Chancellor wrote:
-> > > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
-> > >> The clang build fails with
-> > >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> > >>          } else if (efuse_valid == 0) {
-> > >>                     ^~~~~~~~~~~~~~~~
-> > >>
-> > >> setting_reg2 is set in this block
-> > >>    if (efuse_valid == 2 || efuse_valid == 3) {
-> > >> ..
-> > >>    } else if (efuse_valid == 0) {
-> > >>      // default
-> > >> ..
-> > >>    }
-> > >> But efuse_valid can also have a value of 1.
-> > >> Change the 'else if' to 'else' to make the second block the default.
-> > >>
-> > >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-> > >> Signed-off-by: Tom Rix <trix@redhat.com>
-> > > I am not sure if this fix is correct from a functional standpoint (i.e.
-> > > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
-> > > it is better than not handling this value altogether. For what it's
-> > > worth:
-> >
-> > I looked at how the code used to work, this seemed better than
-> > initializing to NULL.
-> >
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > As a side note, it is unfortunate that this change made it into -next
-> > > when there was an outstanding report about this warning:
-> >
-> >  From the clang side, this is a build break and my static analysis infra
-> > goes down.
-> >
-> > These build breaks seem to happening every week, is there a precommit
-> > clang gating test that could be done for -next ?
-> 
-> Probably worth asking Stephen, though I don't think there's _any_
-> gating (i.e. presubmit testing) for -next, since that'd increase the
-> build capacity needed. -next is tested post-merge (i.e. post submit
-> testing) IIUC.
+> > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
+>
+> Yes, but we don't care. This *always* uses the 32bit immediate form.
+> Even if the immediate is small.
 
-Stephen does do build testing during the merges ("Between each merge,
-the tree was built with a ppc64_defconfig for powerpc, an allmodconfig
-for x86_64, a multi_v7_defconfig for arm and a native build of
-tools/perf"), in addition to testing after the final tree is done.
+Yes, that part is not a problem, but it's a valid point that LLVM
+might not always use r8-r15 here, so I will have to check for the REX
+prefix before blindly attempting to decode the instruction.
 
-https://lore.kernel.org/20220516205718.2c5a52f9@canb.auug.org.au/
-
-Increasing the "during merge" testing is not a reasonable request (IMO)
-due to the additional time it would add to the entire -next process.  I
-am not sure that having Stephen do builds with clang post merge is any
-different from all the existing build coverage that we already have (the
-tree is already done at that point), other than maybe people listen to a
-human complaining more than a robot... :)
-
-Cheers,
-Nathan
+Sami
