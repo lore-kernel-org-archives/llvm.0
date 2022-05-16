@@ -1,38 +1,38 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041551361
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 16:33:04 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id v71so2904891ybi.4
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 09:33:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6621361
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 16:39:39 +0000 (UTC)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ff1ed64f82so8822967b3.1
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 09:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uVOWBi2MNBuehei9huBnd/8loFbnwhqAiuOC/hCYUtE=;
-        b=UMpVvjAskWnfR6g3ci4cMkPkNEchbPVQCDFZURqGgdGBGtyEU0+pfkHuIEsLxzzdxa
-         B18bBKbFeo2JcX6Nz0IkEdagX64XxF2YEDcGnalbPkbzsdXHnZZGaCAZvltIUt8sXuPo
-         zc+e8B4SuenU8MISBWZpTrjTRFvYcwbYxq6tk/fA+vLgbNtNdpbpv9n/FFbrhrGyS4/A
-         hl891Clm6zzMg1ByvOjCgkYC1CBLqqCMd5UMKl7fYoxLVwfMTVOj3WL8d9fGHLWJxHp1
-         HFHt9MPjqwqb5TyctUJdvK/tYMZpC5GtaKZHEttGWXNLnXoDb1+0WTqUO3MYlQIJ76Hw
-         42MQ==
+        bh=DJ1mj/6AEbnCZ4HPughZpfwPoxjL4U+12a8eW3KN+cU=;
+        b=BrUCwqzxN2mNfk/ExieimQ9XkZd769u40ZXKgP3WMEJSnoidxk7l4mgPgX8TQLEUf+
+         mHoGRcO4qbZrF3SZvjLddv1SFfTTPb/Qdm7F/4Iww+SxqXQBztROLAuEfJN/v/B1VpYQ
+         Ow8ybjFEWj00m3V7QA+mRR5vUigRQPZszrSAj3T8lfAbC2/FCRo96LSLXzVjjdgvWDsV
+         Yfs6cGR6w4Xbfm8W5Mf6h60V4gzbxVxbjBnQXmEnogjmm/VFkWUOQpgtI8/qriceckOr
+         RaOqb/nWuFQtgqtCf0NnQumcR5ga8ZlkjY+sc2wBUohWGR5PrpBBo67IOdsHmRMHYVWj
+         3kpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uVOWBi2MNBuehei9huBnd/8loFbnwhqAiuOC/hCYUtE=;
-        b=0X3OhiHo7fFLJyL6QO/bLZ4q01Ne2xd+kn+LeOjG1LqU9HD4TvZ2VNbWe0zgxUoYl7
-         vqvW2UPrVJ7e1m2rjnMPnwW5xhRMQL/VQZthEdqfMhD2XQqmYe3KxcQu7AZDVIWp9fUl
-         WciEmZskVZOnz+clEuvG/70TVDcN0rWEmpymypEEtKwp826XGZu0OD+9xP1YiWqgWVNO
-         WVGmFhD6q3LU2fAIkhkuo5HS3gx0ZAk/yjJZIclUDeA5xslancoQHtw5J+U0x3QOPzvZ
-         Wn9CkLvo6eEM/5aK05geT4p3Uj2D5qjuaX70jmLrHWzqg0JCp3oio/PZxiTWj9xRDQLX
-         cKow==
-X-Gm-Message-State: AOAM530idtov0cuNZx1u4zxTqRPy7y2a8Bihkv/ex9Mdj6bgwIyQC7y8
-	2EuRUAJM1RFaDwjvrns/RBsC56i16KoslpoXRSnsLA==
-X-Google-Smtp-Source: ABdhPJxnm0eijYHOVmrixfo245yISpWoVL7JodzT9EqGHwvEuWoWte/Watn8vMd89vUvUVL2y2IhRQzqqpGLJpOURZA=
-X-Received: by 2002:a05:6902:90b:b0:64b:233d:8e03 with SMTP id
- bu11-20020a056902090b00b0064b233d8e03mr18090305ybb.428.1652718783727; Mon, 16
- May 2022 09:33:03 -0700 (PDT)
+        bh=DJ1mj/6AEbnCZ4HPughZpfwPoxjL4U+12a8eW3KN+cU=;
+        b=vugfS374NVX+wtBIH0KYZmcgiBXX6ObVJD2SwlhaJTLuEKF9zwvnEetKx4+fdto1A4
+         CY4kN6aZp0gBwRMByoxG5vULEqErzuZnnaekWP+NswYyVZXhIw+Jwt05fpZtv6q0OY/1
+         VsSTeEbIgregLvKS2vI4ba9ODlFEsEl9NzTPoOHPeWsy5IoJ/ISRDJ7fEI1qiAMyXOGg
+         5gsfraSfdDQMQB8JKIrQ/UxSIvjpnpj5s+1xAQLm0PqBkvEahs+GrFgCaEQ7O1sJY7DD
+         f2aaxk9GBJ5/qWQ1bS4LowB4NX0k+jOC8UeBxoiJ4iwrDUfmqsKw430NKlRGS5y/brxc
+         Z+LQ==
+X-Gm-Message-State: AOAM533cVz+uYbfqwJRMQSjx8KbOHyZ1Q9qBZjApcAK5DyQlhxDSgsZq
+	Fhu7naiNnghltCKTGt0IAtDKX+bJmZtXre3ZP0afbA==
+X-Google-Smtp-Source: ABdhPJzQJa1N5l2z5xfrd+zcTG6blvNDsfHVm9LuNqqXVzDY9SqhLJ1LbDtJEHO1K6Zz6VnIidKyyWBgtD0CkopkxGA=
+X-Received: by 2002:a81:4ecf:0:b0:2fe:d9f2:15b3 with SMTP id
+ c198-20020a814ecf000000b002fed9f215b3mr11033942ywb.305.1652719177966; Mon, 16
+ May 2022 09:39:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,43 +40,115 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-15-samitolvanen@google.com> <202205141455.0A6F409@keescook>
-In-Reply-To: <202205141455.0A6F409@keescook>
+ <20220513202159.1550547-21-samitolvanen@google.com> <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+In-Reply-To: <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 16 May 2022 09:32:27 -0700
-Message-ID: <CABCJKudyuB3doGwcRpYNm-LrdEzjgwR3MTys3MmSs+vMkxhsPg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 14/21] treewide: Drop __cficanonical
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+Date: Mon, 16 May 2022 09:39:02 -0700
+Message-ID: <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To: David Laight <David.Laight@aculab.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	"x86@kernel.org" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
 	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, May 14, 2022 at 2:56 PM Kees Cook <keescook@chromium.org> wrote:
+On Mon, May 16, 2022 at 1:32 AM David Laight <David.Laight@aculab.com> wrote:
 >
-> On Fri, May 13, 2022 at 01:21:52PM -0700, Sami Tolvanen wrote:
-> > CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
-> > won't change function references to point elsewhere. Remove the
-> > __cficanonical attribute and all uses of it.
+> From: Sami Tolvanen
+> > Sent: 13 May 2022 21:22
 > >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  include/linux/compiler_types.h | 4 ----
-> >  include/linux/init.h           | 4 ++--
-> >  include/linux/pci.h            | 4 ++--
-> >  3 files changed, 4 insertions(+), 8 deletions(-)
+> > With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> > immediately before each function and a check to validate the target
+> > function type before indirect calls:
+> >
+> >   ; type preamble
+> >   __cfi_function:
+> >     int3
+> >     int3
+> >     mov <id>, %eax
 >
-> I think this is missing removing it from include/linux/compiler-clang.h ?
+> Interesting - since this code can't be executed there is no
+> point adding an instruction 'prefix' to the 32bit constant.
 
-That was removed in the earlier patch that switched the CFI implementation.
+The reason to embed the type into an instruction is to avoid the need
+to special case objtool's instruction decoder.
 
-> With that done (or explained why not):
+> >     int3
+> >     int3
+> >   function:
+> >     ...
+> >   ; indirect call check
+> >     cmpl    <id>, -6(%r11)
+> >     je      .Ltmp1
+> >     ud2
+> >   .Ltmp1:
+> >     call    __x86_indirect_thunk_r11
+> >
+> > Define the __CFI_TYPE helper macro for manual type annotations in
+> > assembly code, add error handling for the CFI ud2 traps, and allow
+> > CONFIG_CFI_CLANG to be selected on x86_64.
+> >
+> ...
+> > +
+> > +     /*
+> > +      * The compiler generates the following instruction sequence
+> > +      * for indirect call checks:
+> > +      *
+> > +      *   cmpl    <id>, -6(%reg)     ; 7 bytes
+>
+> If the <id> is between -128 and 127 then an 8bit constant
+> (sign extended) might be used.
+> Possibly the compiler forces the assembler to generate the
+> long form.
+>
+> There could also be a REX prefix.
+> That will break any code that tries to use %reg.
 
-I'll add a note about it to the commit message.
+The compiler always generates this specific instruction sequence.
+
+> > +      *   je      .Ltmp1             ; 2 bytes
+> > +      *   ud2                        ; <- addr
+> > +      *   .Ltmp1:
+> > +      *
+> > +      * Both the type and the target address can be decoded from the
+> > +      * cmpl instruction.
+> > +      */
+> > +     if (copy_from_kernel_nofault(buffer, (void *)regs->ip - 9, MAX_INSN_SIZE))
+> > +             return;
+> > +     if (insn_decode_kernel(&insn, buffer))
+> > +             return;
+> > +     if (insn.opcode.value != 0x81 || X86_MODRM_REG(insn.modrm.value) != 7)
+> > +             return;
+>
+> Since you are looking for a very specific opcode why bother
+> calling insn_decode_kernel() - just check for the required (masked)
+> byte values.
+
+Because I need to decode both the immediate value and the register
+from that instruction.
+
+> > +
+> > +     *type = insn.immediate.value;
+> > +
+> > +     offset = insn_get_modrm_rm_off(&insn, regs);
+>
+> Given the expected instruction, isn't that -6 ??
+
+No, this is the register offset.
+
+> > +     if (offset < 0)
+> > +             return;
+> > +
+> > +     *target = *(unsigned long *)((void *)regs + offset);
+>
+> WTF is that calculating??
+
+It's reading the register value from pt_regs.
 
 Sami
