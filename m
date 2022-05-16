@@ -1,313 +1,128 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612B7138F
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652735172; x=1684271172;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OiTkWpvVQg1oDb85FadfPVoeph8BDp4glXEEbhxZyXU=;
-  b=KxkQAuQ32bvteNTMAMPh+WJJRatHzqtHDFWj7HVt/wv3Sop2jz8MD2ri
-   11tktcF68qYcCH3GOdnjWCIkNOLYQMKn9WmYRF8DkQpcPGBfrPOxqOHv9
-   ltz7YdAyTDTYVmQ4Te6RMNaoyh04YpSgFdfEffscsyPQY3E5RqeFMBCJC
-   naysLPR9/sb9Uj0aLDlIH7+E3Yr41p/xI2Sfa+51jrjW3bEdwkQggUJaw
-   WhxrDbf4PIkDtAuYG3WWi0uh1nVxioPc3J7imn4o6lj6dqpPGcDGxqkxZ
-   aMCGUmheiemYQTtdtjrandp0dKZhyRDgrgt3Rv8+MDmtgN22pcMN4r2MV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="331576927"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="331576927"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:05:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="660296101"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 May 2022 14:05:51 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqhuY-0000LA-IM;
-	Mon, 16 May 2022 21:05:50 +0000
-Date: Tue, 17 May 2022 05:05:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@google.com>
-Subject: [arm-platforms:kvm-arm64/per-vcpu-host-pmu-data 3/5]
- arch/arm64/kvm/pmu.c:31:9: error: arithmetic on a pointer to an incomplete
- type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events')
-Message-ID: <202205170503.iV7Pj4uC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10FF4138F
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:10:03 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id i17-20020a259d11000000b0064cd3084085so6679035ybp.9
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 14:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=FZcSyeZsO9IL5sGZuwA1FFxJdj4vwGJ4vjI3g4Z2mBk=;
+        b=Bx7tgt+GJfqaLCs7xBMlT7qFLIwiPAwovX3m4OrDqEAu4mraTTnFTrHLsZlBXSYwEd
+         S9NV+5/yKgYiy//X7fyyyi9qEzfSo11N2NGm9LtwMN4jqNFfeNb9uG/a6QKN59Q2YCX7
+         vHA+1Jld+DnCpZCLfn/1/+uk6RNWLTl6QoRe8Y3mDmyiJW90vwozTDGsxiPiQFQHjgX8
+         imq/7dPd+H0KTJd/I8085oKBUynPopN2VnrIxnA0LtnNS/pkVlxY0t5D02cUN8rYKeq9
+         BKwzNqNWEJJ41+ZJCV7KTfi3QncaffOx2ihSMKc/kZMxDtBbCeuoyh7ghugflNSW/l97
+         VY4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=FZcSyeZsO9IL5sGZuwA1FFxJdj4vwGJ4vjI3g4Z2mBk=;
+        b=iGrlz5wY3+7Dm4oFmNlQh7/rlRad9iqyrHxxy7jJ0pdfwNdilARi1vP2uSXka0xfjA
+         up3c6K7cexY8vNi2c+crfKs/Di/1YYIyqB2phe7yAOcHE+TJw285Iy4D/+8FKHO0tnHC
+         E69AWl0OEHSSorQLQK2CTwQcf50pJKxyu3McirMXzThQjJr86Edc7ujJaSoWZDImPuFH
+         iO8pD9Iemmnm0sMqCRDBxhhb0lCRQ4iNU6r1fNn2t+lFV/9reAHgonEt6j1f61c5F6J6
+         HPkbu629TzLJBsn0BT93NR3yv8Js/1n3cNQai1PsC0UB0lZ+pygbcUTsBxpaQCb6iUmI
+         WRJw==
+X-Gm-Message-State: AOAM530lo6WMNIvnmprp0Yw1C9uJMwxTaRckNRQVPJwqw/QxnHpwlQkP
+	BB+4LNvYl1V1Hlpv5KFFhOBxflyTXzL5Q8Jld3o=
+X-Google-Smtp-Source: ABdhPJzceMbqMCWcaHO+Vaq4YPwgIaTtdI456jBiTN6H9DjqGxN7HtVrx2dWttRmI63nR6Bo6qP6htuKd+wL0/i1wGU=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:2ef0:b8de:b9c8:da45])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6902:1501:b0:649:ff91:5409 with
+ SMTP id q1-20020a056902150100b00649ff915409mr19972941ybu.278.1652735402915;
+ Mon, 16 May 2022 14:10:02 -0700 (PDT)
+Date: Mon, 16 May 2022 14:09:50 -0700
+Message-Id: <20220516210954.1660716-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652735394; l=2928;
+ s=20211004; h=from:subject; bh=nQYhTiVBaVqJ4Yl9K4hhhOCSOYjfiGjNQuRqR5ZoaZY=;
+ b=MlL9nMS36OSe4Xc71noVArPyrOx9FfKJ4WVEjRfBsGB6qnO0RlQm4T/J0zfA7HK3VONHQk0DUkNF
+ 9HCJ9boqDoPPJ8T3o7x4TYAe9ONvn4bz+m/8mAmV0RwDV2Rj4Jlz
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v3 0/4] pass -march= only to compiler
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Arnd Bergmann <arnd@arndb.de>, Ard@google.com, Biesheuvel@google.com
+Cc: Russell King <rmk+kernel@armlinux.org.uk>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/per-vcpu-host-pmu-data
-head:   20492a62b99bd4367b79a76ca288d018f11980db
-commit: 84d751a019a9792f5b4884e1d598b603c360ec22 [3/5] KVM: arm64: Pass pmu events to hyp via vcpu
-config: arm64-randconfig-r001-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170503.iV7Pj4uC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?id=84d751a019a9792f5b4884e1d598b603c360ec22
-        git remote add arm-platforms https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git
-        git fetch --no-tags arm-platforms kvm-arm64/per-vcpu-host-pmu-data
-        git checkout 84d751a019a9792f5b4884e1d598b603c360ec22
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+When both -march= and -Wa,-march= are specified for assembler or
+assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
+value but Clang will warn that -march= is unused.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+warning: argument unused during compilation: '-march=armv6k'
+[-Wunused-command-line-argument]
 
-Note: the arm-platforms/kvm-arm64/per-vcpu-host-pmu-data HEAD 20492a62b99bd4367b79a76ca288d018f11980db builds fine.
-      It only hurts bisectability.
+This is the top group of warnings we observe when using clang to
+assemble the kernel via `ARCH=arm make LLVM=1`.
 
-All errors (new ones prefixed by >>):
+Arnd sent a v2 of my previous patch
+https://lore.kernel.org/linux-arm-kernel/20210928154143.2106903-14-arnd@kernel.org/
+I added yet a few more instances I found since then.
 
-   arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with internal linkage has incomplete non-array type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') [-Wtentative-definition-incomplete-type]
-   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-                                                ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
->> arch/arm64/kvm/pmu.c:31:9: error: arithmetic on a pointer to an incomplete type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events')
-           return this_cpu_ptr(&kvm_pmu_events);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:252:27: note: expanded from macro 'this_cpu_ptr'
-   #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
-                             ^~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:241:2: note: expanded from macro 'raw_cpu_ptr'
-           __verify_pcpu_ptr(ptr);                                         \
-           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:219:52: note: expanded from macro '__verify_pcpu_ptr'
-           const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
-                                                       ~~~~~ ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
->> arch/arm64/kvm/pmu.c:46:6: error: incomplete definition of type 'struct kvm_pmu_events'
-                   pmu->events_host |= set;
-                   ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:48:6: error: incomplete definition of type 'struct kvm_pmu_events'
-                   pmu->events_guest |= set;
-                   ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:61:5: error: incomplete definition of type 'struct kvm_pmu_events'
-           pmu->events_host &= ~clr;
-           ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:62:5: error: incomplete definition of type 'struct kvm_pmu_events'
-           pmu->events_guest &= ~clr;
-           ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:186:20: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_guest = pmu->events_guest;
-                          ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:187:19: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_host = pmu->events_host;
-                         ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:206:20: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_guest = pmu->events_guest;
-                          ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/pmu.c:207:19: error: incomplete definition of type 'struct kvm_pmu_events'
-           events_host = pmu->events_host;
-                         ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
->> arch/arm64/kvm/pmu.c:9:46: error: tentative definition has type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') that is never completed
-   static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-                                                ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   1 warning and 10 errors generated.
---
->> arch/arm64/kvm/arm.c:764:17: error: no member named 'events' in 'struct kvm_pmu'
-           vcpu->arch.pmu.events = *kvm_get_pmu_events();
-           ~~~~~~~~~~~~~~ ^
-   1 error generated.
---
->> arch/arm64/kvm/hyp/nvhe/switch.c:128:47: error: no member named 'events' in 'struct kvm_pmu'
-           struct kvm_pmu_events *pmu = &vcpu->arch.pmu.events;
-                                         ~~~~~~~~~~~~~~ ^
->> arch/arm64/kvm/hyp/nvhe/switch.c:130:9: error: incomplete definition of type 'struct kvm_pmu_events'
-           if (pmu->events_host)
-               ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:131:19: error: incomplete definition of type 'struct kvm_pmu_events'
-                   write_sysreg(pmu->events_host, pmcntenclr_el0);
-                                ~~~^
-   arch/arm64/include/asm/sysreg.h:1300:20: note: expanded from macro 'write_sysreg'
-           u64 __val = (u64)(v);                                   \
-                             ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:133:9: error: incomplete definition of type 'struct kvm_pmu_events'
-           if (pmu->events_guest)
-               ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:134:19: error: incomplete definition of type 'struct kvm_pmu_events'
-                   write_sysreg(pmu->events_guest, pmcntenset_el0);
-                                ~~~^
-   arch/arm64/include/asm/sysreg.h:1300:20: note: expanded from macro 'write_sysreg'
-           u64 __val = (u64)(v);                                   \
-                             ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:136:13: error: incomplete definition of type 'struct kvm_pmu_events'
-           return (pmu->events_host || pmu->events_guest);
-                   ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:136:33: error: incomplete definition of type 'struct kvm_pmu_events'
-           return (pmu->events_host || pmu->events_guest);
-                                       ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:144:47: error: no member named 'events' in 'struct kvm_pmu'
-           struct kvm_pmu_events *pmu = &vcpu->arch.pmu.events;
-                                         ~~~~~~~~~~~~~~ ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:146:9: error: incomplete definition of type 'struct kvm_pmu_events'
-           if (pmu->events_guest)
-               ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:147:19: error: incomplete definition of type 'struct kvm_pmu_events'
-                   write_sysreg(pmu->events_guest, pmcntenclr_el0);
-                                ~~~^
-   arch/arm64/include/asm/sysreg.h:1300:20: note: expanded from macro 'write_sysreg'
-           u64 __val = (u64)(v);                                   \
-                             ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:149:9: error: incomplete definition of type 'struct kvm_pmu_events'
-           if (pmu->events_host)
-               ~~~^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:150:19: error: incomplete definition of type 'struct kvm_pmu_events'
-                   write_sysreg(pmu->events_host, pmcntenset_el0);
-                                ~~~^
-   arch/arm64/include/asm/sysreg.h:1300:20: note: expanded from macro 'write_sysreg'
-           u64 __val = (u64)(v);                                   \
-                             ^
-   arch/arm64/include/asm/kvm_host.h:793:8: note: forward declaration of 'struct kvm_pmu_events'
-   struct kvm_pmu_events *kvm_get_pmu_events(void);
-          ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:189:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_CP15_32]            = kvm_hyp_handle_cp15_32,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:188:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:190:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SYS64]              = kvm_hyp_handle_sysreg,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:188:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:191:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SVE]                = kvm_hyp_handle_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:188:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
+Fixing this will allow us to enable
+-Werror=unused-command-line-argument for clang builds.
+
+Nick Desaulniers (4):
+  ARM: remove lazy evaluation in Makefile
+  ARM: use .arch directives instead of assembler command line flags
+  ARM: only use -mtp=cp15 for the compiler
+  ARM: pass -march= only to compiler
+
+ arch/arm/Makefile                   | 76 ++++++++++++++++-------------
+ arch/arm/boot/compressed/Makefile   |  1 -
+ arch/arm/common/Makefile            |  2 -
+ arch/arm/common/mcpm_head.S         |  2 +
+ arch/arm/common/vlock.S             |  2 +
+ arch/arm/kernel/Makefile            |  2 -
+ arch/arm/kernel/hyp-stub.S          |  2 +
+ arch/arm/kernel/swp_emulate.c       |  1 +
+ arch/arm/lib/Makefile               |  4 --
+ arch/arm/lib/delay-loop.S           |  4 ++
+ arch/arm/mach-at91/Makefile         |  3 --
+ arch/arm/mach-at91/pm_suspend.S     |  4 ++
+ arch/arm/mach-imx/Makefile          |  3 --
+ arch/arm/mach-imx/headsmp.S         |  2 +
+ arch/arm/mach-imx/resume-imx6.S     |  2 +
+ arch/arm/mach-imx/suspend-imx6.S    |  2 +
+ arch/arm/mach-mvebu/Makefile        |  3 --
+ arch/arm/mach-mvebu/coherency_ll.S  |  1 +
+ arch/arm/mach-mvebu/pmsu.c          |  1 +
+ arch/arm/mach-npcm/Makefile         |  2 -
+ arch/arm/mach-npcm/headsmp.S        |  2 +
+ arch/arm/mach-tegra/Makefile        |  2 -
+ arch/arm/mach-tegra/reset-handler.S |  2 +
+ arch/arm/mach-tegra/sleep-tegra20.S |  2 +
+ arch/arm/mach-tegra/sleep-tegra30.S |  2 +
+ arch/arm/mm/Makefile                | 15 ------
+ arch/arm/mm/abort-ev6.S             |  1 +
+ arch/arm/mm/abort-ev7.S             |  1 +
+ arch/arm/mm/cache-v6.S              |  2 +
+ arch/arm/mm/cache-v7.S              |  2 +
+ arch/arm/mm/cache-v7m.S             |  2 +
+ arch/arm/mm/copypage-feroceon.c     |  1 +
+ arch/arm/mm/proc-v6.S               |  2 +
+ arch/arm/mm/proc-v7-2level.S        |  2 +
+ arch/arm/mm/proc-v7.S               |  2 +
+ arch/arm/mm/tlb-v6.S                |  2 +
+ arch/arm/mm/tlb-v7.S                |  2 +
+ drivers/memory/Makefile             |  2 -
+ drivers/memory/ti-emif-sram-pm.S    |  1 +
+ drivers/soc/bcm/brcmstb/pm/Makefile |  1 -
+ drivers/soc/bcm/brcmstb/pm/s2-arm.S |  1 +
+ 41 files changed, 94 insertions(+), 74 deletions(-)
 
 
-vim +31 arch/arm64/kvm/pmu.c
-
-     8	
-   > 9	static DEFINE_PER_CPU(struct kvm_pmu_events, kvm_pmu_events);
-    10	
-    11	/*
-    12	 * Given the perf event attributes and system type, determine
-    13	 * if we are going to need to switch counters at guest entry/exit.
-    14	 */
-    15	static bool kvm_pmu_switch_needed(struct perf_event_attr *attr)
-    16	{
-    17		/**
-    18		 * With VHE the guest kernel runs at EL1 and the host at EL2,
-    19		 * where user (EL0) is excluded then we have no reason to switch
-    20		 * counters.
-    21		 */
-    22		if (has_vhe() && attr->exclude_user)
-    23			return false;
-    24	
-    25		/* Only switch if attributes are different */
-    26		return (attr->exclude_host != attr->exclude_guest);
-    27	}
-    28	
-    29	struct kvm_pmu_events *kvm_get_pmu_events(void)
-    30	{
-  > 31		return this_cpu_ptr(&kvm_pmu_events);
-    32	}
-    33	
-    34	/*
-    35	 * Add events to track that we may want to switch at guest entry/exit
-    36	 * time.
-    37	 */
-    38	void kvm_set_pmu_events(u32 set, struct perf_event_attr *attr)
-    39	{
-    40		struct kvm_pmu_events *pmu = kvm_get_pmu_events();
-    41	
-    42		if (!kvm_arm_support_pmu_v3() || !pmu || !kvm_pmu_switch_needed(attr))
-    43			return;
-    44	
-    45		if (!attr->exclude_host)
-  > 46			pmu->events_host |= set;
-    47		if (!attr->exclude_guest)
-    48			pmu->events_guest |= set;
-    49	}
-    50	
-
+base-commit: 0ac824f379fba2c2b17b75fd5ada69cd68c66348
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0.550.gb090851708-goog
+
