@@ -1,28 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FDA138F
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 20:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA677C385AA;
-	Mon, 16 May 2022 20:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652734037;
-	bh=5wO7R+yZo4gN5lTIMsqBqohYvbOxO4gvGse1hhlcptg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Y35VZRZ30EOlEPUaWb+FVp3fJosi92AYRAWjqVJvsXyhKD9K+IBvP/8HNkbT7yFBt
-	 q5lpao2Ev+vbpmpASAeJ8o6wZKCw0qVbYnsgxhn/zBZbbIle517EKc4htb92+8Q8FU
-	 Y3apr4K8prEuUHvorZgI12sZIjmJkQL/GJT264gDfL86kIMkASy1h7jXtVaQzRLcwR
-	 RZ87SQ+TPJt8VWhwVDnwv2CHcp/teiX1YogK6Kd360L4zfE0igBr7unKXw3RwzWIjV
-	 ZijilDizKRD0op5Qyi/w+lEzFfRXnFWkJN4POc3jIlustAdpONCXqnjKV4DJFI3VL7
-	 AZd891RR3C6bA==
-Date: Mon, 16 May 2022 13:47:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F67138F
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 21:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652735155; x=1684271155;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZYt40Q+PfFSSqQhOuPpZ/jVUPjaP/eVg7/MgNninAro=;
+  b=HO3oOj8S6/JvXrTvONXdE7oW1HkUWMW/Lv28Fm3MHYUi+VWj21dlyPZ/
+   XMJxefNpJQAM9PYPJkpZEwlJErsiDqubDd/wdJFCNcRZifswXowDZ6n36
+   s30YE9yPGGWexM0yYG/ab3e5d9nIHCKxQOFWJBoHdd7ajXUzCNLgfEvEm
+   ckdFlpHHmIqXRQC4jC+O56YtTucOwZ31aUWgeq8akzjlhco/MFAF72C7q
+   3KYXDo3/aTbx1YT5QatirBR05po1UwUqy90TU4RqrL3z4pW++SdBPqQW+
+   VBTkoRP0zN8jhrCQzF9407+vt5kNTvCkhUgXAtz3CKxrJwRpVgB9JwvUk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251479236"
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="251479236"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 14:05:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
+   d="scan'208";a="544548627"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 May 2022 14:05:51 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqhuY-0000LC-JA;
+	Mon, 16 May 2022 21:05:50 +0000
+Date: Tue, 17 May 2022 05:05:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiubo Li <xiubli@redhat.com>, jlayton@kernel.org,
+	viro@zeniv.linux.org.uk
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, idryomov@gmail.com,
+	vshankar@redhat.com, ceph-devel@vger.kernel.org, mcgrof@kernel.org,
+	akpm@linux-foundation.org, arnd@arndb.de,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Xiubo Li <xiubli@redhat.com>
+Subject: Re: [PATCH 2/2] ceph: wait the first reply of inflight unlink/rmdir
+Message-ID: <202205170402.ez4Z5njh-lkp@intel.com>
+References: <20220516122046.40655-3-xiubli@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,79 +50,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220516122046.40655-3-xiubli@redhat.com>
 
-Hi Josh and Peter,
+Hi Xiubo,
 
-After a recent change in LLVM [1], I see warnings (errors?) from objtool
-when building x86_64 allmodconfig on 5.15 and 5.17:
+I love your patch! Yet something to improve:
 
-  $ make -skj"$(nproc)" KCONFIG_ALLCONFIG=<(echo CONFIG_WERROR) LLVM=1 allmodconfig all
-  ...
-  mm/highmem.o: warning: objtool: no non-local symbols !?
-  mm/highmem.o: warning: objtool: gelf_update_symshndx: invalid section index
-  make[2]: *** [scripts/Makefile.build:288: mm/highmem.o] Error 255
-  ...
-  security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-  security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-  make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-  ...
+[auto build test ERROR on ceph-client/for-linus]
+[also build test ERROR on linus/master v5.18-rc7 next-20220516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I don't see the same errors on x86_64 allmodconfig on mainline so I
-bisected the 5.17 branch and came upon commit 4abff6d48dbc ("objtool:
-Fix code relocs vs weak symbols"). I wanted to see what 5.17 might be
-missing and came to commit ed53a0d97192 ("x86/alternative: Use
-.ibt_endbr_seal to seal indirect calls") in mainline, which I think just
-hides the issue for allmodconfig. I can reproduce this problem with a
-more selective set of config values on mainline:
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiubo-Li/ceph-wait-async-unlink-to-finish/20220516-202249
+base:   https://github.com/ceph/ceph-client.git for-linus
+config: i386-randconfig-a001-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170402.ez4Z5njh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/85d578952d01b70d71fccd86ccb0fdd1dbd0df8b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xiubo-Li/ceph-wait-async-unlink-to-finish/20220516-202249
+        git checkout 85d578952d01b70d71fccd86ccb0fdd1dbd0df8b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-  $ make -skj"$(nproc)" LLVM=1 defconfig
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  $ scripts/config -e KASAN -e SECURITY_TOMOYO -e SECURITY_TOMOYO_OMIT_USERSPACE_LOADER
+All errors (new ones prefixed by >>):
 
-  $ make -skj"$(nproc)" LLVM=1 olddefconfig security/tomoyo/load_policy.o
-  security/tomoyo/load_policy.o: warning: objtool: no non-local symbols !?
-  security/tomoyo/load_policy.o: warning: objtool: gelf_update_symshndx: invalid section index
-  make[3]: *** [scripts/Makefile.build:288: security/tomoyo/load_policy.o] Error 255
-  ...
+>> ld.lld: error: undefined symbol: ceph_wait_on_conflict_unlink
+   >>> referenced by dir.c
+   >>>               ceph/dir.o:(ceph_link) in archive fs/built-in.a
+   >>> referenced by dir.c
+   >>>               ceph/dir.o:(ceph_symlink) in archive fs/built-in.a
+   >>> referenced by dir.c
+   >>>               ceph/dir.o:(ceph_mkdir) in archive fs/built-in.a
+   >>> referenced 3 more times
 
-Looking at the object file, the '.text.asan.module_ctor' section has
-disappeared.
-
-Before:
-
-  $ llvm-nm -S security/tomoyo/load_policy.o
-  0000000000000000 0000000000000001 t asan.module_ctor
-
-  $ llvm-readelf -s security/tomoyo/load_policy.o
-
-  Symbol table '.symtab' contains 4 entries:
-     Num:    Value          Size Type    Bind   Vis       Ndx Name
-       0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-       1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-       2: 0000000000000000     0 SECTION LOCAL  DEFAULT     3 .text.asan.module_ctor
-       3: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-
-After:
-
-  $ llvm-nm -S security/tomoyo/load_policy.o
-  0000000000000000 0000000000000001 t asan.module_ctor
-
-  $ llvm-readelf -s security/tomoyo/load_policy.o
-
-  Symbol table '.symtab' contains 3 entries:
-     Num:    Value          Size Type    Bind   Vis       Ndx Name
-       0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   UND
-       1: 0000000000000000     0 FILE    LOCAL  DEFAULT   ABS load_policy.c
-       2: 0000000000000000     1 FUNC    LOCAL  DEFAULT     3 asan.module_ctor
-
-As far as I understand it, the kernel uses constructors for at least
-KASAN and KCSAN, hence why that change impacts the kernel. Beyond that,
-I am not really sure whether the LLVM change is problematic or objtool
-just is not accounting for something that it should. I am happy to
-provide any additional information that might help understand what is
-going wrong here.
-
-[1]: https://github.com/llvm/llvm-project/commit/badd088c57d7d18acd337b7868fe8c7974c88c5b
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
