@@ -1,142 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5451361
-	for <llvm@lists.linux.dev>; Mon, 16 May 2022 17:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1652720773;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0ejIgoWmRxczoYnPHf/4zfggdO1eNy2ArBNlJdHBm7s=;
-	b=JqXqeYUIPxzu2G5Io088xXI9Memdd73pI6RsbZxT/vNvA20p0lZYR8dRwf3oObt6g94rq8
-	v6JIcLvzgiqWwIMc+femosxXl2dg7ugPd5gDRfSbYkTiff8siAXKXSBauL27Th/+rq9Xwy
-	kQw+Qg58rrv1tkJFVuaHD/4qe0irCs8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-5tpm2HdON8S558dyUutkQw-1; Mon, 16 May 2022 13:06:12 -0400
-X-MC-Unique: 5tpm2HdON8S558dyUutkQw-1
-Received: by mail-qv1-f70.google.com with SMTP id a1-20020a056214130100b00456549a0589so3369373qvv.2
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 10:06:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A831361
+	for <llvm@lists.linux.dev>; Mon, 16 May 2022 17:15:37 +0000 (UTC)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2fb9a85a124so157670917b3.13
+        for <llvm@lists.linux.dev>; Mon, 16 May 2022 10:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SGf6wjrvSBA9+5luKWtA8S1TB1Ho/iykZkRoevKUR/M=;
+        b=sG0LBzcw6X5gtPxGyrwzWMTlfNPOaO9928SvntnUZYb9/aTe8ETQvXR+oTGM+2Q01E
+         FT27+UEachU8nZ1/6NE6iFT0H7w2Z3yA+Xt2mScQcVbGHTAWTIC7oC4Ow2OaFjZ9yRPC
+         zsYacU5leVMUJP7q08JQQ5kO8v4LF8Y18NuJOV1FQrJzkb1Q6HVJDb2aR5qUZZ4fxb8L
+         j83sHlqEvTkYQHwcihaYzN7Qej80njRn7ld+NLQm+PvbJhpZV4rhRz6XHZUrjQV7dE19
+         0b1Wx+2l3Noy/e5cucVImILRyz95RaT9Ba/0fxbWcc15VZWfUSGKEh7MDJ5UgWmgO8Wm
+         Fp5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0ejIgoWmRxczoYnPHf/4zfggdO1eNy2ArBNlJdHBm7s=;
-        b=qNMLLg+By2APA76VE8n48C/iQjYYzThOr9lLt3ZLGDsnCf0TS4qnd6Ei5KNOFP8lV3
-         mLjrcQiViekqj7SJn41qgKXB6S2TIohJGynSm3I0+FU6URq04Jd/FiOIw4FVfv9jogcx
-         BoABVou8/3skmdTmzL9xfZaC0YKD99W91UPdpcZSz9t3AnAgi7S4xU5LCZ/rvnRqygrR
-         gufN6c602pZTabSe3ddX2lIm09q9W4iyYXlVJew08/X2QeJH7rz+RRKoquBUQgFNeXUB
-         GA1oVyFkfSquSwQwKMyt8lOud6yloyxD4EWQYCOrf9EA6mWWUz7msOUYVsIoMNZspq6n
-         XGpg==
-X-Gm-Message-State: AOAM533mEjG8Tuan5IIAYyK7LRgn4Vcfzg2aG5nV5PHM+i8BENb7IYOQ
-	FbqL7198VexgALJ5CnM14YOXTTrZZuodsfugVvqKA1FAmM5w8UXDOiFbnrqQ0cc6mt2fvV+uRCL
-	uyzmQ11WQAKzDo+vKvw75AowBl0OYRORfv6tTYwln+C2ME0U/nfhiFRmrx3Vg
-X-Received: by 2002:ad4:414a:0:b0:461:ce93:f10c with SMTP id z10-20020ad4414a000000b00461ce93f10cmr5008258qvp.73.1652720771243;
-        Mon, 16 May 2022 10:06:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz2m47ZgyrUeZFqTNUFcAJdSpDA0fm/ABlQgiRXf+xheTHQc5HQAFHPXDg1aLZY0I0R0QohcA==
-X-Received: by 2002:ad4:414a:0:b0:461:ce93:f10c with SMTP id z10-20020ad4414a000000b00461ce93f10cmr5008110qvp.73.1652720769745;
-        Mon, 16 May 2022 10:06:09 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id m6-20020ac86886000000b002f39b99f6bcsm5973279qtq.86.2022.05.16.10.06.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 10:06:09 -0700 (PDT)
-Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: arnd@arndb.de, gregkh@linuxfoundation.org, ndesaulniers@google.com,
- ricky_wu@realtek.com, kai.heng.feng@canonical.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220516130047.3887590-1-trix@redhat.com>
- <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
-Date: Mon, 16 May 2022 10:06:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SGf6wjrvSBA9+5luKWtA8S1TB1Ho/iykZkRoevKUR/M=;
+        b=0blsiN5N/K+qzO1eUhXUU46yN/u+igdyENahHcEJ9aG+o/P4ymQ9v+xQL8P1zLXyKN
+         HALMY07tVP4YCmaogRW+q71N1k4zEQ8M7wm34bIiXQTw12ekwN0nXegkHXG9Ifjssjgq
+         fl5uiffjUcfWe53mKfou3s7MID6cd5NxCxL03FVuC33ZuVyr4MIUirgsQucNByz2XTpX
+         BNQBvBkViAj1++DeXH9E1s7nJEwG+LByb7Cy3I12WvLx8uSn211D+Yuj3OL6jL7W7RWz
+         uDmIyKI+0cm4vcsQoGfI1/2g0yqG1o4i2tFeB8C+O/zRLaAbUS17QANGYZGSogAR3Wul
+         CemA==
+X-Gm-Message-State: AOAM533vY71A1r30+b1tEZW0quBPs2voycioEdaNMjlFSAt7nIsXaf1t
+	ZjdPJ2hZd+i9M7pF91gXggBRZOLSSJgHhQgj1S4PBg==
+X-Google-Smtp-Source: ABdhPJwVJxOR6miZJ4+xQc2WHDZMKppmkvrGNnjVqxWGG/tKcoV/VdOV2r77ffndCOhGZP+04/DkGyU0orcJhTS4elU=
+X-Received: by 2002:a0d:d747:0:b0:2ff:22b9:9281 with SMTP id
+ z68-20020a0dd747000000b002ff22b99281mr186733ywd.305.1652721336717; Mon, 16
+ May 2022 10:15:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com> <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+In-Reply-To: <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 16 May 2022 10:15:00 -0700
+Message-ID: <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-
-On 5/16/22 8:56 AM, Nathan Chancellor wrote:
-> On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
->> The clang build fails with
->> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->>          } else if (efuse_valid == 0) {
->>                     ^~~~~~~~~~~~~~~~
->>
->> setting_reg2 is set in this block
->>    if (efuse_valid == 2 || efuse_valid == 3) {
->> ..
->>    } else if (efuse_valid == 0) {
->>      // default
->> ..
->>    }
->> But efuse_valid can also have a value of 1.
->> Change the 'else if' to 'else' to make the second block the default.
->>
->> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
->> Signed-off-by: Tom Rix <trix@redhat.com>
-> I am not sure if this fix is correct from a functional standpoint (i.e.
-> is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
-> it is better than not handling this value altogether. For what it's
-> worth:
-
-I looked at how the code used to work, this seemed better than 
-initializing to NULL.
-
+On Mon, May 16, 2022 at 2:54 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> On Fri, May 13, 2022 at 01:21:58PM -0700, Sami Tolvanen wrote:
+> > With CONFIG_CFI_CLANG, the compiler injects a type preamble
+> > immediately before each function and a check to validate the target
+> > function type before indirect calls:
+> >
+> >   ; type preamble
+> >   __cfi_function:
+> >     int3
+> >     int3
+> >     mov <id>, %eax
+> >     int3
+> >     int3
+> >   function:
+> >     ...
 >
-> As a side note, it is unfortunate that this change made it into -next
-> when there was an outstanding report about this warning:
-
- From the clang side, this is a build break and my static analysis infra 
-goes down.
-
-These build breaks seem to happening every week, is there a precommit 
-clang gating test that could be done for -next ?
-
-Tom
-
+> When I enable CFI_CLANG and X86_KERNEL_IBT I get:
 >
-> https://lore.kernel.org/202205100220.WyAyhKap-lkp@intel.com/
+> 0000000000000c80 <__cfi_io_schedule_timeout>:
+> c80:   cc                      int3
+> c81:   cc                      int3
+> c82:   b8 b5 b1 39 b3          mov    $0xb339b1b5,%eax
+> c87:   cc                      int3
+> c88:   cc                      int3
 >
->> ---
->>   drivers/misc/cardreader/rts5261.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
->> index 749cc5a46d13..f22634b14dc8 100644
->> --- a/drivers/misc/cardreader/rts5261.c
->> +++ b/drivers/misc/cardreader/rts5261.c
->> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
->>   			setting_reg1 = PCR_SETTING_REG4;
->>   			setting_reg2 = PCR_SETTING_REG5;
->>   		}
->> -	} else if (efuse_valid == 0) {
->> +	} else {
->>   		// default
->>   		setting_reg1 = PCR_SETTING_REG1;
->>   		setting_reg2 = PCR_SETTING_REG2;
->> -- 
->> 2.27.0
->>
-> Cheers,
-> Nathan
+> 0000000000000c89 <io_schedule_timeout>:
+> c89:   f3 0f 1e fa             endbr64
 >
+>
+> That seems unfortunate. Would it be possible to get an additional
+> compiler option to suppress the endbr for all symbols that get a __cfi_
+> preaamble?
 
+What's the concern with the endbr? Dropping it would currently break
+the CFI+IBT combination on newer hardware, no?
+
+> Also, perhaps s/CFI_CLANG/KERNEL_CFI/ or somesuch, so that GCC might
+> also implement this same scheme (in time)?
+
+I'm fine with renaming the config.
+
+> >   ; indirect call check
+> >     cmpl    <id>, -6(%r11)
+> >     je      .Ltmp1
+> >     ud2
+> >   .Ltmp1:
+> >     call    __x86_indirect_thunk_r11
+>
+> The first one I try and find looks like:
+>
+> 26:       41 81 7b fa a6 96 9e 38         cmpl   $0x389e96a6,-0x6(%r11)
+> 2e:       74 02                   je     32 <__traceiter_sched_kthread_stop+0x29>
+> 30:       0f 0b                   ud2
+> 32:       4c 89 f6                mov    %r14,%rsi
+> 35:       e8 00 00 00 00          call   3a <__traceiter_sched_kthread_stop+0x31> 36: R_X86_64_PLT32      __x86_indirect_thunk_r11-0x4
+>
+> This must not be. If I'm to rewrite that lot to:
+>
+>   movl  $\hash, %r10d
+>   sub   $9, %r11
+>   call  *%r11
+>   .nop  4
+>
+> Then there must not be spurious instruction in between the ud2 and the
+> indirect call/retpoline thing.
+
+With the current compiler patch, LLVM sets up function arguments after
+the CFI check. if it's a problem, we can look into changing that.
+
+Sami
