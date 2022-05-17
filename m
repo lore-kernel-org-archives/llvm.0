@@ -1,146 +1,201 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370D97A
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 01:59:23 +0000 (UTC)
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4BDA83F5F4
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 01:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1652752416;
-	bh=0IJeGuY5tYKvN9axhAJnVrgVgRACxJYzXE/eYjk+nos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=IpuQr5fTBtNkIoXTS+mr+yt8mixkfmYsXfCzGrGINQ8dnGNf5mWrDgsx7BpApLjLS
-	 fZQlV6M6PTEgWaTn2IpbqOVGiGqRGwP5RMZLUX0MiJHM0/r3frTfUrsaDDmbNZBOvB
-	 KRRhLbBY2Ti1QDCLMSzQVNUTEHC/GUB6zP1ZiTfO+W4tTNgfiwnlHvuZTynvA1BXJ8
-	 NZyOoR61czGm3epwA1jXT7cRtH4Gy29lnuUiDMTO9r+gQs6VJL8E2zalYTH7LAaPWL
-	 /0caV6ZR8CofHePsB6bx4Pz6NCe+kHQ2ov4hOg+FhOQaFO9U6oPSX6kFpat4ziqjU7
-	 rUHTGq+ubeldA==
-Received: by mail-oi1-f199.google.com with SMTP id t67-20020acaaa46000000b00326e00d791eso6034462oie.16
-        for <llvm@lists.linux.dev>; Mon, 16 May 2022 18:53:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0IJeGuY5tYKvN9axhAJnVrgVgRACxJYzXE/eYjk+nos=;
-        b=CpGZL+0uhvtl58jjMWtTOInvwBq3UYi7Qowueu5f2/z3rtTGXoFsO91SWmlO3+Jwur
-         Px4NjCUMmmLyHlGPZGXDVkUfONk8Rcr1IQoRvlWXu5Q31H3MApCUlBOcp2lRrvHHvfoc
-         iBx4EZQXQvgCaa3n/pFklj5WhBI/NsF84wZO1Dc+NJNs6vJmWIW8HymqcQmk7MSD4J5g
-         9AFwbqNiosZa2e3IPn/R+0tVaQf7hs9Q7pdP76Muebrm4MNBO0LGoFTUD59W/r2geuow
-         6Xl9LUIeGS9oBEJ1w00Zm2eHFRds2W0X5kuuGw4w22cPitXKGih5wSZFPUVVzcxCm/q7
-         exgg==
-X-Gm-Message-State: AOAM533HaYl8/hWI0nDKxksvU8Re8KvBGBp6m26XFieqo676KtvLCtXn
-	gTgrCl8ooMc8QnH4+2yrmpWOTCYA4qYSvrfn7g/G+EbWZxeUo6zJiSVzcOPD6NOB48hDmV+eQ2V
-	tWFwoo/Wob77G+xpSlkOaq2GoTQqOe0SK9imcfET/OqYUHwo=
-X-Received: by 2002:a05:6830:33cf:b0:5af:4018:fc2a with SMTP id q15-20020a05683033cf00b005af4018fc2amr7287432ott.161.1652752415165;
-        Mon, 16 May 2022 18:53:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxQKaMjm+HGo56tEW8iIAzIfXbZpXdSSZ5jTkEIdP2Cq6Z/yGa2ufblWkAi6dIjmMf/A7vt0doEce2wz99pDv4=
-X-Received: by 2002:a05:6830:33cf:b0:5af:4018:fc2a with SMTP id
- q15-20020a05683033cf00b005af4018fc2amr7287417ott.161.1652752414886; Mon, 16
- May 2022 18:53:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6001E10F8
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 03:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652756996; x=1684292996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bZSWVzfk62hRgRSBoatVgskFp9AcVeOHwhKIxAPvNzg=;
+  b=EagOkpxtUErQI7QpCvfeDTb0DLE9P3ggdbVuGQA8Vu1ypN5cBm8nSj4B
+   StQ3CRA9gG2kg8e+pX1jfN46rQtgqYsfO3LTuiDz5X6PVMUhB8s9lID+G
+   d4LAKPETcVCWskfpHoH/6sl3wBDb4xXTjYmrzOk3tZHn3j/nxlMCvEG0h
+   lfNuwZA/SeoT0hLThf8SGWnF/howdrs6nYfBuOCPCMxiGeFrWOL6XpujB
+   q5PrSZJAmlqFzjqRq/7k2G2M9HUUILACfds6EIiYQDit/PhqTd6zvBlIF
+   S2LGIevAzid85b6/JnuENK1trzTRqeSCd7EzsD5vjxk1rxixIN0jAeMYd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357447370"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="357447370"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 20:09:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="626254755"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 16 May 2022 20:09:54 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nqnar-0000YL-Dr;
+	Tue, 17 May 2022 03:09:53 +0000
+Date: Tue, 17 May 2022 11:09:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	linux-bluetooth@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v2] Bluetooth: MGMT: Fix uses of bitmap_from_u64
+Message-ID: <202205171145.9ekbbpAa-lkp@intel.com>
+References: <20220516203539.1708251-1-luiz.dentz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220516130047.3887590-1-trix@redhat.com> <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
- <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
-In-Reply-To: <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Tue, 17 May 2022 09:53:23 +0800
-Message-ID: <CAAd53p57APcectWW-NN_=HE6JkTQRk717cWNZ5iJcP+MtEYjog@mail.gmail.com>
-Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
-To: Tom Rix <trix@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, arnd@arndb.de, gregkh@linuxfoundation.org, 
-	ndesaulniers@google.com, ricky_wu@realtek.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516203539.1708251-1-luiz.dentz@gmail.com>
 
-On Tue, May 17, 2022 at 1:06 AM Tom Rix <trix@redhat.com> wrote:
->
->
-> On 5/16/22 8:56 AM, Nathan Chancellor wrote:
-> > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
-> >> The clang build fails with
-> >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> >>          } else if (efuse_valid == 0) {
-> >>                     ^~~~~~~~~~~~~~~~
-> >>
-> >> setting_reg2 is set in this block
-> >>    if (efuse_valid == 2 || efuse_valid == 3) {
-> >> ..
-> >>    } else if (efuse_valid == 0) {
-> >>      // default
-> >> ..
-> >>    }
-> >> But efuse_valid can also have a value of 1.
-> >> Change the 'else if' to 'else' to make the second block the default.
-> >>
-> >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> > I am not sure if this fix is correct from a functional standpoint (i.e.
-> > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?) but
-> > it is better than not handling this value altogether. For what it's
-> > worth:
->
-> I looked at how the code used to work, this seemed better than
-> initializing to NULL.
+Hi Luiz,
 
-Or maybe use a single if block?
+I love your patch! Perhaps something to improve:
 
-u16 setting_reg1 =PCR_SETTING_REG1 , setting_reg2 = PCR_SETTING_REG2;
-...
-if ((efuse_valid == 2 || efuse_valid == 3) && (valid != 3) {
-    setting_reg1 = PCR_SETTING_REG4;
-    setting_reg2 = PCR_SETTING_REG5;
-}
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on next-20220516]
+[cannot apply to bluetooth/master v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Kai-Heng
+url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-MGMT-Fix-uses-of-bitmap_from_u64/20220517-050324
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+config: hexagon-randconfig-r041-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171145.9ekbbpAa-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/15b968f930769afbaabbfb85c2cefcbc30506a7b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Luiz-Augusto-von-Dentz/Bluetooth-MGMT-Fix-uses-of-bitmap_from_u64/20220517-050324
+        git checkout 15b968f930769afbaabbfb85c2cefcbc30506a7b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/bluetooth/
 
->
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > As a side note, it is unfortunate that this change made it into -next
-> > when there was an outstanding report about this warning:
->
->  From the clang side, this is a build break and my static analysis infra
-> goes down.
->
-> These build breaks seem to happening every week, is there a precommit
-> clang gating test that could be done for -next ?
->
-> Tom
->
-> >
-> > https://lore.kernel.org/202205100220.WyAyhKap-lkp@intel.com/
-> >
-> >> ---
-> >>   drivers/misc/cardreader/rts5261.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-> >> index 749cc5a46d13..f22634b14dc8 100644
-> >> --- a/drivers/misc/cardreader/rts5261.c
-> >> +++ b/drivers/misc/cardreader/rts5261.c
-> >> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
-> >>                      setting_reg1 = PCR_SETTING_REG4;
-> >>                      setting_reg2 = PCR_SETTING_REG5;
-> >>              }
-> >> -    } else if (efuse_valid == 0) {
-> >> +    } else {
-> >>              // default
-> >>              setting_reg1 = PCR_SETTING_REG1;
-> >>              setting_reg2 = PCR_SETTING_REG2;
-> >> --
-> >> 2.27.0
-> >>
-> > Cheers,
-> > Nathan
-> >
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/bluetooth/mgmt.c:7113:7: warning: variable 'params' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (err)
+                       ^~~
+   net/bluetooth/mgmt.c:7163:9: note: uninitialized use occurs here
+                                params ? params->flags : NULL);
+                                ^~~~~~
+   net/bluetooth/mgmt.c:7113:3: note: remove the 'if' if its condition is always true
+                   if (err)
+                   ^~~~~~~~
+   net/bluetooth/mgmt.c:7082:32: note: initialize the variable 'params' to silence this warning
+           struct hci_conn_params *params;
+                                         ^
+                                          = NULL
+   1 warning generated.
+
+
+vim +7113 net/bluetooth/mgmt.c
+
+e8907f76544ffe Luiz Augusto von Dentz 2021-10-27  7076  
+2faade53e65f27 Marcel Holtmann        2014-06-29  7077  static int add_device(struct sock *sk, struct hci_dev *hdev,
+2faade53e65f27 Marcel Holtmann        2014-06-29  7078  		      void *data, u16 len)
+2faade53e65f27 Marcel Holtmann        2014-06-29  7079  {
+2faade53e65f27 Marcel Holtmann        2014-06-29  7080  	struct mgmt_cp_add_device *cp = data;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7081  	u8 auto_conn, addr_type;
+4c54bf2b093bb2 Abhishek Pandit-Subedi 2020-06-17  7082  	struct hci_conn_params *params;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7083  	int err;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7084  
+181d695352305c Marcel Holtmann        2020-05-06  7085  	bt_dev_dbg(hdev, "sock %p", sk);
+2faade53e65f27 Marcel Holtmann        2014-06-29  7086  
+6659358efe617b Johan Hedberg          2014-07-09  7087  	if (!bdaddr_type_is_valid(cp->addr.type) ||
+2faade53e65f27 Marcel Holtmann        2014-06-29  7088  	    !bacmp(&cp->addr.bdaddr, BDADDR_ANY))
+2a1afb5ac8d580 Johan Hedberg          2015-03-06  7089  		return mgmt_cmd_complete(sk, hdev->id, MGMT_OP_ADD_DEVICE,
+2faade53e65f27 Marcel Holtmann        2014-06-29  7090  					 MGMT_STATUS_INVALID_PARAMS,
+2faade53e65f27 Marcel Holtmann        2014-06-29  7091  					 &cp->addr, sizeof(cp->addr));
+2faade53e65f27 Marcel Holtmann        2014-06-29  7092  
+4b9e7e7516135b Marcel Holtmann        2014-07-23  7093  	if (cp->action != 0x00 && cp->action != 0x01 && cp->action != 0x02)
+2a1afb5ac8d580 Johan Hedberg          2015-03-06  7094  		return mgmt_cmd_complete(sk, hdev->id, MGMT_OP_ADD_DEVICE,
+2faade53e65f27 Marcel Holtmann        2014-06-29  7095  					 MGMT_STATUS_INVALID_PARAMS,
+2faade53e65f27 Marcel Holtmann        2014-06-29  7096  					 &cp->addr, sizeof(cp->addr));
+2faade53e65f27 Marcel Holtmann        2014-06-29  7097  
+2faade53e65f27 Marcel Holtmann        2014-06-29  7098  	hci_dev_lock(hdev);
+2faade53e65f27 Marcel Holtmann        2014-06-29  7099  
+6659358efe617b Johan Hedberg          2014-07-09  7100  	if (cp->addr.type == BDADDR_BREDR) {
+4b9e7e7516135b Marcel Holtmann        2014-07-23  7101  		/* Only incoming connections action is supported for now */
+6659358efe617b Johan Hedberg          2014-07-09  7102  		if (cp->action != 0x01) {
+51d7a94d56f842 Johan Hedberg          2015-11-11  7103  			err = mgmt_cmd_complete(sk, hdev->id,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7104  						MGMT_OP_ADD_DEVICE,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7105  						MGMT_STATUS_INVALID_PARAMS,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7106  						&cp->addr, sizeof(cp->addr));
+6659358efe617b Johan Hedberg          2014-07-09  7107  			goto unlock;
+6659358efe617b Johan Hedberg          2014-07-09  7108  		}
+6659358efe617b Johan Hedberg          2014-07-09  7109  
+3d4f9c00492b4e Archie Pusaka          2021-06-04  7110  		err = hci_bdaddr_list_add_with_flags(&hdev->accept_list,
+8baaa4038edbff Abhishek Pandit-Subedi 2020-06-17  7111  						     &cp->addr.bdaddr,
+8baaa4038edbff Abhishek Pandit-Subedi 2020-06-17  7112  						     cp->addr.type, 0);
+6659358efe617b Johan Hedberg          2014-07-09 @7113  		if (err)
+6659358efe617b Johan Hedberg          2014-07-09  7114  			goto unlock;
+a397407f266f8d Johan Hedberg          2014-07-09  7115  
+01b1cb87d37fb1 Johan Hedberg          2015-11-16  7116  		hci_req_update_scan(hdev);
+a397407f266f8d Johan Hedberg          2014-07-09  7117  
+6659358efe617b Johan Hedberg          2014-07-09  7118  		goto added;
+6659358efe617b Johan Hedberg          2014-07-09  7119  	}
+6659358efe617b Johan Hedberg          2014-07-09  7120  
+85813a7ec774b9 Johan Hedberg          2015-10-21  7121  	addr_type = le_addr_type(cp->addr.type);
+2faade53e65f27 Marcel Holtmann        2014-06-29  7122  
+4b9e7e7516135b Marcel Holtmann        2014-07-23  7123  	if (cp->action == 0x02)
+2faade53e65f27 Marcel Holtmann        2014-06-29  7124  		auto_conn = HCI_AUTO_CONN_ALWAYS;
+4b9e7e7516135b Marcel Holtmann        2014-07-23  7125  	else if (cp->action == 0x01)
+4b9e7e7516135b Marcel Holtmann        2014-07-23  7126  		auto_conn = HCI_AUTO_CONN_DIRECT;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7127  	else
+a3451d279f839d Johan Hedberg          2014-07-02  7128  		auto_conn = HCI_AUTO_CONN_REPORT;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7129  
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7130  	/* Kernel internally uses conn_params with resolvable private
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7131  	 * address, but Add Device allows only identity addresses.
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7132  	 * Make sure it is enforced before calling
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7133  	 * hci_conn_params_lookup.
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7134  	 */
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7135  	if (!hci_is_identity_address(&cp->addr.bdaddr, addr_type)) {
+51d7a94d56f842 Johan Hedberg          2015-11-11  7136  		err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_ADD_DEVICE,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7137  					MGMT_STATUS_INVALID_PARAMS,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7138  					&cp->addr, sizeof(cp->addr));
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7139  		goto unlock;
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7140  	}
+9a0a8a8e852dab Jakub Pawlowski        2015-07-20  7141  
+bf5b3c8be07905 Marcel Holtmann        2014-06-30  7142  	/* If the connection parameters don't exist for this device,
+bf5b3c8be07905 Marcel Holtmann        2014-06-30  7143  	 * they will be created and configured with defaults.
+bf5b3c8be07905 Marcel Holtmann        2014-06-30  7144  	 */
+51d7a94d56f842 Johan Hedberg          2015-11-11  7145  	if (hci_conn_params_set(hdev, &cp->addr.bdaddr, addr_type,
+d06b50ce14119a Marcel Holtmann        2014-07-01  7146  				auto_conn) < 0) {
+51d7a94d56f842 Johan Hedberg          2015-11-11  7147  		err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_ADD_DEVICE,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7148  					MGMT_STATUS_FAILED, &cp->addr,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7149  					sizeof(cp->addr));
+2faade53e65f27 Marcel Holtmann        2014-06-29  7150  		goto unlock;
+4c54bf2b093bb2 Abhishek Pandit-Subedi 2020-06-17  7151  	} else {
+4c54bf2b093bb2 Abhishek Pandit-Subedi 2020-06-17  7152  		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
+4c54bf2b093bb2 Abhishek Pandit-Subedi 2020-06-17  7153  						addr_type);
+2faade53e65f27 Marcel Holtmann        2014-06-29  7154  	}
+2faade53e65f27 Marcel Holtmann        2014-06-29  7155  
+e8907f76544ffe Luiz Augusto von Dentz 2021-10-27  7156  	err = hci_cmd_sync_queue(hdev, add_device_sync, NULL, NULL);
+e8907f76544ffe Luiz Augusto von Dentz 2021-10-27  7157  	if (err < 0)
+e8907f76544ffe Luiz Augusto von Dentz 2021-10-27  7158  		goto unlock;
+51d7a94d56f842 Johan Hedberg          2015-11-11  7159  
+6659358efe617b Johan Hedberg          2014-07-09  7160  added:
+8afef092a192cb Marcel Holtmann        2014-06-29  7161  	device_added(sk, hdev, &cp->addr.bdaddr, cp->addr.type, cp->action);
+4c54bf2b093bb2 Abhishek Pandit-Subedi 2020-06-17  7162  	device_flags_changed(NULL, hdev, &cp->addr.bdaddr, cp->addr.type,
+15b968f930769a Luiz Augusto von Dentz 2022-05-16  7163  			     params ? params->flags : NULL);
+8afef092a192cb Marcel Holtmann        2014-06-29  7164  
+51d7a94d56f842 Johan Hedberg          2015-11-11  7165  	err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_ADD_DEVICE,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7166  				MGMT_STATUS_SUCCESS, &cp->addr,
+51d7a94d56f842 Johan Hedberg          2015-11-11  7167  				sizeof(cp->addr));
+2faade53e65f27 Marcel Holtmann        2014-06-29  7168  
+2faade53e65f27 Marcel Holtmann        2014-06-29  7169  unlock:
+2faade53e65f27 Marcel Holtmann        2014-06-29  7170  	hci_dev_unlock(hdev);
+2faade53e65f27 Marcel Holtmann        2014-06-29  7171  	return err;
+2faade53e65f27 Marcel Holtmann        2014-06-29  7172  }
+2faade53e65f27 Marcel Holtmann        2014-06-29  7173  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
