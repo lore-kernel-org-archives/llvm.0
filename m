@@ -1,193 +1,119 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59471874
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 22:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652825426; x=1684361426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ffg6rv8JZmAM/Vut3zOFIclJ/LXo7tALPpgvXJyK+5c=;
-  b=cdZaiIyC4rRKNHbInDJH7xcfkeb7zscdKPGquk+eIxLowXpYSFjK1Yhx
-   SHvB6lEUZz4084QY1QhnoFg/GTPKQ3x5kFvRHkJxNTIGzCYG7uGfcbJNH
-   yLEk6Z30do7g3jIXDDcg0k+VV1ivno//+7VyaWKVkYJlbvgZG9Qmqe570
-   eGNYMLMrqzko/SzGQK9jz1h0O8QZz07yUJn9H9RayGhFZZSyUNdGQEL91
-   CUQqvcBzlvBUcZMW74042ZJGZXev0IeFPQ2sGVlrT5JrX/+Q/QN/n+SFE
-   AjBd1ly2VwVW05ZUHfgmavXh3Z1B9umDHCGR0oSJl1OuhADoVPpHSmxKx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357764264"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="357764264"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:10:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="700270819"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 May 2022 15:10:04 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nr5OG-0001Up-1V;
-	Tue, 17 May 2022 22:10:04 +0000
-Date: Wed, 18 May 2022 06:09:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sui Chen <suichen@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC Patch v5 1/1] i2c debug counters as sysfs attributes
-Message-ID: <202205180518.gLEg6p2y-lkp@intel.com>
-References: <20220517100505.2569874-2-suichen@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03B11FA5
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 22:29:50 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id f4so489521lfu.12
+        for <llvm@lists.linux.dev>; Tue, 17 May 2022 15:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vRrKK940tfY15AL/k2whqSoFtZdbDZpofZ1keoPwuls=;
+        b=bmW79KvYYbX9yJ25BckYi9U4OZPqh9WoGqI0OtODtPwXovUvFB0Mlx7LQg5aEmBLUA
+         BiVzwzxveln6wne0cgVGF37mWxwUOsxkjXFyhS7Ax8UPP2uL61asXWWhB84s9eLrEoZI
+         afCElLueYI9Ar3gaweUf3VPgkl8g5E5Xa1bH3nfox4kc7tal/yDxEE7djtQyPkLGrlNm
+         FZTPC87BoRi7kWr611X2F6GFlucPK7Ih5N/LkMzOwVzwow7t/qDugrr5X5/tiMk8pEf7
+         pcJeNVa+Qj8MSJRjtdM+pY3HWqdoLYvA/hhXaTzVduKO35znsTrdWKlyNc4Jl4t0AgRo
+         3SZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vRrKK940tfY15AL/k2whqSoFtZdbDZpofZ1keoPwuls=;
+        b=GKdVOOxyBk9SDukpNDViyaJdDz+IBBxOdXh0qPFQnTqI4igV8q7/L9vbYnmZKAPf5O
+         EraQDCDahQ5tC2W6A+Q1oUgw2TVW+jwF1JreggaqnqiLyGBKPK2aRbNKxKAOnqRZ/sX1
+         LGtHYFMDRJilqmlDkXlq+Hrzlg8R1L4hSIYdRUX+5Q/moGpC7ck89UUEbOby4TgN0Yaz
+         3gE4kfBa71H7M7ZtyJtVsDyRq++x/yhgpxOtoB0M3IXJ3g68uHuw1NfI+hDiN0RJ4Adp
+         71BlEPbF80wsG6CQf7lZ2V2vSIvkEyajldjYCU5KuCAoqJxHcDlUVv8RoWUkjxXJghb1
+         VGbQ==
+X-Gm-Message-State: AOAM530G3HDRXPk4VXiACkBewwLn6eUgXB4fZKqEVi+FLceoG7exYRVG
+	XwQOIB35z+7M2kc+8Y25+g4Kp4+0z2mnA/JENMio/Q==
+X-Google-Smtp-Source: ABdhPJzAQmbCDjA2O7dLfFPHDMx+mXoBHhB/mP3eIxQ/7+fxV1qQkpaIZEiwttGEcDDfQrLU5iW98Ti7DlMBe9dnlbo=
+X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
+ f17-20020a05651201d100b00471f63ab182mr18342309lfp.392.1652826588756; Tue, 17
+ May 2022 15:29:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517100505.2569874-2-suichen@google.com>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local> <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+ <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
+In-Reply-To: <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 17 May 2022 15:29:36 -0700
+Message-ID: <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
+Subject: Re: Dangerous addr to ctrl dependency transformation in fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+To: =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>, 
+	Charalampos Mainas <charalampos.mainas@gmail.com>, Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sui,
+On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
+<paul.heidekrueger@in.tum.de> wrote:
+>
+> On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
+> > On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
+> > <paul.heidekrueger@in.tum.de> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > work on my dependency checker tool is progressing nicely, and it is
+> > > flagging, what I believe is, a harmful addr to ctrl dependency
+> > > transformation. For context, see [1] and [2]. I'm using the Clang
+> > > compiler.
+> > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachme=
+nts/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pr=
+o/T/#u
+> >
+> > Hi Paul,
+> > Thanks for the report and your (and your team's) work on this tool.
+> > Orthogonal to your report, Jose (cc'ed) and I are currently in the
+> > planning process to put together a Kernel+Toolchain microconference
+> > track at Linux Plumbers Conference [0] this year (Sept 12-14) in
+> > Dublin, Ireland.  Would you or someone from your group be able and
+> > interested in presenting more information about your work to an
+> > audience of kernel and toolchain developers at such an event?
+> >
+> > Would others be interested in such a topic? (What do they say in
+> > Starship Troopers...?...Would you like to know more?)
+> >
+> > [0] https://lpc.events/event/16/
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+> Hi Nick and Jose,
+>
+> Many thanks for inviting us! I would love to do a talk at LPC! Hopefully
+> in person too.
+>
+> Given that there have been several talks around this topic at LPC
+> already, it seems very fitting, and we'll hopefully have more to share
+> by then. Actually we have more to share already :-)
+>
+> https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/T/=
+#u
+>
+> I assume we will have to submit an abstract soon?
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on linux/master linus/master v5.18-rc7 next-20220517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Yes, if you go to: https://lpc.events/event/16/abstracts/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Chen/i2c-core-Adapter-and-client-stats-as-sysfs-attributes/20220517-180857
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: i386-randconfig-a003-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180518.gLEg6p2y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2d26f1bca9ffcd15ddb7ab0bbb596cacd89712ca
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sui-Chen/i2c-core-Adapter-and-client-stats-as-sysfs-attributes/20220517-180857
-        git checkout 2d26f1bca9ffcd15ddb7ab0bbb596cacd89712ca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/i2c/
+click "Submit new abstract" in the bottom right.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/i2c-core-base.c:280:6: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-           int ret = adap->bus_recovery_info->recover_bus(adap);
-               ^
->> drivers/i2c/i2c-core-base.c:910:9: warning: no previous prototype for function 'i2c_client_stats_messages_show' [-Wmissing-prototypes]
-   ssize_t i2c_client_stats_messages_show(struct kobject *kobj, struct kobj_attribute *addr,
-           ^
-   drivers/i2c/i2c-core-base.c:910:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t i2c_client_stats_messages_show(struct kobject *kobj, struct kobj_attribute *addr,
-   ^
-   static 
->> drivers/i2c/i2c-core-base.c:922:9: warning: no previous prototype for function 'i2c_client_stats_bus_errors_show' [-Wmissing-prototypes]
-   ssize_t i2c_client_stats_bus_errors_show(struct kobject *kobj, struct kobj_attribute *addr,
-           ^
-   drivers/i2c/i2c-core-base.c:922:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t i2c_client_stats_bus_errors_show(struct kobject *kobj, struct kobj_attribute *addr,
-   ^
-   static 
->> drivers/i2c/i2c-core-base.c:934:9: warning: no previous prototype for function 'i2c_client_stats_nacks_show' [-Wmissing-prototypes]
-   ssize_t i2c_client_stats_nacks_show(struct kobject *kobj, struct kobj_attribute *addr,
-           ^
-   drivers/i2c/i2c-core-base.c:934:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t i2c_client_stats_nacks_show(struct kobject *kobj, struct kobj_attribute *addr,
-   ^
-   static 
->> drivers/i2c/i2c-core-base.c:946:9: warning: no previous prototype for function 'i2c_client_stats_timeouts_show' [-Wmissing-prototypes]
-   ssize_t i2c_client_stats_timeouts_show(struct kobject *kobj, struct kobj_attribute *addr,
-           ^
-   drivers/i2c/i2c-core-base.c:946:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t i2c_client_stats_timeouts_show(struct kobject *kobj, struct kobj_attribute *addr,
-   ^
-   static 
-   drivers/i2c/i2c-core-base.c:968:3: error: field designator 'default_attrs' does not refer to any field in type 'struct kobj_type'
-           .default_attrs = i2c_client_stats_attrs,
-            ^
->> drivers/i2c/i2c-core-base.c:1064:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           kobject_init_and_add(&client_stats->kobj, &i2c_client_stats_ktype,
-           ^~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/i2c/i2c-core-base.c:2704:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret, addr;
-               ^
->> drivers/i2c/i2c-core-base.c:2703:7: warning: unused variable 'buf' [-Wunused-variable]
-           char buf[32];
-                ^
-   8 warnings and 1 error generated.
---
->> drivers/i2c/i2c-dev.c:786:9: warning: no previous prototype for function 'bus_errors_show' [-Wmissing-prototypes]
-   ssize_t bus_errors_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:786:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t bus_errors_show(struct device *pdev,
-   ^
-   static 
->> drivers/i2c/i2c-dev.c:793:9: warning: no previous prototype for function 'transfers_show' [-Wmissing-prototypes]
-   ssize_t transfers_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:793:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t transfers_show(struct device *pdev,
-   ^
-   static 
->> drivers/i2c/i2c-dev.c:800:9: warning: no previous prototype for function 'nacks_show' [-Wmissing-prototypes]
-   ssize_t nacks_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:800:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t nacks_show(struct device *pdev,
-   ^
-   static 
->> drivers/i2c/i2c-dev.c:807:9: warning: no previous prototype for function 'recovery_successes_show' [-Wmissing-prototypes]
-   ssize_t recovery_successes_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:807:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t recovery_successes_show(struct device *pdev,
-   ^
-   static 
->> drivers/i2c/i2c-dev.c:814:9: warning: no previous prototype for function 'recovery_failures_show' [-Wmissing-prototypes]
-   ssize_t recovery_failures_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:814:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t recovery_failures_show(struct device *pdev,
-   ^
-   static 
->> drivers/i2c/i2c-dev.c:821:9: warning: no previous prototype for function 'timeouts_show' [-Wmissing-prototypes]
-   ssize_t timeouts_show(struct device *pdev,
-           ^
-   drivers/i2c/i2c-dev.c:821:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t timeouts_show(struct device *pdev,
-   ^
-   static 
-   6 warnings generated.
-
-
-vim +280 drivers/i2c/i2c-core-base.c
-
-   270	
-   271	int i2c_recover_bus(struct i2c_adapter *adap)
-   272	{
-   273		if (!adap->stats)
-   274			i2c_adapter_create_stats_directory(adap);
-   275	
-   276		if (!adap->bus_recovery_info)
-   277			return -EBUSY;
-   278	
-   279		dev_dbg(&adap->dev, "Trying i2c bus recovery\n");
- > 280		int ret = adap->bus_recovery_info->recover_bus(adap);
-   281	
-   282		if (ret == 0)
-   283			++(adap->stats->recovery_successes);
-   284		else
-   285			++(adap->stats->recovery_failures);
-   286	
-   287		return ret;
-   288	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Under the "Track" dropdown, please select "Toolchains Track."
+--=20
+Thanks,
+~Nick Desaulniers
