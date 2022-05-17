@@ -1,87 +1,75 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28FD10E8
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:51:23 +0000 (UTC)
-Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 83244CCF8D
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:21:21 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id B3BA7240006;
-	Tue, 17 May 2022 08:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1652775672;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y1/AW8BzbU/J7Ef4GC883IGCwsyydNpj3xsEo4FKgGM=;
-	b=aCE5S3xg+ZtS00gLcC8M4Ey5prbCVQ+Vbl7wceGLpnjHN+tsHiiyHzIh/fLa0zg1Irr8IM
-	ZOU1BHAilJ5JFwlTJSa9IEu65dGG7cwMo0qsadEj+eKloJmQL6riHROruaUJpBYA6dG8hp
-	FDxJLNFegrgRko0KZgvkcWlkW4Gg0z52KaKTvcrsAVVrgdVz8+e+EXeH5Wn+BZCexhCTuI
-	Dr9aY5dExZEDWe6HtucI+P2ONJdIeTrIr4tbXGljhkZ5pZcePOIuU1WQZ+24JnuTRXIHQy
-	SLgi3J+s62Zc7D6yPc9b7I8Ls9jUAPtLt4GknCkBm+I/dAj8BizliNITpK/SJw==
-Date: Tue, 17 May 2022 10:21:10 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Mikhail Zhilkin <csharper2005@gmail.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>,
- NOGUCHI Hiroshi <drvlabo@gmail.com>
-Subject: Re: [linux-next:master 10956/12195] ERROR: modpost: "__udivdi3"
- [drivers/mtd/parsers/scpart.ko] undefined!
-Message-ID: <20220517102110.42952fb6@xps-13>
-In-Reply-To: <202205170327.TVBbIsh2-lkp@intel.com>
-References: <202205170327.TVBbIsh2-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7362810E8
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:56:35 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5D5D1063;
+	Tue, 17 May 2022 01:47:43 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.4.124])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E2EE3F73D;
+	Tue, 17 May 2022 01:47:41 -0700 (PDT)
+Date: Tue, 17 May 2022 09:47:37 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 08/21] psci: Fix the function type for
+ psci_initcall_t
+Message-ID: <YoNhKaTT3EDukxXY@FVFF77S0Q05N>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-9-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513202159.1550547-9-samitolvanen@google.com>
 
-Hi Mikhail,
+On Fri, May 13, 2022 at 01:21:46PM -0700, Sami Tolvanen wrote:
+> Functions called through a psci_initcall_t pointer all have
+> non-const arguments. Fix the type definition to avoid tripping
+> indirect call checks with CFI_CLANG.
+> 
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-lkp@intel.com wrote on Tue, 17 May 2022 03:32:03 +0800:
+I'd prefer that we spread the `const` to each of the implementations rather
+than dropping it from the type.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   3f7bdc402fb06f897ff1f492a2d42e1f7c2efedb
-> commit: 4213e556fe2a18782e91a87fec70d98c48f1ee41 [10956/12195] mtd: parse=
-rs: add support for Sercomm partitions
-> config: i386-randconfig-r004-20220516 (https://download.01.org/0day-ci/ar=
-chive/20220517/202205170327.TVBbIsh2-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853f=
-a8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git/commit/?id=3D4213e556fe2a18782e91a87fec70d98c48f1ee41
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/ke=
-rnel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout 4213e556fe2a18782e91a87fec70d98c48f1ee41
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->=20
-> >> ERROR: modpost: "__udivdi3" [drivers/mtd/parsers/scpart.ko] undefined!=
- =20
->=20
-
-Can you give this a look rapidly? Otherwise I'll have to drop the patch
-(I can keep the bindings anyway).
+I have a local patch for that I can send out shortly.
 
 Thanks,
-Miqu=C3=A8l
+Mark.
+
+> ---
+>  drivers/firmware/psci/psci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index cfb448eabdaa..6554bf4b8c99 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -521,7 +521,7 @@ static int __init psci_probe(void)
+>  	return 0;
+>  }
+>  
+> -typedef int (*psci_initcall_t)(const struct device_node *);
+> +typedef int (*psci_initcall_t)(struct device_node *);
+>  
+>  /*
+>   * PSCI init function for PSCI versions >=0.2
+> -- 
+> 2.36.0.550.gb090851708-goog
+> 
