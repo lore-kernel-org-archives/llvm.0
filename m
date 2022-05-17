@@ -1,89 +1,109 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEDE7A
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 20:26:35 +0000 (UTC)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ebf4b91212so3076477b3.8
-        for <llvm@lists.linux.dev>; Tue, 17 May 2022 13:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wkLF6OT1t2YOSmlQuHNSc8YMQFZWsweJNSK3A1X9WFc=;
-        b=lRLBJQQGJdCf/Vu5j6vHzWkLG9PUWk/gz7qLmFYdfdeMrVMiDYwEGSqEgimFBRs/WR
-         O4fzMukpLDP635Z0lxkIi/bGO+6noGtP3ot9Q6tPrpn5Qgc8EBWqdICI1eFCMI80Ma8f
-         3pmbS7srfTEV/kcWtkPkbs4OUB9yf9NtfT3b3XSlogZZaNp0x1O7QOpDXUpYtygcePvN
-         r44Nl5IDZG3YlfUztaaVn5/rsfAb7pQG3FUP3uVcOUwlKpzvjWE1Js0p/1TuDq4NRwPT
-         ySAm9/hX9TNiNyu3JgtBpjTrtlclAwH3eZZ8opRa481V27pvCsGDX/3oZhvbvnsW3dLn
-         tX0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wkLF6OT1t2YOSmlQuHNSc8YMQFZWsweJNSK3A1X9WFc=;
-        b=0A+wTTrKExeuGVkUHZKP9mw0V7zyPboNvUg1Uru3RGYKLIWrNGz5C0VVFjRasymljz
-         YPgmuBdBgGMC3JVs8rQ8mTNQenRb3KCsBRjZyBzSrBhFAiG8dH+LtwsFa8cQU4E47Xx2
-         wet9Djr/dq7dot16hCAtKaRszlIwhuTIe10D/gNr+cP7KpKr7WyxlJIvEi6sIKHA5Ekv
-         eaqom26KgMuIpjR7CK6+Tl1ziNi9o3q3Ez00Df1xcys2qSTMbfzV+R7Y1CEYI4FXgTND
-         tLndKEE4RaARiuFoP1BB85sXv/64g2MERuF/73F7nKNvb9rlxM5u2TAbw33xxkm8+OAi
-         KLdg==
-X-Gm-Message-State: AOAM533QkD5VzBwHrlbKZ/GzjOie6ZaiJhGrqKPxrlcq3fuvGb3+if6n
-	W8jkRWi8AbePOqx+o0ookRLiWO0+snLglzujQqPocA==
-X-Google-Smtp-Source: ABdhPJyUXGOqF8+tBvLpsGWh5ahMBfxg2ZLY5vD+1aR0edc0om38+5POyM0OXwEuZ9R6X5KTM2qgFqwhL5XOumOXyK0=
-X-Received: by 2002:a81:2008:0:b0:2f8:3968:e70a with SMTP id
- g8-20020a812008000000b002f83968e70amr28536127ywg.321.1652819194477; Tue, 17
- May 2022 13:26:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1B17A
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 20:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652819281; x=1684355281;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VW5xQ9qTTYjQwND3euvBbD0acujiIM1e4Z7pmUl06lk=;
+  b=lK9MFiC0H/n/xxsMEIlC5cqEhnIFnjow2F9GrrmZj1MgTFKnHYeswkxf
+   ZWRXsmYr7A/BgGaFM7GcXDfVQi1XyM5n0n2Emhz9OzSuRBGi+F13hUXMN
+   BYzimfnhxp4n8yytHBBTMqJe/uIS3Hr9WPBPQr7Y3LzgFT/acfSShnJ0N
+   JS0/Ts4efxVS4iGmxACroeGgtl+OAg5tPKkJGwPwPv+APYBC8CyA72Sxs
+   dO4DaBNPUxn3P+Dx3KO53DZNS1a439iG6pIIcU6MnyKSBfKsujl6zWh0J
+   37zK3mGuC98Cpeybp4doHVH3BB9XypGZlntSCZiDCpfy2HfV4s0OHVxUk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="268903382"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="268903382"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 13:27:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="605530219"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 13:27:57 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nr3nQ-0001Mx-Ie;
+	Tue, 17 May 2022 20:27:56 +0000
+Date: Wed, 18 May 2022 04:27:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linuxppc-dev@lists.ozlabs.org,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: [powerpc:next-test 139/145]
+ arch/powerpc/sysdev/mpc5xxx_clocks.c:26:2: error: call to undeclared
+ function 'fwnode_for_each_parent_node'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202205180443.Cfi2jikJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com> <YoNjjjb3ygIKnwfj@hirez.programming.kicks-ass.net>
-In-Reply-To: <YoNjjjb3ygIKnwfj@hirez.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 17 May 2022 13:25:58 -0700
-Message-ID: <CABCJKufWy0QrZbpe7CyZOxse60rVHp8fF0iv3D7rS67gjy+E7g@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/21] KCFI support
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, May 17, 2022 at 1:58 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, May 13, 2022 at 01:21:38PM -0700, Sami Tolvanen wrote:
-> > KCFI is a proposed forward-edge control-flow integrity scheme for
-> > Clang, which is more suitable for kernel use than the existing CFI
-> > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-> > alter function references to point to a jump table, and won't break
-> > function address equality. The latest LLVM patch is here:
-> >
-> >   https://reviews.llvm.org/D119296
-> >
-> > This RFC series replaces the current arm64 CFI implementation with
-> > KCFI and adds support for x86_64.
->
-> You have some weird behaviour vs weak functions (I so hate those)...
->
-> 100: 0000000000000980     9 FUNC    LOCAL  DEFAULT    2 __cfi_free_initmem
-> 233: 0000000000000989    35 FUNC    WEAK   DEFAULT    2 free_initmem
->
-> With the result that on the final link:
->
->    179: 00000000000009b0     9 FUNC    LOCAL  DEFAULT    1 __cfi_free_initmem
->   8689: 00000000000007f0     9 FUNC    LOCAL  DEFAULT   65 __cfi_free_initmem
-> 173283: 00000000000007f9   198 FUNC    GLOBAL DEFAULT   65 free_initmem
->
-> This is getting me objtool issues (I'll fix them) but perhaps it's
-> something you can do something about as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next-test
+head:   2e4a9942261f89ad204a8189634029a4b1f0efb6
+commit: f9724684ea2198caaab132514ca104175ed2f15f [139/145] powerpc/mpc5xxx: Switch mpc5xxx_get_bus_frequency() to use fwnode
+config: powerpc-mpc512x_defconfig (https://download.01.org/0day-ci/archive/20220518/202205180443.Cfi2jikJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=f9724684ea2198caaab132514ca104175ed2f15f
+        git remote add powerpc https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git
+        git fetch --no-tags powerpc next-test
+        git checkout f9724684ea2198caaab132514ca104175ed2f15f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Good catch, I'll fix this.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sami
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/sysdev/mpc5xxx_clocks.c:26:2: error: call to undeclared function 'fwnode_for_each_parent_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           fwnode_for_each_parent_node(fwnode, parent) {
+           ^
+>> arch/powerpc/sysdev/mpc5xxx_clocks.c:26:45: error: expected ';' after expression
+           fwnode_for_each_parent_node(fwnode, parent) {
+                                                      ^
+                                                      ;
+   2 errors generated.
+
+
+vim +/fwnode_for_each_parent_node +26 arch/powerpc/sysdev/mpc5xxx_clocks.c
+
+     8	
+     9	/**
+    10	 * mpc5xxx_fwnode_get_bus_frequency - Find the bus frequency for a firmware node
+    11	 * @fwnode:	firmware node
+    12	 *
+    13	 * Returns bus frequency (IPS on MPC512x, IPB on MPC52xx),
+    14	 * or 0 if the bus frequency cannot be found.
+    15	 */
+    16	unsigned long mpc5xxx_fwnode_get_bus_frequency(struct fwnode_handle *fwnode)
+    17	{
+    18		struct fwnode_handle *parent;
+    19		u32 bus_freq;
+    20		int ret;
+    21	
+    22		ret = fwnode_property_read_u32(fwnode, "bus-frequency", &bus_freq);
+    23		if (!ret)
+    24			return bus_freq;
+    25	
+  > 26		fwnode_for_each_parent_node(fwnode, parent) {
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
