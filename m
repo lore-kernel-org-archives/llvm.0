@@ -1,206 +1,84 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00E07F
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 07:34:24 +0000 (UTC)
-Received: by mail-il1-f170.google.com with SMTP id i5so12097291ilv.0
-        for <llvm@lists.linux.dev>; Tue, 17 May 2022 00:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=pEIcGVNsbeP6EiKjnzSjTr7kPW4tfGTBsDC1SnKAcwM=;
-        b=AWgu/vGIkG8SmK3kIloR1l6q55qvAy1lBIHmOz8KORVQPGImI9XQpuXsSewqtqK4dY
-         AhJuZcWVYo2jdg5ieemepA284NKyMoJ8SDzMFb/B36gaJgd5p69vb+m3LABO/YVtbrtf
-         n6v8I7qGuiH4GdumG8EsJ+0e/nbhe8akw3iEC4oblawPKLd29OgOzARUx9xeYM2yCNR7
-         HqbkoJQ+I13WPVx6ZsHls7+ypCXVOk3/tPt0JUP+vqdY85PWOj+7DAbYm8jzeBx9vKBD
-         lTwBelAoH0dqeTRw2yh3z0YH7gmQOtRiPHxGx9UZEj+VOYhaoVrkej3TEfVDv2frlzEk
-         xA+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=pEIcGVNsbeP6EiKjnzSjTr7kPW4tfGTBsDC1SnKAcwM=;
-        b=gvrAVt/Ut1XYOfl3LCR5JAEzL92G+R42WRt55JRojE7wW94znH2ClOWbxzMGxQ2AIb
-         a5QiI/H3rJmBgWNu7WH/P0A2GwHbfcvHhP4ZAbzSuoEUkubGXDipWFsG+c/42IfgVnAY
-         W5286f1vmEnJnXAtG651dH0o8t5k6oHWhHIoleVbFCRFtVsrp+kN4v1IH2wOePD6m5CH
-         9ftsSR1EU3s7yAbXPPQYXixP2jURb91LpRrROytnJcitymECSCq8q0iX8QRKMGRliywm
-         T62d2ZglsNixCd9U4D1Jov4enQFclOZeRLClO7QJZXXYVreR/jWRJtkQUM7ON9y3V/eo
-         Soww==
-X-Gm-Message-State: AOAM530O9rM25MKRuHNx/QBVP5Zv5Ziw5Y19jri4i+eV3o7GwXq7Lta/
-	tl64qC225nkIFUR8z6Uj/YCbF9fw/Z6kyi1RGEw=
-X-Google-Smtp-Source: ABdhPJxpxXwSTo6irCiTCVwfZuGB/jC8kC7emFTJHW5uAL3gMHm1SrXQKLS+6z5JRZflp7ueEwaZj1o0WavbtC3Flvs=
-X-Received: by 2002:a05:6e02:1a88:b0:2d1:f00:78b0 with SMTP id
- k8-20020a056e021a8800b002d10f0078b0mr7010341ilv.20.1652772863639; Tue, 17 May
- 2022 00:34:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741D97F
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 07:56:09 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-89-AbgIZabJO0GTyUNJIXZG-Q-1; Tue, 17 May 2022 08:56:06 +0100
+X-MC-Unique: AbgIZabJO0GTyUNJIXZG-Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Tue, 17 May 2022 08:56:05 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Tue, 17 May 2022 08:56:05 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Sami Tolvanen' <samitolvanen@google.com>, Peter Zijlstra
+	<peterz@infradead.org>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Kees Cook
+	<keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Topic: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Index: AQHYZwdlgt4N7xLw0EK8voqNmmoVIa0hK0vAgAB8yACAAF6CUIAADPZSgACjHQA=
+Date: Tue, 17 May 2022 07:56:05 +0000
+Message-ID: <161477674eb04ebe94a4905070bc9f97@AcuMS.aculab.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+ <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com>
+ <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+ <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+In-Reply-To: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com> <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
-In-Reply-To: <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Tue, 17 May 2022 09:33:47 +0200
-Message-ID: <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/21] KCFI support
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On Mon, May 16, 2022 at 7:57 PM Sami Tolvanen <samitolvanen@google.com> wro=
-te:
->
-> On Mon, May 16, 2022 at 10:31 AM Sedat Dilek <sedat.dilek@gmail.com> wrot=
-e:
-> >> Anything Like LLVM cmake Options to be condidered and Set?
-> >
-> >
-> > I activate Clang and LLD ad projects - OK - enough?
->
-> Clang and LLD should be sufficient.
->
+RnJvbTogU2FtaSBUb2x2YW5lbg0KPiBTZW50OiAxNiBNYXkgMjAyMiAyMzowMw0KPiANCj4gT24g
+TW9uLCBNYXkgMTYsIDIwMjIgYXQgMjo0NCBQTSBQZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGluZnJh
+ZGVhZC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gT24gTW9uLCBNYXkgMTYsIDIwMjIgYXQgMDk6MzI6
+NTVQTSArMDAwMCwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+DQo+ID4gPiA+IFRoZSBjb21waWxl
+ciBhbHdheXMgZ2VuZXJhdGVzIHRoaXMgc3BlY2lmaWMgaW5zdHJ1Y3Rpb24gc2VxdWVuY2UuDQo+
+ID4gPg0KPiA+ID4gWWVzLCBidXQgdGhlcmUgYXJlIHNldmVyYWwgd2F5cyB0byBlbmNvZGUgJ2Nt
+cGwgaW1tLC02KHJlZyknLg0KPiA+DQo+ID4gWWVzLCBidXQgd2UgZG9uJ3QgY2FyZS4gVGhpcyAq
+YWx3YXlzKiB1c2VzIHRoZSAzMmJpdCBpbW1lZGlhdGUgZm9ybS4NCj4gPiBFdmVuIGlmIHRoZSBp
+bW1lZGlhdGUgaXMgc21hbGwuDQo+IA0KPiBZZXMsIHRoYXQgcGFydCBpcyBub3QgYSBwcm9ibGVt
+LCBidXQgaXQncyBhIHZhbGlkIHBvaW50IHRoYXQgTExWTQ0KPiBtaWdodCBub3QgYWx3YXlzIHVz
+ZSByOC1yMTUgaGVyZSwgc28gSSB3aWxsIGhhdmUgdG8gY2hlY2sgZm9yIHRoZSBSRVgNCj4gcHJl
+Zml4IGJlZm9yZSBibGluZGx5IGF0dGVtcHRpbmcgdG8gZGVjb2RlIHRoZSBpbnN0cnVjdGlvbi4N
+Cg0KQXJlIHlvdSBhbGxvd2luZyBmb3IgdGhlIFJFWCBwcmVmaXggYXQgYWxsPw0KVGhlIGVuY29k
+aW5nIG9mOg0KPiA+ID4gKyAgICAgICogICBjbXBsICAgIDxpZD4sIC02KCVyZWcpICAgICA7IDcg
+Ynl0ZXMNCmlzDQoJPG9wY29kZT48bW9kL1RUVC9ybT48b2ZmOD48aW1tMzI+DQp3aGljaCBpcyA3
+IGJ5dGVzIHdpdGhvdXQgdGhlIFJFWC4NCklmIHJlZyBpcyByMTEgdGhlcmUgaXMgYW4gZXh0cmEg
+UkVYIGJ5dGUgLSBmb3IgOCBpbiB0b3RhbC4NCg0KV2l0aG91dCB0aGUgUkVYIGJ5dGUgdGhlIGRl
+Y29kZSB3aWxsIGJlIHVzaW5nICVieC4NClNvIHRoZSB0ZXN0aW5nIHNob3VsZCBhbGwgaGF2ZSBm
+YWlsZWQuDQpXaGljaCBtZWFucyB0aGF0IHNvbWV0aGluZyBlbHNlIGlzIHdyb25nIGFzIHdlbGwu
+DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9h
+ZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBO
+bzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Before I give this a try...
-Some questions about the LLVM toolchain requirements...
-
-I use tc-build to generate a selfmade LLVM toolchain for X86
-(stage1-only + BPF).
-
-$ python3 ./build-llvm.py --no-update --build-type Release -p
-clang;lld -t X86;BPF --clang-vendor dileks -B
-/home/dileks/src/llvm-toolchain/build -I /opt/llvm-toolchain
---check-targets clang lld --build-stage1-only --install-stage1-only -D
-LLVM_PARALLEL_LINK_JOBS=3D1 --show-build-commands
-
-Link: https://github.com/ClangBuiltLinux/tc-build.git
-
-tc-build uses a GOOD_REVISION for regular kernel-builds, this is
-currently 3b2e605e33bd.
-
-$ git describe
-llvmorg-15-init-5163-g3b2e605e33bd
-
-$ git show -1 42a879eb2f22
-commit 42a879eb2f22af6d1b85983c12fac68b2e9a5e03
-Author: Nathan Chancellor <nathan@kernel.org>
-Date:   Mon Mar 21 09:19:26 2022 -0700
-
-   build-llvm.py: Update known good revision
-
-   Qualified with https://github.com/nathanchance/llvm-kernel-testing.
-
-   Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-diff --git a/build-llvm.py b/build-llvm.py
-index c3aade1092ec..54e5d4729a1a 100755
---- a/build-llvm.py
-+++ b/build-llvm.py
-@@ -16,7 +16,7 @@ import urllib.request as request
-from urllib.error import URLError
-
-# This is a known good revision of LLVM for building the kernel
--GOOD_REVISION =3D '08f70adedb775ce6d41a1f8ad75c4bac225efb5b'
-+GOOD_REVISION =3D '3b2e605e33bd9017ff2eff1493add07822f9d58b'
-
-
-class Directories:
-
-So, your LLVM git is approx. 5.200 commits further.
-
-$ git log --oneline
-tc-build/GOOD_REVISION-20210321..for-15/kcfi-rfc-v2-samitolvanen | wc
--l
-5190
-
-Is your tags/kcfi-rfc-v2 the recommended LLVM toolchain for testing kcfi-rf=
-c-v2?
-
-What I want to ask is if your commit well tested for x86 (and arm64)
-means build and boot on bare metal?
-
-From Nathan I know if he says I have run kernel-tests - it works.
-"Qualified with https://github.com/nathanchance/llvm-kernel-testing."
-
-Just for the records:
-You definitely need a pre-LLVM-15 toolchain + KCFI sanitizer patch?
-LLVM-14?
-
-> >> This series is also available in GitHub:
-> >>
-> >>   https://github.com/samitolvanen/linux/commits/kcfi-rfc-v2
-> >>
-> >>
-> >>
-> >
-> >> Can you please add a history of what changed?
->
-> Oops, I forgot to include that.
->
-
-Thanks.
-Please fold this ChangeLog into kcfi-rfc-v3.
-
-> Changes in v2:
-> - Changed the compiler patch to encode arm64 target and type details
-> in the ESR, and updated the kernel error handling patch accordingly.
-> - Changed the compiler patch to embed the x86_64 type hash in a valid
-> instruction to avoid special casing objtool instruction decoding, and
-> added a __cfi_ symbol for the preamble. Changed the kernel error
-> handling and manual type annotations to match.
-> - Dropped the .kcfi_types section as that=E2=80=99s no longer needed by
-> objtool, and changed the objtool patch to simply ignore the __cfi_
-> preambles falling through.
-> - Dropped the .kcfi_traps section on arm64 as it=E2=80=99s no longer need=
-ed,
-> and moved the trap look-up code behind CONFIG_ARCH_USES_CFI_TRAPS,
-> which is selected only for x86_64.
-> - Dropped __nocfi attributes from arm64 code where CFI was disabled
-> due to address space confusion issues, and added type annotations to
-> relevant assembly functions.
-> - Dropped __nocfi from __init.
->
-> > Nathan has a i915 cfi patch in His personal kernel.org Git.
-> > Is this relevant to kcfi?
->
-> It fixes a type mismatch, so in that sense it's relevant.
->
-
-Here the link to patch "drm/i915: Fix CFI violation with show_dynamic_id()"=
-:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?h=
-=3Dsubmitted/i915-cfi-fix&id=3D53735be6dc53453fcfbac658e847b54360e73871
-
-> > To distinguish between clang-cfi we should use different kbuild variabl=
-es for kcfi.
->
-> The plan is to replace the current CFI implementation. Does reusing
-> the kbuild variable names cause a problem?
->
-
-No hurry.
-Afaics someone in the long list of comments to single patches was
-thinking of when GCC has "KCFI" support implemented...
-
-You say no need to build your kernel with LTO...
-That sounds good.
-Currently, I build my kernels with Clang-14 and CONFIG_LTO_CLANG_THIN=3Dy.
-Does something speak against using CONFIG_LTO_CLANG_THIN=3Dy with KCFI supp=
-ort?
-Build-time?
-Disc-usage?
-
-Thanks for answering my questions.
-
-- Sedat -
