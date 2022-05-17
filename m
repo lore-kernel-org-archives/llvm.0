@@ -1,91 +1,206 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C767C7F
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 07:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652771834; x=1684307834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=1jTU5KHo259xMf0l/RnxXGGu/AAe/sE0TQK8+z7eBQc=;
-  b=OiF2LfvUqDZvAEp6veTlqxRWapyysRPBGWw0FwA5gfOXo6MBCrgoCsvx
-   kQRhyL1GfmIil3EwWPADuqU9kBuqbrvkctb8Aq3YTClfDKuj4p6x3yIpP
-   cwL6dRLNGWwsWnqjdoidRUjgVk1Mgui7voWn9hOyXNhD3+VHT6AE7Y3rr
-   N6BJBW3LKp6K0nmitHqOtT6R3zahc8xWsnbnPIHlxNdUelFkjW8q81QZd
-   TVo9oDhlH+9P5HAw166xwuI+KKo00/TiZc/FbE2R6MZioiTM8Atq+eU0p
-   +1Q4majp+/8JP31cVkp6l4V5NzXoDEGnex6vCzKwhBwO3m663ETjvYz27
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="250987401"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="250987401"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:17:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="638621112"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 17 May 2022 00:17:11 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nqrSB-0000iV-8K;
-	Tue, 17 May 2022 07:17:11 +0000
-Date: Tue, 17 May 2022 15:16:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-	jikos@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	benjamin.tissoires@redhat.com, spbnick@gmail.com,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stefanberzl@gmail.com,
-	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH for-5.19/uclogic 2/4] HID: uclogic: Add KUnit tests for
- uclogic_rdesc_template_apply()
-Message-ID: <202205171527.RQ8sqqya-lkp@intel.com>
-References: <20220516181323.59554-3-jose.exposito89@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00E07F
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 07:34:24 +0000 (UTC)
+Received: by mail-il1-f170.google.com with SMTP id i5so12097291ilv.0
+        for <llvm@lists.linux.dev>; Tue, 17 May 2022 00:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=pEIcGVNsbeP6EiKjnzSjTr7kPW4tfGTBsDC1SnKAcwM=;
+        b=AWgu/vGIkG8SmK3kIloR1l6q55qvAy1lBIHmOz8KORVQPGImI9XQpuXsSewqtqK4dY
+         AhJuZcWVYo2jdg5ieemepA284NKyMoJ8SDzMFb/B36gaJgd5p69vb+m3LABO/YVtbrtf
+         n6v8I7qGuiH4GdumG8EsJ+0e/nbhe8akw3iEC4oblawPKLd29OgOzARUx9xeYM2yCNR7
+         HqbkoJQ+I13WPVx6ZsHls7+ypCXVOk3/tPt0JUP+vqdY85PWOj+7DAbYm8jzeBx9vKBD
+         lTwBelAoH0dqeTRw2yh3z0YH7gmQOtRiPHxGx9UZEj+VOYhaoVrkej3TEfVDv2frlzEk
+         xA+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=pEIcGVNsbeP6EiKjnzSjTr7kPW4tfGTBsDC1SnKAcwM=;
+        b=gvrAVt/Ut1XYOfl3LCR5JAEzL92G+R42WRt55JRojE7wW94znH2ClOWbxzMGxQ2AIb
+         a5QiI/H3rJmBgWNu7WH/P0A2GwHbfcvHhP4ZAbzSuoEUkubGXDipWFsG+c/42IfgVnAY
+         W5286f1vmEnJnXAtG651dH0o8t5k6oHWhHIoleVbFCRFtVsrp+kN4v1IH2wOePD6m5CH
+         9ftsSR1EU3s7yAbXPPQYXixP2jURb91LpRrROytnJcitymECSCq8q0iX8QRKMGRliywm
+         T62d2ZglsNixCd9U4D1Jov4enQFclOZeRLClO7QJZXXYVreR/jWRJtkQUM7ON9y3V/eo
+         Soww==
+X-Gm-Message-State: AOAM530O9rM25MKRuHNx/QBVP5Zv5Ziw5Y19jri4i+eV3o7GwXq7Lta/
+	tl64qC225nkIFUR8z6Uj/YCbF9fw/Z6kyi1RGEw=
+X-Google-Smtp-Source: ABdhPJxpxXwSTo6irCiTCVwfZuGB/jC8kC7emFTJHW5uAL3gMHm1SrXQKLS+6z5JRZflp7ueEwaZj1o0WavbtC3Flvs=
+X-Received: by 2002:a05:6e02:1a88:b0:2d1:f00:78b0 with SMTP id
+ k8-20020a056e021a8800b002d10f0078b0mr7010341ilv.20.1652772863639; Tue, 17 May
+ 2022 00:34:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516181323.59554-3-jose.exposito89@gmail.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com> <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+In-Reply-To: <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Tue, 17 May 2022 09:33:47 +0200
+Message-ID: <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi "José,
+On Mon, May 16, 2022 at 7:57 PM Sami Tolvanen <samitolvanen@google.com> wro=
+te:
+>
+> On Mon, May 16, 2022 at 10:31 AM Sedat Dilek <sedat.dilek@gmail.com> wrot=
+e:
+> >> Anything Like LLVM cmake Options to be condidered and Set?
+> >
+> >
+> > I activate Clang and LLD ad projects - OK - enough?
+>
+> Clang and LLD should be sufficient.
+>
 
-Thank you for the patch! Yet something to improve:
+Before I give this a try...
+Some questions about the LLVM toolchain requirements...
 
-[auto build test ERROR on f7d8e387d9aeff963e6691c0166269b8042b4ff9]
+I use tc-build to generate a selfmade LLVM toolchain for X86
+(stage1-only + BPF).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
-base:   f7d8e387d9aeff963e6691c0166269b8042b4ff9
-config: riscv-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171527.RQ8sqqya-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/59e13d6c9ab96d326e1575bd6cd2f0ca0c98f561
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jos-Exp-sito/Add-support-for-XP-PEN-Deco-L/20220517-021641
-        git checkout 59e13d6c9ab96d326e1575bd6cd2f0ca0c98f561
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+$ python3 ./build-llvm.py --no-update --build-type Release -p
+clang;lld -t X86;BPF --clang-vendor dileks -B
+/home/dileks/src/llvm-toolchain/build -I /opt/llvm-toolchain
+--check-targets clang lld --build-stage1-only --install-stage1-only -D
+LLVM_PARALLEL_LINK_JOBS=3D1 --show-build-commands
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Link: https://github.com/ClangBuiltLinux/tc-build.git
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+tc-build uses a GOOD_REVISION for regular kernel-builds, this is
+currently 3b2e605e33bd.
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/hid/hid-uclogic-rdesc.o
-ERROR: modpost: missing MODULE_LICENSE() in drivers/hid/hid-uclogic-rdesc-test.o
->> ERROR: modpost: "uclogic_rdesc_template_apply" [drivers/hid/hid-uclogic-rdesc-test.ko] undefined!
+$ git describe
+llvmorg-15-init-5163-g3b2e605e33bd
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+$ git show -1 42a879eb2f22
+commit 42a879eb2f22af6d1b85983c12fac68b2e9a5e03
+Author: Nathan Chancellor <nathan@kernel.org>
+Date:   Mon Mar 21 09:19:26 2022 -0700
+
+   build-llvm.py: Update known good revision
+
+   Qualified with https://github.com/nathanchance/llvm-kernel-testing.
+
+   Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+diff --git a/build-llvm.py b/build-llvm.py
+index c3aade1092ec..54e5d4729a1a 100755
+--- a/build-llvm.py
++++ b/build-llvm.py
+@@ -16,7 +16,7 @@ import urllib.request as request
+from urllib.error import URLError
+
+# This is a known good revision of LLVM for building the kernel
+-GOOD_REVISION =3D '08f70adedb775ce6d41a1f8ad75c4bac225efb5b'
++GOOD_REVISION =3D '3b2e605e33bd9017ff2eff1493add07822f9d58b'
+
+
+class Directories:
+
+So, your LLVM git is approx. 5.200 commits further.
+
+$ git log --oneline
+tc-build/GOOD_REVISION-20210321..for-15/kcfi-rfc-v2-samitolvanen | wc
+-l
+5190
+
+Is your tags/kcfi-rfc-v2 the recommended LLVM toolchain for testing kcfi-rf=
+c-v2?
+
+What I want to ask is if your commit well tested for x86 (and arm64)
+means build and boot on bare metal?
+
+From Nathan I know if he says I have run kernel-tests - it works.
+"Qualified with https://github.com/nathanchance/llvm-kernel-testing."
+
+Just for the records:
+You definitely need a pre-LLVM-15 toolchain + KCFI sanitizer patch?
+LLVM-14?
+
+> >> This series is also available in GitHub:
+> >>
+> >>   https://github.com/samitolvanen/linux/commits/kcfi-rfc-v2
+> >>
+> >>
+> >>
+> >
+> >> Can you please add a history of what changed?
+>
+> Oops, I forgot to include that.
+>
+
+Thanks.
+Please fold this ChangeLog into kcfi-rfc-v3.
+
+> Changes in v2:
+> - Changed the compiler patch to encode arm64 target and type details
+> in the ESR, and updated the kernel error handling patch accordingly.
+> - Changed the compiler patch to embed the x86_64 type hash in a valid
+> instruction to avoid special casing objtool instruction decoding, and
+> added a __cfi_ symbol for the preamble. Changed the kernel error
+> handling and manual type annotations to match.
+> - Dropped the .kcfi_types section as that=E2=80=99s no longer needed by
+> objtool, and changed the objtool patch to simply ignore the __cfi_
+> preambles falling through.
+> - Dropped the .kcfi_traps section on arm64 as it=E2=80=99s no longer need=
+ed,
+> and moved the trap look-up code behind CONFIG_ARCH_USES_CFI_TRAPS,
+> which is selected only for x86_64.
+> - Dropped __nocfi attributes from arm64 code where CFI was disabled
+> due to address space confusion issues, and added type annotations to
+> relevant assembly functions.
+> - Dropped __nocfi from __init.
+>
+> > Nathan has a i915 cfi patch in His personal kernel.org Git.
+> > Is this relevant to kcfi?
+>
+> It fixes a type mismatch, so in that sense it's relevant.
+>
+
+Here the link to patch "drm/i915: Fix CFI violation with show_dynamic_id()"=
+:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?h=
+=3Dsubmitted/i915-cfi-fix&id=3D53735be6dc53453fcfbac658e847b54360e73871
+
+> > To distinguish between clang-cfi we should use different kbuild variabl=
+es for kcfi.
+>
+> The plan is to replace the current CFI implementation. Does reusing
+> the kbuild variable names cause a problem?
+>
+
+No hurry.
+Afaics someone in the long list of comments to single patches was
+thinking of when GCC has "KCFI" support implemented...
+
+You say no need to build your kernel with LTO...
+That sounds good.
+Currently, I build my kernels with Clang-14 and CONFIG_LTO_CLANG_THIN=3Dy.
+Does something speak against using CONFIG_LTO_CLANG_THIN=3Dy with KCFI supp=
+ort?
+Build-time?
+Disc-usage?
+
+Thanks for answering my questions.
+
+- Sedat -
