@@ -1,46 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6D67A
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 01:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DD87A
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 01:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652749270; x=1684285270;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wov2LQaQVG/3AxlEqLF0YKuINCkabUjD2lygg5Hs/uo=;
-  b=ADiJzb1C7JraiUp9ocE+T5f5AT4IzJuEbrYV015LQU3XUPKbEJOH36/y
-   XicRj5HEQWA1baZ7480njon2j3pvO5ishbmhlfiJsrOmMyDhKOdIyjZt1
-   nxGe3Go8NGGc612NQimchyKvfEPOEly5T/x2Ty4y8TNJqpWpaaI4UxrAg
-   GU3A136qyLXxOChv+m6VT6XdGLifHz9ys3rig7EPOkrINvvnw+BehVO93
-   Hh9E4AFT6DwvIa62b2bTuytGBD3CYwC3RkT0Mik9irIOmYC8XBX1EOJdu
-   kny75/ufvFdY9EIf2v9gYqHFH7cPfwWbqZCK12MI5KH1i5919LRqjyt+S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271136385"
+  t=1652751722; x=1684287722;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jC8CasluGEzTR24qDOd2wFlDjfT6+GpR14ulY4IaFUQ=;
+  b=UKzC05UlOEF6U9KX1uBPcT/currIW/40oFhinMxKE6ByWcC7iAyHW7i0
+   IbiTM0xGIpA/zEIwB/4w+xKE+sJOZVGHcaAemfu9mKEskSnXdc4vHbYNi
+   28CyidxeKHTc7TanZ44nMve+VRlRfXADxFU9JEhSJIpgLU2y+2rno0KRI
+   UkVo8sds/6J0KRkWHEFy0WIauk0ESrZsg0i5JaEKSz6FRp+jXfCNOugbX
+   JHLU0R0lGfjB/ispak57OqXGDNd2zvAV5jhjnuAa9Y6BmlpmioR3VfT1R
+   vZA248XP6mVlBE5d4Gp3ETJJHst6HChF/2dSOKDe0p9PPSWEnmShqithc
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="269843954"
 X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="271136385"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 18:01:01 -0700
+   d="scan'208";a="269843954"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 18:42:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
-   d="scan'208";a="596817843"
+   d="scan'208";a="544637724"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 May 2022 18:00:58 -0700
+  by orsmga006.jf.intel.com with ESMTP; 16 May 2022 18:41:59 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nqla6-0000Sd-0v;
-	Tue, 17 May 2022 01:00:58 +0000
-Date: Tue, 17 May 2022 09:00:25 +0800
+	id 1nqmDm-0000Tk-S9;
+	Tue, 17 May 2022 01:41:58 +0000
+Date: Tue, 17 May 2022 09:41:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, sgarapati@marvell.com,
-	sbalcerak@marvell.com, cchavva@marvell.com,
-	Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [PATCH 1/3] drivers: i2c: thunderx: octeontx2 clock divisor
- logic changes
-Message-ID: <202205170856.ko6UxqWi-lkp@intel.com>
-References: <20220511133659.29176-2-pmalgujar@marvell.com>
+To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [linux-stable-rc:linux-5.15.y 3230/6576]
+ drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a
+ string literal (potentially insecure)
+Message-ID: <202205170906.EotxYXVJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,67 +48,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511133659.29176-2-pmalgujar@marvell.com>
 
-Hi Piyush,
+Hi Tvrtko,
 
-Thank you for the patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linux/master linus/master v5.18-rc7 next-20220516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: mips-randconfig-r025-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170856.ko6UxqWi-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   4aa8770e7dfca33d694a86ec8fc85900ada99c26
+commit: 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7 [3230/6576] drm/i915: Flush TLBs before releasing backing store
+config: x86_64-randconfig-r031-20220516 (https://download.01.org/0day-ci/archive/20220517/202205170906.EotxYXVJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Piyush-Malgujar/drivers-i2c-thunderx-Marvell-thunderx-i2c-changes/20220511-213853
-        git checkout 56654d280f7c130d4f1d78eb8a3fa57fedc86b7b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/i2c/busses/i2c-octeon-platdrv.c:27:
->> drivers/i2c/busses/i2c-octeon-core.h:223:21: error: incomplete definition of type 'struct pci_dev'
-           u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
-                          ~~~~^
-   include/asm-generic/pci_iomap.h:10:8: note: forward declaration of 'struct pci_dev'
-   struct pci_dev;
-          ^
+>> drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_gt.c:966:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
    1 error generated.
 
 
-vim +223 drivers/i2c/busses/i2c-octeon-core.h
+vim +966 drivers/gpu/drm/i915/gt/intel_gt.c
 
-   213	
-   214	#define PCI_SUBSYS_DEVID_9XXX 0xB
-   215	/**
-   216	 * octeon_i2c_is_otx2 - check for chip ID
-   217	 * @pdev: PCI dev structure
-   218	 *
-   219	 * Returns TRUE if OcteonTX2, FALSE otherwise.
-   220	 */
-   221	static inline bool octeon_i2c_is_otx2(struct pci_dev *pdev)
-   222	{
- > 223		u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
-   224	
-   225		return (chip_id == PCI_SUBSYS_DEVID_9XXX);
-   226	}
-   227	
+   927	
+   928	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+   929	{
+   930		static const i915_reg_t gen8_regs[] = {
+   931			[RENDER_CLASS]			= GEN8_RTCR,
+   932			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
+   933			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
+   934			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
+   935		};
+   936		static const i915_reg_t gen12_regs[] = {
+   937			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
+   938			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
+   939			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
+   940			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
+   941		};
+   942		struct drm_i915_private *i915 = gt->i915;
+   943		struct intel_uncore *uncore = gt->uncore;
+   944		struct intel_engine_cs *engine;
+   945		enum intel_engine_id id;
+   946		const i915_reg_t *regs;
+   947		unsigned int num = 0;
+   948	
+   949		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+   950			return;
+   951	
+   952		if (GRAPHICS_VER(i915) == 12) {
+   953			regs = gen12_regs;
+   954			num = ARRAY_SIZE(gen12_regs);
+   955		} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
+   956			regs = gen8_regs;
+   957			num = ARRAY_SIZE(gen8_regs);
+   958		} else if (GRAPHICS_VER(i915) < 8) {
+   959			return;
+   960		}
+   961	
+   962		if (drm_WARN_ONCE(&i915->drm, !num,
+   963				  "Platform does not implement TLB invalidation!"))
+   964			return;
+   965	
+ > 966		GEM_TRACE("\n");
 
 -- 
 0-DAY CI Kernel Test Service
