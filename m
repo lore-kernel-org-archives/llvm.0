@@ -1,149 +1,89 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373777A
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 19:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652817418; x=1684353418;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fPsVOaqVsswBJF7YYuk48XX7iG9H4V7CPV/kkGoqpTk=;
-  b=P93RtFp0e1QZST5od1ncqTNRtjtsJdIS+Xe1c3WWBaqelo0I9E8HAvB8
-   5sot28D4A5qVWqOOo5zTe8BS8xHUCOyFc9CIKlEZQ0u4vtk6Xh+dvlbtF
-   eFLdB4XLqky8MYIDfWmq1ovjjnjw+fkVJa+xOFmRQUFcdMo+U5agN48dI
-   CahFvIzc2MtVtXfDLV0PmBNOoYi0x2Es/Pg080op4PYIVKKVyyTL2ErC4
-   VYTd38L97Ek3qRxqfaVmA14z6aT+8RL5sS1Vrn1ITIulBNQ7jGwvZ51Se
-   7r0awlTfXkqIUrcdfm3PbH1qQyGRABjCHwxxRtoI7oJqpWhLiw8ON0O1F
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271000527"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="271000527"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 12:56:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="700220258"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 May 2022 12:56:55 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nr3JP-0001Kv-8R;
-	Tue, 17 May 2022 19:56:55 +0000
-Date: Wed, 18 May 2022 03:56:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mikulas Patocka <mpatocka@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 6050/6576]
- util/parse-events-bison.c:1565:6: error: expected '}'
-Message-ID: <202205180342.UWV0h7yb-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEDE7A
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 20:26:35 +0000 (UTC)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ebf4b91212so3076477b3.8
+        for <llvm@lists.linux.dev>; Tue, 17 May 2022 13:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wkLF6OT1t2YOSmlQuHNSc8YMQFZWsweJNSK3A1X9WFc=;
+        b=lRLBJQQGJdCf/Vu5j6vHzWkLG9PUWk/gz7qLmFYdfdeMrVMiDYwEGSqEgimFBRs/WR
+         O4fzMukpLDP635Z0lxkIi/bGO+6noGtP3ot9Q6tPrpn5Qgc8EBWqdICI1eFCMI80Ma8f
+         3pmbS7srfTEV/kcWtkPkbs4OUB9yf9NtfT3b3XSlogZZaNp0x1O7QOpDXUpYtygcePvN
+         r44Nl5IDZG3YlfUztaaVn5/rsfAb7pQG3FUP3uVcOUwlKpzvjWE1Js0p/1TuDq4NRwPT
+         ySAm9/hX9TNiNyu3JgtBpjTrtlclAwH3eZZ8opRa481V27pvCsGDX/3oZhvbvnsW3dLn
+         tX0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wkLF6OT1t2YOSmlQuHNSc8YMQFZWsweJNSK3A1X9WFc=;
+        b=0A+wTTrKExeuGVkUHZKP9mw0V7zyPboNvUg1Uru3RGYKLIWrNGz5C0VVFjRasymljz
+         YPgmuBdBgGMC3JVs8rQ8mTNQenRb3KCsBRjZyBzSrBhFAiG8dH+LtwsFa8cQU4E47Xx2
+         wet9Djr/dq7dot16hCAtKaRszlIwhuTIe10D/gNr+cP7KpKr7WyxlJIvEi6sIKHA5Ekv
+         eaqom26KgMuIpjR7CK6+Tl1ziNi9o3q3Ez00Df1xcys2qSTMbfzV+R7Y1CEYI4FXgTND
+         tLndKEE4RaARiuFoP1BB85sXv/64g2MERuF/73F7nKNvb9rlxM5u2TAbw33xxkm8+OAi
+         KLdg==
+X-Gm-Message-State: AOAM533QkD5VzBwHrlbKZ/GzjOie6ZaiJhGrqKPxrlcq3fuvGb3+if6n
+	W8jkRWi8AbePOqx+o0ookRLiWO0+snLglzujQqPocA==
+X-Google-Smtp-Source: ABdhPJyUXGOqF8+tBvLpsGWh5ahMBfxg2ZLY5vD+1aR0edc0om38+5POyM0OXwEuZ9R6X5KTM2qgFqwhL5XOumOXyK0=
+X-Received: by 2002:a81:2008:0:b0:2f8:3968:e70a with SMTP id
+ g8-20020a812008000000b002f83968e70amr28536127ywg.321.1652819194477; Tue, 17
+ May 2022 13:26:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220513202159.1550547-1-samitolvanen@google.com> <YoNjjjb3ygIKnwfj@hirez.programming.kicks-ass.net>
+In-Reply-To: <YoNjjjb3ygIKnwfj@hirez.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Tue, 17 May 2022 13:25:58 -0700
+Message-ID: <CABCJKufWy0QrZbpe7CyZOxse60rVHp8fF0iv3D7rS67gjy+E7g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   4aa8770e7dfca33d694a86ec8fc85900ada99c26
-commit: 773ca67ffc964785fae7e950e164ed845c9b365d [6050/6576] stat: fix inconsistency between struct stat and struct compat_stat
-config: x86_64-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180342.UWV0h7yb-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=773ca67ffc964785fae7e950e164ed845c9b365d
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 773ca67ffc964785fae7e950e164ed845c9b365d
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=x86_64 SHELL=/bin/bash tools/all
+On Tue, May 17, 2022 at 1:58 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, May 13, 2022 at 01:21:38PM -0700, Sami Tolvanen wrote:
+> > KCFI is a proposed forward-edge control-flow integrity scheme for
+> > Clang, which is more suitable for kernel use than the existing CFI
+> > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+> > alter function references to point to a jump table, and won't break
+> > function address equality. The latest LLVM patch is here:
+> >
+> >   https://reviews.llvm.org/D119296
+> >
+> > This RFC series replaces the current arm64 CFI implementation with
+> > KCFI and adds support for x86_64.
+>
+> You have some weird behaviour vs weak functions (I so hate those)...
+>
+> 100: 0000000000000980     9 FUNC    LOCAL  DEFAULT    2 __cfi_free_initmem
+> 233: 0000000000000989    35 FUNC    WEAK   DEFAULT    2 free_initmem
+>
+> With the result that on the final link:
+>
+>    179: 00000000000009b0     9 FUNC    LOCAL  DEFAULT    1 __cfi_free_initmem
+>   8689: 00000000000007f0     9 FUNC    LOCAL  DEFAULT   65 __cfi_free_initmem
+> 173283: 00000000000007f9   198 FUNC    GLOBAL DEFAULT   65 free_initmem
+>
+> This is getting me objtool issues (I'll fix them) but perhaps it's
+> something you can do something about as well.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Good catch, I'll fix this.
 
-Note: the linux-stable-rc/linux-5.15.y HEAD 4aa8770e7dfca33d694a86ec8fc85900ada99c26 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-   Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/kvm.h' differs from latest version at 'arch/arm64/include/uapi/asm/kvm.h'
-   Makefile.config:573: No sys/sdt.h found, no SDT events are defined, please install systemtap-sdt-devel or systemtap-sdt-dev
-   Makefile.config:621: No libunwind found. Please install libunwind-dev[el] >= 1.1 and/or set LIBUNWIND_DIR
-   Makefile.config:739: slang not found, disables TUI support. Please install slang-devel, libslang-dev or libslang2-dev
-   Makefile.config:786: Missing perl devel files. Disabling perl scripting support, please install perl-ExtUtils-Embed/libperl-dev
-   Makefile.config:821: No 'python-config' tool was found: disables Python support - please install python-devel/python-dev
-   Makefile.config:883: No bfd.h/libbfd found, please install binutils-dev[el]/zlib-static/libiberty-dev to gain symbol demangling
-   Makefile.config:927: No libzstd found, disables trace compression, please install libzstd-dev[el] and/or set LIBZSTD_DIR
-   Makefile.config:1006: No libbabeltrace found, disables 'perf data' CTF format support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
-   Makefile.config:1032: No alternatives command found, you need to set JDIR= to point to the root of your Java directory
-   pmu-events/jevents.c:73:22: warning: no previous prototype for function 'convert' [-Wmissing-prototypes]
-   enum aggr_mode_class convert(const char *aggr_mode)
-                        ^
-   pmu-events/jevents.c:73:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   enum aggr_mode_class convert(const char *aggr_mode)
-   ^
-   static 
-   event-parse.c:112:13: warning: variable 'x' set but not used [-Wunused-but-set-variable]
-           static int x;
-                      ^
-   1 warning generated.
-   1 warning generated.
-     PERF_VERSION = 5.15.35.g773ca67ffc96
-   tests/mmap-basic.c:112:8: error: variable 'foo' set but not used [-Werror,-Wunused-but-set-variable]
-                           int foo = syscalls[i]();
-                               ^
-   1 error generated.
-   make[6]: *** [/kbuild/worktree/build-ktools-consumer/tools/build/Makefile.build:97: /kbuild/worktree/build-ktools-consumer/tools/perf/tests/mmap-basic.o] Error 1
-   make[6]: *** Waiting for unfinished jobs....
->> util/parse-events-bison.c:1565:6: error: expected '}'
-       {
-        ^
-   util/parse-events-bison.c:1565:5: note: to match this '{'
-       {
-       ^
->> util/parse-events-bison.c:1565:6: error: expected '}'
-       {
-        ^
-   util/parse-events-bison.c:1372:1: note: to match this '{'
-   {
-   ^
-   util/parse-events-bison.c:1501:9: error: use of undeclared label 'yyexhaustedlab'
-           YYNOMEM;
-           ^
-   util/parse-events-bison.c:844:30: note: expanded from macro 'YYNOMEM'
-   #define YYNOMEM         goto yyexhaustedlab
-                                ^
-   util/parse-events-bison.c:1532:9: error: use of undeclared label 'yyabortlab'
-           YYABORT;
-           ^
-   util/parse-events-bison.c:842:30: note: expanded from macro 'YYABORT'
-   #define YYABORT         goto yyabortlab
-                                ^
-   util/parse-events-bison.c:1538:5: error: use of undeclared label 'yyacceptlab'
-       YYACCEPT;
-       ^
-   util/parse-events-bison.c:841:30: note: expanded from macro 'YYACCEPT'
-   #define YYACCEPT        goto yyacceptlab
-                                ^
-   util/parse-events-bison.c:1553:10: error: use of undeclared label 'yydefault'
-       goto yydefault;
-            ^
-   6 errors generated.
-   make[6]: *** [/kbuild/worktree/build-ktools-consumer/tools/build/Makefile.build:97: /kbuild/worktree/build-ktools-consumer/tools/perf/util/parse-events-bison.o] Error 1
-   make[6]: *** Waiting for unfinished jobs....
-   make[5]: *** [/kbuild/worktree/build-ktools-consumer/tools/build/Makefile.build:139: tests] Error 2
-   make[5]: *** Waiting for unfinished jobs....
-   make[5]: *** [/kbuild/worktree/build-ktools-consumer/tools/build/Makefile.build:139: util] Error 2
-   make[4]: *** [Makefile.perf:658: /kbuild/worktree/build-ktools-consumer/tools/perf/perf-in.o] Error 2
-   make[3]: *** [Makefile.perf:238: sub-make] Error 2
-   make[2]: *** [Makefile:70: all] Error 2
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sami
