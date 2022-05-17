@@ -1,109 +1,87 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3CA10E8
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:48:51 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-34-6UbOAxNsPEi7Kzwns5WYfw-1; Tue, 17 May 2022 09:48:49 +0100
-X-MC-Unique: 6UbOAxNsPEi7Kzwns5WYfw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Tue, 17 May 2022 09:48:41 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Tue, 17 May 2022 09:48:41 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Peter Zijlstra' <peterz@infradead.org>, Kees Cook <keescook@chromium.org>
-CC: Sami Tolvanen <samitolvanen@google.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>, "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>
-Subject: RE: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Thread-Topic: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-Thread-Index: AQHYacnJgt4N7xLw0EK8voqNmmoVIa0iwPIw
-Date: Tue, 17 May 2022 08:48:41 +0000
-Message-ID: <ebd0c266697a42c8b7609ff6cbc5f6c9@AcuMS.aculab.com>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com>
- <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
- <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
- <20220516183047.GM76023@worktop.programming.kicks-ass.net>
- <202205161531.3339CA95@keescook>
- <YoNXPVQRvIFS81aW@hirez.programming.kicks-ass.net>
- <YoNfiK1qKd9YDVIf@hirez.programming.kicks-ass.net>
-In-Reply-To: <YoNfiK1qKd9YDVIf@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28FD10E8
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:51:23 +0000 (UTC)
+Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 83244CCF8D
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:21:21 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id B3BA7240006;
+	Tue, 17 May 2022 08:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1652775672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y1/AW8BzbU/J7Ef4GC883IGCwsyydNpj3xsEo4FKgGM=;
+	b=aCE5S3xg+ZtS00gLcC8M4Ey5prbCVQ+Vbl7wceGLpnjHN+tsHiiyHzIh/fLa0zg1Irr8IM
+	ZOU1BHAilJ5JFwlTJSa9IEu65dGG7cwMo0qsadEj+eKloJmQL6riHROruaUJpBYA6dG8hp
+	FDxJLNFegrgRko0KZgvkcWlkW4Gg0z52KaKTvcrsAVVrgdVz8+e+EXeH5Wn+BZCexhCTuI
+	Dr9aY5dExZEDWe6HtucI+P2ONJdIeTrIr4tbXGljhkZ5pZcePOIuU1WQZ+24JnuTRXIHQy
+	SLgi3J+s62Zc7D6yPc9b7I8Ls9jUAPtLt4GknCkBm+I/dAj8BizliNITpK/SJw==
+Date: Tue, 17 May 2022 10:21:10 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Mikhail Zhilkin <csharper2005@gmail.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>,
+ NOGUCHI Hiroshi <drvlabo@gmail.com>
+Subject: Re: [linux-next:master 10956/12195] ERROR: modpost: "__udivdi3"
+ [drivers/mtd/parsers/scpart.ko] undefined!
+Message-ID: <20220517102110.42952fb6@xps-13>
+In-Reply-To: <202205170327.TVBbIsh2-lkp@intel.com>
+References: <202205170327.TVBbIsh2-lkp@intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-From: Peter Zijlstra
-> Sent: 17 May 2022 09:41
-...
-> > If we use %eax instead of %r10d for the hash transfer (as per Joao), an=
-d
-> > use int3 instead of ud2, then we can shrink the fineibt sequence to:
-> >
-> > __cfi_\func:
-> > =09endbr=09=09=09=09# 4
-> > =09xorl=09$0x12345678, %eax=09# 5
-> > =09jz=091f=09=09=09# 2
-> > =09int3=09=09=09=09# 1
-> > \func:
-> > =09...
-> >
-> > Which is 12 bytes, and needs a larger preamble (up from 9 in the curren=
-t
-> > proposal).
+Hi Mikhail,
+
+lkp@intel.com wrote on Tue, 17 May 2022 03:32:03 +0800:
+
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it master
+> head:   3f7bdc402fb06f897ff1f492a2d42e1f7c2efedb
+> commit: 4213e556fe2a18782e91a87fec70d98c48f1ee41 [10956/12195] mtd: parse=
+rs: add support for Sercomm partitions
+> config: i386-randconfig-r004-20220516 (https://download.01.org/0day-ci/ar=
+chive/20220517/202205170327.TVBbIsh2-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853f=
+a8ee225edf2d0de94b0dcbd31bea916e825e)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git/commit/?id=3D4213e556fe2a18782e91a87fec70d98c48f1ee41
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/ke=
+rnel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 4213e556fe2a18782e91a87fec70d98c48f1ee41
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
 >=20
-> On all that; perhaps it would be good to have a compiler option to
-> specify the preamble size. It can enforce the minimum at 7 to have at
-> least the required:
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 >=20
-> =09movl $0x12345678, %eax
-> =09int3
-> =09int3
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
 >=20
-> but any larger number will just increase the preamble with int3 padding
-> at the top.
+> >> ERROR: modpost: "__udivdi3" [drivers/mtd/parsers/scpart.ko] undefined!=
+ =20
 >=20
-> That can go right along with the option to supress endbr when preamble
-> :-)
 
-You also need a compiler option to specify the register.
-While (I think) %eax is usable in kernel, it isn't in userspace.
-It is used in varargs calls to pass (IIRC) the number of fp
-args that are passed in registers.
+Can you give this a look rapidly? Otherwise I'll have to drop the patch
+(I can keep the bindings anyway).
 
-(I can't remember which registers userspace has reserved for
-the PLT code? - That might include r10??)
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
-
+Thanks,
+Miqu=C3=A8l
