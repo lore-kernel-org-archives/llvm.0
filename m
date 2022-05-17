@@ -1,37 +1,56 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25242EC5
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 04:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254F77F
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 06:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=6VdXU36plQ8uaQ+VdzI8WaT/aCW7YyIgVyie8C4UwZQ=; b=Lwo8VzstY2I33pwrgT6Oe7JrVv
-	2Smz0NCanGwQH4Q0AquxBcma1Btb2dQHOmtEcj4lEmlS1TYhiX5jknBJYPp2IA3KwdwEI3mzIphe1
-	Rr6AgqpIRbou8hwB1Bq+4WuzkEVDjBgucpYEpR8zjDEY9ufmSukNYu2j/I/Q2p6o1gnmcV0zE4aun
-	bwDdQUqGlMyOqTAifEyM/qSSHAvojyIfsmHP3Of3pM9SoNl0YFia6z01a2TIYiOrHqmg3TK7LMa6D
-	8/F+jpzMCaAl2WY4sLnjY4rgeJF59syaLqIdlJMyQlASBjlj0l5y2/uVbUbrJJL8M5wKxWFK1ZMoU
-	tvDoXa6w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nqp8I-00AX5V-QY; Tue, 17 May 2022 04:48:30 +0000
-Date: Tue, 17 May 2022 05:48:30 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Brian Cain <bcain@quicinc.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-	Sid Manning <sidneym@quicinc.com>
-Subject: Re: [linux-next:master 9995/11651] fs/buffer.c:2254:5: warning:
- stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio'
-Message-ID: <YoMpHlVdH+HCMhUj@casper.infradead.org>
-References: <202205150051.3RzuooAG-lkp@intel.com>
- <Yn/YsTpOh898B30l@casper.infradead.org>
- <YoAlvnyjEbYV4T1L@dev-arch.thelio-3990X>
- <SN6PR02MB4205A0695B4B2543A9B981FCB8CE9@SN6PR02MB4205.namprd02.prod.outlook.com>
+	bh=aLCWNoCxYV5Hh6OVMOjiRNyULq/N1kxDOoi8F+4cMeU=; b=PSN4Ub/0JDasSDDQLijbie5jNh
+	g+io1dJsLgtWtc6cdiweuX5JlJDzqN8g6tQcYSNnFhdKQxamJhAdnxZThcYde0lRC7Y6vrEZg9Lt0
+	xBleWifse8gR+mWC1H8WAKgoXMa/4lX7w1uofiZa3I0LJ/LUySOpvfqidM0PSDuVW3HssnQd89UN7
+	90Xh/GBOpOrwHgx653Q+yW01BNhPgCkytHscLw+aR8x7M8u0VpIvdzPZZYkWpoQp5YgA8e2fiqq16
+	YNkTILeSIMrMlZolzrEo1cyk49A0HIWrVaLmiKR4u24ZbgY0gMPZbcrTFaB+4/bwvFcSe4nhV5N6Q
+	J/wSStJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nqqwC-00AbBn-Pk; Tue, 17 May 2022 06:44:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B073130031C;
+	Tue, 17 May 2022 08:44:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9B7BF2023D64A; Tue, 17 May 2022 08:44:06 +0200 (CEST)
+Date: Tue, 17 May 2022 08:44:06 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: David Laight <David.Laight@aculab.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <YoNENqdLBK6tLmpa@hirez.programming.kicks-ass.net>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
+ <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
+ <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com>
+ <20220516214414.GR76023@worktop.programming.kicks-ass.net>
+ <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,21 +59,22 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4205A0695B4B2543A9B981FCB8CE9@SN6PR02MB4205.namprd02.prod.outlook.com>
+In-Reply-To: <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com>
 
-On Tue, May 17, 2022 at 04:16:45AM +0000, Brian Cain wrote:
-> > -----Original Message-----
-> > From: Nathan Chancellor <nathan@kernel.org>
-> ...
-> > As a side note... Brian, is there any reason for 256K pages to exist for
-> > Hexagon? This has been an option since Hexagon's introduction but is it
-> > actually used? 4K pages is the default and the help text says "use with
-> > caution". Perhaps the choice should be turned off altogether for
-> > CONFIG_COMPILE_TEST so that we cannot select this configuration and
-> > bother developers with these reports.
+On Mon, May 16, 2022 at 03:03:02PM -0700, Sami Tolvanen wrote:
+> On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
+> >
+> > > > The compiler always generates this specific instruction sequence.
+> > >
+> > > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
+> >
+> > Yes, but we don't care. This *always* uses the 32bit immediate form.
+> > Even if the immediate is small.
 > 
-> It's not the most commonly used page size, yeah.  Ok, we will disable it for CONFIG_COMPILE_TEST.
+> Yes, that part is not a problem, but it's a valid point that LLVM
+> might not always use r8-r15 here, so I will have to check for the REX
+> prefix before blindly attempting to decode the instruction.
 
-Maybe the stack size limit could be raised for 256KB page size?
-Presumably the minimum stack size is 256KB, so it's not a problem for an
-individual function to consume 16KB of stack space?
+LLVM has always used r11 for indirect calls, will that change?
