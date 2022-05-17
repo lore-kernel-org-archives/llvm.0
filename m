@@ -1,33 +1,36 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3420210E8
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:44:35 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 0E899C7BA5
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:32:45 +0000 (UTC)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-	by mail.gandi.net (Postfix) with ESMTPA id C70C0240008;
-	Tue, 17 May 2022 08:32:31 +0000 (UTC)
-Precedence: bulk
-X-Mailing-List: llvm@lists.linux.dev
-List-Id: <llvm.lists.linux.dev>
-List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
-List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Date: Tue, 17 May 2022 01:32:31 -0700
-From: Joao Moreira <joao@overdrivepizza.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Kees Cook <keescook@chromium.org>, Sami Tolvanen
- <samitolvanen@google.com>, linux-kernel@vger.kernel.org, Josh Poimboeuf
- <jpoimboe@redhat.com>, x86@kernel.org, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-In-Reply-To: <YoNXPVQRvIFS81aW@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3CA10E8
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 08:48:51 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-34-6UbOAxNsPEi7Kzwns5WYfw-1; Tue, 17 May 2022 09:48:49 +0100
+X-MC-Unique: 6UbOAxNsPEi7Kzwns5WYfw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Tue, 17 May 2022 09:48:41 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Tue, 17 May 2022 09:48:41 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Peter Zijlstra' <peterz@infradead.org>, Kees Cook <keescook@chromium.org>
+CC: Sami Tolvanen <samitolvanen@google.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Topic: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Thread-Index: AQHYacnJgt4N7xLw0EK8voqNmmoVIa0iwPIw
+Date: Tue, 17 May 2022 08:48:41 +0000
+Message-ID: <ebd0c266697a42c8b7609ff6cbc5f6c9@AcuMS.aculab.com>
 References: <20220513202159.1550547-1-samitolvanen@google.com>
  <20220513202159.1550547-21-samitolvanen@google.com>
  <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
@@ -35,135 +38,72 @@ References: <20220513202159.1550547-1-samitolvanen@google.com>
  <20220516183047.GM76023@worktop.programming.kicks-ass.net>
  <202205161531.3339CA95@keescook>
  <YoNXPVQRvIFS81aW@hirez.programming.kicks-ass.net>
-Message-ID: <141870fac344a671029e2684f84bc828@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+ <YoNfiK1qKd9YDVIf@hirez.programming.kicks-ass.net>
+In-Reply-To: <YoNfiK1qKd9YDVIf@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+Precedence: bulk
+X-Mailing-List: llvm@lists.linux.dev
+List-Id: <llvm.lists.linux.dev>
+List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
->> Cons:
->> - FineIBT does callee-based hash verification, which means any
->>   attacker-constructed memory region just has to have an endbr and 
->> nops at
->>   "shellcode - 9". KCFI would need the region to have the hash at
->>   "shellcode - 6" and an endbr at "shellcode". However, that hash is 
->> well
->>   known, so it's not much protection.
-> 
-> How would you get the ENDBR there anyway? If you can write code it's
-> game over.
-> 
-+1 here. If you can't keep W^X, both approaches are equally doomed.
+From: Peter Zijlstra
+> Sent: 17 May 2022 09:41
+...
+> > If we use %eax instead of %r10d for the hash transfer (as per Joao), an=
+d
+> > use int3 instead of ud2, then we can shrink the fineibt sequence to:
+> >
+> > __cfi_\func:
+> > =09endbr=09=09=09=09# 4
+> > =09xorl=09$0x12345678, %eax=09# 5
+> > =09jz=091f=09=09=09# 2
+> > =09int3=09=09=09=09# 1
+> > \func:
+> > =09...
+> >
+> > Which is 12 bytes, and needs a larger preamble (up from 9 in the curren=
+t
+> > proposal).
+>=20
+> On all that; perhaps it would be good to have a compiler option to
+> specify the preamble size. It can enforce the minimum at 7 to have at
+> least the required:
+>=20
+> =09movl $0x12345678, %eax
+> =09int3
+> =09int3
+>=20
+> but any larger number will just increase the preamble with int3 padding
+> at the top.
+>=20
+> That can go right along with the option to supress endbr when preamble
+> :-)
 
-Yet, there is a relevant detail here. ENDBR has a pre-defined/fixed 
-opcode, which means that it is predictable from the binary perspective. 
-Because of that, compilers already do security optimizations and prevent 
-for example the emission of ENDBR's opcode as immediate operands. This 
-very same approach can be used by JIT stuff, preventing ENDBRs to be 
-emitted as unintended gadgets. Because KCFI hashes aren't predictable, 
-you can't (or at least I can't think of a way to) prevent these from 
-being emitted as operands, which means that if you have an IBT-able 
-machine, you will want to enable it even if you have KCFI.
+You also need a compiler option to specify the register.
+While (I think) %eax is usable in kernel, it isn't in userspace.
+It is used in varargs calls to pass (IIRC) the number of fp
+args that are passed in registers.
 
-With this said, the instrumentation for KCFI on IBT-enabled machines 
-should be of at least 9 bytes (5 for the hash/mov and 4 for ENDBR, not 
-counting the additional 4 bytes we asked for).
+(I can't remember which registers userspace has reserved for
+the PLT code? - That might include r10??)
 
->> - Potential performance hit due to making an additional "call" outside
->>   the cache lines of both caller and callee.
-> 
-> That was all an effort to shrink and simplify, all this CFI stuff is
-> massive bloat :/
-> 
-> If we use %eax instead of %r10d for the hash transfer (as per Joao), 
-> and
-> use int3 instead of ud2, then we can shrink the fineibt sequence to:
-> 
-> __cfi_\func:
-> 	endbr				# 4
-> 	xorl	$0x12345678, %eax	# 5
-> 	jz	1f			# 2
-> 	int3				# 1
-> \func:
-> 	...
-> 
-> Which is 12 bytes, and needs a larger preamble (up from 9 in the 
-> current
-> proposal).
+=09David
 
-As per the above-analysis, if we can make FineIBT instrumentation fit in 
-12 bytes, this means that the 9 bytes required for KCFI+IBT plus three 
-bytes would suffice for having FineIBT (again, if we can make it fit). 
-And this would make that call go away.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-> 
-> If we do the objtool/linker fixup, such that direct calls/jumps will
-> *never* hit ENDBR, then we can do something ugly like:
-> 
-> 	kCFI			FineIBT
-> 
-> __cfi_\func:			__cfi_\func:
-> 	int3				endbr
-> 	movl $0x12345678, %rax		xorl $0x12345678, %eax
-> 	int3				jz   1f
-> 	int3				int3
-> \func:
-> 	endbr
-> __direct_\func:			__direct_\func:
-> 	...				...
-> 
-> which is 12 bytes on both sides and shrinks the preaamble to 8 bytes
-> while additionally also supporting kCFI+IBT for those few people that
-> don't care about speculation based attacks much.
-> 
-> But now it's complicated again and requires significant tools work :/
-> (also, using int3 isn't ideal).
-> 
->> Pros:
->> - FineIBT can be done without read access to the kernel text, which 
->> will
->>   be nice in the exec-only future.
-> 
->   - Mostly kills SpectreBHB (because it has the hash check *after*
->     ENDBR).
-
-- Callee-side checks allow you to make an specific function 
-coarse-grained without making an indirect call instruction 
-coarse-grained. I.e: If you have a binary blob or some function that for 
-whatever reason can't have a hash, you just disable the check in this 
-function, making it reachable by every indirect call in the binary but 
-being reasonably able to measure the risks behind it. If you make an 
-indirect call coarse-grained, this means that now this indirect call can 
-reach all functions in the binary, including functions like 
-"disable_cet" and "disable_super_nice_security_feature". The risk 
-impacts of these latter relaxations are much harder to measure, imho 
-(yet, I would enjoy hearing counter-arguments, if any).
-
-> 
-> So were IBT limits speculation to all sites that have ENDBR, you can
-> still target any of them. With FineIBT you loose all sites that don't
-> match on hash value, significantly reducing the options.
-> 
->> I'd kind of like the "dynamic FineIBT conversion" to be a config 
->> option,
->> at least at first. We could at least do performance comparisons 
->> between
->> them.
-> 
-> Why would you need a config option for that? Since it is dynamic anyway
-> a boot option works fine.
-> 
-> 
-> Also, regardless of all this, it probably makes sense to add an LTO 
-> pass
-> to remove all unused __cfi_ symbols and endbr instructions, less viable
-> targets is more better :-)
-
-We have that for IBT in clang already (I implemented and upstreamed it 
-back when you were trying ibt-seal in objtool). I did not find the time 
-to test it with the final IBT support but it is in my todo list to take 
-a look and perhaps send a RFC here. FWIIW, 
-https://reviews.llvm.org/D116070
-
-> 
-> I've been doing that with objtool for the IBT builds.
