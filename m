@@ -1,89 +1,174 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA2E10F8
-	for <llvm@lists.linux.dev>; Tue, 17 May 2022 20:36:51 +0000 (UTC)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f863469afbso4096067b3.0
-        for <llvm@lists.linux.dev>; Tue, 17 May 2022 13:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ap6I3L4wAL2dCUYbfv592hI1CK5Q2LIvM0tZSX0GvuE=;
-        b=ExlnNy27IdZuSeHWhoB+wChwCWqkCyYWFwRPPA2XWICoMp/0iSB+0UgbJlEzhwDYzV
-         SMT40ZwqMBmRgOSYUTA2q+yp6FZR1llqfeaNClhztQ9J+UBKHhKcZ2VewvTL8xnNu+JB
-         ZrEYCvyLXT4xEDs7VMFQHjLsulNCsHVAoMHChcme8bpk9vRy39GW3YuyIA69rH1CIUmd
-         G8aheQL7oWM8YW6ttEAPmxVbCCeUNok07yUqRS4PzpeCGqjbuBIiBYxqAI7HDDKOLmO4
-         XQl4kz19ESmGzRU2DTUhAwuZHs3mA88L2vWmBR5UdbPXrpeFe1MOLsz9GklUpir/x34f
-         zVTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ap6I3L4wAL2dCUYbfv592hI1CK5Q2LIvM0tZSX0GvuE=;
-        b=VbvP4mdN1PHHmPrU6T2zvuYdJto/0LRDKV+h+B3XxuaOKUe8QriEMArWMrdnw/8h9R
-         me8mgmWbyL61a5/fY+eukqwnZghQUyz89rilZ1BtVv0x63pgSW8L5nbZBFF/zisrcT/0
-         DQzjjOmkCpMtbrTj6qNWCkDoec5B/W1iyhuOQhGftWnbNUCEVdAw56G+ToZNMZzU09oe
-         UZ16YmEomniToUI5oTJHXvCoq6z8quz45O9xkxJBhce9s3/egAhJuDzi0lwq2hnIe6ST
-         x5rvuSBA5GMaHmC8cLke7BNqJwp2C4GMXnl7GQgLghEKS+f4akDNuouTr+ZVhlag8Dms
-         OS7A==
-X-Gm-Message-State: AOAM532hyA+9In7Ckwm3o18/B9T0NxTEihB70MiiZKcUJVYC5lL+hwMj
-	7X8sbLzMPUy6zfaoBHhnKeEeE4DarJMAtCFwIyVyPQ==
-X-Google-Smtp-Source: ABdhPJz6+ql5NLCT+TCJzkPXm3RGXLdJGWYcAV8GnmANmUz8/mfTMhwDLOzesEEUiMBMguVZLZHXbKZDvfTwj/yIcJU=
-X-Received: by 2002:a0d:d747:0:b0:2ff:22b9:9281 with SMTP id
- z68-20020a0dd747000000b002ff22b99281mr7123980ywd.305.1652819810645; Tue, 17
- May 2022 13:36:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7FB1874
+	for <llvm@lists.linux.dev>; Tue, 17 May 2022 21:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652822944; x=1684358944;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QnWt9y7iPZGxys9AtXbjA4+pu8rLJx3NmJINXdGHLJg=;
+  b=i3KlL6InBh2hX3ZXt/rUs+Ay+5cR+tSq83+XKOp4eIvtERHDGRT7hD5u
+   SilKGNjyzZ2MrfWc5P8PIXCXWtgAOe9vwdkBvagaGAkuBsw0bAyuj52B8
+   0LA4Kp7d1tukFUvz6nyRagn54BWXujHDgQTkfHLc2Qfesl56LvyMnzqMA
+   cC8bJ4zYWpidDcBbaT2Vb+dTmgLOp25G214ZRXjlQEPGPLqSQGc5p2ajw
+   xovo1+0tdNwuhzLatabhtdh+s5GMr9RAb53Uz2pyBNTsPZlxlvwKh3HJ5
+   2/UJzpDYl1Eo39q+p39m2k+cwX5mSP4Y+JRRim25sQYiQjqt8pzV5F0g0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270166079"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="270166079"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 14:29:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="523165895"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 May 2022 14:29:01 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nr4kW-0001RZ-R2;
+	Tue, 17 May 2022 21:29:00 +0000
+Date: Wed, 18 May 2022 05:28:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>, Hyun Kwon <hyun.kwon@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 629/1093]
+ drivers/gpu/drm/xlnx/xlnx_dsi.c:967:41: warning: implicit conversion from
+ 'unsigned long long' to 'unsigned long' changes value from 200000000000 to
+ 2431504384
+Message-ID: <202205180544.g3jiSfi5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <20220513202159.1550547-21-samitolvanen@google.com> <f65c01979b884174965802a13cf6b077@AcuMS.aculab.com>
- <CABCJKueo+cw1DHH6N2dUjD-U7OKqmkJUyimm0ychv1drt5U9Rg@mail.gmail.com>
- <19b3e040302d4d8aa240eee43427dfaa@AcuMS.aculab.com> <20220516214414.GR76023@worktop.programming.kicks-ass.net>
- <CABCJKucPMgMQ-D_yByvMSx6yutjsBXGAwirmheOYejWHARi9iQ@mail.gmail.com> <YoNENqdLBK6tLmpa@hirez.programming.kicks-ass.net>
-In-Reply-To: <YoNENqdLBK6tLmpa@hirez.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 17 May 2022 13:36:14 -0700
-Message-ID: <CABCJKuePNjvcKqZ3ZRmv9ws_2-L2B+a1y_rSXS_cjprf=grLrw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Laight <David.Laight@aculab.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, "x86@kernel.org" <x86@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 16, 2022 at 11:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, May 16, 2022 at 03:03:02PM -0700, Sami Tolvanen wrote:
-> > On Mon, May 16, 2022 at 2:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Mon, May 16, 2022 at 09:32:55PM +0000, David Laight wrote:
-> > >
-> > > > > The compiler always generates this specific instruction sequence.
-> > > >
-> > > > Yes, but there are several ways to encode 'cmpl imm,-6(reg)'.
-> > >
-> > > Yes, but we don't care. This *always* uses the 32bit immediate form.
-> > > Even if the immediate is small.
-> >
-> > Yes, that part is not a problem, but it's a valid point that LLVM
-> > might not always use r8-r15 here, so I will have to check for the REX
-> > prefix before blindly attempting to decode the instruction.
->
-> LLVM has always used r11 for indirect calls, will that change?
+Hi Saurabh,
 
-No, this won't change register allocation, but I will have to ensure
-that the compiler won't do any unnecessary register shuffling for the
-check itself.
+FYI, the error/warning still remains.
 
-Sami
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+head:   5ead03b6e64b5072737c653bb20ebcd88704e3d1
+commit: 32f4c7d25b52562567b652709480223cf36e3229 [629/1093] drm: xlnx: dsi: Adding dsi driver to new framework
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220518/202205180544.g3jiSfi5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/Xilinx/linux-xlnx/commit/32f4c7d25b52562567b652709480223cf36e3229
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
+        git checkout 32f4c7d25b52562567b652709480223cf36e3229
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/xlnx/ drivers/media/i2c/ drivers/media/platform/xilinx/ drivers/net/ethernet/xilinx/ drivers/phy/xilinx/ drivers/staging/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xlnx/xlnx_dsi.c:967:41: warning: implicit conversion from 'unsigned long long' to 'unsigned long' changes value from 200000000000 to 2431504384 [-Wconstant-conversion]
+           ret = clk_set_rate(dsi->dphy_clk_200M, XDSI_DPHY_CLK_REQ);
+                 ~~~~~~~~~~~~                     ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xlnx/xlnx_dsi.c:88:27: note: expanded from macro 'XDSI_DPHY_CLK_REQ'
+   #define XDSI_DPHY_CLK_REQ       200000000000UL
+                                   ^~~~~~~~~~~~~~
+>> drivers/gpu/drm/xlnx/xlnx_dsi.c:980:39: warning: result of comparison of constant 203000000000 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+           if (rate < XDSI_DPHY_CLK_MIN && rate > XDSI_DPHY_CLK_MAX) {
+                                           ~~~~ ^ ~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/xlnx/xlnx_dsi.c:980:11: warning: result of comparison of constant 197000000000 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
+           if (rate < XDSI_DPHY_CLK_MIN && rate > XDSI_DPHY_CLK_MAX) {
+               ~~~~ ^ ~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +967 drivers/gpu/drm/xlnx/xlnx_dsi.c
+
+   928	
+   929	static int xlnx_dsi_probe(struct platform_device *pdev)
+   930	{
+   931		struct device *dev = &pdev->dev;
+   932		struct resource *res;
+   933		struct xlnx_dsi *dsi;
+   934		struct device_node *vpss_node;
+   935		int ret;
+   936		unsigned long rate;
+   937	
+   938		dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+   939		if (!dsi)
+   940			return -ENOMEM;
+   941	
+   942		dsi->dsi_host.ops = &xlnx_dsi_ops;
+   943		dsi->dsi_host.dev = dev;
+   944		dsi->dev = dev;
+   945	
+   946		ret = xlnx_dsi_parse_dt(dsi);
+   947		if (ret)
+   948			return ret;
+   949	
+   950		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   951		dsi->iomem = devm_ioremap_resource(dev, res);
+   952		if (IS_ERR(dsi->iomem))
+   953			return PTR_ERR(dsi->iomem);
+   954	
+   955		platform_set_drvdata(pdev, dsi);
+   956	
+   957		/* Bridge support */
+   958		vpss_node = of_parse_phandle(dsi->dev->of_node, "xlnx,vpss", 0);
+   959		if (vpss_node) {
+   960			dsi->bridge = of_xlnx_bridge_get(vpss_node);
+   961			if (!dsi->bridge) {
+   962				dev_info(dsi->dev, "Didn't get bridge instance\n");
+   963				return -EPROBE_DEFER;
+   964			}
+   965		}
+   966	
+ > 967		ret = clk_set_rate(dsi->dphy_clk_200M, XDSI_DPHY_CLK_REQ);
+   968		if (ret) {
+   969			dev_err(dev, "failed to set dphy clk rate %d\n", ret);
+   970			return ret;
+   971		}
+   972	
+   973		ret = clk_prepare_enable(dsi->dphy_clk_200M);
+   974		if (ret) {
+   975			dev_err(dev, "failed to enable dphy clk %d\n", ret);
+   976			return ret;
+   977		}
+   978	
+   979		rate = clk_get_rate(dsi->dphy_clk_200M);
+ > 980		if (rate < XDSI_DPHY_CLK_MIN && rate > XDSI_DPHY_CLK_MAX) {
+   981			dev_err(dev, "Error DPHY clock = %lu\n", rate);
+   982			ret = -EINVAL;
+   983			goto err_disable_dphy_clk;
+   984		}
+   985	
+   986		ret = clk_prepare_enable(dsi->video_aclk);
+   987		if (ret) {
+   988			dev_err(dev, "failed to enable video clk %d\n", ret);
+   989			goto err_disable_dphy_clk;
+   990		}
+   991	
+   992		ret = component_add(dev, &xlnx_dsi_component_ops);
+   993		if (ret < 0)
+   994			goto err_disable_video_clk;
+   995	
+   996		return ret;
+   997	
+   998	err_disable_video_clk:
+   999		clk_disable_unprepare(dsi->video_aclk);
+  1000	err_disable_dphy_clk:
+  1001		clk_disable_unprepare(dsi->dphy_clk_200M);
+  1002		return ret;
+  1003	}
+  1004	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
