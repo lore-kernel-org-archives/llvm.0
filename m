@@ -1,167 +1,227 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2079.outbound.protection.outlook.com [40.107.101.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B781852
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 07:05:34 +0000 (UTC)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1nrDkF-0000CF-AS; Wed, 18 May 2022 09:05:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1EB3B80F3A;
-	Wed, 18 May 2022 07:05:18 +0000 (UTC)
-Date: Wed, 18 May 2022 09:05:17 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field
- hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than
- 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to ...
-Message-ID: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
-References: <202205181414.n8QRDe8k-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E0046A6
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 07:12:23 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kOahddyKa7IWXMv/ZQ+JZK936s8XGnBwDpi2+ZUw2swWUB/buxSh+SAoOpMlD+4mhZH+YxIKW5wJF79unESq3TmX+zVHGkLb9u6Gfkpyz246vOTbz7spxkW3La5zbjgFFYOQ/LnFAekJFmJBIOEBHI06BpFaU+Fz2WGEBjKJJ4icBmFUM6pxEHJ0v807F9JIq1qO4wBmBnkhyTmfnDH80p6uQGELNnB1MpwT+hrekKgjmCQwCqhvx9gG5BwtDBEjGpLigYvlkFbNSAliHZK0QHSVNbwQPvxwfk4DKZEdo8D3YxOcI0CTqvqhVutC3w8LUb6q2ppPWJ3m24AJJKF6mA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UH2NUAVPfYlVMtjZc9geO7akhy0eK6oKZFDW6Jh/cpc=;
+ b=mnLBExiTPSXrSJwhrpmdZ3NhrHfUIN0fDTbGmyMRrqjP9M3g1Kc2wmtXaB1FtvpW31Zvt6ec2HnLDx57rFpn/hwZ9Kt8JxOhLq/IHUkuevGtMxpH1/X9Eb8bveILhtQK+L8k9mGwHGv+3ylW1jR22IRk7DaCc/87jHoXr0PpsmQLb8lXxzUnrP9Xm/xYvFD00AToBMxevfsEynrBi+br7OfmLeqA16CNnixCTtKzV0fJ4aAFKsozKnisiZLAX7AybicA/0MWl33Xr6aKeHuFv18Z3MEPOF0DV55rLoz+J1zV0L6zygoLFUXDShsK8kYicEpwMGsfz/CFFR3tG7VC9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UH2NUAVPfYlVMtjZc9geO7akhy0eK6oKZFDW6Jh/cpc=;
+ b=rsZ2ZKmkWX43saBe/pVLXgD7VqeUC8c7MW7/lSOqr77xISxRbt2/o2vUha7bj0KqBdHUWs5oUafQCPbT/vOg8YrPoinSOPB6L4w49Q8dxLGczHDQSc5zWeATCySGwviyk+V5Qqh7Nm1Vv0h3m9hMB189b1LNrDdvBxBT4G2GJ/S9gGJq3Anjtf/4SqOj06M0dkThEMWE44LcdOY/Sm1JtqiIGAoVbidE3tYH6LSOtprPVPeuAbflWUWOwHS//4rX7ewjzlB4RNEqwpmQduBW93p817CqCs6A0+/snl5QFPc5Sn2E/dExbi8uhJkLeHQrT+lECEzobvTfV2wyYfcB6A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BN6PR12MB1908.namprd12.prod.outlook.com (2603:10b6:404:fa::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.15; Wed, 18 May
+ 2022 07:12:20 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0%7]) with mapi id 15.20.5273.014; Wed, 18 May 2022
+ 07:12:20 +0000
+Message-ID: <d0abf3db-0726-81b9-5a44-36cb1736a155@nvidia.com>
+Date: Wed, 18 May 2022 00:12:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Content-Language: en-US
+To: Mike Kravetz <mike.kravetz@oracle.com>, Minchan Kim <minchan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+ trix@redhat.com, Matthew Wilcox <willy@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, David Hildenbrand <david@redhat.com>
+References: <000000000000ef451a05dee0f2b1@google.com>
+ <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+ <Yn7vnpXwX50J3K+7@google.com>
+ <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+ <Yn73Hz7LkSUv7ycw@google.com>
+ <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
+ <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0293.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::28) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cujgf6c2mizwls7v"
-Content-Disposition: inline
-In-Reply-To: <202205181414.n8QRDe8k-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 14277034-419c-4f0c-18fe-08da389dbfc4
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1908:EE_
+X-Microsoft-Antispam-PRVS:
+	<BN6PR12MB190869CA7A354D961E0E16CDA8D19@BN6PR12MB1908.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	J/wnYI9/AaC6i3yC56UncABb4CZanarBCYD8BklGPZFACDokju5Y2LpDisMipSxONPIVOvpMB1FYF8agDwMuXUsmBWMbrYYyWfIFdOkhdxZBRhuYjsX5hp2GjF0gnCD+xFeJ0IZbxYwfwpQBAixOfXDy0EZ6buMjz46aSaH+bpDXH4OeU4tuyAYygrEnCcRkwoAm5r1/jI/WxhrbSRS6bCJ3TaJuzQGXXHdLp/onuoQQJdBb0rEQqbPclrRNsQLAWOOUM1vz/vtEtyTe+50Er1wdg7qIILajmpp+hlniU7DzK2+vycCQDxI0/6pjXY2w/jeRbc3qfJ2hsx5FcBxF8Iu1LgmMA1og3Ab8hoseHq/hXN4aDxSZW1f6NeYBHnBp+oetuKxmBvHtPuaDUTacnTCWnKieHogvaApk2fg242EW4FPlYeIWomKZtm71x7zFJ9D3t4XWU4M7eKyNj9ckWHzZ8r5PFbO35ZvhGKQtgupw0hzVJ/Dso6NgQLXxQTmtYFsRnHlq/IV+D3RRqMFBPgYCGVh7UdWERMPzA2zQPvGvBByKFsm8dRiOs0lpaCwKHslwNFiMNQ/JqNSMMEooH3yEOhWNt22Bdv5mh5bzB9yc21jdVEp7fRwqUchkn0UxQf1XNWrf1fP1YsVkzlpbjsIkTREIEQYH99HpFsAtzF+J3zTsS903K0vlIE8iDKUMUZxFJkgOeHAlrhIAr48AijqIwJxV1vB+JuNJ07JrDERwItxzRRwyDY+MHtNYfOjKRqMKmuzTpLAdEUkRYXVwI24Q707Up2o2iZxKRESIzig=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(110136005)(508600001)(36756003)(53546011)(8936002)(38100700002)(2906002)(66476007)(31696002)(5660300002)(6512007)(7416002)(83380400001)(54906003)(86362001)(26005)(66556008)(316002)(2616005)(4326008)(8676002)(31686004)(6506007)(66946007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q2dTWmttaE9jN1pXMXFRb1gyVkFpcHRjQTcwR05rb25SWWJvSE1vazhKeVpG?=
+ =?utf-8?B?KzlNRmJkdXNyUDRoU0daQ2hOa2JSMEt2YitWMkNSSWg0Nk8xaktFb3o5OGcz?=
+ =?utf-8?B?YjlCMkxBUnNuRHllaC9BY1BXSG1GMUtKanhxKzRvTjZSUmlra3R0eVhoRTl1?=
+ =?utf-8?B?Y0txa280aHoyZkRpNzI5bkdEcDg1THNDSDdMM3U0b1pXWFF3U016a1lLSXJs?=
+ =?utf-8?B?TWszaXRxTHpnRzgzbWVCdDl3cWE4NFhWR3lmQVV3YXgvdWxSNWNzS2dKQkJQ?=
+ =?utf-8?B?OUEyYWo1WnJ5dGFERXNSUVl1RzNueEVML3FQTWlqNmluM0t0dVNwY0dtWUxl?=
+ =?utf-8?B?c0h5RGdTUnVvdCt0QmlEVlBRQS9PN2I0QittU1Rkb212Y24rWmNHNEZ6bUZq?=
+ =?utf-8?B?TENKeDBVNDZkRThKWXR6ekdtK2NHWHhSaS8wbkF4a0JkTDRMNnVnQjF3RmhJ?=
+ =?utf-8?B?S1BHc1BQK1ZyKytCR01tM1ZmeVdVekJmcnFDT3Z4VVR5NmV4M2VIcjJGZkhs?=
+ =?utf-8?B?Q2dyNitvdVhDS3VyM1d3cGNZVVQxM2VIbVVJRGwyYUUxWHlpS2k3eGIvdG96?=
+ =?utf-8?B?TFlMWWVlRzRYbWJDT0MyQStQM296RkpsQ2UydFFFTktOL3Y2dVZxL2ZZc1dH?=
+ =?utf-8?B?TWdWdlhsa3ZxODU3cW1DSVRwUzhjOWhlS2NhWVlqRGZHTGhZYWtKVUFmWVJz?=
+ =?utf-8?B?Z1FRM05ES290bkJ2TmcwTlZ1Yk9ZRWNaUXpvclpmYjR4WXJua2FFM0gxcEVm?=
+ =?utf-8?B?OEt3MUg2NjE3cU96UHExMnFEZHN3ZlhiS3h3NW13VStVRUNnc0lZYWdRODhx?=
+ =?utf-8?B?S2gvWGQwZCs0anh4YkpWY3djR3R5Sk44dHRBcDQvRUg0YUJsWTlJRXFIaDRO?=
+ =?utf-8?B?bTFrWGFIeVFJUWZQSEZ3TlRKdFlqNm1tVkJuSW5KLzQzY0Q3M2tNcFdSZTNk?=
+ =?utf-8?B?Vm9tWWxzYnlKekYvdGUrVXM3L21qMVRuSjEvREFJN21aTjJVNU5tV3MvMTFO?=
+ =?utf-8?B?Z1V5UkRndWszdEkwQmliVXhXU2NjMGxmdU9FZ2RJQTN3QURhUkFaeGFTWFRW?=
+ =?utf-8?B?bmd2YWoyQitMeTBDMkpzdzV1M28zQzlwWGVtc3AyaWF0NHBuU2JnMmpqM0Nx?=
+ =?utf-8?B?MEtkUzBpRG5JQmVpWFBiSzBpNXNRTXlJQVlOVDNmckNuWWwvMzZIc2Eyem05?=
+ =?utf-8?B?NEpxSTZ2clVPMHFUcENVZmRCdWtFOC9TK1JyUzVSRkpWZjBGRHpJQVZ0NjZl?=
+ =?utf-8?B?aGt4ckJUS2IzV3p3T0xwWWtKbXdpYTdaOVNmcSs3dkNwM2hpQlpMRFBhelV2?=
+ =?utf-8?B?d1RXZ0ZMb3BhS3l6YTgzSCtQVmlpVE5CYTY4ZTV5QmJiQitjc25NNHhNeE85?=
+ =?utf-8?B?cyt2L29jQjl6MEh6enE3MUJHbmZmTXRETHNOR3VBVDdFM0ZEOGRQeXhYSXBp?=
+ =?utf-8?B?QTlUcjh1VFBIaXJOQkxqVm9xSDFUTDIrR0FOWWVReVIrTnZwU0hSMEgzVWRN?=
+ =?utf-8?B?TTJUWi9GRDVnVHJGdmtuYUhOeVVFZ09tWlN6QkJoODZsaTV1OEFWTFc0S2VW?=
+ =?utf-8?B?SnJuNmpQVGJYSitBYTlzUXBENnVnaFgwV0k0N2VnWmh3NGpMOEZjcFZua2Vw?=
+ =?utf-8?B?MVVybGpRM1Z0K0NaK01ic2NiZDdhZHN5Q3E2anlUelVhcE5PMEM1emI0SGkw?=
+ =?utf-8?B?RHZjbncrdUQva3RpQlc3bHFoYUpReUp0NGlnUTBYTEtQK2kwbjEvWnlVWU45?=
+ =?utf-8?B?RmVCWU1FR2hyeHBJb1ZwNVNUcUhyL2ZYOEgzMjNwdytBdUhoTHd2MDY0Q2dn?=
+ =?utf-8?B?WXZwVHVPRFNGODRSbTczdjV3dTEvOHN2MXIreDc3MUVSN1pXdEhsalJBOGxv?=
+ =?utf-8?B?cGFickNxVE5kVThwWWo3dGZTRmNLb3pVaktyWUQyVUh4SzFSbVVpaUIyZVZP?=
+ =?utf-8?B?cHY2Umpxdjh5STZ2N1pmbnN6dktnWjNFTkQ0SFoxeGMwYzVheHMvWmU4QXFO?=
+ =?utf-8?B?USt6M25kcXZRRDN5RGtMUXNmUWNUZG91UndFQTh3ZTZsNXp3MDdpN3A3WUgy?=
+ =?utf-8?B?MjRrV1BSUEg4NnM1MDhEZ1FlUXZnZDZmWGlOcmRvei93RVFjYytpUCtCU1pC?=
+ =?utf-8?B?OE5JVFdxUWhQOGtzWUlrVW5KSElmVU1VVEVmd2JjU1hQY1BHQWNrSm9yUkxP?=
+ =?utf-8?B?SGFXRzdPbTNQWUpkajhuS0ExejZaUU5HZm5ncDk5aWcwaGdYbiswaVpsT0Mw?=
+ =?utf-8?B?SWxTNkMrcHA1TTZtRG1pVDhaOXUyNXBUVXErZVlhdHhlcHMyNkdCMVljNTBj?=
+ =?utf-8?B?S1EwR2xnd1ZldVc5Y2ViUFZoUWtWL29ya1AzQytaUHNrTjgxNXJabmdJM0Yx?=
+ =?utf-8?Q?sKzpXrTU6GS0r160=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14277034-419c-4f0c-18fe-08da389dbfc4
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 07:12:20.6073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hCNUk5f7udsrIEEWPOEqASj74xf5fIDDLAloW9NkJZpJGmp45m0lwOxn+YyFn8d++BtKsswb+X3IC4ZRoSWKJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1908
+
+On 5/16/22 20:37, Mike Kravetz wrote:
+
+> Later, that code was modified (for performance reasons) in commit  0fa5bc4023c18 to do a single try_grab_compound_page() instead of multiple
+> calls to try_grab_page().  At the time it was not noticed that
+> try_grab_compound_page had a check for 'pinnable' when try_grab_page did
+> not.  So, I think this commit actually changed the behavior.
+
+This makes me unhappy with the try_grab_page() situation: the name
+doesn't give you any hint that it now has extra policy in there.
+Furthermore, the policy is unaware of all of the call sites and
+is already getting it wrong.
+
+After looking through the call sites, I'm leaning slightly toward pulling
+is_pinnable_page() out, and letting the call sites decide if they want
+or need to apply that policy.
+
+Just because try_grab_folio() is a choke point, does not mean that it
+is the right place for the is_pinnable_page() checks. And while it's
+nice to avoid scattering is_pinnable_page() all over the place, it's
+more important to *not* have it when it is not correct.
+
+There is a counter-argument, though, which goes something like,
+"try_grab_folio(FOLL_PIN) is never ever correct if the page is not
+pinnable". But that's not as clear cut as one might think. See below.
+
+> 
+>>
+>> try_grab_folio()
+>>      /*
+>>       * Can't do FOLL_LONGTERM + FOLL_PIN gup fast path if not in a
+>>       * right zone, so fail and let the caller fall back to the slow
+>>       * path.
+>>       */
+>>      if (unlikely((flags & FOLL_LONGTERM) &&
+>>               !is_pinnable_page(page))) /* which we just changed */
+>>          return NULL;
+>>
+>> ...and now I'm starting to think that this warning might fire even with
+>> the corrected check for MIGRATE_CMA || MIGRATE_ISOLATE. Because
+>> try_grab_folio() didn't always have this early exit and it is starting
+>> to look wrong.
+>>
+>> Simply attempting to pin a non-pinnable huge page would hit this
+>> warning. Adding additional reasons that a page is not pinnable (which
+>> the patch does) could make this more likely to fire.
+> 
+> Yes, that is correct.  One could easily allocate a hugetlb page from
+> CMA and trigger this warning.
+> 
+
+Thanks for confirming that!
+
+>>
+>> I need to look at this a little more closely, it is making me wonder
+>> whether the is_pinnable_page() check is a problem in this path. The
+>> comment in try_grab_folio() indicates that the early return is a hack
+>> (it assumes that the caller is in the gup fast path), and maybe the hack
+>> is just wrong here--I think we're actually on the slow gup path. Not
+>> good.
+>>
+>> Mike, any thoughts here?
+>>
+> 
+> Do you know why try_grab_compound_page(now try_grab_folio) checks for
+> pinnable when try_grab_page does not?
+
+I think it's just an oversight. The CMA and migrate-out logic was sort of
+retrofitted and I think it's just incomplete, yet.
+
+> 
+> Then I guess the next question is 'Should we allow pinning of hugetlb pages
+> in these areas?'.  My first thought would be no.  But, recall it was 'allowed'
+> until that commit which changed try_grab_page to try_grab_compound_page.
+> In the 'common' case of compaction, we do not attempt to migrate/move hugetlb
+> pages (last time I looked), so long term pinning should not be an issue.
+> However, for things like memory offline or alloc_contig_range() we want to
+> migrate hugetlb pages, so this would be an issue there.
+> 
+> At a minimum, I think the warning should go.
+
+Agreed. That, and either a) bring try_grab_folio() and try_grab_page() into
+the same behavior with respect to checking for pinnable, or b) lifting
+is_pinnable_page() out of try_grab_folio() and letting the callers decide, as
+mentioned above.
+
+Your point above makes it seem like the flexibility of (b) might be better...
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
 
---cujgf6c2mizwls7v
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 18.05.2022 14:45:33, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   210e04ff768142b96452030c4c2627512b30ad95
-> commit: eb79a267c9b3e608e7762a1b221428f37ace3aa3 can: mcp251xfd: rename a=
-ll remaining occurrence to mcp251xfd
-> date:   1 year, 8 months ago
-> config: arm-randconfig-c002-20220518 (https://download.01.org/0day-ci/arc=
-hive/20220518/202205181414.n8QRDe8k-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853f=
-a8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3Deb79a267c9b3e608e7762a1b221428f37ace3aa3
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout eb79a267c9b3e608e7762a1b221428f37ace3aa3
->         # save the config file
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=20
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c:511:1: warning: unused =
-function 'mcp251xfd_chip_set_mode_nowait' [-Wunused-function]
->    mcp251xfd_chip_set_mode_nowait(const struct mcp251xfd_priv *priv,
->    ^
->    3 warnings generated.
-> --
-> >> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    2 warnings generated.
->=20
->=20
-> vim +481 drivers/net/can/spi/mcp251xfd/mcp251xfd.h
->=20
->    477=09
->    478	union mcp251xfd_tx_obj_load_buf {
->    479		struct __packed {
->    480			struct mcp251xfd_buf_cmd cmd;
->  > 481			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->    482		} nocrc;
->    483		struct __packed {
->    484			struct mcp251xfd_buf_cmd_crc cmd;
->    485			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->    486			__be16 crc;
->    487		} crc;
->    488	} ____cacheline_aligned;
->    489
-
-The structure layout is intentional as it describes the hardware
-messages on the SPI bus. The functions accessing these structs use
-appropriate put_unaligned_*() functions.
-
-How to properly annotate these structs to silence the warnings?
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---cujgf6c2mizwls7v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKEmqsACgkQrX5LkNig
-010wJAf/chPXIiNCGy6KFLiLZz5cZUSKN6WyTQN1q4bmbJppDkFfg+dEjoMedGWL
-KPH0TdZ9AtWFRFDZzmGrPgBVcnoXD0Hi7Hb1ISIJFZjf7XBDXvePoFY0+6JikS6w
-AwbMsLZMHBByU9kMOz5NobPyBDaWKcc78dLZARD+vrHhwzQ5C8mITuHHGeQU995N
-Q83dbx/7dqK6DIfM4draFFYetB4UWmaUS3aBDs0SB7+hX4+8ts9KHdlCm0k/7FXU
-607UgLU7Lukwxprd3lGf54HEDAt2fazhseZri8rIaXKOznpjLSOvt0PNUvsQrAEh
-5HqZC4V3MqeqIurSCde5uCv2B9sgww==
-=THh8
------END PGP SIGNATURE-----
-
---cujgf6c2mizwls7v--
