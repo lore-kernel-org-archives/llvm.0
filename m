@@ -1,383 +1,108 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B971852
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 07:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=77+MIQsxJm14/HmUlAwrMcbVJVMpzlGQUGBhYiPRONM=; b=QI4/JN6CEpVh71pz+R+HatJOlV
-	4R58hFbJ5B8WDY/eWaAMKua3I6Exfy79FNHNFhb0g8cdEbdSmoMI01rlPFyHLi7rueJsZbV8bZSWI
-	Yeym6UDqqfoTOdGSNF74r7JMceQBlYmeUdEV+5aQ4RZwSLtpuLZwcdbF3PXbnUk6y1jALRtoFK//x
-	bdo3ILMT1yXKr0bm3S0HiqIPEHmUdKA/0yVme441pioh2y9lqvor9uAd5hpY5AwZFDP8WwvVBG2pB
-	ff2F9RkKQpa5kg49p71Znrr6PChm5iQzmxs4pdwqSG0L4kp9I6XB9YUYdXEpMDzA3P47n1CrA4Ko/
-	De46MzlQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nrEJe-00BYyb-M7; Wed, 18 May 2022 07:41:54 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 62B4298119B; Wed, 18 May 2022 09:41:52 +0200 (CEST)
-Date: Wed, 18 May 2022 09:41:52 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH] objtool: Fix symbol creation
-Message-ID: <20220518074152.GB10117@worktop.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EF81852;
+	Wed, 18 May 2022 07:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE5DC385AA;
+	Wed, 18 May 2022 07:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652860005;
+	bh=KUl7JvGgqkc1DfGhPQMhcKNc6+xW1iqiAC34dWUYIYI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dkK2VuiRazUYy/0raeMMGlNR4Tax1p2NGjBr/nBjKum21oFxmslWmUCU0VzoRu+cO
+	 HmrzPveZdQjdv+cTPBR2V9tak/jiomNUfYBj5sw2dX2dKoC9xH7uM57L8jH4xYiIuM
+	 08YqMdtOguRYHRonbNsRBlTLvM52Q+3TpvkwtUExXHPUUphUHyK569lWDbMs10HDjU
+	 DyH3Js5U9VM/fgDmVN0asWG655mirLaZZDwLq2xvJajzBmBVBbWSRTWp5U0pCUQtsS
+	 fyTFbdmkyAv0lZigt1Yr/42MgLcInpjxDL0ApYmAeUaT9QZgryC0kOix45ZHLnTsUi
+	 zGfw+Eb+H8wvA==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2fedd26615cso15185367b3.7;
+        Wed, 18 May 2022 00:46:45 -0700 (PDT)
+X-Gm-Message-State: AOAM530zK0NWYFIfu77IvkOy5pLWe1uGiXsmc/AWeou8wqSoatpyvSz0
+	TmjJ1Fd2ucYzysuBvsHCGyViAQojBoeT2CMh6aw=
+X-Google-Smtp-Source: ABdhPJyhm2Dj408LoUWWmvAqhkBhAYE1RnSkeixOEh3zciq1RMr7OwAYsEs1iONJHOBW1KRcCiA1jSuvrZOus+J3c4c=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr29636586ywd.495.1652860004199; Wed, 18
+ May 2022 00:46:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518012429.4zqzarvwsraxivux@treble>
+References: <20220228103142.3301082-1-arnd@kernel.org> <20220516131023.GA2329080@roeck-us.net>
+ <YoJSF8T5K9pPx3Ap@kroah.com> <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
+In-Reply-To: <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Wed, 18 May 2022 08:46:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
+Message-ID: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
+Subject: Re: [greybus-dev] Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Greg KH <gregkh@linuxfoundation.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Jonathan Corbet <corbet@lwn.net>, 
+	Federico Vaga <federico.vaga@vaga.pv.it>, Alex Shi <alexs@kernel.org>, 
+	Hu Haowen <src.res@email.cn>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc-tw-discuss@lists.sourceforge.net, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Intel Graphics <intel-gfx@lists.freedesktop.org>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, greybus-dev@lists.linaro.org, 
+	linux-staging@lists.linux.dev, linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 16, 2022 at 3:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 5/16/22 06:31, Greg KH wrote:
+> > On Mon, May 16, 2022 at 06:10:23AM -0700, Guenter Roeck wrote:
+> >> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+> >>> From: Arnd Bergmann <arnd@arndb.de>
+> >>>
+> >>> During a patch discussion, Linus brought up the option of changing
+> >>> the C standard version from gnu89 to gnu99, which allows using variab=
+le
+> >>> declaration inside of a for() loop. While the C99, C11 and later stan=
+dards
+> >>> introduce many other features, most of these are already available in
+> >>> gnu89 as GNU extensions as well.
+> >>
+> >> The downside is that backporting affected patches to older kernel bran=
+ches
+> >> now fails with error messages such as
+> >>
+> >> mm/kfence/core.c: In function =E2=80=98kfence_init_pool=E2=80=99:
+> >> mm/kfence/core.c:595:2: error: =E2=80=98for=E2=80=99 loop initial decl=
+arations are only allowed in C99 or C11 mode
+> >>
+> >> Just something to keep in mind when writing patches.
+> >
+> > I just ran across this very issue on this commit.  It's an easy fixup
+> > for 5.17.y to make this work, so I did that in my tree.  If this gets t=
+o
+> > be too much, we might need to reconsider adding c11 to older stable
+> > kernels.
+> >
+>
+> I think I'll do just that for ChromeOS; I don't want to have to deal
+> with the backports, and we are using recent compilers anyway.
 
-Subject: objtool: Fix symbol creation
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue, 17 May 2022 17:42:04 +0200
+I think it would be better not to have the --std=3Dgnu11 change in the olde=
+r
+stable kernels by default, as this has introduced build warnings and other
+smaller issues, as well as raising the minimum compiler version.
 
-Nathan reported objtool failing with the following messages:
+The users that are stuck on older kernels for some reason tend to
+overlap with those on older compilers. One example here is Android,
+which used to ship with a gcc-4.9 build as the only non-clang toolchain,
+and was using this for building their kernels. If someone wants to
+pull in stable updates into an older Android, this would fail with
+-std=3Dgnu11. Others may be in the same situation.
 
-  warning: objtool: no non-local symbols !?
-  warning: objtool: gelf_update_symshndx: invalid section index
+Changing some of the 5.x stable branches to -std=3Dgnu11 is probably
+less of a problem, but I would not know where to draw the line exactly.
+Maybe check with the Android team to see what the newest kernel is
+that they expect to be built with the old gcc-4.9.
 
-The problem is due to commit 4abff6d48dbc ("objtool: Fix code relocs
-vs weak symbols") failing to consider the case where an object would
-have no non-local symbols.
-
-The problem that commit tries to address is adding a STB_LOCAL symbol
-to the symbol table in light of the ELF spec's requirement that:
-
-  In each symbol table, all symbols with STB_LOCAL binding preced the
-  weak and global symbols.  As ``Sections'' above describes, a symbol
-  table section's sh_info section header member holds the symbol table
-  index for the first non-local symbol.
-
-The approach taken is to find this first non-local symbol, move that
-to the end and then re-use the freed spot to insert a new local symbol
-and increment sh_info.
-
-Except it never considered the case of object files without global
-symbols and got a whole bunch of details wrong -- so many in fact that
-it is a wonder it ever worked :/
-
-Specifically:
-
- - It failed to re-hash the symbol on the new index, so a subsequent
-   find_symbol_by_index() would not find it at the new location and a
-   query for the old location would now return a non-deterministic
-   choice between the old and new symbol.
-
- - It failed to appreciate that the GElf wrappers are not a valid disk
-   format (it works because GElf is basically Elf64 and we only
-   support x86_64 atm.)
-
- - It failed to fully appreciate how horrible the libelf API really is
-   and got the gelf_update_symshndx() call pretty much completely
-   wrong; with the direct consequence that if inserting a second
-   STB_LOCAL symbol would require moving the same STB_GLOBAL symbol
-   again it would completely come unstuck.
-
-Write a new elf_update_symbol() function that wraps all the magic
-required to update or create a new symbol at a given index.
-
-Specifically, gelf_update_sym*() require an @ndx argument that is
-relative to the @data argument; this means you have to manually
-iterate the section data descriptor list and update @ndx.
-
-Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
----
- tools/objtool/elf.c |  198 +++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 129 insertions(+), 69 deletions(-)
-
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -374,6 +374,9 @@ static void elf_add_symbol(struct elf *e
- 	struct list_head *entry;
- 	struct rb_node *pnode;
- 
-+	INIT_LIST_HEAD(&sym->pv_target);
-+	sym->alias = sym;
-+
- 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
- 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
- 
-@@ -438,8 +441,6 @@ static int read_symbols(struct elf *elf)
- 			return -1;
- 		}
- 		memset(sym, 0, sizeof(*sym));
--		INIT_LIST_HEAD(&sym->pv_target);
--		sym->alias = sym;
- 
- 		sym->idx = i;
- 
-@@ -603,24 +604,21 @@ static void elf_dirty_reloc_sym(struct e
- }
- 
- /*
-- * Move the first global symbol, as per sh_info, into a new, higher symbol
-- * index. This fees up the shndx for a new local symbol.
-+ * The libelf API is terrible; gelf_update_sym*() takes a data block relative
-+ * index value, *NOT* the symbol index. As such, iterate the data blocks and
-+ * adjust index until it fits.
-+ *
-+ * If no data block is found, allow adding a new data block provided the index
-+ * is only one past the end.
-  */
--static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
--				  struct section *symtab_shndx)
-+static int elf_update_symbol(struct elf *elf, struct section *symtab,
-+			     struct section *symtab_shndx, struct symbol *sym)
- {
--	Elf_Data *data, *shndx_data = NULL;
--	Elf32_Word first_non_local;
--	struct symbol *sym;
--	Elf_Scn *s;
--
--	first_non_local = symtab->sh.sh_info;
--
--	sym = find_symbol_by_index(elf, first_non_local);
--	if (!sym) {
--		WARN("no non-local symbols !?");
--		return first_non_local;
--	}
-+	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
-+	Elf64_Xword entsize = symtab->sh.sh_entsize;
-+	Elf32_Word shndx = sym->sec->idx;
-+	Elf_Scn *s, *t = NULL;
-+	int max_idx, idx = sym->idx;
- 
- 	s = elf_getscn(elf->elf, symtab->idx);
- 	if (!s) {
-@@ -628,79 +626,124 @@ static int elf_move_global_symbol(struct
- 		return -1;
- 	}
- 
--	data = elf_newdata(s);
--	if (!data) {
--		WARN_ELF("elf_newdata");
--		return -1;
-+	if (symtab_shndx) {
-+		t = elf_getscn(elf->elf, symtab_shndx->idx);
-+		if (!t) {
-+			WARN_ELF("elf_getscn");
-+			return -1;
-+		}
- 	}
- 
--	data->d_buf = &sym->sym;
--	data->d_size = sizeof(sym->sym);
--	data->d_align = 1;
--	data->d_type = ELF_T_SYM;
-+	for (;;) {
-+		/* get next data descriptor for the relevant sections */
-+		symtab_data = elf_getdata(s, symtab_data);
-+		if (t)
-+			shndx_data = elf_getdata(t, shndx_data);
-+
-+		/* end-of-list */
-+		if (!symtab_data) {
-+			/* if @idx == 0, it's the next contiguous entry, create it */
-+			if (!idx) {
-+				void *buf;
-+
-+				symtab_data = elf_newdata(s);
-+				if (t)
-+					shndx_data = elf_newdata(t);
-+
-+				buf = calloc(1, entsize);
-+				if (!buf) {
-+					WARN("malloc");
-+					return -1;
-+				}
-+
-+				symtab_data->d_buf = buf;
-+				symtab_data->d_size = entsize;
-+				symtab_data->d_align = 1;
-+				symtab_data->d_type = ELF_T_SYM;
-+
-+				symtab->sh.sh_size += entsize;
-+				symtab->changed = true;
-+
-+				if (t) {
-+					shndx_data->d_buf = &sym->sec->idx;
-+					shndx_data->d_size = sizeof(Elf32_Word);
-+					shndx_data->d_align = sizeof(Elf32_Word);
-+					shndx_data->d_type = ELF_T_WORD;
-+
-+					symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
-+					symtab_shndx->changed = true;
-+				}
- 
--	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
--	elf_dirty_reloc_sym(elf, sym);
-+				break;
-+			}
- 
--	symtab->sh.sh_info += 1;
--	symtab->sh.sh_size += data->d_size;
--	symtab->changed = true;
-+			/* we don't do holes in symbol tables */
-+			WARN("index out of range");
-+			return -1;
-+		}
- 
--	if (symtab_shndx) {
--		s = elf_getscn(elf->elf, symtab_shndx->idx);
--		if (!s) {
--			WARN_ELF("elf_getscn");
-+		/* empty blocks should not happen */
-+		if (!symtab_data->d_size) {
-+			WARN("zero size data");
- 			return -1;
- 		}
- 
--		shndx_data = elf_newdata(s);
-+		/* is this the right block? */
-+		max_idx = symtab_data->d_size / entsize;
-+		if (idx < max_idx)
-+			break;
-+
-+		/* adjust index and try again */
-+		idx -= max_idx;
-+	}
-+
-+	/* something went side-ways */
-+	if (idx < 0) {
-+		WARN("negative index");
-+		return -1;
-+	}
-+
-+	/* setup extended section index magic and write the symbol */
-+	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
-+		sym->sym.st_shndx = shndx;
-+		if (!shndx_data)
-+			shndx = 0;
-+	} else {
-+		sym->sym.st_shndx = SHN_XINDEX;
- 		if (!shndx_data) {
--			WARN_ELF("elf_newshndx_data");
-+			WARN("no .symtab_shndx");
- 			return -1;
- 		}
-+	}
- 
--		shndx_data->d_buf = &sym->sec->idx;
--		shndx_data->d_size = sizeof(Elf32_Word);
--		shndx_data->d_align = 4;
--		shndx_data->d_type = ELF_T_WORD;
--
--		symtab_shndx->sh.sh_size += 4;
--		symtab_shndx->changed = true;
-+	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
-+		WARN_ELF("gelf_update_symshndx");
-+		return -1;
- 	}
- 
--	return first_non_local;
-+	return 0;
- }
- 
- static struct symbol *
- elf_create_section_symbol(struct elf *elf, struct section *sec)
- {
- 	struct section *symtab, *symtab_shndx;
--	Elf_Data *shndx_data = NULL;
--	struct symbol *sym;
--	Elf32_Word shndx;
-+	Elf32_Word first_non_local, new_idx;
-+	struct symbol *sym, *old;
- 
- 	symtab = find_section_by_name(elf, ".symtab");
- 	if (symtab) {
- 		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
--		if (symtab_shndx)
--			shndx_data = symtab_shndx->data;
- 	} else {
- 		WARN("no .symtab");
- 		return NULL;
- 	}
- 
--	sym = malloc(sizeof(*sym));
-+	sym = calloc(1, sizeof(*sym));
- 	if (!sym) {
- 		perror("malloc");
- 		return NULL;
- 	}
--	memset(sym, 0, sizeof(*sym));
--
--	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
--	if (sym->idx < 0) {
--		WARN("elf_move_global_symbol");
--		return NULL;
--	}
- 
- 	sym->name = sec->name;
- 	sym->sec = sec;
-@@ -710,24 +753,41 @@ elf_create_section_symbol(struct elf *el
- 	// st_other 0
- 	// st_value 0
- 	// st_size 0
--	shndx = sec->idx;
--	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
--		sym->sym.st_shndx = shndx;
--		if (!shndx_data)
--			shndx = 0;
--	} else {
--		sym->sym.st_shndx = SHN_XINDEX;
--		if (!shndx_data) {
--			WARN("no .symtab_shndx");
-+
-+	/*
-+	 * Move the first global symbol, as per sh_info, into a new, higher
-+	 * symbol index. This fees up a spot for a new local symbol.
-+	 */
-+	first_non_local = symtab->sh.sh_info;
-+	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
-+	old = find_symbol_by_index(elf, first_non_local);
-+	if (old) {
-+		old->idx = new_idx;
-+
-+		hlist_del(&old->hash);
-+		elf_hash_add(symbol, &old->hash, old->idx);
-+
-+		elf_dirty_reloc_sym(elf, old);
-+
-+		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
-+			WARN("elf_update_symbol move");
- 			return NULL;
- 		}
-+
-+		new_idx = first_non_local;
- 	}
- 
--	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
--		WARN_ELF("gelf_update_symshndx");
-+	sym->idx = new_idx;
-+	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
-+		WARN("elf_update_symbol");
- 		return NULL;
- 	}
- 
-+	/*
-+	 * Either way, we added a LOCAL symbol.
-+	 */
-+	symtab->sh.sh_info += 1;
-+
- 	elf_add_symbol(elf, sym);
- 
- 	return sym;
-
+         Arnd
