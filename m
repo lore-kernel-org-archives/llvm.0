@@ -1,117 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6225646AF;
-	Wed, 18 May 2022 18:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F82C34113;
-	Wed, 18 May 2022 18:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652899545;
-	bh=BagzOTYZWCGSwt0tBoax0Ts+NwQ5tB79VYsdhAHbds4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pMJlSrxH3S//KP5N794tKqWKYBIZxNC6S/ejwsxrZN8rTUXu2JkoFh4rQdPAiX5MY
-	 DjZGXOf2/i/f/7N0TnU5HlBwFH7xKkex0i/5RKCpR7bJOjpdTyW4jEIZAoLluUALY3
-	 MRIvsc7tquW6QgQP1gnrzR13pBZSWcoTGeNF8hBTgvI6uxtAHZ1EvQiEQJTsAFL7YM
-	 KJzr/Mic+FGYEAOWs2VGx1K7eOJ9ZLfrIPAz68oMDjMtec1wGou8piBBUoOE3CLsvO
-	 CIZPFeJoEhzR4curzPpB+gyZyemdubXvhe5/cc3MvN6ZV4bYcC3uMv92ShQtYSBZK0
-	 v9V01CFk7ZSdA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jessica Clarke <jrtc27@jrtc27.com>
-Subject: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-Date: Wed, 18 May 2022 11:45:29 -0700
-Message-Id: <20220518184529.454008-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122A823A3
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 20:15:36 +0000 (UTC)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1nrQ4q-0007Bg-Ub; Wed, 18 May 2022 22:15:24 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E473B818A0;
+	Wed, 18 May 2022 20:15:20 +0000 (UTC)
+Date: Wed, 18 May 2022 22:15:19 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+	linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
+ warning
+Message-ID: <20220518201519.euo3jygzuk4nul2p@pengutronix.de>
+References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
+ <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+ <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
+ <CAMZ6RqL2eKd-uqP-2vnt99_0RRE-8x7hxwYy6x1b0Oqes-HGgA@mail.gmail.com>
+ <YoUcS2WMkyJYMHfG@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3hg3ueutwh7avwyx"
+Content-Disposition: inline
+In-Reply-To: <YoUcS2WMkyJYMHfG@dev-arch.thelio-3990X>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-builds with LLVM's integrated assembler fail like:
 
-  In file included from arch/riscv/kernel/asm-offsets.c:10:
-  In file included from ./include/linux/mm.h:29:
-  In file included from ./include/linux/pgtable.h:6:
-  In file included from ./arch/riscv/include/asm/pgtable.h:114:
-  ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
-          ALT_THEAD_PMA(prot_val);
-          ^
-  ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
-          : "0"(_val),                                                    \
-            ^
+--3hg3ueutwh7avwyx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This was reported upstream to LLVM where Jessica pointed out a couple of
-issues with the existing implementation of ALT_THEAD_PMA:
+On 18.05.2022 09:18:19, Nathan Chancellor wrote:
+> > > > Because this is a false positive, I did not add a Fixes tag, nor a
+> > > > Reported-by: kernel test robot.
+> > >
+> > > I think that the Reported-by tag should always be included but I agree
+> > > that a Fixes tag is not necessary for this warning, as we currently h=
+ave
+> > > it under W=3D1, so it should not be visible under normal circumstance=
+s.
+> >=20
+> > ACK.
+> > Marc, can you directly add below tags to the patch:
+> >=20
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+>=20
+> Please use:
+>=20
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+>=20
+> To make it clear that I didn't perform anything more than a build test
+> to see that the warning is fixed.
 
-* t3 is modified but not listed in the clobbers list.
+I've updated the tags!
 
-* "+r"(_val) marks _val as both an input and output of the asm but then
-  "0"(_val) marks _val as an input matching constraint, which does not
-  make much sense in this situation, as %1 is not actually used in the
-  asm and matching constraints are designed to be used for different
-  inputs that need to use the same register.
+Thanks,
+Marc
 
-Drop the matching contraint and shift all the operands by one, as %1 is
-unused, and mark t3 as clobbered. This resolves the build error and goes
-not cause any problems with GNU as.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-Link: https://github.com/llvm/llvm-project/issues/55514
-Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/include/asm/errata_list.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+--3hg3ueutwh7avwyx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 9e2888dbb5b1..416ead0f9a65 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(						\
- 	"nop\n\t"							\
- 	"nop\n\t"							\
- 	"nop",								\
--	"li      t3, %2\n\t"						\
--	"slli    t3, t3, %4\n\t"					\
-+	"li      t3, %1\n\t"						\
-+	"slli    t3, t3, %3\n\t"					\
- 	"and     t3, %0, t3\n\t"					\
- 	"bne     t3, zero, 2f\n\t"					\
--	"li      t3, %3\n\t"						\
--	"slli    t3, t3, %4\n\t"					\
-+	"li      t3, %2\n\t"						\
-+	"slli    t3, t3, %3\n\t"					\
- 	"or      %0, %0, t3\n\t"					\
- 	"2:",  THEAD_VENDOR_ID,						\
- 		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
- 	: "+r"(_val)							\
--	: "0"(_val),							\
--	  "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-+	: "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
- 	  "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),			\
--	  "I"(ALT_THEAD_PBMT_SHIFT))
-+	  "I"(ALT_THEAD_PBMT_SHIFT)					\
-+	: "t3")
- #else
- #define ALT_THEAD_PMA(_val)
- #endif
+-----BEGIN PGP SIGNATURE-----
 
-base-commit: 93c0651617a62a69717299f1464dda798af8bebb
--- 
-2.36.1
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKFU9EACgkQrX5LkNig
+011QFQf/TUOy2+UNnYLUPR+PrsBCz35GcXtNba1vH/GmLSi0Hnf6t7BHY5XXEXCE
+FEIlAi/xX0kucczoQaKIS6g9e0XNA3dVAM8P8FLbhZpje/jiK4rc6tQPqkzjDFnn
+q0bYU6BxRlTKqiedMFpDzyNizk2yCH1B2ey1YXZS6Ac4DIgnluhZx7nMjuUdFEIX
+DMEYL40PHFFB7/rCsy5IvM/gNCqiqC8FGJB6a5dePSSX3bmCXZ7wOKLzEc2B5iDc
+WyPu0WxRT3UTExEKwvktj0ODaimU8wQSmsjBIi7PPP8lLxJBabTafG7w7bW3JSuv
+oi9jBO2/cSN7/ZbsBSRb4M3fr+L5jw==
+=zpqy
+-----END PGP SIGNATURE-----
 
+--3hg3ueutwh7avwyx--
