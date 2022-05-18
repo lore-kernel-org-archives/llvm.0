@@ -1,43 +1,51 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287107F
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 00:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339227F
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 01:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652835252; x=1684371252;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c9ASCWtNl5ff1+M8qK7VVRJgCNKtny+nyyxNn1EA9+g=;
-  b=FyfbbpxbdQzmrHV/OBgtL0pUbMknfHjgBcGo2YVQQlBiXs6cfToQD5og
-   QZuSq2RRnNewpjwjyusZb1D4+XR6hZXv3DYERYFoya2gTShu64sxtXNk7
-   gDdC8GafKrN2t73GWOfz7tX0yVkyCfd5U3B99mDFGjw0Vz091us7icJ7J
-   QGjS3iefyy0u4sBIEiQf8F4d0Wi9XPDqMdar2VHDvDdRJ/a4IpbvuDbQW
-   sNqFNoKm2X9EbqtDXgSaqY8ssSkUi0T41LsTLk56PG7sruwOsEmojk1Ev
-   /ABKn0LeFGo/zuyV3gxZ8JTPuaGb2DJPwRycgKwGEwqzfLeR9iLcVNPtQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="268991594"
+  t=1652836515; x=1684372515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6tM7gH4JRFS/rWl6JwkUGKCjUG1QwGkrdJ6CLSIx99k=;
+  b=PuLcTxyz+3uDuJpnFbaQ+Z844uNPiKUpjxJVM9UquOtR6A8dLtb+/FeN
+   hJKNGBPlp/H04abosMd6MZNlOQzfAP/s/SCM77uWUwhjCrFVNPME5IslM
+   XjvZfwYx2XULAEbMN/PIjgK37bk4rAIKvvrDLvOVF77fNL1XiAx4Wg9X3
+   sDijgRTXtvH7x0tYXkOmNmKpMYA/NxBDSGxrfepFvKUzJrjj5gDlTe+oL
+   7T0c77NPw2blWgggjhpiHh0RIfVzqsupI5YzCDGU25Hw6dcNfdTYr1CGW
+   WlCt9Rg1I/XJ71PIS0c+gWjqE4u/YqIqrPgXFTNZ876vRfB0pJR3rUxFm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="268997447"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="268991594"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 17:54:11 -0700
+   d="scan'208";a="268997447"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 18:15:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="742045555"
+   d="scan'208";a="597448146"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 17 May 2022 17:54:09 -0700
+  by orsmga008.jf.intel.com with ESMTP; 17 May 2022 18:15:10 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nr7x3-0001c5-6H;
-	Wed, 18 May 2022 00:54:09 +0000
-Date: Wed, 18 May 2022 08:54:06 +0800
+	id 1nr8HN-0001d7-Md;
+	Wed, 18 May 2022 01:15:09 +0000
+Date: Wed, 18 May 2022 09:14:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_iommu_dtbind_v1 35/37]
- arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202205180812.fxcKuXBO-lkp@intel.com>
+To: longli@linuxonhyperv.com, "K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Stephen Hemminger <sthemmin@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Long Li <longli@microsoft.com>
+Subject: Re: [PATCH 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+Message-ID: <202205180903.446J0L2Y-lkp@intel.com>
+References: <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,109 +54,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_iommu_dtbind_v1
-head:   13676549febfed9e7e2a3368008ed2cae53c84a7
-commit: 84b7089883b326751f31f50b205663151dd10768 [35/37] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r031-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180812.fxcKuXBO-lkp@intel.com/config)
+Hi,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc7 next-20220517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 42226c989789d8da4af1de0c31070c96726d990c
+config: x86_64-randconfig-a002-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180903.446J0L2Y-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/84b7089883b326751f31f50b205663151dd10768
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_iommu_dtbind_v1
-        git checkout 84b7089883b326751f31f50b205663151dd10768
+        # https://github.com/intel-lab-lkp/linux/commit/f082dc68ab65c498c978d574e62413d50286b4f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
+        git checkout f082dc68ab65c498c978d574e62413d50286b4f9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
-
-
-vim +264 arch/riscv/kvm/aia_aplic.c
-
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+   In file included from <built-in>:1:
+>> ./usr/include/rdma/mana-abi.h:12:10: fatal error: 'linux/mana/mana.h' file not found
+   #include <linux/mana/mana.h>
+            ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 -- 
 0-DAY CI Kernel Test Service
