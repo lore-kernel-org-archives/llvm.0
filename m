@@ -1,97 +1,85 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339227F
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 01:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652836515; x=1684372515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6tM7gH4JRFS/rWl6JwkUGKCjUG1QwGkrdJ6CLSIx99k=;
-  b=PuLcTxyz+3uDuJpnFbaQ+Z844uNPiKUpjxJVM9UquOtR6A8dLtb+/FeN
-   hJKNGBPlp/H04abosMd6MZNlOQzfAP/s/SCM77uWUwhjCrFVNPME5IslM
-   XjvZfwYx2XULAEbMN/PIjgK37bk4rAIKvvrDLvOVF77fNL1XiAx4Wg9X3
-   sDijgRTXtvH7x0tYXkOmNmKpMYA/NxBDSGxrfepFvKUzJrjj5gDlTe+oL
-   7T0c77NPw2blWgggjhpiHh0RIfVzqsupI5YzCDGU25Hw6dcNfdTYr1CGW
-   WlCt9Rg1I/XJ71PIS0c+gWjqE4u/YqIqrPgXFTNZ876vRfB0pJR3rUxFm
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="268997447"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="268997447"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 18:15:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="597448146"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 May 2022 18:15:10 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nr8HN-0001d7-Md;
-	Wed, 18 May 2022 01:15:09 +0000
-Date: Wed, 18 May 2022 09:14:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: longli@linuxonhyperv.com, "K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Stephen Hemminger <sthemmin@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Long Li <longli@microsoft.com>
-Subject: Re: [PATCH 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
- Network Adapter
-Message-ID: <202205180903.446J0L2Y-lkp@intel.com>
-References: <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC867F
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 01:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F43C385B8;
+	Wed, 18 May 2022 01:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652837071;
+	bh=cZ2O9NOlY984cGIAsEwAguwouqwzPyw0CuWZHAKHjZg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i1QiMPVKBFCZ8e3aj6D0tG8+xMSDHs8voek5NGNvS5iDpQFufmL2/XBeI3qikGA2H
+	 WYwHdHlKjwt3Gw+u22lUw1v3lRtmTa/UMyewtlNG8Wn7Vt2z8HKHpLDYJi15mdypDM
+	 lgchQPCnn5VJ0CJ7gILieyU/OWyKc5OgYGAtNNAmP1+g1nhyM2RrE7/Iu/k+jkBM/E
+	 0DdXysnwAy1do6ZHkLAWvgUlCg2OzgyntMhD0Bp2oHvda37FUkZDOELljZkhTLgqu/
+	 g3856uLAF6pa8yoR83/FpcRP3KIcxxv0qWNJj/RYoR6Lmyuym0JGb3ViqzDyn5JzxK
+	 ZGXIvcUJvJjbA==
+Date: Tue, 17 May 2022 18:24:29 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <20220518012429.4zqzarvwsraxivux@treble>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
+In-Reply-To: <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
 
-Hi,
+On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
+> +	for (;;) {
+> +		symtab_data = elf_getdata(s, symtab_data);
+> +		if (t)
+> +			shndx_data = elf_getdata(t, shndx_data);
+>  
+> -	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+> -	elf_dirty_reloc_sym(elf, sym);
+> +		if (!symtab_data) {
+> +			if (!idx) {
+> +				void *buf;
 
-I love your patch! Yet something to improve:
+I'm confused by whatever this is doing, how is !symtab_data possible,
+i.e. why would symtab not have data?
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc7 next-20220517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>  elf_create_section_symbol(struct elf *elf, struct section *sec)
+>  {
+>  	struct section *symtab, *symtab_shndx;
+> -	Elf_Data *shndx_data = NULL;
+> -	struct symbol *sym;
+> -	Elf32_Word shndx;
+> +	Elf32_Word first_non_local, new;
+> +	struct symbol *sym, *old;
+> +	int size;
+> +
+> +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+> +		size = sizeof(Elf32_Sym);
+> +	else
+> +		size = sizeof(Elf64_Sym);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 42226c989789d8da4af1de0c31070c96726d990c
-config: x86_64-randconfig-a002-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180903.446J0L2Y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f082dc68ab65c498c978d574e62413d50286b4f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
-        git checkout f082dc68ab65c498c978d574e62413d50286b4f9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This should probably be called 'entsize' and I think you can just get it
+from symtab->sh.sh_entsize.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> +	/*
+> +	 * Either way, we added a LOCAL symbol.
+> +	 */
+> +	symtab->sh.sh_info += 1;
+> +
+>  	elf_add_symbol(elf, sym);
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/rdma/mana-abi.h:12:10: fatal error: 'linux/mana/mana.h' file not found
-   #include <linux/mana/mana.h>
-            ^~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Not sure if it matters here, but elf_add_symbol() doesn't set sym->alias
+and sym->pv_target, and both of those are unconditionally initialized in
+read_symbols().  Should elf_add_symbol() be changed to initialize them?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Josh
