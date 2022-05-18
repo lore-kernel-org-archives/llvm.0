@@ -1,227 +1,223 @@
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2079.outbound.protection.outlook.com [40.107.101.79])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E0046A6
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 07:12:23 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kOahddyKa7IWXMv/ZQ+JZK936s8XGnBwDpi2+ZUw2swWUB/buxSh+SAoOpMlD+4mhZH+YxIKW5wJF79unESq3TmX+zVHGkLb9u6Gfkpyz246vOTbz7spxkW3La5zbjgFFYOQ/LnFAekJFmJBIOEBHI06BpFaU+Fz2WGEBjKJJ4icBmFUM6pxEHJ0v807F9JIq1qO4wBmBnkhyTmfnDH80p6uQGELNnB1MpwT+hrekKgjmCQwCqhvx9gG5BwtDBEjGpLigYvlkFbNSAliHZK0QHSVNbwQPvxwfk4DKZEdo8D3YxOcI0CTqvqhVutC3w8LUb6q2ppPWJ3m24AJJKF6mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UH2NUAVPfYlVMtjZc9geO7akhy0eK6oKZFDW6Jh/cpc=;
- b=mnLBExiTPSXrSJwhrpmdZ3NhrHfUIN0fDTbGmyMRrqjP9M3g1Kc2wmtXaB1FtvpW31Zvt6ec2HnLDx57rFpn/hwZ9Kt8JxOhLq/IHUkuevGtMxpH1/X9Eb8bveILhtQK+L8k9mGwHGv+3ylW1jR22IRk7DaCc/87jHoXr0PpsmQLb8lXxzUnrP9Xm/xYvFD00AToBMxevfsEynrBi+br7OfmLeqA16CNnixCTtKzV0fJ4aAFKsozKnisiZLAX7AybicA/0MWl33Xr6aKeHuFv18Z3MEPOF0DV55rLoz+J1zV0L6zygoLFUXDShsK8kYicEpwMGsfz/CFFR3tG7VC9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UH2NUAVPfYlVMtjZc9geO7akhy0eK6oKZFDW6Jh/cpc=;
- b=rsZ2ZKmkWX43saBe/pVLXgD7VqeUC8c7MW7/lSOqr77xISxRbt2/o2vUha7bj0KqBdHUWs5oUafQCPbT/vOg8YrPoinSOPB6L4w49Q8dxLGczHDQSc5zWeATCySGwviyk+V5Qqh7Nm1Vv0h3m9hMB189b1LNrDdvBxBT4G2GJ/S9gGJq3Anjtf/4SqOj06M0dkThEMWE44LcdOY/Sm1JtqiIGAoVbidE3tYH6LSOtprPVPeuAbflWUWOwHS//4rX7ewjzlB4RNEqwpmQduBW93p817CqCs6A0+/snl5QFPc5Sn2E/dExbi8uhJkLeHQrT+lECEzobvTfV2wyYfcB6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BN6PR12MB1908.namprd12.prod.outlook.com (2603:10b6:404:fa::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.15; Wed, 18 May
- 2022 07:12:20 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::15e3:d746:57e8:4de0]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::15e3:d746:57e8:4de0%7]) with mapi id 15.20.5273.014; Wed, 18 May 2022
- 07:12:20 +0000
-Message-ID: <d0abf3db-0726-81b9-5a44-36cb1736a155@nvidia.com>
-Date: Wed, 18 May 2022 00:12:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Content-Language: en-US
-To: Mike Kravetz <mike.kravetz@oracle.com>, Minchan Kim <minchan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
- trix@redhat.com, Matthew Wilcox <willy@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>, David Hildenbrand <david@redhat.com>
-References: <000000000000ef451a05dee0f2b1@google.com>
- <00000000000077377c05dee75f63@google.com>
- <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
- <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
- <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
- <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
- <Yn7vnpXwX50J3K+7@google.com>
- <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
- <Yn73Hz7LkSUv7ycw@google.com>
- <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
- <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0293.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::28) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6154B1852
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 07:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652858187; x=1684394187;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0IL0WsCd3/HrKBEhnZxB/UtqoL3AiE13Ig/YdXaNECc=;
+  b=emoTUJCaQ1G2MMk9elvia9DpKTQLsHGsH1l/+usBGDK6Z5SeFD5uWgSR
+   r9hkvGzIGvMNWP1gHpKA9SMnPelEht2XzdVLJA/oC5/2oTSlr17QtS7pE
+   FQ0VG7LXcHqf9dZSUWh83zSXSOLIVTEFNWoTBbXphU2yWjt9TzRrhdsh/
+   td78p3Rr+9itljga1jkQThJldYXwJEZDnpzMa1FZAhtva7Qh9fhTZcg9C
+   zW2u78Qpy18DG3S5nhyPH+OYjIPkle0ZfnELSJZcycRAVB/uS2P+aCHZi
+   PgZHgwfPQqhZtJsnld5WO+ysZy5koLbl8ariQ5E5JjFP47yWwZiVTWaDK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253569730"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="253569730"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:16:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="898089195"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 18 May 2022 00:16:22 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nrDuw-0001v6-6S;
+	Wed, 18 May 2022 07:16:22 +0000
+Date: Wed, 18 May 2022 15:16:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Besar Wicaksono <bwicaksono@nvidia.com>, robin.murphy@arm.com,
+	catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
+	thanu.rangarajan@arm.com, Michael.Williams@arm.com,
+	suzuki.poulose@arm.com, treding@nvidia.com, jonathanh@nvidia.com,
+	vsethi@nvidia.com, Besar Wicaksono <bwicaksono@nvidia.com>
+Subject: Re: [PATCH v2 1/2] perf: coresight_pmu: Add support for ARM
+ CoreSight PMU driver
+Message-ID: <202205181534.wuyBFt9d-lkp@intel.com>
+References: <20220515163044.50055-2-bwicaksono@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14277034-419c-4f0c-18fe-08da389dbfc4
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1908:EE_
-X-Microsoft-Antispam-PRVS:
-	<BN6PR12MB190869CA7A354D961E0E16CDA8D19@BN6PR12MB1908.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	J/wnYI9/AaC6i3yC56UncABb4CZanarBCYD8BklGPZFACDokju5Y2LpDisMipSxONPIVOvpMB1FYF8agDwMuXUsmBWMbrYYyWfIFdOkhdxZBRhuYjsX5hp2GjF0gnCD+xFeJ0IZbxYwfwpQBAixOfXDy0EZ6buMjz46aSaH+bpDXH4OeU4tuyAYygrEnCcRkwoAm5r1/jI/WxhrbSRS6bCJ3TaJuzQGXXHdLp/onuoQQJdBb0rEQqbPclrRNsQLAWOOUM1vz/vtEtyTe+50Er1wdg7qIILajmpp+hlniU7DzK2+vycCQDxI0/6pjXY2w/jeRbc3qfJ2hsx5FcBxF8Iu1LgmMA1og3Ab8hoseHq/hXN4aDxSZW1f6NeYBHnBp+oetuKxmBvHtPuaDUTacnTCWnKieHogvaApk2fg242EW4FPlYeIWomKZtm71x7zFJ9D3t4XWU4M7eKyNj9ckWHzZ8r5PFbO35ZvhGKQtgupw0hzVJ/Dso6NgQLXxQTmtYFsRnHlq/IV+D3RRqMFBPgYCGVh7UdWERMPzA2zQPvGvBByKFsm8dRiOs0lpaCwKHslwNFiMNQ/JqNSMMEooH3yEOhWNt22Bdv5mh5bzB9yc21jdVEp7fRwqUchkn0UxQf1XNWrf1fP1YsVkzlpbjsIkTREIEQYH99HpFsAtzF+J3zTsS903K0vlIE8iDKUMUZxFJkgOeHAlrhIAr48AijqIwJxV1vB+JuNJ07JrDERwItxzRRwyDY+MHtNYfOjKRqMKmuzTpLAdEUkRYXVwI24Q707Up2o2iZxKRESIzig=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(110136005)(508600001)(36756003)(53546011)(8936002)(38100700002)(2906002)(66476007)(31696002)(5660300002)(6512007)(7416002)(83380400001)(54906003)(86362001)(26005)(66556008)(316002)(2616005)(4326008)(8676002)(31686004)(6506007)(66946007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Q2dTWmttaE9jN1pXMXFRb1gyVkFpcHRjQTcwR05rb25SWWJvSE1vazhKeVpG?=
- =?utf-8?B?KzlNRmJkdXNyUDRoU0daQ2hOa2JSMEt2YitWMkNSSWg0Nk8xaktFb3o5OGcz?=
- =?utf-8?B?YjlCMkxBUnNuRHllaC9BY1BXSG1GMUtKanhxKzRvTjZSUmlra3R0eVhoRTl1?=
- =?utf-8?B?Y0txa280aHoyZkRpNzI5bkdEcDg1THNDSDdMM3U0b1pXWFF3U016a1lLSXJs?=
- =?utf-8?B?TWszaXRxTHpnRzgzbWVCdDl3cWE4NFhWR3lmQVV3YXgvdWxSNWNzS2dKQkJQ?=
- =?utf-8?B?OUEyYWo1WnJ5dGFERXNSUVl1RzNueEVML3FQTWlqNmluM0t0dVNwY0dtWUxl?=
- =?utf-8?B?c0h5RGdTUnVvdCt0QmlEVlBRQS9PN2I0QittU1Rkb212Y24rWmNHNEZ6bUZq?=
- =?utf-8?B?TENKeDBVNDZkRThKWXR6ekdtK2NHWHhSaS8wbkF4a0JkTDRMNnVnQjF3RmhJ?=
- =?utf-8?B?S1BHc1BQK1ZyKytCR01tM1ZmeVdVekJmcnFDT3Z4VVR5NmV4M2VIcjJGZkhs?=
- =?utf-8?B?Q2dyNitvdVhDS3VyM1d3cGNZVVQxM2VIbVVJRGwyYUUxWHlpS2k3eGIvdG96?=
- =?utf-8?B?TFlMWWVlRzRYbWJDT0MyQStQM296RkpsQ2UydFFFTktOL3Y2dVZxL2ZZc1dH?=
- =?utf-8?B?TWdWdlhsa3ZxODU3cW1DSVRwUzhjOWhlS2NhWVlqRGZHTGhZYWtKVUFmWVJz?=
- =?utf-8?B?Z1FRM05ES290bkJ2TmcwTlZ1Yk9ZRWNaUXpvclpmYjR4WXJua2FFM0gxcEVm?=
- =?utf-8?B?OEt3MUg2NjE3cU96UHExMnFEZHN3ZlhiS3h3NW13VStVRUNnc0lZYWdRODhx?=
- =?utf-8?B?S2gvWGQwZCs0anh4YkpWY3djR3R5Sk44dHRBcDQvRUg0YUJsWTlJRXFIaDRO?=
- =?utf-8?B?bTFrWGFIeVFJUWZQSEZ3TlRKdFlqNm1tVkJuSW5KLzQzY0Q3M2tNcFdSZTNk?=
- =?utf-8?B?Vm9tWWxzYnlKekYvdGUrVXM3L21qMVRuSjEvREFJN21aTjJVNU5tV3MvMTFO?=
- =?utf-8?B?Z1V5UkRndWszdEkwQmliVXhXU2NjMGxmdU9FZ2RJQTN3QURhUkFaeGFTWFRW?=
- =?utf-8?B?bmd2YWoyQitMeTBDMkpzdzV1M28zQzlwWGVtc3AyaWF0NHBuU2JnMmpqM0Nx?=
- =?utf-8?B?MEtkUzBpRG5JQmVpWFBiSzBpNXNRTXlJQVlOVDNmckNuWWwvMzZIc2Eyem05?=
- =?utf-8?B?NEpxSTZ2clVPMHFUcENVZmRCdWtFOC9TK1JyUzVSRkpWZjBGRHpJQVZ0NjZl?=
- =?utf-8?B?aGt4ckJUS2IzV3p3T0xwWWtKbXdpYTdaOVNmcSs3dkNwM2hpQlpMRFBhelV2?=
- =?utf-8?B?d1RXZ0ZMb3BhS3l6YTgzSCtQVmlpVE5CYTY4ZTV5QmJiQitjc25NNHhNeE85?=
- =?utf-8?B?cyt2L29jQjl6MEh6enE3MUJHbmZmTXRETHNOR3VBVDdFM0ZEOGRQeXhYSXBp?=
- =?utf-8?B?QTlUcjh1VFBIaXJOQkxqVm9xSDFUTDIrR0FOWWVReVIrTnZwU0hSMEgzVWRN?=
- =?utf-8?B?TTJUWi9GRDVnVHJGdmtuYUhOeVVFZ09tWlN6QkJoODZsaTV1OEFWTFc0S2VW?=
- =?utf-8?B?SnJuNmpQVGJYSitBYTlzUXBENnVnaFgwV0k0N2VnWmh3NGpMOEZjcFZua2Vw?=
- =?utf-8?B?MVVybGpRM1Z0K0NaK01ic2NiZDdhZHN5Q3E2anlUelVhcE5PMEM1emI0SGkw?=
- =?utf-8?B?RHZjbncrdUQva3RpQlc3bHFoYUpReUp0NGlnUTBYTEtQK2kwbjEvWnlVWU45?=
- =?utf-8?B?RmVCWU1FR2hyeHBJb1ZwNVNUcUhyL2ZYOEgzMjNwdytBdUhoTHd2MDY0Q2dn?=
- =?utf-8?B?WXZwVHVPRFNGODRSbTczdjV3dTEvOHN2MXIreDc3MUVSN1pXdEhsalJBOGxv?=
- =?utf-8?B?cGFickNxVE5kVThwWWo3dGZTRmNLb3pVaktyWUQyVUh4SzFSbVVpaUIyZVZP?=
- =?utf-8?B?cHY2Umpxdjh5STZ2N1pmbnN6dktnWjNFTkQ0SFoxeGMwYzVheHMvWmU4QXFO?=
- =?utf-8?B?USt6M25kcXZRRDN5RGtMUXNmUWNUZG91UndFQTh3ZTZsNXp3MDdpN3A3WUgy?=
- =?utf-8?B?MjRrV1BSUEg4NnM1MDhEZ1FlUXZnZDZmWGlOcmRvei93RVFjYytpUCtCU1pC?=
- =?utf-8?B?OE5JVFdxUWhQOGtzWUlrVW5KSElmVU1VVEVmd2JjU1hQY1BHQWNrSm9yUkxP?=
- =?utf-8?B?SGFXRzdPbTNQWUpkajhuS0ExejZaUU5HZm5ncDk5aWcwaGdYbiswaVpsT0Mw?=
- =?utf-8?B?SWxTNkMrcHA1TTZtRG1pVDhaOXUyNXBUVXErZVlhdHhlcHMyNkdCMVljNTBj?=
- =?utf-8?B?S1EwR2xnd1ZldVc5Y2ViUFZoUWtWL29ya1AzQytaUHNrTjgxNXJabmdJM0Yx?=
- =?utf-8?Q?sKzpXrTU6GS0r160=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14277034-419c-4f0c-18fe-08da389dbfc4
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 07:12:20.6073
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hCNUk5f7udsrIEEWPOEqASj74xf5fIDDLAloW9NkJZpJGmp45m0lwOxn+YyFn8d++BtKsswb+X3IC4ZRoSWKJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1908
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220515163044.50055-2-bwicaksono@nvidia.com>
 
-On 5/16/22 20:37, Mike Kravetz wrote:
+Hi Besar,
 
-> Later, that code was modified (for performance reasons) in commit  0fa5bc4023c18 to do a single try_grab_compound_page() instead of multiple
-> calls to try_grab_page().  At the time it was not noticed that
-> try_grab_compound_page had a check for 'pinnable' when try_grab_page did
-> not.  So, I think this commit actually changed the behavior.
+Thank you for the patch! Perhaps something to improve:
 
-This makes me unhappy with the try_grab_page() situation: the name
-doesn't give you any hint that it now has extra policy in there.
-Furthermore, the policy is unaware of all of the call sites and
-is already getting it wrong.
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on soc/for-next linus/master v5.18-rc7 next-20220517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-After looking through the call sites, I'm leaning slightly toward pulling
-is_pinnable_page() out, and letting the call sites decide if they want
-or need to apply that policy.
+url:    https://github.com/intel-lab-lkp/linux/commits/Besar-Wicaksono/perf-coresight_pmu-Add-support-for-ARM-CoreSight-PMU-driver/20220516-013131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220518/202205181534.wuyBFt9d-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/79f30980a7a91e6bbe7430206e4e46fa8134cfa9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Besar-Wicaksono/perf-coresight_pmu-Add-support-for-ARM-CoreSight-PMU-driver/20220516-013131
+        git checkout 79f30980a7a91e6bbe7430206e4e46fa8134cfa9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/qcom/venus/ drivers/perf/coresight_pmu/ drivers/rtc/
 
-Just because try_grab_folio() is a choke point, does not mean that it
-is the right place for the is_pinnable_page() checks. And while it's
-nice to avoid scattering is_pinnable_page() all over the place, it's
-more important to *not* have it when it is not correct.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-There is a counter-argument, though, which goes something like,
-"try_grab_folio(FOLL_PIN) is never ever correct if the page is not
-pinnable". But that's not as clear cut as one might think. See below.
+All warnings (new ones prefixed by >>):
 
-> 
->>
->> try_grab_folio()
->>      /*
->>       * Can't do FOLL_LONGTERM + FOLL_PIN gup fast path if not in a
->>       * right zone, so fail and let the caller fall back to the slow
->>       * path.
->>       */
->>      if (unlikely((flags & FOLL_LONGTERM) &&
->>               !is_pinnable_page(page))) /* which we just changed */
->>          return NULL;
->>
->> ...and now I'm starting to think that this warning might fire even with
->> the corrected check for MIGRATE_CMA || MIGRATE_ISOLATE. Because
->> try_grab_folio() didn't always have this early exit and it is starting
->> to look wrong.
->>
->> Simply attempting to pin a non-pinnable huge page would hit this
->> warning. Adding additional reasons that a page is not pinnable (which
->> the patch does) could make this more likely to fire.
-> 
-> Yes, that is correct.  One could easily allocate a hugetlb page from
-> CMA and trigger this warning.
-> 
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:49: error: incomplete definition of type 'struct acpi_apmt_node'
+           return CHECK_APMT_FLAG(coresight_pmu->apmt_node->flags, ATOMIC, SUPP);
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:4: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+             ^~~~~
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:9: error: use of undeclared identifier 'ACPI_APMT_FLAGS_ATOMIC'
+           return CHECK_APMT_FLAG(coresight_pmu->apmt_node->flags, ATOMIC, SUPP);
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:13: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                      ^
+   <scratch space>:61:1: note: expanded from here
+   ACPI_APMT_FLAGS_ATOMIC
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:9: error: use of undeclared identifier 'ACPI_APMT_FLAGS_ATOMIC_SUPP'
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:41: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                                                  ^
+   <scratch space>:64:1: note: expanded from here
+   ACPI_APMT_FLAGS_ATOMIC_SUPP
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:369:13: error: incomplete definition of type 'struct acpi_apmt_node'
+                   (apmt_node->impl_id) ? apmt_node->impl_id :
+                    ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:369:35: error: incomplete definition of type 'struct acpi_apmt_node'
+                   (apmt_node->impl_id) ? apmt_node->impl_id :
+                                          ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:894:58: error: incomplete definition of type 'struct acpi_apmt_node'
+                   devm_kasprintf(dev, GFP_KERNEL, PMUNAME "%u", apmt_node->id);
+                                                                 ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:31: error: incomplete definition of type 'struct acpi_apmt_node'
+           if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
+                               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:4: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+             ^~~~~
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:6: error: use of undeclared identifier 'ACPI_APMT_FLAGS_DUAL_PAGE'
+           if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
+               ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:13: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                      ^
+   <scratch space>:60:1: note: expanded from here
+   ACPI_APMT_FLAGS_DUAL_PAGE
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:6: error: use of undeclared identifier 'ACPI_APMT_FLAGS_DUAL_PAGE_SUPP'
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:41: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                                                  ^
+   <scratch space>:63:1: note: expanded from here
+   ACPI_APMT_FLAGS_DUAL_PAGE_SUPP
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1028:15: error: incomplete definition of type 'struct acpi_apmt_node'
+           if (apmt_node->ovflw_irq == 0)
+               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+>> drivers/perf/coresight_pmu/arm_coresight_pmu.c:1053:6: warning: variable 'level' set but not used [-Wunused-but-set-variable]
+           int level = 0;
+               ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1079:27: error: incomplete definition of type 'struct acpi_apmt_node'
+           affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
+                           ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1079:37: error: use of undeclared identifier 'ACPI_APMT_FLAGS_AFFINITY'
+           affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
+                                              ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1081:23: error: use of undeclared identifier 'ACPI_APMT_FLAGS_AFFINITY_PROC'
+           if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
+                                ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1083:17: error: incomplete definition of type 'struct acpi_apmt_node'
+                           if (apmt_node->proc_affinity ==
+                               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1093:23: error: incomplete definition of type 'struct acpi_apmt_node'
+                                       cpu, apmt_node->proc_affinity))
+                                            ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   1 warning and 15 errors generated.
 
-Thanks for confirming that!
 
->>
->> I need to look at this a little more closely, it is making me wonder
->> whether the is_pinnable_page() check is a problem in this path. The
->> comment in try_grab_folio() indicates that the early return is a hack
->> (it assumes that the caller is in the gup fast path), and maybe the hack
->> is just wrong here--I think we're actually on the slow gup path. Not
->> good.
->>
->> Mike, any thoughts here?
->>
-> 
-> Do you know why try_grab_compound_page(now try_grab_folio) checks for
-> pinnable when try_grab_page does not?
+vim +/level +1053 drivers/perf/coresight_pmu/arm_coresight_pmu.c
 
-I think it's just an oversight. The CMA and migrate-out logic was sort of
-retrofitted and I think it's just incomplete, yet.
+  1047	
+  1048	static inline int coresight_pmu_find_cpu_container(int cpu, u32 container_uid)
+  1049	{
+  1050		u32 acpi_uid;
+  1051		struct device *cpu_dev = get_cpu_device(cpu);
+  1052		struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
+> 1053		int level = 0;
+  1054	
+  1055		if (!cpu_dev)
+  1056			return -ENODEV;
+  1057	
+  1058		while (acpi_dev) {
+  1059			if (!strcmp(acpi_device_hid(acpi_dev),
+  1060				    ACPI_PROCESSOR_CONTAINER_HID) &&
+  1061			    !kstrtouint(acpi_device_uid(acpi_dev), 0, &acpi_uid) &&
+  1062			    acpi_uid == container_uid)
+  1063				return 0;
+  1064	
+  1065			acpi_dev = acpi_dev->parent;
+  1066			level++;
+  1067		}
+  1068	
+  1069		return -ENODEV;
+  1070	}
+  1071	
 
-> 
-> Then I guess the next question is 'Should we allow pinning of hugetlb pages
-> in these areas?'.  My first thought would be no.  But, recall it was 'allowed'
-> until that commit which changed try_grab_page to try_grab_compound_page.
-> In the 'common' case of compaction, we do not attempt to migrate/move hugetlb
-> pages (last time I looked), so long term pinning should not be an issue.
-> However, for things like memory offline or alloc_contig_range() we want to
-> migrate hugetlb pages, so this would be an issue there.
-> 
-> At a minimum, I think the warning should go.
-
-Agreed. That, and either a) bring try_grab_folio() and try_grab_page() into
-the same behavior with respect to checking for pinnable, or b) lifting
-is_pinnable_page() out of try_grab_folio() and letting the callers decide, as
-mentioned above.
-
-Your point above makes it seem like the flexibility of (b) might be better...
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
