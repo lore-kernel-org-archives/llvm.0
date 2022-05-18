@@ -1,108 +1,189 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5866B33C1
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 22:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=mAr+xOmPUpatPCsQEvvtVuA3lNcGb0ypfwN80fV79Fs=; b=j2e34UkPXU8jsfY5u4yxYT50Ex
-	B3+HdDt7erkE/L/86lgiyQKu1KSEg0OEhUiSPK0vHtrirNwPH8C8rW3rNIycDBkk+V4RxhLmWEy/W
-	fbLpqc0WAxXU9Ug4ku1AI8vZO9s6aglmY6sBLAsCo0kvno4lMolAvCY9NWwKACMHLa0nG+KCXaw+9
-	x6WkfwOPBwHz2g7AernbWmrYQF0i37wsDbJXCJGjjbDCLeNrQ998Q1W8N1uGJOjyTlGb7/GIE2vRQ
-	3HotHqdT5Hc5cIx6MdvXRoeOnqpEgGesKesyqwDE3J0EBwthrcMzwiluz30NYFfnlj9KNN/b7Fcs3
-	+ZwEpLtA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nrRry-001fUb-Uz; Wed, 18 May 2022 22:10:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9020D3002BF;
-	Thu, 19 May 2022 00:10:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7837D20757B47; Thu, 19 May 2022 00:10:12 +0200 (CEST)
-Date: Thu, 19 May 2022 00:10:12 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH] objtool: Fix symbol creation
-Message-ID: <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
- <20220518074152.GB10117@worktop.programming.kicks-ass.net>
- <20220518173604.7gcrjjum6fo2m2ub@treble>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B020046A1
+	for <llvm@lists.linux.dev>; Wed, 18 May 2022 22:38:32 +0000 (UTC)
+Received: by mail-lj1-f171.google.com with SMTP id a23so4169095ljd.9
+        for <llvm@lists.linux.dev>; Wed, 18 May 2022 15:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
+        b=DBCDYEj9O79QGw1FqBTNKBN+UG/9b8MI+aWVV/QwexN4gbJ2Amb3SPW+GCbUY5i3+N
+         SgYOwJHat25fpLjb6YVNE2HgjKIRAfAC09GzTJhO8vnLvQa+7yhkGDObb4amXFRV1Kyw
+         +Cw+laGn/BdFpRqa7l8fZp9kbEtzow+apOaSmIEp4/S+6l/SK6aCTFPHQwQDhWe9mY8D
+         Md2X1lcXvFI6DY3j8QVa0t7FPC9yHcAdGEwIxC/cjgZaMcT4mRr41hc6BU9r2FO8zojX
+         nsum4g2gea72U9JYJVhZdK/3nJIIKkAH8NO3jVj8DR+RTBDjtSlKAdY0KKnyeWNDnBaA
+         NVzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
+        b=0DNVJWk7LOx9EFGDYm22vLJkMwqPDTsVXV1ezYWSjoOODvYftkn0fKiCAejrbQhxXv
+         sldLWgWZwrIXxuYGJ39l5u0n49vEp/UcpybCFl2s4SGTO4RfMWPD07WRtn0rzHATkwTe
+         fJohWmOYm6YWKFiFWhStHDX+jCd1RKZ+EkBYeIVcDO+zHRyhLQLesngPf5bfa7TtlhJ9
+         w3U5oeGlC8L3Ak5HShzYr3Hr7ZRLlbeJdid1P9dqOFN1vJgvQdVzBIOmCmyt/gvrBUGt
+         4n5WHL8RBL+B3ArLfObU/z4OWu6x/zl8DSvaXWIxHn+j7gCQSEOsGRRZsVk4b8KZxvx1
+         Dbhg==
+X-Gm-Message-State: AOAM531ccBrXf3yeD5L6L2nfYsyLhsJ5TvBAjwD6D/AkR9bHcRGLdpHn
+	7JtYjlk6BKaHOy3cRmh5LHCzg9EO+MnztfckvPF4Vw==
+X-Google-Smtp-Source: ABdhPJxIvkMHr6Wdqc9RtIs7R9Iciobl7SAFqpROG3q5kajc4MrpS/iRKSLKPONXjr32ZMmvkbRxQg1q/DnFVMkdTfY=
+X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
+ x8-20020a2ea7c8000000b0024f700a4df5mr916472ljp.472.1652913510399; Wed, 18 May
+ 2022 15:38:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518173604.7gcrjjum6fo2m2ub@treble>
+References: <20220516210954.1660716-5-ndesaulniers@google.com> <202205180917.RNpZaxIl-lkp@intel.com>
+In-Reply-To: <202205180917.RNpZaxIl-lkp@intel.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 18 May 2022 15:38:18 -0700
+Message-ID: <CAKwvOdmkd2PxvMUZA=A-72eATGDZkqDj--Bv1W+Xt_K_LWdROA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] ARM: pass -march= only to compiler
+To: David Spickett <david.spickett@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Russell King <rmk+kernel@armlinux.org.uk>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 18, 2022 at 10:36:04AM -0700, Josh Poimboeuf wrote:
-> On Wed, May 18, 2022 at 09:41:52AM +0200, Peter Zijlstra wrote:
-> > +static int elf_update_symbol(struct elf *elf, struct section *symtab,
-> > +			     struct section *symtab_shndx, struct symbol *sym)
-> >  {
-> > -	Elf_Data *data, *shndx_data = NULL;
-> > -	Elf32_Word first_non_local;
-> > -	struct symbol *sym;
-> > -	Elf_Scn *s;
-> > -
-> > -	first_non_local = symtab->sh.sh_info;
-> > -
-> > -	sym = find_symbol_by_index(elf, first_non_local);
-> > -	if (!sym) {
-> > -		WARN("no non-local symbols !?");
-> > -		return first_non_local;
-> > -	}
-> > +	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
-> > +	Elf64_Xword entsize = symtab->sh.sh_entsize;
-> > +	Elf32_Word shndx = sym->sec->idx;
-> 
-> So if it's a global UNDEF symbol then I think 'sym->sec' can be NULL and
-> this blows up?
+Lore thread, for context:
+https://lore.kernel.org/llvm/20220516210954.1660716-1-ndesaulniers@google.com/
 
-Oh indeed, sym->sec ? sym->sec->idx : SHN_UNDEF it is.
+On Tue, May 17, 2022 at 6:26 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Nick,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on 0ac824f379fba2c2b17b75fd5ada69cd68c66348]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
+> base:   0ac824f379fba2c2b17b75fd5ada69cd68c66348
+> config: arm-randconfig-r026-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180917.RNpZaxIl-lkp@intel.com/config)
 
-> > +	for (;;) {
-> > +		/* get next data descriptor for the relevant sections */
-> > +		symtab_data = elf_getdata(s, symtab_data);
-> > +		if (t)
-> > +			shndx_data = elf_getdata(t, shndx_data);
-> > +
-> > +		/* end-of-list */
-> > +		if (!symtab_data) {
-> > +			/* if @idx == 0, it's the next contiguous entry, create it */
-> > +			if (!idx) {
-> > +				void *buf;
-> 
-> Could just do the "index out of range warning" here to reduce the
-> indentation level.
+^ looks like this is a THUMB2 build.
 
-Sure.
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://github.com/intel-lab-lkp/linux/commit/6da98100eed87e4316be5ec584fe415134f25a3e
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
+>         git checkout 6da98100eed87e4316be5ec584fe415134f25a3e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+> >> arch/arm/crypto/poly1305-core.S:16:1: error: target does not support ARM mode
+>    .code 32
+>    ^
 
-> > +	/* setup extended section index magic and write the symbol */
-> > +	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
-> 
-> > +		sym->sym.st_shndx = shndx;
-> > +		if (!shndx_data)
-> > +			shndx = 0;
-> 
-> I think this '0' is SHN_UNDEF?
-> 
-> Also shouldn't 'sym->sym.st_shndx' get the same value?
+It looks like arch/arm/crypto/poly1305-core.S has a preprocessor guard
+for __thumb2__.
 
-This is when there isn't an extended section index. Specifically
-gelf_update_symshndx() requires that when @shndx_data == NULL, @shndx
-must be 0 too.
+My change changes the command line from:
+
+from:
+$(CC) ... -march=armv7-m ...
+to:
+$(CC ... -Wa,-march=armv7-m ...
+
+(where ... contains `-mthumb -Wa,-mthumb` for BOTH).
+
+$ arm-linux-gnueabi-gcc -march=armv7-m -mthumb -dM -E - < /dev/null | grep thumb
+#define __thumb2__ 1
+#define __thumb__ 1
+$ arm-linux-gnueabi-gcc -Wa,-march=armv7-m -mthumb -dM -E - <
+/dev/null | grep thumb
+#define __thumb__ 1
+$ clang --target=arm-linux-gnueabi -march=armv7-m -mthumb -dM -E - <
+/dev/null | grep thumb
+#define __thumb2__ 1
+#define __thumb__ 1
+$ clang --target=arm-linux-gnueabi -Wa,-march=armv7-m -mthumb -dM -E -
+< /dev/null | grep thumb
+#define __thumb__ 1
+$
+
+(so it seems that the preprocessor definition of `__thumb2__` is
+dependent on `-march=`, not `-Wa,-march=`).
+
+David, we might have a very subtle bug in clang:
+
+$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
+-Wa,-march=armv7-m -x assembler-with-cpp
+-Wunused-command-line-argument - < /dev/null -dM -E
+<prints a bunch of preprocessor defines, but no instance of
+-Wunused-command-line-argument>
+$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
+-Wa,-march=armv7-m -x assembler-with-cpp
+-Wunused-command-line-argument - < /dev/null -dM -c
+clang-15: warning: argument unused during compilation:
+'-march=armv7-m' [-Wunused-command-line-argument]
+
+That seems weird because -c vs -E have different behaviors regarding
+-Wunused-command-line-argument, and it seems like for `-x
+assembler-with-cpp` that the -march= flag without -Wa, prefix *is*
+expected to control the behavior of certain preprocessor defines like
+`__thumb2__`.
+
+Perhaps a more straightforward test case:
+```asm
+@ x.S
+@ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m \
+@   -Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
+.syntax unified
+.text
+foo:
+  movs r0, #__thumb2__
+```
+
+$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
+-Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
+clang-15: warning: argument unused during compilation:
+'-march=armv7-m' [-Wunused-command-line-argument]
+
+$ llvm-objdump -dr x.o | tail -n 2
+00000000 <foo>:
+       0: 01 20        movs r0, #1
+
+Obviously that warning about `-Wunused-command-line-argument` is
+incorrect; the value of `__thumb2__` comes from the preprocessor and
+is controlled by `-march=armv7-m`. It can't be simultaneously "unused"
+and used to define particular preprocessor directives.
+
+Using the above command line invocation without `-march=armv7-m`
+produces the assembler-time failure:
+/tmp/x-03ab60.s:10:3: error: unsupported relocation on symbol
+  movs r0, #__thumb2__
+  ^
+because __thumb2__ is not defined.
+
+(perhaps `#ifundef __thumb2__ #error "oops" #endif` would be simpler yet).
+
+
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
+
+
+--
+Thanks,
+~Nick Desaulniers
