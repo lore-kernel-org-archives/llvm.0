@@ -1,679 +1,484 @@
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71572904
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 17:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1652982333; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5iGfYWb1Bjj/D/QMjHpz5s5R4CGPz0UkXJkKxwJ5+YU=;
-	b=O49XgG69PHmWNf8UbLtLJohVQ8DnynXBmYFDfbf4Q9Qt74qWeWbtZt7Ycep6kj1XRwRoki
-	MYWA/1hyoxqHlp2QYTyUrfYJdsQ7ncK7U+ji3dzKlHdDoANFOzoAnq8SvYB9LNbxK0zOg5
-	GNck9BqmM63dw7a4zRSwK+ltKwUvtg8=
-Date: Thu, 19 May 2022 18:45:24 +0100
-From: Paul Cercueil <paul@crapouillou.net>
-Subject: Re: arch/mips/include/asm/checksum.h:195:9: error: unsupported inline
- asm: input with type 'unsigned long' matching output with type '__wsum' (aka
- 'unsigned int')
-To: kernel test robot <lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD5B2904
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 18:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652984702; x=1684520702;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oBIrVVWUdJDUev+0u2qBxfjdigQp2+Whjv4adFD09P8=;
+  b=WUFEcGxS7LsJVpcwtq7Si/FHkP9wNMbCA1vAmZkhnJV6hTDRFHrJRJa4
+   OXa35RFbae+ehfHeoodrbNxDihyItONYy7gqGusnEX79aGiTtCFxuMZgL
+   9pO0M2YBmeYK5kux1cP/WkUrmWWgHC4ZDdShiiQuoIwdRq12eTx5nuAfy
+   lmYcXkxegMgs2xDhm5uJ4TihxOMxfDcMwlnn+u5vCe0sJNn+H2PDRnf+y
+   /EnI75vG2AelNhnv6mYqbDF0G06Y/h7CgEhufU70pyh/ZIK3pdSVqJ5nb
+   Y8duFcRZLEbmYbQy0tjFK7bOytgu/z4N5M/a7lbU1ukApq3e4VobQgPA9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="259894751"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="259894751"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:25:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="524218352"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 19 May 2022 11:24:58 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nrkpW-0003qD-8L;
+	Thu, 19 May 2022 18:24:58 +0000
+Date: Fri, 20 May 2022 02:24:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>, linux-mips <linux-mips@vger.kernel.org>
-Message-Id: <OB55CR.QAT1J8A48BK21@crapouillou.net>
-In-Reply-To: <202205200128.layu7VXF-lkp@intel.com>
-References: <202205200128.layu7VXF-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 12308/12886] arch/x86/kvm/hyperv.c:1983:22:
+ error: shift count >= width of type
+Message-ID: <202205200219.llzx7zfy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Bot,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   21498d01d045c5b95b93e0a0625ae965b4330ebe
+commit: 81db71a60292e9a40ae8f6ef137b17f2aaa15a52 [12308/12886] KVM: x86: hyper-v: replace bitmap_weight() with hweight64()
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220520/202205200219.llzx7zfy-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Le ven., mai 20 2022 at 01:23:43 +0800, kernel test robot=20
-<lkp@intel.com> a =E9crit :
-> tree:  =20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=20
-> master
-> head:   f993aed406eaf968ba3867a76bb46c95336a33d0
-> commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add=20
-> MIPS_GENERIC_KERNEL symbol
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I have no idea how that error could be even remotely related to the=20
-commit above.
+All errors (new ones prefixed by >>):
 
-About the real issue: Maybe the last "addu" in csum_tcpudp_nofold()=20
-should be a "daddu"?
-
-Cheers,
--Paul
-
-> date:   1 year, 8 months ago
-> config: mips-randconfig-r036-20220519=20
-> (https://download.01.org/0day-ci/archive/20220520/202205200128.layu7VXF-l=
-kp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project=20
-> e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-> reproduce (this is a W=3D1 build):
->         wget=20
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross=20
-> -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         #=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dc434b9f80b0923e6460031b0fd964f8b0bf3c6a6
->         git remote add linus=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=20
-> W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash arch/mips/cavium-octeon=
-/=20
-> drivers/dma-buf/heaps/ net/ipv6/
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All error/warnings (new ones prefixed by >>):
->=20
->    In file included from arch/mips/cavium-octeon/octeon-platform.c:10:
->    In file included from include/linux/etherdevice.h:20:
->    In file included from include/linux/if_ether.h:19:
->    In file included from include/linux/skbuff.h:28:
->    In file included from include/net/checksum.h:22:
->>>  arch/mips/include/asm/checksum.h:195:9: error: unsupported inline=20
->>> asm: input with type 'unsigned long' matching output with type=20
->>> '__wsum' (aka 'unsigned int')
->            : "0" ((__force unsigned long)daddr),
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    In file included from arch/mips/cavium-octeon/octeon-platform.c:15:
->    In file included from arch/mips/include/asm/octeon/octeon.h:11:
->    In file included from arch/mips/include/asm/octeon/cvmx.h:72:
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:323:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:323:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:324:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_SIM)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:324:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:325:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBT3000)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:325:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:326:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KODAMA)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:326:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:327:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NIAGARA)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:327:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:328:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NAC38)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:328:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:329:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_THUNDER)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:329:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:330:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_TRANTOR)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:330:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:331:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBH3000)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:331:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:332:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_EBH3100)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
-> --
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                   =20
-> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MIN)
->                   =20
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E100)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_DSR1000N)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KONTRON_S1901)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                   =20
-> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MAX)
->                   =20
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_NULL)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_SIM_TYPE_DEPRECATED)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_OCTEON_SAMPLE)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_MAX)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/cavium-octeon/smp.c:99:6: warning: no previous prototype=20
-> for function 'octeon_send_ipi_single' [-Wmissing-prototypes]
->    void octeon_send_ipi_single(int cpu, unsigned int action)
->         ^
->    arch/mips/cavium-octeon/smp.c:99:1: note: declare 'static' if the=20
-> function is not intended to be used outside of this translation unit
->    void octeon_send_ipi_single(int cpu, unsigned int action)
->    ^
->    static
->>>  arch/mips/cavium-octeon/smp.c:194:5: warning: no previous=20
->>> prototype for function 'plat_post_relocation' [-Wmissing-prototypes]
->    int plat_post_relocation(long offset)
->        ^
->    arch/mips/cavium-octeon/smp.c:194:1: note: declare 'static' if the=20
-> function is not intended to be used outside of this translation unit
->    int plat_post_relocation(long offset)
->    ^
->    static
->    81 warnings generated.
->    Assembler messages:
->    Warning: a different -march was already specified, is now octeon
-> --
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:394:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                   =20
-> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MIN)
->                   =20
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:397:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_UBNT_E100)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:398:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_DSR1000N)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:399:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_KONTRON_S1901)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:400:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                   =20
-> ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_CUST_PRIVATE_MAX)
->                   =20
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:401:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:318:20: note:=20
-> expanded from macro 'ENUM_BRD_TYPE_CASE'
->            case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_NULL)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:412:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_SIM_TYPE_DEPRECATED)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:413:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_OCTEON_SAMPLE)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:414:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: warning:=20
-> adding 'int' to a string does not append to the string=20
-> [-Wstring-plus-int]
->                    ENUM_CHIP_TYPE_CASE(CVMX_CHIP_TYPE_MAX)
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                           ~~~^~~~
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:415:3: note: use=20
-> array indexing to silence this warning
->    arch/mips/include/asm/octeon/cvmx-bootinfo.h:407:20: note:=20
-> expanded from macro 'ENUM_CHIP_TYPE_CASE'
->            case x: return(#x + 15);        /* Skip CVMX_CHIP_TYPE */
->                              ^
->    In file included from=20
-> arch/mips/cavium-octeon/crypto/octeon-sha1.c:23:
->    In file included from include/crypto/internal/hash.h:11:
->    In file included from include/crypto/algapi.h:13:
->    In file included from include/linux/skbuff.h:28:
->    In file included from include/net/checksum.h:22:
->>>  arch/mips/include/asm/checksum.h:195:9: error: unsupported inline=20
->>> asm: input with type 'unsigned long' matching output with type=20
->>> '__wsum' (aka 'unsigned int')
->            : "0" ((__force unsigned long)daddr),
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    79 warnings and 1 error generated.
-> ..
->=20
->=20
-> vim +195 arch/mips/include/asm/checksum.h
->=20
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  162
-> 01cfbad79a5e2b arch/mips/include/asm/checksum.h Alexander Duyck=20
-> 2016-03-11  163  static inline __wsum csum_tcpudp_nofold(__be32=20
-> saddr, __be32 daddr,
-> 01cfbad79a5e2b arch/mips/include/asm/checksum.h Alexander Duyck=20
-> 2016-03-11  164  					__u32 len, __u8 proto,
-> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro        =20
-> 2006-11-14  165  					__wsum sum)
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  166  {
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  167  	__asm__(
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  168  	"	.set	push		# csum_tcpudp_nofold\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  169  	"	.set	noat		\n"
-> 875d43e72b5bf2 include/asm-mips/checksum.h      Ralf Baechle   =20
-> 2005-09-03  170  #ifdef CONFIG_32BIT
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  171  	"	addu	%0, %2		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  172  	"	sltu	$1, %0, %2	\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  173  	"	addu	%0, $1		\n"
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  174
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  175  	"	addu	%0, %3		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  176  	"	sltu	$1, %0, %3	\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  177  	"	addu	%0, $1		\n"
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  178
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  179  	"	addu	%0, %4		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  180  	"	sltu	$1, %0, %4	\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  181  	"	addu	%0, $1		\n"
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  182  #endif
-> 875d43e72b5bf2 include/asm-mips/checksum.h      Ralf Baechle   =20
-> 2005-09-03  183  #ifdef CONFIG_64BIT
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  184  	"	daddu	%0, %2		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  185  	"	daddu	%0, %3		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  186  	"	daddu	%0, %4		\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  187  	"	dsll32	$1, %0, 0	\n"
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  188  	"	daddu	%0, $1		\n"
-> 66fd848cadaa6b arch/mips/include/asm/checksum.h Ralf Baechle   =20
-> 2017-01-26  189  	"	sltu	$1, %0, $1	\n"
-> e97288386a316e include/asm-mips/checksum.h      Ralf Baechle   =20
-> 2005-09-20  190  	"	dsra32	%0, %0, 0	\n"
-> 66fd848cadaa6b arch/mips/include/asm/checksum.h Ralf Baechle   =20
-> 2017-01-26  191  	"	addu	%0, $1		\n"
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  192  #endif
-> 04988d6fda5c1c include/asm-mips/checksum.h      Thiemo Seufer  =20
-> 2005-07-08  193  	"	.set	pop"
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  194  	: "=3Dr" (sum)
-> 66218da212bf14 include/asm-mips/checksum.h      Atsushi Nemoto =20
-> 2007-01-24 @195  	: "0" ((__force unsigned long)daddr),
-> 66218da212bf14 include/asm-mips/checksum.h      Atsushi Nemoto =20
-> 2007-01-24  196  	  "r" ((__force unsigned long)saddr),
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  197  #ifdef __MIPSEL__
-> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro        =20
-> 2006-11-14  198  	  "r" ((proto + len) << 8),
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  199  #else
-> 8e3d8433d8c22c include/asm-mips/checksum.h      Al Viro        =20
-> 2006-11-14  200  	  "r" (proto + len),
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  201  #endif
-> 1d464c26b56252 include/asm-mips/checksum.h      Dave Johnson   =20
-> 2007-04-18  202  	  "r" ((__force unsigned long)sum));
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  203
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  204  	return sum;
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  205  }
-> b4b5015a1c1450 arch/mips/include/asm/checksum.h Ralf Baechle   =20
-> 2014-12-17  206  #define csum_tcpudp_nofold csum_tcpudp_nofold
-> ^1da177e4c3f41 include/asm-mips/checksum.h      Linus Torvalds =20
-> 2005-04-16  207
->=20
-> :::::: The code at line 195 was first introduced by commit
-> :::::: 66218da212bf141532d678a699f5789c78145ab1 [MIPS] Fix wrong=20
-> checksum calculation on 64-bit MIPS
->=20
-> :::::: TO: Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
->=20
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+   In file included from arch/x86/kvm/hyperv.c:21:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:5:
+   In file included from include/linux/mmdebug.h:5:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/x86/include/asm/bug.h:87:
+   In file included from include/asm-generic/bug.h:22:
+   In file included from include/linux/printk.h:8:
+   In file included from include/linux/linkage.h:7:
+   In file included from include/linux/export.h:123:
+   ./include/generated/autoksyms.h:456:20: error: ISO C99 requires whitespace after the macro name [-Werror,-Wc99-extensions]
+   #define __KSYM_arch/x86/kvm/vmx/vmenter.o 1
+                      ^
+   ./include/generated/autoksyms.h:1308:23: error: ISO C99 requires whitespace after the macro name [-Werror,-Wc99-extensions]
+   #define __KSYM_drivers/gpu/drm/display/drm_dp_dual_mode_helper.o 1
+                         ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:11:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 1))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:12:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 2))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:13:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 3))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:14:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 4))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:15:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 5))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:16:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 6))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:17:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 7)))))
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:11:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 1))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:12:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 2))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:13:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 3))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:14:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 4))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:15:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 5))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:16:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 6))) +     \
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   include/asm-generic/bitops/const_hweight.h:19:72: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                                          ^
+   include/asm-generic/bitops/const_hweight.h:17:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 7)))))
+                  ^
+>> arch/x86/kvm/hyperv.c:1983:22: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   include/asm-generic/bitops/const_hweight.h:19:48: note: expanded from macro '__const_hweight16'
+   #define __const_hweight16(w) (__const_hweight8(w)  + __const_hweight8((w)  >> 8 ))
+                                                  ^
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
+vim +1983 arch/x86/kvm/hyperv.c
+
+  1934	
+  1935	static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+  1936	{
+  1937		struct kvm *kvm = vcpu->kvm;
+  1938		struct hv_send_ipi_ex send_ipi_ex;
+  1939		struct hv_send_ipi send_ipi;
+  1940		DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+  1941		unsigned long valid_bank_mask;
+  1942		u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+  1943		u32 vector;
+  1944		bool all_cpus;
+  1945	
+  1946		if (hc->code == HVCALL_SEND_IPI) {
+  1947			if (!hc->fast) {
+  1948				if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
+  1949							    sizeof(send_ipi))))
+  1950					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1951				sparse_banks[0] = send_ipi.cpu_mask;
+  1952				vector = send_ipi.vector;
+  1953			} else {
+  1954				/* 'reserved' part of hv_send_ipi should be 0 */
+  1955				if (unlikely(hc->ingpa >> 32 != 0))
+  1956					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1957				sparse_banks[0] = hc->outgpa;
+  1958				vector = (u32)hc->ingpa;
+  1959			}
+  1960			all_cpus = false;
+  1961			valid_bank_mask = BIT_ULL(0);
+  1962	
+  1963			trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+  1964		} else {
+  1965			if (!hc->fast) {
+  1966				if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+  1967							    sizeof(send_ipi_ex))))
+  1968					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1969			} else {
+  1970				send_ipi_ex.vector = (u32)hc->ingpa;
+  1971				send_ipi_ex.vp_set.format = hc->outgpa;
+  1972				send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
+  1973			}
+  1974	
+  1975			trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+  1976						 send_ipi_ex.vp_set.format,
+  1977						 send_ipi_ex.vp_set.valid_bank_mask);
+  1978	
+  1979			vector = send_ipi_ex.vector;
+  1980			valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+  1981			all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+  1982	
+> 1983			if (hc->var_cnt != hweight64(valid_bank_mask))
+  1984				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1985	
+  1986			if (all_cpus)
+  1987				goto check_and_send_ipi;
+  1988	
+  1989			if (!hc->var_cnt)
+  1990				goto ret_success;
+  1991	
+  1992			if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
+  1993						  offsetof(struct hv_send_ipi_ex,
+  1994							   vp_set.bank_contents)))
+  1995				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1996		}
+  1997	
+  1998	check_and_send_ipi:
+  1999		if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+  2000			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  2001	
+  2002		if (all_cpus) {
+  2003			kvm_send_ipi_to_many(kvm, vector, NULL);
+  2004		} else {
+  2005			sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+  2006	
+  2007			kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
+  2008		}
+  2009	
+  2010	ret_success:
+  2011		return HV_STATUS_SUCCESS;
+  2012	}
+  2013	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
