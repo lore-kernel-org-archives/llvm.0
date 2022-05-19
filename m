@@ -1,42 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B508E320F
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652991157; x=1684527157;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QennQp5LPM9aFmphQ4Wal8H49G93bJYru095k5uVdpQ=;
-  b=kyE4Eu/fUyh7uO07w4mJ5sPgl4vX3oq6svVSZKY2HHJLnaZ7R1a/rjQp
-   +m4w5KlKLnaLLGPb4EfIT9ZE+MXteMc3ELx+QvHjOACo8rZJQmzBIaNAT
-   j1kJQ4goxhZAdzI9V8RRsmv7ToB36Hdj3LrnD8QTr4qpybrWe31UV5vSk
-   KG3cpzjba767a0sfmsXfAkWOvFqAERlHto0HcxIhHs8UqM9pooA4gIAIJ
-   rsfPjIPGUiLDfQNDsM+CLQZDG8l/YVvOEAQOpRx48EBvcy7I7mLrIp86F
-   dZFwuJCYdSPO3B8c6pw9wfjXl1//Ie5k4BQjznv1nGxoSQVE2ioLywBz3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="271184456"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="271184456"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:12:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="546293174"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 19 May 2022 13:12:35 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nrmVd-0003ur-Bz;
-	Thu, 19 May 2022 20:12:33 +0000
-Date: Fri, 20 May 2022 04:12:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: [tytso-ext4:dev 17/25] fs/ext4/super.c:2799:29: warning: unused
- variable 'sbi'
-Message-ID: <202205200431.kzojEoNc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436CB33C1
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F313C34100;
+	Thu, 19 May 2022 20:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652991967;
+	bh=Quh9L0q3EahfNIUTr+QDaYHBwXik/wbXAFmGrSnt9fI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R1KrnXNRvU+9wV1q3KLJidxtm9bnPrPVuVIPpnmNCknQ35CXkWLDk/n0Z/cjaVUBh
+	 i4RwQDb5oxRe29AbKFCVc3F+H/VjBowWcdHsluxPcvWPgZoGRp8Zgjvv6tJEhg2OcI
+	 9BsRM0XpZ3oSecOGPkdHY55bbB+TcW+9VdQoxI20/3QTFM/UjNmzgR1FdVUGM+EKgz
+	 ToBb2WAYowYOGH0qLnOQn0KaWr7nyX6aOWauzZPvQOvu7ZNJ8izxrbm+ZQE5dPzgYZ
+	 WSbIVObb26EY5x3ebaiIdUStR65xhh1xFrro7TkQgVP147ymcC5wKJu3KWydixnXBR
+	 eXxn+99uGjAsA==
+Date: Thu, 19 May 2022 13:26:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+Message-ID: <Yoan3dgL988r0Mv/@dev-arch.thelio-3990X>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com>
+ <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+ <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+ <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X>
+ <CA+icZUU0k8UHRiFvV45nr1xY0p3SgaG+MLjJoEnmUCQ8T+WGdg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,68 +45,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CA+icZUU0k8UHRiFvV45nr1xY0p3SgaG+MLjJoEnmUCQ8T+WGdg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-head:   b76a7dd9a7437e8c21253ce3a7574bebde3827f9
-commit: 0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609 [17/25] ext4: only allow test_dummy_encryption when supported
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220520/202205200431.kzojEoNc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/commit/?id=0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609
-        git remote add tytso-ext4 https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
-        git fetch --no-tags tytso-ext4 dev
-        git checkout 0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
+On Thu, May 19, 2022 at 11:01:40AM +0200, Sedat Dilek wrote:
+> On Tue, May 17, 2022 at 8:49 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > I have run kCFI (v1, I haven't had time to test v2) on x86_64 hardware,
+> > both AMD and Intel. I have only found two failures so far: the i915
+> > issue that I mention below and a failure in the KVM subsystem, which I
+> > can see by just running QEMU:
+> >
+> 
+> Is there a fix around this issue?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, I mentioned it offhand to Sami in IRC but I never followed up. This
+failure appears to be introduced by commit f922bd9bf33b ("KVM: Move MMU
+notifier's mmu_lock acquisition into common helper").
 
-All warnings (new ones prefixed by >>):
+Sami, do you want an issue opened around this somewhere?
 
->> fs/ext4/super.c:2799:29: warning: unused variable 'sbi' [-Wunused-variable]
-           const struct ext4_sb_info *sbi = EXT4_SB(sb);
-                                      ^
-   1 warning generated.
+> > [  124.344654] CFI failure at kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm] (target: kvm_null_fn+0x0/0x7 [kvm]; expected type: 0x1e2c5b9c)
+> > [  124.344691] WARNING: CPU: 5 PID: 2767 at kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm]
+> > [  124.344708] Modules linked in: ...
+> > [  124.344737] CPU: 5 PID: 2767 Comm: qemu-system-x86 Tainted: P                  5.18.0-rc6-debug-00033-g1d5284aff7cd #1 8c4966c7fb24f3345076747feebac5fb340a4797
+> > [  124.344738] Hardware name: ASUS System Product Name/PRIME Z590M-PLUS, BIOS 1203 10/27/2021
+> > [  124.344738] RIP: 0010:kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm]
+> > [  124.344756] Code: 48 89 da e8 88 16 86 dd 48 85 c0 89 6c 24 0c 74 30 4d 85 f6 74 36 48 c7 c5 19 c8 b4 c0 4c 8b 34 24 81 7d fa 9c 5b 2c 1e 74 02 <0f> 0b 48 89 c7 4c 89 fe 48 89 da e8 b6 16 86 dd 48 85 c0 75 e2 eb
+> > [  124.344757] RSP: 0018:ffffc033039d78e8 EFLAGS: 00010282
+> > [  124.344758] RAX: ffffa0a141ed9450 RBX: 00007fb897e9efff RCX: ffffa0a143c9d850
+> > [  124.344758] RDX: 00007fb897e9efff RSI: 00007fb897e9e000 RDI: ffffc03304499cf8
+> > [  124.344759] RBP: ffffffffc0b4c819 R08: 0000000000000000 R09: 0000000000000000
+> > [  124.344759] R10: 0000000000000000 R11: ffffffffc0b4c639 R12: ffffc03304499000
+> > [  124.344760] R13: ffffc033044a30a0 R14: ffffc033044a3120 R15: 00007fb897e9e000
+> > [  124.344760] FS:  00007fbca4bc3640(0000) GS:ffffa0a87f540000(0000) knlGS:0000000000000000
+> > [  124.344761] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [  124.344761] CR2: 0000000000000000 CR3: 0000000119f74006 CR4: 0000000000772ee0
+> > [  124.344762] PKRU: 55555554
+> > [  124.344762] Call Trace:
+> > [  124.344762]  <TASK>
+> > [  124.344763]  __mmu_notifier_invalidate_range_end+0xa1/0xd7
+> > [  124.344764]  wp_page_copy+0x592/0x920
+> > [  124.344766]  __handle_mm_fault+0x820/0x8f0
+> > [  124.344767]  handle_mm_fault+0xe0/0x227
+> > [  124.344768]  __get_user_pages+0x17a/0x430
+> > [  124.344769]  get_user_pages_unlocked+0xd9/0x327
+> > [  124.344770]  hva_to_pfn+0xfa/0x3f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344788]  kvm_faultin_pfn+0xc3/0x2f0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344806]  ? fast_page_fault+0x400/0x4c0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344823]  direct_page_fault+0x130/0x350 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344841]  kvm_mmu_page_fault+0x176/0x2f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344858]  vmx_handle_exit+0xe/0x37 [kvm_intel 647f514f18fc365045dc57db46d2bb4930b746eb]
+> > [  124.344863]  vcpu_enter_guest+0xbff/0x1030 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344881]  vcpu_run+0x65/0x2f0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344898]  kvm_arch_vcpu_ioctl_run+0x15f/0x3f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344916]  kvm_vcpu_ioctl+0x547/0x627 [kvm 950e483805e01f967a3e331506278d766494a4cc]
+> > [  124.344933]  ? syscall_exit_to_user_mode+0x24/0x47
+> > [  124.344934]  ? do_syscall_64+0x7a/0x97
+> > [  124.344935]  ? __fget_files+0xa1/0xc0
+> > [  124.344936]  __se_sys_ioctl+0x7c/0xc0
+> > [  124.344937]  do_syscall_64+0x6c/0x97
+> > [  124.344938]  ? do_syscall_64+0x7a/0x97
+> > [  124.344939]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > [  124.344940] RIP: 0033:0x7fbca75f7b1f
+> > [  124.344940] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+> > [  124.344941] RSP: 002b:00007fbca4bc2550 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > [  124.344942] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007fbca75f7b1f
+> > [  124.344942] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 000000000000000e
+> > [  124.344943] RBP: 000056351ba661d0 R08: 000056351a74dc48 R09: 0000000000000004
+> > [  124.344943] R10: 004818cf4f129e11 R11: 0000000000000246 R12: 0000000000000000
+> > [  124.344943] R13: 0000000000000000 R14: 00007fbca814f004 R15: 0000000000000000
+> > [  124.344944]  </TASK>
+> > [  124.344945] ---[ end trace 0000000000000000 ]---
 
-
-vim +/sbi +2799 fs/ext4/super.c
-
-  2794	
-  2795	static int ext4_check_test_dummy_encryption(const struct fs_context *fc,
-  2796						    struct super_block *sb)
-  2797	{
-  2798		const struct ext4_fs_context *ctx = fc->fs_private;
-> 2799		const struct ext4_sb_info *sbi = EXT4_SB(sb);
-  2800	
-  2801		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION) ||
-  2802		    !(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
-  2803			return 0;
-  2804	
-  2805		if (!ext4_has_feature_encrypt(sb)) {
-  2806			ext4_msg(NULL, KERN_WARNING,
-  2807				 "test_dummy_encryption requires encrypt feature");
-  2808			return -EINVAL;
-  2809		}
-  2810		/*
-  2811		 * This mount option is just for testing, and it's not worthwhile to
-  2812		 * implement the extra complexity (e.g. RCU protection) that would be
-  2813		 * needed to allow it to be set or changed during remount.  We do allow
-  2814		 * it to be specified during remount, but only if there is no change.
-  2815		 */
-  2816		if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE &&
-  2817		    !DUMMY_ENCRYPTION_ENABLED(sbi)) {
-  2818			ext4_msg(NULL, KERN_WARNING,
-  2819				 "Can't set test_dummy_encryption on remount");
-  2820			return -EINVAL;
-  2821		}
-  2822		return 0;
-  2823	}
-  2824	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
