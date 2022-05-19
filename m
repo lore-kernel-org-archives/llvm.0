@@ -1,42 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293F82F48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755042F59
 	for <llvm@lists.linux.dev>; Thu, 19 May 2022 21:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652997279; x=1684533279;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/I5NJ+54RWKMStEMU2hGQt0cBAW0ada/XIy6RjOXe6A=;
-  b=E0f7slXccTkeByovYg3DrTZ//Aq6pvh83kQXK2PhxzVFrrOqah7NN3e5
-   YFdNR73eWESBdkvGxKYdJgWjXkq+x/bq9sjhz16ZBPUdwolA3nCzbny+0
-   SOb4I7sSsMB/n6Yw31yIpnGxwmVMMic+S1pU1R29aWOOfecrMLAuUC6HH
-   13K1nMfeas03BfpWGtRSAP2nU7GUO3XnvJQy1Yn5mLLVn9lWSMHLYXCp3
-   lxqn7XhR2wv7iMDVjdpBjPnjnNPrTJ482CG4/o1xfVuA08DUAuNr8hAYN
-   enn+PKDhtDllxjHwfEbXwhypKvnL2jdIX8zmyhUy5vWRfwmRwyKJW3GUb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272091594"
+  bh=xKUpO4jRN+eIL8fLkxsRx9WY2vqao2VpSUZhYk5NjLE=;
+  b=KFuw/B3VJXoxlta5xwTqYQ9bkExTt5iiqlRl00jZtmbZ7snqIGHiUXzx
+   PiUY2osTyvNE+3MM9HAi5NX4PZQYAVSsnx1i5Zl0DMTbln5B6ZSMA1D0W
+   N/DdyW3R7D6/mnwfVItMvxtpOkfTuzEV75EcJE300zeMNJx+/AZ9VrUFd
+   nhOxYyQmAXoFH8OS1cRSYQaNXbNtKrZspbh1ZDKT55I2bjtx2AB5yCU/T
+   fjrcfWrnD+6ggm81X4vNoIai0zb3q+Oh2XU2xdVDzKz6eJ9j3VDU96x/d
+   +z6CVkUNTDgW+wEZztNaemlejvJofaXrD36vWshYtR/WdtE4ST8i/ncM0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335440880"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272091594"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:38 -0700
+   d="scan'208";a="335440880"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="701386593"
+   d="scan'208";a="818213805"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nro6O-0003yn-G7;
+	id 1nro6O-0003yi-Ez;
 	Thu, 19 May 2022 21:54:36 +0000
-Date: Fri, 20 May 2022 05:54:01 +0800
+Date: Fri, 20 May 2022 05:54:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>
+To: Frederic Weisbecker <frederic@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [netfilter-nf-next:testing 9/12] ld.lld: error: undefined symbol:
- nf_hook_bpf_create
-Message-ID: <202205200527.2rAxKhM6-lkp@intel.com>
+Subject: [paulmck-rcu:context-tracking.2022.05.19a 20/21]
+ kernel/context_tracking.c:500:4: error: call to undeclared function
+ 'ct_kernel_exit'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205200501.17EQ97Fa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,32 +48,233 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-head:   4456ac35299c131e2ac26b4dc025b257d810277b
-commit: 11b2910d788799e8c68df305994260fd79a61e10 [9/12] netfilter: add bpf base hook program generator
-config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220520/202205200527.2rAxKhM6-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git context-tracking.2022.05.19a
+head:   6153dca9e37b244684bf472728f5c3688c5b0aca
+commit: 02be5e537043004b7c133565ae473daf19a99e5d [20/21] rcu/context_tracking: Merge dynticks counter and context tracking states
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220520/202205200501.17EQ97Fa-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=11b2910d788799e8c68df305994260fd79a61e10
-        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
-        git fetch --no-tags netfilter-nf-next testing
-        git checkout 11b2910d788799e8c68df305994260fd79a61e10
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=02be5e537043004b7c133565ae473daf19a99e5d
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu context-tracking.2022.05.19a
+        git checkout 02be5e537043004b7c133565ae473daf19a99e5d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: nf_hook_bpf_create
-   >>> referenced by core.c
-   >>>               netfilter/core.o:(nf_hook_entries_grow) in archive net/built-in.a
+>> kernel/context_tracking.c:500:4: error: call to undeclared function 'ct_kernel_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
+                           ^
+   kernel/context_tracking.c:500:4: note: did you mean 'is_kernel_text'?
+   include/linux/kallsyms.h:27:19: note: 'is_kernel_text' declared here
+   static inline int is_kernel_text(unsigned long addr)
+                     ^
+>> kernel/context_tracking.c:607:4: error: call to undeclared function 'ct_kernel_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
+                           ^
+   2 errors generated.
+
+
+vim +/ct_kernel_exit +500 kernel/context_tracking.c
+
+   451	
+   452	/**
+   453	 * __ct_user_enter - Inform the context tracking that the CPU is going
+   454	 *		     to enter user or guest space mode.
+   455	 *
+   456	 * This function must be called right before we switch from the kernel
+   457	 * to user or guest space, when it's guaranteed the remaining kernel
+   458	 * instructions to execute won't use any RCU read side critical section
+   459	 * because this function sets RCU in extended quiescent state.
+   460	 */
+   461	void noinstr __ct_user_enter(enum ctx_state state)
+   462	{
+   463		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+   464		lockdep_assert_irqs_disabled();
+   465	
+   466		/* Kernel threads aren't supposed to go to userspace */
+   467		WARN_ON_ONCE(!current->mm);
+   468	
+   469		if (!context_tracking_recursion_enter())
+   470			return;
+   471	
+   472		if (__ct_state() != state) {
+   473			if (ct->active) {
+   474				/*
+   475				 * At this stage, only low level arch entry code remains and
+   476				 * then we'll run in userspace. We can assume there won't be
+   477				 * any RCU read-side critical section until the next call to
+   478				 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
+   479				 * on the tick.
+   480				 */
+   481				if (state == CONTEXT_USER) {
+   482					instrumentation_begin();
+   483					trace_user_enter(0);
+   484					vtime_user_enter(current);
+   485					instrumentation_end();
+   486				}
+   487				/*
+   488				 * Other than generic entry implementation, we may be past the last
+   489				 * rescheduling opportunity in the entry code. Trigger a self IPI
+   490				 * that will fire and reschedule once we resume in user/guest mode.
+   491				 */
+   492				rcu_irq_work_resched();
+   493	
+   494				/*
+   495				 * Enter RCU idle mode right before resuming userspace.  No use of RCU
+   496				 * is permitted between this call and rcu_eqs_exit(). This way the
+   497				 * CPU doesn't need to maintain the tick for RCU maintenance purposes
+   498				 * when the CPU runs in userspace.
+   499				 */
+ > 500				ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
+   501	
+   502				/*
+   503				 * Special case if we only track user <-> kernel transitions for tickless
+   504				 * cputime accounting but we don't support RCU extended quiescent state.
+   505				 * In this we case we don't care about any concurrency/ordering.
+   506				 */
+   507				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+   508					atomic_set(&ct->state, state);
+   509			} else {
+   510				/*
+   511				 * Even if context tracking is disabled on this CPU, because it's outside
+   512				 * the full dynticks mask for example, we still have to keep track of the
+   513				 * context transitions and states to prevent inconsistency on those of
+   514				 * other CPUs.
+   515				 * If a task triggers an exception in userspace, sleep on the exception
+   516				 * handler and then migrate to another CPU, that new CPU must know where
+   517				 * the exception returns by the time we call exception_exit().
+   518				 * This information can only be provided by the previous CPU when it called
+   519				 * exception_enter().
+   520				 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
+   521				 * is false because we know that CPU is not tickless.
+   522				 */
+   523				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+   524					/* Tracking for vtime only, no concurrent RCU EQS accounting */
+   525					atomic_set(&ct->state, state);
+   526				} else {
+   527					/*
+   528					 * Tracking for vtime and RCU EQS. Make sure we don't race
+   529					 * with NMIs. OTOH we don't care about ordering here since
+   530					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+   531					 * ordered.
+   532					 */
+   533					atomic_add(state, &ct->state);
+   534				}
+   535			}
+   536		}
+   537		context_tracking_recursion_exit();
+   538	}
+   539	EXPORT_SYMBOL_GPL(__ct_user_enter);
+   540	
+   541	/*
+   542	 * FIXME: This function should be noinstr but the below local_irq_restore() is
+   543	 * unsafe because it involves illegal RCU uses through tracing and lockdep. This
+   544	 * must be fixed first.
+   545	 */
+   546	void ct_user_enter(enum ctx_state state)
+   547	{
+   548		unsigned long flags;
+   549	
+   550		/*
+   551		 * Some contexts may involve an exception occuring in an irq,
+   552		 * leading to that nesting:
+   553		 * ct_irq_enter() rcu_eqs_exit(true) rcu_eqs_enter(true) ct_irq_exit()
+   554		 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
+   555		 * helpers are enough to protect RCU uses inside the exception. So
+   556		 * just return immediately if we detect we are in an IRQ.
+   557		 */
+   558		if (in_interrupt())
+   559			return;
+   560	
+   561		local_irq_save(flags);
+   562		__ct_user_enter(state);
+   563		local_irq_restore(flags);
+   564	}
+   565	NOKPROBE_SYMBOL(ct_user_enter);
+   566	EXPORT_SYMBOL_GPL(ct_user_enter);
+   567	
+   568	/**
+   569	 * user_enter_callable() - Unfortunate ASM callable version of user_enter() for
+   570	 * 			   archs that didn't manage to check the context tracking
+   571	 * 			   static key from low level code.
+   572	 *
+   573	 * FIXME: This function should be noinstr but it unsafely calls local_irq_restore(),
+   574	 * involving illegal RCU uses through tracing and lockdep. This must be fixed first.
+   575	 */
+   576	void user_enter_callable(void)
+   577	{
+   578		user_enter();
+   579	}
+   580	NOKPROBE_SYMBOL(user_enter_callable);
+   581	
+   582	/**
+   583	 * __ct_user_exit - Inform the context tracking that the CPU is
+   584	 * 		    exiting user or guest mode and entering the kernel.
+   585	 *
+   586	 * This function must be called after we entered the kernel from user or
+   587	 * guest space before any use of RCU read side critical section. This
+   588	 * potentially include any high level kernel code like syscalls, exceptions,
+   589	 * signal handling, etc...
+   590	 *
+   591	 * This call supports re-entrancy. This way it can be called from any exception
+   592	 * handler without needing to know if we came from userspace or not.
+   593	 */
+   594	void noinstr __ct_user_exit(enum ctx_state state)
+   595	{
+   596		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+   597	
+   598		if (!context_tracking_recursion_enter())
+   599			return;
+   600	
+   601		if (__ct_state() == state) {
+   602			if (ct->active) {
+   603				/*
+   604				 * Exit RCU idle mode while entering the kernel because it can
+   605				 * run a RCU read side critical section anytime.
+   606				 */
+ > 607				ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
+   608				if (state == CONTEXT_USER) {
+   609					instrumentation_begin();
+   610					vtime_user_exit(current);
+   611					trace_user_exit(0);
+   612					instrumentation_end();
+   613				}
+   614	
+   615				/*
+   616				 * Special case if we only track user <-> kernel transitions for tickless
+   617				 * cputime accounting but we don't support RCU extended quiescent state.
+   618				 * In this we case we don't care about any concurrency/ordering.
+   619				 */
+   620				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+   621					atomic_set(&ct->state, CONTEXT_KERNEL);
+   622	
+   623			} else {
+   624				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+   625					/* Tracking for vtime only, no concurrent RCU EQS accounting */
+   626					atomic_set(&ct->state, CONTEXT_KERNEL);
+   627				} else {
+   628					/*
+   629					 * Tracking for vtime and RCU EQS. Make sure we don't race
+   630					 * with NMIs. OTOH we don't care about ordering here since
+   631					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+   632					 * ordered.
+   633					 */
+   634					atomic_sub(state, &ct->state);
+   635				}
+   636			}
+   637		}
+   638		context_tracking_recursion_exit();
+   639	}
+   640	EXPORT_SYMBOL_GPL(__ct_user_exit);
+   641	
 
 -- 
 0-DAY CI Kernel Test Service
