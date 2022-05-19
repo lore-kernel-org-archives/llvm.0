@@ -1,108 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701FD23A5
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:33:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4FEC385AA;
-	Thu, 19 May 2022 20:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652992405;
-	bh=g22bXAXTZmdIS0EuXClsOsWJKTibdtEoxOIoGn+1a+8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B3L8hlzg+FLyGlJ0+WYyWsHhn+nZhuUdLNoreq4zIJSw5kDKnd8/kq3MBG9p6kf5y
-	 ZaK9scYSSDnEUIT6SdpTIReSwfYLBti+kdH+z4uROzpiMB7pYKbqG+obr5aAmlnhOv
-	 QAldZwU6IIgypSDoTm/qZD2BHC0cjc5A1Zwx2b2Ldu0kJDqlbM1kV6OX1pXYaiTJ3W
-	 BWgqdjcGy0dS9hwI3wInVm5fw7yRqEIbXVA3Fuu9R8B59wR3y3+lL5kIghDUBQpoeI
-	 rS1s4v77N55GqvipUfLjQvXuMg67XhVtUohxQAmW4ZKJgO+mhc6T20kLo/VCjMUtzk
-	 l/qz5QOBmHcqw==
-Date: Thu, 19 May 2022 13:33:23 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [tytso-ext4:dev 17/25] fs/ext4/super.c:2799:29: warning: unused
- variable 'sbi'
-Message-ID: <Yoapk4osojwJyrxM@sol.localdomain>
-References: <202205200431.kzojEoNc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCBB2C80
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:42:19 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id p139so10979264ybc.11
+        for <llvm@lists.linux.dev>; Thu, 19 May 2022 13:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z2okLhz72KUTvla4YyoDTB8A/W8JoxXBQasuMUph8C0=;
+        b=d2ACSNJz5Z8ThxTfbHc462MoLXTn6k5pKJ9S8YoDulcbrtuD12Q7GHSdwteiu3ukqF
+         8jm8K7ARf6N8ex53iZDSVuRkhCCKuPM3siwOeFnm++0kLE32geBnd9BfvESLJGAOjiEx
+         OR4ibZwwOngZDxrb6FIj4vWGc7cVl6ea2yFnW1Y+XnEbhVrwHFuayzfHQ21OYZV8TcVg
+         1/dne1LxTfdLS2mn6T/t8oofcir+h2ipDqF2MJyXJVi6J/c3Zyowqds2/KZpXKnG55qo
+         DWbEU2HpavtgJ7G69pKePU2mXV+TgVs3Xn5a81GpLuMBsCElSG1yF1jX7cnhwb+TYZ5J
+         KL2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z2okLhz72KUTvla4YyoDTB8A/W8JoxXBQasuMUph8C0=;
+        b=k0fAA8SJhXR1Rr1Kilug7kPPLyPZWAZkXaB3TGZakngfaqY6Po2FbNMSkmW8+eUHJM
+         AgL7TWjJhUNfEw1vmOhcMnR377Ee8K9JNdDFQ3GUEo2wpasiI2AOUMnkfBydHFZWVovS
+         TQRysqa9WkZhtIxfXFJjDxP2OMHv+i7HTso40GRbqjcpr+JAmk12tmwTn+SGr7W3unyq
+         YBXrkwowRP6+2MGLNx/CUd6mpevW9f3Pu/NngnpfE16dZ+tGjUjwXw+gmltOUQ07ccGn
+         zpjumizKf2v1KipIMV2tolMwVxAI90qarA8xJmHeIBbkIjLinE3bJmXoPuqh0J6VLnVl
+         I1lQ==
+X-Gm-Message-State: AOAM532P2SOvCfDCXgvpuI4FeTFHetBKJMECJuQVbCzXmn5n0IiWe34b
+	lcu3lwdwExIte5VKF8lLJTR4YZGTWJgFftVNW2iL1Q==
+X-Google-Smtp-Source: ABdhPJxJ/yh/6kwjFetK+yKNj03Si68VL6xzAYIFBlugdZlKFzZHju2VwSEDLPIqRhvMZjc2UyCWKc4FGr1HAakdJJs=
+X-Received: by 2002:a05:6902:18a:b0:64b:30ae:da2a with SMTP id
+ t10-20020a056902018a00b0064b30aeda2amr5956500ybh.314.1652992938667; Thu, 19
+ May 2022 13:42:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205200431.kzojEoNc-lkp@intel.com>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com>
+ <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+ <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+ <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X> <CA+icZUU0k8UHRiFvV45nr1xY0p3SgaG+MLjJoEnmUCQ8T+WGdg@mail.gmail.com>
+ <Yoan3dgL988r0Mv/@dev-arch.thelio-3990X>
+In-Reply-To: <Yoan3dgL988r0Mv/@dev-arch.thelio-3990X>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 19 May 2022 13:41:42 -0700
+Message-ID: <CABCJKueRFbzmJaZVj=oSP9mg+93mQrYo-eiX+ZZh0EP34VdE-g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Joao Moreira <joao@overdrivepizza.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, May 20, 2022 at 04:12:21AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-> head:   b76a7dd9a7437e8c21253ce3a7574bebde3827f9
-> commit: 0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609 [17/25] ext4: only allow test_dummy_encryption when supported
-> config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220520/202205200431.kzojEoNc-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/commit/?id=0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609
->         git remote add tytso-ext4 https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
->         git fetch --no-tags tytso-ext4 dev
->         git checkout 0df27ddf69f38e5ab1e1c73e46c35eecc6ca1609
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> fs/ext4/super.c:2799:29: warning: unused variable 'sbi' [-Wunused-variable]
->            const struct ext4_sb_info *sbi = EXT4_SB(sb);
->                                       ^
->    1 warning generated.
-> 
-> 
-> vim +/sbi +2799 fs/ext4/super.c
-> 
->   2794	
->   2795	static int ext4_check_test_dummy_encryption(const struct fs_context *fc,
->   2796						    struct super_block *sb)
->   2797	{
->   2798		const struct ext4_fs_context *ctx = fc->fs_private;
-> > 2799		const struct ext4_sb_info *sbi = EXT4_SB(sb);
->   2800	
->   2801		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION) ||
->   2802		    !(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
->   2803			return 0;
->   2804	
->   2805		if (!ext4_has_feature_encrypt(sb)) {
->   2806			ext4_msg(NULL, KERN_WARNING,
->   2807				 "test_dummy_encryption requires encrypt feature");
->   2808			return -EINVAL;
->   2809		}
->   2810		/*
->   2811		 * This mount option is just for testing, and it's not worthwhile to
->   2812		 * implement the extra complexity (e.g. RCU protection) that would be
->   2813		 * needed to allow it to be set or changed during remount.  We do allow
->   2814		 * it to be specified during remount, but only if there is no change.
->   2815		 */
->   2816		if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE &&
->   2817		    !DUMMY_ENCRYPTION_ENABLED(sbi)) {
->   2818			ext4_msg(NULL, KERN_WARNING,
->   2819				 "Can't set test_dummy_encryption on remount");
->   2820			return -EINVAL;
->   2821		}
->   2822		return 0;
->   2823	}
->   2824	
+On Thu, May 19, 2022 at 1:26 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, May 19, 2022 at 11:01:40AM +0200, Sedat Dilek wrote:
+> > On Tue, May 17, 2022 at 8:49 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > I have run kCFI (v1, I haven't had time to test v2) on x86_64 hardware,
+> > > both AMD and Intel. I have only found two failures so far: the i915
+> > > issue that I mention below and a failure in the KVM subsystem, which I
+> > > can see by just running QEMU:
+> > >
+> >
+> > Is there a fix around this issue?
+>
+> No, I mentioned it offhand to Sami in IRC but I never followed up. This
+> failure appears to be introduced by commit f922bd9bf33b ("KVM: Move MMU
+> notifier's mmu_lock acquisition into common helper").
+>
+> Sami, do you want an issue opened around this somewhere?
 
-That's kind of annoying; it's because DUMMY_ENCRYPTION_ENABLED() is a macro that
-doesn't use its argument when !CONFIG_FS_ENCRYPTION.
+Yes, please file a bug. The ClangBuiltLinux Github is probably the best place.
 
-I'll send a new version of this patch that just makes the contents of
-ext4_check_test_dummy_encryption() be conditional on CONFIG_FS_ENCRYPTION.
-
-This will be temporary, as the ifdef will go away later in "ext4: fix up
-test_dummy_encryption handling for new mount API".
-
-- Eric
+Sami
