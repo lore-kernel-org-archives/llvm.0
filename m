@@ -1,44 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755042F59
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 21:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281ED33C3
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 23:07:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652997279; x=1684533279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xKUpO4jRN+eIL8fLkxsRx9WY2vqao2VpSUZhYk5NjLE=;
-  b=KFuw/B3VJXoxlta5xwTqYQ9bkExTt5iiqlRl00jZtmbZ7snqIGHiUXzx
-   PiUY2osTyvNE+3MM9HAi5NX4PZQYAVSsnx1i5Zl0DMTbln5B6ZSMA1D0W
-   N/DdyW3R7D6/mnwfVItMvxtpOkfTuzEV75EcJE300zeMNJx+/AZ9VrUFd
-   nhOxYyQmAXoFH8OS1cRSYQaNXbNtKrZspbh1ZDKT55I2bjtx2AB5yCU/T
-   fjrcfWrnD+6ggm81X4vNoIai0zb3q+Oh2XU2xdVDzKz6eJ9j3VDU96x/d
-   +z6CVkUNTDgW+wEZztNaemlejvJofaXrD36vWshYtR/WdtE4ST8i/ncM0
+  t=1653001666; x=1684537666;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=owTa8Ojj1njakSWjuxpOqGqY+f8O3SRc7zvEl/3ZICg=;
+  b=f7p60oRy0QJ9kKBtpuaEYGK907M/pOezU3Ypwh7eVuRvaswDYCXqUkRw
+   20keY/8TTho2NR1BfIdLiBJKWcsXerOeYfHOOqknj7mNS2Y6WaY/oXa1u
+   D3KlTzv7cbQIz07eJG4IVfMq+34ryRD0XXjRo9Vos5UH8nG86bjcEaAxE
+   9OnUC/TxxAMGG9raS4/3IbyCu0aVmzzicTYVVhgs5ck36GmvooYj8tvvr
+   aJQHcOuGncOjJ56RIEz1SsLnBB20v42pwTPxgJ7JIZndbF+Gp3mnnlBqp
+   yonp82NeMhlZLRROgUhZIv8qKgqC+TB+ySimv05K13GJLD4QV6DFIGYQO
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335440880"
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="297721069"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="335440880"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:39 -0700
+   d="scan'208";a="297721069"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:07:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="818213805"
+   d="scan'208";a="557162745"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
+  by orsmga002.jf.intel.com with ESMTP; 19 May 2022 16:07:43 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nro6O-0003yi-Ez;
-	Thu, 19 May 2022 21:54:36 +0000
-Date: Fri, 20 May 2022 05:54:04 +0800
+	id 1nrpF9-00042G-07;
+	Thu, 19 May 2022 23:07:43 +0000
+Date: Fri, 20 May 2022 07:07:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:context-tracking.2022.05.19a 20/21]
- kernel/context_tracking.c:500:4: error: call to undeclared function
- 'ct_kernel_exit'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205200501.17EQ97Fa-lkp@intel.com>
+To: Chih-En Lin <shiyn.lin@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH 3/6] mm, pgtable: Add ownership for the PTE table
+Message-ID: <202205200722.h5TDQrQZ-lkp@intel.com>
+References: <20220519183127.3909598-4-shiyn.lin@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,234 +45,171 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220519183127.3909598-4-shiyn.lin@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git context-tracking.2022.05.19a
-head:   6153dca9e37b244684bf472728f5c3688c5b0aca
-commit: 02be5e537043004b7c133565ae473daf19a99e5d [20/21] rcu/context_tracking: Merge dynticks counter and context tracking states
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220520/202205200501.17EQ97Fa-lkp@intel.com/config)
+Hi Chih-En,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on soc/for-next linus/master v5.18-rc7 next-20220519]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chih-En-Lin/Introduce-Copy-On-Write-to-Page-Table/20220520-023243
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 734387ec2f9d77b00276042b1fa7c95f48ee879d
+config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220520/202205200722.h5TDQrQZ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=02be5e537043004b7c133565ae473daf19a99e5d
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu context-tracking.2022.05.19a
-        git checkout 02be5e537043004b7c133565ae473daf19a99e5d
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/aa5b69eef6a0be734cd331cb3ab4172d854fb93c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chih-En-Lin/Introduce-Copy-On-Write-to-Page-Table/20220520-023243
+        git checkout aa5b69eef6a0be734cd331cb3ab4172d854fb93c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/context_tracking.c:500:4: error: call to undeclared function 'ct_kernel_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
-                           ^
-   kernel/context_tracking.c:500:4: note: did you mean 'is_kernel_text'?
-   include/linux/kallsyms.h:27:19: note: 'is_kernel_text' declared here
-   static inline int is_kernel_text(unsigned long addr)
-                     ^
->> kernel/context_tracking.c:607:4: error: call to undeclared function 'ct_kernel_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
-                           ^
-   2 errors generated.
+   include/linux/signal.h:162:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigandnsets, _sig_andn)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
+                   r->sig[3] = op(a3, b3);                                 \
+                   ^      ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:162:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_BINOP(sigandnsets, _sig_andn)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
+                   r->sig[2] = op(a2, b2);                                 \
+                   ^      ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:27: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                   ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                   ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:11:
+   In file included from include/linux/uaccess.h:11:
+   In file included from arch/powerpc/include/asm/uaccess.h:9:
+   In file included from arch/powerpc/include/asm/kup.h:37:
+>> include/linux/pgtable.h:603:59: error: invalid operands to binary expression ('void' and 'pmd_t *')
+           return (smp_load_acquire(&pmd_page(*pmd)->cow_pte_owner) == owner) ?
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~
+   In file included from arch/powerpc/kernel/asm-offsets.c:19:
+   In file included from include/linux/mman.h:5:
+   In file included from include/linux/mm.h:25:
+>> include/linux/page_ref.h:89:32: error: no member named 'page' in 'struct folio'
+           return page_ref_count(&folio->page);
+                                  ~~~~~  ^
+   include/linux/page_ref.h:106:25: error: no member named 'page' in 'struct folio'
+           set_page_count(&folio->page, v);
+                           ~~~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   28 warnings and 20 errors generated.
+   make[2]: *** [scripts/Makefile.build:120: arch/powerpc/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/ct_kernel_exit +500 kernel/context_tracking.c
+vim +603 include/linux/pgtable.h
 
-   451	
-   452	/**
-   453	 * __ct_user_enter - Inform the context tracking that the CPU is going
-   454	 *		     to enter user or guest space mode.
-   455	 *
-   456	 * This function must be called right before we switch from the kernel
-   457	 * to user or guest space, when it's guaranteed the remaining kernel
-   458	 * instructions to execute won't use any RCU read side critical section
-   459	 * because this function sets RCU in extended quiescent state.
-   460	 */
-   461	void noinstr __ct_user_enter(enum ctx_state state)
-   462	{
-   463		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
-   464		lockdep_assert_irqs_disabled();
-   465	
-   466		/* Kernel threads aren't supposed to go to userspace */
-   467		WARN_ON_ONCE(!current->mm);
-   468	
-   469		if (!context_tracking_recursion_enter())
-   470			return;
-   471	
-   472		if (__ct_state() != state) {
-   473			if (ct->active) {
-   474				/*
-   475				 * At this stage, only low level arch entry code remains and
-   476				 * then we'll run in userspace. We can assume there won't be
-   477				 * any RCU read-side critical section until the next call to
-   478				 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
-   479				 * on the tick.
-   480				 */
-   481				if (state == CONTEXT_USER) {
-   482					instrumentation_begin();
-   483					trace_user_enter(0);
-   484					vtime_user_enter(current);
-   485					instrumentation_end();
-   486				}
-   487				/*
-   488				 * Other than generic entry implementation, we may be past the last
-   489				 * rescheduling opportunity in the entry code. Trigger a self IPI
-   490				 * that will fire and reschedule once we resume in user/guest mode.
-   491				 */
-   492				rcu_irq_work_resched();
-   493	
-   494				/*
-   495				 * Enter RCU idle mode right before resuming userspace.  No use of RCU
-   496				 * is permitted between this call and rcu_eqs_exit(). This way the
-   497				 * CPU doesn't need to maintain the tick for RCU maintenance purposes
-   498				 * when the CPU runs in userspace.
-   499				 */
- > 500				ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
-   501	
-   502				/*
-   503				 * Special case if we only track user <-> kernel transitions for tickless
-   504				 * cputime accounting but we don't support RCU extended quiescent state.
-   505				 * In this we case we don't care about any concurrency/ordering.
-   506				 */
-   507				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
-   508					atomic_set(&ct->state, state);
-   509			} else {
-   510				/*
-   511				 * Even if context tracking is disabled on this CPU, because it's outside
-   512				 * the full dynticks mask for example, we still have to keep track of the
-   513				 * context transitions and states to prevent inconsistency on those of
-   514				 * other CPUs.
-   515				 * If a task triggers an exception in userspace, sleep on the exception
-   516				 * handler and then migrate to another CPU, that new CPU must know where
-   517				 * the exception returns by the time we call exception_exit().
-   518				 * This information can only be provided by the previous CPU when it called
-   519				 * exception_enter().
-   520				 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
-   521				 * is false because we know that CPU is not tickless.
-   522				 */
-   523				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
-   524					/* Tracking for vtime only, no concurrent RCU EQS accounting */
-   525					atomic_set(&ct->state, state);
-   526				} else {
-   527					/*
-   528					 * Tracking for vtime and RCU EQS. Make sure we don't race
-   529					 * with NMIs. OTOH we don't care about ordering here since
-   530					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
-   531					 * ordered.
-   532					 */
-   533					atomic_add(state, &ct->state);
-   534				}
-   535			}
-   536		}
-   537		context_tracking_recursion_exit();
-   538	}
-   539	EXPORT_SYMBOL_GPL(__ct_user_enter);
-   540	
-   541	/*
-   542	 * FIXME: This function should be noinstr but the below local_irq_restore() is
-   543	 * unsafe because it involves illegal RCU uses through tracing and lockdep. This
-   544	 * must be fixed first.
-   545	 */
-   546	void ct_user_enter(enum ctx_state state)
-   547	{
-   548		unsigned long flags;
-   549	
-   550		/*
-   551		 * Some contexts may involve an exception occuring in an irq,
-   552		 * leading to that nesting:
-   553		 * ct_irq_enter() rcu_eqs_exit(true) rcu_eqs_enter(true) ct_irq_exit()
-   554		 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
-   555		 * helpers are enough to protect RCU uses inside the exception. So
-   556		 * just return immediately if we detect we are in an IRQ.
-   557		 */
-   558		if (in_interrupt())
-   559			return;
-   560	
-   561		local_irq_save(flags);
-   562		__ct_user_enter(state);
-   563		local_irq_restore(flags);
-   564	}
-   565	NOKPROBE_SYMBOL(ct_user_enter);
-   566	EXPORT_SYMBOL_GPL(ct_user_enter);
-   567	
-   568	/**
-   569	 * user_enter_callable() - Unfortunate ASM callable version of user_enter() for
-   570	 * 			   archs that didn't manage to check the context tracking
-   571	 * 			   static key from low level code.
-   572	 *
-   573	 * FIXME: This function should be noinstr but it unsafely calls local_irq_restore(),
-   574	 * involving illegal RCU uses through tracing and lockdep. This must be fixed first.
-   575	 */
-   576	void user_enter_callable(void)
-   577	{
-   578		user_enter();
-   579	}
-   580	NOKPROBE_SYMBOL(user_enter_callable);
-   581	
-   582	/**
-   583	 * __ct_user_exit - Inform the context tracking that the CPU is
-   584	 * 		    exiting user or guest mode and entering the kernel.
-   585	 *
-   586	 * This function must be called after we entered the kernel from user or
-   587	 * guest space before any use of RCU read side critical section. This
-   588	 * potentially include any high level kernel code like syscalls, exceptions,
-   589	 * signal handling, etc...
-   590	 *
-   591	 * This call supports re-entrancy. This way it can be called from any exception
-   592	 * handler without needing to know if we came from userspace or not.
-   593	 */
-   594	void noinstr __ct_user_exit(enum ctx_state state)
-   595	{
-   596		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
-   597	
-   598		if (!context_tracking_recursion_enter())
-   599			return;
    600	
-   601		if (__ct_state() == state) {
-   602			if (ct->active) {
-   603				/*
-   604				 * Exit RCU idle mode while entering the kernel because it can
-   605				 * run a RCU read side critical section anytime.
-   606				 */
- > 607				ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
-   608				if (state == CONTEXT_USER) {
-   609					instrumentation_begin();
-   610					vtime_user_exit(current);
-   611					trace_user_exit(0);
-   612					instrumentation_end();
-   613				}
-   614	
-   615				/*
-   616				 * Special case if we only track user <-> kernel transitions for tickless
-   617				 * cputime accounting but we don't support RCU extended quiescent state.
-   618				 * In this we case we don't care about any concurrency/ordering.
-   619				 */
-   620				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
-   621					atomic_set(&ct->state, CONTEXT_KERNEL);
-   622	
-   623			} else {
-   624				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
-   625					/* Tracking for vtime only, no concurrent RCU EQS accounting */
-   626					atomic_set(&ct->state, CONTEXT_KERNEL);
-   627				} else {
-   628					/*
-   629					 * Tracking for vtime and RCU EQS. Make sure we don't race
-   630					 * with NMIs. OTOH we don't care about ordering here since
-   631					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
-   632					 * ordered.
-   633					 */
-   634					atomic_sub(state, &ct->state);
-   635				}
-   636			}
-   637		}
-   638		context_tracking_recursion_exit();
-   639	}
-   640	EXPORT_SYMBOL_GPL(__ct_user_exit);
-   641	
+   601	static inline bool cow_pte_owner_is_same(pmd_t *pmd, pmd_t *owner)
+   602	{
+ > 603		return (smp_load_acquire(&pmd_page(*pmd)->cow_pte_owner) == owner) ?
+   604			true : false;
+   605	}
+   606	
 
 -- 
 0-DAY CI Kernel Test Service
