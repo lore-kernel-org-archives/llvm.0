@@ -1,120 +1,385 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC497A;
-	Thu, 19 May 2022 07:22:02 +0000 (UTC)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nraTh-0004Vm-9x; Thu, 19 May 2022 09:21:45 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Jessica Clarke <jrtc27@jrtc27.com>
-Subject: Re: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-Date: Thu, 19 May 2022 09:21:44 +0200
-Message-ID: <3667011.kQq0lBPeGt@diego>
-In-Reply-To: <20220518184529.454008-1-nathan@kernel.org>
-References: <20220518184529.454008-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDEA23CB
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 09:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XrYKEh8RhSLE25PF1iComKvphLhT+lBnN/kFlXkBQ+I=; b=ajZp3ndFGU6wrKpKpw6NowR6x4
+	R5rremBiPvHVKDhc3AGYAuwcVFngJfK9apwE/fy6HaHEFNcrTbiXaDuidwOp2dIwFqWLWL3UtPDFv
+	fBQXUq2/iFeH0YLOtCHuc7SiwJKt0cDL0/ZzUptEcu/rwVkKtwygUilByt52L9kiMknhXfnY+Abmk
+	6xj4pRlBYBhUWpUXybXeYayIKHFmJwq0uIxpjc53TUwVfZotfydHbgAabnfFzqiT5+NMxdYpPKnNs
+	BcqBnA6LZQCSOL58dnKbY5HV3+KFtuAgsDv/wMgoHGWZjun5kraZHInSxxQcUopEFIbYupQFt/685
+	NnyOwECQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nrc1K-001mgJ-5C; Thu, 19 May 2022 09:00:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8A7F0980E0B; Thu, 19 May 2022 11:00:29 +0200 (CEST)
+Date: Thu, 19 May 2022 11:00:29 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: [PATCH v2] objtool: Fix symbol creation
+Message-ID: <20220519090029.GA6479@worktop.programming.kicks-ass.net>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+ <20220518012429.4zqzarvwsraxivux@treble>
+ <20220518074152.GB10117@worktop.programming.kicks-ass.net>
+ <20220518173604.7gcrjjum6fo2m2ub@treble>
+ <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
 
-Am Mittwoch, 18. Mai 2022, 20:45:29 CEST schrieb Nathan Chancellor:
-> After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-> builds with LLVM's integrated assembler fail like:
-> 
->   In file included from arch/riscv/kernel/asm-offsets.c:10:
->   In file included from ./include/linux/mm.h:29:
->   In file included from ./include/linux/pgtable.h:6:
->   In file included from ./arch/riscv/include/asm/pgtable.h:114:
->   ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
->           ALT_THEAD_PMA(prot_val);
->           ^
->   ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
->           : "0"(_val),                                                    \
->             ^
-> 
-> This was reported upstream to LLVM where Jessica pointed out a couple of
-> issues with the existing implementation of ALT_THEAD_PMA:
-> 
-> * t3 is modified but not listed in the clobbers list.
-> 
-> * "+r"(_val) marks _val as both an input and output of the asm but then
->   "0"(_val) marks _val as an input matching constraint, which does not
->   make much sense in this situation, as %1 is not actually used in the
->   asm and matching constraints are designed to be used for different
->   inputs that need to use the same register.
-> 
-> Drop the matching contraint and shift all the operands by one, as %1 is
-> unused, and mark t3 as clobbered. This resolves the build error and goes
-> not cause any problems with GNU as.
-> 
-> Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-> Link: https://github.com/llvm/llvm-project/issues/55514
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-> Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Subject: objtool: Fix symbol creation
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue, 17 May 2022 17:42:04 +0200
 
-I'm not sure anymore why it ended up the original way, but with this change
-it definitly looks better
+Nathan reported objtool failing with the following messages:
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+  warning: objtool: no non-local symbols !?
+  warning: objtool: gelf_update_symshndx: invalid section index
 
-On an actual D1-Nezha board also
+The problem is due to commit 4abff6d48dbc ("objtool: Fix code relocs
+vs weak symbols") failing to consider the case where an object would
+have no non-local symbols.
 
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+The problem that commit tries to address is adding a STB_LOCAL symbol
+to the symbol table in light of the ELF spec's requirement that:
 
+  In each symbol table, all symbols with STB_LOCAL binding preced the
+  weak and global symbols.  As ``Sections'' above describes, a symbol
+  table section's sh_info section header member holds the symbol table
+  index for the first non-local symbol.
 
-Thanks for doing that improvement
-Heiko
+The approach taken is to find this first non-local symbol, move that
+to the end and then re-use the freed spot to insert a new local symbol
+and increment sh_info.
 
-> ---
->  arch/riscv/include/asm/errata_list.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 9e2888dbb5b1..416ead0f9a65 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(						\
->  	"nop\n\t"							\
->  	"nop\n\t"							\
->  	"nop",								\
-> -	"li      t3, %2\n\t"						\
-> -	"slli    t3, t3, %4\n\t"					\
-> +	"li      t3, %1\n\t"						\
-> +	"slli    t3, t3, %3\n\t"					\
->  	"and     t3, %0, t3\n\t"					\
->  	"bne     t3, zero, 2f\n\t"					\
-> -	"li      t3, %3\n\t"						\
-> -	"slli    t3, t3, %4\n\t"					\
-> +	"li      t3, %2\n\t"						\
-> +	"slli    t3, t3, %3\n\t"					\
->  	"or      %0, %0, t3\n\t"					\
->  	"2:",  THEAD_VENDOR_ID,						\
->  		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
->  	: "+r"(_val)							\
-> -	: "0"(_val),							\
-> -	  "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-> +	: "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
->  	  "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),			\
-> -	  "I"(ALT_THEAD_PBMT_SHIFT))
-> +	  "I"(ALT_THEAD_PBMT_SHIFT)					\
-> +	: "t3")
->  #else
->  #define ALT_THEAD_PMA(_val)
->  #endif
-> 
-> base-commit: 93c0651617a62a69717299f1464dda798af8bebb
-> 
+Except it never considered the case of object files without global
+symbols and got a whole bunch of details wrong -- so many in fact that
+it is a wonder it ever worked :/
 
+Specifically:
 
+ - It failed to re-hash the symbol on the new index, so a subsequent
+   find_symbol_by_index() would not find it at the new location and a
+   query for the old location would now return a non-deterministic
+   choice between the old and new symbol.
 
+ - It failed to appreciate that the GElf wrappers are not a valid disk
+   format (it works because GElf is basically Elf64 and we only
+   support x86_64 atm.)
+
+ - It failed to fully appreciate how horrible the libelf API really is
+   and got the gelf_update_symshndx() call pretty much completely
+   wrong; with the direct consequence that if inserting a second
+   STB_LOCAL symbol would require moving the same STB_GLOBAL symbol
+   again it would completely come unstuck.
+
+Write a new elf_update_symbol() function that wraps all the magic
+required to update or create a new symbol at a given index.
+
+Specifically, gelf_update_sym*() require an @ndx argument that is
+relative to the @data argument; this means you have to manually
+iterate the section data descriptor list and update @ndx.
+
+Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+---
+ tools/objtool/elf.c |  198 +++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 129 insertions(+), 69 deletions(-)
+
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -374,6 +374,9 @@ static void elf_add_symbol(struct elf *e
+ 	struct list_head *entry;
+ 	struct rb_node *pnode;
+ 
++	INIT_LIST_HEAD(&sym->pv_target);
++	sym->alias = sym;
++
+ 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
+ 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
+ 
+@@ -438,8 +441,6 @@ static int read_symbols(struct elf *elf)
+ 			return -1;
+ 		}
+ 		memset(sym, 0, sizeof(*sym));
+-		INIT_LIST_HEAD(&sym->pv_target);
+-		sym->alias = sym;
+ 
+ 		sym->idx = i;
+ 
+@@ -603,24 +604,21 @@ static void elf_dirty_reloc_sym(struct e
+ }
+ 
+ /*
+- * Move the first global symbol, as per sh_info, into a new, higher symbol
+- * index. This fees up the shndx for a new local symbol.
++ * The libelf API is terrible; gelf_update_sym*() takes a data block relative
++ * index value, *NOT* the symbol index. As such, iterate the data blocks and
++ * adjust index until it fits.
++ *
++ * If no data block is found, allow adding a new data block provided the index
++ * is only one past the end.
+  */
+-static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+-				  struct section *symtab_shndx)
++static int elf_update_symbol(struct elf *elf, struct section *symtab,
++			     struct section *symtab_shndx, struct symbol *sym)
+ {
+-	Elf_Data *data, *shndx_data = NULL;
+-	Elf32_Word first_non_local;
+-	struct symbol *sym;
+-	Elf_Scn *s;
+-
+-	first_non_local = symtab->sh.sh_info;
+-
+-	sym = find_symbol_by_index(elf, first_non_local);
+-	if (!sym) {
+-		WARN("no non-local symbols !?");
+-		return first_non_local;
+-	}
++	Elf32_Word shndx = sym->sec ? sym->sec->idx : SHN_UNDEF;
++	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
++	Elf64_Xword entsize = symtab->sh.sh_entsize;
++	int max_idx, idx = sym->idx;
++	Elf_Scn *s, *t = NULL;
+ 
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -628,79 +626,124 @@ static int elf_move_global_symbol(struct
+ 		return -1;
+ 	}
+ 
+-	data = elf_newdata(s);
+-	if (!data) {
+-		WARN_ELF("elf_newdata");
+-		return -1;
++	if (symtab_shndx) {
++		t = elf_getscn(elf->elf, symtab_shndx->idx);
++		if (!t) {
++			WARN_ELF("elf_getscn");
++			return -1;
++		}
+ 	}
+ 
+-	data->d_buf = &sym->sym;
+-	data->d_size = sizeof(sym->sym);
+-	data->d_align = 1;
+-	data->d_type = ELF_T_SYM;
++	for (;;) {
++		/* get next data descriptor for the relevant sections */
++		symtab_data = elf_getdata(s, symtab_data);
++		if (t)
++			shndx_data = elf_getdata(t, shndx_data);
++
++		/* end-of-list */
++		if (!symtab_data) {
++			void *buf;
++
++			if (idx) {
++				/* we don't do holes in symbol tables */
++				WARN("index out of range");
++				return -1;
++			}
+ 
+-	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+-	elf_dirty_reloc_sym(elf, sym);
++			/* if @idx == 0, it's the next contiguous entry, create it */
++			symtab_data = elf_newdata(s);
++			if (t)
++				shndx_data = elf_newdata(t);
++
++			buf = calloc(1, entsize);
++			if (!buf) {
++				WARN("malloc");
++				return -1;
++			}
+ 
+-	symtab->sh.sh_info += 1;
+-	symtab->sh.sh_size += data->d_size;
+-	symtab->changed = true;
++			symtab_data->d_buf = buf;
++			symtab_data->d_size = entsize;
++			symtab_data->d_align = 1;
++			symtab_data->d_type = ELF_T_SYM;
++
++			symtab->sh.sh_size += entsize;
++			symtab->changed = true;
++
++			if (t) {
++				shndx_data->d_buf = &sym->sec->idx;
++				shndx_data->d_size = sizeof(Elf32_Word);
++				shndx_data->d_align = sizeof(Elf32_Word);
++				shndx_data->d_type = ELF_T_WORD;
+ 
+-	if (symtab_shndx) {
+-		s = elf_getscn(elf->elf, symtab_shndx->idx);
+-		if (!s) {
+-			WARN_ELF("elf_getscn");
++				symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
++				symtab_shndx->changed = true;
++			}
++
++			break;
++		}
++
++		/* empty blocks should not happen */
++		if (!symtab_data->d_size) {
++			WARN("zero size data");
+ 			return -1;
+ 		}
+ 
+-		shndx_data = elf_newdata(s);
++		/* is this the right block? */
++		max_idx = symtab_data->d_size / entsize;
++		if (idx < max_idx)
++			break;
++
++		/* adjust index and try again */
++		idx -= max_idx;
++	}
++
++	/* something went side-ways */
++	if (idx < 0) {
++		WARN("negative index");
++		return -1;
++	}
++
++	/* setup extended section index magic and write the symbol */
++	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++		sym->sym.st_shndx = shndx;
++		if (!shndx_data)
++			shndx = 0;
++	} else {
++		sym->sym.st_shndx = SHN_XINDEX;
+ 		if (!shndx_data) {
+-			WARN_ELF("elf_newshndx_data");
++			WARN("no .symtab_shndx");
+ 			return -1;
+ 		}
++	}
+ 
+-		shndx_data->d_buf = &sym->sec->idx;
+-		shndx_data->d_size = sizeof(Elf32_Word);
+-		shndx_data->d_align = 4;
+-		shndx_data->d_type = ELF_T_WORD;
+-
+-		symtab_shndx->sh.sh_size += 4;
+-		symtab_shndx->changed = true;
++	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
++		WARN_ELF("gelf_update_symshndx");
++		return -1;
+ 	}
+ 
+-	return first_non_local;
++	return 0;
+ }
+ 
+ static struct symbol *
+ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ {
+ 	struct section *symtab, *symtab_shndx;
+-	Elf_Data *shndx_data = NULL;
+-	struct symbol *sym;
+-	Elf32_Word shndx;
++	Elf32_Word first_non_local, new_idx;
++	struct symbol *sym, *old;
+ 
+ 	symtab = find_section_by_name(elf, ".symtab");
+ 	if (symtab) {
+ 		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
+-		if (symtab_shndx)
+-			shndx_data = symtab_shndx->data;
+ 	} else {
+ 		WARN("no .symtab");
+ 		return NULL;
+ 	}
+ 
+-	sym = malloc(sizeof(*sym));
++	sym = calloc(1, sizeof(*sym));
+ 	if (!sym) {
+ 		perror("malloc");
+ 		return NULL;
+ 	}
+-	memset(sym, 0, sizeof(*sym));
+-
+-	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
+-	if (sym->idx < 0) {
+-		WARN("elf_move_global_symbol");
+-		return NULL;
+-	}
+ 
+ 	sym->name = sec->name;
+ 	sym->sec = sec;
+@@ -710,24 +753,41 @@ elf_create_section_symbol(struct elf *el
+ 	// st_other 0
+ 	// st_value 0
+ 	// st_size 0
+-	shndx = sec->idx;
+-	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+-		sym->sym.st_shndx = shndx;
+-		if (!shndx_data)
+-			shndx = 0;
+-	} else {
+-		sym->sym.st_shndx = SHN_XINDEX;
+-		if (!shndx_data) {
+-			WARN("no .symtab_shndx");
++
++	/*
++	 * Move the first global symbol, as per sh_info, into a new, higher
++	 * symbol index. This fees up a spot for a new local symbol.
++	 */
++	first_non_local = symtab->sh.sh_info;
++	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
++	old = find_symbol_by_index(elf, first_non_local);
++	if (old) {
++		old->idx = new_idx;
++
++		hlist_del(&old->hash);
++		elf_hash_add(symbol, &old->hash, old->idx);
++
++		elf_dirty_reloc_sym(elf, old);
++
++		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
++			WARN("elf_update_symbol move");
+ 			return NULL;
+ 		}
++
++		new_idx = first_non_local;
+ 	}
+ 
+-	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
+-		WARN_ELF("gelf_update_symshndx");
++	sym->idx = new_idx;
++	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
++		WARN("elf_update_symbol");
+ 		return NULL;
+ 	}
+ 
++	/*
++	 * Either way, we added a LOCAL symbol.
++	 */
++	symtab->sh.sh_info += 1;
++
+ 	elf_add_symbol(elf, sym);
+ 
+ 	return sym;
 
