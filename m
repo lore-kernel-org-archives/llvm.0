@@ -1,385 +1,233 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDEA23CB
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 09:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=XrYKEh8RhSLE25PF1iComKvphLhT+lBnN/kFlXkBQ+I=; b=ajZp3ndFGU6wrKpKpw6NowR6x4
-	R5rremBiPvHVKDhc3AGYAuwcVFngJfK9apwE/fy6HaHEFNcrTbiXaDuidwOp2dIwFqWLWL3UtPDFv
-	fBQXUq2/iFeH0YLOtCHuc7SiwJKt0cDL0/ZzUptEcu/rwVkKtwygUilByt52L9kiMknhXfnY+Abmk
-	6xj4pRlBYBhUWpUXybXeYayIKHFmJwq0uIxpjc53TUwVfZotfydHbgAabnfFzqiT5+NMxdYpPKnNs
-	BcqBnA6LZQCSOL58dnKbY5HV3+KFtuAgsDv/wMgoHGWZjun5kraZHInSxxQcUopEFIbYupQFt/685
-	NnyOwECQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nrc1K-001mgJ-5C; Thu, 19 May 2022 09:00:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8A7F0980E0B; Thu, 19 May 2022 11:00:29 +0200 (CEST)
-Date: Thu, 19 May 2022 11:00:29 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH v2] objtool: Fix symbol creation
-Message-ID: <20220519090029.GA6479@worktop.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
- <20220518074152.GB10117@worktop.programming.kicks-ass.net>
- <20220518173604.7gcrjjum6fo2m2ub@treble>
- <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DB023CB
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 09:02:16 +0000 (UTC)
+Received: by mail-io1-f53.google.com with SMTP id o190so5068498iof.10
+        for <llvm@lists.linux.dev>; Thu, 19 May 2022 02:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=NFytTSvpESA+gNTucGdfA0zmuvcHaBQUd/+6cBap22I=;
+        b=eL8pdHPx4vN0d5L7qUH6EoYO1SdzoGbuSRbXHYt3rldg70paJSV7wpHk3Mzhr0mEEM
+         OHkEXPU9Kc+QHINA29ZqAZpIvhHwSXMFhnk0hZQDa9ZIkexddhVNvYFfhyfIlp0GIiz0
+         spn0l590s/wnxqGjmThGAcSi7NAgRHAp02i4JjMh+6cBdxsieR5UQpoYZz6tGZC1M70p
+         AiH6t8vzrLCnchk2o0EnO2dYn1dszZ3Gf2KS07k/ZXmtv1xzAdda8e3dr8LyZz9QeMdY
+         lC+Agfh0KyWKhdYSixDdqKXHBe7iKvNcpLqgcJW3jhjWgPkV1Uynj5DXG/ul8fsxUDBH
+         FsgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=NFytTSvpESA+gNTucGdfA0zmuvcHaBQUd/+6cBap22I=;
+        b=qXDRq7bojwco7mDWrHE1i5xesxTo85/RkrbuK8TgRbIYwFbk39adUID0r8FgYv9lL6
+         TrozgXC1sLUylfdd0cJldgFb4UnHIhn6IWY1Uto+dzoda4hW+y8JV2TImzjkhV87bbyj
+         dXMW5D6FqodYR9DoiKZKNOq5qSGJZAq5bhuDwoUPPrZPeuPz4zYvo3YfvbAI4P6GOP5a
+         /9S1f+lnlk+vu7Dwfep1HTP2UR9BtCGv22We1gOv27qyR5zkZF2oehncNkiqWkdy1EHo
+         /jsvgZolBTv4ael30ecCtOXXRmmfi+H5rrIKcgbMyxRvZTSnTv8vMysc5wyB38QUhz5i
+         aDwA==
+X-Gm-Message-State: AOAM533oJOZSIW77RMVPEaRyAxBuYqAVC9ox7wHZwVHCfvODNezcodj1
+	UFxQSa520WDPfK1VPnpPUB/GMGJybP+VtHFPHIA=
+X-Google-Smtp-Source: ABdhPJynAP+UQSWDZQ0SgaLBUZcMuLPo7siz4q081It2e6L/Wbf4ooHvNg1+p72d0srWuWjKUpf3r3nnMcmJXlRcDAQ=
+X-Received: by 2002:a05:6602:1542:b0:65a:bc5d:db78 with SMTP id
+ h2-20020a056602154200b0065abc5ddb78mr1967758iow.128.1652950936005; Thu, 19
+ May 2022 02:02:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com>
+ <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+ <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com> <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X>
+In-Reply-To: <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Thu, 19 May 2022 11:01:40 +0200
+Message-ID: <CA+icZUU0k8UHRiFvV45nr1xY0p3SgaG+MLjJoEnmUCQ8T+WGdg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org, 
+	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Joao Moreira <joao@overdrivepizza.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Subject: objtool: Fix symbol creation
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue, 17 May 2022 17:42:04 +0200
+On Tue, May 17, 2022 at 8:49 PM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> On Tue, May 17, 2022 at 09:33:47AM +0200, Sedat Dilek wrote:
+> > Is your tags/kcfi-rfc-v2 the recommended LLVM toolchain for testing kcf=
+i-rfc-v2?
+> >
+> > What I want to ask is if your commit well tested for x86 (and arm64)
+> > means build and boot on bare metal?
+>
+> I have run kCFI (v1, I haven't had time to test v2) on x86_64 hardware,
+> both AMD and Intel. I have only found two failures so far: the i915
+> issue that I mention below and a failure in the KVM subsystem, which I
+> can see by just running QEMU:
+>
 
-Nathan reported objtool failing with the following messages:
+Is there a fix around this issue?
 
-  warning: objtool: no non-local symbols !?
-  warning: objtool: gelf_update_symshndx: invalid section index
+> [  124.344654] CFI failure at kvm_mmu_notifier_invalidate_range_end+0xca/=
+0x177 [kvm] (target: kvm_null_fn+0x0/0x7 [kvm]; expected type: 0x1e2c5b9c)
+> [  124.344691] WARNING: CPU: 5 PID: 2767 at kvm_mmu_notifier_invalidate_r=
+ange_end+0xca/0x177 [kvm]
+> [  124.344708] Modules linked in: ...
+> [  124.344737] CPU: 5 PID: 2767 Comm: qemu-system-x86 Tainted: P         =
+         5.18.0-rc6-debug-00033-g1d5284aff7cd #1 8c4966c7fb24f3345076747fee=
+bac5fb340a4797
+> [  124.344738] Hardware name: ASUS System Product Name/PRIME Z590M-PLUS, =
+BIOS 1203 10/27/2021
+> [  124.344738] RIP: 0010:kvm_mmu_notifier_invalidate_range_end+0xca/0x177=
+ [kvm]
+> [  124.344756] Code: 48 89 da e8 88 16 86 dd 48 85 c0 89 6c 24 0c 74 30 4=
+d 85 f6 74 36 48 c7 c5 19 c8 b4 c0 4c 8b 34 24 81 7d fa 9c 5b 2c 1e 74 02 <=
+0f> 0b 48 89 c7 4c 89 fe 48 89 da e8 b6 16 86 dd 48 85 c0 75 e2 eb
+> [  124.344757] RSP: 0018:ffffc033039d78e8 EFLAGS: 00010282
+> [  124.344758] RAX: ffffa0a141ed9450 RBX: 00007fb897e9efff RCX: ffffa0a14=
+3c9d850
+> [  124.344758] RDX: 00007fb897e9efff RSI: 00007fb897e9e000 RDI: ffffc0330=
+4499cf8
+> [  124.344759] RBP: ffffffffc0b4c819 R08: 0000000000000000 R09: 000000000=
+0000000
+> [  124.344759] R10: 0000000000000000 R11: ffffffffc0b4c639 R12: ffffc0330=
+4499000
+> [  124.344760] R13: ffffc033044a30a0 R14: ffffc033044a3120 R15: 00007fb89=
+7e9e000
+> [  124.344760] FS:  00007fbca4bc3640(0000) GS:ffffa0a87f540000(0000) knlG=
+S:0000000000000000
+> [  124.344761] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  124.344761] CR2: 0000000000000000 CR3: 0000000119f74006 CR4: 000000000=
+0772ee0
+> [  124.344762] PKRU: 55555554
+> [  124.344762] Call Trace:
+> [  124.344762]  <TASK>
+> [  124.344763]  __mmu_notifier_invalidate_range_end+0xa1/0xd7
+> [  124.344764]  wp_page_copy+0x592/0x920
+> [  124.344766]  __handle_mm_fault+0x820/0x8f0
+> [  124.344767]  handle_mm_fault+0xe0/0x227
+> [  124.344768]  __get_user_pages+0x17a/0x430
+> [  124.344769]  get_user_pages_unlocked+0xd9/0x327
+> [  124.344770]  hva_to_pfn+0xfa/0x3f7 [kvm 950e483805e01f967a3e331506278d=
+766494a4cc]
+> [  124.344788]  kvm_faultin_pfn+0xc3/0x2f0 [kvm 950e483805e01f967a3e33150=
+6278d766494a4cc]
+> [  124.344806]  ? fast_page_fault+0x400/0x4c0 [kvm 950e483805e01f967a3e33=
+1506278d766494a4cc]
+> [  124.344823]  direct_page_fault+0x130/0x350 [kvm 950e483805e01f967a3e33=
+1506278d766494a4cc]
+> [  124.344841]  kvm_mmu_page_fault+0x176/0x2f7 [kvm 950e483805e01f967a3e3=
+31506278d766494a4cc]
+> [  124.344858]  vmx_handle_exit+0xe/0x37 [kvm_intel 647f514f18fc365045dc5=
+7db46d2bb4930b746eb]
+> [  124.344863]  vcpu_enter_guest+0xbff/0x1030 [kvm 950e483805e01f967a3e33=
+1506278d766494a4cc]
+> [  124.344881]  vcpu_run+0x65/0x2f0 [kvm 950e483805e01f967a3e331506278d76=
+6494a4cc]
+> [  124.344898]  kvm_arch_vcpu_ioctl_run+0x15f/0x3f7 [kvm 950e483805e01f96=
+7a3e331506278d766494a4cc]
+> [  124.344916]  kvm_vcpu_ioctl+0x547/0x627 [kvm 950e483805e01f967a3e33150=
+6278d766494a4cc]
+> [  124.344933]  ? syscall_exit_to_user_mode+0x24/0x47
+> [  124.344934]  ? do_syscall_64+0x7a/0x97
+> [  124.344935]  ? __fget_files+0xa1/0xc0
+> [  124.344936]  __se_sys_ioctl+0x7c/0xc0
+> [  124.344937]  do_syscall_64+0x6c/0x97
+> [  124.344938]  ? do_syscall_64+0x7a/0x97
+> [  124.344939]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  124.344940] RIP: 0033:0x7fbca75f7b1f
+> [  124.344940] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 0=
+0 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <=
+89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+> [  124.344941] RSP: 002b:00007fbca4bc2550 EFLAGS: 00000246 ORIG_RAX: 0000=
+000000000010
+> [  124.344942] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007fbca=
+75f7b1f
+> [  124.344942] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 000000000=
+000000e
+> [  124.344943] RBP: 000056351ba661d0 R08: 000056351a74dc48 R09: 000000000=
+0000004
+> [  124.344943] R10: 004818cf4f129e11 R11: 0000000000000246 R12: 000000000=
+0000000
+> [  124.344943] R13: 0000000000000000 R14: 00007fbca814f004 R15: 000000000=
+0000000
+> [  124.344944]  </TASK>
+> [  124.344945] ---[ end trace 0000000000000000 ]---
+>
+> I don't do any bare metal testing for the tc-build known good revision
+> bumps, just QEMU tests with boot-utils.
+>
+> > Just for the records:
+> > You definitely need a pre-LLVM-15 toolchain + KCFI sanitizer patch?
+> > LLVM-14?
+>
+> The feature won't land in LLVM 14, so there is little point to
+> backporting and testing it on LLVM 14. This is a work in progress
+> feature so it has to target the main branch. I have fairly good coverage
+> of tip of tree locally and we have solid coverage through CI so we'll
+> know if something major happens, it should be pretty safe to test Sami's
+> series.
+>
 
-The problem is due to commit 4abff6d48dbc ("objtool: Fix code relocs
-vs weak symbols") failing to consider the case where an object would
-have no non-local symbols.
+OK, no backport.
 
-The problem that commit tries to address is adding a STB_LOCAL symbol
-to the symbol table in light of the ELF spec's requirement that:
+> > > > Nathan has a i915 cfi patch in His personal kernel.org Git.
+> > > > Is this relevant to kcfi?
+> > >
+> > > It fixes a type mismatch, so in that sense it's relevant.
+> > >
+> >
+> > Here the link to patch "drm/i915: Fix CFI violation with show_dynamic_i=
+d()":
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit=
+/?h=3Dsubmitted/i915-cfi-fix&id=3D53735be6dc53453fcfbac658e847b54360e73871
+>
+> This is now in the i915 tree so that branch is going to disappear:
+>
+> https://cgit.freedesktop.org/drm/drm-intel/commit/?id=3D18fb42db05a0b93ab=
+5dd5eab5315e50eaa3ca620
+>
 
-  In each symbol table, all symbols with STB_LOCAL binding preced the
-  weak and global symbols.  As ``Sections'' above describes, a symbol
-  table section's sh_info section header member holds the symbol table
-  index for the first non-local symbol.
+Good to know.
 
-The approach taken is to find this first non-local symbol, move that
-to the end and then re-use the freed spot to insert a new local symbol
-and increment sh_info.
+> > You say no need to build your kernel with LTO...
+> > That sounds good.
+> > Currently, I build my kernels with Clang-14 and CONFIG_LTO_CLANG_THIN=
+=3Dy.
+> > Does something speak against using CONFIG_LTO_CLANG_THIN=3Dy with KCFI =
+support?
+> > Build-time?
+> > Disc-usage?
+>
+> I wouldn't expect the build time or disk usage to significantly increase
+> with kCFI. I ran a quick benchmark with Arch Linux's configuration with
+> ThinLTO then ThinLTO + kCFI on an AMD EPYC 7513:
+>
+> Benchmark 1: ThinLTO
+>   Time (abs =E2=89=A1):        166.036 s               [User: 4687.951 s,=
+ System: 1636.767 s]
+>
+> Benchmark 2: ThinLTO + kCFI
+>   Time (abs =E2=89=A1):        168.739 s               [User: 4682.020 s,=
+ System: 1638.109 s]
+>
+> Summary
+>   'ThinLTO' ran
+>     1.02 times faster than 'ThinLTO + kCFI'
+>
 
-Except it never considered the case of object files without global
-symbols and got a whole bunch of details wrong -- so many in fact that
-it is a wonder it ever worked :/
+Thanks for your feedback.
 
-Specifically:
-
- - It failed to re-hash the symbol on the new index, so a subsequent
-   find_symbol_by_index() would not find it at the new location and a
-   query for the old location would now return a non-deterministic
-   choice between the old and new symbol.
-
- - It failed to appreciate that the GElf wrappers are not a valid disk
-   format (it works because GElf is basically Elf64 and we only
-   support x86_64 atm.)
-
- - It failed to fully appreciate how horrible the libelf API really is
-   and got the gelf_update_symshndx() call pretty much completely
-   wrong; with the direct consequence that if inserting a second
-   STB_LOCAL symbol would require moving the same STB_GLOBAL symbol
-   again it would completely come unstuck.
-
-Write a new elf_update_symbol() function that wraps all the magic
-required to update or create a new symbol at a given index.
-
-Specifically, gelf_update_sym*() require an @ndx argument that is
-relative to the @data argument; this means you have to manually
-iterate the section data descriptor list and update @ndx.
-
-Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
----
- tools/objtool/elf.c |  198 +++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 129 insertions(+), 69 deletions(-)
-
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -374,6 +374,9 @@ static void elf_add_symbol(struct elf *e
- 	struct list_head *entry;
- 	struct rb_node *pnode;
- 
-+	INIT_LIST_HEAD(&sym->pv_target);
-+	sym->alias = sym;
-+
- 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
- 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
- 
-@@ -438,8 +441,6 @@ static int read_symbols(struct elf *elf)
- 			return -1;
- 		}
- 		memset(sym, 0, sizeof(*sym));
--		INIT_LIST_HEAD(&sym->pv_target);
--		sym->alias = sym;
- 
- 		sym->idx = i;
- 
-@@ -603,24 +604,21 @@ static void elf_dirty_reloc_sym(struct e
- }
- 
- /*
-- * Move the first global symbol, as per sh_info, into a new, higher symbol
-- * index. This fees up the shndx for a new local symbol.
-+ * The libelf API is terrible; gelf_update_sym*() takes a data block relative
-+ * index value, *NOT* the symbol index. As such, iterate the data blocks and
-+ * adjust index until it fits.
-+ *
-+ * If no data block is found, allow adding a new data block provided the index
-+ * is only one past the end.
-  */
--static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
--				  struct section *symtab_shndx)
-+static int elf_update_symbol(struct elf *elf, struct section *symtab,
-+			     struct section *symtab_shndx, struct symbol *sym)
- {
--	Elf_Data *data, *shndx_data = NULL;
--	Elf32_Word first_non_local;
--	struct symbol *sym;
--	Elf_Scn *s;
--
--	first_non_local = symtab->sh.sh_info;
--
--	sym = find_symbol_by_index(elf, first_non_local);
--	if (!sym) {
--		WARN("no non-local symbols !?");
--		return first_non_local;
--	}
-+	Elf32_Word shndx = sym->sec ? sym->sec->idx : SHN_UNDEF;
-+	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
-+	Elf64_Xword entsize = symtab->sh.sh_entsize;
-+	int max_idx, idx = sym->idx;
-+	Elf_Scn *s, *t = NULL;
- 
- 	s = elf_getscn(elf->elf, symtab->idx);
- 	if (!s) {
-@@ -628,79 +626,124 @@ static int elf_move_global_symbol(struct
- 		return -1;
- 	}
- 
--	data = elf_newdata(s);
--	if (!data) {
--		WARN_ELF("elf_newdata");
--		return -1;
-+	if (symtab_shndx) {
-+		t = elf_getscn(elf->elf, symtab_shndx->idx);
-+		if (!t) {
-+			WARN_ELF("elf_getscn");
-+			return -1;
-+		}
- 	}
- 
--	data->d_buf = &sym->sym;
--	data->d_size = sizeof(sym->sym);
--	data->d_align = 1;
--	data->d_type = ELF_T_SYM;
-+	for (;;) {
-+		/* get next data descriptor for the relevant sections */
-+		symtab_data = elf_getdata(s, symtab_data);
-+		if (t)
-+			shndx_data = elf_getdata(t, shndx_data);
-+
-+		/* end-of-list */
-+		if (!symtab_data) {
-+			void *buf;
-+
-+			if (idx) {
-+				/* we don't do holes in symbol tables */
-+				WARN("index out of range");
-+				return -1;
-+			}
- 
--	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
--	elf_dirty_reloc_sym(elf, sym);
-+			/* if @idx == 0, it's the next contiguous entry, create it */
-+			symtab_data = elf_newdata(s);
-+			if (t)
-+				shndx_data = elf_newdata(t);
-+
-+			buf = calloc(1, entsize);
-+			if (!buf) {
-+				WARN("malloc");
-+				return -1;
-+			}
- 
--	symtab->sh.sh_info += 1;
--	symtab->sh.sh_size += data->d_size;
--	symtab->changed = true;
-+			symtab_data->d_buf = buf;
-+			symtab_data->d_size = entsize;
-+			symtab_data->d_align = 1;
-+			symtab_data->d_type = ELF_T_SYM;
-+
-+			symtab->sh.sh_size += entsize;
-+			symtab->changed = true;
-+
-+			if (t) {
-+				shndx_data->d_buf = &sym->sec->idx;
-+				shndx_data->d_size = sizeof(Elf32_Word);
-+				shndx_data->d_align = sizeof(Elf32_Word);
-+				shndx_data->d_type = ELF_T_WORD;
- 
--	if (symtab_shndx) {
--		s = elf_getscn(elf->elf, symtab_shndx->idx);
--		if (!s) {
--			WARN_ELF("elf_getscn");
-+				symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
-+				symtab_shndx->changed = true;
-+			}
-+
-+			break;
-+		}
-+
-+		/* empty blocks should not happen */
-+		if (!symtab_data->d_size) {
-+			WARN("zero size data");
- 			return -1;
- 		}
- 
--		shndx_data = elf_newdata(s);
-+		/* is this the right block? */
-+		max_idx = symtab_data->d_size / entsize;
-+		if (idx < max_idx)
-+			break;
-+
-+		/* adjust index and try again */
-+		idx -= max_idx;
-+	}
-+
-+	/* something went side-ways */
-+	if (idx < 0) {
-+		WARN("negative index");
-+		return -1;
-+	}
-+
-+	/* setup extended section index magic and write the symbol */
-+	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
-+		sym->sym.st_shndx = shndx;
-+		if (!shndx_data)
-+			shndx = 0;
-+	} else {
-+		sym->sym.st_shndx = SHN_XINDEX;
- 		if (!shndx_data) {
--			WARN_ELF("elf_newshndx_data");
-+			WARN("no .symtab_shndx");
- 			return -1;
- 		}
-+	}
- 
--		shndx_data->d_buf = &sym->sec->idx;
--		shndx_data->d_size = sizeof(Elf32_Word);
--		shndx_data->d_align = 4;
--		shndx_data->d_type = ELF_T_WORD;
--
--		symtab_shndx->sh.sh_size += 4;
--		symtab_shndx->changed = true;
-+	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
-+		WARN_ELF("gelf_update_symshndx");
-+		return -1;
- 	}
- 
--	return first_non_local;
-+	return 0;
- }
- 
- static struct symbol *
- elf_create_section_symbol(struct elf *elf, struct section *sec)
- {
- 	struct section *symtab, *symtab_shndx;
--	Elf_Data *shndx_data = NULL;
--	struct symbol *sym;
--	Elf32_Word shndx;
-+	Elf32_Word first_non_local, new_idx;
-+	struct symbol *sym, *old;
- 
- 	symtab = find_section_by_name(elf, ".symtab");
- 	if (symtab) {
- 		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
--		if (symtab_shndx)
--			shndx_data = symtab_shndx->data;
- 	} else {
- 		WARN("no .symtab");
- 		return NULL;
- 	}
- 
--	sym = malloc(sizeof(*sym));
-+	sym = calloc(1, sizeof(*sym));
- 	if (!sym) {
- 		perror("malloc");
- 		return NULL;
- 	}
--	memset(sym, 0, sizeof(*sym));
--
--	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
--	if (sym->idx < 0) {
--		WARN("elf_move_global_symbol");
--		return NULL;
--	}
- 
- 	sym->name = sec->name;
- 	sym->sec = sec;
-@@ -710,24 +753,41 @@ elf_create_section_symbol(struct elf *el
- 	// st_other 0
- 	// st_value 0
- 	// st_size 0
--	shndx = sec->idx;
--	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
--		sym->sym.st_shndx = shndx;
--		if (!shndx_data)
--			shndx = 0;
--	} else {
--		sym->sym.st_shndx = SHN_XINDEX;
--		if (!shndx_data) {
--			WARN("no .symtab_shndx");
-+
-+	/*
-+	 * Move the first global symbol, as per sh_info, into a new, higher
-+	 * symbol index. This fees up a spot for a new local symbol.
-+	 */
-+	first_non_local = symtab->sh.sh_info;
-+	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
-+	old = find_symbol_by_index(elf, first_non_local);
-+	if (old) {
-+		old->idx = new_idx;
-+
-+		hlist_del(&old->hash);
-+		elf_hash_add(symbol, &old->hash, old->idx);
-+
-+		elf_dirty_reloc_sym(elf, old);
-+
-+		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
-+			WARN("elf_update_symbol move");
- 			return NULL;
- 		}
-+
-+		new_idx = first_non_local;
- 	}
- 
--	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
--		WARN_ELF("gelf_update_symshndx");
-+	sym->idx = new_idx;
-+	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
-+		WARN("elf_update_symbol");
- 		return NULL;
- 	}
- 
-+	/*
-+	 * Either way, we added a LOCAL symbol.
-+	 */
-+	symtab->sh.sh_info += 1;
-+
- 	elf_add_symbol(elf, sym);
- 
- 	return sym;
-
+-Sedat-
