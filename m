@@ -1,43 +1,36 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9F42C80
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652993618; x=1684529618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=prFT2V92y88ma5B9DL0iH2Zf38zaOjaulan120HspYQ=;
-  b=F8wm4uXJH1kvdEU+VA16Cljqx5xHqo4ZQmpDWsLNcd2g7rl8Exox41Mv
-   ieqoxova+xeAEpWIS2CkkWKr4NGCRxyjMHpZO4JA9uyVn6jd1etu1nQDe
-   LIL0NDCI8pW2Sd2GzP1LJX1yqhyRPPrY4d1U4v+DYlZsPyKTrLPBWUSiL
-   QXCdTMH5rDlS4a4CBe9aDmH9YHPjHKuX60v2Skmg4o+V4DE2cBJkTqtcB
-   mlwYbHlGu2hBgsVILlvSGgaYDPpl7zY2Ylvumy/5xyIfBn5TBAzgG5grI
-   3PhgM3Puy7ULZSoA84Ieiy1Mca2uyKEdzRmzDNyBCFy5OA9/CZJcKIGlw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272504350"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272504350"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:53:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="557110670"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 May 2022 13:53:35 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nrn9L-0003wO-8N;
-	Thu, 19 May 2022 20:53:35 +0000
-Date: Fri, 20 May 2022 04:52:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Ricardo Ribalda <ribalda@chromium.org>
-Subject: [hverkuil-media-tree:for-v5.20a 23/29] ERROR: modpost:
- "usb_submit_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
-Message-ID: <202205200435.65DKJk2s-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D562C80
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 20:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA3BC385AA;
+	Thu, 19 May 2022 20:57:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652993875;
+	bh=x13lgvI1NLwKjefgh/hXMZpz1ml1ACd9zj8zDJhtgss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ILD2JdyTZXM7ZphRjpyODgeNLgnu8bVwFsXmlbUD0j7AE/lNSxsr7ekXLyVE1PtCC
+	 wbhK/59K1EUVkHa1PeUCWWPpQllkNkc8hN9gr5IdYBxwvKPF+vbXyb8rfyAm6uCW/r
+	 MTpZo+wXhBfWoB0dyGOD5Vqv+TNYslfbO1evBgnh4yXW6mIgYx7E61rRR3gMk9SW59
+	 qw0BkoEmh/Mdh1fk74cuAp9Kce+StedldvEWVOlQSFBD9tw50CpfEkoc2qrVVTUUcH
+	 Ln1yE0+BB6zw0S7C4xiDQKbWjl0K979nQqP60RsQdPaQrOzgDUwXc6W68dGalemoQI
+	 8rmocEXHcASQA==
+Date: Thu, 19 May 2022 13:57:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ricky WU <ricky_wu@realtek.com>
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, Tom Rix <trix@redhat.com>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
+Message-ID: <YoavUdiAJXPqsU7Q@dev-arch.thelio-3990X>
+References: <20220516130047.3887590-1-trix@redhat.com>
+ <YoJ0I/XPoj1B/+mm@dev-arch.thelio-3990X>
+ <d34498ad-0230-7c73-8f1f-9ca59fbf930f@redhat.com>
+ <CAAd53p57APcectWW-NN_=HE6JkTQRk717cWNZ5iJcP+MtEYjog@mail.gmail.com>
+ <bab0c4250147420a842f3e966a8264a6@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,41 +39,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <bab0c4250147420a842f3e966a8264a6@realtek.com>
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.20a
-head:   e481d316b60f1d57e770f21dc5398d5dcff13ee6
-commit: 308124c0301a5258078c2ffddd03cf3fb584d792 [23/29] media: stkwebcam: deprecate driver, move to staging
-config: arm64-randconfig-r012-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200435.65DKJk2s-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.20a
-        git checkout 308124c0301a5258078c2ffddd03cf3fb584d792
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Tue, May 17, 2022 at 08:10:17AM +0000, Ricky WU wrote:
+> > -----Original Message-----
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Sent: Tuesday, May 17, 2022 9:53 AM
+> > To: Tom Rix <trix@redhat.com>
+> > Cc: Nathan Chancellor <nathan@kernel.org>; arnd@arndb.de;
+> > gregkh@linuxfoundation.org; ndesaulniers@google.com; Ricky WU
+> > <ricky_wu@realtek.com>; linux-kernel@vger.kernel.org; llvm@lists.linux.dev
+> > Subject: Re: [PATCH] misc: rtsx: Set setting_reg2 before use.
+> > 
+> > On Tue, May 17, 2022 at 1:06 AM Tom Rix <trix@redhat.com> wrote:
+> > >
+> > >
+> > > On 5/16/22 8:56 AM, Nathan Chancellor wrote:
+> > > > On Mon, May 16, 2022 at 09:00:47AM -0400, Tom Rix wrote:
+> > > >> The clang build fails with
+> > > >> rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized
+> > whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> > > >>          } else if (efuse_valid == 0) {
+> > > >>                     ^~~~~~~~~~~~~~~~
+> > > >>
+> > > >> setting_reg2 is set in this block
+> > > >>    if (efuse_valid == 2 || efuse_valid == 3) { ..
+> > > >>    } else if (efuse_valid == 0) {
+> > > >>      // default
+> > > >> ..
+> > > >>    }
+> > > >> But efuse_valid can also have a value of 1.
+> > > >> Change the 'else if' to 'else' to make the second block the default.
+> > > >>
+> > > >> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
+> > > >> Signed-off-by: Tom Rix <trix@redhat.com>
+> > > > I am not sure if this fix is correct from a functional standpoint (i.e.
+> > > > is treating efuse_valid == 1 the same as efuse_valid == 0 correct?)
+> > > > but it is better than not handling this value altogether. For what
+> > > > it's
+> > > > worth:
+> > >
+> > > I looked at how the code used to work, this seemed better than
+> > > initializing to NULL.
+> > 
+> > Or maybe use a single if block?
+> > 
+> > u16 setting_reg1 =PCR_SETTING_REG1 , setting_reg2 =
+> > PCR_SETTING_REG2; ...
+> > if ((efuse_valid == 2 || efuse_valid == 3) && (valid != 3) {
+> >     setting_reg1 = PCR_SETTING_REG4;
+> >     setting_reg2 = PCR_SETTING_REG5;
+> > }
+> > 
+> > Kai-Heng
+> > 
+> > >
+> > > >
+> > > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > >
+> > > > As a side note, it is unfortunate that this change made it into
+> > > > -next when there was an outstanding report about this warning:
+> > >
+> > >  From the clang side, this is a build break and my static analysis
+> > > infra goes down.
+> > >
+> > > These build breaks seem to happening every week, is there a precommit
+> > > clang gating test that could be done for -next ?
+> > >
+> > > Tom
+> > >
+> > > >
+> > > > https://lore.kernel.org/202205100220.WyAyhKap-lkp@intel.com/
+> > > >
+> > > >> ---
+> > > >>   drivers/misc/cardreader/rts5261.c | 2 +-
+> > > >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >>
+> > > >> diff --git a/drivers/misc/cardreader/rts5261.c
+> > > >> b/drivers/misc/cardreader/rts5261.c
+> > > >> index 749cc5a46d13..f22634b14dc8 100644
+> > > >> --- a/drivers/misc/cardreader/rts5261.c
+> > > >> +++ b/drivers/misc/cardreader/rts5261.c
+> > > >> @@ -403,7 +403,7 @@ static void rts5261_init_from_hw(struct rtsx_pcr
+> > *pcr)
+> > > >>                      setting_reg1 = PCR_SETTING_REG4;
+> > > >>                      setting_reg2 = PCR_SETTING_REG5;
+> > > >>              }
+> > > >> -    } else if (efuse_valid == 0) {
+> > > >> +    } else {
+> > > >>              // default
+> > > >>              setting_reg1 = PCR_SETTING_REG1;
+> > > >>              setting_reg2 = PCR_SETTING_REG2;
+> 
+> Sorry for the trouble 
+> here can be changed to 
+> ...
+> } else if (efuse_valid == 0) {
+> 		// default
+> 		setting_reg1 = PCR_SETTING_REG1;
+> 		setting_reg2 = PCR_SETTING_REG2;
+> } else {
+>  return;
+> }
+> Because other values are invalid
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Tom, were you going to send a v2 of this?
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "usb_submit_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_set_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_free_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_kill_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_alloc_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_autopm_put_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_autopm_get_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_put_dev" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_put_intf" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_get_intf" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
-WARNING: modpost: suppressed 4 unresolved symbol warnings because there were too many)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
