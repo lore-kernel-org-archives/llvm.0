@@ -1,189 +1,114 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B020046A1
-	for <llvm@lists.linux.dev>; Wed, 18 May 2022 22:38:32 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id a23so4169095ljd.9
-        for <llvm@lists.linux.dev>; Wed, 18 May 2022 15:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
-        b=DBCDYEj9O79QGw1FqBTNKBN+UG/9b8MI+aWVV/QwexN4gbJ2Amb3SPW+GCbUY5i3+N
-         SgYOwJHat25fpLjb6YVNE2HgjKIRAfAC09GzTJhO8vnLvQa+7yhkGDObb4amXFRV1Kyw
-         +Cw+laGn/BdFpRqa7l8fZp9kbEtzow+apOaSmIEp4/S+6l/SK6aCTFPHQwQDhWe9mY8D
-         Md2X1lcXvFI6DY3j8QVa0t7FPC9yHcAdGEwIxC/cjgZaMcT4mRr41hc6BU9r2FO8zojX
-         nsum4g2gea72U9JYJVhZdK/3nJIIKkAH8NO3jVj8DR+RTBDjtSlKAdY0KKnyeWNDnBaA
-         NVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
-        b=0DNVJWk7LOx9EFGDYm22vLJkMwqPDTsVXV1ezYWSjoOODvYftkn0fKiCAejrbQhxXv
-         sldLWgWZwrIXxuYGJ39l5u0n49vEp/UcpybCFl2s4SGTO4RfMWPD07WRtn0rzHATkwTe
-         fJohWmOYm6YWKFiFWhStHDX+jCd1RKZ+EkBYeIVcDO+zHRyhLQLesngPf5bfa7TtlhJ9
-         w3U5oeGlC8L3Ak5HShzYr3Hr7ZRLlbeJdid1P9dqOFN1vJgvQdVzBIOmCmyt/gvrBUGt
-         4n5WHL8RBL+B3ArLfObU/z4OWu6x/zl8DSvaXWIxHn+j7gCQSEOsGRRZsVk4b8KZxvx1
-         Dbhg==
-X-Gm-Message-State: AOAM531ccBrXf3yeD5L6L2nfYsyLhsJ5TvBAjwD6D/AkR9bHcRGLdpHn
-	7JtYjlk6BKaHOy3cRmh5LHCzg9EO+MnztfckvPF4Vw==
-X-Google-Smtp-Source: ABdhPJxIvkMHr6Wdqc9RtIs7R9Iciobl7SAFqpROG3q5kajc4MrpS/iRKSLKPONXjr32ZMmvkbRxQg1q/DnFVMkdTfY=
-X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
- x8-20020a2ea7c8000000b0024f700a4df5mr916472ljp.472.1652913510399; Wed, 18 May
- 2022 15:38:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FA31FB8
+	for <llvm@lists.linux.dev>; Thu, 19 May 2022 02:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652928166; x=1684464166;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l6xV8ekPzx3Yt2dpmJfC+atg0RJvwErhgJl3h4CHsSg=;
+  b=JJBkSGywY02q4Oa9e7mvgWh1DbVJqrAvs1BSxABhtKt8E4ti8j0AmIc4
+   w4I9JpRIj0nU8C8+NytoQcU7tOuwjLs343V5NhzgcrSDSB/yFgHKEXczG
+   Zry6GAzvcN0Bbw3zcgJSRoQlbErSIjYRjoDPFGVWrnXLtIRcFoUexbIac
+   P1mY9oQH76hTO8UZc4XfbQAdcfTq1BNRuq4D0GZP3XMjdidO74iRzYRjx
+   G6vk+3LbWFQeTw3yFeXUfA5qaikfkVzm5c6CuSCuwMy5xSTRKCqV0H7dg
+   DL4sGvS4lKeZzfvFG7TrSIKTguDsdX1ZxGg8EelULsdsYH88tw3MY1S+3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271941854"
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="271941854"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 19:42:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="545836026"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2022 19:42:44 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nrW7f-0002xn-4X;
+	Thu, 19 May 2022 02:42:43 +0000
+Date: Thu, 19 May 2022 10:42:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uros Bizjak <ubizjak@gmail.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] KVM: VMX: Use try_cmpxchg64 in pi_try_set_control
+Message-ID: <202205191028.PcCtw7Xz-lkp@intel.com>
+References: <20220518134550.2358-1-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220516210954.1660716-5-ndesaulniers@google.com> <202205180917.RNpZaxIl-lkp@intel.com>
-In-Reply-To: <202205180917.RNpZaxIl-lkp@intel.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 18 May 2022 15:38:18 -0700
-Message-ID: <CAKwvOdmkd2PxvMUZA=A-72eATGDZkqDj--Bv1W+Xt_K_LWdROA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] ARM: pass -march= only to compiler
-To: David Spickett <david.spickett@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Russell King <rmk+kernel@armlinux.org.uk>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518134550.2358-1-ubizjak@gmail.com>
 
-Lore thread, for context:
-https://lore.kernel.org/llvm/20220516210954.1660716-1-ndesaulniers@google.com/
+Hi Uros,
 
-On Tue, May 17, 2022 at 6:26 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Nick,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on 0ac824f379fba2c2b17b75fd5ada69cd68c66348]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
-> base:   0ac824f379fba2c2b17b75fd5ada69cd68c66348
-> config: arm-randconfig-r026-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180917.RNpZaxIl-lkp@intel.com/config)
+Thank you for the patch! Yet something to improve:
 
-^ looks like this is a THUMB2 build.
+[auto build test ERROR on kvm/master]
+[also build test ERROR on mst-vhost/linux-next linux/master linus/master v5.18-rc7 next-20220518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/6da98100eed87e4316be5ec584fe415134f25a3e
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
->         git checkout 6da98100eed87e4316be5ec584fe415134f25a3e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> arch/arm/crypto/poly1305-core.S:16:1: error: target does not support ARM mode
->    .code 32
->    ^
+url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220519/202205191028.PcCtw7Xz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
+        git checkout 2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-It looks like arch/arm/crypto/poly1305-core.S has a preprocessor guard
-for __thumb2__.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-My change changes the command line from:
+All errors (new ones prefixed by >>):
 
-from:
-$(CC) ... -march=armv7-m ...
-to:
-$(CC ... -Wa,-march=armv7-m ...
-
-(where ... contains `-mthumb -Wa,-mthumb` for BOTH).
-
-$ arm-linux-gnueabi-gcc -march=armv7-m -mthumb -dM -E - < /dev/null | grep thumb
-#define __thumb2__ 1
-#define __thumb__ 1
-$ arm-linux-gnueabi-gcc -Wa,-march=armv7-m -mthumb -dM -E - <
-/dev/null | grep thumb
-#define __thumb__ 1
-$ clang --target=arm-linux-gnueabi -march=armv7-m -mthumb -dM -E - <
-/dev/null | grep thumb
-#define __thumb2__ 1
-#define __thumb__ 1
-$ clang --target=arm-linux-gnueabi -Wa,-march=armv7-m -mthumb -dM -E -
-< /dev/null | grep thumb
-#define __thumb__ 1
-$
-
-(so it seems that the preprocessor definition of `__thumb2__` is
-dependent on `-march=`, not `-Wa,-march=`).
-
-David, we might have a very subtle bug in clang:
-
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -x assembler-with-cpp
--Wunused-command-line-argument - < /dev/null -dM -E
-<prints a bunch of preprocessor defines, but no instance of
--Wunused-command-line-argument>
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -x assembler-with-cpp
--Wunused-command-line-argument - < /dev/null -dM -c
-clang-15: warning: argument unused during compilation:
-'-march=armv7-m' [-Wunused-command-line-argument]
-
-That seems weird because -c vs -E have different behaviors regarding
--Wunused-command-line-argument, and it seems like for `-x
-assembler-with-cpp` that the -march= flag without -Wa, prefix *is*
-expected to control the behavior of certain preprocessor defines like
-`__thumb2__`.
-
-Perhaps a more straightforward test case:
-```asm
-@ x.S
-@ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m \
-@   -Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
-.syntax unified
-.text
-foo:
-  movs r0, #__thumb2__
-```
-
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
-clang-15: warning: argument unused during compilation:
-'-march=armv7-m' [-Wunused-command-line-argument]
-
-$ llvm-objdump -dr x.o | tail -n 2
-00000000 <foo>:
-       0: 01 20        movs r0, #1
-
-Obviously that warning about `-Wunused-command-line-argument` is
-incorrect; the value of `__thumb2__` comes from the preprocessor and
-is controlled by `-march=armv7-m`. It can't be simultaneously "unused"
-and used to define particular preprocessor directives.
-
-Using the above command line invocation without `-march=armv7-m`
-produces the assembler-time failure:
-/tmp/x-03ab60.s:10:3: error: unsupported relocation on symbol
-  movs r0, #__thumb2__
-  ^
-because __thumb2__ is not defined.
-
-(perhaps `#ifundef __thumb2__ #error "oops" #endif` would be simpler yet).
+>> arch/x86/kvm/vmx/posted_intr.c:45:7: error: call to undeclared function 'try_cmpxchg64'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!try_cmpxchg64(&pi_desc->control, pold, new))
+                ^
+   arch/x86/kvm/vmx/posted_intr.c:45:7: note: did you mean '__cmpxchg64'?
+   arch/x86/include/asm/cmpxchg_32.h:47:19: note: '__cmpxchg64' declared here
+   static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
+                     ^
+   1 error generated.
 
 
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
+vim +/try_cmpxchg64 +45 arch/x86/kvm/vmx/posted_intr.c
 
+    36	
+    37	static int pi_try_set_control(struct pi_desc *pi_desc, u64 *pold, u64 new)
+    38	{
+    39		/*
+    40		 * PID.ON can be set at any time by a different vCPU or by hardware,
+    41		 * e.g. a device.  PID.control must be written atomically, and the
+    42		 * update must be retried with a fresh snapshot an ON change causes
+    43		 * the cmpxchg to fail.
+    44		 */
+  > 45		if (!try_cmpxchg64(&pi_desc->control, pold, new))
+    46			return -EBUSY;
+    47	
+    48		return 0;
+    49	}
+    50	
 
---
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
