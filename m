@@ -1,265 +1,181 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AF315A8
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 08:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8519317C3
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 09:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653036031; x=1684572031;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=lalRxZn8yU9NsEB9QGMI/xVt/SbTAjPPWuzDHmsG7A4=;
-  b=eOiuu5Wernmap4Dedyv2j4W57IvTSkSMMwPuaXG+FNqAe4p2rIjYjrEv
-   61t4CeSzcQoNwKl+5nfaLze/8Xk0bQkVziGF9rsZbR/ZVevPacjciTHA6
-   BEPbz3+nUVVJNBlqJoQWBmkBuldQAIT9bgqTGcXf6tW1C1vozeMJluxTI
-   n8+OGDx7zggpsJ/pMy40740pOKbnzfiqjomxBj2xz+Ug/LP9mlnN9EsdU
-   TKobORvUjlfQhS/k0w7YeSA0RVkvbvM+FXqX4Q0EhcHCfKOIW8wdv4KgE
-   ZRsJIk6Du+4SBcURPXqAv08LnMtYQrmANrFDCwahcZ5+rzwhFESTWq+Ub
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272668609"
+  t=1653038138; x=1684574138;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZfuSkAOFPzT7Yq96d+tGz0uFUcIEUKXPQZTW7LoRwi8=;
+  b=Y8FE3cnjPuOIURwDbRYt0WM3q2z80jTojsCKt3Fz82gwLDs/6rCDruuo
+   sNSMjGheBYzs81RCTt4n33ccU36aDwjefJKDN2wApaXQXR/oedTs9CuSQ
+   01yA2X4nr1OPR8Q/fKS5X+u51b+zqlvvIkZyRhyX0u18QyO2PB+V2X2Rg
+   /R8cRS0W4kIDkKDSmXNsthT5i1qTz1wtw8Kmdk5roMoAR0Rp4eWiw8p3r
+   xYYa6F6teY++KtYS/pEvgady8cJ21I4YJ3WkloDsyPDjOkS3eG+FVt0KE
+   e0LTDbERLvon+d0tj/bmB+3fTkwDZRFCLaXJ8LmnpmsDrsNY+j2ECu7C6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="260130062"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272668609"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 01:40:30 -0700
+   d="scan'208";a="260130062"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 02:15:37 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="570706394"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.242]) ([10.255.28.242])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 01:40:28 -0700
-Subject: Re: [PATCH net-next 10/10] inet: add READ_ONCE(sk->sk_bound_dev_if)
- in INET_MATCH()
-To: Eric Dumazet <edumazet@google.com>, kernel test robot <lkp@intel.com>
-Cc: Eric Dumazet <eric.dumazet@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, netdev <netdev@vger.kernel.org>
-References: <20220511233757.2001218-11-eric.dumazet@gmail.com>
- <202205122132.HUrst9JA-lkp@intel.com>
- <CANn89i+kG-2uW+7iqqVjJN8Q+bZF82f+4qONsmg+4zuW+qj0Ug@mail.gmail.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <7bc3a332-10f7-4a31-33ce-7507a2791bf3@intel.com>
-Date: Fri, 20 May 2022 16:40:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+   d="scan'208";a="524560779"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 20 May 2022 02:15:36 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nryjQ-0004Xr-19;
+	Fri, 20 May 2022 09:15:36 +0000
+Date: Fri, 20 May 2022 17:15:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH] netfs: Fix gcc-12 warning by embedding vfs inode in
+ netfs_i_context
+Message-ID: <202205201704.QywgxU3d-lkp@intel.com>
+References: <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CANn89i+kG-2uW+7iqqVjJN8Q+bZF82f+4qONsmg+4zuW+qj0Ug@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
+
+Hi David,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on ceph-client/for-linus]
+[also build test ERROR on cifs/for-next linus/master v5.18-rc7]
+[cannot apply to kees/for-next/pstore next-20220519]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Howells/netfs-Fix-gcc-12-warning-by-embedding-vfs-inode-in-netfs_i_context/20220519-214842
+base:   https://github.com/ceph/ceph-client.git for-linus
+config: riscv-buildonly-randconfig-r003-20220519 (https://download.01.org/0day-ci/archive/20220520/202205201704.QywgxU3d-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c6351083b2bff7647113155cb6dd3ee7ed32ced5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Howells/netfs-Fix-gcc-12-warning-by-embedding-vfs-inode-in-netfs_i_context/20220519-214842
+        git checkout c6351083b2bff7647113155cb6dd3ee7ed32ced5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/cifs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from fs/cifs/fscache.c:9:
+   In file included from fs/cifs/fscache.h:12:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/cifs/fscache.c:9:
+   In file included from fs/cifs/fscache.h:12:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/cifs/fscache.c:9:
+   In file included from fs/cifs/fscache.h:12:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> fs/cifs/fscache.c:106:9: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+           cifsi->netfs_ctx.cache =
+           ~~~~~  ^
+   fs/cifs/fscache.c:134:10: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+                   cifsi->netfs_ctx.cache = NULL;
+                   ~~~~~  ^
+   7 warnings and 2 errors generated.
 
 
+vim +106 fs/cifs/fscache.c
 
-On 5/13/2022 12:13 AM, Eric Dumazet wrote:
-> On Thu, May 12, 2022 at 6:16 AM kernel test robot <lkp@intel.com> wrote:
->>
->> Hi Eric,
->>
->> I love your patch! Perhaps something to improve:
->>
->> [auto build test WARNING on net-next/master]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-add-annotations-for-sk-sk_bound_dev_if/20220512-073914
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b57c7e8b76c646cf77ce4353a779a8b781592209
->> config: hexagon-randconfig-r035-20220512 (https://download.01.org/0day-ci/archive/20220512/202205122132.HUrst9JA-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://github.com/intel-lab-lkp/linux/commit/c92cfd9f3ecb483ff055edb02f7498494b96ba68
->>          git remote add linux-review https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review Eric-Dumazet/net-add-annotations-for-sk-sk_bound_dev_if/20220512-073914
->>          git checkout c92cfd9f3ecb483ff055edb02f7498494b96ba68
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv4/
-> 
-> Thank you for the instructions.
-> Unfortunately this is failing for me.
+402cb8dda949d9 David Howells    2018-04-04   96  
+70431bfd825d9c David Howells    2020-11-17   97  void cifs_fscache_get_inode_cookie(struct inode *inode)
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05   98  {
+70431bfd825d9c David Howells    2020-11-17   99  	struct cifs_fscache_inode_coherency_data cd;
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  100  	struct cifsInodeInfo *cifsi = CIFS_I(inode);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  101  	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+96daf2b09178d8 Steve French     2011-05-27  102  	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  103  
+c6351083b2bff7 David Howells    2022-05-19  104  	cifs_fscache_fill_coherency(&cifsi->nic.inode, &cd);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  105  
+bc899ee1c898e5 David Howells    2021-06-29 @106  	cifsi->netfs_ctx.cache =
+70431bfd825d9c David Howells    2020-11-17  107  		fscache_acquire_cookie(tcon->fscache, 0,
+70431bfd825d9c David Howells    2020-11-17  108  				       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+70431bfd825d9c David Howells    2020-11-17  109  				       &cd, sizeof(cd),
+c6351083b2bff7 David Howells    2022-05-19  110  				       i_size_read(&cifsi->nic.inode));
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  111  }
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  112  
 
-Hi Eric,
-
-Can you share the problem you met？
-
-Best Regards,
-Rong Chen
-
-> 
-> I have tested ARCH=i386 before sending the series, I am not sure what
-> the issue is for ARCH=hexagon and the cross compiler.
-> 
-> Maybe __always_unused is not yet understood for this combination.
-> 
-> It might be the time to just use __addrpair even on 32bit arches...
-> 
-> Then we can remove saddr,daddr args from INET_MATCH()
-> 
-> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-> index 5d3fa071d754601149c9ad0dd559f074ac58deaa..34ddb54506dd02e702dd20cbe8b7dba006130c5a
-> 100644
-> --- a/include/net/inet_hashtables.h
-> +++ b/include/net/inet_hashtables.h
-> @@ -295,7 +295,6 @@ static inline struct sock
-> *inet_lookup_listener(struct net *net,
->          ((__force __portpair)(((__u32)(__dport) << 16) | (__force
-> __u32)(__be16)(__sport)))
->   #endif
-> 
-> -#if (BITS_PER_LONG == 64)
->   #ifdef __BIG_ENDIAN
->   #define INET_ADDR_COOKIE(__name, __saddr, __daddr) \
->          const __addrpair __name = (__force __addrpair) ( \
-> @@ -325,30 +324,6 @@ static inline bool INET_MATCH(const struct sock
-> *sk, struct net *net,
->          bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
->          return bound_dev_if == dif || bound_dev_if == sdif;
->   }
-> -#else /* 32-bit arch */
-> -#define INET_ADDR_COOKIE(__name, __saddr, __daddr) \
-> -       const int __name __deprecated __always_unused
-> -
-> -static inline bool INET_MATCH(const struct sock *sk, struct net *net,
-> -                             const __addrpair __always_unused cookie,
-> -                             const __be32 saddr,
-> -                             const __be32 daddr,
-> -                             const __portpair ports,
-> -                             const int dif,
-> -                             const int sdif)
-> -{
-> -       int bound_dev_if;
-> -
-> -       if (!net_eq(sock_net(sk), net) ||
-> -           sk->sk_portpair != ports ||
-> -           sk->sk_daddr != saddr ||
-> -           sk->sk_rcv_saddr != daddr)
-> -               return false;
-> -
-> -       bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
-> -       return bound_dev_if == dif || bound_dev_if == sdif;
-> -}
-> -#endif /* 64-bit arch */
-> 
-> 
-> I will cook a small patch to simplify INET_MATCH(), then if/when
-> merged, I will resend the pach series about sk_bound_dev_if.
-> 
-> Thanks.
-> 
-> 
-> 
-> 
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> net/ipv4/inet_hashtables.c:413:34: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
->>                     if (likely(INET_MATCH(sk, net, acookie,
->>                                                    ^~~~~~~
->>     include/linux/compiler.h:77:40: note: expanded from macro 'likely'
->>     # define likely(x)      __builtin_expect(!!(x), 1)
->>                                                 ^
->>     net/ipv4/inet_hashtables.c:398:2: note: variable 'acookie' is declared here
->>             INET_ADDR_COOKIE(acookie, saddr, daddr);
->>             ^
->>     include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
->>             const int __name __deprecated __always_unused
->>             ^
->>     net/ipv4/inet_hashtables.c:468:35: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
->>                     if (likely(INET_MATCH(sk2, net, acookie,
->>                                                     ^~~~~~~
->>     include/linux/compiler.h:77:40: note: expanded from macro 'likely'
->>     # define likely(x)      __builtin_expect(!!(x), 1)
->>                                                 ^
->>     net/ipv4/inet_hashtables.c:452:2: note: variable 'acookie' is declared here
->>             INET_ADDR_COOKIE(acookie, saddr, daddr);
->>             ^
->>     include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
->>             const int __name __deprecated __always_unused
->>             ^
->>     net/ipv4/inet_hashtables.c:535:38: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
->>                             if (unlikely(INET_MATCH(esk, net, acookie,
->>                                                               ^~~~~~~
->>     include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
->>     # define unlikely(x)    __builtin_expect(!!(x), 0)
->>                                                 ^
->>     net/ipv4/inet_hashtables.c:529:2: note: variable 'acookie' is declared here
->>             INET_ADDR_COOKIE(acookie, sk->sk_daddr, sk->sk_rcv_saddr);
->>             ^
->>     include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
->>             const int __name __deprecated __always_unused
->>             ^
->>     3 warnings generated.
->> --
->>>> net/ipv4/udp.c:2566:27: warning: variable 'acookie' is uninitialized when used here [-Wuninitialized]
->>                     if (INET_MATCH(sk, net, acookie, rmt_addr,
->>                                             ^~~~~~~
->>     net/ipv4/udp.c:2561:2: note: variable 'acookie' is declared here
->>             INET_ADDR_COOKIE(acookie, rmt_addr, loc_addr);
->>             ^
->>     include/net/inet_hashtables.h:330:2: note: expanded from macro 'INET_ADDR_COOKIE'
->>             const int __name __deprecated __always_unused
->>             ^
->>     1 warning generated.
->>
->>
->> vim +/acookie +413 net/ipv4/inet_hashtables.c
->>
->> 2c13270b441054 Eric Dumazet     2015-03-15  391
->> c67499c0e77206 Pavel Emelyanov  2008-01-31  392  struct sock *__inet_lookup_established(struct net *net,
->> c67499c0e77206 Pavel Emelyanov  2008-01-31  393                                   struct inet_hashinfo *hashinfo,
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  394                                   const __be32 saddr, const __be16 sport,
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  395                                   const __be32 daddr, const u16 hnum,
->> 3fa6f616a7a4d0 David Ahern      2017-08-07  396                                   const int dif, const int sdif)
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  397  {
->> c7228317441f4d Joe Perches      2014-05-13  398         INET_ADDR_COOKIE(acookie, saddr, daddr);
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  399         const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  400         struct sock *sk;
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  401         const struct hlist_nulls_node *node;
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  402         /* Optimize here for direct hit, only listening connections can
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  403          * have wildcards anyways.
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  404          */
->> 9f26b3add3783c Pavel Emelyanov  2008-06-16  405         unsigned int hash = inet_ehashfn(net, daddr, hnum, saddr, sport);
->> f373b53b5fe67a Eric Dumazet     2009-10-09  406         unsigned int slot = hash & hashinfo->ehash_mask;
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  407         struct inet_ehash_bucket *head = &hashinfo->ehash[slot];
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  408
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  409  begin:
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  410         sk_nulls_for_each_rcu(sk, node, &head->chain) {
->> ce43b03e888947 Eric Dumazet     2012-11-30  411                 if (sk->sk_hash != hash)
->> ce43b03e888947 Eric Dumazet     2012-11-30  412                         continue;
->> ce43b03e888947 Eric Dumazet     2012-11-30 @413                 if (likely(INET_MATCH(sk, net, acookie,
->> 3fa6f616a7a4d0 David Ahern      2017-08-07  414                                       saddr, daddr, ports, dif, sdif))) {
->> 41c6d650f6537e Reshetova, Elena 2017-06-30  415                         if (unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->> 05dbc7b59481ca Eric Dumazet     2013-10-03  416                                 goto out;
->> ce43b03e888947 Eric Dumazet     2012-11-30  417                         if (unlikely(!INET_MATCH(sk, net, acookie,
->> 3fa6f616a7a4d0 David Ahern      2017-08-07  418                                                  saddr, daddr, ports,
->> 3fa6f616a7a4d0 David Ahern      2017-08-07  419                                                  dif, sdif))) {
->> 05dbc7b59481ca Eric Dumazet     2013-10-03  420                                 sock_gen_put(sk);
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  421                                 goto begin;
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  422                         }
->> 05dbc7b59481ca Eric Dumazet     2013-10-03  423                         goto found;
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  424                 }
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  425         }
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  426         /*
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  427          * if the nulls value we got at the end of this lookup is
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  428          * not the expected one, we must restart lookup.
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  429          * We probably met an item that was moved to another chain.
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  430          */
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  431         if (get_nulls_value(node) != slot)
->> 3ab5aee7fe840b Eric Dumazet     2008-11-16  432                 goto begin;
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  433  out:
->> 05dbc7b59481ca Eric Dumazet     2013-10-03  434         sk = NULL;
->> 05dbc7b59481ca Eric Dumazet     2013-10-03  435  found:
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  436         return sk;
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  437  }
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  438  EXPORT_SYMBOL_GPL(__inet_lookup_established);
->> 77a5ba55dab7b4 Pavel Emelyanov  2007-12-20  439
->>
->> --
->> 0-DAY CI Kernel Test Service
->> https://01.org/lkp
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
