@@ -1,130 +1,109 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349217A
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 13:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653052190; x=1684588190;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JYvA0BL6yB7SFLBfiv6pDy7n04oHm5chtGpJPdO8AMI=;
-  b=jjE4EABKqw3zg5ZVIscj4d0pJ3F3nYrObuotZOp9PxjraFX91YwTN28T
-   7yGIixAV5QCmnolAbrPqN2PsDosrIwMAizjf70clwKnKGT2/lcQxZUOrB
-   JltDj6RRI4u8jOyXe7Ho79jD2Yx20PRUCwsqPgMM+8dygoCUFQTUQjIeO
-   rzECh79vAlMjclZXNSqAfpiBQlDq5+NafuA5+kTVYRd93v/g5bkYnspzX
-   9JU+D2XZCtc+syOqvsf+BHFsFHFgDzpnxuRlnRrC4zo9OZyEO4nZ5c1Ze
-   Ruw+En+t84srhwkja/ojnqT1mE84Ty4+wb5PrGDXd/q45F3caHMmlkwRY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="270184298"
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="270184298"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 06:09:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="715526492"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 20 May 2022 06:09:45 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ns2O0-0004ii-Lb;
-	Fri, 20 May 2022 13:09:44 +0000
-Date: Fri, 20 May 2022 21:08:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, djwong@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] xfs: Remove the redundant assignment
-Message-ID: <202205202134.P3H4KQ7S-lkp@intel.com>
-References: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48CE7A
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 13:17:36 +0000 (UTC)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f83983782fso86843697b3.6
+        for <llvm@lists.linux.dev>; Fri, 20 May 2022 06:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DcB1zlqvD0ic5dHg+T25IYpQK53YYAb6GQPicG711bg=;
+        b=MC1PMrseH0OxjpwmhAcX/GaEsapXbnhc6GVvhC9tV6NEJZlNCnTBEFbA7FBMeo85A1
+         mpg/s4BR7IuFVe4qWQLnlgsyWJC0DKbHJAhzsuS2l5xKjbGEHWcSnYQrtbIPX3AU3YAr
+         mS+oYTuPZuvpTrlP4F/k1+agSsOYonddlEtFR0Ye5an0FGYXOnRGXpix5wzoW2tnN+mF
+         7c03soZcVj/X6qKj9zo2Vo7WFDP2BJJVwBA5UkPsaNoXMCat009MmKAGl7xrGz+GoEiw
+         jcPRQrxXsuUMD8BM1+OeWjuSBvz8R64rRlnIpAh5vGQda/y2bTuYoH2abtA9Z6+mb54I
+         /8Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DcB1zlqvD0ic5dHg+T25IYpQK53YYAb6GQPicG711bg=;
+        b=q119qulV36gYfrMb+HscBXGqPmH8nepmEg5GRCiGfMjvCIKSl/Ba8Emdl6tVb2YbpW
+         eNtDEtEAE5mRFz13paZal9a01muligRffZ8kw1elUxAepw37tMOTlkEWrj1ytE62I1uM
+         iQWOCAV+CZDmrgXA6IhWSYkAZoLR7b19KCufdO9F3isMeY2URFu1U6B8vgICus1wIX1p
+         RQtORn6bffdEHtDCcKKjkcpuq+GhXTABkftIWc15TBC/oLpMLJaMEXF4MxLP2Z02srDH
+         bIYp9qpMLaebgxnRHCJqKDh8wnNxzRDEc+VF9YOzhcPyRSKVhKJbJtvx9tR20WjkRt/A
+         w8Cg==
+X-Gm-Message-State: AOAM5312mRqFrM3MjuSEgFWMNxLGEodQpCsQTxoKDQxzqaetWmXmMEou
+	K8jblwqnlEXaK9YeKopb3Z+mxXXnVH2vKaPPXRa6eQ==
+X-Google-Smtp-Source: ABdhPJy4ave1qred1HSociKbyiDNRS2gm4U7Lbzq9ogIgZs7jaoWZK1yaa1TvirK7fO6aHUq8/nc+fOu7W05SYR8FGA=
+X-Received: by 2002:a0d:e888:0:b0:2ff:54e:8cf4 with SMTP id
+ r130-20020a0de888000000b002ff054e8cf4mr9989471ywe.489.1653052655558; Fri, 20
+ May 2022 06:17:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
+References: <20220511233757.2001218-11-eric.dumazet@gmail.com>
+ <202205122132.HUrst9JA-lkp@intel.com> <CANn89i+kG-2uW+7iqqVjJN8Q+bZF82f+4qONsmg+4zuW+qj0Ug@mail.gmail.com>
+ <7bc3a332-10f7-4a31-33ce-7507a2791bf3@intel.com>
+In-Reply-To: <7bc3a332-10f7-4a31-33ce-7507a2791bf3@intel.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 20 May 2022 06:17:24 -0700
+Message-ID: <CANn89i+Tdm-J1b1P7A1MZQVvmnq0hKRjaRYgHGbn8bmnLkxnAg@mail.gmail.com>
+Subject: Re: [PATCH net-next 10/10] inet: add READ_ONCE(sk->sk_bound_dev_if)
+ in INET_MATCH()
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Eric Dumazet <eric.dumazet@gmail.com>, 
+	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jiapeng,
+On Fri, May 20, 2022 at 1:40 AM Chen, Rong A <rong.a.chen@intel.com> wrote:
+>
+>
+>
+> On 5/13/2022 12:13 AM, Eric Dumazet wrote:
+> > On Thu, May 12, 2022 at 6:16 AM kernel test robot <lkp@intel.com> wrote=
+:
+> >>
+> >> Hi Eric,
+> >>
+> >> I love your patch! Perhaps something to improve:
+> >>
+> >> [auto build test WARNING on net-next/master]
+> >>
+> >> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/ne=
+t-add-annotations-for-sk-sk_bound_dev_if/20220512-073914
+> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next=
+.git b57c7e8b76c646cf77ce4353a779a8b781592209
+> >> config: hexagon-randconfig-r035-20220512 (https://download.01.org/0day=
+-ci/archive/20220512/202205122132.HUrst9JA-lkp@intel.com/config)
+> >> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1=
+8dd123c56754edf62c7042dcf23185c3727610f)
+> >> reproduce (this is a W=3D1 build):
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # https://github.com/intel-lab-lkp/linux/commit/c92cfd9f3ecb4=
+83ff055edb02f7498494b96ba68
+> >>          git remote add linux-review https://github.com/intel-lab-lkp/=
+linux
+> >>          git fetch --no-tags linux-review Eric-Dumazet/net-add-annotat=
+ions-for-sk-sk_bound_dev_if/20220512-073914
+> >>          git checkout c92cfd9f3ecb483ff055edb02f7498494b96ba68
+> >>          # save the config file
+> >>          mkdir build_dir && cp config build_dir/.config
+> >>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash net/ipv4/
+> >
+> > Thank you for the instructions.
+> > Unfortunately this is failing for me.
+>
+> Hi Eric,
+>
+> Can you share the problem you met=EF=BC=9F
 
-Thank you for the patch! Perhaps something to improve:
+It seems the problem has disappeared on the host where I retried the
+recipe this morning.
 
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on v5.18-rc7 next-20220519]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/xfs-Remove-the-redundant-assignment/20220520-120736
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220520/202205202134.P3H4KQ7S-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/890587fbe3e3934d20fcd39effdcefedd65e6b7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiapeng-Chong/xfs-Remove-the-redundant-assignment/20220520-120736
-        git checkout 890587fbe3e3934d20fcd39effdcefedd65e6b7f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/xfs/xfs_log_recover.c:3542:20: warning: unused variable 'agfp' [-Wunused-variable]
-                           struct xfs_agf  *agfp = agfbp->b_addr;
-                                            ^
->> fs/xfs/xfs_log_recover.c:3551:20: warning: unused variable 'agi' [-Wunused-variable]
-                           struct xfs_agi  *agi = agibp->b_addr;
-                                            ^
-   2 warnings generated.
-
-
-vim +/agfp +3542 fs/xfs/xfs_log_recover.c
-
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3519  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3520  #if defined(DEBUG)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3521  /*
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3522   * Read all of the agf and agi counters and check that they
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3523   * are consistent with the superblock counters.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3524   */
-e89fbb5ee1893f Christoph Hellwig 2017-11-06  3525  STATIC void
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3526  xlog_recover_check_summary(
-9a8d2fdbb47aaa Mark Tinguely     2012-06-14  3527  	struct xlog		*log)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3528  {
-934933c3eec9e4 Dave Chinner      2021-06-02  3529  	struct xfs_mount	*mp = log->l_mp;
-934933c3eec9e4 Dave Chinner      2021-06-02  3530  	struct xfs_perag	*pag;
-e82226138b20d4 Dave Chinner      2020-12-16  3531  	struct xfs_buf		*agfbp;
-e82226138b20d4 Dave Chinner      2020-12-16  3532  	struct xfs_buf		*agibp;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3533  	xfs_agnumber_t		agno;
-5e1be0fb1a3950 Christoph Hellwig 2008-11-28  3534  	int			error;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3535  
-934933c3eec9e4 Dave Chinner      2021-06-02  3536  	for_each_perag(mp, agno, pag) {
-934933c3eec9e4 Dave Chinner      2021-06-02  3537  		error = xfs_read_agf(mp, NULL, pag->pag_agno, 0, &agfbp);
-4805621a37d9b2 Christoph Hellwig 2008-11-28  3538  		if (error) {
-a0fa2b679ecd15 Dave Chinner      2011-03-07  3539  			xfs_alert(mp, "%s agf read failed agno %d error %d",
-934933c3eec9e4 Dave Chinner      2021-06-02  3540  						__func__, pag->pag_agno, error);
-4805621a37d9b2 Christoph Hellwig 2008-11-28  3541  		} else {
-9798f615ad2be4 Christoph Hellwig 2020-03-10 @3542  			struct xfs_agf	*agfp = agfbp->b_addr;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3543  			xfs_buf_relse(agfbp);
-4805621a37d9b2 Christoph Hellwig 2008-11-28  3544  		}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  3545  
-934933c3eec9e4 Dave Chinner      2021-06-02  3546  		error = xfs_read_agi(mp, NULL, pag->pag_agno, &agibp);
-a0fa2b679ecd15 Dave Chinner      2011-03-07  3547  		if (error) {
-a0fa2b679ecd15 Dave Chinner      2011-03-07  3548  			xfs_alert(mp, "%s agi read failed agno %d error %d",
-934933c3eec9e4 Dave Chinner      2021-06-02  3549  						__func__, pag->pag_agno, error);
-a0fa2b679ecd15 Dave Chinner      2011-03-07  3550  		} else {
-370c782b98436b Christoph Hellwig 2020-03-10 @3551  			struct xfs_agi	*agi = agibp->b_addr;
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+It is very possible that this was because I started from a fresh
+directory, instead of reusing a prior git tree,
+hoping to not pull 4 GB of data from the Internet :/
