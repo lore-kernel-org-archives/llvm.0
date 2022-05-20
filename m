@@ -1,50 +1,50 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841762F4A
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 17:08:04 +0000 (UTC)
-Received: by mail-io1-f54.google.com with SMTP id z20so840309iof.1
-        for <llvm@lists.linux.dev>; Fri, 20 May 2022 10:08:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D9A2F4A
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 17:15:23 +0000 (UTC)
+Received: by mail-io1-f48.google.com with SMTP id e3so9363304ios.6
+        for <llvm@lists.linux.dev>; Fri, 20 May 2022 10:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=i9RUNA8HR+3LMt6aSWi5aaLx+ys609H8mKFKAqfMPg0=;
-        b=fi8Mi0svNJsbGMxAZlv113yYTnugqYauhfAsCUjx6xSentLsfoGMTD6TThGnvsRwTo
-         5V85jyeVzRrM2JRDguntsgHeUP2UvmuQarXoztfrsWUfLf0fu/+Yut87wQdMj0CyN/7G
-         HXNmvNoRXKz8IzDmIU92PtZsvMCvhczDbMzl/QLZReCMgfhD7hM8t0es/DethhdUDKvR
-         NBPyDA4bGLJmiV7+8vuF2ELVeeUhiFgiPYYWhUbW66GBc78jExJkY1RBZF3tmlaCfXVY
-         eKw73WLuhZaNHsFn+5E/EY+FQH0fLLcu3F9aovWsHm5DWAUdvto/9V1Vhv0r86IEy4Kg
-         RrGw==
+        bh=5q9k0da/eVXDTkiJGcgonVdoXFkBjK7hd3VFbFH4vhw=;
+        b=czMMupnbSKq4FnJ6sDpWiqRxFmJNvDaZBwGxehqUu02wRBpq48pknNWwA9UzJhsewy
+         wHP+g3IPKf+q9B0oB/aI6NMcW3WttDfC6FB9PWRyaijEXBGFcuOQn3OVAWiWKko6sara
+         9ehbvUgZyXmcU0izNXqjsYUhW0HOXH1LO+V0tqWRf+LDTyRik3agsLvqif86yLhFIRCk
+         yiNMWyViQKeWOVWIHik6Naa6jyT7QJbCOyBr+GCbJBVfhu+/0v9VCv4v4Q3mtTEEK6r8
+         kUswfiqgjeCEMA+KYRo03+9xuNlVDxz+m6yQc2YiUko1RorVhb9b6g1YQOy4O5XyD58+
+         FQ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=i9RUNA8HR+3LMt6aSWi5aaLx+ys609H8mKFKAqfMPg0=;
-        b=U0GafWBJHlkoZuVUGSzUhRHoAizimY+U3nY1D33EIha9ejUPTuOyPZqVwYe2LPcBtf
-         9cteTUMhCBaXJv7Sw6v+XYsan47OsR/CcjtROxdoMrLVyInO87rs+QNDbz2yAGvupc8d
-         EHYXRhGzQ/4i8nKDDviVsd/W7qUF/KtbMrCM+DICD3+W8WUCC+ZLpKil8hVrfqJF+URB
-         o5+cBmota+dVYpuOZTmh7uhdr45aDAWoOFaT+toNANMME8mwt8VjN1jYY1YXYlR4q3qt
-         hT6rv0fAbWF1BZhW3TB0mQHN/Ny3EMwJTnv23Q4sG3J7EYAxvRUziBDpKMXRvrb65J7v
-         QOyA==
-X-Gm-Message-State: AOAM530SFO9L5UFfeaZG70MJTqhLyHAz49F8WBD2T5mOczI/h0r0tj9C
-	zsIO6KufWWW3NkOszwigjXVHnYKmLq8oXjDqGUs=
-X-Google-Smtp-Source: ABdhPJx0Wxbb+MrHMlPDahkSrsVbBco0rEU7ibhFy6N5zjeUlbIkyQBb+iddFyu3mMBkraqNHFu1vga1jEp2stAeLiw=
-X-Received: by 2002:a05:6638:f89:b0:32e:89f4:e150 with SMTP id
- h9-20020a0566380f8900b0032e89f4e150mr4780556jal.308.1653066483631; Fri, 20
- May 2022 10:08:03 -0700 (PDT)
+        bh=5q9k0da/eVXDTkiJGcgonVdoXFkBjK7hd3VFbFH4vhw=;
+        b=Jc8tmZhdGxsBsKQRK799qU973Ct4bkc4sxYnix1whtdyN0H4BfYN1XOgLgXQwoD5RG
+         XUCZTlRjAeROHF5fGB3dkRuv/r0iIWFvhyphpYLbzC+VnS2tH6TvgQ/zKkxid+ra5Fyi
+         a92qDGdJ10R1f7XQIfLpqcKuGvlnjI8l0f9hqJLUdzfX3obDrzxWFLPiO0qOS04i1sZC
+         SfNnV+HqtWyjF9Uyza4NZTtztbOSClDodCI4EUSwVtkQhQyWZJLf2AjM084+s7Stg60K
+         2T3JldZjSCUkXoZ7JHLhS9YcPW4PVL1aNfHtfX3TmvcRB+MXmc1NLbiZSkDfzYjqiSYH
+         lBeg==
+X-Gm-Message-State: AOAM532hvgRG/JH9cTloCLtdAKesbAwpVAabuqR6I0IiXrvM0oD4K0ie
+	BW8cTn9rjtquVD5bYgIdXO/r4l5JvTkMaprZH5k=
+X-Google-Smtp-Source: ABdhPJz3POU7VbsuvrNoJkvEZ2aJ7n8c9GU3fPmcEACUCVCqqHtueymxozFHYnQ75CSj/2qO50Amq834K51+YvQakYY=
+X-Received: by 2002:a5e:c643:0:b0:657:b1b0:8e2d with SMTP id
+ s3-20020a5ec643000000b00657b1b08e2dmr5374422ioo.64.1653066922765; Fri, 20 May
+ 2022 10:15:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220506160106.522341-1-mic@digikod.net> <20220506160106.522341-4-mic@digikod.net>
-In-Reply-To: <20220506160106.522341-4-mic@digikod.net>
+References: <20220506160106.522341-1-mic@digikod.net> <20220506160106.522341-5-mic@digikod.net>
+In-Reply-To: <20220506160106.522341-5-mic@digikod.net>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 20 May 2022 19:07:52 +0200
-Message-ID: <CANiq72=75oefMG_GFO5scHZQ1Swk+oBLST83VWM6pvUuf-R-4g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] clang-format: Fix goto labels indentation
+Date: Fri, 20 May 2022 19:15:11 +0200
+Message-ID: <CANiq72kbp3xTpj-L2BfLQ1Ecx-2Ki0W3e5YLERx8-T9bjb96=g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] clang-format: Fix empty curly braces
 To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Andy Whitcroft <apw@canonical.com>, 
 	Brian Norris <briannorris@chromium.org>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
@@ -59,12 +59,15 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, May 6, 2022 at 6:00 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> w=
 rote:
 >
-> Thanks to IndentGotoLabels introduced with clang-format-10 [1], we can
-> avoid goto labels identation.  This follows the current coding style and
-> it is then in line with the checkpatch.pl rules [2].
+> SplitEmptyFunction [1] should be false to not add a new line in an empty
+> function body.  This follows the current kernel coding style.
 
-To be consistent, this should increase the minimum to clang-format-10
--- I will fix it on my side.
+I don't think this is correct. Checking headers in `include/linux/`, I
+see ~70 using {} (when not in the same line as the signature), and
+~700 in different lines. In `kernel/`, it is even more pronounced: 4
+vs. ~200.
+
+Am I missing something?
 
 Cheers,
 Miguel
