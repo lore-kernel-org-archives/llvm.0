@@ -1,42 +1,53 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BFB15A2
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 00:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F98A7A;
+	Fri, 20 May 2022 00:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653006053; x=1684542053;
+  t=1653007375; x=1684543375;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=98iWXTy+7QEmlwum/A3orH9QjkbQGJL5U60eOWEOWzA=;
-  b=QbOUMGJjRDIUPlQJLLGYzYJUNtUGbyhDJSCWAhNt+06m7on4SKklAfXF
-   pAr6kYxbbcmN1tXZiPjY/w0VhPeAamXWdxAT94iTjgbjCqxjWeyGL05Nx
-   7h+RrK3NJ9ljGfFXBxqein9emYKLEEAA4CPrj0Mrq5X/Yt1hhtbhK52ls
-   c5g1nNpFn6IP11M/kInb31yOl+yC32AbLlQoYnBsmCJiuCRUTmGkU61Cp
-   17Hh3Z78XR8CFF+lBmOXutpNrMGgMWIz1QiLfyW+tbVN3XkibpKV6UyNl
-   cW52nKYixGUTq5IgyXyktrkbipNQnZyWMRbxh9am4ZcF4KYs9Z3IDaQtR
+  bh=BajxnFhDjeYK6OJdvg1bDjwAI7zO7CVIHlt3kCTR+TE=;
+  b=e5WIt0gmSGgQ/tgXe2DaQ0S1d0TO6WFiLoaRH5wecEiZh2WfNB53VV8I
+   RGYc0pB3knhBKv5JacoYBABuXp0S2cMUd3g2oKadu1Z42jpxD0Tn4pMBj
+   Ro5Jmo1icyVk1UGiZ3RhUQS20WVwMpQFsYJ10XCchm1iEqz+KofuJJkrg
+   zlZpzc7+X4lWwqh/3WTozp4SF5CYT6wg9k/BxMZg9/gDE+guESwITpfXh
+   ERjh+65Y43BaWXa0whVIF++2DvbZddM5vChoNCdKGXxBG9AJd14nW0dRv
+   FAzLwQKAc55QS629/x8+e8CSb7cMbK8awg/GK+QtMjcpESBIjIdf+ZBAm
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272394409"
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="297741904"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272394409"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:20:50 -0700
+   d="scan'208";a="297741904"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:42:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="899038195"
+   d="scan'208";a="598905012"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 19 May 2022 17:20:48 -0700
+  by orsmga008.jf.intel.com with ESMTP; 19 May 2022 17:42:50 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nrqNs-000456-2e;
-	Fri, 20 May 2022 00:20:48 +0000
-Date: Fri, 20 May 2022 08:20:31 +0800
+	id 1nrqjB-00045d-VE;
+	Fri, 20 May 2022 00:42:49 +0000
+Date: Fri, 20 May 2022 08:41:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chih-En Lin <shiyn.lin@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 4/6] mm: Add COW PTE fallback function
-Message-ID: <202205200816.ZhOASVVs-lkp@intel.com>
-References: <20220519183127.3909598-5-shiyn.lin@gmail.com>
+To: Uri Arev <me@wantyapps.xyz>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Uri Arev <me@wantyapps.xyz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Len Baker <len.baker@gmx.com>, Sam Ravnborg <sam@ravnborg.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Srivathsa Dara <srivathsa729.8@gmail.com>,
+	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: fbtft: fix checkpatch.pl struct should normally
+ be const
+Message-ID: <202205200821.nJQ0IfFt-lkp@intel.com>
+References: <20220519172503.10821-1-me@wantyapps.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,104 +56,305 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519183127.3909598-5-shiyn.lin@gmail.com>
+In-Reply-To: <20220519172503.10821-1-me@wantyapps.xyz>
 
-Hi Chih-En,
+Hi Uri,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on soc/for-next linus/master v5.18-rc7 next-20220519]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thank you for the patch! Yet something to improve:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chih-En-Lin/Introduce-Copy-On-Write-to-Page-Table/20220520-023243
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 734387ec2f9d77b00276042b1fa7c95f48ee879d
-config: arm-shannon_defconfig (https://download.01.org/0day-ci/archive/20220520/202205200816.ZhOASVVs-lkp@intel.com/config)
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uri-Arev/staging-fbtft-fix-checkpatch-pl-struct-should-normally-be-const/20220520-012948
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 4d0cc9e0e53e9946d7b8dc58279c62dfa7a2191b
+config: arm64-randconfig-r011-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200821.nJQ0IfFt-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/e4e2e178c5a43b37925972bc0eab9976d41d35c7
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d26e139bfc29011b0a147df71f0b91485189c66e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chih-En-Lin/Introduce-Copy-On-Write-to-Page-Table/20220520-023243
-        git checkout e4e2e178c5a43b37925972bc0eab9976d41d35c7
+        git fetch --no-tags linux-review Uri-Arev/staging-fbtft-fix-checkpatch-pl-struct-should-normally-be-const/20220520-012948
+        git checkout d26e139bfc29011b0a147df71f0b91485189c66e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/fbtft/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   mm/memory.c:1007:9: warning: variable 'orig_ptep' set but not used [-Wunused-but-set-variable]
-           pte_t *orig_ptep, *ptep;
-                  ^
->> mm/memory.c:4616:8: error: call to undeclared function 'pmd_mkwrite'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           new = pmd_mkwrite(*pmd);
+   drivers/staging/fbtft/fbtft-core.c:332:6: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+           int count = 0;
+               ^
+>> drivers/staging/fbtft/fbtft-core.c:617:8: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+           const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+           ~~~~~ ^
+           int
+>> drivers/staging/fbtft/fbtft-core.c:617:8: error: redefinition of 'fbops' with a different type: 'const int' vs 'const struct fb_ops *'
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: previous definition is here
+           const struct fb_ops *fbops = NULL;
+                                ^
+>> drivers/staging/fbtft/fbtft-core.c:647:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->owner        =      dev->driver->owner;
+           ~~~~~~~~~~~~        ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:648:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_read      =      fb_sys_read;
+           ~~~~~~~~~~~~~~      ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:649:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_write     =      fbtft_fb_write;
+           ~~~~~~~~~~~~~~~     ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:650:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_fillrect  =      fbtft_fb_fillrect;
+           ~~~~~~~~~~~~~~~~~~  ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:651:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_copyarea  =      fbtft_fb_copyarea;
+           ~~~~~~~~~~~~~~~~~~  ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:652:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_imageblit =      fbtft_fb_imageblit;
+           ~~~~~~~~~~~~~~~~~~~ ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:653:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_setcolreg =      fbtft_fb_setcolreg;
+           ~~~~~~~~~~~~~~~~~~~ ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/staging/fbtft/fbtft-core.c:654:22: error: cannot assign to variable 'fbops' with const-qualified type 'const struct fb_ops *'
+           fbops->fb_blank     =      fbtft_fb_blank;
+           ~~~~~~~~~~~~~~~     ^
+   drivers/staging/fbtft/fbtft-core.c:542:23: note: variable 'fbops' declared const here
+           const struct fb_ops *fbops = NULL;
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+>> drivers/staging/fbtft/fbtft-core.c:617:8: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
                  ^
->> mm/memory.c:4617:2: error: call to undeclared function 'set_pmd_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           set_pmd_at(mm, addr, pmd, new);
-           ^
-   mm/memory.c:4617:2: note: did you mean 'set_pte_at'?
-   arch/arm/include/asm/pgtable.h:225:6: note: 'set_pte_at' declared here
-   void set_pte_at(struct mm_struct *mm, unsigned long addr,
-        ^
-   mm/memory.c:4592:6: warning: no previous prototype for function 'cow_pte_fallback' [-Wmissing-prototypes]
-   void cow_pte_fallback(struct vm_area_struct *vma, pmd_t *pmd,
-        ^
-   mm/memory.c:4592:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cow_pte_fallback(struct vm_area_struct *vma, pmd_t *pmd,
-   ^
-   static 
-   2 warnings and 2 errors generated.
+   2 warnings and 10 errors generated.
 
 
-vim +/pmd_mkwrite +4616 mm/memory.c
+vim +/int +617 drivers/staging/fbtft/fbtft-core.c
 
-  4584	
-  4585	/* COW PTE fallback to normal PTE:
-  4586	 * - two state here
-  4587	 *   - After break child :   [parent, rss=1, ref=1, write=NO , owner=parent]
-  4588	 *                        to [parent, rss=1, ref=1, write=YES, owner=NULL  ]
-  4589	 *   - After break parent:   [child , rss=0, ref=1, write=NO , owner=NULL  ]
-  4590	 *                        to [child , rss=1, ref=1, write=YES, owner=NULL  ]
-  4591	 */
-  4592	void cow_pte_fallback(struct vm_area_struct *vma, pmd_t *pmd,
-  4593			unsigned long addr)
-  4594	{
-  4595		struct mm_struct *mm = vma->vm_mm;
-  4596		unsigned long start, end;
-  4597		pmd_t new;
-  4598	
-  4599		BUG_ON(pmd_write(*pmd));
-  4600	
-  4601		start = addr & PMD_MASK;
-  4602		end = (addr + PMD_SIZE) & PMD_MASK;
-  4603	
-  4604		/* If pmd is not owner, it needs to increase the rss.
-  4605		 * Since only the owner has the RSS state for the COW PTE.
-  4606		 */
-  4607		if (!cow_pte_owner_is_same(pmd, pmd)) {
-  4608			cow_pte_rss(mm, vma, pmd, start, end, true /* inc */);
-  4609			mm_inc_nr_ptes(mm);
-  4610			smp_wmb();
-  4611			pmd_populate(mm, pmd, pmd_page(*pmd));
-  4612		}
-  4613	
-  4614		/* Reuse the pte page */
-  4615		set_cow_pte_owner(pmd, NULL);
-> 4616		new = pmd_mkwrite(*pmd);
-> 4617		set_pmd_at(mm, addr, pmd, new);
-  4618	
-  4619		BUG_ON(!pmd_write(*pmd));
-  4620		BUG_ON(pmd_page(*pmd)->cow_pte_owner);
-  4621	}
-  4622	
+   516	
+   517	/**
+   518	 * fbtft_framebuffer_alloc - creates a new frame buffer info structure
+   519	 *
+   520	 * @display: pointer to structure describing the display
+   521	 * @dev: pointer to the device for this fb, this can be NULL
+   522	 * @pdata: platform data for the display in use
+   523	 *
+   524	 * Creates a new frame buffer info structure.
+   525	 *
+   526	 * Also creates and populates the following structures:
+   527	 *   info->fbops
+   528	 *   info->fbdefio
+   529	 *   info->pseudo_palette
+   530	 *   par->fbtftops
+   531	 *   par->txbuf
+   532	 *
+   533	 * Returns the new structure, or NULL if an error occurred.
+   534	 *
+   535	 */
+   536	struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+   537						struct device *dev,
+   538						struct fbtft_platform_data *pdata)
+   539	{
+   540		struct fb_info *info;
+   541		struct fbtft_par *par;
+   542		const struct fb_ops *fbops = NULL;
+   543		struct fb_deferred_io *fbdefio = NULL;
+   544		u8 *vmem = NULL;
+   545		void *txbuf = NULL;
+   546		void *buf = NULL;
+   547		unsigned int width;
+   548		unsigned int height;
+   549		int txbuflen = display->txbuflen;
+   550		unsigned int bpp = display->bpp;
+   551		unsigned int fps = display->fps;
+   552		int vmem_size;
+   553		const s16 *init_sequence = display->init_sequence;
+   554		char *gamma = display->gamma;
+   555		u32 *gamma_curves = NULL;
+   556	
+   557		/* sanity check */
+   558		if (display->gamma_num * display->gamma_len >
+   559				FBTFT_GAMMA_MAX_VALUES_TOTAL) {
+   560			dev_err(dev, "FBTFT_GAMMA_MAX_VALUES_TOTAL=%d is exceeded\n",
+   561				FBTFT_GAMMA_MAX_VALUES_TOTAL);
+   562			return NULL;
+   563		}
+   564	
+   565		/* defaults */
+   566		if (!fps)
+   567			fps = 20;
+   568		if (!bpp)
+   569			bpp = 16;
+   570	
+   571		if (!pdata) {
+   572			dev_err(dev, "platform data is missing\n");
+   573			return NULL;
+   574		}
+   575	
+   576		/* override driver values? */
+   577		if (pdata->fps)
+   578			fps = pdata->fps;
+   579		if (pdata->txbuflen)
+   580			txbuflen = pdata->txbuflen;
+   581		if (pdata->display.init_sequence)
+   582			init_sequence = pdata->display.init_sequence;
+   583		if (pdata->gamma)
+   584			gamma = pdata->gamma;
+   585		if (pdata->display.debug)
+   586			display->debug = pdata->display.debug;
+   587		if (pdata->display.backlight)
+   588			display->backlight = pdata->display.backlight;
+   589		if (pdata->display.width)
+   590			display->width = pdata->display.width;
+   591		if (pdata->display.height)
+   592			display->height = pdata->display.height;
+   593		if (pdata->display.buswidth)
+   594			display->buswidth = pdata->display.buswidth;
+   595		if (pdata->display.regwidth)
+   596			display->regwidth = pdata->display.regwidth;
+   597	
+   598		display->debug |= debug;
+   599		fbtft_expand_debug_value(&display->debug);
+   600	
+   601		switch (pdata->rotate) {
+   602		case 90:
+   603		case 270:
+   604			width =  display->height;
+   605			height = display->width;
+   606			break;
+   607		default:
+   608			width =  display->width;
+   609			height = display->height;
+   610		}
+   611	
+   612		vmem_size = display->width * display->height * bpp / 8;
+   613		vmem = vzalloc(vmem_size);
+   614		if (!vmem)
+   615			goto alloc_fail;
+   616	
+ > 617		const fbops = devm_kzalloc(dev, sizeof(struct fb_ops), GFP_KERNEL);
+   618		if (!fbops)
+   619			goto alloc_fail;
+   620	
+   621		fbdefio = devm_kzalloc(dev, sizeof(struct fb_deferred_io), GFP_KERNEL);
+   622		if (!fbdefio)
+   623			goto alloc_fail;
+   624	
+   625		buf = devm_kzalloc(dev, 128, GFP_KERNEL);
+   626		if (!buf)
+   627			goto alloc_fail;
+   628	
+   629		if (display->gamma_num && display->gamma_len) {
+   630			gamma_curves = devm_kcalloc(dev,
+   631						    display->gamma_num *
+   632						    display->gamma_len,
+   633						    sizeof(gamma_curves[0]),
+   634						    GFP_KERNEL);
+   635			if (!gamma_curves)
+   636				goto alloc_fail;
+   637		}
+   638	
+   639		info = framebuffer_alloc(sizeof(struct fbtft_par), dev);
+   640		if (!info)
+   641			goto alloc_fail;
+   642	
+   643		info->screen_buffer = vmem;
+   644		info->fbops = fbops;
+   645		info->fbdefio = fbdefio;
+   646	
+ > 647		fbops->owner        =      dev->driver->owner;
+   648		fbops->fb_read      =      fb_sys_read;
+   649		fbops->fb_write     =      fbtft_fb_write;
+   650		fbops->fb_fillrect  =      fbtft_fb_fillrect;
+   651		fbops->fb_copyarea  =      fbtft_fb_copyarea;
+   652		fbops->fb_imageblit =      fbtft_fb_imageblit;
+   653		fbops->fb_setcolreg =      fbtft_fb_setcolreg;
+   654		fbops->fb_blank     =      fbtft_fb_blank;
+   655	
+   656		fbdefio->delay =           HZ / fps;
+   657		fbdefio->sort_pagelist =   true;
+   658		fbdefio->deferred_io =     fbtft_deferred_io;
+   659		fb_deferred_io_init(info);
+   660	
+   661		snprintf(info->fix.id, sizeof(info->fix.id), "%s", dev->driver->name);
+   662		info->fix.type =           FB_TYPE_PACKED_PIXELS;
+   663		info->fix.visual =         FB_VISUAL_TRUECOLOR;
+   664		info->fix.xpanstep =	   0;
+   665		info->fix.ypanstep =	   0;
+   666		info->fix.ywrapstep =	   0;
+   667		info->fix.line_length =    width * bpp / 8;
+   668		info->fix.accel =          FB_ACCEL_NONE;
+   669		info->fix.smem_len =       vmem_size;
+   670	
+   671		info->var.rotate =         pdata->rotate;
+   672		info->var.xres =           width;
+   673		info->var.yres =           height;
+   674		info->var.xres_virtual =   info->var.xres;
+   675		info->var.yres_virtual =   info->var.yres;
+   676		info->var.bits_per_pixel = bpp;
+   677		info->var.nonstd =         1;
+   678	
+   679		/* RGB565 */
+   680		info->var.red.offset =     11;
+   681		info->var.red.length =     5;
+   682		info->var.green.offset =   5;
+   683		info->var.green.length =   6;
+   684		info->var.blue.offset =    0;
+   685		info->var.blue.length =    5;
+   686		info->var.transp.offset =  0;
+   687		info->var.transp.length =  0;
+   688	
+   689		info->flags =              FBINFO_FLAG_DEFAULT | FBINFO_VIRTFB;
+   690	
+   691		par = info->par;
+   692		par->info = info;
+   693		par->pdata = pdata;
+   694		par->debug = display->debug;
+   695		par->buf = buf;
+   696		spin_lock_init(&par->dirty_lock);
+   697		par->bgr = pdata->bgr;
+   698		par->startbyte = pdata->startbyte;
+   699		par->init_sequence = init_sequence;
+   700		par->gamma.curves = gamma_curves;
+   701		par->gamma.num_curves = display->gamma_num;
+   702		par->gamma.num_values = display->gamma_len;
+   703		mutex_init(&par->gamma.lock);
+   704		info->pseudo_palette = par->pseudo_palette;
+   705	
+   706		if (par->gamma.curves && gamma) {
+   707			if (fbtft_gamma_parse_str(par, par->gamma.curves, gamma,
+   708						  strlen(gamma)))
+   709				goto release_framebuf;
+   710		}
+   711	
+   712		/* Transmit buffer */
+   713		if (txbuflen == -1)
+   714			txbuflen = vmem_size + 2; /* add in case startbyte is used */
+   715		if (txbuflen >= vmem_size + 2)
+   716			txbuflen = 0;
+   717	
 
 -- 
 0-DAY CI Kernel Test Service
