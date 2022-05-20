@@ -1,158 +1,234 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654467E
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 23:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653089181; x=1684625181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kVjmWwMEvCixYbw/9qk9PdvBuagh38ipestoWpqf7to=;
-  b=EmCgryBwn5wdlVd5Yb+B8Tliyvr+SzixrhWqfUPUYA5JkssD0D+L2bpR
-   81ZJT0INq1kR/VEDFRcY93V3zyoZsxnrykof1kZ/DHD30bYP0splOS+B6
-   SdKlNc4vZxs5vK5p/L5wHV5Dmuv4L1O1wJtP6EYjbpBlxiJkHlJANF0w+
-   MbEzMZuXvzALcKtbDD3yHQLIe192rwPfwPgIkouywLkH/NW83YzETuEPa
-   OydHT+G3IGhsTxeDb/huGg98C/RVqbk0IzVrUk/lwAx/PNVcuqfPSThEc
-   w53Ctuedoa2zoEbmYUHpGQSAdoaMnI2FYAs+29NbyoQbOXuT4d9RUAfRk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="272896063"
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="272896063"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 16:26:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,240,1647327600"; 
-   d="scan'208";a="743717635"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 20 May 2022 16:26:19 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nsC0g-0005bq-Do;
-	Fri, 20 May 2022 23:26:18 +0000
-Date: Sat, 21 May 2022 07:25:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Saleem Abdulrasool <abdulras@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: arch/riscv/kernel/signal.c:197:28: error: use of undeclared
- identifier '__vdso_rt_sigreturn_offset'
-Message-ID: <202205210713.al93bRN0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3D17E
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 23:32:24 +0000 (UTC)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KIb5wa022587;
+	Fri, 20 May 2022 23:31:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Ftbm2cTPH8riRfPhDmPLDHQroM9uKS9P2upzCLrqRbg=;
+ b=uuySMR8vQKSSroib50LLD4kdap+OEdHQfecojvEMDzfpN4jSxHyPvl5L2Tk88Pf6eB4C
+ 5x2vFWcrawXn91tQNEzOx61zpOoKxObpAVUbpsyvGP+2YmLgNLguSxEcnWa+Jch3IDFA
+ IkvFFhlf/c8iw/4RFNRtvEGOxc4zcfcv+uajm5WE0A4Rj8xsiXTXNwCfI5YVap7x3k33
+ hbVZx5VCCb4/Q06SbOT2+gv9IkEUupwjkDrP2jRBn89i9TGNAWZIxRhFquN7PqACmDlD
+ T43yOX7xiHHl6SkBUau/fdJGoJzTafdkKGhDPE7SaAmi3Ko81lOD1ljTkhBWYbYuGz5R Mw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24yu0bde-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 20 May 2022 23:31:37 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24KNUANh040050;
+	Fri, 20 May 2022 23:31:37 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2049.outbound.protection.outlook.com [104.47.56.49])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3g22v6suvt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 20 May 2022 23:31:36 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SzpZ78dRmeDpPll+acOVOlgel1O2OVTKhW4dzEXGob6AVF7HOVEFwH15wiW7d8n7n3pJVLgfzgvxVva/OsA0G+nUqEkpxw9zVb1qcAI3AVWMHZd4lVtTBOAirFa3S+TVi+afWFgVrAuRznQkpOVDvsTvJ3MQmFKRc7UyzPSugk+FvDir7U/cgGQ8mZixJUp7UxCpZa4qSbZhWjhGEP/mQZ7UHBk+6Ihfx1oZfvUPJPTmeFiaUQBdYLpRhYsoRF3Gz+0R11dfcqV+NwkvDe3+JX4mDTqz9KywBfF5vIzTt3huAUAJdaNBvssfGdfPBfSTjnh292fYZKX+tTf3qjRj3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ftbm2cTPH8riRfPhDmPLDHQroM9uKS9P2upzCLrqRbg=;
+ b=OE+uhTl8coIwtV3obNoM4zO6/feBR6qbJwK7+f6su6SL94jFGKCd7TmOiCkfifrHnPASELwqYaKPX+UpHyrs3PQkWY/GXd7Xttb9VXqGptHs2jarb5yCBjIAth0sB5UDy6ivfmqslxpYRJa4nRNOeI3key0Qo84MGUBtZlL22O8gIPwft2ijo142q0N+CSW0gbJYfX5EhN9CDH25+hXQ1DkCv/Sl+uMW+eVBHJxgwJPLXTLGmirzDnw2oWrBea3MrkY2rGgqvC472htbWIr+Qx6waRk24Gt0OyNqkyKF5o03Pp7B+M71z9r72UZLHuavjbHewjOLjl4GrFswuRzM9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ftbm2cTPH8riRfPhDmPLDHQroM9uKS9P2upzCLrqRbg=;
+ b=k/ZyPtyYfATj0b7LyzutwsEaE+3kiY1EC/RTiMPnMK9LCp9KZmLjCn6RaEXrjj13uieXzdndJkLZE1gNb9D92urRaYr1tEKYOUyx/7uCmC1p6xGITHsuO9bj6mA2LHXm0BGgHE9yDxIhL1J2koH5akBg7SkQnnAKJGheTKkE2Mc=
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com (2603:10b6:5:216::10)
+ by SN6PR10MB2895.namprd10.prod.outlook.com (2603:10b6:805:d9::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Fri, 20 May
+ 2022 23:31:34 +0000
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::e81e:38af:cb6e:59e5]) by DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::e81e:38af:cb6e:59e5%4]) with mapi id 15.20.5273.017; Fri, 20 May 2022
+ 23:31:34 +0000
+Message-ID: <a455c6b1-b9ef-39ab-879e-80e13fd13c10@oracle.com>
+Date: Fri, 20 May 2022 16:31:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+Content-Language: en-US
+To: John Hubbard <jhubbard@nvidia.com>, Minchan Kim <minchan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Hildenbrand <david@redhat.com>
+References: <00000000000077377c05dee75f63@google.com>
+ <20220513102617.c464c4f566052838e911a3ec@linux-foundation.org>
+ <75f09063-d184-7d44-17a1-ed04be5eb953@oracle.com>
+ <a7fd0c3f-921e-19b3-2f67-a231dede28f9@oracle.com>
+ <20220513161910.d1b73583cdb2e33562aa86e5@linux-foundation.org>
+ <Yn7vnpXwX50J3K+7@google.com>
+ <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+ <Yn73Hz7LkSUv7ycw@google.com>
+ <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
+ <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
+ <YogT9AwVclxAnyvs@google.com>
+ <0be9132d-a928-9ebe-a9cf-6d140b907d59@nvidia.com>
+From: Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <0be9132d-a928-9ebe-a9cf-6d140b907d59@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CO2PR07CA0072.namprd07.prod.outlook.com (2603:10b6:100::40)
+ To DM6PR10MB4201.namprd10.prod.outlook.com (2603:10b6:5:216::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36250663-d691-41bb-2076-08da3ab8e099
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2895:EE_
+X-Microsoft-Antispam-PRVS: 
+	<SN6PR10MB289591C24CA4EC4F25C28B5BE2D39@SN6PR10MB2895.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	hp6J8DUsR4ELaQehuPTIPH/DkPlribCfTdzSK0obBLkmD78U2LZWOrkkUh2fsFS0TUGo7hJDEJevKWJCsWGYc8nRZW/sJVoraG8nAK4y5MsSg46HQK0Wy9c4dyMKqsDZzDWlmlNMLfLbiTEsABa8RtbUZXojx1hqfmqG0+GmL5iE4aJbmv6s7YKlKTTd4gFWQiOL3a9i7+C7nnvbJ4MyelH++8k1S7tB2SxHjdhYQ0cUsZlAz7AnxImIkGsj0zn/fD0IqVA6KeM/XutMdUtWl/lEdQhB8x9gx8gWC7Zuv8PftuhCr2PnewdVwYDwk92HkRNPAk+Ae91Z0igFzTWG+1OZXRedkW5DAK6DHt4givkZjNKhoKv6X28PFDtv7zabaUcNW/wkGDe2IkUmaP0egek357vOuV3uEgFggE4aHZI4PnqbJ6nwYNgz7s1DUbGlzoWIMiJBO+6Yveumqn0g4Rov7Q4vn3w638EBIObyQrSFXPT2kV8s+dOLqEeMRNfs4egsPmq1QRTpqImOH0lC3vdLggQ7OMJbvrNGbLFFKw66BXr9Q+iRQjLUccZpPs4ulF0FoS/KlOqJHLdFHOmV9tGxmV2SlvxymA4pgBGwwzVMxptlRMTgYb/Lci9Dsi1x+KDAZk6IAMr5Vty/tgryhTNUhdK/fX8mwhFoZV+knb8q7OPt4sk5A53vniAeV74KmlanMgTmcfi0r3kj+KvIlJhDh5tI+F1JKC4ULcfT3g79qne7ipASVbXpw/tsXm20hLl29cRCvqy1QuD+09UwLg==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4201.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(2906002)(6666004)(54906003)(508600001)(2616005)(8936002)(316002)(110136005)(6486002)(186003)(5660300002)(52116002)(7416002)(44832011)(31686004)(38350700002)(38100700002)(6512007)(31696002)(26005)(66556008)(6506007)(53546011)(66946007)(83380400001)(8676002)(4326008)(66476007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?QTN2d3ZZcmRERTc2QUhud0Jnb2kvdVVQVklBV1BZeUFNQklRVThLS2U5R2Zo?=
+ =?utf-8?B?ZzNnV3BDVkhwWGNqbGI1U3N6Um8ra21MOS9Hd2xtOXA5aU4rUnNKd1YwT1pu?=
+ =?utf-8?B?anVSelJIMUoyQk9xMWJva0U4VGgvRDl6Uy9MQmdsSE9BZ2FmRHI4b1dyc0ll?=
+ =?utf-8?B?YTRzUTd0QVA2Z09PUFZXUWdXaloyV2ZYdG5hUXZDQXhrWTVFTWNUSVM2OGJS?=
+ =?utf-8?B?ZFJpbU1NbnJRZEFkR3lTeGZxK2JKRUFCeVZ6bFpodVpDQjhudVlmZjZTbkhi?=
+ =?utf-8?B?aXZNNmZGL0h2MFMzcTNtakNFanRDenF0eXdJckFJeTI1MHh5bFpObjJ4WkNm?=
+ =?utf-8?B?ck5hdVZDQlVNV2txMWRzdFBzOEZ4VlhIVEcyV1d1RW11aU1LeDloRVl5dmxN?=
+ =?utf-8?B?ck1DZ2xBWnJQa0RQbEJIQ01uN2NBMUs5RjVyeGVzRklOdGp3UEpxRjZoSmdH?=
+ =?utf-8?B?RDdVV1hIMm5PeWROaHBCSWFnL0ozNGhzWllHZ1pSZHJETzMzZmFZK283V1Vy?=
+ =?utf-8?B?blB2K08wY3NSV2pFek9VeWdnVmljSkozdGZYUXgzU1hJeWRLRkVDMGt4ODhu?=
+ =?utf-8?B?ZFYySTdXREtYc2tLVStPTUErM1VTbG9hRUlWbzMyRFJSMHB4T1ljUUVTL0k5?=
+ =?utf-8?B?dk9kSTFIQjM3dStpUkZRby85YlR5eGM3NWdsOFg3Z242bmJMMFV6UDRFQ29N?=
+ =?utf-8?B?akpST2JtVzNPVHZNNjY3UkxWRW1PakxiZE1mWDFMbFdkeDNFamZRWFhvNjZL?=
+ =?utf-8?B?ZXorWnMzWU9YYXpBWWJPQmIxb0puVXBxSXRKM2dubnBweTk1THQ0Q29obnpq?=
+ =?utf-8?B?NEJzUXhveEhzOXpLTzQ2UUJiYmJ3MU9iZlFRWTFwclhxaWI3S0thdnlmSzZx?=
+ =?utf-8?B?ckozcWZiRGF5MVhJTVpQa2M3bzgvZXFITHFBUkwwVUJwUC9DbDJxRU1Layt5?=
+ =?utf-8?B?OXd3MkdJNzFXbDdaUmFCbHdKcUxxVE82cklZdXZwWHNjZ28rWmZKakxaR001?=
+ =?utf-8?B?cVJ5eGpzcEw1RHk0Mkw4L2wrQ1VJYjNvczhMRzhmZmVkeFBxSHlLVC9ubjN6?=
+ =?utf-8?B?bUhFS0tHSitSb1UwU0F6REhkOUpScytJWmRTcEI0Z1R2RTc1dXVzZkF1SHJ1?=
+ =?utf-8?B?eUxiQlYydEQ2WEtsZnI1VUYwNGZ5OHIySDB5QVlobDlScm92Ym9PYzA4WnUx?=
+ =?utf-8?B?TmxqemNCcmpKR1ZJd0dHRGNVQ0FjSFJnWFRsdWxBYlZERktFNm9tV1lxUkpJ?=
+ =?utf-8?B?ZERSYmhDUlY4bnRVNlgrTVI5R1ZQV2l2aGN0NnphMTZ3RldmWWV2TWV3b09B?=
+ =?utf-8?B?QUJ5S0tHa3BaWW52OTRrWjlkdms3cVZDWGY5ZnN0S0dacnJ6NW9GUDlETE1n?=
+ =?utf-8?B?VnJLWE5Od3o0V0k0ZmJmSU4rejFsREsxZklHMm1hVWcrbU5LZUx5RUN0ekRH?=
+ =?utf-8?B?dG5ZcUU2UWFQK25BMG9HMTZaU2RyTHJGbTZOM0lwQVNVSnJGWHNBZDNOOTg2?=
+ =?utf-8?B?WWt3QjlVU1VnSFNmWHdTamx2QVQ2K1IyUXdxbGcrbEVDcTRjVkZjVkhEMlFl?=
+ =?utf-8?B?bFNic1Z6MHR6d3F2SUlxMXUxVjd5VFMyWUxJSGx5UUFuOTJwMitSSjRZOFA1?=
+ =?utf-8?B?MFRRaUd4ekMyNm0vcVAxb3krQ0xqK05UcjRMSVdDVW1DQStRK1h5ZFJodU1Z?=
+ =?utf-8?B?Ykp6b21xUktVZ1grZ2VJWUtKb0NEMHgzYk9zNDFXT0QzbjU0RkNVdmhHaHQ0?=
+ =?utf-8?B?bzk1cjZUK2xPV0ZITTg2Qm9EM01HcmprNXRpNWRPaGNHeDF4REtzbnR2eVlz?=
+ =?utf-8?B?NUtiVzN4MTVzam4yZDA1d1VFYnlpK21uYUQvVzRENDdxTFdJYjluT1pjcVFk?=
+ =?utf-8?B?SVY3eDMxZ3c2Y0ZMNTgyajNmL0lXbHQ0OE9xLzVQc3B5clo4ZG44cjBvaFVn?=
+ =?utf-8?B?Rm8vR1VoUkNMaDFrN1Z5bHp2MjdxTEFJYnBUOURaZDZ5Z3RaN3dLZ1hEQzZD?=
+ =?utf-8?B?Q29JenA4RlBYQk45cTZONUJIbXRBbE5EYi9Qc2Q3UlVjNWFCV1RJQ3FzYkg0?=
+ =?utf-8?B?SjAvWFpBeVpQYlRVbkNnOWZtdXNzeFU3T3F6amsyTWhGaTRxYm5ZOG01S0Vj?=
+ =?utf-8?B?Q2JBRWZPU1RrdTZvZkpaM2xtTXJoamIvVzhyRW1WMWl0dnphYW1yZzc2WWRD?=
+ =?utf-8?B?dzRyQUJiTGVmUzRVWnN1Q2dhVTRmamxtV3NPR05FTHR2bFNsZVk4eUVSSkdY?=
+ =?utf-8?B?RnFMcGwvWU1RYURQb09IRnMzQW5uRWVYY0kyYzhYdGpEb2Nrd0xnS1J5UFAz?=
+ =?utf-8?B?MFlnMXM4K3owSEh0eGQxQmhnSDBCZzFSRHFyQ2tZOWwvWHNIUHN3M3doVW1j?=
+ =?utf-8?Q?gZMeMZx4JPlhi9hQ=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36250663-d691-41bb-2076-08da3ab8e099
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4201.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 23:31:34.8027
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kE6xf/Ztjoj+3c3/Z1PF8tf1YdbzTbZvzzG6NYJVCPctRA0T5RnWlivjGfCpli3RATZhXuyfwfcIiyefVbKjag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2895
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-20_08:2022-05-20,2022-05-20 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205200144
+X-Proofpoint-GUID: JRKXwnVuCoKHZzsX8C-36vQJoajl0-Iw
+X-Proofpoint-ORIG-GUID: JRKXwnVuCoKHZzsX8C-36vQJoajl0-Iw
 
-Hi Saleem,
+On 5/20/22 15:56, John Hubbard wrote:
+> On 5/20/22 15:19, Minchan Kim wrote:
+>> The memory offline would be an issue so we shouldn't allow pinning of any
+>> pages in *movable zone*.
+>>
+>> Isn't alloc_contig_range just best effort? Then, it wouldn't be a big
+>> problem to allow pinning on those area. The matter is what target range
+>> on alloc_contig_range is backed by CMA or movable zone and usecases.
+>>
+>> IOW, movable zone should be never allowed. But CMA case, if pages
+>> are used by normal process memory instead of hugeTLB, we shouldn't
+>> allow longterm pinning since someone can claim those memory suddenly.
+>> However, we are fine to allow longterm pinning if the CMA memory
+>> already claimed and mapped at userspace(hugeTLB case IIUC).
+>>
+> 
+> From Mike's comments and yours, plus a rather quick reading of some
+> CMA-related code in mm/hugetlb.c (free_gigantic_page(), alloc_gigantic_pages()), the following seems true:
+> 
+> a) hugetlbfs can allocate pages *from* CMA, via cma_alloc()
+> 
+> b) while hugetlbfs is using those CMA-allocated pages, it is debatable
+> whether those pages should be allowed to be long term pinned. That's
+> because there are two cases:
+> 
+>     Case 1: pages are longterm pinned, then released, all while
+>             owned by hugetlbfs. No problem.
+> 
+>     Case 2: pages are longterm pinned, but then hugetlbfs releases the
+>             pages entirely (via unmounting hugetlbfs, I presume). In
+>             this case, we now have CMA page that are long-term pinned,
+>             and that's the state we want to avoid.
 
-FYI, the error/warning still remains.
+I do not think case 2 can happen.  A hugetlb page can only be changed back
+to 'normal' (buddy) pages when ref count goes to zero.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3b5e1590a26713a8c76896f0f1b99f52ec24e72f
-commit: fde9c59aebafb91caeed816cc510b56f14aa63ae riscv: explicitly use symbol offsets for VDSO
-date:   9 months ago
-config: riscv-randconfig-r042-20220519 (https://download.01.org/0day-ci/archive/20220521/202205210713.al93bRN0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde9c59aebafb91caeed816cc510b56f14aa63ae
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fde9c59aebafb91caeed816cc510b56f14aa63ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+It should also be noted that hugetlb code sets up the CMA area from which
+hugetlb pages can be allocated.  This area is never unreserved/freed.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I do not think there is a reason to disallow long term pinning of hugetlb
+pages allocated from THE hugetlb CMA area.
 
-All errors (new ones prefixed by >>):
+But, I wonder if it is possible for hugetlb pages to be allocated from
+another (non-hugetlb) area.  For example if someone sets up a huge CMA area
+and hugetlb allocations spill over into that area.  If this is possible
+(still need to research), then we would not want to long term pin such
+hugetlb pages.  We can check this in the hugetlb code to determine if
+long term pinning is allowed.  
 
->> arch/riscv/kernel/signal.c:197:28: error: use of undeclared identifier '__vdso_rt_sigreturn_offset'
-           regs->ra = (unsigned long)VDSO_SYMBOL(
-                                     ^
-   arch/riscv/include/asm/vdso.h:20:42: note: expanded from macro 'VDSO_SYMBOL'
-           (void __user *)((unsigned long)(base) + __vdso_##name##_offset)
-                                                   ^
-   <scratch space>:204:1: note: expanded from here
-   __vdso_rt_sigreturn_offset
-   ^
-   arch/riscv/kernel/signal.c:309:27: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                             ^
-   arch/riscv/kernel/signal.c:309:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-                        ^
-                        static 
-   1 warning and 1 error generated.
+> 
+> The reason it is debatable is that hugetlbfs is intended to be used
+> long term, itself. The expected use cases do not normally include a
+> lot of short term mounting and unmounting.
+> 
+> And whichever way that debate goes, we need to allow it to be
+> fixable, by not tying "is pinnable" to "using gup/pup". The caller
+> has the context that is needed to make that policy decision, but
+> gup/pup does not.
+> 
+> At this point, I think it's time to fix up the problems and restore
+> previous behavior, by choosing Case 1 behavior for now. And also
+> lifting the is_pinnable_page() checks up a level, as noted in my
+> other thread.  I can do that, unless someone sees a flaw in the
+> reasoning.
 
-
-vim +/__vdso_rt_sigreturn_offset +197 arch/riscv/kernel/signal.c
-
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  173  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  174  static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  175  	struct pt_regs *regs)
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  176  {
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  177  	struct rt_sigframe __user *frame;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  178  	long err = 0;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  179  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  180  	frame = get_sigframe(ksig, regs, sizeof(*frame));
-96d4f267e40f95 Linus Torvalds    2019-01-03  181  	if (!access_ok(frame, sizeof(*frame)))
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  182  		return -EFAULT;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  183  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  184  	err |= copy_siginfo_to_user(&frame->info, &ksig->info);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  185  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  186  	/* Create the ucontext. */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  187  	err |= __put_user(0, &frame->uc.uc_flags);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  188  	err |= __put_user(NULL, &frame->uc.uc_link);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  189  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  190  	err |= setup_sigcontext(frame, regs);
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  191  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  192  	if (err)
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  193  		return -EFAULT;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  194  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  195  	/* Set up to return from userspace. */
-6bd33e1ece528f Christoph Hellwig 2019-10-28  196  #ifdef CONFIG_MMU
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10 @197  	regs->ra = (unsigned long)VDSO_SYMBOL(
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  198  		current->mm->context.vdso, rt_sigreturn);
-6bd33e1ece528f Christoph Hellwig 2019-10-28  199  #else
-6bd33e1ece528f Christoph Hellwig 2019-10-28  200  	/*
-6bd33e1ece528f Christoph Hellwig 2019-10-28  201  	 * For the nommu case we don't have a VDSO.  Instead we push two
-6bd33e1ece528f Christoph Hellwig 2019-10-28  202  	 * instructions to call the rt_sigreturn syscall onto the user stack.
-6bd33e1ece528f Christoph Hellwig 2019-10-28  203  	 */
-6bd33e1ece528f Christoph Hellwig 2019-10-28  204  	if (copy_to_user(&frame->sigreturn_code, __user_rt_sigreturn,
-6bd33e1ece528f Christoph Hellwig 2019-10-28  205  			 sizeof(frame->sigreturn_code)))
-6bd33e1ece528f Christoph Hellwig 2019-10-28  206  		return -EFAULT;
-6bd33e1ece528f Christoph Hellwig 2019-10-28  207  	regs->ra = (unsigned long)&frame->sigreturn_code;
-6bd33e1ece528f Christoph Hellwig 2019-10-28  208  #endif /* CONFIG_MMU */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  209  
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  210  	/*
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  211  	 * Set up registers for signal handler.
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  212  	 * Registers that we don't modify keep the value they had from
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  213  	 * user-space at the time we took the signal.
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  214  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  215  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  216  	 */
-a4c3733d32a72f Christoph Hellwig 2019-10-28  217  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  218  	regs->sp = (unsigned long)frame;
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  219  	regs->a0 = ksig->sig;                     /* a0: signal number */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  220  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  221  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  222  
-
-:::::: The code at line 197 was first introduced by commit
-:::::: e2c0cdfba7f69925afc92b20cd9835d81e11a4f1 RISC-V: User-facing API
-
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+Go for it.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Mike Kravetz
