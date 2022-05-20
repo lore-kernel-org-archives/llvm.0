@@ -1,41 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2ECA15AA
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 04:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C6D15A9
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 06:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653019777; x=1684555777;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=7ASCMkqGN6o7uz8lVArwg1pvc5zUbAyh850Qj4e2Tao=;
-  b=LksV62d8l32qsCZvJsoQG/oujjx3/Rkt/miMb1YB/FOkgu7X8k9upaXO
-   IhbgbHwrtsuTP5MZpz/4IIUuN+vQsafk5nCTH2E6EXo26PreFzQ00vz5p
-   vJtW1VgDac9H59SLLD2dxkrWcE/K7z2WMfFpRCADpyMp+OdcrcW0LcMVU
-   PvbcUbtUAUaA0C0Hj91SI+GDQHRTXLlpSuYVWwM+hsfv89MIqsxw+C1Nm
-   oqiWe7LlfuQUxOTWaAPS/Nu2HmXzQpIl1FJmG+QgifaJOk3gGXQNa3W+9
-   DKKH6KxxH9HmsSLLvHP3wfEgjnH09qCEz9APAWIKdqLJ1xwY0CF8MSrzS
+  t=1653027201; x=1684563201;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LIUNboT17lR5CW5ZnVnjFPjF/nqQXlv0eH78sLfL0aQ=;
+  b=fhxmdxxHMTxN2QCHCvuys5oKcITVhvJ146xlC0CFy83u4IA/Kz72GuLq
+   JoKWkfZ7Be2wHx05B/Zd3tXdGh1nkftGCFqo/GeZfGNA7uAT2TUWMoszp
+   g1i/1kWcnXFkPdMa9iRI6IjSoWErWutm9UMqyBoaY+CDXeoO5jYqqcgiW
+   Pw6AtYFA8wHmey15GQFHnaBTY8XG6AfaNlUxcJqjsPvbfj/bhdvcXBnUW
+   tQw3i8ZoT4hD6ZWI8GyCmkv6GyFVSoOIWluByQAJCdX3DS9aZLKBrr+9f
+   QLCuJuZajXxcdDC3QVPa7HGaHBTPzn8Rgb7kujuQt3gQ/xeBnb6pNobap
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="254531846"
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="333129126"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="254531846"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 21:09:37 -0700
+   d="scan'208";a="333129126"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:13:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="640133876"
+   d="scan'208";a="662109027"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 19 May 2022 21:09:36 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2022 23:13:17 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nrtxH-0004Gx-QZ;
-	Fri, 20 May 2022 04:09:35 +0000
-Date: Fri, 20 May 2022 12:09:06 +0800
+	id 1nrvsy-0004Lr-TJ;
+	Fri, 20 May 2022 06:13:16 +0000
+Date: Fri, 20 May 2022 14:11:27 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [peterz-queue:sched/idle 8/9] vmlinux.o: warning: objtool:
- mwait_idle+0x1: call to current_set_polling_and_test() leaves .noinstr.text
- section
-Message-ID: <202205201226.CGMDlCpG-lkp@intel.com>
+To: Vinicius Costa Gomes <vinicius.gomes@intel.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Vinicius Costa Gomes <vinicius.gomes@intel.com>, jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	vladimir.oltean@nxp.com, po.liu@nxp.com, boon.leong.ong@intel.com,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v5 10/11] igc: Check incompatible configs for
+ Frame Preemption
+Message-ID: <202205201422.84XYwlpY-lkp@intel.com>
+References: <20220520011538.1098888-11-vinicius.gomes@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,41 +50,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220520011538.1098888-11-vinicius.gomes@intel.com>
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Peter Zijlstra <peterz@infradead.org>
+Hi Vinicius,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
-head:   0d249da1c3122b643b87a578c821dfb35c3bb633
-commit: 4d63ba9ea8f51cf1b33f10cae352a21e45cbe7c3 [8/9] objtool/idle: Validate __cpuidle code as noinstr
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220520/202205201226.CGMDlCpG-lkp@intel.com/config)
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Costa-Gomes/ethtool-Add-support-for-frame-preemption/20220520-092800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git df98714e432abf5cbdac3e4c1a13f94c65ddb8d3
+config: s390-buildonly-randconfig-r002-20220519 (https://download.01.org/0day-ci/archive/20220520/202205201422.84XYwlpY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=4d63ba9ea8f51cf1b33f10cae352a21e45cbe7c3
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/idle
-        git checkout 4d63ba9ea8f51cf1b33f10cae352a21e45cbe7c3
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a42e940bc53c40ee4e33a1bbf022a663bb28a9c7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vinicius-Costa-Gomes/ethtool-Add-support-for-frame-preemption/20220520-092800
+        git checkout a42e940bc53c40ee4e33a1bbf022a663bb28a9c7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/intel/igc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: do_syscall_64+0x1a: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32+0x26: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __do_fast_syscall_32+0x28: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x21: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: acpi_idle_enter+0x6d: call to wbinvd() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x74: call to wbinvd() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: mwait_idle+0x1: call to current_set_polling_and_test() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: acpi_safe_halt+0x7: call to test_ti_thread_flag() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: io_idle+0x3: call to __inb() leaves .noinstr.text section
+   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:40:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/ethernet/intel/igc/igc_main.c:5919:6: warning: variable 'ring' is uninitialized when used here [-Wuninitialized]
+           if (ring->preemptible) {
+               ^~~~
+   drivers/net/ethernet/intel/igc/igc_main.c:5914:23: note: initialize the variable 'ring' to silence this warning
+           struct igc_ring *ring;
+                                ^
+                                 = NULL
+   13 warnings generated.
+
+
+vim +/ring +5919 drivers/net/ethernet/intel/igc/igc_main.c
+
+  5910	
+  5911	static int igc_save_launchtime_params(struct igc_adapter *adapter, int queue,
+  5912					      bool enable)
+  5913	{
+  5914		struct igc_ring *ring;
+  5915	
+  5916		if (queue < 0 || queue >= adapter->num_tx_queues)
+  5917			return -EINVAL;
+  5918	
+> 5919		if (ring->preemptible) {
+  5920			netdev_err(adapter->netdev, "Cannot enable LaunchTime on a preemptible queue\n");
+  5921			return -EINVAL;
+  5922		}
+  5923	
+  5924		ring = adapter->tx_ring[queue];
+  5925		ring->launchtime_enable = enable;
+  5926	
+  5927		return 0;
+  5928	}
+  5929	
 
 -- 
 0-DAY CI Kernel Test Service
