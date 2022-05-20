@@ -1,175 +1,104 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE4C15D1
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 16:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E9129A3
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 16:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653064207; x=1684600207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=CZYswHE5SGhufd15z7J+HW4Ly0idiv0tqBde/Y19+sA=;
-  b=HdHVIZ/tO/bUNtVw4wxVkYr5ReeK61bfMJqVs3KkWVPvIBZSgMFPnCuX
-   chwZEeBwPQ1G6mnIwKQCfVaKYT4kn3VdGJhN3r2xnzZuBmJdhoCl2n1nj
-   eQs8aEotes25O1e3+XujrRati+j1UURrKOe2uqUoMAiJyDcLR03wclhMz
-   Wu7kMPzrmnLPW3rpLyRZHekIPJU/rXUTFrcxm3Cm/aMDpBN9sL1BIz9Dd
-   GOkQnr2VXx8Q9kMSl6YWJF/kf/Y74WzpfnuWq/B916khZD3YknAZgRlyi
-   keZ0zbSN/rcJmEJqze6tZHOTET/XorXoH2bFNL7z3wfRv2Uybz/zXGyUp
+  t=1653065456; x=1684601456;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g9bdBj3ql8h+7P1tweuhkg3AlJoWZiW9c4tHoZzHR+k=;
+  b=AyO1s9Nbn17FqA7UV9E0FlNyotuuwwlKQgHnYUHm3di3X2IWy9LLbI9d
+   LWqVhOFe3FXV3w+pO77t8RMNp6w1hb3GagJfFDo0MAbXFYxL0V1iO9tiR
+   6Y93e6bPvZVpWi5sOb6n8+kBWiGdeHv/lQK+GhCgH3RNchSpzUD+H6k02
+   tvpSiX/KWW1c9o70v2ydWfNwaPWKJKX5o1VuQ8GwhERCevsoAYb928u/G
+   MW1wuoHd3c5hhOUo/07CSLRzUbeDW15ji/oZm+ygbGY8rJ7Fxp5RH1tyd
+   yiTI5DDmYorH8nbfZJoxYPvh5C1n+2ZQ9DIqRPvUEA7XooNy7qqVvVi9b
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="271474354"
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260247425"
 X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="271474354"
+   d="scan'208";a="260247425"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:29:54 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 09:50:56 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="628243549"
+   d="scan'208";a="628252784"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 20 May 2022 09:29:52 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 20 May 2022 09:50:54 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ns5Vg-0004vM-5a;
-	Fri, 20 May 2022 16:29:52 +0000
-Date: Sat, 21 May 2022 00:29:26 +0800
+	id 1ns5q1-0004xw-JM;
+	Fri, 20 May 2022 16:50:53 +0000
+Date: Sat, 21 May 2022 00:50:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH] ceph: try to prevent exceeding the MDS maximum xattr
- size
-Message-ID: <202205210021.IgsLVawx-lkp@intel.com>
-References: <20220520115426.438-1-lhenriques@suse.de>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Bean Huo <beanhuo@micron.com>
+Subject: [linux-next:master 13283/13468]
+ drivers/ufs/host/ufs-exynos.c:1598:34: warning: unused variable
+ 'exynos_ufs_of_match'
+Message-ID: <202205210041.hiIpWG5f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220520115426.438-1-lhenriques@suse.de>
 
-Hi "Luís,
+Hi Bart,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on ceph-client/for-linus]
-[also build test WARNING on v5.18-rc7 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+First bad commit (maybe != root cause):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-s-Henriques/ceph-try-to-prevent-exceeding-the-MDS-maximum-xattr-size/20220520-195559
-base:   https://github.com/ceph/ceph-client.git for-linus
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220521/202205210021.IgsLVawx-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   18ecd30af1a8402c162cca1bd58771c0e5be7815
+commit: dd11376b9f1b73aca3f8c6eb541486bbb6996f05 [13283/13468] scsi: ufs: Split the drivers/scsi/ufs directory
+config: hexagon-randconfig-r001-20220519 (https://download.01.org/0day-ci/archive/20220521/202205210041.hiIpWG5f-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3c9e88c091f0e9b17856d7de9b8c705e827ee716
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lu-s-Henriques/ceph-try-to-prevent-exceeding-the-MDS-maximum-xattr-size/20220520-195559
-        git checkout 3c9e88c091f0e9b17856d7de9b8c705e827ee716
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=dd11376b9f1b73aca3f8c6eb541486bbb6996f05
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout dd11376b9f1b73aca3f8c6eb541486bbb6996f05
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/host/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/ceph/xattr.c:1087:36: warning: data argument not used by format string [-Wformat-extra-args]
-           dout("setxattr value size: ld\n", size);
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
-   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
-                           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                   ~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^
+>> drivers/ufs/host/ufs-exynos.c:1598:34: warning: unused variable 'exynos_ufs_of_match' [-Wunused-const-variable]
+   static const struct of_device_id exynos_ufs_of_match[] = {
+                                    ^
    1 warning generated.
 
 
-vim +1087 fs/ceph/xattr.c
+vim +/exynos_ufs_of_match +1598 drivers/ufs/host/ufs-exynos.c
 
-  1058	
-  1059	static int ceph_sync_setxattr(struct inode *inode, const char *name,
-  1060				      const char *value, size_t size, int flags)
-  1061	{
-  1062		struct ceph_fs_client *fsc = ceph_sb_to_client(inode->i_sb);
-  1063		struct ceph_inode_info *ci = ceph_inode(inode);
-  1064		struct ceph_mds_request *req;
-  1065		struct ceph_mds_client *mdsc = fsc->mdsc;
-  1066		struct ceph_osd_client *osdc = &fsc->client->osdc;
-  1067		struct ceph_pagelist *pagelist = NULL;
-  1068		int op = CEPH_MDS_OP_SETXATTR;
-  1069		int err;
-  1070	
-  1071		if (size > 0) {
-  1072			/* copy value into pagelist */
-  1073			pagelist = ceph_pagelist_alloc(GFP_NOFS);
-  1074			if (!pagelist)
-  1075				return -ENOMEM;
-  1076	
-  1077			err = ceph_pagelist_append(pagelist, value, size);
-  1078			if (err)
-  1079				goto out;
-  1080		} else if (!value) {
-  1081			if (flags & CEPH_XATTR_REPLACE)
-  1082				op = CEPH_MDS_OP_RMXATTR;
-  1083			else
-  1084				flags |= CEPH_XATTR_REMOVE;
-  1085		}
-  1086	
-> 1087		dout("setxattr value size: ld\n", size);
-  1088	
-  1089		/* do request */
-  1090		req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-  1091		if (IS_ERR(req)) {
-  1092			err = PTR_ERR(req);
-  1093			goto out;
-  1094		}
-  1095	
-  1096		req->r_path2 = kstrdup(name, GFP_NOFS);
-  1097		if (!req->r_path2) {
-  1098			ceph_mdsc_put_request(req);
-  1099			err = -ENOMEM;
-  1100			goto out;
-  1101		}
-  1102	
-  1103		if (op == CEPH_MDS_OP_SETXATTR) {
-  1104			req->r_args.setxattr.flags = cpu_to_le32(flags);
-  1105			req->r_args.setxattr.osdmap_epoch =
-  1106				cpu_to_le32(osdc->osdmap->epoch);
-  1107			req->r_pagelist = pagelist;
-  1108			pagelist = NULL;
-  1109		}
-  1110	
-  1111		req->r_inode = inode;
-  1112		ihold(inode);
-  1113		req->r_num_caps = 1;
-  1114		req->r_inode_drop = CEPH_CAP_XATTR_SHARED;
-  1115	
-  1116		dout("xattr.ver (before): %lld\n", ci->i_xattrs.version);
-  1117		err = ceph_mdsc_do_request(mdsc, NULL, req);
-  1118		ceph_mdsc_put_request(req);
-  1119		dout("xattr.ver (after): %lld\n", ci->i_xattrs.version);
-  1120	
-  1121	out:
-  1122		if (pagelist)
-  1123			ceph_pagelist_release(pagelist);
-  1124		return err;
-  1125	}
-  1126	
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1597  
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28 @1598  static const struct of_device_id exynos_ufs_of_match[] = {
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1599  	{ .compatible = "samsung,exynos7-ufs",
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1600  	  .data	      = &exynos_ufs_drvs },
+cc52e15397cc5d drivers/scsi/ufs/ufs-exynos.c Chanho Park 2021-10-18  1601  	{ .compatible = "samsung,exynosautov9-ufs",
+cc52e15397cc5d drivers/scsi/ufs/ufs-exynos.c Chanho Park 2021-10-18  1602  	  .data	      = &exynosauto_ufs_drvs },
+be39f4fd8dd430 drivers/scsi/ufs/ufs-exynos.c Chanho Park 2021-10-18  1603  	{ .compatible = "samsung,exynosautov9-ufs-vh",
+be39f4fd8dd430 drivers/scsi/ufs/ufs-exynos.c Chanho Park 2021-10-18  1604  	  .data	      = &exynosauto_ufs_vh_drvs },
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1605  	{},
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1606  };
+55f4b1f73631a0 drivers/scsi/ufs/ufs-exynos.c Alim Akhtar 2020-05-28  1607  
+
+:::::: The code at line 1598 was first introduced by commit
+:::::: 55f4b1f73631a0817717fe6e98517de51b4c3527 scsi: ufs: ufs-exynos: Add UFS host support for Exynos SoCs
+
+:::::: TO: Alim Akhtar <alim.akhtar@samsung.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 -- 
 0-DAY CI Kernel Test Service
