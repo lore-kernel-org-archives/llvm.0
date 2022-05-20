@@ -1,47 +1,45 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583EB28E5
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 12:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349217A
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 13:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653050929; x=1684586929;
+  t=1653052190; x=1684588190;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ydq2rAxzxy58oJMneM/mj2UuLnLEiLOSmzW01gULOvU=;
-  b=Yhq6nOrztPGDyR+UtAyDKLG3kNnLR9ha5VdihfKkpZh8z8RNSdpbI5J5
-   cyCXmCQ3X32Y2hGJYyW8N5o5Z6/MZzeIBh8IYNrHUHn9RMJt65izRhsMi
-   ddeVqA+Y2KF1F/ewYI/utpmZJtnAY723zS3mqEyqhIAA28NFntVNXqXnn
-   90QqM/7OLlzKryg8bBgPDBGR6EO+5v2F3hfcI1a0FuOlTyxvja3H3vFsv
-   6rgTUx9tU9FK1xL8pSp8/L3ZI4Zpg4Sq/wE8IGGxrFl7MKTDUrokmq728
-   Pstor+OaPqjkqekcmMKeHHXikQlSuYOmew9DerQYgnmixHaVcKxjZlJ6K
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="253112298"
+  bh=JYvA0BL6yB7SFLBfiv6pDy7n04oHm5chtGpJPdO8AMI=;
+  b=jjE4EABKqw3zg5ZVIscj4d0pJ3F3nYrObuotZOp9PxjraFX91YwTN28T
+   7yGIixAV5QCmnolAbrPqN2PsDosrIwMAizjf70clwKnKGT2/lcQxZUOrB
+   JltDj6RRI4u8jOyXe7Ho79jD2Yx20PRUCwsqPgMM+8dygoCUFQTUQjIeO
+   rzECh79vAlMjclZXNSqAfpiBQlDq5+NafuA5+kTVYRd93v/g5bkYnspzX
+   9JU+D2XZCtc+syOqvsf+BHFsFHFgDzpnxuRlnRrC4zo9OZyEO4nZ5c1Ze
+   Ruw+En+t84srhwkja/ojnqT1mE84Ty4+wb5PrGDXd/q45F3caHMmlkwRY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="270184298"
 X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="253112298"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 05:48:48 -0700
+   d="scan'208";a="270184298"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 06:09:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,239,1647327600"; 
-   d="scan'208";a="662248000"
+   d="scan'208";a="715526492"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 May 2022 05:48:44 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 20 May 2022 06:09:45 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ns23g-0004hw-5m;
-	Fri, 20 May 2022 12:48:44 +0000
-Date: Fri, 20 May 2022 20:48:19 +0800
+	id 1ns2O0-0004ii-Lb;
+	Fri, 20 May 2022 13:09:44 +0000
+Date: Fri, 20 May 2022 21:08:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhenwei pi <pizhenwei@bytedance.com>, akpm@linux-foundation.org,
-	naoya.horiguchi@nec.com, mst@redhat.com, david@redhat.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, jasowang@redhat.com,
-	virtualization@lists.linux-foundation.org, pbonzini@redhat.com,
-	peterx@redhat.com, qemu-devel@nongnu.org,
-	zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
-Message-ID: <202205202014.mgqgBrKd-lkp@intel.com>
-References: <20220520070648.1794132-4-pizhenwei@bytedance.com>
+To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, djwong@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] xfs: Remove the redundant assignment
+Message-ID: <202205202134.P3H4KQ7S-lkp@intel.com>
+References: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,120 +48,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520070648.1794132-4-pizhenwei@bytedance.com>
+In-Reply-To: <20220520040518.73957-1-jiapeng.chong@linux.alibaba.com>
 
-Hi zhenwei,
+Hi Jiapeng,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20220519]
-[cannot apply to linux/master linus/master v5.18-rc7]
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on v5.18-rc7 next-20220519]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhenwei-pi/recover-hardware-corrupted-page-by-virtio-balloon/20220520-151328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r041-20220519 (https://download.01.org/0day-ci/archive/20220520/202205202014.mgqgBrKd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/xfs-Remove-the-redundant-assignment/20220520-120736
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220520/202205202134.P3H4KQ7S-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a42127073dd4adb6354649c8235c5cde033d01f2
+        # https://github.com/intel-lab-lkp/linux/commit/890587fbe3e3934d20fcd39effdcefedd65e6b7f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhenwei-pi/recover-hardware-corrupted-page-by-virtio-balloon/20220520-151328
-        git checkout a42127073dd4adb6354649c8235c5cde033d01f2
+        git fetch --no-tags linux-review Jiapeng-Chong/xfs-Remove-the-redundant-assignment/20220520-120736
+        git checkout 890587fbe3e3934d20fcd39effdcefedd65e6b7f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/virtio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/virtio/virtio_balloon.c:654:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/virtio/virtio_balloon.c:654:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
+>> fs/xfs/xfs_log_recover.c:3542:20: warning: unused variable 'agfp' [-Wunused-variable]
+                           struct xfs_agf  *agfp = agfbp->b_addr;
+                                            ^
+>> fs/xfs/xfs_log_recover.c:3551:20: warning: unused variable 'agi' [-Wunused-variable]
+                           struct xfs_agi  *agi = agibp->b_addr;
+                                            ^
+   2 warnings generated.
 
 
-vim +654 drivers/virtio/virtio_balloon.c
+vim +/agfp +3542 fs/xfs/xfs_log_recover.c
 
-   593	
-   594	static void recover_vq_handle_response(struct virtio_balloon *vb, unsigned int len)
-   595	{
-   596		struct __virtio_balloon_recover *in_vbr;
-   597		struct virtio_balloon_recover *vbr;
-   598		struct page *page;
-   599		unsigned int pfns;
-   600		u32 pfn0, pfn1;
-   601		__u8 status;
-   602	
-   603		/* the response is not expected */
-   604		if (unlikely(len != sizeof(struct __virtio_balloon_recover)))
-   605			return;
-   606	
-   607		in_vbr = &vb->in_vbr;
-   608		vbr = &in_vbr->vbr;
-   609		if (unlikely(vbr->cmd != VIRTIO_BALLOON_R_CMD_RESPONSE))
-   610			return;
-   611	
-   612		/* to make sure the contiguous balloon PFNs */
-   613		for (pfns = 1; pfns < VIRTIO_BALLOON_PAGES_PER_PAGE; pfns++) {
-   614			pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns - 1]);
-   615			pfn1 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[pfns]);
-   616			if (pfn1 - pfn0 != 1)
-   617				return;
-   618		}
-   619	
-   620		pfn0 = virtio32_to_cpu(vb->vdev, in_vbr->pfns[0]);
-   621		if (!pfn_valid(pfn0))
-   622			return;
-   623	
-   624		pfn1 = -1;
-   625		spin_lock(&vb->recover_page_list_lock);
-   626		list_for_each_entry(page, &vb->corrupted_page_list, lru) {
-   627			pfn1 = page_to_pfn(page);
-   628			if (pfn1 == pfn0)
-   629				break;
-   630		}
-   631		spin_unlock(&vb->recover_page_list_lock);
-   632	
-   633		status = vbr->status;
-   634		switch (status) {
-   635		case VIRTIO_BALLOON_R_STATUS_RECOVERED:
-   636			if (pfn1 == pfn0) {
-   637				spin_lock(&vb->recover_page_list_lock);
-   638				list_del(&page->lru);
-   639				balloon_page_push(&vb->recovered_page_list, page);
-   640				spin_unlock(&vb->recover_page_list_lock);
-   641				queue_work(system_freezable_wq, &vb->unpoison_memory_work);
-   642				dev_info_ratelimited(&vb->vdev->dev, "recovered pfn 0x%x", pfn0);
-   643			}
-   644			break;
-   645		case VIRTIO_BALLOON_R_STATUS_FAILED:
-   646			/* the hypervisor can't fix this corrupted page, balloon puts page */
-   647			if (pfn1 == pfn0) {
-   648				spin_lock(&vb->recover_page_list_lock);
-   649				list_del(&page->lru);
-   650				spin_unlock(&vb->recover_page_list_lock);
-   651				put_page(page);
-   652				dev_info_ratelimited(&vb->vdev->dev, "failed to recover pfn 0x%x", pfn0);
-   653			}
- > 654		default:
-   655			break;
-   656		};
-   657	
-   658		/* continue to get response from host side if the response gets handled successfully */
-   659		recover_vq_get_response(vb);
-   660	}
-   661	
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3519  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3520  #if defined(DEBUG)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3521  /*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3522   * Read all of the agf and agi counters and check that they
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3523   * are consistent with the superblock counters.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3524   */
+e89fbb5ee1893f Christoph Hellwig 2017-11-06  3525  STATIC void
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3526  xlog_recover_check_summary(
+9a8d2fdbb47aaa Mark Tinguely     2012-06-14  3527  	struct xlog		*log)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3528  {
+934933c3eec9e4 Dave Chinner      2021-06-02  3529  	struct xfs_mount	*mp = log->l_mp;
+934933c3eec9e4 Dave Chinner      2021-06-02  3530  	struct xfs_perag	*pag;
+e82226138b20d4 Dave Chinner      2020-12-16  3531  	struct xfs_buf		*agfbp;
+e82226138b20d4 Dave Chinner      2020-12-16  3532  	struct xfs_buf		*agibp;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3533  	xfs_agnumber_t		agno;
+5e1be0fb1a3950 Christoph Hellwig 2008-11-28  3534  	int			error;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3535  
+934933c3eec9e4 Dave Chinner      2021-06-02  3536  	for_each_perag(mp, agno, pag) {
+934933c3eec9e4 Dave Chinner      2021-06-02  3537  		error = xfs_read_agf(mp, NULL, pag->pag_agno, 0, &agfbp);
+4805621a37d9b2 Christoph Hellwig 2008-11-28  3538  		if (error) {
+a0fa2b679ecd15 Dave Chinner      2011-03-07  3539  			xfs_alert(mp, "%s agf read failed agno %d error %d",
+934933c3eec9e4 Dave Chinner      2021-06-02  3540  						__func__, pag->pag_agno, error);
+4805621a37d9b2 Christoph Hellwig 2008-11-28  3541  		} else {
+9798f615ad2be4 Christoph Hellwig 2020-03-10 @3542  			struct xfs_agf	*agfp = agfbp->b_addr;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3543  			xfs_buf_relse(agfbp);
+4805621a37d9b2 Christoph Hellwig 2008-11-28  3544  		}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3545  
+934933c3eec9e4 Dave Chinner      2021-06-02  3546  		error = xfs_read_agi(mp, NULL, pag->pag_agno, &agibp);
+a0fa2b679ecd15 Dave Chinner      2011-03-07  3547  		if (error) {
+a0fa2b679ecd15 Dave Chinner      2011-03-07  3548  			xfs_alert(mp, "%s agi read failed agno %d error %d",
+934933c3eec9e4 Dave Chinner      2021-06-02  3549  						__func__, pag->pag_agno, error);
+a0fa2b679ecd15 Dave Chinner      2011-03-07  3550  		} else {
+370c782b98436b Christoph Hellwig 2020-03-10 @3551  			struct xfs_agi	*agi = agibp->b_addr;
 
 -- 
 0-DAY CI Kernel Test Service
