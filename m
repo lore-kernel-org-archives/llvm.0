@@ -1,55 +1,44 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED9633C3
-	for <llvm@lists.linux.dev>; Thu, 19 May 2022 23:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750CD2F33
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 00:08:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653004671; x=1684540671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GVDQWSEfMGG74rHOgwvqpqSuN9oJgomUVNCFcE7jGy0=;
-  b=Th12ecPqMAhVK+HbPSMiK4v1bjyQiA42cCREr8xxFxXu4oDsIV4Sivgt
-   N7d5XxHj2sTyl+/JEQwCcxkzBUNtLzhr5KZIyS+aeABfYMIejT3c7zoh8
-   n0QTezFd1+fBGR91Rj+0Ipxrwr+N+yGmQEmptSnuGqqOLQxy6W2dXVTTn
-   P4xnubtxBAkzHXMtTP8CmSwrmJrDCSGPmZvu9GIow4i7WefcRr3cVTpOD
-   5SyRTabmqub5mi90MuzhxStm6d3R68FjCF2iHeVg7/POMyunsi4jaaiVb
-   PuPqZoT5keP4kR9DNRwwHMaAz31waITGqK6gV4jgTuQ2ci1973dVCvKio
+  t=1653005329; x=1684541329;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3oJVd2uNaGfr914y+xcrWjasG+1vP5j565ik4JIiVL4=;
+  b=MVEDS8ZGWPsyRInJZPK7mKWKP8KKOpuYr2q4gNnBUu+7JxCcnwp0JbNX
+   q0i/2iEWabhiqE8jP8I8gsRIsUnLyHBMxEs3ujtASu6KVJeKrbKGKsmjc
+   c4QwVbRn6XwqGXHT4g3vwmMsc4zoX3qkq3R6qSUShNZdx8/7ujGE/hfot
+   3CMoptAoreLbrMyiVEAQoiazwyjG2BfrsuDYYohzN6nk2Esr8F0QNmGvp
+   mrwIfTNM6UUHDpcMEt/tH9ynIEHaIuSIrFLggTkLKdUBRzFq9dJdg1UoK
+   eGee5vwNuT4h+0MayUabAuj5pL1H1KvQ6wYM84DY6hBEPMdhXWGeMcgwV
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252314516"
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252316656"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="252314516"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:57:50 -0700
+   d="scan'208";a="252316656"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:08:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="557181864"
+   d="scan'208";a="674331932"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 May 2022 16:57:45 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 19 May 2022 17:08:47 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nrq1Z-000445-04;
-	Thu, 19 May 2022 23:57:45 +0000
-Date: Fri, 20 May 2022 07:57:41 +0800
+	id 1nrqCE-00044P-Mr;
+	Fri, 20 May 2022 00:08:46 +0000
+Date: Fri, 20 May 2022 08:08:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@rivosinc.com>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com
-Subject: Re: [PATCH v3 2/2] riscv: turn pgtable_l4|[l5]_enabled to static key
- for RV64
-Message-ID: <202205200730.afjapejq-lkp@intel.com>
-References: <20220519155918.3882-3-jszhang@kernel.org>
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-next 3/3]
+ fs/cifs/fscache.c:106:9: error: no member named 'netfs_ctx' in 'struct
+ cifsInodeInfo'
+Message-ID: <202205200739.HeIDHcBH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,404 +47,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519155918.3882-3-jszhang@kernel.org>
 
-Hi Jisheng,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc7]
-[cannot apply to next-20220519]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/use-static-key-to-optimize-pgtable_l4_enabled/20220520-001459
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git f993aed406eaf968ba3867a76bb46c95336a33d0
-config: riscv-buildonly-randconfig-r003-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200730.afjapejq-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-next
+head:   a3457aa9c40f99183345cbedd7e0a7404bcc6370
+commit: a3457aa9c40f99183345cbedd7e0a7404bcc6370 [3/3] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220520/202205200739.HeIDHcBH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/d052c69ebaf48ac2925d6f9fa033d9e394da1074
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jisheng-Zhang/use-static-key-to-optimize-pgtable_l4_enabled/20220520-001459
-        git checkout d052c69ebaf48ac2925d6f9fa033d9e394da1074
+        # https://github.com/ammarfaizi2/linux-block/commit/a3457aa9c40f99183345cbedd7e0a7404bcc6370
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-next
+        git checkout a3457aa9c40f99183345cbedd7e0a7404bcc6370
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/tty/ net/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/tty/tty_io.c:73:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:112:
->> arch/riscv/include/asm/pgtable-64.h:19:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   arch/riscv/include/asm/pgtable-64.h:27:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/tty/tty_io.c:75:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   7 warnings and 2 errors generated.
---
-   In file included from drivers/tty/tty_ioctl.c:11:
-   In file included from include/uapi/linux/termios.h:6:
-   In file included from ./arch/riscv/include/generated/uapi/asm/termios.h:1:
-   In file included from include/asm-generic/termios.h:6:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:112:
->> arch/riscv/include/asm/pgtable-64.h:19:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   arch/riscv/include/asm/pgtable-64.h:27:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           (set1->sig[1] == set2->sig[1]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           (set1->sig[1] == set2->sig[1]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:118:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[1] == set2->sig[1]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/tty_ioctl.c:13:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:118:27: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[1] == set2->sig[1]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
---
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:112:
->> arch/riscv/include/asm/pgtable-64.h:19:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   arch/riscv/include/asm/pgtable-64.h:27:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:12:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:42:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/tty/tty_port.c:245:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-           INIT_KFIFO(port->xmit_fifo);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kfifo.h:130:69: note: expanded from macro 'INIT_KFIFO'
-           __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
-                         ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
-   8 warnings and 2 errors generated.
---
-   In file included from drivers/tty/serial/earlycon.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:112:
->> arch/riscv/include/asm/pgtable-64.h:19:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   arch/riscv/include/asm/pgtable-64.h:27:6: error: call to undeclared function 'static_branch_likely'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (static_branch_likely(&_pgtable_lx_ready))
-               ^
-   In file included from drivers/tty/serial/earlycon.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/tty/serial/earlycon.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/tty/serial/earlycon.c:16:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
-   In file included from drivers/tty/serial/earlycon.c:17:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/serial/earlycon.c:17:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/serial/earlycon.c:17:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/tty/serial/earlycon.c:17:
-   In file included from include/linux/serial_core.h:13:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-..
+>> fs/cifs/fscache.c:106:9: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+           cifsi->netfs_ctx.cache =
+           ~~~~~  ^
+   fs/cifs/fscache.c:134:10: error: no member named 'netfs_ctx' in 'struct cifsInodeInfo'
+                   cifsi->netfs_ctx.cache = NULL;
+                   ~~~~~  ^
+   2 errors generated.
 
 
-vim +/static_branch_likely +19 arch/riscv/include/asm/pgtable-64.h
+vim +106 fs/cifs/fscache.c
 
-    16	
-    17	static __always_inline bool pgtable_l5_enabled(void)
-    18	{
-  > 19		if (static_branch_likely(&_pgtable_lx_ready))
-    20			return static_branch_likely(&_pgtable_l5_enabled);
-    21		else
-    22			return _pgtable_l5_enabled_early;
-    23	}
-    24	
+402cb8dda949d9 David Howells    2018-04-04   96  
+70431bfd825d9c David Howells    2020-11-17   97  void cifs_fscache_get_inode_cookie(struct inode *inode)
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05   98  {
+70431bfd825d9c David Howells    2020-11-17   99  	struct cifs_fscache_inode_coherency_data cd;
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  100  	struct cifsInodeInfo *cifsi = CIFS_I(inode);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  101  	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+96daf2b09178d8 Steve French     2011-05-27  102  	struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  103  
+a3457aa9c40f99 David Howells    2022-05-19  104  	cifs_fscache_fill_coherency(&cifsi->nic.inode, &cd);
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  105  
+bc899ee1c898e5 David Howells    2021-06-29 @106  	cifsi->netfs_ctx.cache =
+70431bfd825d9c David Howells    2020-11-17  107  		fscache_acquire_cookie(tcon->fscache, 0,
+70431bfd825d9c David Howells    2020-11-17  108  				       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+70431bfd825d9c David Howells    2020-11-17  109  				       &cd, sizeof(cd),
+a3457aa9c40f99 David Howells    2022-05-19  110  				       i_size_read(&cifsi->nic.inode));
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  111  }
+9451a9a52f91a4 Suresh Jayaraman 2010-07-05  112  
+
+:::::: The code at line 106 was first introduced by commit
+:::::: bc899ee1c898e520574ff4d99356eb2e724a9265 netfs: Add a netfs inode context
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
