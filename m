@@ -1,47 +1,42 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C6D15A9
-	for <llvm@lists.linux.dev>; Fri, 20 May 2022 06:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68967E
+	for <llvm@lists.linux.dev>; Fri, 20 May 2022 08:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653027201; x=1684563201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LIUNboT17lR5CW5ZnVnjFPjF/nqQXlv0eH78sLfL0aQ=;
-  b=fhxmdxxHMTxN2QCHCvuys5oKcITVhvJ146xlC0CFy83u4IA/Kz72GuLq
-   JoKWkfZ7Be2wHx05B/Zd3tXdGh1nkftGCFqo/GeZfGNA7uAT2TUWMoszp
-   g1i/1kWcnXFkPdMa9iRI6IjSoWErWutm9UMqyBoaY+CDXeoO5jYqqcgiW
-   Pw6AtYFA8wHmey15GQFHnaBTY8XG6AfaNlUxcJqjsPvbfj/bhdvcXBnUW
-   tQw3i8ZoT4hD6ZWI8GyCmkv6GyFVSoOIWluByQAJCdX3DS9aZLKBrr+9f
-   QLCuJuZajXxcdDC3QVPa7HGaHBTPzn8Rgb7kujuQt3gQ/xeBnb6pNobap
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="333129126"
+  t=1653035135; x=1684571135;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fn49An1DqjMYmUVjYZ6Ve0Mp1CxZbLOepEe7sDKTpN0=;
+  b=GQDLSS5ZkZyNVwtwXFOGF1/jTrKg9Ej1JXynPgx6zaQ806sgUsVdu61E
+   tv/BJIUXLL+mg5xv9PEgvwTzyn5x0MVuC7oPhfp0tWCa5SW8o6fDOgpwz
+   qMkc6gCfSHj5PbvYCbvE0ezRemoEUAj0N7odrhdj/2SESVRbTpK7actCu
+   XpkVPssqZESpEkG+JSUFQud6wy1/uAmUrJI7QCnLw+X4dMQ5HK5MLkHah
+   8cIA9noQ9gFEePOc9cMvveo4Wwd0f0/yS785mcpqJPcAol0B6k0TiuNes
+   oiYUbWfbYbZQWdh/zi60FYmCoSwvAyGAsJnBgPRIJ6yvplY0lecyRHKSD
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335591070"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="333129126"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 23:13:20 -0700
+   d="scan'208";a="335591070"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2022 01:25:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="662109027"
+   d="scan'208";a="674512507"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2022 23:13:17 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 20 May 2022 01:25:33 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nrvsy-0004Lr-TJ;
-	Fri, 20 May 2022 06:13:16 +0000
-Date: Fri, 20 May 2022 14:11:27 +0800
+	id 1nrxwy-0004VZ-Nd;
+	Fri, 20 May 2022 08:25:32 +0000
+Date: Fri, 20 May 2022 16:24:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vinicius Costa Gomes <vinicius.gomes@intel.com>, netdev@vger.kernel.org
+To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>, jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-	vladimir.oltean@nxp.com, po.liu@nxp.com, boon.leong.ong@intel.com,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v5 10/11] igc: Check incompatible configs for
- Frame Preemption
-Message-ID: <202205201422.84XYwlpY-lkp@intel.com>
-References: <20220520011538.1098888-11-vinicius.gomes@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 12308/12886] arch/x86/kvm/hyperv.c:1983:22:
+ warning: shift count >= width of type
+Message-ID: <202205201624.A4IhDdYX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,140 +45,631 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520011538.1098888-11-vinicius.gomes@intel.com>
 
-Hi Vinicius,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Costa-Gomes/ethtool-Add-support-for-frame-preemption/20220520-092800
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git df98714e432abf5cbdac3e4c1a13f94c65ddb8d3
-config: s390-buildonly-randconfig-r002-20220519 (https://download.01.org/0day-ci/archive/20220520/202205201422.84XYwlpY-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   21498d01d045c5b95b93e0a0625ae965b4330ebe
+commit: 81db71a60292e9a40ae8f6ef137b17f2aaa15a52 [12308/12886] KVM: x86: hyper-v: replace bitmap_weight() with hweight64()
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220520/202205201624.A4IhDdYX-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a42e940bc53c40ee4e33a1bbf022a663bb28a9c7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vinicius-Costa-Gomes/ethtool-Add-support-for-frame-preemption/20220520-092800
-        git checkout a42e940bc53c40ee4e33a1bbf022a663bb28a9c7
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=81db71a60292e9a40ae8f6ef137b17f2aaa15a52
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 81db71a60292e9a40ae8f6ef137b17f2aaa15a52
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/intel/igc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/ethernet/intel/igc/igc_main.c:6:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:40:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/ethernet/intel/igc/igc_main.c:5919:6: warning: variable 'ring' is uninitialized when used here [-Wuninitialized]
-           if (ring->preemptible) {
-               ^~~~
-   drivers/net/ethernet/intel/igc/igc_main.c:5914:23: note: initialize the variable 'ring' to silence this warning
-           struct igc_ring *ring;
-                                ^
-                                 = NULL
-   13 warnings generated.
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:11:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 1))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:12:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 2))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:13:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 3))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:14:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 4))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:15:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 5))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:16:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 6))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:17:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 7)))))
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:11:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 1))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:12:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 2))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:13:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 3))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:14:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 4))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:15:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 5))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:16:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 6))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:49: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                   ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:17:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 7)))))
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:10:9: note: expanded from macro '__const_hweight8'
+            ((!!((w) & (1ULL << 0))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:11:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 1))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:12:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 2))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:13:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 3))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:14:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 4))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:15:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 5))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/asm-generic/bitops/const_hweight.h:16:9: note: expanded from macro '__const_hweight8'
+             (!!((w) & (1ULL << 6))) +     \
+                  ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/hyperv.c:1983:22: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (hc->var_cnt != hweight64(valid_bank_mask))
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: expanded from macro 'hweight64'
+   #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+                                                   ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:76: note: expanded from macro '__const_hweight64'
+   #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+                                                                              ^  ~~
+   include/asm-generic/bitops/const_hweight.h:20:73: note: expanded from macro '__const_hweight32'
+   #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+                                                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
 
 
-vim +/ring +5919 drivers/net/ethernet/intel/igc/igc_main.c
+vim +1983 arch/x86/kvm/hyperv.c
 
-  5910	
-  5911	static int igc_save_launchtime_params(struct igc_adapter *adapter, int queue,
-  5912					      bool enable)
-  5913	{
-  5914		struct igc_ring *ring;
-  5915	
-  5916		if (queue < 0 || queue >= adapter->num_tx_queues)
-  5917			return -EINVAL;
-  5918	
-> 5919		if (ring->preemptible) {
-  5920			netdev_err(adapter->netdev, "Cannot enable LaunchTime on a preemptible queue\n");
-  5921			return -EINVAL;
-  5922		}
-  5923	
-  5924		ring = adapter->tx_ring[queue];
-  5925		ring->launchtime_enable = enable;
-  5926	
-  5927		return 0;
-  5928	}
-  5929	
+  1934	
+  1935	static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+  1936	{
+  1937		struct kvm *kvm = vcpu->kvm;
+  1938		struct hv_send_ipi_ex send_ipi_ex;
+  1939		struct hv_send_ipi send_ipi;
+  1940		DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+  1941		unsigned long valid_bank_mask;
+  1942		u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+  1943		u32 vector;
+  1944		bool all_cpus;
+  1945	
+  1946		if (hc->code == HVCALL_SEND_IPI) {
+  1947			if (!hc->fast) {
+  1948				if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
+  1949							    sizeof(send_ipi))))
+  1950					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1951				sparse_banks[0] = send_ipi.cpu_mask;
+  1952				vector = send_ipi.vector;
+  1953			} else {
+  1954				/* 'reserved' part of hv_send_ipi should be 0 */
+  1955				if (unlikely(hc->ingpa >> 32 != 0))
+  1956					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1957				sparse_banks[0] = hc->outgpa;
+  1958				vector = (u32)hc->ingpa;
+  1959			}
+  1960			all_cpus = false;
+  1961			valid_bank_mask = BIT_ULL(0);
+  1962	
+  1963			trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
+  1964		} else {
+  1965			if (!hc->fast) {
+  1966				if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
+  1967							    sizeof(send_ipi_ex))))
+  1968					return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1969			} else {
+  1970				send_ipi_ex.vector = (u32)hc->ingpa;
+  1971				send_ipi_ex.vp_set.format = hc->outgpa;
+  1972				send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
+  1973			}
+  1974	
+  1975			trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
+  1976						 send_ipi_ex.vp_set.format,
+  1977						 send_ipi_ex.vp_set.valid_bank_mask);
+  1978	
+  1979			vector = send_ipi_ex.vector;
+  1980			valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+  1981			all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+  1982	
+> 1983			if (hc->var_cnt != hweight64(valid_bank_mask))
+  1984				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1985	
+  1986			if (all_cpus)
+  1987				goto check_and_send_ipi;
+  1988	
+  1989			if (!hc->var_cnt)
+  1990				goto ret_success;
+  1991	
+  1992			if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
+  1993						  offsetof(struct hv_send_ipi_ex,
+  1994							   vp_set.bank_contents)))
+  1995				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  1996		}
+  1997	
+  1998	check_and_send_ipi:
+  1999		if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+  2000			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+  2001	
+  2002		if (all_cpus) {
+  2003			kvm_send_ipi_to_many(kvm, vector, NULL);
+  2004		} else {
+  2005			sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+  2006	
+  2007			kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
+  2008		}
+  2009	
+  2010	ret_success:
+  2011		return HV_STATUS_SUCCESS;
+  2012	}
+  2013	
 
 -- 
 0-DAY CI Kernel Test Service
