@@ -1,66 +1,42 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645123218
-	for <llvm@lists.linux.dev>; Sat, 21 May 2022 18:25:03 +0000 (UTC)
-Received: by mail-pf1-f171.google.com with SMTP id h13so4018371pfq.5
-        for <llvm@lists.linux.dev>; Sat, 21 May 2022 11:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=h0wJDcwRs4mXeTep4IuVQMZLPWQneg1C4iNScMcuJoI=;
-        b=EnB2MD2GnrEfsaOFYP68a6RoD2AQxuP3Y0NjVpXsoFaLY9QdgcfhUumcUTJhlrr87c
-         xxTazCcm6eHZnBGfE27GOOICbHpOIX4jt3mNfRPEOmH5eMKADUw1Sv4Q8x1nWoMYoNsY
-         XFNIGAAjHVSCChm0n0wFvaaKt8C+OaFpQ+JuoIyiAbKjYo/pTNX14Jeb8VorxLcZam/G
-         0E5G5ugzq6smA8Ngddc46NIW+d4sBFEKqUcRY9UBuceiaxJzeVnhs81r8LrqxJgXmdVq
-         VENfBAtEXYYJvkAmKpIJacDOItJE6s20phWBP64SUxBa9dixjaZ3K388Vv3NnLKVRchh
-         0G5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=h0wJDcwRs4mXeTep4IuVQMZLPWQneg1C4iNScMcuJoI=;
-        b=xTyyLKlItfh+WDBgt/Y7fJseMQls+zJZ1NyV6himVYSqKx8BeaZXDyszZUdalS8hHA
-         KzoFhwFOcL6yJppBe76mbPGdBpSOqNfcfdHoB8hmqLvqX2S3w069IsTamlRcDzink58A
-         In/URsv/EC0fqos7SvK2urpQmfCdI6Sk2KPA4Fmwq9h535t3fogjr2D4a+gN2v8adrkr
-         ivnmH+Z0iuzZY7AbXVfNBpTv8TB2ECx5aVwgVMevWzYd3LQh4c+xbtsKA4ia9GMuN0xn
-         LSCxLfuf/gHR+6UvlhO+c6NEng+YzSI9ibUu4ZYoGnSXenYiawZOUcAMwmpkEFpvui1J
-         a0Tw==
-X-Gm-Message-State: AOAM533P6TioHV2JwNxsfdTxlkzUPINfNBm1sK8Cj7zPHFbq5JYKQ2fr
-	Ck9LZBZjmE65QCva/qovUUM=
-X-Google-Smtp-Source: ABdhPJyQrrZ+8SIhwCfj3TGOCDgRzsIamxuL/g0iUUnx1BAIMmFzoOfdMa2PV/xYNywoietvFXjKIQ==
-X-Received: by 2002:a05:6a00:15c7:b0:510:48c9:f302 with SMTP id o7-20020a056a0015c700b0051048c9f302mr15695799pfu.23.1653157502732;
-        Sat, 21 May 2022 11:25:02 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:ef57:ac0e:cc3e:9974])
-        by smtp.gmail.com with ESMTPSA id r5-20020a655085000000b003f60df4a5d5sm1858737pgp.54.2022.05.21.11.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 May 2022 11:25:02 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date: Sat, 21 May 2022 11:25:00 -0700
-From: Minchan Kim <minchan@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com,
-	Matthew Wilcox <willy@infradead.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [syzbot] WARNING in follow_hugetlb_page
-Message-ID: <YokufHxnkHUk5UR6@google.com>
-References: <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
- <YogT9AwVclxAnyvs@google.com>
- <0be9132d-a928-9ebe-a9cf-6d140b907d59@nvidia.com>
- <a455c6b1-b9ef-39ab-879e-80e13fd13c10@oracle.com>
- <YognlSdHAKgnkPPY@google.com>
- <b36a728c-03a1-0e07-b6d2-9515e647416f@oracle.com>
- <YokEEAemXTwTSZh5@google.com>
- <b025ddd5-aca2-f3e2-6a4f-24a1b4eda985@redhat.com>
- <YokVEZbOayed5hBb@google.com>
- <000a117a-694d-d3a9-a192-14d08d50c884@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040FA33CE
+	for <llvm@lists.linux.dev>; Sat, 21 May 2022 21:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653168954; x=1684704954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zR7Y1g/C/Z6Cz8ORNwIwd2RSqbEMll7sIDR6xIUT72s=;
+  b=eF2eLBmX/M8yN10q2x7P/0JEP0PoDSM6dluTdJwxPnYYyrsn8uN4O0kM
+   272d0LaVFwVyK1y6MsaLsHul00y1In/PJV9Axb+Ky2PK31Ml7X8QbsHdv
+   l2dKPoTymM1f34Iyq6/5QjnazMvcDQ7i2SCVzVVLLf62KbY0Ctv9f1EyE
+   XBe/V/lJ5b2O4IzCvcEClbMFfH1htORs/Cgpn2H5BadoVw7BGl6NN7hOu
+   3TdiC8IeNKBzYsSl9PaCxn/f0AQqiFWvlduU8fJsmzv63FyUomHBqBcli
+   hozVNFedO40rEtMJwV9TGvnnROjivvVmTYbfCxqtP5jP5Nh/VfjIuzAZO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="273036186"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="273036186"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 14:35:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="744019050"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 May 2022 14:35:52 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nsWlM-0006cy-6u;
+	Sat, 21 May 2022 21:35:52 +0000
+Date: Sun, 22 May 2022 05:35:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [congwang:sch_bpf 1/3] net/core/skb_map.c:264:36: warning: unused
+ variable 'bpf_skb_map_pop_proto'
+Message-ID: <202205220540.iNtltJFv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,69 +45,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000a117a-694d-d3a9-a192-14d08d50c884@redhat.com>
 
-On Sat, May 21, 2022 at 06:46:27PM +0200, David Hildenbrand wrote:
+tree:   https://github.com/congwang/linux.git sch_bpf
+head:   c3a4f3837326ac3d30a3775f7671467b27cc42b7
+commit: a9c541fc36e03672a64d65cfa7a08e65743f34c2 [1/3] bpf: introduce skb map
+config: hexagon-randconfig-r006-20220522 (https://download.01.org/0day-ci/archive/20220522/202205220540.iNtltJFv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/congwang/linux/commit/a9c541fc36e03672a64d65cfa7a08e65743f34c2
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sch_bpf
+        git checkout a9c541fc36e03672a64d65cfa7a08e65743f34c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
 
-< snip >
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >> The general rules are:
-> >>
-> >> ZONE_MOVABLE: nobody is allowed to place unmovable allocations there; it
-> >> could prevent memory offlining/unplug.
-> >>
-> >> CMA: nobody *but the designated owner* is allowed to place unmovable
-> >> memory there; it could prevent the actual owner to allocate contiguous
-> >> memory.
-> > 
-> > I am confused what's the meaning of designated owner and actuall owner
-> > in your context.
-> 
-> designated==actual here. I just wanted to distinguish from someone
-> current temporary owner of the page ("allocated it via a movable
-> allocation") but the actual designated owner (e.g., hugetlb CMA)
-> 
-> The page/memory owner terminology is just confusing. Let's rephrase to:
-> only the CMA area owner is allowed to place unmovable allocations there.
+All warnings (new ones prefixed by >>):
 
-Yeah, the CMA area owner is much better.
+>> net/core/skb_map.c:264:36: warning: unused variable 'bpf_skb_map_pop_proto' [-Wunused-const-variable]
+   static const struct bpf_func_proto bpf_skb_map_pop_proto = {
+                                      ^
+>> net/core/skb_map.c:287:36: warning: unused variable 'bpf_skb_map_push_proto' [-Wunused-const-variable]
+   static const struct bpf_func_proto bpf_skb_map_push_proto = {
+                                      ^
+   2 warnings generated.
 
-> 
-> > 
-> > What I thought about the issue based on you explanation:
-> > 
-> > HugeTLB allocates its page by two types of allocation
-> > 
-> > 1. alloc_pages(GFP_MOVABLE)
-> >  
-> > It could allocate the hugetlb page from CMA area but longterm pin
-> > should migrate them out of cma before the pinning so allowing
-> > the pinning on the page is no problem and current code works like
-> > that.
-> > 
-> >     check_and_migrate_movable_pages
-> > 
-> 
-> Yes.
-> 
-> > 2. cma_alloc
-> > 
-> > The cma_alloc is used only for *gigantic page* and the hugetlbfs
-> > is the very owner of the page. IOW, if the hugetlbfs was succeeded
-> > to allocate the gigantic page by cma_alloc, there is no other
-> > owner to be able to claim the page any longer so it's fine to
-> > allow longterm pinning againt the gingantic page but current.
-> > However, current code doesn't work like that due to
-> > is_pinnable_page. IOW, hugetlbfs need a way to distinguish 
-> > whether the page owner is hugetlbfs or not.
-> > 
-> > Are we on same page?
-> 
-> Yes, exactly. What I wanted to express is: for huge pages we have to
-> make a smarter decision because there are cases where we want to
-> migrate, and cases where we don't want to migrate.
 
-Sure, maybe hugetlbfs could squeeze a bit in one of subpage of the
-CMA compound page. "I am CMA allocated but allow to pinned for longterm"
+vim +/bpf_skb_map_pop_proto +264 net/core/skb_map.c
 
-Thanks.
+   263	
+ > 264	static const struct bpf_func_proto bpf_skb_map_pop_proto = {
+   265		.func		= bpf_skb_map_pop,
+   266		.gpl_only	= false,
+   267		.ret_type	= RET_INTEGER,
+   268		.arg1_type	= ARG_CONST_MAP_PTR,
+   269		.arg2_type	= ARG_ANYTHING,
+   270	};
+   271	
+   272	BPF_CALL_3(bpf_skb_map_push, struct bpf_map *, map, struct sk_buff *, skb, u64, key)
+   273	{
+   274		struct bpf_skb_map *rb = bpf_skb_map(map);
+   275		unsigned long flags;
+   276	
+   277		if (atomic_inc_return(&rb->count) > rb->map.max_entries)
+   278			return -ENOBUFS;
+   279		skb = skb_get(skb);
+   280		skb_map_cb(skb)->rank = key;
+   281		raw_spin_lock_irqsave(&rb->lock, flags);
+   282		skb_rb_push(&rb->root, skb);
+   283		raw_spin_unlock_irqrestore(&rb->lock, flags);
+   284		return 0;
+   285	}
+   286	
+ > 287	static const struct bpf_func_proto bpf_skb_map_push_proto = {
+   288		.func		= bpf_skb_map_push,
+   289		.gpl_only	= false,
+   290		.ret_type	= RET_INTEGER,
+   291		.arg1_type	= ARG_CONST_MAP_PTR,
+   292		.arg2_type	= ARG_PTR_TO_CTX,
+   293		.arg3_type	= ARG_ANYTHING,
+   294	};
+   295	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
