@@ -1,44 +1,61 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A0517FC
-	for <llvm@lists.linux.dev>; Sat, 21 May 2022 10:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A620B2C9E
+	for <llvm@lists.linux.dev>; Sat, 21 May 2022 11:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653128138; x=1684664138;
+  t=1653131802; x=1684667802;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3Gr3zUd4VttCHVwQpL+PQl+w2BgS1wp1Fe/pd4Fz6kg=;
-  b=HHtKiAlx5fEembnCfdsixNXXXqyPSTrmFqQE887Pjpg2LNLUl1znXhC/
-   7PKIvxIqBvlpoCtjbr3z5VlM2neKw3JmJohkWRrslLoRpU5ixa0yANZZZ
-   jLfki2t+5iRmiLjKKY2MoxYNGdQcz9qTVHYJ3VfOg7X3XxJpUroLqSYym
-   jXlC9OP6RlUGo555/tsNayD82rkIEEcxbhIb6aMU1o/rX4PXgsWUjVtMD
-   JylURTx+z1o5RoK6Gl452zm3jk61TVfkzlJHW7bInGF9tWqKk7+3KEHvx
-   L/dMvtyCKiPkJ+RHrKhr5i1dPH39q28cWMfZAQe/xnl/HCyRQ1IApzKfA
+  bh=5KFm4isvsGqNpJBUH/v9LUn20VCp8JnS7lgpH6kfS64=;
+  b=lubdR4kl5GI1eOAf4LZyvWrWK3wnLh1rnatcErpSWwa2EpdDkQDJuyG3
+   KzzPLcK4a3cfuj8lyRF3gPBzVj7C1+fKngJny3UKI1GWTS7S3lILvnBxv
+   B8aue4wAlCllrrjrWVk6zz0ftYGZWwlbk6hr+sCP09jFj4v1tdnA9JtSW
+   NKQnvn/jpbluGQjD325SffOAacSPdmFwEnCePDRvnp9axoOvlQ6euO0k9
+   VjGMuYCIS8p2s4NwOrKCLAGqS+/a4F37mKcy0+GWnEhPE2MJd5OOu6LSw
+   +Zrn3yDvfXWaUOeSTjQp6zFTVFChaJoIslk6DYWTGSGZiwXumP1ZneQUl
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="253349824"
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="359244802"
 X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="253349824"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 03:15:37 -0700
+   d="scan'208";a="359244802"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 04:16:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="743864615"
+   d="scan'208";a="640699541"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 21 May 2022 03:15:35 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 21 May 2022 04:16:37 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nsM91-0006BG-BR;
-	Sat, 21 May 2022 10:15:35 +0000
-Date: Sat, 21 May 2022 18:14:37 +0800
+	id 1nsN64-0006EE-GG;
+	Sat, 21 May 2022 11:16:36 +0000
+Date: Sat, 21 May 2022 19:16:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wojciech Drewek <wojciech.drewek@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-wired-lan] [PATCH net] ice: Fix switchdev rules book
- keeping
-Message-ID: <202205211832.w3XhaNbS-lkp@intel.com>
-References: <20220520084527.123885-1-wojciech.drewek@intel.com>
+To: Yosry Ahmed <yosryahmed@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Michal Hocko <mhocko@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Stanislav Fomichev <sdf@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Greg Thelen <gthelen@google.com>,
+	Shakeel Butt <shakeelb@google.com>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	cgroups@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH bpf-next v1 1/5] cgroup: bpf: add a hook for bpf progs to
+ attach to rstat flushing
+Message-ID: <202205211949.sJimC9kh-lkp@intel.com>
+References: <20220520012133.1217211-2-yosryahmed@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,124 +64,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520084527.123885-1-wojciech.drewek@intel.com>
+In-Reply-To: <20220520012133.1217211-2-yosryahmed@google.com>
 
-Hi Wojciech,
+Hi Yosry,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on net/master]
+[auto build test WARNING on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wojciech-Drewek/ice-Fix-switchdev-rules-book-keeping/20220520-164759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 9b80ccda233fa6c59de411bf889cc4d0e028f2c7
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220521/202205211832.w3XhaNbS-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220520-093041
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: hexagon-randconfig-r041-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211949.sJimC9kh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e04c52f89a78dfae78ac79a71f0c92df8c409146
+        # https://github.com/intel-lab-lkp/linux/commit/23c4c48fb35b084dc1173c7b9d23d4e6e1a084a3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wojciech-Drewek/ice-Fix-switchdev-rules-book-keeping/20220520-164759
-        git checkout e04c52f89a78dfae78ac79a71f0c92df8c409146
+        git fetch --no-tags linux-review Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220520-093041
+        git checkout 23c4c48fb35b084dc1173c7b9d23d4e6e1a084a3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/cgroup/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/ice/ice_tc_lib.c:527:8: error: no member named 'dest_vsi_handle' in 'struct ice_tc_flower_fltr'
-           fltr->dest_vsi_handle = rule_added.vsi_handle;
-           ~~~~  ^
-   1 error generated.
+>> kernel/cgroup/rstat.c:145:22: warning: no previous prototype for function 'bpf_rstat_flush' [-Wmissing-prototypes]
+   __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+                        ^
+   kernel/cgroup/rstat.c:145:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+                   ^
+                   static 
+   1 warning generated.
 
 
-vim +527 drivers/net/ethernet/intel/ice/ice_tc_lib.c
+vim +/bpf_rstat_flush +145 kernel/cgroup/rstat.c
 
-   452	
-   453	static int
-   454	ice_eswitch_add_tc_fltr(struct ice_vsi *vsi, struct ice_tc_flower_fltr *fltr)
-   455	{
-   456		struct ice_tc_flower_lyr_2_4_hdrs *headers = &fltr->outer_headers;
-   457		struct ice_adv_rule_info rule_info = { 0 };
-   458		struct ice_rule_query_data rule_added;
-   459		struct ice_hw *hw = &vsi->back->hw;
-   460		struct ice_adv_lkup_elem *list;
-   461		u32 flags = fltr->flags;
-   462		int lkups_cnt;
-   463		int ret;
-   464		int i;
-   465	
-   466		if (!flags || (flags & ICE_TC_FLWR_FIELD_ENC_SRC_L4_PORT)) {
-   467			NL_SET_ERR_MSG_MOD(fltr->extack, "Unsupported encap field(s)");
-   468			return -EOPNOTSUPP;
-   469		}
-   470	
-   471		lkups_cnt = ice_tc_count_lkups(flags, headers, fltr);
-   472		list = kcalloc(lkups_cnt, sizeof(*list), GFP_ATOMIC);
-   473		if (!list)
-   474			return -ENOMEM;
-   475	
-   476		i = ice_tc_fill_rules(hw, flags, fltr, list, &rule_info, NULL);
-   477		if (i != lkups_cnt) {
-   478			ret = -EINVAL;
-   479			goto exit;
-   480		}
-   481	
-   482		/* egress traffic is always redirect to uplink */
-   483		if (fltr->direction == ICE_ESWITCH_FLTR_EGRESS)
-   484			fltr->dest_vsi = vsi->back->switchdev.uplink_vsi;
-   485	
-   486		rule_info.sw_act.fltr_act = fltr->action.fltr_act;
-   487		if (fltr->action.fltr_act != ICE_DROP_PACKET)
-   488			rule_info.sw_act.vsi_handle = fltr->dest_vsi->idx;
-   489		/* For now, making priority to be highest, and it also becomes
-   490		 * the priority for recipe which will get created as a result of
-   491		 * new extraction sequence based on input set.
-   492		 * Priority '7' is max val for switch recipe, higher the number
-   493		 * results into order of switch rule evaluation.
-   494		 */
-   495		rule_info.priority = 7;
-   496	
-   497		if (fltr->direction == ICE_ESWITCH_FLTR_INGRESS) {
-   498			rule_info.sw_act.flag |= ICE_FLTR_RX;
-   499			rule_info.sw_act.src = hw->pf_id;
-   500			rule_info.rx = true;
-   501		} else {
-   502			rule_info.sw_act.flag |= ICE_FLTR_TX;
-   503			rule_info.sw_act.src = vsi->idx;
-   504			rule_info.rx = false;
-   505			rule_info.flags_info.act = ICE_SINGLE_ACT_LAN_ENABLE;
-   506			rule_info.flags_info.act_valid = true;
-   507		}
-   508	
-   509		/* specify the cookie as filter_rule_id */
-   510		rule_info.fltr_rule_id = fltr->cookie;
-   511	
-   512		ret = ice_add_adv_rule(hw, list, lkups_cnt, &rule_info, &rule_added);
-   513		if (ret == -EEXIST) {
-   514			NL_SET_ERR_MSG_MOD(fltr->extack, "Unable to add filter because it already exist");
-   515			ret = -EINVAL;
-   516			goto exit;
-   517		} else if (ret) {
-   518			NL_SET_ERR_MSG_MOD(fltr->extack, "Unable to add filter due to error");
-   519			goto exit;
-   520		}
-   521	
-   522		/* store the output params, which are needed later for removing
-   523		 * advanced switch filter
-   524		 */
-   525		fltr->rid = rule_added.rid;
-   526		fltr->rule_id = rule_added.rule_id;
- > 527		fltr->dest_vsi_handle = rule_added.vsi_handle;
-   528	
-   529	exit:
-   530		kfree(list);
-   531		return ret;
-   532	}
-   533	
+   143	
+   144	/* A hook for bpf stat collectors to attach to and flush their stats */
+ > 145	__weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+   146					     struct cgroup *parent, int cpu)
+   147	{
+   148	}
+   149	
 
 -- 
 0-DAY CI Kernel Test Service
