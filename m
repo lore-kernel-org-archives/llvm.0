@@ -1,172 +1,180 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2A23205
-	for <llvm@lists.linux.dev>; Sat, 21 May 2022 15:40:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653147646; x=1684683646;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wcek4X6GL3X96bUaWOMAi5Y4v/2KBxZh2JF4c1kwpxo=;
-  b=OO0koXCTm01DskwpgYDX2UPGqMgGmmOIAaERQK3mtaIIS3avl4RlIeOv
-   302MkTP/iHuyqc8IiHVtR9tmczZzMgs9u+rrv25n5sowUfe2vkiSMAS4J
-   nU6akGks7vEbNRKthtSnskNWQzfWfRbofL78M1KfQ22OM3cJlwR8Q+Cl9
-   3ey6l5rwF555ydKYqn7/Wh5CEPCEN9yekbDhgliKLMzTL00m7KuucTRmK
-   mBPDM/LRqTvUVP4o/ROrB/L0+QeufhRoSyfa2GjyLuAcQdi+tSwKezJm+
-   nqbN/DgBCJnzUSARy7n+IrgpPGX0tY/3MmB+ZbObVmSM2o7x8AY1T5X8H
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="253386143"
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="253386143"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 08:40:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="715995221"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 21 May 2022 08:40:43 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nsRDe-0006Ok-Di;
-	Sat, 21 May 2022 15:40:42 +0000
-Date: Sat, 21 May 2022 23:40:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haijun Liu <haijun.liu@mediatek.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-	Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: [linux-next:master 9440/13468] include/asm-generic/io.h:464:31:
- error: performing pointer arithmetic on a null pointer has undefined
- behavior
-Message-ID: <202205212322.fqOZ4qyw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BDE3205
+	for <llvm@lists.linux.dev>; Sat, 21 May 2022 15:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1653148324;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MiSSwi9xuJZ/cdu5ca2FrAQepB/n8ZjvRH3BZI2eDME=;
+	b=CgM5bmVSD8DBTqWRjDia3+wjOFnya8LHS05DuKpnx9tHqN9AYcdqmGtE1A/a43Vxq8Ze+s
+	mv+gq0ceXxttYRL6IevqoAESblU9sDFJWWYkKNkAJKPbrYY1sljQ3urX5bg3Xr3ljCPXcQ
+	AfADoKrP+rwGcLCcrPGbDk821NaevvE=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-WfRqe2LYNJWKZjWZCb5_3A-1; Sat, 21 May 2022 11:52:03 -0400
+X-MC-Unique: WfRqe2LYNJWKZjWZCb5_3A-1
+Received: by mail-ed1-f69.google.com with SMTP id w14-20020a50fa8e000000b0042ab142d677so7588187edr.11
+        for <llvm@lists.linux.dev>; Sat, 21 May 2022 08:52:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=MiSSwi9xuJZ/cdu5ca2FrAQepB/n8ZjvRH3BZI2eDME=;
+        b=bigo0h2UC43kgaGYfijLDfd6E4l1VM8el4uP7xXsbwralLEAqEFyJAPTUF+EnooyCF
+         P9X99gFP/MxXCuWiB5XgT1PXAhelT/qefnHr3fXiGMohWzySS9O9qmbxXLMBnZe3imoE
+         gwlck447RXKVtVS1K/783RgJZEeeQlQYXhqShSPFGJsiOFaiPgPpIGfQWlDoaimKr1Oz
+         F0oL81u1UByaqUxVjdE/+CEsycbvBkFTE1vJQdPqrfxXUQ4s2CP7OWIu/+hPe72aSbaM
+         0Crp3cKL46vvtqe/uLZ8czFn42YPX6KHyK75ifcCftDVPFMeaUiwweePYdvxKzQJGS97
+         jCwQ==
+X-Gm-Message-State: AOAM532l34SWPfSn6QBxc/eYfr8N42PNK01tM7rAb62cPciI6AeMgX3a
+	jH4P6GcZyhCnNiZL5S6ie+CFQ4cc1iC5eqb0PCisKGr+j+qlA/P3jfoVutPKDin2pTudMj3ES1X
+	1iqUCCPhjzeoyHw==
+X-Received: by 2002:aa7:d38f:0:b0:42a:a2e6:90d9 with SMTP id x15-20020aa7d38f000000b0042aa2e690d9mr16029545edq.305.1653148321980;
+        Sat, 21 May 2022 08:52:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4xkzaG+uCKjuzlqbWkg8yEWYTiB8UbHwNK2rqRkeJUZK5IAmfpUQKhgxr7TOVUyWMyhjOwQ==
+X-Received: by 2002:aa7:d38f:0:b0:42a:a2e6:90d9 with SMTP id x15-20020aa7d38f000000b0042aa2e690d9mr16029531edq.305.1653148321697;
+        Sat, 21 May 2022 08:52:01 -0700 (PDT)
+Received: from [172.29.4.249] ([45.90.93.190])
+        by smtp.gmail.com with ESMTPSA id c62-20020a509fc4000000b0042aae3f282esm5714786edf.65.2022.05.21.08.51.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 08:52:01 -0700 (PDT)
+Message-ID: <b025ddd5-aca2-f3e2-6a4f-24a1b4eda985@redhat.com>
+Date: Sat, 21 May 2022 17:51:58 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+To: Minchan Kim <minchan@kernel.org>, Mike Kravetz <mike.kravetz@oracle.com>
+Cc: John Hubbard <jhubbard@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ syzbot <syzbot+acf65ca584991f3cc447@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+ trix@redhat.com, Matthew Wilcox <willy@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+References: <Yn7vnpXwX50J3K+7@google.com>
+ <4809b134-a37a-50b8-4c25-44548bc1048f@nvidia.com>
+ <Yn73Hz7LkSUv7ycw@google.com>
+ <d97d8a00-e9e0-278f-0c3f-71162afa48b1@nvidia.com>
+ <6d281052-485c-5e17-4f1c-ef5689831450@oracle.com>
+ <YogT9AwVclxAnyvs@google.com>
+ <0be9132d-a928-9ebe-a9cf-6d140b907d59@nvidia.com>
+ <a455c6b1-b9ef-39ab-879e-80e13fd13c10@oracle.com>
+ <YognlSdHAKgnkPPY@google.com>
+ <b36a728c-03a1-0e07-b6d2-9515e647416f@oracle.com>
+ <YokEEAemXTwTSZh5@google.com>
+From: David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [syzbot] WARNING in follow_hugetlb_page
+In-Reply-To: <YokEEAemXTwTSZh5@google.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=david@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   18ecd30af1a8402c162cca1bd58771c0e5be7815
-commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 [9440/13468] net: wwan: t7xx: Add core components
-config: s390-randconfig-r012-20220521 (https://download.01.org/0day-ci/archive/20220521/202205212322.fqOZ4qyw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/
+On 21.05.22 17:24, Minchan Kim wrote:
+> On Fri, May 20, 2022 at 05:04:22PM -0700, Mike Kravetz wrote:
+>> On 5/20/22 16:43, Minchan Kim wrote:
+>>> On Fri, May 20, 2022 at 04:31:31PM -0700, Mike Kravetz wrote:
+>>>> On 5/20/22 15:56, John Hubbard wrote:
+>>>>> On 5/20/22 15:19, Minchan Kim wrote:
+>>>>>> The memory offline would be an issue so we shouldn't allow pinning of any
+>>>>>> pages in *movable zone*.
+>>>>>>
+>>>>>> Isn't alloc_contig_range just best effort? Then, it wouldn't be a big
+>>>>>> problem to allow pinning on those area. The matter is what target range
+>>>>>> on alloc_contig_range is backed by CMA or movable zone and usecases.
+>>>>>>
+>>>>>> IOW, movable zone should be never allowed. But CMA case, if pages
+>>>>>> are used by normal process memory instead of hugeTLB, we shouldn't
+>>>>>> allow longterm pinning since someone can claim those memory suddenly.
+>>>>>> However, we are fine to allow longterm pinning if the CMA memory
+>>>>>> already claimed and mapped at userspace(hugeTLB case IIUC).
+>>>>>>
+>>>>>
+>>>>> From Mike's comments and yours, plus a rather quick reading of some
+>>>>> CMA-related code in mm/hugetlb.c (free_gigantic_page(), alloc_gigantic_pages()), the following seems true:
+>>>>>
+>>>>> a) hugetlbfs can allocate pages *from* CMA, via cma_alloc()
+>>>>>
+>>>>> b) while hugetlbfs is using those CMA-allocated pages, it is debatable
+>>>>> whether those pages should be allowed to be long term pinned. That's
+>>>>> because there are two cases:
+>>>>>
+>>>>>     Case 1: pages are longterm pinned, then released, all while
+>>>>>             owned by hugetlbfs. No problem.
+>>>>>
+>>>>>     Case 2: pages are longterm pinned, but then hugetlbfs releases the
+>>>>>             pages entirely (via unmounting hugetlbfs, I presume). In
+>>>>>             this case, we now have CMA page that are long-term pinned,
+>>>>>             and that's the state we want to avoid.
+>>>>
+>>>> I do not think case 2 can happen.  A hugetlb page can only be changed back
+>>>> to 'normal' (buddy) pages when ref count goes to zero.
+>>>>
+>>>> It should also be noted that hugetlb code sets up the CMA area from which
+>>>> hugetlb pages can be allocated.  This area is never unreserved/freed.
+>>>>
+>>>> I do not think there is a reason to disallow long term pinning of hugetlb
+>>>> pages allocated from THE hugetlb CMA area.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hm. We primarily use CMA for gigantic pages only IIRC. Ordinary huge
+pages come via the buddy.
 
-All errors (new ones prefixed by >>):
+Assume we allocated a (movable) 2MiB huge page ordinarily via the buddy
+and it ended up on that CMA area by pure luck (as it's movable). If we'd
+allow to pin it long-term, allocating a gigantic page from the
+designated CMA area would fail.
 
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
->> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   12 errors generated.
+So we'd want to allow long-term pinning a gigantic page but we'd not
+want to allow long-term pinning an ordinary huge page. We'd want to
+migrate the latter away.
 
 
-vim +464 include/asm-generic/io.h
+The general rules are:
 
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
+ZONE_MOVABLE: nobody is allowed to place unmovable allocations there; it
+could prevent memory offlining/unplug.
 
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+CMA: nobody *but the designated owner* is allowed to place unmovable
+memory there; it could prevent the actual owner to allocate contiguous
+memory.
 
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+As explained above, it gets a bit weird if the owner (hugetlb) deals
+with different allocation types (huge vs. gigantic pages).
+>> Unless I do not understand, normal movable memory allocations can fall
+>> back to CMA areas?
+
+Yes, just like ZONE_MOVABLE IIRC.
+
+> 
+> In the case, Yes, it would be fallback if gfp_flag was __GFP_MOVABLE.
+> 
+> If HugeTLB support it(I think so), pin_user_pages with FOLL_LONGTERM
+> will migrate the page out of movable/CMA before the longterm pinning
+> so IMHO, we shouldn't have the problem.
+
+As explained, the tricky bit would be hitting a gigantic page that's
+valid to reside permanently on the designated CMA area. IIRC, some
+gigantic pages are indeed movable, but we never place them on
+ZONE_MOVABLE because migration is unlikely to work in practice.
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+
