@@ -1,128 +1,83 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE60A2F24
-	for <llvm@lists.linux.dev>; Sat, 21 May 2022 11:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653132398; x=1684668398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qY8A58FBRynvfBVJJesxTQj/JFqbODeNA1UtNGWQik8=;
-  b=cKVMqakb7h8AbPF80L40awh7IE1xp+IKpbF7plyFc0CIRK12FpZ2AtyD
-   AhRHNtDh+6n2qJFk2X3VsloPn2EDAgY5V0ENQHCArrFUgYBxx9fILheS7
-   U6sqmnb5H5SQc8saHvVzB1gyd+2JI8gi12SC1y0hvWtCbeMhcHRRJTm7X
-   wYS1IpAhTplt4VpZiNQnLnRcSE/lKWVYTlWqbB/ZH27+1etJic2UACi2f
-   uh+yOgnsaVZ5YquhUXEwAzTdzgz2xAcpjcJUs8KpXMbHgTE+IHDvZzcIm
-   NeiA+J5IsCuayibdRYXaRTzikp4G7+24jupbt5+6O4Yb45vP2XoiAo8+u
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="252726384"
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="252726384"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 04:26:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="628577363"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 21 May 2022 04:26:37 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nsNFk-0006Ec-Kc;
-	Sat, 21 May 2022 11:26:36 +0000
-Date: Sat, 21 May 2022 19:26:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC Patch v4 1/2] bpf: introduce skb map
-Message-ID: <202205211934.3kyV1wYU-lkp@intel.com>
-References: <20220520174616.74684-2-xiyou.wangcong@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55422F24
+	for <llvm@lists.linux.dev>; Sat, 21 May 2022 11:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BE0C385A5;
+	Sat, 21 May 2022 11:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653133479;
+	bh=x1yQFVL4D4hpP8UOzK/ojGTRSQhUqgZveDzri3xOrbs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R0FyR1qW/2XYWt5vYSNN2q4uEwpRpz/wffPQ58kwo7/OlfypaALlZAa+1wtH5rEoF
+	 Kza961PnRCa8iR7Jf0E8anzqKUtwu83b5rt21T8mgvC9zwvpvjwsfmPiQlml3km+Ck
+	 fvPFRUrV7azqkUvwsR0nVDwyZQuICquz1/F9mSKy1T/iOzHT96hLk0XmB38XTcZEuq
+	 660ujwvEVOoqBoTFbj5kGSNWOBANsXwEhgCyn/QY3vQVaqzKYLbDzL7+S2yQfvet2G
+	 6sczuSQ/zbWFMlB0e5NgYCWMN2Wm88v5/iEXEZmrosZJpdZsA82K9fLkQ8SPO1HD3B
+	 ortPc2xRjHqUQ==
+Date: Sat, 21 May 2022 13:44:35 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, sgarapati@marvell.com,
+	sbalcerak@marvell.com, cchavva@marvell.com
+Subject: Re: [PATCH 1/3] drivers: i2c: thunderx: octeontx2 clock divisor
+ logic changes
+Message-ID: <YojQozzCK3Sh1Aqd@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, sgarapati@marvell.com,
+	sbalcerak@marvell.com, cchavva@marvell.com
+References: <20220511133659.29176-2-pmalgujar@marvell.com>
+ <202205170856.ko6UxqWi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZznfZLL5dWV5UztK"
+Content-Disposition: inline
+In-Reply-To: <202205170856.ko6UxqWi-lkp@intel.com>
+
+
+--ZznfZLL5dWV5UztK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520174616.74684-2-xiyou.wangcong@gmail.com>
-
-Hi Cong,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master horms-ipvs/master net/master net-next/master linus/master v5.18-rc7 next-20220520]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20220521-014934
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: riscv-randconfig-r016-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211934.3kyV1wYU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/771d03ba8e035ead53334c0dea1d181eb6e9e27d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cong-Wang/net_sched-introduce-eBPF-based-Qdisc/20220521-014934
-        git checkout 771d03ba8e035ead53334c0dea1d181eb6e9e27d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/skb_map.c:264:36: warning: unused variable 'bpf_skb_map_pop_proto' [-Wunused-const-variable]
-   static const struct bpf_func_proto bpf_skb_map_pop_proto = {
-                                      ^
->> kernel/bpf/skb_map.c:287:36: warning: unused variable 'bpf_skb_map_push_proto' [-Wunused-const-variable]
-   static const struct bpf_func_proto bpf_skb_map_push_proto = {
-                                      ^
-   2 warnings generated.
 
 
-vim +/bpf_skb_map_pop_proto +264 kernel/bpf/skb_map.c
+>    In file included from drivers/i2c/busses/i2c-octeon-platdrv.c:27:
+> >> drivers/i2c/busses/i2c-octeon-core.h:223:21: error: incomplete definition of type 'struct pci_dev'
+>            u32 chip_id = (pdev->subsystem_device >> 12) & 0xF;
 
-   263	
- > 264	static const struct bpf_func_proto bpf_skb_map_pop_proto = {
-   265		.func		= bpf_skb_map_pop,
-   266		.gpl_only	= false,
-   267		.ret_type	= RET_INTEGER,
-   268		.arg1_type	= ARG_CONST_MAP_PTR,
-   269		.arg2_type	= ARG_ANYTHING,
-   270	};
-   271	
-   272	BPF_CALL_3(bpf_skb_map_push, struct bpf_map *, map, struct sk_buff *, skb, u64, key)
-   273	{
-   274		struct bpf_skb_map *rb = bpf_skb_map(map);
-   275		unsigned long flags;
-   276	
-   277		if (atomic_inc_return(&rb->count) > rb->map.max_entries)
-   278			return -ENOBUFS;
-   279		skb = skb_get(skb);
-   280		skb_map_cb(skb)->rank = key;
-   281		raw_spin_lock_irqsave(&rb->lock, flags);
-   282		skb_rb_push(&rb->root, skb);
-   283		raw_spin_unlock_irqrestore(&rb->lock, flags);
-   284		return 0;
-   285	}
-   286	
- > 287	static const struct bpf_func_proto bpf_skb_map_push_proto = {
-   288		.func		= bpf_skb_map_push,
-   289		.gpl_only	= false,
-   290		.ret_type	= RET_INTEGER,
-   291		.arg1_type	= ARG_CONST_MAP_PTR,
-   292		.arg2_type	= ARG_PTR_TO_CTX,
-   293		.arg3_type	= ARG_ANYTHING,
-   294	};
-   295	
+I guess this needs some fixing?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Other than that, you should really add Robert Richter to CC when
+resending. He is at least mentioned for 'Odd fixes' in MAINTAINERS.
+
+
+--ZznfZLL5dWV5UztK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKI0KMACgkQFA3kzBSg
+KbZqmw//c0b9rK2Uy5cf7yRZPA+WZzNdki1gx5gAi7O/iOhYTJP43H7g9pHvbAt4
+h3mgy/f+1gIwjus8+8e+qLex/h2xhhJ8BJuODl32JV7wBTzEzmF2sR7P2GLFUprF
+1LePFusUFwixorY7e4zIygRctk5HFkRO+rJpy7G6sz5/UnTjs8gRavLUiUJPd9uI
+Sysfpnw4eOtaSeWoNv9WKthd6ufttRR/NQtPP3M2G4byWZDzWuJgKpYdX18isyb0
+SySDt5/QLJI9V/4cZWIgX30KCHShQH6qLqfznV6O8QMAlekNczNVwgill1wPJ6a8
+jlgqLWq/lz08XpPVGnCHdGVCWU9J6mne6dwmahXlzTg7dhhFgzqXbaHVC1doEJW6
+92IHVkYxmj1WQabhC0Zju+HduIh5aSaMVjpgwmbH9bdW4CGstgqeJEqGr2CC2Q6r
+vM1AVhp1Z3812M/Np476fgvDZGK4mlLAcRIjt0B1PI3Wd4UkNQtMmRuecioQ+EbY
+o6kt7Ze2RZVCEbvTT9fLgdYLq1WrYnXTSMi3XO16spVBg214i6SB0VtNTx76KpDh
+0oYimcFjs41+GE85FBiwQurl2hxTgBiKi4C/wcGHjV4Su8Wrgi7i5KNjQrt/GpxT
+PeOSA+u7HL3C/eD28Ig3fJdgj1iuKlS8sL3vyW+BSvuh6RPH30A=
+=lsfu
+-----END PGP SIGNATURE-----
+
+--ZznfZLL5dWV5UztK--
