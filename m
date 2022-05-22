@@ -1,122 +1,262 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC3133D4
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 21:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653256238; x=1684792238;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tuGNTQKb7tov2NqHToiPCQKs9Nz+OzX5pq7XJ3d4Hus=;
-  b=meal594sXibcAabYcxCritaVMkXN1eeqkkae+l7hwXkD6jGakKA6Za2d
-   vJx0UgCJppJ62vyJ1+KcpRB7q9UqVdyxNmZdU9b/vzgEKqiwLu6ITfpSL
-   790eYrFcdZrZQzEvDQK0QkFwkNpgPYEk1BhdgeQXc4IXa2fAy/I7mZISm
-   s0l1MV/HEUKgteUe2bNgbgVW/tjOoqpaTUp9CmRC4+9guVTwTK8+3/EFK
-   Mi5EgztIuPVmZ4EBEy8LU+5L8ZR/vqYxu+s1lVabhFeVLDMVsDMU5RXKz
-   uIWCg63ClZhvApw3nXNkteVwhJgdJU9CC4KE0afwkOj260tJpwc3+KmqE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="336104807"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="336104807"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 14:50:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="702682155"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 May 2022 14:50:35 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nstT9-0000df-7m;
-	Sun, 22 May 2022 21:50:35 +0000
-Date: Mon, 23 May 2022 05:50:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [madvenka786:orc_v2 17/20] arch/arm64/include/asm/module.h:19:8:
- error: redefinition of 'mod_arch_specific'
-Message-ID: <202205230540.ycgHZVXI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1751A20F7
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 22:35:28 +0000 (UTC)
+Received: by mail-il1-f176.google.com with SMTP id e9so4271976ilq.6
+        for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:35:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=2E7OE1cam9DtyiuG6iuZuYzKDSzejDf2vjxv7Odi/Sk=;
+        b=oqMNGYd47nfrDiDSIzYpcdQ4Cya1qiPvQyxWXTzoexUfoTbZYP2ONrxer27Ff1kglf
+         rh6bubHsMW2JBReMn8bauYwpxzu3VArJhjyoH+wodFEQuLlQGDKlpV9OUospAZp2cbix
+         0oCyjcYyZDDPdewWUXI61UpzqcWOM9Hn3BPjE2gL+52yB6KuTNg0oNTTXFhhZX58Z7JT
+         52tYfaYx43FdjYwMVWRuC7FmB+2f7KO1L8Fqnegb+jy3rTcEDucd9LAp1CkCIjBK4mye
+         wgKBLql7hzY3ZlOu3gNOwienBdTq+UvVqR4cYTUIYDfFt/Kxi/7bJ70mOwyNOriaCRPX
+         Igvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=2E7OE1cam9DtyiuG6iuZuYzKDSzejDf2vjxv7Odi/Sk=;
+        b=cF1OffjSLnpjlXs5fChMX7LtxlzhZRSJdYNfuXUVtOsIMajtHUqosU0mNIj/q7OBej
+         frR1/EB/RNRGRA7aNbxj2TWkK3Cc2/o1hZKg3qNbiCDtnZB+Bv1sgfmUJErjohN8ciR3
+         JeeONhkPqVphnigF4p2e8P078uhoXeUK4cv379dex6zOFDputlMTJU7uoGeVIns0VCHu
+         2/hEO4+PKc66lzdCIbSDCDVV7ZNdAl8Xo9voxN1pbS1PtwyITlwps8UbVrobYXScX64z
+         b2qB3ysvaXd9fpJY+sh24d3KOQz4b6oCIgsdaiTT6BIyRXttsi/GFEK7sPByCgsa9uR9
+         Glgg==
+X-Gm-Message-State: AOAM531roncZykphKYjngUp9IMfNNRKXCGmVjHwYtLxVV9YSyabbdocW
+	blxd2s2E6kT20vrGlkAnLXtsyJyAfks0YxgbsW8=
+X-Google-Smtp-Source: ABdhPJySklQVLvFbAp1hkug5aSL80QEN+5u0W6ifGPaPLk/2fsDEAFFujE9DDiD4hRG9gCxYPn0dBsPLpEHdqh9VFoE=
+X-Received: by 2002:a92:d149:0:b0:2d1:5bd:1ec2 with SMTP id
+ t9-20020a92d149000000b002d105bd1ec2mr10042266ilg.100.1653258927993; Sun, 22
+ May 2022 15:35:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+ <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+ <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
+ <CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com>
+ <CAK7LNATr6gpR1TUBp+wxn_JfeQr+cfxwztwupVui1nrWO-8Osg@mail.gmail.com> <CA+icZUXMWVr-zXm09zV2=pbLMFFOt=phHVT3B0CXVLBG=k8HWQ@mail.gmail.com>
+In-Reply-To: <CA+icZUXMWVr-zXm09zV2=pbLMFFOt=phHVT3B0CXVLBG=k8HWQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Mon, 23 May 2022 00:34:51 +0200
+Message-ID: <CA+icZUU8EAKpuXB996B+BNUcnRzsm5DvrtX-MtXcRm5aX2X8Lg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-modules <linux-modules@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/madvenka786/linux orc_v2
-head:   ed9a1d5c036130a53c639eb712485e3d13ab4372
-commit: 9da8b45b52cb2268200c44977bc7482d3bea70dc [17/20] arm64: Build the kernel with ORC information
-config: arm64-randconfig-r011-20220523 (https://download.01.org/0day-ci/archive/20220523/202205230540.ycgHZVXI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/madvenka786/linux/commit/9da8b45b52cb2268200c44977bc7482d3bea70dc
-        git remote add madvenka786 https://github.com/madvenka786/linux
-        git fetch --no-tags madvenka786 orc_v2
-        git checkout 9da8b45b52cb2268200c44977bc7482d3bea70dc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+On Sun, May 22, 2022 at 6:18 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sun, May 22, 2022 at 6:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Sun, May 22, 2022 at 11:16 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Sun, May 22, 2022 at 11:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > >
+> > > > On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > > >
+> > > > > On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > > > >
+> > > > > > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > This is the third batch of cleanups in this development cycle.
+> > > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > This series is available at
+> > > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> > > > > > >  lto-cleanup-v6
+> > > > > > >
+> > > > > >
+> > > > > > Hi Masahiro,
+> > > > > >
+> > > > > > I cloned the repository on top of latest Linus Git.
+> > > > > >
+> > > > > > Not able to boot in Quemu - Not able to boot on bare metal.
+> > > > > >
+> > > > > > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
+> > > > > > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
+> > > > > > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
+> > > > > > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
+> > > > > > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
+> > > > > > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
+> > > > > > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
+> > > > > > 375:Begin: Running /scripts/local-premount ... [    2.298555]
+> > > > > > crc32c_intel: disagrees about version of symbol module_layout
+> > > > > > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
+> > > > > > module_layout
+> > > > > > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+> > > > > >
+> > > > > > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+> > > > > >
+> > > > > > My linux-config and qemu-log are attached.
+> > > > > >
+> > > > >
+> > > > >
+> > > > > Thanks for your testing.
+> > > > >
+> > > > > I was also able to reproduce this issue.
+> > > > >
+> > > > >
+> > > > > The problematic parts are:
+> > > > >
+> > > > > [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
+> > > > > [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
+> > > > > [    2.306667] libcrc32c: disagrees about version of symbol module_layout
+> > > > >
+> > > > >
+> > > > >
+> > > > > When CONFIG_LTO_CLANG_THIN=y,
+> > > > > I cannot see any __crc_* symbols in "nm  vmlinux".
+> > > > >
+> > > > > Perhaps, LTO might have discarded all the __crc_* symbols
+> > > > > from vmlinux, but I am still checking the details...
+> > > > >
+> > > >
+> > > > Thanks for taking care.
+> > > >
+> > > > Just for the records:
+> > > >
+> > > > $ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
+> > > > CONFIG_MODVERSIONS=y
+> > > >
+> > >
+> > > Did not try CONFIG_MODVERSIONS=n.
+> > >
+> > > We have a new file:
+> > >
+> > > [ include/linux/export-internal.h ]
+> > > /* SPDX-License-Identifier: GPL-2.0-only */
+> > > /*
+> > > * Please do not include this explicitly.
+> > > * This is used by C files generated by modpost.
+> > > */
+> > >
+> > > #ifndef __LINUX_EXPORT_INTERNAL_H__
+> > > #define __LINUX_EXPORT_INTERNAL_H__
+> > >
+> > > #include <linux/compiler.h>
+> > > #include <linux/types.h>
+> > >
+> > > #define SYMBOL_CRC(sym, crc, sec)   \
+> > >        u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
+> > >
+> > > #endif /* __LINUX_EXPORT_INTERNAL_H__ */
+> > >
+> > > But we discard __kcrctab in scripts/module.lds.S file.
+> >
+> >
+> > No.
+> > scripts/module.lds.S keeps __kcrctab.
+> >
+> >
+> > The discarded sections are specified a few lines above:
+> >
+> > /DISCARD/ : {
+> >          *(.discard)
+> >          *(.discard.*)
+> >          SANITIZER_DISCARDS
+> > }
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> > > Maybe we need:
+> >
+> >
+> > No.
+> >
+> > The problem is __crc_* symbols are dropped from vmlinux
+> > when CONFIG_LTO_CLANG=y.
+> >
+> >
+> > Please try this fixup:
+> > https://lore.kernel.org/linux-kbuild/20220522160117.599023-1-masahiroy@kernel.org/T/#u
+> >
+>
+> Thanks!
+>
+> Will give it a try - will report in a few hours.
+>
+> -Sedat-
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I was able to build and boot on bare metal.
 
-All errors (new ones prefixed by >>):
+Feel free to add my...
 
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:33:
->> arch/arm64/include/asm/module.h:19:8: error: redefinition of 'mod_arch_specific'
-   struct mod_arch_specific {
-          ^
-   include/asm-generic/module.h:10:8: note: previous definition is here
-   struct mod_arch_specific
-          ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
+-Sedat-
 
-vim +/mod_arch_specific +19 arch/arm64/include/asm/module.h
-
-24af6c4e4e0f6e Ard Biesheuvel           2017-02-21  18  
-24af6c4e4e0f6e Ard Biesheuvel           2017-02-21 @19  struct mod_arch_specific {
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  20  #ifdef CONFIG_ARM64_MODULE_PLTS
-24af6c4e4e0f6e Ard Biesheuvel           2017-02-21  21  	struct mod_plt_sec	core;
-24af6c4e4e0f6e Ard Biesheuvel           2017-02-21  22  	struct mod_plt_sec	init;
-e71a4e1bebaf7f Ard Biesheuvel           2017-06-06  23  
-e71a4e1bebaf7f Ard Biesheuvel           2017-06-06  24  	/* for CONFIG_DYNAMIC_FTRACE */
-3b23e4991fb66f Torsten Duwe             2019-02-08  25  	struct plt_entry	*ftrace_trampolines;
-fd045f6cd98ec4 Ard Biesheuvel           2015-11-24  26  #endif
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  27  #ifdef CONFIG_UNWINDER_ORC
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  28  	unsigned int num_orcs;
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  29  	int *orc_unwind_ip;
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  30  	struct orc_entry *orc_unwind;
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  31  #endif
-9da8b45b52cb22 Madhavan T. Venkataraman 2022-05-22  32  };
-fd045f6cd98ec4 Ard Biesheuvel           2015-11-24  33  
-
-:::::: The code at line 19 was first introduced by commit
-:::::: 24af6c4e4e0f6e9803bec8dca0f7748afbb2bbf0 arm64: module: split core and init PLT sections
-
-:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> >
+> >
+> >
+> >
+> >
+> > >
+> > > $ git diff scripts/module.lds.S
+> > > diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> > > index 1d0e1e4dc3d2..c04b596c364b 100644
+> > > --- a/scripts/module.lds.S
+> > > +++ b/scripts/module.lds.S
+> > > @@ -21,8 +21,6 @@ SECTIONS {
+> > >
+> > >        __ksymtab               0 : { *(SORT(___ksymtab+*)) }
+> > >        __ksymtab_gpl           0 : { *(SORT(___ksymtab_gpl+*)) }
+> > > -       __kcrctab               0 : { *(SORT(___kcrctab+*)) }
+> > > -       __kcrctab_gpl           0 : { *(SORT(___kcrctab_gpl+*)) }
+> > >
+> > >        .ctors                  0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+> > >        .init_array             0 : ALIGN(8) { *(SORT(.init_array.*))
+> > > *(.init_array) }
+> > >
+> > > Or even?
+> > >
+> > > $ git diff scripts/kallsyms.c
+> > > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> > > index 8caabddf817c..fb3601fe8aa3 100644
+> > > --- a/scripts/kallsyms.c
+> > > +++ b/scripts/kallsyms.c
+> > > @@ -109,7 +109,6 @@ static bool is_ignored_symbol(const char *name, char type)
+> > >        static const char * const ignored_prefixes[] = {
+> > >                "$",                    /* local symbols for ARM, MIPS, etc. */
+> > >                ".L",                   /* local labels,
+> > > .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+> > > -               "__crc_",               /* modversions */
+> > >                "__efistub_",           /* arm64 EFI stub namespace */
+> > >                "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
+> > >                "__AArch64ADRPThunk_",  /* arm64 lld */
+> > >
+> > > - Sedat -
+> >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
