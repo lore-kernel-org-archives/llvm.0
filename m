@@ -1,208 +1,73 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1751A20F7
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 22:35:28 +0000 (UTC)
-Received: by mail-il1-f176.google.com with SMTP id e9so4271976ilq.6
-        for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:35:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32003D66
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 22:36:01 +0000 (UTC)
+Received: by mail-il1-f179.google.com with SMTP id a4so4327373ilr.12
+        for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=2E7OE1cam9DtyiuG6iuZuYzKDSzejDf2vjxv7Odi/Sk=;
-        b=oqMNGYd47nfrDiDSIzYpcdQ4Cya1qiPvQyxWXTzoexUfoTbZYP2ONrxer27Ff1kglf
-         rh6bubHsMW2JBReMn8bauYwpxzu3VArJhjyoH+wodFEQuLlQGDKlpV9OUospAZp2cbix
-         0oCyjcYyZDDPdewWUXI61UpzqcWOM9Hn3BPjE2gL+52yB6KuTNg0oNTTXFhhZX58Z7JT
-         52tYfaYx43FdjYwMVWRuC7FmB+2f7KO1L8Fqnegb+jy3rTcEDucd9LAp1CkCIjBK4mye
-         wgKBLql7hzY3ZlOu3gNOwienBdTq+UvVqR4cYTUIYDfFt/Kxi/7bJ70mOwyNOriaCRPX
-         Igvg==
+        bh=ArpLUn2/pj9FP5lFRBkDLCBidWkCamGHeX/50G01bPs=;
+        b=DiI+Z83vWb7aN9j7eNGIypx40svWAdoh++1piqY8e96KsvuF5oPXAVVtqhQkMI357+
+         qF3wD7UVPlbDbHgc9dmbKwxXFdrp2i5qmzpZXCVwVOsAroG5oWfmHOcs2zFT3GbnR78L
+         sz9pPytFp3QWt2ruqRP+4rVEwDDl5y65x857BQ0pLARdhORynU+6vJu/0Zyew0p9bWG9
+         oG0bU22HFxMvV6zT0+YZ5C+fiU0T7aZ7BpdCFPoQcbm2sK94Qb18JboNEF4nYQX7uzrU
+         Jm+wkRTJsB/V2C/6GTCLGEDWFsWkVjYdOhuPNudY6WD4Uy4l0rhqLGxNhC7JhUpPYnMs
+         Kvbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=2E7OE1cam9DtyiuG6iuZuYzKDSzejDf2vjxv7Odi/Sk=;
-        b=cF1OffjSLnpjlXs5fChMX7LtxlzhZRSJdYNfuXUVtOsIMajtHUqosU0mNIj/q7OBej
-         frR1/EB/RNRGRA7aNbxj2TWkK3Cc2/o1hZKg3qNbiCDtnZB+Bv1sgfmUJErjohN8ciR3
-         JeeONhkPqVphnigF4p2e8P078uhoXeUK4cv379dex6zOFDputlMTJU7uoGeVIns0VCHu
-         2/hEO4+PKc66lzdCIbSDCDVV7ZNdAl8Xo9voxN1pbS1PtwyITlwps8UbVrobYXScX64z
-         b2qB3ysvaXd9fpJY+sh24d3KOQz4b6oCIgsdaiTT6BIyRXttsi/GFEK7sPByCgsa9uR9
-         Glgg==
-X-Gm-Message-State: AOAM531roncZykphKYjngUp9IMfNNRKXCGmVjHwYtLxVV9YSyabbdocW
-	blxd2s2E6kT20vrGlkAnLXtsyJyAfks0YxgbsW8=
-X-Google-Smtp-Source: ABdhPJySklQVLvFbAp1hkug5aSL80QEN+5u0W6ifGPaPLk/2fsDEAFFujE9DDiD4hRG9gCxYPn0dBsPLpEHdqh9VFoE=
-X-Received: by 2002:a92:d149:0:b0:2d1:5bd:1ec2 with SMTP id
- t9-20020a92d149000000b002d105bd1ec2mr10042266ilg.100.1653258927993; Sun, 22
- May 2022 15:35:27 -0700 (PDT)
+        bh=ArpLUn2/pj9FP5lFRBkDLCBidWkCamGHeX/50G01bPs=;
+        b=I2AHmIOx4oOnfw3xz/x41qQn98RMlVbzLwgLGP/GSpMBYzlHkcKK3hyfep14CzQ5Lm
+         RUqBbVgdYUDUzeMxiVRdnClak0MiQLFYYXE104HDOeRzqLvqyKbLR97VoPpGcZeC+i/7
+         Wh7ZHHBENy7zhZFVK3bohKgdpGkitbRSdJyqARsrcHMH26suZfliDLpBlsEDkGLhD9cj
+         +uD1w+PmP8aF0qHYjawHxVXlEkS/FaTou0ntbHOA4QOI1PmklKjK+GEdUvWYwj7IDt8z
+         Tgl+ZpA1TF799tSjzmFNqAblXfwEBFj5y48/YQV2DgOOZgOo7ukf2DIWL+A+Yx743mPE
+         cHtw==
+X-Gm-Message-State: AOAM531oO5zXXn8SFtaeTNajeAPRzKepCnk3NsM675dLgClmBbwSKG7m
+	/R3LNiNvfDCintWsNmh6dF0MEtp7E8dgEjX6mhs=
+X-Google-Smtp-Source: ABdhPJyGISDr2Z+K29rTdFgt0lIY9GUwyNC5SfnmTm5ZFxVdZbc98PA0cihiMx1/6b7oICIsCaLYkQtBpIghRdlZJ8I=
+X-Received: by 2002:a05:6e02:1aa8:b0:2d1:7099:67ba with SMTP id
+ l8-20020a056e021aa800b002d1709967bamr7955707ilv.1.1653258961101; Sun, 22 May
+ 2022 15:36:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
- <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
- <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
- <CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com>
- <CAK7LNATr6gpR1TUBp+wxn_JfeQr+cfxwztwupVui1nrWO-8Osg@mail.gmail.com> <CA+icZUXMWVr-zXm09zV2=pbLMFFOt=phHVT3B0CXVLBG=k8HWQ@mail.gmail.com>
-In-Reply-To: <CA+icZUXMWVr-zXm09zV2=pbLMFFOt=phHVT3B0CXVLBG=k8HWQ@mail.gmail.com>
+References: <20220522160117.599023-1-masahiroy@kernel.org>
+In-Reply-To: <20220522160117.599023-1-masahiroy@kernel.org>
 Reply-To: sedat.dilek@gmail.com
 From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Mon, 23 May 2022 00:34:51 +0200
-Message-ID: <CA+icZUU8EAKpuXB996B+BNUcnRzsm5DvrtX-MtXcRm5aX2X8Lg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
+Date: Mon, 23 May 2022 00:35:25 +0200
+Message-ID: <CA+icZUXos=M_6KE3p00tFpT3Pt_jd3HUvVLRxW7+eJoT26X5cQ@mail.gmail.com>
+Subject: Re: [PATCH] fixup! kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
 To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-modules <linux-modules@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, 
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Peter Zijlstra <peterz@infradead.org>, linux-modules@vger.kernel.org, 
+	llvm@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>, 
 	Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, May 22, 2022 at 6:18 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Sun, May 22, 2022 at 6:03 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Sun, May 22, 2022 at 6:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Sun, May 22, 2022 at 11:16 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Sun, May 22, 2022 at 11:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > >
-> > > > On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > >
-> > > > > On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > > >
-> > > > > > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > This is the third batch of cleanups in this development cycle.
-> > > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > This series is available at
-> > > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> > > > > > >  lto-cleanup-v6
-> > > > > > >
-> > > > > >
-> > > > > > Hi Masahiro,
-> > > > > >
-> > > > > > I cloned the repository on top of latest Linus Git.
-> > > > > >
-> > > > > > Not able to boot in Quemu - Not able to boot on bare metal.
-> > > > > >
-> > > > > > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> > > > > > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> > > > > > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> > > > > > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> > > > > > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> > > > > > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> > > > > > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> > > > > > 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> > > > > > crc32c_intel: disagrees about version of symbol module_layout
-> > > > > > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> > > > > > module_layout
-> > > > > > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-> > > > > >
-> > > > > > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
-> > > > > >
-> > > > > > My linux-config and qemu-log are attached.
-> > > > > >
-> > > > >
-> > > > >
-> > > > > Thanks for your testing.
-> > > > >
-> > > > > I was also able to reproduce this issue.
-> > > > >
-> > > > >
-> > > > > The problematic parts are:
-> > > > >
-> > > > > [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-> > > > > [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-> > > > > [    2.306667] libcrc32c: disagrees about version of symbol module_layout
-> > > > >
-> > > > >
-> > > > >
-> > > > > When CONFIG_LTO_CLANG_THIN=y,
-> > > > > I cannot see any __crc_* symbols in "nm  vmlinux".
-> > > > >
-> > > > > Perhaps, LTO might have discarded all the __crc_* symbols
-> > > > > from vmlinux, but I am still checking the details...
-> > > > >
-> > > >
-> > > > Thanks for taking care.
-> > > >
-> > > > Just for the records:
-> > > >
-> > > > $ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
-> > > > CONFIG_MODVERSIONS=y
-> > > >
-> > >
-> > > Did not try CONFIG_MODVERSIONS=n.
-> > >
-> > > We have a new file:
-> > >
-> > > [ include/linux/export-internal.h ]
-> > > /* SPDX-License-Identifier: GPL-2.0-only */
-> > > /*
-> > > * Please do not include this explicitly.
-> > > * This is used by C files generated by modpost.
-> > > */
-> > >
-> > > #ifndef __LINUX_EXPORT_INTERNAL_H__
-> > > #define __LINUX_EXPORT_INTERNAL_H__
-> > >
-> > > #include <linux/compiler.h>
-> > > #include <linux/types.h>
-> > >
-> > > #define SYMBOL_CRC(sym, crc, sec)   \
-> > >        u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
-> > >
-> > > #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-> > >
-> > > But we discard __kcrctab in scripts/module.lds.S file.
-> >
-> >
-> > No.
-> > scripts/module.lds.S keeps __kcrctab.
-> >
-> >
-> > The discarded sections are specified a few lines above:
-> >
-> > /DISCARD/ : {
-> >          *(.discard)
-> >          *(.discard.*)
-> >          SANITIZER_DISCARDS
-> > }
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> > > Maybe we need:
-> >
-> >
-> > No.
-> >
-> > The problem is __crc_* symbols are dropped from vmlinux
-> > when CONFIG_LTO_CLANG=y.
-> >
-> >
-> > Please try this fixup:
-> > https://lore.kernel.org/linux-kbuild/20220522160117.599023-1-masahiroy@kernel.org/T/#u
-> >
+> I will squash this into
 >
-> Thanks!
+>   https://patchwork.kernel.org/project/linux-kbuild/patch/20220513113930.10488-3-masahiroy@kernel.org/
 >
-> Will give it a try - will report in a few hours.
+> Sedat Reported an error:
 >
-> -Sedat-
+>   https://lore.kernel.org/linux-kbuild/CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com/T/#md82f561e348b7959b7270c33ac86fa3edb0d773a
+>
+> __used is needed to make the combination of
+> CONFIG_MODVERSIONS and CONFIG_LTO_CLANG working.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
 I was able to build and boot on bare metal.
 
@@ -213,50 +78,25 @@ Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
 -Sedat-
 
+> ---
 >
-> >
-> >
-> >
-> >
-> >
-> > >
-> > > $ git diff scripts/module.lds.S
-> > > diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> > > index 1d0e1e4dc3d2..c04b596c364b 100644
-> > > --- a/scripts/module.lds.S
-> > > +++ b/scripts/module.lds.S
-> > > @@ -21,8 +21,6 @@ SECTIONS {
-> > >
-> > >        __ksymtab               0 : { *(SORT(___ksymtab+*)) }
-> > >        __ksymtab_gpl           0 : { *(SORT(___ksymtab_gpl+*)) }
-> > > -       __kcrctab               0 : { *(SORT(___kcrctab+*)) }
-> > > -       __kcrctab_gpl           0 : { *(SORT(___kcrctab_gpl+*)) }
-> > >
-> > >        .ctors                  0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
-> > >        .init_array             0 : ALIGN(8) { *(SORT(.init_array.*))
-> > > *(.init_array) }
-> > >
-> > > Or even?
-> > >
-> > > $ git diff scripts/kallsyms.c
-> > > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > > index 8caabddf817c..fb3601fe8aa3 100644
-> > > --- a/scripts/kallsyms.c
-> > > +++ b/scripts/kallsyms.c
-> > > @@ -109,7 +109,6 @@ static bool is_ignored_symbol(const char *name, char type)
-> > >        static const char * const ignored_prefixes[] = {
-> > >                "$",                    /* local symbols for ARM, MIPS, etc. */
-> > >                ".L",                   /* local labels,
-> > > .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
-> > > -               "__crc_",               /* modversions */
-> > >                "__efistub_",           /* arm64 EFI stub namespace */
-> > >                "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
-> > >                "__AArch64ADRPThunk_",  /* arm64 lld */
-> > >
-> > > - Sedat -
-> >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
+>  include/linux/export-internal.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
+> index 77175d561058..c2b1d4fd5987 100644
+> --- a/include/linux/export-internal.h
+> +++ b/include/linux/export-internal.h
+> @@ -10,7 +10,8 @@
+>  #include <linux/compiler.h>
+>  #include <linux/types.h>
+>
+> +/* __used is needed to keep __crc_* for LTO */
+>  #define SYMBOL_CRC(sym, crc, sec)   \
+> -       u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
+> +       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
+>
+>  #endif /* __LINUX_EXPORT_INTERNAL_H__ */
+> --
+> 2.32.0
+>
