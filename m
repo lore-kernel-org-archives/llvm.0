@@ -1,130 +1,192 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46183210C
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 09:46:16 +0000 (UTC)
-Received: by mail-io1-f51.google.com with SMTP id i74so5978330ioa.4
-        for <llvm@lists.linux.dev>; Sun, 22 May 2022 02:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=suXXqsi9+jjSf0b0zBPpTnO09e3zkBqF8Eabr9WKKbE=;
-        b=Sc+Bu3TQQ+v5pOsrEs+Do5GftmhkiMiSIxCa44mlZDq7mNYcxLdkwdfXKicn7DRWyb
-         HJy6WmcdRs7iPjaePufoTRon/RgIAXRWuGvptGfFgSCtrtB5Uc3R//N868TVfZjB0KKK
-         9YG5tmYdNtYXGnx0n/C24yH/MXnMVP1DCbqXmxIaMfuINtLRrNcmjX1RCmXKqzFDtkQX
-         fenF6PfTaReYHMKNKQ02fqcpEST8I0hVooiLdcFQenVyu8jQfaCI4oyDyJI9fyMlZM7M
-         drpEdkzSHlAIHKUlBsm7tUUApxovLGVTWYtzm+Y9cAPxGhuGtksm4XsjcItCKvLCCXWE
-         zY9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=suXXqsi9+jjSf0b0zBPpTnO09e3zkBqF8Eabr9WKKbE=;
-        b=hgOs/XhtGh0KMhyCpzNENga6Y5v+XjHa/VaCh4BZ4VO5XS86UQ6Iono4diMLFSRpIa
-         o8dTlVdRaoQdp8oiR3WTzZ01XZvrvIeOq0xpw5D+f0s3IYKssfoU8TZJk9oJ2MtC/D1J
-         qflOsU9aobXKxZoxFoYv9/p/sD5yBbeleN14qRq03vlRswDtmmDoPpzlDxz8AkkV/xv6
-         MvYseHcd7GxUhW0ohOeMgU33sMmVsDllX7jBZt2KM/cQlYcSUaYWRf+pjHtRCFLAHld3
-         73gK1iMoSFTZUgRwDax9MUG1gIZ2YQJIhFKMEHPJtDjiETFot1PVHS7B0QOJ3BSGLE2C
-         WWqA==
-X-Gm-Message-State: AOAM531+9r6wM4meiVZgDv6fPkOEpaBMkfOsfYqomdUovJPCvZIav645
-	/g9UtMYmFUIEdgtRq+O5v2GiET0NFKRHvEiJ1aI=
-X-Google-Smtp-Source: ABdhPJwk75eAgmPLNvyHtlfHoP5i7/H2Vm4/MJ4t9PpFPunYJ+u9wWBwvWaEctXhAxfGgh6zp9BW4bjDSvEZguLIAA4=
-X-Received: by 2002:a05:6602:1542:b0:65a:bc5d:db78 with SMTP id
- h2-20020a056602154200b0065abc5ddb78mr8040039iow.128.1653212775197; Sun, 22
- May 2022 02:46:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D94A210C
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 10:08:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653214102; x=1684750102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pVft9LSqtJKDfrQbwqF0zRGlcBrMn4ja8wUJvCE+/nY=;
+  b=TgXqUcUTGFU6F8r0VXovUIBN2fNlx8wzJpIROEyOcNthc90/1Td4D6JC
+   RazkWMCmSb85wsCwjmeQe1lFf/gp+TncapCCGiG3VjrcocfKqwaV11qkt
+   8Ck95hQtXEXOnO+8rIGOdte3kNDDSud1F1gqqWfSffSd7i95KrE2boQU/
+   n/CrAyuaSW0fWEarJ93s/Z+GP9y/rX0afSVgHFRp+xj2n4RWpNrfvKyrz
+   nuEY8qIicTfEPFM+HVsAlgZ8aZgzhPyng2h41Pi9kQgAk96mFpUo9V0w+
+   8p3MnwGWv60NgoNxEhG6lcrepVh6LmDm7Wxc7RlxWhH5EMFlBOb/atl0v
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="253483522"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="253483522"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 03:08:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="819309267"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 May 2022 03:08:18 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nsiVW-0000HU-6O;
+	Sun, 22 May 2022 10:08:18 +0000
+Date: Sun, 22 May 2022 18:07:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavel Skripkin <paskripkin@gmail.com>, toke@toke.dk, kvalo@kernel.org,
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+	senthilkumar@atheros.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>
+Subject: Re: [PATCH v5 2/2] ath9k: htc: clean up statistics macros
+Message-ID: <202205221713.VsmyJA1I-lkp@intel.com>
+References: <7bb006bb88e280c596d0e86ece7d251a21b8ed1f.1653168225.git.paskripkin@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com> <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-In-Reply-To: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 22 May 2022 11:45:39 +0200
-Message-ID: <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-modules <linux-modules@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bb006bb88e280c596d0e86ece7d251a21b8ed1f.1653168225.git.paskripkin@gmail.com>
 
-On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > >
-> > > > This is the third batch of cleanups in this development cycle.
-> > > >
-> > >
-> > >
-> > > This series is available at
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> > >  lto-cleanup-v6
-> > >
-> >
-> > Hi Masahiro,
-> >
-> > I cloned the repository on top of latest Linus Git.
-> >
-> > Not able to boot in Quemu - Not able to boot on bare metal.
-> >
-> > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> > 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> > crc32c_intel: disagrees about version of symbol module_layout
-> > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> > module_layout
-> > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-> >
-> > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
-> >
-> > My linux-config and qemu-log are attached.
-> >
->
->
-> Thanks for your testing.
->
-> I was also able to reproduce this issue.
->
->
-> The problematic parts are:
->
-> [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-> [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-> [    2.306667] libcrc32c: disagrees about version of symbol module_layout
->
->
->
-> When CONFIG_LTO_CLANG_THIN=y,
-> I cannot see any __crc_* symbols in "nm  vmlinux".
->
-> Perhaps, LTO might have discarded all the __crc_* symbols
-> from vmlinux, but I am still checking the details...
->
+Hi Pavel,
 
-Thanks for taking care.
+Thank you for the patch! Yet something to improve:
 
-Just for the records:
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on next-20220520]
+[cannot apply to wireless/main linus/master v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-$ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
-CONFIG_MODVERSIONS=y
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Skripkin/ath9k-fix-use-after-free-in-ath9k_hif_usb_rx_cb/20220522-053020
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220522/202205221713.VsmyJA1I-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/712472af928db8726d53f2c63ea05430e57f4727
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pavel-Skripkin/ath9k-fix-use-after-free-in-ath9k_hif_usb_rx_cb/20220522-053020
+        git checkout 712472af928db8726d53f2c63ea05430e57f4727
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath9k/
 
--Sedat-
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/ath9k/hif_usb.c:372:15: error: use of undeclared identifier 'hiv_dev'; did you mean 'hif_dev'?
+                   TX_STAT_INC(hiv_dev, buf_queued);
+                               ^~~~~~~
+                               hif_dev
+   drivers/net/wireless/ath/ath9k/htc.h:335:16: note: expanded from macro 'TX_STAT_INC'
+                   __STAT_SAFE((hif_dev), (hif_dev)->htc_handle->drv_priv->debug.tx_stats.c++)
+                                ^
+   drivers/net/wireless/ath/ath9k/htc.h:330:38: note: expanded from macro '__STAT_SAFE'
+   #define __STAT_SAFE(hif_dev, expr)      ((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
+                                             ^
+   drivers/net/wireless/ath/ath9k/hif_usb.c:310:48: note: 'hif_dev' declared here
+   static int __hif_usb_tx(struct hif_device_usb *hif_dev)
+                                                  ^
+>> drivers/net/wireless/ath/ath9k/hif_usb.c:372:15: error: use of undeclared identifier 'hiv_dev'; did you mean 'hif_dev'?
+                   TX_STAT_INC(hiv_dev, buf_queued);
+                               ^~~~~~~
+                               hif_dev
+   drivers/net/wireless/ath/ath9k/htc.h:335:27: note: expanded from macro 'TX_STAT_INC'
+                   __STAT_SAFE((hif_dev), (hif_dev)->htc_handle->drv_priv->debug.tx_stats.c++)
+                                           ^
+   drivers/net/wireless/ath/ath9k/htc.h:330:72: note: expanded from macro '__STAT_SAFE'
+   #define __STAT_SAFE(hif_dev, expr)      ((hif_dev)->htc_handle->drv_priv ? (expr) : 0)
+                                                                               ^
+   drivers/net/wireless/ath/ath9k/hif_usb.c:310:48: note: 'hif_dev' declared here
+   static int __hif_usb_tx(struct hif_device_usb *hif_dev)
+                                                  ^
+   2 errors generated.
+
+
+vim +372 drivers/net/wireless/ath/ath9k/hif_usb.c
+
+   308	
+   309	/* TX lock has to be taken */
+   310	static int __hif_usb_tx(struct hif_device_usb *hif_dev)
+   311	{
+   312		struct tx_buf *tx_buf = NULL;
+   313		struct sk_buff *nskb = NULL;
+   314		int ret = 0, i;
+   315		u16 tx_skb_cnt = 0;
+   316		u8 *buf;
+   317		__le16 *hdr;
+   318	
+   319		if (hif_dev->tx.tx_skb_cnt == 0)
+   320			return 0;
+   321	
+   322		/* Check if a free TX buffer is available */
+   323		if (list_empty(&hif_dev->tx.tx_buf))
+   324			return 0;
+   325	
+   326		tx_buf = list_first_entry(&hif_dev->tx.tx_buf, struct tx_buf, list);
+   327		list_move_tail(&tx_buf->list, &hif_dev->tx.tx_pending);
+   328		hif_dev->tx.tx_buf_cnt--;
+   329	
+   330		tx_skb_cnt = min_t(u16, hif_dev->tx.tx_skb_cnt, MAX_TX_AGGR_NUM);
+   331	
+   332		for (i = 0; i < tx_skb_cnt; i++) {
+   333			nskb = __skb_dequeue(&hif_dev->tx.tx_skb_queue);
+   334	
+   335			/* Should never be NULL */
+   336			BUG_ON(!nskb);
+   337	
+   338			hif_dev->tx.tx_skb_cnt--;
+   339	
+   340			buf = tx_buf->buf;
+   341			buf += tx_buf->offset;
+   342			hdr = (__le16 *)buf;
+   343			*hdr++ = cpu_to_le16(nskb->len);
+   344			*hdr++ = cpu_to_le16(ATH_USB_TX_STREAM_MODE_TAG);
+   345			buf += 4;
+   346			memcpy(buf, nskb->data, nskb->len);
+   347			tx_buf->len = nskb->len + 4;
+   348	
+   349			if (i < (tx_skb_cnt - 1))
+   350				tx_buf->offset += (((tx_buf->len - 1) / 4) + 1) * 4;
+   351	
+   352			if (i == (tx_skb_cnt - 1))
+   353				tx_buf->len += tx_buf->offset;
+   354	
+   355			__skb_queue_tail(&tx_buf->skb_queue, nskb);
+   356			TX_STAT_INC(hif_dev, skb_queued);
+   357		}
+   358	
+   359		usb_fill_bulk_urb(tx_buf->urb, hif_dev->udev,
+   360				  usb_sndbulkpipe(hif_dev->udev, USB_WLAN_TX_PIPE),
+   361				  tx_buf->buf, tx_buf->len,
+   362				  hif_usb_tx_cb, tx_buf);
+   363	
+   364		ret = usb_submit_urb(tx_buf->urb, GFP_ATOMIC);
+   365		if (ret) {
+   366			tx_buf->len = tx_buf->offset = 0;
+   367			ath9k_skb_queue_complete(hif_dev, &tx_buf->skb_queue, false);
+   368			__skb_queue_head_init(&tx_buf->skb_queue);
+   369			list_move_tail(&tx_buf->list, &hif_dev->tx.tx_buf);
+   370			hif_dev->tx.tx_buf_cnt++;
+   371		} else {
+ > 372			TX_STAT_INC(hiv_dev, buf_queued);
+   373		}
+   374	
+   375		return ret;
+   376	}
+   377	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
