@@ -1,138 +1,123 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6B420E8
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 03:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653191522; x=1684727522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ncg3fenhMzANpwBzc+ZzrWqpjCh41aOSHl7zLZUGcQw=;
-  b=K/GRUYm8QRDy9r10oR+gr9vG3McIUWhW5q6Gc7/MLiNycWF762voPmvB
-   uKugczsbhC+i1sQ2WdX8ZpoQn4+adwsfAw/XP5R7RBT5szgVW1nzOePcE
-   Epx3+S9oIryvUnzdx3DDJC76wfgtxNyRei04J8pBpCID0RQZ0QRsJrWaj
-   +SUeajKnv3ndbNQJs9NFOL3PMysamLxa+hN/8qaaju2eUe9EVaCwQyZrj
-   iVsI1iW6q7hbEwmfKMdw8lVEDdb1aiyJREuQFjwb30D9xdDwFWncoSXMj
-   WSbUMVhzSaRq4i0RKWhFwWPiABj2NSX02iGBvdeqZctaFLfweIGw/6NfT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="359343319"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="359343319"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 20:52:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="525307183"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 21 May 2022 20:52:00 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nscdL-0006ts-AZ;
-	Sun, 22 May 2022 03:51:59 +0000
-Date: Sun, 22 May 2022 11:51:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [linux-next:master 12283/13468] drivers/rtc/rtc-rzn1.c:291:3:
- warning: variable 'val' is uninitialized when used here
-Message-ID: <202205221120.Tt6UxePI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F6181
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 06:58:34 +0000 (UTC)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-09.nifty.com with ESMTP id 24M6oJKA004001
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:50:19 +0900
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 24M6oASW006411
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:50:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24M6oASW006411
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1653202211;
+	bh=5TwfumVCNM+fvix8eWg6i86pc65IzESlNEbAwwhHqrU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ojV6XLeO60FMwlo+YWIjhWtRGEEawpk4CVTb4L9aglvOsxoK5f7z7QbZSOZfJ/tak
+	 alBhcAPXcIxYqPD77l9IRzaTuM1+hmJzoN/AY0CLlXq3RF133ODYyShafJ1NmxJjCa
+	 q0lpyWHvIylOEdH/w5NWWS57WrNaaAJ1LH6EpwkqOq/sHCzQtTbTby/WMAjGehyBu4
+	 kVp9a8pzx79AFXB+F86AeNMng169Yna619lykZelRBT/YmqMzU/NmFg613kiYe1zhM
+	 gliHIyRLAvkJUkXtL+XM5BQLs9Sn5t2kQlyC6svng8bF7Ur/kDDSJ0tasHLmdhpwVA
+	 4ZAHOIk6oYabQ==
+X-Nifty-SrcIP: [209.85.210.175]
+Received: by mail-pf1-f175.google.com with SMTP id bo5so11079356pfb.4
+        for <llvm@lists.linux.dev>; Sat, 21 May 2022 23:50:11 -0700 (PDT)
+X-Gm-Message-State: AOAM5319bypYzdxpKquUlNOuayn5KlIU1wQz7xy+pTQL/mfqYn7FwW+5
+	yegkRvpgaODgJCTEkWp0QQAW3bwGgRnCfwyTGFU=
+X-Google-Smtp-Source: ABdhPJxhJ2rh9Olkm7eNlJF8gpCf6NRGhN1KHbnGfK8m1IcXzz+fxX+v0f9XGq/1eBPx2nbsbhKNAZoEfz+GfSITou8=
+X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
+ a64-20020a639043000000b003f96c363de3mr8127619pge.616.1653202210391; Sat, 21
+ May 2022 23:50:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+In-Reply-To: <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 22 May 2022 15:49:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   18ecd30af1a8402c162cca1bd58771c0e5be7815
-commit: be4a11cf98aff5d456eae947a49b6163393d9420 [12283/13468] rtc: rzn1: Add oscillator offset support
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220522/202205221120.Tt6UxePI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=be4a11cf98aff5d456eae947a49b6163393d9420
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout be4a11cf98aff5d456eae947a49b6163393d9420
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/rtc/ net/sched/
+On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > >
+> > > This is the third batch of cleanups in this development cycle.
+> > >
+> >
+> >
+> > This series is available at
+> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> >  lto-cleanup-v6
+> >
+>
+> Hi Masahiro,
+>
+> I cloned the repository on top of latest Linus Git.
+>
+> Not able to boot in Quemu - Not able to boot on bare metal.
+>
+> $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
+> 366:[    2.173265] floppy: disagrees about version of symbol module_layout
+> 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
+> 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
+> 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
+> 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
+> 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
+> 375:Begin: Running /scripts/local-premount ... [    2.298555]
+> crc32c_intel: disagrees about version of symbol module_layout
+> 376:[    2.303335] crc32c_generic: disagrees about version of symbol
+> module_layout
+> 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+>
+> Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+>
+> My linux-config and qemu-log are attached.
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Thanks for your testing.
 
->> drivers/rtc/rtc-rzn1.c:291:3: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-                   val |= RZN1_RTC_SUBU_DEV;
-                   ^~~
-   drivers/rtc/rtc-rzn1.c:275:9: note: initialize the variable 'val' to silence this warning
-           u32 val;
-                  ^
-                   = 0
-   1 warning generated.
+I was also able to reproduce this issue.
 
 
-vim +/val +291 drivers/rtc/rtc-rzn1.c
+The problematic parts are:
 
-   269	
-   270	static int rzn1_rtc_set_offset(struct device *dev, long offset)
-   271	{
-   272		struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-   273		unsigned int steps;
-   274		int stepsh, stepsl;
-   275		u32 val;
-   276		int ret;
-   277	
-   278		/*
-   279		 * Check which resolution mode (every 20 or 60s) can be used.
-   280		 * Between 2 and 124 clock pulses can be added or substracted.
-   281		 *
-   282		 * In 20s mode, the minimum resolution is 2 / (32768 * 20) which is
-   283		 * close to 3051 ppb. In 60s mode, the resolution is closer to 1017.
-   284		 */
-   285		stepsh = DIV_ROUND_CLOSEST(offset, 1017);
-   286		stepsl = DIV_ROUND_CLOSEST(offset, 3051);
-   287	
-   288		if (stepsh >= -0x3E && stepsh <= 0x3E) {
-   289			/* 1017 ppb per step */
-   290			steps = stepsh;
- > 291			val |= RZN1_RTC_SUBU_DEV;
-   292		} else if (stepsl >= -0x3E && stepsl <= 0x3E) {
-   293			/* 3051 ppb per step */
-   294			steps = stepsl;
-   295		} else {
-   296			return -ERANGE;
-   297		}
-   298	
-   299		if (!steps)
-   300			return 0;
-   301	
-   302		if (steps > 0) {
-   303			val |= steps + 1;
-   304		} else {
-   305			val |= RZN1_RTC_SUBU_DECR;
-   306			val |= (~(-steps - 1)) & 0x3F;
-   307		}
-   308	
-   309		ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, val,
-   310					 !(val & RZN1_RTC_CTL2_WUST), 100, 2000000);
-   311		if (ret)
-   312			return ret;
-   313	
-   314		writel(val, rtc->base + RZN1_RTC_SUBU);
-   315	
-   316		return 0;
-   317	}
-   318	
+[    2.298555] crc32c_intel: disagrees about version of symbol module_layout
+[    2.303335] crc32c_generic: disagrees about version of symbol module_layout
+[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+
+
+
+When CONFIG_LTO_CLANG_THIN=y,
+I cannot see any __crc_* symbols in "nm  vmlinux".
+
+Perhaps, LTO might have discarded all the __crc_* symbols
+from vmlinux, but I am still checking the details...
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
