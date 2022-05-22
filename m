@@ -1,112 +1,49 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C3033E3
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 20:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653250715; x=1684786715;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mZRSpyF9iYaBRnsEI6jUB0RQpJsiKbD6o8QAcovoo6I=;
-  b=Q5Ao8XUSiWmcJGUN+pbThQ4KjUhOagaNYhajD49Ec3Qkc+6DzgF7ftAH
-   lQ+esX+b9SujkwDa1Rp+klPn7l3uOeLzVaDfDG2K6+MIQx114tWtOJ+iK
-   D2R9hrtfeVw4OPyvLo6TLJAVuTmi++NuIuJcGyhQRwaUsl21SLikYmIa7
-   2k9ykGXGHI+yh9/E6ERBA46zPPxK0zrIDvLtyYMWdkZ6Y+j+20ji13EwU
-   IVoeV7v5xlPXu+87K4AGS3ZW9bVJ+zcZDyIHzGZk/cntwzsFmNlETY/LA
-   JKOUEPRV3tJwQzt0jZZ4yw3MBEERLEZTzjJxEV5Q0Fpg2wBv749rA0bCx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="333677119"
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="333677119"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 13:18:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="577085910"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 May 2022 13:18:33 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nss24-0000ar-U6;
-	Sun, 22 May 2022 20:18:32 +0000
-Date: Mon, 23 May 2022 04:17:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202205230419.k5fZHsKJ-lkp@intel.com>
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0769433D4
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 20:48:59 +0000 (UTC)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 9F3B492009E; Sun, 22 May 2022 22:48:52 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 987B592009D;
+	Sun, 22 May 2022 21:48:52 +0100 (BST)
+Date: Sun, 22 May 2022 21:48:52 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Nathan Chancellor <nathan@kernel.org>
+cc: Paul Cercueil <paul@crapouillou.net>, kernel test robot <lkp@intel.com>, 
+    llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+    linux-kernel@vger.kernel.org, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: arch/mips/include/asm/checksum.h:195:9: error: unsupported inline
+ asm: input with type 'unsigned long' matching output with type '__wsum' (aka
+ 'unsigned int')
+In-Reply-To: <Yoe5TafDskZ9JDSW@dev-arch.thelio-3990X>
+Message-ID: <alpine.DEB.2.21.2205202256030.52080@angie.orcam.me.uk>
+References: <202205200128.layu7VXF-lkp@intel.com> <OB55CR.QAT1J8A48BK21@crapouillou.net> <alpine.DEB.2.21.2205200510350.52080@angie.orcam.me.uk> <Yoe5TafDskZ9JDSW@dev-arch.thelio-3990X>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Mauro,
+On Fri, 20 May 2022, Nathan Chancellor wrote:
 
-FYI, the error/warning still remains.
+> >  It doesn't matter whether there is ADDU or DADDU anymore, given that 
+> > commit 198688edbf77 ("MIPS: Fix inline asm input/output type mismatch in 
+> > checksum.h used with Clang") has added a redundant 32-bit sign-extension 
+> > operation right afterwards, regressing size/performance by an extra 
+> > instruction in this performance-critical code as a workaround for a stupid 
+> > compiler.
+> 
+> Shouldn't this concern have been addressed by Tiezhu's follow up?
+> 
+> https://lore.kernel.org/1617359240-16609-1-git-send-email-yangtiezhu@loongson.cn/
+> 
+> I guess it never got picked up?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   978df3e158467ae09be635b27e9e1eb990704e0b
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   9 weeks ago
-config: hexagon-randconfig-r045-20220522 (https://download.01.org/0day-ci/archive/20220523/202205230419.k5fZHsKJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+ Still it is a hack.  I have now rewritten this code in plain C instead.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
-
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  Maciej
