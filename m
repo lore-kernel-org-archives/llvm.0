@@ -1,123 +1,118 @@
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F6181
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 06:58:34 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-09.nifty.com with ESMTP id 24M6oJKA004001
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:50:19 +0900
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 24M6oASW006411
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 15:50:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24M6oASW006411
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1653202211;
-	bh=5TwfumVCNM+fvix8eWg6i86pc65IzESlNEbAwwhHqrU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ojV6XLeO60FMwlo+YWIjhWtRGEEawpk4CVTb4L9aglvOsxoK5f7z7QbZSOZfJ/tak
-	 alBhcAPXcIxYqPD77l9IRzaTuM1+hmJzoN/AY0CLlXq3RF133ODYyShafJ1NmxJjCa
-	 q0lpyWHvIylOEdH/w5NWWS57WrNaaAJ1LH6EpwkqOq/sHCzQtTbTby/WMAjGehyBu4
-	 kVp9a8pzx79AFXB+F86AeNMng169Yna619lykZelRBT/YmqMzU/NmFg613kiYe1zhM
-	 gliHIyRLAvkJUkXtL+XM5BQLs9Sn5t2kQlyC6svng8bF7Ur/kDDSJ0tasHLmdhpwVA
-	 4ZAHOIk6oYabQ==
-X-Nifty-SrcIP: [209.85.210.175]
-Received: by mail-pf1-f175.google.com with SMTP id bo5so11079356pfb.4
-        for <llvm@lists.linux.dev>; Sat, 21 May 2022 23:50:11 -0700 (PDT)
-X-Gm-Message-State: AOAM5319bypYzdxpKquUlNOuayn5KlIU1wQz7xy+pTQL/mfqYn7FwW+5
-	yegkRvpgaODgJCTEkWp0QQAW3bwGgRnCfwyTGFU=
-X-Google-Smtp-Source: ABdhPJxhJ2rh9Olkm7eNlJF8gpCf6NRGhN1KHbnGfK8m1IcXzz+fxX+v0f9XGq/1eBPx2nbsbhKNAZoEfz+GfSITou8=
-X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
- a64-20020a639043000000b003f96c363de3mr8127619pge.616.1653202210391; Sat, 21
- May 2022 23:50:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9138F2103
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 08:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653208039; x=1684744039;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LteJ72TWNsYKXEonDajzghmVGbT4VlhAsqMZEfLzdiQ=;
+  b=KhYlxaOksiJ3YLpQwAjXsnTFEP2aRKO06agLix0LEzVZ0e3X3pto5PwG
+   ygzxzjMS9jEz9E1I51J9pmX1yknB9X1vDZIMZ6Y9kNRU1jwJSsK5ivl/M
+   0kEYgPTHJfjXTgFGCNCOGTquIw52WKnXmoZupuaCXPkJK/NksZDKYG8xC
+   LUyz0IMlhK507rO1OCLoOLwd57AVU33Zlkfu/AB5vil2Kq02xPOc09drR
+   YpTqiRYUb3Ou7MufkB0Z9+lmWUkHR3lcMdbf8txsphUKBd3bLhkTE8oPA
+   GuKzSB9P+4xcYzWjLVDcKz2wFWGELocZ7NuBzWQVv3y2zp2udeE/BxSJp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="255019946"
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="255019946"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 01:27:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
+   d="scan'208";a="819283116"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 May 2022 01:27:16 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nsgvj-0000DH-Ff;
+	Sun, 22 May 2022 08:27:15 +0000
+Date: Sun, 22 May 2022 16:26:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Huckleberry <nhuck@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [ebiggers:crypto-pending 8/9]
+ arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of
+ '__inittest'
+Message-ID: <202205221607.4vYxE0vQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-In-Reply-To: <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 22 May 2022 15:49:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > >
-> > > This is the third batch of cleanups in this development cycle.
-> > >
-> >
-> >
-> > This series is available at
-> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> >  lto-cleanup-v6
-> >
->
-> Hi Masahiro,
->
-> I cloned the repository on top of latest Linus Git.
->
-> Not able to boot in Quemu - Not able to boot on bare metal.
->
-> $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> crc32c_intel: disagrees about version of symbol module_layout
-> 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> module_layout
-> 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
->
-> Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
->
-> My linux-config and qemu-log are attached.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
+head:   22ca50a7cbeef1cde1ea3d99686ad3575bd7d4ed
+commit: bfa275a9bb4e16067b9056e8019bd478da798bc9 [8/9] crypto: arm64/polyval: Add PMULL accelerated implementation of POLYVAL
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220522/202205221607.4vYxE0vQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b369762beb70dfef22c7e793aed79b94d7dc0757)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=bfa275a9bb4e16067b9056e8019bd478da798bc9
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers crypto-pending
+        git checkout bfa275a9bb4e16067b9056e8019bd478da798bc9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of '__inittest'
+   module_init(polyval_ce_mod_init);
+   ^
+   include/linux/module.h:131:42: note: expanded from macro 'module_init'
+           static inline initcall_t __maybe_unused __inittest(void)                \
+                                                   ^
+   arch/arm64/crypto/polyval-ce-glue.c:185:1: note: previous definition is here
+   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
+   ^
+   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
+   }                                                               \
+                                                                   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+           static inline initcall_t __maybe_unused __inittest(void)                \
+                                                   ^
+>> arch/arm64/crypto/polyval-ce-glue.c:187:1: error: redefinition of 'init_module'
+   module_init(polyval_ce_mod_init);
+   ^
+   include/linux/module.h:133:6: note: expanded from macro 'module_init'
+           int init_module(void) __copy(initfn)                    \
+               ^
+   arch/arm64/crypto/polyval-ce-glue.c:185:1: note: previous definition is here
+   module_cpu_feature_match(PMULL, polyval_ce_mod_init)
+   ^
+   include/linux/cpufeature.h:54:10: note: expanded from macro 'module_cpu_feature_match'
+   }                                                               \
+                                                                   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+           int init_module(void) __copy(initfn)                    \
+               ^
+   2 errors generated.
 
 
-Thanks for your testing.
+vim +/__inittest +187 arch/arm64/crypto/polyval-ce-glue.c
 
-I was also able to reproduce this issue.
-
-
-The problematic parts are:
-
-[    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-[    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-
-
-
-When CONFIG_LTO_CLANG_THIN=y,
-I cannot see any __crc_* symbols in "nm  vmlinux".
-
-Perhaps, LTO might have discarded all the __crc_* symbols
-from vmlinux, but I am still checking the details...
-
-
+   186	
+ > 187	module_init(polyval_ce_mod_init);
+   188	module_exit(polyval_ce_mod_exit);
+   189	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
