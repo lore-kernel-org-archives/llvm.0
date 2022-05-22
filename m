@@ -1,121 +1,111 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11B07C
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 17:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C3033E3
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 20:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653242134; x=1684778134;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TEHU3fRelVLGjcqtRNnrAIQLa49InoqaD0+23YUKMVQ=;
-  b=I28+ww+6qRtEhOtkYLV4oT/RFQMUrkvB1qOG7+1k6rfFvMkxBsAW5SW9
-   vCQ6Xm1paOrDk6d9Z5nvnjFpR8E3tHWforcpY4gy+8Fa/r3Mphsu48Giq
-   UHB7S7Rcz2PgqsGsPRhaXoiV7BL1tVotGAzt60MnxVOIK4kBEH00my5OT
-   3dmUvxf6sWabaqDYLPzKmiP86VQpjlKmb0QuCsAaQpHACFRG8XaP7JNSe
-   u3j+mOyEjhjcgib0tdVVFsX3eWfg5Nf/KCb4+ezlzCkjFpkPg6uCgCYSM
-   YXVAk8O1uzL9zl+1rN6af8GPK4RMJRf0jV7txRF5q2haY4v1I0HuJi1Br
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="253534457"
+  t=1653250715; x=1684786715;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mZRSpyF9iYaBRnsEI6jUB0RQpJsiKbD6o8QAcovoo6I=;
+  b=Q5Ao8XUSiWmcJGUN+pbThQ4KjUhOagaNYhajD49Ec3Qkc+6DzgF7ftAH
+   lQ+esX+b9SujkwDa1Rp+klPn7l3uOeLzVaDfDG2K6+MIQx114tWtOJ+iK
+   D2R9hrtfeVw4OPyvLo6TLJAVuTmi++NuIuJcGyhQRwaUsl21SLikYmIa7
+   2k9ykGXGHI+yh9/E6ERBA46zPPxK0zrIDvLtyYMWdkZ6Y+j+20ji13EwU
+   IVoeV7v5xlPXu+87K4AGS3ZW9bVJ+zcZDyIHzGZk/cntwzsFmNlETY/LA
+   JKOUEPRV3tJwQzt0jZZ4yw3MBEERLEZTzjJxEV5Q0Fpg2wBv749rA0bCx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="333677119"
 X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="253534457"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 10:55:34 -0700
+   d="scan'208";a="333677119"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 13:18:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
-   d="scan'208";a="663086316"
+   d="scan'208";a="577085910"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 May 2022 10:55:31 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 22 May 2022 13:18:33 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nspne-0000X1-HZ;
-	Sun, 22 May 2022 17:55:30 +0000
-Date: Mon, 23 May 2022 01:54:59 +0800
+	id 1nss24-0000ar-U6;
+	Sun, 22 May 2022 20:18:32 +0000
+Date: Mon, 23 May 2022 04:17:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yishai Hadas <yishaih@nvidia.com>, alex.williamson@redhat.com,
-	jgg@nvidia.com, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, yishaih@nvidia.com,
-	maorg@nvidia.com, cohuck@redhat.com, kevin.tian@intel.com,
-	shameerali.kolothum.thodi@huawei.com, liulongfang@huawei.com
-Subject: Re: [PATCH] vfio: Split migration ops from main device ops
-Message-ID: <202205230157.hD7n0wig-lkp@intel.com>
-References: <20220522094756.219881-1-yishaih@nvidia.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202205230419.k5fZHsKJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220522094756.219881-1-yishaih@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Yishai,
+Hi Mauro,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on awilliam-vfio/next]
-[also build test ERROR on next-20220520]
-[cannot apply to v5.18-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yishai-Hadas/vfio-Split-migration-ops-from-main-device-ops/20220522-174959
-base:   https://github.com/awilliam/linux-vfio.git next
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220523/202205230157.hD7n0wig-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   978df3e158467ae09be635b27e9e1eb990704e0b
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   9 weeks ago
+config: hexagon-randconfig-r045-20220522 (https://download.01.org/0day-ci/archive/20220523/202205230419.k5fZHsKJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/f9fa522b20c805dbbb0907b0f90b2b7f1d260218
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yishai-Hadas/vfio-Split-migration-ops-from-main-device-ops/20220522-174959
-        git checkout f9fa522b20c805dbbb0907b0f90b2b7f1d260218
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/vfio/pci/hisilicon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:1188:22: error: no member named 'migration_set_state' in 'struct vfio_device_ops'
-           if (core_vdev->ops->migration_set_state) {
-               ~~~~~~~~~~~~~~  ^
-   1 error generated.
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
+   1 warning generated.
 
 
-vim +1188 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
 
-6abdce51af1a21 Shameer Kolothum 2022-03-08  1176  
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1177  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1178  {
-b0eed085903e77 Longfang Liu     2022-03-08  1179  	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
-b0eed085903e77 Longfang Liu     2022-03-08  1180  			struct hisi_acc_vf_core_device, core_device.vdev);
-b0eed085903e77 Longfang Liu     2022-03-08  1181  	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1182  	int ret;
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1183  
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1184  	ret = vfio_pci_core_enable(vdev);
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1185  	if (ret)
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1186  		return ret;
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1187  
-b0eed085903e77 Longfang Liu     2022-03-08 @1188  	if (core_vdev->ops->migration_set_state) {
-b0eed085903e77 Longfang Liu     2022-03-08  1189  		ret = hisi_acc_vf_qm_init(hisi_acc_vdev);
-b0eed085903e77 Longfang Liu     2022-03-08  1190  		if (ret) {
-b0eed085903e77 Longfang Liu     2022-03-08  1191  			vfio_pci_core_disable(vdev);
-b0eed085903e77 Longfang Liu     2022-03-08  1192  			return ret;
-b0eed085903e77 Longfang Liu     2022-03-08  1193  		}
-b0eed085903e77 Longfang Liu     2022-03-08  1194  		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
-b0eed085903e77 Longfang Liu     2022-03-08  1195  	}
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1196  
-b0eed085903e77 Longfang Liu     2022-03-08  1197  	vfio_pci_core_finish_enable(vdev);
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1198  	return 0;
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1199  }
-ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1200  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 
 -- 
 0-DAY CI Kernel Test Service
