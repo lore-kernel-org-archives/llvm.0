@@ -1,249 +1,122 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CE82F28
-	for <llvm@lists.linux.dev>; Sun, 22 May 2022 16:19:13 +0000 (UTC)
-Received: by mail-io1-f51.google.com with SMTP id e3so13141625ios.6
-        for <llvm@lists.linux.dev>; Sun, 22 May 2022 09:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ITlE3vftP027Hsr7XE8dHRfNscl6K2hBFWw8cBoFZG0=;
-        b=Y8NWRG7CY2yFsZGCPyv5jvcS/ggRj2eI4H1metVk3KN7EitxhOD3SCcwYTXKK64kOz
-         EqL20a0I2yuqxi8WBqrrD4+6XasKdUM09EtQ/SaJAyk1LO5E/3J4kr+d1UnM3nN/C++9
-         Y4SWWzLS/mUV2zGx05n6AlUlFLUq7+Rm/k1PA1FAR8OqOi5zswrDqkycxQOAh+U9DBMz
-         JOdGB7KvcFlkNNYZVAY9rdcG8BzpbPXDWIgEvFrcJVovNJCXaA8p0NjeWo2bHm6BnDYj
-         Er/L7yO2zRyLnGUBkSG22o3rMnU35J7KFeiTWZSAI65aGZtfhYNW18fPxaUlYG9LwE/K
-         ZshQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ITlE3vftP027Hsr7XE8dHRfNscl6K2hBFWw8cBoFZG0=;
-        b=Gyz3gDqoMygDNKG7Dwurux4nQJKeXpbwFKXFMAY5GX74ep9AYKJWqDzGQgcrTtmYDo
-         oSYr3g1Y+myizBWQSgAIAb7qXLYYzodheEbPWys+ZpXuwOpdDMRzQdgclkLgJVBp43Yw
-         T7lUoCiXXlvh9dUG7H457UvIuliuULF2wUG1TvebpVQsMKh94QsWmMmklD2h1H5lSQF1
-         FhB3UIBUMBf3fOuWQELfWhEfMSn2tUeSkNTrKsr9c8Oiqdjyn/W0MJ/bRFUq8pC6/YEt
-         8yBm/42obibw7bI6lpT3qM5JTYn8LgQo3jjjkl2w+CuVT43oCZMg0kSC7hU1TbhLCxUR
-         uvTw==
-X-Gm-Message-State: AOAM532f6oNtsiHppoJUVq0cuz8UdQxLELcKzf806RmtUY4PL7pdt1p4
-	tMEgKNtiGhhuAsiiuqfsLnxKlbt2T+xGSh6pKvo=
-X-Google-Smtp-Source: ABdhPJykPnG7HbrAbHJDKWyYimyapeJ7k2C5WpiLWbevJtKI8y5NSMa/xJmE/HK23lrPvs1unBjvYQLkaJW9DsGVMtE=
-X-Received: by 2002:a05:6638:1308:b0:32b:d5f7:62e6 with SMTP id
- r8-20020a056638130800b0032bd5f762e6mr9391934jad.52.1653236351075; Sun, 22 May
- 2022 09:19:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11B07C
+	for <llvm@lists.linux.dev>; Sun, 22 May 2022 17:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653242134; x=1684778134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TEHU3fRelVLGjcqtRNnrAIQLa49InoqaD0+23YUKMVQ=;
+  b=I28+ww+6qRtEhOtkYLV4oT/RFQMUrkvB1qOG7+1k6rfFvMkxBsAW5SW9
+   vCQ6Xm1paOrDk6d9Z5nvnjFpR8E3tHWforcpY4gy+8Fa/r3Mphsu48Giq
+   UHB7S7Rcz2PgqsGsPRhaXoiV7BL1tVotGAzt60MnxVOIK4kBEH00my5OT
+   3dmUvxf6sWabaqDYLPzKmiP86VQpjlKmb0QuCsAaQpHACFRG8XaP7JNSe
+   u3j+mOyEjhjcgib0tdVVFsX3eWfg5Nf/KCb4+ezlzCkjFpkPg6uCgCYSM
+   YXVAk8O1uzL9zl+1rN6af8GPK4RMJRf0jV7txRF5q2haY4v1I0HuJi1Br
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="253534457"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="253534457"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 10:55:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="663086316"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 May 2022 10:55:31 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nspne-0000X1-HZ;
+	Sun, 22 May 2022 17:55:30 +0000
+Date: Mon, 23 May 2022 01:54:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yishai Hadas <yishaih@nvidia.com>, alex.williamson@redhat.com,
+	jgg@nvidia.com, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, yishaih@nvidia.com,
+	maorg@nvidia.com, cohuck@redhat.com, kevin.tian@intel.com,
+	shameerali.kolothum.thodi@huawei.com, liulongfang@huawei.com
+Subject: Re: [PATCH] vfio: Split migration ops from main device ops
+Message-ID: <202205230157.hD7n0wig-lkp@intel.com>
+References: <20220522094756.219881-1-yishaih@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
- <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
- <CA+icZUV=PwX_e3U3mZwLOVvsA02pgNNAPsGJSMCPitu9ndWbqg@mail.gmail.com>
- <CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com> <CAK7LNATr6gpR1TUBp+wxn_JfeQr+cfxwztwupVui1nrWO-8Osg@mail.gmail.com>
-In-Reply-To: <CAK7LNATr6gpR1TUBp+wxn_JfeQr+cfxwztwupVui1nrWO-8Osg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 22 May 2022 18:18:34 +0200
-Message-ID: <CA+icZUXMWVr-zXm09zV2=pbLMFFOt=phHVT3B0CXVLBG=k8HWQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-modules <linux-modules@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Ard Biesheuvel <ardb@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220522094756.219881-1-yishaih@nvidia.com>
 
-On Sun, May 22, 2022 at 6:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sun, May 22, 2022 at 11:16 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Sun, May 22, 2022 at 11:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Sun, May 22, 2022 at 8:50 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > > On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > >
-> > > > > > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > > > > >
-> > > > > > >
-> > > > > > > This is the third batch of cleanups in this development cycle.
-> > > > > > >
-> > > > > >
-> > > > > >
-> > > > > > This series is available at
-> > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> > > > > >  lto-cleanup-v6
-> > > > > >
-> > > > >
-> > > > > Hi Masahiro,
-> > > > >
-> > > > > I cloned the repository on top of latest Linus Git.
-> > > > >
-> > > > > Not able to boot in Quemu - Not able to boot on bare metal.
-> > > > >
-> > > > > $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> > > > > 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> > > > > 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> > > > > 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> > > > > 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> > > > > 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> > > > > 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> > > > > 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> > > > > crc32c_intel: disagrees about version of symbol module_layout
-> > > > > 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> > > > > module_layout
-> > > > > 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-> > > > >
-> > > > > Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
-> > > > >
-> > > > > My linux-config and qemu-log are attached.
-> > > > >
-> > > >
-> > > >
-> > > > Thanks for your testing.
-> > > >
-> > > > I was also able to reproduce this issue.
-> > > >
-> > > >
-> > > > The problematic parts are:
-> > > >
-> > > > [    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-> > > > [    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-> > > > [    2.306667] libcrc32c: disagrees about version of symbol module_layout
-> > > >
-> > > >
-> > > >
-> > > > When CONFIG_LTO_CLANG_THIN=y,
-> > > > I cannot see any __crc_* symbols in "nm  vmlinux".
-> > > >
-> > > > Perhaps, LTO might have discarded all the __crc_* symbols
-> > > > from vmlinux, but I am still checking the details...
-> > > >
-> > >
-> > > Thanks for taking care.
-> > >
-> > > Just for the records:
-> > >
-> > > $ grep CONFIG_MODVERSIONS /boot/config-5.18.0-rc7-2-amd64-clang14-lto
-> > > CONFIG_MODVERSIONS=y
-> > >
-> >
-> > Did not try CONFIG_MODVERSIONS=n.
-> >
-> > We have a new file:
-> >
-> > [ include/linux/export-internal.h ]
-> > /* SPDX-License-Identifier: GPL-2.0-only */
-> > /*
-> > * Please do not include this explicitly.
-> > * This is used by C files generated by modpost.
-> > */
-> >
-> > #ifndef __LINUX_EXPORT_INTERNAL_H__
-> > #define __LINUX_EXPORT_INTERNAL_H__
-> >
-> > #include <linux/compiler.h>
-> > #include <linux/types.h>
-> >
-> > #define SYMBOL_CRC(sym, crc, sec)   \
-> >        u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
-> >
-> > #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-> >
-> > But we discard __kcrctab in scripts/module.lds.S file.
->
->
-> No.
-> scripts/module.lds.S keeps __kcrctab.
->
->
-> The discarded sections are specified a few lines above:
->
-> /DISCARD/ : {
->          *(.discard)
->          *(.discard.*)
->          SANITIZER_DISCARDS
-> }
->
->
->
->
->
->
->
->
->
-> > Maybe we need:
->
->
-> No.
->
-> The problem is __crc_* symbols are dropped from vmlinux
-> when CONFIG_LTO_CLANG=y.
->
->
-> Please try this fixup:
-> https://lore.kernel.org/linux-kbuild/20220522160117.599023-1-masahiroy@kernel.org/T/#u
->
+Hi Yishai,
 
-Thanks!
+I love your patch! Yet something to improve:
 
-Will give it a try - will report in a few hours.
+[auto build test ERROR on awilliam-vfio/next]
+[also build test ERROR on next-20220520]
+[cannot apply to v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--Sedat-
+url:    https://github.com/intel-lab-lkp/linux/commits/Yishai-Hadas/vfio-Split-migration-ops-from-main-device-ops/20220522-174959
+base:   https://github.com/awilliam/linux-vfio.git next
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220523/202205230157.hD7n0wig-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1443dbaba6f0e57be066995db9164f89fb57b413)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f9fa522b20c805dbbb0907b0f90b2b7f1d260218
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yishai-Hadas/vfio-Split-migration-ops-from-main-device-ops/20220522-174959
+        git checkout f9fa522b20c805dbbb0907b0f90b2b7f1d260218
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/vfio/pci/hisilicon/
 
->
->
->
->
->
-> >
-> > $ git diff scripts/module.lds.S
-> > diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> > index 1d0e1e4dc3d2..c04b596c364b 100644
-> > --- a/scripts/module.lds.S
-> > +++ b/scripts/module.lds.S
-> > @@ -21,8 +21,6 @@ SECTIONS {
-> >
-> >        __ksymtab               0 : { *(SORT(___ksymtab+*)) }
-> >        __ksymtab_gpl           0 : { *(SORT(___ksymtab_gpl+*)) }
-> > -       __kcrctab               0 : { *(SORT(___kcrctab+*)) }
-> > -       __kcrctab_gpl           0 : { *(SORT(___kcrctab_gpl+*)) }
-> >
-> >        .ctors                  0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
-> >        .init_array             0 : ALIGN(8) { *(SORT(.init_array.*))
-> > *(.init_array) }
-> >
-> > Or even?
-> >
-> > $ git diff scripts/kallsyms.c
-> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> > index 8caabddf817c..fb3601fe8aa3 100644
-> > --- a/scripts/kallsyms.c
-> > +++ b/scripts/kallsyms.c
-> > @@ -109,7 +109,6 @@ static bool is_ignored_symbol(const char *name, char type)
-> >        static const char * const ignored_prefixes[] = {
-> >                "$",                    /* local symbols for ARM, MIPS, etc. */
-> >                ".L",                   /* local labels,
-> > .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
-> > -               "__crc_",               /* modversions */
-> >                "__efistub_",           /* arm64 EFI stub namespace */
-> >                "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
-> >                "__AArch64ADRPThunk_",  /* arm64 lld */
-> >
-> > - Sedat -
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:1188:22: error: no member named 'migration_set_state' in 'struct vfio_device_ops'
+           if (core_vdev->ops->migration_set_state) {
+               ~~~~~~~~~~~~~~  ^
+   1 error generated.
+
+
+vim +1188 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+
+6abdce51af1a21 Shameer Kolothum 2022-03-08  1176  
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1177  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1178  {
+b0eed085903e77 Longfang Liu     2022-03-08  1179  	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
+b0eed085903e77 Longfang Liu     2022-03-08  1180  			struct hisi_acc_vf_core_device, core_device.vdev);
+b0eed085903e77 Longfang Liu     2022-03-08  1181  	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1182  	int ret;
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1183  
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1184  	ret = vfio_pci_core_enable(vdev);
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1185  	if (ret)
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1186  		return ret;
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1187  
+b0eed085903e77 Longfang Liu     2022-03-08 @1188  	if (core_vdev->ops->migration_set_state) {
+b0eed085903e77 Longfang Liu     2022-03-08  1189  		ret = hisi_acc_vf_qm_init(hisi_acc_vdev);
+b0eed085903e77 Longfang Liu     2022-03-08  1190  		if (ret) {
+b0eed085903e77 Longfang Liu     2022-03-08  1191  			vfio_pci_core_disable(vdev);
+b0eed085903e77 Longfang Liu     2022-03-08  1192  			return ret;
+b0eed085903e77 Longfang Liu     2022-03-08  1193  		}
+b0eed085903e77 Longfang Liu     2022-03-08  1194  		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
+b0eed085903e77 Longfang Liu     2022-03-08  1195  	}
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1196  
+b0eed085903e77 Longfang Liu     2022-03-08  1197  	vfio_pci_core_finish_enable(vdev);
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1198  	return 0;
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1199  }
+ee3a5b2359e0e5 Shameer Kolothum 2022-03-08  1200  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
