@@ -1,133 +1,319 @@
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14892F27
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 18:05:49 +0000 (UTC)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 24NI5VUo022694
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 03:05:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24NI5VUo022694
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1653329131;
-	bh=xyfMz2s6K1FqS7FKBYD4t23CA7hAJBCjnd+TynP5fZY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GCwsEkUg16irqBe06xUBSn2LtRPsq8KjlYcK65TS8QqLMnH1TOEEnHuJLXNmXfAVk
-	 nmazURMbbTvUGzhdaMvOCnR47ONoVUZQ+f5/J8/dfZGNgQcYSuweedtD8zOOayKLGn
-	 awDPyllQKkoG8KEQKcfOStEj9mffHWhHBKZAX2/l9T+1P01MnD7CAUKh1m6Zt50HVP
-	 kb51V9rGRIGQ9raYJQ5aHDTzlQc9GcftS7HEDKVxpmJBvZRpujN8hDIsfkm4RA6Q1J
-	 M6M1C9qhpXhW16j6psXiec0zxuqYuGRV9Kkb+Vc30devf0l5vshrbW8bUx1eJ8TIyv
-	 7viRZVv+FHTQA==
-X-Nifty-SrcIP: [209.85.215.179]
-Received: by mail-pg1-f179.google.com with SMTP id v15so144809pgk.11
-        for <llvm@lists.linux.dev>; Mon, 23 May 2022 11:05:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530HhNV5wd2qZXYYriKDJDnk/yOdNBpq2AagZkwcKfi9QilSuIfK
-	MVciOXsxCPwA9ZjXP3MWJGDakhFCUS/XftgnwcE=
-X-Google-Smtp-Source: ABdhPJx5Lme6JhQ7OKXuXU7KdkCmDLJQv7tFwa3fzbZTWXsLVHVozSYCDjkmkCCK6F2tBUWOu/ge6oucCPgm4OmGxhg=
-X-Received: by 2002:a63:fc5e:0:b0:3db:5804:f3b with SMTP id
- r30-20020a63fc5e000000b003db58040f3bmr21273043pgk.126.1653329119628; Mon, 23
- May 2022 11:05:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01870636
+	for <llvm@lists.linux.dev>; Mon, 23 May 2022 20:53:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653339215; x=1684875215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hnBl3A6KYCqrMCxOuT4RslY/zmgpepLTAXHpeopwUVU=;
+  b=LBNmOZfUHUYKIz+J+DnxgR55B6q8DYh5z4YDLUAg6adukMvDQTUx40HU
+   Vj6yOl95M+wU02tya2OIfnzmu+sI+48dIPrzw4uQPcBlRmtPufVDj7VJJ
+   cFvTEd5+/Akrxg/vgbqeofLL2hoRk9+ZOo5WvgewDXVGbp/GDbazz69nG
+   vDmHE6H84NgdjYsQOBgZfK+9YAhImVDs/PAkDhGore5yaDlSlIplPo2DI
+   1J0GIIiM/iva0j6CZtrBvBnMOKzxJ3cJ0XGUPlBqkJEGudoqpxW0Lx5fF
+   5FxJAnz2rzaA3nOjfu4/1B1kyBjIeFYVLnsuHACnLB0JW/4xhjbu4tJmW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253229590"
+X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
+   d="scan'208";a="253229590"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 13:53:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
+   d="scan'208";a="819999296"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 May 2022 13:53:30 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ntF3S-0001R4-6H;
+	Mon, 23 May 2022 20:53:30 +0000
+Date: Tue, 24 May 2022 04:52:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tytso@mit.edu,
+	adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+	lczerner@redhat.com, linux-kernel@vger.kernel.org,
+	yi.zhang@huawei.com, yebin10@huawei.com, yukuai3@huawei.com,
+	libaokun1@huawei.com, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH v2 1/2] ext4: fix bug_on ext4_mb_use_inode_pa
+Message-ID: <202205240409.QDeavDo9-lkp@intel.com>
+References: <20220523141658.2919003-2-libaokun1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com>
-In-Reply-To: <20220209185752.1226407-2-alexandr.lobakin@intel.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 24 May 2022 03:04:00 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
-Message-ID: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523141658.2919003-2-libaokun1@huawei.com>
 
-On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> to simplify livepatching (hopefully globally later on) triggers the
-> following:
->
-> ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
->
-> The reason is that for now the condition from remove_dot():
->
-> if (m && (s[n + m] == '.' || s[n + m] == 0))
->
-> which was designed to test if it's a dot or a '\0' after the suffix
-> is never satisfied.
-> This is due to that `s[n + m]` always points to the last digit of a
-> numeric suffix, not on the symbol next to it (from a custom debug
-> print added to modpost):
->
-> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
->
-> So it's off-by-one and was like that since 2014.
-> Fix this for the sake of upcoming features, but don't bother
-> stable-backporting, as it's well hidden -- apart from that LD flag,
-> can be triggered only by GCC LTO which never landed upstream.
->
-> Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  scripts/mod/modpost.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 6bfa33217914..4648b7afe5cc 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
->
->         if (n && s[n]) {
->                 size_t m = strspn(s + n + 1, "0123456789");
-> -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
->                         s[n] = 0;
->
->                 /* strip trailing .lto */
-> --
-> 2.34.1
->
+Hi Baokun,
 
-This trivial patch has not been picked up yet.
+Thank you for the patch! Perhaps something to improve:
 
-I can apply this to my tree, if you want.
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linux/master linus/master v5.18 next-20220523]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Please let me know your thoughts.
+url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-fix-two-bugs-in-ext4_mb_normalize_request/20220523-221114
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+config: i386-randconfig-a015-20220523 (https://download.01.org/0day-ci/archive/20220524/202205240409.QDeavDo9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/74180b479936a47521200fae540eafdf35ca5a07
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baokun-Li/ext4-fix-two-bugs-in-ext4_mb_normalize_request/20220523-221114
+        git checkout 74180b479936a47521200fae540eafdf35ca5a07
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/mballoc.c:4113:10: warning: comparison of distinct pointer types ('typeof (start) *' (aka 'unsigned int *') and 'typeof (({
+       typeof (ac->ac_o_ex.fe_logical) __x = (ac->ac_o_ex.fe_logical);
+       __x - (__x % ((EXT4_SB(ac->ac_sb)->s_blocks_per_group)));
+   })) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           start = max(start, rounddown(ac->ac_o_ex.fe_logical,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +4113 fs/ext4/mballoc.c
+
+  4016	
+  4017	/*
+  4018	 * Normalization means making request better in terms of
+  4019	 * size and alignment
+  4020	 */
+  4021	static noinline_for_stack void
+  4022	ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+  4023					struct ext4_allocation_request *ar)
+  4024	{
+  4025		struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+  4026		int bsbits, max;
+  4027		ext4_lblk_t end;
+  4028		loff_t size, start_off;
+  4029		loff_t orig_size __maybe_unused;
+  4030		ext4_lblk_t start;
+  4031		struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+  4032		struct ext4_prealloc_space *pa;
+  4033	
+  4034		/* do normalize only data requests, metadata requests
+  4035		   do not need preallocation */
+  4036		if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
+  4037			return;
+  4038	
+  4039		/* sometime caller may want exact blocks */
+  4040		if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
+  4041			return;
+  4042	
+  4043		/* caller may indicate that preallocation isn't
+  4044		 * required (it's a tail, for example) */
+  4045		if (ac->ac_flags & EXT4_MB_HINT_NOPREALLOC)
+  4046			return;
+  4047	
+  4048		if (ac->ac_flags & EXT4_MB_HINT_GROUP_ALLOC) {
+  4049			ext4_mb_normalize_group_request(ac);
+  4050			return ;
+  4051		}
+  4052	
+  4053		bsbits = ac->ac_sb->s_blocksize_bits;
+  4054	
+  4055		/* first, let's learn actual file size
+  4056		 * given current request is allocated */
+  4057		size = ac->ac_o_ex.fe_logical + EXT4_C2B(sbi, ac->ac_o_ex.fe_len);
+  4058		size = size << bsbits;
+  4059		if (size < i_size_read(ac->ac_inode))
+  4060			size = i_size_read(ac->ac_inode);
+  4061		orig_size = size;
+  4062	
+  4063		/* max size of free chunks */
+  4064		max = 2 << bsbits;
+  4065	
+  4066	#define NRL_CHECK_SIZE(req, size, max, chunk_size)	\
+  4067			(req <= (size) || max <= (chunk_size))
+  4068	
+  4069		/* first, try to predict filesize */
+  4070		/* XXX: should this table be tunable? */
+  4071		start_off = 0;
+  4072		if (size <= 16 * 1024) {
+  4073			size = 16 * 1024;
+  4074		} else if (size <= 32 * 1024) {
+  4075			size = 32 * 1024;
+  4076		} else if (size <= 64 * 1024) {
+  4077			size = 64 * 1024;
+  4078		} else if (size <= 128 * 1024) {
+  4079			size = 128 * 1024;
+  4080		} else if (size <= 256 * 1024) {
+  4081			size = 256 * 1024;
+  4082		} else if (size <= 512 * 1024) {
+  4083			size = 512 * 1024;
+  4084		} else if (size <= 1024 * 1024) {
+  4085			size = 1024 * 1024;
+  4086		} else if (NRL_CHECK_SIZE(size, 4 * 1024 * 1024, max, 2 * 1024)) {
+  4087			start_off = ((loff_t)ac->ac_o_ex.fe_logical >>
+  4088							(21 - bsbits)) << 21;
+  4089			size = 2 * 1024 * 1024;
+  4090		} else if (NRL_CHECK_SIZE(size, 8 * 1024 * 1024, max, 4 * 1024)) {
+  4091			start_off = ((loff_t)ac->ac_o_ex.fe_logical >>
+  4092								(22 - bsbits)) << 22;
+  4093			size = 4 * 1024 * 1024;
+  4094		} else if (NRL_CHECK_SIZE(ac->ac_o_ex.fe_len,
+  4095						(8<<20)>>bsbits, max, 8 * 1024)) {
+  4096			start_off = ((loff_t)ac->ac_o_ex.fe_logical >>
+  4097								(23 - bsbits)) << 23;
+  4098			size = 8 * 1024 * 1024;
+  4099		} else {
+  4100			start_off = (loff_t) ac->ac_o_ex.fe_logical << bsbits;
+  4101			size	  = (loff_t) EXT4_C2B(EXT4_SB(ac->ac_sb),
+  4102						      ac->ac_o_ex.fe_len) << bsbits;
+  4103		}
+  4104		size = size >> bsbits;
+  4105		start = start_off >> bsbits;
+  4106	
+  4107		/*
+  4108		 * For tiny groups (smaller than 8MB) the chosen allocation
+  4109		 * alignment may be larger than group size. Make sure the
+  4110		 * alignment does not move allocation to a different group which
+  4111		 * makes mballoc fail assertions later.
+  4112		 */
+> 4113		start = max(start, rounddown(ac->ac_o_ex.fe_logical,
+  4114				EXT4_BLOCKS_PER_GROUP(ac->ac_sb)));
+  4115	
+  4116		/* don't cover already allocated blocks in selected range */
+  4117		if (ar->pleft && start <= ar->lleft) {
+  4118			size -= ar->lleft + 1 - start;
+  4119			start = ar->lleft + 1;
+  4120		}
+  4121		if (ar->pright && start + size - 1 >= ar->lright)
+  4122			size -= start + size - ar->lright;
+  4123	
+  4124		/*
+  4125		 * Trim allocation request for filesystems with artificially small
+  4126		 * groups.
+  4127		 */
+  4128		if (size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb))
+  4129			size = EXT4_BLOCKS_PER_GROUP(ac->ac_sb);
+  4130	
+  4131		end = start + size;
+  4132	
+  4133		/* check we don't cross already preallocated blocks */
+  4134		rcu_read_lock();
+  4135		list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+  4136			ext4_lblk_t pa_end;
+  4137	
+  4138			if (pa->pa_deleted)
+  4139				continue;
+  4140			spin_lock(&pa->pa_lock);
+  4141			if (pa->pa_deleted) {
+  4142				spin_unlock(&pa->pa_lock);
+  4143				continue;
+  4144			}
+  4145	
+  4146			pa_end = pa->pa_lstart + EXT4_C2B(EXT4_SB(ac->ac_sb),
+  4147							  pa->pa_len);
+  4148	
+  4149			/* PA must not overlap original request */
+  4150			BUG_ON(!(ac->ac_o_ex.fe_logical >= pa_end ||
+  4151				ac->ac_o_ex.fe_logical < pa->pa_lstart));
+  4152	
+  4153			/* skip PAs this normalized request doesn't overlap with */
+  4154			if (pa->pa_lstart >= end || pa_end <= start) {
+  4155				spin_unlock(&pa->pa_lock);
+  4156				continue;
+  4157			}
+  4158			BUG_ON(pa->pa_lstart <= start && pa_end >= end);
+  4159	
+  4160			/* adjust start or end to be adjacent to this pa */
+  4161			if (pa_end <= ac->ac_o_ex.fe_logical) {
+  4162				BUG_ON(pa_end < start);
+  4163				start = pa_end;
+  4164			} else if (pa->pa_lstart > ac->ac_o_ex.fe_logical) {
+  4165				BUG_ON(pa->pa_lstart > end);
+  4166				end = pa->pa_lstart;
+  4167			}
+  4168			spin_unlock(&pa->pa_lock);
+  4169		}
+  4170		rcu_read_unlock();
+  4171		size = end - start;
+  4172	
+  4173		/* XXX: extra loop to check we really don't overlap preallocations */
+  4174		rcu_read_lock();
+  4175		list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+  4176			ext4_lblk_t pa_end;
+  4177	
+  4178			spin_lock(&pa->pa_lock);
+  4179			if (pa->pa_deleted == 0) {
+  4180				pa_end = pa->pa_lstart + EXT4_C2B(EXT4_SB(ac->ac_sb),
+  4181								  pa->pa_len);
+  4182				BUG_ON(!(start >= pa_end || end <= pa->pa_lstart));
+  4183			}
+  4184			spin_unlock(&pa->pa_lock);
+  4185		}
+  4186		rcu_read_unlock();
+  4187	
+  4188		if (start + size <= ac->ac_o_ex.fe_logical &&
+  4189				start > ac->ac_o_ex.fe_logical) {
+  4190			ext4_msg(ac->ac_sb, KERN_ERR,
+  4191				 "start %lu, size %lu, fe_logical %lu",
+  4192				 (unsigned long) start, (unsigned long) size,
+  4193				 (unsigned long) ac->ac_o_ex.fe_logical);
+  4194			BUG();
+  4195		}
+  4196		BUG_ON(size <= 0 || size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb));
+  4197	
+  4198		/* now prepare goal request */
+  4199	
+  4200		/* XXX: is it better to align blocks WRT to logical
+  4201		 * placement or satisfy big request as is */
+  4202		ac->ac_g_ex.fe_logical = start;
+  4203		ac->ac_g_ex.fe_len = EXT4_NUM_B2C(sbi, size);
+  4204	
+  4205		/* define goal start in order to merge */
+  4206		if (ar->pright && (ar->lright == (start + size))) {
+  4207			/* merge to the right */
+  4208			ext4_get_group_no_and_offset(ac->ac_sb, ar->pright - size,
+  4209							&ac->ac_f_ex.fe_group,
+  4210							&ac->ac_f_ex.fe_start);
+  4211			ac->ac_flags |= EXT4_MB_HINT_TRY_GOAL;
+  4212		}
+  4213		if (ar->pleft && (ar->lleft + 1 == start)) {
+  4214			/* merge to the left */
+  4215			ext4_get_group_no_and_offset(ac->ac_sb, ar->pleft + 1,
+  4216							&ac->ac_f_ex.fe_group,
+  4217							&ac->ac_f_ex.fe_start);
+  4218			ac->ac_flags |= EXT4_MB_HINT_TRY_GOAL;
+  4219		}
+  4220	
+  4221		mb_debug(ac->ac_sb, "goal: %lld(was %lld) blocks at %u\n", size,
+  4222			 orig_size, start);
+  4223	}
+  4224	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
