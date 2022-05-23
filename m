@@ -1,42 +1,44 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A20258E
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 15:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71842F27
+	for <llvm@lists.linux.dev>; Mon, 23 May 2022 17:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653320950; x=1684856950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8lhQ/KID3ztUPGBkFXjcOy6u1hxj1gnvDoqTjbmBCrI=;
-  b=We5q2IMW6ldaSKHwYn0WQj6NY168ek9oIlnggqKYikFQlzi5rJGEbJcp
-   g4NFqRrdVw7XsL55UH9YXKyvErb7RtxcqZP8Ruk/idRnmQJ/IW23IN9yV
-   9m2S5lKuM/IVf1yAaVzaXZR0D8PNmQpstbz+W9J0a0bX1A2qvC5l5ivCx
-   t+4803m3VUORtOO/e+dJPL2yWs5dI9P/tdzRzcsdbVYnn9cp+qrQWIw0+
-   i86KHM6AvdZoGfp3htPj2JGZubUE6RQoZD7NCZEd0f4J1L17DKg7oGT26
-   zpGJNFwIlv3CF3O8iNIaM4bzcxbfKgpXu6uImDX95pijhP1m75slXswow
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="255329082"
+  t=1653328276; x=1684864276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hKIdNNvfXG+tHKyYN5/rWniQBAaRKGnXCLi/V++KCUk=;
+  b=npTgwi6FWUit6PouOym1I+NZxiLLc2EqtABlrAnhhYcGwv7p28wEyq7f
+   8EneXMKa5P0E7uPTnRqkurixk0mRPVK0oFpKwUhMvvL/ScOEeoOM23nGP
+   vBBaDt8OV8+1fwu6xMYKq7fo91H51btGna5IiMzIZp9hG8dHCMDitYyPR
+   iOennrBx/1QyIq8whdDor8BVr76zm8afgQI2REOu9dmgQF4cVqfSpntMp
+   gG8OlVDKo+Cr6E4HaMPDrFDTxxie/FnWCdVUC25cJAq9bqDk9z93mGlpy
+   +mhqgrCPcMg7vgjcKOfPydCZyAr+ulYukEJpQXi/w3HugsWV6LDQK/DW/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273421052"
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="255329082"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 08:49:09 -0700
+   d="scan'208";a="273421052"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:51:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="577457627"
+   d="scan'208";a="675977779"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 May 2022 08:49:08 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 23 May 2022 10:51:14 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntAIt-0001E2-H3;
-	Mon, 23 May 2022 15:49:07 +0000
-Date: Mon, 23 May 2022 23:49:06 +0800
+	id 1ntCD3-0001KS-9z;
+	Mon, 23 May 2022 17:51:13 +0000
+Date: Tue, 24 May 2022 01:50:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, Shyam-sundar.S-k@amd.com,
+	linus.walleij@linaro.org, linux-gpio@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/17] ld.lld: error:
- undefined symbol: kernel_sec_start
-Message-ID: <202205232354.0am40aBc-lkp@intel.com>
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: Re: [PATCH 3/3] pinctrl: amd: Implement pinmux functionality
+Message-ID: <202205240107.bryIFhOh-lkp@intel.com>
+References: <20220523130944.473416-4-Basavaraj.Natikar@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,63 +47,210 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220523130944.473416-4-Basavaraj.Natikar@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   a9b76a04739b5b4dbad86664342c8945e83d8e95
-commit: 06f73703766c6f636c79d04aae9f83446f1b8ff2 [8/17] ARM: Compile the kernel into VMALLOC
-config: arm-randconfig-r021-20220522 (https://download.01.org/0day-ci/archive/20220523/202205232354.0am40aBc-lkp@intel.com/config)
+Hi Basavaraj,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on v5.18 next-20220523]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Basavaraj-Natikar/Enhancements-to-AMD-pinctrl-and-implementation-of-AMD-pinmux/20220523-211520
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+config: riscv-randconfig-r031-20220522 (https://download.01.org/0day-ci/archive/20220524/202205240107.bryIFhOh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=06f73703766c6f636c79d04aae9f83446f1b8ff2
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 06f73703766c6f636c79d04aae9f83446f1b8ff2
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/70170afc73255ab40d39b1668f24ca7f0899f61b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Basavaraj-Natikar/Enhancements-to-AMD-pinctrl-and-implementation-of-AMD-pinmux/20220523-211520
+        git checkout 70170afc73255ab40d39b1668f24ca7f0899f61b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: kernel_sec_start
-   >>> referenced by init.c
-   >>>               mm/init.o:(arm_memblock_init) in archive arch/arm/built-in.a
-   >>> referenced by init.c
-   >>>               mm/init.o:(arm_memblock_init) in archive arch/arm/built-in.a
---
->> mm/gup.c:1599:28: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                           pages[i] = virt_to_page(start);
-                                                   ^~~~~
-   arch/arm/include/asm/memory.h:441:53: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-                                                           ^~~~~
-   include/asm-generic/memory_model.h:18:41: note: expanded from macro '__pfn_to_page'
-   #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-                                                ^~~
-   arch/arm/include/asm/memory.h:322:53: note: passing argument to parameter 'p' here
-   static inline unsigned long virt_to_pfn(const void *p)
-                                                       ^
-   1 warning generated.
---
->> mm/nommu.c:501:36: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                   struct page *page = virt_to_page(from);
-                                                    ^~~~
-   arch/arm/include/asm/memory.h:441:53: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-                                                           ^~~~~
-   include/asm-generic/memory_model.h:18:41: note: expanded from macro '__pfn_to_page'
-   #define __pfn_to_page(pfn)      (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-                                                ^~~
-   arch/arm/include/asm/memory.h:322:53: note: passing argument to parameter 'p' here
-   static inline unsigned long virt_to_pfn(const void *p)
-                                                       ^
-   1 warning generated.
+   In file included from drivers/pinctrl/pinctrl-amd.c:40:
+>> drivers/pinctrl/pinctrl-amd.h:1205:2: error: initializer element is not a compile-time constant
+           PMUX_FUNC(0, IMX_F0_GPIO0, IMX_F1_GPIO0, IMX_F2_GPIO0, IMX_F3_GPIO0),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/pinctrl-amd.h:1199:14: note: expanded from macro 'PMUX_FUNC'
+                   .groups = {GRP_NAME(_gname1), GRP_NAME(_gname2),\
+                              ^~~~~~~~~~~~~~~~~
+   drivers/pinctrl/pinctrl-amd.h:1195:50: note: expanded from macro 'GRP_NAME'
+   #define GRP_NAME(_number) kerncz_groups[_number].name
+                             ~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   1 error generated.
+
+
+vim +1205 drivers/pinctrl/pinctrl-amd.h
+
+  1196	
+  1197	#define PMUX_FUNC(_number, _gname1, _gname2, _gname3, _gname4) {\
+  1198			.name = "iomux_gpio_"#_number,\
+  1199			.groups = {GRP_NAME(_gname1), GRP_NAME(_gname2),\
+  1200				   GRP_NAME(_gname3), GRP_NAME(_gname4)},\
+  1201			.index = _number,\
+  1202			.ngroups = NSELECTS }
+  1203	
+  1204	static const struct amd_function pmx_functions[] = {
+> 1205		PMUX_FUNC(0, IMX_F0_GPIO0, IMX_F1_GPIO0, IMX_F2_GPIO0, IMX_F3_GPIO0),
+  1206		PMUX_FUNC(1, IMX_F0_GPIO1, IMX_F1_GPIO1, IMX_F2_GPIO1, IMX_F3_GPIO1),
+  1207		PMUX_FUNC(2, IMX_F0_GPIO2, IMX_F1_GPIO2, IMX_F2_GPIO2, IMX_F3_GPIO2),
+  1208		PMUX_FUNC(3, IMX_F0_GPIO3, IMX_F1_GPIO3, IMX_F2_GPIO3, IMX_F3_GPIO3),
+  1209		PMUX_FUNC(4, IMX_F0_GPIO4, IMX_F1_GPIO4, IMX_F2_GPIO4, IMX_F3_GPIO4),
+  1210		PMUX_FUNC(5, IMX_F0_GPIO5, IMX_F1_GPIO5, IMX_F2_GPIO5, IMX_F3_GPIO5),
+  1211		PMUX_FUNC(6, IMX_F0_GPIO6, IMX_F1_GPIO6, IMX_F2_GPIO6, IMX_F3_GPIO6),
+  1212		PMUX_FUNC(7, IMX_F0_GPIO7, IMX_F1_GPIO7, IMX_F2_GPIO7, IMX_F3_GPIO7),
+  1213		PMUX_FUNC(8, IMX_F0_GPIO8, IMX_F1_GPIO8, IMX_F2_GPIO8, IMX_F3_GPIO8),
+  1214		PMUX_FUNC(9, IMX_F0_GPIO9, IMX_F1_GPIO9, IMX_F2_GPIO9, IMX_F3_GPIO9),
+  1215		PMUX_FUNC(10, IMX_F0_GPIO10, IMX_F1_GPIO10, IMX_F2_GPIO10, IMX_F3_GPIO10),
+  1216		PMUX_FUNC(11, IMX_F0_GPIO11, IMX_F1_GPIO11, IMX_F2_GPIO11, IMX_F3_GPIO11),
+  1217		PMUX_FUNC(12, IMX_F0_GPIO12, IMX_F1_GPIO12, IMX_F2_GPIO12, IMX_F3_GPIO12),
+  1218		PMUX_FUNC(13, IMX_F0_GPIO13, IMX_F1_GPIO13, IMX_F2_GPIO13, IMX_F3_GPIO13),
+  1219		PMUX_FUNC(14, IMX_F0_GPIO14, IMX_F1_GPIO14, IMX_F2_GPIO14, IMX_F3_GPIO14),
+  1220		PMUX_FUNC(15, IMX_F0_GPIO15, IMX_F1_GPIO15, IMX_F2_GPIO15, IMX_F3_GPIO15),
+  1221		PMUX_FUNC(16, IMX_F0_GPIO16, IMX_F1_GPIO16, IMX_F2_GPIO16, IMX_F3_GPIO16),
+  1222		PMUX_FUNC(17, IMX_F0_GPIO17, IMX_F1_GPIO17, IMX_F2_GPIO17, IMX_F3_GPIO17),
+  1223		PMUX_FUNC(18, IMX_F0_GPIO18, IMX_F1_GPIO18, IMX_F2_GPIO18, IMX_F3_GPIO18),
+  1224		PMUX_FUNC(19, IMX_F0_GPIO19, IMX_F1_GPIO19, IMX_F2_GPIO19, IMX_F3_GPIO19),
+  1225		PMUX_FUNC(20, IMX_F0_GPIO20, IMX_F1_GPIO20, IMX_F2_GPIO20, IMX_F3_GPIO20),
+  1226		PMUX_FUNC(21, IMX_F0_GPIO21, IMX_F1_GPIO21, IMX_F2_GPIO21, IMX_F3_GPIO21),
+  1227		PMUX_FUNC(22, IMX_F0_GPIO22, IMX_F1_GPIO22, IMX_F2_GPIO22, IMX_F3_GPIO22),
+  1228		PMUX_FUNC(23, IMX_F0_GPIO23, IMX_F1_GPIO23, IMX_F2_GPIO23, IMX_F3_GPIO23),
+  1229		PMUX_FUNC(24, IMX_F0_GPIO24, IMX_F1_GPIO24, IMX_F2_GPIO24, IMX_F3_GPIO24),
+  1230		PMUX_FUNC(25, IMX_F0_GPIO25, IMX_F1_GPIO25, IMX_F2_GPIO25, IMX_F3_GPIO25),
+  1231		PMUX_FUNC(26, IMX_F0_GPIO26, IMX_F1_GPIO26, IMX_F2_GPIO26, IMX_F3_GPIO26),
+  1232		PMUX_FUNC(27, IMX_F0_GPIO27, IMX_F1_GPIO27, IMX_F2_GPIO27, IMX_F3_GPIO27),
+  1233		PMUX_FUNC(28, IMX_F0_GPIO28, IMX_F1_GPIO28, IMX_F2_GPIO28, IMX_F3_GPIO28),
+  1234		PMUX_FUNC(29, IMX_F0_GPIO29, IMX_F1_GPIO29, IMX_F2_GPIO29, IMX_F3_GPIO29),
+  1235		PMUX_FUNC(30, IMX_F0_GPIO30, IMX_F1_GPIO30, IMX_F2_GPIO30, IMX_F3_GPIO30),
+  1236		PMUX_FUNC(31, IMX_F0_GPIO31, IMX_F1_GPIO31, IMX_F2_GPIO31, IMX_F3_GPIO31),
+  1237		PMUX_FUNC(32, IMX_F0_GPIO32, IMX_F1_GPIO32, IMX_F2_GPIO32, IMX_F3_GPIO32),
+  1238		PMUX_FUNC(33, IMX_F0_GPIO33, IMX_F1_GPIO33, IMX_F2_GPIO33, IMX_F3_GPIO33),
+  1239		PMUX_FUNC(34, IMX_F0_GPIO34, IMX_F1_GPIO34, IMX_F2_GPIO34, IMX_F3_GPIO34),
+  1240		PMUX_FUNC(35, IMX_F0_GPIO35, IMX_F1_GPIO35, IMX_F2_GPIO35, IMX_F3_GPIO35),
+  1241		PMUX_FUNC(36, IMX_F0_GPIO36, IMX_F1_GPIO36, IMX_F2_GPIO36, IMX_F3_GPIO36),
+  1242		PMUX_FUNC(37, IMX_F0_GPIO37, IMX_F1_GPIO37, IMX_F2_GPIO37, IMX_F3_GPIO37),
+  1243		PMUX_FUNC(38, IMX_F0_GPIO38, IMX_F1_GPIO38, IMX_F2_GPIO38, IMX_F3_GPIO38),
+  1244		PMUX_FUNC(39, IMX_F0_GPIO39, IMX_F1_GPIO39, IMX_F2_GPIO39, IMX_F3_GPIO39),
+  1245		PMUX_FUNC(40, IMX_F0_GPIO40, IMX_F1_GPIO40, IMX_F2_GPIO40, IMX_F3_GPIO40),
+  1246		PMUX_FUNC(41, IMX_F0_GPIO41, IMX_F1_GPIO41, IMX_F2_GPIO41, IMX_F3_GPIO41),
+  1247		PMUX_FUNC(42, IMX_F0_GPIO42, IMX_F1_GPIO42, IMX_F2_GPIO42, IMX_F3_GPIO42),
+  1248		PMUX_FUNC(43, IMX_F0_GPIO43, IMX_F1_GPIO43, IMX_F2_GPIO43, IMX_F3_GPIO43),
+  1249		PMUX_FUNC(44, IMX_F0_GPIO44, IMX_F1_GPIO44, IMX_F2_GPIO44, IMX_F3_GPIO44),
+  1250		PMUX_FUNC(45, IMX_F0_GPIO45, IMX_F1_GPIO45, IMX_F2_GPIO45, IMX_F3_GPIO45),
+  1251		PMUX_FUNC(46, IMX_F0_GPIO46, IMX_F1_GPIO46, IMX_F2_GPIO46, IMX_F3_GPIO46),
+  1252		PMUX_FUNC(47, IMX_F0_GPIO47, IMX_F1_GPIO47, IMX_F2_GPIO47, IMX_F3_GPIO47),
+  1253		PMUX_FUNC(48, IMX_F0_GPIO48, IMX_F1_GPIO48, IMX_F2_GPIO48, IMX_F3_GPIO48),
+  1254		PMUX_FUNC(49, IMX_F0_GPIO49, IMX_F1_GPIO49, IMX_F2_GPIO49, IMX_F3_GPIO49),
+  1255		PMUX_FUNC(50, IMX_F0_GPIO50, IMX_F1_GPIO50, IMX_F2_GPIO50, IMX_F3_GPIO50),
+  1256		PMUX_FUNC(51, IMX_F0_GPIO51, IMX_F1_GPIO51, IMX_F2_GPIO51, IMX_F3_GPIO41),
+  1257		PMUX_FUNC(52, IMX_F0_GPIO52, IMX_F1_GPIO52, IMX_F2_GPIO52, IMX_F3_GPIO52),
+  1258		PMUX_FUNC(53, IMX_F0_GPIO53, IMX_F1_GPIO53, IMX_F2_GPIO53, IMX_F3_GPIO53),
+  1259		PMUX_FUNC(54, IMX_F0_GPIO54, IMX_F1_GPIO54, IMX_F2_GPIO54, IMX_F3_GPIO54),
+  1260		PMUX_FUNC(55, IMX_F0_GPIO55, IMX_F1_GPIO55, IMX_F2_GPIO55, IMX_F3_GPIO55),
+  1261		PMUX_FUNC(56, IMX_F0_GPIO56, IMX_F1_GPIO56, IMX_F2_GPIO56, IMX_F3_GPIO56),
+  1262		PMUX_FUNC(57, IMX_F0_GPIO57, IMX_F1_GPIO57, IMX_F2_GPIO57, IMX_F3_GPIO57),
+  1263		PMUX_FUNC(58, IMX_F0_GPIO58, IMX_F1_GPIO58, IMX_F2_GPIO58, IMX_F3_GPIO58),
+  1264		PMUX_FUNC(59, IMX_F0_GPIO59, IMX_F1_GPIO59, IMX_F2_GPIO59, IMX_F3_GPIO59),
+  1265		PMUX_FUNC(60, IMX_F0_GPIO60, IMX_F1_GPIO60, IMX_F2_GPIO60, IMX_F3_GPIO60),
+  1266		PMUX_FUNC(61, IMX_F0_GPIO61, IMX_F1_GPIO61, IMX_F2_GPIO61, IMX_F3_GPIO61),
+  1267		PMUX_FUNC(62, IMX_F0_GPIO62, IMX_F1_GPIO62, IMX_F2_GPIO62, IMX_F3_GPIO62),
+  1268		PMUX_FUNC(64, IMX_F0_GPIO64, IMX_F1_GPIO64, IMX_F2_GPIO64, IMX_F3_GPIO64),
+  1269		PMUX_FUNC(65, IMX_F0_GPIO65, IMX_F1_GPIO65, IMX_F2_GPIO65, IMX_F3_GPIO65),
+  1270		PMUX_FUNC(66, IMX_F0_GPIO66, IMX_F1_GPIO66, IMX_F2_GPIO66, IMX_F3_GPIO66),
+  1271		PMUX_FUNC(67, IMX_F0_GPIO67, IMX_F1_GPIO67, IMX_F2_GPIO67, IMX_F3_GPIO67),
+  1272		PMUX_FUNC(68, IMX_F0_GPIO68, IMX_F1_GPIO68, IMX_F2_GPIO68, IMX_F3_GPIO68),
+  1273		PMUX_FUNC(69, IMX_F0_GPIO69, IMX_F1_GPIO69, IMX_F2_GPIO69, IMX_F3_GPIO69),
+  1274		PMUX_FUNC(70, IMX_F0_GPIO70, IMX_F1_GPIO70, IMX_F2_GPIO70, IMX_F3_GPIO70),
+  1275		PMUX_FUNC(71, IMX_F0_GPIO71, IMX_F1_GPIO71, IMX_F2_GPIO71, IMX_F3_GPIO71),
+  1276		PMUX_FUNC(72, IMX_F0_GPIO72, IMX_F1_GPIO72, IMX_F2_GPIO72, IMX_F3_GPIO72),
+  1277		PMUX_FUNC(73, IMX_F0_GPIO73, IMX_F1_GPIO73, IMX_F2_GPIO73, IMX_F3_GPIO73),
+  1278		PMUX_FUNC(74, IMX_F0_GPIO74, IMX_F1_GPIO74, IMX_F2_GPIO74, IMX_F3_GPIO74),
+  1279		PMUX_FUNC(75, IMX_F0_GPIO75, IMX_F1_GPIO75, IMX_F2_GPIO75, IMX_F3_GPIO75),
+  1280		PMUX_FUNC(76, IMX_F0_GPIO76, IMX_F1_GPIO76, IMX_F2_GPIO76, IMX_F3_GPIO76),
+  1281		PMUX_FUNC(77, IMX_F0_GPIO77, IMX_F1_GPIO77, IMX_F2_GPIO77, IMX_F3_GPIO77),
+  1282		PMUX_FUNC(78, IMX_F0_GPIO78, IMX_F1_GPIO78, IMX_F2_GPIO78, IMX_F3_GPIO78),
+  1283		PMUX_FUNC(79, IMX_F0_GPIO79, IMX_F1_GPIO79, IMX_F2_GPIO79, IMX_F3_GPIO79),
+  1284		PMUX_FUNC(80, IMX_F0_GPIO80, IMX_F1_GPIO80, IMX_F2_GPIO80, IMX_F3_GPIO80),
+  1285		PMUX_FUNC(81, IMX_F0_GPIO81, IMX_F1_GPIO81, IMX_F2_GPIO81, IMX_F3_GPIO81),
+  1286		PMUX_FUNC(82, IMX_F0_GPIO82, IMX_F1_GPIO82, IMX_F2_GPIO82, IMX_F3_GPIO82),
+  1287		PMUX_FUNC(83, IMX_F0_GPIO83, IMX_F1_GPIO83, IMX_F2_GPIO83, IMX_F3_GPIO83),
+  1288		PMUX_FUNC(84, IMX_F0_GPIO84, IMX_F1_GPIO84, IMX_F2_GPIO84, IMX_F3_GPIO84),
+  1289		PMUX_FUNC(85, IMX_F0_GPIO85, IMX_F1_GPIO85, IMX_F2_GPIO85, IMX_F3_GPIO85),
+  1290		PMUX_FUNC(86, IMX_F0_GPIO86, IMX_F1_GPIO86, IMX_F2_GPIO86, IMX_F3_GPIO86),
+  1291		PMUX_FUNC(87, IMX_F0_GPIO87, IMX_F1_GPIO87, IMX_F2_GPIO87, IMX_F3_GPIO87),
+  1292		PMUX_FUNC(88, IMX_F0_GPIO88, IMX_F1_GPIO88, IMX_F2_GPIO88, IMX_F3_GPIO88),
+  1293		PMUX_FUNC(89, IMX_F0_GPIO89, IMX_F1_GPIO89, IMX_F2_GPIO89, IMX_F3_GPIO89),
+  1294		PMUX_FUNC(90, IMX_F0_GPIO90, IMX_F1_GPIO90, IMX_F2_GPIO90, IMX_F3_GPIO90),
+  1295		PMUX_FUNC(91, IMX_F0_GPIO91, IMX_F1_GPIO91, IMX_F2_GPIO91, IMX_F3_GPIO91),
+  1296		PMUX_FUNC(92, IMX_F0_GPIO92, IMX_F1_GPIO92, IMX_F2_GPIO92, IMX_F3_GPIO92),
+  1297		PMUX_FUNC(93, IMX_F0_GPIO93, IMX_F1_GPIO93, IMX_F2_GPIO93, IMX_F3_GPIO93),
+  1298		PMUX_FUNC(94, IMX_F0_GPIO94, IMX_F1_GPIO94, IMX_F2_GPIO94, IMX_F3_GPIO94),
+  1299		PMUX_FUNC(95, IMX_F0_GPIO95, IMX_F1_GPIO95, IMX_F2_GPIO95, IMX_F3_GPIO95),
+  1300		PMUX_FUNC(96, IMX_F0_GPIO96, IMX_F1_GPIO96, IMX_F2_GPIO96, IMX_F3_GPIO96),
+  1301		PMUX_FUNC(97, IMX_F0_GPIO97, IMX_F1_GPIO97, IMX_F2_GPIO97, IMX_F3_GPIO97),
+  1302		PMUX_FUNC(98, IMX_F0_GPIO98, IMX_F1_GPIO98, IMX_F2_GPIO98, IMX_F3_GPIO98),
+  1303		PMUX_FUNC(99, IMX_F0_GPIO99, IMX_F1_GPIO99, IMX_F2_GPIO99, IMX_F3_GPIO99),
+  1304		PMUX_FUNC(100, IMX_F0_GPIO100, IMX_F1_GPIO100, IMX_F2_GPIO100, IMX_F3_GPIO100),
+  1305		PMUX_FUNC(101, IMX_F0_GPIO101, IMX_F1_GPIO101, IMX_F2_GPIO101, IMX_F3_GPIO101),
+  1306		PMUX_FUNC(102, IMX_F0_GPIO102, IMX_F1_GPIO102, IMX_F2_GPIO102, IMX_F3_GPIO102),
+  1307		PMUX_FUNC(103, IMX_F0_GPIO103, IMX_F1_GPIO103, IMX_F2_GPIO103, IMX_F3_GPIO103),
+  1308		PMUX_FUNC(104, IMX_F0_GPIO104, IMX_F1_GPIO104, IMX_F2_GPIO104, IMX_F3_GPIO104),
+  1309		PMUX_FUNC(105, IMX_F0_GPIO105, IMX_F1_GPIO105, IMX_F2_GPIO105, IMX_F3_GPIO105),
+  1310		PMUX_FUNC(106, IMX_F0_GPIO106, IMX_F1_GPIO106, IMX_F2_GPIO106, IMX_F3_GPIO106),
+  1311		PMUX_FUNC(107, IMX_F0_GPIO107, IMX_F1_GPIO107, IMX_F2_GPIO107, IMX_F3_GPIO107),
+  1312		PMUX_FUNC(108, IMX_F0_GPIO108, IMX_F1_GPIO108, IMX_F2_GPIO108, IMX_F3_GPIO108),
+  1313		PMUX_FUNC(109, IMX_F0_GPIO109, IMX_F1_GPIO109, IMX_F2_GPIO109, IMX_F3_GPIO109),
+  1314		PMUX_FUNC(110, IMX_F0_GPIO110, IMX_F1_GPIO110, IMX_F2_GPIO110, IMX_F3_GPIO110),
+  1315		PMUX_FUNC(111, IMX_F0_GPIO111, IMX_F1_GPIO111, IMX_F2_GPIO111, IMX_F3_GPIO111),
+  1316		PMUX_FUNC(112, IMX_F0_GPIO112, IMX_F1_GPIO112, IMX_F2_GPIO112, IMX_F3_GPIO112),
+  1317		PMUX_FUNC(113, IMX_F0_GPIO113, IMX_F1_GPIO113, IMX_F2_GPIO113, IMX_F3_GPIO113),
+  1318		PMUX_FUNC(114, IMX_F0_GPIO114, IMX_F1_GPIO114, IMX_F2_GPIO114, IMX_F3_GPIO114),
+  1319		PMUX_FUNC(115, IMX_F0_GPIO115, IMX_F1_GPIO115, IMX_F2_GPIO115, IMX_F3_GPIO115),
+  1320		PMUX_FUNC(116, IMX_F0_GPIO116, IMX_F1_GPIO116, IMX_F2_GPIO116, IMX_F3_GPIO116),
+  1321		PMUX_FUNC(117, IMX_F0_GPIO117, IMX_F1_GPIO117, IMX_F2_GPIO117, IMX_F3_GPIO117),
+  1322		PMUX_FUNC(118, IMX_F0_GPIO118, IMX_F1_GPIO118, IMX_F2_GPIO118, IMX_F3_GPIO118),
+  1323		PMUX_FUNC(119, IMX_F0_GPIO119, IMX_F1_GPIO119, IMX_F2_GPIO119, IMX_F3_GPIO119),
+  1324		PMUX_FUNC(120, IMX_F0_GPIO120, IMX_F1_GPIO120, IMX_F2_GPIO120, IMX_F3_GPIO120),
+  1325		PMUX_FUNC(121, IMX_F0_GPIO121, IMX_F1_GPIO121, IMX_F2_GPIO121, IMX_F3_GPIO121),
+  1326		PMUX_FUNC(122, IMX_F0_GPIO122, IMX_F1_GPIO122, IMX_F2_GPIO122, IMX_F3_GPIO122),
+  1327		PMUX_FUNC(123, IMX_F0_GPIO123, IMX_F1_GPIO123, IMX_F2_GPIO123, IMX_F3_GPIO123),
+  1328		PMUX_FUNC(124, IMX_F0_GPIO124, IMX_F1_GPIO124, IMX_F2_GPIO124, IMX_F3_GPIO124),
+  1329		PMUX_FUNC(125, IMX_F0_GPIO125, IMX_F1_GPIO125, IMX_F2_GPIO125, IMX_F3_GPIO125),
+  1330		PMUX_FUNC(126, IMX_F0_GPIO126, IMX_F1_GPIO126, IMX_F2_GPIO126, IMX_F3_GPIO126),
+  1331		PMUX_FUNC(127, IMX_F0_GPIO127, IMX_F1_GPIO127, IMX_F2_GPIO127, IMX_F3_GPIO127),
+  1332		PMUX_FUNC(128, IMX_F0_GPIO128, IMX_F1_GPIO128, IMX_F2_GPIO128, IMX_F3_GPIO128),
+  1333		PMUX_FUNC(129, IMX_F0_GPIO129, IMX_F1_GPIO129, IMX_F2_GPIO129, IMX_F3_GPIO129),
+  1334		PMUX_FUNC(130, IMX_F0_GPIO130, IMX_F1_GPIO130, IMX_F2_GPIO130, IMX_F3_GPIO130),
+  1335		PMUX_FUNC(131, IMX_F0_GPIO131, IMX_F1_GPIO131, IMX_F2_GPIO131, IMX_F3_GPIO131),
+  1336		PMUX_FUNC(132, IMX_F0_GPIO132, IMX_F1_GPIO132, IMX_F2_GPIO132, IMX_F3_GPIO132),
+  1337		PMUX_FUNC(133, IMX_F0_GPIO133, IMX_F1_GPIO133, IMX_F2_GPIO133, IMX_F3_GPIO133),
+  1338		PMUX_FUNC(134, IMX_F0_GPIO134, IMX_F1_GPIO134, IMX_F2_GPIO134, IMX_F3_GPIO134),
+  1339		PMUX_FUNC(135, IMX_F0_GPIO135, IMX_F1_GPIO135, IMX_F2_GPIO135, IMX_F3_GPIO135),
+  1340		PMUX_FUNC(136, IMX_F0_GPIO136, IMX_F1_GPIO136, IMX_F2_GPIO136, IMX_F3_GPIO136),
+  1341		PMUX_FUNC(137, IMX_F0_GPIO137, IMX_F1_GPIO137, IMX_F2_GPIO137, IMX_F3_GPIO137),
+  1342		PMUX_FUNC(138, IMX_F0_GPIO138, IMX_F1_GPIO138, IMX_F2_GPIO138, IMX_F3_GPIO138),
+  1343		PMUX_FUNC(139, IMX_F0_GPIO139, IMX_F1_GPIO139, IMX_F2_GPIO139, IMX_F3_GPIO139),
+  1344		PMUX_FUNC(140, IMX_F0_GPIO140, IMX_F1_GPIO140, IMX_F2_GPIO140, IMX_F3_GPIO140),
+  1345		PMUX_FUNC(141, IMX_F0_GPIO141, IMX_F1_GPIO141, IMX_F2_GPIO141, IMX_F3_GPIO141),
+  1346		PMUX_FUNC(142, IMX_F0_GPIO142, IMX_F1_GPIO142, IMX_F2_GPIO142, IMX_F3_GPIO142),
+  1347		PMUX_FUNC(143, IMX_F0_GPIO143, IMX_F1_GPIO143, IMX_F2_GPIO143, IMX_F3_GPIO143),
+  1348		PMUX_FUNC(144, IMX_F0_GPIO144, IMX_F1_GPIO144, IMX_F2_GPIO144, IMX_F3_GPIO144),
+  1349	};
+  1350	
 
 -- 
 0-DAY CI Kernel Test Service
