@@ -1,57 +1,58 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70B536D
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 02:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9407736D
+	for <llvm@lists.linux.dev>; Mon, 23 May 2022 02:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653273032; x=1684809032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4WK8aGbUDqaIUa1SiHIHoDVH53+ZD8ZQAWBCdkSvXdc=;
-  b=Q7mz4n7o7HO73IBarfTgfMLmw2Z+GrPRazofSTxGHJbois2rsAsrpSK6
-   uXsGAex263iOUSRxoH4p1kK6+GfBwNz3gZwtvcKp/ZVkx0QW6UCeT7Tct
-   1B7Ff9exTmszRIv69olamQHVi50wlY4Ix2gzxMPAqJKuxUEx14RMs1vl+
-   B0aQUWQIP6gY+oA4bNUS4d7SCN7I8tRAMfuTO5q61lPKWzcYdRSAUjHNI
-   Q79fAnuPovOhLcnv/CgaxoPxYRgCF5+LdTT13haXoMjx1HOWIzcsaVbQG
-   LBLEy6Uyh1u1F2xAUMck/1eTHKzCUa6eaN+VXbdduWK64weEcbYtnfuPr
+  t=1653273753; x=1684809753;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TqjUYBj3xQpANT+99CewSw6nfFUz70d/qo8dv6oPqz0=;
+  b=ZuLnVAUTe5McWc9XfaaK301qy/Qq96/Z1J/YK3eZ2KL6UMzk7wfsYBs3
+   MaRnBBrRi/fSB95yUe4qAdPuS1Vcom8iLtPcPI+XQKC/FZ6ZdehCGa0L3
+   8pzGezIGh5kL3wr0ZHzbg+dAl9WoxqK/vYtaverTnL5fQblpWrKpxWblH
+   ciX6aoHmkQktZPpsAFL0TDdZO+c16v2Oj3xJrqRAbAZMF5GqSf9mTtua1
+   JhwPecyTstYOZ7hj8bep0YZnjadFAy65sIBzSMBGHhJOy8cHsePiR32fs
+   EJxQmoL76lktK/Va1rApxy7ZiR9Itvz+TChF8VUgf8LXrBhwPI1aIWh90
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="359475005"
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="273202239"
 X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="359475005"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:30:32 -0700
+   d="scan'208";a="273202239"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:42:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="716481815"
+   d="scan'208";a="744475767"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 May 2022 19:30:31 -0700
+  by orsmga005.jf.intel.com with ESMTP; 22 May 2022 19:42:31 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nsxq2-0000pG-Bf;
-	Mon, 23 May 2022 02:30:30 +0000
-Date: Mon, 23 May 2022 10:30:24 +0800
+	id 1nsy1e-0000pS-JY;
+	Mon, 23 May 2022 02:42:30 +0000
+Date: Mon, 23 May 2022 10:42:19 +0800
 From: kernel test robot <lkp@intel.com>
 To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [tomoyo-tomoyo-test1:master 1/1]
- drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to
- __warn_flushing_systemwide_wq declared with 'warning' attribute: Please
- avoid flushing system-wide workqueues.
-Message-ID: <202205231050.yd4wTc2M-lkp@intel.com>
+Subject: [tomoyo-tomoyo-test1:master 1/1] drivers/staging/wfx/bh.c:298:2:
+ warning: call to __warn_flushing_systemwide_wq declared with 'warning'
+ attribute: Please avoid flushing system-wide workqueues.
+Message-ID: <202205231025.i4fdy5M0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
 tree:   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
 head:   84baad17cb8286b6b53b675f8c3d7343ee6a990c
 commit: 84baad17cb8286b6b53b675f8c3d7343ee6a990c [1/1] workqueue: Wrap flush_workqueue() using a macro
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220523/202205231050.yd4wTc2M-lkp@intel.com/config)
+config: hexagon-randconfig-r045-20220522 (https://download.01.org/0day-ci/archive/20220523/202205231025.i4fdy5M0-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -61,13 +62,29 @@ reproduce (this is a W=1 build):
         git checkout 84baad17cb8286b6b53b675f8c3d7343ee6a990c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/mouse/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/infiniband/core/ drivers/input/mouse/ drivers/staging/wfx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
+>> drivers/staging/wfx/bh.c:298:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
+           flush_workqueue(system_highpri_wq);
+           ^
+   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
+                   __warn_flushing_systemwide_wq();                        \
+                   ^
+   1 warning generated.
+--
+>> drivers/staging/wfx/hif_tx.c:76:3: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
+                   flush_workqueue(system_highpri_wq);
+                   ^
+   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
+                   __warn_flushing_systemwide_wq();                        \
+                   ^
+   1 warning generated.
+--
 >> drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
            flush_scheduled_work();
            ^
@@ -78,21 +95,53 @@ All warnings (new ones prefixed by >>):
                    __warn_flushing_systemwide_wq();                        \
                    ^
    1 warning generated.
+--
+>> drivers/infiniband/core/device.c:2857:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
+           flush_workqueue(system_unbound_wq);
+           ^
+   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
+                   __warn_flushing_systemwide_wq();                        \
+                   ^
+   1 warning generated.
 
 
-vim +/warning +320 drivers/input/mouse/psmouse-smbus.c
+vim +/warning +298 drivers/staging/wfx/bh.c
 
-8eb92e5c91338e Benjamin Tissoires 2017-03-02  316  
-8eb92e5c91338e Benjamin Tissoires 2017-03-02  317  void psmouse_smbus_module_exit(void)
-8eb92e5c91338e Benjamin Tissoires 2017-03-02  318  {
-8eb92e5c91338e Benjamin Tissoires 2017-03-02  319  	bus_unregister_notifier(&i2c_bus_type, &psmouse_smbus_notifier);
-8eb92e5c91338e Benjamin Tissoires 2017-03-02 @320  	flush_scheduled_work();
+b0998f0c040daf Jérôme Pouiller 2019-09-19  285  
+f545b23d477552 Jérôme Pouiller 2022-01-13  286  /* If IRQ is not available, this function allow to manually poll the control register and simulate
+f545b23d477552 Jérôme Pouiller 2022-01-13  287   * an IRQ ahen an event happened.
+57aa557f110d9f Jérôme Pouiller 2020-05-05  288   *
+f545b23d477552 Jérôme Pouiller 2022-01-13  289   * Note that the device has a bug: If an IRQ raise while host read control register, the IRQ is
+f545b23d477552 Jérôme Pouiller 2022-01-13  290   * lost. So, use this function carefully (only duing device initialisation).
+57aa557f110d9f Jérôme Pouiller 2020-05-05  291   */
+57aa557f110d9f Jérôme Pouiller 2020-05-05  292  void wfx_bh_poll_irq(struct wfx_dev *wdev)
+57aa557f110d9f Jérôme Pouiller 2020-05-05  293  {
+57aa557f110d9f Jérôme Pouiller 2020-05-05  294  	ktime_t now, start;
+57aa557f110d9f Jérôme Pouiller 2020-05-05  295  	u32 reg;
+57aa557f110d9f Jérôme Pouiller 2020-05-05  296  
+f00dc1d789e1ca Jérôme Pouiller 2020-05-05  297  	WARN(!wdev->poll_irq, "unexpected IRQ polling can mask IRQ");
+c86176d51340d5 Jérôme Pouiller 2022-02-25 @298  	flush_workqueue(system_highpri_wq);
+57aa557f110d9f Jérôme Pouiller 2020-05-05  299  	start = ktime_get();
+57aa557f110d9f Jérôme Pouiller 2020-05-05  300  	for (;;) {
+c1d193c5058e72 Jérôme Pouiller 2022-01-13  301  		wfx_control_reg_read(wdev, &reg);
+57aa557f110d9f Jérôme Pouiller 2020-05-05  302  		now = ktime_get();
+57aa557f110d9f Jérôme Pouiller 2020-05-05  303  		if (reg & 0xFFF)
+57aa557f110d9f Jérôme Pouiller 2020-05-05  304  			break;
+57aa557f110d9f Jérôme Pouiller 2020-05-05  305  		if (ktime_after(now, ktime_add_ms(start, 1000))) {
+57aa557f110d9f Jérôme Pouiller 2020-05-05  306  			dev_err(wdev->dev, "time out while polling control register\n");
+57aa557f110d9f Jérôme Pouiller 2020-05-05  307  			return;
+57aa557f110d9f Jérôme Pouiller 2020-05-05  308  		}
+57aa557f110d9f Jérôme Pouiller 2020-05-05  309  		udelay(200);
+57aa557f110d9f Jérôme Pouiller 2020-05-05  310  	}
+57aa557f110d9f Jérôme Pouiller 2020-05-05  311  	wfx_bh_request_rx(wdev);
+57aa557f110d9f Jérôme Pouiller 2020-05-05  312  }
+57aa557f110d9f Jérôme Pouiller 2020-05-05  313  
 
-:::::: The code at line 320 was first introduced by commit
-:::::: 8eb92e5c91338eb19f86ffb2232258337ebf905b Input: psmouse - add support for SMBus companions
+:::::: The code at line 298 was first introduced by commit
+:::::: c86176d51340d5ee29afffce63d79c4ece5d96bb staging: wfx: ensure HIF request has been sent before polling
 
-:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+:::::: TO: Jérôme Pouiller <jerome.pouiller@silabs.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
