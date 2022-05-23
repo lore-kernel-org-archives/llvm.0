@@ -1,269 +1,99 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F4F36E
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 01:10:21 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id r23so19181500wrr.2
-        for <llvm@lists.linux.dev>; Sun, 22 May 2022 18:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:cc:message-id:subject:mime-version:list-id;
-        bh=efdrnxM9rWPWgR6bK2DFGgeAP+PNmxm8kTD8+gFixGQ=;
-        b=UlH7h3Y1mx7BUdxM1APBwD3t57SD8O6WbmtyGdvJ/TsIJoHyHdv+y3X/6rpfhs0ghX
-         rQvhWHhvDu3N/TdiO37iinS/UXN9TtgTlA53rP5pbOsqNYHj3SoOlf4d+fwwFZqRFweL
-         eOa1077drSJm4WG+Z5y8ThwXxgn/U3Wnjru1ERX5CAasfJ9rG1XN40NW30sOn+IUHUhF
-         tb7vGHmz0ta9hJYe9lapgeWbryjN0iI4g7/m7fv291U+e1Zm61D021dPlL7VRTlinsDL
-         meyTwSr8HPF1pPKPE4joLROMSK2XCEzpf+UVKOmYWgAYxqOLSr9i9m+S/tQjrLmwp0OB
-         +eVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
-         :list-id;
-        bh=efdrnxM9rWPWgR6bK2DFGgeAP+PNmxm8kTD8+gFixGQ=;
-        b=W+5Bk7Ddh1ptEWhcOh27ah58DoK7V6uojuUT10kErTjC8Va3jEmgONp94XeVe4pCBK
-         fUD4OmEgwAbO2/Ecan5gSV0QF+GybqzQbe1kKPTTpb6nZii2RiXATiK6xROHfIghV/DI
-         v8+UCRnijEgTYFPmJiOcU2OeAXM56Sb6P7AwSBnGevsa8Do+gg76Mf9uv/NkLsyIHpml
-         O/zKd5NgNIJkg4R4MXei3F8/pXgqoX8yINmtaWrrUvnw1RE+KIDMh46a5kAcFJNGJrza
-         e1hNt5HwFRoqlwDHOi+nbDCtc6V0/Yz+gDTIK0Ob7eJXqDh3G0CzeRpJ6RTIbs2H7eRX
-         sv1Q==
-X-Gm-Message-State: AOAM530mbcmAZ8AivtIHpsl7L+oOHcFwoAh/CuuAxUHYSir7PzlEPd8l
-	7miI/rbiPAPsZjoAMTCvEvaCLQ==
-X-Google-Smtp-Source: ABdhPJxfz9APpMOFZy+Xe4M4/Na+devyJbFMg/NmZy2JjQH8HfmYSXOEOKFCE8MVMlTkp22gwzNc1w==
-X-Received: by 2002:a5d:52ce:0:b0:20c:e030:b05a with SMTP id r14-20020a5d52ce000000b0020ce030b05amr16515836wrv.174.1653268219305;
-        Sun, 22 May 2022 18:10:19 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05600c40c700b003973c54bd69sm6413656wmh.1.2022.05.22.18.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 18:10:18 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Mon, 23 May 2022 01:10:17 +0000 (UTC)
-To: Sanjay Patel <spatel@rotateright.com>
-Cc: llvm@lists.linux.dev
-Message-ID: <913191959.251.1653268218351@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by llvm: [InstCombine] fold icmp with
- sub and bool
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70B536D
+	for <llvm@lists.linux.dev>; Mon, 23 May 2022 02:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653273032; x=1684809032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4WK8aGbUDqaIUa1SiHIHoDVH53+ZD8ZQAWBCdkSvXdc=;
+  b=Q7mz4n7o7HO73IBarfTgfMLmw2Z+GrPRazofSTxGHJbois2rsAsrpSK6
+   uXsGAex263iOUSRxoH4p1kK6+GfBwNz3gZwtvcKp/ZVkx0QW6UCeT7Tct
+   1B7Ff9exTmszRIv69olamQHVi50wlY4Ix2gzxMPAqJKuxUEx14RMs1vl+
+   B0aQUWQIP6gY+oA4bNUS4d7SCN7I8tRAMfuTO5q61lPKWzcYdRSAUjHNI
+   Q79fAnuPovOhLcnv/CgaxoPxYRgCF5+LdTT13haXoMjx1HOWIzcsaVbQG
+   LBLEy6Uyh1u1F2xAUMck/1eTHKzCUa6eaN+VXbdduWK64weEcbYtnfuPr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="359475005"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="359475005"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 19:30:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="716481815"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 May 2022 19:30:31 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nsxq2-0000pG-Bf;
+	Mon, 23 May 2022 02:30:30 +0000
+Date: Mon, 23 May 2022 10:30:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [tomoyo-tomoyo-test1:master 1/1]
+ drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to
+ __warn_flushing_systemwide_wq declared with 'warning' attribute: Please
+ avoid flushing system-wide workqueues.
+Message-ID: <202205231050.yd4wTc2M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_250_1958050134.1653268217605"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-master-arm-next-allnoconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_250_1958050134.1653268217605
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
+head:   84baad17cb8286b6b53b675f8c3d7343ee6a990c
+commit: 84baad17cb8286b6b53b675f8c3d7343ee6a990c [1/1] workqueue: Wrap flush_workqueue() using a macro
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220523/202205231050.yd4wTc2M-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add tomoyo-tomoyo-test1 git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git
+        git fetch --no-tags tomoyo-tomoyo-test1 master
+        git checkout 84baad17cb8286b6b53b675f8c3d7343ee6a990c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/mouse/
 
-[TCWG CI] Regression caused by llvm: [InstCombine] fold icmp with sub and bool:
-commit 4069cccf3b4ff4afb743d3d371ead9e2d5491e3a
-Author: Sanjay Patel <spatel@rotateright.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    [InstCombine] fold icmp with sub and bool
+All warnings (new ones prefixed by >>):
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-546
-# First few build errors in logs:
-# 00:01:23 clang-15: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:01:23 make[1]: *** [scripts/Makefile.build:295: block/bio.o] Error 134
-# 00:01:32 make: *** [Makefile:2000: block] Error 2
+>> drivers/input/mouse/psmouse-smbus.c:320:2: warning: call to __warn_flushing_systemwide_wq declared with 'warning' attribute: Please avoid flushing system-wide workqueues. [-Wattribute-warning]
+           flush_scheduled_work();
+           ^
+   include/linux/workqueue.h:705:32: note: expanded from macro 'flush_scheduled_work'
+   #define flush_scheduled_work() flush_workqueue(system_wq)
+                                  ^
+   include/linux/workqueue.h:695:3: note: expanded from macro 'flush_workqueue'
+                   __warn_flushing_systemwide_wq();                        \
+                   ^
+   1 warning generated.
 
-from
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-563
-# linux build successful:
-all
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+vim +/warning +320 drivers/input/mouse/psmouse-smbus.c
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-master-arm-next-allnoconfig
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  316  
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  317  void psmouse_smbus_module_exit(void)
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  318  {
+8eb92e5c91338e Benjamin Tissoires 2017-03-02  319  	bus_unregister_notifier(&i2c_bus_type, &psmouse_smbus_notifier);
+8eb92e5c91338e Benjamin Tissoires 2017-03-02 @320  	flush_scheduled_work();
 
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/build-4069cccf3b4ff4afb743d3d371ead9e2d5491e3a/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/build-aa9acb51f69a862547699c5f7fa5c6f6c1353253/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/
+:::::: The code at line 320 was first introduced by commit
+:::::: 8eb92e5c91338eb19f86ffb2232258337ebf905b Input: psmouse - add support for SMBus companions
 
-Reproduce builds:
-<cut>
-mkdir investigate-llvm-4069cccf3b4ff4afb743d3d371ead9e2d5491e3a
-cd investigate-llvm-4069cccf3b4ff4afb743d3d371ead9e2d5491e3a
+:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests and test.sh script
-mkdir -p artifacts/manifests
-curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/manifests/build-baseline.sh --fail
-curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/manifests/build-parameters.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-master-arm-next-allnoconfig/3/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
-
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
-
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /llvm/ ./ ./bisect/baseline/
-
-cd llvm
-
-# Reproduce first_bad build
-git checkout --detach 4069cccf3b4ff4afb743d3d371ead9e2d5491e3a
-../artifacts/test.sh
-
-# Reproduce last_good build
-git checkout --detach aa9acb51f69a862547699c5f7fa5c6f6c1353253
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 4069cccf3b4ff4afb743d3d371ead9e2d5491e3a
-Author: Sanjay Patel <spatel@rotateright.com>
-Date:   Sun May 22 11:02:28 2022 -0400
-
-    [InstCombine] fold icmp with sub and bool
-    
-    This is the specific pattern seen in #53432, but it can be extended
-    in multiple ways:
-    1. The 'zext' could be an 'and'
-    2. The 'sub' could be some other binop with a similar ==0 property (udiv).
-    
-    There might be some way to generalize using knownbits, but that
-    would require checking that the 'bool' value is created with
-    some instruction that can be replaced with new icmp+logic.
-    
-    https://alive2.llvm.org/ce/z/-KCfpa
----
- .../Transforms/InstCombine/InstCombineCompares.cpp | 26 ++++++++++++++++++++++
- llvm/test/Transforms/InstCombine/icmp-range.ll     | 17 ++++++++------
- 2 files changed, 36 insertions(+), 7 deletions(-)
-
-diff --git a/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp b/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
-index 4f20a0699ec5..e2a6b6b1495b 100644
---- a/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
-+++ b/llvm/lib/Transforms/InstCombine/InstCombineCompares.cpp
-@@ -5631,6 +5631,29 @@ Instruction *InstCombinerImpl::foldICmpUsingKnownBits(ICmpInst &I) {
-   return nullptr;
- }
- 
-+/// If one operand of an icmp is effectively a bool (value range of {0,1}),
-+/// then try to reduce patterns based on that limit.
-+static Instruction *foldICmpUsingBoolRange(ICmpInst &I,
-+                                           InstCombiner::BuilderTy &Builder) {
-+  Value *Op0 = I.getOperand(0), *Op1 = I.getOperand(1);
-+  const ICmpInst::Predicate Pred = I.getPredicate();
-+
-+  Value *X, *Y, *Z;
-+  if (Pred != ICmpInst::ICMP_ULT || !match(Op0, m_Sub(m_Value(X), m_Value(Y))))
-+    return nullptr;
-+
-+  unsigned ExtraUses = !Op0->hasOneUse() + !Op1->hasOneUse();
-+
-+  // Sub must be 0 and bool must be true for "ULT":
-+  // (sub X, Y) <u (zext i1 Z) --> (X == Y) && Z
-+  if (match(Op1, m_ZExt(m_Value(Z))) && ExtraUses < 2) {
-+    Value *EqXY = Builder.CreateICmpEQ(X, Y);
-+    return BinaryOperator::CreateAnd(EqXY, Z);
-+  }
-+
-+  return nullptr;
-+}
-+
- llvm::Optional<std::pair<CmpInst::Predicate, Constant *>>
- InstCombiner::getFlippedStrictnessPredicateAndConstant(CmpInst::Predicate Pred,
-                                                        Constant *C) {
-@@ -6058,6 +6081,9 @@ Instruction *InstCombinerImpl::visitICmpInst(ICmpInst &I) {
-   if (Instruction *Res = foldICmpWithDominatingICmp(I))
-     return Res;
- 
-+  if (Instruction *Res = foldICmpUsingBoolRange(I, Builder))
-+    return Res;
-+
-   if (Instruction *Res = foldICmpUsingKnownBits(I))
-     return Res;
- 
-diff --git a/llvm/test/Transforms/InstCombine/icmp-range.ll b/llvm/test/Transforms/InstCombine/icmp-range.ll
-index b67356675eba..a29d4cd81b9d 100644
---- a/llvm/test/Transforms/InstCombine/icmp-range.ll
-+++ b/llvm/test/Transforms/InstCombine/icmp-range.ll
-@@ -173,9 +173,8 @@ define i1 @test_two_ranges3(i32* nocapture readonly %arg1, i32* nocapture readon
- 
- define i1 @sub_ult_zext(i1 %b, i8 %x, i8 %y) {
- ; CHECK-LABEL: @sub_ult_zext(
--; CHECK-NEXT:    [[Z:%.*]] = zext i1 [[B:%.*]] to i8
--; CHECK-NEXT:    [[S:%.*]] = sub i8 [[X:%.*]], [[Y:%.*]]
--; CHECK-NEXT:    [[R:%.*]] = icmp ult i8 [[S]], [[Z]]
-+; CHECK-NEXT:    [[TMP1:%.*]] = icmp eq i8 [[X:%.*]], [[Y:%.*]]
-+; CHECK-NEXT:    [[R:%.*]] = and i1 [[TMP1]], [[B:%.*]]
- ; CHECK-NEXT:    ret i1 [[R]]
- ;
-   %z = zext i1 %b to i8
-@@ -188,8 +187,8 @@ define i1 @sub_ult_zext_use1(i1 %b, i8 %x, i8 %y) {
- ; CHECK-LABEL: @sub_ult_zext_use1(
- ; CHECK-NEXT:    [[Z:%.*]] = zext i1 [[B:%.*]] to i8
- ; CHECK-NEXT:    call void @use(i8 [[Z]])
--; CHECK-NEXT:    [[S:%.*]] = sub i8 [[X:%.*]], [[Y:%.*]]
--; CHECK-NEXT:    [[R:%.*]] = icmp ult i8 [[S]], [[Z]]
-+; CHECK-NEXT:    [[TMP1:%.*]] = icmp eq i8 [[X:%.*]], [[Y:%.*]]
-+; CHECK-NEXT:    [[R:%.*]] = and i1 [[TMP1]], [[B]]
- ; CHECK-NEXT:    ret i1 [[R]]
- ;
-   %z = zext i1 %b to i8
-@@ -201,10 +200,10 @@ define i1 @sub_ult_zext_use1(i1 %b, i8 %x, i8 %y) {
- 
- define <2 x i1> @zext_ugt_sub_use2(<2 x i1> %b, <2 x i8> %x, <2 x i8> %y) {
- ; CHECK-LABEL: @zext_ugt_sub_use2(
--; CHECK-NEXT:    [[Z:%.*]] = zext <2 x i1> [[B:%.*]] to <2 x i8>
- ; CHECK-NEXT:    [[S:%.*]] = sub <2 x i8> [[X:%.*]], [[Y:%.*]]
- ; CHECK-NEXT:    call void @use_vec(<2 x i8> [[S]])
--; CHECK-NEXT:    [[R:%.*]] = icmp ult <2 x i8> [[S]], [[Z]]
-+; CHECK-NEXT:    [[TMP1:%.*]] = icmp eq <2 x i8> [[X]], [[Y]]
-+; CHECK-NEXT:    [[R:%.*]] = and <2 x i1> [[TMP1]], [[B:%.*]]
- ; CHECK-NEXT:    ret <2 x i1> [[R]]
- ;
-   %z = zext <2 x i1> %b to <2 x i8>
-@@ -214,6 +213,8 @@ define <2 x i1> @zext_ugt_sub_use2(<2 x i1> %b, <2 x i8> %x, <2 x i8> %y) {
-   ret <2 x i1> %r
- }
- 
-+; negative test - too many extra uses
-+
- define i1 @sub_ult_zext_use3(i1 %b, i8 %x, i8 %y) {
- ; CHECK-LABEL: @sub_ult_zext_use3(
- ; CHECK-NEXT:    [[Z:%.*]] = zext i1 [[B:%.*]] to i8
-@@ -231,6 +232,8 @@ define i1 @sub_ult_zext_use3(i1 %b, i8 %x, i8 %y) {
-   ret i1 %r
- }
- 
-+; negative test - wrong predicate
-+
- define i1 @sub_ule_zext(i1 %b, i8 %x, i8 %y) {
- ; CHECK-LABEL: @sub_ule_zext(
- ; CHECK-NEXT:    [[Z:%.*]] = zext i1 [[B:%.*]] to i8
-</cut>
-------=_Part_250_1958050134.1653268217605--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
