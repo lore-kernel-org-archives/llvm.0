@@ -1,82 +1,76 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C733F7C
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 11:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653303958; x=1684839958;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=0VuP0rOABF04xG2+eFPFHzkApRfMbQHws1J3NPkYwR0=;
-  b=blYB8T+PVj7OydKs3XP6z2V+cYzF+h3XBxFKiH84ava7q5jAA5lU8NG9
-   enUUoOUJALd2IKuDYKbNAV2HYsj6Nf05ZrIrldXuU4dnI9tVKwPukeEdr
-   suTI/httI/GfG60t58jl09GqSPCl0GjlcX8+k7xdV941nsWYpo45Cy+2F
-   SQS6PfMRhOYpcGjxZvZMH/v6aUa/CayK1XzuPxbzfasiDoLSwv0VbUYxx
-   CcaxTcnAxyH+g5yS8FnmT51fEvc9aymTI20rCWglZfgFU8zc7Wn+ixcuu
-   B8dZTGc4Ls1HyP4QGEY3sSEdtgmdSilUGS1tQAUykvebGA4KSdcSloepW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="272002570"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="272002570"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 04:05:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="744678782"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 May 2022 04:05:55 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nt5so-00016a-R2;
-	Mon, 23 May 2022 11:05:54 +0000
-Date: Mon, 23 May 2022 19:05:25 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-stable-rc:linux-5.10.y 5204/5689]
- fs/ocfs2/cluster/heartbeat.o: warning: objtool: o2hb_setup_one_bio() falls
- through to next function o2hb_wait_on_io()
-Message-ID: <202205231905.lloh0lRc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0997C
+	for <llvm@lists.linux.dev>; Mon, 23 May 2022 12:25:30 +0000 (UTC)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4L6F9G6b4RzMqRg2;
+	Mon, 23 May 2022 13:14:58 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+	by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4L6F9F4PlPzlhRVb;
+	Mon, 23 May 2022 13:14:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1653304498;
+	bh=+T8+Qt8cxCMVtvjSjB7nIQYHhiPyELQadtTfyUjnfmU=;
+	h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+	b=ZfCmtCnz8Gnlbiu2owgijbxmqIvDPRNmxBk+hrxrtKiOhNJ57ori/2TI2UBPG1Z9o
+	 woLjtQq4qL6m45u5ZyyPfSiKjDaHkkzSX8xS/oxzLV8k/iMeFuY3xCSsEn3kV7JyvC
+	 0m4AvH+3QOIVgr2wIvBQxmEcI1RlrTAy/cCnpgSc=
+Message-ID: <02494cb8-2aa5-1769-f28d-d7206f284e5a@digikod.net>
+Date: Mon, 23 May 2022 13:14:56 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent:
+Content-Language: en-US
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Andy Whitcroft <apw@canonical.com>,
+ Brian Norris <briannorris@chromium.org>,
+ Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>, Joe Perches <joe@perches.com>,
+ Kees Cook <keescook@chromium.org>,
+ Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Paul Moore
+ <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220506160106.522341-1-mic@digikod.net>
+ <20220506160106.522341-5-mic@digikod.net>
+ <CANiq72kbp3xTpj-L2BfLQ1Ecx-2Ki0W3e5YLERx8-T9bjb96=g@mail.gmail.com>
+From: =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v2 4/5] clang-format: Fix empty curly braces
+In-Reply-To: <CANiq72kbp3xTpj-L2BfLQ1Ecx-2Ki0W3e5YLERx8-T9bjb96=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Kees Cook <keescook@chromium.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Marco Elver <elver@google.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linux Memory Management List <linux-mm@kvack.org>
-CC: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   7686a5c2a8d398196259b1bf3fa369a4fd6bcd6f
-commit: 58823a9b097cf36dd59c4d463396e15a5ec4efb7 [5204/5689] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-config: x86_64-randconfig-a013-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231905.lloh0lRc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=58823a9b097cf36dd59c4d463396e15a5ec4efb7
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout 58823a9b097cf36dd59c4d463396e15a5ec4efb7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ocfs2/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 20/05/2022 19:15, Miguel Ojeda wrote:
+> On Fri, May 6, 2022 at 6:00 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>> SplitEmptyFunction [1] should be false to not add a new line in an empty
+>> function body.  This follows the current kernel coding style.
+> 
+> I don't think this is correct. Checking headers in `include/linux/`, I
+> see ~70 using {} (when not in the same line as the signature), and
+> ~700 in different lines. In `kernel/`, it is even more pronounced: 4
+> vs. ~200.
+> 
+> Am I missing something?
 
-All warnings (new ones prefixed by >>):
+You're right, it is not consistent across all kernel code. Using 
+one-liners is easier but after a wider counting for *.c and *.h with 
+5.18 I get:
+- 187 for "\n{ }\n"
+- 196 for "\n{}\n"
+- 1963 for ") *{}\n"
+- 4554 for "\n{\n}"
 
->> fs/ocfs2/cluster/heartbeat.o: warning: objtool: o2hb_setup_one_bio() falls through to next function o2hb_wait_on_io()
+Please ignore this patch, I'll do the same for my changes.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+  Mickaël
