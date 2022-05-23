@@ -1,120 +1,181 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA686629
-	for <llvm@lists.linux.dev>; Mon, 23 May 2022 09:23:06 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id i11so24291429ybq.9
-        for <llvm@lists.linux.dev>; Mon, 23 May 2022 02:23:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nSdESsXQYczC4k5qR6EUhoG55XqgQrQ395OHEw3icQs=;
-        b=F8HSpXRSjVM7pZBQmec2XP8xxvHGgVlKoUVrnjR5+FFu0EB6GyLC3qGVFF3ikjgCka
-         V775VArldkOl4XOCaDyeYhcyx1l18rKp5ds6R4Ejj6iwp2Hlb4fbexV88wxlurWQuMNA
-         c7OfYoj1E4RWK3Eq4XGtIFuZaLQcmWVDJPBAef5WNbJgi4zf986AKAKpLbtl0kM8Ff5A
-         XEV+bL2vP1RFEVz2r2GbVcNwpPztK/YXmUUjQDqK4tr1/RwtBw4jwHkw80AQt4v8BIXc
-         dZ2eCc4vzzbCgQBkpHLY89Huujc6j46igdFeMPH5j/6yin/o1EAUL3A6zMhipTHNJ9po
-         31Yw==
-X-Gm-Message-State: AOAM533AFqwOKHh5cS6CLY3rWFfdYmYPegchlB6txExRCk8wMGaom+dG
-	u73bemE3Gwg+oiGGpNxwNJOB00iAwUpQvsEjJNCa/G8cJe7GUsF6
-X-Google-Smtp-Source: ABdhPJyy8YU4QNP8+S3euZ1cip0Al7OTJHjUcN2ZpHTMyltrNjuzU9LvTTPZtV62bLbOXw9bFGPm+tKQq9FLJrOwEKI=
-X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
- n17-20020a5b0491000000b0064af42f6973mr19994401ybp.20.1653297785863; Mon, 23
- May 2022 02:23:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44081629;
+	Mon, 23 May 2022 09:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653299699; x=1684835699;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eqM+jPOTUeunb8PUCCDFxOTPR27hmR70Sc5kkvXLcJ0=;
+  b=gpDTgDE92GkLiMfwanmSa9hPAh02jA8ahtgapBjyr1DcX9GLLBR+MvJF
+   2gCeW70NbJlidB4n7Bkc75tEuwwAa4vhnqVxjiX7LCfRGxqbM9T4gtx3f
+   h+Unribf8Xcy1mEC1PGNNIPXbpMjI/cefD6/TbhdHmPC8voNQeZnTBsu/
+   1S+8il4ITQb3PNZXbOa+IJgy/vjhJlJn9KwqrtQqwrhrANaoyjGPhZuIf
+   +SkBpu/tqTO+n1ZEucdwOt/KzVaZrg7i4w6MEfZCFwItRQ2A9txTERYlH
+   6sald8HuM4WjpxOs2OgDa0jOJOK+bI0VdrRstv2mqlFKXRqP3gzhwcUgH
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="253673252"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="253673252"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 02:54:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="629291059"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 May 2022 02:54:53 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nt4m4-00013A-G3;
+	Mon, 23 May 2022 09:54:52 +0000
+Date: Mon, 23 May 2022 17:54:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
+	broonie@kernel.org, calvin.johnson@oss.nxp.com, davem@davemloft.net,
+	edumazet@google.com, hkallweit1@gmail.com, jernej.skrabec@gmail.com,
+	krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+	lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+	robh+dt@kernel.org, samuel@sholland.org, wens@csie.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	netdev@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v3 1/3] regulator: Add regulator_bulk_get_all
+Message-ID: <202205231748.IZoXf2Sf-lkp@intel.com>
+References: <20220523052807.4044800-2-clabbe@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220512011855.1189653-1-mailhol.vincent@wanadoo.fr>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Mon, 23 May 2022 18:22:54 +0900
-Message-ID: <CAMZ6RqL-GBDW1f4=eE_N+jaBjSnD7A8kG_XsNjyvcp94M2Ok3g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	x86@kernel.org
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, David Howells <dhowells@redhat.com>, Jan Beulich <JBeulich@suse.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523052807.4044800-2-clabbe@baylibre.com>
 
-On Thu. 12 May 2022 at 10:20, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> The compilers provide some builtin expression equivalent to the ffs(),
-> __ffs() and ffz() function of the kernel. The kernel uses optimized
-> assembly which produces better code than the builtin
-> functions. However, such assembly code can not be optimized when used
-> on constant expression.
->
-> This series relies on __builtin_constant_p to select the optimal solution:
->
->   * use kernel assembly for non constant expressions
->
->   * use compiler's __builtin function for constant expressions.
->
-> I also think that the fls() and fls64() can be optimized in a similar
-> way, using __builtin_ctz() and __builtin_ctzll() but it is a bit less
-> trivial so I want to focus on this series first. If it get accepted, I
-> will then work on those two additionnal function.
->
->
-> ** Statistics **
->
-> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> of __ffs() and ffz() calls (details of the calculation in each patch).
->
->
-> ** Changelog **
->
-> v3 -> v4:
->
->   * (no changes on code, only commit comment was modified)
->
->   * Remove note and link to Nick's message in patch 1/2, c.f.:
->   https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
->
->
-> v2 -> v3:
->
->   * Redacted out the instructions after ret and before next function
->     in the assembly output.
->
->   * Added a note and a link to Nick's message on the constant
->     propagation missed-optimization in clang:
->     https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
->
->   * Fix copy/paste typo in statistics of patch 1/2. Number of
->     occurences before patches are 1081 and not 3607 (percentage
->     reduction of 26.7% remains correct)
->
->   * Rename the functions as follow:
->     - __varible_ffs() -> variable___ffs()
->     - __variable_ffz() -> variable_ffz()
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
->
-> Vincent Mailhol (2):
->   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
->     expressions
->   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
->     expressions
+Hi Corentin,
 
-Hi Thomas, Ingo and Borislav,
+I love your patch! Yet something to improve:
 
-Are there any chances for you to pick those two patches during this
-week's merge windows?
-https://lore.kernel.org/all/20220512011855.1189653-2-mailhol.vincent@wanadoo.fr/
-https://lore.kernel.org/all/20220512011855.1189653-3-mailhol.vincent@wanadoo.fr/
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on sunxi/sunxi/for-next linus/master v5.18 next-20220520]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thank you!
+url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+config: i386-randconfig-a012-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231748.IZoXf2Sf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/179be86f748a2cce87423bb16f4f967c97bf5d9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
+        git checkout 179be86f748a2cce87423bb16f4f967c97bf5d9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/regulator/core.c:4870:2: error: call to undeclared function 'for_each_property_of_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           for_each_property_of_node(np, prop) {
+           ^
+>> drivers/regulator/core.c:4870:37: error: expected ';' after expression
+           for_each_property_of_node(np, prop) {
+                                              ^
+                                              ;
+>> drivers/regulator/core.c:4873:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4876:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/regulator/core.c:4887:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   5 errors generated.
 
 
-Yours sincerely,
-Vincent Mailhol
+vim +/for_each_property_of_node +4870 drivers/regulator/core.c
+
+  4839	
+  4840	/*
+  4841	 * regulator_bulk_get_all - get multiple regulator consumers
+  4842	 *
+  4843	 * @dev:	Device to supply
+  4844	 * @np:		device node to search for consumers
+  4845	 * @consumers:  Configuration of consumers; clients are stored here.
+  4846	 *
+  4847	 * @return number of regulators on success, an errno on failure.
+  4848	 *
+  4849	 * This helper function allows drivers to get several regulator
+  4850	 * consumers in one operation.  If any of the regulators cannot be
+  4851	 * acquired then any regulators that were allocated will be freed
+  4852	 * before returning to the caller.
+  4853	 */
+  4854	int regulator_bulk_get_all(struct device *dev, struct device_node *np,
+  4855				   struct regulator_bulk_data **consumers)
+  4856	{
+  4857		int num_consumers = 0;
+  4858		struct regulator *tmp;
+  4859		struct property *prop;
+  4860		int i, n = 0, ret;
+  4861		char name[64];
+  4862	
+  4863		*consumers = NULL;
+  4864	
+  4865	/*
+  4866	 * first pass: get numbers of xxx-supply
+  4867	 * second pass: fill consumers
+  4868	 * */
+  4869	restart:
+> 4870		for_each_property_of_node(np, prop) {
+  4871			i = is_supply_name(prop->name);
+  4872			if (i == 0)
+> 4873				continue;
+  4874			if (!*consumers) {
+  4875				num_consumers++;
+  4876				continue;
+  4877			} else {
+  4878				memcpy(name, prop->name, i);
+  4879				name[i] = '\0';
+  4880				tmp = regulator_get(dev, name);
+  4881				if (!tmp) {
+  4882					ret = -EINVAL;
+  4883					goto error;
+  4884				}
+  4885				(*consumers)[n].consumer = tmp;
+  4886				n++;
+  4887				continue;
+  4888			}
+  4889		}
+  4890		if (*consumers)
+  4891			return num_consumers;
+  4892		if (num_consumers == 0)
+  4893			return 0;
+  4894		*consumers = kmalloc_array(num_consumers,
+  4895					   sizeof(struct regulator_bulk_data),
+  4896					   GFP_KERNEL);
+  4897		if (!*consumers)
+  4898			return -ENOMEM;
+  4899		goto restart;
+  4900	
+  4901	error:
+  4902		while (--n >= 0)
+  4903			regulator_put(consumers[n]->consumer);
+  4904		return ret;
+  4905	}
+  4906	EXPORT_SYMBOL_GPL(regulator_bulk_get_all);
+  4907	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
