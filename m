@@ -1,36 +1,36 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44081629;
-	Mon, 23 May 2022 09:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67988629;
+	Mon, 23 May 2022 10:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653299699; x=1684835699;
+  t=1653300299; x=1684836299;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eqM+jPOTUeunb8PUCCDFxOTPR27hmR70Sc5kkvXLcJ0=;
-  b=gpDTgDE92GkLiMfwanmSa9hPAh02jA8ahtgapBjyr1DcX9GLLBR+MvJF
-   2gCeW70NbJlidB4n7Bkc75tEuwwAa4vhnqVxjiX7LCfRGxqbM9T4gtx3f
-   h+Unribf8Xcy1mEC1PGNNIPXbpMjI/cefD6/TbhdHmPC8voNQeZnTBsu/
-   1S+8il4ITQb3PNZXbOa+IJgy/vjhJlJn9KwqrtQqwrhrANaoyjGPhZuIf
-   +SkBpu/tqTO+n1ZEucdwOt/KzVaZrg7i4w6MEfZCFwItRQ2A9txTERYlH
-   6sald8HuM4WjpxOs2OgDa0jOJOK+bI0VdrRstv2mqlFKXRqP3gzhwcUgH
+  bh=ggL90ToVu7qh9RF4iy+2ZjsDqdtGnMx14duWRCjmabI=;
+  b=eg2c45XEARSUDygpZHi3cpp28QACJtDWGaAQGdP9D1MuLDyyQ5N1zWY6
+   OLczJCbwnY6pXjesErMekh5jN6qFOR61jf3EuULCfTAPMrAvn0IDiHWoh
+   NSgKrnw7sjyJy1+5Q0c4SGSbvZ6n1/tMh+Wp7i/oDhc4JpTtNsXbZsTfh
+   WUQfHLDuj1rrjC/PUN8NG0gqVv71SLVcseiN8Phc7WQSN9sId2wfbMVYL
+   KDSj3FONQODu1EKY1w8FcdjA6jG9PW3XRpXq9QGxszIrmTnyxJUWN4ZTV
+   Nr3DCNUgT/nhfSvMbk4kn4Fhc7hk+bs0BtmLsY0xefXci0tA0/LQbPtOX
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="253673252"
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="260773613"
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="253673252"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 02:54:58 -0700
+   d="scan'208";a="260773613"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 03:04:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="629291059"
+   d="scan'208";a="675791641"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 May 2022 02:54:53 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 23 May 2022 03:04:53 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nt4m4-00013A-G3;
-	Mon, 23 May 2022 09:54:52 +0000
-Date: Mon, 23 May 2022 17:54:25 +0800
+	id 1nt4vk-00013a-WC;
+	Mon, 23 May 2022 10:04:53 +0000
+Date: Mon, 23 May 2022 18:04:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
 	broonie@kernel.org, calvin.johnson@oss.nxp.com, davem@davemloft.net,
@@ -43,7 +43,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
 	netdev@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
 Subject: Re: [PATCH v3 1/3] regulator: Add regulator_bulk_get_all
-Message-ID: <202205231748.IZoXf2Sf-lkp@intel.com>
+Message-ID: <202205231709.3Wo0pW9z-lkp@intel.com>
 References: <20220523052807.4044800-2-clabbe@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -67,7 +67,7 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/arm64-add-ethernet-to-orange-pi-3/20220523-133344
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-config: i386-randconfig-a012-20220523 (https://download.01.org/0day-ci/archive/20220523/202205231748.IZoXf2Sf-lkp@intel.com/config)
+config: hexagon-buildonly-randconfig-r002-20220522 (https://download.01.org/0day-ci/archive/20220523/202205231709.3Wo0pW9z-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 768a1ca5eccb678947f4155e38a5f5744dcefb56)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -78,7 +78,7 @@ reproduce (this is a W=1 build):
         git checkout 179be86f748a2cce87423bb16f4f967c97bf5d9b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
