@@ -1,154 +1,181 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BDB7C
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 11:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653392084; x=1684928084;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dqryofZxF2pFV6kkTP1H9GJ1NQVHZ92x9MysfmWCcAg=;
-  b=DX5QLJUoPEx7bCULQnV0/9GVDT09IhzQeBVBcXeEe96kpLzNxYachsxH
-   S74UiPiooFqdm71f+Fr3TMgZkeWADg83vBu6POg5sslap6Z/BENze8X0Z
-   GUGTiGwYNEeHPPoitHLvB/tPNQ/U9y8EPScROq9LRsXsqTiUktTyz8T9p
-   N/A5gz8cfc3BanNt+I1DGJlr8RZVG0d+tPphKKK+XZdax5jldxsFmSfKH
-   lizNufrUKNl4gedhmf2Iq4mTTPCdcaXiXm4MuvVXM62Sq9Xrepdog2M4k
-   Jrha3YVwG3bH76WJZZHwAWmRs9CTRrz4U2gPcP99TudZk9xZzoIMm+QP1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336558163"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="336558163"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:34:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="559086967"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 04:34:34 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OBYVcZ004315;
-	Tue, 24 May 2022 12:34:31 +0100
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFFE7C
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 11:47:04 +0000 (UTC)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24O8j8gq017525;
+	Tue, 24 May 2022 11:46:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ subject : from : in-reply-to : date : cc : content-transfer-encoding :
+ message-id : references : to : mime-version; s=corp-2021-07-09;
+ bh=uXSdb6f7uCAMXRH5Tb3TOyjNQCmZ4CVuVpF62hdVnDE=;
+ b=E2x6izipc1galastzBCxijfLh2YHJbp3RdBzaWuztBz2TfO2N0g8NA9xZzG32GTtMCId
+ rXADKhonYcDtaZTg1C2R16RXJ5U9AX0663jp68dDjD6CTZsjwcpPwuLMfnaeb9xM8qQY
+ drOKDn8qJHz25fqoJdgAcj/mp1F7XbMqvCMcA9Kb75JcAN22tBZVcAPDio1X6IL/KRAm
+ 750a34T2hziYUaeW2l9fRXyPl7CauEQ4lm3LqvHxBv1vHGc+X7AwKzLsIPN7IeuJg5at
+ ru87RiLFO0A0hHTXz+xchy9VdxQpMh9CHNHPzHRxx6j6a+HCeoG18zvtEF4iAMSZrxyt uA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g6qps65dw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 May 2022 11:46:26 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24OBkIZh025689;
+	Tue, 24 May 2022 11:46:26 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g6ph87s3t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 May 2022 11:46:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JufPLRiHHtGckENQ5t4bNXrB1rxgzrJLH6d0Gy2HhHluLYS2uiGkVI7YH3Tj7TxbOoNQvWViH3DPTVIh305t2H+zTHdbkwbCxE+nq0fe97xdjpp8p1dzy/0gC54YRKtJ7z2Q+9GUKjMb83N7PDlIWg8zDG6HoCgnrF2FIYRzo/QY4a/SlkazIsogXEXErVVn4gLwJQ9VmWbj9m1QAsZ846kSXau2XRnzX+nvFbVzO8LeaFaZTbfQHV8d8OJymiNLAIOwukmHSMiGTJn9De/z9Gm4iUPN8kefgYnknX2NWeETRy6tKvIZkIeMIf8Z+mhnURN6tT4C8ny4dM4KZtJCFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uXSdb6f7uCAMXRH5Tb3TOyjNQCmZ4CVuVpF62hdVnDE=;
+ b=GYJs8rP4EcV25KJmXEYbUcRGuyvnrstOni7mO2IsCmCDlG7jYdobaSdYzdrPilYEonkUPSF98hI7MQsO/3BTavINq0XL8awenjg4flobXoQ2lHbdDcBxCszGMB8SA7gsDP4r0zFJqgldXbhFl/hRNS5DoGBsOQe8FSxW+YjXahZW5U1O0AbTbV4DTQavrxdxnMBlOJqcLPm2IoqqvGqNv5N8365VzD5779342an+Hzb/VbygkFBv6hrgf6na6rlBbk94tfQ4gYMcGWVgLDkMkAMFBFxiAtF1IN+W7dv6gYiQSr0Kl59zkDE5ZM2Qj2Q0RjCzWDD/+uBxISWiq22s4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uXSdb6f7uCAMXRH5Tb3TOyjNQCmZ4CVuVpF62hdVnDE=;
+ b=yzGGseWve3k3ZGeKKvm9FEagsl2lTjW2sjfJ8Ha6hZ7LDz1xVbOnAjcp2cT9rP4T6hA4oDuqWvhrTJdGWwoFr6dVAUZg8K9/rLaPomFN5jwfTDz9H+fUimVQ7amTo6yW7bqU0Z6tQTXrovUGguJcFYxlPMWm0rkM7Xsell5dFEM=
+Received: from CO1PR10MB4787.namprd10.prod.outlook.com (2603:10b6:303:9c::16)
+ by SN6PR10MB3070.namprd10.prod.outlook.com (2603:10b6:805:d3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.23; Tue, 24 May
+ 2022 11:46:23 +0000
+Received: from CO1PR10MB4787.namprd10.prod.outlook.com
+ ([fe80::3d8a:f5f5:c8b8:bc4a]) by CO1PR10MB4787.namprd10.prod.outlook.com
+ ([fe80::3d8a:f5f5:c8b8:bc4a%9]) with mapi id 15.20.5273.023; Tue, 24 May 2022
+ 11:46:23 +0000
+Content-Type: text/plain;
+	charset=us-ascii
+Subject: Re: plumbers session on profiling?
+From: Ruud van der Pas <ruud.vanderpas@oracle.com>
+In-Reply-To: <87mtf7z0rt.fsf@gnu.org>
+Date: Tue, 24 May 2022 13:46:13 +0200
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-Date: Tue, 24 May 2022 13:33:37 +0200
-Message-Id: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+        Bill Wendling <morbo@google.com>,
+        Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org>
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-ClientProxiedBy: SY2PR01CA0022.ausprd01.prod.outlook.com
+ (2603:10c6:1:14::34) To CO1PR10MB4787.namprd10.prod.outlook.com
+ (2603:10b6:303:9c::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d2abdd5-1e85-42ef-388d-08da3d7b06cb
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3070:EE_
+X-Microsoft-Antispam-PRVS: 
+	<SN6PR10MB30701408054AA2A467747AF5F3D79@SN6PR10MB3070.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	dpvsTk3fZIfrChh/0BdBqJ0kFLW5qWMO8ODqQgjLS3EukCSNmZPngGMWIReUtO1vrwdruo4+N1K3XgtT8R0mEdWUUOYxPHey1JMOyy1N0Uz4TC7oa0yri6LxvDSBkwS922nH5E8+qqiz2SdWyVKCslOPIg1Rl5ti9HXWa3vBLSefoBO0eImslrhlWm/m5p9NkYRmd4jM7O3MRsEpPmj29ajE0GUeRqGLEMB1ukpPMllnVMHej/j8Rm+sER1TsGfMeVdydFw6CzqgJKzTyYrCUyMEDjgkFsgufcqX2SVgw8N1+yVaOoDCYxZP9qj+N8yC+VmXcoUQIboMmcHecmZX6al1ntn5zl5VdwxQRWys0X/ht30AmNxp+6Ln5Mxq7t1u7w5NrwisqtXPSsaPPPM4nE6Ih4dUIQLIZTK5Hf+ycR93cYlmu+3MaStXfnqIGLp0HUkXtfukQgOrm1MQ3iQTdPdrhqk0/fq2Bp5wBQmDC6/RdC3sUIlu9PQIIZGOzRFigOnS48QHjSHagQ/1ZVOdcFB1r3G1USSRVC9jN6x5k2LvErc3IhZ9kh05Fr6Y7cWr0V40AAHgG/B6PeWZP+y6AFBbe4Rg6TMXxFV3GzfYH69Cc4q8e9YQudZK9aHZeKLp/4g3Tj05IBfOGtD+3Jv3wsqLscLj+l5DbCBM9fj405TZLuWQZu8gW4XQauvDnGDs
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4787.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(38100700002)(54906003)(6916009)(4744005)(2616005)(6512007)(86362001)(66946007)(66556008)(4326008)(36756003)(8676002)(66476007)(3480700007)(52116002)(6666004)(53546011)(6486002)(33656002)(6506007)(2906002)(8936002)(508600001)(186003)(5660300002)(7416002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?eXQ7dPXhG5fC+UKgd8gnUna8TpIIYgiIHR5u+2yG74rl+EhQGAjlYkcM3umh?=
+ =?us-ascii?Q?lpptEwGmbJwWZTK103r7Fx//WKxNAPXnB9dI1yZAXqyvufszIHHKz2oyw+Te?=
+ =?us-ascii?Q?t/aY+m5U5ixgrHfkowuT+fe2BYJ7G9Gl8vtCVrzlUpgW4s+40x4NWtMMXYEN?=
+ =?us-ascii?Q?FzKBNzPBReZhgKE8VzUd5C3oaRz3XOU0FhNd0YcuQVT9G/GOKQzbBdTPiIVc?=
+ =?us-ascii?Q?i2hrwTCEWpZO5zvRqsUGnlNUCxyYJWW4JjknykbaI+AJ4KTMCeK47lI23GkY?=
+ =?us-ascii?Q?+8NwQIaq6PPkopJeQVuZAbvFlo5tZts2oH0n3j9otYIJi8PF3kBjFW+W0kuh?=
+ =?us-ascii?Q?E40jNZVc7rhSrwEvqDZrMiVfC8cQTS9YI2X/rWt2VCnIPbfAxXiFyYGItCfP?=
+ =?us-ascii?Q?RAmJZOfC6ribzWgNvoHcXWikiXJu5X0qW4hE+VEhDsP/Wze4NwlDFaaMwGV6?=
+ =?us-ascii?Q?0XAmKRmJprnzOpKC2osXmLnSr2ru9itiXiypk9Si4kg1tkIsenLCjVXq/Tl9?=
+ =?us-ascii?Q?LaACccQFufJF35ol7HmYTpiTUc94Ab1vq+G8m9AYqtknrmy0KjXy2Kkue46H?=
+ =?us-ascii?Q?TEX3/q45rSNax2p2tXpviDjfWJccRein9dg9WDQ/OD/XybmjYM4HmJcNXyvO?=
+ =?us-ascii?Q?PBTcRJp3JxBicQ15gB8YCFjh2tGVLLx62Nw0blWlG7O1IQneOxfyidbsqbm+?=
+ =?us-ascii?Q?2QdWG4lzIW7MPoqjoPqC+vhlwJ1YH8Kn9pJs9C/1uXp2lHg7FiF+OEvXoaqv?=
+ =?us-ascii?Q?diUgEp1kk6wfXyEjz5UNLmabWsBcVFjZu7I85O8zA8vfmH5h9bxTztH4rpkH?=
+ =?us-ascii?Q?r4hCZZFF1LvyGKis6bBtV2WtIvLwglvClKqyVpSK+2QrhuYVcPrX9QfHnGLn?=
+ =?us-ascii?Q?mSfMoghW0vA4UoxdimPTzgqbIKex67y6G3cFBgvYOXkiftQQ6SNMxzvEG/MA?=
+ =?us-ascii?Q?+sUDJZsFxsye2h/yYA232Ihamc3Fm02tF/5vLwJ7NHnfHFJN6nWkuRxaSaNN?=
+ =?us-ascii?Q?abswjGty7yQBJSSa4DGxU6BEif4lcln8E9HbiiUohexu8GJTaIvWuJ13TPsa?=
+ =?us-ascii?Q?xipELeyDYaHlTwqHK9PaJiZ8yJGeJgKVPejjIC22QTKwoTxoXoWl9ct1HNif?=
+ =?us-ascii?Q?ajZGUNZ1qLtWIetC8LLRyOXK3vO9OrygzcksWKRHHEr0R+zS9gIfbaqSorr2?=
+ =?us-ascii?Q?pbkx3M+X2AADPLt9jwlTghcNSr7a6/3SQ/Aa5IyyflbdK8FqETpZ0SVqwSrC?=
+ =?us-ascii?Q?7ATIKNSWkdTTfOFnT4ZSLCVeJjIoRS7dmydyHcL42xNsANkL0DAyibsas+xi?=
+ =?us-ascii?Q?3b+iH+RBR8WHvWuN6ZR/uFLk0wvBK0JrpFcBCV37qWvucnnajFCKASU1SqOK?=
+ =?us-ascii?Q?M090FlHA7C81QCneMKBualHdYPqMzFVN+wwfVDK6XM10Fa+Kq1UgfUKC9hkz?=
+ =?us-ascii?Q?J1UK2lWrQ1M9eH7Csrvk6+/XU8MUXSK6/bwkBcPw8yli4TKJm0GDh4o3rEbC?=
+ =?us-ascii?Q?3Xe+lDEl1UxlGh7BtVq2kcZHnDm4XXOUzIiWZP5a8H5oXOkpWzGE0m2AKP02?=
+ =?us-ascii?Q?sKNl4I6IioaI/b5Ph+R/pjiluHwwvR1UZAQTTspXeFdeLJ4p9CiLl327r5VJ?=
+ =?us-ascii?Q?oYlzOCO/9tKAxE1sajH9t7jCOmNjyPcVyAreJFs7hhulnTDMbKRCCTnr2jCh?=
+ =?us-ascii?Q?gtiVlLfBO3Uc0uvfCrR8xWXj7szkQpdKdkKZxRqEjl1P3qye4+YIJiNbBDlt?=
+ =?us-ascii?Q?1nWv0cj4SabZ39XOH263n8hBPv5JneBmEVL3altl7mn4Pt7AtqcypdGWj75V?=
+X-MS-Exchange-AntiSpam-MessageData-1: DaEuuy2nw4bjMs/pjwU0lDZfnHJFmeRLhho=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d2abdd5-1e85-42ef-388d-08da3d7b06cb
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4787.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 11:46:23.2162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FDxj8X5Z5UWSG3Fsn2YJEaxQBX1nYx9f4kzH8HLJvBiMLLqdXXZefwDpMmHkApvRC1tOFWZIWu50W/aYHXdBn49SXURCR23k422PfudTsnY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB3070
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-24_04:2022-05-23,2022-05-24 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=585 adultscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240061
+X-Proofpoint-ORIG-GUID: br9K5afrhsFWPL1cyIOD54QFrYMvfmgH
+X-Proofpoint-GUID: br9K5afrhsFWPL1cyIOD54QFrYMvfmgH
 
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 24 May 2022 03:04:00 +0900
+Hi Jose,
 
-> On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> > to simplify livepatching (hopefully globally later on) triggers the
-> > following:
-> >
-> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> >
-> > The reason is that for now the condition from remove_dot():
-> >
-> > if (m && (s[n + m] == '.' || s[n + m] == 0))
-> >
-> > which was designed to test if it's a dot or a '\0' after the suffix
-> > is never satisfied.
-> > This is due to that `s[n + m]` always points to the last digit of a
-> > numeric suffix, not on the symbol next to it (from a custom debug
-> > print added to modpost):
-> >
-> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> >
-> > So it's off-by-one and was like that since 2014.
-> > Fix this for the sake of upcoming features, but don't bother
-> > stable-backporting, as it's well hidden -- apart from that LD flag,
-> > can be triggered only by GCC LTO which never landed upstream.
-> >
-> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> >  scripts/mod/modpost.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 6bfa33217914..4648b7afe5cc 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
-> >
-> >         if (n && s[n]) {
-> >                 size_t m = strspn(s + n + 1, "0123456789");
-> > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-> >                         s[n] = 0;
-> >
-> >                 /* strip trailing .lto */
-> > --
-> > 2.34.1
-> >
+Thanks. I indeed plan to attend LPC 2022 and am very interested 
+to participate in such a discussion.
+
+Kind regards, Ruud
+
+> On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
 > 
-> This trivial patch has not been picked up yet.
 > 
-> I can apply this to my tree, if you want.
-
-It's a good idea, I'd like to!
-I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
-is not directly related to it and can be taken independently.
-Should I change the commit message or it's ok to take it as it is?
-
+> I am adding Ruud van der Pas in CC.  He works in gprofng and would be
+> willing to participate in a discussion on kernel profiling.
 > 
-> Please let me know your thoughts.
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
+>> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
+>> 
+>> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
+>> <ndesaulniers@google.com> wrote:
+>>> 
+>>> Hi Sami, Bill, Jose, and Vladamir,
+>>> Jose and I are currently in the planning process to put together a
+>>> Kernel+Toolchain microconference track at Linux Plumbers Conference
+>>> this year (Sept 12-14) in Dublin, Ireland.
+>>> 
+>>> Would you all be interested in leading a session discussing various
+>>> profiling related topics such as:
+>>> * gprofng
+>>> * PGO
+>>> * AutoFDO
+>>> 
+>>> Would others find such a discussion useful?
+>>> --
+>>> Thanks,
+>>> ~Nick Desaulniers
 
-* I'm planning to submit a new rev of FG-KASLR series soon, but
-since I'm too busy with XDP for now, it will happen no sooner than
-in a couple months =\
-
-Thanks!
-Al
