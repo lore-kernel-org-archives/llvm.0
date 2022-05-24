@@ -1,97 +1,104 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8370CA21
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 15:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1322569
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 16:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653406745; x=1684942745;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4rd15RSs+bC2DmRXjk8iPqEenJ0gefzbXgGg23o0n4E=;
-  b=b+x9g6YpQAx5/mPrxvq7WrywApQfKxbVGdVgL38bwwmUPirGk/rHBDUF
-   +/Wk9EbVg/DOXaT4boZ8PFcGLWN4Fii0eshlqzUhVKafTPF4mhJZyo3Pt
-   W7ifoGgVdSHmFqIWVHOP9KbQxS1M7bCtUekWiPJY5ezRLT3AbNEJqR3Wa
-   kVs9Y61Xjp2R6vgR+g+LhO/QQMDRsSc+yiqVjU9iqVkADbRrr1atoHTMg
-   oze3/haawt0m4MOihkqATjGsjcCMszwiT34cwEQj/wwoFCYced7i+832T
-   dcKwn+pi7VXTYqTTqKbNthY99kTRRgtbITo7rGV/3xYcH+Jwm8V1PBl89
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="261173190"
+  t=1653411350; x=1684947350;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oOuSXB2gdak0RiOLo8nGGEuEpjVHr3ygbyaFxZ3tAhU=;
+  b=JLIWU7YnssFhmhg68hYW/1MlvbjcQnWVtESpJ0AQVjKV5V1v8kpL+WKW
+   DkSjsskYqrBCDgqBaJUsj9BLvXHr2PtpFVkakh/no2AocBTYfM3YOnxni
+   gUNIgBQIqYZ7HR76SqAbmtnXVCG8ZetBbk/diJMdY94ARlKGQHUgiNSQ5
+   +8GXJAx0y8e6RyARfcy3ewEB0HdMx+yAlN3fCAZjm7SrTDKFMaMuZVXmY
+   kESuDbK97Bqa1MOJ4NFBrEg8Ku9FCbdxSq5KY6NOxQYaL3J4A4gCidTtE
+   9GZpBEt0nRoUgrej+rm2nFhyTC7TFh0pWd9zV45xg+HaMxp9TEl5fBUV7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273581275"
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="261173190"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 08:39:04 -0700
+   d="scan'208";a="273581275"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:55:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="577938831"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 24 May 2022 08:39:01 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OFd0qk001875;
-	Tue, 24 May 2022 16:39:00 +0100
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH] ath6kl: Use cc-disable-warning to disable -Wdangling-pointer
-Date: Tue, 24 May 2022 17:38:14 +0200
-Message-Id: <20220524153814.1093477-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220524145655.869822-1-nathan@kernel.org>
-References: <20220524145655.869822-1-nathan@kernel.org>
+   d="scan'208";a="601394367"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 May 2022 09:55:48 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ntXox-0002H4-Tq;
+	Tue, 24 May 2022 16:55:47 +0000
+Date: Wed, 25 May 2022 00:54:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Jo=E3o_M=E1rio?= Domingos <joao.mario@tecnico.ulisboa.pt>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org,
+	Atish Patra <atishp@rivosinc.com>
+Subject: [atishp04:unmatched_pmu 1/4] drivers/perf/riscv_pmu_sbi.c:709:34:
+ warning: shift count >= width of type
+Message-ID: <202205250058.7LPnhB6e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 24 May 2022 07:56:55 -0700
+tree:   https://github.com/atishp04/linux unmatched_pmu
+head:   7b75dbb7c4c01dceb7a974c352945fd86eb88c25
+commit: 04bc56e83a7e6e851694e34da95f26c57abc7132 [1/4] RISC-V: Create unique identification for SoC PMU
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220525/202205250058.7LPnhB6e-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/atishp04/linux/commit/04bc56e83a7e6e851694e34da95f26c57abc7132
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 unmatched_pmu
+        git checkout 04bc56e83a7e6e851694e34da95f26c57abc7132
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/
 
-> Clang does not support this option so the build fails:
-> 
->   error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknown-warning-option]
-> 
-> Use cc-disable-warning so that the option is only added when it is
-> supported.
-> 
-> Fixes: bd1d129daa3e ("wifi: ath6k: silence false positive -Wno-dangling-pointer warning on GCC 12")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I was just about to send it :D
+All warnings (new ones prefixed by >>):
 
-Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+>> drivers/perf/riscv_pmu_sbi.c:709:34: warning: shift count >= width of type [-Wshift-count-overflow]
+           pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
+                                           ^  ~~~~~~~~~
+   1 warning generated.
 
-> ---
->  drivers/net/wireless/ath/ath6kl/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath6kl/Makefile b/drivers/net/wireless/ath/ath6kl/Makefile
-> index 01cc0d50fee6..a75bfa9fd1cf 100644
-> --- a/drivers/net/wireless/ath/ath6kl/Makefile
-> +++ b/drivers/net/wireless/ath/ath6kl/Makefile
-> @@ -38,7 +38,7 @@ ath6kl_core-y += recovery.o
->  
->  # FIXME: temporarily silence -Wdangling-pointer on non W=1+ builds
->  ifndef KBUILD_EXTRA_WARN
-> -CFLAGS_htc_mbox.o += -Wno-dangling-pointer
-> +CFLAGS_htc_mbox.o += $(call cc-disable-warning, dangling-pointer)
->  endif
->  
->  ath6kl_core-$(CONFIG_NL80211_TESTMODE) += testmode.o
-> 
-> base-commit: 677fb7525331375ba2f90f4bc94a80b9b6e697a3
-> -- 
-> 2.36.1
 
-Thanks,
-Al
+vim +709 drivers/perf/riscv_pmu_sbi.c
+
+   695	
+   696	static uint64_t pmu_sbi_get_pmu_id(void)
+   697	{
+   698		union sbi_pmu_id {
+   699			uint64_t value;
+   700			struct {
+   701				uint16_t imp:16;
+   702				uint16_t arch:16;
+   703				uint32_t vendor:32;
+   704			};
+   705		} pmuid;
+   706	
+   707		pmuid.value = 0;
+   708		pmuid.vendor = (uint32_t) sbi_get_mvendorid();
+ > 709		pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
+   710		pmuid.imp = (sbi_get_mimpid() >> 16);
+   711	
+   712		return pmuid.value;
+   713	}
+   714	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
