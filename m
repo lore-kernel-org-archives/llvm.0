@@ -1,88 +1,80 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D747C
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 12:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653394834; x=1684930834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W0u2zlXAT8KFsGuWp7OUOFfzrjssYjy5werD9urAYe8=;
-  b=A81U41xsMF/94DC+Ai1xoGi5te2xtQ8xK6LzJaJbHxFm1yg0TVFudqEn
-   LhMrhEXFWV6CRpb9JoIwBmhU7hyu+8UM83ZfOBP13aTrAI5SSyWbcDvPb
-   LWW3AlcsL2pYBTytfOHfxpjX9NxKDgTpoUpDksJga9fQCZcTfFfObmMsr
-   j9RjvhWewAG7Ord2k3I1z3Hlni6Ex4+8h+uR8Rpy2eBEu90y+zqECzUxq
-   I9qZQ8Fi08IzBn99xMu7RnUh/QYYzehunZ0FWGod45XD+Vxh7Fx+T38U2
-   +26CMK0ZUGWFB9Y+xiU+78jxiX5zMtwfSQRNDB34K+Ivz3R7rivJvoR7P
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="254014757"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="254014757"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 05:20:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="526382658"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 May 2022 05:20:31 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntTWY-00021O-QF;
-	Tue, 24 May 2022 12:20:30 +0000
-Date: Tue, 24 May 2022 20:19:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH DRAFT] btrfs: RAID56J journal on-disk format draft
-Message-ID: <202205242033.I6ix2WkH-lkp@intel.com>
-References: <f6679e0b681f9b1a74dfccbe05dcb5b6eb0878f6.1653372729.git.wqu@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D52373;
+	Tue, 24 May 2022 12:30:57 +0000 (UTC)
+Received: from mail-yw1-f172.google.com ([209.85.128.172]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M5Q6l-1nseCo3Eer-001So8; Tue, 24 May 2022 14:30:56 +0200
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ff90e0937aso105131497b3.4;
+        Tue, 24 May 2022 05:30:55 -0700 (PDT)
+X-Gm-Message-State: AOAM531EMZRwvxk8RTSGGj7AsJD2kUqbVbpq44mDDIyLP2lurByl5A9l
+	sycHZxWZ5H+QCjz9S9baRqPxd9jfhZ9BWwTlppw=
+X-Google-Smtp-Source: ABdhPJydwm9ZeQkJCZTDhTWemb3DUsSF1BiWMivHtJQfFJ6OjF0fBSQWMxFqbwtza36HGeAy93l3UAAU+B1mkG6N7Ok=
+X-Received: by 2002:a0d:efc2:0:b0:2fe:d2b7:da8 with SMTP id
+ y185-20020a0defc2000000b002fed2b70da8mr27015519ywe.42.1653395454413; Tue, 24
+ May 2022 05:30:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6679e0b681f9b1a74dfccbe05dcb5b6eb0878f6.1653372729.git.wqu@suse.com>
+References: <20220523150521.2947108-1-nathan@kernel.org>
+In-Reply-To: <20220523150521.2947108-1-nathan@kernel.org>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 24 May 2022 14:30:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1pRmTeufSUOrRZx_B=VafmG33P1_vzn-YTpcSKDjfvVA@mail.gmail.com>
+Message-ID: <CAK8P3a1pRmTeufSUOrRZx_B=VafmG33P1_vzn-YTpcSKDjfvVA@mail.gmail.com>
+Subject: Re: [PATCH] misc: rtsx: Fix clang -Wsometimes-uninitialized in rts5261_init_from_hw()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	patches@lists.linux.dev, Dan Carpenter <dan.carpenter@oracle.com>, 
+	kernel test robot <lkp@intel.com>, Tom Rix <trix@redhat.com>, Ricky WU <ricky_wu@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ZEvQpwApMRMv9LBe/JmXup9pF7PZonKJm1RjC7wV3vnK353HZHa
+ KUl0Aq8VLvF61MQEBs5IPR5s226cYmuS4Jn2Ng4docbWsuHexamjJWWleHD7mJdmc/wXxUg
+ kYtDai1JSszyquhUs4xQu5FEQTSzIzjJL1e/oRiyPvvtUPrgb37vBaDUSqsh4EiZz94YGYT
+ 3XxUnmhFtpVn+HjsINxEw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x7wKNaKBUSQ=:aWm9J+BJWINxPozxKrU/Cw
+ alNT2l62/V8zWGEscSDNmeQIvrBhTVKVeSjzseuL+Xw9Kbe5lLMwyo01/dUxjRyVeAL5BZO7/
+ CeNLdqUXUJQ1vg6QjbXwWBu4ZPkONHV7mnj6DCGuFjPVoELj42/AAW0zsksNq8bzzg7JmLj9P
+ Y9g+t6FoMq4yqU0tYcmtY8dTrkVWaCNs/v2Hq0OBVJ+kE9c13IVJnZYgt38ke9Idlw7XAA6eA
+ pK0i5kmD1t4IQUQzrlBWjQEDbVcTvKt07xeVF/wDGoq+/nXyPGBFVWdzQquZ9fqpH80sR59JK
+ ayFfXIxdjQ3k5ZsQ3WKKddkMkCmrg8zzW8Q9vZkvc8mPRjod9qums4DfXCoOomt0Aw2uLWafQ
+ J8QWx3RIftbSS3QKcBZVgRZ0HJWgIiytjtVX0AeMxQDAf7oVC9Yu8gbLcQq/CAH9sK833PiEj
+ gHArQA0z0eggEkBfdjC4ofmqqz/UEDRd4+sj5qxQP1DLB5JpJEk8MGjzorlFFw7lGKGKhP91/
+ CwEUfEbaGsa5CAEvcKnmzhf9vqVuRdc13slIdCXpv2OW4tcVUjE/dolnEPm6brQW66S3zDyYP
+ GpuHGPu902iLSQ6NlWZgnml2F2c/7XqX54mEd+X2DTURFiNvSSdRsxu5pBw/9nwUkU0Y4KNIl
+ GfFc/P2GEaoYZxiCiMRFA2kyw8r0Kk9rn4AjP7arQm4MMCc5vpOogYgGp8A58bz32IZrjdL7+
+ 9HsuywgPd2JNZpB3xCv6MBCvGnCkGTUz6r0nJ7SjIky63Lz5E9AZqY23uSAIZ2oolZVTaMMg0
+ 8hUZ/1nktEL4WNaX9orl9OPho3ZkQYOKVq9ELo4LJdoJ/g7TbuezOYgnhcul5ZO8f69wXx7a0
+ BXAy1z+kmlhwvxD7T8uQ==
 
-Hi Qu,
+On Mon, May 23, 2022 at 5:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Clang warns:
+>
+>   drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>           } else if (efuse_valid == 0) {
+>                      ^~~~~~~~~~~~~~~~
+>   drivers/misc/cardreader/rts5261.c:412:30: note: uninitialized use occurs here
+>           pci_read_config_dword(pdev, setting_reg2, &lval2);
+>                                       ^~~~~~~~~~~~
+>
+> efuse_valid == 1 is not a valid value so just return early from the
+> function to avoid using setting_reg2 uninitialized.
+>
+> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Tom Rix <trix@redhat.com>
+> Suggested-by: Ricky WU <ricky_wu@realtek.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Looks good to me,
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on v5.18 next-20220524]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-RAID56J-journal-on-disk-format-draft/20220524-141549
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220524/202205242033.I6ix2WkH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/695dee41baee3a72c39396cb548088e91472d04d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qu-Wenruo/btrfs-RAID56J-journal-on-disk-format-draft/20220524-141549
-        git checkout 695dee41baee3a72c39396cb548088e91472d04d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/linux/btrfs_tree.h:1156:2: error: unknown type name 'u8'
-           u8 __reserved[4];
-           ^
-   1 error generated.
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Arnd Bergmann <arnd@arndb.de>
