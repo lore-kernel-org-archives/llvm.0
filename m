@@ -1,45 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026B37C
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 06:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A08A363
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 06:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653372290; x=1684908290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=diIRvvDU2jAulewT+EJl4wwfpMtzfN2iUVgeHmuFZK0=;
-  b=a8YtAniNG+GikW30UnuEzDvOGXdBs3f/tEKQt53cWiTTjW9mUi2ELKU9
-   J4QU7RdMLBtIn+0qCy9Z1NcxWkqTqOY9dMyBzBms/jDs/WtvsKnsiYC/w
-   RQH7AjuD7Uq/HaCGn1jKVdnRXT8NjNEEaHdKOVhG95oI0ggsFSh+b/zlO
-   0frrnrrZek3Tnj+/JQ4jkCcvczexdhtfbr7FgWb7x8Z9sq2la9tylKYC/
-   9Csj/898NtIzh+EBulKeiIg6h4XWJMmyaepmnGkcR5MarhV9SQDZSZJo7
-   2JW/nXJswCwg0jIRXQ0+7pQZhy3GHZBZKNvDCbabPEGDchK1t5ltLxrk/
+  t=1653374234; x=1684910234;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ct3VwdGw1vT8shDjF/RItd2cXMngHVCA6ptzl3SwK6s=;
+  b=YTbd9REjZQgjlfIW/ei2UM3XPSbhGQbEa7l+5oOxyv5gu7vIgIKtPKdC
+   WRt1I5XjE36zWv6FQtHT89d5vTV6PK80cfu6hqsneIP1KpbA1AO0iNm3k
+   gfckez55cDlYy61MNgwWOIbi/nczPITnjfEU6xujJL89teWmqMJmI8Me3
+   eTTI8Pp29Iwub9JcJHcArvEXahHaLg/EUu+6Wj2e7WJ754TlCOgPmpBaA
+   fbl5ilUOG8rGtOijkWFwFnNM34kyYMP6wNL00t/qslK+ooaoBUM+x77XW
+   KJUAE8HmtNzCxwNoMn4lfkP9iinyCwkutv3OipDoLTQdtlC4uuzCBOXLz
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="271014301"
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273171685"
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="271014301"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:04:49 -0700
+   d="scan'208";a="273171685"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:37:13 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="703336777"
+   d="scan'208";a="676227423"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 May 2022 23:04:47 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 23 May 2022 23:37:11 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntNew-0001n0-BV;
-	Tue, 24 May 2022 06:04:46 +0000
-Date: Tue, 24 May 2022 14:04:36 +0800
+	id 1ntOAI-0001pA-O1;
+	Tue, 24 May 2022 06:37:10 +0000
+Date: Tue, 24 May 2022 14:36:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aaron Lewis <aaronlewis@google.com>, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, pbonzini@redhat.com,
-	jmattson@google.com, seanjc@google.com,
-	Aaron Lewis <aaronlewis@google.com>
-Subject: Re: [PATCH 1/4] kvm: x86/pmu: Introduce masked events to the pmu
- event filter
-Message-ID: <202205241319.3YATdncf-lkp@intel.com>
-References: <20220523214110.1282480-2-aaronlewis@google.com>
+To: Alexander Lobakin <alobakin@pm.me>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Subject: drivers/net/dsa/lan9303_mdio.c:145:34: warning: unused variable
+ 'lan9303_mdio_of_match'
+Message-ID: <202205241446.TMjrujfW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,65 +46,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523214110.1282480-2-aaronlewis@google.com>
 
-Hi Aaron,
+Hi Alexander,
 
-Thank you for the patch! Perhaps something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on kvm/master]
-[also build test WARNING on v5.18]
-[cannot apply to mst-vhost/linux-next next-20220523]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lewis/kvm-x86-pmu-Introduce-and-test-masked-events/20220524-054438
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220524/202205241319.3YATdncf-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   143a6252e1b8ab424b4b293512a97cca7295c182
+commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
+date:   1 year, 2 months ago
+config: s390-randconfig-r034-20220524 (https://download.01.org/0day-ci/archive/20220524/202205241446.TMjrujfW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f189a455a73825b7025d8feff486db18ebef171f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aaron-Lewis/kvm-x86-pmu-Introduce-and-test-masked-events/20220524-054438
-        git checkout f189a455a73825b7025d8feff486db18ebef171f
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/pmu.c:633:5: warning: no previous prototype for function 'has_invalid_event' [-Wmissing-prototypes]
-   int has_invalid_event(struct kvm_pmu_event_filter *filter)
-       ^
-   arch/x86/kvm/pmu.c:633:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int has_invalid_event(struct kvm_pmu_event_filter *filter)
-   ^
-   static 
-   1 warning generated.
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/net/dsa/lan9303_mdio.c:10:
+   In file included from include/linux/mdio.h:9:
+   In file included from include/uapi/linux/mdio.h:15:
+   In file included from include/linux/mii.h:13:
+   In file included from include/linux/linkmode.h:5:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/uapi/linux/ethtool.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/net/dsa/lan9303_mdio.c:10:
+   In file included from include/linux/mdio.h:9:
+   In file included from include/uapi/linux/mdio.h:15:
+   In file included from include/linux/mii.h:13:
+   In file included from include/linux/linkmode.h:5:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/uapi/linux/ethtool.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/net/dsa/lan9303_mdio.c:10:
+   In file included from include/linux/mdio.h:9:
+   In file included from include/uapi/linux/mdio.h:15:
+   In file included from include/linux/mii.h:13:
+   In file included from include/linux/linkmode.h:5:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/uapi/linux/ethtool.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/dsa/lan9303_mdio.c:145:34: warning: unused variable 'lan9303_mdio_of_match' [-Wunused-const-variable]
+   static const struct of_device_id lan9303_mdio_of_match[] = {
+                                    ^
+   21 warnings generated.
 
 
-vim +/has_invalid_event +633 arch/x86/kvm/pmu.c
+vim +/lan9303_mdio_of_match +145 drivers/net/dsa/lan9303_mdio.c
 
-   632	
- > 633	int has_invalid_event(struct kvm_pmu_event_filter *filter)
-   634	{
-   635		u64 event_mask;
-   636		int i;
-   637	
-   638		event_mask = kvm_x86_ops.pmu_ops->get_event_mask(filter->flags);
-   639		for(i = 0; i < filter->nevents; i++)
-   640			if (filter->events[i] & ~event_mask)
-   641				return true;
-   642	
-   643		return false;
-   644	}
-   645	
+dc7005831523d6 Juergen Beisert 2017-04-18  144  
+dc7005831523d6 Juergen Beisert 2017-04-18 @145  static const struct of_device_id lan9303_mdio_of_match[] = {
+dc7005831523d6 Juergen Beisert 2017-04-18  146  	{ .compatible = "smsc,lan9303-mdio" },
+dc7005831523d6 Juergen Beisert 2017-04-18  147  	{ /* sentinel */ },
+dc7005831523d6 Juergen Beisert 2017-04-18  148  };
+dc7005831523d6 Juergen Beisert 2017-04-18  149  MODULE_DEVICE_TABLE(of, lan9303_mdio_of_match);
+dc7005831523d6 Juergen Beisert 2017-04-18  150  
+
+:::::: The code at line 145 was first introduced by commit
+:::::: dc7005831523d674be11a98f3256e0cc871157d6 net: dsa: LAN9303: add MDIO managed mode support
+
+:::::: TO: Juergen Beisert <jbe@pengutronix.de>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
