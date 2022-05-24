@@ -1,47 +1,37 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A6EA21
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 15:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653405196; x=1684941196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jg1seA0b2qfEGPEhi40Q5NR3xfGQVSWmwk8f0MnVPS0=;
-  b=GlA2uXeeHOWgiDGAqxaxIcLyPHAH81onSJjEhEWmrg9idlOcJ7gOzHjV
-   slLBaHGAX1pwdVEh9k7t/C+COFqEn03S4elyEldyEa3GVSThDQLvWEVwe
-   7aiJcKfCsCukOU+bm0cwXDM80RHY8To2g+RMrelYa5KzvqN1lb946DTun
-   7aSqKqyr73mbj0PTMZ7Eu80uUAGGMTQuFXJrsAnWUIB3gAWaD1eAk5DYw
-   6/3ZoJUjRI0R+dl60zNEV7mNBDnhcgRnhwcD4dlD8sFDoFZglWp2rBQIy
-   13N+F2YZ3Dus7S9b4kKK/KYrs5PSBDhTNzfi2hsL86WDNaUe5UcUElOUc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="271131769"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="271131769"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 08:13:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="577926540"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 May 2022 08:13:13 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntWDg-0002AY-C8;
-	Tue, 24 May 2022 15:13:12 +0000
-Date: Tue, 24 May 2022 23:12:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: hezhongkun <hezhongkun.hzk@bytedance.com>, hannes@cmpxchg.org,
-	mhocko@kernel.org, roman.gushchin@linux.dev
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, lizefan.x@bytedance.com,
-	Hezhongkun <hezhongkun.hzk@bytedance.com>
-Subject: Re: [PATCH] mm: memcontrol: add the mempolicy interface for cgroup
- v2.
-Message-ID: <202205242316.8f8rvh3s-lkp@intel.com>
-References: <20220524103638.473-1-hezhongkun.hzk@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1243BA21
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 15:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA47EC34113;
+	Tue, 24 May 2022 15:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653405760;
+	bh=Zavzl0EUlZlFuUnnulu91af2QlQ6Gvei0hqhIXk6Wjw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=to3yzRafvciUEnSb39LYNBe/xWkqQtoh1rmu/hFlMGci2JbBXauyj76DC9AMEfxzS
+	 ffO+lAl6i2S9Zz1l5owGqBHPe22GTPYHHiIeU9rUsR0jU3xGyzbZ9D2q3OEnI4W8wp
+	 nIM6Axb4zHKmMDEhsP4hb9W6LE17upO5Ats4LCpry32oe5WDbyzX1OFVzIiBGFKP2z
+	 FrA6N6I6/BIJE/MsTDD0pQGMSCrcSHpEmE7iK+94QeldEb3H64qKLPGJlm82NgWy16
+	 6epR8L9e+ryAf6/GrttwejgG2mPbZkMXbziYxjvbeyyyijvWgH12jR5BQ+3Tqt8Kvm
+	 R4Tjnx4n5E88Q==
+Date: Tue, 24 May 2022 08:22:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Pankaj Raghav <p.raghav@samsung.com>
+Cc: kernel test robot <lkp@intel.com>, axboe@kernel.dk, hch@lst.de,
+	snitzer@redhat.com, damien.lemoal@opensource.wdc.com, hare@suse.de,
+	Johannes.Thumshirn@wdc.com, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, linux-nvme@lists.infradead.org,
+	dm-devel@redhat.com, dsterba@suse.com, jiangbo.365@bytedance.com,
+	linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+	linux-block@vger.kernel.org, jaegeuk@kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v5 5/7] null_blk: allow non power of 2 zoned devices
+Message-ID: <Yoz4PsQjWzVxz+YO@dev-arch.thelio-3990X>
+References: <20220523161601.58078-6-p.raghav@samsung.com>
+ <CGME20220524024108eucas1p26a6384cd77f143bb0fa628f01866e0a0@eucas1p2.samsung.com>
+ <202205241034.izkLMTcH-lkp@intel.com>
+ <7656fdc2-0511-722e-de6a-c2a2460cb048@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,62 +40,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220524103638.473-1-hezhongkun.hzk@bytedance.com>
+In-Reply-To: <7656fdc2-0511-722e-de6a-c2a2460cb048@samsung.com>
 
-Hi hezhongkun,
+On Tue, May 24, 2022 at 09:30:41AM +0200, Pankaj Raghav wrote:
+> On 5/24/22 04:40, kernel test robot wrote:
+> > Hi Pankaj,
+> > 
+> > Thank you for the patch! Yet something to improve:
+> > 
+> > [auto build test ERROR on axboe-block/for-next]
+> > [also build test ERROR on device-mapper-dm/for-next linus/master hch-configfs/for-next v5.18 next-20220523]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> > 
+> > url:    https://protect2.fireeye.com/v1/url?k=8acc50e6-d557681b-8acddba9-000babff317b-0ca211d60a57a8c6&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommits%2FPankaj-Raghav%2Fblock-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze%2F20220524-011616
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+> > config: hexagon-randconfig-r045-20220523 (https://protect2.fireeye.com/v1/url?k=0dc32741-52581fbc-0dc2ac0e-000babff317b-fb6f258f0c80ebb9&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fdownload.01.org%2F0day-ci%2Farchive%2F20220524%2F202205241034.izkLMTcH-lkp%40intel.com%2Fconfig)
+> > compiler: clang version 15.0.0 (https://protect2.fireeye.com/v1/url?k=afbb4f4f-f02077b2-afbac400-000babff317b-a4413fa4cefe1877&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+> > reproduce (this is a W=1 build):
+> >         wget https://protect2.fireeye.com/v1/url?k=718573dc-2e1e4b21-7184f893-000babff317b-b6c06a1c569b0d77&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://protect2.fireeye.com/v1/url?k=247d070f-7be63ff2-247c8c40-000babff317b-6fd7f2f6a5a5bc60&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommit%2F3d3c81da0adbd40eb0d2125327b7e227582b2a37
+> >         git remote add linux-review https://protect2.fireeye.com/v1/url?k=081be8db-5780d026-081a6394-000babff317b-d12fdca0fccd0493&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux
+> >         git fetch --no-tags linux-review Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+> >         git checkout 3d3c81da0adbd40eb0d2125327b7e227582b2a37
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > 
+> >>> ERROR: modpost: "__hexagon_umoddi3" [drivers/block/null_blk/null_blk.ko] undefined!
+> 
+> I am able to apply my patches cleanly against next-20220523, build it
+> without any errors with GCC and boot into it in my x86_64 machine. Not
+> sure why this error is popping up.
 
-Thank you for the patch! Perhaps something to improve:
+Do a 32-bit build and you'll see it. With GCC 12.1.0, ARCH=i386
+defconfig + CONFIG_BLK_DEV_NULL_BLK=y + CONFIG_BLK_DEV_ZONED=y
+reproduces it for me:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18 next-20220524]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+$ make -skj"$(nproc)" ARCH=i386 defconfig menuconfig all
+ld: drivers/block/null_blk/zoned.o: in function `null_init_zoned_dev':
+zoned.c:(.text+0x112e): undefined reference to `__umoddi3'
+...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hezhongkun/mm-memcontrol-add-the-mempolicy-interface-for-cgroup-v2/20220524-183922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 143a6252e1b8ab424b4b293512a97cca7295c182
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220524/202205242316.8f8rvh3s-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6adb0a02c27c8811bee9783451ee25155baf490e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hezhongkun/mm-memcontrol-add-the-mempolicy-interface-for-cgroup-v2/20220524-183922
-        git checkout 6adb0a02c27c8811bee9783451ee25155baf490e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+roundup() does a plain division with a 64-bit dividend, which will cause
+issues with 32-bit architectures. I suspect that you should really be
+using DIV_ROUND_UP_SECTOR_T() for the nr_zones calculation or maybe one
+of the other rounding macros in include/linux/math.h but I am not sure.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> mm/mempolicy.c:179:19: warning: no previous prototype for function 'get_cgrp_or_task_policy' [-Wmissing-prototypes]
-   struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-                     ^
-   mm/mempolicy.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/get_cgrp_or_task_policy +179 mm/mempolicy.c
-
-   178	
- > 179	struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-   180	{
-   181		struct mempolicy *pol;
-   182		struct mem_cgroup *memcg = mem_cgroup_from_task(p);
-   183	
-   184		pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_task_policy(p);
-   185		return pol;
-   186	}
-   187	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
