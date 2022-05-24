@@ -1,43 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1322569
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 16:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B682569
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 17:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653411350; x=1684947350;
+  t=1653412610; x=1684948610;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oOuSXB2gdak0RiOLo8nGGEuEpjVHr3ygbyaFxZ3tAhU=;
-  b=JLIWU7YnssFhmhg68hYW/1MlvbjcQnWVtESpJ0AQVjKV5V1v8kpL+WKW
-   DkSjsskYqrBCDgqBaJUsj9BLvXHr2PtpFVkakh/no2AocBTYfM3YOnxni
-   gUNIgBQIqYZ7HR76SqAbmtnXVCG8ZetBbk/diJMdY94ARlKGQHUgiNSQ5
-   +8GXJAx0y8e6RyARfcy3ewEB0HdMx+yAlN3fCAZjm7SrTDKFMaMuZVXmY
-   kESuDbK97Bqa1MOJ4NFBrEg8Ku9FCbdxSq5KY6NOxQYaL3J4A4gCidTtE
-   9GZpBEt0nRoUgrej+rm2nFhyTC7TFh0pWd9zV45xg+HaMxp9TEl5fBUV7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273581275"
+  bh=Mx3QA546r8/n2uO9HLARzYWOatD8S10c/ExqOVZtmhc=;
+  b=k6hGob8UejI9443OHuWgOIKUIkQbdzv3a9vHOjQzODXqlswcU/ZCi/B6
+   ResDuz69qX/HjGZHMD1xHsu88azcl8pVc0EdTr5+Ke9IHezhykEKd01tq
+   fZwkxeWaHE5Ub/FfgmKmPQTJl15byhqUgy+5TaFIzteV+8iKEvM6T8YbT
+   jcG2La3s40waosigBgVHvce2F2Li5ajPrm4j3Z7GbAHmAzwgSPj443kQu
+   kc9DmyDOASOA5Vc9ynt36ghvWddyXsKtLehas4jDTHnjrCIuv/kOZC+tb
+   p8jN7bV7O/nMlRDwRRioEWRRURe6HS5AZ/MYgyhtf3hmHsVJiKSi/3nnf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="254092626"
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273581275"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:55:50 -0700
+   d="scan'208";a="254092626"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 10:16:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="601394367"
+   d="scan'208";a="526487936"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 May 2022 09:55:48 -0700
+  by orsmga003.jf.intel.com with ESMTP; 24 May 2022 10:16:48 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntXox-0002H4-Tq;
-	Tue, 24 May 2022 16:55:47 +0000
-Date: Wed, 25 May 2022 00:54:57 +0800
+	id 1ntY9H-0002Hq-OF;
+	Tue, 24 May 2022 17:16:47 +0000
+Date: Wed, 25 May 2022 01:15:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Jo=E3o_M=E1rio?= Domingos <joao.mario@tecnico.ulisboa.pt>
+To: Piyush Mehta <piyush.mehta@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org,
-	Atish Patra <atishp@rivosinc.com>
-Subject: [atishp04:unmatched_pmu 1/4] drivers/perf/riscv_pmu_sbi.c:709:34:
- warning: shift count >= width of type
-Message-ID: <202205250058.7LPnhB6e-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>,
+	Manish Narani <manish.narani@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 405/1145] ERROR: modpost:
+ "dwc3_host_wakeup_capable" [drivers/usb/host/xhci-plat-hcd.ko] undefined!
+Message-ID: <202205250143.gdtXIoZ1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,57 +48,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/atishp04/linux unmatched_pmu
-head:   7b75dbb7c4c01dceb7a974c352945fd86eb88c25
-commit: 04bc56e83a7e6e851694e34da95f26c57abc7132 [1/4] RISC-V: Create unique identification for SoC PMU
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220525/202205250058.7LPnhB6e-lkp@intel.com/config)
+Hi Piyush,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   a9ff6d0b21c8b2928d29ede9f74e1249fc953d44
+commit: 9a7535b91e5a749ad7e26fade0820c4c847ff8e2 [405/1145] usb: xhci-plat: Add remote wakeup support for xilinx
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220525/202205250143.gdtXIoZ1-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/04bc56e83a7e6e851694e34da95f26c57abc7132
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 unmatched_pmu
-        git checkout 04bc56e83a7e6e851694e34da95f26c57abc7132
+        # https://github.com/Xilinx/linux-xlnx/commit/9a7535b91e5a749ad7e26fade0820c4c847ff8e2
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout 9a7535b91e5a749ad7e26fade0820c4c847ff8e2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/perf/riscv_pmu_sbi.c:709:34: warning: shift count >= width of type [-Wshift-count-overflow]
-           pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
-                                           ^  ~~~~~~~~~
-   1 warning generated.
-
-
-vim +709 drivers/perf/riscv_pmu_sbi.c
-
-   695	
-   696	static uint64_t pmu_sbi_get_pmu_id(void)
-   697	{
-   698		union sbi_pmu_id {
-   699			uint64_t value;
-   700			struct {
-   701				uint16_t imp:16;
-   702				uint16_t arch:16;
-   703				uint32_t vendor:32;
-   704			};
-   705		} pmuid;
-   706	
-   707		pmuid.value = 0;
-   708		pmuid.vendor = (uint32_t) sbi_get_mvendorid();
- > 709		pmuid.arch = (sbi_get_marchid() >> (63 - 15) & (1 << 15)) | (sbi_get_marchid() & 0x7FFF);
-   710		pmuid.imp = (sbi_get_mimpid() >> 16);
-   711	
-   712		return pmuid.value;
-   713	}
-   714	
+>> ERROR: modpost: "dwc3_host_wakeup_capable" [drivers/usb/host/xhci-plat-hcd.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
