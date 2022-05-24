@@ -1,52 +1,154 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880907C;
-	Tue, 24 May 2022 11:24:34 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6s7r1sC7z4yTC;
-	Tue, 24 May 2022 21:15:52 +1000 (AEST)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: Nathan Chancellor <nathan@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>
-Cc: llvm@lists.linux.dev, Alexey Kardashevskiy <aik@ozlabs.ru>, patches@lists.linux.dev, Tom Rix <trix@redhat.com>, Paul Mackerras <paulus@samba.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Nick Desaulniers <ndesaulniers@google.com>, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <20220511185001.3269404-1-nathan@kernel.org>
-References: <20220511185001.3269404-1-nathan@kernel.org>
-Subject: Re: [PATCH v2 0/2] Link the PowerPC vDSO with ld.lld
-Message-Id: <165339051787.1718562.10503050450628067652.b4-ty@ellerman.id.au>
-Date: Tue, 24 May 2022 21:08:37 +1000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BDB7C
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 11:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653392084; x=1684928084;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dqryofZxF2pFV6kkTP1H9GJ1NQVHZ92x9MysfmWCcAg=;
+  b=DX5QLJUoPEx7bCULQnV0/9GVDT09IhzQeBVBcXeEe96kpLzNxYachsxH
+   S74UiPiooFqdm71f+Fr3TMgZkeWADg83vBu6POg5sslap6Z/BENze8X0Z
+   GUGTiGwYNEeHPPoitHLvB/tPNQ/U9y8EPScROq9LRsXsqTiUktTyz8T9p
+   N/A5gz8cfc3BanNt+I1DGJlr8RZVG0d+tPphKKK+XZdax5jldxsFmSfKH
+   lizNufrUKNl4gedhmf2Iq4mTTPCdcaXiXm4MuvVXM62Sq9Xrepdog2M4k
+   Jrha3YVwG3bH76WJZZHwAWmRs9CTRrz4U2gPcP99TudZk9xZzoIMm+QP1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336558163"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="336558163"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="559086967"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 04:34:34 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OBYVcZ004315;
+	Tue, 24 May 2022 12:34:31 +0100
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>, kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>, live-patching@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
+Date: Tue, 24 May 2022 13:33:37 +0200
+Message-Id: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 
-On Wed, 11 May 2022 11:49:59 -0700, Nathan Chancellor wrote:
-> This series is an alternative to the one proposed by Nick before the
-> PowerPC vDSO unification in commit fd1feade75fb ("powerpc/vdso: Merge
-> vdso64 and vdso32 into a single directory"):
-> 
-> https://lore.kernel.org/20200901222523.1941988-1-ndesaulniers@google.com/
-> 
-> Normally, we try to make compiling and linking two separate stages so
-> that they can be done by $(CC) and $(LD) respectively, which is more in
-> line with what the user expects, versus using the compiler as a linker
-> driver and relying on the implicit default linker value. However, as
-> shown in the above thread, getting this right for the PowerPC vDSO is a
-> little tricky due to the linker emulation values.
-> 
-> [...]
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 24 May 2022 03:04:00 +0900
 
-Applied to powerpc/next.
+> On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
+> > to simplify livepatching (hopefully globally later on) triggers the
+> > following:
+> >
+> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> >
+> > The reason is that for now the condition from remove_dot():
+> >
+> > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> >
+> > which was designed to test if it's a dot or a '\0' after the suffix
+> > is never satisfied.
+> > This is due to that `s[n + m]` always points to the last digit of a
+> > numeric suffix, not on the symbol next to it (from a custom debug
+> > print added to modpost):
+> >
+> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> >
+> > So it's off-by-one and was like that since 2014.
+> > Fix this for the sake of upcoming features, but don't bother
+> > stable-backporting, as it's well hidden -- apart from that LD flag,
+> > can be triggered only by GCC LTO which never landed upstream.
+> >
+> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
+> >  scripts/mod/modpost.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 6bfa33217914..4648b7afe5cc 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
+> >
+> >         if (n && s[n]) {
+> >                 size_t m = strspn(s + n + 1, "0123456789");
+> > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+> >                         s[n] = 0;
+> >
+> >                 /* strip trailing .lto */
+> > --
+> > 2.34.1
+> >
+> 
+> This trivial patch has not been picked up yet.
+> 
+> I can apply this to my tree, if you want.
 
-[1/2] powerpc/vdso: Remove unused ENTRY in linker scripts
-      https://git.kernel.org/powerpc/c/e247172854a57d1a7213bb835ecb4a40ce9bb2b9
-[2/2] powerpc/vdso: Link with ld.lld when requested
-      https://git.kernel.org/powerpc/c/4406b12214f6592909b63dabdea86d69f1b5ba2e
+It's a good idea, I'd like to!
+I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
+is not directly related to it and can be taken independently.
+Should I change the commit message or it's ok to take it as it is?
 
-cheers
+> 
+> Please let me know your thoughts.
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+
+* I'm planning to submit a new rev of FG-KASLR series soon, but
+since I'm too busy with XDP for now, it will happen no sooner than
+in a couple months =\
+
+Thanks!
+Al
