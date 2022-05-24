@@ -1,103 +1,71 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from eggs.gnu.org (eggs.gnu.org [209.51.188.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169AB7F4
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 10:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653387510; x=1684923510;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xSgj51pG5C3QFfOReMyZoIvSUtU6wGmpwG+rrptWICI=;
-  b=mfTrS5AnfxuC2YzHgF0jbgNPNqnv0mphYMUuXT29m5vPmucSN7SLOYs4
-   qQN6FexvCUCQPJ8/Xlnosj78NPdTKNZTYP7dW6awyTJlxdCyJissZOJWB
-   t30+4PNoWavoiT2RBX4GaEQeFivzt0SnJFyQIXFuNByhAqfcAQ6zvfwwo
-   dXbRQTq2zfSJyuSJIxE5jNobtaWGHDaveZ59QyWqeyvzc0J8t8oGXKkB+
-   sfD058dEFwMMKgV2fmGPBFBOZDztB+SPTi01tCWfAQtTn26m7n4E0p11y
-   EC7ZT7q4yhLNkHLAp9va1RIGTJ80ZVsLSt70qeFluZ+bmcNg+f0VKxuvi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="334136460"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="334136460"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:18:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="820230569"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 May 2022 03:18:27 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntRcQ-0001xi-EV;
-	Tue, 24 May 2022 10:18:26 +0000
-Date: Tue, 24 May 2022 18:17:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bhanuprakash Modem <bhanuprakash.modem@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
-	Arun R Murthy <arun.r.murthy@intel.com>,
-	Harry Wentland <harry.wentland@amd.com>
-Subject: [drm-misc:drm-misc-next 1106/1116]
- drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:2: error:
- call to undeclared function 'crtc_debugfs_init'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205241843.8EWKesIA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29BE7F4
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 10:26:10 +0000 (UTC)
+Received: from fencepost.gnu.org ([2001:470:142:3::e]:34274)
+	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1ntRjc-00069F-De; Tue, 24 May 2022 06:25:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+	s=fencepost-gnu-org; h=MIME-Version:In-Reply-To:Date:References:Subject:To:
+	From; bh=gmPY7pu0idGDizRPRNasvnzdbh84qnnW6k/eb1e/WnY=; b=e6aedkZpvvmOHf0wOLry
+	KUV35G4qZM402+I0hZM9c/agp49pS7S4hM/1ZE7TNYysLLBB/ufkOSUHprJz4dmP+QgyXow4o2vFA
+	7gzHS+vDfURA6QBsi4gqoOQmvmZ5iE6xs2TB8IXNhrkeBS46L+8R8+RRwW0XN0MihIbwzj1R92IdN
+	5KmmQPIMgeLsEh6AGw+pb7mSa54YFzgJFmectaL1SwFVZpHUS13IW516ABqqdm1ohe7fWr2LmYzAk
+	lggf65DTsQgqEIMYRd6D/A/eOKSJFT/gUxqwyJ7phsX1Oq/D1t3wZEoB4fz88BEwLTIzoGnnUiibj
+	FBkQZZ/llaKr6w==;
+Received: from dynamic-077-185-012-078.77.185.pool.telefonica.de ([77.185.12.78]:48116 helo=termi.gnu.org)
+	by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1ntRjE-0003DS-8v; Tue, 24 May 2022 06:25:37 -0400
+From: "Jose E. Marchesi" <jemarch@gnu.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,  Bill Wendling
+ <morbo@google.com>,  vladimir.mezentsev@oracle.com,  clang-built-linux
+ <llvm@lists.linux.dev>,  LKML <linux-kernel@vger.kernel.org>,  Yonghong
+ Song <yhs@fb.com>,  Wenlei He <wenlei@fb.com>,  Hongtao Yu <hoy@fb.com>,
+  Ingo Molnar <mingo@kernel.org>, Ruud van der Pas
+ <ruud.vanderpas@oracle.com>
+Subject: Re: plumbers session on profiling?
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+	<CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+Date: Tue, 24 May 2022 12:24:22 +0200
+In-Reply-To: <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+	(Nick Desaulniers's message of "Fri, 15 Apr 2022 13:41:42 -0700")
+Message-ID: <87mtf7z0rt.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   1a3b1ea111c44d9dce9f70ba032531a223395a15
-commit: 4cd79f614b501e496ee8e4181d528c0cc1cb4e18 [1106/1116] drm/amd/display: Move connector debugfs to drm
-config: arm64-randconfig-r001-20220524 (https://download.01.org/0day-ci/archive/20220524/202205241843.8EWKesIA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout 4cd79f614b501e496ee8e4181d528c0cc1cb4e18
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:2: error: call to undeclared function 'crtc_debugfs_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           crtc_debugfs_init(crtc);
-           ^
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9165:20: warning: variable 'abo' set but not used [-Wunused-but-set-variable]
-           struct amdgpu_bo *abo;
-                             ^
-   1 warning and 1 error generated.
+Content-Type: text/plain
 
 
-vim +/crtc_debugfs_init +6622 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+I am adding Ruud van der Pas in CC.  He works in gprofng and would be
+willing to participate in a discussion on kernel profiling.
 
-e7b07ceef2a650 Harry Wentland 2017-08-10  6619  
-e69231c4451ae0 Wayne Lin      2021-03-08  6620  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
-86bc221918925a Wayne Lin      2021-03-02  6621  {
-86bc221918925a Wayne Lin      2021-03-02 @6622  	crtc_debugfs_init(crtc);
-86bc221918925a Wayne Lin      2021-03-02  6623  
-86bc221918925a Wayne Lin      2021-03-02  6624  	return 0;
-86bc221918925a Wayne Lin      2021-03-02  6625  }
-86bc221918925a Wayne Lin      2021-03-02  6626  
-
-:::::: The code at line 6622 was first introduced by commit
-:::::: 86bc221918925a0bbb49043e3936e898e009b43b drm/amd/display: Support crc on specific region
-
-:::::: TO: Wayne Lin <Wayne.Lin@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
+>
+> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> Hi Sami, Bill, Jose, and Vladamir,
+>> Jose and I are currently in the planning process to put together a
+>> Kernel+Toolchain microconference track at Linux Plumbers Conference
+>> this year (Sept 12-14) in Dublin, Ireland.
+>>
+>> Would you all be interested in leading a session discussing various
+>> profiling related topics such as:
+>> * gprofng
+>> * PGO
+>> * AutoFDO
+>>
+>> Would others find such a discussion useful?
+>> --
+>> Thanks,
+>> ~Nick Desaulniers
