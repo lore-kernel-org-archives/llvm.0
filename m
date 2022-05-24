@@ -1,124 +1,66 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B8E2569
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 18:17:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653416229; x=1684952229;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EBnyAxgG8VMP5VnxxAr+i+RhOOaMEQkB+M7uuFYWkuc=;
-  b=bI/9uEXkSQB7nCmz0HB7w68HgI0v5c8Uw4yDv5r+u40H9Dkn/cbbjYBW
-   PkUboddFrO5oRJZ0GQNCE9G6l64gPQYHCEturdBtI2fM7km57LmskExVf
-   W3IhrAAgw6Wchslegj5KqeiRL3FauVEpdQ/wPvv/tNuxB/vNDpqAYMyGB
-   Og3wyLNSztW5qvRNXt0CqIkDWi6nUppW1OAlhR+FZ9PcEwDBM2mrweO21
-   U19BlAc7DTjgJsB9VQwkytm8Gg9/83J74DQ+l9t4CHBbBilB4c1PcGR+e
-   fper/iAKB53C9FWCU/xKA25cksBfeZItW5STEe/VX9aMZdhkuL2SLAppa
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273614552"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273614552"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 11:17:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="717281728"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 May 2022 11:17:05 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntZ5d-0002KY-4x;
-	Tue, 24 May 2022 18:17:05 +0000
-Date: Wed, 25 May 2022 02:16:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Muchun Song <songmuchun@bytedance.com>, hannes@cmpxchg.org,
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cgroups@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	duanxiongchun@bytedance.com, longman@redhat.com,
-	Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v4 09/11] mm: memcontrol: use obj_cgroup APIs to charge
- the LRU pages
-Message-ID: <202205250202.1JanYiVZ-lkp@intel.com>
-References: <20220524060551.80037-10-songmuchun@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BAF7C
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 18:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5300FC34113;
+	Tue, 24 May 2022 18:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653417012;
+	bh=GP5RryM2eOy2O5bC9iq4ToSK1JrnSaWXLglPy8paLP4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=V+Py4Q54RGyMQshiLufQfFQYp26TUly4S70IK1zOy+Igy72ZdM2vd0rCEot9l7FcA
+	 fw3wPXKmXi9ahusl6hz40GnKcu7LH9Du10etw1/xJcrbDzXP2/xKgqTPareZ5ZnOYL
+	 pBEYfvppRKaqc9B8UUBWbGj6QzFhxRPWOYWqy/KBZlwt3Rp/lcWJr9Vi0bdQJ7SwHt
+	 5hV1NGPKObdzwkjxkNhdD6t3oWriZQlEdQh9XC/oWOcrlw3vxkzgcMXXWHMB4o6LQq
+	 ueQJBkFpHpE6jnZR3jcnnVocxD0HEJSlCm9IVnr6YSsvWQHqSFzMj2h/JigUrYApvp
+	 WBV7tEbxfTTpw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36FE6F03943;
+	Tue, 24 May 2022 18:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524060551.80037-10-songmuchun@bytedance.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ath6kl: Use cc-disable-warning to disable -Wdangling-pointer
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <165341701222.5478.18284548057978733772.git-patchwork-notify@kernel.org>
+Date: Tue, 24 May 2022 18:30:12 +0000
+References: <20220524145655.869822-1-nathan@kernel.org>
+In-Reply-To: <20220524145655.869822-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, kvalo@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bot@kernelci.org
 
-Hi Muchun,
+Hello:
 
-Thank you for the patch! Yet something to improve:
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test ERROR on 4b0986a3613c92f4ec1bdc7f60ec66fea135991f]
+On Tue, 24 May 2022 07:56:55 -0700 you wrote:
+> Clang does not support this option so the build fails:
+> 
+>   error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknown-warning-option]
+> 
+> Use cc-disable-warning so that the option is only added when it is
+> supported.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
-base:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-config: arm64-buildonly-randconfig-r005-20220524 (https://download.01.org/0day-ci/archive/20220525/202205250202.1JanYiVZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
-        git checkout bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Here is the summary with links:
+  - ath6kl: Use cc-disable-warning to disable -Wdangling-pointer
+    https://git.kernel.org/netdev/net-next/c/48a75b979940
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> mm/memcontrol.c:6826:10: error: call to undeclared function '__get_obj_cgroup_from_memcg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           objcg = __get_obj_cgroup_from_memcg(memcg);
-                   ^
->> mm/memcontrol.c:6826:8: warning: incompatible integer to pointer conversion assigning to 'struct obj_cgroup *' from 'int' [-Wint-conversion]
-           objcg = __get_obj_cgroup_from_memcg(memcg);
-                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/__get_obj_cgroup_from_memcg +6826 mm/memcontrol.c
-
-  6818	
-  6819	static int charge_memcg(struct folio *folio, struct mem_cgroup *memcg,
-  6820				gfp_t gfp)
-  6821	{
-  6822		struct obj_cgroup *objcg;
-  6823		long nr_pages = folio_nr_pages(folio);
-  6824		int ret = 0;
-  6825	
-> 6826		objcg = __get_obj_cgroup_from_memcg(memcg);
-  6827		/* Do not account at the root objcg level. */
-  6828		if (!obj_cgroup_is_root(objcg))
-  6829			ret = try_charge(memcg, gfp, nr_pages);
-  6830		if (ret)
-  6831			goto out;
-  6832	
-  6833		obj_cgroup_get(objcg);
-  6834		commit_charge(folio, objcg);
-  6835	
-  6836		local_irq_disable();
-  6837		mem_cgroup_charge_statistics(memcg, nr_pages);
-  6838		memcg_check_events(memcg, folio_nid(folio));
-  6839		local_irq_enable();
-  6840	out:
-  6841		obj_cgroup_put(objcg);
-  6842		return ret;
-  6843	}
-  6844	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
