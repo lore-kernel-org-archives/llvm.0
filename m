@@ -1,202 +1,150 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A08A363
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 06:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653374234; x=1684910234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ct3VwdGw1vT8shDjF/RItd2cXMngHVCA6ptzl3SwK6s=;
-  b=YTbd9REjZQgjlfIW/ei2UM3XPSbhGQbEa7l+5oOxyv5gu7vIgIKtPKdC
-   WRt1I5XjE36zWv6FQtHT89d5vTV6PK80cfu6hqsneIP1KpbA1AO0iNm3k
-   gfckez55cDlYy61MNgwWOIbi/nczPITnjfEU6xujJL89teWmqMJmI8Me3
-   eTTI8Pp29Iwub9JcJHcArvEXahHaLg/EUu+6Wj2e7WJ754TlCOgPmpBaA
-   fbl5ilUOG8rGtOijkWFwFnNM34kyYMP6wNL00t/qslK+ooaoBUM+x77XW
-   KJUAE8HmtNzCxwNoMn4lfkP9iinyCwkutv3OipDoLTQdtlC4uuzCBOXLz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273171685"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273171685"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:37:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="676227423"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 May 2022 23:37:11 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntOAI-0001pA-O1;
-	Tue, 24 May 2022 06:37:10 +0000
-Date: Tue, 24 May 2022 14:36:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alobakin@pm.me>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/lan9303_mdio.c:145:34: warning: unused variable
- 'lan9303_mdio_of_match'
-Message-ID: <202205241446.TMjrujfW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09A27E6
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 07:37:20 +0000 (UTC)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220524073045euoutp01649e1343a9ea304f12d01588eb25aab9~x_gbklIgz1875218752euoutp01g
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 07:30:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220524073045euoutp01649e1343a9ea304f12d01588eb25aab9~x_gbklIgz1875218752euoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1653377445;
+	bh=WayQ9nUl6dUlMr1OnKx7a3SkjVCoIKQbCdTwHN9GqG0=;
+	h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+	b=c6wsjALdy/qqUwGqwA1dG6E1n6Ff5ST70EOoKzc/I6dDriQ/dVlCK5+IhBvi0/N4m
+	 Vfgr/EdnsXV2gn+ASRIJAM3E3vHwbN7ia44kub8mMRrGRYLBenO51YFLrPJQHXtnvT
+	 jdbzIeQiSzKiJHDhCUx/FG3MeSc0wicvnYEqkezU=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20220524073045eucas1p1bf1186652cd6072397942e3781e1d8bd~x_ga5MrHj2945429454eucas1p1z;
+	Tue, 24 May 2022 07:30:45 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 80.FB.10260.4A98C826; Tue, 24
+	May 2022 08:30:44 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20220524073044eucas1p2bc05d83d40c029793af050f6cdbdd158~x_gaR5M7W0257402574eucas1p2J;
+	Tue, 24 May 2022 07:30:44 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20220524073044eusmtrp183beb394729a256f4fd7b0124abba89a~x_gaQ_8CV1483114831eusmtrp1Z;
+	Tue, 24 May 2022 07:30:44 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-e7-628c89a4ae72
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 3E.FE.09522.4A98C826; Tue, 24
+	May 2022 08:30:44 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20220524073044eusmtip2c82c9dd2b779a52d6bbea6a809cb08dd~x_gaHfcnE2704727047eusmtip2f;
+	Tue, 24 May 2022 07:30:44 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.20) by CAMSVWEXC01.scsc.local
+	(2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+	Tue, 24 May 2022 08:30:41 +0100
+Message-ID: <7656fdc2-0511-722e-de6a-c2a2460cb048@samsung.com>
+Date: Tue, 24 May 2022 09:30:41 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+	Thunderbird/91.9.1
+Subject: Re: [PATCH v5 5/7] null_blk: allow non power of 2 zoned devices
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, <axboe@kernel.dk>, <hch@lst.de>,
+	<snitzer@redhat.com>, <damien.lemoal@opensource.wdc.com>, <hare@suse.de>,
+	<Johannes.Thumshirn@wdc.com>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-nvme@lists.infradead.org>, <dm-devel@redhat.com>, <dsterba@suse.com>,
+	<jiangbo.365@bytedance.com>, <linux-kernel@vger.kernel.org>,
+	<gost.dev@samsung.com>, <linux-block@vger.kernel.org>, <jaegeuk@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>
+From: Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <202205241034.izkLMTcH-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.20]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+	CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNKsWRmVeSWpSXmKPExsWy7djP87pLOnuSDKZeNLFYfbefzeL32fPM
+	FnvfzWa1uPCjkcliz6JJTBYrVx9lsniyfhazRc+BDywWf7vuMVmc7b7GaLH3lrbF5V1z2Czm
+	L3vKbvGq+RGbxZMp+9ksbkx4ymjRtvEro4Ogx78Ta9g8Fu95yeRx+Wypx6ZVnWwe3bP/sXhs
+	XlLv8WLzTEaP3Tcb2Dx2tt5n9Xi/7yqbx/otV4GSp6s9Pm+S82g/0M0UwBfFZZOSmpNZllqk
+	b5fAlTF/9UGWgnMSFf8ONjE3MP4W7WLk5JAQMJHY/f0HYxcjF4eQwApGiZYnH9ghnC+MEqt+
+	zmGBcD4zSvydc4uti5EDrOXBVj+I+HJGieOTDzDDFT16dpANwtnFKHHrGkg7JwevgJ3E1bev
+	2UBsFgFVictvzkPFBSVOznwCZosKREisbH0DZgsLeEi0nrrDDmIzC4hL3HoynwlkqIjAJkaJ
+	LY3PwG5iFtjFJLFn6zlmkJvYBLQkGjvBGjgFjCTOXH4A1awp0br9N5QtL7H97RxmiBeUJLb9
+	MoEEQK3E2mNnwH6WEGjjkpiybhUTRMJF4uanxSwQtrDEq+Nb2CFsGYnTk3ug4tUST2/8ZoZo
+	bmGU6N+5HhpG1hJ9Z3Igahwlvr+8CxXmk7jxVhDiHD6JSdumM09gVJ2FFBSzkLw8C8kHs5B8
+	sICRZRWjeGppcW56arFxXmq5XnFibnFpXrpecn7uJkZg+jz97/jXHYwrXn3UO8TIxMF4iFGC
+	g1lJhDclrCdJiDclsbIqtSg/vqg0J7X4EKM0B4uSOG9y5oZEIYH0xJLU7NTUgtQimCwTB6dU
+	A5PPtGadcj/7muyQlB2MC4tehRvsE7VMVBcNal5z5rID33pWtnWmNj+V33y0nLjX6erCTre4
+	OUrFljZqj/99r3oZzZXnwdZ8osM78K+49bQLd2QO/eWbvtIhPUzZVEQ//GPAkefWD/4tkVzf
+	ePv34u3Tzn/dPGnJglxNw+bKyHmfHZ2mMlaYsM3R+TDb4ffDy4d1GfU/5tjyhokLF/XozVz8
+	Yu+czWn6nQ7JU6aFZqxrWVbLlju7lpNzp++qvvLffJq9V5iUTd5NmRwZMq/Z/7XdNl+jnWbu
+	cxc6LU63PHKOVZrpyR0XOc/wv8L3Uown/Diu+2KhNBfv76XG+ivfTJopZfKG7dS3pN+veM4z
+	bVRiKc5INNRiLipOBAA/JY5UDgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPKsWRmVeSWpSXmKPExsVy+t/xe7pLOnuSDBpPClisvtvPZvH77Hlm
+	i73vZrNaXPjRyGSxZ9EkJouVq48yWTxZP4vZoufABxaLv133mCzOdl9jtNh7S9vi8q45bBbz
+	lz1lt3jV/IjN4smU/WwWNyY8ZbRo2/iV0UHQ49+JNWwei/e8ZPK4fLbUY9OqTjaP7tn/WDw2
+	L6n3eLF5JqPH7psNbB47W++zerzfd5XNY/2Wq0DJ09UenzfJebQf6GYK4IvSsynKLy1JVcjI
+	Ly6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy5i/+iBLwTmJin8Hm5gb
+	GH+LdjFycEgImEg82OrXxcjJISSwlFFiwpYkEFtCQEbi05WP7BC2sMSfa11sXYxcQDUfGSX+
+	NZ5nhHB2MUqc3d/JAlLFK2AncfXtazYQm0VAVeLym/NQcUGJkzOfgNmiAhESn5ZNYAWxhQU8
+	JFpP3QHbwCwgLnHryXwmkKEiApsYJbY0PmMBcZgFdjFJ7Nl6jhli3VZGifamwywgd7MJaEk0
+	doJ1cwoYSZy5/ABqkqZE6/bfULa8xPa3c5gh3lSS2PbLBOKdWolX93czTmAUnYXkvllI7piF
+	ZNIsJJMWMLKsYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECEw524793LyDcd6rj3qHGJk4GA8x
+	SnAwK4nwpoT1JAnxpiRWVqUW5ccXleakFh9iNAUG0kRmKdHkfGDSyyuJNzQzMDU0MbM0MLU0
+	M1YS5/Us6EgUEkhPLEnNTk0tSC2C6WPi4JRqYJLVP3prCvMb1/x3fVMZTTfWVInZ8c73lJl7
+	N5sl2i3gVpGdClPulrl6QRFK6qfPZLA+N/ibvVP7pVT4Gx33LMWJNx7GThJwNdhR9FGpojx7
+	c8hOjYcF++Me/Ah1Fe6y0WP3+9/dsKGvpDPEcy2r1iTBq2sOP+zjU3LQENM7ViKpczyzzmh+
+	VaH3Li2/vwFMm85zccQvb2jbsuN+x4GZ3j0bL+g4Gc/e4+d0TEEqYNuvHXs4Jb5mBQUnBx94
+	e8hHUb9jaWRNj+XiHV+MDgu9YH80edOi22ybS95PnvPskZBrjMFUy6RHSjxPXrSUCCnsW/cv
+	YdbZ8+JL6g5Oub/txrGMyyGWl6z/zLT69GZdihJLcUaioRZzUXEiAJ7OY7zCAwAA
+X-CMS-MailID: 20220524073044eucas1p2bc05d83d40c029793af050f6cdbdd158
+X-Msg-Generator: CA
+X-RootMTR: 20220524024108eucas1p26a6384cd77f143bb0fa628f01866e0a0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220524024108eucas1p26a6384cd77f143bb0fa628f01866e0a0
+References: <20220523161601.58078-6-p.raghav@samsung.com>
+	<CGME20220524024108eucas1p26a6384cd77f143bb0fa628f01866e0a0@eucas1p2.samsung.com>
+	<202205241034.izkLMTcH-lkp@intel.com>
 
-Hi Alexander,
+On 5/24/22 04:40, kernel test robot wrote:
+> Hi Pankaj,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on axboe-block/for-next]
+> [also build test ERROR on device-mapper-dm/for-next linus/master hch-configfs/for-next v5.18 next-20220523]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://protect2.fireeye.com/v1/url?k=8acc50e6-d557681b-8acddba9-000babff317b-0ca211d60a57a8c6&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommits%2FPankaj-Raghav%2Fblock-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze%2F20220524-011616
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+> config: hexagon-randconfig-r045-20220523 (https://protect2.fireeye.com/v1/url?k=0dc32741-52581fbc-0dc2ac0e-000babff317b-fb6f258f0c80ebb9&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fdownload.01.org%2F0day-ci%2Farchive%2F20220524%2F202205241034.izkLMTcH-lkp%40intel.com%2Fconfig)
+> compiler: clang version 15.0.0 (https://protect2.fireeye.com/v1/url?k=afbb4f4f-f02077b2-afbac400-000babff317b-a4413fa4cefe1877&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+> reproduce (this is a W=1 build):
+>         wget https://protect2.fireeye.com/v1/url?k=718573dc-2e1e4b21-7184f893-000babff317b-b6c06a1c569b0d77&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://protect2.fireeye.com/v1/url?k=247d070f-7be63ff2-247c8c40-000babff317b-6fd7f2f6a5a5bc60&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommit%2F3d3c81da0adbd40eb0d2125327b7e227582b2a37
+>         git remote add linux-review https://protect2.fireeye.com/v1/url?k=081be8db-5780d026-081a6394-000babff317b-d12fdca0fccd0493&q=1&e=5ef82219-ef70-445f-a7d0-0ae0a30be69f&u=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux
+>         git fetch --no-tags linux-review Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+>         git checkout 3d3c81da0adbd40eb0d2125327b7e227582b2a37
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+>>> ERROR: modpost: "__hexagon_umoddi3" [drivers/block/null_blk/null_blk.ko] undefined!
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   143a6252e1b8ab424b4b293512a97cca7295c182
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   1 year, 2 months ago
-config: s390-randconfig-r034-20220524 (https://download.01.org/0day-ci/archive/20220524/202205241446.TMjrujfW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/lan9303_mdio.c:10:
-   In file included from include/linux/mdio.h:9:
-   In file included from include/uapi/linux/mdio.h:15:
-   In file included from include/linux/mii.h:13:
-   In file included from include/linux/linkmode.h:5:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/uapi/linux/ethtool.h:19:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/lan9303_mdio.c:10:
-   In file included from include/linux/mdio.h:9:
-   In file included from include/uapi/linux/mdio.h:15:
-   In file included from include/linux/mii.h:13:
-   In file included from include/linux/linkmode.h:5:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/uapi/linux/ethtool.h:19:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/lan9303_mdio.c:10:
-   In file included from include/linux/mdio.h:9:
-   In file included from include/uapi/linux/mdio.h:15:
-   In file included from include/linux/mii.h:13:
-   In file included from include/linux/linkmode.h:5:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/uapi/linux/ethtool.h:19:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/lan9303_mdio.c:145:34: warning: unused variable 'lan9303_mdio_of_match' [-Wunused-const-variable]
-   static const struct of_device_id lan9303_mdio_of_match[] = {
-                                    ^
-   21 warnings generated.
-
-
-vim +/lan9303_mdio_of_match +145 drivers/net/dsa/lan9303_mdio.c
-
-dc7005831523d6 Juergen Beisert 2017-04-18  144  
-dc7005831523d6 Juergen Beisert 2017-04-18 @145  static const struct of_device_id lan9303_mdio_of_match[] = {
-dc7005831523d6 Juergen Beisert 2017-04-18  146  	{ .compatible = "smsc,lan9303-mdio" },
-dc7005831523d6 Juergen Beisert 2017-04-18  147  	{ /* sentinel */ },
-dc7005831523d6 Juergen Beisert 2017-04-18  148  };
-dc7005831523d6 Juergen Beisert 2017-04-18  149  MODULE_DEVICE_TABLE(of, lan9303_mdio_of_match);
-dc7005831523d6 Juergen Beisert 2017-04-18  150  
-
-:::::: The code at line 145 was first introduced by commit
-:::::: dc7005831523d674be11a98f3256e0cc871157d6 net: dsa: LAN9303: add MDIO managed mode support
-
-:::::: TO: Juergen Beisert <jbe@pengutronix.de>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I am able to apply my patches cleanly against next-20220523, build it
+without any errors with GCC and boot into it in my x86_64 machine. Not
+sure why this error is popping up.
