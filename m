@@ -1,71 +1,1999 @@
-Received: from eggs.gnu.org (eggs.gnu.org [209.51.188.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29BE7F4
-	for <llvm@lists.linux.dev>; Tue, 24 May 2022 10:26:10 +0000 (UTC)
-Received: from fencepost.gnu.org ([2001:470:142:3::e]:34274)
-	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.90_1)
-	(envelope-from <jemarch@gnu.org>)
-	id 1ntRjc-00069F-De; Tue, 24 May 2022 06:25:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
-	s=fencepost-gnu-org; h=MIME-Version:In-Reply-To:Date:References:Subject:To:
-	From; bh=gmPY7pu0idGDizRPRNasvnzdbh84qnnW6k/eb1e/WnY=; b=e6aedkZpvvmOHf0wOLry
-	KUV35G4qZM402+I0hZM9c/agp49pS7S4hM/1ZE7TNYysLLBB/ufkOSUHprJz4dmP+QgyXow4o2vFA
-	7gzHS+vDfURA6QBsi4gqoOQmvmZ5iE6xs2TB8IXNhrkeBS46L+8R8+RRwW0XN0MihIbwzj1R92IdN
-	5KmmQPIMgeLsEh6AGw+pb7mSa54YFzgJFmectaL1SwFVZpHUS13IW516ABqqdm1ohe7fWr2LmYzAk
-	lggf65DTsQgqEIMYRd6D/A/eOKSJFT/gUxqwyJ7phsX1Oq/D1t3wZEoB4fz88BEwLTIzoGnnUiibj
-	FBkQZZ/llaKr6w==;
-Received: from dynamic-077-185-012-078.77.185.pool.telefonica.de ([77.185.12.78]:48116 helo=termi.gnu.org)
-	by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.90_1)
-	(envelope-from <jemarch@gnu.org>)
-	id 1ntRjE-0003DS-8v; Tue, 24 May 2022 06:25:37 -0400
-From: "Jose E. Marchesi" <jemarch@gnu.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,  Bill Wendling
- <morbo@google.com>,  vladimir.mezentsev@oracle.com,  clang-built-linux
- <llvm@lists.linux.dev>,  LKML <linux-kernel@vger.kernel.org>,  Yonghong
- Song <yhs@fb.com>,  Wenlei He <wenlei@fb.com>,  Hongtao Yu <hoy@fb.com>,
-  Ingo Molnar <mingo@kernel.org>, Ruud van der Pas
- <ruud.vanderpas@oracle.com>
-Subject: Re: plumbers session on profiling?
-References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
-	<CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
-Date: Tue, 24 May 2022 12:24:22 +0200
-In-Reply-To: <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
-	(Nick Desaulniers's message of "Fri, 15 Apr 2022 13:41:42 -0700")
-Message-ID: <87mtf7z0rt.fsf@gnu.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA897C
+	for <llvm@lists.linux.dev>; Tue, 24 May 2022 10:37:45 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1834980pjg.0
+        for <llvm@lists.linux.dev>; Tue, 24 May 2022 03:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=mnmxYByRvTFkbZf+p8I5pwYfTXb3vZzm6aeKAXVaEX4=;
+        b=WHCbYPow7Kb7f8FlzOib6b0d1csgcUXjLyt9aiy9N+Ak5JsVwzL8AhqzrWUhvo7gbs
+         DAA+v0O0yZRHkECsbzaTN+xDTbRephb2mLeiIURawLCtGta/F1v3IroNjTzOLsOZwt+9
+         WnsVTEtc6hg4YtI3DAmowIGaxwiAJM1g6+BKicC2afdY8Rf7EQtGlcV0JngBJRP/tA5L
+         md4su3k+dfkqAnh62YYDNL40gWrMU/s3u+5WDk35Owp398CgzvXOFnTjRxT66zvZCRgP
+         ffvZsHbN1nMTF/sNG6+VnsQ0pCxoyl7G4r5w8aj2bxcICzAiqN0icoqF3xba2DBF91OV
+         H4VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=mnmxYByRvTFkbZf+p8I5pwYfTXb3vZzm6aeKAXVaEX4=;
+        b=yq+hsfWLbc58RdSOzgCCWji2JjXDMiBVhGMC+akcKa/OhwwjYRCuPHGoosOD3bN/dH
+         eLD4Z92xXkWDNRrVaXWC9wHxIX3QkOlgGBWcrKsAHLRNqRwMxYQ62FcFmRR85UDeiJsa
+         YwPyh2ozGRE1/2zWieR0NnYMZIIkuYjJPFCRfrv40cXywCXKWx+vwiNYkAc1qlh7Jzva
+         T7DncXiGvfQnIHDiUXsN+BpBqxd5saspI6AtGqepi8h4IpyfLnqJC/TOvE9hsVAjFNVz
+         OIQYQ7eKI0S48BIy/3Bd7mz5yTOrqwHEpAOweNBOMURS0HL929T7FE46zy6B1I6kcZck
+         lbDQ==
+X-Gm-Message-State: AOAM532df+U3eh0Uq8L1P8K5XTVui+DKaBj3qPYyUuepUNruD4FsmSSQ
+	AQY6SVkm/QpDPnwm4huMT5DQe5OP+2uKZxdukBw=
+X-Google-Smtp-Source: ABdhPJzddaq3NHmaPm53f3IZQDQ45m6B0nF8aHWDzt5lnCrQITwZTNu/Q0Gv79CNv3g0q2Yb8hNyaw==
+X-Received: by 2002:a17:902:e353:b0:161:5096:3038 with SMTP id p19-20020a170902e35300b0016150963038mr27371410plc.24.1653388663160;
+        Tue, 24 May 2022 03:37:43 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c78-20020a621c51000000b0050dc76281fdsm8884326pfc.215.2022.05.24.03.37.41
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 03:37:42 -0700 (PDT)
+Message-ID: <628cb576.1c69fb81.fa1e6.4f0c@mx.google.com>
+Date: Tue, 24 May 2022 03:37:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220524
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 225 builds: 14 failed, 211 passed, 86 errors,
+ 92 warnings (next-20220524)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
+next/master build: 225 builds: 14 failed, 211 passed, 86 errors, 92 warning=
+s (next-20220524)
 
-I am adding Ruud van der Pas in CC.  He works in gprofng and would be
-willing to participate in a discussion on kernel profiling.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220524/
 
-> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
->
-> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
->>
->> Hi Sami, Bill, Jose, and Vladamir,
->> Jose and I are currently in the planning process to put together a
->> Kernel+Toolchain microconference track at Linux Plumbers Conference
->> this year (Sept 12-14) in Dublin, Ireland.
->>
->> Would you all be interested in leading a session discussing various
->> profiling related topics such as:
->> * gprofng
->> * PGO
->> * AutoFDO
->>
->> Would others find such a discussion useful?
->> --
->> Thanks,
->> ~Nick Desaulniers
+Tree: next
+Branch: master
+Git Describe: next-20220524
+Git Commit: 09ce5091ff971cdbfd67ad84dc561ea27f10d67a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
+
+Build Failures Detected:
+
+arm64:
+    allmodconfig: (clang-15) FAIL
+
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    allmodconfig: (clang-15) FAIL
+    allmodconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    spear3xx_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-15) FAIL
+
+mips:
+    db1xxx_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    loongson2k_defconfig: (gcc-10) FAIL
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn: (clang-15) FAIL
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    x86_64_defconfig+x86-chromebook: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+    allmodconfig (clang-15): 2 errors, 1 warning
+    defconfig+arm64-chromebook+kselftest (gcc-10): 4 warnings
+    defconfig+kselftest (gcc-10): 4 warnings
+
+arm:
+    allmodconfig (clang-15): 6 errors, 15 warnings
+    allmodconfig (gcc-10): 1 error, 1 warning
+    am200epdkit_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-15): 10 warnings
+    badge4_defconfig (gcc-10): 1 warning
+    bcm2835_defconfig (gcc-10): 2 warnings
+    cm_x300_defconfig (gcc-10): 1 warning
+    colibri_pxa270_defconfig (gcc-10): 1 warning
+    corgi_defconfig (gcc-10): 1 warning
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
+error, 6 warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    davinci_all_defconfig (gcc-10): 1 warning
+    exynos_defconfig (gcc-10): 2 warnings
+    ezx_defconfig (gcc-10): 1 warning
+    imx_v6_v7_defconfig (gcc-10): 2 warnings
+    magician_defconfig (gcc-10): 1 warning
+    mini2440_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
+ng
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
+    multi_v7_defconfig+kselftest (gcc-10): 2 warnings
+    mvebu_v7_defconfig (gcc-10): 1 warning
+    nhk8815_defconfig (gcc-10): 1 warning
+    omap2plus_defconfig (gcc-10): 1 warning
+    pxa_defconfig (gcc-10): 1 warning
+    qcom_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    s3c2410_defconfig (gcc-10): 1 warning
+    s5pv210_defconfig (gcc-10): 1 warning
+    sama7_defconfig (gcc-10): 1 warning
+    simpad_defconfig (gcc-10): 1 warning
+    spear3xx_defconfig (gcc-10): 8 errors
+    spitz_defconfig (gcc-10): 1 warning
+    tegra_defconfig (gcc-10): 1 warning
+    trizeps4_defconfig (gcc-10): 1 warning
+    u8500_defconfig (gcc-10): 1 warning
+    viper_defconfig (gcc-10): 1 warning
+    zeus_defconfig (gcc-10): 1 warning
+
+i386:
+    allmodconfig (clang-15): 10 errors, 1 warning
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    ip27_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error, 1 warning
+    loongson3_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 1 warning
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-15): 50 errors
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error, 1 warning
+
+Errors summary:
+
+    38   arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-t=
+ime absolute expression
+    8    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_254=E2=80=99 declared with attribute error: BUILD_B=
+UG_ON failed: sizeof(*edid) !=3D EDID_LENGTH
+    6    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembl=
+y-time absolute expression
+    5    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting=
+_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wso=
+metimes-uninitialized]
+    4    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembl=
+y-time absolute expression
+    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    fatal error: too many errors emitted, stopping now [-ferror-limit=
+=3D]
+    2    error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wu=
+nknown-warning-option]
+    1    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) =
+exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+    1    sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) =
+exceeds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+    1    include/linux/fortify-string.h:344:4: error: call to =E2=80=98__wr=
+ite_overflow_field=E2=80=99 declared with attribute warning: detected write=
+ beyond size of field (1st parameter); maybe use struct_group()? [-Werror=
+=3Dattribute-warning]
+    1    include/linux/fortify-string.h:344:4: error: call to __write_overf=
+low_field declared with 'warning' attribute: detected write beyond size of =
+field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
+ng]
+    1    drivers/irqchip/irq-loongson-liointc.c:61:13: error: implicit decl=
+aration of function =E2=80=98cpu_logical_map=E2=80=99 [-Werror=3Dimplicit-f=
+unction-declaration]
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
+ size (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
+r-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1388) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1068) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1100) exceeds limit (1024) in 'd=
+ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml2=
+1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1228) exceeds limit (1024) in 'DIS=
+PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
+ion' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dm=
+l20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in 'd=
+ml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1628) exceeds limit (1024) in 'dml2=
+0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml=
+20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCa=
+lculation' [-Werror,-Wframe-larger-than]
+    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
+t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    31   include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=
+=80=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    6    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_=
+flushing_systemwide_wq=E2=80=99 declared with attribute warning: Please avo=
+id flushing system-wide workqueues. [-Wattribute-warning]
+    5    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the var=
+iable 'setting_reg2' to silence this warning
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__=
+write_overflow_field=E2=80=99 declared with attribute warning: detected wri=
+te beyond size of field (1st parameter); maybe use struct_group()? [-Wattri=
+bute-warning]
+    1    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+    1    drivers/net/wireless/intel/iwlwifi/pcie/trans.c:1093: warning: "CA=
+USE" redefined
+    1    clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]  AS      arch/arm/kernel/sleep.o
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    cc1: some warnings being treated as errors
+    1    cc1: all warnings being treated as errors
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2130): Section mismat=
+ch in reference from the function at91_pm_secure_init() to the (unknown ref=
+erence) .init.rodata:(unknown)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-15) =E2=80=94 FAIL, 6 errors, 15 warnings, 0 secti=
+on mismatches
+
+Errors:
+    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
+24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+    include/linux/fortify-string.h:344:4: error: call to __write_overflow_f=
+ield declared with 'warning' attribute: detected write beyond size of field=
+ (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
+ (1032) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
+n]
+    error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknow=
+n-warning-option]
+    sound/soc/intel/avs/path.c:815:18: error: stack frame size (1232) excee=
+ds limit (1024) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]  AS      arch/arm/kernel/sleep.o
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-15) =E2=80=94 FAIL, 2 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) excee=
+ds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-15) =E2=80=94 FAIL, 10 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1100) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1068) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1388) exceeds limit (1024) in 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml20_DI=
+SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
+tion' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in 'dml20v=
+2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1228) exceeds limit (1024) in 'DISPCLKD=
+PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
+[-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1628) exceeds limit (1024) in 'dml20_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in 'dml20v2=
+_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1260) exceeds limit (1024) in 'dml21_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    include/linux/fortify-string.h:344:4: error: call to =E2=80=98__write_o=
+verflow_field=E2=80=99 declared with attribute warning: detected write beyo=
+nd size of field (1st parameter); maybe use struct_group()? [-Werror=3Dattr=
+ibute-warning]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2130): Section mismatch in=
+ reference from the function at91_pm_secure_init() to the (unknown referenc=
+e) .init.rodata:(unknown)
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 1 error, 6 warnings, 0 section mismatches
+
+Errors:
+    error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknow=
+n-warning-option]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-15) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-15) =E2=80=94 FAIL, 50 errors, 0 war=
+nings, 0 section mismatches
+
+Errors:
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 4 warnings, 0 section mismatches
+
+Warnings:
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+    include/linux/workqueue.h:610:2: warning: call to =E2=80=98__warn_flush=
+ing_systemwide_wq=E2=80=99 declared with attribute warning: Please avoid fl=
+ushing system-wide workqueues. [-Wattribute-warning]
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/net/wireless/intel/iwlwifi/pcie/trans.c:1093: warning: "CAUSE" =
+redefined
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    drivers/irqchip/irq-loongson-liointc.c:61:13: error: implicit declarati=
+on of function =E2=80=98cpu_logical_map=E2=80=99 [-Werror=3Dimplicit-functi=
+on-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 1 warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 FAIL, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---
+For more info write to <info@kernelci.org>
