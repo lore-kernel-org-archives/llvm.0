@@ -1,43 +1,58 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DD8A56
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 06:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653461704; x=1684997704;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sNRmLVGfzRJNMK+s8x7hza8MpzNbvyFls3N2bzF/zAI=;
-  b=lqNbUUWmcjlTC6TdqHhNhVm2T/mKxDIAHQZscln6QmiiEMjj9TKPXKSD
-   pnAPYgEqgYUjQ2q4iYVlDzmNg5u8cmwTvbPIMk+KSpwGyUYCcd0R+zXPF
-   wHYGL5fAaWf+TyII8TySgyQ1Lj3Tr8Eh6kIk+UCz3eAJU0IPCu5cIt6+g
-   pi/PHUmYXXRFlUULnrEU6RL/cnwenLd79k2ea2oXTKXgBUifYYHcc7fEO
-   OgFc8UGujOR9K4EvtmDi2g1Okv+7m8Eohsi4g0AM+6jfIZPAER4/Qst5Y
-   RjHgpTeLDbDJgVXlvqzp5696dlWr4qz0DmNpAG8JEVPfZJ5lpfO3910Gq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="253608712"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="253608712"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 23:54:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="608999662"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 May 2022 23:54:46 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntkur-0002pC-P9;
-	Wed, 25 May 2022 06:54:45 +0000
-Date: Wed, 25 May 2022 14:54:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/11]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for function 'spihid_get_data'
-Message-ID: <202205251434.YLWM26fA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4471FA23
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 08:31:45 +0000 (UTC)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f233f06563so13620287fac.7
+        for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
+        b=IuHTNa+IXAL6LEL2YyMB482iZtMh0+jmuW8i6AL7X/UkTx3yI9MdMXZ2u42WpedIx+
+         Ut4PzMpqdWrHa7YgBJ9GR0D07qh65VLonZwsByiXfoSD/X1tFr7x3HZ+l9Q2JCWC/Kic
+         8Y1VytjiBHSx2uz78Q9FatEcNiPyZ9OHREAgAqCcOmguatMXdh5REZcYMQrFTIjRtD40
+         AtjTc95Epz41aD3RKBR+ydNRSgjZttSLLOv/PVsBBagWjLdJ8LaCi4/7AEAoQbq/5zgU
+         +CQLASpfnpdIxA0y0HZ7mknsRGStXGke037bgzb3l8FStbN0MZ3ncLwP3fHwVcSePrRD
+         qZIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
+        b=DoMDk8XbnczsgD2ep3Pn6wd1QsMXANye4/ZhXNXYP0fDov2B69OVDCNkmC0Dw+h0x0
+         /13dRh1zrLhmLZGuoTcf6HIglkxW8HB1G8vMFJLEGIUJDB1aMH3B7GJiQk5N50vLETw0
+         iAmEKyDLJaeKNISQ33sTzRl67ywij3HVCXhbDuG6494RE5fFt6iPXyz1Yp2fiinaF/9b
+         YaQ0WoB81LEzArYorcFH0pMT+pxVUtTmCUtIDRRQe2VWpOHMPiFRGGktsH+h2LDElvBI
+         QQz6HnLkIsA0FAz1JtDnfop1rRDrsiryEhzWskSCZ8kGXCDTddYCX+iZRvLw5uxwbmRL
+         7K7w==
+X-Gm-Message-State: AOAM532U5bjKkF4uPGs2xu7FV4VE2cGZ1l+2e2836xv1HW7YRc/cNaEA
+	1BAkDLIkHmEDYpdYsSq9If0=
+X-Google-Smtp-Source: ABdhPJwJ3Af4TljiCBdGIlzA2/8casq4cg+0HOGwnV6RwOio8P/+jdi4JWYrKmiheK3fngNatmGwNQ==
+X-Received: by 2002:a05:6870:c207:b0:f1:85cd:648f with SMTP id z7-20020a056870c20700b000f185cd648fmr4747352oae.103.1653467504296;
+        Wed, 25 May 2022 01:31:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056870a4c100b000f28d8f2debsm2114774oal.2.2022.05.25.01.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 01:31:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 25 May 2022 01:31:42 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script
+ instead of modpost
+Message-ID: <20220525083142.GA1952409@roeck-us.net>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-7-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,89 +61,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220513113930.10488-7-masahiroy@kernel.org>
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   42af7072aa3351c9a5716b754babb8ded16874ab
-commit: 42af7072aa3351c9a5716b754babb8ded16874ab [11/11] WIP: HID: transport: spi: add Apple SPI transport
-config: arm64-buildonly-randconfig-r005-20220524 (https://download.01.org/0day-ci/archive/20220525/202205251434.YLWM26fA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/42af7072aa3351c9a5716b754babb8ded16874ab
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 42af7072aa3351c9a5716b754babb8ded16874ab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/spi-hid/
+On Fri, May 13, 2022 at 08:39:26PM +0900, Masahiro Yamada wrote:
+> The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+> 
+> Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
+> functions") tried to detect it, but this check has false negatives.
+> 
+> Here is the sample code.
+> 
+>   Makefile:
+> 
+>     obj-y += foo1.o foo2.o
+> 
+>   foo1.c:
+> 
+>     #include <linux/export.h>
+>     static void foo(void) {}
+>     EXPORT_SYMBOL(foo);
+> 
+>   foo2.c:
+> 
+>     void foo(void) {}
+> 
+> foo1.c exports the static symbol 'foo', but modpost cannot catch it
+> because it is fooled by foo2.c, which has a global symbol with the
+> same name.
+> 
+> s->is_static is cleared if a global symbol with the same name is found
+> somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
+> belong to the same compilation unit.
+> 
+> This check should be done per compilation unit, but I do not know how
+> to do it in modpost. modpost runs against vmlinux.o or modules, which
+> merges multiple objects, then forgets their origin.
+> 
+> It is true modpost gets access to the lists of all the member objects
+> (.vmlinux.objs and *.mod), but modpost cannot parse individual objects
+> because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
+> 
+> Add a simple bash script to parse the output from ${NM}. This works for
+> CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On parisc builds, this patch results in:
 
-All warnings (new ones prefixed by >>):
+Building parisc:allnoconfig ... failed
+--------------
+Error log:
+scripts/check-local-export: sh /opt/buildbot/slave/next-next/build/arch/parisc/nm failed
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-                        ^
-   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   ^
-   static 
-   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
-                   ^
-   2 warnings generated.
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
-   4 warnings generated.
-
-
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
-
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter
