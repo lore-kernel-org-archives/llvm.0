@@ -1,47 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D2E1368
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06A67C
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 19:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653501376; x=1685037376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vgc3MtIflvORaob8lTqi592HZbL+t/hdZbXZ66gIvX8=;
-  b=jzAFHve29gmH1zCNlI3+4qYt7veNt3uy9ZiPu2+QYUk6fJFeh/jMiUhI
-   s+PfsidS9i4pJZ3COqB5rZ52wWkWpzknLrjd/WkpYgOlq/X0KpNbJPbwL
-   K/YEXYIWHZzKKra4UA46GVIciWWEJRlAtfx0TcsKKunJjkqlCJJXk2za0
-   u84vfCHMA5bIa/oK/jt+Lr1hcV2URBAXmd0pvJAiiEaCMHDhZBqbJju+l
-   srVrOdtE5cIesXBWdnPc6iDhpp9ZNq2BWMIj4rNQzYDwQSTl8VEr7/abm
-   XeodFJOLTzRtAlbG52WhGm+4pEYRjq5zq7tMz/hcmYxdvdd0fe3AlRBfc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299226944"
+  t=1653505397; x=1685041397;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SU179mfTpSWiQK7fl+PnzxUPgZEme8OU2i0LItLxxog=;
+  b=WbvouVnqfxiKxpGHixd43FeCRwxIAhS1/8krRxoEQXIH5j7y7WYdm2Vh
+   iwoZc/CuiCVqHyHxWAx0inZDNE9lMBR3q4F4fDOVKg3xrUrKHBPQNYL0O
+   e046cMUaLXopL8uyEBLvmqMggNDMdQ2dSANTq2J/4Ls1jV/uByVtQModv
+   Vp36sQrPjZLhpemmcM9aBiFVkwjiawIAMwOdtIHEW1rCOGEw5cwoPq3Fr
+   PYZ/mCh0osV9Yk4f2N42Mr8SMOd6hZrdIzVXTUXTfqlTJ5DRW2ZATo+Tj
+   Y2IOETpFKu4npnYjQIwkEpNzKk3JTrUEnFG/r8uYAHQlv3y2d/VZrCVU1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="255974616"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="299226944"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:53:07 -0700
+   d="scan'208";a="255974616"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 12:03:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="630460953"
+   d="scan'208";a="609335504"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:53:04 -0700
+  by orsmga001.jf.intel.com with ESMTP; 25 May 2022 12:03:05 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntvBv-0003DF-Dh;
-	Wed, 25 May 2022 17:53:03 +0000
-Date: Thu, 26 May 2022 01:53:00 +0800
+	id 1ntwHh-0003FY-8p;
+	Wed, 25 May 2022 19:03:05 +0000
+Date: Thu, 26 May 2022 03:02:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
-	lars@metafoo.de, mchehab+huawei@kernel.org, ardeleanalex@gmail.com,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	robh+dt@kernel.org, mike.looijmans@topic.nl,
-	devicetree@vger.kernel.org
+To: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	thomas.haemmerle@leica-geosystems.com
-Subject: Re: [PATCH V4 1/6] iio: accel: bmi088: Modified the scale calculate
-Message-ID: <202205260151.TTnXYfeD-lkp@intel.com>
-References: <20220525130828.2394919-2-Qing-wu.Li@leica-geosystems.com.cn>
+	linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/config 26/33]
+ drivers/memory/tegra/tegra124-emc.c:1401:20: error: use of undeclared
+ identifier 'hw_versions'; did you mean 'hw_version'?
+Message-ID: <202205260254.LPPZybMA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,138 +46,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525130828.2394919-2-Qing-wu.Li@leica-geosystems.com.cn>
 
-Hi LI,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.18 next-20220525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220525-211157
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220526/202205260151.TTnXYfeD-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: c2dbafb4076bf639babb279975e034a050d9b72a [26/33] media: tegra: Migrate to dev_pm_opp_set_config()
+config: arm64-randconfig-r031-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260254.LPPZybMA-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/71cdfb0a9a6ddbf8737a46bc6161fb921b1ac2f4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220525-211157
-        git checkout 71cdfb0a9a6ddbf8737a46bc6161fb921b1ac2f4
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=c2dbafb4076bf639babb279975e034a050d9b72a
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout c2dbafb4076bf639babb279975e034a050d9b72a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/iio/accel/bmi088-accel-core.c:341:10: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           reg = FIELD_GET(BMIO088_ACCEL_ACC_RANGE_MSK, reg);
-                                 ^
+>> drivers/memory/tegra/tegra124-emc.c:1401:20: error: use of undeclared identifier 'hw_versions'; did you mean 'hw_version'?
+                   .supported_hw = &hw_versions,
+                                    ^~~~~~~~~~~
+                                    hw_version
+   drivers/memory/tegra/tegra124-emc.c:1397:6: note: 'hw_version' declared here
+           u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+               ^
    1 error generated.
 
 
-vim +/FIELD_GET +341 drivers/iio/accel/bmi088-accel-core.c
+vim +1401 drivers/memory/tegra/tegra124-emc.c
 
-   278	
-   279	static int bmi088_accel_read_raw(struct iio_dev *indio_dev,
-   280					 struct iio_chan_spec const *chan,
-   281					 int *val, int *val2, long mask)
-   282	{
-   283		struct bmi088_accel_data *data = iio_priv(indio_dev);
-   284		struct device *dev = regmap_get_device(data->regmap);
-   285		int ret;
-   286		int reg;
-   287	
-   288		switch (mask) {
-   289		case IIO_CHAN_INFO_RAW:
-   290			switch (chan->type) {
-   291			case IIO_TEMP:
-   292				ret = pm_runtime_resume_and_get(dev);
-   293				if (ret)
-   294					return ret;
-   295	
-   296				ret = bmi088_accel_get_temp(data, val);
-   297				goto out_read_raw_pm_put;
-   298			case IIO_ACCEL:
-   299				ret = pm_runtime_resume_and_get(dev);
-   300				if (ret)
-   301					return ret;
-   302	
-   303				ret = iio_device_claim_direct_mode(indio_dev);
-   304				if (ret)
-   305					goto out_read_raw_pm_put;
-   306	
-   307				ret = bmi088_accel_get_axis(data, chan, val);
-   308				iio_device_release_direct_mode(indio_dev);
-   309				if (!ret)
-   310					ret = IIO_VAL_INT;
-   311	
-   312				goto out_read_raw_pm_put;
-   313			default:
-   314				return -EINVAL;
-   315			}
-   316		case IIO_CHAN_INFO_OFFSET:
-   317			switch (chan->type) {
-   318			case IIO_TEMP:
-   319				/* Offset applies before scale */
-   320				*val = BMI088_ACCEL_TEMP_OFFSET/BMI088_ACCEL_TEMP_UNIT;
-   321				return IIO_VAL_INT;
-   322			default:
-   323				return -EINVAL;
-   324			}
-   325		case IIO_CHAN_INFO_SCALE:
-   326			switch (chan->type) {
-   327			case IIO_TEMP:
-   328				/* 0.125 degrees per LSB */
-   329				*val = BMI088_ACCEL_TEMP_UNIT;
-   330				return IIO_VAL_INT;
-   331			case IIO_ACCEL:
-   332				ret = pm_runtime_resume_and_get(dev);
-   333				if (ret)
-   334					return ret;
-   335	
-   336				ret = regmap_read(data->regmap,
-   337						  BMI088_ACCEL_REG_ACC_RANGE, &reg);
-   338				if (ret)
-   339					goto out_read_raw_pm_put;
-   340	
- > 341				reg = FIELD_GET(BMIO088_ACCEL_ACC_RANGE_MSK, reg);
-   342				*val  = data->chip_info->scale_table[reg][0];
-   343				*val2 = data->chip_info->scale_table[reg][1];
-   344				ret = IIO_VAL_INT_PLUS_MICRO;
-   345	
-   346				goto out_read_raw_pm_put;
-   347			default:
-   348				return -EINVAL;
-   349			}
-   350		case IIO_CHAN_INFO_SAMP_FREQ:
-   351			ret = pm_runtime_resume_and_get(dev);
-   352			if (ret)
-   353				return ret;
-   354	
-   355			ret = bmi088_accel_get_sample_freq(data, val, val2);
-   356			goto out_read_raw_pm_put;
-   357		default:
-   358			break;
-   359		}
-   360	
-   361		return -EINVAL;
-   362	
-   363	out_read_raw_pm_put:
-   364		pm_runtime_mark_last_busy(dev);
-   365		pm_runtime_put_autosuspend(dev);
-   366	
-   367		return ret;
-   368	}
-   369	
+  1394	
+  1395	static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+  1396	{
+  1397		u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+  1398		struct opp_table *opp_table;
+  1399		int err;
+  1400		struct dev_pm_opp_config config = {
+> 1401			.supported_hw = &hw_versions,
+  1402			.supported_hw_count = 1,
+  1403		};
+  1404	
+  1405		opp_table = dev_pm_opp_set_config(emc->dev, &config);
+  1406		err = PTR_ERR_OR_ZERO(opp_table);
+  1407		if (err) {
+  1408			dev_err(emc->dev, "failed to set OPP config: %d\n", err);
+  1409			return err;
+  1410		}
+  1411	
+  1412		err = dev_pm_opp_of_add_table(emc->dev);
+  1413		if (err) {
+  1414			if (err == -ENODEV)
+  1415				dev_err(emc->dev, "OPP table not found, please update your device tree\n");
+  1416			else
+  1417				dev_err(emc->dev, "failed to add OPP table: %d\n", err);
+  1418	
+  1419			goto put_hw_table;
+  1420		}
+  1421	
+  1422		dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
+  1423			      hw_version, clk_get_rate(emc->clk) / 1000000);
+  1424	
+  1425		/* first dummy rate-set initializes voltage state */
+  1426		err = dev_pm_opp_set_rate(emc->dev, clk_get_rate(emc->clk));
+  1427		if (err) {
+  1428			dev_err(emc->dev, "failed to initialize OPP clock: %d\n", err);
+  1429			goto remove_table;
+  1430		}
+  1431	
+  1432		return 0;
+  1433	
+  1434	remove_table:
+  1435		dev_pm_opp_of_remove_table(emc->dev);
+  1436	put_hw_table:
+  1437		dev_pm_opp_clear_config(opp_table);
+  1438	
+  1439		return err;
+  1440	}
+  1441	
 
 -- 
 0-DAY CI Kernel Test Service
