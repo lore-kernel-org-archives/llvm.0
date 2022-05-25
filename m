@@ -1,93 +1,101 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797717FE
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 06:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653460488; x=1684996488;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M0oKdsgpAFHdUbHYt90/YCZ+zPrx6X/Xj0vgaYZnyG4=;
-  b=m0fiRrWJQ2IfHTCeIqbQqyLOaWHiE1kN4V/3dVCweE4qyqsMuZ1vBKAK
-   JPQ56lTXJu8ekVsNy1e7BMiFgR25LR8FQxNxdYHGJeMP/+n8M9qVuStM6
-   5mafTBDLHe4m51nmX1MJ4uQ7PkiP/cGs6uXhMeTldRyggwc7BnYyYIe2s
-   4RlUkkkhO/R7DcdZ1S4/vfwxrBxH3Fp8g7wRcywD2mf0R+vp8UW5/GGg6
-   80WebmonNhTd+ByX3380Epe4Ud7kJvzAIaIduUmqy2WtAFhUZW1It4XnR
-   /a7etIhVm4m9LJ7fWGFQAgh/9dZnexYhcqOQ90qJcjJp8sCd5l5spWRg0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="299062475"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="299062475"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 23:34:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="745546927"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 May 2022 23:34:45 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntkbV-0002oM-8y;
-	Wed, 25 May 2022 06:34:45 +0000
-Date: Wed, 25 May 2022 14:33:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peng Fan <peng.fan@nxp.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
- 'imx93_clk_of_match'
-Message-ID: <202205251429.1APkCSOG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F08A56
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 06:51:33 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id p10so10077503wrg.12
+        for <llvm@lists.linux.dev>; Tue, 24 May 2022 23:51:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qIXc7ckxpaycTNNbZsrqsqmLIc4KjcKf1nyaCXgDayU=;
+        b=PxD7sci0Bq2POIbrsPMW+iWZCSTfOsDIVvFKGjw49Ahm8pqpniCGwYDCw+2KtIVleB
+         0qCulIvvsv+s1wP9Yh7ZUma01jn/KHaaEEwY821VadTnviuAbRDeytg04PzNy3Mkxtfn
+         3XQmX9/fX4rBBAolCfsXHHufUcyYBqF55VG0QqMQyDUCzRsiCfV69G/2DeK4rVAfYUUN
+         wiXLPuKYv0lLFZiwjnke60NSfa+1KNUMKU0bq2uhEDmghLGmoNZUN/wYwVnRCIJa+Kps
+         aiQJK6ZqD7rzudwScV1/dXvH5t6Zkx98QoD1QlRXm3WUQR6qS5Nk9xFZE6NYZQGIc6Su
+         MWDQ==
+X-Gm-Message-State: AOAM532OhjE3fFckqr4DQ8UPhS7xZNFSh7qAB3A+M/ZKLOZchHhDURcx
+	PHAPyi7S+IS+RG5VWlhvFxA=
+X-Google-Smtp-Source: ABdhPJzjgBw8F3g0LVeI/WFTG/JhCJXju5CTp4OT98sW0FAjmZZeiN2PfdDBVCtCtRFQm0oaJnvsew==
+X-Received: by 2002:a05:6000:1861:b0:20f:c91e:bd3b with SMTP id d1-20020a056000186100b0020fc91ebd3bmr15504720wri.705.1653461491247;
+        Tue, 24 May 2022 23:51:31 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id l8-20020a05600002a800b0020cd8f1d25csm1471671wry.8.2022.05.24.23.51.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 23:51:30 -0700 (PDT)
+Message-ID: <b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org>
+Date: Wed, 25 May 2022 08:51:29 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
+Content-Language: en-US
+To: Bjorn Helgaas <helgaas@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Bjorn Helgaas <bhelgaas@google.com>
+References: <20220315153048.621328-1-helgaas@kernel.org>
+ <20220315153048.621328-2-helgaas@kernel.org>
+From: Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220315153048.621328-2-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Peng,
+On 15. 03. 22, 16:30, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> There are no users of "__bitwise__" except the definition of "__bitwise".
+> Remove __bitwise__ and define __bitwise directly.
+> 
+> This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> for all sparse builds").
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>   include/uapi/linux/types.h  | 5 ++---
+>   tools/include/linux/types.h | 5 ++---
+>   2 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+> index f6d2f83cbe29..71696f424ac8 100644
+> --- a/include/uapi/linux/types.h
+> +++ b/include/uapi/linux/types.h
+> @@ -20,11 +20,10 @@
+>    */
+>   
+>   #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>   #else
+> -#define __bitwise__
+> +#define __bitwise
+>   #endif
+> -#define __bitwise __bitwise__
 
-FYI, the error/warning still remains.
+Hi,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fdaf9a5840acaab18694a19e0eb0aa51162eeeed
-commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
-date:   3 months ago
-config: hexagon-buildonly-randconfig-r001-20220525 (https://download.01.org/0day-ci/archive/20220525/202205251429.1APkCSOG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 24defbe194b650218680fcd9dec8cd103537b531
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
+this broke userspace, like open-iscsi:
+> [   34s] In file included from session_info.h:9,
+> [   34s]                  from iscsi_util.c:38:
+> [   34s] ../include/iscsi_proto.h:66:30: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'itt_t'
+> [   34s]    66 | typedef uint32_t __bitwise__ itt_t;
+> [   34s]       |                              ^~~~~
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It looks like we need __bitwise__ back.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
-   static const struct of_device_id imx93_clk_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
-
-   323	
- > 324	static const struct of_device_id imx93_clk_of_match[] = {
-   325		{ .compatible = "fsl,imx93-ccm" },
-   326		{ /* Sentinel */ },
-   327	};
-   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
-   329	
-
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+js
+suse labs
