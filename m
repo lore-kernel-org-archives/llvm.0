@@ -1,43 +1,61 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06A67C
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 19:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653505397; x=1685041397;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SU179mfTpSWiQK7fl+PnzxUPgZEme8OU2i0LItLxxog=;
-  b=WbvouVnqfxiKxpGHixd43FeCRwxIAhS1/8krRxoEQXIH5j7y7WYdm2Vh
-   iwoZc/CuiCVqHyHxWAx0inZDNE9lMBR3q4F4fDOVKg3xrUrKHBPQNYL0O
-   e046cMUaLXopL8uyEBLvmqMggNDMdQ2dSANTq2J/4Ls1jV/uByVtQModv
-   Vp36sQrPjZLhpemmcM9aBiFVkwjiawIAMwOdtIHEW1rCOGEw5cwoPq3Fr
-   PYZ/mCh0osV9Yk4f2N42Mr8SMOd6hZrdIzVXTUXTfqlTJ5DRW2ZATo+Tj
-   Y2IOETpFKu4npnYjQIwkEpNzKk3JTrUEnFG/r8uYAHQlv3y2d/VZrCVU1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="255974616"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="255974616"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 12:03:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="609335504"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 May 2022 12:03:05 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntwHh-0003FY-8p;
-	Wed, 25 May 2022 19:03:05 +0000
-Date: Thu, 26 May 2022 03:02:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/config 26/33]
- drivers/memory/tegra/tegra124-emc.c:1401:20: error: use of undeclared
- identifier 'hw_versions'; did you mean 'hw_version'?
-Message-ID: <202205260254.LPPZybMA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B4B7C
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 20:02:32 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so2554949pja.4
+        for <llvm@lists.linux.dev>; Wed, 25 May 2022 13:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AWaeHfIqso2uarSrq2voc6y6tcqWng3SnNIxku0tA0k=;
+        b=ezecxoS1sA3vkGGfwUxIzhGQpcMdwdQ/B9z2SvvAPRmDulRg7UxU9szNANvQ24Y57r
+         ivBiwI1khWN3D600by1SoMY+gQ2uvqvLzdj6JqyC3GStB1oKR0vo010PlPD/Ov4uDDMX
+         PcNzCUpi4CzTj7LRLePIkozu7t9ZfSWN2y7Ik=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AWaeHfIqso2uarSrq2voc6y6tcqWng3SnNIxku0tA0k=;
+        b=FBFLqT9O9NjFhjxrf5aAwEx97kzRp4xFJrfD3TnA/ta0OJB97AKdOiQ3mDYarhSKeL
+         xxifX/TMnjDu567HQ9py4UXoOm4fF8xW1iHZ5cQrDIPU3JDNpA5/pTLSfY9qSTtTK16r
+         98kP0FNxV0pVqPWdDnyNUoL5qkcWawilvjEwQmkDffiFM4/exK/spVRVNzKU46zR8HWb
+         YAE7l+/cl87ainPb6OvqTzd0B4BE9iKF50C4d4v6ejB0EYx5EQjnG6ausTK2/xtLOlTX
+         daOegYcWwNZ1xPIOy34Z5Dghb4N8VOqj0heJY8dwrjG7W4ViIdKYDbN1/ua653THUUMU
+         XbxQ==
+X-Gm-Message-State: AOAM533m88mgIOxGUJNBZ2ZpG7GvVwq6fiLKQxzLLEvQaF2YQhjpYyxq
+	u9Ed+5Bb7fna2AjKqT7x7kH4Gg==
+X-Google-Smtp-Source: ABdhPJyhTlIBPpX3HR10hM9NOmXQk/4SBxH2F1TSa7CgOZddaoOpxfLS37lZuJOm1uIRUa88qkEuyw==
+X-Received: by 2002:a17:90b:4b82:b0:1e0:c609:69d7 with SMTP id lr2-20020a17090b4b8200b001e0c60969d7mr2258619pjb.119.1653508951535;
+        Wed, 25 May 2022 13:02:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056a00228d00b0050dc762819esm11876635pfe.120.2022.05.25.13.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 13:02:29 -0700 (PDT)
+Date: Wed, 25 May 2022 13:02:28 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Joao Moreira <joao@overdrivepizza.com>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-hardening@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH v2 20/21] x86: Add support for CONFIG_CFI_CLANG
+Message-ID: <202205251241.FDC27BC9@keescook>
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <20220513202159.1550547-21-samitolvanen@google.com>
+ <YoIfWENLV1AR2ijj@hirez.programming.kicks-ass.net>
+ <CABCJKucXA2jbTc9TF1mLUsEDKu52t71tzxpnsGOXY3_ks+W4Bg@mail.gmail.com>
+ <20220516183047.GM76023@worktop.programming.kicks-ass.net>
+ <CABCJKudmrBOkoDvDPOA-aEyrs9evHPWpzMpDZ10n8vXDBRdCxQ@mail.gmail.com>
+ <20220516203723.GN76023@worktop.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,91 +64,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220516203723.GN76023@worktop.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
-head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
-commit: c2dbafb4076bf639babb279975e034a050d9b72a [26/33] media: tegra: Migrate to dev_pm_opp_set_config()
-config: arm64-randconfig-r031-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260254.LPPZybMA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=c2dbafb4076bf639babb279975e034a050d9b72a
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/config
-        git checkout c2dbafb4076bf639babb279975e034a050d9b72a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Mon, May 16, 2022 at 10:37:23PM +0200, Peter Zijlstra wrote:
+> On Mon, May 16, 2022 at 12:39:19PM -0700, Sami Tolvanen wrote:
+> 
+> > > > With the current compiler patch, LLVM sets up function arguments after
+> > > > the CFI check. if it's a problem, we can look into changing that.
+> > >
+> > > Yes, please fix that. Again see that same patch for why this is a
+> > > problem. Objtool can trivially find retpoline calls, but finding this
+> > > kCFI gadget is going to be hard work. If you ensure they're
+> > > unconditionally stuck together, then the problem goes away find one,
+> > > finds the other.
+> > 
+> > You can use .kcfi_traps to locate the check right now, but I agree,
+> > it's not quite ideal.
+> 
+> Oohh, indeed.
+> [...]
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Peter,
 
-All errors (new ones prefixed by >>):
+Sami investigated moving the CFI check after arg setup, and found that
+to do it means making LLVM's CFI logic no longer both architecture
+and call-type agnostic. The CFI logic needs put at a lower level,
+requiring it be done in per-architecture code, and then additionally
+per-call-type. (And by per-call-type, AIUI, this means various types of
+indirect calls: standard, tail-call, etc.) Sami has it all working for
+x86, but I'm concerned about the risk/benefit in doing it this way. I
+only see down-sides:
 
->> drivers/memory/tegra/tegra124-emc.c:1401:20: error: use of undeclared identifier 'hw_versions'; did you mean 'hw_version'?
-                   .supported_hw = &hw_versions,
-                                    ^~~~~~~~~~~
-                                    hw_version
-   drivers/memory/tegra/tegra124-emc.c:1397:6: note: 'hw_version' declared here
-           u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
-               ^
-   1 error generated.
+- Linux cannot enable CFI for a new architecture without also
+  implementing it within LLVM first.
 
+- LLVM CFI code becomes more complex, making it harder to
+  maintain/bug-fix/etc.
 
-vim +1401 drivers/memory/tegra/tegra124-emc.c
+I actually see the first issue as the larger problem: I want to make it
+easy for the kernel to use CFI, rather than harder. :P The first user
+of CFI already cleared the way for other architectures by adjusting the
+bulk of core kernel code, etc, so adding another architecture should be
+as trivial as possible, and not require yet newer releases of LLVM, etc,
+etc.
 
-  1394	
-  1395	static int tegra_emc_opp_table_init(struct tegra_emc *emc)
-  1396	{
-  1397		u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
-  1398		struct opp_table *opp_table;
-  1399		int err;
-  1400		struct dev_pm_opp_config config = {
-> 1401			.supported_hw = &hw_versions,
-  1402			.supported_hw_count = 1,
-  1403		};
-  1404	
-  1405		opp_table = dev_pm_opp_set_config(emc->dev, &config);
-  1406		err = PTR_ERR_OR_ZERO(opp_table);
-  1407		if (err) {
-  1408			dev_err(emc->dev, "failed to set OPP config: %d\n", err);
-  1409			return err;
-  1410		}
-  1411	
-  1412		err = dev_pm_opp_of_add_table(emc->dev);
-  1413		if (err) {
-  1414			if (err == -ENODEV)
-  1415				dev_err(emc->dev, "OPP table not found, please update your device tree\n");
-  1416			else
-  1417				dev_err(emc->dev, "failed to add OPP table: %d\n", err);
-  1418	
-  1419			goto put_hw_table;
-  1420		}
-  1421	
-  1422		dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
-  1423			      hw_version, clk_get_rate(emc->clk) / 1000000);
-  1424	
-  1425		/* first dummy rate-set initializes voltage state */
-  1426		err = dev_pm_opp_set_rate(emc->dev, clk_get_rate(emc->clk));
-  1427		if (err) {
-  1428			dev_err(emc->dev, "failed to initialize OPP clock: %d\n", err);
-  1429			goto remove_table;
-  1430		}
-  1431	
-  1432		return 0;
-  1433	
-  1434	remove_table:
-  1435		dev_pm_opp_of_remove_table(emc->dev);
-  1436	put_hw_table:
-  1437		dev_pm_opp_clear_config(opp_table);
-  1438	
-  1439		return err;
-  1440	}
-  1441	
+So, since using .kcfi_traps already solves the issue for finding the
+checks, can we not require moving the CFI check? I think it would be a
+mistake to have to do that.
+
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook
