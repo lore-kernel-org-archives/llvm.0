@@ -1,43 +1,58 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB731368
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674FE1368
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653500748; x=1685036748;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XaAdaYRmEX4q3+5JloUL5heNfATKBvuMIhBlEAf54yk=;
-  b=FyFioERwMWUymM4i2hsuVvo9VgWgnwvQAsy77+M489b399sN35LBnKtG
-   0iCrOqd3ZyiBbaJK0WWhj/E6QiWgOwLQaQOEfbebKnBQB3jrrn1h9Hwou
-   tPgn0xezctbYPTjLUdABN5v15COe06mnxzgSrEzW64Pr9Mi21pl6UOLd0
-   /KwGGToqmGs1gfClQj2U45alLDNnc64fSxwsBa0+3KOQv8hf4gRxM7DxE
-   +SXXMsS6yicKmxk48HclDJ5JSkJuoKBvIwR9j8nyWRJYwdoHJJwOToa6n
-   zXRnjZydch7VDhGo0dz17zd+A5Ts070dTQ2rKxiGdm4VrdJqztcNHZ83P
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272704118"
+  t=1653501193; x=1685037193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OBl8VqVg26hgXRW1FrdHxYUiLB4y0jncmZM7TnohZuE=;
+  b=R6tpzEFy8aqsWKgew8/qhcrPbQNKFLN8x+vMjq1TLgTzHDmUm2yv1uU6
+   y5ZnAA/acvrGs4sQdo2/0fRSpskyVEwyuIGVkcioKLdt9e69jf6F23gG6
+   ZHjXv7VBHIq5Hp0Q9wsRkfnUEuNr6tq/4fe77FIHeVRmxqooLJ2xnpIpY
+   TlNJjzt0cwAKOKxqHU1GlXzGGdxckasDeDnNhAnICxmG8zz9fO7V4/AYi
+   gIloN7/YkY/BlRsBdyoLGFbdU6t/NILYZGq71FLhAqtCUakR9WCBKid5H
+   3NgKJoY+7dWhOk/ZJHkQ2SVAJ+I2yZkFtxCFRcP5MJ5ZByoG7QZO9+UkQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="261503690"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="272704118"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:33:04 -0700
+   d="scan'208";a="261503690"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:53:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="630449881"
+   d="scan'208";a="664528898"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:33:03 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 25 May 2022 10:53:04 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntusY-0003C0-J7;
-	Wed, 25 May 2022 17:33:02 +0000
-Date: Thu, 26 May 2022 01:32:23 +0800
+	id 1ntvBv-0003DC-DD;
+	Wed, 25 May 2022 17:53:03 +0000
+Date: Thu, 26 May 2022 01:52:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	Jason Wang <jasowang@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [tzungbi-chrome-platform:dev 25/25] ERROR: modpost:
- "cros_kunit_ec_xfer_mock_addx"
- [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
-Message-ID: <202205260106.UjRGjFFM-lkp@intel.com>
+	Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
+	Stefano Garzarella <sgarzare@redhat.com>, ecree.xilinx@gmail.com,
+	Eli Cohen <elic@nvidia.com>, Dan Carpenter <error27@gmail.com>,
+	Parav Pandit <parav@nvidia.com>,
+	Wu Zongyong <wuzongyong@linux.alibaba.com>, dinang@xilinx.com,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Xie Yongji <xieyongji@bytedance.com>, gautam.dawar@amd.com,
+	lulu@redhat.com, martinpo@xilinx.com, pabloc@xilinx.com,
+	Longpeng <longpeng2@huawei.com>, Piotr.Uminski@intel.com,
+	tanuj.kamde@amd.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+	habetsm.xilinx@gmail.com, lvivier@redhat.com,
+	Zhang Min <zhang.min9@zte.com.cn>, hanand@xilinx.com
+Subject: Re: [PATCH v3 3/4] vhost-vdpa: uAPI to stop the device
+Message-ID: <202205260121.6V500tTl-lkp@intel.com>
+References: <20220525105922.2413991-4-eperezma@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,35 +61,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220525105922.2413991-4-eperezma@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
-head:   c8065f6d478990cfc385d1d579972a75fc29605b
-commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
-config: arm64-randconfig-r006-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260106.UjRGjFFM-lkp@intel.com/config)
+Hi "Eugenio,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on mst-vhost/linux-next]
+[also build test ERROR on next-20220525]
+[cannot apply to horms-ipvs/master linux/master linus/master v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eugenio-P-rez/Implement-vdpasim-stop-operation/20220525-190143
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220526/202205260121.6V500tTl-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
-        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
-        git fetch --no-tags tzungbi-chrome-platform dev
-        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
+        # https://github.com/intel-lab-lkp/linux/commit/515f6b6d2a0164df801ddbe61e1cb1ae4e763873
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eugenio-P-rez/Implement-vdpasim-stop-operation/20220525-190143
+        git checkout 515f6b6d2a0164df801ddbe61e1cb1ae4e763873
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/vhost/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_addx" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_next" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_add" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_reset" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> drivers/vhost/vdpa.c:668:7: error: use of undeclared identifier 'VHOST_STOP'
+           case VHOST_STOP:
+                ^
+   1 error generated.
+
+
+vim +/VHOST_STOP +668 drivers/vhost/vdpa.c
+
+   587	
+   588	static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+   589					      unsigned int cmd, unsigned long arg)
+   590	{
+   591		struct vhost_vdpa *v = filep->private_data;
+   592		struct vhost_dev *d = &v->vdev;
+   593		void __user *argp = (void __user *)arg;
+   594		u64 __user *featurep = argp;
+   595		u64 features;
+   596		long r = 0;
+   597	
+   598		if (cmd == VHOST_SET_BACKEND_FEATURES) {
+   599			if (copy_from_user(&features, featurep, sizeof(features)))
+   600				return -EFAULT;
+   601			if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
+   602					 BIT_ULL(VHOST_BACKEND_F_STOP)))
+   603				return -EOPNOTSUPP;
+   604			if ((features & BIT_ULL(VHOST_BACKEND_F_STOP)) &&
+   605			     !vhost_vdpa_can_stop(v))
+   606				return -EOPNOTSUPP;
+   607			vhost_set_backend_features(&v->vdev, features);
+   608			return 0;
+   609		}
+   610	
+   611		mutex_lock(&d->mutex);
+   612	
+   613		switch (cmd) {
+   614		case VHOST_VDPA_GET_DEVICE_ID:
+   615			r = vhost_vdpa_get_device_id(v, argp);
+   616			break;
+   617		case VHOST_VDPA_GET_STATUS:
+   618			r = vhost_vdpa_get_status(v, argp);
+   619			break;
+   620		case VHOST_VDPA_SET_STATUS:
+   621			r = vhost_vdpa_set_status(v, argp);
+   622			break;
+   623		case VHOST_VDPA_GET_CONFIG:
+   624			r = vhost_vdpa_get_config(v, argp);
+   625			break;
+   626		case VHOST_VDPA_SET_CONFIG:
+   627			r = vhost_vdpa_set_config(v, argp);
+   628			break;
+   629		case VHOST_GET_FEATURES:
+   630			r = vhost_vdpa_get_features(v, argp);
+   631			break;
+   632		case VHOST_SET_FEATURES:
+   633			r = vhost_vdpa_set_features(v, argp);
+   634			break;
+   635		case VHOST_VDPA_GET_VRING_NUM:
+   636			r = vhost_vdpa_get_vring_num(v, argp);
+   637			break;
+   638		case VHOST_VDPA_GET_GROUP_NUM:
+   639			r = copy_to_user(argp, &v->vdpa->ngroups,
+   640					 sizeof(v->vdpa->ngroups));
+   641			break;
+   642		case VHOST_VDPA_GET_AS_NUM:
+   643			r = copy_to_user(argp, &v->vdpa->nas, sizeof(v->vdpa->nas));
+   644			break;
+   645		case VHOST_SET_LOG_BASE:
+   646		case VHOST_SET_LOG_FD:
+   647			r = -ENOIOCTLCMD;
+   648			break;
+   649		case VHOST_VDPA_SET_CONFIG_CALL:
+   650			r = vhost_vdpa_set_config_call(v, argp);
+   651			break;
+   652		case VHOST_GET_BACKEND_FEATURES:
+   653			features = VHOST_VDPA_BACKEND_FEATURES;
+   654			if (vhost_vdpa_can_stop(v))
+   655				features |= BIT_ULL(VHOST_BACKEND_F_STOP);
+   656			if (copy_to_user(featurep, &features, sizeof(features)))
+   657				r = -EFAULT;
+   658			break;
+   659		case VHOST_VDPA_GET_IOVA_RANGE:
+   660			r = vhost_vdpa_get_iova_range(v, argp);
+   661			break;
+   662		case VHOST_VDPA_GET_CONFIG_SIZE:
+   663			r = vhost_vdpa_get_config_size(v, argp);
+   664			break;
+   665		case VHOST_VDPA_GET_VQS_COUNT:
+   666			r = vhost_vdpa_get_vqs_count(v, argp);
+   667			break;
+ > 668		case VHOST_STOP:
+   669			r = vhost_vdpa_stop(v, argp);
+   670			break;
+   671		default:
+   672			r = vhost_dev_ioctl(&v->vdev, cmd, argp);
+   673			if (r == -ENOIOCTLCMD)
+   674				r = vhost_vdpa_vring_ioctl(v, cmd, argp);
+   675			break;
+   676		}
+   677	
+   678		mutex_unlock(&d->mutex);
+   679		return r;
+   680	}
+   681	
 
 -- 
 0-DAY CI Kernel Test Service
