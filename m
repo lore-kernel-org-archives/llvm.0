@@ -1,44 +1,32 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9140DEC4
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 13:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653484257; x=1685020257;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yTFmjuVJzZeVwWDM7Bs3IwCz1WgeJQrvSFJ69LNLCgI=;
-  b=Z3iBI/+S/7Btt8ugYoqErR9WyKrz2qAS6dDtfon2GYCPDkfQRICDz476
-   k6R4Tya0tDawMXHgupxpK+qz1Kf6sYoLShyEPHHPtY3WjcmqFf6pxPU5J
-   lCH4uZG8CqA/IztkB3b+hqzJNYihlRjLOqEuj9XoDJ9lbRVZyBilelzlj
-   Tz6xJxleHlJwqTLe8ibjy3a7/XWWtCPaTxFa8NaZApAeA8nlWMWJP3z/8
-   e42z0K/EvsfqJqMHUXr4U59+DFHES+bFzdgpFyylO/65VDJ9Rzr9X4puc
-   msrB2XHaOxHasvWZcHV7vM6X+F5cmiMiv7y5enPknLMo3Gu60dW/cAyY8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="334452971"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="334452971"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:10:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="703990916"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 06:10:55 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1ntqms-00031y-Bx;
-	Wed, 25 May 2022 13:10:54 +0000
-Date: Wed, 25 May 2022 21:10:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: include/linux/fortify-string.h:336:4: warning: call to
- __read_overflow2_field declared with 'warning' attribute: detected read
- beyond size of field (2nd parameter); maybe use struct_group()?
-Message-ID: <202205252132.Owgo8tkv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A16361
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 14:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B91C385B8;
+	Wed, 25 May 2022 14:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653489251;
+	bh=jKMXS9Z2wSf/iYiPIqP+VUf/M/S8DyVS0usjv1+qV2c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=ltGVKF9ILk+J3qDoXXxbOxuefxDlIeGH5cypEsKhRPY5BnK8naQBWLrJn1aWrkPny
+	 HcqttzfzqxJilDJv+SOlZl4pTjpU+vwO5RCUmd9Yw+yQaOCjZ6W9AH+7VXbI8X2X2p
+	 hwem9EMNKPwJ3vW+IW0uTscg+pY1KKTtZp5TIceRFt6eNSzGW+UZsiCt22qcRP+OV/
+	 eZLIAszeyj+0rWh0zPUPkwZySV7RgtOxnHt+hYHF+ggHwtWIMSq7Gb4XbUwAfNVaSI
+	 chxWV3rYlzngrCzUkeOZvYKJMHmjz4L9L9t1wmTuyCS3c7vfToXNFBM9TDRP8yOSaJ
+	 QSjcECuuOlYew==
+Date: Wed, 25 May 2022 09:34:09 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
+Message-ID: <20220525143409.GA292780@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,156 +35,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org>
 
-Hi Kees,
+On Wed, May 25, 2022 at 08:51:29AM +0200, Jiri Slaby wrote:
+> On 15. 03. 22, 16:30, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > There are no users of "__bitwise__" except the definition of "__bitwise".
+> > Remove __bitwise__ and define __bitwise directly.
+> > 
+> > This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> > for all sparse builds").
+> > 
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> >   include/uapi/linux/types.h  | 5 ++---
+> >   tools/include/linux/types.h | 5 ++---
+> >   2 files changed, 4 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+> > index f6d2f83cbe29..71696f424ac8 100644
+> > --- a/include/uapi/linux/types.h
+> > +++ b/include/uapi/linux/types.h
+> > @@ -20,11 +20,10 @@
+> >    */
+> >   #ifdef __CHECKER__
+> > -#define __bitwise__ __attribute__((bitwise))
+> > +#define __bitwise	__attribute__((bitwise))
+> >   #else
+> > -#define __bitwise__
+> > +#define __bitwise
+> >   #endif
+> > -#define __bitwise __bitwise__
+> 
+> Hi,
+> 
+> this broke userspace, like open-iscsi:
+> > [   34s] In file included from session_info.h:9,
+> > [   34s]                  from iscsi_util.c:38:
+> > [   34s] ../include/iscsi_proto.h:66:30: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'itt_t'
+> > [   34s]    66 | typedef uint32_t __bitwise__ itt_t;
+> > [   34s]       |                              ^~~~~
+> 
+> It looks like we need __bitwise__ back.
 
-FYI, the error/warning still remains.
+Crap, sorry.  I don't know why I thought it would be safe to remove
+something from uapi.  I'll send a revert.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fdaf9a5840acaab18694a19e0eb0aa51162eeeed
-commit: 281d0c962752fb40866dd8d4cade68656f34bd1f fortify: Add Clang support
-date:   3 months ago
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220525/202205252132.Owgo8tkv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/nvme/host/core.c:7:
-   In file included from include/linux/blkdev.h:5:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from arch/x86/include/asm/preempt.h:7:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/x86/include/asm/thread_info.h:53:
-   In file included from arch/x86/include/asm/cpufeature.h:5:
-   In file included from arch/x86/include/asm/processor.h:22:
-   In file included from arch/x86/include/asm/msr.h:11:
-   In file included from arch/x86/include/asm/cpumask.h:5:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:11:
-   In file included from include/linux/string.h:253:
->> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-                           __read_overflow2_field(q_size_field, size);
-                           ^
->> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-   2 warnings generated.
-
-
-vim +/warning +336 include/linux/fortify-string.h
-
-28e77cc1c06866 Kees Cook      2021-06-16  267  
-28e77cc1c06866 Kees Cook      2021-06-16  268  /*
-28e77cc1c06866 Kees Cook      2021-06-16  269   * __builtin_object_size() must be captured here to avoid evaluating argument
-28e77cc1c06866 Kees Cook      2021-06-16  270   * side-effects further into the macro layers.
-28e77cc1c06866 Kees Cook      2021-06-16  271   */
-28e77cc1c06866 Kees Cook      2021-06-16  272  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
-28e77cc1c06866 Kees Cook      2021-06-16  273  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
-a28a6e860c6cf2 Francis Laniel 2021-02-25  274  
-f68f2ff91512c1 Kees Cook      2021-04-20  275  /*
-f68f2ff91512c1 Kees Cook      2021-04-20  276   * To make sure the compiler can enforce protection against buffer overflows,
-f68f2ff91512c1 Kees Cook      2021-04-20  277   * memcpy(), memmove(), and memset() must not be used beyond individual
-f68f2ff91512c1 Kees Cook      2021-04-20  278   * struct members. If you need to copy across multiple members, please use
-f68f2ff91512c1 Kees Cook      2021-04-20  279   * struct_group() to create a named mirror of an anonymous struct union.
-f68f2ff91512c1 Kees Cook      2021-04-20  280   * (e.g. see struct sk_buff.) Read overflow checking is currently only
-f68f2ff91512c1 Kees Cook      2021-04-20  281   * done when a write overflow is also present, or when building with W=1.
-f68f2ff91512c1 Kees Cook      2021-04-20  282   *
-f68f2ff91512c1 Kees Cook      2021-04-20  283   * Mitigation coverage matrix
-f68f2ff91512c1 Kees Cook      2021-04-20  284   *					Bounds checking at:
-f68f2ff91512c1 Kees Cook      2021-04-20  285   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  286   *					| Compile time  |   Run time    |
-f68f2ff91512c1 Kees Cook      2021-04-20  287   * memcpy() argument sizes:		| write | read  | write | read  |
-f68f2ff91512c1 Kees Cook      2021-04-20  288   *        dest     source   length      +-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  289   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  290   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  291   * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  292   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  293   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  294   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  295   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  296   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  297   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  298   *
-f68f2ff91512c1 Kees Cook      2021-04-20  299   * y = perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  300   * n = cannot perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  301   * n/a = no run-time bounds checking needed since compile-time deterministic
-f68f2ff91512c1 Kees Cook      2021-04-20  302   * B = can perform run-time bounds checking (currently unimplemented)
-f68f2ff91512c1 Kees Cook      2021-04-20  303   * V = vulnerable to run-time overflow (will need refactoring to solve)
-f68f2ff91512c1 Kees Cook      2021-04-20  304   *
-f68f2ff91512c1 Kees Cook      2021-04-20  305   */
-f68f2ff91512c1 Kees Cook      2021-04-20  306  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
-f68f2ff91512c1 Kees Cook      2021-04-20  307  					 const size_t p_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  308  					 const size_t q_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  309  					 const size_t p_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  310  					 const size_t q_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  311  					 const char *func)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  312  {
-a28a6e860c6cf2 Francis Laniel 2021-02-25  313  	if (__builtin_constant_p(size)) {
-f68f2ff91512c1 Kees Cook      2021-04-20  314  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  315  		 * Length argument is a constant expression, so we
-f68f2ff91512c1 Kees Cook      2021-04-20  316  		 * can perform compile-time bounds checking where
-f68f2ff91512c1 Kees Cook      2021-04-20  317  		 * buffer sizes are known.
-f68f2ff91512c1 Kees Cook      2021-04-20  318  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  319  
-f68f2ff91512c1 Kees Cook      2021-04-20  320  		/* Error when size is larger than enclosing struct. */
-f68f2ff91512c1 Kees Cook      2021-04-20  321  		if (p_size > p_size_field && p_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  322  			__write_overflow();
-f68f2ff91512c1 Kees Cook      2021-04-20  323  		if (q_size > q_size_field && q_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  324  			__read_overflow2();
-f68f2ff91512c1 Kees Cook      2021-04-20  325  
-f68f2ff91512c1 Kees Cook      2021-04-20  326  		/* Warn when write size argument larger than dest field. */
-f68f2ff91512c1 Kees Cook      2021-04-20  327  		if (p_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20  328  			__write_overflow_field(p_size_field, size);
-f68f2ff91512c1 Kees Cook      2021-04-20  329  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  330  		 * Warn for source field over-read when building with W=1
-f68f2ff91512c1 Kees Cook      2021-04-20  331  		 * or when an over-write happened, so both can be fixed at
-f68f2ff91512c1 Kees Cook      2021-04-20  332  		 * the same time.
-f68f2ff91512c1 Kees Cook      2021-04-20  333  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  334  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
-f68f2ff91512c1 Kees Cook      2021-04-20  335  		    q_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20 @336  			__read_overflow2_field(q_size_field, size);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  337  	}
-f68f2ff91512c1 Kees Cook      2021-04-20  338  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  339  	 * At this point, length argument may not be a constant expression,
-f68f2ff91512c1 Kees Cook      2021-04-20  340  	 * so run-time bounds checking can be done where buffer sizes are
-f68f2ff91512c1 Kees Cook      2021-04-20  341  	 * known. (This is not an "else" because the above checks may only
-f68f2ff91512c1 Kees Cook      2021-04-20  342  	 * be compile-time warnings, and we want to still warn for run-time
-f68f2ff91512c1 Kees Cook      2021-04-20  343  	 * overflows.)
-f68f2ff91512c1 Kees Cook      2021-04-20  344  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  345  
-f68f2ff91512c1 Kees Cook      2021-04-20  346  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  347  	 * Always stop accesses beyond the struct that contains the
-f68f2ff91512c1 Kees Cook      2021-04-20  348  	 * field, when the buffer's remaining size is known.
-f68f2ff91512c1 Kees Cook      2021-04-20  349  	 * (The -1 test is to optimize away checks where the buffer
-f68f2ff91512c1 Kees Cook      2021-04-20  350  	 * lengths are unknown.)
-f68f2ff91512c1 Kees Cook      2021-04-20  351  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  352  	if ((p_size != (size_t)(-1) && p_size < size) ||
-f68f2ff91512c1 Kees Cook      2021-04-20  353  	    (q_size != (size_t)(-1) && q_size < size))
-f68f2ff91512c1 Kees Cook      2021-04-20  354  		fortify_panic(func);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  355  }
-a28a6e860c6cf2 Francis Laniel 2021-02-25  356  
-
-:::::: The code at line 336 was first introduced by commit
-:::::: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bjorn
