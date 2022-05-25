@@ -1,43 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819F21368
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB731368
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653500573; x=1685036573;
+  t=1653500748; x=1685036748;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S15J8qiMe78oyZ75jSB0YG8t0U9DMdTYTd2h31lUDPg=;
-  b=Y/PA+SdUmeOMMjFH99K/prTd+3U1LUCQ3sJhoe2WePS0JS/C93UmDmZ1
-   fB6ixteP/jeU/ssHO+zrls5F/MQ+/8zbXPh8YF/s6vTjfK8U94Jpxgm19
-   Ps8tuEWX735uElQZF9iBrTo+Is94th4JvMPKQGpO/63DsmnLn4EtmujuG
-   a1wyhooSLOBVl7wIDY2xKXwAHiVXRPObdvd2nNdHDPD4K1AhYspmcoM9h
-   c1N0A667psrUpCi3oe422IodOVklhKv6CnSLjkBpnOfDMuwpyUGjpMVv1
-   HRnmzUM3eFgvGFWPk6tsUGe+kkp7IBbR945GTRd8gOLfmm7qsWJgdztlX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271458943"
+  bh=XaAdaYRmEX4q3+5JloUL5heNfATKBvuMIhBlEAf54yk=;
+  b=FyFioERwMWUymM4i2hsuVvo9VgWgnwvQAsy77+M489b399sN35LBnKtG
+   0iCrOqd3ZyiBbaJK0WWhj/E6QiWgOwLQaQOEfbebKnBQB3jrrn1h9Hwou
+   tPgn0xezctbYPTjLUdABN5v15COe06mnxzgSrEzW64Pr9Mi21pl6UOLd0
+   /KwGGToqmGs1gfClQj2U45alLDNnc64fSxwsBa0+3KOQv8hf4gRxM7DxE
+   +SXXMsS6yicKmxk48HclDJ5JSkJuoKBvIwR9j8nyWRJYwdoHJJwOToa6n
+   zXRnjZydch7VDhGo0dz17zd+A5Ts070dTQ2rKxiGdm4VrdJqztcNHZ83P
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272704118"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="271458943"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:23:07 -0700
+   d="scan'208";a="272704118"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:33:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="609292606"
+   d="scan'208";a="630449881"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 May 2022 10:23:03 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:33:03 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntuis-0003Bd-F4;
-	Wed, 25 May 2022 17:23:02 +0000
-Date: Thu, 26 May 2022 01:22:07 +0800
+	id 1ntusY-0003C0-J7;
+	Wed, 25 May 2022 17:33:02 +0000
+Date: Thu, 26 May 2022 01:32:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/config 10/33] include/linux/pm_opp.h:459:9: warning:
- incompatible pointer to integer conversion returning 'void *' from a
- function with result type 'int'
-Message-ID: <202205260150.ezjPkAEK-lkp@intel.com>
+Subject: [tzungbi-chrome-platform:dev 25/25] ERROR: modpost:
+ "cros_kunit_ec_xfer_mock_addx"
+ [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+Message-ID: <202205260106.UjRGjFFM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,151 +47,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
-head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
-commit: a23b86fb0614c769679169402c09ebcd07dbb22f [10/33] OPP: Add dev_pm_opp_set_config() and friends
-config: mips-randconfig-r014-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260150.ezjPkAEK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
+head:   c8065f6d478990cfc385d1d579972a75fc29605b
+commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
+config: arm64-randconfig-r006-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260106.UjRGjFFM-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=a23b86fb0614c769679169402c09ebcd07dbb22f
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/config
-        git checkout a23b86fb0614c769679169402c09ebcd07dbb22f
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
+        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
+        git fetch --no-tags tzungbi-chrome-platform dev
+        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from kernel/sched/core.c:81:
-   In file included from kernel/sched/sched.h:30:
-   In file included from include/linux/cpufreq.h:19:
->> include/linux/pm_opp.h:459:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EOPNOTSUPP);
-                  ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5235:20: warning: no previous prototype for function 'task_sched_runtime' [-Wmissing-prototypes]
-   unsigned long long task_sched_runtime(struct task_struct *p)
-                      ^
-   kernel/sched/core.c:5235:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long long task_sched_runtime(struct task_struct *p)
-   ^
-   static 
-   kernel/sched/core.c:6487:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
-   asmlinkage __visible void __sched schedule_user(void)
-                                     ^
-   kernel/sched/core.c:6487:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage __visible void __sched schedule_user(void)
-                        ^
-                        static 
-   kernel/sched/core.c:9420:13: warning: no previous prototype for function 'sched_init_smp' [-Wmissing-prototypes]
-   void __init sched_init_smp(void)
-               ^
-   kernel/sched/core.c:9420:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sched_init_smp(void)
-   ^
-   static 
-   kernel/sched/core.c:9448:13: warning: no previous prototype for function 'sched_init' [-Wmissing-prototypes]
-   void __init sched_init(void)
-               ^
-   kernel/sched/core.c:9448:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sched_init(void)
-   ^
-   static 
-   kernel/sched/core.c:3574:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-   static inline bool rq_has_pinned_tasks(struct rq *rq)
-                      ^
-   kernel/sched/core.c:5502:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-   static inline void sched_tick_start(int cpu) { }
-                      ^
-   kernel/sched/core.c:5503:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-   static inline void sched_tick_stop(int cpu) { }
-                      ^
-   kernel/sched/core.c:6191:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-   static inline void sched_core_cpu_starting(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:6192:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:6193:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-   static inline void sched_core_cpu_dying(unsigned int cpu) {}
-                      ^
-   11 warnings generated.
---
-   In file included from kernel/sched/fair.c:53:
-   In file included from kernel/sched/sched.h:30:
-   In file included from include/linux/cpufreq.h:19:
->> include/linux/pm_opp.h:459:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EOPNOTSUPP);
-                  ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:663:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
-   int sched_update_scaling(void)
-       ^
-   kernel/sched/fair.c:663:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_update_scaling(void)
-   ^
-   static 
-   kernel/sched/fair.c:2979:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
-   static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
-                      ^
-   kernel/sched/fair.c:2983:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
-   static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
-                      ^
-   kernel/sched/fair.c:2987:20: warning: unused function 'update_scan_period' [-Wunused-function]
-   static inline void update_scan_period(struct task_struct *p, int new_cpu)
-                      ^
-   kernel/sched/fair.c:4189:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
-   static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-                      ^
-   kernel/sched/fair.c:5524:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
-   static inline int throttled_lb_pair(struct task_group *tg,
-                     ^
-   kernel/sched/fair.c:5541:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
-   static inline void update_runtime_enabled(struct rq *rq) {}
-                      ^
-   kernel/sched/fair.c:5542:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
-   static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-                      ^
-   9 warnings generated.
---
-   In file included from kernel/sched/build_policy.c:33:
-   In file included from kernel/sched/sched.h:30:
-   In file included from include/linux/cpufreq.h:19:
->> include/linux/pm_opp.h:459:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EOPNOTSUPP);
-                  ^~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/sched/build_policy.c:43:
-   kernel/sched/rt.c:666:6: warning: no previous prototype for function 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:666:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
-   2 warnings generated.
---
-   In file included from kernel/sched/build_utility.c:21:
-   In file included from include/linux/cpufreq.h:19:
->> include/linux/pm_opp.h:459:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EOPNOTSUPP);
-                  ^~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +459 include/linux/pm_opp.h
-
-   456	
-   457	static inline int devm_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
-   458	{
- > 459		return ERR_PTR(-EOPNOTSUPP);
-   460	}
-   461	
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_addx" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_next" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_add" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_reset" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
