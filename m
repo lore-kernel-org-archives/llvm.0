@@ -1,43 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644F72569
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 22:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16DE29AC
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 22:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653516741; x=1685052741;
+  t=1653519263; x=1685055263;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Wo76B/Eqk9nONCDhyVIm2GFOyBcbcBMDqB65FrTTl0=;
-  b=Rln8DlXB47iQtKonNUyOXHfj0O67yUMdFqqoA74MhDE5U3UaVqfUbFqf
-   obQm+r/LzfolS3V6O+Nd8SkNHd+pMcmZ3YJq4iNnVO/LkWJDWcTUSHcJp
-   9xPKzS3Zbknp5ufUur42WUG4LeHUabl8j8p7v2MUR+2kECxcRRtzTM5T0
-   E7Lv8kAuqOUuWxh9xMr7DEmvFtwExHDb3KCiRjo6yhThVIwa7eRodbeKz
-   W7f0zAA9BRP6PWv46jJIZ3tddTVn+qJ9cLu/1B0ocOa0wLF2Nn2Mvn+wS
-   HS9IdYtNwq5s1ww7cB0E/I9RByutpNXqZZZF8ENWurj+3Z19hnczL4dWf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253818851"
+  bh=m2aojPMgue6+E5/0+nOyweCRz5sLX+mQS17DDb1TwN8=;
+  b=JUScNR95gqswSh10RSaj8UG1MqqcU/DW9FgbohcEvZ/EdOsusdG+JlYL
+   opucHTbF8QK7hPvD/FbkHdfibRocA3kpFVnklq368mV3c0t3QiMzKQhXp
+   Pywpde9KmvZeZeT6jnBxkU4XCnfYZA1ZAyMEI2/dOQUY5XAJPx1Px7yni
+   m5l+QlDwOFhqEXUbR2MMwv/HbJPHzS/FjxiwbSGf80Ye+fo4mbCZuDXwO
+   zyyjH/UDmrTvxmjUVtIfcCjb9JuU8S2G90HO+puaoAhbYm5ED3DTqJaZi
+   xzVijQa3EUKH/6aksMQdJgU7RM0MTbgBVPAT+n4HGdTbzVZQ0haMORh3u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360346524"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="253818851"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 15:12:20 -0700
+   d="scan'208";a="360346524"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 15:54:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="602502105"
+   d="scan'208";a="745981952"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 May 2022 15:12:19 -0700
+  by orsmga005.jf.intel.com with ESMTP; 25 May 2022 15:54:20 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntzEo-0003Lx-GK;
-	Wed, 25 May 2022 22:12:18 +0000
-Date: Thu, 26 May 2022 06:11:58 +0800
+	id 1ntztT-0003Nq-MO;
+	Wed, 25 May 2022 22:54:19 +0000
+Date: Thu, 26 May 2022 06:53:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
+To: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/050-nvme 8/9] drivers/soc/apple/rtkit.c:665:9:
- error: call to undeclared function 'mbox_client_poll_data'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202205260646.kktYCjXu-lkp@intel.com>
+Subject: [vireshk-pm:opp/config 17/33] drivers/cpufreq/ti-cpufreq.c:331:19:
+ error: incompatible pointer types initializing 'const u32 *' (aka 'const
+ unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int
+ (*)[2]')
+Message-ID: <202205260656.mE4aquA1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,48 +48,117 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux bits/050-nvme
-head:   54dfe8ce63a23f4a11e9aa0481a09a6ec2267b2f
-commit: ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6 [8/9] soc: apple: rtkit: Add apple_rtkit_poll
-config: arm64-buildonly-randconfig-r005-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260646.kktYCjXu-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: f834c0b7a54d96f6322c544479bbe897309b4a0a [17/33] cpufreq: ti: Migrate to dev_pm_opp_set_config()
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220526/202205260656.mE4aquA1-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/050-nvme
-        git checkout ecb1172a9cbf4c3ad18fa5c259380a116c2f00e6
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=f834c0b7a54d96f6322c544479bbe897309b4a0a
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout f834c0b7a54d96f6322c544479bbe897309b4a0a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/apple/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/apple/rtkit.c:665:9: error: call to undeclared function 'mbox_client_poll_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return mbox_client_poll_data(rtk->mbox_chan);
-                  ^
-   drivers/soc/apple/rtkit.c:665:9: note: did you mean 'mbox_client_peek_data'?
-   include/linux/mailbox_client.h:46:6: note: 'mbox_client_peek_data' declared here
-   bool mbox_client_peek_data(struct mbox_chan *chan); /* atomic */
-        ^
-   1 error generated.
+>> drivers/cpufreq/ti-cpufreq.c:331:19: error: incompatible pointer types initializing 'const u32 *' (aka 'const unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int (*)[2]') [-Werror,-Wincompatible-pointer-types]
+                   .supported_hw = &version,
+                                   ^~~~~~~~
+>> drivers/cpufreq/ti-cpufreq.c:360:8: error: use of undeclared label 'fail_put_node'
+                   goto fail_put_node;
+                        ^
+   2 errors generated.
 
 
-vim +/mbox_client_poll_data +665 drivers/soc/apple/rtkit.c
+vim +331 drivers/cpufreq/ti-cpufreq.c
 
-   662	
-   663	int apple_rtkit_poll(struct apple_rtkit *rtk)
-   664	{
- > 665		return mbox_client_poll_data(rtk->mbox_chan);
-   666	}
-   667	EXPORT_SYMBOL_GPL(apple_rtkit_poll);
-   668	
+   322	
+   323	static int ti_cpufreq_probe(struct platform_device *pdev)
+   324	{
+   325		u32 version[VERSION_COUNT];
+   326		const struct of_device_id *match;
+   327		struct ti_cpufreq_data *opp_data;
+   328		const char * const default_reg_names[] = {"vdd", "vbb"};
+   329		int ret;
+   330		struct dev_pm_opp_config config = {
+ > 331			.supported_hw = &version,
+   332			.supported_hw_count = ARRAY_SIZE(version),
+   333		};
+   334	
+   335		match = dev_get_platdata(&pdev->dev);
+   336		if (!match)
+   337			return -ENODEV;
+   338	
+   339		opp_data = devm_kzalloc(&pdev->dev, sizeof(*opp_data), GFP_KERNEL);
+   340		if (!opp_data)
+   341			return -ENOMEM;
+   342	
+   343		opp_data->soc_data = match->data;
+   344	
+   345		opp_data->cpu_dev = get_cpu_device(0);
+   346		if (!opp_data->cpu_dev) {
+   347			pr_err("%s: Failed to get device for CPU0\n", __func__);
+   348			return -ENODEV;
+   349		}
+   350	
+   351		opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
+   352		if (!opp_data->opp_node) {
+   353			dev_info(opp_data->cpu_dev,
+   354				 "OPP-v2 not supported, cpufreq-dt will attempt to use legacy tables.\n");
+   355			goto register_cpufreq_dt;
+   356		}
+   357	
+   358		ret = ti_cpufreq_setup_syscon_register(opp_data);
+   359		if (ret)
+ > 360			goto fail_put_node;
+   361	
+   362		/*
+   363		 * OPPs determine whether or not they are supported based on
+   364		 * two metrics:
+   365		 *	0 - SoC Revision
+   366		 *	1 - eFuse value
+   367		 */
+   368		ret = ti_cpufreq_get_rev(opp_data, &version[0]);
+   369		if (ret)
+   370			goto fail_put_node;
+   371	
+   372		ret = ti_cpufreq_get_efuse(opp_data, &version[1]);
+   373		if (ret)
+   374			goto fail_put_node;
+   375	
+   376		if (opp_data->soc_data->multi_regulator) {
+   377			config.regulator_count = ARRAY_SIZE(default_reg_names);
+   378	
+   379			if (opp_data->soc_data->reg_names)
+   380				config.regulator_names = opp_data->soc_data->reg_names;
+   381			else
+   382				config.regulator_names = default_reg_names;
+   383		}
+   384	
+   385		opp_data->opp_table = dev_pm_opp_set_config(opp_data->cpu_dev, &config);
+   386		of_node_put(opp_data->opp_node);
+   387	
+   388		if (IS_ERR(opp_data->opp_table)) {
+   389			dev_err(opp_data->cpu_dev, "Failed to set OPP config\n");
+   390			return PTR_ERR(opp_data->opp_table);
+   391		}
+   392	
+   393	register_cpufreq_dt:
+   394		platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
+   395	
+   396		return 0;
+   397	}
+   398	
 
 -- 
 0-DAY CI Kernel Test Service
