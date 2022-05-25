@@ -1,79 +1,175 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36F9802
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:16:20 +0000 (UTC)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e93bbb54f9so24329836fac.12
-        for <llvm@lists.linux.dev>; Tue, 24 May 2022 18:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bCkYMI0MPX1g+9HqaT/chD8cfD8Weo7NM7d9+kp9f3A=;
-        b=NgkyyPbyKA8GEMlAbG7O365122h4GqFnUYz/Ga1zYhZCJZ+nPH8jDMcd9pFEtBc3iU
-         rP9oEZJUZzK7AmRZZNLMV2tG1qJ+i+LvvnnYn9p/7VhUAJzHisD56VS0dkKwD7J1Ah1K
-         pMogJAHIbnBTTmvHAeFQ3RPT15uv4Fvx3j9P0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bCkYMI0MPX1g+9HqaT/chD8cfD8Weo7NM7d9+kp9f3A=;
-        b=QC6zj+iUsttoCUMEgqtLWqcQIjpRQsg79Ctm3SGyPDgcA27HcMTiEji9wyux5xJIp7
-         NhSpTXE9ugXpnAV9m9EPbkSjG+ohC6aBHt4RFwkuSrX7VGr94BstH29JC3da8Fd2LRCm
-         TFBqBxHwNrE7vWoEs7NTBqHXoFZJk2Qi/53xuVSkJk+kPF4IyelpMn0DIEZjyKjSeq0U
-         WjiOYBZWtzY69rhlN32ZXtun47HXBEQiQJcQ6pZ5LatmOdB319K6H/pB33bP5J1LWmEX
-         sLXk43MSSjmLotHzHhdX+HeFkPefD4lUYUuYKl71tCzZcKmOyc4NJakZRiO8Lr34CdkY
-         harA==
-X-Gm-Message-State: AOAM533/Jj9tr0T1fSgg9ZoMfv3epUJv108E77f390I9zQfCSG5YaXJ/
-	PTAnIYY1L2eet7Jxlav6X0PmbB5vfHlbsg==
-X-Google-Smtp-Source: ABdhPJwYitegz3ncAFxFsZy+clvFPNaRqV8fM/CzNcvpzBcgBtdWrIUUuwiaAZURO5BebvvKBhiu2g==
-X-Received: by 2002:a05:6870:6589:b0:f1:a98f:4056 with SMTP id fp9-20020a056870658900b000f1a98f4056mr4246992oab.238.1653441379473;
-        Tue, 24 May 2022 18:16:19 -0700 (PDT)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com. [209.85.160.44])
-        by smtp.gmail.com with ESMTPSA id w76-20020aca304f000000b0032617532120sm5715393oiw.48.2022.05.24.18.16.18
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 18:16:18 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f1d5464c48so24381743fac.6
-        for <llvm@lists.linux.dev>; Tue, 24 May 2022 18:16:18 -0700 (PDT)
-X-Received: by 2002:a05:6870:f71d:b0:f2:a4c5:191a with SMTP id
- ej29-20020a056870f71d00b000f2a4c5191amr2700108oab.257.1653441377580; Tue, 24
- May 2022 18:16:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74939802
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653441629; x=1684977629;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pF91zDSA8U1Uv7fAAqztF2F+UfMaJyxJ7uuw78shyaI=;
+  b=IDvktJT+Rpf/oGb2q+81fZtJ6rj8qLoLZyUD0jcrW558XFxycOXD0SU2
+   98SOAH5b/xhvr9hvVxpJcA/J37wUTl0ZZA5U82fHWSWsInFHOM3WvMSis
+   oYQqFJgMKOwwaghnUfp41Eu2GT32F8iz7pEr3hHka8615Hoqv1j6nDXF7
+   5iXK71X9sBM3/5mliHltTEUBXUILe+UloeKntqzQ89JZWQCn/51l73ovu
+   1UfhZz6JO/51kuJrtc01WBdOSoRfnKJcBTwpLhKQMTf6apLui1UwF5c4a
+   /7dV5Oemg3kfjxak1rpOXSeDQUOaQtcpuYbRBF2s+cZqzLNX4tufXNmg+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="334333078"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="334333078"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 18:20:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="664199047"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2022 18:20:27 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ntfhK-0002bS-J9;
+	Wed, 25 May 2022 01:20:26 +0000
+Date: Wed, 25 May 2022 09:19:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:axboe/linux-block/io_uring-5.19 6/6]
+ fs/io_uring.c:6775:1: error: redefinition of 'io_shutdown'
+Message-ID: <202205250952.fOrdanvO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CGME20220524114954epcas1p416e486dce031a941263b13120e717d72@epcas1p4.samsung.com>
- <202205241931.GbIyyVs2-lkp@intel.com> <18b1bfe6-d844-d2c2-fc5e-40248aaf72be@samsung.com>
-In-Reply-To: <18b1bfe6-d844-d2c2-fc5e-40248aaf72be@samsung.com>
-From: Brian Norris <briannorris@chromium.org>
-Date: Tue, 24 May 2022 18:16:00 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNQ=ycB9v=FpNup2SM2Qd+W32M5c7vsh=jXG0qB_d_35w@mail.gmail.com>
-Message-ID: <CA+ASDXNQ=ycB9v=FpNup2SM2Qd+W32M5c7vsh=jXG0qB_d_35w@mail.gmail.com>
-Subject: Re: [linux-next:master 9269/14079] ld.lld: error: undefined symbol: rockchip_pmu_block
-To: Chanwoo Choi <cw00.choi@samsung.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Memory Management List <linux-mm@kvack.org>, Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Chanwoo,
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/io_uring-5.19
+head:   18f8e4c9acdb48c78db9a29d079a8e8248f7171d
+commit: 18f8e4c9acdb48c78db9a29d079a8e8248f7171d [6/6] io_uring: move shutdown under the general net section
+config: s390-randconfig-r035-20220524 (https://download.01.org/0day-ci/archive/20220525/202205250952.fOrdanvO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/18f8e4c9acdb48c78db9a29d079a8e8248f7171d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/io_uring-5.19
+        git checkout 18f8e4c9acdb48c78db9a29d079a8e8248f7171d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-On Tue, May 24, 2022 at 6:04 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
-> How can fix this build issue?
-> Should I add the ARCH_ROCKCHIP dependency to rk3399_dmc.c?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-No. As noted below by the robot, the issue is already fixed in -next.
-I noted as much already on the earlier reports:
-https://lore.kernel.org/all/CA+ASDXO1JDKf-vBB0gWdYKD9vMMoMXYRL2E42HJtnbOvMP7jPA@mail.gmail.com/
+All errors (new ones prefixed by >>):
 
-Unfortunately, the two changes were picked up to different trees at
-different times, so it's not bisectable. (It's not that severe IMO,
-since the build failure can only occur for COMPILE_TEST=y.)
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from fs/io_uring.c:60:
+   In file included from include/linux/blk-mq.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> fs/io_uring.c:6775:1: error: redefinition of 'io_shutdown'
+   IO_NETOP_FN(shutdown);
+   ^
+   fs/io_uring.c:6748:12: note: expanded from macro 'IO_NETOP_FN'
+   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
+              ^
+   <scratch space>:183:1: note: expanded from here
+   io_shutdown
+   ^
+   fs/io_uring.c:6772:1: note: previous definition is here
+   IO_NETOP_PREP(shutdown);
+   ^
+   fs/io_uring.c:6753:32: note: expanded from macro 'IO_NETOP_PREP'
+   #define IO_NETOP_PREP(op)                                               \
+                                                                           ^
+   fs/io_uring.c:6748:12: note: expanded from macro '\
+   IO_NETOP_FN'
+   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
+              ^
+   <scratch space>:178:1: note: expanded from here
+   io_shutdown
+   ^
+   12 warnings and 1 error generated.
 
-> On 5/24/22 8:49 PM, kernel test robot wrote:
-> > Note: the linux-next/master HEAD 09ce5091ff971cdbfd67ad84dc561ea27f10d67a builds fine.
-> >       It may have been fixed somewhere.
 
-Brian
+vim +/io_shutdown +6775 fs/io_uring.c
+
+  6766	
+  6767	IO_NETOP_PREP_ASYNC(sendmsg);
+  6768	IO_NETOP_PREP_ASYNC(recvmsg);
+  6769	IO_NETOP_PREP_ASYNC(connect);
+  6770	IO_NETOP_PREP(accept);
+  6771	IO_NETOP_PREP(socket);
+  6772	IO_NETOP_PREP(shutdown);
+  6773	IO_NETOP_FN(send);
+  6774	IO_NETOP_FN(recv);
+> 6775	IO_NETOP_FN(shutdown);
+  6776	#endif /* CONFIG_NET */
+  6777	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
