@@ -1,58 +1,42 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4471FA23
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 08:31:45 +0000 (UTC)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-f233f06563so13620287fac.7
-        for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
-        b=IuHTNa+IXAL6LEL2YyMB482iZtMh0+jmuW8i6AL7X/UkTx3yI9MdMXZ2u42WpedIx+
-         Ut4PzMpqdWrHa7YgBJ9GR0D07qh65VLonZwsByiXfoSD/X1tFr7x3HZ+l9Q2JCWC/Kic
-         8Y1VytjiBHSx2uz78Q9FatEcNiPyZ9OHREAgAqCcOmguatMXdh5REZcYMQrFTIjRtD40
-         AtjTc95Epz41aD3RKBR+ydNRSgjZttSLLOv/PVsBBagWjLdJ8LaCi4/7AEAoQbq/5zgU
-         +CQLASpfnpdIxA0y0HZ7mknsRGStXGke037bgzb3l8FStbN0MZ3ncLwP3fHwVcSePrRD
-         qZIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
-        b=DoMDk8XbnczsgD2ep3Pn6wd1QsMXANye4/ZhXNXYP0fDov2B69OVDCNkmC0Dw+h0x0
-         /13dRh1zrLhmLZGuoTcf6HIglkxW8HB1G8vMFJLEGIUJDB1aMH3B7GJiQk5N50vLETw0
-         iAmEKyDLJaeKNISQ33sTzRl67ywij3HVCXhbDuG6494RE5fFt6iPXyz1Yp2fiinaF/9b
-         YaQ0WoB81LEzArYorcFH0pMT+pxVUtTmCUtIDRRQe2VWpOHMPiFRGGktsH+h2LDElvBI
-         QQz6HnLkIsA0FAz1JtDnfop1rRDrsiryEhzWskSCZ8kGXCDTddYCX+iZRvLw5uxwbmRL
-         7K7w==
-X-Gm-Message-State: AOAM532U5bjKkF4uPGs2xu7FV4VE2cGZ1l+2e2836xv1HW7YRc/cNaEA
-	1BAkDLIkHmEDYpdYsSq9If0=
-X-Google-Smtp-Source: ABdhPJwJ3Af4TljiCBdGIlzA2/8casq4cg+0HOGwnV6RwOio8P/+jdi4JWYrKmiheK3fngNatmGwNQ==
-X-Received: by 2002:a05:6870:c207:b0:f1:85cd:648f with SMTP id z7-20020a056870c20700b000f185cd648fmr4747352oae.103.1653467504296;
-        Wed, 25 May 2022 01:31:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1-20020a056870a4c100b000f28d8f2debsm2114774oal.2.2022.05.25.01.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 01:31:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 25 May 2022 01:31:42 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script
- instead of modpost
-Message-ID: <20220525083142.GA1952409@roeck-us.net>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <20220513113930.10488-7-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3B6A23
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 08:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653467750; x=1685003750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0DXbn3ndBFHNjG8eF07NLSI46YIpzf8ytZ0vydcZhFE=;
+  b=VGvRGCLOscQik4i68bcPNsGiL75BgvWbKtTocZhuvKaQUxGbvPF6DkQw
+   5fccaPN6Ewu4UNSmf9edHj5Ghm9Xiz4e/WLpH0zCCNmo7fcoISpA7ceON
+   zU2Eyx2TYw/iN27EgfYbPsFCWPugCOJtT9Nt3AXRcxmUPC41w0BHdhdHf
+   cmisVTKLFMfG0o757tc0FYmf6JGZox4vifRzqPwExU9X8AT/f/iusyDlt
+   hwGBDhNwcqw16rWeAVDFMGNmAi+8sTyStJElpBNia1ig7PX1ZtmXupWnj
+   RZ2BAJVLYIwUTQQixZdilWk8zrkTZWSFN43ur3dGkWoxEIN4BQBnUCttn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="272574208"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="272574208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 01:35:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="559551482"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 May 2022 01:35:48 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1ntmUd-0002sI-Cw;
+	Wed, 25 May 2022 08:35:47 +0000
+Date: Wed, 25 May 2022 16:35:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 2/20] drivers/dma/apple-admac.c:260:5:
+ warning: no previous prototype for function 'admac_cyclic_read_residue'
+Message-ID: <202205251600.AqjYQGzD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,55 +45,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220513113930.10488-7-masahiroy@kernel.org>
 
-On Fri, May 13, 2022 at 08:39:26PM +0900, Masahiro Yamada wrote:
-> The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
-> 
-> Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
-> functions") tried to detect it, but this check has false negatives.
-> 
-> Here is the sample code.
-> 
->   Makefile:
-> 
->     obj-y += foo1.o foo2.o
-> 
->   foo1.c:
-> 
->     #include <linux/export.h>
->     static void foo(void) {}
->     EXPORT_SYMBOL(foo);
-> 
->   foo2.c:
-> 
->     void foo(void) {}
-> 
-> foo1.c exports the static symbol 'foo', but modpost cannot catch it
-> because it is fooled by foo2.c, which has a global symbol with the
-> same name.
-> 
-> s->is_static is cleared if a global symbol with the same name is found
-> somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
-> belong to the same compilation unit.
-> 
-> This check should be done per compilation unit, but I do not know how
-> to do it in modpost. modpost runs against vmlinux.o or modules, which
-> merges multiple objects, then forgets their origin.
-> 
-> It is true modpost gets access to the lists of all the member objects
-> (.vmlinux.objs and *.mod), but modpost cannot parse individual objects
-> because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
-> 
-> Add a simple bash script to parse the output from ${NM}. This works for
-> CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
-> 
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   401ef594286e6abfe89c2d92664087bc5d6ca657
+commit: d2b3a34a7f529cd3e338989d7b4c71981180ad30 [2/20] dmaengine: apple-admac: Add Apple ADMAC driver
+config: arm64-buildonly-randconfig-r005-20220524 (https://download.01.org/0day-ci/archive/20220525/202205251600.AqjYQGzD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/d2b3a34a7f529cd3e338989d7b4c71981180ad30
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout d2b3a34a7f529cd3e338989d7b4c71981180ad30
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
 
-On parisc builds, this patch results in:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Building parisc:allnoconfig ... failed
---------------
-Error log:
-scripts/check-local-export: sh /opt/buildbot/slave/next-next/build/arch/parisc/nm failed
+All warnings (new ones prefixed by >>):
 
-Guenter
+>> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for function 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+       ^
+   drivers/dma/apple-admac.c:260:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/admac_cyclic_read_residue +260 drivers/dma/apple-admac.c
+
+   256	
+   257	/*
+   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
+   259	 */
+ > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   261	{
+   262		u32 ring1, ring2;
+   263		u32 residue1, residue2;
+   264		int nreports;
+   265		size_t pos;
+   266	
+   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
+   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
+   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
+   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
+   271	
+   272		if (residue2 > residue1) {
+   273			// engine must have loaded next descriptor between the two residue reads
+   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
+   275		} else {
+   276			// no descriptor load between the two reads, ring2 is safe to use
+   277			nreports = admac_ring_noccupied_slots(ring2);
+   278		}
+   279	
+   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
+   281							 - residue2;
+   282	
+   283		return adtx->buf_len - pos % adtx->buf_len;
+   284	}
+   285	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
