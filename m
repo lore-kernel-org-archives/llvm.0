@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74939802
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F172802
+	for <llvm@lists.linux.dev>; Wed, 25 May 2022 01:46:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653441629; x=1684977629;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pF91zDSA8U1Uv7fAAqztF2F+UfMaJyxJ7uuw78shyaI=;
-  b=IDvktJT+Rpf/oGb2q+81fZtJ6rj8qLoLZyUD0jcrW558XFxycOXD0SU2
-   98SOAH5b/xhvr9hvVxpJcA/J37wUTl0ZZA5U82fHWSWsInFHOM3WvMSis
-   oYQqFJgMKOwwaghnUfp41Eu2GT32F8iz7pEr3hHka8615Hoqv1j6nDXF7
-   5iXK71X9sBM3/5mliHltTEUBXUILe+UloeKntqzQ89JZWQCn/51l73ovu
-   1UfhZz6JO/51kuJrtc01WBdOSoRfnKJcBTwpLhKQMTf6apLui1UwF5c4a
-   /7dV5Oemg3kfjxak1rpOXSeDQUOaQtcpuYbRBF2s+cZqzLNX4tufXNmg+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="334333078"
+  t=1653443190; x=1684979190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6XNN2mNpztmM751uWOdvcFZPSJJBe8cNVQItzudxRro=;
+  b=TaTU73wYlgyH1ndA7Q1Np5Di+duuReWZ7j3+9OKxwPkZROfbnMp9UXi4
+   XzZ/z8zDCCEIUrYLPEr98r1tS4AP7xXscd/MiEE34/cX0tpLiGGpa9PWL
+   ZYydewBpnH1zPES5iSY8Cdd+yPbOVu6hMVe/4l6TYrIVDq04QEk+kXz1b
+   TolJRmzBX8Vz61hZt4aHze4ZbT7d3Ze1cNAozK9KdGb3gKRLCVUpNX39s
+   EfM4P5mpjS8PC5AWWLK7y20cNZPcO2Xq3cHy5zkOp0YwPSoiHIR56iVwk
+   8IspfRjFubn98dP3URACO+NU5CV5lI8gIAjeUUVY/OsoMl3qoRKFFKh4l
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="261301035"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="334333078"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 18:20:28 -0700
+   d="scan'208";a="261301035"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 18:46:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="664199047"
+   d="scan'208";a="559362846"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2022 18:20:27 -0700
+  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 18:46:28 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntfhK-0002bS-J9;
-	Wed, 25 May 2022 01:20:26 +0000
-Date: Wed, 25 May 2022 09:19:51 +0800
+	id 1ntg6V-0002cY-D1;
+	Wed, 25 May 2022 01:46:27 +0000
+Date: Wed, 25 May 2022 09:45:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
+To: Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com, xiubli@redhat.com
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/io_uring-5.19 6/6]
- fs/io_uring.c:6775:1: error: redefinition of 'io_shutdown'
-Message-ID: <202205250952.fOrdanvO-lkp@intel.com>
+	ceph-devel@vger.kernel.org
+Subject: Re: [PATCH] libceph: drop last_piece flag from ceph_msg_data_cursor
+Message-ID: <202205250952.WomOpRyT-lkp@intel.com>
+References: <20220524220610.141970-1-jlayton@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,129 +46,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220524220610.141970-1-jlayton@kernel.org>
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/io_uring-5.19
-head:   18f8e4c9acdb48c78db9a29d079a8e8248f7171d
-commit: 18f8e4c9acdb48c78db9a29d079a8e8248f7171d [6/6] io_uring: move shutdown under the general net section
-config: s390-randconfig-r035-20220524 (https://download.01.org/0day-ci/archive/20220525/202205250952.fOrdanvO-lkp@intel.com/config)
+Hi Jeff,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on ceph-client/for-linus]
+[also build test WARNING on v5.18 next-20220524]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Layton/libceph-drop-last_piece-flag-from-ceph_msg_data_cursor/20220525-060709
+base:   https://github.com/ceph/ceph-client.git for-linus
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220525/202205250952.WomOpRyT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/18f8e4c9acdb48c78db9a29d079a8e8248f7171d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/io_uring-5.19
-        git checkout 18f8e4c9acdb48c78db9a29d079a8e8248f7171d
+        # https://github.com/intel-lab-lkp/linux/commit/09a57bbfef50219b0f819adc621516e6b3344fe4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeff-Layton/libceph-drop-last_piece-flag-from-ceph_msg_data_cursor/20220525-060709
+        git checkout 09a57bbfef50219b0f819adc621516e6b3344fe4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ceph/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from fs/io_uring.c:60:
-   In file included from include/linux/blk-mq.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> fs/io_uring.c:6775:1: error: redefinition of 'io_shutdown'
-   IO_NETOP_FN(shutdown);
-   ^
-   fs/io_uring.c:6748:12: note: expanded from macro 'IO_NETOP_FN'
-   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-              ^
-   <scratch space>:183:1: note: expanded from here
-   io_shutdown
-   ^
-   fs/io_uring.c:6772:1: note: previous definition is here
-   IO_NETOP_PREP(shutdown);
-   ^
-   fs/io_uring.c:6753:32: note: expanded from macro 'IO_NETOP_PREP'
-   #define IO_NETOP_PREP(op)                                               \
-                                                                           ^
-   fs/io_uring.c:6748:12: note: expanded from macro '\
-   IO_NETOP_FN'
-   static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-              ^
-   <scratch space>:178:1: note: expanded from here
-   io_shutdown
-   ^
-   12 warnings and 1 error generated.
+>> net/ceph/messenger.c:858:12: warning: comparison of distinct pointer types ('typeof (cursor->resid) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - *page_offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           *length = min(cursor->resid, PAGE_SIZE - *page_offset);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   net/ceph/messenger.c:931:12: warning: comparison of distinct pointer types ('typeof (cursor->resid) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) - *page_offset) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           *length = min(cursor->resid, PAGE_SIZE - *page_offset);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/io_shutdown +6775 fs/io_uring.c
+vim +858 net/ceph/messenger.c
 
-  6766	
-  6767	IO_NETOP_PREP_ASYNC(sendmsg);
-  6768	IO_NETOP_PREP_ASYNC(recvmsg);
-  6769	IO_NETOP_PREP_ASYNC(connect);
-  6770	IO_NETOP_PREP(accept);
-  6771	IO_NETOP_PREP(socket);
-  6772	IO_NETOP_PREP(shutdown);
-  6773	IO_NETOP_FN(send);
-  6774	IO_NETOP_FN(recv);
-> 6775	IO_NETOP_FN(shutdown);
-  6776	#endif /* CONFIG_NET */
-  6777	
+   845	
+   846	static struct page *
+   847	ceph_msg_data_pages_next(struct ceph_msg_data_cursor *cursor,
+   848						size_t *page_offset, size_t *length)
+   849	{
+   850		struct ceph_msg_data *data = cursor->data;
+   851	
+   852		BUG_ON(data->type != CEPH_MSG_DATA_PAGES);
+   853	
+   854		BUG_ON(cursor->page_index >= cursor->page_count);
+   855		BUG_ON(cursor->page_offset >= PAGE_SIZE);
+   856	
+   857		*page_offset = cursor->page_offset;
+ > 858		*length = min(cursor->resid, PAGE_SIZE - *page_offset);
+   859		return data->pages[cursor->page_index];
+   860	}
+   861	
 
 -- 
 0-DAY CI Kernel Test Service
