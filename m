@@ -1,155 +1,127 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CD610EB
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 06:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653546115; x=1685082115;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O5ecHGSQNMGrOkxnlW/PepN0Pk3/k0H52UCc5+m8Puc=;
-  b=lLFl5ji9yBsGWc0aPGKroubFlZiJWnMEKz0r9Nb8H8DOtdWCGHubNuUy
-   ylamvBVZDEOJmMBYCGoIxfUhZbIr1PVPRDgHJbtCPotaVV6PzqDsav0uz
-   joPvywE+rHMbmVLFXwtLcS0bK2Bxg2kZW/yT1LysBh3/vH6TxpPVJTzHm
-   PVSbxV+NMaWVM/vp12V837YNja2woW800HxwMxPEAiewkZqWEPuLe3Yk7
-   c3E68ubhNEmO4dU+rmTkz82kggTHighYIpjT2dbsagvMnpMNzOE2WVTMD
-   +AcFShgc+rd85T66zvThw1q3ZS57WSGp2WvlauPD1qJymcxxyb5Tc0Eep
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272864794"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="272864794"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 23:21:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="704372214"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 23:21:53 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nu6sa-0003ew-9j;
-	Thu, 26 May 2022 06:21:52 +0000
-Date: Thu, 26 May 2022 14:21:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ebiggers:f2fs-pending 1/1] fs/f2fs/super.c:520:21: error: call to
- undeclared function 'fscrypt_is_dummy_policy_set'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205261436.whb9q09P-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD332EC4
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 07:08:46 +0000 (UTC)
+X-UUID: 8269ac6b732f4c13af0950215420d768-20220526
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:b15ec10b-6098-4f21-995b-6a4bd6e9e238,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:b15ec10b-6098-4f21-995b-6a4bd6e9e238,OB:0,LOB:
+	0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+	N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:0b768c47-4fb1-496b-8f1d-39e733fed1ea,C
+	OID:c3fa04fb1107,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 8269ac6b732f4c13af0950215420d768-20220526
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1084779265; Thu, 26 May 2022 15:03:34 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 26 May 2022 15:03:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 26 May 2022 15:03:32 +0800
+Message-ID: <995c91a5dbad4512aadc8b2e12502e88b335af5b.camel@mediatek.com>
+Subject: Re: [PATCH v21 00/25] Add MediaTek SoC DRM (vdosys1) support for
+ mt8195
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Rex-BC Chen <rex-bc.chen@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Thu, 26 May 2022 15:03:32 +0800
+In-Reply-To: <79863f1b-7bdd-61c7-2209-23011d8e1558@collabora.com>
+References: <20220512053128.31415-1-nancy.lin@mediatek.com>
+	 <8c6ceb14be7e53a7dab9d6f045a48deaef54f683.camel@mediatek.com>
+	 <79863f1b-7bdd-61c7-2209-23011d8e1558@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git f2fs-pending
-head:   14c933f493ea41e28bbe5317af611dc01d66b489
-commit: 14c933f493ea41e28bbe5317af611dc01d66b489 [1/1] f2fs: use the updated test_dummy_encryption helper functions
-config: hexagon-randconfig-r045-20220524 (https://download.01.org/0day-ci/archive/20220526/202205261436.whb9q09P-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=14c933f493ea41e28bbe5317af611dc01d66b489
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers f2fs-pending
-        git checkout 14c933f493ea41e28bbe5317af611dc01d66b489
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/f2fs/
+On Wed, 2022-05-25 at 12:08 +0200, AngeloGioacchino Del Regno wrote:
+> Il 18/05/22 04:47, Rex-BC Chen ha scritto:
+> > On Thu, 2022-05-12 at 13:31 +0800, Nancy.Lin wrote:
+> > > The hardware path of vdosys1 with DPTx output need to go through
+> > > by
+> > > several modules, such as, OVL_ADAPTOR and MERGE.
+> > > 
+> > > Add DRM and these modules support by the patches below:
+> > > 
+> > > Changes in v21:
+> > > - fix reviewer comment
+> > >    - fix rdma and ethdr binding doc and dts
+> > > 
+> 
+> ..snip..
+> 
+> > 
+> > Hello Matthias,
+> > 
+> > Could you also spare some time to give us some suggestion for the
+> > mmsys
+> > and mutex patches of this series?
+> > If we can improve anything, we can do it before 5.19.
+> > Thanks for your big support!
+> > 
+> > BRs,
+> > Rex
+> > 
+> 
+> Even though there may be something to further improve, keep in mind
+> that we're
+> already at v21... that's... a lot of versions, and vdosys0/1 are
+> practically
+> tied together even though they're coming from two different
+> engineers.
+> 
+> I can confirm that this entire stack works on the new HW as intended
+> and that
+> there's no regression on older ones, so on all patches you can add
+> my:
+> 
+> [Tested on MT6795, MT8173, MT8192, MT8195]
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> 
+> 
+> .... BUT! ....
+> 
+> 
+> This series won't apply cleanly anymore on next-20220525 (same for
+> vdosys0,
+> already pinged Jason about it) because of the commits adding support
+> for MT8186,
+> so *please rebase this series once again*.
+> 
+> 
+> Cheers,
+> Angelo
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Angelo,
 
-All errors (new ones prefixed by >>):
+I will rebase to next-20220525 and resend it soon.
 
->> fs/f2fs/super.c:520:21: error: call to undeclared function 'fscrypt_is_dummy_policy_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
-                              ^
-   fs/f2fs/super.c:520:21: note: did you mean 'fscrypt_free_dummy_policy'?
-   include/linux/fscrypt.h:477:1: note: 'fscrypt_free_dummy_policy' declared here
-   fscrypt_free_dummy_policy(struct fscrypt_dummy_policy *dummy_policy)
-   ^
->> fs/f2fs/super.c:525:8: error: call to undeclared function 'fscrypt_parse_test_dummy_encryption'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = fscrypt_parse_test_dummy_encryption(&param, policy);
-                 ^
-   fs/f2fs/super.c:525:8: note: did you mean 'fscrypt_show_test_dummy_encryption'?
-   include/linux/fscrypt.h:470:20: note: 'fscrypt_show_test_dummy_encryption' declared here
-   static inline void fscrypt_show_test_dummy_encryption(struct seq_file *seq,
-                      ^
->> fs/f2fs/super.c:538:8: error: call to undeclared function 'fscrypt_add_test_dummy_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = fscrypt_add_test_dummy_key(sb, policy);
-                 ^
-   3 errors generated.
+Regards,
+Nancy
 
-
-vim +/fscrypt_is_dummy_policy_set +520 fs/f2fs/super.c
-
-   489	
-   490	static int f2fs_set_test_dummy_encryption(struct super_block *sb,
-   491						  const char *opt,
-   492						  const substring_t *arg,
-   493						  bool is_remount)
-   494	{
-   495		struct f2fs_sb_info *sbi = F2FS_SB(sb);
-   496		struct fs_parameter param = {
-   497			.type = fs_value_is_string,
-   498			.string = arg->from ? arg->from : "",
-   499		};
-   500		struct fscrypt_dummy_policy *policy =
-   501			&F2FS_OPTION(sbi).dummy_enc_policy;
-   502		int err;
-   503	
-   504		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION)) {
-   505			f2fs_warn(sbi, "test_dummy_encryption option not supported");
-   506			return -EINVAL;
-   507		}
-   508	
-   509		if (!f2fs_sb_has_encrypt(sbi)) {
-   510			f2fs_err(sbi, "Encrypt feature is off");
-   511			return -EINVAL;
-   512		}
-   513	
-   514		/*
-   515		 * This mount option is just for testing, and it's not worthwhile to
-   516		 * implement the extra complexity (e.g. RCU protection) that would be
-   517		 * needed to allow it to be set or changed during remount.  We do allow
-   518		 * it to be specified during remount, but only if there is no change.
-   519		 */
- > 520		if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
-   521			f2fs_warn(sbi, "Can't set test_dummy_encryption on remount");
-   522			return -EINVAL;
-   523		}
-   524	
- > 525		err = fscrypt_parse_test_dummy_encryption(&param, policy);
-   526		if (err) {
-   527			if (err == -EEXIST)
-   528				f2fs_warn(sbi,
-   529					  "Can't change test_dummy_encryption on remount");
-   530			else if (err == -EINVAL)
-   531				f2fs_warn(sbi, "Value of option \"%s\" is unrecognized",
-   532					  opt);
-   533			else
-   534				f2fs_warn(sbi, "Error processing option \"%s\" [%d]",
-   535					  opt, err);
-   536			return -EINVAL;
-   537		}
- > 538		err = fscrypt_add_test_dummy_key(sb, policy);
-   539		if (err) {
-   540			f2fs_warn(sbi, "Error adding test dummy encryption key [%d]",
-   541				  err);
-   542			return err;
-   543		}
-   544		f2fs_warn(sbi, "Test dummy encryption mode enabled");
-   545		return 0;
-   546	}
-   547	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
