@@ -1,42 +1,48 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001A47C
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 11:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28DA7C
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 12:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653563882; x=1685099882;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BPjvQnwWBSu8CUNkWwbhRr6V2vDqJNPDDllQ5xGL/Oc=;
-  b=PzmXCugQamx1rUul5X0qUl5SYl0eyT5YHHu9XSxi/JhvlHClrWusDLx5
-   Nc2Te9Yqg026Sb3fAmO0yoJLRtHISRfothMA86hMBElwIZNEqj4GeseiW
-   xodwnu3ONAJ9NMK9MTjoSy2rb3FwBLpmZrVAU6pHpMmwb6bxrge2EQg1w
-   fEiKnxCkg2j9KHAEXJMDGSSoxPSuIium+jrVd0oc+JglUA4SkqHspjjee
-   dxDUTm6s155l1qYUG1b+ihArN/iI3HQCn8Weh7xoAVi/bcH4Cd71hKpgM
-   diYksoDpYH+yxvkm/wXxiu5ZR3V3MYM7wjapSTGny60GMhRVO2sL7Gvpb
+  t=1653566946; x=1685102946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8cb6LUIMboo+SIEZgujmYDLknzubtzj+xpHtKPgU8yc=;
+  b=kRLkXjhF8UyjRTrMWWw0iKmWJZ0BrGPwyWF7Dc9MeHtc2LkD2dkid3JJ
+   XAendlBY8i7Qfn/H9zj9lzIlzypzQgAtqeaXIUfDmlHkpACKJBUtfyLGw
+   w6qsn0N3dYc5U76lhM1QynVY5GruuKLkKOEBHZlirE3qjamVoUuvfoJLr
+   SBxZub+0odivcG7Aqivv9LnxrbWqf0V9Yg+FGDtgAA7nfqklltdof2g9u
+   mgAqG7uo8TYci5JI+Wf/IUEg8qSAFuWglpEPY1sgJKyMGudVh2o3gsxES
+   hXxa9bRqhTpZ6ZfEFmR8nGqMkPSTUfOrQ+nNjIpdX7josbmdB+XXv+PC2
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="334765268"
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272952218"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="334765268"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 04:18:00 -0700
+   d="scan'208";a="272952218"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 05:09:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="746274712"
+   d="scan'208";a="677439120"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 May 2022 04:17:59 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 26 May 2022 05:09:02 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nuBV8-0003ou-MB;
-	Thu, 26 May 2022 11:17:58 +0000
-Date: Thu, 26 May 2022 19:17:25 +0800
+	id 1nuCIX-0003qe-HV;
+	Thu, 26 May 2022 12:09:01 +0000
+Date: Thu, 26 May 2022 20:08:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202205261949.WNSQhZ5Y-lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	lgirdwood@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 2/4] regulator: Add driver for MT6331 PMIC regulators
+Message-ID: <202205261929.FCVQ5SD3-lkp@intel.com>
+References: <20220523154709.118663-3-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,56 +51,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220523154709.118663-3-angelogioacchino.delregno@collabora.com>
 
-Hi Mauro,
+Hi AngeloGioacchino,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   10 weeks ago
-config: mips-randconfig-r025-20220524 (https://download.01.org/0day-ci/archive/20220526/202205261949.WNSQhZ5Y-lkp@intel.com/config)
+[auto build test ERROR on broonie-regulator/for-next]
+[also build test ERROR on v5.18 next-20220526]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205261929.FCVQ5SD3-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
+        # https://github.com/intel-lab-lkp/linux/commit/6dc66c0e54d0e22f6688e5b61d2740e0b839fc1e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
+        git checkout 6dc66c0e54d0e22f6688e5b61d2740e0b839fc1e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/marvell/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/regulator/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   1 warning generated.
+>> drivers/regulator/mt6331-regulator.c:15:10: fatal error: 'linux/mfd/mt6331/registers.h' file not found
+   #include <linux/mfd/mt6331/registers.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+vim +15 drivers/regulator/mt6331-regulator.c
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
-
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
-
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+     9	
+    10	#include <linux/module.h>
+    11	#include <linux/of.h>
+    12	#include <linux/platform_device.h>
+    13	#include <linux/regmap.h>
+    14	#include <linux/mfd/mt6397/core.h>
+  > 15	#include <linux/mfd/mt6331/registers.h>
+    16	#include <linux/regulator/driver.h>
+    17	#include <linux/regulator/machine.h>
+    18	#include <linux/regulator/mt6331-regulator.h>
+    19	#include <linux/regulator/of_regulator.h>
+    20	
 
 -- 
 0-DAY CI Kernel Test Service
