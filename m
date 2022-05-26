@@ -1,46 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453EF10EB
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 05:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CD610EB
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 06:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653544797; x=1685080797;
+  t=1653546115; x=1685082115;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FoFi6ee/Unw0akjPodAajaS59MNcAC8Hemf/HS8pGgc=;
-  b=YC0cb3bm0Rmz7EI02YGxeOsrWgCUoXBzJPtVNp+/arhhZoM2NK1Mu8eL
-   tKsIbntLzSbvf/1Ep25qc5d7AFK/L+RNoOAMcWEgpB7gu6vQ0O7F3d491
-   U7P8tlAD+e7JHqTQyVZVnXgbWb5n96pa7yLyQ6jmgCkaY2v1sKJ3lg2WA
-   9zkWoUA4rHGk9UEvrXYK4HSWaSgUIrGIlT5o699xdUZ1EqFgnqVJklOXu
-   85KurcjC7xEr0qU5kTqVC1Dw/dZJdrTJl76hTWyvsRX38ScJVpZxnT5Ro
-   FNFbiLOFgSvVnWB19wD3GixJa4mFeljARpkhFhS7cTqwtVRC0MIt3u3E0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="254544419"
+  bh=O5ecHGSQNMGrOkxnlW/PepN0Pk3/k0H52UCc5+m8Puc=;
+  b=lLFl5ji9yBsGWc0aPGKroubFlZiJWnMEKz0r9Nb8H8DOtdWCGHubNuUy
+   ylamvBVZDEOJmMBYCGoIxfUhZbIr1PVPRDgHJbtCPotaVV6PzqDsav0uz
+   joPvywE+rHMbmVLFXwtLcS0bK2Bxg2kZW/yT1LysBh3/vH6TxpPVJTzHm
+   PVSbxV+NMaWVM/vp12V837YNja2woW800HxwMxPEAiewkZqWEPuLe3Yk7
+   c3E68ubhNEmO4dU+rmTkz82kggTHighYIpjT2dbsagvMnpMNzOE2WVTMD
+   +AcFShgc+rd85T66zvThw1q3ZS57WSGp2WvlauPD1qJymcxxyb5Tc0Eep
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272864794"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="254544419"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 22:59:56 -0700
+   d="scan'208";a="272864794"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 23:21:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="821079105"
+   d="scan'208";a="704372214"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 25 May 2022 22:59:52 -0700
+  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 23:21:53 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nu6XH-0003e8-NG;
-	Thu, 26 May 2022 05:59:51 +0000
-Date: Thu, 26 May 2022 13:59:07 +0800
+	id 1nu6sa-0003ew-9j;
+	Thu, 26 May 2022 06:21:52 +0000
+Date: Thu, 26 May 2022 14:21:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Gao <chao.gao@intel.com>
+To: Eric Biggers <ebiggers@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Zeng Guang <guang.zeng@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: [intel-tdx:kvm-upstream-workaround 99/435]
- arch/x86/kvm/vmx/vmx.c:4410:5: error: no previous prototype for function
- 'vmx_get_pid_table_order'
-Message-ID: <202205261324.RC40VHb7-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [ebiggers:f2fs-pending 1/1] fs/f2fs/super.c:520:21: error: call to
+ undeclared function 'fscrypt_is_dummy_policy_set'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202205261436.whb9q09P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,48 +47,108 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   0075383344a9c2bfaba7cca988c85008d92c4f8c
-commit: 7325e60f0f39b6cffcc23ec74910cf0ec5ac1412 [99/435] KVM: VMX: enable IPI virtualization
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220526/202205261324.RC40VHb7-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git f2fs-pending
+head:   14c933f493ea41e28bbe5317af611dc01d66b489
+commit: 14c933f493ea41e28bbe5317af611dc01d66b489 [1/1] f2fs: use the updated test_dummy_encryption helper functions
+config: hexagon-randconfig-r045-20220524 (https://download.01.org/0day-ci/archive/20220526/202205261436.whb9q09P-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/7325e60f0f39b6cffcc23ec74910cf0ec5ac1412
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 7325e60f0f39b6cffcc23ec74910cf0ec5ac1412
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=14c933f493ea41e28bbe5317af611dc01d66b489
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers f2fs-pending
+        git checkout 14c933f493ea41e28bbe5317af611dc01d66b489
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/f2fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the intel-tdx/kvm-upstream-workaround HEAD 0075383344a9c2bfaba7cca988c85008d92c4f8c builds fine.
-      It only hurts bisectability.
-
 All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/vmx/vmx.c:4410:5: error: no previous prototype for function 'vmx_get_pid_table_order' [-Werror,-Wmissing-prototypes]
-   int vmx_get_pid_table_order(struct kvm *kvm)
-       ^
-   arch/x86/kvm/vmx/vmx.c:4410:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vmx_get_pid_table_order(struct kvm *kvm)
+>> fs/f2fs/super.c:520:21: error: call to undeclared function 'fscrypt_is_dummy_policy_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
+                              ^
+   fs/f2fs/super.c:520:21: note: did you mean 'fscrypt_free_dummy_policy'?
+   include/linux/fscrypt.h:477:1: note: 'fscrypt_free_dummy_policy' declared here
+   fscrypt_free_dummy_policy(struct fscrypt_dummy_policy *dummy_policy)
    ^
-   static 
-   1 error generated.
+>> fs/f2fs/super.c:525:8: error: call to undeclared function 'fscrypt_parse_test_dummy_encryption'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = fscrypt_parse_test_dummy_encryption(&param, policy);
+                 ^
+   fs/f2fs/super.c:525:8: note: did you mean 'fscrypt_show_test_dummy_encryption'?
+   include/linux/fscrypt.h:470:20: note: 'fscrypt_show_test_dummy_encryption' declared here
+   static inline void fscrypt_show_test_dummy_encryption(struct seq_file *seq,
+                      ^
+>> fs/f2fs/super.c:538:8: error: call to undeclared function 'fscrypt_add_test_dummy_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = fscrypt_add_test_dummy_key(sb, policy);
+                 ^
+   3 errors generated.
 
 
-vim +/vmx_get_pid_table_order +4410 arch/x86/kvm/vmx/vmx.c
+vim +/fscrypt_is_dummy_policy_set +520 fs/f2fs/super.c
 
-  4409	
-> 4410	int vmx_get_pid_table_order(struct kvm *kvm)
-  4411	{
-  4412		return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
-  4413	}
-  4414	
+   489	
+   490	static int f2fs_set_test_dummy_encryption(struct super_block *sb,
+   491						  const char *opt,
+   492						  const substring_t *arg,
+   493						  bool is_remount)
+   494	{
+   495		struct f2fs_sb_info *sbi = F2FS_SB(sb);
+   496		struct fs_parameter param = {
+   497			.type = fs_value_is_string,
+   498			.string = arg->from ? arg->from : "",
+   499		};
+   500		struct fscrypt_dummy_policy *policy =
+   501			&F2FS_OPTION(sbi).dummy_enc_policy;
+   502		int err;
+   503	
+   504		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION)) {
+   505			f2fs_warn(sbi, "test_dummy_encryption option not supported");
+   506			return -EINVAL;
+   507		}
+   508	
+   509		if (!f2fs_sb_has_encrypt(sbi)) {
+   510			f2fs_err(sbi, "Encrypt feature is off");
+   511			return -EINVAL;
+   512		}
+   513	
+   514		/*
+   515		 * This mount option is just for testing, and it's not worthwhile to
+   516		 * implement the extra complexity (e.g. RCU protection) that would be
+   517		 * needed to allow it to be set or changed during remount.  We do allow
+   518		 * it to be specified during remount, but only if there is no change.
+   519		 */
+ > 520		if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
+   521			f2fs_warn(sbi, "Can't set test_dummy_encryption on remount");
+   522			return -EINVAL;
+   523		}
+   524	
+ > 525		err = fscrypt_parse_test_dummy_encryption(&param, policy);
+   526		if (err) {
+   527			if (err == -EEXIST)
+   528				f2fs_warn(sbi,
+   529					  "Can't change test_dummy_encryption on remount");
+   530			else if (err == -EINVAL)
+   531				f2fs_warn(sbi, "Value of option \"%s\" is unrecognized",
+   532					  opt);
+   533			else
+   534				f2fs_warn(sbi, "Error processing option \"%s\" [%d]",
+   535					  opt, err);
+   536			return -EINVAL;
+   537		}
+ > 538		err = fscrypt_add_test_dummy_key(sb, policy);
+   539		if (err) {
+   540			f2fs_warn(sbi, "Error adding test dummy encryption key [%d]",
+   541				  err);
+   542			return err;
+   543		}
+   544		f2fs_warn(sbi, "Test dummy encryption mode enabled");
+   545		return 0;
+   546	}
+   547	
 
 -- 
 0-DAY CI Kernel Test Service
