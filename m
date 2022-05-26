@@ -1,43 +1,34 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA61389
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 14:22:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653574932; x=1685110932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MExdy0PQ1mm12crzu+MfwurQlT0wcSHvnPQYx0GnPU4=;
-  b=SFRFI33A3AWhtgrW56tRQgi0nTN1W61gxzRc531mgXVaRUrkLOZ0Ty1l
-   EeU+W8GAkf1qzEV4GCjRCEWonLNb2NKxvk7iXLlsOR/3wx6GEz6Q/t/Tr
-   PucQsELgYu9n9dwEqx+M8aobqH7PfA3Cedran8XQW2WRh0qXYfUXzBDPz
-   dSQ6QDCJVopUCtbLp1tqzq7xFZj69UEFZ+4enXGVVe7HLOCbiRGHmiY2a
-   olaXC4nBBPipbEczjO7uPQzrV1DOfdd3b3VYtYM6ex8b0Xjh+fgRxRve4
-   2SEm1QcZtrnRki3SAvvmZ3xtorD/1O6a9pHDuH2gpws+vOFaGVScSR/3X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="261784921"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="261784921"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 07:22:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="664955508"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 May 2022 07:22:08 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nuENL-0003vI-Ro;
-	Thu, 26 May 2022 14:22:07 +0000
-Date: Thu, 26 May 2022 22:21:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.cleanup 9/10]
- arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the
- beginning of the array
-Message-ID: <202205262245.87lBx9Fw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12318EDB
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 14:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927C7C34116;
+	Thu, 26 May 2022 14:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653575954;
+	bh=tkFr4iPq11JZDYdXXnwdtpbmQ+4dzE7OxukIImn7/7U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Fr9SujQhyc0P9NEkBhhp9/KU26K0aBCw2wW7ced1lmRaKxSaK1ttuQgs2Cjm36r/F
+	 KKq2xmFwvCaohPnvO7NKHdOuvWfkI9wx3j48a5BtFuJZhSxoiX+OgnbHyZlLCHEtz9
+	 lUQC82hs7mCyVQPDlUxUXOy7mt4puNFNngKYDpHfwJv+nJGxC7pZvqTTnKtIYytSKG
+	 S+exnqDI+leh7/mrM/m9lvOhihBcMmIpuHvxpLAh2dA/PUyxvZLUvIqjb2HFdhUUF/
+	 VC4mfhH7Yi1Smmwz6+2czAz3AwXGD68rQlTLMERBgaG636NryTFHxVkoPq45wS4Duc
+	 UDMmPrzjsI/bw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id A2ACB4036D; Thu, 26 May 2022 11:39:10 -0300 (-03)
+Date: Thu, 26 May 2022 11:39:10 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Fangrui Song <maskray@google.com>,
+	Travis Downs <travis.downs@gmail.com>,
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: Call graph dwarf unwinding fails with lld
+Message-ID: <Yo+RDn9om2Eiwjym@kernel.org>
+References: <CAOBGo4zjkcX=ZQm1uYRDe9EjYqsTCyZY-Gf1C4XqMNYGFCcF+Q@mail.gmail.com>
+ <CAP-5=fUobnt9anqeTaUt_EJVuMOpsxGR-Sa_e7qX=ZxqPDr+sA@mail.gmail.com>
+ <20220526041650.esbcujaihdv5jqxm@google.com>
+ <CAP-5=fVbCNg=wGbN3dK1yP_cu_eL3h-sPDZ1hC2BgVM8nmHZ_w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,152 +37,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAP-5=fVbCNg=wGbN3dK1yP_cu_eL3h-sPDZ1hC2BgVM8nmHZ_w@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
-head:   012bb7ae4eb84ae93ded12888ccd1e123c64200f
-commit: c838cb5fbb27ca829668a88691b07ca63f91fde7 [9/10] perf/x86/intel: Optimize short PEBS counters
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262245.87lBx9Fw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c838cb5fbb27ca829668a88691b07ca63f91fde7
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.cleanup
-        git checkout c838cb5fbb27ca829668a88691b07ca63f91fde7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
+Em Wed, May 25, 2022 at 09:25:39PM -0700, Ian Rogers escreveu:
+> On Wed, May 25, 2022 at 9:16 PM Fangrui Song <maskray@google.com> wrote:
+> >
+> > On 2022-05-25, Ian Rogers wrote:
+> > >On Tue, May 24, 2022 at 1:50 PM Travis Downs <travis.downs@gmail.com> wrote:
+> > >>
+> > >> I have been tracking down an issue locally where `perf record
+> > >> --call-graph=dwarf` stopped working in the sense that unwinding always
+> > >> failed.
+> > >>
+> > >> Turns out it was related to `lld` - binaries linked with `lld` don't
+> > >> seem to unwind correctly with `--call-graph=dwarf`. I've confirmed
+> > >> that the `.eh_frame` sections are there, but I guess they are
+> > >> different after using this linker.
+> > >>
+> > >> Has anyone run into this?
+> > >
+> > >I was unaware but thanks for filing the bug!
+> > >
+> > >> There's an open LLVM issue at https://github.com/llvm/llvm-project/issues/53156
+> > >>
+> > >> ... but no activity since it was filed, though it is not clear if the
+> > >> problem is really with lld or the unwinders.
+> > >>
+> > >> In a related question: perf supports more than one DWARF unwinding
+> > >> implementation, depending on what libraries are available at build
+> > >> time, right? Is there a way to select which unwinder is used at
+> > >> runtime?
+> > >
+> > >I don't think so. There are two build options NO_LIBUNWIND=1 and
+> > >NO_LIBDW_DWARF_UNWIND=1. I played around with the example from the
+> > >bug, confirmed no difference with the eh_frames and hand verified
+> > >them, I also added -fno-omit-frame-pointer -O0 and -static. I've not
+> > >got a good handle on the issue but my suspicion is that the
+> > >eh_frame_hdr is broken - it is at least something that lld generates.
+> > >If I change the eh_frame_hdr finding to some findable but unexpected
+> > >offset like eh_frame here:
+> > >https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/unwind-libunwind-local.c?h=perf/core#n286
+> > >and then test with a working linker the unwinding is broken similarly
+> > >to with lld. I was looking for a useful tool (objdump, llvm-objdump,
+> > >readelf, dwarfdump) to look at the eh_frame_hdr but I didn't see one.
+> > >Perhaps someone has a suggestion or maybe pahole can do it. Hopefully
+> > >this gives a lead for you to dig into for the bug.
+> > >
+> > >Thanks,
+> > >Ian
+> >
+> > I am very familiar with lld and have read some nongnu libunwind code, so I guess I
+> > may be an appropriate one debugging the issue, but I am puzzled about how to build tools/perf:
+> >
+> > /tmp/out/custom1 has needed llvm-project tools, built from origin/main
+> > ninja -C /tmp/out/custom1 clang lld llvm-{nm,size,strings,objcopy,objdump,readelf,ar,strip}
+> >
+> > ```
+> > % git checkout master  # torvalds/linux
+> > % PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 defconfig all
+> > % PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 -C tools/perf
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I never tried build both Linux and perf on the same O= directory, can
+you please building perf on a separate directory to see if this changes
+anything?
 
-All warnings (new ones prefixed by >>):
+Also you don't need to build Linux proper to test these problems, right?
 
-   In file included from arch/x86/events/intel/pt.c:27:
-   arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-                         ^
-   arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           s64 left = load64_read(&hwc->period_left);
-                      ^
->> arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:720:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(last, -1)->end = 1;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:769:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(topa, -1)->base = page_to_phys(p) >> TOPA_SHIFT;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:770:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(topa, -1)->size = order;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:773:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(topa, -1)->intr = 1;
-                   ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:774:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(topa, -1)->stop = 1;
-                   ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:1235:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(buf->last, -1)->base = topa_pfn(buf->first);
-                   ^                     ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:1236:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(buf->last, -1)->end = 1;
-                   ^                     ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   8 warnings and 2 errors generated.
+- Arnaldo
 
-
-vim +719 arch/x86/events/intel/pt.c
-
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  690  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  691  /**
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  692   * topa_insert_table() - insert a ToPA table into a buffer
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  693   * @buf:	 PT buffer that's being extended.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  694   * @topa:	 New topa table to be inserted.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  695   *
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  696   * If it's the first table in this buffer, set up buffer's pointers
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  697   * accordingly; otherwise, add a END=1 link entry to @topa to the current
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  698   * "last" table and adjust the last table pointer to @topa.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  699   */
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  700  static void topa_insert_table(struct pt_buffer *buf, struct topa *topa)
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  701  {
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  702  	struct topa *last = buf->last;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  703  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  704  	list_add_tail(&topa->list, &buf->tables);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  705  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  706  	if (!buf->first) {
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  707  		buf->first = buf->last = buf->cur = topa;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  708  		return;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  709  	}
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  710  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  711  	topa->offset = last->offset + last->size;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  712  	buf->last = topa;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  713  
-f6d079ce867d67 arch/x86/events/intel/pt.c                Chao Peng          2018-10-24  714  	if (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries))
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  715  		return;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  716  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  717  	BUG_ON(last->last != TENTS_PER_PAGE - 1);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  718  
-91feca5e2ecc97 arch/x86/events/intel/pt.c                Alexander Shishkin 2019-08-21 @719  	TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  720  	TOPA_ENTRY(last, -1)->end = 1;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  721  }
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  722  
-
-:::::: The code at line 719 was first introduced by commit
-:::::: 91feca5e2ecc9752894d57c9a72c2645471929c3 perf/x86/intel/pt: Free up space in a ToPA descriptor
-
-:::::: TO: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+> > ...
+> > In file included from bench/../../arch/x86/lib/memcpy_64.S:8,
+> >                   from bench/mem-memcpy-x86-64-asm.S:14:
+> > /tmp/linux/x86_64/arch/x86/include/generated/asm/export.h:1:10: fatal error: asm-generic/export.h: No such file or directory
+> >      1 | #include <asm-generic/export.h>
+> >        |          ^~~~~~~~~~~~~~~~~~~~~~
+> > ```
+> >
+> > I am running a 5.16 kernel so I have tried `git checkout v5.16`, no luck as well.
+> > I cannot find useful information about "asm-generic/export.h: no such file or directory" on www:(
+> 
+> Arnaldo, can the tools/include headers be made hermetic?
+> 
+> You may have better luck with the development tree:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/
+> branch perf/core. The perf tool is backward compatible with old
+> kernels, unfortunately Debian packages it wrong which causes issues
+> everywhere.
+> 
+> Thanks,
+> Ian
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+- Arnaldo
