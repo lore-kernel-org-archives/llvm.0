@@ -1,218 +1,86 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C101B185D
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 18:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653589266; x=1685125266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8NqVggT4gUzHrI0Lkp1miHSQ0Wr06BT1kkAR0n4u4o0=;
-  b=P/ZCAe8NmS+Jrv4sbZaaj+E+c/nmPBx4YmQ6x3yWFo923IS6IW+Y5PYf
-   dPr662nGdXRYmEoT22h8TL9tR2vmhu0mItRY+EbZW7L12bVRWhdu563lP
-   B10lvIdtYuoFsS+HW+t376bkWoUCVSJ0ju9OUQIhs90YPjHBI2VYCvCO+
-   6tZ8XPZsLFsxOnO/ZYeN9/PNWkxneMmF0vbg357XEAHdkeDsCnMV8eJgu
-   PjxuOXlAPLo+bZ/Z8qO0E2+0kcw2W0LND6s/koLiTSbqcg/IL6oT8Ddxg
-   RYTvjMe0qeKE5gHGOfAebRt7wvrY/gZDSTLDrVfA6QHeTROu5hMUDgXoB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="273967468"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="273967468"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 11:21:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="574016253"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 26 May 2022 11:21:03 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nuI6Y-000462-9P;
-	Thu, 26 May 2022 18:21:02 +0000
-Date: Fri, 27 May 2022 02:20:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/9]
- fs/cifs/file.c:2735:36: error: no member named 'max_frmr_depth' in 'struct
- smbd_connection'
-Message-ID: <202205270254.xD5T2pAa-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE44F1384
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 22:34:22 +0000 (UTC)
+Received: by mail-pj1-f74.google.com with SMTP id nn14-20020a17090b38ce00b001e00df82de8so4002247pjb.1
+        for <llvm@lists.linux.dev>; Thu, 26 May 2022 15:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Dbycd53wfkFx6wOlXEkeKq8SwIpffLRDpImC05lVbps=;
+        b=j+SEgTICldnd/BNzVi+sD0qfYmtFOB70dPvJ9XXrAwUJ3rxqVCeHCkGBYHZ7uMugGw
+         RsLQrLCnS0E+oS5rjDsPC6MKuYaSXuomFh7GVRykVXWZ0lhx93/r3ckTobcrRa5AZxZk
+         Sd5Eh667uybkWyKhpA5NFw13I8HjlDnvDnh9vuhLH5MOebh1aadDBoD5Zcal4ZxYV0LT
+         S/v7ZNF2c224Ll6Yg2xhkX2fwxJShoqxAYZNf32/RM6n99XUWGvig1Bq3lVVfh8GObvj
+         psdKBDigEhzO4d84B6dXa2N733ZQTfbo3K7fRU8FuOodJjDDIcSYInblsc1XftrHYoWX
+         Pt/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Dbycd53wfkFx6wOlXEkeKq8SwIpffLRDpImC05lVbps=;
+        b=dlSg8Ybx15X9UJBcrgn6vdRuONoCli3dQXDe+qsLJawQfej7nRYzx9Q22ps/PZO8bt
+         4SxNLcITuf9wxXYS1wN/ofXPQc2UI0FtUYPbGTAta3teG+JaaNFdGNX7ZaYiHkBP3yXE
+         BduzJC6CQP+W1RgvxS2HRaZ0x+HhCFwafxGP3mulSt1xQf5bXdr0wVBOSBE4l/9q1C2G
+         rBUNkcvkwo3fatWqpf9F0EACXuwY8tJGSqCyRfFbX03NOhsqLvWcdiDLo1b7uPduo2eY
+         APBfaxRqQH8QzHUU5+X/9mu9ocE69hlZngB5l3CFwsyKJQ6hMsrs6lIGEmEIrqnoWReg
+         1WwA==
+X-Gm-Message-State: AOAM5338xc5D84j52eZZml6DlhuuayyCAZG4wy/mbZBeyKE8L819G8XI
+	oVAwwm9egCBMja8/xiITI6QAuXtwC/yUGw==
+X-Google-Smtp-Source: ABdhPJxB1e3fXG0Ot53wI1nKFx+/5VDP4vCejcIdEzde3KgllVaDKk6peAdB4F6WdN2YyEq+pIVc3TjUgcFuHA==
+X-Received: from zhuyifei-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2edc])
+ (user=zhuyifei job=sendgmr) by 2002:a17:903:213:b0:162:15c2:e4b5 with SMTP id
+ r19-20020a170903021300b0016215c2e4b5mr25653760plh.114.1653604461947; Thu, 26
+ May 2022 15:34:21 -0700 (PDT)
+Date: Thu, 26 May 2022 22:34:07 +0000
+Message-Id: <20220526223407.1686936-1-zhuyifei@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH seccomp] selftests/seccomp: Fix compile warning when CC=clang
+From: YiFei Zhu <zhuyifei@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev, YiFei Zhu <zhuyifei@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
-head:   ba04fd019482403a282ad499323f5cdd1ee5216a
-commit: b4eb9ac0feb7aff675a958612c9d2b2052f53690 [5/9] cifs: Change the I/O paths to use an iterator rather than a page list
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220527/202205270254.xD5T2pAa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b4eb9ac0feb7aff675a958612c9d2b2052f53690
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
-        git checkout b4eb9ac0feb7aff675a958612c9d2b2052f53690
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
+clang has -Wconstant-conversion by default, and the constant 0xAAAAAAAAA
+(9 As) being converted to an int, which is generally 32 bits, results
+in the compile warning:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  clang -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/  -lpthread  seccomp_bpf.c -lcap -o seccomp_bpf
+  seccomp_bpf.c:812:67: warning: implicit conversion from 'long' to 'int' changes value from 45812984490 to -1431655766 [-Wconstant-conversion]
+          int kill = kill_how == KILL_PROCESS ? SECCOMP_RET_KILL_PROCESS : 0xAAAAAAAAA;
+              ~~~~                                                         ^~~~~~~~~~~
+  1 warning generated.
 
-All errors (new ones prefixed by >>):
+-1431655766 is the expected truncation, 0xAAAAAAAA (8 As), so use
+this directly in the code to avoid the warning.
 
->> fs/cifs/file.c:2735:36: error: no member named 'max_frmr_depth' in 'struct smbd_connection'
-                                   max_pages = server->smbd_conn->max_frmr_depth;
-                                               ~~~~~~~~~~~~~~~~~  ^
-   1 error generated.
+Fixes: 3932fcecd962 ("selftests/seccomp: Add test for unknown SECCOMP_RET kill behavior")
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-vim +2735 fs/cifs/file.c
-
-  2662	
-  2663	/*
-  2664	 * Write back the locked page and any subsequent non-locked dirty pages.
-  2665	 */
-  2666	static ssize_t cifs_write_back_from_locked_folio(struct address_space *mapping,
-  2667							 struct writeback_control *wbc,
-  2668							 struct folio *folio,
-  2669							 loff_t start, loff_t end)
-  2670	{
-  2671		struct inode *inode = mapping->host;
-  2672		struct TCP_Server_Info *server;
-  2673		struct cifs_writedata *wdata;
-  2674		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-  2675		struct cifs_credits credits_on_stack;
-  2676		struct cifs_credits *credits = &credits_on_stack;
-  2677		struct cifsFileInfo *cfile = NULL;
-  2678		unsigned int xid, wsize, len;
-  2679		loff_t i_size = i_size_read(inode);
-  2680		size_t max_len;
-  2681		long count = wbc->nr_to_write;
-  2682		int rc;
-  2683	
-  2684		/* The folio should be locked, dirty and not undergoing writeback. */
-  2685		if (folio_start_writeback(folio))
-  2686			WARN_ON(1);
-  2687	
-  2688		count -= folio_nr_pages(folio);
-  2689		len = folio_size(folio);
-  2690	
-  2691		xid = get_xid();
-  2692		server = cifs_pick_channel(cifs_sb_master_tcon(cifs_sb)->ses);
-  2693	
-  2694		rc = cifs_get_writable_file(CIFS_I(inode), FIND_WR_ANY, &cfile);
-  2695		if (rc) {
-  2696			cifs_dbg(VFS, "No writable handle in writepages rc=%d\n", rc);
-  2697			goto err_xid;
-  2698		}
-  2699	
-  2700		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
-  2701						   &wsize, credits);
-  2702		if (rc != 0)
-  2703			goto err_close;
-  2704	
-  2705		wdata = cifs_writedata_alloc(cifs_writev_complete);
-  2706		if (!wdata) {
-  2707			rc = -ENOMEM;
-  2708			goto err_uncredit;
-  2709		}
-  2710	
-  2711		wdata->sync_mode = wbc->sync_mode;
-  2712		wdata->offset = folio_pos(folio);
-  2713		wdata->pid = cfile->pid;
-  2714		wdata->credits = credits_on_stack;
-  2715		wdata->cfile = cfile;
-  2716		wdata->server = server;
-  2717		cfile = NULL;
-  2718	
-  2719		/* Find all consecutive lockable dirty pages, stopping when we find a
-  2720		 * page that is not immediately lockable, is not dirty or is missing,
-  2721		 * or we reach the end of the range.
-  2722		 */
-  2723		if (start < i_size) {
-  2724			/* Trim the write to the EOF; the extra data is ignored.  Also
-  2725			 * put an upper limit on the size of a single storedata op.
-  2726			 */
-  2727			max_len = wsize;
-  2728			max_len = min_t(unsigned long long, max_len, end - start + 1);
-  2729			max_len = min_t(unsigned long long, max_len, i_size - start);
-  2730	
-  2731			if (len < max_len) {
-  2732				int max_pages = INT_MAX;
-  2733	
-  2734				if (server->smbd_conn)
-> 2735					max_pages = server->smbd_conn->max_frmr_depth;
-  2736				max_pages -= folio_nr_pages(folio);
-  2737	
-  2738				if (max_pages > 0)
-  2739					cifs_extend_writeback(mapping, &count, start,
-  2740							      max_pages, max_len, &len);
-  2741			}
-  2742			len = min_t(loff_t, len, max_len);
-  2743		}
-  2744	
-  2745		wdata->bytes = len;
-  2746	
-  2747		/* We now have a contiguous set of dirty pages, each with writeback
-  2748		 * set; the first page is still locked at this point, but all the rest
-  2749		 * have been unlocked.
-  2750		 */
-  2751		folio_unlock(folio);
-  2752	
-  2753		if (start < i_size) {
-  2754			iov_iter_xarray(&wdata->iter, WRITE, &mapping->i_pages, start, len);
-  2755	
-  2756			rc = adjust_credits(wdata->server, &wdata->credits, wdata->bytes);
-  2757			if (rc)
-  2758				goto err_wdata;
-  2759	
-  2760			if (wdata->cfile->invalidHandle)
-  2761				rc = -EAGAIN;
-  2762			else
-  2763				rc = wdata->server->ops->async_writev(wdata,
-  2764								      cifs_writedata_release);
-  2765			if (rc >= 0) {
-  2766				kref_put(&wdata->refcount, cifs_writedata_release);
-  2767				goto err_close;
-  2768			}
-  2769		} else {
-  2770			/* The dirty region was entirely beyond the EOF. */
-  2771			cifs_pages_written_back(inode, start, len);
-  2772			rc = 0;
-  2773		}
-  2774	
-  2775	err_wdata:
-  2776		kref_put(&wdata->refcount, cifs_writedata_release);
-  2777	err_uncredit:
-  2778		add_credits_and_wake_if(server, credits, 0);
-  2779	err_close:
-  2780		if (cfile)
-  2781			cifsFileInfo_put(cfile);
-  2782	err_xid:
-  2783		free_xid(xid);
-  2784		if (rc == 0) {
-  2785			wbc->nr_to_write = count;
-  2786		} else if (is_retryable_error(rc)) {
-  2787			cifs_pages_write_redirty(inode, start, len);
-  2788		} else {
-  2789			cifs_pages_write_failed(inode, start, len);
-  2790			mapping_set_error(mapping, rc);
-  2791		}
-  2792		/* Indication to update ctime and mtime as close is deferred */
-  2793		set_bit(CIFS_INO_MODIFIED_ATTR, &CIFS_I(inode)->flags);
-  2794		return rc;
-  2795	}
-  2796	
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 136df5b76319..4ae6c8991307 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -809,7 +809,7 @@ void kill_thread_or_group(struct __test_metadata *_metadata,
+ 		.len = (unsigned short)ARRAY_SIZE(filter_thread),
+ 		.filter = filter_thread,
+ 	};
+-	int kill = kill_how == KILL_PROCESS ? SECCOMP_RET_KILL_PROCESS : 0xAAAAAAAAA;
++	int kill = kill_how == KILL_PROCESS ? SECCOMP_RET_KILL_PROCESS : 0xAAAAAAAA;
+ 	struct sock_filter filter_process[] = {
+ 		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
+ 			offsetof(struct seccomp_data, nr)),
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.124.g0e6072fb45-goog
+
