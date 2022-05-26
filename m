@@ -1,130 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2773710EC;
-	Thu, 26 May 2022 02:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BCD5C385B8;
-	Thu, 26 May 2022 02:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653532839;
-	bh=Nekco3mEdzmOoGYbr+l5+JxZcWOSAqhdgYQ+UjDVSz8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MR5z7y1ZVGstMnPmq97lSE3kBPaVat/Rm/kjPHJ4cU3joo6Ufz6DNkHJr1g64XVu2
-	 zyMzVlnsk/GqSqPnX3+l5tQ2d/Pax4ByeTLrbEWnYIRYPvsCMJXmvZUpeB16tyRUB1
-	 Qm7oYRFUhP2q30+ivW2xBMrH+hyyNRM+nrxrxiztWNkqVJx7X8d2pw8EgUXUAPsEQ8
-	 m3654klQQlJun3gVn2B4T+4Pf0BqKqdEoB1f5L+21up5imWq07E7AKxQQDAXIvCrdv
-	 ut+72EmMGbqJd6/vEhNDb8yQZi37K1eaLVzToiPIuwbAWcKz6B5IuGmE8LvIdIw5mw
-	 7hkUX90Wmipkg==
-Date: Wed, 25 May 2022 19:40:37 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Heiko Stuebner <heiko@sntech.de>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, Jessica Clarke <jrtc27@jrtc27.com>
-Subject: Re: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-Message-ID: <Yo7opc/A8ITue0/4@dev-arch.thelio-3990X>
-References: <20220518184529.454008-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740AA10EC
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 04:16:54 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id x12so369440pgj.7
+        for <llvm@lists.linux.dev>; Wed, 25 May 2022 21:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=37YmkyKoFHlIVhfVoKPCu3X0KtxvVYiEfGmgY7IaoWc=;
+        b=BKcYn8f17L+yU+CGhIC8h9AMgvMwnsvssgbOwL4AtCl2N5YT4quFIhiVYfdVcpzK/u
+         lmTboJX5vE4RCnHUXecBGyRskSFfH6EOKmZs//ZKhd1ZNDQkSJc9nCszYSeUDs3ZRVTD
+         RdIQUUXYfTAuoJ4mA5ULHontCPdbN0x/VOslUR6kpNyhkQQZRb03uDNaJSQS9/HvRc5Q
+         2HFTpjbouv3Rdbu00Rv/ZDWbS+LXmzYvjTeiNwzCssBSJAISOl5jSRhgQ5gDLQ2cuxCT
+         hAZIfCHVxQQ4hMzEz05dexDU4UgWAPCGQ1CNzDrkbC0ZLN/CQCvj6bvpm2bT7AVvcbHJ
+         c+6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=37YmkyKoFHlIVhfVoKPCu3X0KtxvVYiEfGmgY7IaoWc=;
+        b=Nx5aEijKlaONLjWpI2iMqK3T/DavJkzHY+JwbSVi2691TngPcFg4ci0hgD2XdyiRwi
+         IP9MaOGJ1lShLebL6tjZCIXUOqNNgxpfnT0OWo2MVIzaBXHohGpQN/Hb1KGkUaKk2ZEH
+         ioXLw9Jc6L4TwHdyaM/G8zOQVP/8HdRWvo0NgeZVsk6F+sYxJRXFvqIJeTGJPiZarNDZ
+         P3TYN/VEYu101yLd3yWXYl28GnVCj5RAOn43uysja4su7x0QAECKhwDCRC+W+MuAl6y3
+         CSsSBXYFbUrx+GsMrCkiCfE0l2Yx8FDGvbHyOjn7njetdyBUxX3UkJH1bYXvP9YCyZay
+         un5w==
+X-Gm-Message-State: AOAM531t7UudQvh65hntiGJIc2/W4hzxA+/lkrQoHr/iZJFKqgvVi2lC
+	auV6ZB5aoKXLwCwYAooA0KW45Q==
+X-Google-Smtp-Source: ABdhPJz38bx3fzyCT+4echKVG9eVivcAwLYHYzZlB+x2j8aVSjuNNiASg7wab2fv8AOxmbz9/3KdrQ==
+X-Received: by 2002:a63:8ac1:0:b0:3fa:d86b:c76d with SMTP id y184-20020a638ac1000000b003fad86bc76dmr6097250pgd.418.1653538613654;
+        Wed, 25 May 2022 21:16:53 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:84dd:75b4:f155:aebd])
+        by smtp.gmail.com with ESMTPSA id a26-20020aa795ba000000b00518d0707b52sm205809pfk.208.2022.05.25.21.16.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 21:16:53 -0700 (PDT)
+Date: Wed, 25 May 2022 21:16:50 -0700
+From: Fangrui Song <maskray@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Travis Downs <travis.downs@gmail.com>, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Call graph dwarf unwinding fails with lld
+Message-ID: <20220526041650.esbcujaihdv5jqxm@google.com>
+References: <CAOBGo4zjkcX=ZQm1uYRDe9EjYqsTCyZY-Gf1C4XqMNYGFCcF+Q@mail.gmail.com>
+ <CAP-5=fUobnt9anqeTaUt_EJVuMOpsxGR-Sa_e7qX=ZxqPDr+sA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220518184529.454008-1-nathan@kernel.org>
+In-Reply-To: <CAP-5=fUobnt9anqeTaUt_EJVuMOpsxGR-Sa_e7qX=ZxqPDr+sA@mail.gmail.com>
 
-Small ping on this and https://lore.kernel.org/20220516214520.3252074-1-nathan@kernel.org/.
+On 2022-05-25, Ian Rogers wrote:
+>On Tue, May 24, 2022 at 1:50 PM Travis Downs <travis.downs@gmail.com> wrote:
+>>
+>> I have been tracking down an issue locally where `perf record
+>> --call-graph=dwarf` stopped working in the sense that unwinding always
+>> failed.
+>>
+>> Turns out it was related to `lld` - binaries linked with `lld` don't
+>> seem to unwind correctly with `--call-graph=dwarf`. I've confirmed
+>> that the `.eh_frame` sections are there, but I guess they are
+>> different after using this linker.
+>>
+>> Has anyone run into this?
+>
+>I was unaware but thanks for filing the bug!
+>
+>> There's an open LLVM issue at https://github.com/llvm/llvm-project/issues/53156
+>>
+>> ... but no activity since it was filed, though it is not clear if the
+>> problem is really with lld or the unwinders.
+>>
+>> In a related question: perf supports more than one DWARF unwinding
+>> implementation, depending on what libraries are available at build
+>> time, right? Is there a way to select which unwinder is used at
+>> runtime?
+>
+>I don't think so. There are two build options NO_LIBUNWIND=1 and
+>NO_LIBDW_DWARF_UNWIND=1. I played around with the example from the
+>bug, confirmed no difference with the eh_frames and hand verified
+>them, I also added -fno-omit-frame-pointer -O0 and -static. I've not
+>got a good handle on the issue but my suspicion is that the
+>eh_frame_hdr is broken - it is at least something that lld generates.
+>If I change the eh_frame_hdr finding to some findable but unexpected
+>offset like eh_frame here:
+>https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/unwind-libunwind-local.c?h=perf/core#n286
+>and then test with a working linker the unwinding is broken similarly
+>to with lld. I was looking for a useful tool (objdump, llvm-objdump,
+>readelf, dwarfdump) to look at the eh_frame_hdr but I didn't see one.
+>Perhaps someone has a suggestion or maybe pahole can do it. Hopefully
+>this gives a lead for you to dig into for the bug.
+>
+>Thanks,
+>Ian
 
-Our builds on -next have been broken for a week now. Hopefully these can
-make the first RISC-V pull request to avoid mainline being broken in the
-same fashion.
+I am very familiar with lld and have read some nongnu libunwind code, so I guess I
+may be an appropriate one debugging the issue, but I am puzzled about how to build tools/perf:
 
-Cheers,
-Nathan
+/tmp/out/custom1 has needed llvm-project tools, built from origin/main
+ninja -C /tmp/out/custom1 clang lld llvm-{nm,size,strings,objcopy,objdump,readelf,ar,strip}
 
-On Wed, May 18, 2022 at 11:45:29AM -0700, Nathan Chancellor wrote:
-> After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-> builds with LLVM's integrated assembler fail like:
-> 
->   In file included from arch/riscv/kernel/asm-offsets.c:10:
->   In file included from ./include/linux/mm.h:29:
->   In file included from ./include/linux/pgtable.h:6:
->   In file included from ./arch/riscv/include/asm/pgtable.h:114:
->   ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
->           ALT_THEAD_PMA(prot_val);
->           ^
->   ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
->           : "0"(_val),                                                    \
->             ^
-> 
-> This was reported upstream to LLVM where Jessica pointed out a couple of
-> issues with the existing implementation of ALT_THEAD_PMA:
-> 
-> * t3 is modified but not listed in the clobbers list.
-> 
-> * "+r"(_val) marks _val as both an input and output of the asm but then
->   "0"(_val) marks _val as an input matching constraint, which does not
->   make much sense in this situation, as %1 is not actually used in the
->   asm and matching constraints are designed to be used for different
->   inputs that need to use the same register.
-> 
-> Drop the matching contraint and shift all the operands by one, as %1 is
-> unused, and mark t3 as clobbered. This resolves the build error and goes
-> not cause any problems with GNU as.
-> 
-> Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-> Link: https://github.com/llvm/llvm-project/issues/55514
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-> Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/include/asm/errata_list.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 9e2888dbb5b1..416ead0f9a65 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(						\
->  	"nop\n\t"							\
->  	"nop\n\t"							\
->  	"nop",								\
-> -	"li      t3, %2\n\t"						\
-> -	"slli    t3, t3, %4\n\t"					\
-> +	"li      t3, %1\n\t"						\
-> +	"slli    t3, t3, %3\n\t"					\
->  	"and     t3, %0, t3\n\t"					\
->  	"bne     t3, zero, 2f\n\t"					\
-> -	"li      t3, %3\n\t"						\
-> -	"slli    t3, t3, %4\n\t"					\
-> +	"li      t3, %2\n\t"						\
-> +	"slli    t3, t3, %3\n\t"					\
->  	"or      %0, %0, t3\n\t"					\
->  	"2:",  THEAD_VENDOR_ID,						\
->  		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
->  	: "+r"(_val)							\
-> -	: "0"(_val),							\
-> -	  "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-> +	: "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
->  	  "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),			\
-> -	  "I"(ALT_THEAD_PBMT_SHIFT))
-> +	  "I"(ALT_THEAD_PBMT_SHIFT)					\
-> +	: "t3")
->  #else
->  #define ALT_THEAD_PMA(_val)
->  #endif
-> 
-> base-commit: 93c0651617a62a69717299f1464dda798af8bebb
-> -- 
-> 2.36.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+```
+% git checkout master  # torvalds/linux
+% PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 defconfig all
+% PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 -C tools/perf
+...
+In file included from bench/../../arch/x86/lib/memcpy_64.S:8,
+                  from bench/mem-memcpy-x86-64-asm.S:14:
+/tmp/linux/x86_64/arch/x86/include/generated/asm/export.h:1:10: fatal error: asm-generic/export.h: No such file or directory
+     1 | #include <asm-generic/export.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+```
+
+I am running a 5.16 kernel so I have tried `git checkout v5.16`, no luck as well.
+I cannot find useful information about "asm-generic/export.h: no such file or directory" on www:(
