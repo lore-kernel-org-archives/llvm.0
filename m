@@ -1,213 +1,91 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBCEEA9
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 00:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653523705; x=1685059705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tmwrit1dgQxdQl6Jk490SmR8Scnt8+kfrNYjj+boFjg=;
-  b=VjU1FaFxmAvFBsH7uZ3JwDXEYNT9uFxo34rrpZnW7ujSJHDbGg/z0m+I
-   Xp15oxrJLWAtUJZ6fzVFdJgq69NEVb7cMY0TAyIJXX5u8c4yN9b71LFMP
-   zGZukQuIy6qRhKH4le6WkAwbhAl/CkICzJ7uhNjzjYbSmHtkJjoDJiqkl
-   q2nq5Pl4pf6Gv9ZRjI70FuZjV/lp7PvkxmIjvFi5ALeYG+BU++L/yNTxw
-   TEI56JzoduyLRVYh3sN1nKMeIxHyar4b89iSCMj2S5yWGxKHyBP9s9qf8
-   oGlH5g6trFJpbjEmckGU75HVG+P4bPHxCLutrCc/9dId2hQqgNkbYPApZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="334614933"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="334614933"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 17:08:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="642595075"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 May 2022 17:08:22 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nu137-0003R7-Pc;
-	Thu, 26 May 2022 00:08:21 +0000
-Date: Thu, 26 May 2022 08:08:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matthew Auld <matthew.auld@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Kenneth Graunke <kenneth@whitecape.org>,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 08/10] drm/i915/uapi: disable capturing
- objects on recoverable contexts
-Message-ID: <202205260728.itOPg4qx-lkp@intel.com>
-References: <20220525184337.491763-9-matthew.auld@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314A8EA9
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 00:14:40 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id n10so164497ejk.5
+        for <llvm@lists.linux.dev>; Wed, 25 May 2022 17:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FUN1Hk+wVODcst4ocCxem+PCWnT3RpL+w2LVEy5CkRA=;
+        b=RtP6hh4X8z+2MahAiAUIOJVM9Cfmt7V5Ll8iE25tjBROyYvHx4EOB8CtLSuOQeapQd
+         BR1dE4Yip3iyeN1fJom8sECDjU2+AKUGFOFdW94NxU5AyV9Js4RicQo7nhg6MqqySr/r
+         MsiOZh3uZVfiTEimtdnWO4N2hsnqY1z1fITBrp8gZrKtOs8rtHAtWN82Jm4FaGK04oEk
+         SM1JaUH0FbWOBZC7d6+39nmFWIrPZJ+9Fy/gxfH1Q/NPCP8GuV8eC+jeaecUcSbUXcr8
+         1LN/htRrUOFLscNprtUKZdz2aJSfLLMANVSpubh492YLFpHnbRNWZwvq4j3iFsl4EzSp
+         uJkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FUN1Hk+wVODcst4ocCxem+PCWnT3RpL+w2LVEy5CkRA=;
+        b=hUBi75MV9lqFYkqqwO/E74u5KpYfAq36WnYnqACWuq2WcmGiDgLKasaE7DWa0sMNUl
+         zs5KJ3meYwrNBgakt7TCoIf2lYvH77Hab4oyflByFaDK9b/ZwghJ1EXqfJG61sE73Jiw
+         zaVTsaFizBT9cUMYENShoNjniJ2kLZT7CVztFnDJxMlOBGdJCvhEn7QtniRDMpRsttW+
+         k1WdcCRkpS5xlESiwT2PFjGnz5EyGkiiQspjgR2uz7ptdhh9iz3r6NFZqx8oT9eLjUte
+         C5CoUqwsMtscR1Iislj1arWmHKOrhzoq/l1WYMcgWwZENlg+gqvD+4xpdGZVqoWZJ80L
+         RZMg==
+X-Gm-Message-State: AOAM5326eHf52avIF7pr3HNdGdYBjcwR1HV6z7/IjUkYdngqMabsrs+G
+	kDZiMmto6Xpn0Secc1x/bhA1K1g8BALfrNZKVIc=
+X-Google-Smtp-Source: ABdhPJyO00AJg5mswWV1wx6ajRW6tH6ji4ANJHj6fdfFPQFeCDOUk7NVjUlDeNuLLnBukt35NG5sW7tLc1W4JwY9K+I=
+X-Received: by 2002:a17:907:62a0:b0:6fe:69f3:88de with SMTP id
+ nd32-20020a17090762a000b006fe69f388demr30054330ejc.214.1653524078459; Wed, 25
+ May 2022 17:14:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525184337.491763-9-matthew.auld@intel.com>
+References: <202205021042.xPjJ6Z4J-lkp@intel.com>
+In-Reply-To: <202205021042.xPjJ6Z4J-lkp@intel.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 25 May 2022 21:14:30 -0300
+Message-ID: <CAOMZO5Dg8_vDbW0vau4YFspZZ-RS=in8xEavkyYvBAQB41xTWA@mail.gmail.com>
+Subject: Re: drivers/dma/imx-dma.c:1048:20: warning: cast to smaller integer
+ type 'enum imx_dma_type' from 'const void *'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-kernel <linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Matthew,
+On Sun, May 1, 2022 at 11:13 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Fabio,
+>
+> FYI, the error/warning still remains.
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+> commit: 0ab785c894e618587e83bb67e8a8e96649868ad1 dmaengine: imx-dma: Remove unused .id_table
+> date:   1 year, 5 months ago
+> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021042.xPjJ6Z4J-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ab785c894e618587e83bb67e8a8e96649868ad1
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 0ab785c894e618587e83bb67e8a8e96649868ad1
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/dma/imx-dma.c:1048:20: warning: cast to smaller integer type 'enum imx_dma_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+>            imxdma->devtype = (enum imx_dma_type)of_device_get_match_data(&pdev->dev);
+>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 warning generated.
 
-Thank you for the patch! Yet something to improve:
+Does anyone know how to fix this clang warning?
 
-[auto build test ERROR on drm-tip/drm-tip]
-[also build test ERROR on v5.18 next-20220525]
-[cannot apply to drm-intel/for-linux-next drm/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Auld/small-BAR-uapi-bits/20220526-024641
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220526/202205260728.itOPg4qx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fdc3574e30bb0fdfdc9569fa42d369b1fae41e9e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Auld/small-BAR-uapi-bits/20220526-024641
-        git checkout fdc3574e30bb0fdfdc9569fa42d369b1fae41e9e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:3429:6: error: assigning to 'int' from incompatible type 'void'
-           err = eb_capture_stage(&eb);
-               ^ ~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +3429 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-
-  3384	
-  3385		if (args->flags & I915_EXEC_FENCE_OUT) {
-  3386			out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
-  3387			if (out_fence_fd < 0) {
-  3388				err = out_fence_fd;
-  3389				goto err_in_fence;
-  3390			}
-  3391		}
-  3392	
-  3393		err = eb_create(&eb);
-  3394		if (err)
-  3395			goto err_out_fence;
-  3396	
-  3397		GEM_BUG_ON(!eb.lut_size);
-  3398	
-  3399		err = eb_select_context(&eb);
-  3400		if (unlikely(err))
-  3401			goto err_destroy;
-  3402	
-  3403		err = eb_select_engine(&eb);
-  3404		if (unlikely(err))
-  3405			goto err_context;
-  3406	
-  3407		err = eb_lookup_vmas(&eb);
-  3408		if (err) {
-  3409			eb_release_vmas(&eb, true);
-  3410			goto err_engine;
-  3411		}
-  3412	
-  3413		i915_gem_ww_ctx_init(&eb.ww, true);
-  3414	
-  3415		err = eb_relocate_parse(&eb);
-  3416		if (err) {
-  3417			/*
-  3418			 * If the user expects the execobject.offset and
-  3419			 * reloc.presumed_offset to be an exact match,
-  3420			 * as for using NO_RELOC, then we cannot update
-  3421			 * the execobject.offset until we have completed
-  3422			 * relocation.
-  3423			 */
-  3424			args->flags &= ~__EXEC_HAS_RELOC;
-  3425			goto err_vma;
-  3426		}
-  3427	
-  3428		ww_acquire_done(&eb.ww.ctx);
-> 3429		err = eb_capture_stage(&eb);
-  3430		if (err)
-  3431			goto err_vma;
-  3432	
-  3433		out_fence = eb_requests_create(&eb, in_fence, out_fence_fd);
-  3434		if (IS_ERR(out_fence)) {
-  3435			err = PTR_ERR(out_fence);
-  3436			out_fence = NULL;
-  3437			if (eb.requests[0])
-  3438				goto err_request;
-  3439			else
-  3440				goto err_vma;
-  3441		}
-  3442	
-  3443		err = eb_submit(&eb);
-  3444	
-  3445	err_request:
-  3446		eb_requests_get(&eb);
-  3447		err = eb_requests_add(&eb, err);
-  3448	
-  3449		if (eb.fences)
-  3450			signal_fence_array(&eb, eb.composite_fence ?
-  3451					   eb.composite_fence :
-  3452					   &eb.requests[0]->fence);
-  3453	
-  3454		if (out_fence) {
-  3455			if (err == 0) {
-  3456				fd_install(out_fence_fd, out_fence->file);
-  3457				args->rsvd2 &= GENMASK_ULL(31, 0); /* keep in-fence */
-  3458				args->rsvd2 |= (u64)out_fence_fd << 32;
-  3459				out_fence_fd = -1;
-  3460			} else {
-  3461				fput(out_fence->file);
-  3462			}
-  3463		}
-  3464	
-  3465		if (unlikely(eb.gem_context->syncobj)) {
-  3466			drm_syncobj_replace_fence(eb.gem_context->syncobj,
-  3467						  eb.composite_fence ?
-  3468						  eb.composite_fence :
-  3469						  &eb.requests[0]->fence);
-  3470		}
-  3471	
-  3472		if (!out_fence && eb.composite_fence)
-  3473			dma_fence_put(eb.composite_fence);
-  3474	
-  3475		eb_requests_put(&eb);
-  3476	
-  3477	err_vma:
-  3478		eb_release_vmas(&eb, true);
-  3479		WARN_ON(err == -EDEADLK);
-  3480		i915_gem_ww_ctx_fini(&eb.ww);
-  3481	
-  3482		if (eb.batch_pool)
-  3483			intel_gt_buffer_pool_put(eb.batch_pool);
-  3484	err_engine:
-  3485		eb_put_engine(&eb);
-  3486	err_context:
-  3487		i915_gem_context_put(eb.gem_context);
-  3488	err_destroy:
-  3489		eb_destroy(&eb);
-  3490	err_out_fence:
-  3491		if (out_fence_fd != -1)
-  3492			put_unused_fd(out_fence_fd);
-  3493	err_in_fence:
-  3494		dma_fence_put(in_fence);
-  3495	err_ext:
-  3496		put_fence_array(eb.fences, eb.num_fences);
-  3497		return err;
-  3498	}
-  3499	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks
