@@ -1,78 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB191841
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 15:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3731BC34114;
-	Thu, 26 May 2022 15:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653578245;
-	bh=JwoKQrS2WF+qGe4jyKO4eVRc1+Zjzv9x2ADz53UC8us=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RxyX9SVIJ164cZ4daW3ZHBaYR1kQnuIuqJAsWnq5G59phgrRcPRO8XZQ9CJvnjLNe
-	 rdermwDVjGg/2c+gdKOTjnQksY3rIozXvFXpVMhuRbbUbJItJHdqIqqoP5GSfUpRn7
-	 xLXhwCR9wPykfvZ+a4hogBw4wc05FqsiTtFWXHflGOBO3GDDMkR/q5kNrFfuZ+pQvz
-	 B+9/8JAupjyXHpSPif+pRpKdgBz/Lb0VzCWQxcA77PgpsT1xvtvU5jxL/v1vJtBqOT
-	 igX9DarTfib6XVsTo7/p5+MXfQnQJJpMoW6MrEbRuTmmSDCkeIlKQxUKHHexFFD7d+
-	 picr0fWsefOBQ==
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"Michael S . Tsirkin" <mst@redhat.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v2] linux/types.h: Restore __bitwise__ definition
-Date: Thu, 26 May 2022 10:17:06 -0500
-Message-Id: <20220526151706.331557-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EF31841
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 15:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653580453; x=1685116453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PRzwLMo3UMy+KGc4jJUoI8v/BSa7kTxB5o8O+V94qYI=;
+  b=htOZKm/u1sHWiN22bXGqedVpjKdO5QywCuKCiTMG+YzcDr79sJiktx9r
+   rHyC84TuUI9mSMgXvVHbVXBOGfa7KkxgTLmAlUKo5kwrW+3QfXPN46lnu
+   NNtyvHgFEMrJ0AIYOrWBKMNEpOV5D85PVbPKyK9gG/4fOBq5rAh3DJ9LA
+   rW+TWEyhWZUXEyyBr5A1hAL61RjPzFGGsKzV0sKIOTRdc3JEovGG2DQeu
+   +s5iepQ/rDwuAoZmFZMlWmu33lMLIBBIDLXBRsysjyZ9Pz3ICLTo+q8JG
+   Of3gqByN4RwczqOdpAiPhXNSfKnsk+Td5qFNvyY6c5yKko2Z4TAR6AJus
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="273012255"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="273012255"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 08:54:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="664991013"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 May 2022 08:54:11 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nuFoQ-0003z6-I3;
+	Thu, 26 May 2022 15:54:10 +0000
+Date: Thu, 26 May 2022 23:53:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.cleanup 9/10]
+ arch/x86/events/perf_event.h:1056:16: error: call to undeclared function
+ 'this_cpu_load'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205262333.thHbJnaz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
+head:   012bb7ae4eb84ae93ded12888ccd1e123c64200f
+commit: c838cb5fbb27ca829668a88691b07ca63f91fde7 [9/10] perf/x86/intel: Optimize short PEBS counters
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262333.thHbJnaz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c838cb5fbb27ca829668a88691b07ca63f91fde7
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.cleanup
+        git checkout c838cb5fbb27ca829668a88691b07ca63f91fde7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-This reverts part of commit c724c866bb70cb8c607081a26823a1f0ebde4387.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jiri Slaby reported that c724c866bb70 ("linux/types.h: remove unnecessary
-__bitwise__") broke userspace, including open-iscsi, because it uses
-__bitwise__.
+All errors (new ones prefixed by >>):
 
-Restore the __bitwise__ definition.
+   In file included from arch/x86/events/core.c:45:
+>> arch/x86/events/perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+   2 errors generated.
+--
+   In file included from arch/x86/events/intel/core.c:25:
+>> arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+>> arch/x86/events/intel/core.c:2841:26: error: invalid operands to binary expression ('unsigned long[2]' and 'unsigned long long')
+           if (!(cpuc->active_mask & (1ULL << hwc->idx)))
+                 ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+--
+   In file included from arch/x86/events/intel/bts.c:21:
+>> arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+   2 errors generated.
+--
+   In file included from arch/x86/events/intel/pt.c:27:
+>> arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+   arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:720:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(last, -1)->end = 1;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:769:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(topa, -1)->base = page_to_phys(p) >> TOPA_SHIFT;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:770:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(topa, -1)->size = order;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:773:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(topa, -1)->intr = 1;
+                   ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:774:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(topa, -1)->stop = 1;
+                   ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:1235:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(buf->last, -1)->base = topa_pfn(buf->first);
+                   ^                     ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:1236:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(buf->last, -1)->end = 1;
+                   ^                     ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   8 warnings and 2 errors generated.
+--
+   In file included from arch/x86/events/zhaoxin/core.c:19:
+>> arch/x86/events/zhaoxin/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/zhaoxin/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+   2 errors generated.
+--
+   In file included from arch/x86/events/amd/core.c:14:
+>> arch/x86/events/amd/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+>> arch/x86/events/amd/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+   2 errors generated.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/r/b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org
-Link: https://lore.kernel.org/r/CAHk-=whk=ygWsxt=1HhndCwjtXdga9sPmkxFGby5PJWRk5yx9Q@mail.gmail.com
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- include/uapi/linux/types.h | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-index c4dc597f3dcf..308433be33c2 100644
---- a/include/uapi/linux/types.h
-+++ b/include/uapi/linux/types.h
-@@ -26,6 +26,9 @@
- #define __bitwise
- #endif
- 
-+/* The kernel doesn't use this legacy form, but user space does */
-+#define __bitwise__ __bitwise
-+
- typedef __u16 __bitwise __le16;
- typedef __u16 __bitwise __be16;
- typedef __u32 __bitwise __le32;
+vim +/this_cpu_load +1056 arch/x86/events/perf_event.h
+
+  1052	
+  1053	static inline bool intel_pmu_is_short_pebs(struct perf_event *event)
+  1054	{
+  1055		struct hw_perf_event *hwc = &event->hw;
+> 1056		s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+> 1057		s64 left = load64_read(&hwc->period_left);
+  1058	
+  1059		return counter < left;
+  1060	}
+  1061	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
