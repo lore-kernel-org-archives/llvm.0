@@ -1,44 +1,47 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16DE29AC
-	for <llvm@lists.linux.dev>; Wed, 25 May 2022 22:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBCEEA9
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 00:08:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653519263; x=1685055263;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m2aojPMgue6+E5/0+nOyweCRz5sLX+mQS17DDb1TwN8=;
-  b=JUScNR95gqswSh10RSaj8UG1MqqcU/DW9FgbohcEvZ/EdOsusdG+JlYL
-   opucHTbF8QK7hPvD/FbkHdfibRocA3kpFVnklq368mV3c0t3QiMzKQhXp
-   Pywpde9KmvZeZeT6jnBxkU4XCnfYZA1ZAyMEI2/dOQUY5XAJPx1Px7yni
-   m5l+QlDwOFhqEXUbR2MMwv/HbJPHzS/FjxiwbSGf80Ye+fo4mbCZuDXwO
-   zyyjH/UDmrTvxmjUVtIfcCjb9JuU8S2G90HO+puaoAhbYm5ED3DTqJaZi
-   xzVijQa3EUKH/6aksMQdJgU7RM0MTbgBVPAT+n4HGdTbzVZQ0haMORh3u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360346524"
+  t=1653523705; x=1685059705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tmwrit1dgQxdQl6Jk490SmR8Scnt8+kfrNYjj+boFjg=;
+  b=VjU1FaFxmAvFBsH7uZ3JwDXEYNT9uFxo34rrpZnW7ujSJHDbGg/z0m+I
+   Xp15oxrJLWAtUJZ6fzVFdJgq69NEVb7cMY0TAyIJXX5u8c4yN9b71LFMP
+   zGZukQuIy6qRhKH4le6WkAwbhAl/CkICzJ7uhNjzjYbSmHtkJjoDJiqkl
+   q2nq5Pl4pf6Gv9ZRjI70FuZjV/lp7PvkxmIjvFi5ALeYG+BU++L/yNTxw
+   TEI56JzoduyLRVYh3sN1nKMeIxHyar4b89iSCMj2S5yWGxKHyBP9s9qf8
+   oGlH5g6trFJpbjEmckGU75HVG+P4bPHxCLutrCc/9dId2hQqgNkbYPApZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="334614933"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="360346524"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 15:54:22 -0700
+   d="scan'208";a="334614933"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 17:08:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="745981952"
+   d="scan'208";a="642595075"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 May 2022 15:54:20 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 25 May 2022 17:08:22 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1ntztT-0003Nq-MO;
-	Wed, 25 May 2022 22:54:19 +0000
-Date: Thu, 26 May 2022 06:53:39 +0800
+	id 1nu137-0003R7-Pc;
+	Thu, 26 May 2022 00:08:21 +0000
+Date: Thu, 26 May 2022 08:08:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
+To: Matthew Auld <matthew.auld@intel.com>, intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/config 17/33] drivers/cpufreq/ti-cpufreq.c:331:19:
- error: incompatible pointer types initializing 'const u32 *' (aka 'const
- unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int
- (*)[2]')
-Message-ID: <202205260656.mE4aquA1-lkp@intel.com>
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Kenneth Graunke <kenneth@whitecape.org>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH 08/10] drm/i915/uapi: disable capturing
+ objects on recoverable contexts
+Message-ID: <202205260728.itOPg4qx-lkp@intel.com>
+References: <20220525184337.491763-9-matthew.auld@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,118 +50,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220525184337.491763-9-matthew.auld@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
-head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
-commit: f834c0b7a54d96f6322c544479bbe897309b4a0a [17/33] cpufreq: ti: Migrate to dev_pm_opp_set_config()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220526/202205260656.mE4aquA1-lkp@intel.com/config)
+Hi Matthew,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm-tip/drm-tip]
+[also build test ERROR on v5.18 next-20220525]
+[cannot apply to drm-intel/for-linux-next drm/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Auld/small-BAR-uapi-bits/20220526-024641
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220526/202205260728.itOPg4qx-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=f834c0b7a54d96f6322c544479bbe897309b4a0a
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/config
-        git checkout f834c0b7a54d96f6322c544479bbe897309b4a0a
+        # https://github.com/intel-lab-lkp/linux/commit/fdc3574e30bb0fdfdc9569fa42d369b1fae41e9e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthew-Auld/small-BAR-uapi-bits/20220526-024641
+        git checkout fdc3574e30bb0fdfdc9569fa42d369b1fae41e9e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/cpufreq/ti-cpufreq.c:331:19: error: incompatible pointer types initializing 'const u32 *' (aka 'const unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int (*)[2]') [-Werror,-Wincompatible-pointer-types]
-                   .supported_hw = &version,
-                                   ^~~~~~~~
->> drivers/cpufreq/ti-cpufreq.c:360:8: error: use of undeclared label 'fail_put_node'
-                   goto fail_put_node;
-                        ^
-   2 errors generated.
+>> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:3429:6: error: assigning to 'int' from incompatible type 'void'
+           err = eb_capture_stage(&eb);
+               ^ ~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +331 drivers/cpufreq/ti-cpufreq.c
+vim +3429 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
 
-   322	
-   323	static int ti_cpufreq_probe(struct platform_device *pdev)
-   324	{
-   325		u32 version[VERSION_COUNT];
-   326		const struct of_device_id *match;
-   327		struct ti_cpufreq_data *opp_data;
-   328		const char * const default_reg_names[] = {"vdd", "vbb"};
-   329		int ret;
-   330		struct dev_pm_opp_config config = {
- > 331			.supported_hw = &version,
-   332			.supported_hw_count = ARRAY_SIZE(version),
-   333		};
-   334	
-   335		match = dev_get_platdata(&pdev->dev);
-   336		if (!match)
-   337			return -ENODEV;
-   338	
-   339		opp_data = devm_kzalloc(&pdev->dev, sizeof(*opp_data), GFP_KERNEL);
-   340		if (!opp_data)
-   341			return -ENOMEM;
-   342	
-   343		opp_data->soc_data = match->data;
-   344	
-   345		opp_data->cpu_dev = get_cpu_device(0);
-   346		if (!opp_data->cpu_dev) {
-   347			pr_err("%s: Failed to get device for CPU0\n", __func__);
-   348			return -ENODEV;
-   349		}
-   350	
-   351		opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
-   352		if (!opp_data->opp_node) {
-   353			dev_info(opp_data->cpu_dev,
-   354				 "OPP-v2 not supported, cpufreq-dt will attempt to use legacy tables.\n");
-   355			goto register_cpufreq_dt;
-   356		}
-   357	
-   358		ret = ti_cpufreq_setup_syscon_register(opp_data);
-   359		if (ret)
- > 360			goto fail_put_node;
-   361	
-   362		/*
-   363		 * OPPs determine whether or not they are supported based on
-   364		 * two metrics:
-   365		 *	0 - SoC Revision
-   366		 *	1 - eFuse value
-   367		 */
-   368		ret = ti_cpufreq_get_rev(opp_data, &version[0]);
-   369		if (ret)
-   370			goto fail_put_node;
-   371	
-   372		ret = ti_cpufreq_get_efuse(opp_data, &version[1]);
-   373		if (ret)
-   374			goto fail_put_node;
-   375	
-   376		if (opp_data->soc_data->multi_regulator) {
-   377			config.regulator_count = ARRAY_SIZE(default_reg_names);
-   378	
-   379			if (opp_data->soc_data->reg_names)
-   380				config.regulator_names = opp_data->soc_data->reg_names;
-   381			else
-   382				config.regulator_names = default_reg_names;
-   383		}
-   384	
-   385		opp_data->opp_table = dev_pm_opp_set_config(opp_data->cpu_dev, &config);
-   386		of_node_put(opp_data->opp_node);
-   387	
-   388		if (IS_ERR(opp_data->opp_table)) {
-   389			dev_err(opp_data->cpu_dev, "Failed to set OPP config\n");
-   390			return PTR_ERR(opp_data->opp_table);
-   391		}
-   392	
-   393	register_cpufreq_dt:
-   394		platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
-   395	
-   396		return 0;
-   397	}
-   398	
+  3384	
+  3385		if (args->flags & I915_EXEC_FENCE_OUT) {
+  3386			out_fence_fd = get_unused_fd_flags(O_CLOEXEC);
+  3387			if (out_fence_fd < 0) {
+  3388				err = out_fence_fd;
+  3389				goto err_in_fence;
+  3390			}
+  3391		}
+  3392	
+  3393		err = eb_create(&eb);
+  3394		if (err)
+  3395			goto err_out_fence;
+  3396	
+  3397		GEM_BUG_ON(!eb.lut_size);
+  3398	
+  3399		err = eb_select_context(&eb);
+  3400		if (unlikely(err))
+  3401			goto err_destroy;
+  3402	
+  3403		err = eb_select_engine(&eb);
+  3404		if (unlikely(err))
+  3405			goto err_context;
+  3406	
+  3407		err = eb_lookup_vmas(&eb);
+  3408		if (err) {
+  3409			eb_release_vmas(&eb, true);
+  3410			goto err_engine;
+  3411		}
+  3412	
+  3413		i915_gem_ww_ctx_init(&eb.ww, true);
+  3414	
+  3415		err = eb_relocate_parse(&eb);
+  3416		if (err) {
+  3417			/*
+  3418			 * If the user expects the execobject.offset and
+  3419			 * reloc.presumed_offset to be an exact match,
+  3420			 * as for using NO_RELOC, then we cannot update
+  3421			 * the execobject.offset until we have completed
+  3422			 * relocation.
+  3423			 */
+  3424			args->flags &= ~__EXEC_HAS_RELOC;
+  3425			goto err_vma;
+  3426		}
+  3427	
+  3428		ww_acquire_done(&eb.ww.ctx);
+> 3429		err = eb_capture_stage(&eb);
+  3430		if (err)
+  3431			goto err_vma;
+  3432	
+  3433		out_fence = eb_requests_create(&eb, in_fence, out_fence_fd);
+  3434		if (IS_ERR(out_fence)) {
+  3435			err = PTR_ERR(out_fence);
+  3436			out_fence = NULL;
+  3437			if (eb.requests[0])
+  3438				goto err_request;
+  3439			else
+  3440				goto err_vma;
+  3441		}
+  3442	
+  3443		err = eb_submit(&eb);
+  3444	
+  3445	err_request:
+  3446		eb_requests_get(&eb);
+  3447		err = eb_requests_add(&eb, err);
+  3448	
+  3449		if (eb.fences)
+  3450			signal_fence_array(&eb, eb.composite_fence ?
+  3451					   eb.composite_fence :
+  3452					   &eb.requests[0]->fence);
+  3453	
+  3454		if (out_fence) {
+  3455			if (err == 0) {
+  3456				fd_install(out_fence_fd, out_fence->file);
+  3457				args->rsvd2 &= GENMASK_ULL(31, 0); /* keep in-fence */
+  3458				args->rsvd2 |= (u64)out_fence_fd << 32;
+  3459				out_fence_fd = -1;
+  3460			} else {
+  3461				fput(out_fence->file);
+  3462			}
+  3463		}
+  3464	
+  3465		if (unlikely(eb.gem_context->syncobj)) {
+  3466			drm_syncobj_replace_fence(eb.gem_context->syncobj,
+  3467						  eb.composite_fence ?
+  3468						  eb.composite_fence :
+  3469						  &eb.requests[0]->fence);
+  3470		}
+  3471	
+  3472		if (!out_fence && eb.composite_fence)
+  3473			dma_fence_put(eb.composite_fence);
+  3474	
+  3475		eb_requests_put(&eb);
+  3476	
+  3477	err_vma:
+  3478		eb_release_vmas(&eb, true);
+  3479		WARN_ON(err == -EDEADLK);
+  3480		i915_gem_ww_ctx_fini(&eb.ww);
+  3481	
+  3482		if (eb.batch_pool)
+  3483			intel_gt_buffer_pool_put(eb.batch_pool);
+  3484	err_engine:
+  3485		eb_put_engine(&eb);
+  3486	err_context:
+  3487		i915_gem_context_put(eb.gem_context);
+  3488	err_destroy:
+  3489		eb_destroy(&eb);
+  3490	err_out_fence:
+  3491		if (out_fence_fd != -1)
+  3492			put_unused_fd(out_fence_fd);
+  3493	err_in_fence:
+  3494		dma_fence_put(in_fence);
+  3495	err_ext:
+  3496		put_fence_array(eb.fences, eb.num_fences);
+  3497		return err;
+  3498	}
+  3499	
 
 -- 
 0-DAY CI Kernel Test Service
