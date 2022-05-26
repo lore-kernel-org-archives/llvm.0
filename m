@@ -1,48 +1,44 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28DA7C
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 12:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4E81389
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 13:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653566946; x=1685102946;
+  t=1653571269; x=1685107269;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8cb6LUIMboo+SIEZgujmYDLknzubtzj+xpHtKPgU8yc=;
-  b=kRLkXjhF8UyjRTrMWWw0iKmWJZ0BrGPwyWF7Dc9MeHtc2LkD2dkid3JJ
-   XAendlBY8i7Qfn/H9zj9lzIlzypzQgAtqeaXIUfDmlHkpACKJBUtfyLGw
-   w6qsn0N3dYc5U76lhM1QynVY5GruuKLkKOEBHZlirE3qjamVoUuvfoJLr
-   SBxZub+0odivcG7Aqivv9LnxrbWqf0V9Yg+FGDtgAA7nfqklltdof2g9u
-   mgAqG7uo8TYci5JI+Wf/IUEg8qSAFuWglpEPY1sgJKyMGudVh2o3gsxES
-   hXxa9bRqhTpZ6ZfEFmR8nGqMkPSTUfOrQ+nNjIpdX7josbmdB+XXv+PC2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272952218"
+  bh=rGshprtfTFf5DRIXFvNqu/mGzry0GYqUeey2aN6JSXo=;
+  b=TUJ8SLiD3IW27YYeyZ8bIytHBfBBguvspQ4bST5nO3iJZCzvPxVAJKPG
+   6w+1js32lNke55uWxwGcS0/XACuqGT66YbkugMNFBNG3npsiIMSUM62Ph
+   aScmn1JR7uFzxjVYb6X3Cq7B0cxP7GiebP9Ot1YSmhmQ3wueoFmIN7gTX
+   8JR13cYvisqOEl7hT70yp8UK69TGP3JI9bRi7mOo7SQiHKlhwP66FWo0i
+   658uqA8UxTJJ7aCGNLOgyTnbf9/pKf4PjNBViT1r9yR8RVvOdt1mx4bEI
+   6X1Xc8zO0SYZZMnFhg3ypfAoOdtx+D6xFigvptGHkH1/csg1socf7vfSV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272969302"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="272952218"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 05:09:05 -0700
+   d="scan'208";a="272969302"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 06:21:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="677439120"
+   d="scan'208";a="902016093"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 26 May 2022 05:09:02 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 May 2022 06:21:07 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nuCIX-0003qe-HV;
-	Thu, 26 May 2022 12:09:01 +0000
-Date: Thu, 26 May 2022 20:08:35 +0800
+	id 1nuDQI-0003tR-QX;
+	Thu, 26 May 2022 13:21:06 +0000
+Date: Thu, 26 May 2022 21:20:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	lgirdwood@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 2/4] regulator: Add driver for MT6331 PMIC regulators
-Message-ID: <202205261929.FCVQ5SD3-lkp@intel.com>
-References: <20220523154709.118663-3-angelogioacchino.delregno@collabora.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, edg-e@nccgroup.com
+Subject: Re: [PATCH nf] netfilter: nf_tables: disallow non-stateful
+ expression in sets earlier
+Message-ID: <202205262104.cowfvBMc-lkp@intel.com>
+References: <20220526105952.306242-1-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,58 +47,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523154709.118663-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220526105952.306242-1-pablo@netfilter.org>
 
-Hi AngeloGioacchino,
+Hi Pablo,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on broonie-regulator/for-next]
-[also build test ERROR on v5.18 next-20220526]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test WARNING on nf/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205261929.FCVQ5SD3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-nf_tables-disallow-non-stateful-expression-in-sets-earlier/20220526-190122
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf.git master
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262104.cowfvBMc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6dc66c0e54d0e22f6688e5b61d2740e0b839fc1e
+        # https://github.com/intel-lab-lkp/linux/commit/08b6b97fd372a14e82e821bb2b4c9c10c1426080
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
-        git checkout 6dc66c0e54d0e22f6688e5b61d2740e0b839fc1e
+        git fetch --no-tags linux-review Pablo-Neira-Ayuso/netfilter-nf_tables-disallow-non-stateful-expression-in-sets-earlier/20220526-190122
+        git checkout 08b6b97fd372a14e82e821bb2b4c9c10c1426080
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/regulator/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/regulator/mt6331-regulator.c:15:10: fatal error: 'linux/mfd/mt6331/registers.h' file not found
-   #include <linux/mfd/mt6331/registers.h>
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> net/netfilter/nf_tables_api.c:5431:17: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+           return ERR_PTR(err);
+                          ^~~
+   net/netfilter/nf_tables_api.c:5413:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +15 drivers/regulator/mt6331-regulator.c
+vim +/err +5431 net/netfilter/nf_tables_api.c
 
-     9	
-    10	#include <linux/module.h>
-    11	#include <linux/of.h>
-    12	#include <linux/platform_device.h>
-    13	#include <linux/regmap.h>
-    14	#include <linux/mfd/mt6397/core.h>
-  > 15	#include <linux/mfd/mt6331/registers.h>
-    16	#include <linux/regulator/driver.h>
-    17	#include <linux/regulator/machine.h>
-    18	#include <linux/regulator/mt6331-regulator.h>
-    19	#include <linux/regulator/of_regulator.h>
-    20	
+60319eb1ca351a Pablo Neira Ayuso 2014-04-04  5407  
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5408  struct nft_expr *nft_set_elem_expr_alloc(const struct nft_ctx *ctx,
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5409  					 const struct nft_set *set,
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5410  					 const struct nlattr *attr)
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5411  {
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5412  	struct nft_expr *expr;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5413  	int err;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5414  
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5415  	expr = nft_expr_init(ctx, attr);
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5416  	if (IS_ERR(expr))
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5417  		return expr;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5418  
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5419  	if (expr->ops->type->flags & NFT_EXPR_GC) {
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5420  		if (set->flags & NFT_SET_TIMEOUT)
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5421  			goto err_set_elem_expr;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5422  		if (!set->ops->gc_init)
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5423  			goto err_set_elem_expr;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5424  		set->ops->gc_init(set);
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5425  	}
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5426  
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5427  	return expr;
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5428  
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5429  err_set_elem_expr:
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5430  	nft_expr_destroy(ctx, expr);
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11 @5431  	return ERR_PTR(err);
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5432  }
+a7fc9368040841 Pablo Neira Ayuso 2020-03-11  5433  
 
 -- 
 0-DAY CI Kernel Test Service
