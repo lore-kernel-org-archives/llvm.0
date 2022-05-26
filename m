@@ -1,104 +1,259 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97C510E9
-	for <llvm@lists.linux.dev>; Thu, 26 May 2022 09:00:57 +0000 (UTC)
-Received: by mail-ej1-f53.google.com with SMTP id y13so1829645eje.2
-        for <llvm@lists.linux.dev>; Thu, 26 May 2022 02:00:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sjBm94r+SZCpqMEtFTlHZhDX0lygeSCfuwzmdT2Wqlk=;
-        b=wm9PX8MZU/5of2t0gDHyZsbae+9V0cMwaT8bbF5ykjunJDZg5puAFZAcxTz25sTCYK
-         AJsSx3vdwtrKH2ut9/a0FA338lspzVORoXgkvCu+lpkmQx+UP9cXPeatat03z8MC/ceM
-         DbWOiyzgFcYvzkZMw7MvN1rV8rXjyDjl8mmE+uWs4UZuqsTdXV/DPU/k95Q25y8Czb6a
-         dHq5LySC29HffEKZS54iXrQqM0gc0s9K+eeAQGFQ7t+bfLpvU63ZVO3sRJmf4c2g0yFm
-         W4RdeYEC7aikkyEFwpKT/5VqtlI9u6P7A49EUx814rtwN/M/79wWWqLu1i8GO+6J7Wkn
-         zYAA==
-X-Gm-Message-State: AOAM532och4q4dCyQY+xGQbSOBmSS1xnH7GS+uZCbOCne20tKLX7U+in
-	n6n0mRJ6d4004CV/OJSJ6SM=
-X-Google-Smtp-Source: ABdhPJxqjGaQdiFgCf1SGM3twv9W4CPY5SZ9hMzvvBpbF/H5q4uJ7jgeabbmL+dxHb8NZ/SKb9eVbQ==
-X-Received: by 2002:a17:906:49c6:b0:6fe:95bb:93cc with SMTP id w6-20020a17090649c600b006fe95bb93ccmr32272454ejv.30.1653555656059;
-        Thu, 26 May 2022 02:00:56 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id a24-20020a056402237800b0042ae4dea360sm511221eda.63.2022.05.26.02.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 02:00:55 -0700 (PDT)
-Message-ID: <ef79f546-0d10-f603-ccbe-789ed021943c@kernel.org>
-Date: Thu, 26 May 2022 11:00:54 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAC110E9
+	for <llvm@lists.linux.dev>; Thu, 26 May 2022 09:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653556135; x=1685092135;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BbgZo0fAvzwrr8/AxG79gLLntIyYXKjXVTnVr9TmLbk=;
+  b=SVgZeJbXKOBo9mrpxgOMMYUr8dmEe/CAmRHumIk54DTikZcKKGFhuOfF
+   lanoOGZQ2ayux9AcnfflaGZwN4gHCcTebsPyG+6Yd056IUh1pBKWQ19PM
+   NJaH8VGasGpppcUw82GPySPIBIZmFl+voqji8930s3aeNJMvxzU9HpWCv
+   hIZtu5pedx2dLQOc4Vh6RJXvNNft8qpt1lvUrI7ndhweF3Qn8XtgxHFbq
+   47Hf+8Nxg125Jcecm0y+fqIXNzsCPFvfug6+nCQKSVNAnJYNpQPYxkFRW
+   UikBpGA0LlpL5zll7P4n3o4ygyfIxodIXYgVbSz0TQXq2C2741jhFrEJx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253965894"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="253965894"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 02:08:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="718170597"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 May 2022 02:08:52 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nu9UB-0003jg-Gz;
+	Thu, 26 May 2022 09:08:51 +0000
+Date: Thu, 26 May 2022 17:02:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jianglei Nie <niejianglei2021@163.com>, pizza@shaftnet.org,
+	kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jianglei Nie <niejianglei2021@163.com>
+Subject: Re: [PATCH] cw1200: Fix memory leak in cw1200_set_key()
+Message-ID: <202205261656.CWDWN8nG-lkp@intel.com>
+References: <20220526033003.473943-1-niejianglei2021@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] Revert "linux/types.h: remove unnecessary __bitwise__"
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Bjorn Helgaas <helgaas@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>
-References: <20220525144638.293934-1-helgaas@kernel.org>
- <CAHk-=whk=ygWsxt=1HhndCwjtXdga9sPmkxFGby5PJWRk5yx9Q@mail.gmail.com>
-From: Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHk-=whk=ygWsxt=1HhndCwjtXdga9sPmkxFGby5PJWRk5yx9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526033003.473943-1-niejianglei2021@163.com>
 
-On 25. 05. 22, 18:02, Linus Torvalds wrote:
-> On Wed, May 25, 2022 at 7:46 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>
->> This reverts commit c724c866bb70cb8c607081a26823a1f0ebde4387.
->>
->> Jiri Slaby reported that c724c866bb70 ("linux/types.h: remove unnecessary
->> __bitwise__") broke userspace, including open-iscsi, because it uses
->> __bitwise__.
->>
->> Restore the __bitwise__ definition.
-> 
-> Hmm.
-> 
-> Presumably it's only the uapi case that actually wants to re-instate it.
-> 
-> And I'd rather make that "__bitwise__" case explicitly special, with a
-> comment about why it exists when the kernel itself doesn't use it.
-> 
-> IOW, rather than the revert, maybe something like the below
-> (whitespace-damaged) instead?
-> 
-> Jiri, does something like this work for you?
+Hi Jianglei,
 
-Yes, thanks.
+Thank you for the patch! Yet something to improve:
 
-> ---
->   include/uapi/linux/types.h | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-> index c4dc597f3dcf..308433be33c2 100644
-> --- a/include/uapi/linux/types.h
-> +++ b/include/uapi/linux/types.h
-> @@ -26,6 +26,9 @@
->   #define __bitwise
->   #endif
-> 
-> +/* The kernel doesn't use this legacy form, but user space does */
-> +#define __bitwise__ __bitwise
-> +
->   typedef __u16 __bitwise __le16;
->   typedef __u16 __bitwise __be16;
->   typedef __u32 __bitwise __le32;
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main v5.18 next-20220526]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220526/202205261656.CWDWN8nG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1e40283730dea11a1556d589925313cdca295484
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+        git checkout 1e40283730dea11a1556d589925313cdca295484
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/st/cw1200/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/st/cw1200/sta.c:826:26: error: use of undeclared identifier 'idx'
+                           cw1200_free_key(priv, idx);
+                                                 ^
+   1 error generated.
+
+
+vim +/idx +826 drivers/net/wireless/st/cw1200/sta.c
+
+   679	
+   680	int cw1200_set_key(struct ieee80211_hw *dev, enum set_key_cmd cmd,
+   681			   struct ieee80211_vif *vif, struct ieee80211_sta *sta,
+   682			   struct ieee80211_key_conf *key)
+   683	{
+   684		int ret = -EOPNOTSUPP;
+   685		struct cw1200_common *priv = dev->priv;
+   686		struct ieee80211_key_seq seq;
+   687	
+   688		mutex_lock(&priv->conf_mutex);
+   689	
+   690		if (cmd == SET_KEY) {
+   691			u8 *peer_addr = NULL;
+   692			int pairwise = (key->flags & IEEE80211_KEY_FLAG_PAIRWISE) ?
+   693				1 : 0;
+   694			int idx = cw1200_alloc_key(priv);
+   695			struct wsm_add_key *wsm_key = &priv->keys[idx];
+   696	
+   697			if (idx < 0) {
+   698				ret = -EINVAL;
+   699				goto finally;
+   700			}
+   701	
+   702			if (sta)
+   703				peer_addr = sta->addr;
+   704	
+   705			key->flags |= IEEE80211_KEY_FLAG_PUT_IV_SPACE |
+   706				      IEEE80211_KEY_FLAG_RESERVE_TAILROOM;
+   707	
+   708			switch (key->cipher) {
+   709			case WLAN_CIPHER_SUITE_WEP40:
+   710			case WLAN_CIPHER_SUITE_WEP104:
+   711				if (key->keylen > 16) {
+   712					cw1200_free_key(priv, idx);
+   713					ret = -EINVAL;
+   714					goto finally;
+   715				}
+   716	
+   717				if (pairwise) {
+   718					wsm_key->type = WSM_KEY_TYPE_WEP_PAIRWISE;
+   719					memcpy(wsm_key->wep_pairwise.peer,
+   720					       peer_addr, ETH_ALEN);
+   721					memcpy(wsm_key->wep_pairwise.keydata,
+   722					       &key->key[0], key->keylen);
+   723					wsm_key->wep_pairwise.keylen = key->keylen;
+   724				} else {
+   725					wsm_key->type = WSM_KEY_TYPE_WEP_DEFAULT;
+   726					memcpy(wsm_key->wep_group.keydata,
+   727					       &key->key[0], key->keylen);
+   728					wsm_key->wep_group.keylen = key->keylen;
+   729					wsm_key->wep_group.keyid = key->keyidx;
+   730				}
+   731				break;
+   732			case WLAN_CIPHER_SUITE_TKIP:
+   733				ieee80211_get_key_rx_seq(key, 0, &seq);
+   734				if (pairwise) {
+   735					wsm_key->type = WSM_KEY_TYPE_TKIP_PAIRWISE;
+   736					memcpy(wsm_key->tkip_pairwise.peer,
+   737					       peer_addr, ETH_ALEN);
+   738					memcpy(wsm_key->tkip_pairwise.keydata,
+   739					       &key->key[0], 16);
+   740					memcpy(wsm_key->tkip_pairwise.tx_mic_key,
+   741					       &key->key[16], 8);
+   742					memcpy(wsm_key->tkip_pairwise.rx_mic_key,
+   743					       &key->key[24], 8);
+   744				} else {
+   745					size_t mic_offset =
+   746						(priv->mode == NL80211_IFTYPE_AP) ?
+   747						16 : 24;
+   748					wsm_key->type = WSM_KEY_TYPE_TKIP_GROUP;
+   749					memcpy(wsm_key->tkip_group.keydata,
+   750					       &key->key[0], 16);
+   751					memcpy(wsm_key->tkip_group.rx_mic_key,
+   752					       &key->key[mic_offset], 8);
+   753	
+   754					wsm_key->tkip_group.rx_seqnum[0] = seq.tkip.iv16 & 0xff;
+   755					wsm_key->tkip_group.rx_seqnum[1] = (seq.tkip.iv16 >> 8) & 0xff;
+   756					wsm_key->tkip_group.rx_seqnum[2] = seq.tkip.iv32 & 0xff;
+   757					wsm_key->tkip_group.rx_seqnum[3] = (seq.tkip.iv32 >> 8) & 0xff;
+   758					wsm_key->tkip_group.rx_seqnum[4] = (seq.tkip.iv32 >> 16) & 0xff;
+   759					wsm_key->tkip_group.rx_seqnum[5] = (seq.tkip.iv32 >> 24) & 0xff;
+   760					wsm_key->tkip_group.rx_seqnum[6] = 0;
+   761					wsm_key->tkip_group.rx_seqnum[7] = 0;
+   762	
+   763					wsm_key->tkip_group.keyid = key->keyidx;
+   764				}
+   765				break;
+   766			case WLAN_CIPHER_SUITE_CCMP:
+   767				ieee80211_get_key_rx_seq(key, 0, &seq);
+   768				if (pairwise) {
+   769					wsm_key->type = WSM_KEY_TYPE_AES_PAIRWISE;
+   770					memcpy(wsm_key->aes_pairwise.peer,
+   771					       peer_addr, ETH_ALEN);
+   772					memcpy(wsm_key->aes_pairwise.keydata,
+   773					       &key->key[0], 16);
+   774				} else {
+   775					wsm_key->type = WSM_KEY_TYPE_AES_GROUP;
+   776					memcpy(wsm_key->aes_group.keydata,
+   777					       &key->key[0], 16);
+   778	
+   779					wsm_key->aes_group.rx_seqnum[0] = seq.ccmp.pn[5];
+   780					wsm_key->aes_group.rx_seqnum[1] = seq.ccmp.pn[4];
+   781					wsm_key->aes_group.rx_seqnum[2] = seq.ccmp.pn[3];
+   782					wsm_key->aes_group.rx_seqnum[3] = seq.ccmp.pn[2];
+   783					wsm_key->aes_group.rx_seqnum[4] = seq.ccmp.pn[1];
+   784					wsm_key->aes_group.rx_seqnum[5] = seq.ccmp.pn[0];
+   785					wsm_key->aes_group.rx_seqnum[6] = 0;
+   786					wsm_key->aes_group.rx_seqnum[7] = 0;
+   787					wsm_key->aes_group.keyid = key->keyidx;
+   788				}
+   789				break;
+   790			case WLAN_CIPHER_SUITE_SMS4:
+   791				if (pairwise) {
+   792					wsm_key->type = WSM_KEY_TYPE_WAPI_PAIRWISE;
+   793					memcpy(wsm_key->wapi_pairwise.peer,
+   794					       peer_addr, ETH_ALEN);
+   795					memcpy(wsm_key->wapi_pairwise.keydata,
+   796					       &key->key[0], 16);
+   797					memcpy(wsm_key->wapi_pairwise.mic_key,
+   798					       &key->key[16], 16);
+   799					wsm_key->wapi_pairwise.keyid = key->keyidx;
+   800				} else {
+   801					wsm_key->type = WSM_KEY_TYPE_WAPI_GROUP;
+   802					memcpy(wsm_key->wapi_group.keydata,
+   803					       &key->key[0],  16);
+   804					memcpy(wsm_key->wapi_group.mic_key,
+   805					       &key->key[16], 16);
+   806					wsm_key->wapi_group.keyid = key->keyidx;
+   807				}
+   808				break;
+   809			default:
+   810				pr_warn("Unhandled key type %d\n", key->cipher);
+   811				cw1200_free_key(priv, idx);
+   812				ret = -EOPNOTSUPP;
+   813				goto finally;
+   814			}
+   815			ret = wsm_add_key(priv, wsm_key);
+   816			if (!ret)
+   817				key->hw_key_idx = idx;
+   818			else
+   819				cw1200_free_key(priv, idx);
+   820		} else if (cmd == DISABLE_KEY) {
+   821			struct wsm_remove_key wsm_key = {
+   822				.index = key->hw_key_idx,
+   823			};
+   824	
+   825			if (wsm_key.index > WSM_KEY_MAX_INDEX) {
+ > 826				cw1200_free_key(priv, idx);
+   827				ret = -EINVAL;
+   828				goto finally;
+   829			}
+   830	
+   831			cw1200_free_key(priv, wsm_key.index);
+   832			ret = wsm_remove_key(priv, &wsm_key);
+   833		} else {
+   834			pr_warn("Unhandled key command %d\n", cmd);
+   835		}
+   836	
+   837	finally:
+   838		mutex_unlock(&priv->conf_mutex);
+   839		return ret;
+   840	}
+   841	
 
 -- 
-js
-suse labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp
