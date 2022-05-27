@@ -1,107 +1,97 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28947F
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 17:33:08 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id l13so7807438lfp.11
-        for <llvm@lists.linux.dev>; Fri, 27 May 2022 10:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bj4qyw34YxTvRCJ4T4CzfYuGvBv7f0gh9GISKHTlOYY=;
-        b=SKy17ZMe4xDQzYC7q3+GNm5c5xF1hjIYTQ4puIJ3zzSAcV+Y95jaehz+fj4+GuYZKY
-         uqstDwu/NMw3ISzHC+z5V+hCrCadYuaVQdFTtnBP8Q8u7pIi5sM9tfTFGJ5vBxT4e/vX
-         06o5PPz2i9Lno4XFomQUCKm8wFTMtlQPYpkexnlSFOV4XIsM0W1NRjhzaDH/Et0ksimG
-         8gVuiS6YpZIKXbeANzTrWc6Ay5T6Rv8KwcqMDdYHJIaE8h8hho95NJJ4R3+4lH1wytdb
-         yJyGvtMAfZRZnMr8B/rXDhKZK06APDuvGJb52EsNS62kqaaQvNEemJnHq1qtVlQjaN7O
-         IUiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bj4qyw34YxTvRCJ4T4CzfYuGvBv7f0gh9GISKHTlOYY=;
-        b=IrXoVwLggwWhXlQCuKatLMyic/mVm8GcF/DJGX/abu6h43Q+/Jxzs0A+66HyckxogD
-         7D0NCyvnjywJzim7wgbjk4Z4s1vASXRR34KYTUFz5z26m6op+9a45HQsAvI1FuD5bFtS
-         FH4SbmMjo72tVOuIVv847sEU/Hp7tfWvjFZgJ8Tz1TwskyYyev9gkRyIwxQlh2f+lSnQ
-         y3tx4+Yy5hX8YwBBAEuvHxiPyUgvmznpOKoDYuXJY8/Cy1RovV7uEMIOh7vy3XX8MxHV
-         C1WBpp5tUTaV1OYyhr+IGWpZDGRP230JzCcfrHQlfntj7WVxsu/n8AWh6KqriUqhMgQJ
-         Z4TA==
-X-Gm-Message-State: AOAM531a2NrKzOf8psvSzpi2MO9OP/yDGTuZcKDZEjqYLkuyK4+glFmp
-	nQW5L0aNULJm7G5DgLCYd4odRVd+vHzWu1zPz5QXdQ==
-X-Google-Smtp-Source: ABdhPJzr0zh7RqK3oufVwRmxE56PvSyrvSdp3z1Zx8heuuJjzgu04wiRGDT9v/yTHIeA6z7GEd9gFjjqg5ITn/M97gw=
-X-Received: by 2002:a05:6512:48e:b0:477:c024:1a1c with SMTP id
- v14-20020a056512048e00b00477c0241a1cmr31618834lfq.100.1653672786348; Fri, 27
- May 2022 10:33:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2277F
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 17:42:53 +0000 (UTC)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 24RHgU0d004467
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 02:42:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 24RHgU0d004467
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1653673351;
+	bh=vO9l5kDkkTIQWSumWYQ1Vkw7B/XqoY7ZfQPx5PWESBs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=t/RUfi9Sh5h28itWUOQb0HeUskZksbBYC0U2grK7iHf83mD7gmeY6+WY5DQxn2pst
+	 LvLeoRRjNyowE7U7Ni7dLwGqtu3YaqFDS+74L/C9BQmYytoqcbwBSObFeNnGRYteH9
+	 64VVJtWv5hAMA0wIGEx51mm5eCKE3rPpd6hx7aZ6rH/eJ21NQbHHOg+PHw67DGzXRF
+	 XH0qHk5Rc6FVAxgFPdVeQ+US4wPL5p3JNeJJxXjvDebmzBAdAguNm7pZhK3Jkl8KGj
+	 K1w5TWxnznynXACulsOv5l5mWjTlvaR/6XbUvRm/irKTe9HzptX5huwsjXrvHWUoop
+	 XK1vn5dmbrHtA==
+X-Nifty-SrcIP: [209.85.216.45]
+Received: by mail-pj1-f45.google.com with SMTP id q92-20020a17090a17e500b001e0817e77f6so7700739pja.5
+        for <llvm@lists.linux.dev>; Fri, 27 May 2022 10:42:30 -0700 (PDT)
+X-Gm-Message-State: AOAM531iy+vlJnYlQxR8BSQbKZBu4u3ovUUQtQxo/AI8xFtpQYw7rrCp
+	it07sp4ErMBWp8QO29asf8tbY7beZgkN1mN1n9E=
+X-Google-Smtp-Source: ABdhPJwMiVJv7kLsX2ZZRH8xMYaGS8e37WqzfbRucz+6H3VdKMbNmq62R7H5jsGDhOOZp00zV+5CyfxMkWGovyzpsEM=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr44301921plh.99.1653673349915; Fri, 27
+ May 2022 10:42:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220527100155.1996314-1-masahiroy@kernel.org> <20220527100155.1996314-2-masahiroy@kernel.org>
-In-Reply-To: <20220527100155.1996314-2-masahiroy@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 27 May 2022 10:32:54 -0700
-Message-ID: <CAKwvOd=sMwYPJyUcKVAu9V3bWszuUJ2NUMC8BMT5AdN5i=ra2A@mail.gmail.com>
-Subject: Re: [PATCH v7 1/8] kbuild: replace $(linked-object) with CONFIG options
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@redhat.com>, llvm@lists.linux.dev, 
-	Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, 
-	Michal Marek <michal.lkml@markovi.net>
+References: <20220527100155.1996314-1-masahiroy@kernel.org>
+ <20220527100155.1996314-9-masahiroy@kernel.org> <20220527155053.i4xfrlupuqfu4kem@treble>
+In-Reply-To: <20220527155053.i4xfrlupuqfu4kem@treble>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 28 May 2022 02:41:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQkUJO=8GprusO6-o7=_yg2zVDPHecoNN_075a_Y4U-7w@mail.gmail.com>
+Message-ID: <CAK7LNAQkUJO=8GprusO6-o7=_yg2zVDPHecoNN_075a_Y4U-7w@mail.gmail.com>
+Subject: Re: [PATCH v7 8/8] kbuild: rebuild multi-object modules when objtool
+ is updated
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        clang-built-linux <llvm@lists.linux.dev>, Helge Deller <deller@gmx.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <n.schier@avm.de>, Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, May 27, 2022 at 3:04 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, May 28, 2022 at 12:50 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 >
-> *.prelink.o is created when CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT
-> is enabled.
+> On Fri, May 27, 2022 at 07:01:55PM +0900, Masahiro Yamada wrote:
+> > When CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT is enabled, objtool for
+> > multi-object modules is postponed until the objects are linked together.
+> >
+> > Make sure to re-run objtool and re-link multi-object modules when
+> > objtool is updated.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 >
-> Replace $(linked-object) with $(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)
-> so you will get better idea when the --link option is passed.
+> Hi Masahiro,
 >
-> No functional change is intended.
-
-It triggered my PTSD to see this ^ expression; many commits to LLVM
-are labeled "NFCI."
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+> Is it also possible to rebuild vmlinux.o when objtool changes, for
+> CONFIG_LTO_CLANG, CONFIG_X86_KERNEL_IBT, or CONFIG_NOINSTR_VALIDATION?
+> That doesn't seem to be happening.
 >
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v7:
->   - New patch
->
->  scripts/Makefile.build | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 06400504150b..f80196eef03a 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -219,7 +219,7 @@ objtool_args =                                                              \
->         $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
->         $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
->         --uaccess                                                       \
-> -       $(if $(linked-object), --link)                                  \
-> +       $(if $($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)), --link)    \
->         $(if $(part-of-module), --module)                               \
->         $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
->
-> @@ -284,7 +284,6 @@ quiet_cmd_cc_prelink_modules = LD [M]  $@
->  # modules into native code
->  $(obj)/%.prelink.o: objtool-enabled = y
->  $(obj)/%.prelink.o: part-of-module := y
-> -$(obj)/%.prelink.o: linked-object := y
->
->  $(obj)/%.prelink.o: $(obj)/%.o FORCE
->         $(call if_changed,cc_prelink_modules)
 > --
-> 2.32.0
->
+> Josh
+
+Yes.
+Actually, it is already on my TODO list,
+but it requires more effort.
+
+I will aim for v5.20.
+
+
+
+
+
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Best Regards
+Masahiro Yamada
