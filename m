@@ -1,207 +1,346 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477421851
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 11:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653651054; x=1685187054;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WMFJJZ6HLj4gQSVHjvYyKMWAyLkF08ix5YrY58k9LIA=;
-  b=lrgG/s/VH2WQbrAHK1co0X1IIHnfdr/aHwxbMRUIhKMmVJiuX1KV/2v/
-   JQlXqVBYJUK7FmsDFmTRXhAytMPILtfdoN49bLGD+ul4+eBS6tgH1fI7c
-   whMvyVHiQgnWVSSXH1upD66QRc5drBLgADxRf1l35/aT9Kk2y9tmgxOkZ
-   fdhgfnOgJ5aCBgbHeZF6Y9BhhehfmYemeQC5dg3vTn84imSfbApJjMbGz
-   p9P/JDKEWv1bDB/Ac/yaRO2SHrdfJYSZoKeZKyA1YviGjuiXdRgXjfBaL
-   UFl7BsM7W0/RJSK8K18ulU4eg1b1xdJIte4hmRGV0dANLv9k6PiOlb7mB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="272028451"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="272028451"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 04:30:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="560722632"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 May 2022 04:30:51 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nuYB8-0004ha-JE;
-	Fri, 27 May 2022 11:30:50 +0000
-Date: Fri, 27 May 2022 19:30:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Chao Peng <chao.p.peng@linux.intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 333/429]
- include/linux/memfile_notifier.h:87:57: error: type specifier missing,
- defaults to 'int'; ISO C99 and later do not support implicit int
-Message-ID: <202205271916.7L8Eg9yk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227C81851
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 12:00:49 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id h11so1873673wrb.0
+        for <llvm@lists.linux.dev>; Fri, 27 May 2022 05:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=m8hjobXXscQ5RSJJgp2EcJsmDZ8R3efiq/2P795X5lc=;
+        b=LD4NatI+P23lPQT1J4HL+xQvfFWGLXe62ngZTKxQu1JhbU29cpz58Ep7vifYkK8N4b
+         yalUMCCNfaIgXTrUPCFiR5UoA5fvbeRJikyhFWmIvMpzZ8TC5dMqi/HlgAdjKIaWW7GC
+         d1avkakyPzYpg7FtgxkpwAg1Z7RWovRUozAZq6AR+25FcnJKQEMvWwN4TxQyLkPs+voC
+         kmP66WSBHFAmR4IUruQN6HmJ8OYYxeTIyzAcu+fuGvwFcu2SINK0egybQEc7IWpn6tkv
+         IcfVQ/3xV4YXPAUpHSg56fBpsdwqi2M0JDXvLQZrUQbZEW01gF4/1NNYgftagWf/kzON
+         pwQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=m8hjobXXscQ5RSJJgp2EcJsmDZ8R3efiq/2P795X5lc=;
+        b=Sgc2GSsAoDdm1cC+8EZKuzO4aKVwUK6zPfQTkPuTLZoiYijyh+5hk8WCuxkc+if8ck
+         sGDsyuJ/o+jWIkbgHpdg2a//nmMJE4VaMiJ+EgmsmpdfFRyyuwpQX+oYQhr/gazh+BTc
+         Nb2M8xwTiwD+En+OKDMSeyvGQvLG/G4qq9PyRM23iN9NntY3xoT5q/8JHrUYTnkuDu0y
+         6eUBBN3Bz4l+kLLGtotmMi7Zykw0UT8siNIZt0RKwyzXPmyTcy/QAWVFsctnBLRj3kMb
+         ews7G3EizNHzNDFujqUiDHl+xt6tFLR+5NhhlT/U7BUXrQGZpQDssYwaptNgTaFqKV6+
+         RoHA==
+X-Gm-Message-State: AOAM5319N4u91iRk+tjviZxQjqsJpxD6C9+VJ6qvj3Ez95RHTcI1Al9h
+	VAJTxaTO9r3B7b/vezZ0RFSHsA+MaC0uIrhSOmE=
+X-Google-Smtp-Source: ABdhPJzY+F+HmiFTFwFpOr3tX0pyLI1eBA98saDiztWdIv2vJiH46x43SagvfNalG3t8P68ZeiHaNSutXG/DHmixD3M=
+X-Received: by 2002:a5d:480c:0:b0:20e:6133:132 with SMTP id
+ l12-20020a5d480c000000b0020e61330132mr35657541wrq.593.1653652847198; Fri, 27
+ May 2022 05:00:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220512170008.1301613-2-xiehuan09@gmail.com> <202205130923.SJJN7oez-lkp@intel.com>
+ <20220518224849.b195cc2380fde43c593d79c5@kernel.org> <CAEr6+EDZ3ekYqWzz-0pmR8C5D_mdWdvHoE2dhycSox=hFKh+8g@mail.gmail.com>
+ <20220527084212.337e8f7dda680c7bc179173a@kernel.org>
+In-Reply-To: <20220527084212.337e8f7dda680c7bc179173a@kernel.org>
+From: Jeff Xie <xiehuan09@gmail.com>
+Date: Fri, 27 May 2022 20:00:35 +0800
+Message-ID: <CAEr6+EAMi+w_W0MBeoEC9wGMpFggd-BMv53JFxmvj0ELGv3XBQ@mail.gmail.com>
+Subject: Re: [PATCH v10 1/4] trace: Add trace any kernel object
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, mingo@redhat.com, Tom Zanussi <zanussi@kernel.org>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   49c277ae966b45577acad5c6d98acba3d27d63af
-commit: a46fd36366f3a53f0ea7385cdddef7d5e373edd0 [333/429] mm/shmem: Support memfile_notifier
-config: hexagon-randconfig-r045-20220524 (https://download.01.org/0day-ci/archive/20220527/202205271916.7L8Eg9yk-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/a46fd36366f3a53f0ea7385cdddef7d5e373edd0
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout a46fd36366f3a53f0ea7385cdddef7d5e373edd0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Hi Masami,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, May 27, 2022 at 7:42 AM Masami Hiramatsu <mhiramat@kernel.org> wrot=
+e:
+>
+> Hi Jeff,
+>
+> On Wed, 18 May 2022 22:17:50 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> >  Hi Masami,
+> >
+> > Thank you for your reminder, I feel very strange, this patch series
+> > was always  based on:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+> > ftrace/core
+> >
+> > These compile errors may be because other branches have not merged
+> > into Tom's patches.
+> > Steve told me before that this patch series should rely on Tom's patch.
+>
+> OK, when you send the next version, please describe this in the cover
+> mail and point Tom's series if it is not merged yet.
 
-All errors (new ones prefixed by >>):
+Ok, thanks for the reminder.
 
-   In file included from drivers/char/mem.c:25:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   drivers/char/mem.c:95:13: warning: no previous prototype for function 'unxlate_dev_mem_ptr' [-Wmissing-prototypes]
-   void __weak unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
-               ^
-   drivers/char/mem.c:94:29: note: expanded from macro 'unxlate_dev_mem_ptr'
-   #define unxlate_dev_mem_ptr unxlate_dev_mem_ptr
-                               ^
-   drivers/char/mem.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
-   ^
-   static 
-   1 warning and 1 error generated.
---
-   In file included from drivers/gpu/drm/drm_gem_shmem_helper.c:10:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   1 error generated.
---
-   In file included from drivers/gpu/drm/vgem/vgem_drv.c:36:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   drivers/gpu/drm/vgem/vgem_drv.c:144:10: warning: shift count >= width of type [-Wshift-count-overflow]
-                                        DMA_BIT_MASK(64));
-                                        ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 1 error generated.
---
-   In file included from init/main.c:80:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   init/main.c:769:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-                      ^
-   init/main.c:769:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-   ^
-   static 
-   init/main.c:781:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:781:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
-   init/main.c:783:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
-   void __init __weak poking_init(void) { }
-                      ^
-   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak poking_init(void) { }
-   ^
-   static 
-   3 warnings and 1 error generated.
---
-   In file included from kernel/fork.c:86:
-   In file included from include/linux/khugepaged.h:6:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   kernel/fork.c:163:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-               ^
-   kernel/fork.c:163:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-   ^
-   static 
-   kernel/fork.c:854:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:854:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
-   kernel/fork.c:949:12: warning: no previous prototype for function 'arch_dup_task_struct' [-Wmissing-prototypes]
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-              ^
-   kernel/fork.c:949:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-   ^
-   static 
-   3 warnings and 1 error generated.
---
-   In file included from mm/shmem.c:37:
-   In file included from include/linux/khugepaged.h:6:
-   In file included from include/linux/shmem_fs.h:12:
->> include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
-   In file included from mm/shmem.c:55:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+> Thank you,
+>
+> >
+> >
+> > On Wed, May 18, 2022 at 9:48 PM Masami Hiramatsu <mhiramat@kernel.org> =
+wrote:
+> > >
+> > > Hi Jeff,
+> > >
+> > > Can you fix these errors, since these looks real bugs.
+> > >
+> > > Thank you,
+> > >
+> > > On Fri, 13 May 2022 10:01:48 +0800
+> > > kernel test robot <lkp@intel.com> wrote:
+> > >
+> > > > Hi Jeff,
+> > > >
+> > > > Thank you for the patch! Perhaps something to improve:
+> > > >
+> > > > [auto build test WARNING on rostedt-trace/for-next]
+> > > > [also build test WARNING on v5.18-rc6 next-20220512]
+> > > > [If your patch is applied to the wrong git tree, kindly drop us a n=
+ote.
+> > > > And when submitting patch, we suggest to use '--base' as documented=
+ in
+> > > > https://git-scm.com/docs/git-format-patch]
+> > > >
+> > > > url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/tra=
+ce-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220513-010820
+> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/lin=
+ux-trace.git for-next
+> > > > config: i386-randconfig-c001 (https://download.01.org/0day-ci/archi=
+ve/20220513/202205130923.SJJN7oez-lkp@intel.com/config)
+> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-projec=
+t 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
+> > > > reproduce (this is a W=3D1 build):
+> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/mast=
+er/sbin/make.cross -O ~/bin/make.cross
+> > > >         chmod +x ~/bin/make.cross
+> > > >         # https://github.com/intel-lab-lkp/linux/commit/3c91aa291a0=
+fe8b28b02a14827b0c4ca3ebda601
+> > > >         git remote add linux-review https://github.com/intel-lab-lk=
+p/linux
+> > > >         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-o=
+bjtrace-trigger-to-trace-the-kernel-object/20220513-010820
+> > > >         git checkout 3c91aa291a0fe8b28b02a14827b0c4ca3ebda601
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash kernel/trace/
+> > > >
+> > > > If you fix the issue, kindly add following tag as appropriate
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > >
+> > > > All warnings (new ones prefixed by >>):
+> > > >
+> > > >    kernel/trace/trace_object.c:259:13: error: incompatible function=
+ pointer types initializing 'int (*)(struct seq_file *, struct event_trigge=
+r_ops *, struct event_trigger_data *)' with an expression of type 'int (str=
+uct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-funct=
+ion-pointer-types]
+> > > >            .print                  =3D trace_object_trigger_print,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:260:12: error: incompatible function=
+ pointer types initializing 'int (*)(struct event_trigger_ops *, struct eve=
+nt_trigger_data *)' with an expression of type 'int (struct event_trigger_d=
+ata *)' [-Werror,-Wincompatible-function-pointer-types]
+> > > >            .init                   =3D event_object_trigger_init,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:261:12: error: incompatible function=
+ pointer types initializing 'void (*)(struct event_trigger_ops *, struct ev=
+ent_trigger_data *)' with an expression of type 'void (struct event_trigger=
+_data *)' [-Werror,-Wincompatible-function-pointer-types]
+> > > >            .free                   =3D trace_object_trigger_free,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:266:13: error: incompatible function=
+ pointer types initializing 'int (*)(struct seq_file *, struct event_trigge=
+r_ops *, struct event_trigger_data *)' with an expression of type 'int (str=
+uct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-funct=
+ion-pointer-types]
+> > > >            .print                  =3D trace_object_trigger_print,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:267:12: error: incompatible function=
+ pointer types initializing 'int (*)(struct event_trigger_ops *, struct eve=
+nt_trigger_data *)' with an expression of type 'int (struct event_trigger_d=
+ata *)' [-Werror,-Wincompatible-function-pointer-types]
+> > > >            .init                   =3D event_object_trigger_init,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:268:12: error: incompatible function=
+ pointer types initializing 'void (*)(struct event_trigger_ops *, struct ev=
+ent_trigger_data *)' with an expression of type 'void (struct event_trigger=
+_data *)' [-Werror,-Wincompatible-function-pointer-types]
+> > > >            .free                   =3D trace_object_trigger_free,
+> > > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > >> kernel/trace/trace_object.c:335:61: warning: format specifies ty=
+pe 'long' but the argument has type 'unsigned int' [-Wformat]
+> > > >                    pr_err("the size of the %s should be:%ld\n", fie=
+ld->name, sizeof(void *));
+> > > >                                                         ~~~        =
+          ^~~~~~~~~~~~~~
+> > > >                                                         %u
+> > > >    include/linux/printk.h:489:33: note: expanded from macro 'pr_err=
+'
+> > > >            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+> > > >                                   ~~~     ^~~~~~~~~~~
+> > > >    include/linux/printk.h:446:60: note: expanded from macro 'printk=
+'
+> > > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_=
+ARGS__)
+> > > >                                                        ~~~    ^~~~~=
+~~~~~~
+> > > >    include/linux/printk.h:418:19: note: expanded from macro 'printk=
+_index_wrap'
+> > > >                    _p_func(_fmt, ##__VA_ARGS__);                   =
+        \
+> > > >                            ~~~~    ^~~~~~~~~~~
+> > > >    kernel/trace/trace_object.c:356:3: error: implicit declaration o=
+f function 'event_trigger_unregister' [-Werror,-Wimplicit-function-declarat=
+ion]
+> > > >                    event_trigger_unregister(cmd_ops, file, glob+1, =
+trigger_data);
+> > > >                    ^
+> > > >    kernel/trace/trace_object.c:356:3: note: did you mean 'event_tri=
+gger_register'?
+> > > >    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' dec=
+lared here
+> > > >    extern int event_trigger_register(struct event_command *cmd_ops,
+> > > >               ^
+> > > >    kernel/trace/trace_object.c:370:64: error: too few arguments to =
+function call, expected 7, have 4
+> > > >            ret =3D event_trigger_register(cmd_ops, file, glob, trig=
+ger_data);
+> > > >                  ~~~~~~~~~~~~~~~~~~~~~~                            =
+      ^
+> > > >    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' dec=
+lared here
+> > > >    extern int event_trigger_register(struct event_command *cmd_ops,
+> > > >               ^
+> > > >    1 warning and 8 errors generated.
+> > > >
+> > > >
+> > > > vim +335 kernel/trace/trace_object.c
+> > > >
+> > > >    296
+> > > >    297        static int
+> > > >    298        event_object_trigger_parse(struct event_command *cmd_=
+ops,
+> > > >    299                               struct trace_event_file *file,
+> > > >    300                               char *glob, char *cmd, char *p=
+aram_and_filter)
+> > > >    301        {
+> > > >    302                struct event_trigger_data *trigger_data;
+> > > >    303                struct objtrace_trigger_data *obj_data;
+> > > >    304                struct ftrace_event_field *field;
+> > > >    305                char *objtrace_cmd, *arg;
+> > > >    306                char *param, *filter;
+> > > >    307                int ret;
+> > > >    308                bool remove;
+> > > >    309
+> > > >    310                remove =3D event_trigger_check_remove(glob);
+> > > >    311
+> > > >    312                /*
+> > > >    313                 * separate the param and the filter:
+> > > >    314                 * objtrace:add:OBJ[:COUNT] [if filter]
+> > > >    315                 */
+> > > >    316                ret =3D event_trigger_separate_filter(param_a=
+nd_filter, &param, &filter, true);
+> > > >    317                if (ret)
+> > > >    318                        return ret;
+> > > >    319
+> > > >    320                objtrace_cmd =3D strsep(&param, ":");
+> > > >    321                if (!objtrace_cmd || strcmp(objtrace_cmd, "ad=
+d")) {
+> > > >    322                        pr_err("error objtrace command\n");
+> > > >    323                        return -EINVAL;
+> > > >    324                }
+> > > >    325
+> > > >    326                arg =3D strsep(&param, ":");
+> > > >    327                if (!arg)
+> > > >    328                        return -EINVAL;
+> > > >    329
+> > > >    330                field =3D trace_find_event_field(file->event_=
+call, arg);
+> > > >    331                if (!field)
+> > > >    332                        return -EINVAL;
+> > > >    333
+> > > >    334                if (field->size !=3D sizeof(void *)) {
+> > > >  > 335                        pr_err("the size of the %s should be:=
+%ld\n", field->name, sizeof(void *));
+> > > >    336                        return -EINVAL;
+> > > >    337                }
+> > > >    338
+> > > >    339                if (remove && !field_exist(file, cmd_ops, fie=
+ld->name))
+> > > >    340                        return -EINVAL;
+> > > >    341
+> > > >    342                obj_data =3D kzalloc(sizeof(*obj_data), GFP_K=
+ERNEL);
+> > > >    343                if (!obj_data)
+> > > >    344                        return -ENOMEM;
+> > > >    345
+> > > >    346                obj_data->field =3D field;
+> > > >    347                obj_data->tr =3D file->tr;
+> > > >    348                snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD=
+_LEN, objtrace_cmd);
+> > > >    349
+> > > >    350                trigger_data =3D event_trigger_alloc(cmd_ops,=
+ cmd, param, obj_data);
+> > > >    351                if (!trigger_data) {
+> > > >    352                        kfree(obj_data);
+> > > >    353                        return -ENOMEM;
+> > > >    354                }
+> > > >    355                if (remove) {
+> > > >    356                        event_trigger_unregister(cmd_ops, fil=
+e, glob+1, trigger_data);
+> > > >    357                        kfree(obj_data);
+> > > >    358                        kfree(trigger_data);
+> > > >    359                        return 0;
+> > > >    360                }
+> > > >    361
+> > > >    362                ret =3D event_trigger_parse_num(param, trigge=
+r_data);
+> > > >    363                if (ret)
+> > > >    364                        goto out_free;
+> > > >    365
+> > > >    366                ret =3D event_trigger_set_filter(cmd_ops, fil=
+e, filter, trigger_data);
+> > > >    367                if (ret < 0)
+> > > >    368                        goto out_free;
+> > > >    369
+> > > >    370                ret =3D event_trigger_register(cmd_ops, file,=
+ glob, trigger_data);
+> > > >    371                if (ret)
+> > > >    372                        goto out_free;
+> > > >    373
+> > > >    374                return ret;
+> > > >    375
+> > > >    376         out_free:
+> > > >    377                event_trigger_reset_filter(cmd_ops, trigger_d=
+ata);
+> > > >    378                kfree(obj_data);
+> > > >    379                kfree(trigger_data);
+> > > >    380                return ret;
+> > > >    381        }
+> > > >    382
+> > > >
+> > > > --
+> > > > 0-DAY CI Kernel Test Service
+> > > > https://01.org/lkp
+> > >
+> > >
+> > > --
+> > > Masami Hiramatsu <mhiramat@kernel.org>
+> >
+> > Thanks,
+> > JeffXie
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-
-vim +/int +87 include/linux/memfile_notifier.h
-
-07b4263e3099f7 Chao Peng 2022-01-12  86  
-07b4263e3099f7 Chao Peng 2022-01-12 @87  static int memfile_register_notifier(struct file *file, flags,
-07b4263e3099f7 Chao Peng 2022-01-12  88  				     struct memfile_notifier *notifier)
-07b4263e3099f7 Chao Peng 2022-01-12  89  {
-07b4263e3099f7 Chao Peng 2022-01-12  90  	return -EOPNOTSUPP;
-07b4263e3099f7 Chao Peng 2022-01-12  91  }
-07b4263e3099f7 Chao Peng 2022-01-12  92  
-
-:::::: The code at line 87 was first introduced by commit
-:::::: 07b4263e3099f776c35284155851f0e202b12a44 mm: Introduce memfile_notifier
-
-:::::: TO: Chao Peng <chao.p.peng@linux.intel.com>
-:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+JeffXie
