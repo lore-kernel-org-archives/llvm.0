@@ -1,44 +1,68 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFDD468D
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 02:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894221841
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 02:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653619133; x=1685155133;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yEciXW/qEZbDrq03ZORk1zmLuw0S76ejkbdaY7mm8r0=;
-  b=InJ1D1OtqSUcDkAqlddoBas9ZrJLhN+vvpR70s6JhBw0+p0ZpFlZszdv
-   Smt10Zk1B+oEtv5uTcFpfp5Ta9+stvjAdT/h+qKmt840AeYTORl4W4F1Y
-   /czIDeYoHiKKXfKtegSILWOMvGiU9PtbwsujGAp8e2Tvvpg2FHwaOOyR3
-   4o58xfng73kxmIQoAwxH40l8SYxJFpUFPhcob4FsMSDeEOhwLTrdNKgAv
-   E6R0VF29VVp7d+a2hM/tBP4ZvnET/xU5lmfdOQK0C8mu7ndYZoD5te+LA
-   wwtp1TrWwNinCA8ZCGPjk+wTBDk4e39uVRe5PrkaxSAjDN3n1Bx6a7B0K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="256429338"
+  t=1653619139; x=1685155139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9btj2t8Ai0XAQfVLl3idqQi7EnvGruQK2QwkrzBc3Xc=;
+  b=JFd4yBduLpb836AGWUQ4F6F4TAOWNkv/BIB0IblP+Y+S0BlHd1xCGWs4
+   yI933xOeKJXZpq1Kv78XOjk+hsOY+eqIZ9kRfJUMkbyV004AZ4OxqzjZq
+   Wc+PuPQmFHGb0ajcrOvOB335kgP1/7XOwpPhW88BA+B85WRC5UvdKgMwv
+   2oTbg26ms0Yor5WKQu+dahBolAi3ktACUUiFiRQMdK+XG40yYThLQQK9k
+   w62AEb57SfGI0Ay0TMJ51/LqgHIvIVRFF3bQIy3OpVxFxAZhZWjUE4302
+   8cIsHRqTsBDYpaHr8Nw61pFaG4AVGRght/2XBcRCRFGVLbH9RzlPIQkBR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274459796"
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="256429338"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:38:53 -0700
+   d="scan'208";a="274459796"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:38:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="704901463"
+   d="scan'208";a="610026464"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 19:38:51 -0700
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2022 19:38:51 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nuPsI-0004L0-FU;
+	id 1nuPsI-0004L2-Gf;
 	Fri, 27 May 2022 02:38:50 +0000
-Date: Fri, 27 May 2022 10:37:49 +0800
+Date: Fri, 27 May 2022 10:37:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <sean.j.christopherson@intel.com>
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+	Gurchetan Singh <gurchetansingh@chromium.org>,
+	Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Gert Wollny <gert.wollny@collabora.com>,
+	Gustavo Padovan <gustavo.padovan@collabora.com>,
+	Daniel Stone <daniel@fooishbar.org>,
+	Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
+	Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+	Rob Clark <robdclark@gmail.com>,
+	Emil Velikov <emil.l.velikov@gmail.com>,
+	Robin Murphy <robin.murphy@arm.com>, Qiang Yu <yuq825@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Tomasz Figa <tfiga@chromium.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-	Yang Weijiang <weijiang.yang@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Subject: [rppt:cet/kvm 38/51] arch/x86/kvm/x86.c:6587:3: error: unannotated
- fall-through between switch labels
-Message-ID: <202205271056.ub1i6GQ8-lkp@intel.com>
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH v6 14/22] dma-buf: Introduce new locking convention
+Message-ID: <202205271042.1WRbRP1r-lkp@intel.com>
+References: <20220526235040.678984-15-dmitry.osipenko@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,151 +71,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220526235040.678984-15-dmitry.osipenko@collabora.com>
 
-Hi Sean,
+Hi Dmitry,
 
-FYI, the error/warning still remains.
+I love your patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
-head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
-commit: 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7 [38/51] KVM: x86: Report XSS as an MSR to be saved if there are supported features
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220527/202205271056.ub1i6GQ8-lkp@intel.com/config)
+[auto build test WARNING on linus/master]
+[cannot apply to drm/drm-next media-tree/master drm-intel/for-linux-next v5.18]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220527-075717
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git cdeffe87f790dfd1baa193020411ce9a538446d7
+config: hexagon-randconfig-r045-20220524 (https://download.01.org/0day-ci/archive/20220527/202205271042.1WRbRP1r-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt cet/kvm
-        git checkout 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
+        # https://github.com/intel-lab-lkp/linux/commit/97f090c47ec995a8cf3bced98526ee3eaa25f10f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220527-075717
+        git checkout 97f090c47ec995a8cf3bced98526ee3eaa25f10f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma-buf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/x86.c:6587:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                   case MSR_IA32_XSS:
-                   ^
-   arch/x86/kvm/x86.c:6587:3: note: insert '__attribute__((fallthrough));' to silence this warning
-                   case MSR_IA32_XSS:
-                   ^
-                   __attribute__((fallthrough)); 
-   arch/x86/kvm/x86.c:6587:3: note: insert 'break;' to avoid fall-through
-                   case MSR_IA32_XSS:
-                   ^
-                   break; 
-   1 error generated.
+>> drivers/dma-buf/dma-buf.c:1339:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   return ret;
+                          ^~~
+   drivers/dma-buf/dma-buf.c:1331:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +6587 arch/x86/kvm/x86.c
+vim +/ret +1339 drivers/dma-buf/dma-buf.c
 
-  6513	
-  6514	static void kvm_init_msr_list(void)
-  6515	{
-  6516		struct x86_pmu_capability x86_pmu;
-  6517		u32 dummy[2];
-  6518		unsigned i;
-  6519	
-  6520		BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
-  6521				 "Please update the fixed PMCs in msrs_to_saved_all[]");
-  6522	
-  6523		perf_get_x86_pmu_capability(&x86_pmu);
-  6524	
-  6525		num_msrs_to_save = 0;
-  6526		num_emulated_msrs = 0;
-  6527		num_msr_based_features = 0;
-  6528	
-  6529		for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
-  6530			if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
-  6531				continue;
-  6532	
-  6533			/*
-  6534			 * Even MSRs that are valid in the host may not be exposed
-  6535			 * to the guests in some cases.
-  6536			 */
-  6537			switch (msrs_to_save_all[i]) {
-  6538			case MSR_IA32_BNDCFGS:
-  6539				if (!kvm_mpx_supported())
-  6540					continue;
-  6541				break;
-  6542			case MSR_TSC_AUX:
-  6543				if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
-  6544				    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
-  6545					continue;
-  6546				break;
-  6547			case MSR_IA32_UMWAIT_CONTROL:
-  6548				if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
-  6549					continue;
-  6550				break;
-  6551			case MSR_IA32_RTIT_CTL:
-  6552			case MSR_IA32_RTIT_STATUS:
-  6553				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
-  6554					continue;
-  6555				break;
-  6556			case MSR_IA32_RTIT_CR3_MATCH:
-  6557				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6558				    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
-  6559					continue;
-  6560				break;
-  6561			case MSR_IA32_RTIT_OUTPUT_BASE:
-  6562			case MSR_IA32_RTIT_OUTPUT_MASK:
-  6563				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6564					(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
-  6565					 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
-  6566					continue;
-  6567				break;
-  6568			case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
-  6569				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6570					msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
-  6571					intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
-  6572					continue;
-  6573				break;
-  6574			case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
-  6575				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-  6576				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6577					continue;
-  6578				break;
-  6579			case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
-  6580				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-  6581				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6582					continue;
-  6583				break;
-  6584			case MSR_IA32_XFD:
-  6585			case MSR_IA32_XFD_ERR:
-  6586				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-> 6587			case MSR_IA32_XSS:
-  6588				if (!supported_xss)
-  6589					continue;
-  6590				break;
-  6591			default:
-  6592				break;
-  6593			}
-  6594	
-  6595			msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
-  6596		}
-  6597	
-  6598		for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
-  6599			if (!static_call(kvm_x86_has_emulated_msr)(NULL, emulated_msrs_all[i]))
-  6600				continue;
-  6601	
-  6602			emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
-  6603		}
-  6604	
-  6605		for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
-  6606			struct kvm_msr_entry msr;
-  6607	
-  6608			msr.index = msr_based_features_all[i];
-  6609			if (kvm_get_msr_feature(&msr))
-  6610				continue;
-  6611	
-  6612			msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
-  6613		}
-  6614	}
-  6615	
+  1327	
+  1328	static int dma_buf_vmap_locked(struct dma_buf *dmabuf, struct iosys_map *map)
+  1329	{
+  1330		struct iosys_map ptr;
+  1331		int ret;
+  1332	
+  1333		dma_resv_assert_held(dmabuf->resv);
+  1334	
+  1335		if (dmabuf->vmapping_counter) {
+  1336			dmabuf->vmapping_counter++;
+  1337			BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
+  1338			*map = dmabuf->vmap_ptr;
+> 1339			return ret;
+  1340		}
+  1341	
+  1342		BUG_ON(iosys_map_is_set(&dmabuf->vmap_ptr));
+  1343	
+  1344		ret = dmabuf->ops->vmap(dmabuf, &ptr);
+  1345		if (WARN_ON_ONCE(ret))
+  1346			return ret;
+  1347	
+  1348		dmabuf->vmap_ptr = ptr;
+  1349		dmabuf->vmapping_counter = 1;
+  1350	
+  1351		*map = dmabuf->vmap_ptr;
+  1352	
+  1353		return 0;
+  1354	}
+  1355	
 
 -- 
 0-DAY CI Kernel Test Service
