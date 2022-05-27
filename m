@@ -1,23 +1,21 @@
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C28185D
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 12:54:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(Authenticated sender: dmitry.osipenko)
-	with ESMTPSA id 255C91F46072
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1653655484;
-	bh=2iR4pLutdays/ng9dl/DinzlvxujRkGf8duk/VwT014=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bRx1YNkKDy+aI7rOHNB/rLf9g9vIqbmfWho3NrZ5VTSh84BBzGo6X+PB1RJekpKvV
-	 +0KLuaDFhbwrOoWMlicXq0doa/q7dF7CRwYMAhvxnJqlZALeDz1d3H/dbMvu2Ab/Um
-	 UdaJysjL6bOGQDjD0nXYMKD1HtUgD1g++UroZOMRj5SfA/c6GaaCuucVoEdOSl5OlB
-	 l/t+TSAiAhyQN0yfrPCQTbjoRCQdNUcv0FSz6wIeU1NHSQQyStcJv/3jrABSlBknFr
-	 2JNX8hsXBkXQEhcF3XSNHkJLQ0cF+Uj5ByaQQ4RONsR9ft3cZ7pO5t31VPw2FsRYNl
-	 /sGq/N+un/dmw==
-Message-ID: <32c8da3e-e385-d43c-8561-50642f6eee4c@collabora.com>
-Date: Fri, 27 May 2022 15:44:38 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8599185D
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 13:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=badeba3b8450; t=1653659861;
+	bh=sguvIpamEs+8ZftKok+OD4Ae+fTk7JTH8TB8h2DNyw4=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=HQymCyj5my8UySLozJjhivzXzt2O0D3r/5PfQ3jcl8OQgtvEq5KzA3SFtU7DNS3Hp
+	 PWh49sZU3Q7PmNJ+MebkwMDkQ/CbWc/xig115tEzeosFMDkMm9JdfIwVlHhq+2O6/+
+	 1CaeBDR74w3UZxlqMNdnEVPOd3QKUJjfKEzSsvyY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.153.1]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mkpav-1nYD1e2jCZ-00mLHH; Fri, 27
+ May 2022 15:57:41 +0200
+Message-ID: <1c12cd26-d8aa-4498-f4c0-29478b9578fe@gmx.de>
+Date: Fri, 27 May 2022 15:57:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,52 +24,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH v6 14/22] dma-buf: Introduce new locking convention
+Subject: Re: [PATCH v7 3/8] parisc: fix the exit status of arch/parisc/nm
 Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, David Airlie <airlied@linux.ie>,
- Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gert Wollny <gert.wollny@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Clark <robdclark@gmail.com>, Emil Velikov <emil.l.velikov@gmail.com>,
- Robin Murphy <robin.murphy@arm.com>, Qiang Yu <yuq825@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Thierry Reding
- <thierry.reding@gmail.com>, Tomasz Figa <tfiga@chromium.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- Jani Nikula <jani.nikula@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-media@vger.kernel.org
-References: <20220526235040.678984-15-dmitry.osipenko@collabora.com>
- <202205271042.1WRbRP1r-lkp@intel.com>
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <202205271042.1WRbRP1r-lkp@intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Josh Poimboeuf <jpoimboe@redhat.com>, llvm@lists.linux.dev,
+ linux-parisc@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+References: <20220527100155.1996314-1-masahiroy@kernel.org>
+ <20220527100155.1996314-4-masahiroy@kernel.org>
+From: Helge Deller <deller@gmx.de>
+In-Reply-To: <20220527100155.1996314-4-masahiroy@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rnzEX+fIh/b7XvFHwFrUOvS+E6bfrWBb0OjbmoABoY7eEYFwol/
+ tSEWZTjKLpLoqys43MoXs9LV3XC/t33zohBzXhXDnwtbvSno9l/gRbtG/Pd9sk4M4LPf7Os
+ CpX/dRb36KQR5bz4XG8tmGwqNX6rim9wnN5pdQ+n1xXsfFZvb2iNOAOx4n4SREIxmDddzA4
+ 4wRUOA3dl2IhZ9ivSXCjg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ejNS0xTMqGk=:EGcSQ5nJGcNajPmlb+fvdZ
+ /QWChlhJsNiHTp0PvSWb62rKbY5nkRZrtbqbWAECIZrY7p+QijMVYLH6Yt+dZHCC4as5kgGGF
+ No14sXj55Wh+xoF0pSXptmfZvhjAYKUcfqvNgSzJg2Ri6OV7TyTDRcriDYi74rK6s+7cwWhHI
+ w6mNOkVEXlGdHH/1MwMxNPIrvQcaDdtfYqjBTN/5m0htj94ha1XfTCXCfIJx1sxroLA1WR5Es
+ cd3JUws5DZM0AWzj3tOEvIuAz24ns3uTLOD52w4kZir7EYrLVvsd5Rc1a8KQZPBaQNRBsKMgV
+ A5FpTKj1zGd49+2lS5d4qedChEzIVdSIQQANym0TSN8AsesHV2GqO/Jp0A1RPZv7FxmglYPQE
+ tFjIvXuW2AIRZtfQ+5+X4a7x6zT0b7OrrSKStgk64M59cQNJ06Dab92nI62+ruznjiqyagDJn
+ dfwZX5lWPL9JAS2smWX1v2xdQf6apJ0ZNidHJgTYocooDB7PYYSAtyorrPLgXyuE+sg9nOOmF
+ RBM/h7xf3KVviBjBfITaOK5+IUar/SNWoaY2CrjORe0Y9v767XZXhn5dOmUxQ5QZzpvKQ4Ksq
+ MnQciTFX+6VnSwNqknnsvca+Z/+JWGqpn5EqfnHkYPsM5sQhZ9DMEZ/SqDxV+uuo5tlAk4Yhq
+ a4TEGB+2Ekh2SYzmVXZUu6W9kj2A6E62yGFtecKRXXO8374ixLAYTH1ooGWeS+ANYGUycv0JY
+ l03v08Yq3i1CXa8v7QhCnUM6B5uzXu4slJbPz8SysciVTNHhdtMkOX6SrcLgBPHycpYVU97pY
+ CZJsFwQtIKcNJc+EoRYsJ7izdVa04BEwVkfbKT/acXoN9d9trj+uJIeksLiZO61oF8qww4yFz
+ HF73JFkJKrDT4pLJX+HR8gnCHLhlSA4fnhj8rzjV/lwCJPMr+ymnLtheTlczF9lk/YlHmynVB
+ pEuHsx8P/fv2Sns08Ipp2hyC9dEfKVVdpLfk/xljEhZVFhgcuSiDIrSNgBnnsFxfiL51oNfRQ
+ /PVYhx36fXwKU/ICxvqjuG8jgBRYYK2/NRGL1uOQqqEZ+TwG2k0QD3PxASD1U4QyjdstUYLZ6
+ Me0dcmpD2Uv65lQIFqL8x4pj6Ew9Mvx4Be3eoepPyNGoTqv3sg1UZdGlA==
 
-On 5/27/22 05:37, kernel test robot wrote:
->>> drivers/dma-buf/dma-buf.c:1339:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->                    return ret;
->                           ^~~
->    drivers/dma-buf/dma-buf.c:1331:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    = 0
->    1 warning generated.
+Hello Masahiro,
 
-Interestingly, GCC doesn't detect this problem and it's a valid warning.
-I'll correct it in v7.
+On 5/27/22 12:01, Masahiro Yamada wrote:
+> parisc overrides 'nm' with a shell script. I do not know the reason,
+> but anyway it is how it has worked since 2003. [1]
 
--- 
-Best regards,
-Dmitry
+I don't know the reason either...
+I assume it was that the older toolchains had bugs and kept lots of local
+symbols like .LC? in the object files.
+
+I did a small build without the nm script (and removed it's reference
+in the Makefile), and it did not seem to break anything.
+
+> A problem is that this script returns the exit code of grep instead of
+> ${CROSS_COMPILE}nm.
+
+Instead of fixing this, I'd suggest that you simply remove the nm script
+alltogether. If you like I can apply such a patch in the parisc git tree,
+and you just drop this specific patch. Or you change your patch to remove =
+it.
+Just let me know what you prefer.
+
+Helge
+
+> grep(1) says:
+>     Normally the exit status is 0 if a line is selected, 1 if no lines
+>     were selected, and 2 if an error occurred. However, if the -q or
+>     --quiet or --silent is used and a line is selected, the exit status
+>     is 0 even if an error occurred.
+>
+> When the given object has no symbol, grep returns 1, while the true nm
+> returns 0. Hence, build rules using ${NM} fail on ARCH=3Dparisc even if
+> the given object is valid.
+>
+> This commit corrects the exit status of the script.
+>
+>  - A pipeline returns the exit status of the last command (here, grep).
+>    The exit status of ${CROSS_COMPILE}nm is just ignored. Use bash's
+>    pipefail flag to catch errors of ${CROSS_COMPILE}nm.
+>
+>  - If grep returns 1, this script should return 0 in order to mimic
+>    true nm. If grep returns 2, it is a real and fatal error. Return
+>    it as is.
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git=
+/commit/?id=3D36eaa6e4c0e0b6950136b956b72fd08155b92ca3
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+> Changes in v7:
+>   - New patch
+>
+>  arch/parisc/Makefile |  2 +-
+>  arch/parisc/nm       | 12 ++++++++++--
+>  2 files changed, 11 insertions(+), 3 deletions(-)
+>  mode change 100644 =3D> 100755 arch/parisc/nm
+>
+> diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+> index aca1710fd658..e7139955367d 100644
+> --- a/arch/parisc/Makefile
+> +++ b/arch/parisc/Makefile
+> @@ -18,7 +18,7 @@
+>  boot :=3D arch/parisc/boot
+>  KBUILD_IMAGE :=3D $(boot)/bzImage
+>
+> -NM		=3D sh $(srctree)/arch/parisc/nm
+> +NM		=3D $(srctree)/arch/parisc/nm
+>  CHECKFLAGS	+=3D -D__hppa__=3D1
+>
+>  ifdef CONFIG_64BIT
+> diff --git a/arch/parisc/nm b/arch/parisc/nm
+> old mode 100644
+> new mode 100755
+> index c788308de33f..3e72238a91f3
+> --- a/arch/parisc/nm
+> +++ b/arch/parisc/nm
+> @@ -1,6 +1,14 @@
+> -#!/bin/sh
+> +#!/bin/bash
+>  ##
+>  # Hack to have an nm which removes the local symbols.  We also rely
+>  # on this nm being hidden out of the ordinarily executable path
+>  ##
+> -${CROSS_COMPILE}nm $* | grep -v '.LC*[0-9]*$'
+> +
+> +# use pipefail to catch error of ${CROSS_COMPILE}nm
+> +set -o pipefail
+> +
+> +# grep exits with 1 if no lines were selected.
+> +# If the given object has no symbol, grep returns 1, but it is not an e=
+rror.
+> +
+> +${CROSS_COMPILE}nm "$@" |
+> +{ grep -v '.LC*[0-9]*$' || { exit_code=3D$?; test $exit_code -eq 1 || e=
+xit $exit_code; } }
+
