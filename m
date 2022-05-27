@@ -1,128 +1,86 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF46F7C
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 06:05:24 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3043b3f7d8fso27020417b3.8
-        for <llvm@lists.linux.dev>; Thu, 26 May 2022 23:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7VHvjIfJq9D6lO+TpoQm0tnmjw/+FCIiWflb4wfyiis=;
-        b=EVbTirZ2vrqAYHDnzMm5B3W6FGQZB1r/4vu2KijGst4r3mubDFHwxWtM6tTw7axbKa
-         pCC6F47ItDOVU+AV2wu+0Xh0MFWukiuBHOWIruQlWYrLgzOM6jlwjeZEahtHvqroDOBE
-         iC3LBxdlfM3Z6hJlIYTk2w5Yew2OVmF04h7Bv8fTr14bMln3jTd6S+l8vKUFp3U9IQ+s
-         p8wbaSPJh0yxnSl60+RK/7J5MAr5xBxAWR2DhxO9X7PTN6KZHrdc1bnvJtuv84Ykb6ZX
-         LNw/HUH0BJkZcIslZobcOkt3zEXU7np+FsjWIXfhyMEoB+zJDYGaKtNfcRduJMQpKBbP
-         f3iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7VHvjIfJq9D6lO+TpoQm0tnmjw/+FCIiWflb4wfyiis=;
-        b=0r6dqmeZRhfeRaCIpms/7IVVO75gxwwpl5LTqImPuIKzYZdHtLyUQu8bOMNFM3d934
-         LOB6xjbUqEUme6tb3DG3OoBzdwge1RuUkTH5foLUXwMIsuBFNxYqQ6Dg0sYsetmqG33D
-         816sYkH3SBSLAiuKcqVHOqladI1dkRIFeoQ8Nkv4O6ErTFlU7wE9/NvT8DLodX0KWHg/
-         IXyQ8PBlZxK2dOWZ5NZYVsEqM1th+acarpH1854Mbpw6YV+BwqhbaSFgiGhpi7LQipTT
-         iz680m3L4aer/yGaE6ks/OUqbKED/xNBVaY5RMuq8WeeD/X2oj10lXQZ/0ByqQQR/+uy
-         dEuw==
-X-Gm-Message-State: AOAM532G/UrWPNJ+xiKVajS7jmqMBLeLE0LBJakkpsxRJz6I3teZvq3X
-	zCjQElEwtEJ+BkSjUbp5iAsUF/d9XlJzGa6mHULQCA==
-X-Google-Smtp-Source: ABdhPJzmqggwtA1y7Yx/fkUPb0VYhyt53XkbFW/YOv8U7jTTlx8hbfIWMLZOyIomdvlvIKNRQAdurZiLN3oGIAvuprM=
-X-Received: by 2002:a81:7c45:0:b0:300:2f8c:7cf2 with SMTP id
- x66-20020a817c45000000b003002f8c7cf2mr15465005ywc.255.1653631523553; Thu, 26
- May 2022 23:05:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D001D7C
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 06:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5464AC385A9;
+	Fri, 27 May 2022 06:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1653632856;
+	bh=L9BhbK5z8mAy1Aa7jHJx4mr/XyGaxNMknk8uKHvbA+8=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=QwO6dq/yaF848AYty2DzrwdCzXIHx4c23FjAG/KyexPdSjS+TRCTPGyuT7p6+B11j
+	 XHm2w8jw1C9qhLQtIRHMuyObfB5L5s7gUJSM2vqvg8awqtjqYOfAlmgU28GG2UiymV
+	 7ihcuJIOZUjbc0onUBB89VDt69bLQNvit0YrzT8cHA22uhktzXKQDS4eQVUbdhUTq1
+	 sdHJmnMtUORv38O0gVYkNeFq5a/OJSwZNiUonpgXzwnnyB1sQGfPWIQySbLCAl/XHS
+	 YKeqVqtASVTUrxBReh0oFueogB+bjeRiDHSIFzNOqzVpG93eO1f/qAfpj2HwFP2zWe
+	 3rN/BN/I0gPqQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Jianglei Nie <niejianglei2021@163.com>,  pizza@shaftnet.org,  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,  pabeni@redhat.com,  llvm@lists.linux.dev,  kbuild-all@lists.01.org,  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cw1200: Fix memory leak in cw1200_set_key()
+References: <20220526033003.473943-1-niejianglei2021@163.com>
+	<202205261656.CWDWN8nG-lkp@intel.com>
+Date: Fri, 27 May 2022 09:27:30 +0300
+In-Reply-To: <202205261656.CWDWN8nG-lkp@intel.com> (kernel test robot's
+	message of "Thu, 26 May 2022 17:02:43 +0800")
+Message-ID: <875ylrwkvh.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAOBGo4zjkcX=ZQm1uYRDe9EjYqsTCyZY-Gf1C4XqMNYGFCcF+Q@mail.gmail.com>
- <CAP-5=fUobnt9anqeTaUt_EJVuMOpsxGR-Sa_e7qX=ZxqPDr+sA@mail.gmail.com>
- <20220526041650.esbcujaihdv5jqxm@google.com> <CAP-5=fVbCNg=wGbN3dK1yP_cu_eL3h-sPDZ1hC2BgVM8nmHZ_w@mail.gmail.com>
- <Yo+RDn9om2Eiwjym@kernel.org>
-In-Reply-To: <Yo+RDn9om2Eiwjym@kernel.org>
-From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date: Thu, 26 May 2022 23:05:12 -0700
-Message-ID: <CAFP8O3JreR7XD-OygwP6+wwrJoxEfAnZm9+U8Ti68fmAHKaKvg@mail.gmail.com>
-Subject: Re: Call graph dwarf unwinding fails with lld
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Travis Downs <travis.downs@gmail.com>, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Thu, May 26, 2022 at 7:39 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, May 25, 2022 at 09:25:39PM -0700, Ian Rogers escreveu:
-> > On Wed, May 25, 2022 at 9:16 PM Fangrui Song <maskray@google.com> wrote:
-> > >
-> > > On 2022-05-25, Ian Rogers wrote:
-> > > >On Tue, May 24, 2022 at 1:50 PM Travis Downs <travis.downs@gmail.com> wrote:
-> > > >>
-> > > >> I have been tracking down an issue locally where `perf record
-> > > >> --call-graph=dwarf` stopped working in the sense that unwinding always
-> > > >> failed.
-> > > >>
-> > > >> Turns out it was related to `lld` - binaries linked with `lld` don't
-> > > >> seem to unwind correctly with `--call-graph=dwarf`. I've confirmed
-> > > >> that the `.eh_frame` sections are there, but I guess they are
-> > > >> different after using this linker.
-> > > >>
-> > > >> Has anyone run into this?
-> > > >
-> > > >I was unaware but thanks for filing the bug!
-> > > >
-> > > >> There's an open LLVM issue at https://github.com/llvm/llvm-project/issues/53156
-> > > >>
-> > > >> ... but no activity since it was filed, though it is not clear if the
-> > > >> problem is really with lld or the unwinders.
-> > > >>
-> > > >> In a related question: perf supports more than one DWARF unwinding
-> > > >> implementation, depending on what libraries are available at build
-> > > >> time, right? Is there a way to select which unwinder is used at
-> > > >> runtime?
-> > > >
-> > > >I don't think so. There are two build options NO_LIBUNWIND=1 and
-> > > >NO_LIBDW_DWARF_UNWIND=1. I played around with the example from the
-> > > >bug, confirmed no difference with the eh_frames and hand verified
-> > > >them, I also added -fno-omit-frame-pointer -O0 and -static. I've not
-> > > >got a good handle on the issue but my suspicion is that the
-> > > >eh_frame_hdr is broken - it is at least something that lld generates.
-> > > >If I change the eh_frame_hdr finding to some findable but unexpected
-> > > >offset like eh_frame here:
-> > > >https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/unwind-libunwind-local.c?h=perf/core#n286
-> > > >and then test with a working linker the unwinding is broken similarly
-> > > >to with lld. I was looking for a useful tool (objdump, llvm-objdump,
-> > > >readelf, dwarfdump) to look at the eh_frame_hdr but I didn't see one.
-> > > >Perhaps someone has a suggestion or maybe pahole can do it. Hopefully
-> > > >this gives a lead for you to dig into for the bug.
-> > > >
-> > > >Thanks,
-> > > >Ian
-> > >
-> > > I am very familiar with lld and have read some nongnu libunwind code, so I guess I
-> > > may be an appropriate one debugging the issue, but I am puzzled about how to build tools/perf:
-> > >
-> > > /tmp/out/custom1 has needed llvm-project tools, built from origin/main
-> > > ninja -C /tmp/out/custom1 clang lld llvm-{nm,size,strings,objcopy,objdump,readelf,ar,strip}
-> > >
-> > > ```
-> > > % git checkout master  # torvalds/linux
-> > > % PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 defconfig all
-> > > % PATH=/tmp/out/custom1/bin:$PATH make O=/tmp/linux/x86_64 ARCH=x86_64 -j60 -C tools/perf
->
-> I never tried build both Linux and perf on the same O= directory, can
-> you please building perf on a separate directory to see if this changes
-> anything?
->
-> Also you don't need to build Linux proper to test these problems, right?
->
-> - Arnaldo
+kernel test robot <lkp@intel.com> writes:
 
-Thank you! Using an O= without the kernel build fixes my build problem...
-Then I managed to craft a patch:)
-https://lore.kernel.org/linux-perf-users/20220527055217.452307-1-maskray@google.com/
-("perf: Fix segbase for ld.lld linked objects")
+> Hi Jianglei,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on wireless-next/main]
+> [also build test ERROR on wireless/main v5.18 next-20220526]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+> config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220526/202205261656.CWDWN8nG-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/1e40283730dea11a1556d589925313cdca295484
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+>         git checkout 1e40283730dea11a1556d589925313cdca295484
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/st/cw1200/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>>> drivers/net/wireless/st/cw1200/sta.c:826:26: error: use of undeclared identifier 'idx'
+>                            cw1200_free_key(priv, idx);
+>                                                  ^
+
+So you don't even compile your patches? That is bad.
+
+The patches sent to linux-wireless should be properly tested. In some
+trivial cases a compilation test might enough, but even then that needs
+to be clearly documented with "Compile tested only" in the commit log.
+
+I'm getting worried how frequent it has become that people submit
+untested patches or that they test them using simulation tools like
+syzbot, but not on real hardware.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
