@@ -1,68 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894221841
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 02:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D50468F
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 03:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653619139; x=1685155139;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9btj2t8Ai0XAQfVLl3idqQi7EnvGruQK2QwkrzBc3Xc=;
-  b=JFd4yBduLpb836AGWUQ4F6F4TAOWNkv/BIB0IblP+Y+S0BlHd1xCGWs4
-   yI933xOeKJXZpq1Kv78XOjk+hsOY+eqIZ9kRfJUMkbyV004AZ4OxqzjZq
-   Wc+PuPQmFHGb0ajcrOvOB335kgP1/7XOwpPhW88BA+B85WRC5UvdKgMwv
-   2oTbg26ms0Yor5WKQu+dahBolAi3ktACUUiFiRQMdK+XG40yYThLQQK9k
-   w62AEb57SfGI0Ay0TMJ51/LqgHIvIVRFF3bQIy3OpVxFxAZhZWjUE4302
-   8cIsHRqTsBDYpaHr8Nw61pFaG4AVGRght/2XBcRCRFGVLbH9RzlPIQkBR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274459796"
+  t=1653622256; x=1685158256;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eta9KP2YzKxZauwVlDJ+10Ju5lJmDiQJnyNSgoBSWLg=;
+  b=kc7WCFjilX6B66BD0b0qc3qQA9S3XKY/z9ECH560TDzr7SI+8JnbZeae
+   jhjc2RsSQJRtBvtBiyIr/DlB8is5dvuvpVFRhGySj42t3P+oKrKLhjzVz
+   OBk9VADYpBIAvaZveTIa4zquTmxHknhcuznMpms8mTkXUe6BqPicAt2FJ
+   O+LvGecldYLE23oOclsLvdYvRc6k5Mh6o5o4W5Zvqy9QIgN4UDOhBl3Bo
+   6nfPuOUZH6cUmMBrv+2SCMy2hDatG3+Mc4JuKTZhZk6Ta/8vtdNQ6mAGc
+   5rOve+Wp7lg2rRCW3Jo5g8VOa04X/O3OWxje1BKmbUOJmTrdPmahoxd3v
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="299708616"
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="274459796"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:38:58 -0700
+   d="scan'208";a="299708616"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 20:30:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="610026464"
+   d="scan'208";a="643192992"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 May 2022 19:38:51 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 26 May 2022 20:30:53 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nuPsI-0004L2-Gf;
-	Fri, 27 May 2022 02:38:50 +0000
-Date: Fri, 27 May 2022 10:37:51 +0800
+	id 1nuQge-0004N0-RE;
+	Fri, 27 May 2022 03:30:52 +0000
+Date: Fri, 27 May 2022 11:30:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-	David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Gert Wollny <gert.wollny@collabora.com>,
-	Gustavo Padovan <gustavo.padovan@collabora.com>,
-	Daniel Stone <daniel@fooishbar.org>,
-	Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
-	Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-	Rob Clark <robdclark@gmail.com>,
-	Emil Velikov <emil.l.velikov@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>, Qiang Yu <yuq825@gmail.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Tomasz Figa <tfiga@chromium.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>
+To: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org
-Subject: Re: [PATCH v6 14/22] dma-buf: Introduce new locking convention
-Message-ID: <202205271042.1WRbRP1r-lkp@intel.com>
-References: <20220526235040.678984-15-dmitry.osipenko@collabora.com>
+	Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: [rppt:cet/kvm 12/51] arch/x86/include/asm/pgtable.h:1312:13: error:
+ invalid output size for constraint '+a'
+Message-ID: <202205271127.dwkWLBxL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,79 +48,225 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526235040.678984-15-dmitry.osipenko@collabora.com>
 
-Hi Dmitry,
+Hi Yu-cheng,
 
-I love your patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on linus/master]
-[cannot apply to drm/drm-next media-tree/master drm-intel/for-linux-next v5.18]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220527-075717
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git cdeffe87f790dfd1baa193020411ce9a538446d7
-config: hexagon-randconfig-r045-20220524 (https://download.01.org/0day-ci/archive/20220527/202205271042.1WRbRP1r-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
+head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
+commit: b20ff701175a81ee3517a5f2bca5bbac90529892 [12/51] x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220527/202205271127.dwkWLBxL-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/97f090c47ec995a8cf3bced98526ee3eaa25f10f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Osipenko/Add-generic-memory-shrinker-to-VirtIO-GPU-and-Panfrost-DRM-drivers/20220527-075717
-        git checkout 97f090c47ec995a8cf3bced98526ee3eaa25f10f
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=b20ff701175a81ee3517a5f2bca5bbac90529892
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt cet/kvm
+        git checkout b20ff701175a81ee3517a5f2bca5bbac90529892
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma-buf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/dma-buf/dma-buf.c:1339:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   return ret;
-                          ^~~
-   drivers/dma-buf/dma-buf.c:1331:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+                   } while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+                             ^
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:172:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:184:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:196:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:208:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+                   } while (!try_cmpxchg(&pmdp->pmd, &old_pmd.pmd, new_pmd.pmd));
+                             ^
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:172:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:184:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:196:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:208:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   8 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/ret +1339 drivers/dma-buf/dma-buf.c
+vim +1312 arch/x86/include/asm/pgtable.h
 
-  1327	
-  1328	static int dma_buf_vmap_locked(struct dma_buf *dmabuf, struct iosys_map *map)
-  1329	{
-  1330		struct iosys_map ptr;
-  1331		int ret;
-  1332	
-  1333		dma_resv_assert_held(dmabuf->resv);
-  1334	
-  1335		if (dmabuf->vmapping_counter) {
-  1336			dmabuf->vmapping_counter++;
-  1337			BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
-  1338			*map = dmabuf->vmap_ptr;
-> 1339			return ret;
-  1340		}
-  1341	
-  1342		BUG_ON(iosys_map_is_set(&dmabuf->vmap_ptr));
-  1343	
-  1344		ret = dmabuf->ops->vmap(dmabuf, &ptr);
-  1345		if (WARN_ON_ONCE(ret))
-  1346			return ret;
-  1347	
-  1348		dmabuf->vmap_ptr = ptr;
-  1349		dmabuf->vmapping_counter = 1;
-  1350	
-  1351		*map = dmabuf->vmap_ptr;
-  1352	
-  1353		return 0;
-  1354	}
-  1355	
+  1293	
+  1294	#define __HAVE_ARCH_PTEP_SET_WRPROTECT
+  1295	static inline void ptep_set_wrprotect(struct mm_struct *mm,
+  1296					      unsigned long addr, pte_t *ptep)
+  1297	{
+  1298		/*
+  1299		 * If Shadow Stack is enabled, pte_wrprotect() moves _PAGE_DIRTY
+  1300		 * to _PAGE_COW (see comments at pte_wrprotect()).
+  1301		 * When a thread reads a RW=1, Dirty=0 PTE and before changing it
+  1302		 * to RW=0, Dirty=0, another thread could have written to the page
+  1303		 * and the PTE is RW=1, Dirty=1 now.  Use try_cmpxchg() to detect
+  1304		 * PTE changes and update old_pte, then try again.
+  1305		 */
+  1306		if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+  1307			pte_t old_pte, new_pte;
+  1308	
+  1309			old_pte = READ_ONCE(*ptep);
+  1310			do {
+  1311				new_pte = pte_wrprotect(old_pte);
+> 1312			} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+  1313	
+  1314			return;
+  1315		}
+  1316		clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
+  1317	}
+  1318	
 
 -- 
 0-DAY CI Kernel Test Service
