@@ -1,161 +1,310 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0A44687
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 18:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653676214; x=1685212214;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J2iCt+NOXMe0IN8fYPJXJH6hkLOnuv4W5PV2bVHnVF8=;
-  b=Drqvd06f5QDofW5lan8K2i6o4YfQexgFxZgpc1bZckbWNohKFApicsHK
-   6bSgxP8Mb2tEM4geQMnFSUhqFM7V3LpCaAicQpyeO9S/FqEnZ4jNynO/g
-   DvgjaIvXF57n/VKWfi7Vkvf+CthvXn/8F2s2/pHfpr74NWjxNNa4TSRD/
-   twibgjhIoQX4+LoSWmzQfbsNHV4uq0uMAgVryVKhqfzaUhLLtXXpHZS8g
-   KmI33E/7sUFO+f308Kkf1dJDQSX7tdFMF0fG6uwBNfP9bMm4+iNT78aGd
-   1a59IvJwdjPDQMJhGJeTj62z0yigJ12pyhFGvVBb76EUI3DOm47s7igIb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="360934570"
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="360934570"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 11:30:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="528239527"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 May 2022 11:30:10 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nueiw-000525-3f;
-	Fri, 27 May 2022 18:30:10 +0000
-Date: Sat, 28 May 2022 02:29:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
- warning: unused variable 'c8sectpfe_match'
-Message-ID: <202205280202.QzVZUBx0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EFD1FC8
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 18:35:34 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id a13so4831146plh.6
+        for <llvm@lists.linux.dev>; Fri, 27 May 2022 11:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WbmG0BxQL0R992+1mkLkmRm547n++V/TI4xlf+GH/tc=;
+        b=tQWjfnFLTWBFHvgl/VG2XJA5ghivQFp2Sz2UAYppDuUjX3+IIndkvD+9719qnRLrQo
+         uToN8xZn6rbOB0Tr4rOY68vr4ADYR5y7hEw1cL1cuuFMsCfsKo/ZbRpVLlTxdFyJutO0
+         6M6v8WGi+5z7JONrVpNCfp4wQ/3dvu0O0XrQZdVj1o50aSjtbTr9G494iLeaJn6WI9PC
+         cav3ODzqaFF7nvo10qhk8KDyUv4duGwQRL8HZrU7sAr2DGCfX19NLH+qj/JHlNtwIvOi
+         4nBT1hwUXAFXLuMgkuVJG0o+emZY13jVOFSyzaw8OMZrIztg/1CCmUKWzU5eW4DcS56y
+         POHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WbmG0BxQL0R992+1mkLkmRm547n++V/TI4xlf+GH/tc=;
+        b=qO1YGZLkrYAe5ye5wppNIuuz/5GBlMjYMsPisgkzXrc88ttUDeUEMFSAxwj/44TWCv
+         b0njyJiUuY79voCJK5tncI+QYgV2ZCe6PApVn/D6Tin7cMqOtkeVg5T3SRLG4YiijHUU
+         a9jcRXaEJBxs6b+wDzVer4E15TcECz+GkFFsG2uIgIz+l4c2/6YF1+4a6tio3Tj3av3B
+         cX5N+wTYkF38eA8enP/hSP6c7EVRJ4YxWTLsHLsC50aBDwNbhYUCLdf3vBSfoByw/Ie1
+         laWes0sW/nU0KuG25GxbW+apSldW2ytHRbrG0d6V+fBj48RWa3hHBTBkFPQ+jS6UEXD/
+         m+FA==
+X-Gm-Message-State: AOAM531v9d48pi5pZPAkC4fqdDjckrltxyHOIbDuonGnHO+uLx7YK/N1
+	1ngIi108vF66u+WY+3NOd0hPrg==
+X-Google-Smtp-Source: ABdhPJwho9P0/hsaEFwp0K7Fu4JeYmCk4WUHmiE3+kt3MT7X5yanxhn1NM/JuaheD7q/+beU3CZamQ==
+X-Received: by 2002:a17:902:f789:b0:156:5f56:ddff with SMTP id q9-20020a170902f78900b001565f56ddffmr44145155pln.116.1653676534197;
+        Fri, 27 May 2022 11:35:34 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:781f:286a:7724:6870])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa793ba000000b0050dc76281e5sm3760913pff.191.2022.05.27.11.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 11:35:33 -0700 (PDT)
+Date: Fri, 27 May 2022 11:35:30 -0700
+From: Fangrui Song <maskray@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Sebastian Ullrich <sebasti@nullri.ch>
+Subject: Re: [PATCH] perf: Fix segbase for ld.lld linked objects
+Message-ID: <20220527183530.x4rpomvpehxctf3l@google.com>
+References: <20220527055217.452307-1-maskray@google.com>
+ <CAP-5=fVk9BmzcinBnjjFKBbNA+ojOo+qjS2m2ZAs7t9c2EkLxw@mail.gmail.com>
+ <CAP-5=fU8Pzzz+5W7Vy13tKv0=j8LYNc=+cv12LFvkGoAofJNqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
+In-Reply-To: <CAP-5=fU8Pzzz+5W7Vy13tKv0=j8LYNc=+cv12LFvkGoAofJNqA@mail.gmail.com>
 
-Hi Mauro,
+On 2022-05-27, Ian Rogers wrote:
+>On Thu, May 26, 2022 at 11:49 PM Ian Rogers <irogers@google.com> wrote:
+>>
+>> On Thu, May 26, 2022 at 10:52 PM Fangrui Song <maskray@google.com> wrote:
+>> >
+>> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
+>> > the header size. find_proc_info computes segbase as `map->start +
+>> > segbase - map->pgoff` which is wrong when
+>> >
+>> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
+>> > * and their p_vaddr difference does not equal their p_offset difference
+>> >
+>> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
+>> > such R and RX PT_LOAD program headers.
+>> >
+>> >     ld.lld => fail
+>> >     ld.lld --no-rosegment => ok
+>> >     ld.lld -z separate-code => ok
+>> >
+>> >     ld.bfd -z separate-code (default for Linux/x86) => ok
+>> >     ld.bfd -z noseparate-code => ok
+>> >
+>> > To fix the issue, compute segbase as dso's base address plus
+>> > PT_GNU_EH_FRAME's p_vaddr.
+>> >
+>> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
+>> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
+>> > Signed-off-by: Fangrui Song <maskray@google.com>
+>> > Cc: Ian Rogers <irogers@google.com>
+>>
+>> Thanks Fangrui! I tested static vs not, bfd and lld, perf test and
+>> some hand tests. I couldn't see anything out of order. The code looks
+>> good although there could be some ambiguity over the variables ending
+>> _addr as these are the ELF given addresses rather than the thread's
+>> virtual memory addresses. I'm also trying to get more comments
+>> especially on major data structures like dso, but that can be fixed as
+>> a follow-on.
+>>
+>> Tested-by: Ian Rogers <irogers@google.com>
+>>
+>> > ---
+>> >  tools/perf/util/dso.h                    |  2 +
+>> >  tools/perf/util/unwind-libunwind-local.c | 96 ++++++++++++++++--------
+>> >  2 files changed, 67 insertions(+), 31 deletions(-)
+>> >
+>> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+>> > index 3a9fd4d389b5..ec4fc1a9454b 100644
+>> > --- a/tools/perf/util/dso.h
+>> > +++ b/tools/perf/util/dso.h
+>> > @@ -179,6 +179,7 @@ struct dso {
+>> >         bool             loaded;
+>> >         u8               rel;
+>> >         struct build_id  bid;
+>> > +       u64              base_addr;
+>
+>This is an address in a thread, as one dso can be shared by multiple
+>threads/processes it seems unsafe to hold it as the dso may be loaded
+>at a different address in a different thread. For now we can just
+>recompute the value rather than store it in the dso.
 
-First bad commit (maybe != root cause):
+Ack. Thanks for spotting the issue!
+I did not know that dso can be shared (read the code for the first
+time), guessing this is why `dso__data_get_fd(dso, ui->machine);` needs
+a lock.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7e284070abe53d448517b80493863595af4ab5f0
-commit: e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2 media: platform: place stm32/ and sti/ under st/ dir
-date:   2 months ago
-config: s390-randconfig-r014-20220525 (https://download.01.org/0day-ci/archive/20220528/202205280202.QzVZUBx0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/st/sti/c8sectpfe/
+>> >         u64              text_offset;
+>> >         const char       *short_name;
+>> >         const char       *long_name;
+>> > @@ -197,6 +198,7 @@ struct dso {
+>> >                 u64              file_size;
+>> >                 struct list_head open_entry;
+>> >                 u64              debug_frame_offset;
+>> > +               u64              eh_frame_hdr_addr;
+>
+>This is the elf section address and safe to hold here.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ack.
 
-All warnings (new ones prefixed by >>):
+Fixed in PATCH v2
+https://lore.kernel.org/linux-perf-users/20220527182039.673248-1-maskray@google.com/T/#u
 
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:16:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   13 warnings generated.
-
-
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cf drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
-
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
-
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>Thanks,
+>Ian
+>
+>> >                 u64              eh_frame_hdr_offset;
+>> >         } data;
+>> >         /* bpf prog information */
+>> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+>> > index 41e29fc7648a..7a0053954e49 100644
+>> > --- a/tools/perf/util/unwind-libunwind-local.c
+>> > +++ b/tools/perf/util/unwind-libunwind-local.c
+>> > @@ -169,30 +169,55 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
+>> >         __v;                                                    \
+>> >         })
+>> >
+>> > -static u64 elf_section_offset(int fd, const char *name)
+>> > +static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
+>> >  {
+>> >         Elf *elf;
+>> >         GElf_Ehdr ehdr;
+>> >         GElf_Shdr shdr;
+>> > -       u64 offset = 0;
+>> > +       int ret;
+>> >
+>> >         elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+>> >         if (elf == NULL)
+>> > -               return 0;
+>> > +               return -1;
+>> >
+>> > -       do {
+>> > -               if (gelf_getehdr(elf, &ehdr) == NULL)
+>> > -                       break;
+>> > +       if (gelf_getehdr(elf, &ehdr) == NULL)
+>> > +               goto out_err;
+>> >
+>> > -               if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
+>> > -                       break;
+>> > -
+>> > -               offset = shdr.sh_offset;
+>> > -       } while (0);
+>> > +       if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
+>> > +               goto out_err;
+>> >
+>> > +       *address = shdr.sh_addr;
+>> > +       *offset = shdr.sh_offset;
+>> > +       ret = 0;
+>> > +out_err:
+>> >         elf_end(elf);
+>> > +       return ret;
+>> > +}
+>> > +
+>> > +#ifndef NO_LIBUNWIND_DEBUG_FRAME
+>> > +static u64 elf_section_offset(int fd, const char *name)
+>> > +{
+>> > +       u64 address, offset;
+>> > +
+>> > +       if (elf_section_address_and_offset(fd, name, &address, &offset))
+>> > +               return 0;
+>> > +
+>> >         return offset;
+>> >  }
+>> > +#endif
+>> > +
+>> > +static int elf_base_address(int fd)
+>> > +{
+>> > +       Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+>> > +       GElf_Phdr phdr;
+>> > +       int retval = 0;
+>> > +
+>> > +       if (gelf_getphdr(elf, 0, &phdr) != NULL)
+>> > +               retval = phdr.p_vaddr & -getpagesize();
+>> > +
+>> > +       elf_end(elf);
+>> > +       return retval;
+>> > +}
+>> >
+>> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
+>> >  static int elf_is_exec(int fd, const char *name)
+>> > @@ -248,8 +273,7 @@ struct eh_frame_hdr {
+>> >  } __packed;
+>> >
+>> >  static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+>> > -                              u64 offset, u64 *table_data, u64 *segbase,
+>> > -                              u64 *fde_count)
+>> > +                              u64 offset, u64 *table_data_offset, u64 *fde_count)
+>> >  {
+>> >         struct eh_frame_hdr hdr;
+>> >         u8 *enc = (u8 *) &hdr.enc;
+>> > @@ -265,35 +289,45 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+>> >         dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
+>> >
+>> >         *fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
+>> > -       *segbase    = offset;
+>> > -       *table_data = (enc - (u8 *) &hdr) + offset;
+>> > +       *table_data_offset = enc - (u8 *) &hdr;
+>> >         return 0;
+>> >  }
+>> >
+>> > -static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
+>> > +static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
+>> >                                      u64 *table_data, u64 *segbase,
+>> >                                      u64 *fde_count)
+>> >  {
+>> > -       int ret = -EINVAL, fd;
+>> > -       u64 offset = dso->data.eh_frame_hdr_offset;
+>> > +       struct map *map;
+>> > +       int ret, fd;
+>> >
+>> > -       if (offset == 0) {
+>> > -               fd = dso__data_get_fd(dso, machine);
+>> > +       if (dso->data.eh_frame_hdr_offset == 0) {
+>> > +               u64 addr_min = UINT64_MAX;
+>> > +
+>> > +               fd = dso__data_get_fd(dso, ui->machine);
+>> >                 if (fd < 0)
+>> >                         return -EINVAL;
+>> >
+>> >                 /* Check the .eh_frame section for unwinding info */
+>> > -               offset = elf_section_offset(fd, ".eh_frame_hdr");
+>> > -               dso->data.eh_frame_hdr_offset = offset;
+>> > +               ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
+>> > +                                                    &dso->data.eh_frame_hdr_addr,
+>> > +                                                    &dso->data.eh_frame_hdr_offset);
+>> > +               maps__for_each_entry(ui->thread->maps, map) {
+>> > +                       if (map->dso == dso && map->start < addr_min)
+>> > +                               addr_min = map->start;
+>> > +               }
+>> > +               dso->base_addr = addr_min - elf_base_address(fd);
+>> >                 dso__data_put_fd(dso);
+>> > +               if (ret || dso->data.eh_frame_hdr_offset == 0)
+>> > +                   return -EINVAL;
+>> >         }
+>> >
+>> > -       if (offset)
+>> > -               ret = unwind_spec_ehframe(dso, machine, offset,
+>> > -                                         table_data, segbase,
+>> > -                                         fde_count);
+>> > -
+>> > -       return ret;
+>> > +       *segbase = dso->base_addr + dso->data.eh_frame_hdr_addr;
+>> > +       ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
+>> > +                                  table_data, fde_count);
+>> > +       if (ret)
+>> > +           return ret;
+>> > +       *table_data += *segbase;
+>> > +       return 0;
+>> >  }
+>> >
+>> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
+>> > @@ -388,14 +422,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
+>> >         pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
+>> >
+>> >         /* Check the .eh_frame section for unwinding info */
+>> > -       if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
+>> > +       if (!read_unwind_spec_eh_frame(map->dso, ui,
+>> >                                        &table_data, &segbase, &fde_count)) {
+>> >                 memset(&di, 0, sizeof(di));
+>> >                 di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
+>> >                 di.start_ip = map->start;
+>> >                 di.end_ip   = map->end;
+>> > -               di.u.rti.segbase    = map->start + segbase - map->pgoff;
+>> > -               di.u.rti.table_data = map->start + table_data - map->pgoff;
+>> > +               di.u.rti.segbase    = segbase;
+>> > +               di.u.rti.table_data = table_data;
+>> >                 di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
+>> >                                       / sizeof(unw_word_t);
+>> >                 ret = dwarf_search_unwind_table(as, ip, &di, pi,
+>> > --
+>> > 2.36.1.124.g0e6072fb45-goog
+>> >
