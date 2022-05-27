@@ -1,159 +1,268 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8599185D
-	for <llvm@lists.linux.dev>; Fri, 27 May 2022 13:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1653659861;
-	bh=sguvIpamEs+8ZftKok+OD4Ae+fTk7JTH8TB8h2DNyw4=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=HQymCyj5my8UySLozJjhivzXzt2O0D3r/5PfQ3jcl8OQgtvEq5KzA3SFtU7DNS3Hp
-	 PWh49sZU3Q7PmNJ+MebkwMDkQ/CbWc/xig115tEzeosFMDkMm9JdfIwVlHhq+2O6/+
-	 1CaeBDR74w3UZxlqMNdnEVPOd3QKUJjfKEzSsvyY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.153.1]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mkpav-1nYD1e2jCZ-00mLHH; Fri, 27
- May 2022 15:57:41 +0200
-Message-ID: <1c12cd26-d8aa-4498-f4c0-29478b9578fe@gmx.de>
-Date: Fri, 27 May 2022 15:57:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4409185D
+	for <llvm@lists.linux.dev>; Fri, 27 May 2022 14:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653660242; x=1685196242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=etwPxYibWnptX1yjvwUTVHcGKmHAVjw5AngBkzDp9c0=;
+  b=UBIyx5jI/JQLLY/cbjaDKsvQQVpJ6tQU8Kw8gneONbUwjwDzq+LwiOw4
+   rC1CncHjRyYCU9YBQ66l2QEVo56A96/CBVJjTtxHiCl0hKRpWzcBDziXe
+   xNmMF+pg05d7fimsJdFB1YpcMIjSOV8A3G++LhhBpAbw7pA45tXacw6wi
+   cm0UfKtwFU8y7ttaMKmuOffPKEDNQchTtHjwlSvVlqynnXjyl597LQMHv
+   aXDLp4NQ/Kypg0UcD0j0Y4G0h5Jbg337kiON6ldWIoUtRO58S18BPuOqT
+   Kd+FygtgLV+d0cqWA+MIagJfpiyWfUpqWJNMBwcpIYgvY1r2xun+FAzq1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="256557167"
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="256557167"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 07:04:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="631611515"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 May 2022 07:03:59 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nuaZK-0004pw-Hc;
+	Fri, 27 May 2022 14:03:58 +0000
+Date: Fri, 27 May 2022 22:03:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: mm/page_table_check.c:162:36: error: call to undeclared function
+ 'pmd_pfn'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202205272115.jTU9BRH9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v7 3/8] parisc: fix the exit status of arch/parisc/nm
-Content-Language: en-US
-To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Josh Poimboeuf <jpoimboe@redhat.com>, llvm@lists.linux.dev,
- linux-parisc@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-References: <20220527100155.1996314-1-masahiroy@kernel.org>
- <20220527100155.1996314-4-masahiroy@kernel.org>
-From: Helge Deller <deller@gmx.de>
-In-Reply-To: <20220527100155.1996314-4-masahiroy@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rnzEX+fIh/b7XvFHwFrUOvS+E6bfrWBb0OjbmoABoY7eEYFwol/
- tSEWZTjKLpLoqys43MoXs9LV3XC/t33zohBzXhXDnwtbvSno9l/gRbtG/Pd9sk4M4LPf7Os
- CpX/dRb36KQR5bz4XG8tmGwqNX6rim9wnN5pdQ+n1xXsfFZvb2iNOAOx4n4SREIxmDddzA4
- 4wRUOA3dl2IhZ9ivSXCjg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ejNS0xTMqGk=:EGcSQ5nJGcNajPmlb+fvdZ
- /QWChlhJsNiHTp0PvSWb62rKbY5nkRZrtbqbWAECIZrY7p+QijMVYLH6Yt+dZHCC4as5kgGGF
- No14sXj55Wh+xoF0pSXptmfZvhjAYKUcfqvNgSzJg2Ri6OV7TyTDRcriDYi74rK6s+7cwWhHI
- w6mNOkVEXlGdHH/1MwMxNPIrvQcaDdtfYqjBTN/5m0htj94ha1XfTCXCfIJx1sxroLA1WR5Es
- cd3JUws5DZM0AWzj3tOEvIuAz24ns3uTLOD52w4kZir7EYrLVvsd5Rc1a8KQZPBaQNRBsKMgV
- A5FpTKj1zGd49+2lS5d4qedChEzIVdSIQQANym0TSN8AsesHV2GqO/Jp0A1RPZv7FxmglYPQE
- tFjIvXuW2AIRZtfQ+5+X4a7x6zT0b7OrrSKStgk64M59cQNJ06Dab92nI62+ruznjiqyagDJn
- dfwZX5lWPL9JAS2smWX1v2xdQf6apJ0ZNidHJgTYocooDB7PYYSAtyorrPLgXyuE+sg9nOOmF
- RBM/h7xf3KVviBjBfITaOK5+IUar/SNWoaY2CrjORe0Y9v767XZXhn5dOmUxQ5QZzpvKQ4Ksq
- MnQciTFX+6VnSwNqknnsvca+Z/+JWGqpn5EqfnHkYPsM5sQhZ9DMEZ/SqDxV+uuo5tlAk4Yhq
- a4TEGB+2Ekh2SYzmVXZUu6W9kj2A6E62yGFtecKRXXO8374ixLAYTH1ooGWeS+ANYGUycv0JY
- l03v08Yq3i1CXa8v7QhCnUM6B5uzXu4slJbPz8SysciVTNHhdtMkOX6SrcLgBPHycpYVU97pY
- CZJsFwQtIKcNJc+EoRYsJ7izdVa04BEwVkfbKT/acXoN9d9trj+uJIeksLiZO61oF8qww4yFz
- HF73JFkJKrDT4pLJX+HR8gnCHLhlSA4fnhj8rzjV/lwCJPMr+ymnLtheTlczF9lk/YlHmynVB
- pEuHsx8P/fv2Sns08Ipp2hyC9dEfKVVdpLfk/xljEhZVFhgcuSiDIrSNgBnnsFxfiL51oNfRQ
- /PVYhx36fXwKU/ICxvqjuG8jgBRYYK2/NRGL1uOQqqEZ+TwG2k0QD3PxASD1U4QyjdstUYLZ6
- Me0dcmpD2Uv65lQIFqL8x4pj6Ew9Mvx4Be3eoepPyNGoTqv3sg1UZdGlA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello Masahiro,
+Hi Tong,
 
-On 5/27/22 12:01, Masahiro Yamada wrote:
-> parisc overrides 'nm' with a shell script. I do not know the reason,
-> but anyway it is how it has worked since 2003. [1]
+First bad commit (maybe != root cause):
 
-I don't know the reason either...
-I assume it was that the older toolchains had bugs and kept lots of local
-symbols like .LC? in the object files.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7e284070abe53d448517b80493863595af4ab5f0
+commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+date:   2 weeks ago
+config: riscv-buildonly-randconfig-r002-20220527 (https://download.01.org/0day-ci/archive/20220527/202205272115.jTU9BRH9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I did a small build without the nm script (and removed it's reference
-in the Makefile), and it did not seem to break anything.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> A problem is that this script returns the exit code of grep instead of
-> ${CROSS_COMPILE}nm.
+All error/warnings (new ones prefixed by >>):
 
-Instead of fixing this, I'd suggest that you simply remove the nm script
-alltogether. If you like I can apply such a patch in the parisc git tree,
-and you just drop this specific patch. Or you change your patch to remove =
-it.
-Just let me know what you prefer.
+   mm/page_table_check.c:148:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pte_user_accessible_page(pte)) {
+               ^
+>> mm/page_table_check.c:149:36: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pte_pfn(pte),
+                                                    ^
+   mm/page_table_check.c:161:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pmd_user_accessible_page(pmd)) {
+               ^
+>> mm/page_table_check.c:162:36: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pmd_pfn(pmd),
+                                                    ^
+   mm/page_table_check.c:162:36: note: did you mean '_pmd_pfn'?
+   arch/riscv/include/asm/pgtable-64.h:144:29: note: '_pmd_pfn' declared here
+   static inline unsigned long _pmd_pfn(pmd_t pmd)
+                               ^
+   mm/page_table_check.c:174:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pud_user_accessible_page(pud)) {
+               ^
+>> mm/page_table_check.c:175:36: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pud_pfn(pud),
+                                                    ^
+   mm/page_table_check.c:175:36: note: did you mean '_pud_pfn'?
+   arch/riscv/include/asm/pgtable-64.h:104:29: note: '_pud_pfn' declared here
+   static inline unsigned long _pud_pfn(pud_t pud)
+                               ^
+   mm/page_table_check.c:188:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pte_user_accessible_page(pte)) {
+               ^
+   mm/page_table_check.c:189:34: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pte_pfn(pte),
+                                                  ^
+>> mm/page_table_check.c:191:10: error: call to undeclared function 'pte_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pte_write(pte));
+                                        ^
+   mm/page_table_check.c:203:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pmd_user_accessible_page(pmd)) {
+               ^
+   mm/page_table_check.c:204:34: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pmd_pfn(pmd),
+                                                  ^
+>> mm/page_table_check.c:206:10: error: call to undeclared function 'pmd_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pmd_write(pmd));
+                                        ^
+   mm/page_table_check.c:218:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pud_user_accessible_page(pud)) {
+               ^
+   mm/page_table_check.c:219:34: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pud_pfn(pud),
+                                                  ^
+>> mm/page_table_check.c:221:10: error: call to undeclared function 'pud_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pud_write(pud));
+                                        ^
+   mm/page_table_check.c:221:10: note: did you mean 'up_write'?
+   include/linux/rwsem.h:202:13: note: 'up_write' declared here
+   extern void up_write(struct rw_semaphore *sem);
+               ^
+>> mm/page_table_check.c:233:7: error: call to undeclared function 'pmd_bad'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+                ^
+>> mm/page_table_check.c:234:17: error: call to undeclared function 'pte_offset_map'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pte_t *ptep = pte_offset_map(&pmd, addr);
+                                 ^
+>> mm/page_table_check.c:234:10: warning: incompatible integer to pointer conversion initializing 'pte_t *' with an expression of type 'int' [-Wint-conversion]
+                   pte_t *ptep = pte_offset_map(&pmd, addr);
+                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_table_check.c:237:3: error: call to undeclared function 'pte_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pte_unmap(ptep);
+                   ^
+   mm/page_table_check.c:237:3: note: did you mean 'pte_devmap'?
+   include/linux/mm.h:2113:19: note: 'pte_devmap' declared here
+   static inline int pte_devmap(pte_t pte)
+                     ^
+>> mm/page_table_check.c:238:19: error: use of undeclared identifier 'PTRS_PER_PTE'
+                   for (i = 0; i < PTRS_PER_PTE; i++) {
+                                   ^
+   1 warning and 19 errors generated.
 
-Helge
 
-> grep(1) says:
->     Normally the exit status is 0 if a line is selected, 1 if no lines
->     were selected, and 2 if an error occurred. However, if the -q or
->     --quiet or --silent is used and a line is selected, the exit status
->     is 0 even if an error occurred.
->
-> When the given object has no symbol, grep returns 1, while the true nm
-> returns 0. Hence, build rules using ${NM} fail on ARCH=3Dparisc even if
-> the given object is valid.
->
-> This commit corrects the exit status of the script.
->
->  - A pipeline returns the exit status of the last command (here, grep).
->    The exit status of ${CROSS_COMPILE}nm is just ignored. Use bash's
->    pipefail flag to catch errors of ${CROSS_COMPILE}nm.
->
->  - If grep returns 1, this script should return 0 in order to mimic
->    true nm. If grep returns 2, it is a real and fatal error. Return
->    it as is.
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git=
-/commit/?id=3D36eaa6e4c0e0b6950136b956b72fd08155b92ca3
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v7:
->   - New patch
->
->  arch/parisc/Makefile |  2 +-
->  arch/parisc/nm       | 12 ++++++++++--
->  2 files changed, 11 insertions(+), 3 deletions(-)
->  mode change 100644 =3D> 100755 arch/parisc/nm
->
-> diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
-> index aca1710fd658..e7139955367d 100644
-> --- a/arch/parisc/Makefile
-> +++ b/arch/parisc/Makefile
-> @@ -18,7 +18,7 @@
->  boot :=3D arch/parisc/boot
->  KBUILD_IMAGE :=3D $(boot)/bzImage
->
-> -NM		=3D sh $(srctree)/arch/parisc/nm
-> +NM		=3D $(srctree)/arch/parisc/nm
->  CHECKFLAGS	+=3D -D__hppa__=3D1
->
->  ifdef CONFIG_64BIT
-> diff --git a/arch/parisc/nm b/arch/parisc/nm
-> old mode 100644
-> new mode 100755
-> index c788308de33f..3e72238a91f3
-> --- a/arch/parisc/nm
-> +++ b/arch/parisc/nm
-> @@ -1,6 +1,14 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  ##
->  # Hack to have an nm which removes the local symbols.  We also rely
->  # on this nm being hidden out of the ordinarily executable path
->  ##
-> -${CROSS_COMPILE}nm $* | grep -v '.LC*[0-9]*$'
-> +
-> +# use pipefail to catch error of ${CROSS_COMPILE}nm
-> +set -o pipefail
-> +
-> +# grep exits with 1 if no lines were selected.
-> +# If the given object has no symbol, grep returns 1, but it is not an e=
-rror.
-> +
-> +${CROSS_COMPILE}nm "$@" |
-> +{ grep -v '.LC*[0-9]*$' || { exit_code=3D$?; test $exit_code -eq 1 || e=
-xit $exit_code; } }
+vim +/pmd_pfn +162 mm/page_table_check.c
 
+df4e817b710809 Pasha Tatashin 2022-01-14  141  
+df4e817b710809 Pasha Tatashin 2022-01-14  142  void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  143  				  pte_t pte)
+df4e817b710809 Pasha Tatashin 2022-01-14  144  {
+df4e817b710809 Pasha Tatashin 2022-01-14  145  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  146  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  147  
+df4e817b710809 Pasha Tatashin 2022-01-14  148  	if (pte_user_accessible_page(pte)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @149  		page_table_check_clear(mm, addr, pte_pfn(pte),
+df4e817b710809 Pasha Tatashin 2022-01-14  150  				       PAGE_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  151  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  152  }
+df4e817b710809 Pasha Tatashin 2022-01-14  153  EXPORT_SYMBOL(__page_table_check_pte_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  154  
+df4e817b710809 Pasha Tatashin 2022-01-14  155  void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  156  				  pmd_t pmd)
+df4e817b710809 Pasha Tatashin 2022-01-14  157  {
+df4e817b710809 Pasha Tatashin 2022-01-14  158  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  159  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  160  
+df4e817b710809 Pasha Tatashin 2022-01-14  161  	if (pmd_user_accessible_page(pmd)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @162  		page_table_check_clear(mm, addr, pmd_pfn(pmd),
+92fb05242a1b1e Tong Tiangen   2022-05-12  163  				       PMD_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  164  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  165  }
+df4e817b710809 Pasha Tatashin 2022-01-14  166  EXPORT_SYMBOL(__page_table_check_pmd_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  167  
+df4e817b710809 Pasha Tatashin 2022-01-14  168  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  169  				  pud_t pud)
+df4e817b710809 Pasha Tatashin 2022-01-14  170  {
+df4e817b710809 Pasha Tatashin 2022-01-14  171  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  172  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  173  
+df4e817b710809 Pasha Tatashin 2022-01-14  174  	if (pud_user_accessible_page(pud)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @175  		page_table_check_clear(mm, addr, pud_pfn(pud),
+92fb05242a1b1e Tong Tiangen   2022-05-12  176  				       PUD_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  177  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  178  }
+df4e817b710809 Pasha Tatashin 2022-01-14  179  EXPORT_SYMBOL(__page_table_check_pud_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  180  
+df4e817b710809 Pasha Tatashin 2022-01-14  181  void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  182  				pte_t *ptep, pte_t pte)
+df4e817b710809 Pasha Tatashin 2022-01-14  183  {
+df4e817b710809 Pasha Tatashin 2022-01-14  184  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  185  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  186  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  187  	__page_table_check_pte_clear(mm, addr, *ptep);
+df4e817b710809 Pasha Tatashin 2022-01-14  188  	if (pte_user_accessible_page(pte)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  189  		page_table_check_set(mm, addr, pte_pfn(pte),
+df4e817b710809 Pasha Tatashin 2022-01-14  190  				     PAGE_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @191  				     pte_write(pte));
+df4e817b710809 Pasha Tatashin 2022-01-14  192  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  193  }
+df4e817b710809 Pasha Tatashin 2022-01-14  194  EXPORT_SYMBOL(__page_table_check_pte_set);
+df4e817b710809 Pasha Tatashin 2022-01-14  195  
+df4e817b710809 Pasha Tatashin 2022-01-14  196  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  197  				pmd_t *pmdp, pmd_t pmd)
+df4e817b710809 Pasha Tatashin 2022-01-14  198  {
+df4e817b710809 Pasha Tatashin 2022-01-14  199  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  200  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  201  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  202  	__page_table_check_pmd_clear(mm, addr, *pmdp);
+df4e817b710809 Pasha Tatashin 2022-01-14  203  	if (pmd_user_accessible_page(pmd)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  204  		page_table_check_set(mm, addr, pmd_pfn(pmd),
+92fb05242a1b1e Tong Tiangen   2022-05-12  205  				     PMD_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @206  				     pmd_write(pmd));
+df4e817b710809 Pasha Tatashin 2022-01-14  207  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  208  }
+df4e817b710809 Pasha Tatashin 2022-01-14  209  EXPORT_SYMBOL(__page_table_check_pmd_set);
+df4e817b710809 Pasha Tatashin 2022-01-14  210  
+df4e817b710809 Pasha Tatashin 2022-01-14  211  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  212  				pud_t *pudp, pud_t pud)
+df4e817b710809 Pasha Tatashin 2022-01-14  213  {
+df4e817b710809 Pasha Tatashin 2022-01-14  214  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  215  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  216  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  217  	__page_table_check_pud_clear(mm, addr, *pudp);
+df4e817b710809 Pasha Tatashin 2022-01-14  218  	if (pud_user_accessible_page(pud)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  219  		page_table_check_set(mm, addr, pud_pfn(pud),
+92fb05242a1b1e Tong Tiangen   2022-05-12  220  				     PUD_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @221  				     pud_write(pud));
+df4e817b710809 Pasha Tatashin 2022-01-14  222  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  223  }
+df4e817b710809 Pasha Tatashin 2022-01-14  224  EXPORT_SYMBOL(__page_table_check_pud_set);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  225  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  226  void __page_table_check_pte_clear_range(struct mm_struct *mm,
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  227  					unsigned long addr,
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  228  					pmd_t pmd)
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  229  {
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  230  	if (&init_mm == mm)
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  231  		return;
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  232  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @233  	if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @234  		pte_t *ptep = pte_offset_map(&pmd, addr);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  235  		unsigned long i;
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  236  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @237  		pte_unmap(ptep);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @238  		for (i = 0; i < PTRS_PER_PTE; i++) {
+
+:::::: The code at line 162 was first introduced by commit
+:::::: df4e817b710809425d899340dbfa8504a3ca4ba5 mm: page table check
+
+:::::: TO: Pasha Tatashin <pasha.tatashin@soleen.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
