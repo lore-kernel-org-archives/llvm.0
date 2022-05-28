@@ -1,128 +1,133 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B99B23B2
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 07:11:57 +0000 (UTC)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 24S7BlIZ000850
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 16:11:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24S7BlIZ000850
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1653721908;
-	bh=Ke5jHo8VtsnIBuHnKcTafO9UNs8CqmDY9CjC7LoWcyg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SvcSdFCEKE8RRXBMIA7XpimKe+J6UWfLaXXEF+jpQfgdH3GrR8iY9q+ZsIV8xpUKG
-	 St5ue4XgFERGiF+RT4A6EvCeqUvsstIYFgPOqpteV32R21Bjx2ckbRlHWHpo47vG/u
-	 I88KuEAfS8feRvZ1Zeu6e8/TF4z9c0qR3/CeLnvYu1SNlyr0FGFXmOg9qe8kTiydNj
-	 XOVejqH6RrgBpRp8OhPPt43V0mzC7828XWYpqPtFLDDVU5P4JWiXvfNQNb71p9BZqb
-	 gtsgVUBMyYe+u8aEOVKUYCS6ptlP6MLeS0ATaUDDjS8saLcJzCjLZSIqfyqyfzvrf5
-	 uzrCpOzyd8HEA==
-X-Nifty-SrcIP: [209.85.216.45]
-Received: by mail-pj1-f45.google.com with SMTP id m14-20020a17090a414e00b001df77d29587so8932277pjg.2
-        for <llvm@lists.linux.dev>; Sat, 28 May 2022 00:11:48 -0700 (PDT)
-X-Gm-Message-State: AOAM533mvSNU6lW5HWfzfZ2iEl3D48wnxI3jom3wxxZ+x2HzRfya24VM
-	wyrNaWjxyuIrbL2mqRzRw6gxJaaECPhAbtxM7IQ=
-X-Google-Smtp-Source: ABdhPJxIgcs0jv5kYFRTIFUI+PolCz13bwvjdRWJmELBANgzVLOZHuuZI+qAblhvtkFaI4hepCODALq+NqXohlAZTOc=
-X-Received: by 2002:a17:90a:9b08:b0:1e2:837f:bcce with SMTP id
- f8-20020a17090a9b0800b001e2837fbccemr5889109pjp.144.1653721907307; Sat, 28
- May 2022 00:11:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A123B2
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 07:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653723770; x=1685259770;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zdBsI9qu/DZM5MSkqcsyLB6OJ9auA7XgqkrZTE+QHIg=;
+  b=LA3lJyZgcbLFsTf7jsYY3BDw5ahZSucAWGLvR5ncas1rYvZ0iCKL+h8W
+   VVfx2w6L1KphUDPtrhv7C/2tl6TU7npYU9bpP7DAYA6McsdfSdAtLZEZx
+   Nban2CZ3hPCGiGv/1pTydPGBdSgFGjaozQxylfh4VkehqjH7XjfUiirQo
+   Y9QmFqwHbh78VYKjfxf14tiaCFxtGsUo+D7N6/lIKkWTU8JWd8dWs1ogQ
+   q5ATT8kFW4NLBJdrMMVTBvubeDv7Qabij4ssczq18s0oQbhwElMHClfSE
+   z0P9jOsvEs2p8C4aZyEMD3e/BaUtHowVsjzwt3J6nI1o0zvSSPCx1AhiM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262260961"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="262260961"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 00:42:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="822075607"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 28 May 2022 00:42:47 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nur5y-0005Zu-NY;
+	Sat, 28 May 2022 07:42:46 +0000
+Date: Sat, 28 May 2022 15:42:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kenneth Feng <kenneth.feng@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Yang Wang <kevinyang.wang@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1326:12:
+ warning: stack frame size (1040) exceeds limit (1024) in
+ 'smu_v13_0_7_get_power_profile_mode'
+Message-ID: <202205281546.8st5p4J7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220527100155.1996314-1-masahiroy@kernel.org>
- <20220527100155.1996314-2-masahiroy@kernel.org> <CA+icZUX_xeZ8k-3YZppGbuYzeypU8f_iz_-tuMJ1bg0dhikH8A@mail.gmail.com>
-In-Reply-To: <CA+icZUX_xeZ8k-3YZppGbuYzeypU8f_iz_-tuMJ1bg0dhikH8A@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 28 May 2022 16:10:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARyyomaAS1FK6CMbXKB69RzZMA-hDHL1wzLsuHtCkckyw@mail.gmail.com>
-Message-ID: <CAK7LNARyyomaAS1FK6CMbXKB69RzZMA-hDHL1wzLsuHtCkckyw@mail.gmail.com>
-Subject: Re: [PATCH v7 1/8] kbuild: replace $(linked-object) with CONFIG options
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        clang-built-linux <llvm@lists.linux.dev>, Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, May 28, 2022 at 11:32 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, May 27, 2022 at 1:56 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > *.prelink.o is created when CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT
-> > is enabled.
-> >
-> > Replace $(linked-object) with $(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)
-> > so you will get better idea when the --link option is passed.
-> >
-> > No functional change is intended.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Hi Masahiroy,
->
-> I was not CCed on the cover-letter and only on some patches in this series.
->
-> So, I have re-tested this series by pulling from kbuild.git#kbuild
-> (saw later you renewed the parisc/nm patch).
->
-> While testing my selfmade LLVM version 14.0.4 (PGO + ThinLTO
-> optimized) toolchain I included this series.
->
-> Just built fine and I was able to boot on bare metal.
->
-> -Sedat -
->
+Hi Kenneth,
 
-Thanks for your testing!
+FYI, the error/warning still remains.
 
-I added your Tested-by tag.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
+commit: 334682ae81513638aa49da9615c2c0054a711ed4 drm/amd/pm: enable workload type change on smu_v13_0_7
+date:   3 weeks ago
+config: riscv-randconfig-r026-20220527 (https://download.01.org/0day-ci/archive/20220528/202205281546.8st5p4J7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=334682ae81513638aa49da9615c2c0054a711ed4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 334682ae81513638aa49da9615c2c0054a711ed4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:294:5: warning: no previous prototype for function 'smu_v13_0_7_check_fw_status' [-Wmissing-prototypes]
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+       ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:294:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1326:12: warning: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Wframe-larger-than]
+   static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
+              ^
+   2 warnings generated.
 
 
+vim +/smu_v13_0_7_get_power_profile_mode +1326 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c
 
-
-
-> > ---
-> >
-> > Changes in v7:
-> >   - New patch
-> >
-> >  scripts/Makefile.build | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > index 06400504150b..f80196eef03a 100644
-> > --- a/scripts/Makefile.build
-> > +++ b/scripts/Makefile.build
-> > @@ -219,7 +219,7 @@ objtool_args =                                                              \
-> >         $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
-> >         $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
-> >         --uaccess                                                       \
-> > -       $(if $(linked-object), --link)                                  \
-> > +       $(if $($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)), --link)    \
-> >         $(if $(part-of-module), --module)                               \
-> >         $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
-> >
-> > @@ -284,7 +284,6 @@ quiet_cmd_cc_prelink_modules = LD [M]  $@
-> >  # modules into native code
-> >  $(obj)/%.prelink.o: objtool-enabled = y
-> >  $(obj)/%.prelink.o: part-of-module := y
-> > -$(obj)/%.prelink.o: linked-object := y
-> >
-> >  $(obj)/%.prelink.o: $(obj)/%.o FORCE
-> >         $(call if_changed,cc_prelink_modules)
-> > --
-> > 2.32.0
-> >
-
-
+  1325	
+> 1326	static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
+  1327	{
+  1328		DpmActivityMonitorCoeffIntExternal_t activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
+  1329		uint32_t i, j, size = 0;
+  1330		int16_t workload_type = 0;
+  1331		int result = 0;
+  1332	
+  1333		if (!buf)
+  1334			return -EINVAL;
+  1335	
+  1336		size += sysfs_emit_at(buf, size, "                              ");
+  1337		for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
+  1338			size += sysfs_emit_at(buf, size, "%-14s%s", amdgpu_pp_profile_name[i],
+  1339				(i == smu->power_profile_mode) ? "* " : "  ");
+  1340	
+  1341		size += sysfs_emit_at(buf, size, "\n");
+  1342	
+  1343		for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++) {
+  1344			/* conv PP_SMC_POWER_PROFILE* to WORKLOAD_PPLIB_*_BIT */
+  1345			workload_type = smu_cmn_to_asic_specific_index(smu,
+  1346								       CMN2ASIC_MAPPING_WORKLOAD,
+  1347								       i);
+  1348			if (workload_type < 0)
+  1349				return -EINVAL;
+  1350	
+  1351			result = smu_cmn_update_table(smu,
+  1352						  SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
+  1353						  (void *)(&activity_monitor_external[i]), false);
+  1354			if (result) {
+  1355				dev_err(smu->adev->dev, "[%s] Failed to get activity monitor!", __func__);
+  1356				return result;
+  1357			}
+  1358		}
+  1359	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
