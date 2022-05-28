@@ -1,177 +1,110 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929023AB
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 22:47:48 +0000 (UTC)
-Received: by mail-ot1-f53.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so5339737otf.11
-        for <llvm@lists.linux.dev>; Sat, 28 May 2022 15:47:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732A43FE5
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 23:31:42 +0000 (UTC)
+Received: by mail-vs1-f42.google.com with SMTP id 68so7549438vse.11
+        for <llvm@lists.linux.dev>; Sat, 28 May 2022 16:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
-        b=UwshPpQ3sv/eETtkjsspaFEbkyclPdvMYuf8CQ4Sn6hG2bEMM5qxfNc3Pb7jrYWQ4F
-         0fNtNnhxPe0veQ8CPqxyUgnC/l97XfyLlZ497jO8Rx2CHz1gzOssU0HjhlXRsFPhsUZk
-         KBugrFVKBwr6/k9jenpSUTVUilY4zY4OeuxaVZDRNZxi/Hi7651QEuZ7Saju5+RuHNWd
-         qckO+i5aZsUjhbCGOAJPUsQwor+yJpyq3lC4c+kAMk0Krsnldcd1gV1XqDdMJrQHoUKN
-         XKQ8PoSs/5/G7bidV8+wHJ0V4i76l2fBL4rUwR+f1JkHJZHnrmKl21JpeRA8V1Utrv+K
-         PPdQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZHkspVi7hYgWPjrkicA2Ka1cNGl3qopvOnZQ16mob5o=;
+        b=Gg3IQ+lg74QPdhRPZFKypPilx6JqlFfPJ+wKJjuWc7dfiDeqz7Ej4ejDTuBIvmfY8K
+         hOPfs9pNrSleU0crFRqa6VRLjFrpYl9twi0nfDuxYmDDujG/2/5YXwGWAjuH8NoAXpxO
+         4KwH2a3MSZ8Oy4R4BPM9eeIVbbVnkOYgnWq5DycK3dnUzRosv8FiZBFGZhP7eatjkt1N
+         Lh8kNIipt6Smw86Rqn42AIjJVfoxqkE024CI1V3uE2nYTV284vfqkAU+yx1kvh2R2KPh
+         TyVQMuWvodkAsmpi/mx3igk3w0kIrCQP0XviVaAwqzUtZHJOv94NUnqWo3/gvHpaLGXf
+         R4sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
-        b=4SVcDke6hXmqz5oaLUki7sZzrnqB61UHSgOoD6ZQAxPO80DEzHYf0VVJHzxaePTOt8
-         yNugF4bFcrRmXM4Vjx6u4n0oq4YC4ivVk1r4u2ljmY3LGfA/GaHZ+K6xzmBqY4NRjl3W
-         Z4sOPFtkbyQ6zHd7NVkTFcxCtSkiQfgEY3oJx/tPZY/dLmwdg8svO1Lja2vRRykAvG/R
-         Wy7rP2yUp5LL1vSQDQ6HOz8OquSfMiTMZqecRHirCKN6votb0pr5bpvtKBUOq9OG3vkp
-         ELpDUPB326g8dF5jVmE5W0ibn4EiAH9zF4uxkHVhgDyprIoKQ4r9QSYkGcWzPTOEY1zd
-         a5ew==
-X-Gm-Message-State: AOAM533+p0Cmd0jj1Xo3jc4s5N5cHEJawU19WT7wL7r1FjU6Txym6tJt
-	qcdKab/0b5srkieTsS5CNbs=
-X-Google-Smtp-Source: ABdhPJzfxwBZO8/g/x9lRQ5QRk4I7bGfdsN1gA1y2exJEV+YZZXTThQMguwqH9qoNE8Ad3BAzHwvfg==
-X-Received: by 2002:a05:6830:b85:b0:605:4e76:f077 with SMTP id a5-20020a0568300b8500b006054e76f077mr18436775otv.211.1653778067577;
-        Sat, 28 May 2022 15:47:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r33-20020a056870582100b000f169cbbb32sm1865092oap.43.2022.05.28.15.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 15:47:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 28 May 2022 15:47:45 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd
- files
-Message-ID: <20220528224745.GA2501857@roeck-us.net>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <20220513113930.10488-2-masahiroy@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZHkspVi7hYgWPjrkicA2Ka1cNGl3qopvOnZQ16mob5o=;
+        b=o59tVpwZf717OtOGULkv5FrnnIdqBeFXG+1yZVuFYAjrabwf+SsLGnc9shZ9bDye4n
+         NOIoa9KpW+MmccUFb812aPwhbGK+pHNkxFdS99VLjbNUQO8LBA0ykpqDJZbiZvSbp071
+         m/bEMBhsSFDlUwaNEu+As/DKJZVWPCNb1fXh4AcfWqC3UUSXwmxsdHDA4NcGCakrcwoW
+         JdnDzVOzPprEqkHm18Klz7Cksma6w6VZYGt3eCQrEjHgBdJuNUsPf3+1+P48UOU4gIQw
+         cJQT0AE3YzTOMUvf1EQ1avgfr71Wk0ElDl2N6ub6z6eQjBZoiZWrLAQxALoCgkVoEe60
+         6dmA==
+X-Gm-Message-State: AOAM532jA00TdC+2gTq/thxMjdK07nkI1qmhpqivXhyaCoCpM9sD7uKX
+	cC49CZreRRiXZrCSjub1ZwA6S6qPnkbAE6euE68=
+X-Google-Smtp-Source: ABdhPJy0Acb1c3xSDsjiqAa+wurlHniC7DTliHnSjCHwZc1KOpXXeNt8sWJjTYXpw40/HtDl5zk/Uq4lxuGzoAoQ188=
+X-Received: by 2002:a67:b607:0:b0:337:b5b7:adc9 with SMTP id
+ d7-20020a67b607000000b00337b5b7adc9mr13395803vsm.17.1653780701218; Sat, 28
+ May 2022 16:31:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513113930.10488-2-masahiroy@kernel.org>
+References: <20220526140226.2648689-1-trix@redhat.com> <CAKwvOdmPZXiMZRKyMfZVMmw-95XVocSZn3VVi3yJh0Bx1ONbJQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmPZXiMZRKyMfZVMmw-95XVocSZn3VVi3yJh0Bx1ONbJQ@mail.gmail.com>
+From: Steve French <smfrench@gmail.com>
+Date: Sat, 28 May 2022 18:31:30 -0500
+Message-ID: <CAH2r5mumSyxP8XUJjKwv9exh__NkCtG2HSiO-USqGo_7ZTb0yQ@mail.gmail.com>
+Subject: Re: [PATCH] cifs: set length when cifs_copy_pages_to_iter is successful
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Steve French <stfrench@microsoft.com>, Nathan Chancellor <nathan@kernel.org>, 
+	David Howells <dhowells@redhat.com>, CIFS <linux-cifs@vger.kernel.org>, 
+	samba-technical <samba-technical@lists.samba.org>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev, Tom Rix <trix@redhat.com>, Steve French <sfrench@samba.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Presumably this was in Dave Howell's patch set which we took out of
+for-next to restructure in some of Al's feedback and some things found
+during testing. So nothing to fix in current mainline or for-next ...
+right?
 
-On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
-> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-> versions into ELF objects. Then, modpost extracts the version CRCs
-> from them.
-> 
-[ ... ]
-> This commit changes modpost to extract CRCs from *.cmd files instead of
-> from ELF objects.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+On Sat, May 28, 2022 at 3:40 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Steve's @microsoft.com email addr.
+>
+> On Thu, May 26, 2022 at 7:02 AM Tom Rix <trix@redhat.com> wrote:
+> >
+> > clang build fails with
+> > fs/cifs/smb2ops.c:4984:7: error: variable 'length' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> >   if (rdata->result != 0) {
+> >       ^~~~~~~~~~~~~~~~~~
+> >
+> > handle_read_data() returns the number of bytes handled by setting the length variable.
+> > This only happens in the copy_to_iter() branch, it needs to also happen in the
+> > cifs_copy_pages_to_iter() branch.  When cifs_copy_pages_to_iter() is successful,
+> > its parameter data_len is how many bytes were handled, so set length to data_len.
+> >
+> > Fixes: 67fd8cff2b0f ("cifs: Change the I/O paths to use an iterator rather than a page list")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  fs/cifs/smb2ops.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> > index 3630e132781f..bfad482ec186 100644
+> > --- a/fs/cifs/smb2ops.c
+> > +++ b/fs/cifs/smb2ops.c
+> > @@ -4988,7 +4988,7 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+> >                                 dequeue_mid(mid, rdata->result);
+> >                         return 0;
+> >                 }
+> > -               rdata->got_bytes = pages_len;
+> > +               length = rdata->got_bytes = pages_len;
+> >
+> >         } else if (buf_len >= data_offset + data_len) {
+> >                 /* read response payload is in buf */
+> > --
+> > 2.27.0
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-This patch results in
 
-._muldi3_di.o.cmd: No such file or directory
 
-when building parisc64:defconfig, and
+-- 
+Thanks,
 
-._divsi3.o.cmd: No such file or directory
-
-when building csky:allmodconfig.
-
-Reverting this patch (and the subsequent kbuild patches to avoid
-conflicts) fixes the problem for both architectures. In case it
-helps, the complete build log when rebuilding an image for csky
-is as follows.
-
-#
-# No change to .config
-#
-  HOSTCC  scripts/mod/modpost.o
-  HOSTLD  scripts/mod/modpost
-  CALL    scripts/atomic/check-atomics.sh
-  CALL    scripts/checksyscalls.sh
-  CHK     include/generated/compile.h
-  SO2S    arch/csky/kernel/vdso/vdso-syms.S
-  AS      arch/csky/kernel/vdso/vdso-syms.o
-  AR      arch/csky/kernel/vdso/built-in.a
-  AR      arch/csky/kernel/built-in.a
-  CHK     kernel/kheaders_data.tar.xz
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-._divsi3.o.cmd: No such file or directory
-make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
-make: *** [Makefile:1159: vmlinux] Error 2
-
-This was seen with gcc 11.2 and 11.3.
-
-Guenter
-
----
-bisect on mainline:
-
-# bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
-# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
-git bisect start 'HEAD' 'v5.18'
-# good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
-git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
-# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good c011dd537ffe47462051930413fed07dbdc80313
-# bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
-git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
-# good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
-# good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
-# good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
-# good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
-# good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
-git bisect good 4484054816cab940fc2fde23fa989174fec889d0
-# good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
-git bisect good 16477cdfefdb494235a675cc80563d736991d833
-# good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
-git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
-# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-
----
-bisect on kbuild-5.19:
-
-# bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
-# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-git bisect start 'HEAD' 'v5.18-rc1'
-# good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
-git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
-# good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
-git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
-# good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
-git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
-# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+Steve
