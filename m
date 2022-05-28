@@ -1,43 +1,58 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C76F33C4
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 22:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653775202; x=1685311202;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hlRg9g52u5vxOk/jSrRWEoSqn/Oi/OW1YX3JORUOjGM=;
-  b=NJfEXKcRkomOVOI+d1AsqvvH8tdkDXmXOQKLUp53NQqSoH000v7KPR4t
-   r5hTQv4OJgpIDhbP3Ap4yzZK8ZtNBVG9MkDeXWjC+TWntG3aao5ET4ePl
-   m14JXPAysXH9I0xVgtrtRg+572sE1vQs/FF64psq7ThpowuvvDJzvyHIC
-   dxjrAGOY8Vm6gyfQpItVCaOD6hMxa812BQqQ1TEo6cCntuJfQMhoqA5bV
-   IneesdnQ8ljl73S8v4dn/LGZaqeQxF7UQvnod5wTKbkVZ+WwcpkvSEfmZ
-   OC6XTJBOAMLRDSO24FR5XRccNawvC/LKW4C0TTJmdGlOl5ji/nHsJQFUO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="274441359"
-X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
-   d="scan'208";a="274441359"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 15:00:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
-   d="scan'208";a="550802214"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 May 2022 15:00:00 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nv4TX-0000Z2-Rg;
-	Sat, 28 May 2022 21:59:59 +0000
-Date: Sun, 29 May 2022 05:59:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Felix Fietkau <nbd@nbd.name>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC/RFT 2/2] mac80211: rework the airtime fairness
- implementation
-Message-ID: <202205290520.I4cH1rY0-lkp@intel.com>
-References: <20220528190756.31029-2-nbd@nbd.name>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929023AB
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 22:47:48 +0000 (UTC)
+Received: by mail-ot1-f53.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so5339737otf.11
+        for <llvm@lists.linux.dev>; Sat, 28 May 2022 15:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=UwshPpQ3sv/eETtkjsspaFEbkyclPdvMYuf8CQ4Sn6hG2bEMM5qxfNc3Pb7jrYWQ4F
+         0fNtNnhxPe0veQ8CPqxyUgnC/l97XfyLlZ497jO8Rx2CHz1gzOssU0HjhlXRsFPhsUZk
+         KBugrFVKBwr6/k9jenpSUTVUilY4zY4OeuxaVZDRNZxi/Hi7651QEuZ7Saju5+RuHNWd
+         qckO+i5aZsUjhbCGOAJPUsQwor+yJpyq3lC4c+kAMk0Krsnldcd1gV1XqDdMJrQHoUKN
+         XKQ8PoSs/5/G7bidV8+wHJ0V4i76l2fBL4rUwR+f1JkHJZHnrmKl21JpeRA8V1Utrv+K
+         PPdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=4SVcDke6hXmqz5oaLUki7sZzrnqB61UHSgOoD6ZQAxPO80DEzHYf0VVJHzxaePTOt8
+         yNugF4bFcrRmXM4Vjx6u4n0oq4YC4ivVk1r4u2ljmY3LGfA/GaHZ+K6xzmBqY4NRjl3W
+         Z4sOPFtkbyQ6zHd7NVkTFcxCtSkiQfgEY3oJx/tPZY/dLmwdg8svO1Lja2vRRykAvG/R
+         Wy7rP2yUp5LL1vSQDQ6HOz8OquSfMiTMZqecRHirCKN6votb0pr5bpvtKBUOq9OG3vkp
+         ELpDUPB326g8dF5jVmE5W0ibn4EiAH9zF4uxkHVhgDyprIoKQ4r9QSYkGcWzPTOEY1zd
+         a5ew==
+X-Gm-Message-State: AOAM533+p0Cmd0jj1Xo3jc4s5N5cHEJawU19WT7wL7r1FjU6Txym6tJt
+	qcdKab/0b5srkieTsS5CNbs=
+X-Google-Smtp-Source: ABdhPJzfxwBZO8/g/x9lRQ5QRk4I7bGfdsN1gA1y2exJEV+YZZXTThQMguwqH9qoNE8Ad3BAzHwvfg==
+X-Received: by 2002:a05:6830:b85:b0:605:4e76:f077 with SMTP id a5-20020a0568300b8500b006054e76f077mr18436775otv.211.1653778067577;
+        Sat, 28 May 2022 15:47:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r33-20020a056870582100b000f169cbbb32sm1865092oap.43.2022.05.28.15.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 15:47:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 28 May 2022 15:47:45 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd
+ files
+Message-ID: <20220528224745.GA2501857@roeck-us.net>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-2-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,136 +61,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220528190756.31029-2-nbd@nbd.name>
+In-Reply-To: <20220513113930.10488-2-masahiroy@kernel.org>
 
-Hi Felix,
+Hi,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v5.18 next-20220527]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
+> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+> versions into ELF objects. Then, modpost extracts the version CRCs
+> from them.
+> 
+[ ... ]
+> This commit changes modpost to extract CRCs from *.cmd files instead of
+> from ELF objects.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Felix-Fietkau/mac80211-fix-overflow-issues-in-airtime-fairness-code/20220529-030959
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220529/202205290520.I4cH1rY0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cf2b510572e85ecfada3512dbdf30efd02d882fa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Felix-Fietkau/mac80211-fix-overflow-issues-in-airtime-fairness-code/20220529-030959
-        git checkout cf2b510572e85ecfada3512dbdf30efd02d882fa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+This patch results in
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+._muldi3_di.o.cmd: No such file or directory
 
-All errors (new ones prefixed by >>):
+when building parisc64:defconfig, and
 
-   In file included from net/mac80211/main.c:28:
->> net/mac80211/ieee80211_i.h:1686:13: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                  ~~  ^
-   net/mac80211/ieee80211_i.h:1686:27: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                                ~~  ^
-   2 errors generated.
---
-   In file included from net/mac80211/sta_info.c:23:
->> net/mac80211/ieee80211_i.h:1686:13: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                  ~~  ^
-   net/mac80211/ieee80211_i.h:1686:27: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                                ~~  ^
-   net/mac80211/sta_info.c:1909:6: warning: variable 'weight_sum' set but not used [-Wunused-but-set-variable]
-           u64 weight_sum, weight_sum_reciprocal;
-               ^
-   1 warning and 2 errors generated.
---
-   In file included from net/mac80211/tx.c:32:
->> net/mac80211/ieee80211_i.h:1686:13: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                  ~~  ^
-   net/mac80211/ieee80211_i.h:1686:27: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                                ~~  ^
->> net/mac80211/tx.c:3888:16: error: no member named 'v_t_cur' in 'struct airtime_info'
-           if (air_info->v_t_cur > air_sched->v_t) {
-               ~~~~~~~~  ^
-   net/mac80211/tx.c:3890:45: error: no member named 'v_t_cur' in 'struct airtime_info'
-                           airtime_catchup_v_t(air_sched, air_info->v_t_cur, now);
-                                                          ~~~~~~~~  ^
-   net/mac80211/tx.c:3915:12: error: no member named 'v_t_cur' in 'struct airtime_info'
-           air_info->v_t_cur = air_info->v_t + aql_time;
-           ~~~~~~~~  ^
-   5 errors generated.
---
-   In file included from net/mac80211/rc80211_minstrel_ht.c:14:
-   In file included from net/mac80211/rate.h:15:
->> net/mac80211/ieee80211_i.h:1686:13: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                  ~~  ^
-   net/mac80211/ieee80211_i.h:1686:27: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                                ~~  ^
-   net/mac80211/rc80211_minstrel_ht.c:1708:6: warning: variable 'n_supported' set but not used [-Wunused-but-set-variable]
-           int n_supported = 0;
-               ^
-   1 warning and 2 errors generated.
---
-   In file included from net/mac80211/trace.c:8:
-   In file included from net/mac80211/driver-ops.h:12:
->> net/mac80211/ieee80211_i.h:1686:13: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                  ~~  ^
-   net/mac80211/ieee80211_i.h:1686:27: error: no member named 'v_t_cur' in 'struct airtime_info'
-           return a1->v_t_cur - a2->v_t_cur;
-                                ~~  ^
-   In file included from net/mac80211/trace.c:11:
-   In file included from net/mac80211/trace.h:2908:
-   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
-   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
-   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
-   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-   #define __stringify(x...)       __stringify_1(x)
-                                   ^~~~~~~~~~~~~~~~
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-   #define __stringify_1(x...)     #x
-                                   ^~
-   <scratch space>:123:1: note: expanded from here
-   "./trace.h"
-   ^~~~~~~~~~~
-   3 errors generated.
+._divsi3.o.cmd: No such file or directory
 
+when building csky:allmodconfig.
 
-vim +1686 net/mac80211/ieee80211_i.h
+Reverting this patch (and the subsequent kbuild patches to avoid
+conflicts) fixes the problem for both architectures. In case it
+helps, the complete build log when rebuilding an image for csky
+is as follows.
 
-  1676	
-  1677	static inline int
-  1678	airtime_sched_cmp(struct airtime_sched_list *list,
-  1679			  struct airtime_sched_node *n1, struct airtime_sched_node *n2)
-  1680	{
-  1681		struct airtime_info *a1, *a2;
-  1682	
-  1683		a1 = container_of(n1, struct airtime_info, schedule_order);
-  1684		a2 = container_of(n2, struct airtime_info, schedule_order);
-  1685	
-> 1686		return a1->v_t_cur - a2->v_t_cur;
-  1687	}
-  1688	
+#
+# No change to .config
+#
+  HOSTCC  scripts/mod/modpost.o
+  HOSTLD  scripts/mod/modpost
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  SO2S    arch/csky/kernel/vdso/vdso-syms.S
+  AS      arch/csky/kernel/vdso/vdso-syms.o
+  AR      arch/csky/kernel/vdso/built-in.a
+  AR      arch/csky/kernel/built-in.a
+  CHK     kernel/kheaders_data.tar.xz
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+._divsi3.o.cmd: No such file or directory
+make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
+make: *** [Makefile:1159: vmlinux] Error 2
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This was seen with gcc 11.2 and 11.3.
+
+Guenter
+
+---
+bisect on mainline:
+
+# bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect start 'HEAD' 'v5.18'
+# good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
+# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good c011dd537ffe47462051930413fed07dbdc80313
+# bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
+# good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
+git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
+# good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
+# good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
+# good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
+# good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
+git bisect good 4484054816cab940fc2fde23fa989174fec889d0
+# good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
+git bisect good 16477cdfefdb494235a675cc80563d736991d833
+# good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
+git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+
+---
+bisect on kbuild-5.19:
+
+# bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
+# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
+git bisect start 'HEAD' 'v5.18-rc1'
+# good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
+git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
+# good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
+git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
+# good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
+git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
