@@ -1,315 +1,183 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DC928E4
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 14:49:28 +0000 (UTC)
-Received: by mail-wm1-f52.google.com with SMTP id 7so2935793wmz.3
-        for <llvm@lists.linux.dev>; Sat, 28 May 2022 07:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DtIUUQgNQnlpKr+iJ/L5eRAgxDOGw8+U/orkSdFrre0=;
-        b=L9GSkiKwTuc89mS42WiwEz6LhbkCvSZTA3ZmE9mUwBOJiY1jMMVgEVWQgeXdDybN39
-         MdM6zhTguGCt+DnSmUkrWKLduYpHEQiT63Fz0lO+ZE34meNmPydwlZkYS1T8Q3W0jKUr
-         sIwUZCBUyX8tjsmMSmV2e/WWzl6G3Idqj6QbnsVlgnIjrHKItzMnTItmPF97uAnrS05A
-         oUfso78oJB1/x/9J4ZkyMwRiZtzBH2VZ5OvfLTcsc1b/cpuC07GO6J9KSTQFskktBpT6
-         /XpPflPvfhclsLmeejCd2E3jVx0J5hihv8BV9JWb5kC47XDKX6RvULWw0yNA/ypTMkoq
-         vU5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DtIUUQgNQnlpKr+iJ/L5eRAgxDOGw8+U/orkSdFrre0=;
-        b=4oFY3Bry4+e1QiQ363D93GMCYdIhmrx6JeOvZuUsbYGoY73OxnN4TnH9fRbakLiDyQ
-         zwF6a8Wdg6Snt7UM9bofE4ax3Wr0aOxjpngh8ENHlf8lkrv6TS3eBrvOsTCMjIU8/10w
-         19iOctBxfyqA5FlhbIXBXsXCnQ3mJXdeih+0xQtag1xBMiu7Y6zhLOQgUu4Orykmcxun
-         l86esoHWZY4vGd18ktRJ0C0brsovaKjDRi0rLFiJDD4fpXPLH7z96RZwMpsbv41ponQd
-         oJ6WdciWaHcpJa3E8TmahvMj2hweUIp5OqEUr6TZ/mSAQRjr9tOm/VmkW4zk6/Mi/k7E
-         vvIQ==
-X-Gm-Message-State: AOAM533A+EEwzEpdlFrVX4o+pojN9jFB316b+fQY7HxK1uLD3sqORY8t
-	yYz38TKNgx3j/w7MfAUPCsOhgDWXyCIXOuV1eQyKiw==
-X-Google-Smtp-Source: ABdhPJyH/bw6uwLTMRfOIc15vvgx3Tvt24IEQk7keHoxTGOT7QQda8SsNpO6HKcMSEtYWcm+kB5T3b12L1g4v/9jDWs=
-X-Received: by 2002:a05:600c:2305:b0:397:44a4:d3cb with SMTP id
- 5-20020a05600c230500b0039744a4d3cbmr11320407wmo.115.1653749366349; Sat, 28
- May 2022 07:49:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF6728E4
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 15:54:37 +0000 (UTC)
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-04.nifty.com with ESMTP id 24SFmrC1000541
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 00:48:53 +0900
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+	by conuserg-10.nifty.com with ESMTP id 24SFlthM010610;
+	Sun, 29 May 2022 00:47:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24SFlthM010610
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1653752877;
+	bh=r13GrFRYMDrikoVJbL6k/JBbfLtkbPflsQEkRN/RT58=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YZKNhujl9v0SS6NCq/L67fCkLmiUYCJTty0C/O6EN+GwAxqQjcLhmHdspH9gDo1G2
+	 t4y4/e0iMa6yNkCZYjADyQmsAw9Ej9DA5FS55qPHXLjX0/zdexpqKtcXvr9LgSXkC8
+	 T3a4QQr+xWytTol/fPxGFA7NDZuEd2e3YKlre65nEzeSlQL5XtY9q4wBy6vRBp5T8c
+	 2aKBsqAQFq+HLqBT9g+F7shx4f2AUibVNXfI6fXu9o0wTCEI7hcP0zWMzv+LgvKpoR
+	 gRiJiOalBbJK9OOV3rSVxG2zA4cCnsOhMshsU4GyNtA58/Tp88YrNyChOVYsznr08g
+	 XOk8mGe53aAdQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev
+Subject: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
+Date: Sun, 29 May 2022 00:47:03 +0900
+Message-Id: <20220528154704.2576290-3-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220528154704.2576290-1-masahiroy@kernel.org>
+References: <20220528154704.2576290-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220527182039.673248-1-maskray@google.com> <YpIQWdwtHqAdjLoC@krava>
-In-Reply-To: <YpIQWdwtHqAdjLoC@krava>
-From: Ian Rogers <irogers@google.com>
-Date: Sat, 28 May 2022 07:49:13 -0700
-Message-ID: <CAP-5=fW042ozhWxV4aMF9FFbg1APPqy1Hs5e9-OZ4iaZNnO8qA@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: Fix segbase for ld.lld linked objects
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Fangrui Song <maskray@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Sebastian Ullrich <sebasti@nullri.ch>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sat, May 28, 2022 at 5:06 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Fri, May 27, 2022 at 11:20:39AM -0700, Fangrui Song wrote:
-> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
-> > the header size. find_proc_info computes segbase as `map->start +
-> > segbase - map->pgoff` which is wrong when
-> >
-> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
-> > * and their p_vaddr difference does not equal their p_offset difference
-> >
-> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
-> > such R and RX PT_LOAD program headers.
-> >
-> >     ld.lld (default) => perf report fails to unwind `perf record
-> >     --call-graph dwarf` recorded data
-> >     ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
-> >     ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
-> >     their p_vaddr difference equals p_offset difference
-> >
-> >     ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
-> >     ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
-> >     there are two PT_LOAD but their p_vaddr difference equals p_offset
-> >     difference
-> >
-> > To fix the issue, compute segbase as dso's base address plus
-> > PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
-> > over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
-> > (the minimum guaranteed by generic ABI) from the minimum address.
-> >
-> > In libunwind, find_proc_info transitively called by unw_step is cached,
-> > so the iteration overhead is acceptable.
-> >
-> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
-> > Signed-off-by: Fangrui Song <maskray@google.com>
-> > Cc: Ian Rogers <irogers@google.com>
->
-> nice, is this a problem for libdw dwarf unwind as well?
+This is a preparation for the objtool move in the next commit.
 
-libdw also is broken with lld but not bfd. When I switch on verbose
-output (-vv) with perf report I see:
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-overlapping maps:
-202000-203000 0 a.out
-202000-203000 0 a.out
+ scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
+ scripts/link-vmlinux.sh    | 41 +------------------------
+ 2 files changed, 62 insertions(+), 40 deletions(-)
+ create mode 100644 scripts/Makefile.vmlinux_o
 
-and:
+diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+new file mode 100644
+index 000000000000..a9b375ca86d5
+--- /dev/null
++++ b/scripts/Makefile.vmlinux_o
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++PHONY := __default
++__default: vmlinux.o
++
++include include/config/auto.conf
++include $(srctree)/scripts/Kbuild.include
++
++# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
++# ---------------------------------------------------------------------------
++
++quiet_cmd_gen_initcalls_lds = GEN     $@
++      cmd_gen_initcalls_lds = \
++	$(PYTHON3) $(srctree)/scripts/jobserver-exec \
++	$(PERL) $(real-prereqs) > $@
++
++.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
++		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++	$(call if_changed,gen_initcalls_lds)
++
++targets := .tmp_initcalls.lds
++
++ifdef CONFIG_LTO_CLANG
++initcalls-lds := .tmp_initcalls.lds
++endif
++
++# Link of vmlinux.o used for section mismatch analysis
++# ---------------------------------------------------------------------------
++
++quiet_cmd_ld_vmlinux.o = LD      $@
++      cmd_ld_vmlinux.o = \
++	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
++	$(addprefix -T , $(initcalls-lds)) \
++	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
++	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
++
++define rule_ld_vmlinux.o
++	$(call cmd_and_savecmd,ld_vmlinux.o)
++endef
++
++vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++	$(call if_changed_rule,ld_vmlinux.o)
++
++targets += vmlinux.o
++
++# Add FORCE to the prequisites of a target to force it to be always rebuilt.
++# ---------------------------------------------------------------------------
++
++PHONY += FORCE
++FORCE:
++
++# Read all saved command lines and dependencies for the $(targets) we
++# may be building above, using $(if_changed{,_dep}). As an
++# optimization, we don't need to read them if the target does not
++# exist, we will rebuild anyway in that case.
++
++existing-targets := $(wildcard $(sort $(targets)))
++
++-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
++
++.PHONY: $(PHONY)
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index b593cb1a8137..90680b6bd710 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -45,45 +45,6 @@ info()
+ 	printf "  %-7s %s\n" "${1}" "${2}"
+ }
+ 
+-# Generate a linker script to ensure correct ordering of initcalls.
+-gen_initcalls()
+-{
+-	info GEN .tmp_initcalls.lds
+-
+-	${PYTHON3} ${srctree}/scripts/jobserver-exec		\
+-	${PERL} ${srctree}/scripts/generate_initcall_order.pl	\
+-		${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}	\
+-		> .tmp_initcalls.lds
+-}
+-
+-# Link of vmlinux.o used for section mismatch analysis
+-# ${1} output file
+-modpost_link()
+-{
+-	local objects
+-	local lds=""
+-
+-	objects="--whole-archive				\
+-		${KBUILD_VMLINUX_OBJS}				\
+-		--no-whole-archive				\
+-		--start-group					\
+-		${KBUILD_VMLINUX_LIBS}				\
+-		--end-group"
+-
+-	if is_enabled CONFIG_LTO_CLANG; then
+-		gen_initcalls
+-		lds="-T .tmp_initcalls.lds"
+-
+-		# This might take a while, so indicate that we're doing
+-		# an LTO link
+-		info LTO ${1}
+-	else
+-		info LD ${1}
+-	fi
+-
+-	${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
+-}
+-
+ objtool_link()
+ {
+ 	local objtoolcmd;
+@@ -336,7 +297,7 @@ fi;
+ ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
+ 
+ #link vmlinux.o
+-modpost_link vmlinux.o
++${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
+ objtool_link vmlinux.o
+ 
+ # Generate the list of objects in vmlinux
+-- 
+2.32.0
 
-unwind: failed with 'address range overlaps an existing module'
-
-The sense I get from this is libdw is rejecting the file before
-anything we can do in perf.
-
-Thanks,
-Ian
-
-> you should be able to build it with:
->
->   $ make NO_LIBUNWIND=1
->
-> thanks,
-> jirka
->
-> >
-> > --
-> > Changes from v1:
-> > * Fix elf_base_address to use the first PT_LOAD
-> > * Use dso::elf_base_addr which is a constant even if the dso is loaded into multiple processes
-> > ---
-> >  tools/perf/util/dso.h                    |   2 +
-> >  tools/perf/util/unwind-libunwind-local.c | 107 ++++++++++++++++-------
-> >  2 files changed, 78 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> > index 3a9fd4d389b5..97047a11282b 100644
-> > --- a/tools/perf/util/dso.h
-> > +++ b/tools/perf/util/dso.h
-> > @@ -196,7 +196,9 @@ struct dso {
-> >               u32              status_seen;
-> >               u64              file_size;
-> >               struct list_head open_entry;
-> > +             u64              elf_base_addr;
-> >               u64              debug_frame_offset;
-> > +             u64              eh_frame_hdr_addr;
-> >               u64              eh_frame_hdr_offset;
-> >       } data;
-> >       /* bpf prog information */
-> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-> > index 41e29fc7648a..37622699c91a 100644
-> > --- a/tools/perf/util/unwind-libunwind-local.c
-> > +++ b/tools/perf/util/unwind-libunwind-local.c
-> > @@ -169,30 +169,64 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
-> >       __v;                                                    \
-> >       })
-> >
-> > -static u64 elf_section_offset(int fd, const char *name)
-> > +static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
-> >  {
-> >       Elf *elf;
-> >       GElf_Ehdr ehdr;
-> >       GElf_Shdr shdr;
-> > -     u64 offset = 0;
-> > +     int ret;
-> >
-> >       elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> >       if (elf == NULL)
-> > -             return 0;
-> > +             return -1;
-> >
-> > -     do {
-> > -             if (gelf_getehdr(elf, &ehdr) == NULL)
-> > -                     break;
-> > +     if (gelf_getehdr(elf, &ehdr) == NULL)
-> > +             goto out_err;
-> >
-> > -             if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> > -                     break;
-> > -
-> > -             offset = shdr.sh_offset;
-> > -     } while (0);
-> > +     if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> > +             goto out_err;
-> >
-> > +     *address = shdr.sh_addr;
-> > +     *offset = shdr.sh_offset;
-> > +     ret = 0;
-> > +out_err:
-> >       elf_end(elf);
-> > +     return ret;
-> > +}
-> > +
-> > +#ifndef NO_LIBUNWIND_DEBUG_FRAME
-> > +static u64 elf_section_offset(int fd, const char *name)
-> > +{
-> > +     u64 address, offset;
-> > +
-> > +     if (elf_section_address_and_offset(fd, name, &address, &offset))
-> > +             return 0;
-> > +
-> >       return offset;
-> >  }
-> > +#endif
-> > +
-> > +static u64 elf_base_address(int fd)
-> > +{
-> > +     Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> > +     GElf_Phdr phdr;
-> > +     u64 retval = 0;
-> > +     size_t i, phdrnum = 0;
-> > +
-> > +     if (elf == NULL)
-> > +             return 0;
-> > +     (void)elf_getphdrnum(elf, &phdrnum);
-> > +     /* PT_LOAD segments are sorted by p_vaddr, so the first has the minimum p_vaddr. */
-> > +     for (i = 0; i < phdrnum; i++) {
-> > +             if (gelf_getphdr(elf, i, &phdr) && phdr.p_type == PT_LOAD) {
-> > +                     retval = phdr.p_vaddr & -getpagesize();
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     elf_end(elf);
-> > +     return retval;
-> > +}
-> >
-> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
-> >  static int elf_is_exec(int fd, const char *name)
-> > @@ -248,8 +282,7 @@ struct eh_frame_hdr {
-> >  } __packed;
-> >
-> >  static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
-> > -                            u64 offset, u64 *table_data, u64 *segbase,
-> > -                            u64 *fde_count)
-> > +                            u64 offset, u64 *table_data_offset, u64 *fde_count)
-> >  {
-> >       struct eh_frame_hdr hdr;
-> >       u8 *enc = (u8 *) &hdr.enc;
-> > @@ -265,35 +298,47 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
-> >       dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
-> >
-> >       *fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
-> > -     *segbase    = offset;
-> > -     *table_data = (enc - (u8 *) &hdr) + offset;
-> > +     *table_data_offset = enc - (u8 *) &hdr;
-> >       return 0;
-> >  }
-> >
-> > -static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
-> > +static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
-> >                                    u64 *table_data, u64 *segbase,
-> >                                    u64 *fde_count)
-> >  {
-> > -     int ret = -EINVAL, fd;
-> > -     u64 offset = dso->data.eh_frame_hdr_offset;
-> > +     struct map *map;
-> > +     u64 base_addr = UINT64_MAX;
-> > +     int ret, fd;
-> >
-> > -     if (offset == 0) {
-> > -             fd = dso__data_get_fd(dso, machine);
-> > +     if (dso->data.eh_frame_hdr_offset == 0) {
-> > +             fd = dso__data_get_fd(dso, ui->machine);
-> >               if (fd < 0)
-> >                       return -EINVAL;
-> >
-> >               /* Check the .eh_frame section for unwinding info */
-> > -             offset = elf_section_offset(fd, ".eh_frame_hdr");
-> > -             dso->data.eh_frame_hdr_offset = offset;
-> > +             ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
-> > +                                                  &dso->data.eh_frame_hdr_addr,
-> > +                                                  &dso->data.eh_frame_hdr_offset);
-> > +             dso->data.elf_base_addr = elf_base_address(fd);
-> >               dso__data_put_fd(dso);
-> > +             if (ret || dso->data.eh_frame_hdr_offset == 0)
-> > +                     return -EINVAL;
-> >       }
-> >
-> > -     if (offset)
-> > -             ret = unwind_spec_ehframe(dso, machine, offset,
-> > -                                       table_data, segbase,
-> > -                                       fde_count);
-> > -
-> > -     return ret;
-> > +     maps__for_each_entry(ui->thread->maps, map) {
-> > +             if (map->dso == dso && map->start < base_addr)
-> > +                     base_addr = map->start;
-> > +     }
-> > +     base_addr -= dso->data.elf_base_addr;
-> > +     /* Address of .eh_frame_hdr */
-> > +     *segbase = base_addr + dso->data.eh_frame_hdr_addr;
-> > +     ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
-> > +                                table_data, fde_count);
-> > +     if (ret)
-> > +             return ret;
-> > +     /* binary_search_table offset plus .eh_frame_hdr address */
-> > +     *table_data += *segbase;
-> > +     return 0;
-> >  }
-> >
-> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
-> > @@ -388,14 +433,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
-> >       pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
-> >
-> >       /* Check the .eh_frame section for unwinding info */
-> > -     if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
-> > +     if (!read_unwind_spec_eh_frame(map->dso, ui,
-> >                                      &table_data, &segbase, &fde_count)) {
-> >               memset(&di, 0, sizeof(di));
-> >               di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
-> >               di.start_ip = map->start;
-> >               di.end_ip   = map->end;
-> > -             di.u.rti.segbase    = map->start + segbase - map->pgoff;
-> > -             di.u.rti.table_data = map->start + table_data - map->pgoff;
-> > +             di.u.rti.segbase    = segbase;
-> > +             di.u.rti.table_data = table_data;
-> >               di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
-> >                                     / sizeof(unw_word_t);
-> >               ret = dwarf_search_unwind_table(as, ip, &di, pi,
-> > --
-> > 2.36.1.124.g0e6072fb45-goog
-> >
