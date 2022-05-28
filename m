@@ -1,43 +1,47 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773747F
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 01:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2686C7F
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 02:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653701613; x=1685237613;
+  t=1653704798; x=1685240798;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RROwHBf+WCrcn4WPD/lNxgRPUi+YpjuA0roqe73RFy0=;
-  b=cuk5rwgtkdYzMk7RQM8rAoeSXwXUIMBBWDJJJZQCSnabgd1uyWQpC+mx
-   Ku1Ebc22xSlXvuCwjQHydbiAb+seWJJUEGEe3Qqay3IAO6G/Gr2BeQh59
-   DKSGTLT/qpmN2wIfMhOEG0VrdDevfhM4VNEW8WQn35kVZavDbGpEwMmCv
-   G9t8fW2O57nC24gsRh1BKePdjPVlIKr5oEzPuWY65gez+/dn2g1McfH0K
-   DTd7TtuelYSmPTON//dB9UCrYy6onAAH/p+01hT8oONO2r3/AjGYOxhtB
-   pVjlRRiA+Auwn9HXDhzl/FcOzdHc6eYHnTig7mwPvKsLdx6zOwEJ4iKJD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262229708"
+  bh=khUH6vszZsy4AF5ZynvIyQU7qpFD2NmUUG/bJcOTCT0=;
+  b=UF3mz0SYTcVROkG7Jx0fVzRG/P8XA2lB5PBSA4TBKAU1U4Sx15/Pckn+
+   EgwqS1qRXWXSKISfZA/1n0t5cRJzuKdUtLhDFXmqPEyNVLxH16f9Viz7c
+   fTHjvebjGY1ctyCoQLEtd/29TSPstoLObVDInLoBBLmlpKDSrd8Y0FUF5
+   TIyp3Ut6RmhSobjNY4rqNi9fK5OCAZYzwD5ajx8RFpas/RgibD9SPon6I
+   GZZqs8hUMyYCps5dMG+pK1kAKfWIhAAgvUMq7gREQ+awkp03jBP0rH0Rx
+   NMAOvJwXjO4VumR2fDLc1r5WxPPqaUbGrZR3pSIj5IuGD7EgDEoLhcxRV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="337661171"
 X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="262229708"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 18:33:32 -0700
+   d="scan'208";a="337661171"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 19:26:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="747324763"
+   d="scan'208";a="604204638"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 18:33:31 -0700
+  by orsmga008.jf.intel.com with ESMTP; 27 May 2022 19:26:34 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nulKc-0005Ld-T9;
-	Sat, 28 May 2022 01:33:30 +0000
-Date: Sat, 28 May 2022 09:33:25 +0800
+	id 1num9x-0005Nl-Iw;
+	Sat, 28 May 2022 02:26:33 +0000
+Date: Sat, 28 May 2022 10:25:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
- sysfs
-Message-ID: <202205280959.E5MRUz4H-lkp@intel.com>
-References: <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+To: keliu <liuke94@huawei.com>, scott.branden@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com, arnd@arndb.de,
+	gregkh@linuxfoundation.org, gustavo.pimentel@synopsys.com,
+	kishon@ti.com, lorenzo.pieralisi@arm.com, kw@linux.com,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	keliu <liuke94@huawei.com>
+Subject: Re: [PATCH] drivers: misc: Directly use ida_alloc()/free()
+Message-ID: <202205281008.BUCRO77S-lkp@intel.com>
+References: <20220527083953.2636843-1-liuke94@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,94 +50,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+In-Reply-To: <20220527083953.2636843-1-liuke94@huawei.com>
 
-Hi "Aneesh,
+Hi keliu,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on v5.18]
-[cannot apply to akpm-mm/mm-everything linus/master next-20220527]
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on v5.18 next-20220527]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/mm-demotion-Add-support-for-explicit-memory-tiers/20220527-212536
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git b232b02bf3c205b13a26dcec08e53baddd8e59ed
-config: riscv-randconfig-r001-20220526 (https://download.01.org/0day-ci/archive/20220528/202205280959.E5MRUz4H-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/keliu/drivers-misc-Directly-use-ida_alloc-free/20220527-162050
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 90de6805267f8c79cd2b1a36805071e257c39b5c
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220528/202205281008.BUCRO77S-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/0d746ee496b4c0834aabaf0750bd74139d0ae681
+        # https://github.com/intel-lab-lkp/linux/commit/f8f84e5642ea1ff2fb220c002a35c7d74ec14323
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aneesh-Kumar-K-V/mm-demotion-Add-support-for-explicit-memory-tiers/20220527-212536
-        git checkout 0d746ee496b4c0834aabaf0750bd74139d0ae681
+        git fetch --no-tags linux-review keliu/drivers-misc-Directly-use-ida_alloc-free/20220527-162050
+        git checkout f8f84e5642ea1ff2fb220c002a35c7d74ec14323
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/migrate.c:2258:5: warning: no previous prototype for function '__node_set_memory_tier' [-Wmissing-prototypes]
-   int __node_set_memory_tier(int node, int tier)
-       ^
-   mm/migrate.c:2258:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __node_set_memory_tier(int node, int tier)
-   ^
-   static 
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   error: A dwo section may not contain relocations
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+>> drivers/misc/dw-xdata-pcie.c:336:7: error: call to undeclared function 'ida_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           id = ida_(&xdata_ida, GFP_KERNEL);
+                ^
+   1 error generated.
 
 
-vim +/__node_set_memory_tier +2258 mm/migrate.c
+vim +/ida_ +336 drivers/misc/dw-xdata-pcie.c
 
-  2257	
-> 2258	int __node_set_memory_tier(int node, int tier)
-  2259	{
-  2260		int ret = 0;
-  2261		/*
-  2262		 * As register_memory_tier() for new tier can fail,
-  2263		 * try it before modifying existing tier. register
-  2264		 * tier makes tier visible in sysfs.
-  2265		 */
-  2266		if (!memory_tiers[tier]) {
-  2267			ret = register_memory_tier(tier);
-  2268			if (ret) {
-  2269				goto out;
-  2270			}
-  2271		}
-  2272	
-  2273		node_set(node, memory_tiers[tier]->nodelist);
-  2274	
-  2275	out:
-  2276		return ret;
-  2277	}
-  2278	
+   287	
+   288	static int dw_xdata_pcie_probe(struct pci_dev *pdev,
+   289				       const struct pci_device_id *pid)
+   290	{
+   291		struct device *dev = &pdev->dev;
+   292		struct dw_xdata *dw;
+   293		char name[24];
+   294		u64 addr;
+   295		int err;
+   296		int id;
+   297	
+   298		/* Enable PCI device */
+   299		err = pcim_enable_device(pdev);
+   300		if (err) {
+   301			dev_err(dev, "enabling device failed\n");
+   302			return err;
+   303		}
+   304	
+   305		/* Mapping PCI BAR regions */
+   306		err = pcim_iomap_regions(pdev, BIT(BAR_0), pci_name(pdev));
+   307		if (err) {
+   308			dev_err(dev, "xData BAR I/O remapping failed\n");
+   309			return err;
+   310		}
+   311	
+   312		pci_set_master(pdev);
+   313	
+   314		/* Allocate memory */
+   315		dw = devm_kzalloc(dev, sizeof(*dw), GFP_KERNEL);
+   316		if (!dw)
+   317			return -ENOMEM;
+   318	
+   319		/* Data structure initialization */
+   320		mutex_init(&dw->mutex);
+   321	
+   322		dw->rg_region.vaddr = pcim_iomap_table(pdev)[BAR_0];
+   323		if (!dw->rg_region.vaddr)
+   324			return -ENOMEM;
+   325	
+   326		dw->rg_region.paddr = pdev->resource[BAR_0].start;
+   327	
+   328		dw->max_wr_len = pcie_get_mps(pdev);
+   329		dw->max_wr_len >>= 2;
+   330	
+   331		dw->max_rd_len = pcie_get_readrq(pdev);
+   332		dw->max_rd_len >>= 2;
+   333	
+   334		dw->pdev = pdev;
+   335	
+ > 336		id = ida_(&xdata_ida, GFP_KERNEL);
+   337		if (id < 0) {
+   338			dev_err(dev, "xData: unable to get id\n");
+   339			return id;
+   340		}
+   341	
+   342		snprintf(name, sizeof(name), DW_XDATA_DRIVER_NAME ".%d", id);
+   343		dw->misc_dev.name = kstrdup(name, GFP_KERNEL);
+   344		if (!dw->misc_dev.name) {
+   345			err = -ENOMEM;
+   346			goto err_ida_remove;
+   347		}
+   348	
+   349		dw->misc_dev.minor = MISC_DYNAMIC_MINOR;
+   350		dw->misc_dev.parent = dev;
+   351		dw->misc_dev.groups = xdata_groups;
+   352	
+   353		writel(0x0, &(__dw_regs(dw)->RAM_addr));
+   354		writel(0x0, &(__dw_regs(dw)->RAM_port));
+   355	
+   356		addr = dw->rg_region.paddr + DW_XDATA_EP_MEM_OFFSET;
+   357		writel(lower_32_bits(addr), &(__dw_regs(dw)->addr_lsb));
+   358		writel(upper_32_bits(addr), &(__dw_regs(dw)->addr_msb));
+   359		dev_dbg(dev, "xData: target address = 0x%.16llx\n", addr);
+   360	
+   361		dev_dbg(dev, "xData: wr_len = %zu, rd_len = %zu\n",
+   362			dw->max_wr_len * 4, dw->max_rd_len * 4);
+   363	
+   364		/* Saving data structure reference */
+   365		pci_set_drvdata(pdev, dw);
+   366	
+   367		/* Register misc device */
+   368		err = misc_register(&dw->misc_dev);
+   369		if (err) {
+   370			dev_err(dev, "xData: failed to register device\n");
+   371			goto err_kfree_name;
+   372		}
+   373	
+   374		return 0;
+   375	
+   376	err_kfree_name:
+   377		kfree(dw->misc_dev.name);
+   378	
+   379	err_ida_remove:
+   380		ida_free(&xdata_ida, id);
+   381	
+   382		return err;
+   383	}
+   384	
 
 -- 
 0-DAY CI Kernel Test Service
