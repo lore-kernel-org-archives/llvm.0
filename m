@@ -1,44 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864757B
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 00:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBA17F
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 00:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653696083; x=1685232083;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7v3jG27wAN4KIYP8MWL5vK19QbDLe+bpbG4rhQJc1Yc=;
-  b=fu+LyMMq9OUThPzKJXI3oFMbEMT9rw88e/u01RleGcGMd5YUkhVxqPqo
-   3ugpwFOZAFWWC/fOh5J5SWprKWs7tEJK3qogwKNdwY/LZmsSQnqUQ9OCH
-   e9lpOMQErZ4jmfnzXzgljbACryzhs30YdFSL4JWQ50JhDceDT6sQZSy8u
-   8uk4So/HErqiLJoDWJNRqptCFEAlC3aEoc4Q7UYJ2F0YCkJH1Oj5YZXuB
-   mllAXbAPQUF5eIqEuU9iDu8beZof+UndMWVhFHsXM7uo+NJQC5aliBCE6
-   Qq2ANinQyc4+n7R+OoTAJfsdVWp15bKghZ6CFo/9pCArQNl8mA201cXTZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="299949447"
+  t=1653698547; x=1685234547;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=niqDI2Nx+X1SrZ7oqQlc2PliO4M97rj8lt2tS2Knycw=;
+  b=IlV7M8tWfQPBt+EEPp+vnvLUnhr1BlWUEW4YqqZuv5BAagwmZ0R8SdJf
+   Giof5NCvL1ohcu0ri66a23UHk+VGruoeGe01i+jEbwXVVoYaA6PTX5y2J
+   tqPRv28cztOPIjWaTdPjm6hyjnS5tDkXPbuy4JQjkiq30rj6fA6iH2uFM
+   Up/jbBHQaidKDzt1snMLMSn/z/hbFUFnx8JuJftXnfoqL2vGsIcZooJg/
+   o80rOyfmRZ0dj08t6jRuU4KN9slm+iy40BSMPQqeIgOV4dTUm8tKtwcRu
+   Oa2wgB6WGSI4FyhjrwqQe91Og3cRVRuPqNe1tRGjaB+HuE/aYkLNZtW5J
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="360989132"
 X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="299949447"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 17:01:22 -0700
+   d="scan'208";a="360989132"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 17:42:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="561024527"
+   d="scan'208";a="575099556"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 May 2022 17:01:20 -0700
+  by orsmga007.jf.intel.com with ESMTP; 27 May 2022 17:42:25 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nujtP-0005En-Iq;
-	Sat, 28 May 2022 00:01:19 +0000
-Date: Sat, 28 May 2022 08:00:54 +0800
+	id 1nukXB-0005Iz-5r;
+	Sat, 28 May 2022 00:42:25 +0000
+Date: Sat, 28 May 2022 08:41:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hawking Zhang <Hawking.Zhang@amd.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Wenhui Sheng <Wenhui.Sheng@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1945:6: warning: no previous
- prototype for function 'gfx_v11_0_rlc_stop'
-Message-ID: <202205280743.SW6RoSnw-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 13145/14198] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x59c):
+ relocation R_RISCV_PCREL_HI20 out of range: -524417 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202205280829.utNOVd5s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,192 +46,46 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Hawking,
+BCC: lkp@intel.com
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Miguel Ojeda <ojeda@kernel.org>
+CC: Kees Cook <keescook@chromium.org>
+CC: Alex Gaynor <alex.gaynor@gmail.com>
+CC: Wedson Almeida Filho <wedsonaf@google.com>
+CC: Gary Guo <gary@garyguo.net>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Matthew Wilcox <willy@infradead.org>
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bf272460d744112bacd4c4d562592decbf0edf64
-commit: 3d879e81f0f9ed5d33b5eda0fe5226c884bb8073 drm/amdgpu: add init support for GFX11 (v2)
-date:   3 weeks ago
-config: s390-randconfig-r044-20220525 (https://download.01.org/0day-ci/archive/20220528/202205280743.SW6RoSnw-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d3fde8ff50ab265749704bd7fbcf70d35235421f
+commit: 2087d6ac3567b38f2cddfa8fa445e595af87a04a [13145/14198] kallsyms: support "big" kernel symbols
+config: riscv-randconfig-r042-20220527 (https://download.01.org/0day-ci/archive/20220528/202205280829.utNOVd5s-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d879e81f0f9ed5d33b5eda0fe5226c884bb8073
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3d879e81f0f9ed5d33b5eda0fe5226c884bb8073
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=2087d6ac3567b38f2cddfa8fa445e595af87a04a
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 2087d6ac3567b38f2cddfa8fa445e595af87a04a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:362:6: warning: variable 'index' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (ring->is_mes_queue) {
-               ^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:419:30: note: uninitialized use occurs here
-           amdgpu_device_wb_free(adev, index);
-                                       ^~~~~
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:362:2: note: remove the 'if' if its condition is always false
-           if (ring->is_mes_queue) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:350:16: note: initialize the variable 'index' to silence this warning
-           unsigned index;
-                         ^
-                          = 0
->> drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1945:6: warning: no previous prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes]
-   void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
-        ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1945:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3399:8: error: use of undeclared identifier 'CP_RB0_CNTL__BUF_SWAP_MASK'
-           tmp = REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-                 ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1180:18: note: expanded from macro 'REG_SET_FIELD'
-           (((orig_val) & ~REG_FIELD_MASK(reg, field)) |                   \
-                           ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1177:36: note: expanded from macro 'REG_FIELD_MASK'
-   #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-                                      ^
-   <scratch space>:95:1: note: expanded from here
-   CP_RB0_CNTL__BUF_SWAP_MASK
-   ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3399:8: error: use of undeclared identifier 'CP_RB0_CNTL__BUF_SWAP__SHIFT'
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1181:49: note: expanded from macro 'REG_SET_FIELD'
-            (REG_FIELD_MASK(reg, field) & ((field_val) << REG_FIELD_SHIFT(reg, field))))
-                                                          ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1176:37: note: expanded from macro 'REG_FIELD_SHIFT'
-   #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-                                       ^
-   <scratch space>:101:1: note: expanded from here
-   CP_RB0_CNTL__BUF_SWAP__SHIFT
-   ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3399:8: error: use of undeclared identifier 'CP_RB0_CNTL__BUF_SWAP_MASK'
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1181:4: note: expanded from macro 'REG_SET_FIELD'
-            (REG_FIELD_MASK(reg, field) & ((field_val) << REG_FIELD_SHIFT(reg, field))))
-             ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1177:36: note: expanded from macro 'REG_FIELD_MASK'
-   #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-                                      ^
-   <scratch space>:98:1: note: expanded from here
-   CP_RB0_CNTL__BUF_SWAP_MASK
-   ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4049:8: error: use of undeclared identifier 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK'
-           tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-                 ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1180:18: note: expanded from macro 'REG_SET_FIELD'
-           (((orig_val) & ~REG_FIELD_MASK(reg, field)) |                   \
-                           ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1177:36: note: expanded from macro 'REG_FIELD_MASK'
-   #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-                                      ^
-   <scratch space>:83:1: note: expanded from here
-   CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK
-   ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4049:8: error: use of undeclared identifier 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP__SHIFT'
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1181:49: note: expanded from macro 'REG_SET_FIELD'
-            (REG_FIELD_MASK(reg, field) & ((field_val) << REG_FIELD_SHIFT(reg, field))))
-                                                          ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1176:37: note: expanded from macro 'REG_FIELD_SHIFT'
-   #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-                                       ^
-   <scratch space>:89:1: note: expanded from here
-   CP_HQD_PQ_CONTROL__ENDIAN_SWAP__SHIFT
-   ^
-   drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4049:8: error: use of undeclared identifier 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK'
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1181:4: note: expanded from macro 'REG_SET_FIELD'
-            (REG_FIELD_MASK(reg, field) & ((field_val) << REG_FIELD_SHIFT(reg, field))))
-             ^
-   drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:1177:36: note: expanded from macro 'REG_FIELD_MASK'
-   #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-                                      ^
-   <scratch space>:86:1: note: expanded from here
-   CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK
-   ^
-   14 warnings and 6 errors generated.
-
-
-vim +/gfx_v11_0_rlc_stop +1945 drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
-
-  1944	
-> 1945	void gfx_v11_0_rlc_stop(struct amdgpu_device *adev)
-  1946	{
-  1947		u32 tmp = RREG32_SOC15(GC, 0, regRLC_CNTL);
-  1948	
-  1949		tmp = REG_SET_FIELD(tmp, RLC_CNTL, RLC_ENABLE_F32, 0);
-  1950		WREG32_SOC15(GC, 0, regRLC_CNTL, tmp);
-  1951	}
-  1952	
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x59c): relocation R_RISCV_PCREL_HI20 out of range: -524417 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x58c): relocation R_RISCV_PCREL_HI20 out of range: -524417 is not in [-524288, 524287]; references kallsyms_markers
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
 -- 
 0-DAY CI Kernel Test Service
