@@ -1,53 +1,42 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F0F23D2
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 12:06:54 +0000 (UTC)
-Received: by mail-ed1-f48.google.com with SMTP id h11so8242954eda.8
-        for <llvm@lists.linux.dev>; Sat, 28 May 2022 05:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A6dRJGGRiiQ2vyYSYvYluDowmGKJP1jAiIvtAW6pwYg=;
-        b=RfwsT1HbPpE1LEGF/g+9Sev7/PRER0LBnXmRAECwuWIxgo6yB0WtXNeZP/V2z0HETE
-         AVyYrTlWDGI4wD3yUIr4civyqtnmnWQ3Q7RtLGw++e7NQI+Pl6HJZWGLx454ucY7M4kb
-         c1WfkBXjapmjFMuiu8Q++wWuwZFqqVtgS+u8VpSISRrLNTxQKvBQXjodT0dYMiqKip88
-         F/tiZsFn7Ko0HZRO6z2Qw/OFij+fyxOCTbItAGy1jFUdHTLhPUhcRiHiLY5IfQRl10j3
-         NMG5T3ztYozBI12QURkdQVl11wi/0UEUojrtsiwm5nfu9GuppOOAjOApX9i+2GwzmGwT
-         FlJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A6dRJGGRiiQ2vyYSYvYluDowmGKJP1jAiIvtAW6pwYg=;
-        b=soGR+DkfW6t4+vkJD6JI02OfBYOdpUqanViHrCFocg9jrBsxNdA6TA5/+EbZYtfWRe
-         WUrl5p0bDpY3Ey80xc3AAjY8DCOW8Q4jVOkTr85cFavPE6cOQ+za9iigWB42ERXwI1hr
-         tbkCESPEQlzE/YRpTewJO54CJSnie4fk2jlE4AHCxmI5BeFsFj5woPifbG0LxfQzfTdT
-         iE1u7NXLUMXMONkw/NEK1HSP8+2isKBPWC3TiSOd+XFxDxXAZnvMs/tq77apUqGfeJsK
-         LVsYJJi5MNQIfASQjTFZXZRRt336yo5gWvWw4tVTGi0mCnTBD9yE89dPwitaH3r5r/LT
-         IktA==
-X-Gm-Message-State: AOAM533WKA8wfoTZqxB5ylMhMtdlt8SYvcay3fJsyC4R0ACAvMfoeWYC
-	PfxZT3bb9bHjft1CWDnr9Qs=
-X-Google-Smtp-Source: ABdhPJxm/ejUZGZm8z657xmbq/LMmnZ9dOBN9LTgy16KkSHJ800/cz2H/gcHdLY87u45w51JtZBjgQ==
-X-Received: by 2002:a05:6402:84c:b0:428:4cc4:8212 with SMTP id b12-20020a056402084c00b004284cc48212mr50183061edz.171.1653739612485;
-        Sat, 28 May 2022 05:06:52 -0700 (PDT)
-Received: from krava ([83.240.62.49])
-        by smtp.gmail.com with ESMTPSA id j25-20020a170906831900b006fefd1d5c2bsm2308204ejx.148.2022.05.28.05.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 05:06:51 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 28 May 2022 14:06:49 +0200
-To: Fangrui Song <maskray@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ian Rogers <irogers@google.com>, llvm@lists.linux.dev,
-	Sebastian Ullrich <sebasti@nullri.ch>
-Subject: Re: [PATCH v2] perf: Fix segbase for ld.lld linked objects
-Message-ID: <YpIQWdwtHqAdjLoC@krava>
-References: <20220527182039.673248-1-maskray@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8672564
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 13:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653745301; x=1685281301;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=msNSCCMmakOCPThvjj3sP07AO+iN2SqL77cXRWsmt00=;
+  b=KaOtyB9EKKvfRTo0kX9CJf/fWnQ9zw1/H0tKN9zppq8No7GYZjjq1zn3
+   2cqZBDLRxnJiwDt/BbQ8Lq3Gz0xbExuNHy+wB2OFqauUnfnz63/j/O4oT
+   d80ioGBPpThd6z23/JEhuhuvktuSvad2dtI34f9pihvl+jO1RywDLOPx5
+   C4Bg40xtrILOp8NkqWFQpyzbvFEPndQqXrbTtO2D/nmq8c/z38QAx7eW6
+   U5ReCAJGv7t+M/XqAQXN7otdOOi4JsqD/sAaVDSpMTOpVcCjqBalJHnVU
+   +rvO/wH8tDVzB33/kc4OBVRbH55ILwVAUcwY40JVuAVie0M/o3OHoxVlh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274681911"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="274681911"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 06:41:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="705554276"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 May 2022 06:41:38 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nuwhG-0000Ee-4P;
+	Sat, 28 May 2022 13:41:38 +0000
+Date: Sat, 28 May 2022 21:40:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size
+ (1128) exceeds limit (1024) in 'blake2s_selftest'
+Message-ID: <202205282100.bU9SnP9m-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,247 +45,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220527182039.673248-1-maskray@google.com>
 
-On Fri, May 27, 2022 at 11:20:39AM -0700, Fangrui Song wrote:
-> segbase is the address of .eh_frame_hdr and table_data is segbase plus
-> the header size. find_proc_info computes segbase as `map->start +
-> segbase - map->pgoff` which is wrong when
-> 
-> * .eh_frame_hdr and .text are in different PT_LOAD program headers
-> * and their p_vaddr difference does not equal their p_offset difference
-> 
-> Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
-> such R and RX PT_LOAD program headers.
-> 
->     ld.lld (default) => perf report fails to unwind `perf record
->     --call-graph dwarf` recorded data
->     ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
->     ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
->     their p_vaddr difference equals p_offset difference
-> 
->     ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
->     ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
->     there are two PT_LOAD but their p_vaddr difference equals p_offset
->     difference
-> 
-> To fix the issue, compute segbase as dso's base address plus
-> PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
-> over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
-> (the minimum guaranteed by generic ABI) from the minimum address.
-> 
-> In libunwind, find_proc_info transitively called by unw_step is cached,
-> so the iteration overhead is acceptable.
-> 
-> Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1646
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> Cc: Ian Rogers <irogers@google.com>
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
+head:   54e31fb223170c2e7f3a6c3b1f3b438e32788f43
+commit: 54e31fb223170c2e7f3a6c3b1f3b438e32788f43 crypto: blake2s - remove shash module
+date:   3 hours ago
+config: hexagon-randconfig-r041-20220527 (https://download.01.org/0day-ci/archive/20220528/202205282100.bU9SnP9m-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/54e31fb223170c2e7f3a6c3b1f3b438e32788f43
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
+        git checkout 54e31fb223170c2e7f3a6c3b1f3b438e32788f43
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/crypto/
 
-nice, is this a problem for libdw dwarf unwind as well?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-you should be able to build it with:
+All warnings (new ones prefixed by >>):
 
-  $ make NO_LIBUNWIND=1
+>> lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size (1128) exceeds limit (1024) in 'blake2s_selftest' [-Wframe-larger-than]
+   bool __init blake2s_selftest(void)
+               ^
+   1 warning generated.
 
-thanks,
-jirka
 
-> 
-> --
-> Changes from v1:
-> * Fix elf_base_address to use the first PT_LOAD
-> * Use dso::elf_base_addr which is a constant even if the dso is loaded into multiple processes
-> ---
->  tools/perf/util/dso.h                    |   2 +
->  tools/perf/util/unwind-libunwind-local.c | 107 ++++++++++++++++-------
->  2 files changed, 78 insertions(+), 31 deletions(-)
-> 
-> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> index 3a9fd4d389b5..97047a11282b 100644
-> --- a/tools/perf/util/dso.h
-> +++ b/tools/perf/util/dso.h
-> @@ -196,7 +196,9 @@ struct dso {
->  		u32		 status_seen;
->  		u64		 file_size;
->  		struct list_head open_entry;
-> +		u64		 elf_base_addr;
->  		u64		 debug_frame_offset;
-> +		u64		 eh_frame_hdr_addr;
->  		u64		 eh_frame_hdr_offset;
->  	} data;
->  	/* bpf prog information */
-> diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-> index 41e29fc7648a..37622699c91a 100644
-> --- a/tools/perf/util/unwind-libunwind-local.c
-> +++ b/tools/perf/util/unwind-libunwind-local.c
-> @@ -169,30 +169,64 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
->  	__v;                                                    \
->  	})
->  
-> -static u64 elf_section_offset(int fd, const char *name)
-> +static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
->  {
->  	Elf *elf;
->  	GElf_Ehdr ehdr;
->  	GElf_Shdr shdr;
-> -	u64 offset = 0;
-> +	int ret;
->  
->  	elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
->  	if (elf == NULL)
-> -		return 0;
-> +		return -1;
->  
-> -	do {
-> -		if (gelf_getehdr(elf, &ehdr) == NULL)
-> -			break;
-> +	if (gelf_getehdr(elf, &ehdr) == NULL)
-> +		goto out_err;
->  
-> -		if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> -			break;
-> -
-> -		offset = shdr.sh_offset;
-> -	} while (0);
-> +	if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> +		goto out_err;
->  
-> +	*address = shdr.sh_addr;
-> +	*offset = shdr.sh_offset;
-> +	ret = 0;
-> +out_err:
->  	elf_end(elf);
-> +	return ret;
-> +}
-> +
-> +#ifndef NO_LIBUNWIND_DEBUG_FRAME
-> +static u64 elf_section_offset(int fd, const char *name)
-> +{
-> +	u64 address, offset;
-> +
-> +	if (elf_section_address_and_offset(fd, name, &address, &offset))
-> +		return 0;
-> +
->  	return offset;
->  }
-> +#endif
-> +
-> +static u64 elf_base_address(int fd)
-> +{
-> +	Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> +	GElf_Phdr phdr;
-> +	u64 retval = 0;
-> +	size_t i, phdrnum = 0;
-> +
-> +	if (elf == NULL)
-> +		return 0;
-> +	(void)elf_getphdrnum(elf, &phdrnum);
-> +	/* PT_LOAD segments are sorted by p_vaddr, so the first has the minimum p_vaddr. */
-> +	for (i = 0; i < phdrnum; i++) {
-> +		if (gelf_getphdr(elf, i, &phdr) && phdr.p_type == PT_LOAD) {
-> +			retval = phdr.p_vaddr & -getpagesize();
-> +			break;
-> +		}
-> +	}
-> +
-> +	elf_end(elf);
-> +	return retval;
-> +}
->  
->  #ifndef NO_LIBUNWIND_DEBUG_FRAME
->  static int elf_is_exec(int fd, const char *name)
-> @@ -248,8 +282,7 @@ struct eh_frame_hdr {
->  } __packed;
->  
->  static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
-> -			       u64 offset, u64 *table_data, u64 *segbase,
-> -			       u64 *fde_count)
-> +			       u64 offset, u64 *table_data_offset, u64 *fde_count)
->  {
->  	struct eh_frame_hdr hdr;
->  	u8 *enc = (u8 *) &hdr.enc;
-> @@ -265,35 +298,47 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
->  	dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
->  
->  	*fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
-> -	*segbase    = offset;
-> -	*table_data = (enc - (u8 *) &hdr) + offset;
-> +	*table_data_offset = enc - (u8 *) &hdr;
->  	return 0;
->  }
->  
-> -static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
-> +static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
->  				     u64 *table_data, u64 *segbase,
->  				     u64 *fde_count)
->  {
-> -	int ret = -EINVAL, fd;
-> -	u64 offset = dso->data.eh_frame_hdr_offset;
-> +	struct map *map;
-> +	u64 base_addr = UINT64_MAX;
-> +	int ret, fd;
->  
-> -	if (offset == 0) {
-> -		fd = dso__data_get_fd(dso, machine);
-> +	if (dso->data.eh_frame_hdr_offset == 0) {
-> +		fd = dso__data_get_fd(dso, ui->machine);
->  		if (fd < 0)
->  			return -EINVAL;
->  
->  		/* Check the .eh_frame section for unwinding info */
-> -		offset = elf_section_offset(fd, ".eh_frame_hdr");
-> -		dso->data.eh_frame_hdr_offset = offset;
-> +		ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
-> +						     &dso->data.eh_frame_hdr_addr,
-> +						     &dso->data.eh_frame_hdr_offset);
-> +		dso->data.elf_base_addr = elf_base_address(fd);
->  		dso__data_put_fd(dso);
-> +		if (ret || dso->data.eh_frame_hdr_offset == 0)
-> +			return -EINVAL;
->  	}
->  
-> -	if (offset)
-> -		ret = unwind_spec_ehframe(dso, machine, offset,
-> -					  table_data, segbase,
-> -					  fde_count);
-> -
-> -	return ret;
-> +	maps__for_each_entry(ui->thread->maps, map) {
-> +		if (map->dso == dso && map->start < base_addr)
-> +			base_addr = map->start;
-> +	}
-> +	base_addr -= dso->data.elf_base_addr;
-> +	/* Address of .eh_frame_hdr */
-> +	*segbase = base_addr + dso->data.eh_frame_hdr_addr;
-> +	ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
-> +				   table_data, fde_count);
-> +	if (ret)
-> +		return ret;
-> +	/* binary_search_table offset plus .eh_frame_hdr address */
-> +	*table_data += *segbase;
-> +	return 0;
->  }
->  
->  #ifndef NO_LIBUNWIND_DEBUG_FRAME
-> @@ -388,14 +433,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
->  	pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
->  
->  	/* Check the .eh_frame section for unwinding info */
-> -	if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
-> +	if (!read_unwind_spec_eh_frame(map->dso, ui,
->  				       &table_data, &segbase, &fde_count)) {
->  		memset(&di, 0, sizeof(di));
->  		di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
->  		di.start_ip = map->start;
->  		di.end_ip   = map->end;
-> -		di.u.rti.segbase    = map->start + segbase - map->pgoff;
-> -		di.u.rti.table_data = map->start + table_data - map->pgoff;
-> +		di.u.rti.segbase    = segbase;
-> +		di.u.rti.table_data = table_data;
->  		di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
->  				      / sizeof(unw_word_t);
->  		ret = dwarf_search_unwind_table(as, ip, &di, pi,
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-> 
+vim +/blake2s_selftest +548 lib/crypto/blake2s-selftest.c
+
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  547  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @548  bool __init blake2s_selftest(void)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  549  {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  550  	u8 key[BLAKE2S_KEY_SIZE];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  551  	u8 buf[ARRAY_SIZE(blake2s_testvecs)];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  552  	u8 hash[BLAKE2S_HASH_SIZE];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  553  	struct blake2s_state state;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  554  	bool success = true;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  555  	int i, l;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  556  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  557  	key[0] = key[1] = 1;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  558  	for (i = 2; i < sizeof(key); ++i)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  559  		key[i] = key[i - 2] + key[i - 1];
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  560  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  561  	for (i = 0; i < sizeof(buf); ++i)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  562  		buf[i] = (u8)i;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  563  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  564  	for (i = l = 0; i < ARRAY_SIZE(blake2s_testvecs); l = (l + 37) % ++i) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  565  		int outlen = 1 + i % BLAKE2S_HASH_SIZE;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  566  		int keylen = (13 * i) % (BLAKE2S_KEY_SIZE + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  567  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  568  		blake2s(hash, buf, key + BLAKE2S_KEY_SIZE - keylen, outlen, i,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  569  			keylen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  570  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  571  			pr_err("blake2s self-test %d: FAIL\n", i + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  572  			success = false;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  573  		}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  574  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  575  		if (!keylen)
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  576  			blake2s_init(&state, outlen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  577  		else
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  578  			blake2s_init_key(&state, outlen,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  579  					 key + BLAKE2S_KEY_SIZE - keylen,
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  580  					 keylen);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  581  
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  582  		blake2s_update(&state, buf, l);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  583  		blake2s_update(&state, buf + l, i - l);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  584  		blake2s_final(&state, hash);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  585  		if (memcmp(hash, blake2s_testvecs[i], outlen)) {
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  586  			pr_err("blake2s init/update/final self-test %d: FAIL\n",
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  587  			       i + 1);
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  588  			success = false;
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  589  		}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  590  	}
+66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  591  
+54e31fb223170c Jason A. Donenfeld 2022-05-28  592  	for (i = 0; i < 100; ++i) {
+54e31fb223170c Jason A. Donenfeld 2022-05-28  593  		u8 unaligned_block[BLAKE2S_BLOCK_SIZE + sizeof(long) - 1]
+54e31fb223170c Jason A. Donenfeld 2022-05-28  594  					__aligned(sizeof(long));
+54e31fb223170c Jason A. Donenfeld 2022-05-28  595  		u8 blocks[BLAKE2S_BLOCK_SIZE * 4];
+54e31fb223170c Jason A. Donenfeld 2022-05-28  596  		struct blake2s_state state1, state2;
+54e31fb223170c Jason A. Donenfeld 2022-05-28  597  
+54e31fb223170c Jason A. Donenfeld 2022-05-28  598  		get_random_bytes(blocks, sizeof(blocks));
+54e31fb223170c Jason A. Donenfeld 2022-05-28  599  		get_random_bytes(&state, sizeof(state));
+54e31fb223170c Jason A. Donenfeld 2022-05-28  600  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
