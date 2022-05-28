@@ -1,183 +1,80 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF6728E4
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 15:54:37 +0000 (UTC)
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-04.nifty.com with ESMTP id 24SFmrC1000541
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 00:48:53 +0900
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-10.nifty.com with ESMTP id 24SFlthM010610;
-	Sun, 29 May 2022 00:47:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24SFlthM010610
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1653752877;
-	bh=r13GrFRYMDrikoVJbL6k/JBbfLtkbPflsQEkRN/RT58=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YZKNhujl9v0SS6NCq/L67fCkLmiUYCJTty0C/O6EN+GwAxqQjcLhmHdspH9gDo1G2
-	 t4y4/e0iMa6yNkCZYjADyQmsAw9Ej9DA5FS55qPHXLjX0/zdexpqKtcXvr9LgSXkC8
-	 T3a4QQr+xWytTol/fPxGFA7NDZuEd2e3YKlre65nEzeSlQL5XtY9q4wBy6vRBp5T8c
-	 2aKBsqAQFq+HLqBT9g+F7shx4f2AUibVNXfI6fXu9o0wTCEI7hcP0zWMzv+LgvKpoR
-	 gRiJiOalBbJK9OOV3rSVxG2zA4cCnsOhMshsU4GyNtA58/Tp88YrNyChOVYsznr08g
-	 XOk8mGe53aAdQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev
-Subject: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
-Date: Sun, 29 May 2022 00:47:03 +0900
-Message-Id: <20220528154704.2576290-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220528154704.2576290-1-masahiroy@kernel.org>
-References: <20220528154704.2576290-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB3028E4
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 16:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653753944; x=1685289944;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=41f6nQqX5SfJr8qZx9k03+3R+1jTiVNNGqfIrJHosSU=;
+  b=YZEmIleGuy8NWvSr5yTtuRDiIZ9xtx2Qs+xixV/wg84PUO7Z8RB4wxkh
+   zvsdYu3qQJ+g5JMxzY8/MAJyBc2DiroI5t5FeM50YjFljYkR31rWkUWQr
+   eBaXbSifnabt1aoXrCk1AGcl1Gf4MY9iz2xuQvHP/GSBT9xQ1+GE0nFwE
+   eHH+76hZnc//erD7+7RpCiPZyQ1ki2kqn1PoXBIWww0lwpWTrohTN/fr/
+   2jyFjBJmYxq3KyMBP+VcL3VU0qGL+ubK2oPS22SGg66lceYMZQaUCbYu0
+   3E3Q72bFLO++VR1Aif1O2yOao40nT2iqTfmJyHbFcJISxUmOC8RsXUyr3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="335339373"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="335339373"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 09:05:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="705582803"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 May 2022 09:05:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nuywf-0000Jg-FX;
+	Sat, 28 May 2022 16:05:41 +0000
+Date: Sun, 29 May 2022 00:04:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: llvm-objcopy: error: invalid output format: 'elf64-s390'
+Message-ID: <202205290045.gOvUOkt3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is a preparation for the objtool move in the next commit.
+Hi Heiko,
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+FYI, the error/warning still remains.
 
- scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
- scripts/link-vmlinux.sh    | 41 +------------------------
- 2 files changed, 62 insertions(+), 40 deletions(-)
- create mode 100644 scripts/Makefile.vmlinux_o
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
+commit: adda746629b4a3950f313bc645fa0e54daee871c s390/purgatory: workaround llvm's IAS limitations
+date:   11 days ago
+config: s390-randconfig-c005-20220527 (https://download.01.org/0day-ci/archive/20220529/202205290045.gOvUOkt3-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adda746629b4a3950f313bc645fa0e54daee871c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout adda746629b4a3950f313bc645fa0e54daee871c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-new file mode 100644
-index 000000000000..a9b375ca86d5
---- /dev/null
-+++ b/scripts/Makefile.vmlinux_o
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+PHONY := __default
-+__default: vmlinux.o
-+
-+include include/config/auto.conf
-+include $(srctree)/scripts/Kbuild.include
-+
-+# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
-+# ---------------------------------------------------------------------------
-+
-+quiet_cmd_gen_initcalls_lds = GEN     $@
-+      cmd_gen_initcalls_lds = \
-+	$(PYTHON3) $(srctree)/scripts/jobserver-exec \
-+	$(PERL) $(real-prereqs) > $@
-+
-+.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-+		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-+	$(call if_changed,gen_initcalls_lds)
-+
-+targets := .tmp_initcalls.lds
-+
-+ifdef CONFIG_LTO_CLANG
-+initcalls-lds := .tmp_initcalls.lds
-+endif
-+
-+# Link of vmlinux.o used for section mismatch analysis
-+# ---------------------------------------------------------------------------
-+
-+quiet_cmd_ld_vmlinux.o = LD      $@
-+      cmd_ld_vmlinux.o = \
-+	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-+	$(addprefix -T , $(initcalls-lds)) \
-+	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-+	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
-+
-+define rule_ld_vmlinux.o
-+	$(call cmd_and_savecmd,ld_vmlinux.o)
-+endef
-+
-+vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-+	$(call if_changed_rule,ld_vmlinux.o)
-+
-+targets += vmlinux.o
-+
-+# Add FORCE to the prequisites of a target to force it to be always rebuilt.
-+# ---------------------------------------------------------------------------
-+
-+PHONY += FORCE
-+FORCE:
-+
-+# Read all saved command lines and dependencies for the $(targets) we
-+# may be building above, using $(if_changed{,_dep}). As an
-+# optimization, we don't need to read them if the target does not
-+# exist, we will rebuild anyway in that case.
-+
-+existing-targets := $(wildcard $(sort $(targets)))
-+
-+-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-+
-+.PHONY: $(PHONY)
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index b593cb1a8137..90680b6bd710 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -45,45 +45,6 @@ info()
- 	printf "  %-7s %s\n" "${1}" "${2}"
- }
- 
--# Generate a linker script to ensure correct ordering of initcalls.
--gen_initcalls()
--{
--	info GEN .tmp_initcalls.lds
--
--	${PYTHON3} ${srctree}/scripts/jobserver-exec		\
--	${PERL} ${srctree}/scripts/generate_initcall_order.pl	\
--		${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}	\
--		> .tmp_initcalls.lds
--}
--
--# Link of vmlinux.o used for section mismatch analysis
--# ${1} output file
--modpost_link()
--{
--	local objects
--	local lds=""
--
--	objects="--whole-archive				\
--		${KBUILD_VMLINUX_OBJS}				\
--		--no-whole-archive				\
--		--start-group					\
--		${KBUILD_VMLINUX_LIBS}				\
--		--end-group"
--
--	if is_enabled CONFIG_LTO_CLANG; then
--		gen_initcalls
--		lds="-T .tmp_initcalls.lds"
--
--		# This might take a while, so indicate that we're doing
--		# an LTO link
--		info LTO ${1}
--	else
--		info LD ${1}
--	fi
--
--	${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
--}
--
- objtool_link()
- {
- 	local objtoolcmd;
-@@ -336,7 +297,7 @@ fi;
- ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
- 
- #link vmlinux.o
--modpost_link vmlinux.o
-+${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
- objtool_link vmlinux.o
- 
- # Generate the list of objects in vmlinux
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> llvm-objcopy: error: invalid output format: 'elf64-s390'
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
