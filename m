@@ -1,194 +1,113 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2686C7F
-	for <llvm@lists.linux.dev>; Sat, 28 May 2022 02:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653704798; x=1685240798;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=khUH6vszZsy4AF5ZynvIyQU7qpFD2NmUUG/bJcOTCT0=;
-  b=UF3mz0SYTcVROkG7Jx0fVzRG/P8XA2lB5PBSA4TBKAU1U4Sx15/Pckn+
-   EgwqS1qRXWXSKISfZA/1n0t5cRJzuKdUtLhDFXmqPEyNVLxH16f9Viz7c
-   fTHjvebjGY1ctyCoQLEtd/29TSPstoLObVDInLoBBLmlpKDSrd8Y0FUF5
-   TIyp3Ut6RmhSobjNY4rqNi9fK5OCAZYzwD5ajx8RFpas/RgibD9SPon6I
-   GZZqs8hUMyYCps5dMG+pK1kAKfWIhAAgvUMq7gREQ+awkp03jBP0rH0Rx
-   NMAOvJwXjO4VumR2fDLc1r5WxPPqaUbGrZR3pSIj5IuGD7EgDEoLhcxRV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="337661171"
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="337661171"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 19:26:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
-   d="scan'208";a="604204638"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 May 2022 19:26:34 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1num9x-0005Nl-Iw;
-	Sat, 28 May 2022 02:26:33 +0000
-Date: Sat, 28 May 2022 10:25:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: keliu <liuke94@huawei.com>, scott.branden@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com, arnd@arndb.de,
-	gregkh@linuxfoundation.org, gustavo.pimentel@synopsys.com,
-	kishon@ti.com, lorenzo.pieralisi@arm.com, kw@linux.com,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	keliu <liuke94@huawei.com>
-Subject: Re: [PATCH] drivers: misc: Directly use ida_alloc()/free()
-Message-ID: <202205281008.BUCRO77S-lkp@intel.com>
-References: <20220527083953.2636843-1-liuke94@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E887F46B5
+	for <llvm@lists.linux.dev>; Sat, 28 May 2022 02:32:55 +0000 (UTC)
+Received: by mail-il1-f172.google.com with SMTP id e9so4226320ilq.6
+        for <llvm@lists.linux.dev>; Fri, 27 May 2022 19:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=B9/k/vYalZlu99Y+0uMJfLSyG8XL3D1qV0fsmg7wW8k=;
+        b=lmpl2R8kMj6FJrr+ZbxYA3Ec5/f0QMq2Vqcu4JzdXFQXBpyCEJxNO8J/VyrVIkZW6Y
+         A82SLoVdR9sJuugK9SEQ2YKR3C/b19uiqlJmc1lMGybla+FplstTcpj4o/zz3FQNGge7
+         zyXAGq4ro6UdZOjhLpYelUivo/a/g56zy9Myz4HYiBO2VAD9P8eh8vXSRGDqWz+8lAN4
+         4oRVRSTaf1RoRF9WEXrBWHNJKHyA6511Cmg2upv5D6IhzAQLzFQoxoOvKOt20PxOh2+j
+         WQ4LGZ4hqWWPie0NRAzUJi9MyyVP0+Lu8LkYiCldijKQNjK5vI0YyDMIKn/F4vsIXZIO
+         lBYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=B9/k/vYalZlu99Y+0uMJfLSyG8XL3D1qV0fsmg7wW8k=;
+        b=FMgsnhGC43s4Pgx9lHyPKer2VFECpHXeKd7SdrqDMJOgSsPqR+evdZyIphCoSyIG32
+         jxXTn4qUwcL64OTe/qKLzRsDbZsSMdm7/LoqKlEAM0VdTnFUIrHUzMn9u0VDECkxkM0S
+         yCOlavGk+JZ2fOklcpaxHjQYg9T+tUzjTMNC62ZK1UOhA6CQygy4pvHZC5vyppeGy4IW
+         6hW37qraoUMu4ziGwqsqy7OyfPMqBH20WXgWcUejtdkdLsKaZ6n07aINti+UdkZWn5Aq
+         5V8CQlGcMvlmXoGeFlYc8RXnu3IIUKImujO9UKYOoFESk37oGDlRmjNNBiW6JHX3FEpN
+         QgOg==
+X-Gm-Message-State: AOAM530RBKb6iVD9rhyTATk3bfZBFF+sPJBuKfkonSDk4b0/hVDCteWx
+	mLYAJ65nfpzBJkyvStjWjEr6/xx0bqQvyG2Tiio=
+X-Google-Smtp-Source: ABdhPJwHfUd38QQKGLgQWhy/xoN/+ho5lVQ5i+2NshwjEm3+X5GKjnUhY8Wls0cR6GO03Rd/W9RbALzcxGAmKt9DDnE=
+X-Received: by 2002:a05:6e02:174f:b0:2d1:3971:9348 with SMTP id
+ y15-20020a056e02174f00b002d139719348mr23734496ill.4.1653705174899; Fri, 27
+ May 2022 19:32:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527083953.2636843-1-liuke94@huawei.com>
+References: <20220527100155.1996314-1-masahiroy@kernel.org> <20220527100155.1996314-2-masahiroy@kernel.org>
+In-Reply-To: <20220527100155.1996314-2-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sat, 28 May 2022 04:32:19 +0200
+Message-ID: <CA+icZUX_xeZ8k-3YZppGbuYzeypU8f_iz_-tuMJ1bg0dhikH8A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/8] kbuild: replace $(linked-object) with CONFIG options
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@redhat.com>, llvm@lists.linux.dev, 
+	Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, 
+	Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi keliu,
+On Fri, May 27, 2022 at 1:56 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> *.prelink.o is created when CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT
+> is enabled.
+>
+> Replace $(linked-object) with $(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)
+> so you will get better idea when the --link option is passed.
+>
+> No functional change is intended.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Hi Masahiroy,
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on v5.18 next-20220527]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I was not CCed on the cover-letter and only on some patches in this series.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/keliu/drivers-misc-Directly-use-ida_alloc-free/20220527-162050
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 90de6805267f8c79cd2b1a36805071e257c39b5c
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220528/202205281008.BUCRO77S-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8f84e5642ea1ff2fb220c002a35c7d74ec14323
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review keliu/drivers-misc-Directly-use-ida_alloc-free/20220527-162050
-        git checkout f8f84e5642ea1ff2fb220c002a35c7d74ec14323
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+So, I have re-tested this series by pulling from kbuild.git#kbuild
+(saw later you renewed the parisc/nm patch).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+While testing my selfmade LLVM version 14.0.4 (PGO + ThinLTO
+optimized) toolchain I included this series.
 
-All errors (new ones prefixed by >>):
+Just built fine and I was able to boot on bare metal.
 
->> drivers/misc/dw-xdata-pcie.c:336:7: error: call to undeclared function 'ida_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           id = ida_(&xdata_ida, GFP_KERNEL);
-                ^
-   1 error generated.
+-Sedat -
 
-
-vim +/ida_ +336 drivers/misc/dw-xdata-pcie.c
-
-   287	
-   288	static int dw_xdata_pcie_probe(struct pci_dev *pdev,
-   289				       const struct pci_device_id *pid)
-   290	{
-   291		struct device *dev = &pdev->dev;
-   292		struct dw_xdata *dw;
-   293		char name[24];
-   294		u64 addr;
-   295		int err;
-   296		int id;
-   297	
-   298		/* Enable PCI device */
-   299		err = pcim_enable_device(pdev);
-   300		if (err) {
-   301			dev_err(dev, "enabling device failed\n");
-   302			return err;
-   303		}
-   304	
-   305		/* Mapping PCI BAR regions */
-   306		err = pcim_iomap_regions(pdev, BIT(BAR_0), pci_name(pdev));
-   307		if (err) {
-   308			dev_err(dev, "xData BAR I/O remapping failed\n");
-   309			return err;
-   310		}
-   311	
-   312		pci_set_master(pdev);
-   313	
-   314		/* Allocate memory */
-   315		dw = devm_kzalloc(dev, sizeof(*dw), GFP_KERNEL);
-   316		if (!dw)
-   317			return -ENOMEM;
-   318	
-   319		/* Data structure initialization */
-   320		mutex_init(&dw->mutex);
-   321	
-   322		dw->rg_region.vaddr = pcim_iomap_table(pdev)[BAR_0];
-   323		if (!dw->rg_region.vaddr)
-   324			return -ENOMEM;
-   325	
-   326		dw->rg_region.paddr = pdev->resource[BAR_0].start;
-   327	
-   328		dw->max_wr_len = pcie_get_mps(pdev);
-   329		dw->max_wr_len >>= 2;
-   330	
-   331		dw->max_rd_len = pcie_get_readrq(pdev);
-   332		dw->max_rd_len >>= 2;
-   333	
-   334		dw->pdev = pdev;
-   335	
- > 336		id = ida_(&xdata_ida, GFP_KERNEL);
-   337		if (id < 0) {
-   338			dev_err(dev, "xData: unable to get id\n");
-   339			return id;
-   340		}
-   341	
-   342		snprintf(name, sizeof(name), DW_XDATA_DRIVER_NAME ".%d", id);
-   343		dw->misc_dev.name = kstrdup(name, GFP_KERNEL);
-   344		if (!dw->misc_dev.name) {
-   345			err = -ENOMEM;
-   346			goto err_ida_remove;
-   347		}
-   348	
-   349		dw->misc_dev.minor = MISC_DYNAMIC_MINOR;
-   350		dw->misc_dev.parent = dev;
-   351		dw->misc_dev.groups = xdata_groups;
-   352	
-   353		writel(0x0, &(__dw_regs(dw)->RAM_addr));
-   354		writel(0x0, &(__dw_regs(dw)->RAM_port));
-   355	
-   356		addr = dw->rg_region.paddr + DW_XDATA_EP_MEM_OFFSET;
-   357		writel(lower_32_bits(addr), &(__dw_regs(dw)->addr_lsb));
-   358		writel(upper_32_bits(addr), &(__dw_regs(dw)->addr_msb));
-   359		dev_dbg(dev, "xData: target address = 0x%.16llx\n", addr);
-   360	
-   361		dev_dbg(dev, "xData: wr_len = %zu, rd_len = %zu\n",
-   362			dw->max_wr_len * 4, dw->max_rd_len * 4);
-   363	
-   364		/* Saving data structure reference */
-   365		pci_set_drvdata(pdev, dw);
-   366	
-   367		/* Register misc device */
-   368		err = misc_register(&dw->misc_dev);
-   369		if (err) {
-   370			dev_err(dev, "xData: failed to register device\n");
-   371			goto err_kfree_name;
-   372		}
-   373	
-   374		return 0;
-   375	
-   376	err_kfree_name:
-   377		kfree(dw->misc_dev.name);
-   378	
-   379	err_ida_remove:
-   380		ida_free(&xdata_ida, id);
-   381	
-   382		return err;
-   383	}
-   384	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>
+> Changes in v7:
+>   - New patch
+>
+>  scripts/Makefile.build | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 06400504150b..f80196eef03a 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -219,7 +219,7 @@ objtool_args =                                                              \
+>         $(if $(CONFIG_STACK_VALIDATION), --stackval)                    \
+>         $(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)          \
+>         --uaccess                                                       \
+> -       $(if $(linked-object), --link)                                  \
+> +       $(if $($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT)), --link)    \
+>         $(if $(part-of-module), --module)                               \
+>         $(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+>
+> @@ -284,7 +284,6 @@ quiet_cmd_cc_prelink_modules = LD [M]  $@
+>  # modules into native code
+>  $(obj)/%.prelink.o: objtool-enabled = y
+>  $(obj)/%.prelink.o: part-of-module := y
+> -$(obj)/%.prelink.o: linked-object := y
+>
+>  $(obj)/%.prelink.o: $(obj)/%.o FORCE
+>         $(call if_changed,cc_prelink_modules)
+> --
+> 2.32.0
+>
