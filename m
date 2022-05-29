@@ -1,898 +1,514 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1BA7F
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 10:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1653821036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4NxQsIPT1TLs5JYnfXxL0NEKbaXvh+XYtx5eMRx6bx8=;
-	b=D3b5QL9lXazRNcZxme4tY4vgqhoT0A+fvwRdU1p5oHva3e9yQQutZVST2DqZX2znIgcfvs
-	rLz7OpxBrar9JjhMfty8wssNhCdQFEC8/Bc8hjEhbTohbFGC0G57UmzWHOxqSKNuAbvnGU
-	lg1kn1o+Cp6705iC3A5aloavXxAfM9Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-oeZOJ3bLOsym9JUm3CAVgQ-1; Sun, 29 May 2022 06:43:55 -0400
-X-MC-Unique: oeZOJ3bLOsym9JUm3CAVgQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C345B3806723
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 10:43:54 +0000 (UTC)
-Received: from [172.64.4.26] (unknown [10.30.34.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id AB875492C3B;
-	Sun, 29 May 2022 10:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D9D17D4
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 11:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653823903; x=1685359903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sVcoKiQjA6ONa6dstbRv1aAElIYVcSowUpyItKn3dLs=;
+  b=TnlQzkhU/aiVN48VAKzBBe83fFE+QGRxFWVipisLhiDsfPWKWeOWdquh
+   psgwAm+X6kVj2KipzGO75uxEDffWZxU9EwcfEG+zJ1LWnHx7I+YbC/SE/
+   qmpKbcwZ/ErMXtxc12qaV5m+Rn5CTB5fXjjntQU99GjouSTekByN9gKAy
+   Y7TmXsaiy6RrxC0cPC3QJjkcpSzVtPLCRwtNn/NU145YkWOSbHs2thZSY
+   QHiOE38er3K3oYYyqGjVJeTIqANtRvvsPqGIdZccLMmXQGda3dtKKv92+
+   995wpXTTdWqJX2bQj3BdVKW5d+KW5/W5zDx2B7kTn6eMUGRRNCzFwFy/g
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="272355853"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="272355853"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 04:31:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="528813509"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 May 2022 04:31:39 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nvH90-0000zY-Vl;
+	Sun, 29 May 2022 11:31:39 +0000
+Date: Sun, 29 May 2022 19:31:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sven Schnelle <svens@stackframe.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [deller-fbdev:hp-visualize-fx-fbdev 1/1]
+ drivers/video/fbdev/Kconfig:582: syntax error
+Message-ID: <202205291919.xDFhtL3M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: skt-results-master@redhat.com, llvm@lists.linux.dev
-Subject: =?utf-8?q?=F0=9F=92=A5?= PANICKED: Test report for kernel 5.18.0
- (mainline.kernel.org-clang, 664a393a)
-Date: Sun, 29 May 2022 10:43:54 -0000
-Message-ID: <cki.8NPE7Q5QF8KV45RXLN2C@redhat.com>
-X-Gitlab-Pipeline-ID: 550393693
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/550393693?=
-X-DataWarehouse-Checkout-IID: 43515
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-
-
-Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/43515
-
-Hello,
-
-We ran automated tests on a recent commit from this kernel tree:
-
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: 664a393a2663 - Merge tag 'input-for-v5.19-rc0' of git:/=
-/git.kernel.org/pub/scm/linux/kernel/git/dtor/input
-
-The results of these automated tests are provided below.
-
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: OK
- Selftests compile: FAILED
-             Tests: PANICKED
-    Targeted tests: NO
-
-All kernel binaries, config files, and logs are available for download here=
-:
-
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/05/28/550393693
-
-One or more kernel tests failed:
-
-    s390x:
-     =E2=9D=8C Boot test
-
-    aarch64:
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C Networking cki netfilter test
-     =E2=9D=8C ALSA PCM loopback test
-     =E2=9D=8C storage: dm/common
-     =E2=9D=8C storage: SCSI VPD
-     =E2=9D=8C storage: software RAID testing
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-     =E2=9D=8C Reboot test
-
-    ppc64le:
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C AMTU (Abstract Machine Test Utility)
-     =E2=9D=8C storage: dm/common
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-     =E2=9D=8C trace: ftrace/tracer
-     =F0=9F=92=A5 Boot test
-     =E2=9D=8C kdump - sysrq-c
-
-    x86_64 (debug):
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-
-    x86_64:
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-     =E2=9D=8C Boot test
-
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 5 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 KBUILD_IMAGE=
-=3D targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- KBUILD_IMAGE=3D targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- KBUILD_IMAGE=3D targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 KBUILD_IMAGE=
-=3D targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 KBUILD_IMAGE=
-=3D targz-pkg
-
-
-We built the following selftests:
-
-  x86_64:
-      net: fail
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
-
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
-
-
-Hardware testing
-----------------
-We booted each kernel and ran the following tests:
-
-  aarch64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 ACPI enabled test
-       =E2=9C=85 i2c: i2cdetect sanity
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking MACsec: sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking: igmp conformance test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9D=8C Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Networking ipsec: basic netns - transport
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Networking vnic: ipvlan/basic
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9D=8C ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9C=85 Storage: block zstd compression test
-       =E2=9C=85 Storage: block zstd smoke test
-       =E2=9D=8C storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 lvm snapper test
-       =E2=9D=8C storage: SCSI VPD
-       =E2=9D=8C storage: software RAID testing
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9D=8C Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
-       =E2=9D=8C Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
-       =E2=9C=85 Reboot test
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =F0=9F=9A=A7 =E2=9D=8C xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 6:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 7:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-       =E2=9C=85 Reboot test
-
-  ppc64le:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9D=8C AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking MACsec: sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Networking vnic: ipvlan/basic
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9C=85 ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9D=8C storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 lvm snapper test
-       =E2=9C=85 storage: software RAID testing
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9D=8C trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =E2=9C=85 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =F0=9F=92=A5 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9D=8C kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  s390x:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compression test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 6:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 7:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compression test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  x86_64 (debug):
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
-rding
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
-est_progs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Die Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  x86_64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
-p
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Die Test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
- numa
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
-t
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compression test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
-rding
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
-est_progs
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 6:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9D=8C Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - ext4
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - xfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - nfsv4.2
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  Test sources: https://gitlab.com/cki-project/kernel-tests
-    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
- existing tests!
-
-Aborted tests
--------------
-Tests that didn't complete running successfully are marked with =E2=9A=A1=
-=E2=9A=A1=E2=9A=A1.
-If this was caused by an infrastructure issue, we try to mark that
-explicitly in the report.
-
-Waived tests
-------------
-If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
-uch tests are
-executed but their results are not taken into account. Tests are waived whe=
-n
-their results are not reliable enough, e.g. when they're just introduced or=
- are
-being fixed.
-
-Testing timeout
----------------
-We aim to provide a report within reasonable timeframe. Tests that haven't
-finished running yet are marked with =E2=8F=B1.
-Targeted tests
---------------
-Test runs for patches always include a set of base tests, plus some
-tests chosen based on the file paths modified by the patch. The latter
-are called "targeted tests". If no targeted tests are run, that means
-no patch-specific tests are available. Please, consider contributing a
-targeted test for related patches to increase test coverage. See
-https://docs.engineering.redhat.com/x/_wEZB for more details.
-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git hp-visualize-fx-fbdev
+head:   00d1742e8793d99494006ba3546191f1b8993a8e
+commit: 00d1742e8793d99494006ba3546191f1b8993a8e [1/1] video: fbdev: add HP Visualize FX driver
+config: riscv-randconfig-r042-20220529
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=00d1742e8793d99494006ba3546191f1b8993a8e
+        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+        git fetch --no-tags deller-fbdev hp-visualize-fx-fbdev
+        git checkout 00d1742e8793d99494006ba3546191f1b8993a8e
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv  randconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=riscv 
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/video/fbdev/Kconfig:582: syntax error
+   drivers/video/fbdev/Kconfig:581:warning: ignoring unsupported character '.'
+   drivers/video/fbdev/Kconfig:581: unknown statement "Say"
+   make[2]: *** [scripts/kconfig/Makefile:77: oldconfig] Error 1
+   make[1]: *** [Makefile:628: oldconfig] Error 2
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'oldconfig' not remade because of errors.
+--
+>> drivers/video/fbdev/Kconfig:582: syntax error
+   drivers/video/fbdev/Kconfig:581:warning: ignoring unsupported character '.'
+   drivers/video/fbdev/Kconfig:581: unknown statement "Say"
+   make[2]: *** [scripts/kconfig/Makefile:77: olddefconfig] Error 1
+   make[1]: *** [Makefile:628: olddefconfig] Error 2
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'olddefconfig' not remade because of errors.
+
+
+vim +582 drivers/video/fbdev/Kconfig
+
+   162	
+   163	config FB_SYS_FOPS
+   164		tristate
+   165		depends on FB
+   166	
+   167	config FB_DEFERRED_IO
+   168		bool
+   169		depends on FB
+   170	
+   171	config FB_HECUBA
+   172		tristate
+   173		depends on FB
+   174		depends on FB_DEFERRED_IO
+   175	
+   176	config FB_SVGALIB
+   177		tristate
+   178		depends on FB
+   179		help
+   180		  Common utility functions useful to fbdev drivers of VGA-based
+   181		  cards.
+   182	
+   183	config FB_MACMODES
+   184		tristate
+   185		depends on FB
+   186	
+   187	config FB_BACKLIGHT
+   188		tristate
+   189		depends on FB
+   190		select BACKLIGHT_CLASS_DEVICE
+   191	
+   192	config FB_MODE_HELPERS
+   193		bool "Enable Video Mode Handling Helpers"
+   194		depends on FB
+   195		help
+   196		  This enables functions for handling video modes using the
+   197		  Generalized Timing Formula and the EDID parser. A few drivers rely
+   198		  on this feature such as the radeonfb, rivafb, and the i810fb. If
+   199		  your driver does not take advantage of this feature, choosing Y will
+   200		  just increase the kernel size by about 5K.
+   201	
+   202	config FB_TILEBLITTING
+   203		bool "Enable Tile Blitting Support"
+   204		depends on FB
+   205		help
+   206		  This enables tile blitting.  Tile blitting is a drawing technique
+   207		  where the screen is divided into rectangular sections (tiles), whereas
+   208		  the standard blitting divides the screen into pixels. Because the
+   209		  default drawing element is a tile, drawing functions will be passed
+   210		  parameters in terms of number of tiles instead of number of pixels.
+   211		  For example, to draw a single character, instead of using bitmaps,
+   212		  an index to an array of bitmaps will be used.  To clear or move a
+   213		  rectangular section of a screen, the rectangle will be described in
+   214		  terms of number of tiles in the x- and y-axis.
+   215	
+   216		  This is particularly important to one driver, matroxfb.  If
+   217		  unsure, say N.
+   218	
+   219	comment "Frame buffer hardware drivers"
+   220		depends on FB
+   221	
+   222	config FB_GRVGA
+   223		tristate "Aeroflex Gaisler framebuffer support"
+   224		depends on FB && SPARC
+   225		select FB_CFB_FILLRECT
+   226		select FB_CFB_COPYAREA
+   227		select FB_CFB_IMAGEBLIT
+   228		help
+   229		  This enables support for the SVGACTRL framebuffer in the GRLIB IP library from Aeroflex Gaisler.
+   230	
+   231	config FB_CIRRUS
+   232		tristate "Cirrus Logic support"
+   233		depends on FB && (ZORRO || PCI)
+   234		select FB_CFB_FILLRECT
+   235		select FB_CFB_COPYAREA
+   236		select FB_CFB_IMAGEBLIT
+   237		help
+   238		  This enables support for Cirrus Logic GD542x/543x based boards on
+   239		  Amiga: SD64, Piccolo, Picasso II/II+, Picasso IV, or EGS Spectrum.
+   240	
+   241		  If you have a PCI-based system, this enables support for these
+   242		  chips: GD-543x, GD-544x, GD-5480.
+   243	
+   244		  Please read the file <file:Documentation/fb/cirrusfb.rst>.
+   245	
+   246		  Say N unless you have such a graphics board or plan to get one
+   247		  before you next recompile the kernel.
+   248	
+   249	config FB_PM2
+   250		tristate "Permedia2 support"
+   251		depends on FB && ((AMIGA && BROKEN) || PCI)
+   252		select FB_CFB_FILLRECT
+   253		select FB_CFB_COPYAREA
+   254		select FB_CFB_IMAGEBLIT
+   255		help
+   256		  This is the frame buffer device driver for cards based on
+   257		  the 3D Labs Permedia, Permedia 2 and Permedia 2V chips.
+   258		  The driver was tested on the following cards:
+   259			Diamond FireGL 1000 PRO AGP
+   260			ELSA Gloria Synergy PCI
+   261			Appian Jeronimo PRO (both heads) PCI
+   262			3DLabs Oxygen ACX aka EONtronics Picasso P2 PCI
+   263			Techsource Raptor GFX-8P (aka Sun PGX-32) on SPARC
+   264			ASK Graphic Blaster Exxtreme AGP
+   265	
+   266		  To compile this driver as a module, choose M here: the
+   267		  module will be called pm2fb.
+   268	
+   269	config FB_PM2_FIFO_DISCONNECT
+   270		bool "enable FIFO disconnect feature"
+   271		depends on FB_PM2 && PCI
+   272		help
+   273		  Support the Permedia2 FIFO disconnect feature.
+   274	
+   275	config FB_ARMCLCD
+   276		tristate "ARM PrimeCell PL110 support"
+   277		depends on ARM || ARM64 || COMPILE_TEST
+   278		depends on FB && ARM_AMBA && HAS_IOMEM
+   279		select FB_CFB_FILLRECT
+   280		select FB_CFB_COPYAREA
+   281		select FB_CFB_IMAGEBLIT
+   282		select FB_MODE_HELPERS if OF
+   283		select VIDEOMODE_HELPERS if OF
+   284		select BACKLIGHT_CLASS_DEVICE if OF
+   285		help
+   286		  This framebuffer device driver is for the ARM PrimeCell PL110
+   287		  Colour LCD controller.  ARM PrimeCells provide the building
+   288		  blocks for System on a Chip devices.
+   289	
+   290		  If you want to compile this as a module (=code which can be
+   291		  inserted into and removed from the running kernel), say M
+   292		  here and read <file:Documentation/kbuild/modules.rst>.  The module
+   293		  will be called amba-clcd.
+   294	
+   295	config FB_ACORN
+   296		bool "Acorn VIDC support"
+   297		depends on (FB = y) && ARM && ARCH_ACORN
+   298		select FB_CFB_FILLRECT
+   299		select FB_CFB_COPYAREA
+   300		select FB_CFB_IMAGEBLIT
+   301		help
+   302		  This is the frame buffer device driver for the Acorn VIDC graphics
+   303		  hardware found in Acorn RISC PCs and other ARM-based machines.  If
+   304		  unsure, say N.
+   305	
+   306	config FB_CLPS711X
+   307		tristate "CLPS711X LCD support"
+   308		depends on FB && (ARCH_CLPS711X || COMPILE_TEST)
+   309		select FB_MODE_HELPERS
+   310		select FB_SYS_FILLRECT
+   311		select FB_SYS_COPYAREA
+   312		select FB_SYS_IMAGEBLIT
+   313		select LCD_CLASS_DEVICE
+   314		select VIDEOMODE_HELPERS
+   315		help
+   316		  Say Y to enable the Framebuffer driver for the Cirrus Logic
+   317		  CLPS711X CPUs.
+   318	
+   319	config FB_SA1100
+   320		bool "SA-1100 LCD support"
+   321		depends on (FB = y) && ARM && ARCH_SA1100
+   322		select FB_CFB_FILLRECT
+   323		select FB_CFB_COPYAREA
+   324		select FB_CFB_IMAGEBLIT
+   325		help
+   326		  This is a framebuffer device for the SA-1100 LCD Controller.
+   327		  See <http://www.linux-fbdev.org/> for information on framebuffer
+   328		  devices.
+   329	
+   330		  If you plan to use the LCD display with your SA-1100 system, say
+   331		  Y here.
+   332	
+   333	config FB_IMX
+   334		tristate "Freescale i.MX1/21/25/27 LCD support"
+   335		depends on FB && HAVE_CLK && HAS_IOMEM
+   336		depends on ARCH_MXC || COMPILE_TEST
+   337		select LCD_CLASS_DEVICE
+   338		select FB_CFB_FILLRECT
+   339		select FB_CFB_COPYAREA
+   340		select FB_CFB_IMAGEBLIT
+   341		select FB_MODE_HELPERS
+   342		select VIDEOMODE_HELPERS
+   343	
+   344	config FB_CYBER2000
+   345		tristate "CyberPro 2000/2010/5000 support"
+   346		depends on FB && PCI && (BROKEN || !SPARC64)
+   347		select FB_CFB_FILLRECT
+   348		select FB_CFB_COPYAREA
+   349		select FB_CFB_IMAGEBLIT
+   350		help
+   351		  This enables support for the Integraphics CyberPro 20x0 and 5000
+   352		  VGA chips used in the Rebel.com Netwinder and other machines.
+   353		  Say Y if you have a NetWinder or a graphics card containing this
+   354		  device, otherwise say N.
+   355	
+   356	config FB_CYBER2000_DDC
+   357		bool "DDC for CyberPro support"
+   358		depends on FB_CYBER2000
+   359		select FB_DDC
+   360		default y
+   361		help
+   362		  Say Y here if you want DDC support for your CyberPro graphics
+   363		  card. This is only I2C bus support, driver does not use EDID.
+   364	
+   365	config FB_CYBER2000_I2C
+   366		bool "CyberPro 2000/2010/5000 I2C support"
+   367		depends on FB_CYBER2000 && I2C && ARCH_NETWINDER
+   368		depends on I2C=y || FB_CYBER2000=m
+   369		select I2C_ALGOBIT
+   370		help
+   371		  Enable support for the I2C video decoder interface on the
+   372		  Integraphics CyberPro 20x0 and 5000 VGA chips.  This is used
+   373		  on the Netwinder machines for the SAA7111 video capture.
+   374	
+   375	config FB_APOLLO
+   376		bool
+   377		depends on (FB = y) && APOLLO
+   378		default y
+   379		select FB_CFB_FILLRECT
+   380		select FB_CFB_IMAGEBLIT
+   381	
+   382	config FB_Q40
+   383		bool
+   384		depends on (FB = y) && Q40
+   385		default y
+   386		select FB_CFB_FILLRECT
+   387		select FB_CFB_COPYAREA
+   388		select FB_CFB_IMAGEBLIT
+   389	
+   390	config FB_AMIGA
+   391		tristate "Amiga native chipset support"
+   392		depends on FB && AMIGA
+   393		help
+   394		  This is the frame buffer device driver for the builtin graphics
+   395		  chipset found in Amigas.
+   396	
+   397		  To compile this driver as a module, choose M here: the
+   398		  module will be called amifb.
+   399	
+   400	config FB_AMIGA_OCS
+   401		bool "Amiga OCS chipset support"
+   402		depends on FB_AMIGA
+   403		help
+   404		  This enables support for the original Agnus and Denise video chips,
+   405		  found in the Amiga 1000 and most A500's and A2000's. If you intend
+   406		  to run Linux on any of these systems, say Y; otherwise say N.
+   407	
+   408	config FB_AMIGA_ECS
+   409		bool "Amiga ECS chipset support"
+   410		depends on FB_AMIGA
+   411		help
+   412		  This enables support for the Enhanced Chip Set, found in later
+   413		  A500's, later A2000's, the A600, the A3000, the A3000T and CDTV. If
+   414		  you intend to run Linux on any of these systems, say Y; otherwise
+   415		  say N.
+   416	
+   417	config FB_AMIGA_AGA
+   418		bool "Amiga AGA chipset support"
+   419		depends on FB_AMIGA
+   420		help
+   421		  This enables support for the Advanced Graphics Architecture (also
+   422		  known as the AGA or AA) Chip Set, found in the A1200, A4000, A4000T
+   423		  and CD32. If you intend to run Linux on any of these systems, say Y;
+   424		  otherwise say N.
+   425	
+   426	config FB_FM2
+   427		bool "Amiga FrameMaster II/Rainbow II support"
+   428		depends on (FB = y) && ZORRO
+   429		select FB_CFB_FILLRECT
+   430		select FB_CFB_COPYAREA
+   431		select FB_CFB_IMAGEBLIT
+   432		help
+   433		  This is the frame buffer device driver for the Amiga FrameMaster
+   434		  card from BSC (exhibited 1992 but not shipped as a CBM product).
+   435	
+   436	config FB_ARC
+   437		tristate "Arc Monochrome LCD board support"
+   438		depends on FB && (X86 || COMPILE_TEST)
+   439		select FB_SYS_FILLRECT
+   440		select FB_SYS_COPYAREA
+   441		select FB_SYS_IMAGEBLIT
+   442		select FB_SYS_FOPS
+   443		help
+   444		  This enables support for the Arc Monochrome LCD board. The board
+   445		  is based on the KS-108 lcd controller and is typically a matrix
+   446		  of 2*n chips. This driver was tested with a 128x64 panel. This
+   447		  driver supports it for use with x86 SBCs through a 16 bit GPIO
+   448		  interface (8 bit data, 8 bit control). If you anticipate using
+   449		  this driver, say Y or M; otherwise say N. You must specify the
+   450		  GPIO IO address to be used for setting control and data.
+   451	
+   452	config FB_ATARI
+   453		bool "Atari native chipset support"
+   454		depends on (FB = y) && ATARI
+   455		select FB_CFB_FILLRECT
+   456		select FB_CFB_COPYAREA
+   457		select FB_CFB_IMAGEBLIT
+   458		help
+   459		  This is the frame buffer device driver for the builtin graphics
+   460		  chipset found in Ataris.
+   461	
+   462	config FB_OF
+   463		bool "Open Firmware frame buffer device support"
+   464		depends on (FB = y) && PPC && (!PPC_PSERIES || PCI)
+   465		select FB_CFB_FILLRECT
+   466		select FB_CFB_COPYAREA
+   467		select FB_CFB_IMAGEBLIT
+   468		select FB_MACMODES
+   469		help
+   470		  Say Y if you want support with Open Firmware for your graphics
+   471		  board.
+   472	
+   473	config FB_CONTROL
+   474		bool "Apple \"control\" display support"
+   475		depends on (FB = y) && ((PPC_PMAC && PPC32) || COMPILE_TEST)
+   476		select FB_CFB_FILLRECT
+   477		select FB_CFB_COPYAREA
+   478		select FB_CFB_IMAGEBLIT
+   479		select FB_MACMODES
+   480		help
+   481		  This driver supports a frame buffer for the graphics adapter in the
+   482		  Power Macintosh 7300 and others.
+   483	
+   484	config FB_PLATINUM
+   485		bool "Apple \"platinum\" display support"
+   486		depends on (FB = y) && PPC_PMAC && PPC32
+   487		select FB_CFB_FILLRECT
+   488		select FB_CFB_COPYAREA
+   489		select FB_CFB_IMAGEBLIT
+   490		select FB_MACMODES
+   491		help
+   492		  This driver supports a frame buffer for the "platinum" graphics
+   493		  adapter in some Power Macintoshes.
+   494	
+   495	config FB_VALKYRIE
+   496		bool "Apple \"valkyrie\" display support"
+   497		depends on (FB = y) && (MAC || (PPC_PMAC && PPC32))
+   498		select FB_CFB_FILLRECT
+   499		select FB_CFB_COPYAREA
+   500		select FB_CFB_IMAGEBLIT
+   501		select FB_MACMODES
+   502		help
+   503		  This driver supports a frame buffer for the "valkyrie" graphics
+   504		  adapter in some Power Macintoshes.
+   505	
+   506	config FB_CT65550
+   507		bool "Chips 65550 display support"
+   508		depends on (FB = y) && PPC32 && PCI
+   509		select FB_CFB_FILLRECT
+   510		select FB_CFB_COPYAREA
+   511		select FB_CFB_IMAGEBLIT
+   512		help
+   513		  This is the frame buffer device driver for the Chips & Technologies
+   514		  65550 graphics chip in PowerBooks.
+   515	
+   516	config FB_ASILIANT
+   517		bool "Asiliant (Chips) 69000 display support"
+   518		depends on (FB = y) && PCI
+   519		select FB_CFB_FILLRECT
+   520		select FB_CFB_COPYAREA
+   521		select FB_CFB_IMAGEBLIT
+   522		help
+   523		  This is the frame buffer device driver for the Asiliant 69030 chipset
+   524	
+   525	config FB_IMSTT
+   526		bool "IMS Twin Turbo display support"
+   527		depends on (FB = y) && PCI
+   528		select FB_CFB_IMAGEBLIT
+   529		select FB_MACMODES if PPC_PMAC
+   530		help
+   531		  The IMS Twin Turbo is a PCI-based frame buffer card bundled with
+   532		  many Macintosh and compatible computers.
+   533	
+   534	config FB_VGA16
+   535		tristate "VGA 16-color graphics support"
+   536		depends on FB && (X86 || PPC)
+   537		select FB_CFB_FILLRECT
+   538		select FB_CFB_COPYAREA
+   539		select FB_CFB_IMAGEBLIT
+   540		select VGASTATE
+   541		select FONT_8x16 if FRAMEBUFFER_CONSOLE
+   542		help
+   543		  This is the frame buffer device driver for VGA 16 color graphic
+   544		  cards. Say Y if you have such a card.
+   545	
+   546		  To compile this driver as a module, choose M here: the
+   547		  module will be called vga16fb.
+   548	
+   549	config FB_STI
+   550		tristate "HP STI frame buffer device support"
+   551		depends on FB && PARISC
+   552		select FB_CFB_FILLRECT
+   553		select FB_CFB_COPYAREA
+   554		select FB_CFB_IMAGEBLIT
+   555		default y
+   556		help
+   557		  STI refers to the HP "Standard Text Interface" which is a set of
+   558		  BIOS routines contained in a ROM chip in HP PA-RISC based machines.
+   559		  Enabling this option will implement the linux framebuffer device
+   560		  using calls to the STI BIOS routines for initialisation.
+   561		
+   562		  If you enable this option, you will get a planar framebuffer device
+   563		  /dev/fb which will work on the most common HP graphic cards of the
+   564		  NGLE family, including the artist chips (in the 7xx and Bxxx series),
+   565		  HCRX, HCRX24, CRX, CRX24 and VisEG series.
+   566	
+   567		  It is safe to enable this option, so you should probably say "Y".
+   568	
+   569	config FB_VISUALIZEFX
+   570		tristate "HP Visualize FX support"
+   571		depends on FB && PCI && PARISC
+   572		select FB_CFB_FILLRECT
+   573		select FB_CFB_COPYAREA
+   574		select FB_CFB_IMAGEBLIT
+   575		select RATIONAL
+   576		  help
+   577		    Frame buffer driver for the HP Visualize FX cards. These cards are
+   578		    commonly found in PA-RISC workstations. Currently only FX5 has been
+   579		    tested.
+   580	
+   581		Say Y if you have such a card.
+ > 582	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
