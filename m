@@ -1,201 +1,76 @@
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66DA15A3
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 14:43:00 +0000 (UTC)
-Received: by mail-io1-f49.google.com with SMTP id s23so9086876iog.13
-        for <llvm@lists.linux.dev>; Sun, 29 May 2022 07:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
-        b=Q9i4IqNrDLgnXT5ndv85GwM4ORcOaOyz1LX95hEfYldmLNCvDd14GYQPh4dF7BWY55
-         YQiNls5o7NmCUqVCeLTqkMeW1h0bsJJqV/Z44cD7mwuY0pntb84OIjmPaOdVyY0/PSnA
-         e3cnmqHf+DQ8zOt2nox0GRq0gK3RjIKaQ4jKee2mB+phOsArSwzZG0N/CL43H1Ae37wG
-         tyzB+JxRfrAaPgdaFUJddlz3FNyu0ICNVDdGiSrGMegxblozPD5zNlM5NILKOlR6ZDw4
-         R7UqlS64Mmv1g16tbG0VXLq2gK8puU/CT2TFk6va8OUjrYnm5gDtO2LobkDj+vQhjUOR
-         6Uuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
-        b=dtjwbOzoTEoBWJzjfLlhRplzj9W0+hE4HZErlX2voOiQ6K1m/YCjbGJtdoAvAuCape
-         GvnL6Cjh13AFI1W+2avV2gSkxGibI2dH7uu6I52UAaYlqpsaBe1LFS/NGdL7RinaKLxi
-         AgLVj0mrNeEEUh2Thy5bawNhJSsrhekeTup4W069yI9zm+GTKdR5xZCheMIAL4lOpvnT
-         3mVvSwlipANzfE8aF1T7ThotBrw0jDEuL5/I4mJht3RJCdQu+DCQlvMi1Km+A+gWxDzp
-         C0vsaiW4yDJ4moMhernVJAHwjyRob5Fz7AC8+90wf5tH9NkBnDvhncDGx4elX4/pRbRM
-         d5TA==
-X-Gm-Message-State: AOAM532wyPGRmZEgSzIuyvyHJ42l7EWvFKHUoYWAJBuYXxpY/FdoPwX0
-	iWQkifpaRbSG3sjujJVD28aRrw3cJR9NdBme+Fc=
-X-Google-Smtp-Source: ABdhPJz2GVGOebiROdNoFngR7SNu6Ex/e9wsBn0eouXGks4uJH2PI/3CJHWNZcWW8hDm2lD2oU+0NuyXHiFoa0y3D30=
-X-Received: by 2002:a05:6602:25d3:b0:65b:1d8a:a8ae with SMTP id
- d19-20020a05660225d300b0065b1d8aa8aemr22938278iop.131.1653835379597; Sun, 29
- May 2022 07:42:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D9728FA
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 14:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653836088; x=1685372088;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g42OSt55RshNZX376pV48g4FOU4+F/GIqEJhU5EeFCg=;
+  b=cYY+WjILAPi4AUGZdW8L0u35PLnPEAA805f4zYR22oK0QBYeV818gZt+
+   AkQS6EBJ9+8eiKUFrQHqZgXuxiMRWUm5RV/Rt1ShYSthpOwr5I5HRU/C7
+   4IQk/ORRBMRyxILUCvqgzoisPVwRbuApVQN8X5o6XyJcV8rpwGENhsVw1
+   McoXyhsoa8ZcWBPUACh765eaMF9YC7dQroq4y9xzBAr1dFPfdA0jgKAY8
+   KD1d5UOrcgPRlRd7C4N94jzM82ds/q9M6x6sIWcyWyeyJvO9BxCwNuil6
+   RJmOHI39B1LGcjAeCARUyh200cHNDaZzepr7zyoyhg62lybIeKtRlW1zI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="337848743"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="337848743"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 07:54:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="632300781"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2022 07:54:45 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nvKJZ-00015C-6f;
+	Sun, 29 May 2022 14:54:45 +0000
+Date: Sun, 29 May 2022 22:54:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan Lee <ryan.lee.analog@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: ld.lld: error: assignment to symbol init_pg_end does not converge
+Message-ID: <202205292206.HGk4JbY2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220528154704.2576290-1-masahiroy@kernel.org> <20220528154704.2576290-3-masahiroy@kernel.org>
-In-Reply-To: <20220528154704.2576290-3-masahiroy@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 29 May 2022 16:42:23 +0200
-Message-ID: <CA+icZUV1eoXkVXGEVD-8rMeh+6y7bwXC91R3EqaT5CKf_=D5fw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, May 28, 2022 at 8:25 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This is a preparation for the objtool move in the next commit.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   664a393a2663a0f62fc1b18157ccae33dcdbb8c8
+commit: b58581136770569d2ee4300b10c7c0d76bb86250 ASoC: max98396: add amplifier driver
+date:   5 weeks ago
+config: arm64-randconfig-r011-20220529 (https://download.01.org/0day-ci/archive/20220529/202205292206.HGk4JbY2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b58581136770569d2ee4300b10c7c0d76bb86250
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b58581136770569d2ee4300b10c7c0d76bb86250
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
--Sedat-
+All errors (new ones prefixed by >>):
 
-> ---
->
->  scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
->  scripts/link-vmlinux.sh    | 41 +------------------------
->  2 files changed, 62 insertions(+), 40 deletions(-)
->  create mode 100644 scripts/Makefile.vmlinux_o
->
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> new file mode 100644
-> index 000000000000..a9b375ca86d5
-> --- /dev/null
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +PHONY := __default
-> +__default: vmlinux.o
-> +
-> +include include/config/auto.conf
-> +include $(srctree)/scripts/Kbuild.include
-> +
-> +# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
-> +# ---------------------------------------------------------------------------
-> +
-> +quiet_cmd_gen_initcalls_lds = GEN     $@
-> +      cmd_gen_initcalls_lds = \
-> +       $(PYTHON3) $(srctree)/scripts/jobserver-exec \
-> +       $(PERL) $(real-prereqs) > $@
-> +
-> +.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> +               $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +       $(call if_changed,gen_initcalls_lds)
-> +
-> +targets := .tmp_initcalls.lds
-> +
-> +ifdef CONFIG_LTO_CLANG
-> +initcalls-lds := .tmp_initcalls.lds
-> +endif
-> +
-> +# Link of vmlinux.o used for section mismatch analysis
-> +# ---------------------------------------------------------------------------
-> +
-> +quiet_cmd_ld_vmlinux.o = LD      $@
-> +      cmd_ld_vmlinux.o = \
-> +       $(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-> +       $(addprefix -T , $(initcalls-lds)) \
-> +       --whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-> +       --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
-> +
-> +define rule_ld_vmlinux.o
-> +       $(call cmd_and_savecmd,ld_vmlinux.o)
-> +endef
-> +
-> +vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +       $(call if_changed_rule,ld_vmlinux.o)
-> +
-> +targets += vmlinux.o
-> +
-> +# Add FORCE to the prequisites of a target to force it to be always rebuilt.
-> +# ---------------------------------------------------------------------------
-> +
-> +PHONY += FORCE
-> +FORCE:
-> +
-> +# Read all saved command lines and dependencies for the $(targets) we
-> +# may be building above, using $(if_changed{,_dep}). As an
-> +# optimization, we don't need to read them if the target does not
-> +# exist, we will rebuild anyway in that case.
-> +
-> +existing-targets := $(wildcard $(sort $(targets)))
-> +
-> +-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-> +
-> +.PHONY: $(PHONY)
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index b593cb1a8137..90680b6bd710 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -45,45 +45,6 @@ info()
->         printf "  %-7s %s\n" "${1}" "${2}"
->  }
->
-> -# Generate a linker script to ensure correct ordering of initcalls.
-> -gen_initcalls()
-> -{
-> -       info GEN .tmp_initcalls.lds
-> -
-> -       ${PYTHON3} ${srctree}/scripts/jobserver-exec            \
-> -       ${PERL} ${srctree}/scripts/generate_initcall_order.pl   \
-> -               ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}   \
-> -               > .tmp_initcalls.lds
-> -}
-> -
-> -# Link of vmlinux.o used for section mismatch analysis
-> -# ${1} output file
-> -modpost_link()
-> -{
-> -       local objects
-> -       local lds=""
-> -
-> -       objects="--whole-archive                                \
-> -               ${KBUILD_VMLINUX_OBJS}                          \
-> -               --no-whole-archive                              \
-> -               --start-group                                   \
-> -               ${KBUILD_VMLINUX_LIBS}                          \
-> -               --end-group"
-> -
-> -       if is_enabled CONFIG_LTO_CLANG; then
-> -               gen_initcalls
-> -               lds="-T .tmp_initcalls.lds"
-> -
-> -               # This might take a while, so indicate that we're doing
-> -               # an LTO link
-> -               info LTO ${1}
-> -       else
-> -               info LD ${1}
-> -       fi
-> -
-> -       ${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
-> -}
-> -
->  objtool_link()
->  {
->         local objtoolcmd;
-> @@ -336,7 +297,7 @@ fi;
->  ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
->
->  #link vmlinux.o
-> -modpost_link vmlinux.o
-> +${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
->  objtool_link vmlinux.o
->
->  # Generate the list of objects in vmlinux
-> --
-> 2.32.0
->
+>> ld.lld: error: assignment to symbol init_pg_end does not converge
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
