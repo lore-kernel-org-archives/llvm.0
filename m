@@ -1,235 +1,201 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF4B7B
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 13:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1653831981;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+x+7esITuEjTahDQpOkrlpvxyvUZTU5N43BUwJS8j6w=;
-	b=QRiJhINSlBCRaylGlwCO5VrJnaM3I72lKxymUpLr9q3WlD11ENaxPaYfDMUcttQ9zN8cJW
-	4NaRT4e3NJmfPP8srXtC93LxhIRp0ACw8TWTnbKIPqbr3CFDm8iC+QoKf4VDv8BWUjUA0F
-	J+d3kLoNRYGR5dFBjfvA89Pz9nPH6a0=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-2zIS53LkPlSzba81rengrQ-1; Sun, 29 May 2022 09:46:20 -0400
-X-MC-Unique: 2zIS53LkPlSzba81rengrQ-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-e630d5d6easo5603828fac.10
-        for <llvm@lists.linux.dev>; Sun, 29 May 2022 06:46:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66DA15A3
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 14:43:00 +0000 (UTC)
+Received: by mail-io1-f49.google.com with SMTP id s23so9086876iog.13
+        for <llvm@lists.linux.dev>; Sun, 29 May 2022 07:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
+        b=Q9i4IqNrDLgnXT5ndv85GwM4ORcOaOyz1LX95hEfYldmLNCvDd14GYQPh4dF7BWY55
+         YQiNls5o7NmCUqVCeLTqkMeW1h0bsJJqV/Z44cD7mwuY0pntb84OIjmPaOdVyY0/PSnA
+         e3cnmqHf+DQ8zOt2nox0GRq0gK3RjIKaQ4jKee2mB+phOsArSwzZG0N/CL43H1Ae37wG
+         tyzB+JxRfrAaPgdaFUJddlz3FNyu0ICNVDdGiSrGMegxblozPD5zNlM5NILKOlR6ZDw4
+         R7UqlS64Mmv1g16tbG0VXLq2gK8puU/CT2TFk6va8OUjrYnm5gDtO2LobkDj+vQhjUOR
+         6Uuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+x+7esITuEjTahDQpOkrlpvxyvUZTU5N43BUwJS8j6w=;
-        b=ODwmnl+2ceAO4ZGHuRMAtMIpCbuAoBr9eYRzkoqET7LXbOoXUCfiCLc5HZIuKCKgic
-         cB15JM1ZVGESTeQ5gPCPc6xdAq3csbojBkgoZSRiizEJy4oON3kW+ZKqZQh8oKwYYD/c
-         hWsrz4WM0ClsQ868TnKbZSrhZMVuZ46EHK4zq8GCHezZbcWzuZ/i1/GhGcRaccyCBXNB
-         Mjys3slwLwGZa+S/Hp6Jw4RKTXjAMglRl58+4esmFcsi1gD0T9UZlnbiWfK4oLl0a+YG
-         L/Wq2IKWhLDU630EE0xez08g7UL1ZUCnIDqcV3ntsykXFZV0/rl9vmjd2HBrInmsHGZ2
-         Entg==
-X-Gm-Message-State: AOAM531J+PDDf7ZkBjbTbWMzt3QMdFGok6EA2KN981wKp2DQA6bSU2VS
-	KbzXO1TrJpWkkP9HAWYVghGGsEUsTQeAhpDAgQNZV2TITjLkB9tugcg3ZV1lJ0B6gfmaLI6u9k5
-	+HHLsSeBSdb26cw==
-X-Received: by 2002:a05:6870:589a:b0:f2:fafb:3268 with SMTP id be26-20020a056870589a00b000f2fafb3268mr5161986oab.68.1653831979891;
-        Sun, 29 May 2022 06:46:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyy/4vZkdiw3Eo74fnOSNE+IkU85kNV9iYWClrYLk9dLPusPYefeXXCYc65O67WxYVv9jkq2A==
-X-Received: by 2002:a05:6870:589a:b0:f2:fafb:3268 with SMTP id be26-20020a056870589a00b000f2fafb3268mr5161978oab.68.1653831979679;
-        Sun, 29 May 2022 06:46:19 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y13-20020a9d714d000000b0060aea5bbc87sm3958874otj.18.2022.05.29.06.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 06:46:19 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peter@hurleysoftware.com
-Cc: linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] serial: core: check if uart_get_info succeeds before using
-Date: Sun, 29 May 2022 09:46:05 -0400
-Message-Id: <20220529134605.12881-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=ivB3xZNPk/HRQcIpAvzMtgHzUzcDOyxmfIr4lBMkOpQ=;
+        b=dtjwbOzoTEoBWJzjfLlhRplzj9W0+hE4HZErlX2voOiQ6K1m/YCjbGJtdoAvAuCape
+         GvnL6Cjh13AFI1W+2avV2gSkxGibI2dH7uu6I52UAaYlqpsaBe1LFS/NGdL7RinaKLxi
+         AgLVj0mrNeEEUh2Thy5bawNhJSsrhekeTup4W069yI9zm+GTKdR5xZCheMIAL4lOpvnT
+         3mVvSwlipANzfE8aF1T7ThotBrw0jDEuL5/I4mJht3RJCdQu+DCQlvMi1Km+A+gWxDzp
+         C0vsaiW4yDJ4moMhernVJAHwjyRob5Fz7AC8+90wf5tH9NkBnDvhncDGx4elX4/pRbRM
+         d5TA==
+X-Gm-Message-State: AOAM532wyPGRmZEgSzIuyvyHJ42l7EWvFKHUoYWAJBuYXxpY/FdoPwX0
+	iWQkifpaRbSG3sjujJVD28aRrw3cJR9NdBme+Fc=
+X-Google-Smtp-Source: ABdhPJz2GVGOebiROdNoFngR7SNu6Ex/e9wsBn0eouXGks4uJH2PI/3CJHWNZcWW8hDm2lD2oU+0NuyXHiFoa0y3D30=
+X-Received: by 2002:a05:6602:25d3:b0:65b:1d8a:a8ae with SMTP id
+ d19-20020a05660225d300b0065b1d8aa8aemr22938278iop.131.1653835379597; Sun, 29
+ May 2022 07:42:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <20220528154704.2576290-1-masahiroy@kernel.org> <20220528154704.2576290-3-masahiroy@kernel.org>
+In-Reply-To: <20220528154704.2576290-3-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sun, 29 May 2022 16:42:23 +0200
+Message-ID: <CA+icZUV1eoXkVXGEVD-8rMeh+6y7bwXC91R3EqaT5CKf_=D5fw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-clang static analysis reports this representative issue
-drivers/tty/serial/serial_core.c:2818:9: warning: 3rd function call argument is an uninitialized value [core.CallAndMessage]
-        return sprintf(buf, "%d\n", tmp.iomem_reg_shift);
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Sat, May 28, 2022 at 8:25 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> This is a preparation for the objtool move in the next commit.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-uart_get_info() is used the *show() functions.  When uart_get_info() fails, what is reported
-is garbage.  So check if uart_get_info() succeeded.
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
-Fixes: 4047b37122d1 ("serial: core: Prevent unsafe uart port access, part 1")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/tty/serial/serial_core.c | 52 ++++++++++++++++++++++++--------
- 1 file changed, 39 insertions(+), 13 deletions(-)
+-Sedat-
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 9a85b41caa0a..4160f6711c5d 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2690,7 +2690,9 @@ static ssize_t uartclk_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.baud_base * 16);
- }
- 
-@@ -2700,7 +2702,9 @@ static ssize_t type_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.type);
- }
- 
-@@ -2710,7 +2714,9 @@ static ssize_t line_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.line);
- }
- 
-@@ -2721,7 +2727,9 @@ static ssize_t port_show(struct device *dev,
- 	struct tty_port *port = dev_get_drvdata(dev);
- 	unsigned long ioaddr;
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	ioaddr = tmp.port;
- 	if (HIGH_BITS_OFFSET)
- 		ioaddr |= (unsigned long)tmp.port_high << HIGH_BITS_OFFSET;
-@@ -2734,7 +2742,9 @@ static ssize_t irq_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.irq);
- }
- 
-@@ -2744,7 +2754,9 @@ static ssize_t flags_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "0x%X\n", tmp.flags);
- }
- 
-@@ -2754,7 +2766,9 @@ static ssize_t xmit_fifo_size_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.xmit_fifo_size);
- }
- 
-@@ -2764,7 +2778,9 @@ static ssize_t close_delay_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.close_delay);
- }
- 
-@@ -2774,7 +2790,9 @@ static ssize_t closing_wait_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.closing_wait);
- }
- 
-@@ -2784,7 +2802,9 @@ static ssize_t custom_divisor_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.custom_divisor);
- }
- 
-@@ -2794,7 +2814,9 @@ static ssize_t io_type_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.io_type);
- }
- 
-@@ -2804,7 +2826,9 @@ static ssize_t iomem_base_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "0x%lX\n", (unsigned long)tmp.iomem_base);
- }
- 
-@@ -2814,7 +2838,9 @@ static ssize_t iomem_reg_shift_show(struct device *dev,
- 	struct serial_struct tmp;
- 	struct tty_port *port = dev_get_drvdata(dev);
- 
--	uart_get_info(port, &tmp);
-+	if (uart_get_info(port, &tmp))
-+		return 0;
-+
- 	return sprintf(buf, "%d\n", tmp.iomem_reg_shift);
- }
- 
--- 
-2.27.0
-
+> ---
+>
+>  scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
+>  scripts/link-vmlinux.sh    | 41 +------------------------
+>  2 files changed, 62 insertions(+), 40 deletions(-)
+>  create mode 100644 scripts/Makefile.vmlinux_o
+>
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> new file mode 100644
+> index 000000000000..a9b375ca86d5
+> --- /dev/null
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +PHONY := __default
+> +__default: vmlinux.o
+> +
+> +include include/config/auto.conf
+> +include $(srctree)/scripts/Kbuild.include
+> +
+> +# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
+> +# ---------------------------------------------------------------------------
+> +
+> +quiet_cmd_gen_initcalls_lds = GEN     $@
+> +      cmd_gen_initcalls_lds = \
+> +       $(PYTHON3) $(srctree)/scripts/jobserver-exec \
+> +       $(PERL) $(real-prereqs) > $@
+> +
+> +.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
+> +               $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+> +       $(call if_changed,gen_initcalls_lds)
+> +
+> +targets := .tmp_initcalls.lds
+> +
+> +ifdef CONFIG_LTO_CLANG
+> +initcalls-lds := .tmp_initcalls.lds
+> +endif
+> +
+> +# Link of vmlinux.o used for section mismatch analysis
+> +# ---------------------------------------------------------------------------
+> +
+> +quiet_cmd_ld_vmlinux.o = LD      $@
+> +      cmd_ld_vmlinux.o = \
+> +       $(LD) ${KBUILD_LDFLAGS} -r -o $@ \
+> +       $(addprefix -T , $(initcalls-lds)) \
+> +       --whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
+> +       --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
+> +
+> +define rule_ld_vmlinux.o
+> +       $(call cmd_and_savecmd,ld_vmlinux.o)
+> +endef
+> +
+> +vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+> +       $(call if_changed_rule,ld_vmlinux.o)
+> +
+> +targets += vmlinux.o
+> +
+> +# Add FORCE to the prequisites of a target to force it to be always rebuilt.
+> +# ---------------------------------------------------------------------------
+> +
+> +PHONY += FORCE
+> +FORCE:
+> +
+> +# Read all saved command lines and dependencies for the $(targets) we
+> +# may be building above, using $(if_changed{,_dep}). As an
+> +# optimization, we don't need to read them if the target does not
+> +# exist, we will rebuild anyway in that case.
+> +
+> +existing-targets := $(wildcard $(sort $(targets)))
+> +
+> +-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
+> +
+> +.PHONY: $(PHONY)
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index b593cb1a8137..90680b6bd710 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -45,45 +45,6 @@ info()
+>         printf "  %-7s %s\n" "${1}" "${2}"
+>  }
+>
+> -# Generate a linker script to ensure correct ordering of initcalls.
+> -gen_initcalls()
+> -{
+> -       info GEN .tmp_initcalls.lds
+> -
+> -       ${PYTHON3} ${srctree}/scripts/jobserver-exec            \
+> -       ${PERL} ${srctree}/scripts/generate_initcall_order.pl   \
+> -               ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}   \
+> -               > .tmp_initcalls.lds
+> -}
+> -
+> -# Link of vmlinux.o used for section mismatch analysis
+> -# ${1} output file
+> -modpost_link()
+> -{
+> -       local objects
+> -       local lds=""
+> -
+> -       objects="--whole-archive                                \
+> -               ${KBUILD_VMLINUX_OBJS}                          \
+> -               --no-whole-archive                              \
+> -               --start-group                                   \
+> -               ${KBUILD_VMLINUX_LIBS}                          \
+> -               --end-group"
+> -
+> -       if is_enabled CONFIG_LTO_CLANG; then
+> -               gen_initcalls
+> -               lds="-T .tmp_initcalls.lds"
+> -
+> -               # This might take a while, so indicate that we're doing
+> -               # an LTO link
+> -               info LTO ${1}
+> -       else
+> -               info LD ${1}
+> -       fi
+> -
+> -       ${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
+> -}
+> -
+>  objtool_link()
+>  {
+>         local objtoolcmd;
+> @@ -336,7 +297,7 @@ fi;
+>  ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
+>
+>  #link vmlinux.o
+> -modpost_link vmlinux.o
+> +${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
+>  objtool_link vmlinux.o
+>
+>  # Generate the list of objects in vmlinux
+> --
+> 2.32.0
+>
