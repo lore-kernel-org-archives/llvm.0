@@ -1,186 +1,132 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1492C80
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 17:54:42 +0000 (UTC)
-Received: by mail-wm1-f44.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso7252087wmh.3
-        for <llvm@lists.linux.dev>; Sun, 29 May 2022 10:54:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57D615DC
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 18:47:06 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id e24so282574pjt.0
+        for <llvm@lists.linux.dev>; Sun, 29 May 2022 11:47:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:cc:message-id:subject:mime-version:list-id;
-        bh=iPkRXkc6svW1vQOA60qcvVCYTJcrrjgzAmQlsxkDpPA=;
-        b=A8UmOgSOIeNZmZI9y2WUF1ybNRRMFYQCTxN1ZGSbSTGakbSWfGMvWo8+SI7HmTbRZG
-         eEqJyDGmmxg6WuOQDyGN4FTg68Kq4Ias8K7DOGRCpS6xyjDB38Bar6ljtINnkLS5WAvY
-         Z+D/udFPpyXwyAyoYnwz+2RxGiLMNrVN5TQSEN3V0CfRFJEBmhumWlhzYnyMye8qpOV/
-         hn3IEBEUdKbxbJ9rS4RlMJkAIPy5B/rGgy0LG4wIzTQnDg6xVxm3BT+oiEDy3roYDMgi
-         TXbvPFV6WsJ1JVIcWjIB2qgtX/E9rztqV5P/mgVFdkdsx8KqJB30oxUX0zGrYZV5OrfB
-         FLiQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZoKC3V/XTP0oNzDn2rYTyXnJc5QmXgd18Z7w67R+avg=;
+        b=TMGIQtDS6b29nEVWAGi06Y+LsNlm/dbSDkJ5DqJWftYbraKmb4lHqCA9GONOpCaag0
+         mfdTQ7/H8pLrYNwKmZ+OE1PAvg2Rg6Wma+gshILHWs+vienmn9Z5wxcPv2R/cMFnqw4T
+         EfCJP//4F3o+CvS3f1qRMoj5BRIj/cKKsMcW2cEgXuEqlDyvk7o8jw+v7idf6WiyMsXg
+         jUk5lJmUFV73bykoMidSR3i9gOplo+kVqpSyIcU2KLMXcW7ivhyNL5jQKP/52Brouzqm
+         F3kEnSsIUhhyXocovlVYMtZkUD2BatyKJhJnr0GdE5zSNVaY/2tVeKiDCuPpuzLyt3dV
+         yr1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:message-id:subject:mime-version
-         :list-id;
-        bh=iPkRXkc6svW1vQOA60qcvVCYTJcrrjgzAmQlsxkDpPA=;
-        b=izISqlMVNHS9FZ7Wj8LGmQI4IDLWfPOMAqQOiwI/ZwL42VgGZ4mK1WniJTl5jOYdyE
-         DgXfqf6IV/09a0TF34de2yLkuTM5rhra17SfMKEeE07tn/CpAaBHrvwwRNM2nRUVnGc6
-         jhjxHGf/pmhTDjCUVqF1htnEKtRlIVi0wHsbthqNu2EyLQOlWQgpRa8yvDylkbkubi7/
-         2lI7a1yzIBt2an3wbiJpjaBvberx84oC5ToWC/yyfzvP4ML4zPIrjr2haqc+U47FF2M8
-         A0fFR49vbd+SnczNKZLWfqWHgKryJbYP3rtzEwrNVXhLhZjFjkmIa6GZX94rtqLZfP/P
-         ADMA==
-X-Gm-Message-State: AOAM533psaXtvnoMw/Dqr0AKyBwcKKxHRlrT9bDK8WOlNhN88GLJ8Y5C
-	WVbtyx9bqi9Ft20EWe7qU4JINA==
-X-Google-Smtp-Source: ABdhPJxU3vL/iRxRMeGyOj9COHdq2PHFW89JbQQ80EtwKY3yVWXriLlhocs73CL+6kPoRkIGbdRYfQ==
-X-Received: by 2002:a05:600c:4e91:b0:397:8870:a3e9 with SMTP id f17-20020a05600c4e9100b003978870a3e9mr12643064wmq.141.1653846881261;
-        Sun, 29 May 2022 10:54:41 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5948000000b0020ff877cfbdsm7012510wri.87.2022.05.29.10.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 May 2022 10:54:40 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 29 May 2022 17:54:39 +0000 (UTC)
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <1031873030.1325.1653846880509@jenkins.jenkins>
-Subject: [TCWG CI] Regression caused by linux: crypto: poly1305 - cleanup
- stray CRYPTO_LIB_POLY1305_RSIZE
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZoKC3V/XTP0oNzDn2rYTyXnJc5QmXgd18Z7w67R+avg=;
+        b=hHADeq0MJOa23r0VZty8tlL+W/KAqDiU9Po+6M3PsWaVxR7DhhuxFq2lKRVZlxQEo3
+         zd3fh6c2eDVOsWNyIWtpTvKU8JfpvMaM48F4dRiHpJB36pljG7Lfittf4c4oQ6YtZ4p6
+         rl1PXsZI1qgrXSpXV38kKHKsobIg7GirArxUBcVPtmdogTihZzn1o44CE+VEpOnvnw4j
+         65avOuTLz6ZYYew/0Hs4OERs7DGPmXVuq9hff1D9F8qCU/nb+YPAhijM2Po06vEAlZEu
+         PogKuJRVM/UV0i51miYfZKxXyy+7BDXX2D7zc6jZajZg0JQr2VA1d0HmeQzmci+SfLtA
+         2dVQ==
+X-Gm-Message-State: AOAM531thj+Ql2Ad4tm1TBOaD+us7J1YHKww77uOGQaQDhkO+VYxP+Q3
+	hq5EPtqtjkbQz78KAgmQ3M5YaWBP7RkLtXhagqY=
+X-Google-Smtp-Source: ABdhPJwkrxXtBPptHzvY2Byi0n3TEUCyb7fWT+AksI4A0Fqaj1qWrjbNgt0Sq/7Yja1wr05rnGf9l1oPKG/U6vKGmTs=
+X-Received: by 2002:a17:90a:7f94:b0:1cb:1853:da1b with SMTP id
+ m20-20020a17090a7f9400b001cb1853da1bmr19236794pjl.14.1653850025969; Sun, 29
+ May 2022 11:47:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_1324_1007808186.1653846879806"
-X-Jenkins-Job: TCWG Bisect tcwg_kernel/llvm-release-arm-mainline-defconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
+ <Ym2qdHAB6BMMlegB@thelio-3990X> <CAEQFVGZB6eAetmt1kk+TYbGxpfrDut37DEO_-1HECqM6FEERww@mail.gmail.com>
+ <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com> <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X>
+In-Reply-To: <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X>
+From: Mauro Rossi <issor.oruam@gmail.com>
+Date: Sun, 29 May 2022 20:46:54 +0200
+Message-ID: <CAEQFVGbmHAQ=zxMTr4cmb9oeCarwZgyhiJnnL-Lrwmjatuaa2Q@mail.gmail.com>
+Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
+ llvm 11.0.2 internal assembler
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: luto@kernel.org, Chih-Wei Huang <cwhuang@android-x86.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-------=_Part_1324_1007808186.1653846879806
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Mon, May 9, 2022 at 2:07 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Sat, May 07, 2022 at 02:19:00PM +0200, Mauro Rossi wrote:
+> > > > Alternatively, you could apply the hack that Nick inserted into Android
+> > > > for this issue if upgrading your toolchain or turning off the integrated
+> > > > assembler is not possible:
+> > > >
+> > > > https://android.googlesource.com/kernel/common/+/e58f084735b8abf744d61083b92172ee23d45aae
+> > > >
+> > > > I really do not mean to sound dismissive or rude, I apologize if it
+> > > > comes off that way, but we have worked quite hard to avoid inserting
+> > > > unnecessary workarounds, as they are ultimately technical debt that can
+> > > > be hard to manage over the long term.
+> > > >
+> > > > Cheers,
+> > > > Nathan
+> > >
+> > > Thanks a lot Nathan
+> > >
+> > > It is definitely the clang version 11.0.x which is not updated in aosp
+> > > Android 11 production tags
+> > >
+> > > I will use Nick's workaround which works since only lsl %rax, %rax is
+> > > currently happening
+> > >
+> > > Many thanks, problem solved
+> >
+> > Hello,
+> > I'm back again because I was assuming that Nick's workaround was working ok,
+> > but I have found that ARCH=x86_64 i.e. 64bit built kernel is causing
+> > an immediate hard reboot at initrd execution,
+> > just after hitting [ENTER] at grub/efi menu.
+>
+> It looks like there was a follow up fix for that workaround, maybe that
+> resolves this issue as well?
+>
+> https://android.googlesource.com/kernel/common/+/cc7f7a84191f5defc2ea4633eeea4acb4486b549
+>
+> > ARCh=x86 i.e. 32bit kernel binary is not affected, but is Nick's
+> > workaround targeting 32 bit kernel builds?
+>
+> No, the file that the build error originates from (entry_64.S) is only
+> built on x86_64.
+>
+> > How do aosp android-mailine kernels avoid this instantaneous hard reboot issue?
+>
+> That hack was reverted once the toolchain was upgraded:
+>
+> https://android.googlesource.com/kernel/common/+/ff0216d09fd31802537f2d1702ec2f3e9be73aa3
+> https://android.googlesource.com/kernel/common/+/3c2c8d8f7f2639e319212d10cb8df5bd13098dae
+>
+> Cheers,
+> Nathan
 
-[TCWG CI] Regression caused by linux: crypto: poly1305 - cleanup stray CRYPTO_LIB_POLY1305_RSIZE:
-commit 8bdc2a190105e862dfe7a4033f2fd385b7e58ae8
-Author: Jason A. Donenfeld <Jason@zx2c4.com>
+Hello,
 
-    crypto: poly1305 - cleanup stray CRYPTO_LIB_POLY1305_RSIZE
+sorry i still have the issue when building with hack "ANDROID: x86:
+entry: work around LLVM_IAS=1 bug in LSL"
+I'd just like to understand why I get instant reboot in 64bit kernel
+built with LLVM_IAS=1
 
-Results regressed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-6483
-# First few build errors in logs:
-# 00:02:05 ./include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
-# 00:02:05 make[3]: *** [drivers/crypto/caam/error.o] Error 1
-# 00:02:06 ./include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
-# 00:02:06 make[3]: *** [drivers/crypto/caam/ctrl.o] Error 1
-# 00:02:07 ./include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
-# 00:02:07 make[3]: *** [drivers/crypto/caam/debugfs.o] Error 1
-# 00:02:07 ./include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
-# 00:02:07 make[3]: *** [drivers/crypto/caam/jr.o] Error 1
-# 00:02:07 ./include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
-# 00:02:07 make[3]: *** [drivers/crypto/caam/key_gen.o] Error 1
+I searched for the places where #include "calling.h" is used
 
-from
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-7270
-# linux build successful:
-all
-# linux boot successful:
-boot
+utente@utente-3TB:~/r-x86_kernel/kernel$ grep -r \#include\ \"calling
+arch/x86/entry/thunk_64.S:#include "calling.h"
+arch/x86/entry/entry_32.S:#include "calling.h"
+arch/x86/entry/entry_64_compat.S:#include "calling.h"
+arch/x86/entry/entry_64.S:#include "calling.h"
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+Probably the hardcoding done in the hack is impacting some other asm
+target built in 64 bit kernel and causes a wrong X86 instruction , is
+there a way to refine the #if defto avoid that problem while still
+building with LLVM_IAS=1 ?
 
-This commit has regressed these CI configurations:
- - tcwg_kernel/llvm-release-arm-mainline-defconfig
-
-First_bad build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/build-8bdc2a190105e862dfe7a4033f2fd385b7e58ae8/
-Last_good build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/build-e68b823ab0ba03323805e54743d16200ba0224d4/
-Baseline build: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/build-baseline/
-Even more details: https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/
-
-Reproduce builds:
-<cut>
-mkdir investigate-linux-8bdc2a190105e862dfe7a4033f2fd385b7e58ae8
-cd investigate-linux-8bdc2a190105e862dfe7a4033f2fd385b7e58ae8
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests and test.sh script
-mkdir -p artifacts/manifests
-curl -o artifacts/manifests/build-baseline.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/manifests/build-baseline.sh --fail
-curl -o artifacts/manifests/build-parameters.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/manifests/build-parameters.sh --fail
-curl -o artifacts/test.sh https://ci.linaro.org/job/tcwg_kernel-llvm-bisect-llvm-release-arm-mainline-defconfig/16/artifact/artifacts/test.sh --fail
-chmod +x artifacts/test.sh
-
-# Reproduce the baseline build (build all pre-requisites)
-./jenkins-scripts/tcwg_kernel-build.sh @@ artifacts/manifests/build-baseline.sh
-
-# Save baseline build state (which is then restored in artifacts/test.sh)
-mkdir -p ./bisect
-rsync -a --del --delete-excluded --exclude /bisect/ --exclude /artifacts/ --exclude /linux/ ./ ./bisect/baseline/
-
-cd linux
-
-# Reproduce first_bad build
-git checkout --detach 8bdc2a190105e862dfe7a4033f2fd385b7e58ae8
-../artifacts/test.sh
-
-# Reproduce last_good build
-git checkout --detach e68b823ab0ba03323805e54743d16200ba0224d4
-../artifacts/test.sh
-
-cd ..
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 8bdc2a190105e862dfe7a4033f2fd385b7e58ae8
-Author: Jason A. Donenfeld <Jason@zx2c4.com>
-Date:   Thu May 26 11:35:47 2022 +0200
-
-    crypto: poly1305 - cleanup stray CRYPTO_LIB_POLY1305_RSIZE
-    
-    When CRYPTO_LIB_POLY1305 is unset, CRYPTO_LIB_POLY1305_RSIZE
-    is still set in the Kconfig, cluttering things.
-    
-    Fix this by making CRYPTO_LIB_POLY1305_RSIZE depend on
-    CRYPTO_LIB_POLY1305.
-    
-    Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-    Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
----
- lib/crypto/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 379a66d7f504..a80b8c4dc2cf 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -85,6 +85,7 @@ config CRYPTO_LIB_POLY1305_RSIZE
- 	default 11 if X86_64
- 	default 9 if ARM || ARM64
- 	default 1
-+	depends on CRYPTO_LIB_POLY1305
- 
- config CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	tristate
-</cut>
-------=_Part_1324_1007808186.1653846879806--
+Thanks for the info
+Mauro
