@@ -1,132 +1,177 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57D615DC
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 18:47:06 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id e24so282574pjt.0
-        for <llvm@lists.linux.dev>; Sun, 29 May 2022 11:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZoKC3V/XTP0oNzDn2rYTyXnJc5QmXgd18Z7w67R+avg=;
-        b=TMGIQtDS6b29nEVWAGi06Y+LsNlm/dbSDkJ5DqJWftYbraKmb4lHqCA9GONOpCaag0
-         mfdTQ7/H8pLrYNwKmZ+OE1PAvg2Rg6Wma+gshILHWs+vienmn9Z5wxcPv2R/cMFnqw4T
-         EfCJP//4F3o+CvS3f1qRMoj5BRIj/cKKsMcW2cEgXuEqlDyvk7o8jw+v7idf6WiyMsXg
-         jUk5lJmUFV73bykoMidSR3i9gOplo+kVqpSyIcU2KLMXcW7ivhyNL5jQKP/52Brouzqm
-         F3kEnSsIUhhyXocovlVYMtZkUD2BatyKJhJnr0GdE5zSNVaY/2tVeKiDCuPpuzLyt3dV
-         yr1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZoKC3V/XTP0oNzDn2rYTyXnJc5QmXgd18Z7w67R+avg=;
-        b=hHADeq0MJOa23r0VZty8tlL+W/KAqDiU9Po+6M3PsWaVxR7DhhuxFq2lKRVZlxQEo3
-         zd3fh6c2eDVOsWNyIWtpTvKU8JfpvMaM48F4dRiHpJB36pljG7Lfittf4c4oQ6YtZ4p6
-         rl1PXsZI1qgrXSpXV38kKHKsobIg7GirArxUBcVPtmdogTihZzn1o44CE+VEpOnvnw4j
-         65avOuTLz6ZYYew/0Hs4OERs7DGPmXVuq9hff1D9F8qCU/nb+YPAhijM2Po06vEAlZEu
-         PogKuJRVM/UV0i51miYfZKxXyy+7BDXX2D7zc6jZajZg0JQr2VA1d0HmeQzmci+SfLtA
-         2dVQ==
-X-Gm-Message-State: AOAM531thj+Ql2Ad4tm1TBOaD+us7J1YHKww77uOGQaQDhkO+VYxP+Q3
-	hq5EPtqtjkbQz78KAgmQ3M5YaWBP7RkLtXhagqY=
-X-Google-Smtp-Source: ABdhPJwkrxXtBPptHzvY2Byi0n3TEUCyb7fWT+AksI4A0Fqaj1qWrjbNgt0Sq/7Yja1wr05rnGf9l1oPKG/U6vKGmTs=
-X-Received: by 2002:a17:90a:7f94:b0:1cb:1853:da1b with SMTP id
- m20-20020a17090a7f9400b001cb1853da1bmr19236794pjl.14.1653850025969; Sun, 29
- May 2022 11:47:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4462F34
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 18:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653850795; x=1685386795;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zx1HAeSbK0xCGqOD8SoUEzCLApUT2KqRUMybrU473vQ=;
+  b=Mvb0JeA7lJVr+SSZGND4DFm23/+QxF2vItsCdrqH61geJjAt80FmA2/7
+   C/UlVdFCvrbfsi501EKCQovG7/vP6CXvd/wgOEzk+96FUAAXiUQLbkIlu
+   AZmhgUF6Egu8bDEx8oq8PTgYwOkStvzr0C4PR57tazxOceiEPs89KXcIN
+   I5HTEhUgQuvmSCWpRPicgpdhGSajVXL7VgYOsuVJoTArbtXzlks66i04p
+   opb627wAUvOZt1fLBq7rVI1zuvy3k/svD8vM+ip/i/QTUSNmwnpOgRA2C
+   G4qAWwSMH0q4Maf43L4RhoM+7lznOcMze4GsjhNQS2U3vftOBzj7NvwYg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="274553300"
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="274553300"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2022 11:59:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,260,1647327600"; 
+   d="scan'208";a="632344779"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2022 11:59:53 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nvO8m-0001CA-MN;
+	Sun, 29 May 2022 18:59:52 +0000
+Date: Mon, 30 May 2022 02:59:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/usb/host/max3421-hcd.c:1378:1: warning: stack frame size
+ (11288) exceeds limit (8192) in 'max3421_spi_thread'
+Message-ID: <202205300232.RIbBypzl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
- <Ym2qdHAB6BMMlegB@thelio-3990X> <CAEQFVGZB6eAetmt1kk+TYbGxpfrDut37DEO_-1HECqM6FEERww@mail.gmail.com>
- <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com> <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X>
-In-Reply-To: <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X>
-From: Mauro Rossi <issor.oruam@gmail.com>
-Date: Sun, 29 May 2022 20:46:54 +0200
-Message-ID: <CAEQFVGbmHAQ=zxMTr4cmb9oeCarwZgyhiJnnL-Lrwmjatuaa2Q@mail.gmail.com>
-Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
- llvm 11.0.2 internal assembler
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: luto@kernel.org, Chih-Wei Huang <cwhuang@android-x86.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, May 9, 2022 at 2:07 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Sat, May 07, 2022 at 02:19:00PM +0200, Mauro Rossi wrote:
-> > > > Alternatively, you could apply the hack that Nick inserted into Android
-> > > > for this issue if upgrading your toolchain or turning off the integrated
-> > > > assembler is not possible:
-> > > >
-> > > > https://android.googlesource.com/kernel/common/+/e58f084735b8abf744d61083b92172ee23d45aae
-> > > >
-> > > > I really do not mean to sound dismissive or rude, I apologize if it
-> > > > comes off that way, but we have worked quite hard to avoid inserting
-> > > > unnecessary workarounds, as they are ultimately technical debt that can
-> > > > be hard to manage over the long term.
-> > > >
-> > > > Cheers,
-> > > > Nathan
-> > >
-> > > Thanks a lot Nathan
-> > >
-> > > It is definitely the clang version 11.0.x which is not updated in aosp
-> > > Android 11 production tags
-> > >
-> > > I will use Nick's workaround which works since only lsl %rax, %rax is
-> > > currently happening
-> > >
-> > > Many thanks, problem solved
-> >
-> > Hello,
-> > I'm back again because I was assuming that Nick's workaround was working ok,
-> > but I have found that ARCH=x86_64 i.e. 64bit built kernel is causing
-> > an immediate hard reboot at initrd execution,
-> > just after hitting [ENTER] at grub/efi menu.
->
-> It looks like there was a follow up fix for that workaround, maybe that
-> resolves this issue as well?
->
-> https://android.googlesource.com/kernel/common/+/cc7f7a84191f5defc2ea4633eeea4acb4486b549
->
-> > ARCh=x86 i.e. 32bit kernel binary is not affected, but is Nick's
-> > workaround targeting 32 bit kernel builds?
->
-> No, the file that the build error originates from (entry_64.S) is only
-> built on x86_64.
->
-> > How do aosp android-mailine kernels avoid this instantaneous hard reboot issue?
->
-> That hack was reverted once the toolchain was upgraded:
->
-> https://android.googlesource.com/kernel/common/+/ff0216d09fd31802537f2d1702ec2f3e9be73aa3
-> https://android.googlesource.com/kernel/common/+/3c2c8d8f7f2639e319212d10cb8df5bd13098dae
->
-> Cheers,
-> Nathan
+Hi Kees,
 
-Hello,
+FYI, the error/warning still remains.
 
-sorry i still have the issue when building with hack "ANDROID: x86:
-entry: work around LLVM_IAS=1 bug in LSL"
-I'd just like to understand why I get instant reboot in 64bit kernel
-built with LLVM_IAS=1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   664a393a2663a0f62fc1b18157ccae33dcdbb8c8
+commit: a52f8a59aef46b59753e583bf4b28fccb069ce64 fortify: Explicitly disable Clang support
+date:   8 months ago
+config: x86_64-randconfig-a012-20220530 (https://download.01.org/0day-ci/archive/20220530/202205300232.RIbBypzl-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a52f8a59aef46b59753e583bf4b28fccb069ce64
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a52f8a59aef46b59753e583bf4b28fccb069ce64
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
 
-I searched for the places where #include "calling.h" is used
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-utente@utente-3TB:~/r-x86_kernel/kernel$ grep -r \#include\ \"calling
-arch/x86/entry/thunk_64.S:#include "calling.h"
-arch/x86/entry/entry_32.S:#include "calling.h"
-arch/x86/entry/entry_64_compat.S:#include "calling.h"
-arch/x86/entry/entry_64.S:#include "calling.h"
+All warnings (new ones prefixed by >>):
 
-Probably the hardcoding done in the hack is impacting some other asm
-target built in 64 bit kernel and causes a wrong X86 instruction , is
-there a way to refine the #if defto avoid that problem while still
-building with LLVM_IAS=1 ?
+   drivers/usb/host/max3421-hcd.c:1968:34: warning: unused variable 'max3421_of_match_table' [-Wunused-const-variable]
+   static const struct of_device_id max3421_of_match_table[] = {
+                                    ^
+>> drivers/usb/host/max3421-hcd.c:1378:1: warning: stack frame size (11288) exceeds limit (8192) in 'max3421_spi_thread' [-Wframe-larger-than]
+   max3421_spi_thread(void *dev_id)
+   ^
+   2 warnings generated.
 
-Thanks for the info
-Mauro
+
+vim +/max3421_spi_thread +1378 drivers/usb/host/max3421-hcd.c
+
+2d53139f31626b David Mosberger      2014-04-28  1376  
+2d53139f31626b David Mosberger      2014-04-28  1377  static int
+2d53139f31626b David Mosberger      2014-04-28 @1378  max3421_spi_thread(void *dev_id)
+2d53139f31626b David Mosberger      2014-04-28  1379  {
+2d53139f31626b David Mosberger      2014-04-28  1380  	struct usb_hcd *hcd = dev_id;
+2d53139f31626b David Mosberger      2014-04-28  1381  	struct spi_device *spi = to_spi_device(hcd->self.controller);
+2d53139f31626b David Mosberger      2014-04-28  1382  	struct max3421_hcd *max3421_hcd = hcd_to_max3421(hcd);
+2d53139f31626b David Mosberger      2014-04-28  1383  	int i, i_worked = 1;
+2d53139f31626b David Mosberger      2014-04-28  1384  
+2d53139f31626b David Mosberger      2014-04-28  1385  	/* set full-duplex SPI mode, low-active interrupt pin: */
+2d53139f31626b David Mosberger      2014-04-28  1386  	spi_wr8(hcd, MAX3421_REG_PINCTL,
+2d53139f31626b David Mosberger      2014-04-28  1387  		(BIT(MAX3421_PINCTL_FDUPSPI_BIT) |	/* full-duplex */
+2d53139f31626b David Mosberger      2014-04-28  1388  		 BIT(MAX3421_PINCTL_INTLEVEL_BIT)));	/* low-active irq */
+2d53139f31626b David Mosberger      2014-04-28  1389  
+2d53139f31626b David Mosberger      2014-04-28  1390  	while (!kthread_should_stop()) {
+2d53139f31626b David Mosberger      2014-04-28  1391  		max3421_hcd->rev = spi_rd8(hcd, MAX3421_REG_REVISION);
+2d53139f31626b David Mosberger      2014-04-28  1392  		if (max3421_hcd->rev == 0x12 || max3421_hcd->rev == 0x13)
+2d53139f31626b David Mosberger      2014-04-28  1393  			break;
+2d53139f31626b David Mosberger      2014-04-28  1394  		dev_err(&spi->dev, "bad rev 0x%02x", max3421_hcd->rev);
+2d53139f31626b David Mosberger      2014-04-28  1395  		msleep(10000);
+2d53139f31626b David Mosberger      2014-04-28  1396  	}
+2d53139f31626b David Mosberger      2014-04-28  1397  	dev_info(&spi->dev, "rev 0x%x, SPI clk %dHz, bpw %u, irq %d\n",
+2d53139f31626b David Mosberger      2014-04-28  1398  		 max3421_hcd->rev, spi->max_speed_hz, spi->bits_per_word,
+2d53139f31626b David Mosberger      2014-04-28  1399  		 spi->irq);
+2d53139f31626b David Mosberger      2014-04-28  1400  
+2d53139f31626b David Mosberger      2014-04-28  1401  	while (!kthread_should_stop()) {
+2d53139f31626b David Mosberger      2014-04-28  1402  		if (!i_worked) {
+2d53139f31626b David Mosberger      2014-04-28  1403  			/*
+2d53139f31626b David Mosberger      2014-04-28  1404  			 * We'll be waiting for wakeups from the hard
+2d53139f31626b David Mosberger      2014-04-28  1405  			 * interrupt handler, so now is a good time to
+2d53139f31626b David Mosberger      2014-04-28  1406  			 * sync our hien with the chip:
+2d53139f31626b David Mosberger      2014-04-28  1407  			 */
+2d53139f31626b David Mosberger      2014-04-28  1408  			spi_wr8(hcd, MAX3421_REG_HIEN, max3421_hcd->hien);
+2d53139f31626b David Mosberger      2014-04-28  1409  
+2d53139f31626b David Mosberger      2014-04-28  1410  			set_current_state(TASK_INTERRUPTIBLE);
+2eb5dbdd1263a4 David Mosberger-Tang 2014-06-19  1411  			if (test_and_clear_bit(ENABLE_IRQ, &max3421_hcd->todo))
+2d53139f31626b David Mosberger      2014-04-28  1412  				enable_irq(spi->irq);
+2d53139f31626b David Mosberger      2014-04-28  1413  			schedule();
+2d53139f31626b David Mosberger      2014-04-28  1414  			__set_current_state(TASK_RUNNING);
+2d53139f31626b David Mosberger      2014-04-28  1415  		}
+2d53139f31626b David Mosberger      2014-04-28  1416  
+2d53139f31626b David Mosberger      2014-04-28  1417  		i_worked = 0;
+2d53139f31626b David Mosberger      2014-04-28  1418  
+2d53139f31626b David Mosberger      2014-04-28  1419  		if (max3421_hcd->urb_done)
+2d53139f31626b David Mosberger      2014-04-28  1420  			i_worked |= max3421_urb_done(hcd);
+2d53139f31626b David Mosberger      2014-04-28  1421  		else if (max3421_handle_irqs(hcd))
+2d53139f31626b David Mosberger      2014-04-28  1422  			i_worked = 1;
+2d53139f31626b David Mosberger      2014-04-28  1423  		else if (!max3421_hcd->curr_urb)
+2d53139f31626b David Mosberger      2014-04-28  1424  			i_worked |= max3421_select_and_start_urb(hcd);
+2d53139f31626b David Mosberger      2014-04-28  1425  
+2eb5dbdd1263a4 David Mosberger-Tang 2014-06-19  1426  		if (test_and_clear_bit(RESET_HCD, &max3421_hcd->todo))
+2d53139f31626b David Mosberger      2014-04-28  1427  			/* reset the HCD: */
+2d53139f31626b David Mosberger      2014-04-28  1428  			i_worked |= max3421_reset_hcd(hcd);
+2eb5dbdd1263a4 David Mosberger-Tang 2014-06-19  1429  		if (test_and_clear_bit(RESET_PORT, &max3421_hcd->todo)) {
+2d53139f31626b David Mosberger      2014-04-28  1430  			/* perform a USB bus reset: */
+2d53139f31626b David Mosberger      2014-04-28  1431  			spi_wr8(hcd, MAX3421_REG_HCTL,
+2d53139f31626b David Mosberger      2014-04-28  1432  				BIT(MAX3421_HCTL_BUSRST_BIT));
+2d53139f31626b David Mosberger      2014-04-28  1433  			i_worked = 1;
+2d53139f31626b David Mosberger      2014-04-28  1434  		}
+2eb5dbdd1263a4 David Mosberger-Tang 2014-06-19  1435  		if (test_and_clear_bit(CHECK_UNLINK, &max3421_hcd->todo))
+2d53139f31626b David Mosberger      2014-04-28  1436  			i_worked |= max3421_check_unlink(hcd);
+2eb5dbdd1263a4 David Mosberger-Tang 2014-06-19  1437  		if (test_and_clear_bit(IOPIN_UPDATE, &max3421_hcd->todo)) {
+2d53139f31626b David Mosberger      2014-04-28  1438  			/*
+2d53139f31626b David Mosberger      2014-04-28  1439  			 * IOPINS1/IOPINS2 do not auto-increment, so we can't
+2d53139f31626b David Mosberger      2014-04-28  1440  			 * use spi_wr_buf().
+2d53139f31626b David Mosberger      2014-04-28  1441  			 */
+2d53139f31626b David Mosberger      2014-04-28  1442  			for (i = 0; i < ARRAY_SIZE(max3421_hcd->iopins); ++i) {
+2d53139f31626b David Mosberger      2014-04-28  1443  				u8 val = spi_rd8(hcd, MAX3421_REG_IOPINS1);
+2d53139f31626b David Mosberger      2014-04-28  1444  
+2d53139f31626b David Mosberger      2014-04-28  1445  				val = ((val & 0xf0) |
+2d53139f31626b David Mosberger      2014-04-28  1446  				       (max3421_hcd->iopins[i] & 0x0f));
+2d53139f31626b David Mosberger      2014-04-28  1447  				spi_wr8(hcd, MAX3421_REG_IOPINS1 + i, val);
+2d53139f31626b David Mosberger      2014-04-28  1448  				max3421_hcd->iopins[i] = val;
+2d53139f31626b David Mosberger      2014-04-28  1449  			}
+2d53139f31626b David Mosberger      2014-04-28  1450  			i_worked = 1;
+2d53139f31626b David Mosberger      2014-04-28  1451  		}
+2d53139f31626b David Mosberger      2014-04-28  1452  	}
+2d53139f31626b David Mosberger      2014-04-28  1453  	set_current_state(TASK_RUNNING);
+2d53139f31626b David Mosberger      2014-04-28  1454  	dev_info(&spi->dev, "SPI thread exiting");
+2d53139f31626b David Mosberger      2014-04-28  1455  	return 0;
+2d53139f31626b David Mosberger      2014-04-28  1456  }
+2d53139f31626b David Mosberger      2014-04-28  1457  
+
+:::::: The code at line 1378 was first introduced by commit
+:::::: 2d53139f31626bad6f8983d8e519ddde2cbba921 Add support for using a MAX3421E chip as a host driver.
+
+:::::: TO: David Mosberger <davidm@egauge.net>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
