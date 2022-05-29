@@ -1,195 +1,133 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2180715A7
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 04:29:20 +0000 (UTC)
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 24T4TEWE011944
-	for <llvm@lists.linux.dev>; Sun, 29 May 2022 13:29:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24T4TEWE011944
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1653798555;
-	bh=G/i1dwVBb3QQsD9CFilTnjlTJDW4bryVPOXgitbHRzQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XCyrl0g2GSOY2F6zfUOdjIZRvtSjkiMaWol30nf8GKmiDWxLsfI0zyrSKyH9oB2t0
-	 GSe7tHhP8Syakdkh/AuPMUnS6Txck8tr1wJG5si05KD2dj3Gf4ODtIPl3wSUs3MIWc
-	 0Ndf2j3Y8L0FBCcig65cdzelEHc9Pj9xUmlM0e1uWWUWUVMx0bPKwEzR17/mircllF
-	 ZrrpxMvNP7hG5xLkYWq4dr6ct0sEwh3XAlpxA1HPBFaTMsSixFQx9S3vcad9BPD/A9
-	 jkrWc1mNpO0n7AoGJ0QDf3CH3leM7kjanz9wJqlSganYri0mTimSOayyPsIf007Xze
-	 X3olbDAhyM/vw==
-X-Nifty-SrcIP: [209.85.216.51]
-Received: by mail-pj1-f51.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so5495328pjb.1
-        for <llvm@lists.linux.dev>; Sat, 28 May 2022 21:29:15 -0700 (PDT)
-X-Gm-Message-State: AOAM530FyR+MDsGdFN4xC9g0Re1wTyc3yN5SeJkZBwzC+9EeWKnaTAOZ
-	1q3sNVNsvrtQ83wasL6ttShlO8sb/gvRvmHw09k=
-X-Google-Smtp-Source: ABdhPJzNxHqxq69yNjBbxRveFRTwLx+8EEISbWq1N9bsPU/YNURXqavj/Dvr0ngQWN5AtBu4wR2ivtVeklv4ITjHQzU=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr49302906plp.162.1653798554247; Sat, 28
- May 2022 21:29:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73287A
+	for <llvm@lists.linux.dev>; Sun, 29 May 2022 07:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1653809649;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1FG3p87yRdwMZyqhPwypNiYHtUTF9im9QyhuQTto6bo=;
+	b=dTh8qzExk3h8QaHcd9HsXxw7tpmfFM+XnKR/T+HblLLlOsxk5ZTkArvv5fM8FwpoZf8bPk
+	RdD4gWHOhs80UflBNBCFSwbLTgpFcN/SyeB6eaWu8XjJCcpqjs4Jo1yJgSbm6bvWG+KCJS
+	8jjBDJKsVyYsdGvoIVqwrAcQNZM7f6M=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-jmeoSlsrOMeljseF081M5Q-1; Sun, 29 May 2022 03:34:08 -0400
+X-MC-Unique: jmeoSlsrOMeljseF081M5Q-1
+Received: by mail-wm1-f69.google.com with SMTP id i1-20020a05600c354100b003976fc71579so5054618wmq.8
+        for <llvm@lists.linux.dev>; Sun, 29 May 2022 00:34:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1FG3p87yRdwMZyqhPwypNiYHtUTF9im9QyhuQTto6bo=;
+        b=myTg+ppb9G7AbIgBJ0SMy2ns8aYTTPqeW7yFuPO0rSKIPV8RCxfC81Xgh4EREnACSi
+         sPRNPpkufbYTi5uCwirGdu16CDU2JQKepFzu5g694saFVYKinSK3u8y3Nz9nWGrLkMH9
+         ya2YcZYWNd0rgW/4h2N9xeSUUJHOm66AvYWypUMP/sewn4bnyfi7cumgrNW7e1yGppuL
+         3CDNJA9xz6UCojUannpFnOTbPunMjJJRTMU/XpjyDi+azuWcI3rmyb2K5whFZu7jG7V+
+         Ze6uOe5OYAr5C4TWmqBRe/TW5HzZ3B6gYTHe5Logxv49BFRFlS5LW1MkMIHUDgh1iUXQ
+         tkYQ==
+X-Gm-Message-State: AOAM533o+vIxau3a+vVFhTWQIoir1lAFGreAEHRjHF09m7I97bFYNuts
+	bF8S3A8cTvsn3s3ujb2SodLeLbT9qKi4KTVXB/KiubpC3juJxkWykbXcsV8G2+OzjYbnrjsenE/
+	2mHWv2oTFVRr/nw==
+X-Received: by 2002:a1c:cc07:0:b0:397:b2f:ac59 with SMTP id h7-20020a1ccc07000000b003970b2fac59mr13935544wmb.157.1653809646586;
+        Sun, 29 May 2022 00:34:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzRag373JOG5N4kwlPDXmzRjvYhPV1T9/WUwtpuDCGDUUYfmVVLb162YDQ1ZkVczj0JZTC/BA==
+X-Received: by 2002:a1c:cc07:0:b0:397:b2f:ac59 with SMTP id h7-20020a1ccc07000000b003970b2fac59mr13935529wmb.157.1653809646303;
+        Sun, 29 May 2022 00:34:06 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05600c19d000b003973c54bd69sm7274011wmq.1.2022.05.29.00.34.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 00:34:05 -0700 (PDT)
+Message-ID: <0a3c11c7-2669-ca85-69d1-3b3faa2f7a3c@redhat.com>
+Date: Sun, 29 May 2022 09:34:04 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <20220513113930.10488-2-masahiroy@kernel.org>
- <20220528224745.GA2501857@roeck-us.net>
-In-Reply-To: <20220528224745.GA2501857@roeck-us.net>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 29 May 2022 13:27:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQU1oROfoWGqX37OZu=XkbYGBFu2eNHtwcWLEyvMtM11A@mail.gmail.com>
-Message-ID: <CAK7LNAQU1oROfoWGqX37OZu=XkbYGBFu2eNHtwcWLEyvMtM11A@mail.gmail.com>
-Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd files
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused
+ variable 'ssd130x_spi_table'
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+References: <202205290422.eoxGqDMR-lkp@intel.com>
+ <607265eb-bfbf-4134-f2fe-d66cacd7bfbb@redhat.com>
+ <YpLF9jdqiub98Nl/@dev-arch.thelio-3990X>
+From: Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YpLF9jdqiub98Nl/@dev-arch.thelio-3990X>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, May 29, 2022 at 7:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
+Hello Nathan,
+
+On 5/29/22 03:01, Nathan Chancellor wrote:
+> On Sat, May 28, 2022 at 11:23:04PM +0200, Javier Martinez Canillas wrote:
+>> Hello,
+>>
+>> On 5/28/22 22:58, kernel test robot wrote:
+>>> Hi Javier,
+>>>
+>>> FYI, the error/warning still remains.
+>>>
+>>
+>> Yes, but in my opinion is a false positive.
+> 
+> I don't think it is a false positive for this particular configuration.
+> MODULE_DEVICE_TABLE expands to nothing when the file it is included in
+> is built into the kernel, as opposed to a module, so the variable truly
+> is unused.
 >
-> Hi,
+
+I know that is not used but my point is that we shouldn't need that table
+in the first place. The only reason we add it is to workaround a bug in
+the SPI core.
+ 
+> $ curl -LSs https://download.01.org/0day-ci/archive/20220529/202205290422.eoxGqDMR-lkp@intel.com/config | rg CONFIG_DRM_SSD130X_SPI
+> CONFIG_DRM_SSD130X_SPI=y
+> 
+> You'll see the same warning with GCC and a similar configuration:
 >
-> On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
-> > Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-> > versions into ELF objects. Then, modpost extracts the version CRCs
-> > from them.
-> >
-> [ ... ]
-> > This commit changes modpost to extract CRCs from *.cmd files instead of
-> > from ELF objects.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+
+Yes, I'm not saying that the compiler warning is a false positive but
+that the reported error for this driver is. Since the correct fix on
+a driver that support SPI platform devices would be to use the table
+and set it to the struct spi_driver .id field.
+ 
+> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: error: ‘ssd130x_spi_table’ defined but not used [-Werror=unused-const-variable=]
+>   154 | static const struct spi_device_id ssd130x_spi_table[] = {
+>       |                                   ^~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> At the end of the day, this warning only shows up under W=1, so take it
+> as you will. The kernel test robot is a sign, not a cop :)
 >
-> This patch results in
->
-> ._muldi3_di.o.cmd: No such file or directory
->
-> when building parisc64:defconfig, and
->
-> ._divsi3.o.cmd: No such file or directory
->
-> when building csky:allmodconfig.
->
-> Reverting this patch (and the subsequent kbuild patches to avoid
-> conflicts) fixes the problem for both architectures. In case it
-> helps, the complete build log when rebuilding an image for csky
-> is as follows.
 
+I guess something that could be done is to guard the definition of the
+ssd130x_spi_table with a `if IS_MODULE(CONFIG_DRM_SSD130X_SPI)`, since
+if the symbol is 'y' and the driver built-in, then won't be used indeed.
+ 
+> Cheers,
+> Nathan
+> 
+-- 
+Best regards,
 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-Thank you for the report!
-
-This commit has been in the tree for a while
-but I did not get this kind of report from the 0-day bot.
-
-The wide test coverage from your system is very helpful.
-I just submitted a fix.
-
-Thank you.
-
-
-
-
-
-
-
-
-
-> #
-> # No change to .config
-> #
->   HOSTCC  scripts/mod/modpost.o
->   HOSTLD  scripts/mod/modpost
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
->   CHK     include/generated/compile.h
->   SO2S    arch/csky/kernel/vdso/vdso-syms.S
->   AS      arch/csky/kernel/vdso/vdso-syms.o
->   AR      arch/csky/kernel/vdso/built-in.a
->   AR      arch/csky/kernel/built-in.a
->   CHK     kernel/kheaders_data.tar.xz
->   GEN     .version
->   CHK     include/generated/compile.h
->   UPD     include/generated/compile.h
->   CC      init/version.o
->   AR      init/built-in.a
->   LD      vmlinux.o
->   MODPOST vmlinux.symvers
-> ._divsi3.o.cmd: No such file or directory
-> make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
-> make: *** [Makefile:1159: vmlinux] Error 2
->
-> This was seen with gcc 11.2 and 11.3.
->
-> Guenter
->
-> ---
-> bisect on mainline:
->
-> # bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
-> # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
-> git bisect start 'HEAD' 'v5.18'
-> # good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
-> git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
-> # good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good c011dd537ffe47462051930413fed07dbdc80313
-> # bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
-> git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
-> # good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-> git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
-> # good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
-> # good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
-> # good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
-> # good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
-> git bisect good 4484054816cab940fc2fde23fa989174fec889d0
-> # good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
-> git bisect good 16477cdfefdb494235a675cc80563d736991d833
-> # good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
-> git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
-> # good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-> git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-> # bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-> git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-> # bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-> git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-> # first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
->
-> ---
-> bisect on kbuild-5.19:
->
-> # bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
-> # good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-> git bisect start 'HEAD' 'v5.18-rc1'
-> # good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
-> git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
-> # good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
-> git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
-> # good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
-> git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
-> # good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-> git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-> # bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-> git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-> # bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-> git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-> # first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-
-
-
---
-Best Regards
-Masahiro Yamada
