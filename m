@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E9D2F38
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 13:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F054C385B8;
-	Mon, 30 May 2022 13:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DBD2F38
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 13:46:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEB7C3411F;
+	Mon, 30 May 2022 13:46:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653918244;
-	bh=Y3ci4aj1bWHDsYuaG5QQrbA8DGau5DUCSDNwP7ULckA=;
+	s=k20201202; t=1653918398;
+	bh=4FSrYTcjJKXPVdDoyaJUWxXh5uWevkD+L6Qli9rjWgU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lE2klOa+CQTZqzonW+57iFJqYhdVQVJvR91kW+SeOWXsTEOyXTu5n9B0YoMJlkXCA
-	 56vDus6PNbg7wywlbuVV7f/XjAB7RKPhrMOCN47e+pkuVbQutb3BbiGzTyNSBKE6Ep
-	 Ot5kBjKIGpajfAeHTg+H5V7fo1FBfVlP/jxxg7/sgFWtA5QnkUrvJCcHCG+VFRiVAB
-	 QBR4WkHVV3pAHFY/0MJ6hbwDK3EgxNXNLPdGbyi5J2nqi5on3hlXd7cF7+dB6LK/h2
-	 7SY0n/WLYUU9WeCt2Kqxnmug5nIuZLPs59Qov0BaaPQHhGYa9tiflqzJLKk0v16t+r
-	 z5BEcB09nlL1A==
+	b=UrjrfzxjFNl5zwZbxgg/sUuemVB7evbnl9GRKOUxpibKtfXeWq8xKjOZJmPKW2N+k
+	 1PzALp4KErEHkw0e0Z4glyboJMsoZnP/H5AHPYwB8wOknbFH+snxHs1vQiBSPl2juB
+	 uOM8ASIcRk5UKoYaqQV8+taP/PLumT/MrK9Ezzn0YpEUW9TnR0KS0hSm710Rncf3Ub
+	 Bd2ZOUyKVUP4I31dRAmXxp5ylfbdUxZBbHQyfpKXSJDL9d085j0MzRPJElT+xx2zrS
+	 Id/QlIb4vtc5SGP8mepuNJgLnIdFU2Ge90DKBp8tfQdsZk+YCKsYZRaLtiGfhXwpEg
+	 LuzamxuTxnbWg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yonghong Song <yhs@fb.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	nathan@kernel.org,
+	wg@grandegger.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
 	ndesaulniers@google.com,
-	sunyucong@gmail.com,
-	linux-kselftest@vger.kernel.org,
+	linux-can@vger.kernel.org,
 	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 108/109] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
-Date: Mon, 30 May 2022 09:38:24 -0400
-Message-Id: <20220530133825.1933431-108-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 67/76] can: mcp251xfd: silence clang's -Wunaligned-access warning
+Date: Mon, 30 May 2022 09:43:57 -0400
+Message-Id: <20220530134406.1934928-67-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
+References: <20220530134406.1934928-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,87 +48,62 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yhs@fb.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-[ Upstream commit 4050764cbaa25760aab40857f723393c07898474 ]
+[ Upstream commit 1a6dd9996699889313327be03981716a8337656b ]
 
-Latest llvm-project upstream had a change of behavior
-related to qualifiers on function return type ([1]).
-This caused selftests btf_dump/btf_dump failure.
-The following example shows what changed.
+clang emits a -Wunaligned-access warning on union
+mcp251xfd_tx_ojb_load_buf.
 
-  $ cat t.c
-  typedef const char * const (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
-  struct t {
-    int a;
-    fn_ptr_arr2_t l;
-  };
-  int foo(struct t *arg) {
-    return arg->a;
-  }
+The reason is that field hw_tx_obj (not declared as packed) is being
+packed right after a 16 bits field inside a packed struct:
 
-Compiled with latest upstream llvm15,
-  $ clang -O2 -g -target bpf -S -emit-llvm t.c
-The related generated debuginfo IR looks like:
-  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
-  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !32)
-  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
-  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
-  !20 = !DISubroutineType(types: !21)
-  !21 = !{!22, null}
-  !22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
-  !23 = !DISubroutineType(types: !24)
-  !24 = !{!25, !28}
-  !25 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !26, size: 64)
-  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
-  !27 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
-You can see two intermediate const qualifier to pointer are dropped in debuginfo IR.
+| union mcp251xfd_tx_obj_load_buf {
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd cmd;
+| 		  /* ^ 16 bits fields */
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		  /* ^ not declared as packed */
+| 	} nocrc;
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd_crc cmd;
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		__be16 crc;
+| 	} crc;
+| } ____cacheline_aligned;
 
-With llvm14, we have following debuginfo IR:
-  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
-  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !34)
-  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
-  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
-  !20 = !DISubroutineType(types: !21)
-  !21 = !{!22, null}
-  !22 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !23)
-  !23 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !24, size: 64)
-  !24 = !DISubroutineType(types: !25)
-  !25 = !{!26, !30}
-  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
-  !27 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !28, size: 64)
-  !28 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !29)
-  !29 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
-All const qualifiers are preserved.
+Starting from LLVM 14, having an unpacked struct nested in a packed
+struct triggers a warning. c.f. [1].
 
-To adapt the selftest to both old and new llvm, this patch removed
-the intermediate const qualifier in const-to-ptr types, to make the
-test succeed again.
+This is a false positive because the field is always being accessed
+with the relevant put_unaligned_*() function. Adding __packed to the
+structure declaration silences the warning.
 
-  [1] https://reviews.llvm.org/D125919
+[1] https://github.com/llvm/llvm-project/issues/55520
 
-Reported-by: Mykola Lysenko <mykolal@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/r/20220523152044.3905809-1-yhs@fb.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/all/20220518114357.55452-1-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index 8aaa24a00322..970598dda732 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-@@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
- 
- typedef char * (*fn_ptr_arr1_t[10])(int **);
- 
--typedef char * (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
-+typedef char * (* (* const fn_ptr_arr2_t[5])())(char * (*)(int));
- 
- struct struct_w_typedefs {
- 	int_t a;
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index fa1246e39980..766dbd19bba6 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -426,7 +426,7 @@ struct mcp251xfd_hw_tef_obj {
+ /* The tx_obj_raw version is used in spi async, i.e. without
+  * regmap. We have to take care of endianness ourselves.
+  */
+-struct mcp251xfd_hw_tx_obj_raw {
++struct __packed mcp251xfd_hw_tx_obj_raw {
+ 	__le32 id;
+ 	__le32 flags;
+ 	u8 data[sizeof_field(struct canfd_frame, data)];
 -- 
 2.35.1
 
