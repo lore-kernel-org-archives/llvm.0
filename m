@@ -1,43 +1,45 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B328E3
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 20:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9EA3234
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 20:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653943177; x=1685479177;
+  t=1653943779; x=1685479779;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QTkIl0vdLXId/U9IUXO3ODj7+mfYPr8/vzuTi/UY4VI=;
-  b=YitZuIYBTg8qmuUbKSSLGkKawsV5RYF2FDsZ8SnPEN1loqjphIZ/SkuV
-   COs+Q0kAZs+15H9Uwk8ZPGLiVf28rJdJpYbtBhCzCKHcWzpEkPkkDJHx5
-   oba1o0jxdrxvDOXD81HxJHK1sBfnpcTMGHfJDFIejivhPuVhqUCejU7Fi
-   tG7iXH4n1ygE1GtvCzvi0e8FzoIJF3IaFGJWzJdriokvfunXzZmkMB9CF
-   r/FT8eEO2Z75XVBI2YKWXxT7s09ZqrzTpdc2LUvugEH0EhCg/oUOR+Npj
-   ptasfAWJxG30udzuBMSsIUZFUYdwMgXp+gZOnjeAJNhpofBlNgm9LMeMF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="273886368"
+  bh=yLgUrwmBvYJzRs/dmjYgtmUxC/OOMG1qe2Oil/gEllQ=;
+  b=K8iAVlxwjM0RSkI1jIl5MxmIxfkR9Dyeu5TDsPXdEIc9lx6FE5zTvPbt
+   9JrnHpDvZGRCLAxlZ/Yi7t5vAEgPbGTTXX53rL1jezTBSIPWDAtFvbyFu
+   pSDuPmNEn5WSi/w74VFKB9y/jAQHWLcgXKixZA1Bkhj4q19MlJjqAuMeU
+   tMnAHY0hRD/y0m7oEjU5hrDW4FnK+ui3hf6RbMS1isnFAGQmsyAtaGKiL
+   54S7Pb0fS7yfEZRmeKk3RyeE6e2D0KYPn10+9fNfxh6lZ3j83z6JXfjod
+   HtTYitbYJ6c84V5E3b6jojCisJWDbmIM9bMIWEgzXKv4zwXrINAvzNnLO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="255561771"
 X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="273886368"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 13:39:36 -0700
+   d="scan'208";a="255561771"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 13:49:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
-   d="scan'208";a="706279638"
+   d="scan'208";a="611553038"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 May 2022 13:39:34 -0700
+  by orsmga001.jf.intel.com with ESMTP; 30 May 2022 13:49:36 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nvmAn-0001yY-OI;
-	Mon, 30 May 2022 20:39:33 +0000
-Date: Tue, 31 May 2022 04:38:37 +0800
+	id 1nvmKV-0001yy-PD;
+	Mon, 30 May 2022 20:49:35 +0000
+Date: Tue, 31 May 2022 04:48:53 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-netfs 40/41]
- fs/netfs/io.c:596:15: warning: variable 'ix' set but not used
-Message-ID: <202205310415.IRC0glkJ-lkp@intel.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-netfs 32/41]
+ fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer
+ conversion passing 'unsigned long' to parameter of type 'volatile unsigned
+ long *'; take the address with &
+Message-ID: <202205310411.hGi2pWAu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,80 +51,55 @@ Content-Disposition: inline
 
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-netfs
 head:   1fc71b6b30f6d2a981c163b77c9aee0aecaecb29
-commit: 4efb4efb053eca8b1e75a9242112e8e159baab68 [40/41] fixes
-config: x86_64-randconfig-a011-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310415.IRC0glkJ-lkp@intel.com/config)
+commit: ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938 [32/41] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
+config: x86_64-randconfig-a015-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310411.hGi2pWAu-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4efb4efb053eca8b1e75a9242112e8e159baab68
+        # https://github.com/ammarfaizi2/linux-block/commit/ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
         git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-netfs
-        git checkout 4efb4efb053eca8b1e75a9242112e8e159baab68
+        git checkout ccc1acdfa787b5bf5c9c2b3f829b18f5a0bb0938
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/io.c:596:15: warning: variable 'ix' set but not used [-Wunused-but-set-variable]
-           unsigned int ix = 0, nsegs = 0;
-                        ^
+>> fs/cifs/fscache.c:112:37: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'volatile unsigned long *'; take the address with & [-Wint-conversion]
+                   set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~
+                                                     &
+   include/asm-generic/bitops/instrumented-atomic.h:26:70: note: passing argument to parameter 'addr' here
+   static __always_inline void set_bit(long nr, volatile unsigned long *addr)
+                                                                        ^
    1 warning generated.
 
 
-vim +/ix +596 fs/netfs/io.c
+vim +112 fs/cifs/fscache.c
 
-   586	
-   587	/*
-   588	 * Select the span of an xarray iterator we're going to use.  Limit it by both
-   589	 * maximum size and maximum number of segments.  It is assumed that segments
-   590	 * can be larger than a page in size, provided they're physically contiguous.
-   591	 */
-   592	static size_t netfs_limit_xarray(struct iov_iter *iter, size_t start_offset,
-   593					 size_t max_size, size_t max_segs)
-   594	{
-   595		struct folio *folio;
- > 596		unsigned int ix = 0, nsegs = 0;
-   597		loff_t pos = iter->xarray_start + iter->iov_offset;
-   598		pgoff_t index = pos / PAGE_SIZE;
-   599		size_t span = 0, n = iter->count;
-   600	
-   601		XA_STATE(xas, iter->xarray, index);
-   602	
-   603		if (WARN_ON(!iov_iter_is_xarray(iter)) ||
-   604		    WARN_ON(start_offset > n) ||
-   605		    n == 0)
-   606			return 0;
-   607		max_size = min(max_size, n - start_offset);
-   608	
-   609		rcu_read_lock();
-   610		xas_for_each(&xas, folio, ULONG_MAX) {
-   611			size_t offset, flen, len;
-   612			if (xas_retry(&xas, folio))
-   613				continue;
-   614			if (WARN_ON(xa_is_value(folio)))
-   615				break;
-   616			if (WARN_ON(folio_test_hugetlb(folio)))
-   617				break;
-   618	
-   619			flen = folio_size(folio);
-   620			offset = offset_in_folio(folio, pos);
-   621			len = min(max_size, flen - offset);
-   622			span += len;
-   623			nsegs++;
-   624			ix++;
-   625			if (span >= max_size || nsegs >= max_segs)
-   626				break;
-   627		}
-   628	
-   629		rcu_read_unlock();
-   630		return min(span, max_size);
-   631	}
-   632	
+    96	
+    97	void cifs_fscache_get_inode_cookie(struct inode *inode)
+    98	{
+    99		struct cifs_fscache_inode_coherency_data cd;
+   100		struct cifsInodeInfo *cifsi = CIFS_I(inode);
+   101		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+   102		struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+   103	
+   104		cifs_fscache_fill_coherency(&cifsi->vfs_inode, &cd);
+   105	
+   106		cifsi->netfs_ctx.cache =
+   107			fscache_acquire_cookie(tcon->fscache, 0,
+   108					       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+   109					       &cd, sizeof(cd),
+   110					       i_size_read(&cifsi->vfs_inode));
+   111		if (cifsi->netfs_ctx.cache)
+ > 112			set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+   113	
 
 -- 
 0-DAY CI Kernel Test Service
