@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3242F38
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 13:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0595C385B8;
-	Mon, 30 May 2022 13:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FABF2F38
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 13:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2ABC385B8;
+	Mon, 30 May 2022 13:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653918418;
-	bh=jEQDOTSyoEKOF9759rFdyj0iuN0nKojdVw6RmdvTscU=;
+	s=k20201202; t=1653918564;
+	bh=KC745XvqyuuZYSvsSRRk9yKT/qjIcafkwRqQ36ofcRg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=COdYbR0gveEUh5THUGeGIQg3YuaHn9oyhHsWdwe9229Sxt6wDC500v2vhrHl+zEQk
-	 oFefQoW7TUZ1et9osLt73sS2rHVhqQhFI2PLjwwU72miDxcmL8y12PKLXcDrP2fri4
-	 oSs1ZnadjmV05x/aMbS1YBjI0AJJ4t9CB1FDdfiszdztHZH+waGuZP3wBkcGX28pO6
-	 2MACve8FQVIvLiy8sk/4BKVmLG/fYKqOM9O8Q5rr28d0ni9PCGVU3V4zFO3q6qDP0R
-	 MoaO3lhP4BfdfhjCdjY9Lwhl1JAcxh+7e3Bo9gs7cySS/ULmxeCd0uGBVL+GofEpeb
-	 CMs6fW/Stafyg==
+	b=qPx/ZUgCUH+B3zPCtxyIHp9XAS0BP+61XqwO9H6neaDzEVl+xFivrH2j+CLuH60E9
+	 icEWiF1/AxujpZCWx9Ka8VC+RTlEhs+0/3f2JAWetWQaNiKsrayCKKLbrwz4URse6E
+	 lEE0KywtvmesJtU5ChYfB/3d9CIFftWuZ6nYAm7B4IA+XnIr2n7z2Y2ArgNtniYMb2
+	 91TciR+bYMfEoNnaU2zMgadRVpxdyezv0W4igK9wie3ErSA6UC4Wfy2ARXBEeM1ZAC
+	 xj12lc1jYNKfoo80LJi1b4ZN08FQQk4iE9DUZONQxplVFx+e5Tvqtr+cnxsViTPU15
+	 O+G9Yi4ZlQ4jg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -32,12 +32,12 @@ Cc: Yonghong Song <yhs@fb.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 75/76] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
-Date: Mon, 30 May 2022 09:44:05 -0400
-Message-Id: <20220530134406.1934928-75-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 55/55] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
+Date: Mon, 30 May 2022 09:47:01 -0400
+Message-Id: <20220530134701.1935933-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
+References: <20220530134701.1935933-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -117,7 +117,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index 31975c96e2c9..fe43556e1a61 100644
+index d4a02fe44a12..0620580a5c16 100644
 --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
 +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
 @@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
