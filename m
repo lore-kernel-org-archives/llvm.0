@@ -1,104 +1,105 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C1117F8
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 08:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653900744; x=1685436744;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=F1zZaD9pmXbd3mYt25x7qc88DmH1k0luONBgEixrLZE=;
-  b=iB8WIIRIzQOxFFD0B8HgtBRL9eVd94InoYsh3XYlY4jHsfwY2npmgwNj
-   riyAfldu5xCoaC4AwIaH3GSML3PM0OPhOErs45wgUnrey9N7zv34EhAhY
-   Il7S4/btjBoVXnDAka0vFVn11WVhMptN6FkHLiULL49V6HvaSOBZ0TfIj
-   c1sZf0a4UbIW/IAiBxYMIW4xqegr1GV/SJdnl7CG+y5OlDzs3eUz97UoA
-   3rcSAKXmUc8PHHgL3QF48whwrIFnetx9hXyk3AdVqdyCRimdaSPV+yA4N
-   aBuib5D/SoAPUI/F3O07o915OGDIYOk26reOm+RGKN2DBs/0R62DMQONr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="335589332"
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="335589332"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 01:52:24 -0700
-X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="605086342"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.170]) ([10.255.31.170])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 01:52:22 -0700
-Subject: Re: [kbuild-all] Re: llvm-objcopy: error: invalid output format:
- 'elf64-s390'
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202205290045.gOvUOkt3-lkp@intel.com>
- <YpJMIz/QjDW5IQGr@dev-arch.thelio-3990X>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <fd819888-844f-1a76-fee2-02e89faee090@intel.com>
-Date: Mon, 30 May 2022 16:52:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F89B17F8
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 09:33:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: kholk11)
+	with ESMTPSA id 2E08E1F4239C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1653903212;
+	bh=lMKzFjgelCV6B+f+Iojh6N9K0j7OtZvxDvvRazCQGi8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=e6XuJscA8OJ6A7Fm17Uq+gRoKgI6zyt8LrLBK7yB7ArBvRoXJRT7bFM0eSdRJGzFz
+	 9MtKae83zjZPsD06ZP6TJXtaz0rZDtz5IsOSHYpnVlu11jQOiO1NXC+MYsAfwLT87k
+	 xnpRjjICuJAHkns9zk1BegDzpMgZwqO+E2LhrdrtOTsT87WYSjH6VPQAgzSnVVb9ee
+	 czgPbdHxfFSJxnqoAqkb8wpT+hhVlEUZMIp6dhZlnBuEd6r3+ALjs7+6QCQSygPim9
+	 CbrEQj/WZr1UnxPYm7O7j4S4vzijkbP0sUarC1XOL3T6VEHE19R+uB0c89IevEZiD2
+	 RiSMTFTQJSMwg==
+Message-ID: <540be3e8-6a97-5e80-3767-892025ded07b@collabora.com>
+Date: Mon, 30 May 2022 11:33:28 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YpJMIz/QjDW5IQGr@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 4/4] regulator: Add driver for MT6332 PMIC regulators
 Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, lgirdwood@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, broonie@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20220523154709.118663-5-angelogioacchino.delregno@collabora.com>
+ <202205262341.pY4PkDL7-lkp@intel.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <202205262341.pY4PkDL7-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 5/29/2022 12:21 AM, Nathan Chancellor wrote:
-> On Sun, May 29, 2022 at 12:04:48AM +0800, kernel test robot wrote:
->> Hi Heiko,
->>
->> FYI, the error/warning still remains.
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
->> commit: adda746629b4a3950f313bc645fa0e54daee871c s390/purgatory: workaround llvm's IAS limitations
->> date:   11 days ago
->> config: s390-randconfig-c005-20220527 (https://download.01.org/0day-ci/archive/20220529/202205290045.gOvUOkt3-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0fbe3f3f486e01448121f7931a4ca29fac1504ab)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install s390 cross compiling tool for clang build
->>          # apt-get install binutils-s390x-linux-gnu
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adda746629b4a3950f313bc645fa0e54daee871c
->>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>          git fetch --no-tags linus master
->>          git checkout adda746629b4a3950f313bc645fa0e54daee871c
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> llvm-objcopy: error: invalid output format: 'elf64-s390'
+Il 26/05/22 17:12, kernel test robot ha scritto:
+> Hi AngeloGioacchino,
 > 
-> This is expected, as llvm-objcopy needs support for s390:
-> https://github.com/ClangBuiltLinux/linux/issues/1530
+> Thank you for the patch! Yet something to improve:
 > 
-> Please use GNU objcopy for the time being by explicitly providing
-> OBJCOPY=${CROSS_COMPILE}objcopy to make.
-
-Hi Nathan,
-
-Thanks for your reminding, will update it.
-
-Best Regards,
-Rong Chen
-
+> [auto build test ERROR on broonie-regulator/for-next]
+> [also build test ERROR on v5.18 next-20220526]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-> Cheers,
-> Nathan
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205262341.pY4PkDL7-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/062027827142f02db7e65b052d458f424811e30e
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-MT6331-6332-Regulators/20220523-235049
+>          git checkout 062027827142f02db7e65b052d458f424811e30e
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/regulator/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/regulator/mt6332-regulator.c:15:10: fatal error: 'linux/mfd/mt6332/registers.h' file not found
+>     #include <linux/mfd/mt6332/registers.h>
+
+
+Note for maintainers: this failure is expected, as this series depends on the
+series that introduces the MT6331 and MT6332 MFD device (with its headers, used
+by the regulator driver of this series)
+
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=643602
+
+
+
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1 error generated.
+> 
+> 
+> vim +15 drivers/regulator/mt6332-regulator.c
+> 
+>       9	
+>      10	#include <linux/module.h>
+>      11	#include <linux/of.h>
+>      12	#include <linux/platform_device.h>
+>      13	#include <linux/regmap.h>
+>      14	#include <linux/mfd/mt6397/core.h>
+>    > 15	#include <linux/mfd/mt6332/registers.h>
+>      16	#include <linux/regulator/driver.h>
+>      17	#include <linux/regulator/machine.h>
+>      18	#include <linux/regulator/mt6332-regulator.h>
+>      19	#include <linux/regulator/of_regulator.h>
+>      20	
 > 
