@@ -1,134 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FABF2F38
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 13:49:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2ABC385B8;
-	Mon, 30 May 2022 13:49:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653918564;
-	bh=KC745XvqyuuZYSvsSRRk9yKT/qjIcafkwRqQ36ofcRg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qPx/ZUgCUH+B3zPCtxyIHp9XAS0BP+61XqwO9H6neaDzEVl+xFivrH2j+CLuH60E9
-	 icEWiF1/AxujpZCWx9Ka8VC+RTlEhs+0/3f2JAWetWQaNiKsrayCKKLbrwz4URse6E
-	 lEE0KywtvmesJtU5ChYfB/3d9CIFftWuZ6nYAm7B4IA+XnIr2n7z2Y2ArgNtniYMb2
-	 91TciR+bYMfEoNnaU2zMgadRVpxdyezv0W4igK9wie3ErSA6UC4Wfy2ARXBEeM1ZAC
-	 xj12lc1jYNKfoo80LJi1b4ZN08FQQk4iE9DUZONQxplVFx+e5Tvqtr+cnxsViTPU15
-	 O+G9Yi4ZlQ4jg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Yonghong Song <yhs@fb.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	sunyucong@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 55/55] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
-Date: Mon, 30 May 2022 09:47:01 -0400
-Message-Id: <20220530134701.1935933-55-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
-References: <20220530134701.1935933-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748682F38
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 14:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1653920032;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=My0d94IHmiGuBzUrJl4GrT8CrvGcL1Llk9nU8K4G0dk=;
+	b=b2lLh9IKZBceztfNg2d1MSRgY6Pdggo0GCXT81dewcZObkax/8r7lB2riECDJRCIuGTTVf
+	2Gj3iLp7ckDrLzh3saulAguiWSwwIXEIYRgUAwOtIMbi1Nw+eJNmu6OuFuWXBLwyI9pOFO
+	CDFkJgJc5U0fAO77NHdh9Rvi/6awaeI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-sMz1J7GlMRuh1_HPtVf5TA-1; Mon, 30 May 2022 10:13:51 -0400
+X-MC-Unique: sMz1J7GlMRuh1_HPtVf5TA-1
+Received: by mail-wm1-f69.google.com with SMTP id c187-20020a1c35c4000000b003970013833aso4652526wma.1
+        for <llvm@lists.linux.dev>; Mon, 30 May 2022 07:13:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=My0d94IHmiGuBzUrJl4GrT8CrvGcL1Llk9nU8K4G0dk=;
+        b=XCNWwm3NRGR43PeFWx3zDEW4t+Mm5rhIhtETJFIMnABCxK4HnDHDYpuOcvrLhk8ozN
+         Qx1otGzti6ZNlxcnkjBx/wycorujDoCjZzVLb1CvAB1ObDIvk0BXyCE6Z5un1kOfUHy7
+         /o/Xkw5cfyHeYHA1LLXT8v7I8NfJNc3JmTtRtr7+hlGcliOZBgoadSF5RsOL6BXGAtQ7
+         HCNuyGS+cHWg7HtZSfHuBpChnkFmbVLec0FvwvCg9xxOBtdLW2nhBHyvVHasgv4+X4Sy
+         WrbIDMIxb26UGZ6bePX1jwqriyy+NOfmrMqY2AodPNsXDwO4vVxGynuS3A+/m6WZmptO
+         aJ/w==
+X-Gm-Message-State: AOAM533hPYNVkesXz8bquNd5uAVpRG/ICuJh07FQ1dcZ2fdimjkQp9M2
+	h9ZFr+9nCgW5GsbnrHrf6CZwv73dwEWdgvEI6nXMK1ZlLRvxZp0Ns/b1AW+xxgGG8qBfgXug+jW
+	TLIk4F6vviWimhw==
+X-Received: by 2002:adf:ee8d:0:b0:210:1873:c3d9 with SMTP id b13-20020adfee8d000000b002101873c3d9mr13911811wro.696.1653920029914;
+        Mon, 30 May 2022 07:13:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz/iCgo4uwGn5S2awMlXSuPR6ifvyuA9XqWpTCehNJrPlLvJl/TJOPFU8LtmrJ9Vif/v+TC3A==
+X-Received: by 2002:adf:ee8d:0:b0:210:1873:c3d9 with SMTP id b13-20020adfee8d000000b002101873c3d9mr13911785wro.696.1653920029576;
+        Mon, 30 May 2022 07:13:49 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003973d0a78casm11460061wmq.38.2022.05.30.07.13.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 07:13:49 -0700 (PDT)
+Message-ID: <a806fe1c-0e48-7936-26a4-fb3fd8270300@redhat.com>
+Date: Mon, 30 May 2022 16:13:48 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: unused
+ variable 'ssd130x_spi_table'
+From: Javier Martinez Canillas <javierm@redhat.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+References: <202205290422.eoxGqDMR-lkp@intel.com>
+ <607265eb-bfbf-4134-f2fe-d66cacd7bfbb@redhat.com>
+ <YpLF9jdqiub98Nl/@dev-arch.thelio-3990X>
+ <0a3c11c7-2669-ca85-69d1-3b3faa2f7a3c@redhat.com>
+In-Reply-To: <0a3c11c7-2669-ca85-69d1-3b3faa2f7a3c@redhat.com>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yhs@fb.com>
+On 5/29/22 09:34, Javier Martinez Canillas wrote:
+> Hello Nathan,
 
-[ Upstream commit 4050764cbaa25760aab40857f723393c07898474 ]
+[snip]
 
-Latest llvm-project upstream had a change of behavior
-related to qualifiers on function return type ([1]).
-This caused selftests btf_dump/btf_dump failure.
-The following example shows what changed.
+>>
+>> You'll see the same warning with GCC and a similar configuration:
+>>
+> 
+> Yes, I'm not saying that the compiler warning is a false positive but
+> that the reported error for this driver is. Since the correct fix on
+> a driver that support SPI platform devices would be to use the table
+> and set it to the struct spi_driver .id field.
+>  
+>> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: error: ‘ssd130x_spi_table’ defined but not used [-Werror=unused-const-variable=]
+>>   154 | static const struct spi_device_id ssd130x_spi_table[] = {
+>>       |                                   ^~~~~~~~~~~~~~~~~
+>> cc1: all warnings being treated as errors
+>>
+>> At the end of the day, this warning only shows up under W=1, so take it
+>> as you will. The kernel test robot is a sign, not a cop :)
+>>
+> 
+> I guess something that could be done is to guard the definition of the
+> ssd130x_spi_table with a `if IS_MODULE(CONFIG_DRM_SSD130X_SPI)`, since
+> if the symbol is 'y' and the driver built-in, then won't be used indeed.
+>  
 
-  $ cat t.c
-  typedef const char * const (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
-  struct t {
-    int a;
-    fn_ptr_arr2_t l;
-  };
-  int foo(struct t *arg) {
-    return arg->a;
-  }
+I posted https://lists.freedesktop.org/archives/dri-devel/2022-May/357088.html
+to fix this compile warning. Thanks folks!
 
-Compiled with latest upstream llvm15,
-  $ clang -O2 -g -target bpf -S -emit-llvm t.c
-The related generated debuginfo IR looks like:
-  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
-  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !32)
-  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
-  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
-  !20 = !DISubroutineType(types: !21)
-  !21 = !{!22, null}
-  !22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
-  !23 = !DISubroutineType(types: !24)
-  !24 = !{!25, !28}
-  !25 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !26, size: 64)
-  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
-  !27 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
-You can see two intermediate const qualifier to pointer are dropped in debuginfo IR.
-
-With llvm14, we have following debuginfo IR:
-  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
-  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !34)
-  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
-  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
-  !20 = !DISubroutineType(types: !21)
-  !21 = !{!22, null}
-  !22 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !23)
-  !23 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !24, size: 64)
-  !24 = !DISubroutineType(types: !25)
-  !25 = !{!26, !30}
-  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
-  !27 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !28, size: 64)
-  !28 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !29)
-  !29 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
-All const qualifiers are preserved.
-
-To adapt the selftest to both old and new llvm, this patch removed
-the intermediate const qualifier in const-to-ptr types, to make the
-test succeed again.
-
-  [1] https://reviews.llvm.org/D125919
-
-Reported-by: Mykola Lysenko <mykolal@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/r/20220523152044.3905809-1-yhs@fb.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index d4a02fe44a12..0620580a5c16 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-@@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
- 
- typedef char * (*fn_ptr_arr1_t[10])(int **);
- 
--typedef char * (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
-+typedef char * (* (* const fn_ptr_arr2_t[5])())(char * (*)(int));
- 
- struct struct_w_typedefs {
- 	int_t a;
 -- 
-2.35.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
