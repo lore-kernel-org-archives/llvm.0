@@ -1,92 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6662F38
-	for <llvm@lists.linux.dev>; Mon, 30 May 2022 14:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABBAC3411C;
-	Mon, 30 May 2022 14:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653920753;
-	bh=saYkzz6/Bxx+TCHOWJ3kqLX/CFp8+t6kRB+V5Vc0gWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TajnoueX0WPBLvP2NyXtPjnH7Lbf17+aIc8WM5OMeAbXKnTN0fGlgenaNQyB44Hv1
-	 OFIbLofzQEbCr0j0IcGE6uJsfMJ8ANOxkaO66bFnHWQlzrqSBX5PlaG5pYJ7Yw/g3w
-	 uu7DcTrRgHPeUJZYP1dOzV3lVBzK4qhpkPtKhxSo3LnuUmNFgKmAsx/67UrBmRNmme
-	 NYKDJ/TrBAmeJDFbmeN9jZbEuIZq1IN1zr5iXa8loEY/gmUxlAZig6R8wzHR6gAPdc
-	 v7PSI3ez232iK4R4yDORQRQVV8ewieBfUlo4fE21UC5uCkc4E+a0R0mLmQAu6mdxW9
-	 21ikbrKkdfpEA==
-Date: Mon, 30 May 2022 16:25:50 +0200
-From: Mark Brown <broonie@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: kernel test robot <lkp@intel.com>, lgirdwood@gmail.com,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 4/4] regulator: Add driver for MT6332 PMIC regulators
-Message-ID: <YpTT7l0oAJ51Df5A@sirena.org.uk>
-References: <20220523154709.118663-5-angelogioacchino.delregno@collabora.com>
- <202205262341.pY4PkDL7-lkp@intel.com>
- <540be3e8-6a97-5e80-3767-892025ded07b@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847EF18D
+	for <llvm@lists.linux.dev>; Mon, 30 May 2022 15:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653924376; x=1685460376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2ungWEJC/wLWMUdxC7TEVeV8vHit2unM/hbFzuyjdpk=;
+  b=cECkD6+aqQn/PUXVPppkj/G10kEMb2PGKa9AFETQmPl+qD4I6UcpAP93
+   dyCLeRnd1hyqYIxW0hbj/5frqwzMq4m23bqX8k8jgmv9+3lS/nUR+SkqD
+   p94ENms0v1RBzpqT8V3vmxi3W3SjZkTH0AshmwA52DdnoZqz3YMRPzfWe
+   XrTm5660Ns3muc451H3Zg8uYF4T8OLETGfRUAVFVjM3kp2k//a72Cm0g6
+   5/jULO55fdHmA5o6AwFZHSiAmvt/IjCz4eQqm4EwumOiUGRLAkFdLisjM
+   EAwIcddTveC1VChpFHl/baze21YTjx+ZsOEuDFNvNpgW8tu1ebny1/IrN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275030087"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="275030087"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 08:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="575977292"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 30 May 2022 08:26:10 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nvhHV-0001ne-TS;
+	Mon, 30 May 2022 15:26:09 +0000
+Date: Mon, 30 May 2022 23:25:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: menglong8.dong@gmail.com, kuba@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, rostedt@goodmis.org,
+	mingo@redhat.com, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, nhorman@tuxdriver.com, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, imagedong@tencent.com, dsahern@kernel.org,
+	talalahmad@google.com, keescook@chromium.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to convert
+ skb drop reason to string
+Message-ID: <202205302341.XYygIEYb-lkp@intel.com>
+References: <20220530081201.10151-3-imagedong@tencent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="M/QnrxKiHPTf+/lZ"
-Content-Disposition: inline
-In-Reply-To: <540be3e8-6a97-5e80-3767-892025ded07b@collabora.com>
-X-Cookie: May your camel be as swift as the wind.
-
-
---M/QnrxKiHPTf+/lZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220530081201.10151-3-imagedong@tencent.com>
 
-On Mon, May 30, 2022 at 11:33:28AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 26/05/22 17:12, kernel test robot ha scritto:
+Hi,
 
-> > > > drivers/regulator/mt6332-regulator.c:15:10: fatal error: 'linux/mfd/mt6332/registers.h' file not found
-> >     #include <linux/mfd/mt6332/registers.h>
+Thank you for the patch! Perhaps something to improve:
 
-> Note for maintainers: this failure is expected, as this series depends on the
-> series that introduces the MT6331 and MT6332 MFD device (with its headers, used
-> by the regulator driver of this series)
+[auto build test WARNING on net-next/master]
 
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=643602
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+config: hexagon-randconfig-r041-20220530 (https://download.01.org/0day-ci/archive/20220530/202205302341.XYygIEYb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+        git checkout 73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=hexagon 
 
-That's
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-   mfd: mt6397: Add basic support for MT6331+MT6332 PMIC
+All warnings (new ones prefixed by >>):
 
-It looks like that's not yet been applied - please resubmit when
-that series has been applied.  I'll need a pull request for the
-MFD bits I guess, please make sure Lee knows that's going to be
-needed.
-
-Please include human readable descriptions of things like commits and
-issues being discussed in e-mail in your mails, this makes them much
-easier for humans to read especially when they have no internet access.
-I do frequently catch up on my mail on flights or while otherwise
-travelling so this is even more pressing for me than just being about
-making things a bit easier to read.
-
---M/QnrxKiHPTf+/lZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKU0+0ACgkQJNaLcl1U
-h9AsZggAgZpjGrzxtd8KkXrv69DF/0hxAr/jx7H3w2zmf8aLSB4qEedlb5dWzKZk
-vI88CBNqC2odiuuNYqCF1IiiMQZD1ADsbtBZTzbti27HJ++Gplo6S6SuNzn8IrVJ
-93g8sr8sZ44zNixlJttjrQRlQ2DvzBOMZgd/3HboinR8fv8rwqM/EfHEjJaFE7uI
-tZcB0sjaEAFbR72N9wV24okXAFQMCOpEgRz/DG6ivdIbQPpeg6LDD3hNnm7oEgRB
-rXcN5A/8t1djYba7C1WBmEtwE0rIuMbmI/i+CR6mpTeN0D/U0EBe7PE2LYJzazfn
-BFMlFIahn5vPuC9lY4Yv1rc9i21W7w==
-=FtuI
------END PGP SIGNATURE-----
-
---M/QnrxKiHPTf+/lZ--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
