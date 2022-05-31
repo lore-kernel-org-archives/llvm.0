@@ -1,46 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17C93205
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 13:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BE517E
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 14:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654005395; x=1685541395;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YFSRK+qfPnas2RbhUfW/p8UkWfdUBGu7pVNYkVu6cuo=;
-  b=ToesZsieQ58h7f04bJEEhIfwaNH8BHRRuSjQG4vjY2XVVTYUsg3SzpFz
-   IKolvs2j53nzGSsHDjMslINvnpKmy4ZyI0EeRgckdKUIirjAEcShVsMs7
-   1p/xTPxvliE3XUvw4DOAMC+e97eFk5biM7Fa64pHNDsUpI5p7bnpzPgp+
-   JpI5rZ9jB1eFiySJAnwk8WF86qQ9V0qqon831k6oPtkQUi6M9qiKGu+Kz
-   4H0V6eq5CuLCDFECg8idQPv0ZsGg9dMmOdF62xdAgzyB8cjPfd98pT9uT
-   pbfnE2nuzwWPNyoSGPEyCsVUVEp+HRHJAxO6VYYKFid2wHIIImmQNIQFS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="262891238"
+  t=1654007838; x=1685543838;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y3T67bfAQbnZiZb2PCR9IrVytbv/b6C8m2GiQK7Xh+s=;
+  b=jtXqSc1waADALrpNzmQMYAj7MUB+WM0EzfwDRSA8ZXCZ4ZEmXk6cgGTX
+   oTk/aV/GUqWq+x7aTG1hhAMHzCBZdW+YxM6QLlzkJacogh0uQcYt7y+Jv
+   g1ynXqMfAw7Y7XuOK6ul3L0b7M8bCTSJgdoMBQxwW3xC7CTn7cOHY+IeR
+   zDFYBYh3SrZ/6FMzV8Jql3Dr/91GITtz2aKSyoWm00cqqJv3j9GDgGx0J
+   O4RlCuqjdH1h1cR/lxC/BiIOQBKg/UU+ydUrjRU1MFnTYZGrrLwv3VBnh
+   3L7RfYSb1eaoTxoth37UdIWFQRTOyqIpVV3y4UnmrpAxmhlPO91K1hmcC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="361645572"
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="262891238"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:56:15 -0700
+   d="scan'208";a="361645572"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:37:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="611838461"
+   d="scan'208";a="529604918"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 May 2022 06:56:14 -0700
+  by orsmga003.jf.intel.com with ESMTP; 31 May 2022 07:37:14 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nw2M1-0002lS-C0;
-	Tue, 31 May 2022 13:56:13 +0000
-Date: Tue, 31 May 2022 21:56:00 +0800
+	id 1nw2zi-0002mo-7f;
+	Tue, 31 May 2022 14:37:14 +0000
+Date: Tue, 31 May 2022 22:36:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Fangrui Song <maskray@google.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: Re: [PATCH] media: s5k4ecgx: Switch to GPIO descriptors
-Message-ID: <202205312118.7XAVBcnY-lkp@intel.com>
-References: <20220531084546.67737-1-linus.walleij@linaro.org>
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: ld.lld: error: undefined symbol: .early_setup
+Message-ID: <202205312222.XiSqyPc4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,224 +46,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220531084546.67737-1-linus.walleij@linaro.org>
 
-Hi Linus,
+Hi Fangrui,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on v5.18 next-20220531]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220531-164948
-base:   git://linuxtv.org/media_tree.git master
-config: hexagon-randconfig-r041-20220531 (https://download.01.org/0day-ci/archive/20220531/202205312118.7XAVBcnY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+commit: 0355785313e2191be4e1108cdbda94ddb0238c48 powerpc: Add "-z notext" flag to disable diagnostic
+date:   10 months ago
+config: powerpc64-randconfig-r023-20220530 (https://download.01.org/0day-ci/archive/20220531/202205312222.XiSqyPc4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d6a5013d9dd546a9c9d7ed3714e861f7593b1635
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220531-164948
-        git checkout d6a5013d9dd546a9c9d7ed3714e861f7593b1635
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0355785313e2191be4e1108cdbda94ddb0238c48
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0355785313e2191be4e1108cdbda94ddb0238c48
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/media/i2c/s5k4ecgx.c:897:38: warning: missing terminating '"' character [-Winvalid-pp-token]
-           gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
-                                               ^
->> drivers/media/i2c/s5k4ecgx.c:897:38: error: expected expression
->> drivers/media/i2c/s5k4ecgx.c:947:26: error: use of undeclared identifier 's5k4ecgx_id'
-   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
-                            ^
->> drivers/media/i2c/s5k4ecgx.c:954:12: error: use of undeclared identifier 's5k4ecgx_remove'
-           .remove = s5k4ecgx_remove,
-                     ^
-   drivers/media/i2c/s5k4ecgx.c:955:14: error: use of undeclared identifier 's5k4ecgx_id'
-           .id_table = s5k4ecgx_id,
-                       ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
-   module_i2c_driver(v4l2_i2c_driver);
-   ^
-   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
-           module_driver(__i2c_driver, i2c_add_driver, \
-           ^
-   include/linux/device/driver.h:260:41: note: expanded from macro 'module_driver'
-   static int __init __driver##_init(void) \
-                                           ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
-   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
-           module_driver(__i2c_driver, i2c_add_driver, \
-           ^
-   include/linux/device/driver.h:263:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:132:2: note: expanded from macro '\
-   module_init'
-           { return initfn; }                                      \
-           ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
-   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
-           module_driver(__i2c_driver, i2c_add_driver, \
-           ^
-   include/linux/device/driver.h:265:42: note: expanded from macro 'module_driver'
-   static void __exit __driver##_exit(void) \
-                                            ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
-   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
-           module_driver(__i2c_driver, i2c_add_driver, \
-           ^
-   include/linux/device/driver.h:268:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:140:2: note: expanded from macro '\
-   module_exit'
-           { return exitfn; }                                      \
-           ^
->> drivers/media/i2c/s5k4ecgx.c:964:36: error: expected '}'
-   MODULE_FIRMWARE(S5K4ECGX_FIRMWARE);
-                                      ^
-   drivers/media/i2c/s5k4ecgx.c:856:1: note: to match this '{'
-   {
-   ^
->> drivers/media/i2c/s5k4ecgx.c:947:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
-   ^
-   include/linux/module.h:244:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
-   extern typeof(name) __mod_##type##__##name##_device_table               \
-                       ^
-   <scratch space>:94:1: note: expanded from here
-   __mod_i2c__s5k4ecgx_id_device_table
-   ^
->> drivers/media/i2c/s5k4ecgx.c:895:8: error: use of undeclared label 'out_err'
-                   goto out_err;
-                        ^
-   2 warnings and 10 errors generated.
-
-
-vim +897 drivers/media/i2c/s5k4ecgx.c
-
-   853	
-   854	static int s5k4ecgx_probe(struct i2c_client *client,
-   855				  const struct i2c_device_id *id)
-   856	{
-   857		struct s5k4ecgx_platform_data *pdata = client->dev.platform_data;
-   858		struct v4l2_subdev *sd;
-   859		struct s5k4ecgx *priv;
-   860		int ret, i;
-   861	
-   862		if (pdata == NULL) {
-   863			dev_err(&client->dev, "platform data is missing!\n");
-   864			return -EINVAL;
-   865		}
-   866	
-   867		priv = devm_kzalloc(&client->dev, sizeof(struct s5k4ecgx), GFP_KERNEL);
-   868		if (!priv)
-   869			return -ENOMEM;
-   870	
-   871		mutex_init(&priv->lock);
-   872		priv->streaming = 0;
-   873	
-   874		sd = &priv->sd;
-   875		/* Registering subdev */
-   876		v4l2_i2c_subdev_init(sd, client, &s5k4ecgx_ops);
-   877		/* Static name; NEVER use in new drivers! */
-   878		strscpy(sd->name, S5K4ECGX_DRIVER_NAME, sizeof(sd->name));
-   879	
-   880		sd->internal_ops = &s5k4ecgx_subdev_internal_ops;
-   881		/* Support v4l2 sub-device user space API */
-   882		sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-   883	
-   884		priv->pad.flags = MEDIA_PAD_FL_SOURCE;
-   885		sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
-   886		ret = media_entity_pads_init(&sd->entity, 1, &priv->pad);
-   887		if (ret)
-   888			return ret;
-   889	
-   890		/* Request GPIO lines asserted */
-   891		priv->stby = devm_gpiod_get(&client->dev, "standby", GPIOD_OUT_HIGH);
-   892		if (IS_ERR(priv->stby)) {
-   893			v4l2_err(sd, "failed to request gpio S5K4ECGX_STBY");
-   894			ret = PTR_ERR(priv->stby);
- > 895			goto out_err;
-   896		}
- > 897		gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
-   898		priv->reset = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_HIGH);
-   899		if (IS_ERR(priv->reset)) {
-   900			v4l2_err(sd, "failed to request gpio S5K4ECGX_RST");
-   901			ret = PTR_ERR(priv->reset);
-   902			goto out_err;
-   903		}
-   904		gpiod_set_consumer_name(priv->reset, "S5K4ECGX_RST");
-   905	
-   906		for (i = 0; i < S5K4ECGX_NUM_SUPPLIES; i++)
-   907			priv->supplies[i].supply = s5k4ecgx_supply_names[i];
-   908	
-   909		ret = devm_regulator_bulk_get(&client->dev, S5K4ECGX_NUM_SUPPLIES,
-   910					 priv->supplies);
-   911		if (ret) {
-   912			dev_err(&client->dev, "Failed to get regulators\n");
-   913			goto out_err;
-   914		}
-   915		ret = s5k4ecgx_init_v4l2_ctrls(priv);
-   916		if (ret)
-   917			goto out_err;
-   918	
-   919		priv->curr_pixfmt = &s5k4ecgx_formats[0];
-   920		priv->curr_frmsize = &s5k4ecgx_prev_sizes[0];
-   921	
-   922		return 0;
-   923	
-   924	out_err:
-   925		media_entity_cleanup(&priv->sd.entity);
-   926	
-   927		return ret;
-   928	}
-   929	
-   930	static int s5k4ecgx_remove(struct i2c_client *client)
-   931	{
-   932		struct v4l2_subdev *sd = i2c_get_clientdata(client);
-   933		struct s5k4ecgx *priv = to_s5k4ecgx(sd);
-   934	
-   935		mutex_destroy(&priv->lock);
-   936		v4l2_device_unregister_subdev(sd);
-   937		v4l2_ctrl_handler_free(&priv->handler);
-   938		media_entity_cleanup(&sd->entity);
-   939	
-   940		return 0;
-   941	}
-   942	
-   943	static const struct i2c_device_id s5k4ecgx_id[] = {
-   944		{ S5K4ECGX_DRIVER_NAME, 0 },
-   945		{}
-   946	};
- > 947	MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
-   948	
-   949	static struct i2c_driver v4l2_i2c_driver = {
-   950		.driver = {
-   951			.name = S5K4ECGX_DRIVER_NAME,
-   952		},
-   953		.probe = s5k4ecgx_probe,
- > 954		.remove = s5k4ecgx_remove,
-   955		.id_table = s5k4ecgx_id,
-   956	};
-   957	
- > 958	module_i2c_driver(v4l2_i2c_driver);
-   959	
-   960	MODULE_DESCRIPTION("Samsung S5K4ECGX 5MP SOC camera");
-   961	MODULE_AUTHOR("Sangwook Lee <sangwook.lee@linaro.org>");
-   962	MODULE_AUTHOR("Seok-Young Jang <quartz.jang@samsung.com>");
-   963	MODULE_LICENSE("GPL");
- > 964	MODULE_FIRMWARE(S5K4ECGX_FIRMWARE);
+>> ld.lld: error: undefined symbol: .early_setup
+   >>> referenced by arch/powerpc/kernel/head_64.o:(.ref.text+0xAE)
+   >>> did you mean: early_setup
+   >>> defined in: arch/powerpc/built-in.a(kernel/setup_64.o)
 
 -- 
 0-DAY CI Kernel Test Service
