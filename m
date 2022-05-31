@@ -1,45 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53A12F22
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 12:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B959D2F3A
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 13:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653999793; x=1685535793;
+  t=1654002855; x=1685538855;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nL2+Ikam+GBqRnVV+mHEQYa/V/rwiJja/RdNvaJ6QqY=;
-  b=mOIUny3iW+oAHyv1rgqVTnrYijAaJbe8fCshxrh169YdUM//PjU+HCIl
-   jYEdTVC0+nt9UhzFf9NOE9Dk89J7hO4UyMRziTnL3tXnwdv4J7xF6/IDu
-   QiXrRFL9s8CQE5aB1abN88WpRW1ggzWdcvxwajjfqPsU+dd/buqbmNl8b
-   WXPU/EA+875kQNOgQ3dCfv+9CKqAl52tuU/yuVrF0cY9X/muxIb30WTO1
-   nTsdE9AoALXWE9zeNQgTapV3Kjl8ytybvoR30WQB9pwermljGIq+LoZKG
-   bOwzOuT+mjNM2ZPaIptWFK4th4G4CmqAhGTxBM8/vIlFPhR7OtIZHM2/3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="262870695"
+  bh=SegM12i9kVBv1XKnxpXguRMrPff9WVpH727h9VAvaCY=;
+  b=idQTXTnDrAj/L7vpbdj4bSVii3TCK5uSllWRbaoj9/MkDo8XfJQrO9ZL
+   l6Rhe/W8/Gooqz5X8o5CjJMT64An/EMx2vB8hJ9fCwzoAwpVywTseI1T+
+   dxbUgQBLC7jlSXzrqth1t8P6uE5dOnlzJPA8czOWtDDOYewnroc04FBFZ
+   fn8WlcWsmka2lYipD+eSNixsksytsUS17dWPg5tRe4vc+MjIRJbZbnAl4
+   cc954QAN7HbxbT3n15c9WJY7eqzlv/2P61Q2wpGUNZREZGp1McNYb6Im2
+   PPTmV1YuOT+X7+kUThAlN5WRUQpzD+jsDvZGUCp3Wq4jurJ9j34f9CS+K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="361622970"
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="262870695"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 05:23:13 -0700
+   d="scan'208";a="361622970"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:14:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="679553332"
+   d="scan'208";a="611825633"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 31 May 2022 05:23:10 -0700
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2022 06:14:13 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nw0ty-0002h9-6Z;
-	Tue, 31 May 2022 12:23:10 +0000
-Date: Tue, 31 May 2022 20:22:47 +0800
+	id 1nw1hM-0002k2-Jl;
+	Tue, 31 May 2022 13:14:12 +0000
+Date: Tue, 31 May 2022 21:13:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+To: Marcelo Tosatti <mtosatti@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [stable:linux-5.15.y 3230/6856]
- drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a
- string literal (potentially insecure)
-Message-ID: <202205312043.eacilUVl-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: kernel/time/hrtimer.c:276:20: warning: unused function
+ 'is_migration_base'
+Message-ID: <202205312116.EvPoTOOK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,98 +46,96 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Tvrtko,
+Hi Marcelo,
 
 FYI, the error/warning still remains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   4e67be407725b1d8b829ed2075987037abec98ec
-commit: 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7 [3230/6856] drm/i915: Flush TLBs before releasing backing store
-config: x86_64-randconfig-a014-20220530 (https://download.01.org/0day-ci/archive/20220531/202205312043.eacilUVl-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
+date:   10 months ago
+config: mips-randconfig-r033-20220530 (https://download.01.org/0day-ci/archive/20220531/202205312116.EvPoTOOK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/time/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt.c:966:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   1 error generated.
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:1816:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project c825abd6b0198fb088d9752f556a70705bc99dfd)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-c825abd6b0/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
 
 
-vim +966 drivers/gpu/drm/i915/gt/intel_gt.c
+vim +/is_migration_base +276 kernel/time/hrtimer.c
 
-   927	
-   928	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-   929	{
-   930		static const i915_reg_t gen8_regs[] = {
-   931			[RENDER_CLASS]			= GEN8_RTCR,
-   932			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
-   933			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
-   934			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
-   935		};
-   936		static const i915_reg_t gen12_regs[] = {
-   937			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
-   938			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
-   939			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
-   940			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
-   941		};
-   942		struct drm_i915_private *i915 = gt->i915;
-   943		struct intel_uncore *uncore = gt->uncore;
-   944		struct intel_engine_cs *engine;
-   945		enum intel_engine_id id;
-   946		const i915_reg_t *regs;
-   947		unsigned int num = 0;
-   948	
-   949		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-   950			return;
-   951	
-   952		if (GRAPHICS_VER(i915) == 12) {
-   953			regs = gen12_regs;
-   954			num = ARRAY_SIZE(gen12_regs);
-   955		} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
-   956			regs = gen8_regs;
-   957			num = ARRAY_SIZE(gen8_regs);
-   958		} else if (GRAPHICS_VER(i915) < 8) {
-   959			return;
-   960		}
-   961	
-   962		if (drm_WARN_ONCE(&i915->drm, !num,
-   963				  "Platform does not implement TLB invalidation!"))
-   964			return;
-   965	
- > 966		GEM_TRACE("\n");
+c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+
+:::::: The code at line 276 was first introduced by commit
+:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
