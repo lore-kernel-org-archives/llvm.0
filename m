@@ -1,44 +1,47 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E5A20F1
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 04:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB56E20F2
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 04:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653972418; x=1685508418;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UMXd5+SRH/26T4spxfNmiDa6kr0xrNsZ15FEQuO0q1g=;
-  b=YI+pru9M7+xy6qlegL6KZlub6erXa629TktY/vl9ZtYW+e7SGIUr6oZi
-   qVSl8yx5WY9yzVMXOQLX/JKxM7ePIjaYpJKrfJC2YwcCLiCwJmxYY3R53
-   B+KVE5UU4JscJYY4n/TtkXKGnbSM26DYuYhTE2UNxyuc5G1hUeIxczEQp
-   IQ63IDlyxUovtbhNqCGNpM168uJrUAcLGXL8gQfJtYwp3ZQTpqWe2pO4b
-   X5n/AvLNRQOBBoR8bP7aleQnmRxSVZQb7C/gnYAYTbkGNZoxbMR/afWJu
-   Gu+ZasGtD6apO7MJ5JbLow33piu1yRrvmsLHeqASaKoCUFlKYv+t9nzbh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="273945045"
+  t=1653972419; x=1685508419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qn+cuAzxBVUymorN0NpF3cWBtZUAaq3foyRv2NhaqB8=;
+  b=mYNs1FjECJ41ju4wCd5x02pFUrPfT68m5jL2DUpBR+yQQiwFm+RAupE3
+   s8nrZbA2fJo9nq2MeMiQ7uY2+HG1QGI+20/jS2abdbxDuULiGgzWDZ+EE
+   UbfjkzcOwDGyC3NXyBzbtQHc+NVVrK51NUVfpcLqixq5QCkXn6gdOEXts
+   VHc5mDJIy5BZuW86QYq6lyhfJ+qLSL/HeUnZOgagT1OPVyAWZrFuRrr9l
+   3wDcCC1qHHYg08/lWafuCjleGtoRPr2z3Tj45lWHy0AXdkjWs2WDOZ10i
+   jKhmfp/1On6MiEiGNOwBMuM3QHaLqht98jps1RPey1OMo9ggZIOi8e0jb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="257202460"
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="273945045"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 21:46:58 -0700
+   d="scan'208";a="257202460"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 21:46:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="562151958"
+   d="scan'208";a="679399930"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 May 2022 21:46:56 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 30 May 2022 21:46:56 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nvtmR-0002Ka-Gh;
+	id 1nvtmR-0002Kc-H9;
 	Tue, 31 May 2022 04:46:55 +0000
-Date: Tue, 31 May 2022 12:46:49 +0800
+Date: Tue, 31 May 2022 12:46:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Raghu Bankapur <quic_rbankapu@quicinc.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 470/1102]
- drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for
- function 'jesd204_phy_set_speed'
-Message-ID: <202205311254.tY9EYYED-lkp@intel.com>
+	Krishna Jha <quic_kkishorj@quicinc.com>
+Subject: Re: [PATCH V0 1/1] asoc: msm: use hashtable to check kcontrol
+Message-ID: <202205311233.abvVh5rg-lkp@intel.com>
+References: <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,56 +50,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
 
-Hi Shubhrajyoti,
+Hi Raghu,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-head:   8e42834c82e505bacccca3c9d35da7041793d9d7
-commit: 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486 [470/1102] misc: jesd204b: Add driver for Xilinx jesd204b
-config: arm-randconfig-r026-20220531 (https://download.01.org/0day-ci/archive/20220531/202205311254.tY9EYYED-lkp@intel.com/config)
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on broonie-sound/for-next v5.18 next-20220527]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raghu-Bankapur/asoc-msm-use-hashtable-to-check-kcontrol/20220529-165246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: arm64-randconfig-r036-20220531 (https://download.01.org/0day-ci/archive/20220531/202205311233.abvVh5rg-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/Xilinx/linux-xlnx/commit/4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-        git checkout 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/244d3a3d274761ea83000880d73cc9b0a01b2a4a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Raghu-Bankapur/asoc-msm-use-hashtable-to-check-kcontrol/20220529-165246
+        git checkout 244d3a3d274761ea83000880d73cc9b0a01b2a4a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/xlnx/ drivers/media/i2c/ drivers/misc/jesd204b/ drivers/staging/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/mediatek/ sound/core/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/misc/jesd204b/jesd_phy.c:97:6: warning: variable 'pll' set but not used [-Wunused-but-set-variable]
-           int pll = st->pll;
-               ^
->> drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for function 'jesd204_phy_set_speed' [-Wmissing-prototypes]
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-        ^
-   drivers/misc/jesd204b/jesd_phy.c:172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
+>> sound/core/control.c:375:14: warning: no previous prototype for function 'snd_ctl_strtoint' [-Wmissing-prototypes]
+   unsigned int snd_ctl_strtoint(const char *s)
+                ^
+   sound/core/control.c:375:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int snd_ctl_strtoint(const char *s)
    ^
    static 
-   2 warnings generated.
+   1 warning generated.
 
 
-vim +/jesd204_phy_set_speed +172 drivers/misc/jesd204b/jesd_phy.c
+vim +/snd_ctl_strtoint +375 sound/core/control.c
 
-   171	
- > 172	void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-   173	{
-   174		/* make sure we have the correct PLL's selected. */
-   175		configure_channel_drp(st, band);
-   176	}
-   177	
+   373	
+   374	/* Used to convert the string into int value -- BKDRHash */
+ > 375	unsigned int snd_ctl_strtoint(const char *s)
+   376	{
+   377		unsigned int res = 0;
+   378	
+   379		while (*s)
+   380			res = (res << 5) - res + (*s++);
+   381	
+   382		return (res & 0x7FFFFFFF);
+   383	}
+   384	
 
 -- 
 0-DAY CI Kernel Test Service
