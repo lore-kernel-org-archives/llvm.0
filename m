@@ -1,43 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499A420F1
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 06:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164FA18D
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 06:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653978121; x=1685514121;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OJB59SHnQ9L5ybsWDFMb1uJ4a6XSHniBIWBBViBGNbo=;
-  b=OxlG60p82rSaiFbM1bZJYZK1NsFEagGrTVoyk4Wcu1LaONeFJTCXajvS
-   KOVSj5O+8CJqIx0zRu+e7AirDV4H95CeMtPygJzwcQTMlaaq7rdUYCGAT
-   EmBcsY89zAg+DUJ6jb8zPTK0v/PW34jrFC1atuuwt8lSZxWHC7S9AwOkd
-   jVX7xTC7nW9cl6sxuIO++MrNNcPVBVEJOMJ2yMO+lEBsuP5yX8J8A4CcU
-   dyRAGgUYkFkdb9KkY/kyTfiJcPUkw8+bCZvkrzQlVXgQZbcC/Bh1NUqqq
-   agkzocAnSDs+inD19hfzy3kEigf3YrigDhDUEs5wM5HA53W/OidIWHKad
+  t=1653978722; x=1685514722;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4GlZMiryq20PHVIOwKQIJ2kXn5tZS7yxCLfxDhxlPJU=;
+  b=I6+x8XbJKVnWohiBX2743qFYjgaHZrBF2fEcY7ETry1cjUz2MvsX8Ki2
+   RmnAth4pvsjkDBhakf0cAzg7gyfJSDb09JBud3r/ngFzno1zuPZTx5B2e
+   RZxKUu+ov1ff5JxpGvxS45UppJkq+CVRCi0LNoxcbJbjc7Lo4OYhBsqzT
+   B5f2YYe9cXGo+k8ta3lSYsHkppbeVR0dqmjZnoJfLiY0dt8WRMJw6Sq94
+   KiWRXIHFYC8WymKpztAUO5j50V6vpsWuhf+PW/0XxQy5Q+H/lPx9s0AfA
+   A4vy5TRY50P6P+94MlKZNAopwiYCr2jGd0x66q5nv91iQVV5cEAW+ukBn
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="255026757"
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="273963337"
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="255026757"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 23:22:00 -0700
+   d="scan'208";a="273963337"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 23:32:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="611690143"
+   d="scan'208";a="754468071"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 May 2022 23:21:59 -0700
+  by orsmga005.jf.intel.com with ESMTP; 30 May 2022 23:31:59 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nvvGQ-0002Py-Aw;
-	Tue, 31 May 2022 06:21:58 +0000
-Date: Tue, 31 May 2022 14:21:12 +0800
+	id 1nvvQ6-0002QI-I0;
+	Tue, 31 May 2022 06:31:58 +0000
+Date: Tue, 31 May 2022 14:31:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC] mm/page_isolation: Fix an infinite loop in
- isolate_single_pageblock()
-Message-ID: <202205311448.NLkd29GM-lkp@intel.com>
-References: <20220530115027.123341-1-anshuman.khandual@arm.com>
+To: Guangbin Huang <huangguangbin2@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:949:12:
+ warning: stack frame size (1048) exceeds limit (1024) in
+ 'hclge_dbg_dump_tm_pri'
+Message-ID: <202205311418.t6cRf5o7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,155 +46,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530115027.123341-1-anshuman.khandual@arm.com>
 
-Hi Anshuman,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-page_isolation-Fix-an-infinite-loop-in-isolate_single_pageblock/20220530-195220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220531/202205311448.NLkd29GM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+commit: 04d96139ddb32dd15e5941c303f511a92759a5be net: hns3: refine function hclge_dbg_dump_tm_pri()
+date:   9 months ago
+config: mips-randconfig-r001-20220530 (https://download.01.org/0day-ci/archive/20220531/202205311418.t6cRf5o7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/13632aee393de39b7f25b163df4d9fd6a29e4061
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/mm-page_isolation-Fix-an-infinite-loop-in-isolate_single_pageblock/20220530-195220
-        git checkout 13632aee393de39b7f25b163df4d9fd6a29e4061
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04d96139ddb32dd15e5941c303f511a92759a5be
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 04d96139ddb32dd15e5941c303f511a92759a5be
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/hns3pf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/page_isolation.c:388:18: warning: unused variable 'nr_pages' [-Wunused-variable]
-                           unsigned long nr_pages = compound_nr(page);
-                                         ^
->> mm/page_isolation.c:390:18: warning: unused variable 'head_pfn' [-Wunused-variable]
-                           unsigned long head_pfn = page_to_pfn(head);
-                                         ^
+>> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:949:12: warning: stack frame size (1048) exceeds limit (1024) in 'hclge_dbg_dump_tm_pri' [-Wframe-larger-than]
+   static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
+              ^
+   drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:722:12: warning: stack frame size (1088) exceeds limit (1024) in 'hclge_dbg_dump_tm_pg' [-Wframe-larger-than]
+   static int hclge_dbg_dump_tm_pg(struct hclge_dev *hdev, char *buf, int len)
+              ^
    2 warnings generated.
 
 
-vim +/nr_pages +388 mm/page_isolation.c
+vim +/hclge_dbg_dump_tm_pri +949 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
 
-a5d76b54a3f3a4 KAMEZAWA Hiroyuki 2007-10-16  281  
-b2c9e2fbba3253 Zi Yan            2022-05-12  282  /**
-b2c9e2fbba3253 Zi Yan            2022-05-12  283   * isolate_single_pageblock() -- tries to isolate a pageblock that might be
-b2c9e2fbba3253 Zi Yan            2022-05-12  284   * within a free or in-use page.
-b2c9e2fbba3253 Zi Yan            2022-05-12  285   * @boundary_pfn:		pageblock-aligned pfn that a page might cross
-88ee134320b831 Zi Yan            2022-05-24  286   * @flags:			isolation flags
-b2c9e2fbba3253 Zi Yan            2022-05-12  287   * @gfp_flags:			GFP flags used for migrating pages
-b2c9e2fbba3253 Zi Yan            2022-05-12  288   * @isolate_before:	isolate the pageblock before the boundary_pfn
-b2c9e2fbba3253 Zi Yan            2022-05-12  289   *
-b2c9e2fbba3253 Zi Yan            2022-05-12  290   * Free and in-use pages can be as big as MAX_ORDER-1 and contain more than one
-b2c9e2fbba3253 Zi Yan            2022-05-12  291   * pageblock. When not all pageblocks within a page are isolated at the same
-b2c9e2fbba3253 Zi Yan            2022-05-12  292   * time, free page accounting can go wrong. For example, in the case of
-b2c9e2fbba3253 Zi Yan            2022-05-12  293   * MAX_ORDER-1 = pageblock_order + 1, a MAX_ORDER-1 page has two pagelbocks.
-b2c9e2fbba3253 Zi Yan            2022-05-12  294   * [         MAX_ORDER-1         ]
-b2c9e2fbba3253 Zi Yan            2022-05-12  295   * [  pageblock0  |  pageblock1  ]
-b2c9e2fbba3253 Zi Yan            2022-05-12  296   * When either pageblock is isolated, if it is a free page, the page is not
-b2c9e2fbba3253 Zi Yan            2022-05-12  297   * split into separate migratetype lists, which is supposed to; if it is an
-b2c9e2fbba3253 Zi Yan            2022-05-12  298   * in-use page and freed later, __free_one_page() does not split the free page
-b2c9e2fbba3253 Zi Yan            2022-05-12  299   * either. The function handles this by splitting the free page or migrating
-b2c9e2fbba3253 Zi Yan            2022-05-12  300   * the in-use page then splitting the free page.
-b2c9e2fbba3253 Zi Yan            2022-05-12  301   */
-88ee134320b831 Zi Yan            2022-05-24  302  static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
-9b209e557d698f Zi Yan            2022-05-26  303  			gfp_t gfp_flags, bool isolate_before, bool skip_isolation)
-b2c9e2fbba3253 Zi Yan            2022-05-12  304  {
-b2c9e2fbba3253 Zi Yan            2022-05-12  305  	unsigned char saved_mt;
-b2c9e2fbba3253 Zi Yan            2022-05-12  306  	unsigned long start_pfn;
-b2c9e2fbba3253 Zi Yan            2022-05-12  307  	unsigned long isolate_pageblock;
-b2c9e2fbba3253 Zi Yan            2022-05-12  308  	unsigned long pfn;
-b2c9e2fbba3253 Zi Yan            2022-05-12  309  	struct zone *zone;
-88ee134320b831 Zi Yan            2022-05-24  310  	int ret;
-b2c9e2fbba3253 Zi Yan            2022-05-12  311  
-b2c9e2fbba3253 Zi Yan            2022-05-12  312  	VM_BUG_ON(!IS_ALIGNED(boundary_pfn, pageblock_nr_pages));
-b2c9e2fbba3253 Zi Yan            2022-05-12  313  
-b2c9e2fbba3253 Zi Yan            2022-05-12  314  	if (isolate_before)
-b2c9e2fbba3253 Zi Yan            2022-05-12  315  		isolate_pageblock = boundary_pfn - pageblock_nr_pages;
-b2c9e2fbba3253 Zi Yan            2022-05-12  316  	else
-b2c9e2fbba3253 Zi Yan            2022-05-12  317  		isolate_pageblock = boundary_pfn;
-b2c9e2fbba3253 Zi Yan            2022-05-12  318  
-b2c9e2fbba3253 Zi Yan            2022-05-12  319  	/*
-b2c9e2fbba3253 Zi Yan            2022-05-12  320  	 * scan at the beginning of MAX_ORDER_NR_PAGES aligned range to avoid
-b2c9e2fbba3253 Zi Yan            2022-05-12  321  	 * only isolating a subset of pageblocks from a bigger than pageblock
-b2c9e2fbba3253 Zi Yan            2022-05-12  322  	 * free or in-use page. Also make sure all to-be-isolated pageblocks
-b2c9e2fbba3253 Zi Yan            2022-05-12  323  	 * are within the same zone.
-b2c9e2fbba3253 Zi Yan            2022-05-12  324  	 */
-b2c9e2fbba3253 Zi Yan            2022-05-12  325  	zone  = page_zone(pfn_to_page(isolate_pageblock));
-b2c9e2fbba3253 Zi Yan            2022-05-12  326  	start_pfn  = max(ALIGN_DOWN(isolate_pageblock, MAX_ORDER_NR_PAGES),
-b2c9e2fbba3253 Zi Yan            2022-05-12  327  				      zone->zone_start_pfn);
-b2c9e2fbba3253 Zi Yan            2022-05-12  328  
-b2c9e2fbba3253 Zi Yan            2022-05-12  329  	saved_mt = get_pageblock_migratetype(pfn_to_page(isolate_pageblock));
-9b209e557d698f Zi Yan            2022-05-26  330  
-9b209e557d698f Zi Yan            2022-05-26  331  	if (skip_isolation)
-9b209e557d698f Zi Yan            2022-05-26  332  		VM_BUG_ON(!is_migrate_isolate(saved_mt));
-9b209e557d698f Zi Yan            2022-05-26  333  	else {
-88ee134320b831 Zi Yan            2022-05-24  334  		ret = set_migratetype_isolate(pfn_to_page(isolate_pageblock), saved_mt, flags,
-88ee134320b831 Zi Yan            2022-05-24  335  				isolate_pageblock, isolate_pageblock + pageblock_nr_pages);
-88ee134320b831 Zi Yan            2022-05-24  336  
-88ee134320b831 Zi Yan            2022-05-24  337  		if (ret)
-88ee134320b831 Zi Yan            2022-05-24  338  			return ret;
-9b209e557d698f Zi Yan            2022-05-26  339  	}
-b2c9e2fbba3253 Zi Yan            2022-05-12  340  
-b2c9e2fbba3253 Zi Yan            2022-05-12  341  	/*
-b2c9e2fbba3253 Zi Yan            2022-05-12  342  	 * Bail out early when the to-be-isolated pageblock does not form
-b2c9e2fbba3253 Zi Yan            2022-05-12  343  	 * a free or in-use page across boundary_pfn:
-b2c9e2fbba3253 Zi Yan            2022-05-12  344  	 *
-b2c9e2fbba3253 Zi Yan            2022-05-12  345  	 * 1. isolate before boundary_pfn: the page after is not online
-b2c9e2fbba3253 Zi Yan            2022-05-12  346  	 * 2. isolate after boundary_pfn: the page before is not online
-b2c9e2fbba3253 Zi Yan            2022-05-12  347  	 *
-b2c9e2fbba3253 Zi Yan            2022-05-12  348  	 * This also ensures correctness. Without it, when isolate after
-b2c9e2fbba3253 Zi Yan            2022-05-12  349  	 * boundary_pfn and [start_pfn, boundary_pfn) are not online,
-b2c9e2fbba3253 Zi Yan            2022-05-12  350  	 * __first_valid_page() will return unexpected NULL in the for loop
-b2c9e2fbba3253 Zi Yan            2022-05-12  351  	 * below.
-b2c9e2fbba3253 Zi Yan            2022-05-12  352  	 */
-b2c9e2fbba3253 Zi Yan            2022-05-12  353  	if (isolate_before) {
-b2c9e2fbba3253 Zi Yan            2022-05-12  354  		if (!pfn_to_online_page(boundary_pfn))
-b2c9e2fbba3253 Zi Yan            2022-05-12  355  			return 0;
-b2c9e2fbba3253 Zi Yan            2022-05-12  356  	} else {
-b2c9e2fbba3253 Zi Yan            2022-05-12  357  		if (!pfn_to_online_page(boundary_pfn - 1))
-b2c9e2fbba3253 Zi Yan            2022-05-12  358  			return 0;
-b2c9e2fbba3253 Zi Yan            2022-05-12  359  	}
-b2c9e2fbba3253 Zi Yan            2022-05-12  360  
-b2c9e2fbba3253 Zi Yan            2022-05-12  361  	for (pfn = start_pfn; pfn < boundary_pfn;) {
-b2c9e2fbba3253 Zi Yan            2022-05-12  362  		struct page *page = __first_valid_page(pfn, boundary_pfn - pfn);
-b2c9e2fbba3253 Zi Yan            2022-05-12  363  
-b2c9e2fbba3253 Zi Yan            2022-05-12  364  		VM_BUG_ON(!page);
-b2c9e2fbba3253 Zi Yan            2022-05-12  365  		pfn = page_to_pfn(page);
-b2c9e2fbba3253 Zi Yan            2022-05-12  366  		/*
-b2c9e2fbba3253 Zi Yan            2022-05-12  367  		 * start_pfn is MAX_ORDER_NR_PAGES aligned, if there is any
-b2c9e2fbba3253 Zi Yan            2022-05-12  368  		 * free pages in [start_pfn, boundary_pfn), its head page will
-b2c9e2fbba3253 Zi Yan            2022-05-12  369  		 * always be in the range.
-b2c9e2fbba3253 Zi Yan            2022-05-12  370  		 */
-b2c9e2fbba3253 Zi Yan            2022-05-12  371  		if (PageBuddy(page)) {
-b2c9e2fbba3253 Zi Yan            2022-05-12  372  			int order = buddy_order(page);
-b2c9e2fbba3253 Zi Yan            2022-05-12  373  
-86d28b0709279c Zi Yan            2022-05-26  374  			if (pfn + (1UL << order) > boundary_pfn) {
-86d28b0709279c Zi Yan            2022-05-26  375  				/* free page changed before split, check it again */
-86d28b0709279c Zi Yan            2022-05-26  376  				if (split_free_page(page, order, boundary_pfn - pfn))
-86d28b0709279c Zi Yan            2022-05-26  377  					continue;
-86d28b0709279c Zi Yan            2022-05-26  378  			}
-86d28b0709279c Zi Yan            2022-05-26  379  
-86d28b0709279c Zi Yan            2022-05-26  380  			pfn += 1UL << order;
-b2c9e2fbba3253 Zi Yan            2022-05-12  381  			continue;
-b2c9e2fbba3253 Zi Yan            2022-05-12  382  		}
-b2c9e2fbba3253 Zi Yan            2022-05-12  383  		/*
-b2c9e2fbba3253 Zi Yan            2022-05-12  384  		 * migrate compound pages then let the free page handling code
-b2c9e2fbba3253 Zi Yan            2022-05-12  385  		 * above do the rest. If migration is not possible, just fail.
-b2c9e2fbba3253 Zi Yan            2022-05-12  386  		 */
-b2c9e2fbba3253 Zi Yan            2022-05-12  387  		if (PageCompound(page)) {
-b2c9e2fbba3253 Zi Yan            2022-05-12 @388  			unsigned long nr_pages = compound_nr(page);
-b2c9e2fbba3253 Zi Yan            2022-05-12  389  			struct page *head = compound_head(page);
-b2c9e2fbba3253 Zi Yan            2022-05-12 @390  			unsigned long head_pfn = page_to_pfn(head);
-b2c9e2fbba3253 Zi Yan            2022-05-12  391  
+04d96139ddb32d Guangbin Huang 2021-08-30   948  
+04987ca1b9b684 Guangbin Huang 2021-01-28  @949  static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
+04987ca1b9b684 Guangbin Huang 2021-01-28   950  {
+04d96139ddb32d Guangbin Huang 2021-08-30   951  	char data_str[ARRAY_SIZE(tm_pri_items)][HCLGE_DBG_DATA_STR_LEN];
+04d96139ddb32d Guangbin Huang 2021-08-30   952  	struct hclge_tm_shaper_para c_shaper_para, p_shaper_para;
+04d96139ddb32d Guangbin Huang 2021-08-30   953  	char *result[ARRAY_SIZE(tm_pri_items)], *sch_mode_str;
+04d96139ddb32d Guangbin Huang 2021-08-30   954  	char content[HCLGE_DBG_TM_INFO_LEN];
+04d96139ddb32d Guangbin Huang 2021-08-30   955  	u8 pri_num, sch_mode, weight, i, j;
+04d96139ddb32d Guangbin Huang 2021-08-30   956  	int pos, ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   957  
+04987ca1b9b684 Guangbin Huang 2021-01-28   958  	ret = hclge_tm_get_pri_num(hdev, &pri_num);
+04987ca1b9b684 Guangbin Huang 2021-01-28   959  	if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   960  		return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   961  
+04d96139ddb32d Guangbin Huang 2021-08-30   962  	for (i = 0; i < ARRAY_SIZE(tm_pri_items); i++)
+04d96139ddb32d Guangbin Huang 2021-08-30   963  		result[i] = &data_str[i][0];
+04d96139ddb32d Guangbin Huang 2021-08-30   964  
+04d96139ddb32d Guangbin Huang 2021-08-30   965  	hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
+04d96139ddb32d Guangbin Huang 2021-08-30   966  			       NULL, ARRAY_SIZE(tm_pri_items));
+04d96139ddb32d Guangbin Huang 2021-08-30   967  	pos = scnprintf(buf, len, "%s", content);
+04987ca1b9b684 Guangbin Huang 2021-01-28   968  
+04987ca1b9b684 Guangbin Huang 2021-01-28   969  	for (i = 0; i < pri_num; i++) {
+04987ca1b9b684 Guangbin Huang 2021-01-28   970  		ret = hclge_tm_get_pri_sch_mode(hdev, i, &sch_mode);
+04987ca1b9b684 Guangbin Huang 2021-01-28   971  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   972  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   973  
+04987ca1b9b684 Guangbin Huang 2021-01-28   974  		ret = hclge_tm_get_pri_weight(hdev, i, &weight);
+04987ca1b9b684 Guangbin Huang 2021-01-28   975  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   976  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   977  
+04987ca1b9b684 Guangbin Huang 2021-01-28   978  		ret = hclge_tm_get_pri_shaper(hdev, i,
+04987ca1b9b684 Guangbin Huang 2021-01-28   979  					      HCLGE_OPC_TM_PRI_C_SHAPPING,
+04987ca1b9b684 Guangbin Huang 2021-01-28   980  					      &c_shaper_para);
+04987ca1b9b684 Guangbin Huang 2021-01-28   981  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   982  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   983  
+04987ca1b9b684 Guangbin Huang 2021-01-28   984  		ret = hclge_tm_get_pri_shaper(hdev, i,
+04987ca1b9b684 Guangbin Huang 2021-01-28   985  					      HCLGE_OPC_TM_PRI_P_SHAPPING,
+04987ca1b9b684 Guangbin Huang 2021-01-28   986  					      &p_shaper_para);
+04987ca1b9b684 Guangbin Huang 2021-01-28   987  		if (ret)
+04987ca1b9b684 Guangbin Huang 2021-01-28   988  			return ret;
+04987ca1b9b684 Guangbin Huang 2021-01-28   989  
+04987ca1b9b684 Guangbin Huang 2021-01-28   990  		sch_mode_str = sch_mode & HCLGE_TM_TX_SCHD_DWRR_MSK ? "dwrr" :
+04987ca1b9b684 Guangbin Huang 2021-01-28   991  			       "sp";
+04987ca1b9b684 Guangbin Huang 2021-01-28   992  
+04d96139ddb32d Guangbin Huang 2021-08-30   993  		j = 0;
+04d96139ddb32d Guangbin Huang 2021-08-30   994  		sprintf(result[j++], "%04u", i);
+04d96139ddb32d Guangbin Huang 2021-08-30   995  		sprintf(result[j++], "%4s", sch_mode_str);
+04d96139ddb32d Guangbin Huang 2021-08-30   996  		sprintf(result[j++], "%3u", weight);
+04d96139ddb32d Guangbin Huang 2021-08-30   997  		hclge_dbg_fill_shaper_content(&c_shaper_para, result, &j);
+04d96139ddb32d Guangbin Huang 2021-08-30   998  		hclge_dbg_fill_shaper_content(&p_shaper_para, result, &j);
+04d96139ddb32d Guangbin Huang 2021-08-30   999  		hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
+04d96139ddb32d Guangbin Huang 2021-08-30  1000  				       (const char **)result,
+04d96139ddb32d Guangbin Huang 2021-08-30  1001  				       ARRAY_SIZE(tm_pri_items));
+04d96139ddb32d Guangbin Huang 2021-08-30  1002  		pos += scnprintf(buf + pos, len - pos, "%s", content);
+04987ca1b9b684 Guangbin Huang 2021-01-28  1003  	}
+04987ca1b9b684 Guangbin Huang 2021-01-28  1004  
+04987ca1b9b684 Guangbin Huang 2021-01-28  1005  	return 0;
+04987ca1b9b684 Guangbin Huang 2021-01-28  1006  }
+04987ca1b9b684 Guangbin Huang 2021-01-28  1007  
+
+:::::: The code at line 949 was first introduced by commit
+:::::: 04987ca1b9b6841cfa5f9b459c5a270b75c89345 net: hns3: add debugfs support for tm nodes, priority and qset info
+
+:::::: TO: Guangbin Huang <huangguangbin2@huawei.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
