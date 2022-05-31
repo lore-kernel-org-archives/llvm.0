@@ -1,43 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD3820FE
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 06:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A40120FC
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 07:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653979984; x=1685515984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=geoRAX1J7UlLZ804yic3TUqIadkaJkALoS3bhYf2uSw=;
-  b=ZEO0mGtsiciS5Az+GZptzLoxzbnybKrJ8adVfAN1HAZ6gAQzhqxykcBJ
-   0cQlupejiMv4K6DjLkQQUXESVgs6nF5VxVVnzwCc79ghT7F1Lvv/sc1lR
-   YsRQxwKPgEyRO6ui2GK/GzJLRguBRptLt+R04++XAmUEHLh9Dbk3d4ncB
-   IGXlYi1rrZuFVPeyW0sdqYoYzMJSGJnBXf3lwYqEVwSfnBRM+GFvenen+
-   BCJXRmV4H+ngKDHgpcvczcaR3KOUyy62HFLCPj7KbO5sQAekZFAiLNlOt
-   YtLZV7XyczMdfEwnpamgPMN+pQy9oR/JgFbGoySkZs/Ref9P2kmYGLKPH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="275244479"
+  t=1653983825; x=1685519825;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=blAnd/CwLvYq8vuBHY6+jp83ZrdFmvIGwKowYFS60Ro=;
+  b=jpJCc7jGDe+wLGUEXOZhVAiI1oDP69x4f2FDIvr6gSBGu23MvU7LwsE8
+   HM7tof7wjZSKqUT7DUaAAUTQgfgiAsvYLV3nBafTg9ZebRLJW1moOQlkU
+   +xFPtjYd0IxHWQV1L3hRKoVyByooq7Run1XNcPdOojSJB/1rC7DqtFTrB
+   HTYiO/G/7FrsYcWJrl3YnNZ1eg/Pe/Bh3Jqykz4LzToRlWC/WMOKwlqq+
+   IgMZ4wZw59BwsUqTYfyluoDj0rpOcBQbI/DSQtktz1awtTpgB2BPgGEcT
+   g/2wVkekX8mxUxdnzRxb7kSp7n4/FS8qQviypfRBsruJ/PZYJ5+g9WKMn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10363"; a="262806860"
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="275244479"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 23:53:01 -0700
+   d="scan'208";a="262806860"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 00:57:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,264,1647327600"; 
-   d="scan'208";a="580959499"
+   d="scan'208";a="706464540"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 May 2022 23:53:00 -0700
+  by orsmga004.jf.intel.com with ESMTP; 31 May 2022 00:57:03 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nvvkR-0002RV-7s;
-	Tue, 31 May 2022 06:52:59 +0000
-Date: Tue, 31 May 2022 14:52:50 +0800
+	id 1nvwkQ-0002Ur-By;
+	Tue, 31 May 2022 07:57:02 +0000
+Date: Tue, 31 May 2022 15:57:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jiawen Wu <jiawenwu@trustnetic.com>
-Subject: Re: [PATCH net-next v4] net: txgbe: Add build support for txgbe
-Message-ID: <202205311441.65SwYadh-lkp@intel.com>
-References: <20220531032640.27678-1-jiawenwu@trustnetic.com>
+	ceph-devel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>
+Subject: [ceph-client:wip-fscrypt 8/64] net/ceph/messenger_v1.c:1019:49:
+ error: too many arguments to function call, expected 3, have 4
+Message-ID: <202205311559.ghi4Hs9C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,59 +45,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220531032640.27678-1-jiawenwu@trustnetic.com>
 
-Hi Jiawen,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiawen-Wu/net-txgbe-Add-build-support-for-txgbe/20220531-112035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220531/202205311441.65SwYadh-lkp@intel.com/config)
+tree:   https://github.com/ceph/ceph-client.git wip-fscrypt
+head:   4a13fcc148c64143afe231bd0cae743b89c70177
+commit: 2c136200054ea17849153ac4f55fe2abc99ee34e [8/64] libceph: add sparse read support to msgr1
+config: arm64-buildonly-randconfig-r002-20220531 (https://download.01.org/0day-ci/archive/20220531/202205311559.ghi4Hs9C-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/52085d783a4667549a5f4224135c71c0a643bec0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiawen-Wu/net-txgbe-Add-build-support-for-txgbe/20220531-112035
-        git checkout 52085d783a4667549a5f4224135c71c0a643bec0
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ceph/ceph-client/commit/2c136200054ea17849153ac4f55fe2abc99ee34e
+        git remote add ceph-client https://github.com/ceph/ceph-client.git
+        git fetch --no-tags ceph-client wip-fscrypt
+        git checkout 2c136200054ea17849153ac4f55fe2abc99ee34e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash net/ceph/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/pci/quirks.c:5911:1: error: unterminated function-like macro invocation
-   DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_WANGXUN, PCI_ANY_ID,
-   ^
-   include/linux/pci.h:2087:9: note: macro 'DECLARE_PCI_FIXUP_HEADER' defined here
-   #define DECLARE_PCI_FIXUP_HEADER(vendor, device, hook)                  \
-           ^
+>> net/ceph/messenger_v1.c:1019:49: error: too many arguments to function call, expected 3, have 4
+                   page = ceph_msg_data_next(cursor, &off, &len, NULL);
+                          ~~~~~~~~~~~~~~~~~~                     ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   include/linux/ceph/messenger.h:531:14: note: 'ceph_msg_data_next' declared here
+   struct page *ceph_msg_data_next(struct ceph_msg_data_cursor *cursor,
+                ^
    1 error generated.
 
 
-vim +5911 drivers/pci/quirks.c
+vim +1019 net/ceph/messenger_v1.c
 
-  5898	
-  5899	static void quirk_wangxun_set_read_req_size(struct pci_dev *pdev)
-  5900	{
-  5901		u16 ctl;
-  5902	
-  5903		pcie_capability_read_word(pdev, PCI_EXP_DEVCTL, &ctl);
-  5904	
-  5905		if (((ctl & PCI_EXP_DEVCTL_READRQ) != PCI_EXP_DEVCTL_READRQ_128B) &&
-  5906		    ((ctl & PCI_EXP_DEVCTL_READRQ) != PCI_EXP_DEVCTL_READRQ_256B))
-  5907			pcie_capability_clear_and_set_word(pdev, PCI_EXP_DEVCTL,
-  5908							   PCI_EXP_DEVCTL_READRQ,
-  5909							   PCI_EXP_DEVCTL_READRQ_256B);
-  5910	}
-> 5911	DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_WANGXUN, PCI_ANY_ID,
+  1000	
+  1001	static int read_sparse_msg_extent(struct ceph_connection *con, u32 *crc)
+  1002	{
+  1003		struct ceph_msg_data_cursor *cursor = &con->in_msg->cursor;
+  1004		bool do_bounce = ceph_test_opt(from_msgr(con->msgr), RXBOUNCE);
+  1005	
+  1006		if (do_bounce && unlikely(!con->bounce_page)) {
+  1007			con->bounce_page = alloc_page(GFP_NOIO);
+  1008			if (!con->bounce_page) {
+  1009				pr_err("failed to allocate bounce page\n");
+  1010				return -ENOMEM;
+  1011			}
+  1012		}
+  1013	
+  1014		while (cursor->sr_resid > 0) {
+  1015			struct page *page, *rpage;
+  1016			size_t off, len;
+  1017			int ret;
+  1018	
+> 1019			page = ceph_msg_data_next(cursor, &off, &len, NULL);
+  1020			rpage = do_bounce ? con->bounce_page : page;
+  1021	
+  1022			/* clamp to what remains in extent */
+  1023			len = min_t(int, len, cursor->sr_resid);
+  1024			ret = ceph_tcp_recvpage(con->sock, rpage, (int)off, len);
+  1025			if (ret <= 0)
+  1026				return ret;
+  1027			*crc = ceph_crc32c_page(*crc, rpage, off, ret);
+  1028			ceph_msg_data_advance(cursor, (size_t)ret);
+  1029			cursor->sr_resid -= ret;
+  1030			if (do_bounce)
+  1031				memcpy_page(page, off, rpage, off, ret);
+  1032		}
+  1033		return 1;
+  1034	}
+  1035	
 
 -- 
 0-DAY CI Kernel Test Service
