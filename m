@@ -1,137 +1,111 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4029C7A
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 20:55:50 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-30c2f288f13so78591547b3.7
-        for <llvm@lists.linux.dev>; Tue, 31 May 2022 13:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n0erMVA2WLxTnlrSBdIrVdtNSrXGOBg+9JqlB+pB8OI=;
-        b=Hxx7j/A8m31TgFbVzraeVQLkmGp1R3N65ku/+Mo1VayfP7QOiMBD+Q/xPjg8gC4bVA
-         Jge8obmljL51sJAaYF7hcYWToYBCdLzYVx438YdCYWoWfUanfv57BTTt5PIxsRm55Tep
-         HhIsCwONlvBxa4J9CvqlRMtoEB2/f1Hdh4FMvvfauVrrIekTR/uTSxRrNeKTyFxC/0Wc
-         kmxZlOJn80yA6ovOO5vY/zsQq/9gyFQUqcYWkgQCMtlC+hkW4PPaSoGwhwpdONxBZ2od
-         PKpIiRwbt1w3Bu7UBf43dHqgICbwz+TL5rtJaYqlTlagSixAyr/fVLxKN+VAjK7KGW8P
-         DnIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n0erMVA2WLxTnlrSBdIrVdtNSrXGOBg+9JqlB+pB8OI=;
-        b=LGIFph/Ig6RwLfFm+Fy9UV1GCvk7sZy0t1mXYAhM6weV51up/kzB/GfgV1aZ5qVxD3
-         GG3S9e4LVrquDTdo/c6prMcLJS02tDu0A9jQnVs/3TCAO3XO6U2wHmLnIQRdUOjwaSHd
-         JW7L248gMgPOgYBMiURV8CAgJKu6TwTlypozu9cSxwVcjMBZPIi/vfWY+Nc4aH40yAGT
-         JbFpP40Hzo5sr2hzF+nZnjvF5akbSGbGmpGjgbKV/LD+ztscX5HWLThl7p39MX6Zklba
-         x88/RaXtgax1eRKEH11UHttArgRT3A8Lg+Gfy/vG+i1n1uafDduLuKn1uMvQkATcSYJd
-         XTvg==
-X-Gm-Message-State: AOAM533yf6ejT/qGeRZOGNUsXza93pHsLfhzEMiDLvzFz8OdvzpkGBi2
-	jaGju3ItNKfM/fOX/5FAYvqxa+cA/Gki3u1Y+/qFcA==
-X-Google-Smtp-Source: ABdhPJx0gO36aoJo+lIPrMYGfkoCjPcQotCjzgydI2LcD1yt1cMmnDPIEvKTVODPjaZ07o9ZrB+D0PX7D0hXZ2QdAPw=
-X-Received: by 2002:a81:1e14:0:b0:2f8:c348:9c62 with SMTP id
- e20-20020a811e14000000b002f8c3489c62mr65829007ywe.291.1654030549041; Tue, 31
- May 2022 13:55:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE4F7A
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 20:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654030589; x=1685566589;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KmOBMBNjMDvpHex0XEgSTh2uGSxfl8GV13MikE3newM=;
+  b=VMhrM21ezYk7q6kPzl+Y2/y7fDc2jS0obCd5sY/1jCsoJHkNkWcDmZAO
+   jsn4rFusuNEy8hSo/1f2n64w4aRPqekjtgLczKMIVK/726Vu2BAkCxU7n
+   xVWRnlzRM2w26Bo6KUENKvrjYgbWEQsqJ6yVE0I+WxulPI4sO+5ocQl2f
+   ZdWdnN+f1Mngf1ZacdZFkI7KSiLb1mrXfVvpNXvodi8gcXjKPd0zeZvyh
+   F8sBsU3vLGL+nCjAxALS/MmXay5Q01cEDndjUVX8T7AmH06pRRK23sTk0
+   QM23jlKa/NMogCKuBhV+u3P0AJ/gGztcin7aBMUdo5osidxTYxzLurRgr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275464215"
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="275464215"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 13:56:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
+   d="scan'208";a="706748538"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 May 2022 13:56:26 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nw8uf-00034W-Ih;
+	Tue, 31 May 2022 20:56:25 +0000
+Date: Wed, 1 Jun 2022 04:55:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bo Liu <liubo03@inspur.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+	"Michael S. Tsirkin" <mst@redhat.com>
+Subject: [mst-vhost:vhost 62/65] drivers/virtio/virtio_ring.c:1783:9: error:
+ use of undeclared identifier 'vq'
+Message-ID: <202206010444.EGBXgPMJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220531175910.890307-1-samitolvanen@google.com> <202205311231.C26F6E4E@keescook>
-In-Reply-To: <202205311231.C26F6E4E@keescook>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 31 May 2022 13:55:13 -0700
-Message-ID: <CABCJKufAo8QoKcxa3oEgjpaLWx3+KmdMCJK0U02=H9L9snAHUQ@mail.gmail.com>
-Subject: Re: [PATCH] cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
-To: Kees Cook <keescook@chromium.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, May 31, 2022 at 12:33 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, May 31, 2022 at 10:59:10AM -0700, Sami Tolvanen wrote:
-> > RCU_NONIDLE usage during __cfi_slowpath_diag can result in an invalid
-> > RCU state in the cpuidle code path:
-> >
-> >   WARNING: CPU: 1 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter+0xe4/0x138
-> >   ...
-> >   Call trace:
-> >     rcu_eqs_enter+0xe4/0x138
-> >     rcu_idle_enter+0xa8/0x100
-> >     cpuidle_enter_state+0x154/0x3a8
-> >     cpuidle_enter+0x3c/0x58
-> >     do_idle.llvm.6590768638138871020+0x1f4/0x2ec
-> >     cpu_startup_entry+0x28/0x2c
-> >     secondary_start_kernel+0x1b8/0x220
-> >     __secondary_switched+0x94/0x98
-> >
-> > Instead, call rcu_irq_enter/exit to wake up RCU only when needed and
-> > disable interrupts for the entire CFI shadow/module check when we do.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  kernel/cfi.c | 22 ++++++++++++++++------
-> >  1 file changed, 16 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/kernel/cfi.c b/kernel/cfi.c
-> > index 9594cfd1cf2c..08102d19ec15 100644
-> > --- a/kernel/cfi.c
-> > +++ b/kernel/cfi.c
-> > @@ -281,6 +281,8 @@ static inline cfi_check_fn find_module_check_fn(unsigned long ptr)
-> >  static inline cfi_check_fn find_check_fn(unsigned long ptr)
-> >  {
-> >       cfi_check_fn fn = NULL;
-> > +     unsigned long flags;
-> > +     bool rcu_idle;
-> >
-> >       if (is_kernel_text(ptr))
-> >               return __cfi_check;
-> > @@ -290,13 +292,21 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
-> >        * the shadow and __module_address use RCU, so we need to wake it
-> >        * up if necessary.
-> >        */
-> > -     RCU_NONIDLE({
-> > -             if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-> > -                     fn = find_shadow_check_fn(ptr);
-> > +     rcu_idle = !rcu_is_watching();
-> > +     if (rcu_idle) {
-> > +             local_irq_save(flags);
-> > +             rcu_irq_enter();
-> > +     }
-> > +
-> > +     if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-> > +             fn = find_shadow_check_fn(ptr);
-> > +     if (!fn)
-> > +             fn = find_module_check_fn(ptr);
-> >
-> > -             if (!fn)
-> > -                     fn = find_module_check_fn(ptr);
-> > -     });
-> > +     if (rcu_idle) {
-> > +             rcu_irq_exit();
-> > +             local_irq_restore(flags);
-> > +     }
-> >
-> >       return fn;
-> >  }
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >
->
-> Thanks for the fix! It looks like these tags could be added, yes?
->
-> Fixes: cf68fffb66d6 ("add support for Clang CFI")
-> Cc: stable@vger.kernel.org
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git vhost
+head:   5e83df49b4993a11b01399f6ce402f775940f965
+commit: a50f09346a341984d34ff41f03dbd14dea6f20fe [62/65] virtio_ring: remove unused variable in virtqueue_add()
+config: mips-randconfig-c004-20220531 (https://download.01.org/0day-ci/archive/20220601/202206010444.EGBXgPMJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?id=a50f09346a341984d34ff41f03dbd14dea6f20fe
+        git remote add mst-vhost https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git
+        git fetch --no-tags mst-vhost vhost
+        git checkout a50f09346a341984d34ff41f03dbd14dea6f20fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/virtio/
 
-Yes, agreed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Also, to improve the commit log, under what situation was this problem
-> encountered?
+All errors (new ones prefixed by >>):
 
-On affected devices, this warning is triggered at boot.
+>> drivers/virtio/virtio_ring.c:1783:9: error: use of undeclared identifier 'vq'
+           return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
+                  ^
+   1 error generated.
 
-Sami
+
+vim +/vq +1783 drivers/virtio/virtio_ring.c
+
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1768  
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1769  
+e6f633e5beab65 Tiwei Bie 2018-11-21  1770  /*
+e6f633e5beab65 Tiwei Bie 2018-11-21  1771   * Generic functions and exported symbols.
+e6f633e5beab65 Tiwei Bie 2018-11-21  1772   */
+e6f633e5beab65 Tiwei Bie 2018-11-21  1773  
+e6f633e5beab65 Tiwei Bie 2018-11-21  1774  static inline int virtqueue_add(struct virtqueue *_vq,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1775  				struct scatterlist *sgs[],
+e6f633e5beab65 Tiwei Bie 2018-11-21  1776  				unsigned int total_sg,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1777  				unsigned int out_sgs,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1778  				unsigned int in_sgs,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1779  				void *data,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1780  				void *ctx,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1781  				gfp_t gfp)
+e6f633e5beab65 Tiwei Bie 2018-11-21  1782  {
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21 @1783  	return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, total_sg,
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1784  					out_sgs, in_sgs, data, ctx, gfp) :
+1ce9e6055fa0a9 Tiwei Bie 2018-11-21  1785  				 virtqueue_add_split(_vq, sgs, total_sg,
+e6f633e5beab65 Tiwei Bie 2018-11-21  1786  					out_sgs, in_sgs, data, ctx, gfp);
+e6f633e5beab65 Tiwei Bie 2018-11-21  1787  }
+e6f633e5beab65 Tiwei Bie 2018-11-21  1788  
+
+:::::: The code at line 1783 was first introduced by commit
+:::::: 1ce9e6055fa0a9043405c5604cf19169ec5379ff virtio_ring: introduce packed ring support
+
+:::::: TO: Tiwei Bie <tiwei.bie@intel.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
