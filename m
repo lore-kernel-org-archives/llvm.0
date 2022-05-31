@@ -1,451 +1,129 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A430C7E
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 17:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654016842; x=1685552842;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ss8C3wT5Ka+COPPXfUaUW6AkO/fa82NeiHAzBT3fkbs=;
-  b=gGKMnHoE43kV981554FA5uF61RgW6ycbKLI3OF3A4l/+sJxgZhknaQRy
-   +9wRfVyn7eJDRwyOUjwCb91v/Go5Qx+tA98rfOqXpNcTP8ZU1Dc6+tiuo
-   bcM/EqK72O9KeWPqeG2eOSshRGPuKo65N04kHqh5nKkg7wJRxLR1uA5i9
-   WtvAXTF2lk4BC3QPartwwxv6aQYOxSRGOLz0Y5tbQMfnap5Kg/RfsH/tP
-   6L37o1ywfuXYY8vUogSn3xwx8PQF3rriqFir+IoaLiL/Z+EbmPOuFDVXu
-   hGqpHrZMppLnBiw0N7B48EI+UwVJhGM6qRdGSg5iOdVwdSJIMwF/yaGNk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="275327992"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="275327992"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 10:07:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="667011393"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 May 2022 10:07:19 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nw5Kw-0002uG-Tu;
-	Tue, 31 May 2022 17:07:18 +0000
-Date: Wed, 1 Jun 2022 01:07:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [stable:linux-5.15.y 5773/6856] <instantiation>:3:19: error: too
- many positional arguments
-Message-ID: <202206010058.CoFfIpvt-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E03A7E
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 17:59:16 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-30974094b5cso87658307b3.20
+        for <llvm@lists.linux.dev>; Tue, 31 May 2022 10:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=43It4tY6rrOkbTtcYBE6N6l07cvQ+0q2w708BzUCfdQ=;
+        b=cXZh0iB2YUeKYWSq/DnFCdl8EfWrduss4aKiLDcCamYQxpSehyBOr4Mc2Id9+hCYIK
+         pk3kI/d2LS9MbBzExeYMvn/w+d4BmVB0YXSZ+skDu8gCDQ3DefzaGupJW4tsBoH/0Tg+
+         itlbwwf2hGrxNFki2bplHtgCS3/hLVA8ID0F6auJlQRpeiZQCF8S7rUif4r9upjflXJL
+         tta6rNIuKi3PgSzLcLV7gdpXYPxvnG4I6+k00Zk93DDHs0fuyQHXktG7wVbOX3zpHbqC
+         rMlQDftQ/vo1M9BEP+YAucYerbdaEQaRjqsL2EpO/thbKjx2KFc7UlCDU1haZRZ2U9Vu
+         luaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=43It4tY6rrOkbTtcYBE6N6l07cvQ+0q2w708BzUCfdQ=;
+        b=fT9M8VS73udVqEBiaYN1aek7exlYN8/Wi5yY2QVbYycAAiQW/XCbTwY2597/ev0PYE
+         dGcwpoUh7M9ntbd745L/eifIsCcvNexD9FpJso4SqCezw3Pw+cs73+t90x28STVltME0
+         mroOqBg1yyygKk+7VqkAEv3BRX6Q5IqtMugt+v31NDNpnI2V/l6Ou8dWqB2dp+sd+Fe4
+         KZ0mK2H4Eti1zcmM6spU7zWEr4puRfDqM+YMwmCvTaF2ZoeJz3WWdujBkCZrGt3FROKm
+         +ordZuM8roJWg2ca9xc6dBIr6q3SCK0cnNH4dqL4TwahC4a6ABbT6lONn0n0Mo8AclJS
+         dOpQ==
+X-Gm-Message-State: AOAM533yVMV/fMKRBNHSuxxj0WYia3K72gMcmOY4CZaP2PIWGVUN8ENT
+	CA2+f4hobmF8qMpxYEP1U0gwXG9YVhFs+MlP5BY=
+X-Google-Smtp-Source: ABdhPJzYg2PfrP7VAcOIhffi51zcFsynl9sjjnou+I9ggql8TYO0BMoIPH151gDfL/0kxSkXR0y1Lgi6goCkxQD9zNE=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:1067:12fc:51e8:95dc])
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:13c2:b0:641:b6d:a151 with
+ SMTP id y2-20020a05690213c200b006410b6da151mr59039298ybu.348.1654019955516;
+ Tue, 31 May 2022 10:59:15 -0700 (PDT)
+Date: Tue, 31 May 2022 10:59:10 -0700
+Message-Id: <20220531175910.890307-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; h=from:subject;
+ bh=3APPK7JF94JGhsLYsP/k0BDbTWmcKvSdC5cUDwc7HEc=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBilldu8L6b8RrGC/uxYEv0Gt9ac9FJ70jAIdFrFvYx
+ EHOOhWyJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYpZXbgAKCRBMtfaEi7xW7kl4C/
+ sGCz2eKwsUVqQBfjgycK9T1O2Q00Tu+HFofNAQbx4mkHJHNeWBFRwG6hwpCmtJsW1AQhMexHawitij
+ pRuOxuW5Ao3CKRsq7h1iSypEEHTZS/6XWLZ4UxwcSb92I77OqdviGLpbXPcLemLi/A9xHEY8qGF59K
+ 1I/dRgW2S2WNN/JKkJAmD2dGFd5o5rQ7VNSzkyE1DKve/bllIIPEenvR5Wep0d8UsmTmIlGzgIeceM
+ e/ChPrDIOk5qG+Wu+IU8w7j3qutB0PEBfQ4q87dg2S1ig0AuZM+26vIplp3oRylAQXIVPDgFkRntua
+ HCXqLh35oofnfgIshwTLivkIn6qKnQLkl0QTxTR0yaCSodf/LxrbqP2rMFFHKW4/Ez8KfYrbyTYKIi
+ oYTzkdFvZILF1O7dNfDPlCfOWVDM8lu6KcdQjRJxGi88gu/WOymYVreOEvQCadOf161KxVBiPmrsba
+ XlOq1MdW5ZjjeDMHq020MIhgpTiSklSjuh41GqNOyeM/w=
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH] cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   4e67be407725b1d8b829ed2075987037abec98ec
-commit: 33db9912ff7c491f839c89a08e98f755aa09598f [5773/6856] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-config: s390-randconfig-r026-20220530 (https://download.01.org/0day-ci/archive/20220601/202206010058.CoFfIpvt-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+RCU_NONIDLE usage during __cfi_slowpath_diag can result in an invalid
+RCU state in the cpuidle code path:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  WARNING: CPU: 1 PID: 0 at kernel/rcu/tree.c:613 rcu_eqs_enter+0xe4/0x138
+  ...
+  Call trace:
+    rcu_eqs_enter+0xe4/0x138
+    rcu_idle_enter+0xa8/0x100
+    cpuidle_enter_state+0x154/0x3a8
+    cpuidle_enter+0x3c/0x58
+    do_idle.llvm.6590768638138871020+0x1f4/0x2ec
+    cpu_startup_entry+0x28/0x2c
+    secondary_start_kernel+0x1b8/0x220
+    __secondary_switched+0x94/0x98
 
-All errors (new ones prefixed by >>):
+Instead, call rcu_irq_enter/exit to wake up RCU only when needed and
+disable interrupts for the entire CFI shadow/module check when we do.
 
-   In file included from lib/raid6/s390vx8.c:14:
-   In file included from include/linux/raid/pq.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from lib/raid6/s390vx8.c:14:
-   In file included from include/linux/raid/pq.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from lib/raid6/s390vx8.c:14:
-   In file included from include/linux/raid/pq.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 0,7,0,1
-           ^
->> <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 8,15,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 0,7,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
->> <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 16,23,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
->> <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 16,23,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 0,7,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   12 warnings and 20 errors generated.
---
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if " len " > 254\n"                                           \
-            ^
-   <inline asm>:5:5: note: instantiated into assembly here
-   .if 6651b-6641b > 254
-       ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives does not support instructions blocks > 254 bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives does not support instructions "    \
-            ^
-   <inline asm>:6:2: note: instantiated into assembly here
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if (" len ") %% 2\n"                                          \
-            ^
-   <inline asm>:8:5: note: instantiated into assembly here
-   .if (6651b-6641b) % 2
-       ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives instructions length is odd
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
-           ^
-   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
-           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
-           ^
-   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
-            ^
-   <inline asm>:9:2: note: instantiated into assembly here
-           .error "cpu alternatives instructions length is odd"
-           ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
-           OLDINSTR_PADDING(oldinstr, num)                                 \
-           ^
-   arch/s390/include/asm/alternative.h:71:3: note: expanded from macro 'OLDINSTR_PADDING'
-           ".if " oldinstr_pad_len(num) " > 6\n"                           \
-            ^
-   <inline asm>:15:5: note: instantiated into assembly here
-   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
-       ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
-           INSTR_LEN_SANITY_CHECK(oldinstr_len)
-           ^
-   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if " len " > 254\n"                                           \
-            ^
-   <inline asm>:25:5: note: instantiated into assembly here
-   .if 662b-661b > 254
-       ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives does not support instructions blocks > 254 bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
-           INSTR_LEN_SANITY_CHECK(oldinstr_len)
-           ^
-   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives does not support instructions "    \
-            ^
-   <inline asm>:26:2: note: instantiated into assembly here
-           .error "cpu alternatives does not support instructions blocks > 254 bytes"
-           ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
-           INSTR_LEN_SANITY_CHECK(oldinstr_len)
-           ^
-   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           ".if (" len ") %% 2\n"                                          \
-            ^
-   <inline asm>:28:5: note: instantiated into assembly here
-   .if (662b-661b) % 2
-       ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives instructions length is odd
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
-           INSTR_LEN_SANITY_CHECK(oldinstr_len)
-           ^
-   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
-           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
-            ^
-   <inline asm>:29:2: note: instantiated into assembly here
-           .error "cpu alternatives instructions length is odd"
-           ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: invalid number of bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
-           OLDINSTR_PADDING(oldinstr, num)                                 \
-           ^
-   arch/s390/include/asm/alternative.h:74:3: note: expanded from macro 'OLDINSTR_PADDING'
-           "\t.fill (" oldinstr_pad_len(num) " - (6620b-662b)) / 2, 2, 0x0700\n" \
-            ^
-   <inline asm>:18:8: note: instantiated into assembly here
-           .fill (-(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) - (6620b-662b)) / 2, 2, 0x0700
-                 ^
-   In file included from kernel/trace/trace_clock.c:16:
-   In file included from include/linux/spinlock.h:94:
->> arch/s390/include/asm/spinlock.h:89:3: error: invalid number of bytes
-                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
-                   ^
-   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
-           OLDINSTR(oldinstr, 1)                                           \
-           ^
-   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
-           OLDINSTR_PADDING(oldinstr, num)                                 \
-           ^
-   arch/s390/include/asm/alternative.h:74:3: note: expanded from macro 'OLDINSTR_PADDING'
-           "\t.fill (" oldinstr_pad_len(num) " - (6620b-662b)) / 2, 2, 0x0700\n" \
-            ^
-   <inline asm>:18:8: note: instantiated into assembly here
-           .fill (-(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) - (6620b-662b)) / 2, 2, 0x0700
-                 ^
-   11 errors generated.
-..
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ kernel/cfi.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
+diff --git a/kernel/cfi.c b/kernel/cfi.c
+index 9594cfd1cf2c..08102d19ec15 100644
+--- a/kernel/cfi.c
++++ b/kernel/cfi.c
+@@ -281,6 +281,8 @@ static inline cfi_check_fn find_module_check_fn(unsigned long ptr)
+ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+ {
+ 	cfi_check_fn fn = NULL;
++	unsigned long flags;
++	bool rcu_idle;
+ 
+ 	if (is_kernel_text(ptr))
+ 		return __cfi_check;
+@@ -290,13 +292,21 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+ 	 * the shadow and __module_address use RCU, so we need to wake it
+ 	 * up if necessary.
+ 	 */
+-	RCU_NONIDLE({
+-		if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
+-			fn = find_shadow_check_fn(ptr);
++	rcu_idle = !rcu_is_watching();
++	if (rcu_idle) {
++		local_irq_save(flags);
++		rcu_irq_enter();
++	}
++
++	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
++		fn = find_shadow_check_fn(ptr);
++	if (!fn)
++		fn = find_module_check_fn(ptr);
+ 
+-		if (!fn)
+-			fn = find_module_check_fn(ptr);
+-	});
++	if (rcu_idle) {
++		rcu_irq_exit();
++		local_irq_restore(flags);
++	}
+ 
+ 	return fn;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.255.ge46751e96f-goog
+
