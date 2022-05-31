@@ -1,85 +1,160 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BE517E
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 14:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654007838; x=1685543838;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y3T67bfAQbnZiZb2PCR9IrVytbv/b6C8m2GiQK7Xh+s=;
-  b=jtXqSc1waADALrpNzmQMYAj7MUB+WM0EzfwDRSA8ZXCZ4ZEmXk6cgGTX
-   oTk/aV/GUqWq+x7aTG1hhAMHzCBZdW+YxM6QLlzkJacogh0uQcYt7y+Jv
-   g1ynXqMfAw7Y7XuOK6ul3L0b7M8bCTSJgdoMBQxwW3xC7CTn7cOHY+IeR
-   zDFYBYh3SrZ/6FMzV8Jql3Dr/91GITtz2aKSyoWm00cqqJv3j9GDgGx0J
-   O4RlCuqjdH1h1cR/lxC/BiIOQBKg/UU+ydUrjRU1MFnTYZGrrLwv3VBnh
-   3L7RfYSb1eaoTxoth37UdIWFQRTOyqIpVV3y4UnmrpAxmhlPO91K1hmcC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="361645572"
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="361645572"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 07:37:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="529604918"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 31 May 2022 07:37:14 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nw2zi-0002mo-7f;
-	Tue, 31 May 2022 14:37:14 +0000
-Date: Tue, 31 May 2022 22:36:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fangrui Song <maskray@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: ld.lld: error: undefined symbol: .early_setup
-Message-ID: <202205312222.XiSqyPc4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDAC2F50
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 15:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E20C385A9;
+	Tue, 31 May 2022 15:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1654009392;
+	bh=m0jg7/GG/1GqctpKJeTLM1iJ6iRQvTeTBHHJu4GUHlQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=n8RzKOwPBEZvK6mSHWVlzIZlgvI6medx09sZwG9C1J0Dd9D0cwCgGYslMXDwq69Fq
+	 W82WU5oWShwWTPYwV75gwihPKeZy2GM9nTYYtpird0HFGJP43fcrmm2jlOzpI5NLme
+	 oaO8hbhD4Piyym0t0lGmmZnibACUaLtS80x1zt3Ji6PWjHmgBpdjSR9flsTRL/F4Uy
+	 sSHnDMDwPDVDabzPC3v7agPny65kOXEVR6EYe955cUTmZUtD52DwG95ZQ8MpGf6EE3
+	 XMvTAW9AcBW//Nudwab9zLqKd7j3vkUz6nW/Fry7k6IrJ22bUuG2Ko0+6jkm2vHYlr
+	 GE+3c9oF9ba4A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 461255C02A9; Tue, 31 May 2022 08:03:12 -0700 (PDT)
+Date: Tue, 31 May 2022 08:03:12 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+	Martin Fink <martin.fink@in.tum.de>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
 
-Hi Fangrui,
+On Tue, May 31, 2022 at 01:47:12PM +0200, Paul Heidekrüger wrote:
+> On Tue, Apr 26, 2022 at 01:32:54PM -0700, Paul E. McKenney wrote:
+> > On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
+> > > Hi all, 
+> > > 
+> > > My dependency checker is flagging yet another broken dependency. For
+> > > context, see [1].
+> > > 
+> > > Thankfully, it is fairly straight-forward to explain this time.
+> > > 
+> > > > stable_node = page_stable_node(page);
+> > > 
+> > > Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
+> > > call to "page_stable_node()", which can depend on a "READ_ONCE()", being
+> > > assigned to "stable_node".
+> > > 
+> > > > if (stable_node) {
+> > > >         if (stable_node->head != &migrate_nodes &&
+> > > >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
+> > > >             NUMA(stable_node->nid)) {
+> > > >                 stable_node_dup_del(stable_node); ‣dup: stable_node
+> > > >                 stable_node->head = &migrate_nodes;
+> > > >                 list_add(&stable_node->list, stable_node->head);
+> > > 
+> > > The dependency chain then runs into the two following if's, through an
+> > > assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
+> > > finally reaches a call to "list_add()" (line 2039) where
+> > > "stable_node->head" gets passed as the second function argument. 
+> > 
+> > Huh.
+> > 
+> > But migrate_nodes is nothing more or less than a list_head structure.
+> > So one would expect that some other mechanism is protecting its ->prev
+> > and ->next pointers.
+> > 
+> > > >         }
+> > > > }
+> > > > 
+> > > > static inline void list_add(struct list_head *new, struct list_head *head)
+> > > > {
+> > > >         __list_add(new, head, head->next);
+> > > > }
+> > > > 
+> > > > static inline void __list_add(struct list_head *new,
+> > > >                               struct list_head *prev,
+> > > >                               struct list_head *next)
+> > > > {
+> > > >         if (!__list_add_valid(new, prev, next))
+> > > >                 return;
+> > > > 
+> > > >         next->prev = new;
+> > > >         new->next = next;
+> > > >         new->prev = prev;
+> > > >         WRITE_ONCE(prev->next, new);
+> > > > }
+> > > 
+> > > By being passed into "list_add()" via "stable_node->head", the
+> > > dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
+> > > whose destination address, "stable_node->head->next", is part of the
+> > > dependency chain and therefore carries an address dependency. 
+> > > 
+> > > However, as a result of the assignment in line 2038, Clang knows that
+> > > "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
+> > > the dependency chain. 
+> > > 
+> > > What do you think?
+> > 
+> > Given that this is a non-atomic update, there had better be something
+> > protecting it.  This something might be a lock, a decremented-to-zero
+> > reference count, a rule about only one kthread being permitted to update
+> > that list, and so on.  In all such cases, the code would not be relying
+> > on the dependency, but rather on whatever was protecting that operation.
+> > 
+> > Or am I missing something here?
+> 
+> Nope, missing nothing, that was exactly it!
+> 
+> In ksm_scan_thread(), which calls ksm_do_scan(), which calls
+> cmp_and_merge_page(), there is a mutex_lock() / mutex_unlock() pair,
+> surrounding the dependency. 
 
-FYI, the error/warning still remains.
+Whew!!!  ;-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
-commit: 0355785313e2191be4e1108cdbda94ddb0238c48 powerpc: Add "-z notext" flag to disable diagnostic
-date:   10 months ago
-config: powerpc64-randconfig-r023-20220530 (https://download.01.org/0day-ci/archive/20220531/202205312222.XiSqyPc4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0776c48f9b7e69fa447bee57c7c0985caa856be9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0355785313e2191be4e1108cdbda94ddb0238c48
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0355785313e2191be4e1108cdbda94ddb0238c48
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> Still keeping this as a trophy for our dependency checker though ;-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As well you should!
 
-All errors (new ones prefixed by >>):
+							Thanx, Paul
 
->> ld.lld: error: undefined symbol: .early_setup
-   >>> referenced by arch/powerpc/kernel/head_64.o:(.ref.text+0xAE)
-   >>> did you mean: early_setup
-   >>> defined in: arch/powerpc/built-in.a(kernel/setup_64.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Many thanks,
+> Paul
+> 
+> PS Sorry for the late reply - been distracted ..
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > Many thanks,
+> > > Paul
+> > > 
+> > > --
+> > > [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
+> > > 
