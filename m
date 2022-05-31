@@ -1,160 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDAC2F50
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 15:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E20C385A9;
-	Tue, 31 May 2022 15:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654009392;
-	bh=m0jg7/GG/1GqctpKJeTLM1iJ6iRQvTeTBHHJu4GUHlQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=n8RzKOwPBEZvK6mSHWVlzIZlgvI6medx09sZwG9C1J0Dd9D0cwCgGYslMXDwq69Fq
-	 W82WU5oWShwWTPYwV75gwihPKeZy2GM9nTYYtpird0HFGJP43fcrmm2jlOzpI5NLme
-	 oaO8hbhD4Piyym0t0lGmmZnibACUaLtS80x1zt3Ji6PWjHmgBpdjSR9flsTRL/F4Uy
-	 sSHnDMDwPDVDabzPC3v7agPny65kOXEVR6EYe955cUTmZUtD52DwG95ZQ8MpGf6EE3
-	 XMvTAW9AcBW//Nudwab9zLqKd7j3vkUz6nW/Fry7k6IrJ22bUuG2Ko0+6jkm2vHYlr
-	 GE+3c9oF9ba4A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 461255C02A9; Tue, 31 May 2022 08:03:12 -0700 (PDT)
-Date: Tue, 31 May 2022 08:03:12 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-	Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FC62F50
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 15:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=LpXPAneCugbQKHFScwdaqR/e+kKcx/ImtDg7Wq8zAWA=; b=icH4vRbWpozE50sycTIIOtua87
+	YO+86QBJ38xanxRX9luKNWYPuGhPGvCuhU0yDUCTTTBxPrQZTyack11k5kZ6ZfU/SpJ3eHIFqwjjv
+	c6Xnz2kH/yQSELj5WtLrMQdho7kslht3v1Rw/r6XbIzCqT/t2Mpj6jmmUYVd40q0acNUtY9KYNhJ7
+	x0BbhLLahoffzlV5BEUS62JmYJeXcFhI2IAK0pwKnRgRp9seqQbPnwvv8IDYgc9dk+kSNgm9kq72J
+	+0tTawagakssCe4R/8uNHcUsoDgKC3LjTsTRa00S+RwYbF/iAgZmdhWnZwMggAGomjwPwCQukRv2Q
+	zqNp6vWQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1nw4Ab-005UoH-R7; Tue, 31 May 2022 15:52:34 +0000
+Message-ID: <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
+Date: Tue, 31 May 2022 08:52:28 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] HID: uclogic: properly format kernel-doc comment for
+ hid_dbg() wrappers
+Content-Language: en-US
+To: Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>, Nikolai Kondrashov
+ <spbnick@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+ llvm@lists.linux.dev, stable@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20220531092817.13894-1-bagasdotme@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220531092817.13894-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
 
-On Tue, May 31, 2022 at 01:47:12PM +0200, Paul Heidekrüger wrote:
-> On Tue, Apr 26, 2022 at 01:32:54PM -0700, Paul E. McKenney wrote:
-> > On Fri, Apr 22, 2022 at 12:35:41PM +0200, Paul Heidekrüger wrote:
-> > > Hi all, 
-> > > 
-> > > My dependency checker is flagging yet another broken dependency. For
-> > > context, see [1].
-> > > 
-> > > Thankfully, it is fairly straight-forward to explain this time.
-> > > 
-> > > > stable_node = page_stable_node(page);
-> > > 
-> > > Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
-> > > call to "page_stable_node()", which can depend on a "READ_ONCE()", being
-> > > assigned to "stable_node".
-> > > 
-> > > > if (stable_node) {
-> > > >         if (stable_node->head != &migrate_nodes &&
-> > > >             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
-> > > >             NUMA(stable_node->nid)) {
-> > > >                 stable_node_dup_del(stable_node); ‣dup: stable_node
-> > > >                 stable_node->head = &migrate_nodes;
-> > > >                 list_add(&stable_node->list, stable_node->head);
-> > > 
-> > > The dependency chain then runs into the two following if's, through an
-> > > assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
-> > > finally reaches a call to "list_add()" (line 2039) where
-> > > "stable_node->head" gets passed as the second function argument. 
-> > 
-> > Huh.
-> > 
-> > But migrate_nodes is nothing more or less than a list_head structure.
-> > So one would expect that some other mechanism is protecting its ->prev
-> > and ->next pointers.
-> > 
-> > > >         }
-> > > > }
-> > > > 
-> > > > static inline void list_add(struct list_head *new, struct list_head *head)
-> > > > {
-> > > >         __list_add(new, head, head->next);
-> > > > }
-> > > > 
-> > > > static inline void __list_add(struct list_head *new,
-> > > >                               struct list_head *prev,
-> > > >                               struct list_head *next)
-> > > > {
-> > > >         if (!__list_add_valid(new, prev, next))
-> > > >                 return;
-> > > > 
-> > > >         next->prev = new;
-> > > >         new->next = next;
-> > > >         new->prev = prev;
-> > > >         WRITE_ONCE(prev->next, new);
-> > > > }
-> > > 
-> > > By being passed into "list_add()" via "stable_node->head", the
-> > > dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
-> > > whose destination address, "stable_node->head->next", is part of the
-> > > dependency chain and therefore carries an address dependency. 
-> > > 
-> > > However, as a result of the assignment in line 2038, Clang knows that
-> > > "stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
-> > > the dependency chain. 
-> > > 
-> > > What do you think?
-> > 
-> > Given that this is a non-atomic update, there had better be something
-> > protecting it.  This something might be a lock, a decremented-to-zero
-> > reference count, a rule about only one kthread being permitted to update
-> > that list, and so on.  In all such cases, the code would not be relying
-> > on the dependency, but rather on whatever was protecting that operation.
-> > 
-> > Or am I missing something here?
+
+
+On 5/31/22 02:28, Bagas Sanjaya wrote:
+> Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
+> 6 warnings for hid_dbg() wrapper functions below:
 > 
-> Nope, missing nothing, that was exactly it!
+> drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+> drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
+>  * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+> drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
+> drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface frame parameters with hid_dbg(), indented with two
+> drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
+>  * Dump tablet interface frame parameters with hid_dbg(), indented with two
+> drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
+> drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface parameters with hid_dbg().
+> drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
+>  * Dump tablet interface parameters with hid_dbg().
 > 
-> In ksm_scan_thread(), which calls ksm_do_scan(), which calls
-> cmp_and_merge_page(), there is a mutex_lock() / mutex_unlock() pair,
-> surrounding the dependency. 
-
-Whew!!!  ;-)
-
-> Still keeping this as a trophy for our dependency checker though ;-)
-
-As well you should!
-
-							Thanx, Paul
-
-> Many thanks,
-> Paul
+> One of them is reported by kernel test robot.
 > 
-> PS Sorry for the late reply - been distracted ..
+> Fix these warnings by properly format kernel-doc comment for these
+> functions.
 > 
-> > 
-> > 							Thanx, Paul
-> > 
-> > > Many thanks,
-> > > Paul
-> > > 
-> > > --
-> > > [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
-> > > 
+> Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
+> Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Nikolai Kondrashov <spbnick@gmail.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: "José Expósito" <jose.exposito89@gmail.com>
+> Cc: llvm@lists.linux.dev
+> Cc: stable@vger.kernel.org # v5.18
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Changes since v1 [1]:
+>    - Approach the warning by fixing kernel-doc comments formatting
+>      (suggested by Jonathan Corbet)
+> 
+>  [1]: https://lore.kernel.org/linux-doc/20220528091403.160169-1-bagasdotme@gmail.com/
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+One note (nit) below:
+
+>  drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+> index db838f16282d64..647bbd3e000e2f 100644
+> --- a/drivers/hid/hid-uclogic-params.c
+> +++ b/drivers/hid/hid-uclogic-params.c
+> @@ -23,11 +23,11 @@
+>  /**
+>   * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
+>   *                                       to a string.
+> - *
+>   * @inrange:	The in-range reporting type to convert.
+>   *
+> - * Returns:
+> - *	The string representing the type, or NULL if the type is unknown.
+> + * Return:
+> + * * The string representing the type, or
+> + * * NULL if the type is unknown.
+
+        %NULL
+would be better here, but not required.
+
+>   */
+>  static const char *uclogic_params_pen_inrange_to_str(
+>  				enum uclogic_params_pen_inrange inrange)
+
+
+Thanks.
+-- 
+~Randy
