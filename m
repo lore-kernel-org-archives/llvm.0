@@ -1,36 +1,36 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CD63205
-	for <llvm@lists.linux.dev>; Tue, 31 May 2022 13:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17C93205
+	for <llvm@lists.linux.dev>; Tue, 31 May 2022 13:56:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654005376; x=1685541376;
+  t=1654005395; x=1685541395;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ryjw+Wdkq1IqWZaPmId2Yr1FTb9LVvlGoE5/LYc0rW4=;
-  b=arJN9ZQylooGrRj/FQIZY3gUao38KJaIEIyWBVNQ6c88HkCBM0B9TRE+
-   WVX6CYAdCnsdamvsHyo3HCy/4mrFfchReKjdnSrrFZusv49ao+HRDHnsC
-   0xIBLDeovLBCWfwClenTCLtfHaGDFv8RNbjCYWcsx73Z5ACt6b1f2M5fB
-   Bhl7IpHTrAG0gEG1BMBZunp3Bzv+t8Ik+A8tjqviXp40+UCS4z+nf509D
-   VGuR/Vuwl86VF8VqMB35cxhRMisfqnvMe+2kXIsJaM5HfY6+O5BuZ2/4Z
-   BOHjdz3qAfdrZH8fE47GQLjrgWf4vytnisHp63bSZ56F1eVsEywt1451W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="257326099"
+  bh=YFSRK+qfPnas2RbhUfW/p8UkWfdUBGu7pVNYkVu6cuo=;
+  b=ToesZsieQ58h7f04bJEEhIfwaNH8BHRRuSjQG4vjY2XVVTYUsg3SzpFz
+   IKolvs2j53nzGSsHDjMslINvnpKmy4ZyI0EeRgckdKUIirjAEcShVsMs7
+   1p/xTPxvliE3XUvw4DOAMC+e97eFk5biM7Fa64pHNDsUpI5p7bnpzPgp+
+   JpI5rZ9jB1eFiySJAnwk8WF86qQ9V0qqon831k6oPtkQUi6M9qiKGu+Kz
+   4H0V6eq5CuLCDFECg8idQPv0ZsGg9dMmOdF62xdAgzyB8cjPfd98pT9uT
+   pbfnE2nuzwWPNyoSGPEyCsVUVEp+HRHJAxO6VYYKFid2wHIIImmQNIQFS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="262891238"
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="257326099"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:56:16 -0700
+   d="scan'208";a="262891238"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 06:56:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,265,1647327600"; 
-   d="scan'208";a="903978552"
+   d="scan'208";a="611838461"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 31 May 2022 06:56:14 -0700
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2022 06:56:14 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nw2M1-0002lU-CW;
+	id 1nw2M1-0002lS-C0;
 	Tue, 31 May 2022 13:56:13 +0000
-Date: Tue, 31 May 2022 21:55:58 +0800
+Date: Tue, 31 May 2022 21:56:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -39,7 +39,7 @@ Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	Linus Walleij <linus.walleij@linaro.org>,
 	Sylwester Nawrocki <s.nawrocki@samsung.com>
 Subject: Re: [PATCH] media: s5k4ecgx: Switch to GPIO descriptors
-Message-ID: <202205312157.9EPLfsUw-lkp@intel.com>
+Message-ID: <202205312118.7XAVBcnY-lkp@intel.com>
 References: <20220531084546.67737-1-linus.walleij@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,20 +63,18 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220531-164948
 base:   git://linuxtv.org/media_tree.git master
-config: arm-randconfig-c002-20220531 (https://download.01.org/0day-ci/archive/20220531/202205312157.9EPLfsUw-lkp@intel.com/config)
+config: hexagon-randconfig-r041-20220531 (https://download.01.org/0day-ci/archive/20220531/202205312118.7XAVBcnY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/intel-lab-lkp/linux/commit/d6a5013d9dd546a9c9d7ed3714e861f7593b1635
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220531-164948
         git checkout d6a5013d9dd546a9c9d7ed3714e861f7593b1635
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/i2c/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
@@ -87,10 +85,13 @@ All error/warnings (new ones prefixed by >>):
            gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
                                                ^
 >> drivers/media/i2c/s5k4ecgx.c:897:38: error: expected expression
+>> drivers/media/i2c/s5k4ecgx.c:947:26: error: use of undeclared identifier 's5k4ecgx_id'
+   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+                            ^
 >> drivers/media/i2c/s5k4ecgx.c:954:12: error: use of undeclared identifier 's5k4ecgx_remove'
            .remove = s5k4ecgx_remove,
                      ^
->> drivers/media/i2c/s5k4ecgx.c:955:14: error: use of undeclared identifier 's5k4ecgx_id'
+   drivers/media/i2c/s5k4ecgx.c:955:14: error: use of undeclared identifier 's5k4ecgx_id'
            .id_table = s5k4ecgx_id,
                        ^
 >> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
@@ -102,16 +103,17 @@ All error/warnings (new ones prefixed by >>):
    include/linux/device/driver.h:260:41: note: expanded from macro 'module_driver'
    static int __init __driver##_init(void) \
                                            ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: use of undeclared identifier 'v4l2_i2c_driver_init'
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
    include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
            module_driver(__i2c_driver, i2c_add_driver, \
            ^
-   include/linux/device/driver.h:264:13: note: expanded from macro 'module_driver'
-   module_init(__driver##_init); \
-               ^
-   <scratch space>:73:1: note: expanded from here
-   v4l2_i2c_driver_init
-   ^
+   include/linux/device/driver.h:263:3: note: expanded from macro 'module_driver'
+   } \
+     ^
+   include/linux/module.h:132:2: note: expanded from macro '\
+   module_init'
+           { return initfn; }                                      \
+           ^
 >> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
    include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
            module_driver(__i2c_driver, i2c_add_driver, \
@@ -119,47 +121,32 @@ All error/warnings (new ones prefixed by >>):
    include/linux/device/driver.h:265:42: note: expanded from macro 'module_driver'
    static void __exit __driver##_exit(void) \
                                             ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: use of undeclared identifier 'v4l2_i2c_driver_exit'; did you mean 'v4l2_i2c_driver'?
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
    include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
            module_driver(__i2c_driver, i2c_add_driver, \
            ^
-   include/linux/device/driver.h:269:13: note: expanded from macro 'module_driver'
-   module_exit(__driver##_exit);
-               ^
-   <scratch space>:89:1: note: expanded from here
-   v4l2_i2c_driver_exit
-   ^
-   drivers/media/i2c/s5k4ecgx.c:949:26: note: 'v4l2_i2c_driver' declared here
-   static struct i2c_driver v4l2_i2c_driver = {
-                            ^
->> drivers/media/i2c/s5k4ecgx.c:958:1: error: initializing 'exitcall_t' (aka 'void (*)(void)') with an expression of incompatible type 'struct i2c_driver'
-   module_i2c_driver(v4l2_i2c_driver);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
-           module_driver(__i2c_driver, i2c_add_driver, \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/device/driver.h:268:3: note: expanded from macro 'module_driver'
    } \
      ^
-   include/linux/module.h:100:24: note: expanded from macro '\
+   include/linux/module.h:140:2: note: expanded from macro '\
    module_exit'
-   #define module_exit(x)  __exitcall(x);
-                           ^          ~
-   include/linux/init.h:299:20: note: expanded from macro '__exitcall'
-           static exitcall_t __exitcall_##fn __exit_call = fn
-                             ^                             ~~
-   <scratch space>:90:1: note: expanded from here
-   __exitcall_v4l2_i2c_driver_exit
-   ^
+           { return exitfn; }                                      \
+           ^
 >> drivers/media/i2c/s5k4ecgx.c:964:36: error: expected '}'
    MODULE_FIRMWARE(S5K4ECGX_FIRMWARE);
                                       ^
    drivers/media/i2c/s5k4ecgx.c:856:1: note: to match this '{'
    {
    ^
->> drivers/media/i2c/s5k4ecgx.c:949:26: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-   static struct i2c_driver v4l2_i2c_driver = {
-                            ^
+>> drivers/media/i2c/s5k4ecgx.c:947:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+   ^
+   include/linux/module.h:244:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                       ^
+   <scratch space>:94:1: note: expanded from here
+   __mod_i2c__s5k4ecgx_id_device_table
+   ^
 >> drivers/media/i2c/s5k4ecgx.c:895:8: error: use of undeclared label 'out_err'
                    goto out_err;
                         ^
@@ -262,15 +249,15 @@ vim +897 drivers/media/i2c/s5k4ecgx.c
    944		{ S5K4ECGX_DRIVER_NAME, 0 },
    945		{}
    946	};
-   947	MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+ > 947	MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
    948	
- > 949	static struct i2c_driver v4l2_i2c_driver = {
+   949	static struct i2c_driver v4l2_i2c_driver = {
    950		.driver = {
    951			.name = S5K4ECGX_DRIVER_NAME,
    952		},
    953		.probe = s5k4ecgx_probe,
  > 954		.remove = s5k4ecgx_remove,
- > 955		.id_table = s5k4ecgx_id,
+   955		.id_table = s5k4ecgx_id,
    956	};
    957	
  > 958	module_i2c_driver(v4l2_i2c_driver);
