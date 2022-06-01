@@ -1,93 +1,132 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418D563A
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 20:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F1933D6
+	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 21:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654115520; x=1685651520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=i2CoMCKZWusaz7aKZyipOQ3qwKdv2ES5FNwWBC7IkNY=;
-  b=B2U/drpBweZt+BJ1rMrt8lQCDe435AvaynszJm1yUkTIyU+xsTefjjlj
-   D0QSKDcs3na011lI/n1bVoM0JEqvlKpsXAuXu19zFhPZZ3JlVACoDByh8
-   01vzEy3IfWSDA90BjAwTnm5wRU7Q/zZnIJy2cRQ+lWWhSpl8ln7sAuV8F
-   6A0UaOmDBAOvXqCx6S213pT8jqlobnCeLNBNiamXVG6/hktvEIzTF99ek
-   ADlEF5nnePFiv7+DZKArIOuk9C+c8bCnsZneDBrajosy5S9CN8WKeAWbZ
-   YJXcllXO8fDBg6BK5oCQEMwn/0SqdxE19tM0IJUL8i970yhpsRt7bnc02
+  t=1654118963; x=1685654963;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ozN0bpmL3RRXWdUyP9jFjhJ9AhuZNvpPXYlOb8sqBD4=;
+  b=TDLCBQmvcav0Yujj9eIOrpwRmOewGZWvnRRi3MbU4xsZMn6mxcxFZ5m9
+   L3oM05ZfscJQ2oPVR7cnc2ypdS2S6/Ph9qQbFML+6TR13te6NjlqDzRKB
+   kQTa79Ea5K94M0Kj3e7nPnWb7BCgXg7w3mIeXIs9PSiweMX4ZdeXTtQnu
+   opGBlc34t5Jskm15EqCvYy6RAGKx1QewxPSuhwPSS9hYRr8vuxOGrsOyY
+   IRl0UitemLveBfrpghfbVBn2Uw3aGxeD5yJzZffUEF6r7NKQtiHPiwwan
+   ddSNAw1fN5MFjeXqryeFeb1JBW8va2pmpA/m3LmCSrYOY4ULZgCZYYR3g
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275444496"
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336390649"
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="275444496"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 13:28:18 -0700
+   d="scan'208";a="336390649"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:29:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="756618553"
+   d="scan'208";a="562992536"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2022 13:28:17 -0700
+  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 14:29:21 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwUwy-0004NQ-OG;
-	Wed, 01 Jun 2022 20:28:16 +0000
-Date: Thu, 2 Jun 2022 04:27:29 +0800
+	id 1nwVu4-0004QA-LM;
+	Wed, 01 Jun 2022 21:29:20 +0000
+Date: Thu, 2 Jun 2022 05:28:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS
- maximum xattr size
-Message-ID: <202206020411.AHeREyCE-lkp@intel.com>
-References: <20220601162939.12278-1-lhenriques@suse.de>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 58/59]
+ fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer
+ types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL <<
+ __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof
+ (ctx->crypto_bshift) *)1))) && ...
+Message-ID: <202206020559.wB4dxgKa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220601162939.12278-1-lhenriques@suse.de>
 
-Hi "Luís,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on ceph-client/for-linus]
-[also build test WARNING on v5.18 next-20220601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-s-Henriques/ceph-prevent-a-client-from-exceeding-the-MDS-maximum-xattr-size/20220602-002950
-base:   https://github.com/ceph/ceph-client.git for-linus
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220602/202206020411.AHeREyCE-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   22ecc2fcdab4616e624408911ec1d54644e82030
+commit: ff509dc49891f934a7a774e277b87729018db753 [58/59] netfs: Use flush from afs_writeback
+config: hexagon-randconfig-r041-20220601 (https://download.01.org/0day-ci/archive/20220602/202206020559.wB4dxgKa-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/052d43ff323eb7d212ed64d7cd3e2af4589f4596
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lu-s-Henriques/ceph-prevent-a-client-from-exceeding-the-MDS-maximum-xattr-size/20220602-002950
-        git checkout 052d43ff323eb7d212ed64d7cd3e2af4589f4596
+        # https://github.com/ammarfaizi2/linux-block/commit/ff509dc49891f934a7a774e277b87729018db753
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout ff509dc49891f934a7a774e277b87729018db753
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/ceph/xattr.c:1081:37: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           dout("setxattr value size: %ld\n", size);
-                                      ~~~     ^~~~
-                                      %zu
-   include/linux/ceph/ceph_debug.h:35:45: note: expanded from macro 'dout'
-   # define dout(fmt, ...) pr_debug(" " fmt, ##__VA_ARGS__)
-                                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL << __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof (ctx->crypto_bshift) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->min_bshift) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->crypto_bshift) * 0L)) : (int *)8))))), ((ctx->min_bshift) > (ctx->crypto_bshift) ? (ctx->min_bshift) : (ctx->crypto_bshift)), ({
+       typeof (ctx->min_bshift) __UNIQUE_ID___x275 = (ctx->min_bshift);
+       typeof (ctx->crypto_bshift) __UNIQUE_ID___y276 = (ctx->crypto_bshift);
+       ((__UNIQUE_ID___x275) > (__UNIQUE_ID___y276) ? (__UNIQUE_ID___x275) : (__UNIQUE_ID___y276));
+   }))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   hard_align = max(hard_align,
+                                ^~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:411:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << 16) << ctx->cache_order) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:413:10: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << (0 ? 4 : 6)) * (1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> fs/netfs/buffered_flush.c:533:22: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+           _leave(" ok [%zx]", wreq->last);
+                        ~~~    ^~~~~~~~~~
+                        %lx
+   fs/netfs/internal.h:299:65: note: expanded from macro '_leave'
+   #define _leave(FMT, ...) no_printk("<== %s()"FMT"", __func__, ##__VA_ARGS__)
+                                                ~~~                ^~~~~~~~~~~
    include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
                    printk(fmt, ##__VA_ARGS__);             \
                           ~~~    ^~~~~~~~~~~
@@ -97,80 +136,209 @@ All warnings (new ones prefixed by >>):
    include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
                    _p_func(_fmt, ##__VA_ARGS__);                           \
                            ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+   fs/netfs/buffered_flush.c:545:26: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+           _leave(" cancel [%zx]", wreq->last);
+                            ~~~    ^~~~~~~~~~
+                            %lx
+   fs/netfs/internal.h:299:65: note: expanded from macro '_leave'
+   #define _leave(FMT, ...) no_printk("<== %s()"FMT"", __func__, ##__VA_ARGS__)
+                                                ~~~                ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/buffered_flush.c:348:33: warning: unused function 'netfs_find_writeback' [-Wunused-function]
+   static struct netfs_io_request *netfs_find_writeback(struct netfs_i_context *ctx,
+                                   ^
+   fs/netfs/buffered_flush.c:364:13: warning: unused function 'netfs_wait_for_writeback' [-Wunused-function]
+   static void netfs_wait_for_writeback(struct netfs_io_request *wreq,
+               ^
+   7 warnings generated.
 
 
-vim +1081 fs/ceph/xattr.c
+vim +408 fs/netfs/buffered_flush.c
 
-  1052	
-  1053	static int ceph_sync_setxattr(struct inode *inode, const char *name,
-  1054				      const char *value, size_t size, int flags)
-  1055	{
-  1056		struct ceph_fs_client *fsc = ceph_sb_to_client(inode->i_sb);
-  1057		struct ceph_inode_info *ci = ceph_inode(inode);
-  1058		struct ceph_mds_request *req;
-  1059		struct ceph_mds_client *mdsc = fsc->mdsc;
-  1060		struct ceph_osd_client *osdc = &fsc->client->osdc;
-  1061		struct ceph_pagelist *pagelist = NULL;
-  1062		int op = CEPH_MDS_OP_SETXATTR;
-  1063		int err;
-  1064	
-  1065		if (size > 0) {
-  1066			/* copy value into pagelist */
-  1067			pagelist = ceph_pagelist_alloc(GFP_NOFS);
-  1068			if (!pagelist)
-  1069				return -ENOMEM;
-  1070	
-  1071			err = ceph_pagelist_append(pagelist, value, size);
-  1072			if (err)
-  1073				goto out;
-  1074		} else if (!value) {
-  1075			if (flags & CEPH_XATTR_REPLACE)
-  1076				op = CEPH_MDS_OP_RMXATTR;
-  1077			else
-  1078				flags |= CEPH_XATTR_REMOVE;
-  1079		}
-  1080	
-> 1081		dout("setxattr value size: %ld\n", size);
-  1082	
-  1083		/* do request */
-  1084		req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-  1085		if (IS_ERR(req)) {
-  1086			err = PTR_ERR(req);
-  1087			goto out;
-  1088		}
-  1089	
-  1090		req->r_path2 = kstrdup(name, GFP_NOFS);
-  1091		if (!req->r_path2) {
-  1092			ceph_mdsc_put_request(req);
-  1093			err = -ENOMEM;
-  1094			goto out;
-  1095		}
-  1096	
-  1097		if (op == CEPH_MDS_OP_SETXATTR) {
-  1098			req->r_args.setxattr.flags = cpu_to_le32(flags);
-  1099			req->r_args.setxattr.osdmap_epoch =
-  1100				cpu_to_le32(osdc->osdmap->epoch);
-  1101			req->r_pagelist = pagelist;
-  1102			pagelist = NULL;
-  1103		}
-  1104	
-  1105		req->r_inode = inode;
-  1106		ihold(inode);
-  1107		req->r_num_caps = 1;
-  1108		req->r_inode_drop = CEPH_CAP_XATTR_SHARED;
-  1109	
-  1110		dout("xattr.ver (before): %lld\n", ci->i_xattrs.version);
-  1111		err = ceph_mdsc_do_request(mdsc, NULL, req);
-  1112		ceph_mdsc_put_request(req);
-  1113		dout("xattr.ver (after): %lld\n", ci->i_xattrs.version);
-  1114	
-  1115	out:
-  1116		if (pagelist)
-  1117			ceph_pagelist_release(pagelist);
-  1118		return err;
-  1119	}
-  1120	
+   372	
+   373	/*
+   374	 * Extend the region to be written back to include subsequent contiguously
+   375	 * dirty pages if possible, but don't sleep while doing so.
+   376	 *
+   377	 * If this page holds new content, then we can include filler zeros in the
+   378	 * writeback.
+   379	 */
+   380	static void netfs_extend_writeback(struct netfs_io_request *wreq,
+   381					   struct writeback_control *wbc,
+   382					   struct netfs_i_context *ctx,
+   383					   struct netfs_dirty_region *region)
+   384	{
+   385		struct folio_batch fbatch;
+   386		struct folio *folio;
+   387		unsigned int i;
+   388		pgoff_t index = wreq->last + 1, stop_mask, stop_at, max_pages;
+   389		ssize_t max_size;
+   390		size_t align, hard_align;
+   391		bool stop = true, dirty;
+   392		int ret;
+   393	
+   394		XA_STATE(xas, &wreq->mapping->i_pages, index);
+   395	
+   396		_enter("%lx", index);
+   397	
+   398		/* We have a number of criteria by which we can decide where to stop
+   399		 * extension of this writeback:
+   400		 *
+   401		 *  1) The maximum I/O size (but wbacks can be subdivided)
+   402		 *  2) Boundaries within the filesystem (eg. ceph object size)
+   403		 *  3) Local boundaries (cache granules, VM radix node sizes)
+   404		 *  4) Content crypto/compression boundaries
+   405		 */
+   406		hard_align = PAGE_SIZE;
+   407		if (ctx->min_bshift || ctx->crypto_bshift)
+ > 408			hard_align = max(hard_align,
+   409					 1UL << max(ctx->min_bshift, ctx->crypto_bshift));
+   410		if (ctx->cache_order)
+ > 411			hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
+   412	
+ > 413		align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
+   414		if (wreq->alignment > align)
+   415			align = wreq->alignment;
+   416	
+   417		stop_mask = (align - 1) / PAGE_SIZE;
+   418	
+   419		max_size = XA_CHUNK_SIZE * PAGE_SIZE;
+   420		if (wreq->wsize > max_size)
+   421			max_size = roundup_pow_of_two(wreq->wsize);
+   422	
+   423		_debug("LIMITS al=%zx ha=%zx mx=%zx", align, hard_align, max_size);
+   424	
+   425		max_pages = max_size / PAGE_SIZE;
+   426		max_pages &= ~stop_mask;
+   427		_debug("MAX_PAGES %lx %lx", max_pages, stop_mask);
+   428		if (wreq->last - wreq->first + 1 >= max_pages) {
+   429			_leave(" [already hit wsize %lx %lx]",
+   430			       wreq->last - wreq->first + 1, max_pages);
+   431			return;
+   432		}
+   433	
+   434		stop_at = wreq->first + max_pages;
+   435		if (stop_at < wreq->first)
+   436			stop_at = ULONG_MAX;
+   437		else
+   438			stop_at = round_down(stop_at, align / PAGE_SIZE);
+   439		_debug("STOP_AT %lx (%lx %lx %lx)", stop_at, wreq->first, max_pages, align / PAGE_SIZE);
+   440	
+   441		if (index >= stop_at || wbc->nr_to_write <= 0 || wreq->len > max_size) {
+   442			_leave(" [prestop]");
+   443			return;
+   444		}
+   445	
+   446		do {
+   447			/* Firstly, we gather up a batch of contiguous dirty folios
+   448			 * under the RCU read lock - but we can't clear the dirty flags
+   449			 * there if any of those folios are mapped.
+   450			 */
+   451			folio_batch_init(&fbatch);
+   452			_debug("extend %lx %lx", index, xas.xa_index);
+   453			rcu_read_lock();
+   454	
+   455			xas_for_each(&xas, folio, ULONG_MAX) {
+   456				stop = true;
+   457				if (xas_retry(&xas, folio))
+   458					continue;
+   459				if (xa_is_value(folio))
+   460					break;
+   461				if (folio_index(folio) != index)
+   462					break;
+   463	
+   464				if (!folio_try_get_rcu(folio)) {
+   465					xas_reset(&xas);
+   466					continue;
+   467				}
+   468	
+   469				/* Has the folio moved or been split? */
+   470				if (unlikely(folio != xas_reload(&xas))) {
+   471					folio_put(folio);
+   472					break;
+   473				}
+   474	
+   475				if (!folio_trylock(folio)) {
+   476					folio_put(folio);
+   477					break;
+   478				}
+   479				if (!folio_test_dirty(folio) ||
+   480				    folio_test_writeback(folio)) {
+   481					folio_unlock(folio);
+   482					folio_put(folio);
+   483					break;
+   484				}
+   485	
+   486				wreq->len += folio_size(folio);
+   487				index += folio_nr_pages(folio);
+   488				stop = index >= stop_at || wbc->nr_to_write <= 0;
+   489	
+   490				if (!folio_batch_add(&fbatch, folio))
+   491					break;
+   492				if (stop)
+   493					break;
+   494			}
+   495	
+   496			if (!stop)
+   497				xas_pause(&xas);
+   498			rcu_read_unlock();
+   499	
+   500			/* Now, if we obtained any pages, we can shift them to being
+   501			 * writable and mark them for caching.
+   502			 */
+   503			if (!folio_batch_count(&fbatch))
+   504				break;
+   505	
+   506			for (i = 0; i < folio_batch_count(&fbatch); i++) {
+   507				folio = fbatch.folios[i];
+   508				//_debug("found [%x] %lx", i, folio->index);
+   509				trace_netfs_folio_dirty(wreq->mapping, folio,
+   510							netfs_folio_trace_store_ex);
+   511	
+   512				dirty = folio_clear_dirty_for_io(folio);
+   513				if (folio_start_writeback(folio)) {
+   514					_debug("! no wb");
+   515					goto nomem_redirty;
+   516				}
+   517	
+   518				ret = netfs_xa_store_and_mark(&wreq->buffer, folio->index, folio,
+   519							      true, true, dirty, GFP_NOFS);
+   520				if (ret < 0) {
+   521					_debug("! no buffer");
+   522					goto nomem_cancel_wb;
+   523				}
+   524				wbc->nr_to_write -= folio_nr_pages(folio);
+   525				index = folio_next_index(folio);
+   526				wreq->last = index - 1;
+   527				folio_unlock(folio);
+   528			}
+   529	
+   530			cond_resched();
+   531		} while (!stop);
+   532	
+ > 533		_leave(" ok [%zx]", wreq->last);
+   534		return;
+   535	
+   536	nomem_cancel_wb:
+   537		folio_end_writeback(folio);
+   538	nomem_redirty:
+   539		if (dirty)
+   540			folio_redirty_for_writepage(wbc, folio);
+   541		for (; i < folio_batch_count(&fbatch); i++) {
+   542			folio_unlock(folio);
+   543			folio_put(folio);
+   544		}
+   545		_leave(" cancel [%zx]", wreq->last);
+   546	}
+   547	
 
 -- 
 0-DAY CI Kernel Test Service
