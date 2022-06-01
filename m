@@ -1,120 +1,97 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0F9366
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 05:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654062290; x=1685598290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1sqm3JQDoLDrhWARKDhFVitl2lkVt0q//HmMCX54PtQ=;
-  b=gtp9Af0DWhvobvFIK0iZv+pIQets0icuRRp8Jbhvt0l39fC8PPPtrIlk
-   ZWUdCFNKdTFok//lFT8orr7RfdC9NwvD5oaWnFWhOV9iI4b2Iv+miOD4h
-   xcVSH+p4zWdGY624VSNH1k/Vh8g8e7iQa9BlUH3RPsxbU9JxR3zENbqh9
-   os2N8dfzScZJKK8kJWqcfhNJJgw658T1dvcRRUYvT8Srwr7/TNi5+fhLl
-   UtZabCPe9UPX3oFq/lRosISxLayROj4CjUpLuQqSyl4mTkV1liIjCB1Z0
-   WaAbABF+hemvHhiZJMLM/k11eeWVddF0mguLOCHHqtMRVl5PKmYdgwkn7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="257551841"
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="257551841"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 22:44:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,266,1647327600"; 
-   d="scan'208";a="904299326"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 31 May 2022 22:44:46 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nwH9y-0003bM-92;
-	Wed, 01 Jun 2022 05:44:46 +0000
-Date: Wed, 1 Jun 2022 13:44:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhihao Cheng <chengzhihao1@huawei.com>, ebiederm@xmission.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	chengzhihao1@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v3] proc: Fix a dentry lock race between release_task and
- lookup
-Message-ID: <202206011314.dh4oSNjS-lkp@intel.com>
-References: <20220601023622.4191510-1-chengzhihao1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E7B362
+	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 07:27:46 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id y189so1167120pfy.10
+        for <llvm@lists.linux.dev>; Wed, 01 Jun 2022 00:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eMeA/fqvYZU6vrSiCnNJA0sstC2+T/rmbcmFof3BR34=;
+        b=Ve/MDQjVQ36HEHc3RKBr36SX9I68T1b4706XRvOHxHRgDsEzn3JOnjpOjtHXaFBlaE
+         5sKBR5xf0pwoFavEKOjpPGC+XjnBihHNbZG+Shi+XCMgIzx6OXcZAAqI9y/pFOAv6OJk
+         TYwI4uyqOG/3HWq0jJQ3LeYVHTfwsp/ylK+2Fvn9+AQTOFCCVboUB2IldBbynyw5F+68
+         1Lkz3GjBIqDCp2v04ZbG9Eh5biTPgCosHS2Kv3LvfXxCabp2AxUB60JM3j6HTz4UhJpd
+         B9Tq8YCUVg0SaKQI9UeErLNPGiL7bjX8DaO9Yp5sDidUQ+RsNOytfGbCqOD90Zi8gCk+
+         /ovg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eMeA/fqvYZU6vrSiCnNJA0sstC2+T/rmbcmFof3BR34=;
+        b=rNhq5SO1cE3/JR8DmVMVHfz7wLwC82QGHb7v2Xx+4M7iLnokAWnaTA+KhT1W4h/VoR
+         XYZE/oycb3RO8QvCNO09XcqKBIMdnqH7QVpTp/k4nSJnPHdRSlstTzPRUEEypACLpJNh
+         gAXYV3hdv8DTkp4tgCB8DwYWroxw6xPDI6hRPujTgIKI19vqR86TELnkPswNP78P/eLF
+         yeZEAlxD/I+tcOKNRQymx5iP85todMq8iFzIyPnmSI4TSwXpuRpRrWG6EFSUXWTv5Afc
+         wtjgQNCxjWfAaxsUVK8uj/1rYT7r9liS2yKNwOqRynm0tZRLX4Hw1GOV2JszN+ZZDgE1
+         qrGw==
+X-Gm-Message-State: AOAM532PD3bWCJ2C2NuH2IGrVHwpIT6i5bMo7JxFb7EmiYmpCl63z8wJ
+	EtcxSnBo4Fxw0n47b2V/gG0=
+X-Google-Smtp-Source: ABdhPJzncNVm9JEdvzWZ/WJX8rZD6Uc3eyRjjE+e9aLdBHmlkh2N+ra6ix7Phl7ZYouz3tV5tJAaCQ==
+X-Received: by 2002:a05:6a00:1d8e:b0:518:87e7:db00 with SMTP id z14-20020a056a001d8e00b0051887e7db00mr52648703pfw.84.1654068465543;
+        Wed, 01 Jun 2022 00:27:45 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-26.three.co.id. [180.214.232.26])
+        by smtp.gmail.com with ESMTPSA id gn1-20020a17090ac78100b001df82551cf2sm650434pjb.44.2022.06.01.00.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 00:27:44 -0700 (PDT)
+Date: Wed, 1 Jun 2022 14:27:42 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
+	Nikolai Kondrashov <spbnick@gmail.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	=?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+	llvm@lists.linux.dev, stable@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: properly format kernel-doc comment for
+ hid_dbg() wrappers
+Message-ID: <YpcU7qeOtShFx8xR@debian.me>
+References: <20220531092817.13894-1-bagasdotme@gmail.com>
+ <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220601023622.4191510-1-chengzhihao1@huawei.com>
+In-Reply-To: <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
 
-Hi Zhihao,
+> One note (nit) below:
+> 
+> >  drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
+> >  1 file changed, 14 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+> > index db838f16282d64..647bbd3e000e2f 100644
+> > --- a/drivers/hid/hid-uclogic-params.c
+> > +++ b/drivers/hid/hid-uclogic-params.c
+> > @@ -23,11 +23,11 @@
+> >  /**
+> >   * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
+> >   *                                       to a string.
+> > - *
+> >   * @inrange:	The in-range reporting type to convert.
+> >   *
+> > - * Returns:
+> > - *	The string representing the type, or NULL if the type is unknown.
+> > + * Return:
+> > + * * The string representing the type, or
+> > + * * NULL if the type is unknown.
+> 
+>         %NULL
+> would be better here, but not required.
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Hi Randy,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18 next-20220601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhihao-Cheng/proc-Fix-a-dentry-lock-race-between-release_task-and-lookup/20220601-102513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 700170bf6b4d773e328fa54ebb70ba444007c702
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220601/202206011314.dh4oSNjS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9dfec748ded82f145043dc08a944e1a9af7a640d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhihao-Cheng/proc-Fix-a-dentry-lock-race-between-release_task-and-lookup/20220601-102513
-        git checkout 9dfec748ded82f145043dc08a944e1a9af7a640d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/proc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/proc/base.c:1929:15: warning: no previous prototype for function 'proc_pid_make_base_inode' [-Wmissing-prototypes]
-   struct inode *proc_pid_make_base_inode(struct super_block *sb,
-                 ^
-   fs/proc/base.c:1929:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct inode *proc_pid_make_base_inode(struct super_block *sb,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/proc_pid_make_base_inode +1929 fs/proc/base.c
-
-  1928	
-> 1929	struct inode *proc_pid_make_base_inode(struct super_block *sb,
-  1930					       struct task_struct *task, umode_t mode)
-  1931	{
-  1932		struct inode *inode;
-  1933		struct proc_inode *ei;
-  1934		struct pid *pid;
-  1935	
-  1936		inode = proc_pid_make_inode(sb, task, mode);
-  1937		if (!inode)
-  1938			return NULL;
-  1939	
-  1940		/* Let proc_flush_pid find this directory inode */
-  1941		ei = PROC_I(inode);
-  1942		pid = ei->pid;
-  1943		spin_lock(&pid->lock);
-  1944		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
-  1945		spin_unlock(&pid->lock);
-  1946	
-  1947		return inode;
-  1948	}
-  1949	
+I don't see %NULL in Documentation/ (I git-grep-ed it but none found).
+What should I do when I have to explain NULL in Return: section of
+kernel-doc comment?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara
