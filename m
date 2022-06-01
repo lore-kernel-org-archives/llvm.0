@@ -1,43 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC0420E4
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 13:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC2A256F
+	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 14:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654090686; x=1685626686;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JR5obCoehj3ulyaBpP75i60De/pEvORZKnoggn39DHk=;
-  b=jYXliTdO51qKkVtLSZAYFaYs//la87Z+OBzi5TFoW1v0RdQ7l0jsREOB
-   Fp+vHourCwrcEpU/YdYcpwCThPMKZHQfFdsE7Zc7V5wqSRgoE16KjLy6Q
-   jJz2v1wy+V80z+ez3DgUS75bF/TJGihY5n3798aDINgblEx98XSXgD8cl
-   8FtVmA55iHwA/Yhs7ekDSrAQeacVOWmHf6oXHzWFRwCWXYkom56DwS05H
-   d+h4OMhJ8UcIQEq/haPtVZwfHQH3rjCSe/1iRnSgcPr4XDzpvOw+FLIw9
-   RZMIvpjADu7tqDgYBSTzeOEOT3L/1Y5upg1DwC9dAzzJWD2iCHVAz8SJW
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275668673"
+  t=1654092547; x=1685628547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OIASPbT4ErywrxAuYrz/ZgaqSnR5UCcNc+ztvYy5GUs=;
+  b=kZP4nRkOia4m+z/ks4WXsMufKO/tBv+0gEtokghIzLJp6P9zEuGPnif4
+   xIBjr55P9nSdIA8rVCCpNy/oLAdshCZz3RupU1gJCCU0hk2LvvwmySBo+
+   ETMpkZbYHguXSoTbjfH7C8jtIBykOHC98957vVRtldtVgP/CSYILPq+oL
+   Zie+Xm/XMap6F/ZsE8OIIapIn2jatIhh8tONGs4nzZBcj0Mal5vYrqzPk
+   Hktl6dx6ZVdXrSi3Oo5wbdKNmkxj/o1G2HEz4BpbTCT5+2gHnu6nvhcLX
+   LpAuOBWFimmNpCLg9ludLDTRrJNL6knTewyFleXbLxVgMUnT/AxkRilxd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="273168309"
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275668673"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:38:05 -0700
+   d="scan'208";a="273168309"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:09:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="562800373"
+   d="scan'208";a="680113133"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 06:38:03 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2022 07:09:04 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwOXz-00041u-07;
-	Wed, 01 Jun 2022 13:38:03 +0000
-Date: Wed, 1 Jun 2022 21:37:34 +0800
+	id 1nwP20-00043U-0h;
+	Wed, 01 Jun 2022 14:09:04 +0000
+Date: Wed, 1 Jun 2022 22:08:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Collingbourne <pcc@google.com>
+To: Haowen Bai <baihaowen@meizu.com>, Jan Harkes <jaharkes@cs.cmu.edu>,
+	coda@cs.cmu.edu
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Subject: arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for
- function 'kasan_hw_tags_enable'
-Message-ID: <202206012143.S2fcThHk-lkp@intel.com>
+	Haowen Bai <baihaowen@meizu.com>, codalist@coda.cs.cmu.edu,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] coda: remove unused variable
+Message-ID: <202206012159.9WhO0iYq-lkp@intel.com>
+References: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +48,159 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
 
-Hi Peter,
+Hi Haowen,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   700170bf6b4d773e328fa54ebb70ba444007c702
-commit: e5af50a5df571c1d0268b02f924de49b742c990f arm64: kasan: mte: move GCR_EL1 switch to task switch when KASAN disabled
-date:   8 months ago
-config: arm64-buildonly-randconfig-r001-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012143.S2fcThHk-lkp@intel.com/config)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/coda-remove-unused-variable/20220601-160014
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 700170bf6b4d773e328fa54ebb70ba444007c702
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220601/202206012159.9WhO0iYq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e5af50a5df571c1d0268b02f924de49b742c990f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e5af50a5df571c1d0268b02f924de49b742c990f
+        # https://github.com/intel-lab-lkp/linux/commit/627c05172e8d819cb8dca41dfa795baae03ea6f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Haowen-Bai/coda-remove-unused-variable/20220601-160014
+        git checkout 627c05172e8d819cb8dca41dfa795baae03ea6f9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/coda/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: functions only called from assembly code should be annotated with the asmlinkage attribute
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for function 'kasan_hw_tags_enable' [-Wmissing-prototypes]
-   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
-               ^
-   arch/arm64/kernel/mte.c:197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
-   ^
-   static 
-   arch/arm64/kernel/mte.c:103:20: warning: unused function '__mte_enable_kernel' [-Wunused-function]
-   static inline void __mte_enable_kernel(const char *mode, unsigned long tcf)
-                      ^
-   2 warnings generated.
+   fs/coda/upcall.c:115:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:164:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:238:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:306:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:329:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:383:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:410:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   fs/coda/upcall.c:443:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp; 
+                             ^
+   fs/coda/upcall.c:459:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp; 
+                             ^
+>> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
+           UPARG(CODA_IOCTL);
+           ^
+   fs/coda/upcall.c:63:44: note: expanded from macro 'UPARG'
+           inp = (union inputArgs *)alloc_upcall(op, insize); \
+                                                     ^
+>> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
+   fs/coda/upcall.c:66:19: note: expanded from macro 'UPARG'
+           outsize = insize; \
+                     ^
+   fs/coda/upcall.c:576:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
+           union outputArgs *outp;
+                             ^
+   10 warnings and 2 errors generated.
 
 
-vim +/kasan_hw_tags_enable +197 arch/arm64/kernel/mte.c
+vim +/insize +483 fs/coda/upcall.c
 
-   196	
- > 197	void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
-   198					 __le32 *updptr, int nr_inst)
-   199	{
-   200		BUG_ON(nr_inst != 1); /* Branch -> NOP */
-   201	
-   202		if (kasan_hw_tags_enabled())
-   203			*updptr = cpu_to_le32(aarch64_insn_gen_nop());
-   204	}
-   205	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  473  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  474  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  475  int venus_pioctl(struct super_block *sb, struct CodaFid *fid,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  476  		 unsigned int cmd, struct PioctlData *data)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  477  {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  478          union inputArgs *inp;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  479          union outputArgs *outp;  
+627c05172e8d81 Haowen Bai       2022-06-01  480  	int outsize, error;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  481  	int iocsize;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  482  
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @483  	UPARG(CODA_IOCTL);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  484  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  485          /* build packet for Venus */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  486          if (data->vi.in_size > VC_MAXDATASIZE) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  487  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  488  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  489          }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  490  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  491          if (data->vi.out_size > VC_MAXDATASIZE) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  492  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  493  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  494  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  495  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  496          inp->coda_ioctl.VFid = *fid;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  497      
+^1da177e4c3f41 Linus Torvalds   2005-04-16  498          /* the cmd field was mutated by increasing its size field to
+^1da177e4c3f41 Linus Torvalds   2005-04-16  499           * reflect the path and follow args. We need to subtract that
+^1da177e4c3f41 Linus Torvalds   2005-04-16  500           * out before sending the command to Venus.  */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  501          inp->coda_ioctl.cmd = (cmd & ~(PIOCPARM_MASK << 16));	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  502          iocsize = ((cmd >> 16) & PIOCPARM_MASK) - sizeof(char *) - sizeof(int);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  503          inp->coda_ioctl.cmd |= (iocsize & PIOCPARM_MASK) <<	16;	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  504      
+^1da177e4c3f41 Linus Torvalds   2005-04-16  505          /* in->coda_ioctl.rwflag = flag; */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  506          inp->coda_ioctl.len = data->vi.in_size;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  507          inp->coda_ioctl.data = (char *)(INSIZE(ioctl));
+^1da177e4c3f41 Linus Torvalds   2005-04-16  508       
+^1da177e4c3f41 Linus Torvalds   2005-04-16  509          /* get the data out of user space */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  510  	if (copy_from_user((char *)inp + (long)inp->coda_ioctl.data,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  511  			   data->vi.in, data->vi.in_size)) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  512  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  513  	        goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  514  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  515  
+a1b0aa87647493 Jan Harkes       2007-07-19  516  	error = coda_upcall(coda_vcp(sb), SIZE(ioctl) + data->vi.in_size,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  517  			    &outsize, inp);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  518  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  519          if (error) {
+6d6bd94f4d83d7 Fabian Frederick 2014-06-06  520  		pr_warn("%s: Venus returns: %d for %s\n",
+6d6bd94f4d83d7 Fabian Frederick 2014-06-06  521  			__func__, error, coda_f2s(fid));
+^1da177e4c3f41 Linus Torvalds   2005-04-16  522  		goto exit; 
+^1da177e4c3f41 Linus Torvalds   2005-04-16  523  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  524  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  525  	if (outsize < (long)outp->coda_ioctl.data + outp->coda_ioctl.len) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  526  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  527  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  528  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  529          
+^1da177e4c3f41 Linus Torvalds   2005-04-16  530  	/* Copy out the OUT buffer. */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  531          if (outp->coda_ioctl.len > data->vi.out_size) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  532  		error = -EINVAL;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  533  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  534          }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  535  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  536  	/* Copy out the OUT buffer. */
+^1da177e4c3f41 Linus Torvalds   2005-04-16  537  	if (copy_to_user(data->vi.out,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  538  			 (char *)outp + (long)outp->coda_ioctl.data,
+^1da177e4c3f41 Linus Torvalds   2005-04-16  539  			 outp->coda_ioctl.len)) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  540  		error = -EFAULT;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  541  		goto exit;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  542  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  543  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  544   exit:
+936dae4525322f Dan Carpenter    2019-07-16  545  	kvfree(inp);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  546  	return error;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  547  }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  548  
 
 -- 
 0-DAY CI Kernel Test Service
