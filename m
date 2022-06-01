@@ -1,45 +1,47 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC2A256F
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 14:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B738C646
+	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 14:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654092547; x=1685628547;
+  t=1654094353; x=1685630353;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OIASPbT4ErywrxAuYrz/ZgaqSnR5UCcNc+ztvYy5GUs=;
-  b=kZP4nRkOia4m+z/ks4WXsMufKO/tBv+0gEtokghIzLJp6P9zEuGPnif4
-   xIBjr55P9nSdIA8rVCCpNy/oLAdshCZz3RupU1gJCCU0hk2LvvwmySBo+
-   ETMpkZbYHguXSoTbjfH7C8jtIBykOHC98957vVRtldtVgP/CSYILPq+oL
-   Zie+Xm/XMap6F/ZsE8OIIapIn2jatIhh8tONGs4nzZBcj0Mal5vYrqzPk
-   Hktl6dx6ZVdXrSi3Oo5wbdKNmkxj/o1G2HEz4BpbTCT5+2gHnu6nvhcLX
-   LpAuOBWFimmNpCLg9ludLDTRrJNL6knTewyFleXbLxVgMUnT/AxkRilxd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="273168309"
+  bh=kgeZ5dHKGAmvtm2SI9klD7xeCUa8LmfIDO8LskDbpCY=;
+  b=L2B6ajtTtnqwlXyIsw0rY/HpjzIYZHJfUBPJ7Lb2YREyCPegmGn63jkL
+   7rmAWPWeXLairxpqNZZxSLCyBrO9kvL/oMHk+YSuwk+2aY6o0ZkLPRtbp
+   O1lTnCWEOdYQh7UVG77VMnLP2iF/y7I2q3NrseJDl+Lja2t7jDD+sJ85L
+   xxeqsfu+MUa7Fav+oVHBsOrp7QcV+TqXqKpad+d/Mk6hEesvKTKg+FmE9
+   ZWXSee9Nf/Ysgj/VszBR7xRvDvpUL7lI3uUOUPdMeKAaAnTHFrRX6N3Ia
+   619jMM0p2LDDpZ9VW0VvzLrnrstXuU6XYehCtJVO4Ga3Ns1heQOvDKbUX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275333322"
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="273168309"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:09:06 -0700
+   d="scan'208";a="275333322"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:39:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="680113133"
+   d="scan'208";a="581611535"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2022 07:09:04 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 07:39:10 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwP20-00043U-0h;
-	Wed, 01 Jun 2022 14:09:04 +0000
-Date: Wed, 1 Jun 2022 22:08:03 +0800
+	id 1nwPV2-00044e-Nc;
+	Wed, 01 Jun 2022 14:39:04 +0000
+Date: Wed, 1 Jun 2022 22:38:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haowen Bai <baihaowen@meizu.com>, Jan Harkes <jaharkes@cs.cmu.edu>,
-	coda@cs.cmu.edu
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Haowen Bai <baihaowen@meizu.com>, codalist@coda.cs.cmu.edu,
+To: Haowen Bai <baihaowen@meizu.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	Haowen Bai <baihaowen@meizu.com>, linux-parisc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coda: remove unused variable
-Message-ID: <202206012159.9WhO0iYq-lkp@intel.com>
-References: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
+Subject: Re: [PATCH] net: tulip: de4x5: remove unused variable
+Message-ID: <202206012206.rmnA2Zg6-lkp@intel.com>
+References: <1654068277-6691-1-git-send-email-baihaowen@meizu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,159 +50,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654070283-7216-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <1654068277-6691-1-git-send-email-baihaowen@meizu.com>
 
 Hi Haowen,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18 next-20220601]
+[auto build test ERROR on horms-ipvs/master]
+[also build test ERROR on v5.18]
+[cannot apply to net-next/master net/master linus/master next-20220601]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/coda-remove-unused-variable/20220601-160014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 700170bf6b4d773e328fa54ebb70ba444007c702
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220601/202206012159.9WhO0iYq-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Haowen-Bai/net-tulip-de4x5-remove-unused-variable/20220601-152922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220601/202206012206.rmnA2Zg6-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/627c05172e8d819cb8dca41dfa795baae03ea6f9
+        # https://github.com/intel-lab-lkp/linux/commit/98c118e28527e7ff29469521c68414943a7cfc3a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Haowen-Bai/coda-remove-unused-variable/20220601-160014
-        git checkout 627c05172e8d819cb8dca41dfa795baae03ea6f9
+        git fetch --no-tags linux-review Haowen-Bai/net-tulip-de4x5-remove-unused-variable/20220601-152922
+        git checkout 98c118e28527e7ff29469521c68414943a7cfc3a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/coda/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   fs/coda/upcall.c:115:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:164:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:238:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:306:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:329:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:383:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:410:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   fs/coda/upcall.c:443:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp; 
-                             ^
-   fs/coda/upcall.c:459:27: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp; 
-                             ^
->> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
-           UPARG(CODA_IOCTL);
+>> drivers/net/ethernet/dec/tulip/de4x5.c:3823:2: error: use of undeclared identifier 'imr'
+           UNMASK_IRQs;
            ^
-   fs/coda/upcall.c:63:44: note: expanded from macro 'UPARG'
-           inp = (union inputArgs *)alloc_upcall(op, insize); \
-                                                     ^
->> fs/coda/upcall.c:483:2: error: use of undeclared identifier 'insize'
-   fs/coda/upcall.c:66:19: note: expanded from macro 'UPARG'
-           outsize = insize; \
-                     ^
-   fs/coda/upcall.c:576:20: warning: variable 'outp' set but not used [-Wunused-but-set-variable]
-           union outputArgs *outp;
-                             ^
-   10 warnings and 2 errors generated.
+   drivers/net/ethernet/dec/tulip/de4x5.c:694:5: note: expanded from macro 'UNMASK_IRQs'
+       imr |= lp->irq_mask;\
+       ^
+>> drivers/net/ethernet/dec/tulip/de4x5.c:3823:2: error: use of undeclared identifier 'imr'
+   drivers/net/ethernet/dec/tulip/de4x5.c:695:10: note: expanded from macro 'UNMASK_IRQs'
+       outl(imr, DE4X5_IMR);               /* Unmask the IRQs */\
+            ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:3826:2: error: use of undeclared identifier 'imr'
+           ENABLE_IRQs;
+           ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:683:5: note: expanded from macro 'ENABLE_IRQs'
+       imr |= lp->irq_en;\
+       ^
+   drivers/net/ethernet/dec/tulip/de4x5.c:3826:2: error: use of undeclared identifier 'imr'
+   drivers/net/ethernet/dec/tulip/de4x5.c:684:10: note: expanded from macro 'ENABLE_IRQs'
+       outl(imr, DE4X5_IMR);               /* Enable the IRQs */\
+            ^
+   4 errors generated.
 
 
-vim +/insize +483 fs/coda/upcall.c
+vim +/imr +3823 drivers/net/ethernet/dec/tulip/de4x5.c
 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  473  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  474  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  475  int venus_pioctl(struct super_block *sb, struct CodaFid *fid,
-^1da177e4c3f41 Linus Torvalds   2005-04-16  476  		 unsigned int cmd, struct PioctlData *data)
-^1da177e4c3f41 Linus Torvalds   2005-04-16  477  {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  478          union inputArgs *inp;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  479          union outputArgs *outp;  
-627c05172e8d81 Haowen Bai       2022-06-01  480  	int outsize, error;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  481  	int iocsize;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  482  
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @483  	UPARG(CODA_IOCTL);
-^1da177e4c3f41 Linus Torvalds   2005-04-16  484  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  485          /* build packet for Venus */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  486          if (data->vi.in_size > VC_MAXDATASIZE) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  487  		error = -EINVAL;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  488  		goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  489          }
-^1da177e4c3f41 Linus Torvalds   2005-04-16  490  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  491          if (data->vi.out_size > VC_MAXDATASIZE) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  492  		error = -EINVAL;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  493  		goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  494  	}
-^1da177e4c3f41 Linus Torvalds   2005-04-16  495  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  496          inp->coda_ioctl.VFid = *fid;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  497      
-^1da177e4c3f41 Linus Torvalds   2005-04-16  498          /* the cmd field was mutated by increasing its size field to
-^1da177e4c3f41 Linus Torvalds   2005-04-16  499           * reflect the path and follow args. We need to subtract that
-^1da177e4c3f41 Linus Torvalds   2005-04-16  500           * out before sending the command to Venus.  */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  501          inp->coda_ioctl.cmd = (cmd & ~(PIOCPARM_MASK << 16));	
-^1da177e4c3f41 Linus Torvalds   2005-04-16  502          iocsize = ((cmd >> 16) & PIOCPARM_MASK) - sizeof(char *) - sizeof(int);
-^1da177e4c3f41 Linus Torvalds   2005-04-16  503          inp->coda_ioctl.cmd |= (iocsize & PIOCPARM_MASK) <<	16;	
-^1da177e4c3f41 Linus Torvalds   2005-04-16  504      
-^1da177e4c3f41 Linus Torvalds   2005-04-16  505          /* in->coda_ioctl.rwflag = flag; */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  506          inp->coda_ioctl.len = data->vi.in_size;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  507          inp->coda_ioctl.data = (char *)(INSIZE(ioctl));
-^1da177e4c3f41 Linus Torvalds   2005-04-16  508       
-^1da177e4c3f41 Linus Torvalds   2005-04-16  509          /* get the data out of user space */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  510  	if (copy_from_user((char *)inp + (long)inp->coda_ioctl.data,
-^1da177e4c3f41 Linus Torvalds   2005-04-16  511  			   data->vi.in, data->vi.in_size)) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  512  		error = -EINVAL;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  513  	        goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  514  	}
-^1da177e4c3f41 Linus Torvalds   2005-04-16  515  
-a1b0aa87647493 Jan Harkes       2007-07-19  516  	error = coda_upcall(coda_vcp(sb), SIZE(ioctl) + data->vi.in_size,
-^1da177e4c3f41 Linus Torvalds   2005-04-16  517  			    &outsize, inp);
-^1da177e4c3f41 Linus Torvalds   2005-04-16  518  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  519          if (error) {
-6d6bd94f4d83d7 Fabian Frederick 2014-06-06  520  		pr_warn("%s: Venus returns: %d for %s\n",
-6d6bd94f4d83d7 Fabian Frederick 2014-06-06  521  			__func__, error, coda_f2s(fid));
-^1da177e4c3f41 Linus Torvalds   2005-04-16  522  		goto exit; 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  523  	}
-^1da177e4c3f41 Linus Torvalds   2005-04-16  524  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  525  	if (outsize < (long)outp->coda_ioctl.data + outp->coda_ioctl.len) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  526  		error = -EINVAL;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  527  		goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  528  	}
-^1da177e4c3f41 Linus Torvalds   2005-04-16  529          
-^1da177e4c3f41 Linus Torvalds   2005-04-16  530  	/* Copy out the OUT buffer. */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  531          if (outp->coda_ioctl.len > data->vi.out_size) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  532  		error = -EINVAL;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  533  		goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  534          }
-^1da177e4c3f41 Linus Torvalds   2005-04-16  535  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  536  	/* Copy out the OUT buffer. */
-^1da177e4c3f41 Linus Torvalds   2005-04-16  537  	if (copy_to_user(data->vi.out,
-^1da177e4c3f41 Linus Torvalds   2005-04-16  538  			 (char *)outp + (long)outp->coda_ioctl.data,
-^1da177e4c3f41 Linus Torvalds   2005-04-16  539  			 outp->coda_ioctl.len)) {
-^1da177e4c3f41 Linus Torvalds   2005-04-16  540  		error = -EFAULT;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  541  		goto exit;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  542  	}
-^1da177e4c3f41 Linus Torvalds   2005-04-16  543  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  544   exit:
-936dae4525322f Dan Carpenter    2019-07-16  545  	kvfree(inp);
-^1da177e4c3f41 Linus Torvalds   2005-04-16  546  	return error;
-^1da177e4c3f41 Linus Torvalds   2005-04-16  547  }
-^1da177e4c3f41 Linus Torvalds   2005-04-16  548  
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3814  
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3815  static void
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3816  de4x5_setup_intr(struct net_device *dev)
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3817  {
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3818      struct de4x5_private *lp = netdev_priv(dev);
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3819      u_long iobase = dev->base_addr;
+98c118e28527e7 drivers/net/ethernet/dec/tulip/de4x5.c Haowen Bai     2022-06-01  3820      s32 sts;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3821  
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3822      if (inl(DE4X5_OMR) & OMR_SR) {   /* Only unmask if TX/RX is enabled */
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16 @3823  	UNMASK_IRQs;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3824  	sts = inl(DE4X5_STS);        /* Reset any pending (stale) interrupts */
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3825  	outl(sts, DE4X5_STS);
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3826  	ENABLE_IRQs;
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3827      }
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3828  }
+^1da177e4c3f41 drivers/net/tulip/de4x5.c              Linus Torvalds 2005-04-16  3829  
 
 -- 
 0-DAY CI Kernel Test Service
