@@ -1,46 +1,45 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F1933D6
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 21:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F38A33D6
+	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 21:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654118963; x=1685654963;
+  t=1654119625; x=1685655625;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ozN0bpmL3RRXWdUyP9jFjhJ9AhuZNvpPXYlOb8sqBD4=;
-  b=TDLCBQmvcav0Yujj9eIOrpwRmOewGZWvnRRi3MbU4xsZMn6mxcxFZ5m9
-   L3oM05ZfscJQ2oPVR7cnc2ypdS2S6/Ph9qQbFML+6TR13te6NjlqDzRKB
-   kQTa79Ea5K94M0Kj3e7nPnWb7BCgXg7w3mIeXIs9PSiweMX4ZdeXTtQnu
-   opGBlc34t5Jskm15EqCvYy6RAGKx1QewxPSuhwPSS9hYRr8vuxOGrsOyY
-   IRl0UitemLveBfrpghfbVBn2Uw3aGxeD5yJzZffUEF6r7NKQtiHPiwwan
-   ddSNAw1fN5MFjeXqryeFeb1JBW8va2pmpA/m3LmCSrYOY4ULZgCZYYR3g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336390649"
+  bh=F1raApfcs620B/kgahY5y8OKGmxj85IM7DVX5FLddLs=;
+  b=EUW2Nt6HGvLv3GUqbPRbYO5HhTBxGcQpBjULqZHF3FYqFZ3lcYwRtPRB
+   W4P+JQsCZBbVxE/exPPuWIWmErZU6AflB+RvbLX+yE6Yj/jTrD93700h1
+   fdFZVdnNycEZUCpM2mt0WfF3kYoXPwxOZwbTHI7vmqy7SrVZsh5WCKwPP
+   Z+hIGBlHL++TV6YaHUtLVliN/tLJSKth4A8Y7IOdRmm1J5Jlj2zthsYdU
+   mTUOOcYdZwn1am0yRuX/9zKmUDN631LVYnaw7T/TdPSw4eqYeEOFa5LcQ
+   MF8wEB3HF89/8OWFJp2oVEZNH5azsWev29oi8kvBvEgfTQGqrveArWay4
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336395124"
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="336390649"
+   d="scan'208";a="336395124"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:29:23 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:40:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="562992536"
+   d="scan'208";a="562997118"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 14:29:21 -0700
+  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 14:40:23 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwVu4-0004QA-LM;
-	Wed, 01 Jun 2022 21:29:20 +0000
-Date: Thu, 2 Jun 2022 05:28:58 +0800
+	id 1nwW4k-0004Qy-KV;
+	Wed, 01 Jun 2022 21:40:22 +0000
+Date: Thu, 2 Jun 2022 05:40:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
 	linux-kernel@vger.kernel.org
 Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 58/59]
- fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer
- types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL <<
- __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof
- (ctx->crypto_bshift) *)1))) && ...
-Message-ID: <202206020559.wB4dxgKa-lkp@intel.com>
+ fs/netfs/buffered_flush.c:411:16: warning: comparison of distinct pointer
+ types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (((1UL) <<
+ 12) << ctx->cache_order) *' (aka 'unsigned long *'))
+Message-ID: <202206020513.KecvF1iO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +52,7 @@ Content-Disposition: inline
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
 head:   22ecc2fcdab4616e624408911ec1d54644e82030
 commit: ff509dc49891f934a7a774e277b87729018db753 [58/59] netfs: Use flush from afs_writeback
-config: hexagon-randconfig-r041-20220601 (https://download.01.org/0day-ci/archive/20220602/202206020559.wB4dxgKa-lkp@intel.com/config)
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220602/202206020513.KecvF1iO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -64,17 +63,17 @@ reproduce (this is a W=1 build):
         git checkout ff509dc49891f934a7a774e277b87729018db753
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL << __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof (ctx->crypto_bshift) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->min_bshift) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->crypto_bshift) * 0L)) : (int *)8))))), ((ctx->min_bshift) > (ctx->crypto_bshift) ? (ctx->min_bshift) : (ctx->crypto_bshift)), ({
-       typeof (ctx->min_bshift) __UNIQUE_ID___x275 = (ctx->min_bshift);
-       typeof (ctx->crypto_bshift) __UNIQUE_ID___y276 = (ctx->crypto_bshift);
-       ((__UNIQUE_ID___x275) > (__UNIQUE_ID___y276) ? (__UNIQUE_ID___x275) : (__UNIQUE_ID___y276));
+   fs/netfs/buffered_flush.c:408:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (1UL << __builtin_choose_expr(((!!(sizeof ((typeof (ctx->min_bshift) *)1 == (typeof (ctx->crypto_bshift) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->min_bshift) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(ctx->crypto_bshift) * 0L)) : (int *)8))))), ((ctx->min_bshift) > (ctx->crypto_bshift) ? (ctx->min_bshift) : (ctx->crypto_bshift)), ({
+       typeof (ctx->min_bshift) __UNIQUE_ID___x312 = (ctx->min_bshift);
+       typeof (ctx->crypto_bshift) __UNIQUE_ID___y313 = (ctx->crypto_bshift);
+       ((__UNIQUE_ID___x312) > (__UNIQUE_ID___y313) ? (__UNIQUE_ID___x312) : (__UNIQUE_ID___y313));
    }))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
                    hard_align = max(hard_align,
                                 ^~~~~~~~~~~~~~~
@@ -90,7 +89,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_flush.c:411:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << 16) << ctx->cache_order) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+>> fs/netfs/buffered_flush.c:411:16: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12) << ctx->cache_order) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
                    hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:52:19: note: expanded from macro 'max'
@@ -105,7 +104,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_flush.c:413:10: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << (0 ? 4 : 6)) * (1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+>> fs/netfs/buffered_flush.c:413:10: warning: comparison of distinct pointer types ('typeof (hard_align) *' (aka 'unsigned int *') and 'typeof ((1UL << (0 ? 4 : 6)) * ((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
            align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/minmax.h:45:19: note: expanded from macro 'min'
@@ -120,7 +119,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_flush.c:533:22: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+   fs/netfs/buffered_flush.c:533:22: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
            _leave(" ok [%zx]", wreq->last);
                         ~~~    ^~~~~~~~~~
                         %lx
@@ -161,7 +160,7 @@ All warnings (new ones prefixed by >>):
    7 warnings generated.
 
 
-vim +408 fs/netfs/buffered_flush.c
+vim +411 fs/netfs/buffered_flush.c
 
    372	
    373	/*
@@ -199,7 +198,7 @@ vim +408 fs/netfs/buffered_flush.c
    405		 */
    406		hard_align = PAGE_SIZE;
    407		if (ctx->min_bshift || ctx->crypto_bshift)
- > 408			hard_align = max(hard_align,
+   408			hard_align = max(hard_align,
    409					 1UL << max(ctx->min_bshift, ctx->crypto_bshift));
    410		if (ctx->cache_order)
  > 411			hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
@@ -324,7 +323,7 @@ vim +408 fs/netfs/buffered_flush.c
    530			cond_resched();
    531		} while (!stop);
    532	
- > 533		_leave(" ok [%zx]", wreq->last);
+   533		_leave(" ok [%zx]", wreq->last);
    534		return;
    535	
    536	nomem_cancel_wb:
