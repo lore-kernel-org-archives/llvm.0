@@ -1,181 +1,79 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9247E9
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 08:23:33 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id q123so4156533pgq.6
-        for <llvm@lists.linux.dev>; Thu, 02 Jun 2022 01:23:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEBE7E9
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 08:25:20 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id u18so3953120plb.3
+        for <llvm@lists.linux.dev>; Thu, 02 Jun 2022 01:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cbmNOareeTE5Db8Piv7hDPn78IPOWasDWjVRSeszEak=;
-        b=F2LlSXp3PxiU4nJ+UEfZulTenT901DxKJZUBhWrOIghbAJO7H41vsGxbtH7E6owQWK
-         zQNb3UDVLjgTRyR3z0DwxC517totfjnOMzlmsup9oVLRJ7WIcIHmVTAS06wIa0d3jzBn
-         pGeP0Hnz64qgoYJ2AGAah3DGsQXD+uEy0SyEZlkn9IU2qLQiwtVQsW+yvaR8P/V7kamU
-         PSl9zdxBEmC6RnXKuSxR823fwizfddWXsJUYVeIciFVC6gcr6ZiEvi6BrVD861SpdSCl
-         rVYObcA9UB3exWvMCpScTGJFvKdKHge8UpqidsV4EqPSuxyGlR/kwSWy/e7x5HT03n9x
-         a/BA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oRhnzCWuKPecicMPuwgDWmM/IRUGzVdqDQ7z87LQhbk=;
+        b=IcVGagBvGn+NYxuFsRi/WEvN4rKiNa1PdLLhSog90tAfXeFzYHZJnMnp+5WKUfu8SY
+         gw3Jkn0eRI50CNLBLEMlKvl5Vj8xP/4RTsMjKv79zUpM0DQxFOkMveY1CJlU3gN6lYmp
+         SzAHH9EkX/wPyfdhlBgbY3RF3KqBCRKvqqGHe5NBl1dw+o7NPygu8k5WWhJZXNYhefdR
+         vwuoXiVAzOvOtcI2Zp07VpEZPzzNh73dRbfM9bIdARmAio4OZErjsxHCKx1DquLc2X5D
+         dAErk9vYuymzWVAFdJk7P7YbujpG79g26VxnlFUHLwTEoTXAaVCExP3dbiNW5Sbz89In
+         cfZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cbmNOareeTE5Db8Piv7hDPn78IPOWasDWjVRSeszEak=;
-        b=mQx9nNIW7++EcX/WfxmUisAuoTJmnY2PYQrRPD4q7xsSmFHDTIQ2weqomiRjschfKo
-         4CnXIXFY2G2g0KXm/wSXgQpyUO/iC7MKZy11BPPbYQ2pbdwJTldYUVl9PAdrIG2QtqoW
-         aGmj09G/Ab2DqWRhHv/dLGFJoQX1Y4sCiu4U9hSJiisLGktO509m16yIH+ZHTPmNUSjT
-         KOmE9WENlH7e4IFZA+3eP64JLA8OGMnIpjntat7S8GcXRo9Iw1fQ+C70g3ap3xFraGw8
-         m9Yno70P75tMb6Umnd68p0/l+B3/2nKM+JdG+n1RRtV6Fcpqr9nl2NoAKk8NUyf+bHlf
-         Sa/w==
-X-Gm-Message-State: AOAM533y9aVuekUNgPtn1xKyY+YdtPktsrBXg1ucNVkGw70vc68aap+O
-	e5R3fCFt0Nay6Ey5FFAfCJ8=
-X-Google-Smtp-Source: ABdhPJxFm4ypSV8CsNf46zwnitNOtF7T1Y2Qz7WihywdMlvPbxJxJgebJkp9t7XcCiJigUBLFeMVdA==
-X-Received: by 2002:a05:6a00:16cd:b0:51b:5f55:9bd with SMTP id l13-20020a056a0016cd00b0051b5f5509bdmr15451936pfc.6.1654158212946;
-        Thu, 02 Jun 2022 01:23:32 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id z14-20020a170903018e00b0016368840c41sm2972334plg.14.2022.06.02.01.23.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oRhnzCWuKPecicMPuwgDWmM/IRUGzVdqDQ7z87LQhbk=;
+        b=uUl958wMADjOjhngu8FrYs7TEbe28piuLy4CyA+UX6spJ0e4VtuhiZdN7Cr+EBeYgE
+         Qr4gBFyRjGowX0hRI3iaf9g4TVrJmQoUpOQHHRtulKdJjPNIczqoVnyRrvPOncLV/OoU
+         /6RJJNAZWJuRwBKWup8rdTBQ3EMQkhapbNDDJbawkv6L5XHNtWhBBws5XqE7r5bHZPJD
+         giW332xwxNMlgBIEp00lqFIPg8LC4KBaNqJ9OvotzMwdLi8xMBvVqlI0cAqIioaKZJgE
+         NVsO7spS3OtTL7ViF+5aY9fOlRCOaYoctO0qiHGsO3SqiBsTO9SX8ZBN9Th8F46GNY9P
+         hOTg==
+X-Gm-Message-State: AOAM531iiJWziecnTR3ibagxESc2/SAiIvua8AOo+VqqVdbH5eAXupDX
+	F7e1SosDSLV6F8n1CB2BsSo=
+X-Google-Smtp-Source: ABdhPJycPC+01SHXYkAI90I3AACl6PgQls13ile8bUJ7Q0/pCqYbyeqqhwtzkYpcZNFO9NVdlL9Clg==
+X-Received: by 2002:a17:902:f552:b0:163:f64a:6154 with SMTP id h18-20020a170902f55200b00163f64a6154mr3704270plf.147.1654158320121;
+        Thu, 02 Jun 2022 01:25:20 -0700 (PDT)
+Received: from localhost (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa79514000000b0051b97828505sm2865595pfp.166.2022.06.02.01.25.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 01:23:32 -0700 (PDT)
+        Thu, 02 Jun 2022 01:25:19 -0700 (PDT)
+Date: Thu, 2 Jun 2022 15:25:16 +0700
 From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: linux-doc@vger.kernel.org
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
-	kernel test robot <lkp@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
 	Nikolai Kondrashov <spbnick@gmail.com>,
 	Jiri Kosina <jikos@kernel.org>,
 	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] HID: uclogic: properly format kernel-doc comment for hid_dbg() wrappers
-Date: Thu,  2 Jun 2022 15:23:21 +0700
-Message-Id: <20220602082321.313143-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+	=?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+	llvm@lists.linux.dev, stable@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: properly format kernel-doc comment for
+ hid_dbg() wrappers
+Message-ID: <Yphz7EnxGSG2eMRM@debian.me>
+References: <20220531092817.13894-1-bagasdotme@gmail.com>
+ <3995c3d8-395a-bd39-eebc-370bd1fca09c@infradead.org>
+ <YpcU7qeOtShFx8xR@debian.me>
+ <053f756b-fafa-e07a-4308-0a5de8dda595@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <053f756b-fafa-e07a-4308-0a5de8dda595@infradead.org>
 
-Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
-6 warnings for hid_dbg() wrapper functions below:
+On Wed, Jun 01, 2022 at 05:18:52AM -0700, Randy Dunlap wrote:
+> In Documentation/doc-guide/kernel-doc.rst, section Highlights and cross-references:
+> 
+> ``%CONST``
+>   Name of a constant. (No cross-referencing, just formatting.)
+> 
+> So '%' before a constant value just helps with the generated formatting
+> of the output. It's just "prettier." No big deal.
+> 
 
-drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface parameters with hid_dbg().
-drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
- * Dump tablet interface parameters with hid_dbg().
+Thanks for suggestion!
 
-One of them is reported by kernel test robot.
-
-Fix these warnings by properly format kernel-doc comment for these
-functions.
-
-Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
-Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: José Expósito <jose.exposito89@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Nikolai Kondrashov <spbnick@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: llvm@lists.linux.dev
-Cc: stable@vger.kernel.org # v5.18
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v2 [1]:
-   - Format NULL as kernel-doc constant (suggested by Randy Dunlap)
-   - Collect review tags:
-     - Tested-by and Acked-by from Randy Dunlap
-     - Tested-by from José Expósito
-
- [1]: https://lore.kernel.org/linux-doc/20220531092817.13894-1-bagasdotme@gmail.com/
- drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index db838f16282d64..e5e65d849faa97 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -23,11 +23,11 @@
- /**
-  * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
-  *                                       to a string.
-- *
-  * @inrange:	The in-range reporting type to convert.
-  *
-- * Returns:
-- *	The string representing the type, or NULL if the type is unknown.
-+ * Return:
-+ * * The string representing the type, or
-+ * * %NULL if the type is unknown.
-  */
- static const char *uclogic_params_pen_inrange_to_str(
- 				enum uclogic_params_pen_inrange inrange)
-@@ -45,10 +45,12 @@ static const char *uclogic_params_pen_inrange_to_str(
- }
- 
- /**
-- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-- *
-+ * uclogic_params_pen_hid_dbg() - Dump tablet interface pen parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @pen:	The pen parameters to dump.
-+ *
-+ * Dump tablet interface pen parameters with hid_dbg(). The dump is indented
-+ * with a tab.
-  */
- static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- 					const struct uclogic_params_pen *pen)
-@@ -77,11 +79,12 @@ static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- }
- 
- /**
-- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-- * tabs.
-- *
-+ * uclogic_params_frame_hid_dbg() - Dump tablet interface frame parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @frame:	The frame parameters to dump.
-+ *
-+ * Dump tablet interface frame parameters with hid_dbg(). The dump is
-+ * indented with two tabs.
-  */
- static void uclogic_params_frame_hid_dbg(
- 				const struct hid_device *hdev,
-@@ -102,10 +105,11 @@ static void uclogic_params_frame_hid_dbg(
- }
- 
- /**
-- * Dump tablet interface parameters with hid_dbg().
-- *
-+ * uclogic_params_hid_dbg() - Dump tablet interface parameters
-  * @hdev:	The HID device the parameters describe.
-  * @params:	The parameters to dump.
-+ *
-+ * Dump tablet interface parameters with hid_dbg().
-  */
- void uclogic_params_hid_dbg(const struct hid_device *hdev,
- 				const struct uclogic_params *params)
-
-base-commit: d1dc87763f406d4e67caf16dbe438a5647692395
 -- 
 An old man doll... just what I always wanted! - Clara
-
