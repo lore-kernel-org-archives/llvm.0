@@ -1,43 +1,46 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C4E3D86
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 22:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18727E3
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 23:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654208155; x=1685744155;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BS3rLjdPqfSKzK3DmZXapPlrQnsi0Ki0Gpxo+UJQimA=;
-  b=i0kKdJ35btCjkWP/DMR42mM7EV+QweJzcX4OY6EU7I74bX/n7Lh6dEdp
-   bllw+3GQqTWWNdBBow5ff+jykgueHC/14uVf09RjhYk1iDoEID2j41fv0
-   NM0nzTcPaMkaYBkRgH+mPXUMzA3VktRspANJoI2PilAZG5Hq2VIBwH4FE
-   fhKSWUJRwRe4KACKXApWtlrpjufnAiSOk/OyXEAPZrojRILq5aejpZqbS
-   LQUV8xx9+DPC+AklEDS5zECwDXZ73cWEOzxO0GO8sLi/BcJBPb/SCNGOo
-   IFhKY80wE1DEtVeKx0eWr5UIRJiVD8Y5zkcHm2VL1uXD++K8GTBQjYREl
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="339142349"
+  t=1654212418; x=1685748418;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GRhPAQ2CU2PMb7oMPFXlMaxADdhIAO/5kxDqAOm3iB0=;
+  b=E/pRJsXy83f79w51W+sRTOUH/od8ZGFL8oK9qYMmDjG9lt0uz2j6CbkE
+   YDr6NN+DqPyVy8AMGoc+Bp9g2sJctmcYnFtMK9Vfg9C/AQOADbYVeIyH0
+   hi9lLOl2vTXkX6RTx1bj6/Nb7TyzlBEnNMCCyxUeDCOxEB8DG4ot/0NZ+
+   MlC12/j6xTzdsbosssRL/LRsTcESTIKfGbynsWZ1+YvSlcOdvqENacxA3
+   BSuaTalVfASNvWXTPKrK4s1pBBnMh00JZuE5MmzcoD7dPZEEJjbYL50qD
+   CGU7GZmtJGQ1xxVCHUf7xb8F45hZQfImdH/wg0OEcTAt/AVxq9Jd/Dil+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="263755425"
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="339142349"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:15:55 -0700
+   d="scan'208";a="263755425"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 16:26:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="530766227"
+   d="scan'208";a="563544713"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 15:15:53 -0700
+  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 16:26:54 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwt6e-0005UL-KN;
-	Thu, 02 Jun 2022 22:15:52 +0000
-Date: Fri, 3 Jun 2022 06:15:47 +0800
+	id 1nwuDN-0005WF-L0;
+	Thu, 02 Jun 2022 23:26:53 +0000
+Date: Fri, 3 Jun 2022 07:26:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dave.2022.06.02a 56/78]
- kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
-Message-ID: <202206030613.IxQYmIW8-lkp@intel.com>
+To: Zack Rusin <zack@kde.org>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mombasawalam@vmware.com,
+	virtualization@lists.linux-foundation.org, krastevm@vmware.com,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	spice-devel@lists.freedesktop.org, Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 3/6] drm/qxl: Create mouse hotspot properties on cursor
+ planes
+Message-ID: <202206030750.8hv8vdBA-lkp@intel.com>
+References: <20220602154243.1015688-4-zack@kde.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,143 +49,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220602154243.1015688-4-zack@kde.org>
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dave.2022.06.02a
-head:   2efc5c4abe4cc1259378f7c1678a93540559673c
-commit: cda3200416cdef7f25546cd6249fb411c8c32079 [56/78] rcu-tasks: Merge state into .b.need_qs and atomically update
-config: arm-buildonly-randconfig-r004-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030613.IxQYmIW8-lkp@intel.com/config)
+Hi Zack,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip v5.18 next-20220602]
+[cannot apply to airlied/drm-next tegra-drm/drm/tegra/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-Add-mouse-cursor-hotspot-support-to-atomic-KMS/20220602-234633
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220603/202206030750.8hv8vdBA-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/cda3200416cdef7f25546cd6249fb411c8c32079
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dave.2022.06.02a
-        git checkout cda3200416cdef7f25546cd6249fb411c8c32079
+        # https://github.com/intel-lab-lkp/linux/commit/0bf2395ee17bd25ae6411c560de883496256195d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zack-Rusin/drm-Add-mouse-cursor-hotspot-support-to-atomic-KMS/20220602-234633
+        git checkout 0bf2395ee17bd25ae6411c560de883496256195d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/qxl/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                  ^~~~~~~~~~~~~~~~~~
-   <scratch space>:39:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(o),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                  ^~~~~~~~~~~~~~~~~~
-   <scratch space>:39:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(n),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
->> kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
-   }))' (aka 'void')
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^
-   include/linux/atomic.h:73:29: note: expanded from macro '__atomic_op_fence'
-           typeof(op##_relaxed(args)) __ret;                               \
-                                      ^
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
-           __ret = op##_relaxed(args);                                     \
-                   ^~~~~~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(o),               \
-                                                        ^~~
-   In file included from kernel/rcu/update.c:606:
-   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
-           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
-           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
-           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
-           __ret = op##_relaxed(args);                                     \
-                   ^~~~~~~~~~~~~~~~~~
-   <scratch space>:40:1: note: expanded from here
-   arch_cmpxchg_relaxed
-   ^
-   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
-                                         (unsigned long)(n),               \
-                                                        ^~~
-   5 errors generated.
+>> drivers/gpu/drm/qxl/qxl_display.c:486:26: warning: unused variable 'fb' [-Wunused-variable]
+           struct drm_framebuffer *fb = plane_state->fb;
+                                   ^
+   drivers/gpu/drm/qxl/qxl_display.c:532:26: warning: unused variable 'fb' [-Wunused-variable]
+           struct drm_framebuffer *fb = plane_state->fb;
+                                   ^
+   2 warnings generated.
 
 
-vim +1239 kernel/rcu/tasks.h
+vim +/fb +486 drivers/gpu/drm/qxl/qxl_display.c
 
-  1224	
-  1225	/*
-  1226	 * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
-  1227	 * the four-byte operand-size restriction of some platforms.
-  1228	 * Returns the old value, which is often ignored.
-  1229	 */
-  1230	u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
-  1231	{
-  1232		union rcu_special ret;
-  1233		union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
-  1234		union rcu_special trs_new = trs_old;
-  1235	
-  1236		if (trs_old.b.need_qs != old)
-  1237			return trs_old.b.need_qs;
-  1238		trs_new.b.need_qs = new;
-> 1239		ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
-  1240		return ret.b.need_qs;
-  1241	}
-  1242	EXPORT_SYMBOL_GPL(rcu_trc_cmpxchg_need_qs);
-  1243	
+c2ff663260fee3 Gabriel Krisman Bertazi 2017-02-27  482  
+b4b27f08f9f96d Gerd Hoffmann           2021-02-17  483  static int qxl_primary_apply_cursor(struct qxl_device *qdev,
+b4b27f08f9f96d Gerd Hoffmann           2021-02-17  484  				    struct drm_plane_state *plane_state)
+9428088c90b6f7 Ray Strode              2017-11-27  485  {
+b4b27f08f9f96d Gerd Hoffmann           2021-02-17 @486  	struct drm_framebuffer *fb = plane_state->fb;
+b4b27f08f9f96d Gerd Hoffmann           2021-02-17  487  	struct qxl_crtc *qcrtc = to_qxl_crtc(plane_state->crtc);
+9428088c90b6f7 Ray Strode              2017-11-27  488  	struct qxl_cursor_cmd *cmd;
+9428088c90b6f7 Ray Strode              2017-11-27  489  	struct qxl_release *release;
+9428088c90b6f7 Ray Strode              2017-11-27  490  	int ret = 0;
+9428088c90b6f7 Ray Strode              2017-11-27  491  
+9428088c90b6f7 Ray Strode              2017-11-27  492  	if (!qcrtc->cursor_bo)
+9428088c90b6f7 Ray Strode              2017-11-27  493  		return 0;
+9428088c90b6f7 Ray Strode              2017-11-27  494  
+9428088c90b6f7 Ray Strode              2017-11-27  495  	ret = qxl_alloc_release_reserved(qdev, sizeof(*cmd),
+9428088c90b6f7 Ray Strode              2017-11-27  496  					 QXL_RELEASE_CURSOR_CMD,
+9428088c90b6f7 Ray Strode              2017-11-27  497  					 &release, NULL);
+9428088c90b6f7 Ray Strode              2017-11-27  498  	if (ret)
+9428088c90b6f7 Ray Strode              2017-11-27  499  		return ret;
+9428088c90b6f7 Ray Strode              2017-11-27  500  
+9428088c90b6f7 Ray Strode              2017-11-27  501  	ret = qxl_release_list_add(release, qcrtc->cursor_bo);
+9428088c90b6f7 Ray Strode              2017-11-27  502  	if (ret)
+9428088c90b6f7 Ray Strode              2017-11-27  503  		goto out_free_release;
+9428088c90b6f7 Ray Strode              2017-11-27  504  
+9428088c90b6f7 Ray Strode              2017-11-27  505  	ret = qxl_release_reserve_list(release, false);
+9428088c90b6f7 Ray Strode              2017-11-27  506  	if (ret)
+9428088c90b6f7 Ray Strode              2017-11-27  507  		goto out_free_release;
+9428088c90b6f7 Ray Strode              2017-11-27  508  
+9428088c90b6f7 Ray Strode              2017-11-27  509  	cmd = (struct qxl_cursor_cmd *)qxl_release_map(qdev, release);
+9428088c90b6f7 Ray Strode              2017-11-27  510  	cmd->type = QXL_CURSOR_SET;
+0bf2395ee17bd2 Zack Rusin              2022-06-02  511  	cmd->u.set.position.x = plane_state->crtc_x + plane_state->hotspot_x;
+0bf2395ee17bd2 Zack Rusin              2022-06-02  512  	cmd->u.set.position.y = plane_state->crtc_y + plane_state->hotspot_y;
+9428088c90b6f7 Ray Strode              2017-11-27  513  
+9428088c90b6f7 Ray Strode              2017-11-27  514  	cmd->u.set.shape = qxl_bo_physical_address(qdev, qcrtc->cursor_bo, 0);
+9428088c90b6f7 Ray Strode              2017-11-27  515  
+9428088c90b6f7 Ray Strode              2017-11-27  516  	cmd->u.set.visible = 1;
+9428088c90b6f7 Ray Strode              2017-11-27  517  	qxl_release_unmap(qdev, release, &cmd->release_info);
+9428088c90b6f7 Ray Strode              2017-11-27  518  
+9428088c90b6f7 Ray Strode              2017-11-27  519  	qxl_release_fence_buffer_objects(release);
+933db73351d359 Vasily Averin           2020-04-29  520  	qxl_push_cursor_ring_release(qdev, release, QXL_CMD_CURSOR, false);
+9428088c90b6f7 Ray Strode              2017-11-27  521  
+9428088c90b6f7 Ray Strode              2017-11-27  522  	return ret;
+9428088c90b6f7 Ray Strode              2017-11-27  523  
+9428088c90b6f7 Ray Strode              2017-11-27  524  out_free_release:
+9428088c90b6f7 Ray Strode              2017-11-27  525  	qxl_release_free(qdev, release);
+9428088c90b6f7 Ray Strode              2017-11-27  526  	return ret;
+9428088c90b6f7 Ray Strode              2017-11-27  527  }
+9428088c90b6f7 Ray Strode              2017-11-27  528  
 
 -- 
 0-DAY CI Kernel Test Service
