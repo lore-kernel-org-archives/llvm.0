@@ -1,44 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4F73D65
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 20:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CA53237
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 21:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654200049; x=1685736049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LhfFstmU8umuCBkObaNVgZTt4U6is+wjbx1RU6J1Iwg=;
-  b=QXu3zbZklhriBfmIbygrHfayExWkbulaDZSjjIY3b8s6L0w5hKOuZQzE
-   oZphwjWJEOPKfimDhQgR6Vu5stPss7gvVrsgU2BZZKBX4WcxgBhYvxgzU
-   l8jYUJ4k7DIwjz0vscIkPcdSb4lxksXB4E6J2nFpZDpyJWPU2PUJ3vCD0
-   dT9DZtgmCbAZGJvM6S/ElMBvSRqtyYDkQT3E+DZrjDqLUcQOM64b+un6C
-   2hSe07jSgbt4Vcr0P9J/YIM4+ehH0iBiyT60/DwLm2VK2Bp6ud3zeqU7Q
-   /uo3JxtawL79Mb/fgerjgVbTmYbbaoD333qH7Lfn669j28FFv5vGmK/yn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="274869153"
+  t=1654203772; x=1685739772;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0UzVWwaOi/8bfFUzsc83WA6PHSfLMI2rHT/Y5hwvIF0=;
+  b=KxlxS9dCH/LwjUU1dOffJ7zRMJB+vYzqakzMigkVKG9vuZwLTBN8n2YL
+   6aicfqKsREnycyvekJcbkQ2aoTIK33I32OWn2azZAv3x3uBYQs6Bi4Vgm
+   pGJwzf5LI9PnVVFzMsCkn0q9gUx8IVMPyjsuMe6SY9488vW0fsvbR6Uv+
+   RZhVLP5BG0SnYRCnlvMN5IR4F/Exszu0U/MM0miHPwgetZpn+sw0+I+gR
+   ZlXZP3OrWjnk2qZXHjUK+jHEqoKhTUAfM/jcGa4XGUOBQK9g/ZDFQYcbM
+   tRwdLqzVIVea7yN/bSPCZJMbtMbVEIqRpHiXb9lXoCN4umRx6OlISYzOr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="336736636"
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="274869153"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 13:00:48 -0700
+   d="scan'208";a="336736636"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 14:02:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="668144480"
+   d="scan'208";a="612991715"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Jun 2022 13:00:46 -0700
+  by orsmga001.jf.intel.com with ESMTP; 02 Jun 2022 14:02:50 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwqzu-0005PB-54;
-	Thu, 02 Jun 2022 20:00:46 +0000
-Date: Fri, 3 Jun 2022 04:00:16 +0800
+	id 1nwrxx-0005RP-SR;
+	Thu, 02 Jun 2022 21:02:49 +0000
+Date: Fri, 3 Jun 2022 05:02:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+To: Jiri Pirko <jiri@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	alsa-devel@alsa-project.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 15/20] ASoC: tlv320aic23: Use modern ASoC DAI format
- terminology
-Message-ID: <202206030307.ZnUCVGoC-lkp@intel.com>
-References: <20220602135316.3554400-16-broonie@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_lc_dev 4/5] ld.lld: error: undefined
+ symbol: auxiliary_device_init
+Message-ID: <202206030535.Sbiik5tQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,93 +45,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602135316.3554400-16-broonie@kernel.org>
 
-Hi Mark,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on v5.18 next-20220602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Brown/ASoC-DAI-clocking-terminology-modernisation/20220602-220124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220603/202206030307.ZnUCVGoC-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_lc_dev
+head:   ef34c1c33c0ae43a9ad3c0ed3708eb1880972de0
+commit: 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b [4/5] mlxsw: core_linecards: Introduce per line card auxiliary device
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220603/202206030535.Sbiik5tQ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3ef04fe7b323f8132d917a0f3b54ff93e003db5c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mark-Brown/ASoC-DAI-clocking-terminology-modernisation/20220602-220124
-        git checkout 3ef04fe7b323f8132d917a0f3b54ff93e003db5c
+        # https://github.com/jpirko/linux_mlxsw/commit/2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_lc_dev
+        git checkout 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/tlv320aic23.c:432:16: error: use of undeclared identifier 'SND_SOC_DAIFMT_CLOCk_PROVIDER_MASK'
-           switch (fmt & SND_SOC_DAIFMT_CLOCk_PROVIDER_MASK) {
-                         ^
-   1 error generated.
-
-
-vim +/SND_SOC_DAIFMT_CLOCk_PROVIDER_MASK +432 sound/soc/codecs/tlv320aic23.c
-
-   423	
-   424	static int tlv320aic23_set_dai_fmt(struct snd_soc_dai *codec_dai,
-   425					   unsigned int fmt)
-   426	{
-   427		struct snd_soc_component *component = codec_dai->component;
-   428		u16 iface_reg;
-   429	
-   430		iface_reg = snd_soc_component_read(component, TLV320AIC23_DIGT_FMT) & (~0x03);
-   431	
- > 432		switch (fmt & SND_SOC_DAIFMT_CLOCk_PROVIDER_MASK) {
-   433		case SND_SOC_DAIFMT_CBP_CFP:
-   434			iface_reg |= TLV320AIC23_MS_MASTER;
-   435			break;
-   436		case SND_SOC_DAIFMT_CBC_CFC:
-   437			iface_reg &= ~TLV320AIC23_MS_MASTER;
-   438			break;
-   439		default:
-   440			return -EINVAL;
-   441	
-   442		}
-   443	
-   444		/* interface format */
-   445		switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
-   446		case SND_SOC_DAIFMT_I2S:
-   447			iface_reg |= TLV320AIC23_FOR_I2S;
-   448			break;
-   449		case SND_SOC_DAIFMT_DSP_A:
-   450			iface_reg |= TLV320AIC23_LRP_ON;
-   451			fallthrough;
-   452		case SND_SOC_DAIFMT_DSP_B:
-   453			iface_reg |= TLV320AIC23_FOR_DSP;
-   454			break;
-   455		case SND_SOC_DAIFMT_RIGHT_J:
-   456			break;
-   457		case SND_SOC_DAIFMT_LEFT_J:
-   458			iface_reg |= TLV320AIC23_FOR_LJUST;
-   459			break;
-   460		default:
-   461			return -EINVAL;
-   462	
-   463		}
-   464	
-   465		snd_soc_component_write(component, TLV320AIC23_DIGT_FMT, iface_reg);
-   466	
-   467		return 0;
-   468	}
-   469	
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: default_do_nmi+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: lockdep_hardirqs_on+0xa6: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: lockdep_hardirqs_off+0xa3: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x63: call to __this_cpu_preempt_check() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x32: call to __this_cpu_preempt_check() leaves .noinstr.text section
+>> ld.lld: error: undefined symbol: auxiliary_device_init
+   >>> referenced by core_linecard_dev.c
+   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: __auxiliary_device_add
+   >>> referenced by core_linecard_dev.c
+   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: __auxiliary_driver_register
+   >>> referenced by core_linecard_dev.c
+   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_register) in archive drivers/built-in.a
+--
+>> ld.lld: error: undefined symbol: auxiliary_driver_unregister
+   >>> referenced by core_linecard_dev.c
+   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_unregister) in archive drivers/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service
