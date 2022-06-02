@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D832594
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 17:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5713D65
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 19:30:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654192721; x=1685728721;
+  t=1654198244; x=1685734244;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7cd/T3aKkkDKSmIlJXDylki50o+AeXsDVVeUoS5JTms=;
-  b=YM1tl1AilFmKIn6fKF71KNphUAIB3fQWeZqUNegyh+JyUMFCzLnCy4Wn
-   xM83OkOvJz8teKBGDo6kGHCxby3UZUEwmycVBZ+5XgZF3uj4BpbUM2t0s
-   S1TRnSJlR5nw3Hdl91D0r5jc1SN9yXmaGjVeuz/5nY1cHrMAkxFSzyDsB
-   8HiMag5PFrr67ew1CZRdNhiJWarQIcOBVrZtYiXh2V83+7/9013FoniW9
-   WW7KQJYc2JN1sefIs/0ztMZxJXQw/t8/e2mkwZ7uY7ePNHYMUTdD4kn2H
-   wZ0iSeZ4COzZMoAtV/6ljxDZIIcDSCSbOkvR+fv2oKRE5B5HX+CNZyJ3z
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="273594262"
+  bh=yeLBFSRfAiiQpPmARewcxOGVJkh1rWGnNFTfx9w3h7Q=;
+  b=HCfzM0Zn2dMw9e697XC+0tgKnVwtAM7QgfVl/gjS6Lg5r25SGRXKiIEs
+   Fm9WoZ0VnVkYmRqQyXOaqqjj6ZHK+dW5VpKJhgC2QXProtg8O6AY7VYyY
+   xhpGML5MalTXxWxCXDwgaU9D2y6JKVgRJo4OQneVXdaYnniKCLkRrP3vZ
+   N3AW9BrfjhkXByLuST86M1e3Fm4F288QA2QoTzJYdYnDsg8j1Jabe5n2v
+   Ta/X6FEsZzuBDV5X8dlxqhEy4BsHWifgy4BvshAzOn1ywgNlcY2g4dT9p
+   j/74FaxxR8Lm60E8pp8bTvFfb7v4b2tqU6CMEZ86fehcrCt1N//pDfwEM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="258132356"
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="273594262"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 10:58:40 -0700
+   d="scan'208";a="258132356"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 12:30:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="707671916"
+   d="scan'208";a="668135905"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jun 2022 10:58:39 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Jun 2022 12:30:41 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwp5i-0005Kn-Bp;
-	Thu, 02 Jun 2022 17:58:38 +0000
-Date: Fri, 3 Jun 2022 01:58:17 +0800
+	id 1nwqWm-0005Nj-DF;
+	Thu, 02 Jun 2022 19:30:40 +0000
+Date: Fri, 3 Jun 2022 03:29:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Kamal Dasu <kdasu.kdev@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 23/31]
- arch/mips/include/asm/page.h:263:33: error: call to undeclared function
- 'virt_to_phys'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206030149.i9E92Rg0-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+	Al Cooper <alcooperx@gmail.com>
+Subject: [ulfh-mmc:devel 6/15] drivers/mmc/host/sdhci-brcmstb.c:302:6:
+ warning: variable 'base_clk' is used uninitialized whenever 'if' condition
+ is true
+Message-ID: <202206030355.nu0lsR4i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,153 +48,205 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   8e0ac1b6b44d1c62420ad92b2a1cbc106a00f3de
-commit: e299c342a63c14e1e2a0971b0726c90e298431ff [23/31] MIPS: Make virt_to_pfn() a static inline
-config: mips-randconfig-r022-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030149.i9E92Rg0-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git devel
+head:   10980053142d8a3e86eb4d3014574424b42b7a45
+commit: 2cecaac1b21c364bdf3639440bf59118ebeee86c [6/15] mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220603/202206030355.nu0lsR4i-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
         # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=e299c342a63c14e1e2a0971b0726c90e298431ff
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout e299c342a63c14e1e2a0971b0726c90e298431ff
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git/commit/?id=2cecaac1b21c364bdf3639440bf59118ebeee86c
+        git remote add ulfh-mmc git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git
+        git fetch --no-tags ulfh-mmc devel
+        git checkout 2cecaac1b21c364bdf3639440bf59118ebeee86c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/mmc/host/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
-   In file included from arch/mips/include/asm/io.h:29:
->> arch/mips/include/asm/page.h:263:33: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/include/asm/page.h:263:33: note: did you mean 'virt_to_pfn'?
-   arch/mips/include/asm/page.h:256:29: note: 'virt_to_pfn' declared here
-   static inline unsigned long virt_to_pfn(const void *kaddr)
+>> drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (res)
+               ^~~
+   drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
+           clk_disable_unprepare(base_clk);
+                                 ^~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:302:2: note: remove the 'if' if its condition is always false
+           if (res)
+           ^~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:295:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (IS_ERR(priv->cfg_regs)) {
+               ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
+           clk_disable_unprepare(base_clk);
+                                 ^~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:295:2: note: remove the 'if' if its condition is always false
+           if (IS_ERR(priv->cfg_regs)) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:280:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (IS_ERR(host)) {
+               ^~~~~~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
+           clk_disable_unprepare(base_clk);
+                                 ^~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:280:2: note: remove the 'if' if its condition is always false
+           if (IS_ERR(host)) {
+           ^~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-brcmstb.c:259:22: note: initialize the variable 'base_clk' to silence this warning
+           struct clk *base_clk;
                                ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:64:
-   In file included from arch/mips/include/asm/mmiowb.h:5:
->> arch/mips/include/asm/io.h:115:27: error: static declaration of 'virt_to_phys' follows non-static declaration
-   static inline phys_addr_t virt_to_phys(const volatile void *x)
-                             ^
-   arch/mips/include/asm/io.h:114:22: note: expanded from macro 'virt_to_phys'
-   #define virt_to_phys virt_to_phys
-                        ^
-   arch/mips/include/asm/page.h:263:33: note: previous implicit declaration is here
-           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-                                          ^
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
-   void output_ptreg_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_ptreg_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
-   void output_task_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_task_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
-   void output_thread_info_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_info_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
-   void output_thread_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for function 'output_thread_fpu_defines' [-Wmissing-prototypes]
-   void output_thread_fpu_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:136:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_thread_fpu_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
-   void output_mm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_mm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
-   void output_sc_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_sc_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
-   void output_signal_defined(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_signal_defined(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for function 'output_pm_defines' [-Wmissing-prototypes]
-   void output_pm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_pm_defines(void)
-   ^
-   static 
-   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for function 'output_kvm_defines' [-Wmissing-prototypes]
-   void output_kvm_defines(void)
-        ^
-   arch/mips/kernel/asm-offsets.c:346:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void output_kvm_defines(void)
-   ^
-   static 
-   10 warnings and 2 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+                                = NULL
+   3 warnings generated.
 
 
-vim +/virt_to_phys +263 arch/mips/include/asm/page.h
+vim +302 drivers/mmc/host/sdhci-brcmstb.c
 
-   255	
-   256	static inline unsigned long virt_to_pfn(const void *kaddr)
-   257	{
-   258		/*
-   259		 * MIPS virt_to_phys() returns a phys_addr_t which is
-   260		 * an unsigned int on MIPS, but the interface expects
-   261		 * unsigned long.
-   262		 */
- > 263		return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
-   264	}
-   265	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-   266	
+d46ba2d17f9026 Al Cooper           2020-01-13  247  
+476bf3d62d5cc0 Al Cooper           2016-06-16  248  static int sdhci_brcmstb_probe(struct platform_device *pdev)
+476bf3d62d5cc0 Al Cooper           2016-06-16  249  {
+78ab82fdb65c70 Al Cooper           2020-01-13  250  	const struct brcmstb_match_priv *match_priv;
+d46ba2d17f9026 Al Cooper           2020-01-13  251  	struct sdhci_pltfm_data brcmstb_pdata;
+476bf3d62d5cc0 Al Cooper           2016-06-16  252  	struct sdhci_pltfm_host *pltfm_host;
+78ab82fdb65c70 Al Cooper           2020-01-13  253  	const struct of_device_id *match;
+78ab82fdb65c70 Al Cooper           2020-01-13  254  	struct sdhci_brcmstb_priv *priv;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  255  	u32 actual_clock_mhz;
+78ab82fdb65c70 Al Cooper           2020-01-13  256  	struct sdhci_host *host;
+78ab82fdb65c70 Al Cooper           2020-01-13  257  	struct resource *iomem;
+476bf3d62d5cc0 Al Cooper           2016-06-16  258  	struct clk *clk;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  259  	struct clk *base_clk;
+476bf3d62d5cc0 Al Cooper           2016-06-16  260  	int res;
+476bf3d62d5cc0 Al Cooper           2016-06-16  261  
+78ab82fdb65c70 Al Cooper           2020-01-13  262  	match = of_match_node(sdhci_brcm_of_match, pdev->dev.of_node);
+78ab82fdb65c70 Al Cooper           2020-01-13  263  	match_priv = match->data;
+78ab82fdb65c70 Al Cooper           2020-01-13  264  
+d46ba2d17f9026 Al Cooper           2020-01-13  265  	dev_dbg(&pdev->dev, "Probe found match for %s\n",  match->compatible);
+d46ba2d17f9026 Al Cooper           2020-01-13  266  
+b41123f4f57df6 Krzysztof Kozlowski 2020-09-02  267  	clk = devm_clk_get_optional(&pdev->dev, NULL);
+b41123f4f57df6 Krzysztof Kozlowski 2020-09-02  268  	if (IS_ERR(clk))
+b41123f4f57df6 Krzysztof Kozlowski 2020-09-02  269  		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
+b41123f4f57df6 Krzysztof Kozlowski 2020-09-02  270  				     "Failed to get clock from Device Tree\n");
+b41123f4f57df6 Krzysztof Kozlowski 2020-09-02  271  
+476bf3d62d5cc0 Al Cooper           2016-06-16  272  	res = clk_prepare_enable(clk);
+476bf3d62d5cc0 Al Cooper           2016-06-16  273  	if (res)
+476bf3d62d5cc0 Al Cooper           2016-06-16  274  		return res;
+476bf3d62d5cc0 Al Cooper           2016-06-16  275  
+d46ba2d17f9026 Al Cooper           2020-01-13  276  	memset(&brcmstb_pdata, 0, sizeof(brcmstb_pdata));
+d46ba2d17f9026 Al Cooper           2020-01-13  277  	brcmstb_pdata.ops = match_priv->ops;
+d46ba2d17f9026 Al Cooper           2020-01-13  278  	host = sdhci_pltfm_init(pdev, &brcmstb_pdata,
+78ab82fdb65c70 Al Cooper           2020-01-13  279  				sizeof(struct sdhci_brcmstb_priv));
+476bf3d62d5cc0 Al Cooper           2016-06-16  280  	if (IS_ERR(host)) {
+476bf3d62d5cc0 Al Cooper           2016-06-16  281  		res = PTR_ERR(host);
+476bf3d62d5cc0 Al Cooper           2016-06-16  282  		goto err_clk;
+476bf3d62d5cc0 Al Cooper           2016-06-16  283  	}
+476bf3d62d5cc0 Al Cooper           2016-06-16  284  
+78ab82fdb65c70 Al Cooper           2020-01-13  285  	pltfm_host = sdhci_priv(host);
+78ab82fdb65c70 Al Cooper           2020-01-13  286  	priv = sdhci_pltfm_priv(pltfm_host);
+f3a70f991dd073 Al Cooper           2022-04-27  287  	if (device_property_read_bool(&pdev->dev, "supports-cqe")) {
+f3a70f991dd073 Al Cooper           2022-04-27  288  		priv->flags |= BRCMSTB_PRIV_FLAGS_HAS_CQE;
+f3a70f991dd073 Al Cooper           2022-04-27  289  		match_priv->ops->irq = sdhci_brcmstb_cqhci_irq;
+f3a70f991dd073 Al Cooper           2022-04-27  290  	}
+78ab82fdb65c70 Al Cooper           2020-01-13  291  
+78ab82fdb65c70 Al Cooper           2020-01-13  292  	/* Map in the non-standard CFG registers */
+78ab82fdb65c70 Al Cooper           2020-01-13  293  	iomem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+78ab82fdb65c70 Al Cooper           2020-01-13  294  	priv->cfg_regs = devm_ioremap_resource(&pdev->dev, iomem);
+78ab82fdb65c70 Al Cooper           2020-01-13  295  	if (IS_ERR(priv->cfg_regs)) {
+78ab82fdb65c70 Al Cooper           2020-01-13  296  		res = PTR_ERR(priv->cfg_regs);
+78ab82fdb65c70 Al Cooper           2020-01-13  297  		goto err;
+78ab82fdb65c70 Al Cooper           2020-01-13  298  	}
+78ab82fdb65c70 Al Cooper           2020-01-13  299  
+476bf3d62d5cc0 Al Cooper           2016-06-16  300  	sdhci_get_of_property(pdev);
+1e20186e706da8 Stefan Wahren       2018-12-23  301  	res = mmc_of_parse(host->mmc);
+1e20186e706da8 Stefan Wahren       2018-12-23 @302  	if (res)
+1e20186e706da8 Stefan Wahren       2018-12-23  303  		goto err;
+476bf3d62d5cc0 Al Cooper           2016-06-16  304  
+6bcc55fe648b86 Al Cooper           2022-04-27  305  	/*
+6bcc55fe648b86 Al Cooper           2022-04-27  306  	 * Automatic clock gating does not work for SD cards that may
+6bcc55fe648b86 Al Cooper           2022-04-27  307  	 * voltage switch so only enable it for non-removable devices.
+6bcc55fe648b86 Al Cooper           2022-04-27  308  	 */
+6bcc55fe648b86 Al Cooper           2022-04-27  309  	if ((match_priv->flags & BRCMSTB_MATCH_FLAGS_HAS_CLOCK_GATE) &&
+6bcc55fe648b86 Al Cooper           2022-04-27  310  	    (host->mmc->caps & MMC_CAP_NONREMOVABLE))
+6bcc55fe648b86 Al Cooper           2022-04-27  311  		priv->flags |= BRCMSTB_PRIV_FLAGS_GATE_CLOCK;
+6bcc55fe648b86 Al Cooper           2022-04-27  312  
+78ab82fdb65c70 Al Cooper           2020-01-13  313  	/*
+78ab82fdb65c70 Al Cooper           2020-01-13  314  	 * If the chip has enhanced strobe and it's enabled, add
+78ab82fdb65c70 Al Cooper           2020-01-13  315  	 * callback
+78ab82fdb65c70 Al Cooper           2020-01-13  316  	 */
+78ab82fdb65c70 Al Cooper           2020-01-13  317  	if (match_priv->hs400es &&
+78ab82fdb65c70 Al Cooper           2020-01-13  318  	    (host->mmc->caps2 & MMC_CAP2_HS400_ES))
+78ab82fdb65c70 Al Cooper           2020-01-13  319  		host->mmc_host_ops.hs400_enhanced_strobe = match_priv->hs400es;
+78ab82fdb65c70 Al Cooper           2020-01-13  320  
+476bf3d62d5cc0 Al Cooper           2016-06-16  321  	/*
+476bf3d62d5cc0 Al Cooper           2016-06-16  322  	 * Supply the existing CAPS, but clear the UHS modes. This
+476bf3d62d5cc0 Al Cooper           2016-06-16  323  	 * will allow these modes to be specified by device tree
+476bf3d62d5cc0 Al Cooper           2016-06-16  324  	 * properties through mmc_of_parse().
+476bf3d62d5cc0 Al Cooper           2016-06-16  325  	 */
+476bf3d62d5cc0 Al Cooper           2016-06-16  326  	host->caps = sdhci_readl(host, SDHCI_CAPABILITIES);
+f3a70f991dd073 Al Cooper           2022-04-27  327  	if (match_priv->flags & BRCMSTB_MATCH_FLAGS_NO_64BIT)
+6a3d8ced09482b Jaedon Shin         2016-09-09  328  		host->caps &= ~SDHCI_CAN_64BIT;
+476bf3d62d5cc0 Al Cooper           2016-06-16  329  	host->caps1 = sdhci_readl(host, SDHCI_CAPABILITIES_1);
+476bf3d62d5cc0 Al Cooper           2016-06-16  330  	host->caps1 &= ~(SDHCI_SUPPORT_SDR50 | SDHCI_SUPPORT_SDR104 |
+476bf3d62d5cc0 Al Cooper           2016-06-16  331  			 SDHCI_SUPPORT_DDR50);
+78ab82fdb65c70 Al Cooper           2020-01-13  332  	host->quirks |= SDHCI_QUIRK_MISSING_CAPS;
+78ab82fdb65c70 Al Cooper           2020-01-13  333  
+f3a70f991dd073 Al Cooper           2022-04-27  334  	if (match_priv->flags & BRCMSTB_MATCH_FLAGS_BROKEN_TIMEOUT)
+78ab82fdb65c70 Al Cooper           2020-01-13  335  		host->quirks |= SDHCI_QUIRK_BROKEN_TIMEOUT_VAL;
+476bf3d62d5cc0 Al Cooper           2016-06-16  336  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  337  	/* Change the base clock frequency if the DT property exists */
+2cecaac1b21c36 Kamal Dasu          2022-05-20  338  	if (device_property_read_u32(&pdev->dev, "clock-frequency",
+2cecaac1b21c36 Kamal Dasu          2022-05-20  339  				     &priv->base_freq_hz) != 0)
+2cecaac1b21c36 Kamal Dasu          2022-05-20  340  		goto add_host;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  341  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  342  	base_clk = devm_clk_get_optional(&pdev->dev, "sdio_freq");
+2cecaac1b21c36 Kamal Dasu          2022-05-20  343  	if (IS_ERR(base_clk)) {
+2cecaac1b21c36 Kamal Dasu          2022-05-20  344  		dev_warn(&pdev->dev, "Clock for \"sdio_freq\" not found\n");
+2cecaac1b21c36 Kamal Dasu          2022-05-20  345  		goto add_host;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  346  	}
+2cecaac1b21c36 Kamal Dasu          2022-05-20  347  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  348  	res = clk_prepare_enable(base_clk);
+2cecaac1b21c36 Kamal Dasu          2022-05-20  349  	if (res)
+2cecaac1b21c36 Kamal Dasu          2022-05-20  350  		goto err;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  351  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  352  	/* set improved clock rate */
+2cecaac1b21c36 Kamal Dasu          2022-05-20  353  	clk_set_rate(base_clk, priv->base_freq_hz);
+2cecaac1b21c36 Kamal Dasu          2022-05-20  354  	actual_clock_mhz = clk_get_rate(base_clk) / 1000000;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  355  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  356  	host->caps &= ~SDHCI_CLOCK_V3_BASE_MASK;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  357  	host->caps |= (actual_clock_mhz << SDHCI_CLOCK_BASE_SHIFT);
+2cecaac1b21c36 Kamal Dasu          2022-05-20  358  	/* Disable presets because they are now incorrect */
+2cecaac1b21c36 Kamal Dasu          2022-05-20  359  	host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  360  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  361  	dev_dbg(&pdev->dev, "Base Clock Frequency changed to %dMHz\n",
+2cecaac1b21c36 Kamal Dasu          2022-05-20  362  		actual_clock_mhz);
+2cecaac1b21c36 Kamal Dasu          2022-05-20  363  	priv->base_clk = base_clk;
+2cecaac1b21c36 Kamal Dasu          2022-05-20  364  
+2cecaac1b21c36 Kamal Dasu          2022-05-20  365  add_host:
+d46ba2d17f9026 Al Cooper           2020-01-13  366  	res = sdhci_brcmstb_add_host(host, priv);
+476bf3d62d5cc0 Al Cooper           2016-06-16  367  	if (res)
+476bf3d62d5cc0 Al Cooper           2016-06-16  368  		goto err;
+476bf3d62d5cc0 Al Cooper           2016-06-16  369  
+476bf3d62d5cc0 Al Cooper           2016-06-16  370  	pltfm_host->clk = clk;
+476bf3d62d5cc0 Al Cooper           2016-06-16  371  	return res;
+476bf3d62d5cc0 Al Cooper           2016-06-16  372  
+476bf3d62d5cc0 Al Cooper           2016-06-16  373  err:
+476bf3d62d5cc0 Al Cooper           2016-06-16  374  	sdhci_pltfm_free(pdev);
+476bf3d62d5cc0 Al Cooper           2016-06-16  375  err_clk:
+2cecaac1b21c36 Kamal Dasu          2022-05-20  376  	clk_disable_unprepare(base_clk);
+476bf3d62d5cc0 Al Cooper           2016-06-16  377  	clk_disable_unprepare(clk);
+476bf3d62d5cc0 Al Cooper           2016-06-16  378  	return res;
+476bf3d62d5cc0 Al Cooper           2016-06-16  379  }
+476bf3d62d5cc0 Al Cooper           2016-06-16  380  
+
+:::::: The code at line 302 was first introduced by commit
+:::::: 1e20186e706da8446f9435f2924cd65ab1397e73 mmc: sdhci-brcmstb: handle mmc_of_parse() errors during probe
+
+:::::: TO: Stefan Wahren <stefan.wahren@i2se.com>
+:::::: CC: Ulf Hansson <ulf.hansson@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
