@@ -1,44 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF05E3D86
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 21:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C4E3D86
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 22:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654204373; x=1685740373;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EG4fFmbtoez27DKDle4Ouq6qSysWshoV4GNB3C6WPzQ=;
-  b=O1wx20eSJLt5DqoShEsgcrVtpCPrMNclORmXeHSgRI7/merNgRjYIewe
-   kJgkc5jpyLpZWODiIPDYRze6JD8AOOpi6TNG/Ddsy0lsUx+YSTOWP37kE
-   1N7u4KLWSdcjxHJAreC2i7TwWQJrHiSsOLAqMpKX+2FEAg5w+Y9Li26du
-   6aICp6G5NjZvBuVmArs+PQNQyPHqK63MlsaT7ASXL14EPVHJotWHwC9m7
-   md6RrnEE+Kez0CXwqeNGiYCf5lelcSKiNoqScaq2I2ZS+O5Pk3Du98RWK
-   fwTAlxB7QYpTQTAwZfdi189Ov4Jg/UwswXGx55hfgAf+JBduZ+bkNA2BO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="255946640"
+  t=1654208155; x=1685744155;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BS3rLjdPqfSKzK3DmZXapPlrQnsi0Ki0Gpxo+UJQimA=;
+  b=i0kKdJ35btCjkWP/DMR42mM7EV+QweJzcX4OY6EU7I74bX/n7Lh6dEdp
+   bllw+3GQqTWWNdBBow5ff+jykgueHC/14uVf09RjhYk1iDoEID2j41fv0
+   NM0nzTcPaMkaYBkRgH+mPXUMzA3VktRspANJoI2PilAZG5Hq2VIBwH4FE
+   fhKSWUJRwRe4KACKXApWtlrpjufnAiSOk/OyXEAPZrojRILq5aejpZqbS
+   LQUV8xx9+DPC+AklEDS5zECwDXZ73cWEOzxO0GO8sLi/BcJBPb/SCNGOo
+   IFhKY80wE1DEtVeKx0eWr5UIRJiVD8Y5zkcHm2VL1uXD++K8GTBQjYREl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="339142349"
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="255946640"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 14:12:53 -0700
+   d="scan'208";a="339142349"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:15:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="634232611"
+   d="scan'208";a="530766227"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2022 14:12:51 -0700
+  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 15:15:53 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nws7e-0005Rx-8h;
-	Thu, 02 Jun 2022 21:12:50 +0000
-Date: Fri, 3 Jun 2022 05:12:35 +0800
+	id 1nwt6e-0005UL-KN;
+	Thu, 02 Jun 2022 22:15:52 +0000
+Date: Fri, 3 Jun 2022 06:15:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Xie <xiehuan09@gmail.com>, rostedt@goodmis.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mingo@redhat.com,
-	mhiramat@kernel.org, zanussi@kernel.org,
-	linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
-Message-ID: <202206030515.4lqqkb3W-lkp@intel.com>
-References: <20220602164518.286295-2-xiehuan09@gmail.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dave.2022.06.02a 56/78]
+ kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
+Message-ID: <202206030613.IxQYmIW8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,139 +46,143 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602164518.286295-2-xiehuan09@gmail.com>
 
-Hi Jeff,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-base:   b39181f7c6907dc66ff937b74758671fa6ba430c
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220603/202206030515.4lqqkb3W-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dave.2022.06.02a
+head:   2efc5c4abe4cc1259378f7c1678a93540559673c
+commit: cda3200416cdef7f25546cd6249fb411c8c32079 [56/78] rcu-tasks: Merge state into .b.need_qs and atomically update
+config: arm-buildonly-randconfig-r004-20220531 (https://download.01.org/0day-ci/archive/20220603/202206030613.IxQYmIW8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/765253f020469f94856aedc5a3fe5444e1e8f4e8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-        git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/cda3200416cdef7f25546cd6249fb411c8c32079
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dave.2022.06.02a
+        git checkout cda3200416cdef7f25546cd6249fb411c8c32079
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/qxl/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/trace/trace_object.c:336:61: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-                   pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-                                                        ~~~                  ^~~~~~~~~~~~~~
-                                                        %u
-   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
+           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
+           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
+           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
+           typeof(op##_relaxed(args)) __ret;                               \
+                  ^~~~~~~~~~~~~~~~~~
+   <scratch space>:39:1: note: expanded from here
+   arch_cmpxchg_relaxed
+   ^
+   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
+                                         (unsigned long)(o),               \
+                                                        ^~~
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
+           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
+           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
+           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:73:9: note: expanded from macro '__atomic_op_fence'
+           typeof(op##_relaxed(args)) __ret;                               \
+                  ^~~~~~~~~~~~~~~~~~
+   <scratch space>:39:1: note: expanded from here
+   arch_cmpxchg_relaxed
+   ^
+   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
+                                         (unsigned long)(n),               \
+                                                        ^~~
+   In file included from kernel/rcu/update.c:606:
+>> kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
+   }))' (aka 'void')
+   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
+           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
+           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:73:29: note: expanded from macro '__atomic_op_fence'
+           typeof(op##_relaxed(args)) __ret;                               \
+                                      ^
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
+           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
+           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
+           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
+           __ret = op##_relaxed(args);                                     \
+                   ^~~~~~~~~~~~~~~~~~
+   <scratch space>:40:1: note: expanded from here
+   arch_cmpxchg_relaxed
+   ^
+   arch/arm/include/asm/cmpxchg.h:212:26: note: expanded from macro 'arch_cmpxchg_relaxed'
+                                         (unsigned long)(o),               \
+                                                        ^~~
+   In file included from kernel/rcu/update.c:606:
+   kernel/rcu/tasks.h:1239:8: error: operand of type 'union rcu_special' where arithmetic or pointer type is required
+           ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1916:2: note: expanded from macro 'cmpxchg'
+           arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:52:2: note: expanded from macro 'arch_cmpxchg'
+           __atomic_op_fence(arch_cmpxchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:75:10: note: expanded from macro '__atomic_op_fence'
+           __ret = op##_relaxed(args);                                     \
+                   ^~~~~~~~~~~~~~~~~~
+   <scratch space>:40:1: note: expanded from here
+   arch_cmpxchg_relaxed
+   ^
+   arch/arm/include/asm/cmpxchg.h:213:26: note: expanded from macro 'arch_cmpxchg_relaxed'
+                                         (unsigned long)(n),               \
+                                                        ^~~
+   5 errors generated.
 
 
-vim +336 kernel/trace/trace_object.c
+vim +1239 kernel/rcu/tasks.h
 
-   297	
-   298	static int
-   299	event_object_trigger_parse(struct event_command *cmd_ops,
-   300			       struct trace_event_file *file,
-   301			       char *glob, char *cmd, char *param_and_filter)
-   302	{
-   303		struct event_trigger_data *trigger_data;
-   304		struct objtrace_trigger_data *obj_data;
-   305		struct ftrace_event_field *field;
-   306		char *objtrace_cmd, *arg;
-   307		char *param, *filter;
-   308		int ret;
-   309		bool remove;
-   310	
-   311		remove = event_trigger_check_remove(glob);
-   312	
-   313		/*
-   314		 * separate the param and the filter:
-   315		 * objtrace:add:OBJ[:COUNT] [if filter]
-   316		 */
-   317		ret = event_trigger_separate_filter(param_and_filter, &param, &filter, true);
-   318		if (ret)
-   319			return ret;
-   320	
-   321		objtrace_cmd = strsep(&param, ":");
-   322		if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CMD_ADD)) {
-   323			pr_err("error objtrace command\n");
-   324			return -EINVAL;
-   325		}
-   326	
-   327		arg = strsep(&param, ":");
-   328		if (!arg)
-   329			return -EINVAL;
-   330	
-   331		field = trace_find_event_field(file->event_call, arg);
-   332		if (!field)
-   333			return -EINVAL;
-   334	
-   335		if (field->size != sizeof(void *)) {
- > 336			pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-   337			return -EINVAL;
-   338		}
-   339	
-   340		if (remove && !field_exist(file, cmd_ops, field->name))
-   341			return -ENOENT;
-   342	
-   343		obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
-   344		if (!obj_data)
-   345			return -ENOMEM;
-   346	
-   347		obj_data->field = field;
-   348		obj_data->tr = file->tr;
-   349		snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtrace_cmd);
-   350	
-   351		trigger_data = event_trigger_alloc(cmd_ops, cmd, param, obj_data);
-   352		if (!trigger_data) {
-   353			kfree(obj_data);
-   354			return -ENOMEM;
-   355		}
-   356		if (remove) {
-   357			event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
-   358			kfree(obj_data);
-   359			kfree(trigger_data);
-   360			return 0;
-   361		}
-   362	
-   363		ret = event_trigger_parse_num(param, trigger_data);
-   364		if (ret)
-   365			goto out_free;
-   366	
-   367		ret = event_trigger_set_filter(cmd_ops, file, filter, trigger_data);
-   368		if (ret < 0)
-   369			goto out_free;
-   370	
-   371		ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
-   372		if (ret)
-   373			goto out_free;
-   374	
-   375		return ret;
-   376	
-   377	 out_free:
-   378		event_trigger_reset_filter(cmd_ops, trigger_data);
-   379		kfree(obj_data);
-   380		kfree(trigger_data);
-   381		return ret;
-   382	}
-   383	
+  1224	
+  1225	/*
+  1226	 * Do a cmpxchg() on ->trc_reader_special.b.need_qs, allowing for
+  1227	 * the four-byte operand-size restriction of some platforms.
+  1228	 * Returns the old value, which is often ignored.
+  1229	 */
+  1230	u8 rcu_trc_cmpxchg_need_qs(struct task_struct *t, u8 old, u8 new)
+  1231	{
+  1232		union rcu_special ret;
+  1233		union rcu_special trs_old = READ_ONCE(t->trc_reader_special);
+  1234		union rcu_special trs_new = trs_old;
+  1235	
+  1236		if (trs_old.b.need_qs != old)
+  1237			return trs_old.b.need_qs;
+  1238		trs_new.b.need_qs = new;
+> 1239		ret = cmpxchg(&t->trc_reader_special, trs_old, trs_new);
+  1240		return ret.b.need_qs;
+  1241	}
+  1242	EXPORT_SYMBOL_GPL(rcu_trc_cmpxchg_need_qs);
+  1243	
 
 -- 
 0-DAY CI Kernel Test Service
