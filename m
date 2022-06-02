@@ -1,42 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CA53237
-	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 21:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF05E3D86
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 21:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654203772; x=1685739772;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0UzVWwaOi/8bfFUzsc83WA6PHSfLMI2rHT/Y5hwvIF0=;
-  b=KxlxS9dCH/LwjUU1dOffJ7zRMJB+vYzqakzMigkVKG9vuZwLTBN8n2YL
-   6aicfqKsREnycyvekJcbkQ2aoTIK33I32OWn2azZAv3x3uBYQs6Bi4Vgm
-   pGJwzf5LI9PnVVFzMsCkn0q9gUx8IVMPyjsuMe6SY9488vW0fsvbR6Uv+
-   RZhVLP5BG0SnYRCnlvMN5IR4F/Exszu0U/MM0miHPwgetZpn+sw0+I+gR
-   ZlXZP3OrWjnk2qZXHjUK+jHEqoKhTUAfM/jcGa4XGUOBQK9g/ZDFQYcbM
-   tRwdLqzVIVea7yN/bSPCZJMbtMbVEIqRpHiXb9lXoCN4umRx6OlISYzOr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="336736636"
+  t=1654204373; x=1685740373;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EG4fFmbtoez27DKDle4Ouq6qSysWshoV4GNB3C6WPzQ=;
+  b=O1wx20eSJLt5DqoShEsgcrVtpCPrMNclORmXeHSgRI7/merNgRjYIewe
+   kJgkc5jpyLpZWODiIPDYRze6JD8AOOpi6TNG/Ddsy0lsUx+YSTOWP37kE
+   1N7u4KLWSdcjxHJAreC2i7TwWQJrHiSsOLAqMpKX+2FEAg5w+Y9Li26du
+   6aICp6G5NjZvBuVmArs+PQNQyPHqK63MlsaT7ASXL14EPVHJotWHwC9m7
+   md6RrnEE+Kez0CXwqeNGiYCf5lelcSKiNoqScaq2I2ZS+O5Pk3Du98RWK
+   fwTAlxB7QYpTQTAwZfdi189Ov4Jg/UwswXGx55hfgAf+JBduZ+bkNA2BO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="255946640"
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="336736636"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 14:02:52 -0700
+   d="scan'208";a="255946640"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 14:12:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="612991715"
+   d="scan'208";a="634232611"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jun 2022 14:02:50 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2022 14:12:51 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwrxx-0005RP-SR;
-	Thu, 02 Jun 2022 21:02:49 +0000
-Date: Fri, 3 Jun 2022 05:02:20 +0800
+	id 1nws7e-0005Rx-8h;
+	Thu, 02 Jun 2022 21:12:50 +0000
+Date: Fri, 3 Jun 2022 05:12:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Pirko <jiri@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_lc_dev 4/5] ld.lld: error: undefined
- symbol: auxiliary_device_init
-Message-ID: <202206030535.Sbiik5tQ-lkp@intel.com>
+To: Jeff Xie <xiehuan09@gmail.com>, rostedt@goodmis.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, mingo@redhat.com,
+	mhiramat@kernel.org, zanussi@kernel.org,
+	linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
+Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
+Message-ID: <202206030515.4lqqkb3W-lkp@intel.com>
+References: <20220602164518.286295-2-xiehuan09@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,52 +47,139 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220602164518.286295-2-xiehuan09@gmail.com>
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_lc_dev
-head:   ef34c1c33c0ae43a9ad3c0ed3708eb1880972de0
-commit: 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b [4/5] mlxsw: core_linecards: Introduce per line card auxiliary device
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220603/202206030535.Sbiik5tQ-lkp@intel.com/config)
+Hi Jeff,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
+base:   b39181f7c6907dc66ff937b74758671fa6ba430c
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220603/202206030515.4lqqkb3W-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_lc_dev
-        git checkout 2d0852c5fa89a48c6fa1f860600b5e24e2faab4b
+        # https://github.com/intel-lab-lkp/linux/commit/765253f020469f94856aedc5a3fe5444e1e8f4e8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
+        git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/qxl/ kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack+0x9: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x8: call to sev_es_nmi_complete() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: default_do_nmi+0x10: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: kvm_read_and_reset_apf_flags+0x1: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_on+0xa6: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: lockdep_hardirqs_off+0xa3: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x63: call to __this_cpu_preempt_check() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x32: call to __this_cpu_preempt_check() leaves .noinstr.text section
->> ld.lld: error: undefined symbol: auxiliary_device_init
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: __auxiliary_device_add
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_dev_add) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: __auxiliary_driver_register
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_register) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: auxiliary_driver_unregister
-   >>> referenced by core_linecard_dev.c
-   >>> net/ethernet/mellanox/mlxsw/core_linecard_dev.o:(mlxsw_linecard_driver_unregister) in archive drivers/built-in.a
+>> kernel/trace/trace_object.c:336:61: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                   pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
+                                                        ~~~                  ^~~~~~~~~~~~~~
+                                                        %u
+   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +336 kernel/trace/trace_object.c
+
+   297	
+   298	static int
+   299	event_object_trigger_parse(struct event_command *cmd_ops,
+   300			       struct trace_event_file *file,
+   301			       char *glob, char *cmd, char *param_and_filter)
+   302	{
+   303		struct event_trigger_data *trigger_data;
+   304		struct objtrace_trigger_data *obj_data;
+   305		struct ftrace_event_field *field;
+   306		char *objtrace_cmd, *arg;
+   307		char *param, *filter;
+   308		int ret;
+   309		bool remove;
+   310	
+   311		remove = event_trigger_check_remove(glob);
+   312	
+   313		/*
+   314		 * separate the param and the filter:
+   315		 * objtrace:add:OBJ[:COUNT] [if filter]
+   316		 */
+   317		ret = event_trigger_separate_filter(param_and_filter, &param, &filter, true);
+   318		if (ret)
+   319			return ret;
+   320	
+   321		objtrace_cmd = strsep(&param, ":");
+   322		if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CMD_ADD)) {
+   323			pr_err("error objtrace command\n");
+   324			return -EINVAL;
+   325		}
+   326	
+   327		arg = strsep(&param, ":");
+   328		if (!arg)
+   329			return -EINVAL;
+   330	
+   331		field = trace_find_event_field(file->event_call, arg);
+   332		if (!field)
+   333			return -EINVAL;
+   334	
+   335		if (field->size != sizeof(void *)) {
+ > 336			pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
+   337			return -EINVAL;
+   338		}
+   339	
+   340		if (remove && !field_exist(file, cmd_ops, field->name))
+   341			return -ENOENT;
+   342	
+   343		obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
+   344		if (!obj_data)
+   345			return -ENOMEM;
+   346	
+   347		obj_data->field = field;
+   348		obj_data->tr = file->tr;
+   349		snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtrace_cmd);
+   350	
+   351		trigger_data = event_trigger_alloc(cmd_ops, cmd, param, obj_data);
+   352		if (!trigger_data) {
+   353			kfree(obj_data);
+   354			return -ENOMEM;
+   355		}
+   356		if (remove) {
+   357			event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
+   358			kfree(obj_data);
+   359			kfree(trigger_data);
+   360			return 0;
+   361		}
+   362	
+   363		ret = event_trigger_parse_num(param, trigger_data);
+   364		if (ret)
+   365			goto out_free;
+   366	
+   367		ret = event_trigger_set_filter(cmd_ops, file, filter, trigger_data);
+   368		if (ret < 0)
+   369			goto out_free;
+   370	
+   371		ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
+   372		if (ret)
+   373			goto out_free;
+   374	
+   375		return ret;
+   376	
+   377	 out_free:
+   378		event_trigger_reset_filter(cmd_ops, trigger_data);
+   379		kfree(obj_data);
+   380		kfree(trigger_data);
+   381		return ret;
+   382	}
+   383	
 
 -- 
 0-DAY CI Kernel Test Service
