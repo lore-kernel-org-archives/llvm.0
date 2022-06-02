@@ -1,46 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE96B645
-	for <llvm@lists.linux.dev>; Wed,  1 Jun 2022 22:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF27628
+	for <llvm@lists.linux.dev>; Thu,  2 Jun 2022 00:40:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654123530; x=1685659530;
+  t=1654130400; x=1685666400;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=smkMhl7SsLCvV8F21B6h6yHB6om4C/Bmm9M+s7xMgFs=;
-  b=oC3R54YH7KpP6anGlcRpgoBObGC0UAHryK9cvqHrtBBg1Eq6VPQdWHUQ
-   Lo+az2D2znNGVdR54a+yrKQpJ0JjbVNlqqTH8lmfiLEMohAzGOyIzXrIa
-   K/27vk8uvFXRLkfqxaTfeVZ3BExw/oE+p2raA1oymfhdtnsFLE4/QHyeI
-   cuR7RUn1IuDREX5CXCc6RPra9TA3zT+fS3Y1jOLWyIpiR7Oco8nYP/BOL
-   Fk87tLBWnu8GatIjUDLGarL7l/wTLCNB48HRtjqHBNrHF62S7Lad4oKYh
-   /ZoczDsQ13x8OFCDCvee5we2LNkzKTy6+pVX5uz3xDDKNi+ONefq1EF+U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="273323024"
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="273323024"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:45:30 -0700
+  bh=/NEsbvbuUCxR99tcx+zO5i0VaG0aRU9+4mB4ZBYmo6g=;
+  b=mIXIU3mzEiutZrlKgT5tf4f6OeXOGjB/lCYO7kzfjLDrzQtQd5H8jdu6
+   IkyDAXg9Ezi6OCbYqLzQkgml9TykG328qqg2dgTs/kxEdoCjSPkd341u1
+   3UO1UfOg0V/c3+EoihP6S2XOTRwBuOw5eYNtl6Obo8MKlpGwy4pl5Vt4J
+   XTXUq3rvJ6OYfwwhXJCS+yE/TXzDCYeavR15OcJP7mAGh9aU909nJ8vuL
+   FfhfDjlMNmNqPK9wmcBiDTjDp3h+GMzA3RDS0OfQW4zt7m+6q5NISSQq8
+   KdeqzGYBDLs+FGeD1zf9LgYxJQpMmV+GQLGL+sB4qkMZVNeKyH5jZjJhE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="362150553"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="362150553"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:39:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="581805052"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="612575503"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 15:45:27 -0700
+  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 17:39:56 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nwX5j-0004UY-14;
-	Wed, 01 Jun 2022 22:45:27 +0000
-Date: Thu, 2 Jun 2022 06:44:41 +0800
+	id 1nwYsW-0004aE-05;
+	Thu, 02 Jun 2022 00:39:56 +0000
+Date: Thu, 2 Jun 2022 08:39:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Song Liu <song@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, kernel-team@fb.com,
-	rostedt@goodmis.org, jolsa@kernel.org, Song Liu <song@kernel.org>
-Subject: Re: [PATCH bpf-next 5/5] bpf: trampoline: support
- FTRACE_OPS_FL_SHARE_IPMODIFY
-Message-ID: <202206020622.HnFjEObo-lkp@intel.com>
-References: <20220601175749.3071572-6-song@kernel.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_manafm@quicinc.com,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH 2/3] thermal/debugfs: Add debugfs information
+Message-ID: <202206020816.0blG5XwC-lkp@intel.com>
+References: <20220601151441.9128-2-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,120 +47,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601175749.3071572-6-song@kernel.org>
+In-Reply-To: <20220601151441.9128-2-daniel.lezcano@linaro.org>
 
-Hi Song,
+Hi Daniel,
 
 I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220602/202206020622.HnFjEObo-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220602/202206020816.0blG5XwC-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7edcf1c49617641579f2bc36b86c7d59bea20aef
+        # https://github.com/intel-lab-lkp/linux/commit/04c295f7e8b49af742179609949736f6f056b49c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
-        git checkout 7edcf1c49617641579f2bc36b86c7d59bea20aef
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+        git checkout 04c295f7e8b49af742179609949736f6f056b49c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/trampoline.c:30:66: warning: declaration of 'enum ftrace_ops_cmd' will not be visible outside of this function [-Wvisibility]
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
-                                                                    ^
-   kernel/bpf/trampoline.c:92:21: error: invalid application of 'sizeof' to an incomplete type 'struct ftrace_ops'
-           tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
-                              ^     ~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:100:10: error: incomplete definition of type 'struct ftrace_ops'
-           tr->fops->private = tr;
-           ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:101:10: error: incomplete definition of type 'struct ftrace_ops'
-           tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
-           ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:397:11: error: incomplete definition of type 'struct ftrace_ops'
-                   tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-                   ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:397:22: error: use of undeclared identifier 'FTRACE_OPS_FL_SHARE_IPMODIFY'
-                   tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-                                      ^
-   kernel/bpf/trampoline.c:415:11: error: incomplete definition of type 'struct ftrace_ops'
-                   tr->fops->func = NULL;
-                   ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:416:11: error: incomplete definition of type 'struct ftrace_ops'
-                   tr->fops->trampoline = 0;
-                   ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:431:67: warning: declaration of 'enum ftrace_ops_cmd' will not be visible outside of this function [-Wvisibility]
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-                                                                     ^
-   kernel/bpf/trampoline.c:431:12: error: conflicting types for 'bpf_tramp_ftrace_ops_func'
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-              ^
-   kernel/bpf/trampoline.c:30:12: note: previous declaration is here
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
-              ^
-   kernel/bpf/trampoline.c:431:82: error: variable has incomplete type 'enum ftrace_ops_cmd'
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-                                                                                    ^
-   kernel/bpf/trampoline.c:431:67: note: forward declaration of 'enum ftrace_ops_cmd'
-   static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-                                                                     ^
-   kernel/bpf/trampoline.c:433:33: error: incomplete definition of type 'struct ftrace_ops'
-           struct bpf_trampoline *tr = ops->private;
-                                       ~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:448:7: error: use of undeclared identifier 'FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY'
-           case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY:
-                ^
-   kernel/bpf/trampoline.c:452:7: error: use of undeclared identifier 'FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY'
-           case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY:
-                ^
-   kernel/bpf/trampoline.c:454:11: error: incomplete definition of type 'struct ftrace_ops'
-                   tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-                   ~~~~~~~~^
-   include/linux/bpf.h:47:8: note: forward declaration of 'struct ftrace_ops'
-   struct ftrace_ops;
-          ^
-   kernel/bpf/trampoline.c:454:23: error: use of undeclared identifier 'FTRACE_OPS_FL_SHARE_IPMODIFY'
-                   tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-                                       ^
-   2 warnings and 14 errors generated.
+   In file included from drivers/thermal/thermal_core.c:27:
+   In file included from drivers/thermal/thermal_core.h:16:
+>> drivers/thermal/thermal_debugfs.h:11:20: warning: function 'thermal_debugfs_init' has internal linkage but is not defined [-Wundefined-internal]
+   static inline void thermal_debugfs_init(void);
+                      ^
+   drivers/thermal/thermal_core.c:1496:2: note: used here
+           thermal_debugfs_init();
+           ^
+   1 warning generated.
 
 
-vim +30 kernel/bpf/trampoline.c
+vim +/thermal_debugfs_init +11 drivers/thermal/thermal_debugfs.h
 
-    29	
-  > 30	static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
-    31	
+     2	
+     3	#ifdef CONFIG_THERMAL_DEBUGFS
+     4	void thermal_debugfs_init(void);
+     5	void thermal_debugfs_cdev_register(struct thermal_cooling_device *cdev);
+     6	void thermal_debugfs_cdev_unregister(struct thermal_cooling_device *cdev);
+     7	void thermal_debugfs_tz_register(struct thermal_zone_device *tz);
+     8	void thermal_debugfs_tz_unregister(struct thermal_zone_device *tz);
+     9	void thermal_debugfs_cdev_transition(struct thermal_cooling_device *cdev, int state);
+    10	#else
+  > 11	static inline void thermal_debugfs_init(void);
 
 -- 
 0-DAY CI Kernel Test Service
