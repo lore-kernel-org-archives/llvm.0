@@ -1,84 +1,157 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B23A31
-	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 04:09:08 +0000 (UTC)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LDqBR6ZxPzKmHw;
-	Fri,  3 Jun 2022 12:08:47 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 3 Jun
- 2022 12:08:59 +0800
-Date: Fri, 3 Jun 2022 12:08:52 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: Changbin Du <changbin.du@huawei.com>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, <changbin.du@gmail.com>, Nick Desaulniers
-	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, Hui Wang
-	<hw.huiwang@huawei.com>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: riscv: alternatives: move length validation inside the subsection
-Message-ID: <20220603040852.uduno354yrdyexs3@M910t>
-References: <20220602112734.it2bzlqaismotjof@M910t>
- <YpjMdVjLzoIoSGz9@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065377E
+	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 05:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654233952; x=1685769952;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7Yy+YKPjezZqxZ9iAmymPlZoAsDQLdULcf7v+4p5KUI=;
+  b=GrVAjLZEvYEfhEkKoBCG4tvfSRwMjd1auvRuKhHjHj3V+F5PHMMQGSUP
+   O/jtBncgJt913zliLGvzZmuG1gzFDESazKH1qzCTMm2uCVeiOh4rFD2aH
+   oowZ7sM995MqXO9Mvq1TzaHcwIdTWHG1SF3Oz9EMl/GH0jpSxDBflfNXF
+   JznBk6FS84v91EvpxpMLfCBM6GE3MiPVrttuQ9N7eWuBLdnNz9LNI/Qik
+   uBMBeqXSK9AnLdsmjs/Od0iPdD2i3LZuJhiSeUmpZjAx0tvfwdPmV3kOd
+   BPPlcWFyvWkQS6+oMWHVuLO4NMBH3t+LtaNDGkLD0eci9WXmd8O6QTfvS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="276185782"
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="276185782"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 22:25:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="757343217"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 02 Jun 2022 22:25:50 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nwzoj-0006Or-C0;
+	Fri, 03 Jun 2022 05:25:49 +0000
+Date: Fri, 3 Jun 2022 13:24:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: fs/ntfs3/attrib.c:70:20: warning: unused function
+ 'attr_must_be_resident'
+Message-ID: <202206031318.lX6gx7wh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YpjMdVjLzoIoSGz9@dev-arch.thelio-3990X>
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
 
-On Thu, Jun 02, 2022 at 07:43:01AM -0700, Nathan Chancellor wrote:
-> On Thu, Jun 02, 2022 at 07:27:34PM +0800, Changbin Du wrote:
-> > Apply the same fix from commit 966a0acce2fc ("arm64/alternatives: move
-> > length validation inside the subsection") to riscv.  Due to the one-pass
-> > design of LLVM's integrated assembler, it can not compute the length of
-> > instructions if the .org directive is outside of the subsection that these
-> > instructions are in.
-> > 
-> > Here is the build error reported by llvm:
-> > 
-> > In file included from ./arch/riscv/include/asm/pgtable.h:108:
-> > ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
-> >         ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
-> >         ^
-> > ./arch/riscv/include/asm/errata_list.h:41:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
-> > asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
-> >     ^
-> > ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
-> >         _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-> >         ^
-> > ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
-> >         __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-> >         ^
-> > ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
-> >         ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-> >         ^
-> > ./arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
-> >         ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-> >          ^
-> > <inline asm>:25:6: note: instantiated into assembly here
-> > .org    . - (887b - 886b) + (889b - 888b)
-> >         ^
-> > 
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> 
-> Thanks for the patch! I already sent an equivalent change two weeks ago
-> as https://lore.kernel.org/20220516214520.3252074-1-nathan@kernel.org/,
-> which I think is slightly better because it handles the __ASSEMBLY__
-> version of the macro as well.
-> 
-Agreed. Thank you, and please ignore this one.
+Hi Konstantin,
 
-> Cheers,
-> Nathan
-> 
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
+commit: 6e5be40d32fb1907285277c02e74493ed43d77fe fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
+date:   10 months ago
+config: mips-randconfig-r012-20220531 (https://download.01.org/0day-ci/archive/20220603/202206031318.lX6gx7wh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5be40d32fb1907285277c02e74493ed43d77fe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6e5be40d32fb1907285277c02e74493ed43d77fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma-buf/ drivers/leds/ fs/ntfs3/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ntfs3/attrib.c:70:20: warning: unused function 'attr_must_be_resident'
+   static inline bool attr_must_be_resident(struct ntfs_sb_info
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project b364c76683f8ef241025a9556300778c07b590c2)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-b364c76683/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm net nr_bisected scripts source usr
+--
+>> fs/ntfs3/bitmap.c:59:19: warning: unused function 'wnd_bits'
+   static inline u32 wnd_bits(const struct wnd_bitmap size_t i)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/atomic.h", .line = 157, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1 # atomic_sub
+   subu $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project b364c76683f8ef241025a9556300778c07b590c2)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-b364c76683/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm net nr_bisected scripts source usr
+
+
+vim +/attr_must_be_resident +70 fs/ntfs3/attrib.c
+
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  64  
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  65  /*
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  66   * attr_must_be_resident
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  67   *
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  68   * returns true if attribute must be resident
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  69   */
+be71b5cba2e6485 Konstantin Komarov 2021-08-13 @70  static inline bool attr_must_be_resident(struct ntfs_sb_info *sbi,
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  71  					 enum ATTR_TYPE type)
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  72  {
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  73  	const struct ATTR_DEF_ENTRY *de;
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  74  
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  75  	switch (type) {
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  76  	case ATTR_STD:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  77  	case ATTR_NAME:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  78  	case ATTR_ID:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  79  	case ATTR_LABEL:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  80  	case ATTR_VOL_INFO:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  81  	case ATTR_ROOT:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  82  	case ATTR_EA_INFO:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  83  		return true;
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  84  	default:
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  85  		de = ntfs_query_def(sbi, type);
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  86  		if (de && (de->flags & NTFS_ATTR_MUST_BE_RESIDENT))
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  87  			return true;
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  88  		return false;
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  89  	}
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  90  }
+be71b5cba2e6485 Konstantin Komarov 2021-08-13  91  
+
+:::::: The code at line 70 was first introduced by commit
+:::::: be71b5cba2e6485e8959da7a9f9a44461a1bb074 fs/ntfs3: Add attrib operations
+
+:::::: TO: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+:::::: CC: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
