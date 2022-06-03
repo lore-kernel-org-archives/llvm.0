@@ -1,194 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5DB10E0
-	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 15:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B2FC34114;
-	Fri,  3 Jun 2022 15:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1891386
+	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 19:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FF6C385B8;
+	Fri,  3 Jun 2022 19:24:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654270652;
-	bh=suq/woGG7vWxkcVyFOYn9ju0qxii5vlaISAzo0sGVLs=;
+	s=k20201202; t=1654284243;
+	bh=yt+bB3Q+W8oVkpzAEgMcRoEXyzhk3C1iaR9Ljh12V+0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k5Oy2GwgtF3VGX/G9vLtV6KU1KzzAVFaVJ6z/d7Jj0z+U2r5YmmwH7ug8OQUw2H7R
-	 xy6QYSRvaIceLMy02O1JS6dMbV3eSTVn7DkWfXMZl1cLfLr5GgcvrOS50801luUByE
-	 A9564BbybLUSIVMZJeLdjNxgEXz4k1973wvEU8IW5Yo/FwHBgzyScsro4ZwynkjgjK
-	 m5WOtOZJ7lWhK+2QEsmJDXzjGS65Idx45IuREk+C8fFxxDab+0UpOeaWd/LvB9y2A7
-	 gv+EK1zJzIDpv7UK7BlVwrpw90SwzEpKLkhXGnv4BM8sR/ar90yRaKJ5I6KW+dL+ik
-	 CKb+a7Mf19BUw==
-Date: Fri, 3 Jun 2022 08:37:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jeff Xie <xiehuan09@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, mingo@redhat.com,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
-Message-ID: <YpoqulzEvwNDHFMH@dev-arch.thelio-3990X>
-References: <20220602164518.286295-2-xiehuan09@gmail.com>
- <202206030515.4lqqkb3W-lkp@intel.com>
- <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com>
+	b=O9MHOZXYaNO1a0uNf4TGQcDx2TvE/MXiR8+rLcoxIoSZe/ykSV82GLX9qufcBKcK3
+	 XeYlZBUGLdwXWglLZo/ct9mgVN+bWTjnCFPWMzLw5l51uvjZ8uHO1KmSwyF4dxJNT1
+	 U6Z31jCH/wDI75npKvF3m7dYGx6WgLubziWrnzu/JesQV58NM8lHiDAI3AuqLbN481
+	 THO0RULtZ0jyhxUixw270coBskVc/QYq0Pk7EsHUUBWw7i7HsgrlMxy1bMfc72wSqu
+	 OITLuH13u+7gnw4BIUekewYEuBoZ/NglJy2mU6a7oosx+LZWupfU8oG7GAHjfzKGLX
+	 trNk6TfYBiqhg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id AB1C14096F; Fri,  3 Jun 2022 21:24:01 +0200 (CEST)
+Date: Fri, 3 Jun 2022 21:24:01 +0200
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Fangrui Song <maskray@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Sebastian Ullrich <sebasti@nullri.ch>
+Subject: Re: [PATCH v2] perf: Fix segbase for ld.lld linked objects
+Message-ID: <Yppf0ZOhRWZunQDx@kernel.org>
+References: <20220527182039.673248-1-maskray@google.com>
+ <CAP-5=fWXm-G8M_MTBjj2h_JkHgj6WU27GDqJ0hcRthtYG-m4AQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com>
+In-Reply-To: <CAP-5=fWXm-G8M_MTBjj2h_JkHgj6WU27GDqJ0hcRthtYG-m4AQ@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-On Fri, Jun 03, 2022 at 09:48:07AM +0800, Jeff Xie wrote:
-> Hi lkp,
+Em Fri, May 27, 2022 at 11:51:54AM -0700, Ian Rogers escreveu:
+> On Fri, May 27, 2022 at 11:20 AM Fangrui Song <maskray@google.com> wrote:
+> >
+> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
+> > the header size. find_proc_info computes segbase as `map->start +
+> > segbase - map->pgoff` which is wrong when
+> >
+> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
+> > * and their p_vaddr difference does not equal their p_offset difference
+> >
+> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
+> > such R and RX PT_LOAD program headers.
+> >
+> >     ld.lld (default) => perf report fails to unwind `perf record
+> >     --call-graph dwarf` recorded data
+> >     ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
+> >     ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
+> >     their p_vaddr difference equals p_offset difference
+> >
+> >     ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
+> >     ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
+> >     there are two PT_LOAD but their p_vaddr difference equals p_offset
+> >     difference
+> >
+> > To fix the issue, compute segbase as dso's base address plus
+> > PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
+> > over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
+> > (the minimum guaranteed by generic ABI) from the minimum address.
+> >
+> > In libunwind, find_proc_info transitively called by unw_step is cached,
+> > so the iteration overhead is acceptable.
+> >
+> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Cc: Ian Rogers <irogers@google.com>
 > 
-> On Fri, Jun 3, 2022 at 5:12 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Jeff,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-> > base:   b39181f7c6907dc66ff937b74758671fa6ba430c
-> > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220603/202206030515.4lqqkb3W-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/765253f020469f94856aedc5a3fe5444e1e8f4e8
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-> >         git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/qxl/ kernel/trace/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> kernel/trace/trace_object.c:336:61: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-> >                    pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-> >                                                         ~~~                  ^~~~~~~~~~~~~~
-> >                                                         %u
-> 
-> I will  double check it ,the sizeof(void *) on x86_64 is type ‘long
-> unsigned int’.
+> Reviewed-by: Ian Rogers <irogers@google.com>
 
-Per Documentation/core-api/printk-formats.rst, sizeof returns size_t,
-which should use the %zu specifier.
+Thanks, applied.
 
-Cheers,
-Nathan
+- Arnaldo
 
-> >    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-> >            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> >                                   ~~~     ^~~~~~~~~~~
-> >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
-> >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-> >                                                        ~~~    ^~~~~~~~~~~
-> >    include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-> >                    _p_func(_fmt, ##__VA_ARGS__);                           \
-> >                            ~~~~    ^~~~~~~~~~~
-> >    1 warning generated.
-> >
-> >
-> > vim +336 kernel/trace/trace_object.c
-> >
-> >    297
-> >    298  static int
-> >    299  event_object_trigger_parse(struct event_command *cmd_ops,
-> >    300                         struct trace_event_file *file,
-> >    301                         char *glob, char *cmd, char *param_and_filter)
-> >    302  {
-> >    303          struct event_trigger_data *trigger_data;
-> >    304          struct objtrace_trigger_data *obj_data;
-> >    305          struct ftrace_event_field *field;
-> >    306          char *objtrace_cmd, *arg;
-> >    307          char *param, *filter;
-> >    308          int ret;
-> >    309          bool remove;
-> >    310
-> >    311          remove = event_trigger_check_remove(glob);
-> >    312
-> >    313          /*
-> >    314           * separate the param and the filter:
-> >    315           * objtrace:add:OBJ[:COUNT] [if filter]
-> >    316           */
-> >    317          ret = event_trigger_separate_filter(param_and_filter, &param, &filter, true);
-> >    318          if (ret)
-> >    319                  return ret;
-> >    320
-> >    321          objtrace_cmd = strsep(&param, ":");
-> >    322          if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CMD_ADD)) {
-> >    323                  pr_err("error objtrace command\n");
-> >    324                  return -EINVAL;
-> >    325          }
-> >    326
-> >    327          arg = strsep(&param, ":");
-> >    328          if (!arg)
-> >    329                  return -EINVAL;
-> >    330
-> >    331          field = trace_find_event_field(file->event_call, arg);
-> >    332          if (!field)
-> >    333                  return -EINVAL;
-> >    334
-> >    335          if (field->size != sizeof(void *)) {
-> >  > 336                  pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-> >    337                  return -EINVAL;
-> >    338          }
-> >    339
-> >    340          if (remove && !field_exist(file, cmd_ops, field->name))
-> >    341                  return -ENOENT;
-> >    342
-> >    343          obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
-> >    344          if (!obj_data)
-> >    345                  return -ENOMEM;
-> >    346
-> >    347          obj_data->field = field;
-> >    348          obj_data->tr = file->tr;
-> >    349          snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtrace_cmd);
-> >    350
-> >    351          trigger_data = event_trigger_alloc(cmd_ops, cmd, param, obj_data);
-> >    352          if (!trigger_data) {
-> >    353                  kfree(obj_data);
-> >    354                  return -ENOMEM;
-> >    355          }
-> >    356          if (remove) {
-> >    357                  event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
-> >    358                  kfree(obj_data);
-> >    359                  kfree(trigger_data);
-> >    360                  return 0;
-> >    361          }
-> >    362
-> >    363          ret = event_trigger_parse_num(param, trigger_data);
-> >    364          if (ret)
-> >    365                  goto out_free;
-> >    366
-> >    367          ret = event_trigger_set_filter(cmd_ops, file, filter, trigger_data);
-> >    368          if (ret < 0)
-> >    369                  goto out_free;
-> >    370
-> >    371          ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
-> >    372          if (ret)
-> >    373                  goto out_free;
-> >    374
-> >    375          return ret;
-> >    376
-> >    377   out_free:
-> >    378          event_trigger_reset_filter(cmd_ops, trigger_data);
-> >    379          kfree(obj_data);
-> >    380          kfree(trigger_data);
-> >    381          return ret;
-> >    382  }
-> >    383
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> 
-> Thanks,
-> JeffXie
-> 
