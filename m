@@ -1,69 +1,203 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFFBA31
-	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 11:02:04 +0000 (UTC)
-Received: by mail-il1-f179.google.com with SMTP id v7so5985464ilo.3
-        for <llvm@lists.linux.dev>; Fri, 03 Jun 2022 04:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SGV5SsKbSd2QdHPl8LR4HxzpZDbxIoUIGiTmzmYRICU=;
-        b=pTs3iB6pTzJtRvoxfh2eEuGwMr+d8vioWpsetePj816n7Tz/NNC3l3FSOFVCXMdeZk
-         hLP1SWblTC+U/6yblN8X9EqpqlTpsWqNQ7byW1YxdPwSszlYgLPsHl3TUYr95POo++/A
-         kEyw+rAg0a7K9btirU4Bcpt+Q0+NBAid/pLfIqCU6ytkFT9cUx+8LJ4FAwnn3a1DGDk4
-         eQWpRiVM3vQyUh2MQrVRYdVSVskdGf2A4UWNvaOzYAh0AgQAIEHnUWoTt0J8b31q5w6o
-         xts8eVhu8x+eR3ZtQxfybwkt3ljALAD+9jtOkE9DKO7+t9IrPieSsQoZwPB+Ls/iINT4
-         XCUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SGV5SsKbSd2QdHPl8LR4HxzpZDbxIoUIGiTmzmYRICU=;
-        b=4dZObXCfXFFd5INC0VUag0RtDq+b4hbhRAh2ZgyYzL2mbkgGWsY9D80gDwOcgmS6x1
-         h2rh7cGL/ENgFjRt6e0KB/mnj0NLpC86AoB3PMov/lmZAli9ZPOb4cbJNXpidre7qpil
-         MVvF6tNMFkggurUhUQtSE30h7dwShExE6A6KxYANUDSprby6/M9JIMlr5coBmBBl93eT
-         vHtwbxkyzPtepVAs2SElFNgHLYtkfLFKy6ex9RMc3FsHIrWTD8ZSkNk/vWAJ7J9Qqnt5
-         w9/hiQ4KF+NrbdLY7QVvlznisjGFKIUK2jtx/xTt3enTqzjF6TlrOSQpasUdQ2Bp0Vg1
-         GxRg==
-X-Gm-Message-State: AOAM533sePiIBWrHUO08DlsdtH3SWM/wYBJJHHi4S1ostjKJv6J5UzrV
-	9iyxilRC9IT5o605hxy28latuqawGCjPOXokvdI=
-X-Google-Smtp-Source: ABdhPJxV7dB9gEgpQyA2p3QXnsAEKKA1bjMJgQFfQx59SR/96koLig1G7LYsfePBxG02Vo2liG0CZrJjqV9KdJVMJHY=
-X-Received: by 2002:a05:6e02:1c82:b0:2d3:b7c2:1129 with SMTP id
- w2-20020a056e021c8200b002d3b7c21129mr5634371ill.237.1654254123233; Fri, 03
- Jun 2022 04:02:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE34ED2
+	for <llvm@lists.linux.dev>; Fri,  3 Jun 2022 12:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654260727; x=1685796727;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QhvfwyWOJNNF7WV71CYvJiems9urcoeP8CCRiDmzIDs=;
+  b=PUoy/NCQTFjW704mslFR0Vf3E8YueXfY8RXkK5iyRbCPEN9OJ8XocPe4
+   9kcTi570IVszLoa52HRtn2FeFllQGVfDaf5eaMMIP7uUulFBUgSnWGHEB
+   Z5dC3fUJP5txU6W2Ph1MMyER5rDChc+PYWddpZ7N/vIKJ/7MYqPyop7hl
+   SetT081vTUY45AklpvgCYRKCsRUR2d0G4EAw+c3LUtPWd8oBOxlF3KstN
+   pnP5Bh0wg8nHv8gUUq+vsC56xHtAZX/5aTmuYwLrBVJeI2pJPpAD3Y/5I
+   XBPXZLYFXUSXNzcDWSeppPSakPS1jgWyIrzq9g5B5B1jgf9KokuEU2GL8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275044646"
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="275044646"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 05:52:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="634503194"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Jun 2022 05:52:03 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nx6mY-0007fF-Ie;
+	Fri, 03 Jun 2022 12:52:02 +0000
+Date: Fri, 3 Jun 2022 20:51:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 28/34]
+ arch/powerpc/include/asm/page.h:234:9: error: call to undeclared function
+ 'VIRTUAL_BUG_ON'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206032026.IXhExuNC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202205240321.sb0gX2mq-lkp@intel.com> <cdd02535-b446-5547-4fdd-6deaf3fba6a6@intel.com>
-In-Reply-To: <cdd02535-b446-5547-4fdd-6deaf3fba6a6@intel.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 3 Jun 2022 13:01:52 +0200
-Message-ID: <CANiq72k69wUZxvCeJFH3=9LsyjT76XFcfbf5aKZbb-u91wMmkQ@mail.gmail.com>
-Subject: Re: [rust:rust-next 2/24] ld.lld: error: kernel/built-in.a(kallsyms.o):(function
- get_symbol_offset: .text+0x5f0): relocation R_RISCV_PCREL_HI20 out of range:
- -524435 is not in [-524288, 524287]; references kallsyms_names
-To: kernel test robot <yujie.liu@intel.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, kbuild-all@lists.01.org, llvm@lists.linux.dev, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 3, 2022 at 12:32 PM kernel test robot <yujie.liu@intel.com> wrote:
->
->  >> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x5f0): relocation R_RISCV_PCREL_HI20 out of range: -524435 is not in [-524288, 524287]; references kallsyms_names
->     >>> referenced by kallsyms.c
->     >>> defined in kernel/built-in.a(kallsyms.o)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
+head:   1aafd4ba7b78b4ac0013a48a35252654852cb7ab
+commit: 2db5956e0783e740080a19ef8dd8a70ecdbf47c4 [28/34] powerpc: Make virt_to_pfn() a static inline
+config: powerpc64-buildonly-randconfig-r005-20220531 (https://download.01.org/0day-ci/archive/20220603/202206032026.IXhExuNC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=2db5956e0783e740080a19ef8dd8a70ecdbf47c4
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
+        git checkout 2db5956e0783e740080a19ef8dd8a70ecdbf47c4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-There are similar reports for the same relocation type in trees
-without Rust support merged, so this might not be being triggered by
-Rust itself, e.g.:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    https://lore.kernel.org/llvm/202206010956.rOpdU4dr-lkp@intel.com/
-    https://lore.kernel.org/llvm/202205280837.PPVZBhXr-lkp@intel.com/
+All errors (new ones prefixed by >>):
 
-Cheers,
-Miguel
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from ./arch/powerpc/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+   In file included from arch/powerpc/include/asm/current.h:13:
+   In file included from arch/powerpc/include/asm/paca.h:18:
+   In file included from arch/powerpc/include/asm/mmu.h:149:
+>> arch/powerpc/include/asm/page.h:234:9: error: call to undeclared function 'VIRTUAL_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return __pa(kaddr) >> PAGE_SHIFT;
+                  ^
+   arch/powerpc/include/asm/page.h:222:2: note: expanded from macro '__pa'
+           VIRTUAL_BUG_ON((unsigned long)(x) < PAGE_OFFSET);               \
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+
+
+vim +/VIRTUAL_BUG_ON +234 arch/powerpc/include/asm/page.h
+
+   231	
+   232	static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+   233	{
+ > 234		return __pa(kaddr) >> PAGE_SHIFT;
+   235	}
+   236	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+   237	#define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
+   238	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
