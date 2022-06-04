@@ -1,185 +1,130 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D6D1365
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 10:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1823136A
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 11:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654337695; x=1685873695;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5LUpzMSJijEEONy0DD3d7qFngDAS7gLVbhZnKuXnQjI=;
-  b=Rn6yttuPj5Zx+OjO0ik3fc7aXhXSQaJ5rVG/6ER0E7tIChUknSSpss1N
-   G6/ITH47VgJRzkriQmr4kV7TT08iab1rkPs7iTNGBLdClJ/FBpu4gJI7+
-   0yiJJE7w4INRV42EpoUohIM+kyIaxitBowiIRwHilnEq4AsAeXtlpBBVv
-   Hxi+rUdonBjl3l+s5aTMDJAAvwPPkOCpUz8UzARSULAu/dTevwD+VEtdy
-   YhcCmGRGKQtF70+/mbTXAX7/pA6n3FiKfNr7b5UPO6fb6UIRyM36IlOFE
-   LiIC6NfY+UFj9OhTBNRBpX7PWzcMihFwVP2xBIoatGV4PIdcJur6diPUA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="264096616"
+  t=1654340441; x=1685876441;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+eMIP4372CiyNzLU4uicwb1KwDon0gxRoNeNm90U5Kk=;
+  b=b8IQhSP8zVwty+KnmPlvAlafWZ14ULgYHxQn6rgAlyP8gByJQnsWIwcB
+   Nm/gMqe/CCEgx78ltfKEnG6LSvpsr5bS9fqwSaOAikIMG9i5v30XyX5zH
+   yE74aw3lvE4AIloGZnxPVWpabNmCXFCkqjT0Ms4KZfhm6cXYg+rJk6mZe
+   0Xey99SjtCNwXxBdi/sI6Ol909OtokJ44+xSFa5C9/JwT7qUQrVGA2ctY
+   qKmahFctZmeK29IeLI53gNC8cDJEWTiFarUPwq5R3iPvDwcu+C9k9PHu/
+   s/VysxbRhoJSZSruSlm5qZwrp1J//6SZWT/gqGzS2x0Y7Rjx6qV9mDnJc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="264100563"
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="264096616"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 03:14:39 -0700
+   d="scan'208";a="264100563"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 04:00:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="634896012"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jun 2022 03:14:39 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sat, 4 Jun 2022 03:14:38 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sat, 4 Jun 2022 03:14:38 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sat, 4 Jun 2022 03:14:38 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sat, 4 Jun 2022 03:14:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XANXt4BNUjIJ8olIqMpnY1W5MPcB2ghcasR+LHQlwuKTZhnGbQHY5Wa5OMhsHHssVXpPDI9JcGVYIUW1pc97KHpNoIWGBGTqEnqRAGXr9UJYfthafDvGRH6XnPpFuB9BAIc4zjO0mYCTtFlTORryxu706SlmMlUi3ICL1R864D1xUIIJza1kZYCLL4Y9kz8dTRwP0nUdCLkSk3VoHcDziRNJExxlM5jVFgDJzNVjEgDEZWAkaL3KSQEcXBNoTE3Qg80wWqpnIPWDbyAJnpp99TC6rSEqQDoq6KLljzFF2TITTJNEmLVg91++AOjVLiKqHtrYN998uV69CdQmU+WD1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DkUIUYmzfWi0hNZM3H4oTM0KzPgRj3hyM6yIStqzyQM=;
- b=dAW8zDIxyz8H+0rq7Zn/YKRIioC0ynt18YbTMmCQLBAh7hEWanuvqv8cZPrQ9DZvZsA8rhCF+wxDMjw8KkYgeFQiGpHKAZcc+NbXsAg4FjZqQC82Z+9uX8Bpg276CngeJ91hGg23joEU5qeestzIoL1/cSbC16stFtoT/BPGjRYBcw1pHX7jWQP1rvBrYLpy3lycIJoikQINOcPDfswmrcWx09a1gInLN3kuW8QdbJjvIhaTswUVkq3iJDvJmrJN1olKqVQebnXD6tEBLJEHcIqES/8nyGsdGKtachKjg/YErTcZ0CGYvuKx5jXpT4Pl5lmOHvWIeWKpSKlHsXiJAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15)
- by SN6PR11MB3310.namprd11.prod.outlook.com (2603:10b6:805:b9::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Sat, 4 Jun
- 2022 10:14:36 +0000
-Received: from MW4PR11MB5933.namprd11.prod.outlook.com
- ([fe80::1169:fc9:c1ef:248e]) by MW4PR11MB5933.namprd11.prod.outlook.com
- ([fe80::1169:fc9:c1ef:248e%9]) with mapi id 15.20.5293.019; Sat, 4 Jun 2022
- 10:14:36 +0000
-Message-ID: <d4c31c67-de25-ac88-7115-4872e31f8bdf@intel.com>
-Date: Sat, 4 Jun 2022 18:14:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [rust:rust-next 2/24] ld.lld: error:
- kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x5f0):
- relocation R_RISCV_PCREL_HI20 out of range: -524435 is not in [-524288,
- 524287]; references kallsyms_names
-Content-Language: en-US
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: Miguel Ojeda <ojeda@kernel.org>, <kbuild-all@lists.01.org>,
-	<llvm@lists.linux.dev>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>
-References: <202205240321.sb0gX2mq-lkp@intel.com>
- <cdd02535-b446-5547-4fdd-6deaf3fba6a6@intel.com>
- <CANiq72k69wUZxvCeJFH3=9LsyjT76XFcfbf5aKZbb-u91wMmkQ@mail.gmail.com>
-From: Yujie Liu <yujie.liu@intel.com>
-In-Reply-To: <CANiq72k69wUZxvCeJFH3=9LsyjT76XFcfbf5aKZbb-u91wMmkQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0019.apcprd02.prod.outlook.com
- (2603:1096:3:17::31) To MW4PR11MB5933.namprd11.prod.outlook.com
- (2603:10b6:303:16a::15)
+   d="scan'208";a="613627143"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 04:00:31 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nxRWB-000Ahp-6a;
+	Sat, 04 Jun 2022 11:00:31 +0000
+Date: Sat, 4 Jun 2022 19:00:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_lc_dev 7/10]
+ drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:117:8: warning:
+ variable 'flash_owner' is uninitialized when used here
+Message-ID: <202206041845.0gXUtHQ7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b7de7ecc-49bf-48bf-e2b3-08da461306cd
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3310:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR11MB3310039D68E891DB6132DFBEFBA09@SN6PR11MB3310.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IDB+gxYxkYDe7NOTusmw7KRxZPOsPS2/zAnimw+I+D7PiMbMT1tEuOW0O2yYiDJW3E+KfMM1mWIzejvaGx4NHVoGZuNSA+Ph0JVxzGvIadyACi7wAx2PSlhVdm2r+vMfcAoF6MEJtSxBY4VXrbI8iaGnJ52/JPlr0DmsStDtuElUUsk4Ix3YtC+ars/Y3N1AV0rxDDflyNShh01RDXY+GOKclfOfcpOUGSP+FHTtQDS8dtSa23qxky2hwvJM+coYWeoTooyxVa/ecJeNjWCPGaTX04Pcxr674O9RnEdF21WhMEeDgR4WiTSZdwj8HASS/2jklL93WbmlTjDwjlQNAYYzbe8bvL2F9znz6YJmoeMjDU2G0oGMX7LzuFTe5UUUyNnQOBUAc0Zx8FDpzt7h12btlz0TRSJ2EhRwKqnCipov+HZbGmI8jZMOu4BDfVxgBqDWcSztiWGsXHKPZUsrRRJ6lvaIw7dNQMQT82cnBjjqWBuqWMGiZCoJIf7wiAeZgQ7xjSH2FoTKqccSrBvZCHy8IoxSjsJZnMIZbOuBoEBoUY2mwogtSoQlex0Fpx415d42tdsdPXdvHE3CaiF8TrQ3k14BfpWx9c/5+vFaan7A1cMH+ffz9eZtZn4EwlQfYOiMIQUQRZlf6lgzv9L/6LZjKspZazP+inAHWpP11lMgu/9liMm+QRTrmYx2222VQTEGOAIGRZujcjHGFJuoC2p2U9W7VxNpVVeX/HDr7vnLF2n8VfEf+Hlmto9MTk+ydgljexo5/5vIKARUWdxfiQLoVEa2YqZnmO41ILG+7yXztYdVgYHzUJYx7CRiRPCeeKQArRHatUmURKEgd93MsgnTR3b1GLnnvtO5v7b1/2I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(66556008)(966005)(186003)(5660300002)(508600001)(8676002)(66476007)(316002)(38100700002)(4326008)(2906002)(31686004)(82960400001)(8936002)(6486002)(2616005)(36756003)(44832011)(31696002)(6506007)(53546011)(6512007)(26005)(6666004)(6916009)(86362001)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlFSUXdmNXpJSGlOelBhMndyMTVsRkNLNklUMDlxVnZVbitGZmNmc0wxQkpG?=
- =?utf-8?B?cGR6dzhGWTZBL0dRWnI1cE5BUnZ5c0dVNGFSVmo5anoyQTJwSUtZT3lVdDNw?=
- =?utf-8?B?dCtpUFArUEQ4elNwQ2YvRXViTmlPcVN3cER2ZEV4ZEV5WGhISVlsSmlXODdr?=
- =?utf-8?B?VmwydzR1MUJXZVFDeC9rSzluWVlTdkVqN1NGRlByU2orMjhWMDNabzNxSmpN?=
- =?utf-8?B?UUl6NVdXWmUyVEo0RXlxWVFIZGNXRzFOVHNEN2Y0V2dKclI5aGVSVjVvQkhV?=
- =?utf-8?B?b0R3VVphNFBiUWVSQnI0WDk0MlBWTTBuM0NGVGF1ME1TZmdhTy8vNE92b0t2?=
- =?utf-8?B?YVZObkpLTHFaR0dldmQ5TVBFd3lXclRKbTFKNFhPeEsrZ04zNDhxSVorRlUr?=
- =?utf-8?B?V3JoeHVuc0VYZ05jYmpXYXdzcExhdnJxa3AxaGIrWlRxOERpbUR4b3R2RDVr?=
- =?utf-8?B?ZUxlWUtidkhoWnhPcFM5S1d6TktMV1MvMVpvNDZkWUtSMzZHSUE3R3U1dVZS?=
- =?utf-8?B?Zm14K05ER3FvaTBUWG1QbUppVmRYVyt5empsazdFUU5hVmluaWExRU1kdmk4?=
- =?utf-8?B?anNnb2pWdGgzdU10aU1zM255VUdTOEZERHNmajkrWkRTVFV2bUFKbDlZUUM2?=
- =?utf-8?B?aTMzcE42S2RSN0FVRDhHdXA0Yi9BN2ZPaGdoWmxmVStzZk5HQVJ4SHpCSFkv?=
- =?utf-8?B?Unh0NHF1TGR2Uk00eUJrVmVBT3p5L1JDTmRPTGgvdEQ5MUFWWDBFUERhN3dx?=
- =?utf-8?B?b0poWms2NWViMUxLelRra3dFbkFaMktkNFNhd1I0aHdXS3R4ODV6Y29WTDVl?=
- =?utf-8?B?MHlzNmFSVnAvdy9RVDNYL1ZvVHNjenBnQmF2WHNEV01Yd0sycDZFNXlzSzE1?=
- =?utf-8?B?clNnNWJJV1NsRDByRVVnT1gwUnpZZ200UEpHYlZoNzA2WWJmRkZzL0N0RGMy?=
- =?utf-8?B?NUFkK2c5ekE1eEtvdVpYQi9tblJLelgyUzZSK1AxVDkyQllLa0RoaVczZUVW?=
- =?utf-8?B?alU5V2wwTS93RGZ4R3dPdlJ6ZFg1RDVybCs3eVRmVTFOYWVLaW1NRS9IRTdS?=
- =?utf-8?B?WTFSazNERVcrU0xyWTVGTExWeGRCSW1mdmE1YWx5bnJyZG1oQ01KdHZQT0JF?=
- =?utf-8?B?eEdKUjBXQWRESlVrYndGek0rM2JQNGJPZnJsVldZc1QwdHhFOTdhRVVzU05w?=
- =?utf-8?B?THVsVy9ON0RlR1k3MVlQSTdDY0I1MDZhMm11YmQ1S29Rdll3czcxellrVVQr?=
- =?utf-8?B?Z0UrSnluU2lCNTZCMlB0VElCUXM0V0x6a3RFYWxSS3hQaXVHcEJTN0xMNWkw?=
- =?utf-8?B?NlBCWW9DdXdCNVBuRldIOHF0THhRWW9QQXdmVGpHdENhTnZCNUpGSnV1bGx5?=
- =?utf-8?B?ZW5MejdndmhBTVdDdlhkVnAyTG5jU2gydVgvL3M2cFZoSGZ6Y21oVVlEMVBS?=
- =?utf-8?B?LytSb2xQeUYrclUwUUo1YXRYbE1sQjJ2ZUJpVXBQbENjWEZLTE5ja1hZTVVl?=
- =?utf-8?B?cXNBQS9rRUVIUHExVVlQc0pzNm4xN01ra3ovSEM5Vmg4R0tBMHhyWnU4U0tr?=
- =?utf-8?B?RGd0eUtnYm1KK0lHb2JqbFJ3d2tVdTA0YkVQVmphNjZQWG1xcElCdjEzNjBx?=
- =?utf-8?B?MThIQm5wQkVSMUpmb1A1WnVNd2RFNXRDSHVua3ZxSDZrWjlJSGNDdXVyN2kx?=
- =?utf-8?B?Qld6R2dkaUVHR3hYTTl2NXByWU8vUUNQRHo3RVBhUjNWT2ZOQTdYcnlMWktp?=
- =?utf-8?B?SVZ0WkxKV1VDY2ZnZys0b2Nrd1JMdjhtdkJZeW5XQ0RBaUxEQ3BlT040MS9j?=
- =?utf-8?B?aWxSZ2luZE1ueE1EbnhTVk04a1oxbnJEMks1UUxFdkJrdDVXdFpEdGxIUEtn?=
- =?utf-8?B?M25oN0dVckM3YitFK2V5dzVFa3ltVEsvTG1RL3g3S3UxVkpTRGZLeWJtdlpN?=
- =?utf-8?B?VHUzY1M1RVVwTXBocURWM2hDYTdrYWxEYkRBQ0UxdXRvUTcyQVVJOHczYVBq?=
- =?utf-8?B?OXVzakV2Nitod0cwTzV3VDRQcml3SFlNTmJuRktpYWJFS0FITEN6Y0dRKzlG?=
- =?utf-8?B?UU5PUzJSOEhNVU1hUjR2VVhBejI4M0RiVVN3b1c0a0JFR1VwbXpzSTZaWnpn?=
- =?utf-8?B?cW14MWF4TTdKVFBwc05IVC9raU9WeklWb014cTZ0U25YL1A4SmVVTngydXd6?=
- =?utf-8?B?QndGV3MvWlI1eEpCSTFEQnRCSkJJWGZyK1g2YmhHVW9NU0dDbFViN2FaT21i?=
- =?utf-8?B?d25GdTlhNDUwQmpQQlZPRXY3cXJYZ3B2L1FVdW9kVTFYREQyRHRQT3V2TUZX?=
- =?utf-8?B?L1VqMk1RakFpMVBRNkxoMnhnN09BSE1Dd2J4VVlsNDdxQ1FCUE1sdz09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7de7ecc-49bf-48bf-e2b3-08da461306cd
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5933.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2022 10:14:36.1635
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qKcM3Ek0XxFyZeRnSv03yvOPqj9dvL0FjoTELxSBb+9Y1BY2ACZTzH8DSEtL6Dv+ZBrx96fdzNbADQ8xDkcFpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3310
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/3/2022 19:01, Miguel Ojeda wrote:
-> On Fri, Jun 3, 2022 at 12:32 PM kernel test robot <yujie.liu@intel.com> wrote:
->>
->>   >> ld.lld: error: kernel/built-in.a(kallsyms.o):(function get_symbol_offset: .text+0x5f0): relocation R_RISCV_PCREL_HI20 out of range: -524435 is not in [-524288, 524287]; references kallsyms_names
->>      >>> referenced by kallsyms.c
->>      >>> defined in kernel/built-in.a(kallsyms.o)
-> 
-> There are similar reports for the same relocation type in trees
-> without Rust support merged, so this might not be being triggered by
-> Rust itself, e.g.:
-> 
->      https://lore.kernel.org/llvm/202206010956.rOpdU4dr-lkp@intel.com/
->      https://lore.kernel.org/llvm/202205280837.PPVZBhXr-lkp@intel.com/
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_lc_dev
+head:   e2de0017d7e8979fd196f786987bbb81a0ed3e9d
+commit: a07ffbd025d76f046793282969a77fc55173b5e1 [7/10] mlxsw: core_linecards: Probe provisioned line cards for devices and expose FW version
+config: arm64-buildonly-randconfig-r006-20220531 (https://download.01.org/0day-ci/archive/20220604/202206041845.0gXUtHQ7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/jpirko/linux_mlxsw/commit/a07ffbd025d76f046793282969a77fc55173b5e1
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_lc_dev
+        git checkout a07ffbd025d76f046793282969a77fc55173b5e1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
 
-Thanks for the info, it looks like an existing relocation issue in
-kallsyms under riscv arch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-commit 2087d6ac3567b (kallsyms: support "big" kernel symbols) changed
-some code of kallsyms to support long Rust symbols, so it exposed that
-relocation issue and triggered this report.
+All warnings (new ones prefixed by >>):
 
-We'll do more checks next time to ensure the reported issue is indeed
-Rust related.
+>> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:117:8: warning: variable 'flash_owner' is uninitialized when used here [-Wuninitialized]
+                   if (!flash_owner) /* We care only about flashable ones. */
+                        ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:99:19: note: initialize the variable 'flash_owner' to silence this warning
+                   bool flash_owner;
+                                   ^
+                                    = 0
+   1 warning generated.
 
-Thanks,
-Yujie
 
-> 
-> Cheers,
-> Miguel
+vim +/flash_owner +117 drivers/net/ethernet/mellanox/mlxsw/core_linecards.c
+
+    89	
+    90	static int mlxsw_linecard_device_info_update(struct mlxsw_linecard *linecard)
+    91	{
+    92		struct mlxsw_core *mlxsw_core = linecard->linecards->mlxsw_core;
+    93		bool flashable_found = false;
+    94		u8 msg_seq = 0;
+    95	
+    96		do {
+    97			struct mlxsw_linecard_device_info info;
+    98			char mddq_pl[MLXSW_REG_MDDQ_LEN];
+    99			bool flash_owner;
+   100			bool data_valid;
+   101			u8 device_index;
+   102			int err;
+   103	
+   104			mlxsw_reg_mddq_device_info_pack(mddq_pl, linecard->slot_index,
+   105							msg_seq);
+   106			err = mlxsw_reg_query(mlxsw_core, MLXSW_REG(mddq), mddq_pl);
+   107			if (err)
+   108				return err;
+   109			mlxsw_reg_mddq_device_info_unpack(mddq_pl, &msg_seq,
+   110							  &data_valid, NULL,
+   111							  &device_index,
+   112							  &info.fw_major,
+   113							  &info.fw_minor,
+   114							  &info.fw_sub_minor);
+   115			if (!data_valid)
+   116				break;
+ > 117			if (!flash_owner) /* We care only about flashable ones. */
+   118				continue;
+   119			if (flashable_found) {
+   120				dev_warn_once(linecard->linecards->bus_info->dev, "linecard %u: More flashable devices present, exposing only the first one\n",
+   121					      linecard->slot_index);
+   122				return 0;
+   123			}
+   124			linecard->device.info = info;
+   125			flashable_found = true;
+   126		} while (msg_seq);
+   127	
+   128		return 0;
+   129	}
+   130	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
