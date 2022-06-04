@@ -1,44 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC225185F
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 19:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6272E185F
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 20:14:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654371833; x=1685907833;
+  t=1654373694; x=1685909694;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FLI1+m3xfotkSnfI4GG7ZfArwo0hf/nqdT/fj0Gxlrk=;
-  b=XteNWPrjhLp9uALpxh9zolAO4wBt2GI0y8PIysKOAgZwdevwDwKRIWlk
-   I2/mWyCuJBC9pFUixcBM/Fo0i9WgG1j076eO9xbKAfvmT+cGw2hUqkiuG
-   ND78UQixw7E5Iz0oVyFPBvGJvR9aCR+EVi7KuPWLBzV1ltZT9Znf6zPZ7
-   l+42dNDlQwozFtYT1oIMboznUKsPWuqpawLE1YTYMylMsH/6VD/XMi6ZX
-   nGBtVXi07tgUQ6z9D33hKeMHkznirVmZRXXwJ1hh4pE/jJWzFlOD9ph6o
-   HuSifO4dDKmD+hMw+m+/Mm9hHqP2wSRBMhlweyMD+T2VXT1zSK9nmdRPb
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339540936"
+  bh=HVRQeyG0y8fQ4NQKT8brR/tA0m19TceYv7i/OeCd2F8=;
+  b=KlMtDv19/p80KOxoOKeCws7F1Eld3BPV8d3hP7diWJ0OTQma6reSiKXS
+   klLNoj0BabXUZqxPGjDdppgceo4bfMu4K8uzjZ4Pf3TSAJizoilPiF0Pf
+   DKDIyKiKvBKmyJtFpmsEMv6TPJ1GmPd8b3bO1okB/39RX99hfEWD45p2l
+   a2iYGbMI6R7bDBq2jQdf9T9kCIzQ0r+q7Jn6soNsLRsBl1lH6w/IH+S3R
+   Ba7B4V3WRQChGv7EGTx1qZbdCO5CaFyj00Q/z4TEindGqwE1sdl999V29
+   J+QOkCNcrH1dit7XEq0OrIq2ibn8QpLnppkgbHCPFwjg8fUkAl4tCwO9l
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="301853176"
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="339540936"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 12:43:53 -0700
+   d="scan'208";a="301853176"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 13:14:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="553804742"
+   d="scan'208";a="668920953"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2022 12:43:51 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Jun 2022 13:14:52 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nxZgc-000BA9-S5;
-	Sat, 04 Jun 2022 19:43:50 +0000
-Date: Sun, 5 Jun 2022 03:43:02 +0800
+	id 1nxaAd-000BBX-Ke;
+	Sat, 04 Jun 2022 20:14:51 +0000
+Date: Sun, 5 Jun 2022 04:14:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
+To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/pci/controller/dwc/pcie-spear13xx.c:252:34: warning: unused
- variable 'spear13xx_pcie_of_match'
-Message-ID: <202206050312.ypRp8ryQ-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 37/38] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202206050412.2xjgJC2b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,150 +47,108 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
-date:   1 year, 3 months ago
-config: s390-randconfig-c005-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050312.ypRp8ryQ-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   0c38c32343008325233d4b0d253ce0b52c46f72e
+commit: 64df1a6507aeae55c9d83e1dd5bf61bb76b1d1b9 [37/38] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-r042-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050412.2xjgJC2b-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ea29b20a828511de3348334e529a3d046a180416
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/64df1a6507aeae55c9d83e1dd5bf61bb76b1d1b9
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout 64df1a6507aeae55c9d83e1dd5bf61bb76b1d1b9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-spear13xx.c:252:34: warning: unused variable 'spear13xx_pcie_of_match' [-Wunused-const-variable]
-   static const struct of_device_id spear13xx_pcie_of_match[] = {
-                                    ^
-   21 warnings generated.
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
 
 
-vim +/spear13xx_pcie_of_match +252 drivers/pci/controller/dwc/pcie-spear13xx.c
+vim +264 arch/riscv/kvm/aia_aplic.c
 
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  251  
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11 @252  static const struct of_device_id spear13xx_pcie_of_match[] = {
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  253  	{ .compatible = "st,spear1340-pcie", },
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  254  	{},
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  255  };
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  256  
-
-:::::: The code at line 252 was first introduced by commit
-:::::: 51b66a6ce12570e5ee1a249c811f7f2d74814a43 PCI: spear: Add PCIe driver for ST Microelectronics SPEAr13xx
-
-:::::: TO: Pratyush Anand <pratyush.anand@st.com>
-:::::: CC: Viresh Kumar <viresh.kumar@linaro.org>
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
 
 -- 
 0-DAY CI Kernel Test Service
