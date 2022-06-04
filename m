@@ -1,178 +1,246 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE0C10EC
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 02:07:21 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so8354973pjq.2
-        for <llvm@lists.linux.dev>; Fri, 03 Jun 2022 19:07:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D53210EC
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 02:20:06 +0000 (UTC)
+Received: by mail-wm1-f54.google.com with SMTP id r129so4868076wmr.3
+        for <llvm@lists.linux.dev>; Fri, 03 Jun 2022 19:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
-        b=O89rwX5Clw1y6HYOM9jUXOMzKZti5N0Bp8oLKBxvrTRsZr8SCMU6D50/Xw5iIbmGGM
-         Ea1Xvv8gSwcK2e3gcOVQKcmLIziYTVY+JelcKmeawLFWcsPQTFWu9K/Kp/Y2hu0wSTgL
-         vjmyus7ON2X6+em9CTi1xkd2xgqigHbYUOZLP/Wjv4XHPIZ8IJ5xBnUqX/Ubjmcps0FV
-         2PDoqXnen7va3NM6AB91gGtCr5ripbP7MeEgLab71Y8nUb+P3UY1GbTylYrGtetRLUA1
-         rdagm+MXQhnMSacHYAcsBDXcq9hOKumDJgyyVVre5UCzBsN1keZVZLFE1SGKyHU7uwwD
-         KV5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HGkjSRozKyvgRElWJ1LnFEFfbG7jMHZRo7WjZyuEArk=;
+        b=D3ZulesEjRq6EtfnnC3EfYOYsnGQ0d1aNNvKJnneSfmNQraJIAzlkUjXPChEiYRGjK
+         Z1ufCeO3eSvIpA6xZFFdqkYv513ehaFPsVsTfdwgNU2CSFfLwkpXWEWsgulaEIZ2Zv1P
+         3tA5EOQLkUmKOANg9p/l2/a5RkHHbfMPIuPDyzVqJK+e0WPA56AfvzBEC+IISnmA3fwS
+         Rn9MIOmgk+tDa97oCMI2h02LhZutDwG/1Tnmb1JTLX/zBZhXEuuWDlYhCZPsOvz8GRF7
+         fEyAxwGXT1jx0iRq4SpUeCNQRURViMvZeVAP4XVL4le4tOuFGm7ZQExw0qkCkvQAmTF9
+         NhNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
-        b=1b1gLz+xZDiJxYTR2mthh62Zw42qVrFZCZI8gmycQeoDAOgQV7hO8co1YE/mW2cmTr
-         ARAfmIAPCTHbFTdwirjl9EeYAQOqd9BjSRuXqD0xjIWzZQruVWKzdkiyzClCiIpXpglb
-         EtvcTcbBbF9UESWDRtQSJt87lp9sDTlpehQ0gFXXgJnmqcze41xF6wFFVQRiSEjXcM9P
-         oiHH+EVbIhzObWWW5vGJTMTzZnHsTNqQtdaeXXpGxLM/Zo0jhwVd36ZlkvhYb7Kt+llz
-         Kg1Iz1Wnty15AlfjSTAJRI1AePCeFhzB7bqIE29J3ETomn9IQkUV1IuayE5C5vB8xsxT
-         VvzA==
-X-Gm-Message-State: AOAM531zgMLWkm0FPB+Sz23Yk+iKqEU6B3xLLSH18tdygE8Aw52t+OhK
-	jiE22XvLMNQbvUXrr5tSyTA=
-X-Google-Smtp-Source: ABdhPJy4Nue4jpg7LM+nr0HISR1+I5KCAXBSSOv4nxRiYB063+TcRbZ2N6mlkGz2ch+16XRWjLUgLA==
-X-Received: by 2002:a17:902:6b42:b0:15d:3603:6873 with SMTP id g2-20020a1709026b4200b0015d36036873mr12838922plt.30.1654308440641;
-        Fri, 03 Jun 2022 19:07:20 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170902c2ce00b0015e8d4eb207sm6060553pla.81.2022.06.03.19.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 19:07:19 -0700 (PDT)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: linux-doc@vger.kernel.org
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	kernel test robot <lkp@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-	Nikolai Kondrashov <spbnick@gmail.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	llvm@lists.linux.dev,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] HID: uclogic: properly format kernel-doc comment for hid_dbg() wrappers
-Date: Sat,  4 Jun 2022 09:07:11 +0700
-Message-Id: <20220604020711.252312-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HGkjSRozKyvgRElWJ1LnFEFfbG7jMHZRo7WjZyuEArk=;
+        b=nc+UeI7EffTA2kbkfmvnIWRnlkWbXjA+dv7Fm9B9ijsGXBBGoVbeJil4Qp26UNrV07
+         IZbA5sdH+blKcdMECrW8vVZhfa0SbIlTogzOir5QLr8jcwrGshtMeze7XKKNqo4C7hTf
+         T6MMz/XjSSv4j2xxI+SVlvlTWh0LvWmjp0KbIj+SfziFd/WyyyKVqkuw7fWeqXULKp6F
+         ByeOZEx3ifEIDbzQY7OHMcWrp7+wjP1BfNyC53qR4jUeBjO14+m297xABOCF3pqWM6j1
+         eRQrPJiUbK56BzPrsNOxKxa9Cp4OIC2DxGUW3P+Ew3lKjEPjBogZJPgB2mkfZR/K67Td
+         Jl8A==
+X-Gm-Message-State: AOAM532s+gerLI0/MPDa7HlCvHziUeAPP1a2MGABoMJgtQfIDAqOlvZR
+	KFRfqEWECJ3p13i8zIE1MKlUQiRIH6NN/zI3abk=
+X-Google-Smtp-Source: ABdhPJwhgVPSvdOc/PgImXhUPya+FwaBih09OroVWIiiA3VNyTFWjDGXyOVd4bO0fmA/qjfVNvYplVNxUPkUvzE3C/U=
+X-Received: by 2002:a05:600c:285:b0:395:b9bf:57 with SMTP id
+ 5-20020a05600c028500b00395b9bf0057mr40918706wmk.21.1654309204503; Fri, 03 Jun
+ 2022 19:20:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220602164518.286295-2-xiehuan09@gmail.com> <202206030515.4lqqkb3W-lkp@intel.com>
+ <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com> <YpoqulzEvwNDHFMH@dev-arch.thelio-3990X>
+In-Reply-To: <YpoqulzEvwNDHFMH@dev-arch.thelio-3990X>
+From: Jeff Xie <xiehuan09@gmail.com>
+Date: Sat, 4 Jun 2022 10:19:52 +0800
+Message-ID: <CAEr6+EC7w0Y0Fvf+2fj7D56rHB56e3axTo8xuvNhxkU2ex9UaQ@mail.gmail.com>
+Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, mingo@redhat.com, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
-6 warnings for hid_dbg() wrapper functions below:
+Hi  Nathan,
 
-drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface parameters with hid_dbg().
-drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
- * Dump tablet interface parameters with hid_dbg().
+On Fri, Jun 3, 2022 at 11:37 PM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> On Fri, Jun 03, 2022 at 09:48:07AM +0800, Jeff Xie wrote:
+> > Hi lkp,
+> >
+> > On Fri, Jun 3, 2022 at 5:12 AM kernel test robot <lkp@intel.com> wrote:
+> > >
+> > > Hi Jeff,
+> > >
+> > > Thank you for the patch! Perhaps something to improve:
+> > >
+> > > [auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
+> > >
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace=
+-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
+> > > base:   b39181f7c6907dc66ff937b74758671fa6ba430c
+> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive=
+/20220603/202206030515.4lqqkb3W-lkp@intel.com/config)
+> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project =
+b364c76683f8ef241025a9556300778c07b590c2)
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://github.com/intel-lab-lkp/linux/commit/765253f020469=
+f94856aedc5a3fe5444e1e8f4e8
+> > >         git remote add linux-review https://github.com/intel-lab-lkp/=
+linux
+> > >         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-obj=
+trace-trigger-to-trace-the-kernel-object/20220603-004723
+> > >         git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/gpu/drm/qxl/ ke=
+rnel/trace/
+> > >
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> kernel/trace/trace_object.c:336:61: warning: format specifies type=
+ 'long' but the argument has type 'unsigned int' [-Wformat]
+> > >                    pr_err("the size of the %s should be:%ld\n", field=
+->name, sizeof(void *));
+> > >                                                         ~~~          =
+        ^~~~~~~~~~~~~~
+> > >                                                         %u
+> >
+> > I will  double check it ,the sizeof(void *) on x86_64 is type =E2=80=98=
+long
+> > unsigned int=E2=80=99.
+>
+> Per Documentation/core-api/printk-formats.rst, sizeof returns size_t,
+> which should use the %zu specifier.
 
-One of them is reported by kernel test robot.
+This is great, Thank you for your reminder ;-)
 
-Fix these warnings by properly format kernel-doc comment for these
-functions.
-
-Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
-Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: José Expósito <jose.exposito89@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Nikolai Kondrashov <spbnick@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: llvm@lists.linux.dev
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v3 [1]:
-   - Drom stable ML from CC list (in response to Greg KH reply)
-
- [1]: https://lore.kernel.org/linux-doc/20220602082321.313143-1-bagasdotme@gmail.com/
-
- drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index db838f16282d64..e5e65d849faa97 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -23,11 +23,11 @@
- /**
-  * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
-  *                                       to a string.
-- *
-  * @inrange:	The in-range reporting type to convert.
-  *
-- * Returns:
-- *	The string representing the type, or NULL if the type is unknown.
-+ * Return:
-+ * * The string representing the type, or
-+ * * %NULL if the type is unknown.
-  */
- static const char *uclogic_params_pen_inrange_to_str(
- 				enum uclogic_params_pen_inrange inrange)
-@@ -45,10 +45,12 @@ static const char *uclogic_params_pen_inrange_to_str(
- }
- 
- /**
-- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-- *
-+ * uclogic_params_pen_hid_dbg() - Dump tablet interface pen parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @pen:	The pen parameters to dump.
-+ *
-+ * Dump tablet interface pen parameters with hid_dbg(). The dump is indented
-+ * with a tab.
-  */
- static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- 					const struct uclogic_params_pen *pen)
-@@ -77,11 +79,12 @@ static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- }
- 
- /**
-- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-- * tabs.
-- *
-+ * uclogic_params_frame_hid_dbg() - Dump tablet interface frame parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @frame:	The frame parameters to dump.
-+ *
-+ * Dump tablet interface frame parameters with hid_dbg(). The dump is
-+ * indented with two tabs.
-  */
- static void uclogic_params_frame_hid_dbg(
- 				const struct hid_device *hdev,
-@@ -102,10 +105,11 @@ static void uclogic_params_frame_hid_dbg(
- }
- 
- /**
-- * Dump tablet interface parameters with hid_dbg().
-- *
-+ * uclogic_params_hid_dbg() - Dump tablet interface parameters
-  * @hdev:	The HID device the parameters describe.
-  * @params:	The parameters to dump.
-+ *
-+ * Dump tablet interface parameters with hid_dbg().
-  */
- void uclogic_params_hid_dbg(const struct hid_device *hdev,
- 				const struct uclogic_params *params)
-
-base-commit: 1f952675835bfe18d6ae494a5581724d68c52352
--- 
-An old man doll... just what I always wanted! - Clara
-
+> Cheers,
+> Nathan
+>
+> > >    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
+> > >            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+> > >                                   ~~~     ^~~~~~~~~~~
+> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
+> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_AR=
+GS__)
+> > >                                                        ~~~    ^~~~~~~=
+~~~~
+> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_i=
+ndex_wrap'
+> > >                    _p_func(_fmt, ##__VA_ARGS__);                     =
+      \
+> > >                            ~~~~    ^~~~~~~~~~~
+> > >    1 warning generated.
+> > >
+> > >
+> > > vim +336 kernel/trace/trace_object.c
+> > >
+> > >    297
+> > >    298  static int
+> > >    299  event_object_trigger_parse(struct event_command *cmd_ops,
+> > >    300                         struct trace_event_file *file,
+> > >    301                         char *glob, char *cmd, char *param_and=
+_filter)
+> > >    302  {
+> > >    303          struct event_trigger_data *trigger_data;
+> > >    304          struct objtrace_trigger_data *obj_data;
+> > >    305          struct ftrace_event_field *field;
+> > >    306          char *objtrace_cmd, *arg;
+> > >    307          char *param, *filter;
+> > >    308          int ret;
+> > >    309          bool remove;
+> > >    310
+> > >    311          remove =3D event_trigger_check_remove(glob);
+> > >    312
+> > >    313          /*
+> > >    314           * separate the param and the filter:
+> > >    315           * objtrace:add:OBJ[:COUNT] [if filter]
+> > >    316           */
+> > >    317          ret =3D event_trigger_separate_filter(param_and_filte=
+r, &param, &filter, true);
+> > >    318          if (ret)
+> > >    319                  return ret;
+> > >    320
+> > >    321          objtrace_cmd =3D strsep(&param, ":");
+> > >    322          if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CM=
+D_ADD)) {
+> > >    323                  pr_err("error objtrace command\n");
+> > >    324                  return -EINVAL;
+> > >    325          }
+> > >    326
+> > >    327          arg =3D strsep(&param, ":");
+> > >    328          if (!arg)
+> > >    329                  return -EINVAL;
+> > >    330
+> > >    331          field =3D trace_find_event_field(file->event_call, ar=
+g);
+> > >    332          if (!field)
+> > >    333                  return -EINVAL;
+> > >    334
+> > >    335          if (field->size !=3D sizeof(void *)) {
+> > >  > 336                  pr_err("the size of the %s should be:%ld\n", =
+field->name, sizeof(void *));
+> > >    337                  return -EINVAL;
+> > >    338          }
+> > >    339
+> > >    340          if (remove && !field_exist(file, cmd_ops, field->name=
+))
+> > >    341                  return -ENOENT;
+> > >    342
+> > >    343          obj_data =3D kzalloc(sizeof(*obj_data), GFP_KERNEL);
+> > >    344          if (!obj_data)
+> > >    345                  return -ENOMEM;
+> > >    346
+> > >    347          obj_data->field =3D field;
+> > >    348          obj_data->tr =3D file->tr;
+> > >    349          snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, ob=
+jtrace_cmd);
+> > >    350
+> > >    351          trigger_data =3D event_trigger_alloc(cmd_ops, cmd, pa=
+ram, obj_data);
+> > >    352          if (!trigger_data) {
+> > >    353                  kfree(obj_data);
+> > >    354                  return -ENOMEM;
+> > >    355          }
+> > >    356          if (remove) {
+> > >    357                  event_trigger_unregister(cmd_ops, file, glob+=
+1, trigger_data);
+> > >    358                  kfree(obj_data);
+> > >    359                  kfree(trigger_data);
+> > >    360                  return 0;
+> > >    361          }
+> > >    362
+> > >    363          ret =3D event_trigger_parse_num(param, trigger_data);
+> > >    364          if (ret)
+> > >    365                  goto out_free;
+> > >    366
+> > >    367          ret =3D event_trigger_set_filter(cmd_ops, file, filte=
+r, trigger_data);
+> > >    368          if (ret < 0)
+> > >    369                  goto out_free;
+> > >    370
+> > >    371          ret =3D event_trigger_register(cmd_ops, file, glob, t=
+rigger_data);
+> > >    372          if (ret)
+> > >    373                  goto out_free;
+> > >    374
+> > >    375          return ret;
+> > >    376
+> > >    377   out_free:
+> > >    378          event_trigger_reset_filter(cmd_ops, trigger_data);
+> > >    379          kfree(obj_data);
+> > >    380          kfree(trigger_data);
+> > >    381          return ret;
+> > >    382  }
+> > >    383
+> > >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> >
+> > Thanks,
+> > JeffXie
+> >
+Thanks,
+JeffXie
