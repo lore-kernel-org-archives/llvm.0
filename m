@@ -1,44 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA57B137F
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 15:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05270EA0
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 17:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654356103; x=1685892103;
+  t=1654364390; x=1685900390;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=b1NmwPYbmnZ7oSt7ka23Krkah2ZTY9LKm2fg5a7qsTs=;
-  b=gDyIYxi64FRDgFW3pfpETqisSInHr0o6NhRMT5sRlTU+PGIoicrJEKs+
-   PIIxyl7ZMfRtWz9Uk9i7l2bWxOkMDpbmWhWxeSpWorSk8KoNFsrAwB1od
-   uVRXzx1qs7YlZz8pvTsdoa3a6GXQLTdV8ZrmjJpycNTYWZ/Mambnz8qwf
-   OEszGj9yipByEA72h4AncK4T+jr1BlXOuQHMR+XCu4sEG0bOh128q3GU+
-   FLDyv3q573dR6X7CU5FsDoGFZ9puHswU8Tddht8PC0JqCFsEKDCUUOXKK
-   r2umbbld3CXRjufnoQEjGtPIQSyQoxxOBO8xTUq3rzn+Bk5SLzNYOkWo6
+  bh=fw58+DLuVveflhvtJyRFgJ7M82oNU8uKvexxbDIxiWU=;
+  b=NiReMtrIdkjoW32pUpvo4/ZEA13mgsEuQMC5jbRHCZjHkQg/wOMjMC6u
+   svR2lyqlGxVawzz4+6Xk356JhEPqkFwjLQl9X/9KHIkNo04s9b8V7x58x
+   4MiRRRzfx0tU+6gaz5SXQSzPnQ3KPW/4EX/FosDzH0EuMacYVcKm2OugH
+   PJN/GFCIOR+9V2L8xQsCzfJk09QuRdhYPJGw4nT6Pc/BldKEWfBVhZwrY
+   zvqS+p4JMm+sG6bAB6XDvzdCWQS+mhdrG1R7gTO9huEOKcJyXPEhZE60l
+   4RqJWSEOYKfqZRjEoj9z6Fyh4OHs3uUPsOOJ356X4tAOq2VMYC6pKLgRz
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="256920987"
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339530744"
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="256920987"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 08:21:43 -0700
+   d="scan'208";a="339530744"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 10:39:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="582986399"
+   d="scan'208";a="531444736"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2022 08:21:41 -0700
+  by orsmga003.jf.intel.com with ESMTP; 04 Jun 2022 10:39:48 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nxVau-000Azv-Pn;
-	Sat, 04 Jun 2022 15:21:40 +0000
-Date: Sat, 4 Jun 2022 23:20:40 +0800
+	id 1nxXka-000B5l-6K;
+	Sat, 04 Jun 2022 17:39:48 +0000
+Date: Sun, 5 Jun 2022 01:39:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Michael Ellerman <mpe@ellerman.id.au>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable
- 'rzn1_dmac_match'
-Message-ID: <202206042329.O1C6vwtx-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function
+ '_tlbie_pid_lpid'
+Message-ID: <202206050116.iF1fFubY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,107 +46,82 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Michael,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 134d9c52fca26d2d199516e915da00f0cc6adc73 dmaengine: dw: dmamux: Introduce RZN1 DMA router support
-date:   2 weeks ago
-config: s390-randconfig-r007-20220604 (https://download.01.org/0day-ci/archive/20220604/202206042329.O1C6vwtx-lkp@intel.com/config)
+commit: a736143afd036f2078fe19435b16fd55abc789a9 Merge branch 'topic/ppc-kvm' into next
+date:   12 months ago
+config: powerpc64-buildonly-randconfig-r006-20220604 (https://download.01.org/0day-ci/archive/20220605/202206050116.iF1fFubY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=134d9c52fca26d2d199516e915da00f0cc6adc73
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64le-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a736143afd036f2078fe19435b16fd55abc789a9
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 134d9c52fca26d2d199516e915da00f0cc6adc73
+        git checkout a736143afd036f2078fe19435b16fd55abc789a9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/dma/dw/ lib/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
-   In file included from include/linux/of_dma.h:14:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
-   In file included from include/linux/of_dma.h:14:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
-   In file included from include/linux/of_dma.h:14:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable 'rzn1_dmac_match' [-Wunused-const-variable]
-   static const struct of_device_id rzn1_dmac_match[] = {
-                                    ^
-   13 warnings generated.
+>> arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function '_tlbie_pid_lpid' [-Werror,-Wunused-function]
+   static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+                      ^
+>> arch/powerpc/mm/book3s64/radix_tlb.c:662:20: error: unused function '_tlbie_va_range_lpid' [-Werror,-Wunused-function]
+   static inline void _tlbie_va_range_lpid(unsigned long start, unsigned long end,
+                      ^
+   2 errors generated.
 
 
-vim +/rzn1_dmac_match +105 drivers/dma/dw/rzn1-dmamux.c
+vim +/_tlbie_pid_lpid +418 arch/powerpc/mm/book3s64/radix_tlb.c
 
-   104	
- > 105	static const struct of_device_id rzn1_dmac_match[] = {
-   106		{ .compatible = "renesas,rzn1-dma" },
-   107		{}
-   108	};
-   109	
+1a472c9dba6b96 arch/powerpc/mm/tlb-radix.c          Aneesh Kumar K.V 2016-04-29  417  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21 @418  static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  419  				   unsigned long ric)
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  420  {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  421  	asm volatile("ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  422  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  423  	/*
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  424  	 * Workaround the fact that the "ric" argument to __tlbie_pid
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  425  	 * must be a compile-time contraint to match the "i" constraint
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  426  	 * in the asm statement.
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  427  	 */
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  428  	switch (ric) {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  429  	case RIC_FLUSH_TLB:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  430  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_TLB);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  431  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  432  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  433  	case RIC_FLUSH_PWC:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  434  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_PWC);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  435  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  436  	case RIC_FLUSH_ALL:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  437  	default:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  438  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_ALL);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  439  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  440  	}
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  441  	asm volatile("eieio; tlbsync; ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  442  }
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  443  struct tlbiel_pid {
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  444  	unsigned long pid;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  445  	unsigned long ric;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  446  };
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  447  
+
+:::::: The code at line 418 was first introduced by commit
+:::::: f0c6fbbb90504fb7e9dbf0865463d3c2b4de49e5 KVM: PPC: Book3S HV: Add support for H_RPT_INVALIDATE
+
+:::::: TO: Bharata B Rao <bharata@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 -- 
 0-DAY CI Kernel Test Service
