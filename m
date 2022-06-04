@@ -1,246 +1,158 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D53210EC
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 02:20:06 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id r129so4868076wmr.3
-        for <llvm@lists.linux.dev>; Fri, 03 Jun 2022 19:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HGkjSRozKyvgRElWJ1LnFEFfbG7jMHZRo7WjZyuEArk=;
-        b=D3ZulesEjRq6EtfnnC3EfYOYsnGQ0d1aNNvKJnneSfmNQraJIAzlkUjXPChEiYRGjK
-         Z1ufCeO3eSvIpA6xZFFdqkYv513ehaFPsVsTfdwgNU2CSFfLwkpXWEWsgulaEIZ2Zv1P
-         3tA5EOQLkUmKOANg9p/l2/a5RkHHbfMPIuPDyzVqJK+e0WPA56AfvzBEC+IISnmA3fwS
-         Rn9MIOmgk+tDa97oCMI2h02LhZutDwG/1Tnmb1JTLX/zBZhXEuuWDlYhCZPsOvz8GRF7
-         fEyAxwGXT1jx0iRq4SpUeCNQRURViMvZeVAP4XVL4le4tOuFGm7ZQExw0qkCkvQAmTF9
-         NhNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HGkjSRozKyvgRElWJ1LnFEFfbG7jMHZRo7WjZyuEArk=;
-        b=nc+UeI7EffTA2kbkfmvnIWRnlkWbXjA+dv7Fm9B9ijsGXBBGoVbeJil4Qp26UNrV07
-         IZbA5sdH+blKcdMECrW8vVZhfa0SbIlTogzOir5QLr8jcwrGshtMeze7XKKNqo4C7hTf
-         T6MMz/XjSSv4j2xxI+SVlvlTWh0LvWmjp0KbIj+SfziFd/WyyyKVqkuw7fWeqXULKp6F
-         ByeOZEx3ifEIDbzQY7OHMcWrp7+wjP1BfNyC53qR4jUeBjO14+m297xABOCF3pqWM6j1
-         eRQrPJiUbK56BzPrsNOxKxa9Cp4OIC2DxGUW3P+Ew3lKjEPjBogZJPgB2mkfZR/K67Td
-         Jl8A==
-X-Gm-Message-State: AOAM532s+gerLI0/MPDa7HlCvHziUeAPP1a2MGABoMJgtQfIDAqOlvZR
-	KFRfqEWECJ3p13i8zIE1MKlUQiRIH6NN/zI3abk=
-X-Google-Smtp-Source: ABdhPJwhgVPSvdOc/PgImXhUPya+FwaBih09OroVWIiiA3VNyTFWjDGXyOVd4bO0fmA/qjfVNvYplVNxUPkUvzE3C/U=
-X-Received: by 2002:a05:600c:285:b0:395:b9bf:57 with SMTP id
- 5-20020a05600c028500b00395b9bf0057mr40918706wmk.21.1654309204503; Fri, 03 Jun
- 2022 19:20:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10746EC6
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 05:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654318877; x=1685854877;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rr0nprWAXUpegr/ZWzpAxrOUkhKhyXAxrf90w7RL+G4=;
+  b=Bc/c+ztI7RmMXsTXpYvVmfCOSv3Pz83khRBBZ8fbM3jF0tVMpaNU8IB1
+   2tCRf3tcHfF381g5EIMV93lnoQnncd+y5o+a7QwVVakEdOMipsINGQVgD
+   24lA1RnfzcQ4H4mzOTek9sA7+jFyuyE6LuLIHr6vZT5S980sXAHwhvTMp
+   7caXnvhO2+cpqDFRBedupOePM3mf4Q7s6Mv6G8DAteH97qidXU9sDHwym
+   kI6E8ZuZSZ7GryweLuxlxQbS1x9h5kutpi8UsPRR76C+2u5uz1FWSxdD4
+   yS+DKWZQNSdysNic+la+reepDwCLCdsvLxuTdBUIxYKNl+6ilRXsfz1RC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="275199163"
+X-IronPort-AV: E=Sophos;i="5.91,276,1647327600"; 
+   d="scan'208";a="275199163"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 22:01:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,276,1647327600"; 
+   d="scan'208";a="578338629"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Jun 2022 22:01:14 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nxLuT-000AER-LN;
+	Sat, 04 Jun 2022 05:01:13 +0000
+Date: Sat, 4 Jun 2022 13:00:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paulo Alcantara <pc@cjr.nz>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+	Steve French <stfrench@microsoft.com>
+Subject: [cifs:for-next 8/8] fs/cifs/dfs_cache.c:1294:2: warning: variable
+ 'ppath' is used uninitialized whenever 'if' condition is false
+Message-ID: <202206041223.Kx81JSQt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220602164518.286295-2-xiehuan09@gmail.com> <202206030515.4lqqkb3W-lkp@intel.com>
- <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com> <YpoqulzEvwNDHFMH@dev-arch.thelio-3990X>
-In-Reply-To: <YpoqulzEvwNDHFMH@dev-arch.thelio-3990X>
-From: Jeff Xie <xiehuan09@gmail.com>
-Date: Sat, 4 Jun 2022 10:19:52 +0800
-Message-ID: <CAEr6+EC7w0Y0Fvf+2fj7D56rHB56e3axTo8xuvNhxkU2ex9UaQ@mail.gmail.com>
-Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, mingo@redhat.com, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi  Nathan,
+tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+head:   ef605e86821253d16d47a02ce1f766a461614fef
+commit: ef605e86821253d16d47a02ce1f766a461614fef [8/8] cifs: skip trailing separators of prefix paths
+config: arm-randconfig-c002-20220603 (https://download.01.org/0day-ci/archive/20220604/202206041223.Kx81JSQt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add cifs git://git.samba.org/sfrench/cifs-2.6.git
+        git fetch --no-tags cifs for-next
+        git checkout ef605e86821253d16d47a02ce1f766a461614fef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/cifs/
 
-On Fri, Jun 3, 2022 at 11:37 PM Nathan Chancellor <nathan@kernel.org> wrote=
-:
->
-> On Fri, Jun 03, 2022 at 09:48:07AM +0800, Jeff Xie wrote:
-> > Hi lkp,
-> >
-> > On Fri, Jun 3, 2022 at 5:12 AM kernel test robot <lkp@intel.com> wrote:
-> > >
-> > > Hi Jeff,
-> > >
-> > > Thank you for the patch! Perhaps something to improve:
-> > >
-> > > [auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
-> > >
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace=
--Introduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-> > > base:   b39181f7c6907dc66ff937b74758671fa6ba430c
-> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive=
-/20220603/202206030515.4lqqkb3W-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project =
-b364c76683f8ef241025a9556300778c07b590c2)
-> > > reproduce (this is a W=3D1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://github.com/intel-lab-lkp/linux/commit/765253f020469=
-f94856aedc5a3fe5444e1e8f4e8
-> > >         git remote add linux-review https://github.com/intel-lab-lkp/=
-linux
-> > >         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-obj=
-trace-trigger-to-trace-the-kernel-object/20220603-004723
-> > >         git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/gpu/drm/qxl/ ke=
-rnel/trace/
-> > >
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> kernel/trace/trace_object.c:336:61: warning: format specifies type=
- 'long' but the argument has type 'unsigned int' [-Wformat]
-> > >                    pr_err("the size of the %s should be:%ld\n", field=
-->name, sizeof(void *));
-> > >                                                         ~~~          =
-        ^~~~~~~~~~~~~~
-> > >                                                         %u
-> >
-> > I will  double check it ,the sizeof(void *) on x86_64 is type =E2=80=98=
-long
-> > unsigned int=E2=80=99.
->
-> Per Documentation/core-api/printk-formats.rst, sizeof returns size_t,
-> which should use the %zu specifier.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This is great, Thank you for your reminder ;-)
+All warnings (new ones prefixed by >>):
 
-> Cheers,
-> Nathan
->
-> > >    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-> > >            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> > >                                   ~~~     ^~~~~~~~~~~
-> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
-> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_AR=
-GS__)
-> > >                                                        ~~~    ^~~~~~~=
-~~~~
-> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_i=
-ndex_wrap'
-> > >                    _p_func(_fmt, ##__VA_ARGS__);                     =
-      \
-> > >                            ~~~~    ^~~~~~~~~~~
-> > >    1 warning generated.
-> > >
-> > >
-> > > vim +336 kernel/trace/trace_object.c
-> > >
-> > >    297
-> > >    298  static int
-> > >    299  event_object_trigger_parse(struct event_command *cmd_ops,
-> > >    300                         struct trace_event_file *file,
-> > >    301                         char *glob, char *cmd, char *param_and=
-_filter)
-> > >    302  {
-> > >    303          struct event_trigger_data *trigger_data;
-> > >    304          struct objtrace_trigger_data *obj_data;
-> > >    305          struct ftrace_event_field *field;
-> > >    306          char *objtrace_cmd, *arg;
-> > >    307          char *param, *filter;
-> > >    308          int ret;
-> > >    309          bool remove;
-> > >    310
-> > >    311          remove =3D event_trigger_check_remove(glob);
-> > >    312
-> > >    313          /*
-> > >    314           * separate the param and the filter:
-> > >    315           * objtrace:add:OBJ[:COUNT] [if filter]
-> > >    316           */
-> > >    317          ret =3D event_trigger_separate_filter(param_and_filte=
-r, &param, &filter, true);
-> > >    318          if (ret)
-> > >    319                  return ret;
-> > >    320
-> > >    321          objtrace_cmd =3D strsep(&param, ":");
-> > >    322          if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CM=
-D_ADD)) {
-> > >    323                  pr_err("error objtrace command\n");
-> > >    324                  return -EINVAL;
-> > >    325          }
-> > >    326
-> > >    327          arg =3D strsep(&param, ":");
-> > >    328          if (!arg)
-> > >    329                  return -EINVAL;
-> > >    330
-> > >    331          field =3D trace_find_event_field(file->event_call, ar=
-g);
-> > >    332          if (!field)
-> > >    333                  return -EINVAL;
-> > >    334
-> > >    335          if (field->size !=3D sizeof(void *)) {
-> > >  > 336                  pr_err("the size of the %s should be:%ld\n", =
-field->name, sizeof(void *));
-> > >    337                  return -EINVAL;
-> > >    338          }
-> > >    339
-> > >    340          if (remove && !field_exist(file, cmd_ops, field->name=
-))
-> > >    341                  return -ENOENT;
-> > >    342
-> > >    343          obj_data =3D kzalloc(sizeof(*obj_data), GFP_KERNEL);
-> > >    344          if (!obj_data)
-> > >    345                  return -ENOMEM;
-> > >    346
-> > >    347          obj_data->field =3D field;
-> > >    348          obj_data->tr =3D file->tr;
-> > >    349          snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, ob=
-jtrace_cmd);
-> > >    350
-> > >    351          trigger_data =3D event_trigger_alloc(cmd_ops, cmd, pa=
-ram, obj_data);
-> > >    352          if (!trigger_data) {
-> > >    353                  kfree(obj_data);
-> > >    354                  return -ENOMEM;
-> > >    355          }
-> > >    356          if (remove) {
-> > >    357                  event_trigger_unregister(cmd_ops, file, glob+=
-1, trigger_data);
-> > >    358                  kfree(obj_data);
-> > >    359                  kfree(trigger_data);
-> > >    360                  return 0;
-> > >    361          }
-> > >    362
-> > >    363          ret =3D event_trigger_parse_num(param, trigger_data);
-> > >    364          if (ret)
-> > >    365                  goto out_free;
-> > >    366
-> > >    367          ret =3D event_trigger_set_filter(cmd_ops, file, filte=
-r, trigger_data);
-> > >    368          if (ret < 0)
-> > >    369                  goto out_free;
-> > >    370
-> > >    371          ret =3D event_trigger_register(cmd_ops, file, glob, t=
-rigger_data);
-> > >    372          if (ret)
-> > >    373                  goto out_free;
-> > >    374
-> > >    375          return ret;
-> > >    376
-> > >    377   out_free:
-> > >    378          event_trigger_reset_filter(cmd_ops, trigger_data);
-> > >    379          kfree(obj_data);
-> > >    380          kfree(trigger_data);
-> > >    381          return ret;
-> > >    382  }
-> > >    383
-> > >
-> > > --
-> > > 0-DAY CI Kernel Test Service
-> > > https://01.org/lkp
-> >
-> > Thanks,
-> > JeffXie
-> >
-Thanks,
-JeffXie
+>> fs/cifs/dfs_cache.c:1294:2: warning: variable 'ppath' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (target_pplen || dfsref_pplen) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/cifs/dfs_cache.c:1307:12: note: uninitialized use occurs here
+           *prefix = ppath;
+                     ^~~~~
+   fs/cifs/dfs_cache.c:1294:2: note: remove the 'if' if its condition is always true
+           if (target_pplen || dfsref_pplen) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   fs/cifs/dfs_cache.c:1270:28: note: initialize the variable 'ppath' to silence this warning
+           char *target_share, *ppath;
+                                     ^
+                                      = NULL
+   1 warning generated.
+
+
+vim +1294 fs/cifs/dfs_cache.c
+
+  1255	
+  1256	/**
+  1257	 * dfs_cache_get_tgt_share - parse a DFS target
+  1258	 *
+  1259	 * @path: DFS full path
+  1260	 * @it: DFS target iterator.
+  1261	 * @share: tree name.
+  1262	 * @prefix: prefix path.
+  1263	 *
+  1264	 * Return zero if target was parsed correctly, otherwise non-zero.
+  1265	 */
+  1266	int dfs_cache_get_tgt_share(char *path, const struct dfs_cache_tgt_iterator *it, char **share,
+  1267				    char **prefix)
+  1268	{
+  1269		char sep;
+  1270		char *target_share, *ppath;
+  1271		const char *target_ppath, *dfsref_ppath;
+  1272		size_t target_pplen, dfsref_pplen;
+  1273		size_t len, c;
+  1274	
+  1275		if (!it || !path || !share || !prefix || strlen(path) < it->it_path_consumed)
+  1276			return -EINVAL;
+  1277	
+  1278		sep = it->it_name[0];
+  1279		if (sep != '\\' && sep != '/')
+  1280			return -EINVAL;
+  1281	
+  1282		target_ppath = parse_target_share(it->it_name, &target_share);
+  1283		if (IS_ERR(target_ppath))
+  1284			return PTR_ERR(target_ppath);
+  1285	
+  1286		/* point to prefix in DFS referral path */
+  1287		dfsref_ppath = path + it->it_path_consumed;
+  1288		dfsref_ppath += strspn(dfsref_ppath, "/\\");
+  1289	
+  1290		target_pplen = strlen(target_ppath);
+  1291		dfsref_pplen = strlen(dfsref_ppath);
+  1292	
+  1293		/* merge prefix paths from DFS referral path and target node */
+> 1294		if (target_pplen || dfsref_pplen) {
+  1295			len = target_pplen + dfsref_pplen + 2;
+  1296			ppath = kzalloc(len, GFP_KERNEL);
+  1297			if (!ppath) {
+  1298				kfree(target_share);
+  1299				return -ENOMEM;
+  1300			}
+  1301			c = strscpy(ppath, target_ppath, len);
+  1302			if (c && dfsref_pplen)
+  1303				ppath[c] = sep;
+  1304			strlcat(ppath, dfsref_ppath, len);
+  1305		}
+  1306		*share = target_share;
+  1307		*prefix = ppath;
+  1308		return 0;
+  1309	}
+  1310	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
