@@ -1,128 +1,95 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05270EA0
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 17:39:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654364390; x=1685900390;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fw58+DLuVveflhvtJyRFgJ7M82oNU8uKvexxbDIxiWU=;
-  b=NiReMtrIdkjoW32pUpvo4/ZEA13mgsEuQMC5jbRHCZjHkQg/wOMjMC6u
-   svR2lyqlGxVawzz4+6Xk356JhEPqkFwjLQl9X/9KHIkNo04s9b8V7x58x
-   4MiRRRzfx0tU+6gaz5SXQSzPnQ3KPW/4EX/FosDzH0EuMacYVcKm2OugH
-   PJN/GFCIOR+9V2L8xQsCzfJk09QuRdhYPJGw4nT6Pc/BldKEWfBVhZwrY
-   zvqS+p4JMm+sG6bAB6XDvzdCWQS+mhdrG1R7gTO9huEOKcJyXPEhZE60l
-   4RqJWSEOYKfqZRjEoj9z6Fyh4OHs3uUPsOOJ356X4tAOq2VMYC6pKLgRz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339530744"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="339530744"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 10:39:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="531444736"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jun 2022 10:39:48 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nxXka-000B5l-6K;
-	Sat, 04 Jun 2022 17:39:48 +0000
-Date: Sun, 5 Jun 2022 01:39:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function
- '_tlbie_pid_lpid'
-Message-ID: <202206050116.iF1fFubY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD4810EC
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 18:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E605FC385B8;
+	Sat,  4 Jun 2022 18:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1654367555;
+	bh=ysqPwP/wqkdmiymo7y3Y0C2os7PDLtfEfzoXPROtBOM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GdSlIPd5ooj+owxk+noEMsEWzCN8SmMmgIlbA/avre5Goc1/E+v+IdcMO0St95jiU
+	 SG52OypF6Z4K7sDBbvnsnuKdcMoOoyrijj6nHUYmOg+EMYyDDoiFcI9FebLHImY0qm
+	 Yjcbyh2WA9F9PP67ZgZHJojSRG8BKzzJO6T4UdlI=
+Date: Sat, 4 Jun 2022 11:32:34 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Shiyang Ruan <ruansy.fnst@fujitsu.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, Linux Memory
+ Management List <linux-mm@kvack.org>, "Darrick J. Wong"
+ <djwong@kernel.org>, Christoph Hellwig <hch@lst.de>, Dan Williams
+ <dan.j.williams@intel.com>, Miaohe Lin <linmiaohe@huawei.com>
+Subject: Re: [akpm-mm:mm-unstable 168/180] mm/memory-failure.c:1740:7:
+ error: call to undeclared function 'mf_generic_kill_procs'; ISO C99 and
+ later do not support implicit function declarations
+Message-Id: <20220604113234.6b5cd3cd12335acc5e450286@linux-foundation.org>
+In-Reply-To: <202206042127.sGqAcR3f-lkp@intel.com>
+References: <202206042127.sGqAcR3f-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Michael,
+On Sat, 4 Jun 2022 21:55:44 +0800 kernel test robot <lkp@intel.com> wrote:
 
-FYI, the error/warning still remains.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   f06e3c5104126b9a6660b58f29619b53bfa33b2b
+> commit: 92eb33ec5ea377357ff8087197209cbfbf40dbf9 [168/180] mm: factor helpers for memory_failure_dev_pagemap
+> config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220604/202206042127.sGqAcR3f-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=92eb33ec5ea377357ff8087197209cbfbf40dbf9
+>         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>         git fetch --no-tags akpm-mm mm-unstable
+>         git checkout 92eb33ec5ea377357ff8087197209cbfbf40dbf9
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> mm/memory-failure.c:1740:7: error: call to undeclared function 'mf_generic_kill_procs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            rc = mf_generic_kill_procs(pfn, flags, pgmap);
+>                 ^
+>    1 error generated.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: a736143afd036f2078fe19435b16fd55abc789a9 Merge branch 'topic/ppc-kvm' into next
-date:   12 months ago
-config: powerpc64-buildonly-randconfig-r006-20220604 (https://download.01.org/0day-ci/archive/20220605/202206050116.iF1fFubY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64le-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a736143afd036f2078fe19435b16fd55abc789a9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a736143afd036f2078fe19435b16fd55abc789a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
+Thanks, I did this:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--- a/mm/memory-failure.c~mm-factor-helpers-for-memory_failure_dev_pagemap-fix
++++ a/mm/memory-failure.c
+@@ -1714,12 +1714,21 @@ out:
+ 	unlock_page(head);
+ 	return res;
+ }
++
+ #else
++
++static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
++					struct dev_pagemap *pgmap)
++{
++	return 0;
++}
++
+ static inline int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb)
+ {
+ 	return 0;
+ }
+-#endif
++
++#endif	/* CONFIG_HUGETLB_PAGE */
+ 
+ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+ 		struct dev_pagemap *pgmap)
+_
 
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function '_tlbie_pid_lpid' [-Werror,-Wunused-function]
-   static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
-                      ^
->> arch/powerpc/mm/book3s64/radix_tlb.c:662:20: error: unused function '_tlbie_va_range_lpid' [-Werror,-Wunused-function]
-   static inline void _tlbie_va_range_lpid(unsigned long start, unsigned long end,
-                      ^
-   2 errors generated.
-
-
-vim +/_tlbie_pid_lpid +418 arch/powerpc/mm/book3s64/radix_tlb.c
-
-1a472c9dba6b96 arch/powerpc/mm/tlb-radix.c          Aneesh Kumar K.V 2016-04-29  417  
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21 @418  static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  419  				   unsigned long ric)
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  420  {
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  421  	asm volatile("ptesync" : : : "memory");
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  422  
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  423  	/*
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  424  	 * Workaround the fact that the "ric" argument to __tlbie_pid
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  425  	 * must be a compile-time contraint to match the "i" constraint
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  426  	 * in the asm statement.
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  427  	 */
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  428  	switch (ric) {
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  429  	case RIC_FLUSH_TLB:
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  430  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_TLB);
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  431  		fixup_tlbie_pid_lpid(pid, lpid);
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  432  		break;
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  433  	case RIC_FLUSH_PWC:
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  434  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_PWC);
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  435  		break;
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  436  	case RIC_FLUSH_ALL:
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  437  	default:
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  438  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_ALL);
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  439  		fixup_tlbie_pid_lpid(pid, lpid);
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  440  	}
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  441  	asm volatile("eieio; tlbsync; ptesync" : : : "memory");
-f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  442  }
-2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  443  struct tlbiel_pid {
-2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  444  	unsigned long pid;
-2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  445  	unsigned long ric;
-2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  446  };
-2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  447  
-
-:::::: The code at line 418 was first introduced by commit
-:::::: f0c6fbbb90504fb7e9dbf0865463d3c2b4de49e5 KVM: PPC: Book3S HV: Add support for H_RPT_INVALIDATE
-
-:::::: TO: Bharata B Rao <bharata@linux.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
