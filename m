@@ -1,44 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4ABA7E
-	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 20:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E50C7E
+	for <llvm@lists.linux.dev>; Sat,  4 Jun 2022 21:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654376335; x=1685912335;
+  t=1654378195; x=1685914195;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=alcl3p9MajAzhzqPbCbm+pdKG7LQBoXPfMN6XrVSj4Y=;
-  b=URV0A9IZSTW6XwxLGINF+SwiiesGk9NRYIPkn/p/cUxf4JR5VYnEQyWO
-   tW8HaTmeDxDDdjwFzXcAzoFYaA5eYaGeSXHNefrj8aGT9ko2ojJ+kxfte
-   FnYtV4K/tdgroMXO7nYNktoVTC9bcPMv6Bnd/bIlN7r4CWphYNFK5XTam
-   BmA3uFZzEuqdjryp54BWyrATQZwZr2vRdQ4Wtqlo3P/EeIBn1dRlP7Pmx
-   NgzAGHe27aPzyD5OEWECYPFBU2u0gG7brHgzbzDXlNR4O+uGZvUJIaR/Z
-   Xt+bw/VJ1D3qxEVzs3pwqy56YCbuLxSIXjwDuKvCNkwDwl4/ljqzOn8uL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="258571257"
+  bh=gFNxvLYNZl1TZ2AZycae92kk6hqpmzLDuFh7sQB7liU=;
+  b=MsUSTn5O8sJHG4KifG/TcvAJAMx3Fngh+N7637NYjL6DKF9khNMKYYQp
+   V49LXmBysYvgTrZFVKDft7TKFef3TGM0oA4GQKnM6iDpOWZd+YZ411hWl
+   z44oFYDa2O0xiU4kE0NSfjXzJpk7rvVKj+vFz/iW7lNDz/knOZHv34zOF
+   XjndYVarAEiMoTtl8OyGTPNHX7QUsulGwQcA1pzckI3r9rxBzkzDhx679
+   d+F8R6/UVXbm94coqPtG58AmHSf2lxuRdHxiaYyUusRS1z3zfJB6ZDlSd
+   tEHJ+33YXB/OdFtBnL7eQmZKHlU6Ecq+PJ492dtUlAeMyxKkGXnePN+Ss
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276523082"
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="258571257"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 13:58:55 -0700
+   d="scan'208";a="276523082"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 14:29:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="708506088"
+   d="scan'208";a="564293386"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2022 13:58:53 -0700
+  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2022 14:29:53 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nxarE-000BCv-Ak;
-	Sat, 04 Jun 2022 20:58:52 +0000
-Date: Sun, 5 Jun 2022 04:58:05 +0800
+	id 1nxbLE-000BDt-Qt;
+	Sat, 04 Jun 2022 21:29:52 +0000
+Date: Sun, 5 Jun 2022 05:29:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
+To: Liao Chang <liaochang1@huawei.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused
- variable 'sun4i_ts_of_match'
-Message-ID: <202206050416.ksMtkpmV-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Li Zhengyu <lizhengyu3@huawei.com>
+Subject: ld.lld: error: undefined symbol: machine_kexec
+Message-ID: <202206050554.XnCXKQwp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,151 +48,53 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
-date:   1 year, 3 months ago
-config: s390-randconfig-c005-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050416.ksMtkpmV-lkp@intel.com/config)
+commit: 6261586e0c91db14c34f894f4bc48f2300cff1d4 RISC-V: Add kexec_file support
+date:   2 weeks ago
+config: riscv-randconfig-r012-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050554.XnCXKQwp-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6261586e0c91db14c34f894f4bc48f2300cff1d4
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout ea29b20a828511de3348334e529a3d046a180416
+        git checkout 6261586e0c91db14c34f894f4bc48f2300cff1d4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/ drivers/input/touchscreen/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/input/touchscreen/sun4i-ts.c:36:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/input/touchscreen/sun4i-ts.c:36:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/input/touchscreen/sun4i-ts.c:36:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/input/touchscreen/sun4i-ts.c:36:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/input/touchscreen/sun4i-ts.c:36:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused variable 'sun4i_ts_of_match' [-Wunused-const-variable]
-   static const struct of_device_id sun4i_ts_of_match[] = {
-                                    ^
-   21 warnings generated.
-
-
-vim +/sun4i_ts_of_match +392 drivers/input/touchscreen/sun4i-ts.c
-
-f09f98d3240b7e Hans de Goede 2014-05-14  391  
-6decea7c5438e2 Hans de Goede 2014-05-14 @392  static const struct of_device_id sun4i_ts_of_match[] = {
-6decea7c5438e2 Hans de Goede 2014-05-14  393  	{ .compatible = "allwinner,sun4i-a10-ts", },
-91c68a7c1d92b4 Hans de Goede 2015-03-08  394  	{ .compatible = "allwinner,sun5i-a13-ts", },
-43c0e2234021d7 Chen-Yu Tsai  2015-01-26  395  	{ .compatible = "allwinner,sun6i-a31-ts", },
-6decea7c5438e2 Hans de Goede 2014-05-14  396  	{ /* sentinel */ }
-6decea7c5438e2 Hans de Goede 2014-05-14  397  };
-6decea7c5438e2 Hans de Goede 2014-05-14  398  MODULE_DEVICE_TABLE(of, sun4i_ts_of_match);
-6decea7c5438e2 Hans de Goede 2014-05-14  399  
-
-:::::: The code at line 392 was first introduced by commit
-:::::: 6decea7c5438e2955f64e2513ec9a2fac7602a7d Input: add driver for Allwinner sunxi SoC's rtp controller
-
-:::::: TO: Hans de Goede <hdegoede@redhat.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>> ld.lld: error: undefined symbol: machine_kexec_cleanup
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(kimage_free) in archive kernel/built-in.a
+--
+>> ld.lld: error: undefined symbol: riscv_crash_save_regs
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
+--
+>> ld.lld: error: undefined symbol: machine_crash_shutdown
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
+--
+>> ld.lld: error: undefined symbol: machine_kexec
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(kernel_kexec) in archive kernel/built-in.a
+--
+>> ld.lld: error: undefined symbol: machine_shutdown
+   >>> referenced by kexec_core.c
+   >>> kexec_core.o:(kernel_kexec) in archive kernel/built-in.a
+--
+>> ld.lld: error: undefined symbol: machine_kexec_prepare
+   >>> referenced by kexec_file.c
+   >>> kexec_file.o:(__se_sys_kexec_file_load) in archive kernel/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service
