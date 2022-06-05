@@ -1,42 +1,44 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD6910F2
-	for <llvm@lists.linux.dev>; Sun,  5 Jun 2022 00:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5301840
+	for <llvm@lists.linux.dev>; Sun,  5 Jun 2022 01:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654388000; x=1685924000;
+  t=1654391845; x=1685927845;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tjCLWlnDd1xOelaMV0Mv+df88jS7FOL8Fp/HZ2+wZzY=;
-  b=mXZ3REecJnQHJeUPtavyvRwJPr8Zd5hkCqua7b1UZnmJTKCPWlTvPxmO
-   OiUwdKyflbY/X2pUaKjhFiJW5fTypMm82OWE2IMdBgMFlvysJa4j4znmU
-   D1BygJuTQkPf9jyZZC6tzMbhyQkF1NE8COopIx/1imjAxtUk0wU81Ep8N
-   tvRKy4DK0AM5Ta0a5tVmZ800ewRHrL954aGq0CodK8Ln4UmrN7/KEI1Mx
-   RgC5pEBFrTq45W0ePr6tBEnQoWjBz+cGd9284r48nYY/lMOxUybbF3JxD
-   MS02C7GgNO0NZUINbPSz8bUuo0wZikHLTV5u9Gq7Y94H2wI0cQnLqtlB/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339559444"
+  bh=+9SmauaC50SGMWqDNTH6YEIYCMPjxm85swtliW3l4iY=;
+  b=dYy4lAz9KUFALd8E2MiILBb//NKuUu9Y3tUKraUAxe0r2tGsqiT+/NH6
+   xryyIsI1y9aJOKPBIOmRXEkfQutdWI+hSJC0JysQ1txQxs4ytzUMDLgHL
+   2kFGl29d+rKrXc0Jft/yOi3ABPRqn8XhXJRlsM+9XAkQpiNIJeb5F8TYX
+   YEGf94LyMdR6+y42v9eJ5aUx0H2eX+pMHP/LEbwEe4S5kJs+d+vinwTYs
+   lCJrdX7Q8ohkn59nBNC2OVxQ6ltjdoEZM2sd5xBjDSU/jKQgk1Dg12U8R
+   987ewxYkvGjmANmXEcybr4QOkXcURZLCV4eAXggefHH7yJqI+upI+r0OT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="362866326"
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="339559444"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 17:13:19 -0700
+   d="scan'208";a="362866326"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 18:17:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="906001734"
+   d="scan'208";a="564331304"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jun 2022 17:13:18 -0700
+  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2022 18:17:22 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nxdtN-000BIk-Es;
-	Sun, 05 Jun 2022 00:13:17 +0000
-Date: Sun, 5 Jun 2022 08:12:21 +0800
+	id 1nxetO-000BLB-7Y;
+	Sun, 05 Jun 2022 01:17:22 +0000
+Date: Sun, 5 Jun 2022 09:16:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Sven Peter <sven@svenpeter.dev>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous
- prototype for function 'tick_broadcast'
-Message-ID: <202206050825.OuexWb2X-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [asahilinux:bits/050-nvme 4/9] drivers/soc/apple/sart.c:248:4:
+ warning: format specifies type 'unsigned long long' but the argument has
+ type 'phys_addr_t' (aka 'unsigned int')
+Message-ID: <202206050943.yFqgZDBn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,56 +48,85 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   9 weeks ago
-config: arm-randconfig-r002-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050825.OuexWb2X-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
+tree:   https://github.com/AsahiLinux/linux bits/050-nvme
+head:   54dfe8ce63a23f4a11e9aa0481a09a6ec2267b2f
+commit: 96470149f537ee4410acef69bb8a38d806fc98c1 [4/9] soc: apple: Add SART driver
+config: hexagon-randconfig-r041-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050943.yFqgZDBn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 416a5080d89066029f9889dc23f94de47c2fa895)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # https://github.com/AsahiLinux/linux/commit/96470149f537ee4410acef69bb8a38d806fc98c1
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/050-nvme
+        git checkout 96470149f537ee4410acef69bb8a38d806fc98c1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/apple/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous prototype for function 'tick_broadcast' [-Wmissing-prototypes]
-   void tick_broadcast(const struct cpumask *mask)
-        ^
-   arch/arm/mach-omap2/board-generic.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tick_broadcast(const struct cpumask *mask)
-   ^
-   static 
-   1 warning generated.
+>> drivers/soc/apple/sart.c:248:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                    paddr, size);
+                    ^~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:284:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                    paddr, size);
+                    ^~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/tick_broadcast +44 arch/arm/mach-omap2/board-generic.c
+vim +248 drivers/soc/apple/sart.c
 
-e69b4e1a7577c1 Tony Lindgren 2020-05-07  41  
-d86ad463d6706d Tony Lindgren 2020-05-28  42  /* Used by am437x for ARM timer in non-SMP configurations */
-d86ad463d6706d Tony Lindgren 2020-05-28  43  #if !defined(CONFIG_SMP) && defined(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST)
-d86ad463d6706d Tony Lindgren 2020-05-28 @44  void tick_broadcast(const struct cpumask *mask)
-d86ad463d6706d Tony Lindgren 2020-05-28  45  {
-d86ad463d6706d Tony Lindgren 2020-05-28  46  }
-d86ad463d6706d Tony Lindgren 2020-05-28  47  #endif
-d86ad463d6706d Tony Lindgren 2020-05-28  48  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: d86ad463d6706d35167418660ae3293207ee9d1c ARM: OMAP2+: Fix regression for using local timer on non-SMP SoCs
-
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+   219	
+   220	int apple_sart_add_allowed_region(struct apple_sart *sart, phys_addr_t paddr,
+   221					  size_t size)
+   222	{
+   223		int i, ret;
+   224	
+   225		for (i = 0; i < APPLE_SART_MAX_ENTRIES; ++i) {
+   226			if (test_bit(i, &sart->protected_entries))
+   227				continue;
+   228			if (test_and_set_bit(i, &sart->used_entries))
+   229				continue;
+   230	
+   231			ret = sart_set_entry(sart, i, APPLE_SART_FLAGS_ALLOW, paddr,
+   232					     size);
+   233			if (ret) {
+   234				dev_dbg(sart->dev,
+   235					"unable to set entry %d to [%pa, 0x%zx]\n",
+   236					i, &paddr, size);
+   237				clear_bit(i, &sart->used_entries);
+   238				return ret;
+   239			}
+   240	
+   241			dev_dbg(sart->dev, "wrote [%pa, 0x%zx] to %d\n", &paddr, size,
+   242				i);
+   243			return 0;
+   244		}
+   245	
+   246		dev_warn(sart->dev,
+   247			 "no free entries left to add [paddr: 0x%llx, size: 0x%zx]\n",
+ > 248			 paddr, size);
+   249	
+   250		return -EBUSY;
+   251	}
+   252	EXPORT_SYMBOL(apple_sart_add_allowed_region);
+   253	
 
 -- 
 0-DAY CI Kernel Test Service
