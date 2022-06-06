@@ -1,160 +1,190 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED7B3D86
-	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 22:18:15 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id w20so3830510lfa.11
-        for <llvm@lists.linux.dev>; Mon, 06 Jun 2022 15:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AEicuTVMgg6V1QO4zYkGhfVsMSgQk+TbKCz6HyUOuSA=;
-        b=FkSl67D1qpP1+e0AN36ByGsngSb94JD7VibKCDEBSYAW+ITNExRg12fzsjXYaV90DT
-         jm1r1bBlSEfzPb8K+SYZd/MsmF8+qdcHXxXcLri6n5Yx8FuwqWSmDg1nR30rH9WXM0Y1
-         JzbtyBLhaeJAJKe0IeoXtpBwF0qG6UqATVHTRxALfhBH2fPGLh/K9COzRk7WW8k4QWXs
-         jbGQjW6B/arT7ePxRTUXT7X+7f8T3nyHhycTNv/8HZZ6k/JO7gOVM5ZJKQsoTNik5IUQ
-         /RYVVrwVQOnBzUsHzxrR7cQB8M0RNqjbazVxl0V4VkqKEFCLeqfI6VX1D8Ave1Jq5/KS
-         ty0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AEicuTVMgg6V1QO4zYkGhfVsMSgQk+TbKCz6HyUOuSA=;
-        b=JeZyuByOukG97p4dKrtQhTJhdedED1qWMEJS0dWB24tEprAPMNMdllf5+V/FBfhAFG
-         gQwao7LTm7uIvU0dKZHf7Yu+haBkE8zzNkFKsa3rMWgukrZw51JaQEQEJrIhszcUKV7f
-         JuAyipBsFFdyUprcIrWKuJBrqHKEPlAHWmF7nl0L0Fwo2CkyvbJaGAlSU+7DFBbkGSez
-         kcMr5Zf3AuKxYHGchVW8ihZhu+YsRsS9pPL6lARvEtfQYiMJp1h/uvKtSZRCmPFCDTSb
-         yoGYvqyt6Cg2qgPKuhQaAGx2t4YlUDusmc3nXSY2a1yyqEuMwD8SUrFx6GX5NG5e6mn9
-         E4/A==
-X-Gm-Message-State: AOAM532Xk9HMzTD0RReT6zc3vtmHYOADG33yTANFBTRuXrrNuqPKIeEz
-	7hbiSTrH74zX02mfBmPDOGl+JACNG6+NpgSjlgoPJnOypg0/sg==
-X-Google-Smtp-Source: ABdhPJxqUrw4xLKP5o5CLTHUeWbcjcktYubJ5FZ6j5Aaz3e7EZAb3xtgpXPy5aj6klZoufbg/PxodtMNEea0nw4iYqs=
-X-Received: by 2002:ac2:454b:0:b0:479:1131:f2ff with SMTP id
- j11-20020ac2454b000000b004791131f2ffmr14826098lfm.626.1654553893157; Mon, 06
- Jun 2022 15:18:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C3F4C63
+	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 23:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654559619; x=1686095619;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Pn9gJGaKelF3S6kXLuvZQb+xN39UpGWw6CBRvZTPKUw=;
+  b=O7CJoq/7oqxJjcxeRjkBfZCshIYKRZ6O0HHCOcM6SKCEGse9dnzbLFR/
+   JU7WPVXtRiN0E8deFw5zlIuOQPOaDQrFoNSYou6NDPD7T46G5Y+R/EPyB
+   AaKei860Tyl/FiBuk+fR6lJU9tCR1lcRY7HHUgc4D9hsT1474ms9MDnk7
+   J8hx2pctBtMDsm99MpdLdGz8s/5DFT4GgfU8tW+9da8JtuLuQe53Vzaib
+   qy5i+VqhA7Fve54fEFHy6DeHpSgoqt5tfqu0z36otDnkSAKV1Mk6bo7lt
+   +e4kcE7wTnJKp95ddUt004aGshHG7xQMnajseos6p5Yqi5h3FkI72olO/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="302061404"
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="302061404"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 16:53:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="709255533"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 Jun 2022 16:53:33 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nyMXM-000D90-8a;
+	Mon, 06 Jun 2022 23:53:32 +0000
+Date: Tue, 7 Jun 2022 07:52:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-raid@vger.kernel.org
+Subject: [song-md:test/klp-trampoline 4/6] kernel/trace/ftrace.c:8006:14:
+ error: no member named 'func_hash' in 'struct ftrace_ops'
+Message-ID: <202206070722.yx7Ff8v1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
- <Ym2qdHAB6BMMlegB@thelio-3990X> <CAEQFVGZB6eAetmt1kk+TYbGxpfrDut37DEO_-1HECqM6FEERww@mail.gmail.com>
- <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com>
- <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X> <CAEQFVGYSV=boBYGHfJLis8ayftzNPJy1UYgeEEQLuNb0hSfhjg@mail.gmail.com>
- <CAKwvOd=c=9xbzg0CjGxNnHtu3BOatWpe0gYQU7TWw0rkjwCCxA@mail.gmail.com>
- <CAEQFVGYOkTi4oNSnfyN48Re_4uhQqPF81+M7Xd5VJ0+tETwSbA@mail.gmail.com>
- <CAKwvOdmrwfm3HsyvGg2_HwYw1tdcj67DLj22oeGGf8MUO4x=mQ@mail.gmail.com> <CAEQFVGZTX9RdFvqOvZ-Lxsf4Jq--jNXKrrwKipZ6ZkYx_G2haA@mail.gmail.com>
-In-Reply-To: <CAEQFVGZTX9RdFvqOvZ-Lxsf4Jq--jNXKrrwKipZ6ZkYx_G2haA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 6 Jun 2022 15:18:01 -0700
-Message-ID: <CAKwvOdkOnSBZADEi44z-w+zK0+UBzVY-ZP_r08FC_eTQC_Y2Fg@mail.gmail.com>
-Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
- llvm 11.0.2 internal assembler
-To: Mauro Rossi <issor.oruam@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Chih-Wei Huang <cwhuang@android-x86.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 6, 2022 at 2:57 PM Mauro Rossi <issor.oruam@gmail.com> wrote:
->
-> On Sat, Jun 4, 2022 at 12:13 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, Jun 1, 2022 at 5:57 AM Mauro Rossi <issor.oruam@gmail.com> wrote:
-> > >
-> > > On Wed, Jun 1, 2022 at 12:09 AM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > As Nathan noted, I messed up the commit "ANDROID: x86: entry: work
-> > > > around LLVM_IAS=1 bug in LSL". Please see:
-> > > > https://android-review.googlesource.com/c/kernel/common/+/1521061
-> > > > https://android-review.googlesource.com/c/kernel/common/+/1560152/
-> > > >
-> > > > If you're using an older toolchain, you'll need just the first. If
-> > > > you're using a newer toolchain, you'll need BOTH (or none, including
-> > > > dropping "ANDROID: x86: entry: work around LLVM_IAS=1 bug in LSL").
-> > >
-> > > Thanks Nick,
-> > >
-> > > I had already applied the squashed commit composed of  "ANDROID: x86:
-> > > entry: work around LLVM_IAS=1 bug in LSL" (the one using .quad) and
-> > > "ANDROID: x86: entry: fix LSL open coding", so I have already:
-> > >
-> > > .macro LOAD_CPU_AND_NODE_SEG_LIMIT reg:req
-> > > movq $__CPUNODE_SEG, \reg
-> > > +#ifdef __clang__
-> > > +.long 0xc0030f48
-> >
-> > LGTM
-> >
-> > > +#else
-> > > lsl \reg, \reg
-> > > +#endif
-> > > .endm
-> > >
-> > >
-> > > So in principle my kernel image should boot when built with LLVM_IAS=1
-> > > but to my surprise all my systems (Sony VAIO i7, Intel NUC DN2820FYKH
-> > > with Celeron D2830, Athlon 200GE) are affected by hard reboot when
-> > > executing the kernel image
-> >
-> > Might need more info.  Do they boot when LLVM_IAS=0 is explicitly set
-> > with your command line invocation of make? i.e. `make LLVM=1
-> > LLVM_IAS=0 ...`?  Can you launch these kernels in qemu?
->
-> Yes, kernel 5.17 and 5.18 built with LLVM=1 LLVM_IAS=0 do not cause
-> instantaneus hard reboot and proceed in the boot stages
->
-> The complete list of make variables Ihave used is as follows:
->
-> LLVM=1 LLVM_IAS=0 \
->         CC=$(abspath $(LLVM_PREBUILTS_PATH)/clang) \
->         LD=$(abspath $(LLVM_PREBUILTS_PATH)/ld.lld) \
->         AR=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-ar) \
->         NM=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-nm) \
->         OBJCOPY=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-objcopy) \
->         OBJDUMP=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-objdump) \
->         READELF=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-readelf) \
->         OBJSIZE=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-size) \
->         STRIP=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-strip) \
->         HOSTCC=$(abspath $(LLVM_PREBUILTS_PATH)/clang) \
->         HOSTCXX=$(abspath $(LLVM_PREBUILTS_PATH)/clang++) \
->         HOSTLD=$(abspath $(LLVM_PREBUILTS_PATH)/ld.lld) \
->         HOSTLDFLAGS=-fuse-ld=lld \
->         HOSTAR=$(abspath $(LLVM_PREBUILTS_PATH)/llvm-ar)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git test/klp-trampoline
+head:   6fbf5243a0d6ac55cae9ed84bb5ef0d49d1c00bc
+commit: 7970d53b6d04732808d677f072446b59451d032c [4/6] ftrace: introduce FTRACE_OPS_FL_SHARE_IPMODIFY
+config: x86_64-randconfig-c007-20220606 (https://download.01.org/0day-ci/archive/20220607/202206070722.yx7Ff8v1-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=7970d53b6d04732808d677f072446b59451d032c
+        git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
+        git fetch --no-tags song-md test/klp-trampoline
+        git checkout 7970d53b6d04732808d677f072446b59451d032c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You could probably simplify the above to:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-$ PATH=$PATH:$LLVM_PREBUILTS_PATH make LLVM=1 LLVM_IAS=0
+All errors (new ones prefixed by >>):
 
->
-> >
-> > >
-> > > I'm trying to understand how to build (and boot) with LLVM_IAS=1 and
-> > > using clang 11.0.2 shipped with AOSP Android 11
+   kernel/trace/ftrace.c:8004:14: error: use of undeclared identifier 'direct_mutex'; did you mean 'event_mutex'?
+           mutex_lock(&direct_mutex);
+                       ^~~~~~~~~~~~
+                       event_mutex
+   include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
+   #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+                                              ^
+   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
+   extern struct mutex event_mutex;
+                       ^
+>> kernel/trace/ftrace.c:8006:14: error: no member named 'func_hash' in 'struct ftrace_ops'
+           hash = ops->func_hash->filter_hash;
+                  ~~~  ^
+>> kernel/trace/ftrace.c:8019:9: error: call to undeclared function 'ops_references_ip'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   if (ops_references_ip(op, ip)) {
+                                       ^
+>> kernel/trace/ftrace.c:8027:14: error: no member named 'ops_func' in 'struct ftrace_ops'
+                                   if (!op->ops_func) {
+                                        ~~  ^
+   kernel/trace/ftrace.c:8031:15: error: no member named 'ops_func' in 'struct ftrace_ops'
+                                   ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
+                                         ~~  ^
+   kernel/trace/ftrace.c:8046:16: error: use of undeclared identifier 'direct_mutex'; did you mean 'event_mutex'?
+           mutex_unlock(&direct_mutex);
+                         ^~~~~~~~~~~~
+                         event_mutex
+   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
+   extern struct mutex event_mutex;
+                       ^
+   kernel/trace/ftrace.c:8083:17: error: use of undeclared identifier 'direct_mutex'; did you mean 'event_mutex'?
+                   mutex_unlock(&direct_mutex);
+                                 ^~~~~~~~~~~~
+                                 event_mutex
+   kernel/trace/trace.h:1523:21: note: 'event_mutex' declared here
+   extern struct mutex event_mutex;
+                       ^
+   7 errors generated.
 
-Can you try a newer version of LLVM?  AOSP LLVM 11 is technically a
-pre-release version somewhere between the LLVM 10 and 11 releases.  We
-no longer support LLVM 10 with mainline, so it's hard to say if AOSP
-LLVM 11.0.2 contains or does not contain problematic or necessary
-commits.
 
-Also, do you have a kernel tree I can fetch? I'd be happy to try to
-boot the result in QEMU. Have you tried that?
+vim +8006 kernel/trace/ftrace.c
 
-> >
-> > I think this combo should work; we are testing x86_64 with mainline
-> > https://github.com/ClangBuiltLinux/continuous-integration2/blob/95b9a12cad31675118d61c26d0b541fa4e3c8f09/generator.yml#L1694
-> >
-> > Could be something in your .config files though.
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
-
+  7973	
+  7974	/*
+  7975	 * When registering ftrace_ops with IPMODIFY (not direct), it is necessary
+  7976	 * to make sure it doesn't conflict with any direct ftrace_ops. If there is
+  7977	 * existing direct ftrace_ops on a kernel function being patched, call
+  7978	 * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY on it to enable sharing.
+  7979	 *
+  7980	 * @ops:     ftrace_ops being registered.
+  7981	 *
+  7982	 * Returns:
+  7983	 *         0 - @ops does have IPMODIFY or @ops itself is DIRECT, no change
+  7984	 *             needed;
+  7985	 *         1 - @ops has IPMODIFY, hold direct_mutex;
+  7986	 *         -EBUSY - currently registered DIRECT ftrace_ops does not support
+  7987	 *                  SHARE_IPMODIFY, we need to abort the register.
+  7988	 *         -EAGAIN - cannot make changes to currently registered DIRECT
+  7989	 *                   ftrace_ops at the moment, but we can retry later. This
+  7990	 *                   is needed to avoid potential deadlocks.
+  7991	 */
+  7992	static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
+  7993		__acquires(&direct_mutex)
+  7994	{
+  7995		struct ftrace_func_entry *entry;
+  7996		struct ftrace_hash *hash;
+  7997		struct ftrace_ops *op;
+  7998		int size, i, ret;
+  7999	
+  8000		if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY) ||
+  8001		    (ops->flags & FTRACE_OPS_FL_DIRECT))
+  8002			return 0;
+  8003	
+  8004		mutex_lock(&direct_mutex);
+  8005	
+> 8006		hash = ops->func_hash->filter_hash;
+  8007		size = 1 << hash->size_bits;
+  8008		for (i = 0; i < size; i++) {
+  8009			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+  8010				unsigned long ip = entry->ip;
+  8011				bool found_op = false;
+  8012	
+  8013				mutex_lock(&ftrace_lock);
+  8014				do_for_each_ftrace_op(op, ftrace_ops_list) {
+  8015					if (!(op->flags & FTRACE_OPS_FL_DIRECT))
+  8016						continue;
+  8017					if (op->flags & FTRACE_OPS_FL_SHARE_IPMODIFY)
+  8018						break;
+> 8019					if (ops_references_ip(op, ip)) {
+  8020						found_op = true;
+  8021						break;
+  8022					}
+  8023				} while_for_each_ftrace_op(op);
+  8024				mutex_unlock(&ftrace_lock);
+  8025	
+  8026				if (found_op) {
+> 8027					if (!op->ops_func) {
+  8028						ret = -EBUSY;
+  8029						goto err_out;
+  8030					}
+  8031					ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
+  8032					if (ret)
+  8033						goto err_out;
+  8034				}
+  8035			}
+  8036		}
+  8037	
+  8038		/*
+  8039		 * Didn't find any overlap with any direct function, or the direct
+  8040		 * function can share with ipmodify. Hold direct_mutex to make sure
+  8041		 * this doesn't change until we are done.
+  8042		 */
+  8043		return 1;
+  8044	
+  8045	err_out:
+  8046		mutex_unlock(&direct_mutex);
+  8047		return ret;
+  8048	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
