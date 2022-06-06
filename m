@@ -1,233 +1,102 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36457C
-	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 18:29:21 +0000 (UTC)
-Received: by mail-lj1-f172.google.com with SMTP id s13so16675449ljd.4
-        for <llvm@lists.linux.dev>; Mon, 06 Jun 2022 11:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rsv2N92+ZqJEH9bTxNPmExrepo9exn8lWuSrT2tKiOI=;
-        b=CDRN5wvevDSX4L6VqzDHsCD/eYaYFxLIjrjvDqvfUY+zAZ8soBwmK9oZR2d906uKTM
-         DeeQR42u/Z70lsKCub+iMsXnU0YBa9nSvQ8N3RIatmDxUX0k66bbt78vQrErqH824Vk2
-         nTrB/ubSBF25YQ/ORyc1m07tu1dLOF3LVUokOXM3uYi5fbYULpQI0pBr53SHJ6Y9ECWm
-         tiOKhcVGEqPtEho6uQFRF8gZr027NjFevnNZBQrUP6W4fu8tXmq9IPNstzR/CcxweYSf
-         lYBFCLBLmyQx8WeETP7/wuI18EDZPM8K+62AOGQpOndlQj0/Y4wM5Ls/7BCOBDuj8/WL
-         5GRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rsv2N92+ZqJEH9bTxNPmExrepo9exn8lWuSrT2tKiOI=;
-        b=wVYYcN4lb31Xoz4kNuA18kfTPzdna/OAX0ADWgpuFjiKUttRJmvjAVJBIUWOTmC3zh
-         MnyZjSS5LLDZ1dWQKczKnpzGdnixo+32lGpQcHEy7/6mBMF1ccE8R1u9gbMtXlTPppvx
-         qGvwf+Uw963IFDuNStDiT3jPKuNGccSbIYBrpmBwe/fgZeu0qcItilWt1UKXH7DwbaiQ
-         kmjb7zofGx39vxwh5arjL/nSWv0GrOHlyXSaf8yAbdbxjjQboE+Yi+SrxiMJ9VkEuuag
-         FghB/vxuSW/UTUVcZkbs3LT4JR7IEg1apZUWuy++1rpyCEuYNyUOtgsYzNACpesWZCwq
-         QP4g==
-X-Gm-Message-State: AOAM532nl0IydyjIGwGPMcS7050eZ3sMzlK2hMJ2iK+Ypjt46jeWxeVU
-	GrK7bRdew68MrgCMgS0N1SFUGe60sIBddb1dqi9GHw==
-X-Google-Smtp-Source: ABdhPJz9WBVfjcWsnEhD1m8xEt5J4gYwmCxK9iWJrGTUUViNn3ZQW/arYk5oezL4vGONjYr05Zn9cp/XNsth6qnJcTA=
-X-Received: by 2002:a2e:a90a:0:b0:253:de3f:812b with SMTP id
- j10-20020a2ea90a000000b00253de3f812bmr48330959ljq.400.1654540159081; Mon, 06
- Jun 2022 11:29:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7A17E
+	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 20:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654546591; x=1686082591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jtrT9xol1zz8x3wq/vAV4b2zS4KUY7UQ5TB0I2JKtBk=;
+  b=STSx3aiWAxnzNJyo/oW3oxpFMN62WMehjLQjY+jCkbIlIb4gdIRzN8Uf
+   STaWhkizpM5TymjvJAatuQqiAqBkDe6SbYwqjREbTQFaeeP04iOba5kLK
+   Ye4l35Xa1bFP6YJMiZAn3cGeF9zlRflSZsxqDLV4QiKYp5OvLCTh91GrP
+   E4BA4w9iG7MdATsZ7lY6LVGc3DNns4qTavzX3CBVjjn+5fVpCmt3O/Nuw
+   kFk8xDoBwFj9EwKKgH+decnGbgqoj+rtqr2VtGMB7fgZa1JIZeMZRQpTa
+   lqJz61EX8OwwxMnL5XpJnTZ8OJaa35UMZ1FbgGAfyPOfJj+56C0WkOe9R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="276729170"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="276729170"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 13:16:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="669651235"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 13:16:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nyJ9H-000D1x-SJ;
+	Mon, 06 Jun 2022 20:16:27 +0000
+Date: Tue, 7 Jun 2022 04:16:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Sedat Dilek <sedat.dilek@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH] kbuild: fix build failure by scripts/check-local-export
+Message-ID: <202206070434.3wvNWfJZ-lkp@intel.com>
+References: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220529134605.12881-1-trix@redhat.com>
-In-Reply-To: <20220529134605.12881-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 6 Jun 2022 11:29:07 -0700
-Message-ID: <CAKwvOdnvcP4m_+4gjhmjX+xmmU2um6_HGVqQa0euFCkwog6i1A@mail.gmail.com>
-Subject: Re: [PATCH] serial: core: check if uart_get_info succeeds before using
-To: Tom Rix <trix@redhat.com>
-Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, nathan@kernel.org, 
-	peter@hurleysoftware.com, linux-serial@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
 
-On Sun, May 29, 2022 at 6:46 AM Tom Rix <trix@redhat.com> wrote:
->
-> clang static analysis reports this representative issue
-> drivers/tty/serial/serial_core.c:2818:9: warning: 3rd function call argument is an uninitialized value [core.CallAndMessage]
->         return sprintf(buf, "%d\n", tmp.iomem_reg_shift);
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> uart_get_info() is used the *show() functions.  When uart_get_info() fails, what is reported
-> is garbage.  So check if uart_get_info() succeeded.
+Hi Tetsuo,
 
-Hi Tom,
-Thanks for the patch. What do you think about throwing __must_check on
-the definition of uart_get_info with a comment that members of the
-retinfo param will not be initialized if the return value is not zero?
+I love your patch! Yet something to improve:
 
-Otherwise, patch LGTM.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on linus/master v5.19-rc1 next-20220606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
-> Fixes: 4047b37122d1 ("serial: core: Prevent unsafe uart port access, part 1")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/tty/serial/serial_core.c | 52 ++++++++++++++++++++++++--------
->  1 file changed, 39 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 9a85b41caa0a..4160f6711c5d 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -2690,7 +2690,9 @@ static ssize_t uartclk_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.baud_base * 16);
->  }
->
-> @@ -2700,7 +2702,9 @@ static ssize_t type_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.type);
->  }
->
-> @@ -2710,7 +2714,9 @@ static ssize_t line_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.line);
->  }
->
-> @@ -2721,7 +2727,9 @@ static ssize_t port_show(struct device *dev,
->         struct tty_port *port = dev_get_drvdata(dev);
->         unsigned long ioaddr;
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         ioaddr = tmp.port;
->         if (HIGH_BITS_OFFSET)
->                 ioaddr |= (unsigned long)tmp.port_high << HIGH_BITS_OFFSET;
-> @@ -2734,7 +2742,9 @@ static ssize_t irq_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.irq);
->  }
->
-> @@ -2744,7 +2754,9 @@ static ssize_t flags_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "0x%X\n", tmp.flags);
->  }
->
-> @@ -2754,7 +2766,9 @@ static ssize_t xmit_fifo_size_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.xmit_fifo_size);
->  }
->
-> @@ -2764,7 +2778,9 @@ static ssize_t close_delay_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.close_delay);
->  }
->
-> @@ -2774,7 +2790,9 @@ static ssize_t closing_wait_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.closing_wait);
->  }
->
-> @@ -2784,7 +2802,9 @@ static ssize_t custom_divisor_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.custom_divisor);
->  }
->
-> @@ -2794,7 +2814,9 @@ static ssize_t io_type_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.io_type);
->  }
->
-> @@ -2804,7 +2826,9 @@ static ssize_t iomem_base_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "0x%lX\n", (unsigned long)tmp.iomem_base);
->  }
->
-> @@ -2814,7 +2838,9 @@ static ssize_t iomem_reg_shift_show(struct device *dev,
->         struct serial_struct tmp;
->         struct tty_port *port = dev_get_drvdata(dev);
->
-> -       uart_get_info(port, &tmp);
-> +       if (uart_get_info(port, &tmp))
-> +               return 0;
-> +
->         return sprintf(buf, "%d\n", tmp.iomem_reg_shift);
->  }
->
-> --
-> 2.27.0
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Tetsuo-Handa/kbuild-fix-build-failure-by-scripts-check-local-export/20220606-234446
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: arm-mxs_defconfig (https://download.01.org/0day-ci/archive/20220607/202206070434.3wvNWfJZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/7047234a52a99a58113ebe0502e1c227af2b6c61
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tetsuo-Handa/kbuild-fix-build-failure-by-scripts-check-local-export/20220606-234446
+        git checkout 7047234a52a99a58113ebe0502e1c227af2b6c61
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> llvm-nm: error: : unknown argument '--'
+   make[2]: *** [scripts/Makefile.build:249: scripts/mod/empty.o] Error 1
+   make[2]: *** Deleting file 'scripts/mod/empty.o'
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1195: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
