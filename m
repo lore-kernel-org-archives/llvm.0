@@ -1,882 +1,262 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7747E
-	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 12:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1654519681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=R2VT1aRF1otg3c1A7eZvAXFeIbfO3QztBGpORGMevlw=;
-	b=LGI2nEnfHXKQC8Uq/4IxW3yHmMhHkUSrhKn5FzSQCwa7wlL3NA+zOQCrQnh3FlmNvwHNdT
-	stBJf8zzMELcgopiBOsMk7hnbdZNKi2vU5Oo/gahRV9OQSsronQ1nOoCTTWkek9clEh1bd
-	EKISga22jNqFn6h17Npswl9XfMbS89A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-LfSP48UdMvyFSKEHMW7K3Q-1; Mon, 06 Jun 2022 08:40:04 -0400
-X-MC-Unique: LfSP48UdMvyFSKEHMW7K3Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B05F1C01B26
-	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 12:40:04 +0000 (UTC)
-Received: from [172.64.0.92] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 13DAF2166B29;
-	Mon,  6 Jun 2022 12:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C14628E6
+	for <llvm@lists.linux.dev>; Mon,  6 Jun 2022 15:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654530024; x=1686066024;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L61haQy24dlnKi4VDgjYlFt0spfUGeEqGGwv62tAWYQ=;
+  b=gDrrnVP4N1Tsm1mIZNC3OkMaQStwJIeYm3W+J8ifKJN3e0uVjLHa34Wo
+   HOICxdBKZ1B0lJacrVXBvEPPWEunrswQLnpMfbyq/vWCARL4+QZz7ySYz
+   HAdqilTthNP0oUEk0NeuX3PmZag6KvR/rC9cPmBSCR7XGtV96ALJXI0FJ
+   DYg/N4T5Fl+nThtOglaMKOSW2IZd271PDVczQFezC0hjGNS3X5BYYcSkK
+   3xWOCfvUMoBAJg08tt7x9t6BG9+dXxfC7jP24yo8wPkP4E4MjQxYcz/Dy
+   8yZ+S3dX84sL0iIAFpWjFrhuoPFcTzuiapU28saABGxgcg8b+Sm5zqu1v
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="276705740"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="276705740"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 08:40:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="682298131"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Jun 2022 08:40:21 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nyEq4-000Cqn-Ss;
+	Mon, 06 Jun 2022 15:40:20 +0000
+Date: Mon, 6 Jun 2022 23:39:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arun R Murthy <arun.r.murthy@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: drivers/gpu/drm/i915/display/intel_display.c:7532:3: error:
+ unannotated fall-through between switch labels
+Message-ID: <202206062357.xOj8gI5t-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: skt-results-master@redhat.com, llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.19.0-rc1
- (mainline.kernel.org-clang, f2906aa8)
-Date: Mon, 06 Jun 2022 12:40:03 -0000
-Message-ID: <cki.Z0K1F9EROV3MT9Z57DO2@redhat.com>
-X-Gitlab-Pipeline-ID: 556160049
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/556160049?=
-X-DataWarehouse-Checkout-IID: 44191
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-
-
-Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/44191
-
-Hello,
-
-We ran automated tests on a recent commit from this kernel tree:
-
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: f2906aa86338 - Linux 5.19-rc1
-
-The results of these automated tests are provided below.
-
-    Overall result: FAILED (see details below)
-             Merge: OK
-           Compile: OK
- Selftests compile: FAILED
-             Tests: FAILED
-    Targeted tests: NO
-
-All kernel binaries, config files, and logs are available for download here=
-:
-
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/06/06/556160049
-
-One or more kernel tests failed:
-
-    s390x:
-     =E2=9D=8C kdump - sysrq-c
-     =E2=9D=8C kdump - file-load
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-
-    aarch64:
-     =E2=9D=8C LTP - syscalls
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C Networking cki netfilter test
-     =E2=9D=8C ALSA PCM loopback test
-     =E2=9D=8C storage: SCSI VPD
-     =E2=9D=8C storage: software RAID testing
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-
-    x86_64 (debug):
-     =E2=9D=8C xfstests - nfsv4.2
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-     =E2=9D=8C Reboot test
-
-    x86_64:
-     =E2=9D=8C xfstests - nfsv4.2
-     =E2=9D=8C xfstests - cifsv3.11
-     =E2=9D=8C POSIX pjd-fstest suites
-     =E2=9D=8C storage: dm/common
-     =E2=9D=8C Storage: swraid mdadm raid_module test
-     =E2=9D=8C Reboot test
-
-We hope that these logs can help you find the problem quickly. For the full
-detail on our testing procedures, please scroll to the bottom of this messa=
-ge.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 5 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-
-We built the following selftests:
-
-  x86_64:
-      net: fail
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
-
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
-
-
-Hardware testing
-----------------
-We booted each kernel and ran the following tests:
-
-  aarch64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 Reboot test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 ACPI enabled test
-       =E2=9C=85 i2c: i2cdetect sanity
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9D=8C LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking MACsec: sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking: igmp conformance test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9D=8C Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Networking ipsec: basic netns - transport
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Networking vnic: ipvlan/basic
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9D=8C ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9C=85 Storage: block zstd compression test
-       =E2=9C=85 Storage: block zstd smoke test
-       =E2=9C=85 storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 lvm snapper test
-       =E2=9D=8C storage: SCSI VPD
-       =E2=9D=8C storage: software RAID testing
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9D=8C Storage blktests - nvmeof-mp
-       =E2=9C=85 Reboot test
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9C=85 Storage block - storage fio numa
-       =E2=9C=85 Reboot test
-
-    Host 6:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 7:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 8:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  ppc64le:
-    Host 1:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
-est
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
-t
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
-r
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 4:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-  s390x:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9D=8C kdump - sysrq-c
-       =E2=9D=8C kdump - file-load
-       =E2=9C=85 Reboot test
-
-    Host 2:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-       =E2=9C=85 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking MACsec: sanity
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Networking ipsec: basic netns - transport
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Networking vnic: ipvlan/basic
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 Storage: block zstd compression test
-       =E2=9C=85 Storage: block zstd smoke test
-       =E2=9C=85 storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 lvm snapper test
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
-       =E2=9C=85 Reboot test
-
-    Host 5:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 6:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =E2=9C=85 Reboot test
-
-  x86_64 (debug):
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 CPU: Die Test
-       =E2=9C=85 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9D=8C xfstests - nfsv4.2
-       =E2=9C=85 xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9C=85 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking: igmp conformance test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: sanity smoke test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9C=85 storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 storage: SCSI VPD
-       =E2=9C=85 storage: software RAID testing
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9C=85 trace: ftrace/tracer
-       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
-       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - net
-       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - forwarding
-       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - tc
-       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - bpf
-       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - bpf_test_progs
-       =F0=9F=9A=A7 =E2=9D=8C Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =E2=9D=8C Reboot test
-
-  x86_64:
-    Host 1:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 selinux-policy: serge-testsuite
-       =E2=9C=85 Reboot test
-
-    Host 2:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
-       =E2=9C=85 Reboot test
-
-    Host 3:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 xfstests - ext4
-       =E2=9C=85 xfstests - xfs
-       =E2=9D=8C xfstests - nfsv4.2
-       =E2=9D=8C xfstests - cifsv3.11
-       =F0=9F=9A=A7 =E2=9C=85 xfstests - btrfs
-       =E2=9C=85 Reboot test
-
-    Host 4:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 ACPI table test
-       =E2=9C=85 i2c: i2cdetect sanity
-       =E2=9C=85 LTP - cve
-       =E2=9C=85 LTP - sched
-       =E2=9C=85 LTP - syscalls
-       =E2=9C=85 LTP - can
-       =E2=9C=85 LTP - commands
-       =E2=9C=85 LTP - containers
-       =E2=9C=85 LTP - dio
-       =E2=9C=85 LTP - fs
-       =E2=9C=85 LTP - fsx
-       =E2=9C=85 LTP - math
-       =E2=9C=85 LTP - hugetlb
-       =E2=9C=85 LTP - mm
-       =E2=9C=85 LTP - nptl
-       =E2=9C=85 LTP - pty
-       =E2=9C=85 LTP - ipc
-       =E2=9C=85 LTP - tracing
-       =E2=9C=85 LTP: openposix test suite
-       =E2=9C=85 CIFS Connectathon
-       =E2=9D=8C POSIX pjd-fstest suites
-       =E2=9C=85 Loopdev Sanity
-       =E2=9C=85 jvm - jcstress tests
-       =E2=9C=85 Memory: fork_mem
-       =E2=9C=85 Memory function: memfd_create
-       =E2=9C=85 AMTU (Abstract Machine Test Utility)
-       =E2=9C=85 Networking bridge: sanity
-       =E2=9C=85 Ethernet drivers sanity
-       =E2=9C=85 Networking MACsec: sanity
-       =E2=9C=85 Networking socket: fuzz
-       =E2=9C=85 Networking sctp-auth: sockopts test
-       =E2=9C=85 Networking: igmp conformance test
-       =E2=9C=85 Networking route: pmtu
-       =E2=9C=85 Networking route_func - local
-       =E2=9C=85 Networking route_func - forward
-       =E2=9C=85 Networking TCP: keepalive test
-       =E2=9C=85 Networking UDP: socket
-       =E2=9C=85 Networking cki netfilter test
-       =E2=9C=85 Networking tunnel: geneve basic test
-       =E2=9C=85 Networking tunnel: gre basic
-       =E2=9C=85 L2TP basic test
-       =E2=9C=85 Networking tunnel: vxlan basic
-       =E2=9C=85 Networking tunnel: permtest
-       =E2=9C=85 Networking ipsec: basic netns - transport
-       =E2=9C=85 Networking ipsec: basic netns - tunnel
-       =E2=9C=85 Networking vnic: ipvlan/basic
-       =E2=9C=85 Libkcapi AF_ALG test
-       =E2=9C=85 pciutils: sanity smoke test
-       =E2=9C=85 pciutils: update pci ids test
-       =E2=9C=85 ALSA PCM loopback test
-       =E2=9C=85 ALSA Control (mixer) Userspace Element test
-       =E2=9C=85 Storage: block zstd compression test
-       =E2=9C=85 Storage: block zstd smoke test
-       =E2=9D=8C storage: dm/common
-       =E2=9C=85 lvm thinp sanity
-       =E2=9C=85 lvm thinp stqe test
-       =E2=9C=85 lvm snapper test
-       =E2=9C=85 storage: SCSI VPD
-       =E2=9C=85 storage: software RAID testing
-       =E2=9D=8C Storage: swraid mdadm raid_module test
-       =E2=9C=85 Storage: swraid scsi_raid
-       =E2=9C=85 storage: targetcli basic
-       =E2=9C=85 trace: ftrace/tracer
-       =E2=9C=85 kdump - kexec_boot
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
-       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
-       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
-       =F0=9F=9A=A7 =E2=9D=8C Memory function: kaslr
-       =F0=9F=9A=A7 =E2=9C=85 Networking VRF: sanity
-       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
-       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
-       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
-       =E2=9D=8C Reboot test
-
-    Host 5:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 CPU: Die Test
-       =E2=9C=85 IPMI driver test
-       =E2=9C=85 IPMItool loop stress test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
- numa
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 6:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 kdump - sysrq-c
-       =E2=9C=85 kdump - file-load
-       =E2=9C=85 Reboot test
-
-    Host 7:
-
-       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
- (marked
-       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-       This is not the fault of the kernel that was tested.
-
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 machineinfo
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Die Test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMI driver test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 IPMItool loop stress test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - blk
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - filesystem fio test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - queue scheduler test
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - cpu-cache
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 CPU: Idle Test
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage block - storage fio=
- numa
-       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
-
-    Host 8:
-       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
-       =F0=9F=9A=A7 =E2=9C=85 machineinfo
-       =E2=9C=85 Boot test
-       =E2=9C=85 CPU: Die Test
-       =E2=9C=85 Storage blktests - blk
-       =E2=9C=85 Storage block - filesystem fio test
-       =E2=9C=85 Storage block - queue scheduler test
-       =E2=9C=85 stress: stress-ng - cpu-cache
-       =E2=9C=85 stress: stress-ng - memory
-       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
-       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
-       =E2=9C=85 Reboot test
-
-  Test sources: https://gitlab.com/cki-project/kernel-tests
-    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
- existing tests!
-
-Aborted tests
--------------
-Tests that didn't complete running successfully are marked with =E2=9A=A1=
-=E2=9A=A1=E2=9A=A1.
-If this was caused by an infrastructure issue, we try to mark that
-explicitly in the report.
-
-Waived tests
-------------
-If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
-uch tests are
-executed but their results are not taken into account. Tests are waived whe=
-n
-their results are not reliable enough, e.g. when they're just introduced or=
- are
-being fixed.
-
-Testing timeout
----------------
-We aim to provide a report within reasonable timeframe. Tests that haven't
-finished running yet are marked with =E2=8F=B1.
-Targeted tests
---------------
-Test runs for patches always include a set of base tests, plus some
-tests chosen based on the file paths modified by the patch. The latter
-are called "targeted tests". If no targeted tests are run, that means
-no patch-specific tests are available. Please, consider contributing a
-targeted test for related patches to increase test coverage. See
-https://docs.engineering.redhat.com/x/_wEZB for more details.
-
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220601-122646/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
+head:   cc1daa161e85e6157fff3455b5aa0b2712730b3e
+commit: cc1daa161e85e6157fff3455b5aa0b2712730b3e drm/i915: Support Async Flip on Linear buffers
+date:   5 days ago
+config: i386-randconfig-c001-20220606 (https://download.01.org/0day-ci/archive/20220606/202206062357.xOj8gI5t-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cc1daa161e85e6157fff3455b5aa0b2712730b3e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220601-122646/Arun-R-Murthy/drm-i915-Support-Async-Flip-on-Linear-buffers/20220426-200801
+        git checkout cc1daa161e85e6157fff3455b5aa0b2712730b3e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_display.c:7532:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+                   case I915_FORMAT_MOD_X_TILED:
+                   ^
+   drivers/gpu/drm/i915/display/intel_display.c:7532:3: note: insert 'break;' to avoid fall-through
+                   case I915_FORMAT_MOD_X_TILED:
+                   ^
+                   break; 
+   1 error generated.
+
+
+vim +7532 drivers/gpu/drm/i915/display/intel_display.c
+
+b0b2bed2a1305c8 Ville Syrjälä         2022-02-14  7458  
+b0b2bed2a1305c8 Ville Syrjälä         2022-02-14  7459  static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct intel_crtc *crtc)
+30ff93af9e19dbe Karthik B S           2020-09-21  7460  {
+30ff93af9e19dbe Karthik B S           2020-09-21  7461  	struct drm_i915_private *i915 = to_i915(state->base.dev);
+30ff93af9e19dbe Karthik B S           2020-09-21  7462  	const struct intel_crtc_state *old_crtc_state, *new_crtc_state;
+30ff93af9e19dbe Karthik B S           2020-09-21  7463  	const struct intel_plane_state *new_plane_state, *old_plane_state;
+30ff93af9e19dbe Karthik B S           2020-09-21  7464  	struct intel_plane *plane;
+30ff93af9e19dbe Karthik B S           2020-09-21  7465  	int i;
+30ff93af9e19dbe Karthik B S           2020-09-21  7466  
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7467  	old_crtc_state = intel_atomic_get_old_crtc_state(state, crtc);
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7468  	new_crtc_state = intel_atomic_get_new_crtc_state(state, crtc);
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7469  
+b0b2bed2a1305c8 Ville Syrjälä         2022-02-14  7470  	if (!new_crtc_state->uapi.async_flip)
+b0b2bed2a1305c8 Ville Syrjälä         2022-02-14  7471  		return 0;
+b0b2bed2a1305c8 Ville Syrjälä         2022-02-14  7472  
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7473  	if (!new_crtc_state->hw.active) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7474  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7475  			    "[CRTC:%d:%s] not active\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7476  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7477  		return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7478  	}
+30ff93af9e19dbe Karthik B S           2020-09-21  7479  
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7480  	if (intel_crtc_needs_modeset(new_crtc_state)) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7481  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7482  			    "[CRTC:%d:%s] modeset required\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7483  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7484  		return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7485  	}
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7486  
+30ff93af9e19dbe Karthik B S           2020-09-21  7487  	if (old_crtc_state->active_planes != new_crtc_state->active_planes) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7488  		drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7489  			    "[CRTC:%d:%s] Active planes cannot be in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7490  			    crtc->base.base.id, crtc->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7491  		return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7492  	}
+30ff93af9e19dbe Karthik B S           2020-09-21  7493  
+30ff93af9e19dbe Karthik B S           2020-09-21  7494  	for_each_oldnew_intel_plane_in_state(state, plane, old_plane_state,
+30ff93af9e19dbe Karthik B S           2020-09-21  7495  					     new_plane_state, i) {
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7496  		if (plane->pipe != crtc->pipe)
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7497  			continue;
+0826edb6a5e5b32 José Roberto de Souza 2021-10-29  7498  
+30ff93af9e19dbe Karthik B S           2020-09-21  7499  		/*
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7500  		 * Only async flip capable planes should be in the state
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7501  		 * if we're really about to ask the hardware to perform
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7502  		 * an async flip. We should never get this far otherwise.
+30ff93af9e19dbe Karthik B S           2020-09-21  7503  		 */
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7504  		if (drm_WARN_ON(&i915->drm,
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7505  				new_crtc_state->do_async_flip && !plane->async_flip))
+30ff93af9e19dbe Karthik B S           2020-09-21  7506  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7507  
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7508  		/*
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7509  		 * Only check async flip capable planes other planes
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7510  		 * may be involved in the initial commit due to
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7511  		 * the wm0/ddb optimization.
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7512  		 *
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7513  		 * TODO maybe should track which planes actually
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7514  		 * were requested to do the async flip...
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7515  		 */
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7516  		if (!plane->async_flip)
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7517  			continue;
+2e08437160d1e8f Ville Syrjälä         2022-02-14  7518  
+30ff93af9e19dbe Karthik B S           2020-09-21  7519  		/*
+30ff93af9e19dbe Karthik B S           2020-09-21  7520  		 * FIXME: This check is kept generic for all platforms.
+244dba4cb596379 Lucas De Marchi       2021-07-28  7521  		 * Need to verify this for all gen9 platforms to enable
+30ff93af9e19dbe Karthik B S           2020-09-21  7522  		 * this selectively if required.
+30ff93af9e19dbe Karthik B S           2020-09-21  7523  		 */
+30ff93af9e19dbe Karthik B S           2020-09-21  7524  		switch (new_plane_state->hw.fb->modifier) {
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7525  		case DRM_FORMAT_MOD_LINEAR:
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7526  			if (DISPLAY_VER(i915) < 12) {
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7527  				drm_dbg_kms(&i915->drm,
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7528  					"[PLANE:%d:%s] Modifier does not support async flips\n",
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7529  					plane->base.base.id, plane->base.name);
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7530  				return -EINVAL;
+cc1daa161e85e61 Arun R Murthy         2022-06-01  7531  			}
+30ff93af9e19dbe Karthik B S           2020-09-21 @7532  		case I915_FORMAT_MOD_X_TILED:
+30ff93af9e19dbe Karthik B S           2020-09-21  7533  		case I915_FORMAT_MOD_Y_TILED:
+30ff93af9e19dbe Karthik B S           2020-09-21  7534  		case I915_FORMAT_MOD_Yf_TILED:
+072ce4164f973bc Stanislav Lisovskiy   2022-01-18  7535  		case I915_FORMAT_MOD_4_TILED:
+30ff93af9e19dbe Karthik B S           2020-09-21  7536  			break;
+30ff93af9e19dbe Karthik B S           2020-09-21  7537  		default:
+30ff93af9e19dbe Karthik B S           2020-09-21  7538  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7539  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7540  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7541  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7542  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7543  
+aaec72ee90bcccf Ville Syrjälä         2021-10-18  7544  		if (new_plane_state->hw.fb->format->num_planes > 1) {
+aaec72ee90bcccf Ville Syrjälä         2021-10-18  7545  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7546  				    "[PLANE:%d:%s] Planar formats do not support async flips\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7547  				    plane->base.base.id, plane->base.name);
+aaec72ee90bcccf Ville Syrjälä         2021-10-18  7548  			return -EINVAL;
+aaec72ee90bcccf Ville Syrjälä         2021-10-18  7549  		}
+aaec72ee90bcccf Ville Syrjälä         2021-10-18  7550  
+be6c1dd5ac074de Imre Deak             2021-10-27  7551  		if (old_plane_state->view.color_plane[0].mapping_stride !=
+be6c1dd5ac074de Imre Deak             2021-10-27  7552  		    new_plane_state->view.color_plane[0].mapping_stride) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7553  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7554  				    "[PLANE:%d:%s] Stride cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7555  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7556  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7557  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7558  
+30ff93af9e19dbe Karthik B S           2020-09-21  7559  		if (old_plane_state->hw.fb->modifier !=
+30ff93af9e19dbe Karthik B S           2020-09-21  7560  		    new_plane_state->hw.fb->modifier) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7561  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7562  				    "[PLANE:%d:%s] Modifier cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7563  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7564  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7565  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7566  
+30ff93af9e19dbe Karthik B S           2020-09-21  7567  		if (old_plane_state->hw.fb->format !=
+30ff93af9e19dbe Karthik B S           2020-09-21  7568  		    new_plane_state->hw.fb->format) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7569  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7570  				    "[PLANE:%d:%s] Pixel format cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7571  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7572  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7573  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7574  
+30ff93af9e19dbe Karthik B S           2020-09-21  7575  		if (old_plane_state->hw.rotation !=
+30ff93af9e19dbe Karthik B S           2020-09-21  7576  		    new_plane_state->hw.rotation) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7577  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7578  				    "[PLANE:%d:%s] Rotation cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7579  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7580  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7581  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7582  
+30ff93af9e19dbe Karthik B S           2020-09-21  7583  		if (!drm_rect_equals(&old_plane_state->uapi.src, &new_plane_state->uapi.src) ||
+30ff93af9e19dbe Karthik B S           2020-09-21  7584  		    !drm_rect_equals(&old_plane_state->uapi.dst, &new_plane_state->uapi.dst)) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7585  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7586  				    "[PLANE:%d:%s] Size/co-ordinates cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7587  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7588  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7589  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7590  
+30ff93af9e19dbe Karthik B S           2020-09-21  7591  		if (old_plane_state->hw.alpha != new_plane_state->hw.alpha) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7592  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7593  				    "[PLANES:%d:%s] Alpha value cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7594  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7595  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7596  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7597  
+30ff93af9e19dbe Karthik B S           2020-09-21  7598  		if (old_plane_state->hw.pixel_blend_mode !=
+30ff93af9e19dbe Karthik B S           2020-09-21  7599  		    new_plane_state->hw.pixel_blend_mode) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7600  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7601  				    "[PLANE:%d:%s] Pixel blend mode cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7602  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7603  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7604  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7605  
+30ff93af9e19dbe Karthik B S           2020-09-21  7606  		if (old_plane_state->hw.color_encoding != new_plane_state->hw.color_encoding) {
+30ff93af9e19dbe Karthik B S           2020-09-21  7607  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7608  				    "[PLANE:%d:%s] Color encoding cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7609  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7610  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7611  		}
+30ff93af9e19dbe Karthik B S           2020-09-21  7612  
+30ff93af9e19dbe Karthik B S           2020-09-21  7613  		if (old_plane_state->hw.color_range != new_plane_state->hw.color_range) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7614  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7615  				    "[PLANE:%d:%s] Color range cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7616  				    plane->base.base.id, plane->base.name);
+30ff93af9e19dbe Karthik B S           2020-09-21  7617  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7618  		}
+ef6ba31dd384058 Anshuman Gupta        2021-09-24  7619  
+ef6ba31dd384058 Anshuman Gupta        2021-09-24  7620  		/* plane decryption is allow to change only in synchronous flips */
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7621  		if (old_plane_state->decrypt != new_plane_state->decrypt) {
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7622  			drm_dbg_kms(&i915->drm,
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7623  				    "[PLANE:%d:%s] Decryption cannot be changed in async flip\n",
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7624  				    plane->base.base.id, plane->base.name);
+ef6ba31dd384058 Anshuman Gupta        2021-09-24  7625  			return -EINVAL;
+30ff93af9e19dbe Karthik B S           2020-09-21  7626  		}
+6b4e414ce8dab70 Ville Syrjälä         2022-02-14  7627  	}
+30ff93af9e19dbe Karthik B S           2020-09-21  7628  
+30ff93af9e19dbe Karthik B S           2020-09-21  7629  	return 0;
+30ff93af9e19dbe Karthik B S           2020-09-21  7630  }
+30ff93af9e19dbe Karthik B S           2020-09-21  7631  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
