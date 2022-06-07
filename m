@@ -1,175 +1,102 @@
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22927F
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 16:48:27 +0000 (UTC)
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-06.nifty.com with ESMTP id 257Gg1Pf014409
-	for <llvm@lists.linux.dev>; Wed, 8 Jun 2022 01:42:01 +0900
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-	by conuserg-09.nifty.com with ESMTP id 257Ge4L0032527;
-	Wed, 8 Jun 2022 01:40:04 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 257Ge4L0032527
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1654620005;
-	bh=KIQsPoYwJl2iHAlLQ3N6FDhBbmcoJ7MxPCwB4wOjf9k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Yk7vi2La1zL4Tvi/uHEi9Ftav84vUtcysbVtd4AYUTjaQPRTS5/EuHa9qKhI7ip4U
-	 effPPofbrLiBTmdtoGW33Gt5nFEBmSXMjy0cegNqMhC2CF6yHb2w4JSwv8yR/PQy2i
-	 mQu9IdjtkNhlnJv+PiOukZGTOoSMDjlfO+toKa1Kc2ebi4Vwi8KNkqfy9tTMUe3+eu
-	 WEhZ03vfegdMEDki/5daPNjuEiFJWsDpwxIoy4Tqn9MIXVDyjAipReKy3icpzZf/lJ
-	 lfWYb8P++4EgFMGiO5XIz2gh4TsGngsJQrfzcRXpXlcKTZrneHNE77y6UjC7v0ozRQ
-	 OpdZ78+/YGF+A==
-X-Nifty-SrcIP: [133.32.177.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for process substitution
-Date: Wed,  8 Jun 2022 01:40:00 +0900
-Message-Id: <20220607164000.447941-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2997F
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 17:24:34 +0000 (UTC)
+Received: by mail-lj1-f176.google.com with SMTP id s13so19979391ljd.4
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 10:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WGXDbLLtqPgbZ/3WaqTn0w4G97KhWPUzyJUyHiAl65c=;
+        b=fXcRlI2bJl9PYMBbbXYz5hPVac9Q75B5BigJvoztYYM/pVGzLkBAOAilWRze4d2fcW
+         rFJNGasK2WrVTwzztCCogHov0MUhSjZOalC1T3G/O40MKOiJpHmp2kL4C+8U1FeabOFK
+         2sMuoLNSnITfk1n8NZpfORm0Lmgl8pG8furTP91T9b+w5xow9FxFbueWE6KOeeA+Onb7
+         RRBfeaUQ6e3NR2lT8g4nQEMkRn9uGcqMpRgKcv9Ai6wZQ+OqTgDkPvwrEKXOqMTZJaZn
+         a6D4k2GdYxEoTIs2uJERv1QWHVkYumcq9CU1sqa8TWf7bqaCHMHc9v8vCdJQxCkrXqr6
+         E2Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WGXDbLLtqPgbZ/3WaqTn0w4G97KhWPUzyJUyHiAl65c=;
+        b=e7777BGKAIMQcOTA4TICea1coxdyPYXT6daB+AqMCMBFupESasylWyjbkk/MopoZEv
+         EpUz0ZACc1l+SymI02w1U/EhLa016ZQQEGgvrNtgDy71U4qWD/ImcS+5SemA0LpvfhhY
+         LOGIC+Qy9mSw25ac7iodz3T9jIJdOEUWzTKORC/WAB4LqWEEn/D4V45L2+4o0qTioItX
+         91yiI0QH1TG4XU3/mmykG1Lh5pqP/noUx/ap8XUgj0F5vE6G37zRkf5D05LgugCbzi/s
+         dQzdhPGXaGGBRqozpryDwzCja79LuJm0CMbJztJ0cXSkRBWhK1gksTPsZdpjqHiHt7s3
+         /wlQ==
+X-Gm-Message-State: AOAM532zkBSKTwQp/7+koMvQiiEPHr0KeHEZ1YP5vNYLiTAZdkln/u1r
+	yEam7NXG0d6UhuRXjTvAdBtlF1PF6jai5sBW0RgCLQ==
+X-Google-Smtp-Source: ABdhPJzZdGRm7zcejXzLCc1zvFixbWQgiEqigChk9f/02vn2hn+b1/g4LqMUsjcR0t4jXmGw+tReeOy+II+7fLstzEg=
+X-Received: by 2002:a2e:8715:0:b0:255:a7e5:d50d with SMTP id
+ m21-20020a2e8715000000b00255a7e5d50dmr3573997lji.26.1654622671928; Tue, 07
+ Jun 2022 10:24:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220607164000.447941-1-masahiroy@kernel.org>
+In-Reply-To: <20220607164000.447941-1-masahiroy@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Jun 2022 10:24:20 -0700
+Message-ID: <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for
+ process substitution
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Bash>=4.4 supports 'wait $!' to check the exit status of a process
-substitution, but some people using older bash versions reported an
-error like this:
+On Tue, Jun 7, 2022 at 9:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Bash>=4.4 supports 'wait $!' to check the exit status of a process
+> substitution, but some people using older bash versions reported an
+> error like this:
+>
+> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> Reported-by: Wang Yugui <wangyugui@e16-tech.com>
+> Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I used the process substitution because a pipeline executes each command
-in a subshell; variables modified within the while-loop in the subshell
-context would be lost after the subshell terminates.
+Some comments below.
 
-Fortunately, Bash>=4.2 supports the 'lastpipe' option, which runs the
-last element of a pipeline in the current shell process.
+> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> index 34415ae1af1b..19c286c23786 100644
+> --- a/Documentation/process/changes.rst
+> +++ b/Documentation/process/changes.rst
+> @@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
+>  GNU C                  5.1              gcc --version
+>  Clang/LLVM (optional)  11.0.0           clang --version
+>  GNU make               3.81             make --version
+> +bash                   4.2              bash --version
 
-Also, set 'pipefail' to catch errors from ${NM}.
+/usr/bin/env bash
+and definitely /bin/bash
+both show up a lot in kernel sources. At this point, I think bash is a
+requirement at this point, so it's good to document it finally.
 
-Bash 4.2, released in 2011, is 5 years older than Bash 4.4.
+> +# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
+> +# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
+> +# '2>/dev/null'. However, it suppresses real error messages as well. Add a
+> +# hand-crafted error message here.
+> +#
+> +# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
+> +# binutils to 2.37, llvm to 13.0.0.
 
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Reported-by: Wang Yugui <wangyugui@e16-tech.com>
-Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Might be nice to include `TODO:` in the comment block. Vim will
+highlight these in comments.
 
-Changes in v2:
-  - Add bash to Documentation/process/changes.rst
-
- Documentation/process/changes.rst | 12 +++++++++++
- scripts/check-local-export        | 35 ++++++++++++++++++-------------
- 2 files changed, 32 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 34415ae1af1b..19c286c23786 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
- GNU C                  5.1              gcc --version
- Clang/LLVM (optional)  11.0.0           clang --version
- GNU make               3.81             make --version
-+bash                   4.2              bash --version
- binutils               2.23             ld -v
- flex                   2.5.35           flex --version
- bison                  2.0              bison --version
-@@ -84,6 +85,12 @@ Make
- 
- You will need GNU make 3.81 or later to build the kernel.
- 
-+Bash
-+----
-+
-+Some bash scripts are used for the kernel build.
-+Bash 4.2 or newer is needed.
-+
- Binutils
- --------
- 
-@@ -362,6 +369,11 @@ Make
- 
- - <ftp://ftp.gnu.org/gnu/make/>
- 
-+Bash
-+----
-+
-+- <ftp://ftp.gnu.org/gnu/bash/>
-+
- Binutils
- --------
- 
-diff --git a/scripts/check-local-export b/scripts/check-local-export
-index da745e2743b7..e21c7b54885d 100755
---- a/scripts/check-local-export
-+++ b/scripts/check-local-export
-@@ -8,11 +8,30 @@
- 
- set -e
- 
-+# catch errors from ${NM}
-+set -o pipefail
-+
-+# Run the last element of a pipeline in the current shell.
-+# Without this, the while-loop would be executed in a subshell, and
-+# the changes made to 'symbol_types' and 'export_symbols' would be lost.
-+shopt -s lastpipe
-+
- declare -A symbol_types
- declare -a export_symbols
- 
- exit_code=0
- 
-+# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
-+# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
-+# '2>/dev/null'. However, it suppresses real error messages as well. Add a
-+# hand-crafted error message here.
-+#
-+# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
-+# binutils to 2.37, llvm to 13.0.0.
-+#
-+# Then, the following line will be really simple:
-+#   ${NM} --quiet ${1} |
-+{ ${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } } |
- while read value type name
- do
- 	# Skip the line if the number of fields is less than 3.
-@@ -37,21 +56,7 @@ do
- 	if [[ ${name} == __ksymtab_* ]]; then
- 		export_symbols+=(${name#__ksymtab_})
- 	fi
--
--	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
--	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
--	# hidden by '2>/dev/null'. However, it suppresses real error messages
--	# as well. Add a hand-crafted error message here.
--	#
--	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
--	# of binutils to 2.37, llvm to 13.0.0.
--	#
--	# Then, the following line will be really simple:
--	#   done < <(${NM} --quiet ${1})
--done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
--
--# Catch error in the process substitution
--wait $!
-+done
- 
- for name in "${export_symbols[@]}"
- do
 -- 
-2.32.0
-
+Thanks,
+~Nick Desaulniers
