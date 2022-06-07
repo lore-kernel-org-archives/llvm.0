@@ -1,43 +1,44 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556EE7C
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 07:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CABB7C
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 07:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654586466; x=1686122466;
+  t=1654587649; x=1686123649;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yu8t4z26qsJ8fD2huo7C0fLOmXT/T0TqYTOz2Lye/5w=;
-  b=I5SFRycV26Zc7+geh6odShFxB3GkFGbxO8n51PbD/WZNfVxjYetQAgN2
-   6AH3z2vUX0oqOpG6UF0PUSq4BH4i4TveLuxRsTqmMxt40jnUYqpP5pWNS
-   vp/U63xMMjgCxNBdjmD1+tx8yhRJCiHuxDbqR+V4aKXRVbCQPil7mSMoX
-   T9GSM93EHqcRaXln3t+QUc/xX5Q5oWGs/4H/xjX7NHpwBIGNAMqRaRxEF
-   sI/WB3TZad8Y92rPSqnN5knL0Zwc5UnII+SSh/VCpW9iX5IAMRThc0Y+5
-   P2W0z/95y9KOdjBMgAhATg3/4ET/NU/ZCHTUGcgYHykrv5gDxoNuJ3Iot
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="259371448"
+  bh=B+WYoP6Zk3TaibE1wctiooiWrRYzinG+AW1DrGNq9DM=;
+  b=SzNkBgMCaH1ddGT4+J+/o3Ub5BhCYF63qYeF/d62CIJ6tA62VQjFRKwJ
+   C2Yctsv3FT2JDb/lZ4qBYnqIRbl3AmJ4JdCu/IKKz5t9+zQ7ZfY6a/1xC
+   nFFt8J5nHi+k0oLBRbZtJ9JNwEDJL4mqjPjBlLx0ZW/Ksk6QEzTtT6LdK
+   KIOooAvL99kez1u+FOtJQQxKxNqB3AES1Ym8A7ocwh6QvTucXkc1PbPol
+   kEvzwdU7zEgLPH9io+1YObhBgyryHVCjVWde8qEe2HiixUAQQhMZo5OoX
+   E5pLFIIniNWqkflrGGEGyVJAbshrt5I2WYb1KU/CgUENYFIQSGFITx3dW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="274248033"
 X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="259371448"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 00:19:48 -0700
+   d="scan'208";a="274248033"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 00:40:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="826234951"
+   d="scan'208";a="636004037"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jun 2022 00:19:46 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2022 00:40:47 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nyTVB-000DT7-Sp;
-	Tue, 07 Jun 2022 07:19:45 +0000
-Date: Tue, 7 Jun 2022 15:19:39 +0800
+	id 1nyTpW-000DTx-Aa;
+	Tue, 07 Jun 2022 07:40:46 +0000
+Date: Tue, 7 Jun 2022 15:40:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
+To: Jack Qiu via Linux-f2fs-devel <linux-f2fs-devel@lists.sourceforge.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	"Darrick J. Wong" <darrick.wong@oracle.com>,
-	linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 115/367] fs/xfs/xfs_inode.c:956:1:
- warning: declaration does not declare anything
-Message-ID: <202206071526.Y2P1K7gT-lkp@intel.com>
+	linux-f2fs-devel@lists.sourceforge.net,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>
+Subject: [jaegeuk-f2fs:dev-test 2/2] fs/f2fs/file.c:3908:15: error: use of
+ undeclared identifier 'sbi'
+Message-ID: <202206071533.vc9l1Css-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,39 +48,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   879e09570c469d3320e25aa7f625ded1a2f5c24e
-commit: 070c22c92d6f738172c822e7bf509633c37d3d31 [115/367] xfs: track file link count updates during live nlinks fsck
-config: hexagon-buildonly-randconfig-r008-20220605 (https://download.01.org/0day-ci/archive/20220607/202206071526.Y2P1K7gT-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   7f7c4d65019e9c82538b92ec5df2e4f0c6765998
+commit: 7f7c4d65019e9c82538b92ec5df2e4f0c6765998 [2/2] f2fs: optimize error handling in redirty_blocks
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220607/202206071533.vc9l1Css-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=070c22c92d6f738172c822e7bf509633c37d3d31
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout 070c22c92d6f738172c822e7bf509633c37d3d31
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?id=7f7c4d65019e9c82538b92ec5df2e4f0c6765998
+        git remote add jaegeuk-f2fs https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git
+        git fetch --no-tags jaegeuk-f2fs dev-test
+        git checkout 7f7c4d65019e9c82538b92ec5df2e4f0c6765998
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/f2fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/xfs/xfs_inode.c:956:1: warning: declaration does not declare anything [-Wmissing-declarations]
-   static XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   ^~~~~~
-   1 warning generated.
+>> fs/f2fs/file.c:3908:15: error: use of undeclared identifier 'sbi'
+                   f2fs_bug_on(sbi, !page);
+                               ^
+   1 error generated.
 
 
-vim +956 fs/xfs/xfs_inode.c
+vim +/sbi +3908 fs/f2fs/file.c
 
-   954	
-   955	#ifdef CONFIG_XFS_LIVE_HOOKS
- > 956	static XFS_HOOKS_SWITCH_DEFINE(xfs_nlinks_hooks_switch);
-   957	
+  3884	
+  3885	static int redirty_blocks(struct inode *inode, pgoff_t page_idx, int len)
+  3886	{
+  3887		DEFINE_READAHEAD(ractl, NULL, NULL, inode->i_mapping, page_idx);
+  3888		struct address_space *mapping = inode->i_mapping;
+  3889		struct page *page;
+  3890		pgoff_t redirty_idx = page_idx;
+  3891		int i, page_len = 0, ret = 0;
+  3892	
+  3893		page_cache_ra_unbounded(&ractl, len, 0);
+  3894	
+  3895		for (i = 0; i < len; i++, page_idx++) {
+  3896			page = read_cache_page(mapping, page_idx, NULL, NULL);
+  3897			if (IS_ERR(page)) {
+  3898				ret = PTR_ERR(page);
+  3899				break;
+  3900			}
+  3901			page_len++;
+  3902		}
+  3903	
+  3904		for (i = 0; i < page_len; i++, redirty_idx++) {
+  3905			page = find_lock_page(mapping, redirty_idx);
+  3906	
+  3907			/* It will never fail, when page has pinned above */
+> 3908			f2fs_bug_on(sbi, !page);
+  3909	
+  3910			set_page_dirty(page);
+  3911			f2fs_put_page(page, 1);
+  3912			f2fs_put_page(page, 0);
+  3913		}
+  3914	
+  3915		return ret;
+  3916	}
+  3917	
 
 -- 
 0-DAY CI Kernel Test Service
