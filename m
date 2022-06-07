@@ -1,83 +1,175 @@
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1FD28FB;
-	Tue,  7 Jun 2022 16:22:40 +0000 (UTC)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 98938255B;
-	Tue,  7 Jun 2022 16:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1654618915;
-	bh=irHcnff1wq9PsQ/ooZgwpGjN4eo9539UTqaoXdp+yZM=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=RyjHxpnZI5dvE9YplBk3xvaTo2NI1eh/x14lJCEoBOJVxmqU7PjnKjM9V6LKGPBnj
-	 4YzQM7LlXpBE8PzJHVBCh0QKmPmdoEO6ZWjqGbP6C4hNW7zOn8+SKn1dzucoNObJhF
-	 1I4Z2gNobFI4cjiCRm0V63wWDX7M8rLpYFSjMRzw=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id A8B462144;
-	Tue,  7 Jun 2022 16:22:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1654618952;
-	bh=irHcnff1wq9PsQ/ooZgwpGjN4eo9539UTqaoXdp+yZM=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=jlaRx3pBEkdB2/ZiAEJKNHge609MRLnrknR9OgcnwIUIxBx7GHR95VeNcV5FFMYQC
-	 IwY3YOmnZY+ZDdO9QZf8il6ZCdDTasUdC9U0jtU9VOzCtciDOc94/Sjz5OyIVou5rz
-	 XgTliCaHuKppKheWt3+n/gr4rA7tuv/o7i6uIXZ0=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 7 Jun 2022 19:22:32 +0300
-Message-ID: <4d81ad89-57c4-88a9-8730-14c0fd9bb075@paragon-software.com>
-Date: Tue, 7 Jun 2022 19:22:31 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22927F
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 16:48:27 +0000 (UTC)
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-06.nifty.com with ESMTP id 257Gg1Pf014409
+	for <llvm@lists.linux.dev>; Wed, 8 Jun 2022 01:42:01 +0900
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+	by conuserg-09.nifty.com with ESMTP id 257Ge4L0032527;
+	Wed, 8 Jun 2022 01:40:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 257Ge4L0032527
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1654620005;
+	bh=KIQsPoYwJl2iHAlLQ3N6FDhBbmcoJ7MxPCwB4wOjf9k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Yk7vi2La1zL4Tvi/uHEi9Ftav84vUtcysbVtd4AYUTjaQPRTS5/EuHa9qKhI7ip4U
+	 effPPofbrLiBTmdtoGW33Gt5nFEBmSXMjy0cegNqMhC2CF6yHb2w4JSwv8yR/PQy2i
+	 mQu9IdjtkNhlnJv+PiOukZGTOoSMDjlfO+toKa1Kc2ebi4Vwi8KNkqfy9tTMUe3+eu
+	 WEhZ03vfegdMEDki/5daPNjuEiFJWsDpwxIoy4Tqn9MIXVDyjAipReKy3icpzZf/lJ
+	 lfWYb8P++4EgFMGiO5XIz2gh4TsGngsJQrfzcRXpXlcKTZrneHNE77y6UjC7v0ozRQ
+	 OpdZ78+/YGF+A==
+X-Nifty-SrcIP: [133.32.177.133]
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for process substitution
+Date: Wed,  8 Jun 2022 01:40:00 +0900
+Message-Id: <20220607164000.447941-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable frame
-Content-Language: en-US
-To: Colin Ian King <colin.i.king@gmail.com>, <ntfs3@lists.linux.dev>
-CC: <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20211230155952.379721-1-colin.i.king@gmail.com>
-From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20211230155952.379721-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
+Content-Transfer-Encoding: 8bit
 
+Bash>=4.4 supports 'wait $!' to check the exit status of a process
+substitution, but some people using older bash versions reported an
+error like this:
 
+  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
 
-On 12/30/21 18:59, Colin Ian King wrote:
-> Variable frame is assigned a value that is never read. The
-> assignment is redundant and can be removed. Cleans up the
-> clang-scan build warning:
-> 
-> fs/ntfs3/file.c:995:3: warning: Value stored to 'frame' is
-> never read [deadcode.DeadStores]
->                  frame = pos >> frame_bits;
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   fs/ntfs3/file.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-> index 3bae76930e68..27c32692513c 100644
-> --- a/fs/ntfs3/file.c
-> +++ b/fs/ntfs3/file.c
-> @@ -992,7 +992,6 @@ static ssize_t ntfs_compress_write(struct kiocb *iocb, struct iov_iter *from)
->   		if (bytes > count)
->   			bytes = count;
->   
-> -		frame = pos >> frame_bits;
->   		frame_vbo = pos & ~(frame_size - 1);
->   		index = frame_vbo >> PAGE_SHIFT;
->   
+I used the process substitution because a pipeline executes each command
+in a subshell; variables modified within the while-loop in the subshell
+context would be lost after the subshell terminates.
 
-Applied, thanks!
+Fortunately, Bash>=4.2 supports the 'lastpipe' option, which runs the
+last element of a pipeline in the current shell process.
+
+Also, set 'pipefail' to catch errors from ${NM}.
+
+Bash 4.2, released in 2011, is 5 years older than Bash 4.4.
+
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+Reported-by: Wang Yugui <wangyugui@e16-tech.com>
+Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+Changes in v2:
+  - Add bash to Documentation/process/changes.rst
+
+ Documentation/process/changes.rst | 12 +++++++++++
+ scripts/check-local-export        | 35 ++++++++++++++++++-------------
+ 2 files changed, 32 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index 34415ae1af1b..19c286c23786 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
+ GNU C                  5.1              gcc --version
+ Clang/LLVM (optional)  11.0.0           clang --version
+ GNU make               3.81             make --version
++bash                   4.2              bash --version
+ binutils               2.23             ld -v
+ flex                   2.5.35           flex --version
+ bison                  2.0              bison --version
+@@ -84,6 +85,12 @@ Make
+ 
+ You will need GNU make 3.81 or later to build the kernel.
+ 
++Bash
++----
++
++Some bash scripts are used for the kernel build.
++Bash 4.2 or newer is needed.
++
+ Binutils
+ --------
+ 
+@@ -362,6 +369,11 @@ Make
+ 
+ - <ftp://ftp.gnu.org/gnu/make/>
+ 
++Bash
++----
++
++- <ftp://ftp.gnu.org/gnu/bash/>
++
+ Binutils
+ --------
+ 
+diff --git a/scripts/check-local-export b/scripts/check-local-export
+index da745e2743b7..e21c7b54885d 100755
+--- a/scripts/check-local-export
++++ b/scripts/check-local-export
+@@ -8,11 +8,30 @@
+ 
+ set -e
+ 
++# catch errors from ${NM}
++set -o pipefail
++
++# Run the last element of a pipeline in the current shell.
++# Without this, the while-loop would be executed in a subshell, and
++# the changes made to 'symbol_types' and 'export_symbols' would be lost.
++shopt -s lastpipe
++
+ declare -A symbol_types
+ declare -a export_symbols
+ 
+ exit_code=0
+ 
++# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
++# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
++# '2>/dev/null'. However, it suppresses real error messages as well. Add a
++# hand-crafted error message here.
++#
++# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
++# binutils to 2.37, llvm to 13.0.0.
++#
++# Then, the following line will be really simple:
++#   ${NM} --quiet ${1} |
++{ ${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } } |
+ while read value type name
+ do
+ 	# Skip the line if the number of fields is less than 3.
+@@ -37,21 +56,7 @@ do
+ 	if [[ ${name} == __ksymtab_* ]]; then
+ 		export_symbols+=(${name#__ksymtab_})
+ 	fi
+-
+-	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
+-	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
+-	# hidden by '2>/dev/null'. However, it suppresses real error messages
+-	# as well. Add a hand-crafted error message here.
+-	#
+-	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
+-	# of binutils to 2.37, llvm to 13.0.0.
+-	#
+-	# Then, the following line will be really simple:
+-	#   done < <(${NM} --quiet ${1})
+-done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
+-
+-# Catch error in the process substitution
+-wait $!
++done
+ 
+ for name in "${export_symbols[@]}"
+ do
+-- 
+2.32.0
+
