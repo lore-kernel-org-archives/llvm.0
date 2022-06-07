@@ -1,161 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECFB2F48
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895F4C385A5;
-	Tue,  7 Jun 2022 20:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654634769;
-	bh=ZjlX7o9AK/ffVeqZzZ5K4UUhk6vQnABK67ThoO275YU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SOIxLu13wVKoV2xBLBasWEyRxoaHDvHdOdJkJ3hcGSMnqiY7pZ4OSwzWbJ4QOwRMj
-	 Hi5qA8rcylqPocnEC2UA+ePhLKsFECsJfu0uDLYTXVOD9nawHFmQtBRv/orfaezf9y
-	 dOjC33JC63ObFelRd3cDa23fqrWjVO29LsIMMuP13ZdwKZdkAsgx4a/YPa4Vdw8k01
-	 FGal4+vdAgC4KVrzoS/ozUBpCm7/qkc6DN6fJ1oGyWAm/v1ypiQge3sOdcqrW6NcsQ
-	 UbshIOcb64NI1PfCCUsqvKGYb/03v/H+BCTVI//5bjlqXhMiP5XdFzuPH9PSOAV6gg
-	 71qGlJdGCU8rw==
-Date: Tue, 7 Jun 2022 13:46:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Justin Stitt <jstitt007@gmail.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, llvm@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] netfilter: conntrack: fix this -Wformat clang warning:
-Message-ID: <Yp+5DqDrVJAS5T8I@dev-arch.thelio-3990X>
-References: <20220606212819.9548-1-jstitt007@gmail.com>
- <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X>
- <CAKwvOdmFCge4cpcyqL1gtqg2xdAgmeuaJZaSMvW=m+cTr8XaaQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D13B2F4D
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 21:22:46 +0000 (UTC)
+Received: by mail-wm1-f47.google.com with SMTP id z9so3165595wmf.3
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 14:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=I0TYj0aY/TkdqOtA53I+eFE0LIyvHOAIiCLx8hJBREw=;
+        b=e40+dm/Z0W0bIfob5pTvP0J2RyA4XpxF11pWtEW7puVHQEiUnWvd2CVD5XctVds9Bn
+         PShLixF5Z4+GFBxqf2YR+q4TKyj0YAyTh8B08UoCUcVGBEeXJw3LB3TDHcgY0OphiaBw
+         BeuKOWXH2i+K+No4ln5jeT/AJUK5T9VEOcG8dUQckKV3KbXWODCdTYeGYur0rCBwOLoT
+         rKutET82TgGy2BgoaxPWUnW8sGs6P4YskJacxjyO7dDtvzcbFv1zJoPmg+MuHPjFSbt/
+         RweF/zHNN6q+a6d0MWPovexRLYenU/ASh1h0PWKSbW10Qc96jNP5Nk2Ls3O4zqDzQnL6
+         fOZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=I0TYj0aY/TkdqOtA53I+eFE0LIyvHOAIiCLx8hJBREw=;
+        b=1LTU/p4T7nC13bMe2znkZ6myz30jLv0TLNiNV+tmjfhlV+5251BvxuuD8YaraUzZIp
+         021wCZIVIr0mLXSSi/eFJL5BGbQ+i9iTC9BD7KSFYh8KCnw2fyEKiPs06UJumHWtCGh3
+         F/P/jID2AoWIZiPiSc1Mn6gQMYI8xzt85CHqeELpcWLNa/KoLzpQQ6loaPN80RoxEKQ0
+         LbaXv/1E74m5OYvmIMrigJeJkoX6iaykoStiYaK3Gs/0CbvwXmNLuJvUecQJsZb7vxaK
+         62xQPRCjFuMdGgiGDw/7kXFvZSFKd7h4E54UHwtrX5ZqhC9yGGAqR3N27rXO11VECDTm
+         mbVg==
+X-Gm-Message-State: AOAM532KgyoVTiTu659IqRGfdLfgefK2oai05b0fJenRqtjRx4lLraS3
+	ixOObNxQvDdobMu1xNS/9mGq2CSsTBxofv6ql/yK
+X-Google-Smtp-Source: ABdhPJyYw/U5+gWoypUqkMl2O59z0OyPFHm7PAW4ahOWZ6+WyOnqtBiiwAIn75Yllh4b0x6DATOkqoiYJsazfLTYCeU=
+X-Received: by 2002:a05:600c:414e:b0:397:55aa:ccc0 with SMTP id
+ h14-20020a05600c414e00b0039755aaccc0mr61566727wmm.51.1654636964669; Tue, 07
+ Jun 2022 14:22:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmFCge4cpcyqL1gtqg2xdAgmeuaJZaSMvW=m+cTr8XaaQ@mail.gmail.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-4-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-4-cgzones@googlemail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 7 Jun 2022 17:22:34 -0400
+Message-ID: <CAHC9VhRatc13ZsBSsjZeGtBfz0ouUGL9n0LTjbQtuZtYv2M43w@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Eric Paris <eparis@parisplace.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Serge Hallyn <serge@hallyn.com>, Austin Kim <austin.kim@lge.com>, 
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Yang Li <yang.lee@linux.alibaba.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 07, 2022 at 01:29:30PM -0700, Nick Desaulniers wrote:
-> On Tue, Jun 7, 2022 at 8:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Justin,
-> >
-> > The subject might be a little more descriptive if if were something
-> > like:
-> >
-> > netfilter: conntrack: Fix clang -Wformat in print_tuple()
-> >
-> > rather than saying "this warning", as subjects should be standalone from
-> > the rest of the message. Minor nit but some maintainers have high
-> > standards for commit messages.
-> >
-> > On Mon, Jun 06, 2022 at 02:28:19PM -0700, Justin Stitt wrote:
-> >
-> > It would be helpful to note here that this warning appears when building
-> > arm64 with clang using -Wformat; the architecture is critical for
-> > reproducing this warning.
-> >
-> > >  | net/netfilter/nf_conntrack_standalone.c:63:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->src.u.tcp.port),
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:64:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->dst.u.tcp.port));
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:69:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->src.u.udp.port),
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:70:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->dst.u.udp.port));
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:75:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->src.u.dccp.port),
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:76:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->dst.u.dccp.port));
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:80:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->src.u.sctp.port),
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  | net/netfilter/nf_conntrack_standalone.c:81:7: warning: format specifies type
-> > >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> > >  |                            ntohs(tuple->dst.u.sctp.port));
-> > >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >
-> > > Variadic functions (printf-like) undergo default argument promotion.
-> > > Documentation/core-api/printk-formats.rst specifically recommends
-> > > using the promoted-to-type's format flag.
-> > >
-> > > Also, as per C11 6.3.1.1:
-> > > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
-> > > `If an int can represent all values of the original type ..., the
-> > > value is converted to an int; otherwise, it is converted to an
-> > > unsigned int. These are called the integer promotions.`
-> >
-> > I think that it is probably worth noting that ntohs() has type 'int' in
-> > this case because arm64 does not define CONFIG_ARCH_USE_BUILTIN_BSWAP to
-> > use the version of __swab16() with a cast to __u16; rather, it uses the
-> > one with the conditional operator, which per 6.5.15.5 means the type of
-> > the result of the conditional operator is determined through these
-> > promotion rules as well.
-> >
-> > I suspect that the conditional versions of __swab{16,32,64}() in
-> > include/uapi/linux/swab.h want a cast on the outside of the conditional
-> > operator with the specified type but I am not sure what other
-> > repurcussions that might have so it is probably safer to just fix these
-> > warnings up one by one.
-> 
-> Yes, there's a subtly where for ternary's the resulting type is the
-> largest of all operands. When the LHS of the ? is larger than either
-> results, the result is STILL the larger type.
-> https://godbolt.org/z/EGjW8sqzf
+On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+> introduced a NULL check on the context after a successful call to
+> security_sid_to_context().  This is on the one hand redundant after
+> checking for success and on the other hand insufficient on an actual
+> NULL pointer, since the context is passed to seq_escape() leading to a
+> call of strlen() on it.
+>
+> Reported by Clang analyzer:
+>
+>     In file included from security/selinux/hooks.c:28:
+>     In file included from ./include/linux/tracehook.h:50:
+>     In file included from ./include/linux/memcontrol.h:13:
+>     In file included from ./include/linux/cgroup.h:18:
+>     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1s=
+t argument to string length function [unix.cstring.NullArg]
+>             seq_escape_mem(m, src, strlen(src), flags, esc);
+>                                    ^~~~~~~~~~~
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/hooks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ha, I used the same test locally to make sure I was understanding things
-correctly :)
+I was waiting for Nick to reply, but he never did, and this looks good
+to me so I just merged it into selinux/next.  Thanks for your patience
+Christian.
 
-> That said, regardless of that change, unnamed parameters of variadic
-> functions will still undergo default argument promotion, so the __u16
-> would still be promoted to int.  So we still want this patch, too.
-
-Ah right, I forgot about the default argument promotion rules. While the
-result of ntohs() would still be promoted to int (and we should use the
-wider specifier for that reason as you said), we wouldn't see a warning
-in the first place because the type of ntohs() would match the specifier
-in all cases, rather than !CONFIG_ARCH_USE_BUILTIN_BSWAP, which is the
-only reason I made that comment. I suspect adding that cast will clear
-up more warnings than just this one, depending on how many there are
-from ntohs() (and __swab16()).
-
-> Justin, can you send a separate patch adding the explicit cast to to
-> __u16 for the ternary expression in __swab16 when
-> __HAVE_BUILTIN_BSWAP16__ is not defined?
-> include/uapi/linux/swab.h
-> Please include Nathan's suggested by tag; cc me and I'll provide review.
-> 
-> >
-> > > Thus it makes sense to change %hu (as well as %u) to %d.
-> >
-> > Regardless of that, changing from '%hu' to '%d' is recommended so that
-> > part of the change is fine. I am not sure that changing '%u' to '%d'
-> > does anything other than add to the diff, as there was no warnings from
-> > those, but consistency is key.
-> 
-> These types in the case of icmp are uint8_t; they also are
-> default-argument-promoted to int. All possible values of uint8_t are
-> representable by int, and so %d and %u will make no difference. It is
-> "no functional change" and simply being consistent, as you say.
-
-Right, I should have made that more clear by adding ", so that part is
-fine as well", thanks for spelling it out!
-
-Cheers,
-Nathan
+--=20
+paul-moore.com
