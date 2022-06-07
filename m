@@ -1,111 +1,85 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7798E320E
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 21:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654637895; x=1686173895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1ePpN/66ifBUrXzD9UOlIVYgsb6yN+4qexSlGr5Seyw=;
-  b=KtUfzRLh4MWc/g1IXL2q7SgNs/hx+fcryBBiBl2sWdHpuAO8MuG+rvPP
-   Hg0oNJRGJ7XHxF6njj3MlULFIiCAOqQBF/rbeRWP8fFFf/AF9US2K63Qj
-   LfwuXDWVc0Ua6TCoaC86xQZpk/Q0gE6FQmIEY6fgRGh0aIFIHRjevcZUQ
-   0QiBu66uiXTgbnqohy1NQm83oLdVJTmnNg6rB3Z+w8YMnDBQslLwxvHoP
-   NPizLcwQ2WovhV2HiT7pLBT7bdQIlROMvMnoI9U7QVZwbk8Gk1UjsiIKF
-   R/CRWjvSqW01x5i3RLHldQo5yN9Rsa2feXpOQ9P7ziq1Kvz7bNzqXKeNH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="265404543"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="265404543"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 14:38:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="565615057"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2022 14:38:07 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nygtq-000Dyj-A4;
-	Tue, 07 Jun 2022 21:38:06 +0000
-Date: Wed, 8 Jun 2022 05:38:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hao Xu <hao.xu@linux.dev>, io-uring@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Subject: Re: [PATCH 4/5] io_uring: support nonblock try for splicing from
- pipe to pipe
-Message-ID: <202206080550.7nXmrsiv-lkp@intel.com>
-References: <20220607080619.513187-5-hao.xu@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76003320E
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 22:20:52 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so8614931pjb.1
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 15:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OAR2/RmOjZbYj98rO6ac1mg+RH5GE5HBqimT+k5kjhE=;
+        b=M3MPEpZWkUQnUQtZkqtKjHgTaFJPCuP8yD6txsdbih3NMKLrTcEvP0q/avKLCBU41/
+         /3puSqoegNDh7Vw58ZqTAqzFQvXNZo4vjupzMO9x6vGIuef2mPLe7QDoK12FQf8TRNCU
+         QXDScL4D3ps9PbPDGeE2keSpUqUtL0+rZ+N+gpkGis57IM+IWoIh39TagtQ/5ncRsRFB
+         rUvPu3HI3WC7nwKIGFJgWkBm9tDiJ/IAkD64f5OZO24Fdg3LlE9AH/BANr5RyATboyZA
+         RGUeSYZ4GkusZ++xgV7AaoVhJFjcoyb3Xlm3XaDEUfvY6itgyXI7eYERZqVVaMGoHmtS
+         VyuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OAR2/RmOjZbYj98rO6ac1mg+RH5GE5HBqimT+k5kjhE=;
+        b=3eELfMxNyYQxATiPmnGNvrKVCAGV8pljzuparolOaULaWTJWIIgTslWTkOIrkbSrap
+         WhGC3WFEUc8kQDfm+KchvM1WlzkJn0K73pBGf4ZuHmmlSjRlfjXiD2eHHDTY5a9i2Nw5
+         fZ69RwgG3fbxHUB+jfhWOSYpy0KHy+hO9MKtsPZbOmsSOGAEmOwIWAHxgSit+u+SD2/i
+         V3krcE75uST3uy5FolVtgWtYi8DZtW8NPebh6dwEMR1H3XPrtonRKaxtm3Ck6fb8kPtm
+         uDlCBNszJR0nsc1fxrd59RzjsQtc+wEZcMVLaKrsaUSn6JY7rjHZfIid6hgNklpizTke
+         MoYw==
+X-Gm-Message-State: AOAM532DwTTv0IOoT/cVOhiK1wKuGJDw0cXIuqc5BtPWjpqtrroGGYSk
+	EEKKZ0em+Bda+KPaAOyxH2+4k1riL3f0jOLu
+X-Google-Smtp-Source: ABdhPJwXcISX0IOahOjg2aruo+uAMtXRJD494uIGO8TUrweujgZqug76VqTpGVNJXoGSOVg1tSYsMA==
+X-Received: by 2002:a17:903:1247:b0:156:25b4:4206 with SMTP id u7-20020a170903124700b0015625b44206mr31259117plh.146.1654640450835;
+        Tue, 07 Jun 2022 15:20:50 -0700 (PDT)
+Received: from penguin.lxd ([2620:0:1000:2514:216:3eff:fe31:a1ca])
+        by smtp.googlemail.com with ESMTPSA id p10-20020a170902780a00b001640aad2f71sm13286969pll.180.2022.06.07.15.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 15:20:50 -0700 (PDT)
+From: Justin Stitt <jstitt007@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Justin Stitt <jstitt007@gmail.com>
+Subject: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16 conditional
+Date: Tue,  7 Jun 2022 15:20:06 -0700
+Message-Id: <20220607222006.22719-1-jstitt007@gmail.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607080619.513187-5-hao.xu@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-Hi Hao,
+if __HAVE_BUILTIN_BSWAP16__ is defined then __swab16 utilizes a __u16 cast.
+This same cast should be used if __HAVE_BUILTIN_BSWAP16__ is not defined as
+well. This should fix loads (at least a few) clang -Wformat warnings
+specifically with `ntohs()`
 
-Thank you for the patch! Perhaps something to improve:
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+---
+ include/uapi/linux/swab.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test WARNING on d8271bf021438f468dab3cd84fe5279b5bbcead8]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/support-nonblock-submission-for-splice-pipe-to-pipe/20220607-161605
-base:   d8271bf021438f468dab3cd84fe5279b5bbcead8
-config: mips-buildonly-randconfig-r001-20220607 (https://download.01.org/0day-ci/archive/20220608/202206080550.7nXmrsiv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/96683840c3f19b77a536a259094d24e0cd93ebc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hao-Xu/support-nonblock-submission-for-splice-pipe-to-pipe/20220607-161605
-        git checkout 96683840c3f19b77a536a259094d24e0cd93ebc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> io_uring/splice.c:91:6: warning: no previous prototype for function 'io_splice_support_nowait' [-Wmissing-prototypes]
-   bool io_splice_support_nowait(struct file *in, struct file *out)
-        ^
-   io_uring/splice.c:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool io_splice_support_nowait(struct file *in, struct file *out)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/io_splice_support_nowait +91 io_uring/splice.c
-
-    90	
-  > 91	bool io_splice_support_nowait(struct file *in, struct file *out)
-    92	{
-    93		if (get_pipe_info(in, true) && get_pipe_info(out, true))
-    94			return true;
-    95	
-    96		return false;
-    97	}
-    98	
-
+diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+index 7272f85d6d6a..f6be3f2e6fee 100644
+--- a/include/uapi/linux/swab.h
++++ b/include/uapi/linux/swab.h
+@@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+ #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+ #else
+ #define __swab16(x)				\
+-	(__builtin_constant_p((__u16)(x)) ?	\
++	(__u16)(__builtin_constant_p((__u16)(x)) ?	\
+ 	___constant_swab16(x) :			\
+ 	__fswab16(x))
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+
