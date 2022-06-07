@@ -1,46 +1,43 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CFB7C
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 06:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB337C
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 06:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654584288; x=1686120288;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9rkHTm7Ei8ImHRwiNFg80RLRPu9BYHXM2S+xFJHjJeQ=;
-  b=dT4mPTRSWK/6g8Y89aUwVj9wExVOYUWEa3v/oDh2zEIzULm7T2DNz/z1
-   5+Algq1Jz7Inj9zJArhg0caqa1aV8yddC2qgoNiQWvpDLCMNwWBMhvdSR
-   Iv3wMMajEzp0T3Vwm605HYXdDpAMnkYDYSBRsNN74Xm9LKff0dZXTaUAF
-   FMaf8DFG8ZYck6QMXD+In7miSMdvzH2Cp2+EVFbJmiX4lXT1ke33nXpAD
-   yuajudhVZXBIGjCMwGsLRBEbNHvZS5sqdKzSbeO8GIcB9UnztgIAEGtXr
-   EIz475/4wTUdoUAkg7axaPjn0gmVex4p3nvNtL5W/4xiomShadeInrBqW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="337962894"
+  t=1654585187; x=1686121187;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ugz5Yr2O87wU2aHl3D58metSBL+6GZHntS4uQF/xDd0=;
+  b=VvpqBeZea5OmEP8pAfTPtgkvLKk3ZnlGrn9B4chcDCSZNEXcKeYKTEnG
+   SBypGu9Srydq8piJ/bzodDMQGC5KDIX6Ind7lDvWsMQonVGvpxgOENL/5
+   KYWHBukNdL52HQtByVdLAcqQJZ+uovhWU9oNPehKOLgY1ZVRNQrsLeQ8W
+   wUM5OEtiOyyJQ+jSOXH6DTtie8uRq1Nb3C1Yn50+g97DMD0/BvSyxbhLj
+   2/bh0/nb9zTpO3PIEqEbIJgrNhhQesql2VFPZ/pxO3BwlBCnVAl630SNM
+   BW9Lc+qQKbdK2ISlqVOQ4Uoph8V0n8LhHRrFAnrzDXmJDgvvo23gWMyOs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="337968186"
 X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="337962894"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 23:44:47 -0700
+   d="scan'208";a="337968186"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 23:59:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="709362247"
+   d="scan'208";a="584065425"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Jun 2022 23:44:45 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 06 Jun 2022 23:59:45 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nySxI-000DR1-I4;
-	Tue, 07 Jun 2022 06:44:44 +0000
-Date: Tue, 7 Jun 2022 14:44:06 +0800
+	id 1nyTBp-000DRh-3V;
+	Tue, 07 Jun 2022 06:59:45 +0000
+Date: Tue, 7 Jun 2022 14:58:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: kah.jing.lee@intel.com, arnd@arndb.de, gregkh@linuxfoundation.org
+To: Thomas Gleixner <tglx@linutronix.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, dinguyen@kernel.org,
-	tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>,
-	Ley Foon Tan <lftan@altera.com>
-Subject: Re: [PATCH 1/2] drivers: misc: intel_sysid: Add sysid from arch to
- drivers
-Message-ID: <202206071402.jrrayqsc-lkp@intel.com>
-References: <20220602122212.3021232-1-kah.jing.lee@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [tglx-spdx:2022-batch1 11/25]
+ arch/x86/crypto/crc32-pclmul_asm.S:2:2: error: unexpected token at start of
+ statement
+Message-ID: <202206071406.DZ8LbAVZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,111 +46,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602122212.3021232-1-kah.jing.lee@intel.com>
 
-Hi,
+Hi Thomas,
 
-Thank you for the patch! Perhaps something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on soc/for-next staging/staging-testing v5.19-rc1 next-20220607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/kah-jing-lee-intel-com/New-driver-for-Intel-Altera-FPGA-System-ID-softIP/20220602-202553
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 90de6805267f8c79cd2b1a36805071e257c39b5c
-config: s390-randconfig-r024-20220607 (https://download.01.org/0day-ci/archive/20220607/202206071402.jrrayqsc-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git 2022-batch1
+head:   91ba6750a1ba591f72b2f68e0a209c9cc7c0ace4
+commit: 5de8e209fec395c4e3a43a9554ef3459547f0364 [11/25] treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_179.RULE
+config: x86_64-randconfig-a009 (https://download.01.org/0day-ci/archive/20220607/202206071406.DZ8LbAVZ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bfd40e4202ce67e500bedec9eaaf9b7207f980d0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review kah-jing-lee-intel-com/New-driver-for-Intel-Altera-FPGA-System-ID-softIP/20220602-202553
-        git checkout bfd40e4202ce67e500bedec9eaaf9b7207f980d0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git/commit/?id=5de8e209fec395c4e3a43a9554ef3459547f0364
+        git remote add tglx-spdx https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git
+        git fetch --no-tags tglx-spdx 2022-batch1
+        git checkout 5de8e209fec395c4e3a43a9554ef3459547f0364
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/misc/intel_sysid.c:26:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/misc/intel_sysid.c:26:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/misc/intel_sysid.c:26:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/misc/intel_sysid.c:109:34: warning: unused variable 'intel_sysid_match' [-Wunused-const-variable]
-   static const struct of_device_id intel_sysid_match[] = {
-                                    ^
-   13 warnings generated.
+>> arch/x86/crypto/crc32-pclmul_asm.S:2:2: error: unexpected token at start of statement
+    */
+    ^
 
 
-vim +/intel_sysid_match +109 drivers/misc/intel_sysid.c
+vim +2 arch/x86/crypto/crc32-pclmul_asm.S
 
-   108	
- > 109	static const struct of_device_id intel_sysid_match[] = {
-   110		{ .compatible = "intel,socfpga-sysid-1.0" },
-   111		{ /* Sentinel */ }
-   112	};
-   113	
+78c37d191dd6899 Alexander Boyko 2013-01-10 @2   */
+78c37d191dd6899 Alexander Boyko 2013-01-10  3  
+
+:::::: The code at line 2 was first introduced by commit
+:::::: 78c37d191dd6899d8c219fee597a17d6e3c5d288 crypto: crc32 - add crc32 pclmulqdq implementation and wrappers for table implementation
+
+:::::: TO: Alexander Boyko <alexander_boyko@xyratex.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
 
 -- 
 0-DAY CI Kernel Test Service
