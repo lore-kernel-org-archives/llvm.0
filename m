@@ -1,207 +1,121 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D962F48
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:36:55 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id c2so10670977lfk.0
-        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 13:36:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D4A2F48
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:45:03 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id u26so29390875lfd.8
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 13:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3q6TfnyhK/JVdpGe1sn/i51UuwyEe8WKDR0Bhpepgkw=;
-        b=tnMvdL81BwwXW6yVLeadSVxqoY40YLtneqyhtf7dzDEpjVWIgYH2iRPKp6eha1ETf/
-         Smnkr1PDED9FhO6HiPjOWfoRl+qtY5bDl2zV8/T21F7omzHIsh8REiwWKm7rynrFC7ha
-         9z+rlqOGw5hX23QjtYQZk2+zXzfNjdTLnK4vrIWAqzEASTEjsvOOPjhpZ6f40Z7QrcnB
-         /r0WaquGT7aHMBd+33JvbWRYcNc6jPuoNu/Lox9ShGV826J9aHUp1scqdqE5EYLGSHfx
-         gfWYSsAzMjOPFQwNOxPDSeXLbznp8dwHpy4bYBa63aLMO72Y8VFdbnm8Wo5j+lC8f2hp
-         o8GA==
+        bh=on30OEe/DO5zamISOEay2WIQIU04GrMtf4oLpYULsi0=;
+        b=qiK8I6WsrgYjyC91chUFuazIMqEbG3bN/GrHqaSMF4F8x6MV8QSOzCE71g3Nm8aqBY
+         GkphlLTEkCrLci6izemxw/C9WRQBv0IXrmoR1/KWbahNRw7cGoDMRwr5A/9l3/GzShi+
+         JRNwJT9PDXB63R0cJa3JnoL1VCWjQ1Cw1KWCrjyLqSoei6nvABDIIIhTw64rVpOQW1Kg
+         q1rMMkLT+fM3bK5K1OUIlEHDQDNblUNPpHV3zEMjJkKkxaj0qLC8V8JO+mZY8C44m+YZ
+         prF8n8lV7evp1UVmD7avSiGmHM86dDosTsCNkBqWSZoZeC8M3ague2Ctr85fdwk5aXGn
+         nRqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3q6TfnyhK/JVdpGe1sn/i51UuwyEe8WKDR0Bhpepgkw=;
-        b=zGtIP+AcXHRyMR7JrmyHe+nDpwLO4Rzj7IrQpzgkvLdi8BAfOLmsM5riwqURvSjEdE
-         bd0EeKHA8ou5B74G8/9VAZAz+2uzH9QAIy9Z36moHEkLh5XZfnKk49rWc6FS674Dwyos
-         igilJY3rxdX4ZIyvfclLjKNHXCNjEdIMPoRq0GUboVPaqrI3ioo6GGoxkK7Z7ZsdqZif
-         S3t90rLfmINlW9/nnoaSWDtXVvIW4JFnZMV0HY0B7YdclWbl5J/xyFQEB3bkqDu3Bylz
-         5YTURu/lUr88LHZNhvhr74LZkSlh9pTrGqtBpEz/QAvrPLLrL3F1WCKR6S1PkcRr83VI
-         1xmg==
-X-Gm-Message-State: AOAM531XxWDTAgToAy7mbUnIOxq1RZrWTycjJyPKGdLfXYlLvhElPsD9
-	SZ0JebVaFevhnLwZXoQAR1h9Qcca8jxEk/IrwEFXqA==
-X-Google-Smtp-Source: ABdhPJy8Duzb8ouGhVTvWRJ84NdalTVXSBgNTWEcv3+UOHIOpiHr/k9nNY8Ntdn5isOX7HonVhqmVDniLFKJXZMbJLw=
-X-Received: by 2002:a05:6512:3132:b0:478:f2f1:3a75 with SMTP id
- p18-20020a056512313200b00478f2f13a75mr21381284lfd.100.1654634213023; Tue, 07
- Jun 2022 13:36:53 -0700 (PDT)
+        bh=on30OEe/DO5zamISOEay2WIQIU04GrMtf4oLpYULsi0=;
+        b=yzJ/xKgW3WQsRZd8JahQgwPf+vV7qEg1eeUg7k+53qYtsAXJaoe4GG9qscClsdktKm
+         SLTCKNgztmxtQx+KID6Qzv2a8aBBDT1pxSO93QQey2okZ9okA+sm0eDLvD/ab/btuf2c
+         gKXxoP6PQRJhDaZ6bBbufemNSqd7WIck8U2nWwb0CuYcnGvmmvsPCNkS4Kw48BzE56+7
+         tl9UKBDgpl5zxrIC8Ql17PLtNc/dgyCk+saBv8SPdD/rCoQkcLtKTLV8c/aQ3X4AVqZT
+         6I86Pf23LhSSjgcFhWlUiRYpD5yILKen1ZT6Bd3MwCBRGaGsEToeMs0xnEU7zrltrcnf
+         M6SA==
+X-Gm-Message-State: AOAM530ot5j5O6NjfZadluQihbkT7Qlo0cv0KEeEG+NS3w9K88OOmsfp
+	k2T82K4TTS5CieD2MM2Qndi+tWjsrS6eWfHlnn913g==
+X-Google-Smtp-Source: ABdhPJydJnHSMFNA7KkWvxEBYxxyscRFA6vipqsuXxkhyRm5UrhSrOPz9WDL3yIG52KtyuSzUpI+acnnvERqzMf/7Ko=
+X-Received: by 2002:a05:6512:401c:b0:479:7232:5444 with SMTP id
+ br28-20020a056512401c00b0047972325444mr2089108lfb.403.1654634701789; Tue, 07
+ Jun 2022 13:45:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X> <20220607180847.13482-1-jstitt007@gmail.com>
- <CAKwvOd=C2kyMVLYTKJcBQNnqK0T4nEBMeaS3DpTM2ez1P+qcqQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=C2kyMVLYTKJcBQNnqK0T4nEBMeaS3DpTM2ez1P+qcqQ@mail.gmail.com>
+References: <20220607191119.20686-1-jstitt007@gmail.com>
+In-Reply-To: <20220607191119.20686-1-jstitt007@gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Jun 2022 13:36:41 -0700
-Message-ID: <CAKwvOdnAALywDS6aZKCu1xnocc8LR5q_-UdLwSkBJ83nS-bL6g@mail.gmail.com>
-Subject: Re: [PATCH v2] netfilter: conntrack: Fix clang -Wformat warning in print_tuple()
+Date: Tue, 7 Jun 2022 13:44:50 -0700
+Message-ID: <CAKwvOdkHb9W1dePaKAuSKv2D0e0uMGLGCZGeakzgD3ZWxf-2iA@mail.gmail.com>
+Subject: Re: [PATCH] net: amd-xgbe: fix clang -Wformat warning
 To: Justin Stitt <jstitt007@gmail.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, 
+Cc: Tom Lendacky <thomas.lendacky@amd.com>, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com, Tom Rix <trix@redhat.com>, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Also, please make sure to run scripts/get_maintainer.pl on your patch
-file and CC everyone it recommends, with the maintainers you want to
-pick up your patch in the To field.
-https://lore.kernel.org/llvm/20220607180847.13482-1-jstitt007@gmail.com/T/#u
+On Tue, Jun 7, 2022 at 12:11 PM Justin Stitt <jstitt007@gmail.com> wrote:
+>
+> see warning:
+> | drivers/net/ethernet/amd/xgbe/xgbe-drv.c:2787:43: warning: format specifies
+> | type 'unsigned short' but the argument has type 'int' [-Wformat]
+> |        netdev_dbg(netdev, "Protocol: %#06hx\n", ntohs(eth->h_proto));
+> |                                      ~~~~~~     ^~~~~~~~~~~~~~~~~~~
+>
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends
+> using the promoted-to-type's format flag.
+>
+> Also, as per C11 6.3.1.1:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
+> `If an int can represent all values of the original type ..., the
+> value is converted to an int; otherwise, it is converted to an
+> unsigned int. These are called the integer promotions.`
+>
+> Since the argument is a u16 it will get promoted to an int and thus it is
+> most accurate to use the %x format specifier here. It should be noted that the
+> `#06` formatting sugar does not alter the promotion rules.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <jstitt007@gmail.com>
 
-$ ./scripts/get_maintainer.pl
-0001-netfilter-conntrack-Fix-clang-Wformat-warning-in-pri.patch
-Pablo Neira Ayuso <pablo@netfilter.org> (maintainer:NETFILTER)
-Jozsef Kadlecsik <kadlec@netfilter.org> (maintainer:NETFILTER)
-Florian Westphal <fw@strlen.de> (maintainer:NETFILTER)
-"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING [GENERAL])
-Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING [GENERAL])
-Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING [GENERAL])
-Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING [GENERAL])
+LGTM; thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Don't forget to cc everyone from ./scripts/get_maintainer.pl!
+$ /scripts/get_maintainer.pl
+20220607_jstitt007_net_amd_xgbe_fix_clang_wformat_warning.mbx
+Tom Lendacky <thomas.lendacky@amd.com> (supporter:AMD XGBE DRIVER)
+"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
+Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
 Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUPPORT)
 Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUILD SUPPORT)
 Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
-netfilter-devel@vger.kernel.org (open list:NETFILTER)
-coreteam@netfilter.org (open list:NETFILTER)
-netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+netdev@vger.kernel.org (open list:AMD XGBE DRIVER)
 linux-kernel@vger.kernel.org (open list)
-llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT
+llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
 
-On Tue, Jun 7, 2022 at 1:33 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> ---
+>  drivers/net/ethernet/amd/xgbe/xgbe-drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> On Tue, Jun 7, 2022 at 11:09 AM Justin Stitt <jstitt007@gmail.com> wrote:
-> >
-> >  | net/netfilter/nf_conntrack_standalone.c:63:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->src.u.tcp.port),
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:64:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->dst.u.tcp.port));
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:69:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->src.u.udp.port),
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:70:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->dst.u.udp.port));
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:75:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->src.u.dccp.port),
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:76:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->dst.u.dccp.port));
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:80:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->src.u.sctp.port),
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  | net/netfilter/nf_conntrack_standalone.c:81:7: warning: format specifies type
-> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
-> >  |                            ntohs(tuple->dst.u.sctp.port));
-> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Variadic functions (printf-like) undergo default argument promotion.
-> > Documentation/core-api/printk-formats.rst specifically recommends
-> > using the promoted-to-type's format flag.
-> >
-> > Also, as per C11 6.3.1.1:
-> > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
-> > `If an int can represent all values of the original type ..., the
-> > value is converted to an int; otherwise, it is converted to an
-> > unsigned int. These are called the integer promotions.`
-> > Thus it makes sense to change %hu (as well as %u) to %d.
-> >
-> > It should be noted that %u does not produce the same warning as %hu in this
-> > context. However, it should probably be changed as well for consistency.
+> diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+> index a3593290886f..4d46780fad13 100644
+> --- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+> +++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+> @@ -2784,7 +2784,7 @@ void xgbe_print_pkt(struct net_device *netdev, struct sk_buff *skb, bool tx_rx)
 >
-> Right, because they are `unsigned char` and the parameter is unnamed
-> for variadic functions they are also default-argument-promoted to int.
-> -Wformat won't warn on signedness.
+>         netdev_dbg(netdev, "Dst MAC addr: %pM\n", eth->h_dest);
+>         netdev_dbg(netdev, "Src MAC addr: %pM\n", eth->h_source);
+> -       netdev_dbg(netdev, "Protocol: %#06hx\n", ntohs(eth->h_proto));
+> +       netdev_dbg(netdev, "Protocol: %#06x\n", ntohs(eth->h_proto));
 >
-> Thanks for the patch!
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
->
-> Also, Nathan supplied his RB tag on v1; it's ok next time to include
-> it on subsequent revisions of patches, so long as you don't change the
-> patch too much between revisions.
->
-> >
-> > Signed-off-by: Justin Stitt <jstitt007@gmail.com>
-> > ---
-> >  Diff between v1 -> v2:
-> >  * update commit message and subject line
-> >
-> >  Note: The architecture (arm64) is critical for reproducing this warning.
-> >
-> >  net/netfilter/nf_conntrack_standalone.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-> > index 6ad7bbc90d38..afbec8a12c5e 100644
-> > --- a/net/netfilter/nf_conntrack_standalone.c
-> > +++ b/net/netfilter/nf_conntrack_standalone.c
-> > @@ -53,30 +53,30 @@ print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
-> >
-> >         switch (l4proto->l4proto) {
-> >         case IPPROTO_ICMP:
-> > -               seq_printf(s, "type=%u code=%u id=%u ",
-> > +               seq_printf(s, "type=%d code=%d id=%d ",
-> >                            tuple->dst.u.icmp.type,
-> >                            tuple->dst.u.icmp.code,
-> >                            ntohs(tuple->src.u.icmp.id));
-> >                 break;
-> >         case IPPROTO_TCP:
-> > -               seq_printf(s, "sport=%hu dport=%hu ",
-> > +               seq_printf(s, "sport=%d dport=%d ",
-> >                            ntohs(tuple->src.u.tcp.port),
-> >                            ntohs(tuple->dst.u.tcp.port));
-> >                 break;
-> >         case IPPROTO_UDPLITE:
-> >         case IPPROTO_UDP:
-> > -               seq_printf(s, "sport=%hu dport=%hu ",
-> > +               seq_printf(s, "sport=%d dport=%d ",
-> >                            ntohs(tuple->src.u.udp.port),
-> >                            ntohs(tuple->dst.u.udp.port));
-> >
-> >                 break;
-> >         case IPPROTO_DCCP:
-> > -               seq_printf(s, "sport=%hu dport=%hu ",
-> > +               seq_printf(s, "sport=%d dport=%d ",
-> >                            ntohs(tuple->src.u.dccp.port),
-> >                            ntohs(tuple->dst.u.dccp.port));
-> >                 break;
-> >         case IPPROTO_SCTP:
-> > -               seq_printf(s, "sport=%hu dport=%hu ",
-> > +               seq_printf(s, "sport=%d dport=%d ",
-> >                            ntohs(tuple->src.u.sctp.port),
-> >                            ntohs(tuple->dst.u.sctp.port));
-> >                 break;
-> > --
-> > 2.30.2
-> >
->
->
+>         for (i = 0; i < skb->len; i += 32) {
+>                 unsigned int len = min(skb->len - i, 32U);
 > --
-> Thanks,
-> ~Nick Desaulniers
-
+> 2.30.2
+>
 
 
 -- 
