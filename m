@@ -1,90 +1,215 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE5A7C
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 19:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654631825; x=1686167825;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=cT4HnWxZ5YEcXe33MLvIyasEsHsC3AhdEwl2TozGkXE=;
-  b=OmCmGvE3k9uQQXi7oiqkzkvddRa1bVYXfRgGMhDb+5iTWdGuD2vKe2Ug
-   cia0g6wQaseA/y8whG+5snPo8Ybwyi/f+cl+LaSKplEiRhIYE4YCO5KM+
-   JHkP1QFv5GsmoIz3FAYwDrxsvZgCvBi7eTNqQSyDxnpENnwEC3ejrTrrd
-   lWmavT/V99t31rNjUH55jeFIpbg4j5fSv2po63eg3cK+5e3bxpV62wlh+
-   iSVMkcYn6WpYyjD6u+3T0fvgzBIIMcWOelsokHP0qFcBAJsCseb/OaKDS
-   WMw6s+RnfRzC3ojGHantEaNSfzt8bNpARycp+jPSGwQzAh+RyX1xrLBfO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275516648"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="275516648"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 12:57:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="565575010"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2022 12:57:03 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nyfK2-000DuL-Lt;
-	Tue, 07 Jun 2022 19:57:02 +0000
-Date: Wed, 8 Jun 2022 03:56:29 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
- 8168/9999] vmlinux.o: warning: objtool: __switch_to_asm()+0x0: undefined
- stack state
-Message-ID: <202206080312.96b5TnRP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30DA7C
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:29:44 +0000 (UTC)
+Received: by mail-lf1-f54.google.com with SMTP id j10so30041115lfe.12
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 13:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UOYpSc7h6G6Mcnhor2e/NffZqKr7OZqCk2rdZZjgr2A=;
+        b=TlsXRljIGk9azzfB7KgTa0t3mP4ywgrVDoG/+pFDEZgb1hEMZ7e8NxJHUseFzaLuCS
+         63M24bNSRyHaRS+qPGJZYLgyxE6+RBHwFnJ2OzLr9DsC99KLD9hmsotHUWAx7d1wQbQy
+         BP5ugycFWWRS4QRHCgpuniS00B33qGZNz4/WNZ+NZfecqA0N/PPXhSZP+3fdPgPAT6Ra
+         CPeT7cGR1IyAsqxq7fAvIooQTz3W5aHKK2aheT3/8Y9E+9aAYMipsehx168LQjj/OtpD
+         SIv9Xp1fWqYJOWbxspFT82ZsyjCUX3ni3ARi3jrKiaGfzTl9+ocBWEetSJRiUBW7uk6J
+         ZIng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UOYpSc7h6G6Mcnhor2e/NffZqKr7OZqCk2rdZZjgr2A=;
+        b=QDeg4rd0KeYKGy0QxsOqaNUpBsvchgOAG0zA0KYAygD9ic1UjDrWQGchLmi0y+QM/0
+         2hYmVcvS68PkCk2hrWGbO++Opk7LAZZ24fYld1I5fM5RUI+uEl8CoiejpAXoaC6q1oRX
+         5pEjYwmCTq4xmoiWw4qqPLnX5mnU+13zU0mYhep9cSIOn9YNxNSWh3onwt1U4p//eTBK
+         +YkmHu/JTZTzYnZ6KytZdeTNNoKq4xl8VCZbCprY7eQzZebHgt6dRluZo5cOW2IF31jc
+         YtXTEp4ENZ6fCsuD9OHtBMBbfVxq1u9YD1QN/gS921vG2upbYoe4RLTSmTDkuSzj0Bgz
+         wqLQ==
+X-Gm-Message-State: AOAM533xJHdkGloOKXYcqZzDgoaLNdaeKkRmpCiJUiqeElfyCND/fLaV
+	3Bpr0li52W3Ws1wnlGK5IYYwTrSKKBRU9FmLGRKBGw==
+X-Google-Smtp-Source: ABdhPJz8e1qkF3YsPNqQ+CSoYj7aqtQOE0vae7btjfiKP9le+uXKwKIHwZDpfRB4B0gvYe988Q34Dn4thhR7sEsYWio=
+X-Received: by 2002:ac2:5c44:0:b0:479:11e1:36f7 with SMTP id
+ s4-20020ac25c44000000b0047911e136f7mr17801753lfp.432.1654633782547; Tue, 07
+ Jun 2022 13:29:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220606212819.9548-1-jstitt007@gmail.com> <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X>
+In-Reply-To: <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Jun 2022 13:29:30 -0700
+Message-ID: <CAKwvOdmFCge4cpcyqL1gtqg2xdAgmeuaJZaSMvW=m+cTr8XaaQ@mail.gmail.com>
+Subject: Re: [PATCH] netfilter: conntrack: fix this -Wformat clang warning:
+To: Nathan Chancellor <nathan@kernel.org>, Justin Stitt <jstitt007@gmail.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
+	Florian Westphal <fw@strlen.de>, llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-TO: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Tue, Jun 7, 2022 at 8:27 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Justin,
+>
+> The subject might be a little more descriptive if if were something
+> like:
+>
+> netfilter: conntrack: Fix clang -Wformat in print_tuple()
+>
+> rather than saying "this warning", as subjects should be standalone from
+> the rest of the message. Minor nit but some maintainers have high
+> standards for commit messages.
+>
+> On Mon, Jun 06, 2022 at 02:28:19PM -0700, Justin Stitt wrote:
+>
+> It would be helpful to note here that this warning appears when building
+> arm64 with clang using -Wformat; the architecture is critical for
+> reproducing this warning.
+>
+> >  | net/netfilter/nf_conntrack_standalone.c:63:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.tcp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:64:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.tcp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:69:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.udp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:70:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.udp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:75:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.dccp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:76:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.dccp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:80:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.sctp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:81:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.sctp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Variadic functions (printf-like) undergo default argument promotion.
+> > Documentation/core-api/printk-formats.rst specifically recommends
+> > using the promoted-to-type's format flag.
+> >
+> > Also, as per C11 6.3.1.1:
+> > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
+> > `If an int can represent all values of the original type ..., the
+> > value is converted to an int; otherwise, it is converted to an
+> > unsigned int. These are called the integer promotions.`
+>
+> I think that it is probably worth noting that ntohs() has type 'int' in
+> this case because arm64 does not define CONFIG_ARCH_USE_BUILTIN_BSWAP to
+> use the version of __swab16() with a cast to __u16; rather, it uses the
+> one with the conditional operator, which per 6.5.15.5 means the type of
+> the result of the conditional operator is determined through these
+> promotion rules as well.
+>
+> I suspect that the conditional versions of __swab{16,32,64}() in
+> include/uapi/linux/swab.h want a cast on the outside of the conditional
+> operator with the specified type but I am not sure what other
+> repurcussions that might have so it is probably safer to just fix these
+> warnings up one by one.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
-head:   aadf7ad9db2f7d93ecfb34d0e4f328519460c94e
-commit: e48efff5cb5fd63a687465347bdbb52ef98dad44 [8168/9999] ANDROID: arch/Kconfig: fix up LTO LLVM_IAS depdency
-config: x86_64-randconfig-a003-20220606 (https://download.01.org/0day-ci/archive/20220608/202206080312.96b5TnRP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e48efff5cb5fd63a687465347bdbb52ef98dad44
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
-        git checkout e48efff5cb5fd63a687465347bdbb52ef98dad44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Yes, there's a subtly where for ternary's the resulting type is the
+largest of all operands. When the LHS of the ? is larger than either
+results, the result is STILL the larger type.
+https://godbolt.org/z/EGjW8sqzf
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That said, regardless of that change, unnamed parameters of variadic
+functions will still undergo default argument promotion, so the __u16
+would still be promoted to int.  So we still want this patch, too.
 
-All warnings (new ones prefixed by >>):
+Justin, can you send a separate patch adding the explicit cast to to
+__u16 for the ternary expression in __swab16 when
+__HAVE_BUILTIN_BSWAP16__ is not defined?
+include/uapi/linux/swab.h
+Please include Nathan's suggested by tag; cc me and I'll provide review.
 
->> vmlinux.o: warning: objtool: __switch_to_asm()+0x0: undefined stack state
->> vmlinux.o: warning: objtool: camellia_cbc_dec_32way()+0xb3: stack state mismatch: cfa1=7+520 cfa2=7+8
->> vmlinux.o: warning: objtool: camellia_ctr_32way()+0x1a: stack state mismatch: cfa1=7+520 cfa2=7+8
->> vmlinux.o: warning: objtool: aesni_gcm_init_avx_gen2()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_enc_update_avx_gen2()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_dec_update_avx_gen2()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_finalize_avx_gen2()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_init_avx_gen4()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_enc_update_avx_gen4()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_dec_update_avx_gen4()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: aesni_gcm_finalize_avx_gen4()+0x12: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: sha256_transform_rorx()+0x13: unsupported stack pointer realignment
->> vmlinux.o: warning: objtool: crc_pcl()+0x87: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: startup_64_setup_env()+0x4d: return with modified stack frame
->> vmlinux.o: warning: objtool: .head.text+0x106: unsupported instruction in callable function
+>
+> > Thus it makes sense to change %hu (as well as %u) to %d.
+>
+> Regardless of that, changing from '%hu' to '%d' is recommended so that
+> part of the change is fine. I am not sure that changing '%u' to '%d'
+> does anything other than add to the diff, as there was no warnings from
+> those, but consistency is key.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+These types in the case of icmp are uint8_t; they also are
+default-argument-promoted to int. All possible values of uint8_t are
+representable by int, and so %d and %u will make no difference. It is
+"no functional change" and simply being consistent, as you say.
+
+
+>
+> > Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >  net/netfilter/nf_conntrack_standalone.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
+> > index 6ad7bbc90d38..afbec8a12c5e 100644
+> > --- a/net/netfilter/nf_conntrack_standalone.c
+> > +++ b/net/netfilter/nf_conntrack_standalone.c
+> > @@ -53,30 +53,30 @@ print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
+> >
+> >       switch (l4proto->l4proto) {
+> >       case IPPROTO_ICMP:
+> > -             seq_printf(s, "type=%u code=%u id=%u ",
+> > +             seq_printf(s, "type=%d code=%d id=%d ",
+> >                          tuple->dst.u.icmp.type,
+> >                          tuple->dst.u.icmp.code,
+> >                          ntohs(tuple->src.u.icmp.id));
+> >               break;
+> >       case IPPROTO_TCP:
+> > -             seq_printf(s, "sport=%hu dport=%hu ",
+> > +             seq_printf(s, "sport=%d dport=%d ",
+> >                          ntohs(tuple->src.u.tcp.port),
+> >                          ntohs(tuple->dst.u.tcp.port));
+> >               break;
+> >       case IPPROTO_UDPLITE:
+> >       case IPPROTO_UDP:
+> > -             seq_printf(s, "sport=%hu dport=%hu ",
+> > +             seq_printf(s, "sport=%d dport=%d ",
+> >                          ntohs(tuple->src.u.udp.port),
+> >                          ntohs(tuple->dst.u.udp.port));
+> >
+> >               break;
+> >       case IPPROTO_DCCP:
+> > -             seq_printf(s, "sport=%hu dport=%hu ",
+> > +             seq_printf(s, "sport=%d dport=%d ",
+> >                          ntohs(tuple->src.u.dccp.port),
+> >                          ntohs(tuple->dst.u.dccp.port));
+> >               break;
+> >       case IPPROTO_SCTP:
+> > -             seq_printf(s, "sport=%hu dport=%hu ",
+> > +             seq_printf(s, "sport=%d dport=%d ",
+> >                          ntohs(tuple->src.u.sctp.port),
+> >                          ntohs(tuple->dst.u.sctp.port));
+> >               break;
+> > --
+> > 2.30.2
+> >
+> >
+
+
+
+--
+Thanks,
+~Nick Desaulniers
