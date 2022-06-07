@@ -1,143 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1430D2F48
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757FDC385A2;
-	Tue,  7 Jun 2022 20:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654634157;
-	bh=VJmfnqX0UQuKG6JX/Juy1BlHWUzOBDOdt9R7hQL7eiw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eD2Kx5oerDySCdSLkKJDiDa5vDGxAB00e/MYgt0SgfJwP08f1+RGfRwL1Get4rted
-	 9k2JlE17+0uDRFjsMOym3nIHEB26ptJJ1lQfbsNJyVTuymueAyFVzv57B+L5/hrF1+
-	 rlFw8/oBLPCql0fQ08L2YbjOBTE6lJB484c3EuxJtyTEHF+jztC0Z2dkBg9Gz2bNVZ
-	 Ov6UB4TLemBNKLoJJDFozfNctHZ0umtRoFG/PmJs18Q52XO33LrY7aPTjPGqi4Ylw5
-	 I3VmGirjqjhTJHL6prVTgQ6KUaO9QA3TRI/u25sNLui7TjaBguROOKEz0DHLYUUqld
-	 EZwRuBG+x8XtA==
-Date: Tue, 7 Jun 2022 13:35:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <jstitt007@gmail.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2] netfilter: conntrack: Fix clang -Wformat warning in
- print_tuple()
-Message-ID: <Yp+2qwh5DNbxVfvS@dev-arch.thelio-3990X>
-References: <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X>
- <20220607180847.13482-1-jstitt007@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D962F48
+	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 20:36:55 +0000 (UTC)
+Received: by mail-lf1-f43.google.com with SMTP id c2so10670977lfk.0
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 13:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3q6TfnyhK/JVdpGe1sn/i51UuwyEe8WKDR0Bhpepgkw=;
+        b=tnMvdL81BwwXW6yVLeadSVxqoY40YLtneqyhtf7dzDEpjVWIgYH2iRPKp6eha1ETf/
+         Smnkr1PDED9FhO6HiPjOWfoRl+qtY5bDl2zV8/T21F7omzHIsh8REiwWKm7rynrFC7ha
+         9z+rlqOGw5hX23QjtYQZk2+zXzfNjdTLnK4vrIWAqzEASTEjsvOOPjhpZ6f40Z7QrcnB
+         /r0WaquGT7aHMBd+33JvbWRYcNc6jPuoNu/Lox9ShGV826J9aHUp1scqdqE5EYLGSHfx
+         gfWYSsAzMjOPFQwNOxPDSeXLbznp8dwHpy4bYBa63aLMO72Y8VFdbnm8Wo5j+lC8f2hp
+         o8GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3q6TfnyhK/JVdpGe1sn/i51UuwyEe8WKDR0Bhpepgkw=;
+        b=zGtIP+AcXHRyMR7JrmyHe+nDpwLO4Rzj7IrQpzgkvLdi8BAfOLmsM5riwqURvSjEdE
+         bd0EeKHA8ou5B74G8/9VAZAz+2uzH9QAIy9Z36moHEkLh5XZfnKk49rWc6FS674Dwyos
+         igilJY3rxdX4ZIyvfclLjKNHXCNjEdIMPoRq0GUboVPaqrI3ioo6GGoxkK7Z7ZsdqZif
+         S3t90rLfmINlW9/nnoaSWDtXVvIW4JFnZMV0HY0B7YdclWbl5J/xyFQEB3bkqDu3Bylz
+         5YTURu/lUr88LHZNhvhr74LZkSlh9pTrGqtBpEz/QAvrPLLrL3F1WCKR6S1PkcRr83VI
+         1xmg==
+X-Gm-Message-State: AOAM531XxWDTAgToAy7mbUnIOxq1RZrWTycjJyPKGdLfXYlLvhElPsD9
+	SZ0JebVaFevhnLwZXoQAR1h9Qcca8jxEk/IrwEFXqA==
+X-Google-Smtp-Source: ABdhPJy8Duzb8ouGhVTvWRJ84NdalTVXSBgNTWEcv3+UOHIOpiHr/k9nNY8Ntdn5isOX7HonVhqmVDniLFKJXZMbJLw=
+X-Received: by 2002:a05:6512:3132:b0:478:f2f1:3a75 with SMTP id
+ p18-20020a056512313200b00478f2f13a75mr21381284lfd.100.1654634213023; Tue, 07
+ Jun 2022 13:36:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607180847.13482-1-jstitt007@gmail.com>
+References: <Yp9uRz40J24vWLSb@dev-arch.thelio-3990X> <20220607180847.13482-1-jstitt007@gmail.com>
+ <CAKwvOd=C2kyMVLYTKJcBQNnqK0T4nEBMeaS3DpTM2ez1P+qcqQ@mail.gmail.com>
+In-Reply-To: <CAKwvOd=C2kyMVLYTKJcBQNnqK0T4nEBMeaS3DpTM2ez1P+qcqQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Jun 2022 13:36:41 -0700
+Message-ID: <CAKwvOdnAALywDS6aZKCu1xnocc8LR5q_-UdLwSkBJ83nS-bL6g@mail.gmail.com>
+Subject: Re: [PATCH v2] netfilter: conntrack: Fix clang -Wformat warning in print_tuple()
+To: Justin Stitt <jstitt007@gmail.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
+	Florian Westphal <fw@strlen.de>, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com, Tom Rix <trix@redhat.com>, 
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 07, 2022 at 11:08:47AM -0700, Justin Stitt wrote:
->  | net/netfilter/nf_conntrack_standalone.c:63:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->src.u.tcp.port),
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:64:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->dst.u.tcp.port));
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:69:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->src.u.udp.port),
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:70:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->dst.u.udp.port));
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:75:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->src.u.dccp.port),
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:76:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->dst.u.dccp.port));
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:80:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->src.u.sctp.port),
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  | net/netfilter/nf_conntrack_standalone.c:81:7: warning: format specifies type
->  | 'unsigned short' but the argument has type 'int' [-Wformat]
->  |                            ntohs(tuple->dst.u.sctp.port));
->  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Variadic functions (printf-like) undergo default argument promotion.
-> Documentation/core-api/printk-formats.rst specifically recommends
-> using the promoted-to-type's format flag.
-> 
-> Also, as per C11 6.3.1.1:
-> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
-> `If an int can represent all values of the original type ..., the
-> value is converted to an int; otherwise, it is converted to an
-> unsigned int. These are called the integer promotions.`
-> Thus it makes sense to change %hu (as well as %u) to %d.
-> 
-> It should be noted that %u does not produce the same warning as %hu in this
-> context. However, it should probably be changed as well for consistency.
-> 
-> Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+Also, please make sure to run scripts/get_maintainer.pl on your patch
+file and CC everyone it recommends, with the maintainers you want to
+pick up your patch in the To field.
+https://lore.kernel.org/llvm/20220607180847.13482-1-jstitt007@gmail.com/T/#u
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+$ ./scripts/get_maintainer.pl
+0001-netfilter-conntrack-Fix-clang-Wformat-warning-in-pri.patch
+Pablo Neira Ayuso <pablo@netfilter.org> (maintainer:NETFILTER)
+Jozsef Kadlecsik <kadlec@netfilter.org> (maintainer:NETFILTER)
+Florian Westphal <fw@strlen.de> (maintainer:NETFILTER)
+"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING [GENERAL])
+Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING [GENERAL])
+Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING [GENERAL])
+Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING [GENERAL])
+Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUPPORT)
+Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUILD SUPPORT)
+Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
+netfilter-devel@vger.kernel.org (open list:NETFILTER)
+coreteam@netfilter.org (open list:NETFILTER)
+netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+linux-kernel@vger.kernel.org (open list)
+llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT
 
-> ---
->  Diff between v1 -> v2:
->  * update commit message and subject line
->  
->  Note: The architecture (arm64) is critical for reproducing this warning.
->  
->  net/netfilter/nf_conntrack_standalone.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-> index 6ad7bbc90d38..afbec8a12c5e 100644
-> --- a/net/netfilter/nf_conntrack_standalone.c
-> +++ b/net/netfilter/nf_conntrack_standalone.c
-> @@ -53,30 +53,30 @@ print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
->  
->  	switch (l4proto->l4proto) {
->  	case IPPROTO_ICMP:
-> -		seq_printf(s, "type=%u code=%u id=%u ",
-> +		seq_printf(s, "type=%d code=%d id=%d ",
->  			   tuple->dst.u.icmp.type,
->  			   tuple->dst.u.icmp.code,
->  			   ntohs(tuple->src.u.icmp.id));
->  		break;
->  	case IPPROTO_TCP:
-> -		seq_printf(s, "sport=%hu dport=%hu ",
-> +		seq_printf(s, "sport=%d dport=%d ",
->  			   ntohs(tuple->src.u.tcp.port),
->  			   ntohs(tuple->dst.u.tcp.port));
->  		break;
->  	case IPPROTO_UDPLITE:
->  	case IPPROTO_UDP:
-> -		seq_printf(s, "sport=%hu dport=%hu ",
-> +		seq_printf(s, "sport=%d dport=%d ",
->  			   ntohs(tuple->src.u.udp.port),
->  			   ntohs(tuple->dst.u.udp.port));
->  
->  		break;
->  	case IPPROTO_DCCP:
-> -		seq_printf(s, "sport=%hu dport=%hu ",
-> +		seq_printf(s, "sport=%d dport=%d ",
->  			   ntohs(tuple->src.u.dccp.port),
->  			   ntohs(tuple->dst.u.dccp.port));
->  		break;
->  	case IPPROTO_SCTP:
-> -		seq_printf(s, "sport=%hu dport=%hu ",
-> +		seq_printf(s, "sport=%d dport=%d ",
->  			   ntohs(tuple->src.u.sctp.port),
->  			   ntohs(tuple->dst.u.sctp.port));
->  		break;
-> -- 
-> 2.30.2
-> 
+On Tue, Jun 7, 2022 at 1:33 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Tue, Jun 7, 2022 at 11:09 AM Justin Stitt <jstitt007@gmail.com> wrote:
+> >
+> >  | net/netfilter/nf_conntrack_standalone.c:63:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.tcp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:64:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.tcp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:69:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.udp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:70:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.udp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:75:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.dccp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:76:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.dccp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:80:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->src.u.sctp.port),
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  | net/netfilter/nf_conntrack_standalone.c:81:7: warning: format specifies type
+> >  | 'unsigned short' but the argument has type 'int' [-Wformat]
+> >  |                            ntohs(tuple->dst.u.sctp.port));
+> >  |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > Variadic functions (printf-like) undergo default argument promotion.
+> > Documentation/core-api/printk-formats.rst specifically recommends
+> > using the promoted-to-type's format flag.
+> >
+> > Also, as per C11 6.3.1.1:
+> > (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
+> > `If an int can represent all values of the original type ..., the
+> > value is converted to an int; otherwise, it is converted to an
+> > unsigned int. These are called the integer promotions.`
+> > Thus it makes sense to change %hu (as well as %u) to %d.
+> >
+> > It should be noted that %u does not produce the same warning as %hu in this
+> > context. However, it should probably be changed as well for consistency.
+>
+> Right, because they are `unsigned char` and the parameter is unnamed
+> for variadic functions they are also default-argument-promoted to int.
+> -Wformat won't warn on signedness.
+>
+> Thanks for the patch!
+>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+>
+> Also, Nathan supplied his RB tag on v1; it's ok next time to include
+> it on subsequent revisions of patches, so long as you don't change the
+> patch too much between revisions.
+>
+> >
+> > Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+> > ---
+> >  Diff between v1 -> v2:
+> >  * update commit message and subject line
+> >
+> >  Note: The architecture (arm64) is critical for reproducing this warning.
+> >
+> >  net/netfilter/nf_conntrack_standalone.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
+> > index 6ad7bbc90d38..afbec8a12c5e 100644
+> > --- a/net/netfilter/nf_conntrack_standalone.c
+> > +++ b/net/netfilter/nf_conntrack_standalone.c
+> > @@ -53,30 +53,30 @@ print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
+> >
+> >         switch (l4proto->l4proto) {
+> >         case IPPROTO_ICMP:
+> > -               seq_printf(s, "type=%u code=%u id=%u ",
+> > +               seq_printf(s, "type=%d code=%d id=%d ",
+> >                            tuple->dst.u.icmp.type,
+> >                            tuple->dst.u.icmp.code,
+> >                            ntohs(tuple->src.u.icmp.id));
+> >                 break;
+> >         case IPPROTO_TCP:
+> > -               seq_printf(s, "sport=%hu dport=%hu ",
+> > +               seq_printf(s, "sport=%d dport=%d ",
+> >                            ntohs(tuple->src.u.tcp.port),
+> >                            ntohs(tuple->dst.u.tcp.port));
+> >                 break;
+> >         case IPPROTO_UDPLITE:
+> >         case IPPROTO_UDP:
+> > -               seq_printf(s, "sport=%hu dport=%hu ",
+> > +               seq_printf(s, "sport=%d dport=%d ",
+> >                            ntohs(tuple->src.u.udp.port),
+> >                            ntohs(tuple->dst.u.udp.port));
+> >
+> >                 break;
+> >         case IPPROTO_DCCP:
+> > -               seq_printf(s, "sport=%hu dport=%hu ",
+> > +               seq_printf(s, "sport=%d dport=%d ",
+> >                            ntohs(tuple->src.u.dccp.port),
+> >                            ntohs(tuple->dst.u.dccp.port));
+> >                 break;
+> >         case IPPROTO_SCTP:
+> > -               seq_printf(s, "sport=%hu dport=%hu ",
+> > +               seq_printf(s, "sport=%d dport=%d ",
+> >                            ntohs(tuple->src.u.sctp.port),
+> >                            ntohs(tuple->dst.u.sctp.port));
+> >                 break;
+> > --
+> > 2.30.2
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
