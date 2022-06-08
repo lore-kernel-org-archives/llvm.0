@@ -1,123 +1,110 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4F37B
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 00:14:52 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id bo5so16914455pfb.4
-        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 17:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=45epDQdJCBp4DgsIx1Sz2CxwS+YHltdpTyZ3wnT8hgs=;
-        b=aQTromRtl9Y8U0lSwdvw9JG/L6+ooOtEs95fFlo72XqRmwp+oPMHpnTAvjNmGlpzcP
-         P6SsxkAWmuw0sO2drXqm1qW6y86edJ8FtkvwTqyy4Z7F6OskExf3akYJDxmxgb5UAgEV
-         8bnEHiAjLg/Jxwg5mj4zvzCh5ZXxVmBgxmlJ12LeG4M6EzrOJ8uGq1Rw/fzsJc4GBCWO
-         PMxIEj7Iii+JdU2tsKoIb/+EKDVglzEsSFNuA4D0YpNmwKdz2cUIzUAlhCMEtwzPCm4L
-         qaUeh1GXO75cY11pQH5OhdAedvysyZBHTpwZ9xYnLGd0pEetd+sadM8v5NNfj9ghO8in
-         FiCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=45epDQdJCBp4DgsIx1Sz2CxwS+YHltdpTyZ3wnT8hgs=;
-        b=pziiFPXCnn5+Axn7mjKiRJXlwfEi2i/TDZcywz+gLOBKFyWAhIEwe8HQeen2xoE+Jk
-         w11Ws8lVbaZjSyju31bcmNBt3goZGvqIC4sfp+RyKDQBTTMhQxSIACW7pQa0pEJFf+c4
-         lOz2SZnDuNczlcOSdi4yxNSp4EbTeZ/N08Ahd1U0EWinnL7bnQiqmQ/9QSiNTP5yGXOK
-         Dk/Gq5bbqWJVqIqsYjK9CzUyv4uy2U6UTsJQD1LsIYDL6KlXwu2r5M2J3lM+m/6giIhW
-         k99eNtN5AsRDnFMP5yLwhz80bq6TzMi/d4GjJisCr7Hubdmcz/pNFjnvhGOD9u+dC8fL
-         qQjQ==
-X-Gm-Message-State: AOAM533ca+m58SIZOjCmf1AAX6XD6ORIz7+KSgZV47TqXYpxG4Cqrasm
-	OEvR+Rv0u/WwwGCW5LEQ1Yo=
-X-Google-Smtp-Source: ABdhPJyp28p2GDv7dkrNLXwv8Yj9hsL5KfMbOVCvI7otC6p6OS3I+JYKTxX9fdbZfv/y1by8dd43Kw==
-X-Received: by 2002:a63:6b41:0:b0:3fe:22d6:e6aa with SMTP id g62-20020a636b41000000b003fe22d6e6aamr2305774pgc.249.1654647291916;
-        Tue, 07 Jun 2022 17:14:51 -0700 (PDT)
-Received: from penguin.lxd ([2620:0:1000:2514:216:3eff:fe31:a1ca])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a63f341000000b003fc4cc19414sm13458821pgj.45.2022.06.07.17.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 17:14:51 -0700 (PDT)
-From: Justin Stitt <jstitt007@gmail.com>
-To: ndesaulniers@google.com,
-	akpm@linux-foundation.org
-Cc: jstitt007@gmail.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	nathan@kernel.org,
-	trix@redhat.com
-Subject: [PATCH v2] include/uapi/linux/swab.h: move explicit cast outside ternary
-Date: Tue,  7 Jun 2022 17:14:22 -0700
-Message-Id: <20220608001422.26383-1-jstitt007@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAKwvOd=-NXR5HoHwwEUZMsCt90oaADH6XHifje9n-8S8rj9SFw@mail.gmail.com>
-References: <CAKwvOd=-NXR5HoHwwEUZMsCt90oaADH6XHifje9n-8S8rj9SFw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64017C
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 00:53:18 +0000 (UTC)
+Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-04.nifty.com with ESMTP id 2580nZwC016616
+	for <llvm@lists.linux.dev>; Wed, 8 Jun 2022 09:49:35 +0900
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
+	by conssluserg-06.nifty.com with ESMTP id 2580nRai003381
+	for <llvm@lists.linux.dev>; Wed, 8 Jun 2022 09:49:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2580nRai003381
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1654649368;
+	bh=S/dDT9BasIRXgEc6RVl1cw8Lg+oN+87n3tvQW1y0y5s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pq13qCUBav9taDdoORZZRTDKLMDvrfYbTVf3hheu/c7GIcZWOp3FSECkf/nMzqOtz
+	 Nss58zZNp5V9eVt51avZZzKZo+LW3w/t4aEPM1k/Nro3WbOZBbfBcxrr1Z76tGP1da
+	 5cdvJbxeeus1daNCFmDT2g4qXbO0Ek9MBtkbLIeqsD78Its7iAq13+kWW3T35n2jxN
+	 e/jyVp3foB1lXZIJkew7eKvyH84x/u185Truwq+E076MhLm3TfdMiwxqi8GtMXfXb7
+	 WG7r40QZal3l9XN2q6g0CYH5OADQwhn3liydeQ62kxz4c9bHHel9zA8YsLJRWLd/DQ
+	 0ZUp2ZfKsK9uA==
+X-Nifty-SrcIP: [209.85.216.49]
+Received: by mail-pj1-f49.google.com with SMTP id j7so17151787pjn.4
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 17:49:27 -0700 (PDT)
+X-Gm-Message-State: AOAM531EFcFyNGqQBYgzq9nwrHzJV93L12NO4w361THWZ9oMFXOXMP/6
+	WO2JRyqIQ9m8UuT2oGJf1wvJZJbUPhy6yM2/vrA=
+X-Google-Smtp-Source: ABdhPJyvxrvxhpAQBt1oIWNmd41Y+hLLu9bqNzxLMKWVDzxCt4eJI55BWcV8rcD7rQENE/ud68TgbNZXHjIvxj0IsmI=
+X-Received: by 2002:a17:90b:3a87:b0:1e8:789d:c60 with SMTP id
+ om7-20020a17090b3a8700b001e8789d0c60mr15749985pjb.77.1654649367064; Tue, 07
+ Jun 2022 17:49:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220607164000.447941-1-masahiroy@kernel.org> <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
+In-Reply-To: <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 8 Jun 2022 09:48:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQKts5EQ0A-7w6sgcFXn59rRBgK3CB1As-oopO2P4P-Nw@mail.gmail.com>
+Message-ID: <CAK7LNAQKts5EQ0A-7w6sgcFXn59rRBgK3CB1As-oopO2P4P-Nw@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for
+ process substitution
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-A cast inside __builtin_constant_p doesn't do anything since it should evaluate
-as constant at compile time irrespective of this cast. Instead, I moved this
-cast outside the ternary to ensure the return type is as expected.
+On Wed, Jun 8, 2022 at 2:24 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Tue, Jun 7, 2022 at 9:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Bash>=4.4 supports 'wait $!' to check the exit status of a process
+> > substitution, but some people using older bash versions reported an
+> > error like this:
+> >
+> > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> > Reported-by: Wang Yugui <wangyugui@e16-tech.com>
+> > Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Some comments below.
+>
+> > diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> > index 34415ae1af1b..19c286c23786 100644
+> > --- a/Documentation/process/changes.rst
+> > +++ b/Documentation/process/changes.rst
+> > @@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
+> >  GNU C                  5.1              gcc --version
+> >  Clang/LLVM (optional)  11.0.0           clang --version
+> >  GNU make               3.81             make --version
+> > +bash                   4.2              bash --version
+>
+> /usr/bin/env bash
+> and definitely /bin/bash
+> both show up a lot in kernel sources. At this point, I think bash is a
+> requirement at this point, so it's good to document it finally.
+>
+> > +# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
+> > +# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
+> > +# '2>/dev/null'. However, it suppresses real error messages as well. Add a
+> > +# hand-crafted error message here.
+> > +#
+> > +# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
+> > +# binutils to 2.37, llvm to 13.0.0.
+>
+> Might be nice to include `TODO:` in the comment block. Vim will
+> highlight these in comments.
 
-For instance, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16 is
-actually returning an `int` not a `u16` due to integer promotion as described
-by Nick in this thread. This has repercussions when building with clang
--Wformat. This fix should solve many of these warnings.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Justin Stitt <jstitt007@gmail.com>
----
- include/uapi/linux/swab.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+OK. will do.
 
-diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-index f6be3f2e6fee..ab5a1283800c 100644
---- a/include/uapi/linux/swab.h
-+++ b/include/uapi/linux/swab.h
-@@ -99,10 +99,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
-  * @x: value to byteswap
-  */
- #ifdef __HAVE_BUILTIN_BSWAP16__
--#define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-+#define __swab16(x) (__u16)__builtin_bswap16(x)
- #else
- #define __swab16(x)				\
--	(__u16)(__builtin_constant_p((__u16)(x)) ?	\
-+	(__u16)(__builtin_constant_p(x) ?	\
- 	___constant_swab16(x) :			\
- 	__fswab16(x))
- #endif
-@@ -112,10 +112,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
-  * @x: value to byteswap
-  */
- #ifdef __HAVE_BUILTIN_BSWAP32__
--#define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-+#define __swab32(x) (__u32)__builtin_bswap32(x)
- #else
- #define __swab32(x)				\
--	(__builtin_constant_p((__u32)(x)) ?	\
-+	(__u32)(__builtin_constant_p(x) ?	\
- 	___constant_swab32(x) :			\
- 	__fswab32(x))
- #endif
-@@ -125,10 +125,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
-  * @x: value to byteswap
-  */
- #ifdef __HAVE_BUILTIN_BSWAP64__
--#define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
-+#define __swab64(x) (__u64)__builtin_bswap64(x)
- #else
- #define __swab64(x)				\
--	(__builtin_constant_p((__u64)(x)) ?	\
-+	(__u64)(__builtin_constant_p(x) ?	\
- 	___constant_swab64(x) :			\
- 	__fswab64(x))
- #endif
+Thanks.
+
+
 -- 
-2.30.2
-
+Best Regards
+Masahiro Yamada
