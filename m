@@ -1,85 +1,85 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5EF7B
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 15:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654701581; x=1686237581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C/vRiU53efJcn6fLogwCXc6HwBl6rv6d1wnE187attg=;
-  b=HePnd1wHZ5+7TlPZmoqFogSKE81I8OmRXPDySxR3vGvyXTvyJXvdjKOb
-   Age9qWF+t9DPDOf+LRyz+pigMtPIScFc/0mo7BeFxrjvRTrAiMOR21xkj
-   ixzv6Y5BXAomxz9ByJLFWtbohCURU+lub9aonsPdFv3ykkikip98x9PHf
-   rhNnjRzwX5Z36OX0ZDusebPadltYYcrtVtepFKVkKF+FmRHIh9ZXaGaSp
-   J0/zmRnuL+JGeO20LfLEKNwAdq6qkTFP3CJcF7d4HPgRY6pmzN6tHFaQg
-   zepD1cfWtERNCkBu9YxlTRKd9JyQepVmRpECzep+VKPykokallW8Ocog3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="275696463"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="275696463"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 08:19:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="533136744"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2022 08:19:37 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nyxT6-000Ejc-GS;
-	Wed, 08 Jun 2022 15:19:36 +0000
-Date: Wed, 8 Jun 2022 23:19:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jan Kara <jack@suse.cz>, Ted Tso <tytso@mit.edu>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH] jbd2: Remove unused exports for jbd2 debugging
-Message-ID: <202206082321.RIUKdEnL-lkp@intel.com>
-References: <20220606144047.16780-1-jack@suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5157B;
+	Wed,  8 Jun 2022 15:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CA4C34116;
+	Wed,  8 Jun 2022 15:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1654702111;
+	bh=xNLY7igwqhkEdX0LdFwkeYns5vg4pARM/9a9j++CR8Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oIW5WJ1BJbIWgXH9K9gQyrMXg6UQZ+S78zAn3pGiCraQDI2d21f7n3ducnWT6Jsb2
+	 Ezq/+xFsTFXe7Qn0ZuspuTXzbTehxaiQLN3Kb7NuJP6XNRWOAP1mJpAJ0qU6I7xtvD
+	 pjutZYEk66mXFu9qdTe2f7i/9q5xNcB4rW7vWg06yINH9sfyrrCL81BLRoejmkCqxG
+	 91lPAEtLqx5AhyvnW6r3EbQEpnZYhujYqU1EzsZIf5EUCmQodWKQ/VbUmrOMsHxTzv
+	 owjfjejJSw3RmcuDKOph3ntVkVeo2a6LlrOBL3Om5ymxBpMulyBwmk1nvvNlYUaGCi
+	 IPSCVCd68vpIw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Adrian Hunter <adrian.hunter@intel.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Kamal Dasu <kdasu.kdev@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Justin Stitt <jstitt007@gmail.com>,
+	Dan Carpenter <dan.carpenter@oracle.com>,
+	linux-mmc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] mmc: sdhci-brcmstb: Initialize base_clk to NULL in sdhci_brcmstb_probe()
+Date: Wed,  8 Jun 2022 08:27:57 -0700
+Message-Id: <20220608152757.82529-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606144047.16780-1-jack@suse.cz>
+Content-Transfer-Encoding: 8bit
 
-Hi Jan,
+Clang warns a few times along the lines of:
 
-I love your patch! Yet something to improve:
+  drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+          if (res)
+              ^~~
+  drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
+          clk_disable_unprepare(base_clk);
+                                ^~~~~~~~
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+base_clk is used in the error path before it is initialized. Initialize
+it to NULL, as clk_disable_unprepare() calls clk_disable() and
+clk_unprepare(), which both handle NULL pointers gracefully.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jan-Kara/jbd2-Remove-unused-exports-for-jbd2-debugging/20220606-224629
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: hexagon-randconfig-r023-20220607 (https://download.01.org/0day-ci/archive/20220608/202206082321.RIUKdEnL-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9aaaac58ce0525ce441ad75b45bf3e5f3911a82b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jan-Kara/jbd2-Remove-unused-exports-for-jbd2-debugging/20220606-224629
-        git checkout 9aaaac58ce0525ce441ad75b45bf3e5f3911a82b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
+Fixes: 2cecaac1b21c ("mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1650
 Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/mmc/host/sdhci-brcmstb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
+index f8dff8537920..28e9cf995c41 100644
+--- a/drivers/mmc/host/sdhci-brcmstb.c
++++ b/drivers/mmc/host/sdhci-brcmstb.c
+@@ -256,7 +256,7 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
+ 	struct sdhci_host *host;
+ 	struct resource *iomem;
+ 	struct clk *clk;
+-	struct clk *base_clk;
++	struct clk *base_clk = NULL;
+ 	int res;
+ 
+ 	match = of_match_node(sdhci_brcm_of_match, pdev->dev.of_node);
 
->> ERROR: modpost: "__jbd2_debug" [fs/ext4/ext4.ko] undefined!
-
+base-commit: 10980053142d8a3e86eb4d3014574424b42b7a45
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
