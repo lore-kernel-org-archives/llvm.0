@@ -1,100 +1,86 @@
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [142.44.231.140])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E15E191
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 05:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+Aq0BEXW9Vx+qdJvDk57eAicNJ2BKjCbJLuilgiXECE=; b=JhoGfEViWh+8/+pz1wq98sMeQv
-	EpyDPOIMiUcj6oAzclYz7wHD+SJn5oDpUu1dWWNvi1W6fEAetRQejsyUxlXh2Kieu3Zg8VA5AdQO/
-	1biPimiuOp6Rsf6q+aTCd3oGSvhtorbSo9INV3gSqR91Ytt6TN8f8C26dZ8lnjzVEsZ8PN+1JxJ3r
-	uBVR95r4TED4GhuhGJNJXqU2BhIVT0wSO1gOoy8Rev+s/01ocQ0xxvRhc1a/DuTeWfKX9CY2i3ITq
-	tW6fwDendyi3TRLkvx1K4hwV8QIbH4Z44/60n0zCtNdaBVweVcJC/W09Binc7n4X5NRICV7fFsEn+
-	vGC3VREw==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nyni9-004zX5-2C; Wed, 08 Jun 2022 04:54:29 +0000
-Date: Wed, 8 Jun 2022 04:54:29 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <jstitt007@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Richard Smith <richardsmith@google.com>
-Subject: Re: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16
- conditional
-Message-ID: <YqArhaiEu+6YWZfg@zeniv-ca.linux.org.uk>
-References: <20220607222006.22719-1-jstitt007@gmail.com>
- <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
- <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com>
- <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5AE7B
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 09:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730E6C3411C;
+	Wed,  8 Jun 2022 09:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1654682293;
+	bh=FcJ8Di2tEi7J9mL1kUYDLPSlQ/etsnhAYzuqiYLHspg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=oLv93pnlM5mEtu4/ho0CsYmNpR45IoFG+CHaYiZnEe9m4CBxPEmqOFnVYN1wqBDEx
+	 jjCb2oe0VCEO752zZTkl7gSY5ImbSbk14KoQ4YQVkyw8oCLL6is66rwycRV6bjLPFQ
+	 eHnMG6+t0yArDfiWTGi1kHqGw/XmcOVdGzsiO0TPb+b+/ncL54MqF7htThYUFpl/SC
+	 JHhrx3l/erbi+nRH6BrmX7nXhhuUju2zCRvgYYtCQy6mLjO+vmNw8eqah70qhheZ8K
+	 O4LMY6injcdWA15JGvYU5bVxzl7K9M/xU6t2sXg7tueNhL0kgU0KlX7Vr516jzBK7u
+	 uBKYI0WHx/eIw==
+Date: Wed, 8 Jun 2022 11:58:09 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+cc: linux-doc@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>, 
+    kernel test robot <lkp@intel.com>, Randy Dunlap <rdunlap@infradead.org>, 
+    =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>, 
+    Nikolai Kondrashov <spbnick@gmail.com>, 
+    Benjamin Tissoires <benjamin.tissoires@redhat.com>, llvm@lists.linux.dev, 
+    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] HID: uclogic: properly format kernel-doc comment for
+ hid_dbg() wrappers
+In-Reply-To: <20220604020711.252312-1-bagasdotme@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2206081157590.10851@cbobk.fhfr.pm>
+References: <20220604020711.252312-1-bagasdotme@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-On Tue, Jun 07, 2022 at 04:21:28PM -0700, Andrew Morton wrote:
+On Sat, 4 Jun 2022, Bagas Sanjaya wrote:
 
-> > 6.5.15/5
-> > >> If both the second and third operands have arithmetic type, the result type that would be determined by the usual arithmetic conversions, were they applied to those two operands, is the type of the result.
-> > 6.3.1.8/1
-> > >> Otherwise, the integer promotions are performed on both operands.
-> > 6.3.1.1/2
-> > >> If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer promotions.
+> Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
+> 6 warnings for hid_dbg() wrapper functions below:
 > 
-> Geeze.  Can we please turn this into English and add it to the changelog?
+> drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+> drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
+>  * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+> drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
+> drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface frame parameters with hid_dbg(), indented with two
+> drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
+>  * Dump tablet interface frame parameters with hid_dbg(), indented with two
+> drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
+> drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Dump tablet interface parameters with hid_dbg().
+> drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
+>  * Dump tablet interface parameters with hid_dbg().
 > 
-> Is it saying that an expression
+> One of them is reported by kernel test robot.
 > 
-> 	int ? u16 : u16
+> Fix these warnings by properly format kernel-doc comment for these
+> functions.
 > 
-> has type int?  Or something else?  What did we do wrong here and is it
-> possible to correct our types rather than adding a cast?
+> Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
+> Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: José Expósito <jose.exposito89@gmail.com>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Nikolai Kondrashov <spbnick@gmail.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Not quite.  Same rules as u16 + u16 - on architectures where int is wider
-than 16 bits it's (int)u16 + (int)u16 and yields int, on 16bit ones it's
-(unsigned int)u16 + (unsigned int)u16 and yields unsigned int.
+Applied, thanks.
 
-You *can't* get smaller-than-int out of ? :, same as you can't get it
-out of addition, etc.
+-- 
+Jiri Kosina
+SUSE Labs
 
-__builtin_choose_expr() would do it, but I would take a cast over that
-ugliness.
-
-FWIW, it might make sense for clang to keep track of the following
-property: expression has the same value as it would if integer promotions
-in it had been replaced with integer promotion of result.
-
-Example: with
-	unsigned short x, y, mask;
-
-expresion "x & y" is interpreted as and_int((int)x, (int)y), which is equal
-to (int)and_u16(x, y), so that expression has the property in question.
-"x != 12 ? x : y" has the same property.  "x + y", OTOH, doesn't - if x and y
-are both 32768, x + y is add_int((int)x, (int)y), i.e. 65536, while
-(int)add_u16(x, y) would be 0.
-
-For a somewhat more subtle example,
-	(x & ~mask) | (y & mask)
-is interpreted as
-	or_int(and_int((int)x, not_int((int)mask)), and_int((int)y, (int)mask))
-which is equal to
-	(int)or_u16(and_u16(x,not_u16(mask)), and_u16(y, mask))
-IOW, the property in question holds for that one, despite having a subexpression
-(~mask) that does *NOT* have that property.  (int)not_u16(0) is 0xffff and
-not_int((int)0) is (assuming 32bit int) 0xffffffff.  Upper 16 bits get fouled;
-applying & with known-16bit launders them off...
-
-That predicate is behind the handling of small bitwise types in sparse;
-otherwise all operations on __be16 would trigger warnings due to promotions
-from __be16 to int.  And aforementioned subtle example is common enough, so we
-had to deal with it.  See commit d24967cb847b "[PATCH] handle fouled-bitwise"
-in sparse git...
