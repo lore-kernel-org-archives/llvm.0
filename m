@@ -1,78 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9C933D2
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 20:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5139AC34116;
-	Wed,  8 Jun 2022 20:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1654718981;
-	bh=pz7GykqV2fBiNMIoMumJXkyndH8tIJzyT30UbdEylm8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=h7S1smJh5zFtLPBh3uAO9csKh+t12Pf8/uD6P4jq1i5weXqc30W53KfRvY/2Ew0p9
-	 YXQADjF9ap1MvHMjE+BiJwnsjEp+UgYdL1adxVQ+9V6Q9zYAxWdHLZ8XAXyt2UBNEo
-	 nbtb+3fSany3022UQpV4rFwMZ8b/9DBAs4BQt+94=
-Date: Wed, 8 Jun 2022 13:09:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Justin Stitt <jstitt007@gmail.com>
-Cc: ndesaulniers@google.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, nathan@kernel.org, trix@redhat.com
-Subject: Re: [PATCH v2] include/uapi/linux/swab.h: move explicit cast
- outside ternary
-Message-Id: <20220608130940.8d2c3cb4a31b77a3274756df@linux-foundation.org>
-In-Reply-To: <20220608001422.26383-1-jstitt007@gmail.com>
-References: <CAKwvOd=-NXR5HoHwwEUZMsCt90oaADH6XHifje9n-8S8rj9SFw@mail.gmail.com>
-	<20220608001422.26383-1-jstitt007@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5272E7C
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 20:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654721309; x=1686257309;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yL3Zv+i95CITTrChFrjzM4m9fnoVpSgmhhjr2XdpLDI=;
+  b=adkCdIUnD+D2LENbExriHYNM7IbRyH0csDtUwh7AbTkvNakFLCJ/Obbv
+   Us8FZmJ7oaiVxLvDPMOP7R+nuTBivo5p2Dlns8sfW4NZslwQugjItF4rQ
+   JVini56CKxsthisyRsYQr0U9lk8lRbZrStxQfNoMoh5lwCn2OVWudZXuG
+   d/bHiZEszXDiZ/QJVtPSbMg5IAJ5gruiemE2E1nkL7QZ32Nh/mZh8b5jo
+   YP1kaUpnjMfzbxKrv+klEb5maYfvgx+dnOPE6hbK3igJsdIEcVRSdC5ZD
+   CNzaTpRNwJNOnFG5rdCyK5nIU0syBGmP5Xu0Vdg/W7HM4+GZdFjN416TB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="363373678"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="363373678"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 13:48:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="670772436"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2022 13:48:25 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nz2bJ-000Ezp-1i;
+	Wed, 08 Jun 2022 20:48:25 +0000
+Date: Thu, 9 Jun 2022 04:47:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
+	lee.jones@linaro.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, hao.wu@intel.com,
+	trix@redhat.com, linux-kernel@vger.kernel.org,
+	linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
+	matthew.gerlach@linux.intel.com,
+	Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: Re: [PATCH v1 3/4] mfd: intel-m10-bmc: add PMCI driver
+Message-ID: <202206090450.TSpq556V-lkp@intel.com>
+References: <20220607032833.3482-4-tianfei.zhang@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607032833.3482-4-tianfei.zhang@intel.com>
 
-On Tue,  7 Jun 2022 17:14:22 -0700 Justin Stitt <jstitt007@gmail.com> wrote:
+Hi Tianfei,
 
-> A cast inside __builtin_constant_p doesn't do anything since it should evaluate
-> as constant at compile time irrespective of this cast. Instead, I moved this
-> cast outside the ternary to ensure the return type is as expected.
-> 
-> For instance, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16 is
-> actually returning an `int` not a `u16` due to integer promotion as described
-> by Nick in this thread. This has repercussions when building with clang
-> -Wformat. This fix should solve many of these warnings.
-> 
+Thank you for the patch! Perhaps something to improve:
 
-ARM allmodconfig:
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on v5.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-In file included from ./include/linux/swab.h:5,
-                 from ./arch/arm/include/asm/opcodes.h:86,
-                 from ./arch/arm/include/asm/bug.h:7,
-                 from ./include/linux/bug.h:5,
-                 from ./include/linux/mmdebug.h:5,
-                 from ./include/linux/gfp.h:5,
-                 from ./include/linux/slab.h:15,
-                 from ./fs/xfs/kmem.h:9,
-                 from ./fs/xfs/xfs_linux.h:24,
-                 from ./fs/xfs/xfs.h:22,
-                 from fs/xfs/scrub/agheader.c:6:
-fs/xfs/scrub/agheader.c: In function 'xchk_superblock':
-./include/uapi/linux/byteorder/little_endian.h:42:52: error: unsigned conversion from 'int' to 'short unsigned int' changes value from '-49265' to '16271' [-Werror=overflow]
-   42 | #define __cpu_to_be16(x) ((__force __be16)__swab16((x)))
-      |                                                    ^~~
-./include/uapi/linux/swab.h:102:46: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16(x)
-      |                                              ^
-./include/linux/byteorder/generic.h:96:21: note: in expansion of macro '__cpu_to_be16'
-   96 | #define cpu_to_be16 __cpu_to_be16
-      |                     ^~~~~~~~~~~~~
-fs/xfs/scrub/agheader.c:158:23: note: in expansion of macro 'cpu_to_be16'
-  158 |         vernum_mask = cpu_to_be16(~XFS_SB_VERSION_OKBITS |
-      |                       ^~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[2]: *** [scripts/Makefile.build:249: fs/xfs/scrub/agheader.o] Error 1
-make[1]: *** [scripts/Makefile.build:466: fs/xfs] Error 2
-make: *** [Makefile:1839: fs] Error 2
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220609/202206090450.TSpq556V-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/88995bb5653b69e780baba37b6ade01348054135
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tianfei-Zhang/mfd-add-PMCI-driver-support/20220607-113619
+        git checkout 88995bb5653b69e780baba37b6ade01348054135
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mfd/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/intel-m10-bmc-core.c:18:34: warning: unused variable 'n6000_fw_handshake_regs' [-Wunused-const-variable]
+   static const struct regmap_range n6000_fw_handshake_regs[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/n6000_fw_handshake_regs +18 drivers/mfd/intel-m10-bmc-core.c
+
+    17	
+  > 18	static const struct regmap_range n6000_fw_handshake_regs[] = {
+    19		regmap_reg_range(M10BMC_PMCI_TELEM_START, M10BMC_PMCI_TELEM_END),
+    20	};
+    21	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
