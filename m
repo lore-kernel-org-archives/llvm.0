@@ -1,125 +1,141 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D1B7B
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 22:35:45 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so25185631pju.1
-        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 15:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QkfG3CN6VP7C6URzXpCUgAMNHT6wVB7vqkw29Zwtti8=;
-        b=aVmSd5Qm43ot4Iz6ZdHjcy1oJnJoZREHn5Iz8ybmYiwx2DSn9VAdXPHEVwL2Vubyaj
-         fikCdsfY2d5SNFlxXkk4Dm8OGFn4ESH19O28hn21JRsO3WBLpw3ca1+ZztdYXLo7Uz5f
-         UnEmYMCv9RjzQq/kSUfGLvzYHOcXaic2qyWuZu6CJHMpeESeNSvfi1hokmVzWExONL91
-         BmpNbBQ4BUwXWirTRSFKrfy0Dt1+s/ATmOYCKQDJOeRVeMqPMktzjCztbtvu2TWYV/zO
-         havqXOpDEMFcSHUeK9hBcU+wsjYHOWedKV7Tgkgw0XklrIZcJeruOcvB+QUSYqrnv3c4
-         P2qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QkfG3CN6VP7C6URzXpCUgAMNHT6wVB7vqkw29Zwtti8=;
-        b=zcwM4cLwPZFCpBbNbU9xizjfBr/pfTpbj8ObxOU/tmXNoqzWCZd2FZm1cParZoxx9s
-         ItRPv0RAIkqmRULdINd13kp/fS+ENWemHWcJlBssJWeXSPaq88hqnPAfLel5e0hjQUt7
-         UrD+tdY1SI256R+45ArYaCLIIt2Yl/9Qk/UrKfKP2EtwD9eKgEqVxcvp8G3AWw5KR6hD
-         EbiPeA0Cnv/ivuxjMtDVw9ZAtcXOdjLvuCjQvwJKBHxAtol9a9a2wIfZA8SxvKAwKLtv
-         oJTHL0hy/UkbHViEWd2Fdczj/C9T1r+F5KzvuvS7pR852zuXjA7KMD+kBlTQ1cG3KZvn
-         y2IQ==
-X-Gm-Message-State: AOAM530JQiVzwjsVAmw1CTnLXQ6Sooq+BHjvEMOq/+7jBIHMd5TGCNqn
-	Ccs+PYlKh19eo73rqiG8O3s=
-X-Google-Smtp-Source: ABdhPJxP8xhSZFpzrx8YPSQgMGYtyQAtidz5XK8BadsQSYqXUyDGJ5Pzgkq4Isax41MsJUyi6JB38A==
-X-Received: by 2002:a17:90b:4c8c:b0:1e8:5607:7ec0 with SMTP id my12-20020a17090b4c8c00b001e856077ec0mr251063pjb.36.1654727744901;
-        Wed, 08 Jun 2022 15:35:44 -0700 (PDT)
-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:2396:fa38:7c58:2e7b])
-        by smtp.googlemail.com with ESMTPSA id t185-20020a625fc2000000b0051b9d15fc18sm15726494pfb.156.2022.06.08.15.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 15:35:44 -0700 (PDT)
-From: Justin Stitt <jstitt007@gmail.com>
-X-Google-Original-From: Justin Stitt <justinstitt@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A397B
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 22:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654728187; x=1686264187;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XGHgRPX9dGA2vPRH7/Sc6rsJwBJOpH8Js23esZ2htM8=;
+  b=UABei3p+JRABj/T98bBMZCO4i2nGzipy9D+D0JpLnRU66sw8tep/454x
+   oI2l7a8iAdLNkXG0ojb4FNcHpeLALx2XILqqyrVG2gZxRknvRSFgEWhPZ
+   lGtmn3jbzlHoYEIQULSrIfSDz9E85yfxFYiOtXLqjGJJtRN+NR/6DJaWJ
+   JIEEfnVUdBmHBNZcFCAwTutUT6OFmqBmGcjrvlDhXk9U8n3N25lVPrhNi
+   pJuhWqasOpi70vCqmaBSJouhfm+vGeECYln/NdMgcuKxrpoyJJbanV1XU
+   BdmpteXAEItsWw8DMC9zJvm1chbAGDh8IlcAk+KEKLZpQ944A3KCq8GhJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="277096567"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="277096567"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:43:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585155769"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2022 15:43:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nz4OH-000FBR-2o;
+	Wed, 08 Jun 2022 22:43:05 +0000
+Date: Thu, 9 Jun 2022 06:42:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Evan Quan <evan.quan@amd.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Justin Stitt <jstitt007@gmail.com>
-Subject: [PATCH v3] include/uapi/linux/swab.h: move explicit cast outside ternary
-Date: Wed,  8 Jun 2022 15:35:39 -0700
-Message-Id: <20220608223539.470472-1-justinstitt@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+	Alex Deucher <alexander.deucher@amd.com>,
+	Lijo Lazar <lijo.lazar@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
+ warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
+ aligned than 'PPTable_t' and is usually due to 'struct
+ smu_11_0_powerplay_table' being packed, which can lea...
+Message-ID: <202206090601.ju4HNlMn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Justin Stitt <jstitt007@gmail.com>
+Hi Evan,
 
-A cast inside __builtin_constant_p doesn't do anything since it should
-evaluate as constant at compile time irrespective of this cast. Instead,
-I moved this cast outside the ternary to ensure the return type is as
-expected.
+FYI, the error/warning still remains.
 
-Additionally, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16
-is actually returning an `int` not a `u16` due to integer promotion.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bfb56e93bcef41859c2d5ab234ffd80b691be35
+commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
+date:   5 months ago
+config: arm-buildonly-randconfig-r010-20220607 (https://download.01.org/0day-ci/archive/20220609/202206090601.ju4HNlMn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-As Al Viro notes:
-You *can't* get smaller-than-int out of ? :, same as you can't get it
-out of addition, etc.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This also fixes some clang -Wformat warnings involving default
-argument promotion.
+All warnings (new ones prefixed by >>):
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Justin Stitt <jstitt007@gmail.com>
----
- diff from v2 -> v3:
-  * re-insert respective (u16, u32, u64) cast to __builtin_bswap as per
-     Nick's suggestion
-  * added note from Al Viro
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+                   ^
+   1 warning generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
+                     ^
+   1 warning generated.
 
- include/uapi/linux/swab.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-index 7272f85d6d6a..0723a9cce747 100644
---- a/include/uapi/linux/swab.h
-+++ b/include/uapi/linux/swab.h
-@@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
- #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
- #else
- #define __swab16(x)				\
--	(__builtin_constant_p((__u16)(x)) ?	\
-+	(__u16)(__builtin_constant_p(x) ?	\
- 	___constant_swab16(x) :			\
- 	__fswab16(x))
- #endif
-@@ -115,7 +115,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
- #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
- #else
- #define __swab32(x)				\
--	(__builtin_constant_p((__u32)(x)) ?	\
-+	(__u32)(__builtin_constant_p(x) ?	\
- 	___constant_swab32(x) :			\
- 	__fswab32(x))
- #endif
-@@ -128,7 +128,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
- #define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
- #else
- #define __swab64(x)				\
--	(__builtin_constant_p((__u64)(x)) ?	\
-+	(__u64)(__builtin_constant_p(x) ?	\
- 	___constant_swab64(x) :			\
- 	__fswab64(x))
- #endif
+vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
+
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
+4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
+73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
+2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
+ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
+
+:::::: The code at line 163 was first introduced by commit
+:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
+
+:::::: TO: Huang Rui <ray.huang@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
