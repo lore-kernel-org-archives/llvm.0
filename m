@@ -1,142 +1,123 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330324C65
-	for <llvm@lists.linux.dev>; Tue,  7 Jun 2022 23:43:46 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id c2so11230629lfk.0
-        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 16:43:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4F37B
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 00:14:52 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id bo5so16914455pfb.4
+        for <llvm@lists.linux.dev>; Tue, 07 Jun 2022 17:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BsJ4E/n6E6WEYC3xGqcJLEMCmh5wzfUdFOjfQObwoo0=;
-        b=MiLDd7q0UzhgPqtULsC28miEBwaRcoPU5dgYwC8Vnb3XkpW6tvL29D9H61eOW5mkU7
-         RtydIL+wpjs3qQwcBNDZrTRSNEfNeLR4ECa2gln2u/GCeQgaBoKORAuAN3akCT3pUIce
-         C04A4X1xY6BG5tDDEXmSV3c8OFFspxcjkkWOk+yUJRtgKYgQ/Ph5TrkL2THDj6D42B2H
-         TscnQy/usJ58iOhHOuoDeeOFTvps9u8Wz4RdtyK4cCwu6zLxdOFGOxrTBp7Se+/r2EkI
-         XzYlUI/kTG5IP2+O0uu8+suzgo4VnVGpttk/9STP++GmrvKOp17sZojssv7ryL6Edcqu
-         fOAw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=45epDQdJCBp4DgsIx1Sz2CxwS+YHltdpTyZ3wnT8hgs=;
+        b=aQTromRtl9Y8U0lSwdvw9JG/L6+ooOtEs95fFlo72XqRmwp+oPMHpnTAvjNmGlpzcP
+         P6SsxkAWmuw0sO2drXqm1qW6y86edJ8FtkvwTqyy4Z7F6OskExf3akYJDxmxgb5UAgEV
+         8bnEHiAjLg/Jxwg5mj4zvzCh5ZXxVmBgxmlJ12LeG4M6EzrOJ8uGq1Rw/fzsJc4GBCWO
+         PMxIEj7Iii+JdU2tsKoIb/+EKDVglzEsSFNuA4D0YpNmwKdz2cUIzUAlhCMEtwzPCm4L
+         qaUeh1GXO75cY11pQH5OhdAedvysyZBHTpwZ9xYnLGd0pEetd+sadM8v5NNfj9ghO8in
+         FiCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BsJ4E/n6E6WEYC3xGqcJLEMCmh5wzfUdFOjfQObwoo0=;
-        b=N55Vt5iaXI1kmxovNyBibGEpU7lvWLf9fGwzTgDDE0zjStH7yp+2qukZs+QWpq3pYP
-         zN04LpsVPK5w6e/X/xjbQ7QBw1UowDwQHgjLF2G+1YtGH9oZ/UIQiV1atSYUOu0HUwBn
-         a6qgEZ/iC6Te5uc3mqg83TAUMybCpi5j6Q7B4XBciFzAluC+pyVdyuh2CqLJOevWxNR3
-         qyxJB2Rdpopc0BKKLCNlM0ozDgCLPDvD7lUc9g9RWUIj41IRFBAOFSQXxVSgpe/JtQr1
-         j1W8l5PZSl13P9ZCSNXJ9iSt26OU+jKVxUM9cuvXeKHJFuRTpLXjhO6yXVWuFloYMWzC
-         q2JQ==
-X-Gm-Message-State: AOAM530+t8lnEziMNbXqfzbJR+ov4z7iNIXa3DQkz0vCwaiQrmY8WNBB
-	Vw/gXV9M8JhXnRYiTHnhArZGLtdPhUmewgkMVO3VBw==
-X-Google-Smtp-Source: ABdhPJxMSdiKma4gy0XJ31Ei7YNJtDAZetRdNPGU1knDY0iRcPr5fqk/dczy94U1kwwpxw5G9qq8r/um7sgG9zZftLI=
-X-Received: by 2002:a05:6512:3f94:b0:478:7abe:de4a with SMTP id
- x20-20020a0565123f9400b004787abede4amr54365154lfa.401.1654645423956; Tue, 07
- Jun 2022 16:43:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=45epDQdJCBp4DgsIx1Sz2CxwS+YHltdpTyZ3wnT8hgs=;
+        b=pziiFPXCnn5+Axn7mjKiRJXlwfEi2i/TDZcywz+gLOBKFyWAhIEwe8HQeen2xoE+Jk
+         w11Ws8lVbaZjSyju31bcmNBt3goZGvqIC4sfp+RyKDQBTTMhQxSIACW7pQa0pEJFf+c4
+         lOz2SZnDuNczlcOSdi4yxNSp4EbTeZ/N08Ahd1U0EWinnL7bnQiqmQ/9QSiNTP5yGXOK
+         Dk/Gq5bbqWJVqIqsYjK9CzUyv4uy2U6UTsJQD1LsIYDL6KlXwu2r5M2J3lM+m/6giIhW
+         k99eNtN5AsRDnFMP5yLwhz80bq6TzMi/d4GjJisCr7Hubdmcz/pNFjnvhGOD9u+dC8fL
+         qQjQ==
+X-Gm-Message-State: AOAM533ca+m58SIZOjCmf1AAX6XD6ORIz7+KSgZV47TqXYpxG4Cqrasm
+	OEvR+Rv0u/WwwGCW5LEQ1Yo=
+X-Google-Smtp-Source: ABdhPJyp28p2GDv7dkrNLXwv8Yj9hsL5KfMbOVCvI7otC6p6OS3I+JYKTxX9fdbZfv/y1by8dd43Kw==
+X-Received: by 2002:a63:6b41:0:b0:3fe:22d6:e6aa with SMTP id g62-20020a636b41000000b003fe22d6e6aamr2305774pgc.249.1654647291916;
+        Tue, 07 Jun 2022 17:14:51 -0700 (PDT)
+Received: from penguin.lxd ([2620:0:1000:2514:216:3eff:fe31:a1ca])
+        by smtp.googlemail.com with ESMTPSA id t1-20020a63f341000000b003fc4cc19414sm13458821pgj.45.2022.06.07.17.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 17:14:51 -0700 (PDT)
+From: Justin Stitt <jstitt007@gmail.com>
+To: ndesaulniers@google.com,
+	akpm@linux-foundation.org
+Cc: jstitt007@gmail.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nathan@kernel.org,
+	trix@redhat.com
+Subject: [PATCH v2] include/uapi/linux/swab.h: move explicit cast outside ternary
+Date: Tue,  7 Jun 2022 17:14:22 -0700
+Message-Id: <20220608001422.26383-1-jstitt007@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAKwvOd=-NXR5HoHwwEUZMsCt90oaADH6XHifje9n-8S8rj9SFw@mail.gmail.com>
+References: <CAKwvOd=-NXR5HoHwwEUZMsCt90oaADH6XHifje9n-8S8rj9SFw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220607222006.22719-1-jstitt007@gmail.com> <20220607152744.d7c801d092529309500ac9a6@linux-foundation.org>
- <CAKwvOdmXeRbFjkHgFXps4pLH6Q6pGWRNOqA85=h2aFnR=uaggg@mail.gmail.com> <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
-In-Reply-To: <20220607162128.b5d4aa70f4a8a7610ce29250@linux-foundation.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Jun 2022 16:43:32 -0700
-Message-ID: <CAKwvOd=KxY5PBgedkerrL_3BAV_ri8N4F-=piJ6tQXHwFDSr3g@mail.gmail.com>
-Subject: Re: [PATCH] include/uapi/linux/swab.h: add __u16 cast to __swab16 conditional
-To: Andrew Morton <akpm@linux-foundation.org>, Justin Stitt <jstitt007@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	Richard Smith <richardsmith@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 7, 2022 at 4:21 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 7 Jun 2022 15:42:56 -0700 Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> > On Tue, Jun 7, 2022 at 3:27 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue,  7 Jun 2022 15:20:06 -0700 Justin Stitt <jstitt007@gmail.com> wrote:
-> > >
-> > > > if __HAVE_BUILTIN_BSWAP16__ is defined then __swab16 utilizes a __u16 cast.
-> > > > This same cast should be used if __HAVE_BUILTIN_BSWAP16__ is not defined as
-> > > > well. This should fix loads (at least a few) clang -Wformat warnings
-> > > > specifically with `ntohs()`
-> > > >
-> > > > ...
-> > > >
-> > > > --- a/include/uapi/linux/swab.h
-> > > > +++ b/include/uapi/linux/swab.h
-> > > > @@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
-> > > >  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> > > >  #else
-> > > >  #define __swab16(x)                          \
-> > > > -     (__builtin_constant_p((__u16)(x)) ?     \
-> > > > +     (__u16)(__builtin_constant_p((__u16)(x)) ?      \
-> > > >       ___constant_swab16(x) :                 \
-> > > >       __fswab16(x))
-> > > >  #endif
-> > >
-> > > More explanation, please?  Both ___constant_swab16() and __fswab16()
-> > > return __u16, so why does this patch have any effect?
-> > >
-> >
-> > See this example:
-> > https://godbolt.org/z/fzE73jn13
-> > And the ImplicitCastExpr nodes adding to the AST:
-> > https://godbolt.org/z/oYeYxYdKW
-> >
-> > Both the second and third operand are promoted to int.
-> >
-> > C11: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf
-> >
-> > 6.5.15/5
-> > >> If both the second and third operands have arithmetic type, the result type that would be determined by the usual arithmetic conversions, were they applied to those two operands, is the type of the result.
-> > 6.3.1.8/1
-> > >> Otherwise, the integer promotions are performed on both operands.
-> > 6.3.1.1/2
-> > >> If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer promotions.
->
-> Geeze.  Can we please turn this into English and add it to the changelog?
->
-> Is it saying that an expression
->
->         int ? u16 : u16
->
-> has type int?
+A cast inside __builtin_constant_p doesn't do anything since it should evaluate
+as constant at compile time irrespective of this cast. Instead, I moved this
+cast outside the ternary to ensure the return type is as expected.
 
-Yep.
+For instance, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16 is
+actually returning an `int` not a `u16` due to integer promotion as described
+by Nick in this thread. This has repercussions when building with clang
+-Wformat. This fix should solve many of these warnings.
 
-> Or something else?
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+---
+ include/uapi/linux/swab.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Technically, the `int` in your example (the first operand) doesn't
-matter. Could be a `long long` or a `char` and it would not matter.
+diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+index f6be3f2e6fee..ab5a1283800c 100644
+--- a/include/uapi/linux/swab.h
++++ b/include/uapi/linux/swab.h
+@@ -99,10 +99,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+  * @x: value to byteswap
+  */
+ #ifdef __HAVE_BUILTIN_BSWAP16__
+-#define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
++#define __swab16(x) (__u16)__builtin_bswap16(x)
+ #else
+ #define __swab16(x)				\
+-	(__u16)(__builtin_constant_p((__u16)(x)) ?	\
++	(__u16)(__builtin_constant_p(x) ?	\
+ 	___constant_swab16(x) :			\
+ 	__fswab16(x))
+ #endif
+@@ -112,10 +112,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+  * @x: value to byteswap
+  */
+ #ifdef __HAVE_BUILTIN_BSWAP32__
+-#define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
++#define __swab32(x) (__u32)__builtin_bswap32(x)
+ #else
+ #define __swab32(x)				\
+-	(__builtin_constant_p((__u32)(x)) ?	\
++	(__u32)(__builtin_constant_p(x) ?	\
+ 	___constant_swab32(x) :			\
+ 	__fswab32(x))
+ #endif
+@@ -125,10 +125,10 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+  * @x: value to byteswap
+  */
+ #ifdef __HAVE_BUILTIN_BSWAP64__
+-#define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
++#define __swab64(x) (__u64)__builtin_bswap64(x)
+ #else
+ #define __swab64(x)				\
+-	(__builtin_constant_p((__u64)(x)) ?	\
++	(__u64)(__builtin_constant_p(x) ?	\
+ 	___constant_swab64(x) :			\
+ 	__fswab64(x))
+ #endif
+-- 
+2.30.2
 
-> What did we do wrong here and is it
-
-Perhaps the simplest English explanation would be "ternary expressions
-with then/else clauses with types smaller than int undergo implicit
-promotion to int."
-
-> possible to correct our types rather than adding a cast?
-
-I think the cast is the explicit cast back to __u16 way to go here,
-IMO.  I don't think anything within the ternary could be changed to
-avoid implicit promotions.
-
-
-Justin, can you please send a v2 removing the casts withing
-__builtin_constant_p (as in the diff I posted previously in this
-thread) and with the below text added to the commit message:
-
-Ternary expressions with then/else clauses with types smaller than int
-undergo implicit promotion to int. Cast the result of the ternary back
-to the expected __u16 to match the type when __HAVE_BUILTIN_BSWAP16__
-is defined.
-
-Also remove pointless casts within __builtin_constant_p argument lists.
---
-Thanks,
-~Nick Desaulniers
