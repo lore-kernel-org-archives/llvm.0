@@ -1,92 +1,121 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9D3320A;
-	Wed,  8 Jun 2022 17:13:07 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id k19so29193052wrd.8;
-        Wed, 08 Jun 2022 10:13:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15419320A
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 17:53:53 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3135519f95fso47127857b3.6
+        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 10:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v+GRs44ZAaCp+LmoA0Cy0UHC9B5TNPhLzc4XBlKlRTo=;
-        b=hD81EXZWqyx/co7W/gf5GnU9GUtXPEgMAioMsT+GWekm+tuav8KGKCdXziFPvH04/6
-         9Xu6DxyqjAF6hPIBZwu0EceEN4x3pASI87/zXb8nQd2YshEUp+eeJ7kz6FyJKAUs0iDb
-         MWjIW2CKumSxIj53VjH4e35KJ86gPUUQC7JlXXfyDfBz1rto663/xVAR7BmWYi9hw3NY
-         Oq1Wcn7Lnuq1e1sx80VkHjscYbJD91L0WcoDOTdzFhrretv3w6o4vrlssMzaCiw54GPp
-         DKP7qDgxrAzl+rEthXs9qYFpt03+KCUR3ixggR9S9/qYBoAzc1dQ+c8Jgifa5niLyhzT
-         3OHg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZYP+ah1U7+mN31aQTFJq4MgSsX2goe2sE/NP4qdAU5U=;
+        b=BSUl7JxGmnB729HAQjXimmjj8f9Tkw3EIFXgI1WL45S/MqvidYnh+pEtUIVi8lyYMp
+         3FOd7Vft2hoB98KFadhSg8bE0bzYSCe4+jH79YukI+AoeAJsd0lJqIqRUO++n39ZG1Zf
+         tOnjGxYk1ARMynx5cMnk8v+Z2OU+1I6HTrogCEIvZkBlmnMLQiRfxtrSvkSJwb30eLSc
+         oxN+cJcv7FH6nko/NroiAOhIPZS9zxv4kRsCUYYnnUVD55BxhQTKb5tvcns+MCHE6z/1
+         HyHj7USGIQpfG4O06Yaqc07KQDwyHEvP+16o0raoX8UKLr+o6DUKTe/otHCk2E2P7Xu1
+         ie9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v+GRs44ZAaCp+LmoA0Cy0UHC9B5TNPhLzc4XBlKlRTo=;
-        b=Fj+XUUTWzuElI5OxMGY2B1BFuOQ6ZO13IT/gjNlKStwkRRiBg241chiRnTD8eRCW5M
-         7tH2qKTlpOvWF7TS80gIu/aeax05KRAXNkYH3HiyLPIQ01ShSRBEf2Vn3/VErdlXSNvJ
-         ojt6S4jhy+MBQB5bLocT9YkWZZW0rwkRjbW8i/JjA0tgYntdgkHPcE9g7igiYK3MN8Fc
-         sEe1432xEcXpAcIirY2GkvKpOLepTPYbjtI68Pf7ohiPenZIuTIhYv/pAn4pEwvg0PN0
-         zj+fTEfd+3GYWJetRY07hFxAsxNCWLafDB8Q2PbYCGcb2MtAUpzQpqCIXvDvqYiRTiPW
-         Xqcw==
-X-Gm-Message-State: AOAM531gF8ViGLuYemUGywtZGUBRqFTpfIOviSZBPEyu5ca1dK9hjr2y
-	tHxqxmUu8uBjpqdEFKqIQm0=
-X-Google-Smtp-Source: ABdhPJwkgF72nHBSu7q9qGTg8h+atXBju2MmrOTs/inNaJwRb7OsEfkkDX6uot0cngO8WakstveCDw==
-X-Received: by 2002:adf:b644:0:b0:210:1fde:a513 with SMTP id i4-20020adfb644000000b002101fdea513mr36197690wre.604.1654708385227;
-        Wed, 08 Jun 2022 10:13:05 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:58e:6120:8c0d:a21d:4424:54a3? ([2a01:e0a:58e:6120:8c0d:a21d:4424:54a3])
-        by smtp.gmail.com with ESMTPSA id m9-20020a05600c4f4900b003973435c517sm23631084wmq.0.2022.06.08.10.13.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 10:13:04 -0700 (PDT)
-Message-ID: <51542057-4b25-7897-b2a0-d5027af869ea@gmail.com>
-Date: Wed, 8 Jun 2022 19:13:01 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZYP+ah1U7+mN31aQTFJq4MgSsX2goe2sE/NP4qdAU5U=;
+        b=saJ9xeIiAT/h3CMDpo2Oto780BMzhOcxllC6WLUffC5/iMCCRPWB7tSLGau89xnmBX
+         OZaSlWlVdqdqcHc7/rhnHezZJRRiS156LcSrmmSVeWjwoCrv8Z93R/AJ+pbEadpyvnOd
+         gMHh6ZJ2AWemBZ0ZphwPD0PevSZlXyFqmVxVkh0SqYPQS/UmFFEeQur9im9iS5uJXR4p
+         N3IXsN5Zt/BmymBaFh7U+F2zCbCvtSmb906Dh6s3DuJgQ1LTAk9AUN4JHUAJuPLur7UM
+         qufzN3+Sj7S+97SKRmVgHA8ef7u5yJPQU54LL/NH7fPOVMpwdpec9qNqv3M4BNqieVfZ
+         EU3A==
+X-Gm-Message-State: AOAM530v1HsndFv+BSUEC2q02bWFcZk/tLoK7M0lUcvk9a+OVpgosPd6
+	fpgPpYUk4W2mtDMzyZoZkNewsaKbrtdhJpfW6Zuz1Q==
+X-Google-Smtp-Source: ABdhPJyIp/kr/93Oc0dPwDHSBySwZnVz9Ba5VqpHQ/Mfh6VClr44aHdb03JA8owDUdvQtcPKFqrgVqUz+R3T/zalvrs=
+X-Received: by 2002:a0d:eb08:0:b0:30c:2f46:f7aa with SMTP id
+ u8-20020a0deb08000000b0030c2f46f7aamr38450413ywe.299.1654710832805; Wed, 08
+ Jun 2022 10:53:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] mmc: sdhci-brcmstb: Initialize base_clk to NULL in
- sdhci_brcmstb_probe()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Adrian Hunter <adrian.hunter@intel.com>, Al Cooper <alcooperx@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
- Florian Fainelli <f.fainelli@gmail.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Justin Stitt <jstitt007@gmail.com>, Dan Carpenter
- <dan.carpenter@oracle.com>, linux-mmc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-References: <20220608152757.82529-1-nathan@kernel.org>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220608152757.82529-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211122170301.764232470@infradead.org> <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com> <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com> <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com> <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <Yh7fLRYl8KgMcOe5@google.com>
+In-Reply-To: <Yh7fLRYl8KgMcOe5@google.com>
+From: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date: Wed, 8 Jun 2022 10:53:41 -0700
+Message-ID: <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+To: Peter Collingbourne <pcc@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Joao Moreira <joao@overdrivepizza.com>, 
+	Kees Cook <keescook@chromium.org>, x86@kernel.org, hjl.tools@gmail.com, 
+	jpoimboe@redhat.com, andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org, 
+	ndesaulniers@google.com, samitolvanen@google.com, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Peter,
+
+On Tue, Mar 1, 2022 at 7:06 PM Peter Collingbourne <pcc@google.com> wrote:
+>
+> Hi Peter,
+> One issue with this call sequence is that:
+>
+> On Fri, Feb 11, 2022 at 02:38:03PM +0100, Peter Zijlstra wrote:
+> > caller:
+> >       cmpl    $0xdeadbeef, -0x4(%rax)         # 7 bytes
+>
+> Because this instruction ends in the constant 0xdeadbeef, it may
+> be used as a "gadget" that would effectively allow branching to an
+> arbitrary address in %rax if the attacker can arrange to set ZF=3D1.
+
+Do you mind elaborating how this instruction can be used as a gadget?
+How does it look like?
+
+The information will be useful to the summary of Sami's KCFI LLVM
+patch: https://reviews.llvm.org/D119296
+
+> >       je      1f                              # 2 bytes
+> >       ud2                                     # 2 bytes
+> > 1:    call    __x86_indirect_thunk_rax        # 5 bytes
+> >
+> >
+> >       .align 16
+> >       .byte 0xef, 0xbe, 0xad, 0xde            # 4 bytes
+> > func:
+> >       endbr                                   # 4 bytes
+> >       ...
+> >       ret
+>
+> I think we can avoid this problem with a slight tweak to your
+> instruction sequence, at the cost of 2 bytes per function prologue.
+> First, change the call sequence like so:
+>
+>         cmpl    $0xdeadbeef, -0x6(%rax)         # 6 bytes
+>         je      1f                              # 2 bytes
+>         ud2                                     # 2 bytes
+> 1:      call    __x86_indirect_thunk_rax        # 5 bytes
+>
+> The key difference is that we've changed 0x4 to 0x6.
+>
+> Then change the function prologue to this:
+>
+>         .align 16
+>         .byte 0xef, 0xbe, 0xad, 0xde            # 4 bytes
+>         .zero 2                                 # 2 bytes
+> func:
+>
+> The end result of the above is that the constant embedded in the cmpl
+> instruction may only be used to reach the following ud2 instruction,
+> which will "harmlessly" terminate execution in the same way as if
+> the prologue signature did not match.
+>
+> Peter
+>
 
 
-
-On 6/8/2022 5:27 PM, Nathan Chancellor wrote:
-> Clang warns a few times along the lines of:
-> 
->    drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (res)
->                ^~~
->    drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
->            clk_disable_unprepare(base_clk);
->                                  ^~~~~~~~
-> 
-> base_clk is used in the error path before it is initialized. Initialize
-> it to NULL, as clk_disable_unprepare() calls clk_disable() and
-> clk_unprepare(), which both handle NULL pointers gracefully.
-> 
-> Fixes: 2cecaac1b21c ("mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1650
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
