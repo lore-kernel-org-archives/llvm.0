@@ -1,110 +1,112 @@
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE0D2F36
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 19:03:42 +0000 (UTC)
-Received: by mail-io1-f46.google.com with SMTP id i16so182908ioa.6
-        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 12:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=uHvO6lASenJXAwmtol028iE9jl3QIf1MGNf5sYAD2mI=;
-        b=mCzgaJ5RtUYhEB7TvHlxTBehiR1oOVyn5iAnL2NYhYfUTBEpRGyLQQIlfu/Pkjp41N
-         d+ToihCuCXnhN/EOcOn4VXOJd0D2nUFMx8b2ynE7wq8VLYDAbts2Fqlsypxa0BjUGTJI
-         OC2AzPMxMVPfXZVcC1kngUyf8XdkfJfMcx2BeyhsBP/8eVfjWejkDpY6R4G8wQjBo9C0
-         u6pGK9zoPI39Shrk2R7FLhiQDdA59H3KPEPk1ubgMoO9ml86fC98s5w5UNeXe96sMU7X
-         UA0kJzEDY0GdGSyTDxFv7l1QzrGPLcGEIgCeipt6Lnf/ExBnQ3zWOEWw1OJIuSicWkD7
-         0mzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=uHvO6lASenJXAwmtol028iE9jl3QIf1MGNf5sYAD2mI=;
-        b=V/9THIwMuz7i/n0sApYDrhB8P42fo+aSSXyk5O2U57lauo045rg1LeBKE9PKEmHVnD
-         RfqkTXsa8Zt0ehtK1tSEDKVqO2M40wMlJLygOoNuMltsm7yae+Wqb/FXy9I/VAKexUb3
-         NGapjDpeWqDXusDINjYK8d5g4StcinVXzR44hrSj0k7SUKUeWfWq5rLcDPuIwHOaq/6W
-         q3+/MCfAf70SDm+Y1+3+nwZVABX3ZZl1P5Xj6OtURDyA6A3FDv9PN7sznZmVxmGet7rx
-         w8qu69niMY9mQ8qK2FJJf//k3dMMEOpHFH0+fVWCvNTI2yWdtTgEyqSaoWi0UrvIMOmv
-         mklg==
-X-Gm-Message-State: AOAM530Btl9e+Z8/euu/YW1q/ouF1Zw0SRifZ5yjjxgGbJcUzVGzH1f6
-	Ao7w7Fw7HjE+NxPNwqfQBEU5axhO4OsYSkLdD20=
-X-Google-Smtp-Source: ABdhPJyPfBPW81UGtdc6N58+KH5F9Ju0Yh1bhwA/dhd1CNQBi4oFOkgVajdsRbnFlopI7Jcb7mSItJulOzBqKQr6Sc0=
-X-Received: by 2002:a05:6638:2188:b0:331:cf8b:af23 with SMTP id
- s8-20020a056638218800b00331cf8baf23mr5436095jaj.80.1654715021475; Wed, 08 Jun
- 2022 12:03:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC7733D2
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 19:26:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654716409; x=1686252409;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Uy0NJ8HqhtZ8h5uZtYMnISXssK4l/TvtOa+ng9NUjPA=;
+  b=Hvqb6blZcvHaXxfcaCj23vpHy+iPv0QSY1qS1K5VzNeWu3fS23z6fIcY
+   V7Ml87/07oEaWUSMDn5q/5Eh3HYooNuQ1w4UVp3qmV7YONhaHz/DY0ym/
+   KIFsNKSZoS79qD8aBC4dToB+tKPteY4GZJEE2FREnMRGgsmIKnvbc34H0
+   ddVgd7BpYQvVF8XzA7I1UVngrOKGE4eDYZp5c7mu07JWJqBV/Iv1NlG8t
+   l65TVcGFROCthQyGpO6lQt8DheXuCokbgihfvijfL+1vVK6ex4uQ5y3lj
+   2i4ppkpVP0iJhRVk1s2wWU1antlo066R1jt6VHFRfmJJGEEn+SS8R18E6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="257444555"
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="257444555"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 12:26:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="609807458"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2022 12:26:45 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nz1KG-000EwD-MG;
+	Wed, 08 Jun 2022 19:26:44 +0000
+Date: Thu, 9 Jun 2022 03:26:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+	Tudor Ambarus <tudor.ambarus@microchip.com>,
+	Pratyush Yadav <p.yadav@ti.com>, Michael Walle <michael@walle.cc>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] mtd: spi-nor: siliconkaiser: add support for sk25lp128
+Message-ID: <202206090308.3aMXmhee-lkp@intel.com>
+References: <20220603135933.143372-1-tom@tom-fitzhenry.me.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220607164000.447941-1-masahiroy@kernel.org> <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
-In-Reply-To: <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Wed, 8 Jun 2022 21:03:05 +0200
-Message-ID: <CA+icZUUZ0_92vDofYkgG3QzyuhC3wABwdT16ZPbH=92_0pGoRQ@mail.gmail.com>
-Subject: Re: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for
- process substitution
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603135933.143372-1-tom@tom-fitzhenry.me.uk>
 
-On Tue, Jun 7, 2022 at 8:42 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Tue, Jun 7, 2022 at 9:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > Bash>=4.4 supports 'wait $!' to check the exit status of a process
-> > substitution, but some people using older bash versions reported an
-> > error like this:
-> >
-> > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-> > Reported-by: Wang Yugui <wangyugui@e16-tech.com>
-> > Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > Tested-by: Jon Hunter <jonathanh@nvidia.com>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
->
+Hi Tom,
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
+Thank you for the patch! Perhaps something to improve:
 
--Sedat-
+[auto build test WARNING on mtd/spi-nor/next]
+[also build test WARNING on v5.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Some comments below.
->
-> > diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-> > index 34415ae1af1b..19c286c23786 100644
-> > --- a/Documentation/process/changes.rst
-> > +++ b/Documentation/process/changes.rst
-> > @@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
-> >  GNU C                  5.1              gcc --version
-> >  Clang/LLVM (optional)  11.0.0           clang --version
-> >  GNU make               3.81             make --version
-> > +bash                   4.2              bash --version
->
-> /usr/bin/env bash
-> and definitely /bin/bash
-> both show up a lot in kernel sources. At this point, I think bash is a
-> requirement at this point, so it's good to document it finally.
->
-> > +# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
-> > +# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
-> > +# '2>/dev/null'. However, it suppresses real error messages as well. Add a
-> > +# hand-crafted error message here.
-> > +#
-> > +# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
-> > +# binutils to 2.37, llvm to 13.0.0.
->
-> Might be nice to include `TODO:` in the comment block. Vim will
-> highlight these in comments.
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Fitzhenry/mtd-spi-nor-siliconkaiser-add-support-for-sk25lp128/20220605-163120
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
+config: arm-randconfig-c002-20220607 (https://download.01.org/0day-ci/archive/20220609/202206090308.3aMXmhee-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/9ee4927880d43f8611d371e7cc7d8854a927de66
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tom-Fitzhenry/mtd-spi-nor-siliconkaiser-add-support-for-sk25lp128/20220605-163120
+        git checkout 9ee4927880d43f8611d371e7cc7d8854a927de66
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/spi-nor/ drivers/nfc/nfcmrvl/ fs/quota/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/mtd/spi-nor/siliconkaiser.c:8:18: error: call to undeclared function 'SNOR_ID3'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     { "sk25lp128", SNOR_ID3(0x257018) },
+                    ^
+>> drivers/mtd/spi-nor/siliconkaiser.c:8:18: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+     { "sk25lp128", SNOR_ID3(0x257018) },
+                    ^~~~~~~~~~~~~~~~~~
+                    {                 }
+   drivers/mtd/spi-nor/siliconkaiser.c:8:18: error: initializer element is not a compile-time constant
+     { "sk25lp128", SNOR_ID3(0x257018) },
+                    ^~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+
+
+vim +8 drivers/mtd/spi-nor/siliconkaiser.c
+
+     6	
+     7	static const struct flash_info siliconkaiser_nor_parts[] = {
+   > 8	  { "sk25lp128", SNOR_ID3(0x257018) },
+     9	};
+    10	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
