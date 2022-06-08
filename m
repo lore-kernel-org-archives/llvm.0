@@ -1,215 +1,110 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCA32F36
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 18:35:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654713351; x=1686249351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DqUiRXlTjJeKVR62BqB5dFoUTGYJ9vm4Fy2jswQl65M=;
-  b=cyCEWC3PD49mj7v2q+xbYRewWs69UiXQ2r7t4ZTfrwUxSj55a6c79Qnd
-   ql20jVoC59uvfQy7TsxPeHc1gVhwMU9UEfqtSoOqMwbRBA/wZ3ZMlRLZ3
-   VQDjCVAvBu1V6OuwNRywI6CwbtXO8nGsJoCXfofl2mkTMPbVrNyuB9CJ3
-   IgkpzhDDC6S5EucGLkjJlJPbusc3aeQmc8avVSeulCVv8/O4l3UlazfgO
-   eKlt5xNIVV0c2r8OIrIHypVvevk+TwWi3ZQJ8wKTQUSZcN6fRtdKsWtPL
-   K0+pKLeQeFQVG3/ggvy/KqCIp+38H05UJ3FQ0OHWeIKfHW5O8irHIT9E1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="265799281"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="265799281"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:35:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="683490966"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 11:35:43 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nz0Wt-000Eu1-5U;
-	Wed, 08 Jun 2022 18:35:43 +0000
-Date: Thu, 9 Jun 2022 02:35:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prashant Malani <pmalani@chromium.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	heikki.krogerus@linux.intel.com,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <narmstrong@baylibre.com>,
-	David Airlie <airlied@linux.ie>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Tzung-Bi Shih <tzungbi@google.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Jonas Karlman <jonas@kwiboo.se>, swboyd@chromium.org,
-	Pin-Yen Lin <treapking@chromium.org>,
-	Rob Herring <robh+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>,
-	Hsin-Yi Wang <hsinyi@chromium.org>, Xin Ji <xji@analogixsemi.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Robert Foss <robert.foss@linaro.org>,
-	Prashant Malani <pmalani@chromium.org>,
-	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH 6/7] drm/bridge: anx7625: Register Type-C mode switches
-Message-ID: <202206090245.ZHrBQ2To-lkp@intel.com>
-References: <20220607190131.1647511-7-pmalani@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE0D2F36
+	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 19:03:42 +0000 (UTC)
+Received: by mail-io1-f46.google.com with SMTP id i16so182908ioa.6
+        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 12:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=uHvO6lASenJXAwmtol028iE9jl3QIf1MGNf5sYAD2mI=;
+        b=mCzgaJ5RtUYhEB7TvHlxTBehiR1oOVyn5iAnL2NYhYfUTBEpRGyLQQIlfu/Pkjp41N
+         d+ToihCuCXnhN/EOcOn4VXOJd0D2nUFMx8b2ynE7wq8VLYDAbts2Fqlsypxa0BjUGTJI
+         OC2AzPMxMVPfXZVcC1kngUyf8XdkfJfMcx2BeyhsBP/8eVfjWejkDpY6R4G8wQjBo9C0
+         u6pGK9zoPI39Shrk2R7FLhiQDdA59H3KPEPk1ubgMoO9ml86fC98s5w5UNeXe96sMU7X
+         UA0kJzEDY0GdGSyTDxFv7l1QzrGPLcGEIgCeipt6Lnf/ExBnQ3zWOEWw1OJIuSicWkD7
+         0mzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=uHvO6lASenJXAwmtol028iE9jl3QIf1MGNf5sYAD2mI=;
+        b=V/9THIwMuz7i/n0sApYDrhB8P42fo+aSSXyk5O2U57lauo045rg1LeBKE9PKEmHVnD
+         RfqkTXsa8Zt0ehtK1tSEDKVqO2M40wMlJLygOoNuMltsm7yae+Wqb/FXy9I/VAKexUb3
+         NGapjDpeWqDXusDINjYK8d5g4StcinVXzR44hrSj0k7SUKUeWfWq5rLcDPuIwHOaq/6W
+         q3+/MCfAf70SDm+Y1+3+nwZVABX3ZZl1P5Xj6OtURDyA6A3FDv9PN7sznZmVxmGet7rx
+         w8qu69niMY9mQ8qK2FJJf//k3dMMEOpHFH0+fVWCvNTI2yWdtTgEyqSaoWi0UrvIMOmv
+         mklg==
+X-Gm-Message-State: AOAM530Btl9e+Z8/euu/YW1q/ouF1Zw0SRifZ5yjjxgGbJcUzVGzH1f6
+	Ao7w7Fw7HjE+NxPNwqfQBEU5axhO4OsYSkLdD20=
+X-Google-Smtp-Source: ABdhPJyPfBPW81UGtdc6N58+KH5F9Ju0Yh1bhwA/dhd1CNQBi4oFOkgVajdsRbnFlopI7Jcb7mSItJulOzBqKQr6Sc0=
+X-Received: by 2002:a05:6638:2188:b0:331:cf8b:af23 with SMTP id
+ s8-20020a056638218800b00331cf8baf23mr5436095jaj.80.1654715021475; Wed, 08 Jun
+ 2022 12:03:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607190131.1647511-7-pmalani@chromium.org>
+References: <20220607164000.447941-1-masahiroy@kernel.org> <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
+In-Reply-To: <CAKwvOdk5ZrcSmQSPrFzreZ-z_Hpi4Lc-D-Y4NDuHPiUWpXdwzA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Wed, 8 Jun 2022 21:03:05 +0200
+Message-ID: <CA+icZUUZ0_92vDofYkgG3QzyuhC3wABwdT16ZPbH=92_0pGoRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts/check-local-export: avoid 'wait $!' for
+ process substitution
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Wang Yugui <wangyugui@e16-tech.com>, Jon Hunter <jonathanh@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Prashant,
+On Tue, Jun 7, 2022 at 8:42 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Tue, Jun 7, 2022 at 9:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Bash>=4.4 supports 'wait $!' to check the exit status of a process
+> > substitution, but some people using older bash versions reported an
+> > error like this:
+> >
+> > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> > Reported-by: Wang Yugui <wangyugui@e16-tech.com>
+> > Tested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+>
 
-I love your patch! Yet something to improve:
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+-Sedat-
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-buildonly-randconfig-r012-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090245.ZHrBQ2To-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-        git checkout 2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
->> include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for function 'fwnode_typec_mux_get' [-Wmissing-prototypes]
-   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-                     ^
-   include/linux/usb/typec_mux.h:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-   ^
-   static 
->> include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for function 'typec_mux_put' [-Wmissing-prototypes]
-   void typec_mux_put(struct typec_mux *mux) {}
-        ^
-   include/linux/usb/typec_mux.h:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_put(struct typec_mux *mux) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for function 'typec_mux_set' [-Wmissing-prototypes]
-   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-       ^
-   include/linux/usb/typec_mux.h:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-   ^
-   static 
->> include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for function 'typec_mux_register' [-Wmissing-prototypes]
-   typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-   ^
-   include/linux/usb/typec_mux.h:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct typec_mux *
-   ^
-   static 
->> include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for function 'typec_mux_unregister' [-Wmissing-prototypes]
-   void typec_mux_unregister(struct typec_mux *mux) {}
-        ^
-   include/linux/usb/typec_mux.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_unregister(struct typec_mux *mux) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for function 'typec_mux_set_drvdata' [-Wmissing-prototypes]
-   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-        ^
-   include/linux/usb/typec_mux.h:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for function 'typec_mux_get_drvdata' [-Wmissing-prototypes]
-   void *typec_mux_get_drvdata(struct typec_mux *mux)
-         ^
-   include/linux/usb/typec_mux.h:110:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *typec_mux_get_drvdata(struct typec_mux *mux)
-   ^
-   static 
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2617:23: error: incompatible pointer types assigning to 'struct typec_mux_dev *' from 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
-           port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2631:24: error: incompatible pointer types passing 'struct typec_mux_dev *' to parameter of type 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
-                   typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:107:45: note: passing argument to parameter 'mux' here
-   void typec_mux_unregister(struct typec_mux *mux) {}
-                                               ^
-   7 warnings and 2 errors generated.
-
-
-vim +2617 drivers/gpu/drm/bridge/analogix/anx7625.c
-
-  2590	
-  2591	static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
-  2592						struct anx7625_data *ctx)
-  2593	{
-  2594		struct anx7625_port_data *port_data;
-  2595		struct typec_mux_desc mux_desc = {};
-  2596		char name[32];
-  2597		u32 port_num;
-  2598		int ret;
-  2599	
-  2600		ret = of_property_read_u32(node, "reg", &port_num);
-  2601		if (ret)
-  2602			return ret;
-  2603	
-  2604		if (port_num >= ctx->num_typec_switches) {
-  2605			dev_err(dev, "Invalid port number specified: %d\n", port_num);
-  2606			return -EINVAL;
-  2607		}
-  2608	
-  2609		port_data = &ctx->typec_ports[port_num];
-  2610		port_data->ctx = ctx;
-  2611		mux_desc.fwnode = &node->fwnode;
-  2612		mux_desc.drvdata = port_data;
-  2613		snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
-  2614		mux_desc.name = name;
-  2615		mux_desc.set = anx7625_typec_mux_set;
-  2616	
-> 2617		port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-  2618		if (IS_ERR(port_data->typec_mux)) {
-  2619			ret = PTR_ERR(port_data->typec_mux);
-  2620			dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
-  2621		}
-  2622	
-  2623		return ret;
-  2624	}
-  2625	
-  2626	static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
-  2627	{
-  2628		int i;
-  2629	
-  2630		for (i = 0; i < ctx->num_typec_switches; i++)
-> 2631			typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-  2632	}
-  2633	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Some comments below.
+>
+> > diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> > index 34415ae1af1b..19c286c23786 100644
+> > --- a/Documentation/process/changes.rst
+> > +++ b/Documentation/process/changes.rst
+> > @@ -32,6 +32,7 @@ you probably needn't concern yourself with pcmciautils.
+> >  GNU C                  5.1              gcc --version
+> >  Clang/LLVM (optional)  11.0.0           clang --version
+> >  GNU make               3.81             make --version
+> > +bash                   4.2              bash --version
+>
+> /usr/bin/env bash
+> and definitely /bin/bash
+> both show up a lot in kernel sources. At this point, I think bash is a
+> requirement at this point, so it's good to document it finally.
+>
+> > +# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm) shows
+> > +# 'no symbols' diagnostic (but exits with 0). It is harmless and hidden by
+> > +# '2>/dev/null'. However, it suppresses real error messages as well. Add a
+> > +# hand-crafted error message here.
+> > +#
+> > +# Use --quiet instead of 2>/dev/null when we upgrade the minimum version of
+> > +# binutils to 2.37, llvm to 13.0.0.
+>
+> Might be nice to include `TODO:` in the comment block. Vim will
+> highlight these in comments.
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
