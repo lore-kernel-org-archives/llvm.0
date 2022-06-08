@@ -1,85 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5157B;
-	Wed,  8 Jun 2022 15:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CA4C34116;
-	Wed,  8 Jun 2022 15:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654702111;
-	bh=xNLY7igwqhkEdX0LdFwkeYns5vg4pARM/9a9j++CR8Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=oIW5WJ1BJbIWgXH9K9gQyrMXg6UQZ+S78zAn3pGiCraQDI2d21f7n3ducnWT6Jsb2
-	 Ezq/+xFsTFXe7Qn0ZuspuTXzbTehxaiQLN3Kb7NuJP6XNRWOAP1mJpAJ0qU6I7xtvD
-	 pjutZYEk66mXFu9qdTe2f7i/9q5xNcB4rW7vWg06yINH9sfyrrCL81BLRoejmkCqxG
-	 91lPAEtLqx5AhyvnW6r3EbQEpnZYhujYqU1EzsZIf5EUCmQodWKQ/VbUmrOMsHxTzv
-	 owjfjejJSw3RmcuDKOph3ntVkVeo2a6LlrOBL3Om5ymxBpMulyBwmk1nvvNlYUaGCi
-	 IPSCVCd68vpIw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Adrian Hunter <adrian.hunter@intel.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Kamal Dasu <kdasu.kdev@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Justin Stitt <jstitt007@gmail.com>,
-	Dan Carpenter <dan.carpenter@oracle.com>,
-	linux-mmc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] mmc: sdhci-brcmstb: Initialize base_clk to NULL in sdhci_brcmstb_probe()
-Date: Wed,  8 Jun 2022 08:27:57 -0700
-Message-Id: <20220608152757.82529-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A60E7B;
+	Wed,  8 Jun 2022 15:28:55 +0000 (UTC)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 5B3571D78;
+	Wed,  8 Jun 2022 15:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=paragon-software.com; s=mail; t=1654702092;
+	bh=ZIn5ncpNxC8T/c1MmFgaJnj+dvlJ1abmWAeW+JUsdto=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=LR5mbVmS7J/+r4oKJTo8vi0yNSt3z7ohVTUkK53WvHvhgMWK6Pyg9x242XSGZqjw4
+	 XnsuqNMogYV39PIzaZbyckB10YgqySZwAZ0fHIJklBU9CW+qzLCxiL5rfl54uIbcAC
+	 4Qj5/0mVa1X2T/KvR22/1XSg75E19KieKc/3jX5E=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 8 Jun 2022 18:28:49 +0300
+Message-ID: <d8ff3d09-ac85-da53-c638-30135c9eb6c2@paragon-software.com>
+Date: Wed, 8 Jun 2022 18:28:49 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] fs/ntfs3: remove redundant assignment to variable vcn
+Content-Language: en-US
+To: Colin Ian King <colin.i.king@gmail.com>, <ntfs3@lists.linux.dev>
+CC: <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20220418140038.82843-1-colin.i.king@gmail.com>
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220418140038.82843-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 
-Clang warns a few times along the lines of:
 
-  drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-          if (res)
-              ^~~
-  drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
-          clk_disable_unprepare(base_clk);
-                                ^~~~~~~~
 
-base_clk is used in the error path before it is initialized. Initialize
-it to NULL, as clk_disable_unprepare() calls clk_disable() and
-clk_unprepare(), which both handle NULL pointers gracefully.
+On 4/18/22 17:00, Colin Ian King wrote:
+> Variable vcn is being assigned a value that is never read, it is
+> being re-assigned again in the initialization of a for-loop.  The
+> assignment is redundant and can be removed.
+> 
+> Cleans up clang scan build warning:
+> fs/ntfs3/attrib.c:1176:7: warning: Value stored to 'vcn' during its
+> initialization is never read [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   fs/ntfs3/attrib.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+> index e8c00dda42ad..fc0623b029e6 100644
+> --- a/fs/ntfs3/attrib.c
+> +++ b/fs/ntfs3/attrib.c
+> @@ -1173,7 +1173,7 @@ int attr_load_runs_range(struct ntfs_inode *ni, enum ATTR_TYPE type,
+>   {
+>   	struct ntfs_sb_info *sbi = ni->mi.sbi;
+>   	u8 cluster_bits = sbi->cluster_bits;
+> -	CLST vcn = from >> cluster_bits;
+> +	CLST vcn;
+>   	CLST vcn_last = (to - 1) >> cluster_bits;
+>   	CLST lcn, clen;
+>   	int err;
 
-Fixes: 2cecaac1b21c ("mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1650
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/mmc/host/sdhci-brcmstb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-index f8dff8537920..28e9cf995c41 100644
---- a/drivers/mmc/host/sdhci-brcmstb.c
-+++ b/drivers/mmc/host/sdhci-brcmstb.c
-@@ -256,7 +256,7 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
- 	struct sdhci_host *host;
- 	struct resource *iomem;
- 	struct clk *clk;
--	struct clk *base_clk;
-+	struct clk *base_clk = NULL;
- 	int res;
- 
- 	match = of_match_node(sdhci_brcm_of_match, pdev->dev.of_node);
-
-base-commit: 10980053142d8a3e86eb4d3014574424b42b7a45
--- 
-2.36.1
-
+Thanks for patch, applied!
