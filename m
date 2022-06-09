@@ -1,145 +1,94 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59577B
-	for <llvm@lists.linux.dev>; Wed,  8 Jun 2022 23:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654731915; x=1686267915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+QQGNxbXfmrAkH/8Zr0jWsDMVO1KlxTDhrWPFlWKtII=;
-  b=YsBF3qTu3CZuidSKEtxuu7HYeza+imBQp9uhQY1HODIIRRsG0LIrnOhL
-   kF2djLHodQDAw1RozP7PfoW5l2pitwPoTJKabxJZWPTHiLl2foun+ZzoN
-   +ValCJVaDGzO1D02LPftR5s9HZnwlFQOexhcLghyqFkNbJVcyH+VL60PY
-   2zZ39N7yincRnpLjKObAq9RpfOOlLLoGunY4uF1PtqSnhgUGlmkCZavgA
-   ZEQJnlSBgh88NObEWhN5hKge9nmLe/XV4Jx1ToZBNyUWQpB1qZrWB1qp/
-   q32qoWx3vmCRMB0chtNncLzhD1c5Puhee+ZKnAgfemsfem4+KBZ904FMc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="265880404"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="265880404"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 16:45:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="555647682"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Jun 2022 16:45:07 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nz5MJ-000FEx-2s;
-	Wed, 08 Jun 2022 23:45:07 +0000
-Date: Thu, 9 Jun 2022 07:44:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Gwendal Grignou <gwendal@chromium.org>,
-	Stephen Boyd <swboyd@chromium.org>,
-	Jongpil Jung <jongpil19.jung@samsung.com>,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH 1/1] iio:proximity:sx9360: Fix hardware gain read/write
-Message-ID: <202206090719.8FcfVgxx-lkp@intel.com>
-References: <20220608010857.1720-1-xiaohuizhang@ruc.edu.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEA87A
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 00:06:35 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31332df12a6so77588307b3.4
+        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 17:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rWmXg+4rcMcMBm2s7YjpkCcdd6M/TYiOX6qHnnqhyKA=;
+        b=XkDvHxg+l2pqP3tUpPa58TwUKa05NcHTh5rKdyaGOQmzJQmB087nmkq6wgL6e+SNSj
+         YezaKK2Ngjf2oyEKZdCkOkKQoz5DRHYAlxWGSou39iNNyetkG7ZHRdUjnRBbJoJFUj/u
+         oxD1AJsylzkyygyCGZu8bl7IcvM82z9V3zntDKSdk6H0cC5Q7kCbbOlaOMWFUNofU2Rf
+         hKd4csBqWt2cr52DKZumxU9EfAKqEyhB6Ksh9HyiAaUL8EtglJ9Fr7j5d+BYtxDnpX96
+         A9YyZNI3c2WIN9FOoZEv1ABNuINhTqIqN9kGXzJMjVhO3qfYW1+u82Vg4cBba8cusKU4
+         Uxsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rWmXg+4rcMcMBm2s7YjpkCcdd6M/TYiOX6qHnnqhyKA=;
+        b=iovwwnYKziShcPffLilaCVKJz2QIdNq4nKcPiTX61h4LeKn1cqTnf1SeIOdcZetvmI
+         gRK9o/joxOPn5fH+BeZeLpfA0PsTXxpgqOKlOH+HMBNtBMP1kp3tIH28sMtYD9FcjvqO
+         edYiR31E1Kci8HsZjljxJArJ9ExyxMP77hCS2m4f8AL7xurxCf2/5rBiOT1TcEzjkS7u
+         0fjJ2X/v2unyhrb3S5VgoxCqTHUVIov571ZK80v7cDoNksODgHti9rGUk8veU+s5XwBC
+         IUru2QIJdGqJ0stfFtPcGOti6vzegZ/SRKYZItpS6rnGgMAR2LDmVOAKbSRCIrH5/T8c
+         fqRA==
+X-Gm-Message-State: AOAM533ExpF53WDegbB1QFpQmbF9H87hnfHEVqO3bjLRNdP+4VUHvNDR
+	B5HRvUtBgkpGBEL602tgUcPORQwgEJk+pGzaOh8mpw==
+X-Google-Smtp-Source: ABdhPJycg/VezgHOfXrGTsDTYajapWp9fPNJzHErESk4GuOmkrZZOMqTUdYdU0DF7IL5AGUlMcqg+z2tDRU4Ec0d+9E=
+X-Received: by 2002:a05:690c:b85:b0:313:2fee:a601 with SMTP id
+ ck5-20020a05690c0b8500b003132feea601mr13521777ywb.243.1654733194645; Wed, 08
+ Jun 2022 17:06:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608010857.1720-1-xiaohuizhang@ruc.edu.cn>
+References: <20211122170301.764232470@infradead.org> <20211122170805.338489412@infradead.org>
+ <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com> <202202081541.900F9E1B@keescook>
+ <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com> <202202082003.FA77867@keescook>
+ <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com> <20220211133803.GV23216@worktop.programming.kicks-ass.net>
+ <Yh7fLRYl8KgMcOe5@google.com> <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
+In-Reply-To: <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 8 Jun 2022 17:05:58 -0700
+Message-ID: <CABCJKueigY+oJ0HTV_YXKcTZG35ACxPE_YpKp_ZURgzxNYQ4WA@mail.gmail.com>
+Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
+To: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Cc: Peter Collingbourne <pcc@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Joao Moreira <joao@overdrivepizza.com>, Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>, 
+	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>, andrew.cooper3@citrix.com, 
+	LKML <linux-kernel@vger.kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xiaohui,
+On Wed, Jun 8, 2022 at 10:53 AM F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@googl=
+e.com> wrote:
+>
+> Hi Peter,
+>
+> On Tue, Mar 1, 2022 at 7:06 PM Peter Collingbourne <pcc@google.com> wrote=
+:
+> >
+> > Hi Peter,
+> > One issue with this call sequence is that:
+> >
+> > On Fri, Feb 11, 2022 at 02:38:03PM +0100, Peter Zijlstra wrote:
+> > > caller:
+> > >       cmpl    $0xdeadbeef, -0x4(%rax)         # 7 bytes
+> >
+> > Because this instruction ends in the constant 0xdeadbeef, it may
+> > be used as a "gadget" that would effectively allow branching to an
+> > arbitrary address in %rax if the attacker can arrange to set ZF=3D1.
+>
+> Do you mind elaborating how this instruction can be used as a gadget?
+> How does it look like?
 
-Thank you for the patch! Yet something to improve:
+With the offset of -4, the je instruction here can be an indirect call
+target because it's preceded by a valid type hash at the end of the
+cmpl instruction. If we change the offset to -6, only the ud2
+instruction is a potential call target in this sequence, which will be
+less useful to an attacker.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> The information will be useful to the summary of Sami's KCFI LLVM
+> patch: https://reviews.llvm.org/D119296
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaohui-Zhang/iio-proximity-sx9360-Fix-hardware-gain-read-write/20220608-125912
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r041-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090719.8FcfVgxx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bdc0a6947530604152de0d152635e144a486ee32
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xiaohui-Zhang/iio-proximity-sx9360-Fix-hardware-gain-read-write/20220608-125912
-        git checkout bdc0a6947530604152de0d152635e144a486ee32
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/proximity/
+I'll add more information about the X86 preamble to the description.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/proximity/sx9360.c:297:21: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_RSVD'
-           else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
-                              ^
->> drivers/iio/proximity/sx9360.c:298:13: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_8'
-                    regval > SX9360_REG_PROX_CTRL0_GAIN_8)
-                             ^
-   drivers/iio/proximity/sx9360.c:646:25: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_8'
-           if (val <= 0 || gain > SX9360_REG_PROX_CTRL0_GAIN_8)
-                                  ^
->> drivers/iio/proximity/sx9360.c:699:3: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_1'
-                   SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-                   ^
->> drivers/iio/proximity/sx9360.c:699:35: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_SHIFT'
-                   SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-                                                   ^
-   drivers/iio/proximity/sx9360.c:702:3: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_1'
-                   SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-                   ^
-   drivers/iio/proximity/sx9360.c:702:35: error: use of undeclared identifier 'SX9360_REG_PROX_CTRL0_GAIN_SHIFT'
-                   SX9360_REG_PROX_CTRL0_GAIN_1 << SX9360_REG_PROX_CTRL0_GAIN_SHIFT |
-                                                   ^
->> drivers/iio/proximity/sx9360.c:796:22: error: invalid application of 'sizeof' to an incomplete type 'const struct sx_common_reg_default[]'
-           .num_default_regs = ARRAY_SIZE(sx9360_default_regs),
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   8 errors generated.
-
-
-vim +/SX9360_REG_PROX_CTRL0_GAIN_RSVD +297 drivers/iio/proximity/sx9360.c
-
-   282	
-   283	static int sx9360_read_gain(struct sx_common_data *data,
-   284				    const struct iio_chan_spec *chan, int *val)
-   285	{
-   286		unsigned int reg, regval;
-   287		int ret;
-   288	
-   289		reg = SX9360_REG_PROX_CTRL0_PHR + chan->channel;
-   290		ret = regmap_read(data->regmap, reg, &regval);
-   291		if (ret)
-   292			return ret;
-   293	
-   294		regval = FIELD_GET(SX9360_REG_PROX_CTRL0_GAIN_MASK, regval);
-   295		if (regval)
-   296			regval--;
- > 297		else if (regval == SX9360_REG_PROX_CTRL0_GAIN_RSVD ||
- > 298			 regval > SX9360_REG_PROX_CTRL0_GAIN_8)
-   299			return -EINVAL;
-   300	
-   301		*val = 1 << regval;
-   302	
-   303		return IIO_VAL_INT;
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sami
