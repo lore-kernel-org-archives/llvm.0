@@ -1,33 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584857A
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 16:34:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E91C34114;
-	Thu,  9 Jun 2022 16:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654792483;
-	bh=Z+8881I4lGsavWzdw6DGjO9wRYbLtT/CZtArIVyvZaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c4Uz+6A+2OOmdOhCtufOjwLRgEWGfXzyZ8jao+p0kgecuiArHgWdmUAlciS4UWhFP
-	 VqqxlcQKwF8fxvxaOPv653HqMr0xYDtqUiUViRXvwCXrTA4sEeOYamoS2xapoQmpBQ
-	 swqkXvhfnnLMtYy6ivQezK+H4KvvdFGT4eRRwsGbvSHN7GPW6JoDCqeExAAvNz767r
-	 8a33RldnDFm8dsLV9u0t0Jd38YwmeGWokosVNzov4z21KdATX11BebY+mrFvQPsDne
-	 ZTV++N4GGGNVwfba6OPP0NGn1sLNGT/SUfODp0hnx9DS2O5tY6EPKdqniH2XUByKBB
-	 aUmgNH187oG3A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id A4ACB4096F; Thu,  9 Jun 2022 13:34:40 -0300 (-03)
-Date: Thu, 9 Jun 2022 13:34:40 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Fangrui Song <maskray@google.com>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sedat Dilek <sedat.dilek@gmail.com>,
-	llvm@lists.linux.dev, Sebastian Ullrich <sebasti@nullri.ch>
-Subject: Re: [PATCH] perf unwind: Fix uninitialized variable
-Message-ID: <YqIhIHQVh7s52Fap@kernel.org>
-References: <20220607000851.39798-1-irogers@google.com>
- <20220607002658.zkbs4c37ihmivcmn@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85BA7A
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 17:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654797346; x=1686333346;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bkVhV2DIALzBN3tjhS5SoyZ7ccFtFXAPjGRdtXgjTBM=;
+  b=Hu8FICHvGhxMbTla/r2rhh52D9HH971C14Z8/iTdNWBczG9rosHhFzcX
+   b5I1ltvsrTqIxfe8qMutxtZjEDS8il/rpsdzIPlO96sdXrQ/D4pVU7zd6
+   GMSeIioL3jzcMQa3L81i7XZKB9GCkLEw+qou3aztr0fgtTptQdJpRYphl
+   IA39XGbrZ4meOilVTc7ZevNm8lMHIk99Df5EITaBTlpF/cpMtfG8qMrUU
+   AYGE18f8kdH4SjvNqM/QwnpilyYfg0tlop4RAa3au95ZxwrrSqzYHjb1r
+   22G0KlEREd7v3qqVqlNn9rqlTEy/lNfATcEEZD2AfLqBVA/kQPNKGLN4h
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266144272"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="266144272"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 10:55:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585708375"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2022 10:55:44 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzMNj-000GEv-GS;
+	Thu, 09 Jun 2022 17:55:43 +0000
+Date: Fri, 10 Jun 2022 01:55:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yuan Yao <yuan.yao@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 449/453]
+ arch/x86/kernel/fpu/xstate.c:719:7: warning: format specifies type 'long'
+ but the argument has type 'unsigned int'
+Message-ID: <202206100124.87NJ8YRo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,47 +47,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607002658.zkbs4c37ihmivcmn@google.com>
-X-Url: http://acmel.wordpress.com
 
-Em Mon, Jun 06, 2022 at 05:26:58PM -0700, Fangrui Song escreveu:
-> On 2022-06-06, Ian Rogers wrote:
-> > ret may be uninitialized on error goto paths.
-> > 
-> > Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > Fixes: dc2cf4ca866f ("perf unwind: Fix segbase for ld.lld linked objects")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> Thanks. Sorry for my mistake...
-> 
-> Reviewed-by: Fangrui Song <maskray@google.com>
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
+commit: c00f6297349a8d81049eefe338ee079179787e28 [449/453] X86: FPU: Fix unexpected #PF while executing XRSTORS
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220610/202206100124.87NJ8YRo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/c00f6297349a8d81049eefe338ee079179787e28
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout c00f6297349a8d81049eefe338ee079179787e28
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/
 
-Thanks, applied.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Arnaldo
+All warnings (new ones prefixed by >>):
 
- 
-> > ---
-> > tools/perf/util/unwind-libunwind-local.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-> > index 37622699c91a..6e5b8cce47bf 100644
-> > --- a/tools/perf/util/unwind-libunwind-local.c
-> > +++ b/tools/perf/util/unwind-libunwind-local.c
-> > @@ -174,7 +174,7 @@ static int elf_section_address_and_offset(int fd, const char *name, u64 *address
-> > 	Elf *elf;
-> > 	GElf_Ehdr ehdr;
-> > 	GElf_Shdr shdr;
-> > -	int ret;
-> > +	int ret = -1;
-> > 
-> > 	elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> > 	if (elf == NULL)
-> > -- 
-> > 2.36.1.255.ge46751e96f-goog
-> > 
+>> arch/x86/kernel/fpu/xstate.c:719:7: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                sizeof(init_fpstate_full), kernel_size);
+                ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:133:29: note: expanded from macro 'WARN'
+                   __WARN_printf(TAINT_WARN, format);                      \
+                                             ^~~~~~
+   include/asm-generic/bug.h:105:17: note: expanded from macro '__WARN_printf'
+                   __warn_printk(arg);                                     \
+                                 ^~~
+   1 warning generated.
+
+
+vim +719 arch/x86/kernel/fpu/xstate.c
+
+   685	
+   686	static int __init init_xstate_size(void)
+   687	{
+   688		/* Recompute the context size for enabled features: */
+   689		unsigned int user_size, kernel_size, kernel_default_size;
+   690		bool compacted = cpu_feature_enabled(X86_FEATURE_XSAVES);
+   691	
+   692		/* Uncompacted user space size */
+   693		user_size = get_xsave_size_user();
+   694	
+   695		/*
+   696		 * XSAVES kernel size includes supervisor states and
+   697		 * uses compacted format when available.
+   698		 *
+   699		 * XSAVE does not support supervisor states so
+   700		 * kernel and user size is identical.
+   701		 */
+   702		if (compacted)
+   703			kernel_size = get_xsaves_size_no_independent();
+   704		else
+   705			kernel_size = user_size;
+   706	
+   707		kernel_default_size =
+   708			xstate_calculate_size(fpu_kernel_cfg.default_features, compacted);
+   709	
+   710		/* Ensure we have the space to store all default enabled features. */
+   711		if (!is_supported_xstate_size(kernel_default_size))
+   712			return -EINVAL;
+   713	
+   714		if (!paranoid_xstate_size_valid(kernel_size))
+   715			return -EINVAL;
+   716	
+   717		WARN(kernel_size > sizeof(init_fpstate_full),
+   718		     "Too small init_fpstate size:%ld expected:%d\n",
+ > 719		     sizeof(init_fpstate_full), kernel_size);
+   720	
+   721		fpu_kernel_cfg.max_size = kernel_size;
+   722		fpu_user_cfg.max_size = user_size;
+   723	
+   724		fpu_kernel_cfg.default_size = kernel_default_size;
+   725		fpu_user_cfg.default_size =
+   726			xstate_calculate_size(fpu_user_cfg.default_features, false);
+   727	
+   728		return 0;
+   729	}
+   730	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://01.org/lkp
