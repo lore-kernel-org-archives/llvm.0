@@ -1,45 +1,49 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03822599
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 14:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5995F2CA2
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 14:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654786599; x=1686322599;
+  t=1654786600; x=1686322600;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cMlf7JU/ZvyPXyCSqmvxhcZQGfHSrOT8Ep9dWoQobNA=;
-  b=WFjXY+68EdtnFeS/ZF4eazykitYBp3it5y/WEOeER0Vw65MpaCwjlL1P
-   NTnO5gNQ1MUBFks+F8i+OFpblHu6mxPZxVdNScFcHEyGFTM2lBlADjYvC
-   j9OVxfV19/tTGVs5SpNn9vmrY5OjNcUe1+eZNQZ91hGkiSIZPUG/PNFsm
-   lNp30ykmOvkzGQ5eyCLMcT4JxiYLz3/QVQQhQH9khy90Ic7yv8DU5t+HU
-   lgoCGFCrY0cmGk66D4Fv7rmw3cVJ43qluAB7N6T8bVSv/hem0EUiAGBNm
-   Awni9bVt9P37MsbFo3Q7vdDF0vv/lrQerSGg2NU9Zlk7LXCrLfyKV9OPK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278116995"
+  bh=AhOKgRD6dzPhGcbP+FED4Ce5jeuzBr0fCvK3sx/IZr4=;
+  b=JHQOHcffWnIp5pODoZh2Ith1Idb8nWRGLO6m+vN84JXN3txXzoor5Mly
+   7pfOINVViR4xUBektMUZ8KkgCmhtOItcihZ6/CMLThTpl/8jlvSrMcu/v
+   yucx5R9YOz2MksHW5PAKcsrwERmKyqBMrdkWlael3kzDSG9/do1JuWj45
+   ZAcKPAR57EuGc/QV7RSn62eOKi+H/cSjiAhRt6qC05tzkP8W/0RqVt178
+   PzM4GxSTGEPTxQfFYjxxOpQQAYAaHzO10vMFOc3riNHoXn3f8Y3EENmgs
+   uBWJAT+v7VfPeEOhMAyaebt9t7belswWryGv8r08fEz5ObaXapooAak3t
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363633675"
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="278116995"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:56:39 -0700
+   d="scan'208";a="363633675"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:56:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="671349491"
+   d="scan'208";a="610286885"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 07:56:36 -0700
+  by orsmga008.jf.intel.com with ESMTP; 09 Jun 2022 07:56:36 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nzJaO-000G53-2T;
+	id 1nzJaO-000G55-3C;
 	Thu, 09 Jun 2022 14:56:36 +0000
-Date: Thu, 9 Jun 2022 22:56:34 +0800
+Date: Thu, 9 Jun 2022 22:56:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	kernel-team@fb.com, song@kernel.org, joannelkoong@gmail.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, eddyz87@gmail.com
-Subject: Re: [PATCH bpf-next v4 3/5] bpf: Inline calls to bpf_loop when
- callback is known
-Message-ID: <202206092228.SWNGbTFO-lkp@intel.com>
-References: <20220608192630.3710333-4-eddyz87@gmail.com>
+To: Aswath Govindraju <a-govindraju@ti.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Aswath Govindraju <a-govindraju@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/ti-sci-intr: Add support for system
+ suspend/resume PM
+Message-ID: <202206092226.YcJ2jTZb-lkp@intel.com>
+References: <20220607061912.12222-1-a-govindraju@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,76 +52,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608192630.3710333-4-eddyz87@gmail.com>
+In-Reply-To: <20220607061912.12222-1-a-govindraju@ti.com>
 
-Hi Eduard,
+Hi Aswath,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on v5.19-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/bpf_loop-inlining/20220609-033007
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: arm-randconfig-r014-20220608 (https://download.01.org/0day-ci/archive/20220609/202206092228.SWNGbTFO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aswath-Govindraju/irqchip-ti-sci-intr-Add-support-for-system-suspend-resume-PM/20220607-142656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git cdb4913293897dde0df522ed5789ba016f3b9157
+config: arm64-randconfig-r020-20220607 (https://download.01.org/0day-ci/archive/20220609/202206092226.YcJ2jTZb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/10671a6a0479bb7ee4d437c4ce7307f198cb96fd
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c41c5fa0992f5a0a3298d6933ed84349f1f48b58
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eduard-Zingerman/bpf_loop-inlining/20220609-033007
-        git checkout 10671a6a0479bb7ee4d437c4ce7307f198cb96fd
+        git fetch --no-tags linux-review Aswath-Govindraju/irqchip-ti-sci-intr-Add-support-for-system-suspend-resume-PM/20220607-142656
+        git checkout c41c5fa0992f5a0a3298d6933ed84349f1f48b58
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/verifier.c:7111:6: warning: no previous prototype for function 'update_loop_inline_state' [-Wmissing-prototypes]
-   void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
-        ^
-   kernel/bpf/verifier.c:7111:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
-   ^
-   static 
->> kernel/bpf/verifier.c:14318:18: warning: no previous prototype for function 'inline_bpf_loop' [-Wmissing-prototypes]
-   struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
-                    ^
-   kernel/bpf/verifier.c:14318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
-   ^
-   static 
-   2 warnings generated.
+>> drivers/irqchip/irq-ti-sci-intr.c:270: warning: expecting prototype for ti_sci_intr_initialize_mappingg(). Prototype was for ti_sci_intr_initialize_mapping() instead
 
 
-vim +/update_loop_inline_state +7111 kernel/bpf/verifier.c
+vim +270 drivers/irqchip/irq-ti-sci-intr.c
 
-  7110	
-> 7111	void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
-  7112	{
-  7113		struct bpf_loop_inline_state *state = &cur_aux(env)->loop_inline_state;
-  7114		struct bpf_reg_state *regs = cur_regs(env);
-  7115		struct bpf_reg_state *flags_reg = &regs[BPF_REG_4];
-  7116	
-  7117		int flags_is_zero =
-  7118			register_is_const(flags_reg) && flags_reg->var_off.value == 0;
-  7119	
-  7120		if (state->initialized) {
-  7121			state->fit_for_inline &=
-  7122				flags_is_zero &&
-  7123				state->callback_subprogno == subprogno;
-  7124		} else {
-  7125			state->initialized = 1;
-  7126			state->fit_for_inline = flags_is_zero;
-  7127			state->callback_subprogno = subprogno;
-  7128		}
-  7129	}
-  7130	
+   264	
+   265	/**
+   266	 * ti_sci_intr_initialize_mappingg - Initialize the out_irq <-> hwirq mapping table
+   267	 * @intr:	IRQ domain corresponding to Interrupt Router
+   268	 */
+   269	static int ti_sci_intr_initialize_mapping(struct ti_sci_intr_irq_domain *intr)
+ > 270	{
+   271		int i;
+   272		int mapping_len = intr->out_irqs->desc->num + intr->out_irqs->desc->num_sec;
+   273	
+   274		intr->mapping = devm_kzalloc(intr->dev, mapping_len * sizeof(u32), GFP_KERNEL);
+   275		if (!intr->mapping)
+   276			return -ENOMEM;
+   277	
+   278		/* Set all the elements in the array to max value of u32 */
+   279		for (i = 0; i < mapping_len; i++)
+   280			intr->mapping[i] = 0xFFFFFFFF;
+   281	
+   282		return 0;
+   283	}
+   284	
 
 -- 
 0-DAY CI Kernel Test Service
