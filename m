@@ -1,42 +1,42 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84527C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:18:48 +0000 (UTC)
-Received: by mail-pl1-f202.google.com with SMTP id j4-20020a170902da8400b00168b0b2341dso964911plx.5
-        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:18:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7527C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:19:11 +0000 (UTC)
+Received: by mail-pl1-f201.google.com with SMTP id h10-20020a170902f54a00b00166449db7f8so11527478plf.9
+        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=HlrKEzC+OauxSUT5xZtPYeK0f3N3z3B8pf9PvEyK7vc=;
-        b=qNUPK/S5iHdXgPK57Bkixsq++QOQQMHfyV6r2MtPs7v9I3SUg8azHVdlWi+Vmpdk0V
-         e9swXJWEpf/dXShWMQkD9tdieecIjQpQiuIyNIyGp6c4DhP+OHtn6lVN3Jb0aUWnt0zX
-         6WRDoSX5skQyQJy1DXGgbB1frbSREBbKFeP8ovCXNP1nwpzQihNeuZDVsxzVVQEW/FTO
-         oasKzV38q06qXK4hlfrcDIvuu6az9YMh+LOMOYwAEM/GaKPtPsyF6cfogObTYmCvxbsF
-         HDhlFK8BOzg5MG7pql3z3B69jG4uxkigcwMhH0FMhZG9+AiHWiMvxTL/b/XFzI/yrt60
-         XE4w==
+        bh=fWdTUxWRVXkKLWYheGOI11e0mL2XAHFKbZxg8ksMoZM=;
+        b=ezNDouTkewW/awvW/cRvKC6jHhcMBl4eQkJi6sdP+X2J6iJMkd00jA2jaRJhpFY7aw
+         yxivdcEq++4iV1GgB2ziv1ayV3oP8FWg/GB0Zo4bN9LSRrIbKMWW4pYYedFNqaZbtBdq
+         LI7orAiKEXNDUMTMRTz+eYmtPr0ihFSVRZhCMEgns7LQjXXffU9ysRs8Jm7/xp/mkHV8
+         hqJ/WTn4IigfYhYdyyonY3s//N3eKAKkW8RZYgrVC9YsY682gIJn1c0bZa76vTplgKaA
+         3OGnJiqbOGhiGk4PrcLnGinCbRAB3xGsfKwPwyZscTB2mgetoP8/LmB/5HB6hMrHCgU0
+         s7qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=HlrKEzC+OauxSUT5xZtPYeK0f3N3z3B8pf9PvEyK7vc=;
-        b=5heNmSnLFj0IKE8ljz3oGnFwy7JoTpB312Ek/AMcyuac0cNAwBQSeowxYquPQDQgsC
-         gagR/vz9EzNqicuqMtKiqqinwE7U4cLG8f+4V44eJIVjOObxIxMFy2RPfD1qvo5Pt6rB
-         1J6gFQ8PEdX7qi5+v+rfIWf+YTEpbOxki9cmiCXjy/UvUOYk5r707xidzsprn1F9G2S9
-         Uqjeo+VrfP2zyqS3/Nq5FRryNwFFD5Ix+YfjNQ6sZTS8XhteE1+kd8ufTuBToyeTvpBa
-         MUrvjizp6YV9AjOYhmCGLVR1SBxGYLP4/5v3m3aBPEphbIof0i4j5jkv7b229oggd2IE
-         ZeAg==
-X-Gm-Message-State: AOAM530gEd2zxUTh6Vn5aTA8XE0KU8herdvBDAcJ16F1ovkZBr6skq8E
-	fkvkmblgTCB//k+vVdADLNUPMiuX
-X-Google-Smtp-Source: ABdhPJxktSZZjGsZMg+ncs7oCo7UsGcqz2MItXnZVpN7aAWxKCb/sSBN71lrVJLJ6nxui+334t4TDARu1w==
+        bh=fWdTUxWRVXkKLWYheGOI11e0mL2XAHFKbZxg8ksMoZM=;
+        b=KBBOwHppFh+ZcRE+VVitb6baC1JeVqHrPyqhh8+JbKPeriqnx27CNFv+UVtABe6C3K
+         qWo7mci44KctxNBTUrd4+yhl3L+7bV9GoHhbjttXv6KsHLJQjHJ2L1oJldsPCaXb2h1/
+         znshEvsbbcG2b1drQIwdFqSGTevwSdDPKGrPNUaRGCwQ1cGylf/ewRdBCYv2UVeCQEDi
+         iH0jriRdhusKqXbZTmk61XhYNINofZ+sqxMw3RFU7FY6hwCyuOAel62ic492rHpE/vnu
+         WD0mISvjZrhixO68/+bWzuIoIzlFG1rxskbasmD7S2c6PugEQEDfKRKGpF0bnTQf9kuh
+         Bv8A==
+X-Gm-Message-State: AOAM531rMjllwUI3AZhKDASqJvWGjEO8fCbqbg1gneW12W2ZNALWL2Fd
+	ABWAAojpAh3yALUNuJC1c9cq1qBk
+X-Google-Smtp-Source: ABdhPJymRh8XdI6qUr+0U3jn9BPA1WS3MroiwqAq54XxkobNI9HSYvmGC6qhWN+ZtdS8zin/gyNAdfGHUw==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a63:5924:0:b0:3fb:a75e:9e8a with SMTP id
- n36-20020a635924000000b003fba75e9e8amr36694755pgb.394.1654813127925; Thu, 09
- Jun 2022 15:18:47 -0700 (PDT)
-Date: Thu,  9 Jun 2022 22:16:23 +0000
+ (user=morbo job=sendgmr) by 2002:a63:c5:0:b0:3fe:26a0:7abe with SMTP id
+ 188-20020a6300c5000000b003fe26a07abemr10973746pga.152.1654813150612; Thu, 09
+ Jun 2022 15:19:10 -0700 (PDT)
+Date: Thu,  9 Jun 2022 22:16:24 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-5-morbo@google.com>
+Message-Id: <20220609221702.347522-6-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 04/12] blk-cgroup: use correct format characters
+Subject: [PATCH 05/12] fs: quota: use correct format characters
 From: Bill Wendling <morbo@google.com>
 To: isanbard@gmail.com
 Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
@@ -71,31 +71,31 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-mm/backing-dev.c:880:57: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
-                                                               ^~~~~~~~~~~~~
+fs/quota/dquot.c:206:22: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                    request_module(module_names[qm].qm_mod_name))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- mm/backing-dev.c | 2 +-
+ fs/quota/dquot.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index ff60bd7d74e0..7b7786dceff3 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -877,7 +877,7 @@ int bdi_register_va(struct backing_dev_info *bdi, const char *fmt, va_list args)
- 		return 0;
+diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+index a74aef99bd3d..3b613de3b371 100644
+--- a/fs/quota/dquot.c
++++ b/fs/quota/dquot.c
+@@ -203,7 +203,7 @@ static struct quota_format_type *find_quota_format(int id)
+ 			     module_names[qm].qm_fmt_id != id; qm++)
+ 			;
+ 		if (!module_names[qm].qm_fmt_id ||
+-		    request_module(module_names[qm].qm_mod_name))
++		    request_module("%s", module_names[qm].qm_mod_name))
+ 			return NULL;
  
- 	vsnprintf(bdi->dev_name, sizeof(bdi->dev_name), fmt, args);
--	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
-+	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, "%s", bdi->dev_name);
- 	if (IS_ERR(dev))
- 		return PTR_ERR(dev);
- 
+ 		spin_lock(&dq_list_lock);
 -- 
 2.36.1.255.ge46751e96f-goog
 
