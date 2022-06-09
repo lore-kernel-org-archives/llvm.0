@@ -1,42 +1,42 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10797C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:21:27 +0000 (UTC)
-Received: by mail-pl1-f202.google.com with SMTP id s2-20020a17090302c200b00158ea215fa2so13458774plk.3
-        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:21:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579537C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:21:50 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-31384ac6813so39884527b3.8
+        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
-        b=i42901GYNhaxsHQ0DOGoOky9iCPlDaMMKrye+1S6wrdYfiDoHAZcC7HTQX/ufq8JDc
-         FtLJH8ibG+4hcwJncrABH5MINqNlaiBQcg6AiUjnTwqlf664IuYPp0tvgNpDNS6s/GjQ
-         Wjh2TOa/isNuXc04yhOdZrj9wIAtXkGMKkDBH370v2doh3glFP/6lvE9gZpbXECpN/zv
-         UStKebGupQmmTtj2yMjnHwJiwJi/peKu25pYf9NTE11Ch6upWSa6FAa3CkIKEN5+Emo5
-         3UDTgqdqaohZKI3Gp3XYmJjjv1YwnDPf8AUi3y1kFAWlFzS3PLERdXTH2sKpk0ltR6ij
-         /vAw==
+        bh=yboyFArx2lHvBt01l8NpldAEI3xLVVvkRY3YCO31PQs=;
+        b=E9tSuZ6hKkd5R9UrAClvzMvLuSapw21MRvFh9K5m/Q4W/Ne6NP2WMWfSPzasz8wKZX
+         Mng11d6Obxtbq83lWoSaFsdBiVCu3gb6X9dNoHMi3E7qOKWwZUm9cJAU6WOY5s+S4WcD
+         k0KWGk2jmTkZOAqD94Ix96O/6kgOmQ/r+QpHomefwKvJ5cV0MNofmxceF2lXxoFWF6gg
+         j5Cs7IkuMhKv2Pf+5++JwO5hcoMx6SP3if8FmA4NjIla9U/uK2//v1BfU0Tfe7AV8KrT
+         Ey/sE8DleSJieRPHEDBL1hPn4naIWW02H/aWpnYArbukY4zZLmv4GV2t/e5g12dM+Qzj
+         ZcQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
-        b=XMV+Ww3VWPBqDAc1KoVaJT+nlq0qDF5MLWu8rZllYsCfzgAUrhbYOJL84qQGr406XU
-         d6r0C53NXnurbWkOrxOFPtfNz6gn3pm3iAv7llM7zx4L2JpuFW8XXJAgpg5s/SILWaJE
-         qHRc8uyDhKCGhPI4wI+KdXP47rc2Fo0+3ejKVCuFHgF/bF6ast04BGpP9OlpRTwrhKrz
-         kRxKGLp3D5iMj5QFerXRpPpyhy//7EESycU/6s3sUMGHcIw+7vFLa1rJiVd96aJTjexw
-         Ms4Wh2GiFGNbng7rTm0qjqmsKmrSFyG/xx3omOSwtgVPLoDcVu9e0YstikdYxYKcJps3
-         CqPg==
-X-Gm-Message-State: AOAM532fdK+wOp2MeFrhcAFricfcqfiLF3c3r4j8scsaIkqGwZrrkBDd
-	iHIvWVRCTv0JS3voVQxH86FosctF
-X-Google-Smtp-Source: ABdhPJxwIiVK0GwVN12g3ZMNH56OyPQzBgCjPEweYrbMYHqEsJdgXTONzisCGHUJLebHzTiLq5Vb6Q5FXg==
+        bh=yboyFArx2lHvBt01l8NpldAEI3xLVVvkRY3YCO31PQs=;
+        b=jbRzZBDndSVeVioX8AW5nAqo7dzJ+wpxjFoiCu9FqLHJCpb7KgDji1FQB7l9Z6mfCE
+         hm64E5hoRzQCRr06RFDYnRbVrvMDdRfi+tNJ5XKEWeja67o9icds+ZOkS5GDBOn4QHa5
+         uyIJca6uqoRHFRpZ07nROroUHg3ylTx1mfLqLhRzxRveCz+v42OzYwoxXOulRMSNJkNq
+         Tyb1EBH6g7PHaZ38EjBylZ2kO6vC9K1iS7usvTZg7ZI6U4/hWjyammbUB+IFufgpgn5h
+         48vlxQG1YAQ+2hbZ0GMzmr4uMqh+xdfQVEA8X4k1yGRxeRSdoIdiPB9qksqaFW6iprTK
+         UinQ==
+X-Gm-Message-State: AOAM5323ohxSYdOwCgSY3L/OHu7Hq8wuHfuTx/eWRi6M7Njuzim/UVxB
+	ItQN6zNV9TXweukJkh2FahZkWxdn
+X-Google-Smtp-Source: ABdhPJzx/fiV7355Fpicwsezz0b2tB8XbCEkcbb8KPwyuPviI/0AOw7BwG+AXnNZJgmFqRPAiS2WX3p4fQ==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a63:409:0:b0:3fd:77f0:9a75 with SMTP id
- 9-20020a630409000000b003fd77f09a75mr25262295pge.149.1654813287223; Thu, 09
- Jun 2022 15:21:27 -0700 (PDT)
-Date: Thu,  9 Jun 2022 22:16:30 +0000
+ (user=morbo job=sendgmr) by 2002:a81:c248:0:b0:313:3c2c:89cd with SMTP id
+ t8-20020a81c248000000b003133c2c89cdmr17003210ywg.175.1654813309307; Thu, 09
+ Jun 2022 15:21:49 -0700 (PDT)
+Date: Thu,  9 Jun 2022 22:16:31 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-12-morbo@google.com>
+Message-Id: <20220609221702.347522-13-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 11/12] ALSA: control: use correct format characters
+Subject: [PATCH 12/12] netfilter: conntrack: use correct format characters
 From: Bill Wendling <morbo@google.com>
 To: isanbard@gmail.com
 Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
@@ -60,7 +60,7 @@ Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
 	Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Daniel Kiper <daniel.kiper@oracle.com>, Ross Philipson <ross.philipson@oracle.com>, 
+	Ross Philipson <ross.philipson@oracle.com>, Daniel Kiper <daniel.kiper@oracle.com>, 
 	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-acpi@vger.kernel.org, linux-mm@kvack.org, 
 	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
@@ -71,31 +71,31 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-sound/core/control.c:2062:24: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        return request_module(module_name);
-                              ^~~~~~~~~~~
+net/netfilter/nf_conntrack_helper.c:168:18: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+                request_module(mod_name);
+                               ^~~~~~~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- sound/core/control.c | 2 +-
+ net/netfilter/nf_conntrack_helper.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/core/control.c b/sound/core/control.c
-index a25c0d64d104..a1778137147d 100644
---- a/sound/core/control.c
-+++ b/sound/core/control.c
-@@ -2059,7 +2059,7 @@ int snd_ctl_request_layer(const char *module_name)
- 	up_read(&snd_ctl_layer_rwsem);
- 	if (lops)
- 		return 0;
--	return request_module(module_name);
-+	return request_module("%s", module_name);
- }
- EXPORT_SYMBOL_GPL(snd_ctl_request_layer);
+diff --git a/net/netfilter/nf_conntrack_helper.c b/net/netfilter/nf_conntrack_helper.c
+index c12a87ebc3ee..1e0424d37abc 100644
+--- a/net/netfilter/nf_conntrack_helper.c
++++ b/net/netfilter/nf_conntrack_helper.c
+@@ -165,7 +165,7 @@ nf_nat_helper_try_module_get(const char *name, u16 l3num, u8 protonum)
+ 	if (!nat) {
+ 		snprintf(mod_name, sizeof(mod_name), "%s", h->nat_mod_name);
+ 		rcu_read_unlock();
+-		request_module(mod_name);
++		request_module("%s", mod_name);
  
+ 		rcu_read_lock();
+ 		nat = nf_conntrack_nat_helper_find(mod_name);
 -- 
 2.36.1.255.ge46751e96f-goog
 
