@@ -1,42 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CF37C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 14:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03822599
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 14:56:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654783731; x=1686319731;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RZ9GC9G4NzHs8ag0KtTu585ebRykJCiuVVNCZInBXc0=;
-  b=PoKOeJ80CLaxPvwnco0U/qLptuJB+P2aNvn5EU0IWEH7Q7eXUpHINjdG
-   2dUPeAx2ccAOCz6dmxg9ZFT+OfeV6QARUETpWGEGCQn7uK3aJOIY+OcHD
-   PZu0W/BZXTHoaD7bKQ4jguzPwmFQKT9psSDm8SG7ACSO67iLo1YBsj5KM
-   z/Ge9SReouB6WOXsZZmHsgKEfFrVCCqUgGJtqzD/UKK4VcWJlUV14VOEj
-   olCe7wNtzMGBZA1itUiKSKtETUk8CpXoqgXe+6++usTi1lhrc7zan7//0
-   CWBxVIwP0kG6pH7lMSMgJbvMpBoepiQeCLYcylJTMHISIFFbZWYGZRnjx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="274816115"
+  t=1654786599; x=1686322599;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cMlf7JU/ZvyPXyCSqmvxhcZQGfHSrOT8Ep9dWoQobNA=;
+  b=WFjXY+68EdtnFeS/ZF4eazykitYBp3it5y/WEOeER0Vw65MpaCwjlL1P
+   NTnO5gNQ1MUBFks+F8i+OFpblHu6mxPZxVdNScFcHEyGFTM2lBlADjYvC
+   j9OVxfV19/tTGVs5SpNn9vmrY5OjNcUe1+eZNQZ91hGkiSIZPUG/PNFsm
+   lNp30ykmOvkzGQ5eyCLMcT4JxiYLz3/QVQQhQH9khy90Ic7yv8DU5t+HU
+   lgoCGFCrY0cmGk66D4Fv7rmw3cVJ43qluAB7N6T8bVSv/hem0EUiAGBNm
+   Awni9bVt9P37MsbFo3Q7vdDF0vv/lrQerSGg2NU9Zlk7LXCrLfyKV9OPK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278116995"
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="274816115"
+   d="scan'208";a="278116995"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:08:37 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 07:56:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="671331825"
+   d="scan'208";a="671349491"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 07:08:35 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 07:56:36 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nzIpv-000G3F-0b;
-	Thu, 09 Jun 2022 14:08:35 +0000
-Date: Thu, 9 Jun 2022 22:07:54 +0800
+	id 1nzJaO-000G53-2T;
+	Thu, 09 Jun 2022 14:56:36 +0000
+Date: Thu, 9 Jun 2022 22:56:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/clk 48/48] drivers/opp/core.c:430:6: warning: no
- previous prototype for function '_invalid_freq_op'
-Message-ID: <202206092215.7H70yWMv-lkp@intel.com>
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	kernel-team@fb.com, song@kernel.org, joannelkoong@gmail.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, eddyz87@gmail.com
+Subject: Re: [PATCH bpf-next v4 3/5] bpf: Inline calls to bpf_loop when
+ callback is known
+Message-ID: <202206092228.SWNGbTFO-lkp@intel.com>
+References: <20220608192630.3710333-4-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,52 +48,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220608192630.3710333-4-eddyz87@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/clk
-head:   3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
-commit: 3c6c953fd159e8e0a31b2b0ba71f6e783a183b81 [48/48] OPP: Allow multiple clocks for a device
-config: arm64-randconfig-r012-20220609 (https://download.01.org/0day-ci/archive/20220609/202206092215.7H70yWMv-lkp@intel.com/config)
+Hi Eduard,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/bpf_loop-inlining/20220609-033007
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: arm-randconfig-r014-20220608 (https://download.01.org/0day-ci/archive/20220609/202206092228.SWNGbTFO-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/clk
-        git checkout 3c6c953fd159e8e0a31b2b0ba71f6e783a183b81
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/10671a6a0479bb7ee4d437c4ce7307f198cb96fd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eduard-Zingerman/bpf_loop-inlining/20220609-033007
+        git checkout 10671a6a0479bb7ee4d437c4ce7307f198cb96fd
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/opp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/opp/core.c:430:6: warning: no previous prototype for function '_invalid_freq_op' [-Wmissing-prototypes]
-   bool _invalid_freq_op(struct opp_table *opp_table)
+>> kernel/bpf/verifier.c:7111:6: warning: no previous prototype for function 'update_loop_inline_state' [-Wmissing-prototypes]
+   void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
         ^
-   drivers/opp/core.c:430:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool _invalid_freq_op(struct opp_table *opp_table)
+   kernel/bpf/verifier.c:7111:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
    ^
    static 
-   drivers/opp/core.c:1635:43: warning: variable 'clk_size' set but not used [-Wunused-but-set-variable]
-           int supply_count, supply_size, icc_size, clk_size;
-                                                    ^
+>> kernel/bpf/verifier.c:14318:18: warning: no previous prototype for function 'inline_bpf_loop' [-Wmissing-prototypes]
+   struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+                    ^
+   kernel/bpf/verifier.c:14318:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+   ^
+   static 
    2 warnings generated.
 
 
-vim +/_invalid_freq_op +430 drivers/opp/core.c
+vim +/update_loop_inline_state +7111 kernel/bpf/verifier.c
 
-   428	
-   429	/* Helpers for invalid operations */
- > 430	bool _invalid_freq_op(struct opp_table *opp_table)
-   431	{
-   432		return WARN_ON(opp_table->clk_count != 1);
-   433	}
-   434	
+  7110	
+> 7111	void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
+  7112	{
+  7113		struct bpf_loop_inline_state *state = &cur_aux(env)->loop_inline_state;
+  7114		struct bpf_reg_state *regs = cur_regs(env);
+  7115		struct bpf_reg_state *flags_reg = &regs[BPF_REG_4];
+  7116	
+  7117		int flags_is_zero =
+  7118			register_is_const(flags_reg) && flags_reg->var_off.value == 0;
+  7119	
+  7120		if (state->initialized) {
+  7121			state->fit_for_inline &=
+  7122				flags_is_zero &&
+  7123				state->callback_subprogno == subprogno;
+  7124		} else {
+  7125			state->initialized = 1;
+  7126			state->fit_for_inline = flags_is_zero;
+  7127			state->callback_subprogno = subprogno;
+  7128		}
+  7129	}
+  7130	
 
 -- 
 0-DAY CI Kernel Test Service
