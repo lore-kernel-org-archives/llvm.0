@@ -1,100 +1,76 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from a3.inai.de (a3.inai.de [88.198.85.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E003D67
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:49:35 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id be31so40218338lfb.10
-        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=h+XSjN/WVesJqDJFOPBbUOjCsElze90l5AUaZpaMfQE4BCHJP6262qTzyHWJva9Bl7
-         Ylea2b1VMRtuu3W6K04USb5N4DyE9/FJG1TJX23DJAAyMpmTkNe0IhcujfXyw2tL6Yzm
-         5AoAwHI63jQHxPEb7KgmYY7AsIWc/AhRsgnJ71aDa/ZsS0NcL3wur4vFJaN8UMyAklRE
-         aEGCgipKXq1q5OQuT+b1/Z3ZAjDVwg+cOz821DhKZdc3CbTWkxewf2eBhHZ6cA8kCpl2
-         vQoxv4lOBXpPPrGtb7sLkscBoEWxzlYML194UCnlDBfFSziOT58BYv12MhyX6zYq7k9Z
-         Vkrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAj7kkMIiekJ9rTKt4JAtAfIGa2quITOg+UqYlGq1Vc=;
-        b=0rleyoLPrShdALFmPcWuJsR0VY2S7Vhk6vP/WvNelrVjscw99fga9s2vuZalQpbMqa
-         1UhibvG2+Mif5aIGeJ06ygW8A3zL1nf5t5zQDiosOGpGG+5sk38DxKY2ULRzcHXUoBmB
-         DnY+mJNFLxXyODQcHW5m2RbLDjJKGJWorl0f+qYABxGQOMLatXrz8btYwTIJDzpxSxg+
-         sDHSajv932KxFUmGV342p2ZdUKWFnFb0vYh8kjbVdCHXGozwCaoz4mKpHOi8wRHwpaD6
-         3ojfDSdapRdwj9vfdJIIxiGYFzFTV723GY933x6Tnlgnxvu2q/8UQDkVVpwqac43L5Jl
-         C6iw==
-X-Gm-Message-State: AOAM531ux1ODsE9v0U2ktUkF2s+MyBjm98BCdlgHYQAw5NjJUABAjQA8
-	8IMYoDQlGfHWoQXiY6z66Of+HxewngUmwrGbdQE2
-X-Google-Smtp-Source: ABdhPJxZXTnzcCwuX2K8dXo0GsWxPjCKHZ8xLR+ukHeOsc32GB8PW2KE6FFGhS4Nls3KDQ2FUv5nfKYIhCIQyfCKYvU=
-X-Received: by 2002:a05:6512:114e:b0:479:1e02:9318 with SMTP id
- m14-20020a056512114e00b004791e029318mr20896704lfg.156.1654814973186; Thu, 09
- Jun 2022 15:49:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9E43D67
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 23:10:30 +0000 (UTC)
+Received: by a3.inai.de (Postfix, from userid 25121)
+	id 3364758723354; Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by a3.inai.de (Postfix) with ESMTP id 30D9E60C247C4;
+	Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+Date: Fri, 10 Jun 2022 01:03:36 +0200 (CEST)
+From: Jan Engelhardt <jengelh@inai.de>
+To: Bill Wendling <morbo@google.com>
+cc: Andrew Morton <akpm@linux-foundation.org>, 
+    Bill Wendling <isanbard@gmail.com>, Tony Luck <tony.luck@intel.com>, 
+    Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, 
+    Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
+    "H. Peter Anvin" <hpa@zytor.com>, Phillip Potter <phil@philpotter.co.uk>, 
+    Arnd Bergmann <arnd@arndb.de>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Jan Kara <jack@suse.com>, 
+    Pablo Neira Ayuso <pablo@netfilter.org>, 
+    Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+    Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
+    Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+    Ross Philipson <ross.philipson@oracle.com>, 
+    Daniel Kiper <daniel.kiper@oracle.com>, linux-edac@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, 
+    ACPI Devel Maling List <linux-acpi@vger.kernel.org>, linux-mm@kvack.org, 
+    netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+    Networking <netdev@vger.kernel.org>, alsa-devel@alsa-project.org, 
+    clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
+In-Reply-To: <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+Message-ID: <nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
+References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org> <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 9 Jun 2022 15:49:21 -0700
-Message-ID: <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Bill Wendling <isanbard@gmail.com>, Tony Luck <tony.luck@intel.com>, 
-	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Phillip Potter <phil@philpotter.co.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Jan Kara <jack@suse.com>, 
-	Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ross Philipson <ross.philipson@oracle.com>, Daniel Kiper <daniel.kiper@oracle.com>, 
-	linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, linux-mm@kvack.org, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	Networking <netdev@vger.kernel.org>, alsa-devel@alsa-project.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+
+On Friday 2022-06-10 00:49, Bill Wendling wrote:
+>On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
+>>
+>> > This patch set fixes some clang warnings when -Wformat is enabled.
+>>
+>> tldr:
+>>
+>> -       printk(msg);
+>> +       printk("%s", msg);
+>>
+>> Otherwise these changes are a
+>> useless consumer of runtime resources.
 >
-> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
->
-> > This patch set fixes some clang warnings when -Wformat is enabled.
-> >
->
-> tldr:
->
-> -       printk(msg);
-> +       printk("%s", msg);
->
-> the only reason to make this change is where `msg' could contain a `%'.
-> Generally, it came from userspace.
+>Calling a "printf" style function is already insanely expensive.
+>[...]
+>The "printk" and similar functions all have the "__printf" attribute.
+>I don't know of a modification to that attribute which can turn off
+>this type of check.
 
-It helps kernel developers not accidentally to insert an unescaped '%'
-in their messages, potentially exposing their code to an attack
-vector.
+Perhaps you can split vprintk_store in the middle (after the call to
+vsnprintf), and offer the second half as a function of its own (e.g.
+"puts"). Then the tldr could be
 
-> Otherwise these changes are a
-> useless consumer of runtime resources.
-
-Calling a "printf" style function is already insanely expensive. :-) I
-understand that it's not okay blithely to increase runtime resources
-simply because it's already slow, but in this case it's worthwhile.
-
-> I think it would be better to quieten clang in some fashion.
-
-The "printk" and similar functions all have the "__printf" attribute.
-I don't know of a modification to that attribute which can turn off
-this type of check.
-
--bw
+- printk(msg);
++ puts(msg);
