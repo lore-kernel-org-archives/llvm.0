@@ -1,43 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9951C3210
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 15:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953C43210
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 15:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654788468; x=1686324468;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aZv0T36vGfEf7pqwFa8crYKTlp0crC6xpuupvEHZFXg=;
-  b=crzRkBZf6OB6KLfzSguFyNd1Dm/xm8cKrrj/91MtczAVXipkGYrCf6Z7
-   0N165TcjgyTBu/uL1MPyiopgnKS/ALeXLzmhZGmmQRrjzOf/HgjZ7fRu5
-   2GidkJXgGV4Kk1Qu4Bl7+PcoVqbQhu5tvg2TYNLvDZ3ngccIqbXJ5aIXj
-   hKN7w5DjIpWR48aqG15el31xTmSUp0xF/Fvvys0nEeWwobdtsgQ/BsgW5
-   w9/T1pbWxvAlzsIFjdRQQ2/cl4/p4R7J8EwI9OXTfSgwTpUSNx/CBVeuF
-   TVpRrB4TboQ27+VouhcqkdWepePgUnkCOFbahWgiUNYck6/cM5tr0l98u
+  t=1654789181; x=1686325181;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CkhFu+0fJMswsoDKiILJAXd3k8ep/ipGRYH4uQLu3rc=;
+  b=YZOA3weBQw2hdCMe29mrk2fXuzzCY7y4bPwBItNSOfA6S5QRIsWOEypA
+   hB9dJPJZGxP9VxrOF0zFAwFKIytvHUNNBl0/kORtEphgEHlh2yek6uY+X
+   i6Rn77E2XG12v3yjJ3IjaVySNQ793C1x9OwXAl0d69NPQX5FlRenodI95
+   AvzoBS7LjBa8AZXhF6xkpOjvPAiYAmv57qg8kXXcQfYxs3HO9j1UiROa7
+   8oQ+ANQDa88PfrcczOK4+jnfSymY7EhH+6+9cfKjTlhQ9hboUAB2mWIoq
+   OGMdY1wR0rL23JY6CuREFi4IIk45y88PM+vT9CN4BBJ7Iois5JrAeu3Tk
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260442247"
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="277347846"
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="260442247"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:27:39 -0700
+   d="scan'208";a="277347846"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:39:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="649317186"
+   d="scan'208";a="671368319"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Jun 2022 08:27:37 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2022 08:39:39 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nzK4P-000G5x-7K;
-	Thu, 09 Jun 2022 15:27:37 +0000
-Date: Thu, 9 Jun 2022 23:27:13 +0800
+	id 1nzKG2-000G7V-Fj;
+	Thu, 09 Jun 2022 15:39:38 +0000
+Date: Thu, 9 Jun 2022 23:39:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 02/19] mm: Convert all PageMovable users to
- movable_operations
-Message-ID: <202206092341.s0Iay4wA-lkp@intel.com>
-References: <20220608150249.3033815-3-willy@infradead.org>
+To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+	Kari Argillander <kari.argillander@gmail.com>
+Subject: [linux-stable-rc:queue/5.15 1/112] fs/ntfs3/xattr.c:684:12: error:
+ redefinition of 'ntfs_xattr_get_acl'
+Message-ID: <202206092357.sMCUOMZm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,114 +46,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608150249.3033815-3-willy@infradead.org>
 
-Hi "Matthew,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on jaegeuk-f2fs/dev-test]
-[cannot apply to trondmy-nfs/linux-next xfs-linux/for-next next-20220609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/Convert-aops-migratepage-to-aops-migrate_folio/20220608-231043
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-config: s390-randconfig-r036-20220608 (https://download.01.org/0day-ci/archive/20220609/202206092341.s0Iay4wA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   160dcf43b181822e124054c0ec05acb0e1c473e4
+commit: fde9576bccfe1dcaf4b0ed729570a74d9bd485f7 [1/112] fs/ntfs3: Restore ntfs_xattr_get_acl and ntfs_xattr_set_acl functions
+config: arm64-randconfig-r012-20220609 (https://download.01.org/0day-ci/archive/20220609/202206092357.sMCUOMZm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/7fd2c06d9eaa28dfc922d77aeb62e6454ed7d831
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/Convert-aops-migratepage-to-aops-migrate_folio/20220608-231043
-        git checkout 7fd2c06d9eaa28dfc922d77aeb62e6454ed7d831
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=fde9576bccfe1dcaf4b0ed729570a74d9bd485f7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout fde9576bccfe1dcaf4b0ed729570a74d9bd485f7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/ntfs3/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/z3fold.c:1505:24: warning: variable 'new_mapping' set but not used [-Wunused-but-set-variable]
-           struct address_space *new_mapping;
-                                 ^
-   1 warning generated.
+>> fs/ntfs3/xattr.c:684:12: error: redefinition of 'ntfs_xattr_get_acl'
+   static int ntfs_xattr_get_acl(struct user_namespace *mnt_userns,
+              ^
+   fs/ntfs3/xattr.c:623:12: note: previous definition is here
+   static int ntfs_xattr_get_acl(struct user_namespace *mnt_userns,
+              ^
+>> fs/ntfs3/xattr.c:709:12: error: redefinition of 'ntfs_xattr_set_acl'
+   static int ntfs_xattr_set_acl(struct user_namespace *mnt_userns,
+              ^
+   fs/ntfs3/xattr.c:648:12: note: previous definition is here
+   static int ntfs_xattr_set_acl(struct user_namespace *mnt_userns,
+              ^
+   2 errors generated.
 
 
-vim +/new_mapping +1505 mm/z3fold.c
+vim +/ntfs_xattr_get_acl +684 fs/ntfs3/xattr.c
 
-1f862989b04ade Vitaly Wool             2019-05-13  1499  
-7fd2c06d9eaa28 Matthew Wilcox (Oracle  2022-06-08  1500) static int z3fold_page_migrate(struct page *newpage, struct page *page,
-7fd2c06d9eaa28 Matthew Wilcox (Oracle  2022-06-08  1501) 		enum migrate_mode mode)
-1f862989b04ade Vitaly Wool             2019-05-13  1502  {
-1f862989b04ade Vitaly Wool             2019-05-13  1503  	struct z3fold_header *zhdr, *new_zhdr;
-1f862989b04ade Vitaly Wool             2019-05-13  1504  	struct z3fold_pool *pool;
-1f862989b04ade Vitaly Wool             2019-05-13 @1505  	struct address_space *new_mapping;
-1f862989b04ade Vitaly Wool             2019-05-13  1506  
-1f862989b04ade Vitaly Wool             2019-05-13  1507  	VM_BUG_ON_PAGE(!PageMovable(page), page);
-1f862989b04ade Vitaly Wool             2019-05-13  1508  	VM_BUG_ON_PAGE(!PageIsolated(page), page);
-dcf5aedb24f899 Vitaly Wool             2020-12-14  1509  	VM_BUG_ON_PAGE(!test_bit(PAGE_CLAIMED, &page->private), page);
-810481a2460891 Henry Burns             2019-07-11  1510  	VM_BUG_ON_PAGE(!PageLocked(newpage), newpage);
-1f862989b04ade Vitaly Wool             2019-05-13  1511  
-1f862989b04ade Vitaly Wool             2019-05-13  1512  	zhdr = page_address(page);
-1f862989b04ade Vitaly Wool             2019-05-13  1513  	pool = zhdr_to_pool(zhdr);
-1f862989b04ade Vitaly Wool             2019-05-13  1514  
-dcf5aedb24f899 Vitaly Wool             2020-12-14  1515  	if (!z3fold_page_trylock(zhdr))
-1f862989b04ade Vitaly Wool             2019-05-13  1516  		return -EAGAIN;
-4a3ac9311dac38 Vitaly Wool             2019-11-30  1517  	if (zhdr->mapped_count != 0 || zhdr->foreign_handles != 0) {
-dcf5aedb24f899 Vitaly Wool             2020-12-14  1518  		clear_bit(PAGE_CLAIMED, &page->private);
-4a1c3839108afc Miaohe Lin              2022-04-29  1519  		z3fold_page_unlock(zhdr);
-1f862989b04ade Vitaly Wool             2019-05-13  1520  		return -EBUSY;
-1f862989b04ade Vitaly Wool             2019-05-13  1521  	}
-c92d2f38563db2 Henry Burns             2019-07-16  1522  	if (work_pending(&zhdr->work)) {
-c92d2f38563db2 Henry Burns             2019-07-16  1523  		z3fold_page_unlock(zhdr);
-c92d2f38563db2 Henry Burns             2019-07-16  1524  		return -EAGAIN;
-c92d2f38563db2 Henry Burns             2019-07-16  1525  	}
-1f862989b04ade Vitaly Wool             2019-05-13  1526  	new_zhdr = page_address(newpage);
-1f862989b04ade Vitaly Wool             2019-05-13  1527  	memcpy(new_zhdr, zhdr, PAGE_SIZE);
-1f862989b04ade Vitaly Wool             2019-05-13  1528  	newpage->private = page->private;
-943fb61dd66f47 Miaohe Lin              2022-04-29  1529  	set_bit(PAGE_MIGRATED, &page->private);
-1f862989b04ade Vitaly Wool             2019-05-13  1530  	z3fold_page_unlock(zhdr);
-1f862989b04ade Vitaly Wool             2019-05-13  1531  	spin_lock_init(&new_zhdr->page_lock);
-c92d2f38563db2 Henry Burns             2019-07-16  1532  	INIT_WORK(&new_zhdr->work, compact_page_work);
-c92d2f38563db2 Henry Burns             2019-07-16  1533  	/*
-c92d2f38563db2 Henry Burns             2019-07-16  1534  	 * z3fold_page_isolate() ensures that new_zhdr->buddy is empty,
-c92d2f38563db2 Henry Burns             2019-07-16  1535  	 * so we only have to reinitialize it.
-c92d2f38563db2 Henry Burns             2019-07-16  1536  	 */
-c92d2f38563db2 Henry Burns             2019-07-16  1537  	INIT_LIST_HEAD(&new_zhdr->buddy);
-1f862989b04ade Vitaly Wool             2019-05-13  1538  	new_mapping = page_mapping(page);
-1f862989b04ade Vitaly Wool             2019-05-13  1539  	__ClearPageMovable(page);
-1f862989b04ade Vitaly Wool             2019-05-13  1540  
-1f862989b04ade Vitaly Wool             2019-05-13  1541  	get_page(newpage);
-1f862989b04ade Vitaly Wool             2019-05-13  1542  	z3fold_page_lock(new_zhdr);
-1f862989b04ade Vitaly Wool             2019-05-13  1543  	if (new_zhdr->first_chunks)
-1f862989b04ade Vitaly Wool             2019-05-13  1544  		encode_handle(new_zhdr, FIRST);
-1f862989b04ade Vitaly Wool             2019-05-13  1545  	if (new_zhdr->last_chunks)
-1f862989b04ade Vitaly Wool             2019-05-13  1546  		encode_handle(new_zhdr, LAST);
-1f862989b04ade Vitaly Wool             2019-05-13  1547  	if (new_zhdr->middle_chunks)
-1f862989b04ade Vitaly Wool             2019-05-13  1548  		encode_handle(new_zhdr, MIDDLE);
-1f862989b04ade Vitaly Wool             2019-05-13  1549  	set_bit(NEEDS_COMPACTING, &newpage->private);
-1f862989b04ade Vitaly Wool             2019-05-13  1550  	new_zhdr->cpu = smp_processor_id();
-1f862989b04ade Vitaly Wool             2019-05-13  1551  	spin_lock(&pool->lock);
-1f862989b04ade Vitaly Wool             2019-05-13  1552  	list_add(&newpage->lru, &pool->lru);
-1f862989b04ade Vitaly Wool             2019-05-13  1553  	spin_unlock(&pool->lock);
-7fd2c06d9eaa28 Matthew Wilcox (Oracle  2022-06-08  1554) 	__SetPageMovable(newpage, &z3fold_mops);
-1f862989b04ade Vitaly Wool             2019-05-13  1555  	z3fold_page_unlock(new_zhdr);
-1f862989b04ade Vitaly Wool             2019-05-13  1556  
-1f862989b04ade Vitaly Wool             2019-05-13  1557  	queue_work_on(new_zhdr->cpu, pool->compact_wq, &new_zhdr->work);
-1f862989b04ade Vitaly Wool             2019-05-13  1558  
-943fb61dd66f47 Miaohe Lin              2022-04-29  1559  	/* PAGE_CLAIMED and PAGE_MIGRATED are cleared now. */
-943fb61dd66f47 Miaohe Lin              2022-04-29  1560  	page->private = 0;
-1f862989b04ade Vitaly Wool             2019-05-13  1561  	put_page(page);
-1f862989b04ade Vitaly Wool             2019-05-13  1562  	return 0;
-1f862989b04ade Vitaly Wool             2019-05-13  1563  }
-1f862989b04ade Vitaly Wool             2019-05-13  1564  
+   683	
+ > 684	static int ntfs_xattr_get_acl(struct user_namespace *mnt_userns,
+   685				      struct inode *inode, int type, void *buffer,
+   686				      size_t size)
+   687	{
+   688		struct posix_acl *acl;
+   689		int err;
+   690	
+   691		if (!(inode->i_sb->s_flags & SB_POSIXACL)) {
+   692			ntfs_inode_warn(inode, "add mount option \"acl\" to use acl");
+   693			return -EOPNOTSUPP;
+   694		}
+   695	
+   696		acl = ntfs_get_acl(inode, type, false);
+   697		if (IS_ERR(acl))
+   698			return PTR_ERR(acl);
+   699	
+   700		if (!acl)
+   701			return -ENODATA;
+   702	
+   703		err = posix_acl_to_xattr(mnt_userns, acl, buffer, size);
+   704		posix_acl_release(acl);
+   705	
+   706		return err;
+   707	}
+   708	
+ > 709	static int ntfs_xattr_set_acl(struct user_namespace *mnt_userns,
+   710				      struct inode *inode, int type, const void *value,
+   711				      size_t size)
+   712	{
+   713		struct posix_acl *acl;
+   714		int err;
+   715	
+   716		if (!(inode->i_sb->s_flags & SB_POSIXACL)) {
+   717			ntfs_inode_warn(inode, "add mount option \"acl\" to use acl");
+   718			return -EOPNOTSUPP;
+   719		}
+   720	
+   721		if (!inode_owner_or_capable(mnt_userns, inode))
+   722			return -EPERM;
+   723	
+   724		if (!value) {
+   725			acl = NULL;
+   726		} else {
+   727			acl = posix_acl_from_xattr(mnt_userns, value, size);
+   728			if (IS_ERR(acl))
+   729				return PTR_ERR(acl);
+   730	
+   731			if (acl) {
+   732				err = posix_acl_valid(mnt_userns, acl);
+   733				if (err)
+   734					goto release_and_out;
+   735			}
+   736		}
+   737	
+   738		err = ntfs_set_acl(mnt_userns, inode, acl, type);
+   739	
+   740	release_and_out:
+   741		posix_acl_release(acl);
+   742		return err;
+   743	}
+   744	
 
 -- 
 0-DAY CI Kernel Test Service
