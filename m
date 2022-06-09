@@ -1,42 +1,42 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E77C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:21:03 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id s23-20020a257717000000b00660719d9f2fso17390462ybc.23
-        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:21:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10797C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 22:21:27 +0000 (UTC)
+Received: by mail-pl1-f202.google.com with SMTP id s2-20020a17090302c200b00158ea215fa2so13458774plk.3
+        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 15:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=v4Xn62a8gwv09PX197f2KX5K6c68JUg+Unaoh5Rs3zU=;
-        b=rIM31hja6TacLFy83ekGaYY6NocbE3+qp06k1AYSWqT3YCOM3vKnexoLoVRg3/QFrC
-         NK6lDPMraatUaGV4ysDVq7Ma73A8ej30mShvcnMynXPj4q1s4HwLXHsyE5NReacxVqEF
-         SN/r5DNjRMP1h9Yx1PS5+t5PqoRBJ1DmF1KeRqex3FpyMoNRbYlXt2tQwLA6Cftv+3aS
-         xU6s22QmO1Pl1Kwrbe6vsMz+d3Z4FRfHNfEK9twj222QTX3BVZNBOKgun1MV8xBDAQQA
-         +IscNJZzBGaDfdE3Gg++zvAyvxAsnUQ0EJis1knVDwKv7m2aWEOPArINp5NiPyNi+Z2n
-         h4Ig==
+        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
+        b=i42901GYNhaxsHQ0DOGoOky9iCPlDaMMKrye+1S6wrdYfiDoHAZcC7HTQX/ufq8JDc
+         FtLJH8ibG+4hcwJncrABH5MINqNlaiBQcg6AiUjnTwqlf664IuYPp0tvgNpDNS6s/GjQ
+         Wjh2TOa/isNuXc04yhOdZrj9wIAtXkGMKkDBH370v2doh3glFP/6lvE9gZpbXECpN/zv
+         UStKebGupQmmTtj2yMjnHwJiwJi/peKu25pYf9NTE11Ch6upWSa6FAa3CkIKEN5+Emo5
+         3UDTgqdqaohZKI3Gp3XYmJjjv1YwnDPf8AUi3y1kFAWlFzS3PLERdXTH2sKpk0ltR6ij
+         /vAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=v4Xn62a8gwv09PX197f2KX5K6c68JUg+Unaoh5Rs3zU=;
-        b=tlYxGUhDiWbiWA61HsIOWNqYpB1D5dKw+gXTjzhSHBDDau+T8Wmu50xvfsoYyGFIBp
-         ksdMh2IERwucg4uu+HIRZnn2bPZCCXyN37eQWEVn/fnhV1XpIcW9ZeB+N79i3YEcRzhX
-         AB9tRsR3KThcZqrr0AZujIKXHCfR1N/efDqqTscKdTZlHSsQB9KcnUmLG8yuUBD1/X9I
-         kDluLwGklzaiLBvrSOn5deRRhECFLKpIiwOQdqKCQQC9OWFUoLVybrqKpykWE74TuekZ
-         c+M/JFsBjhOdCfu0qxhDIfDIb3ea9uYPmwx6onaghyO8aT1w5ReV5/oA1cHG6IPbyMTv
-         J4xg==
-X-Gm-Message-State: AOAM533TbHONepqa3kL5bPRcwConWo2KqhuXKCEmTUkjpO55kOgq7zhb
-	QXe59fJDRKUYOvR9HzVIW+KZhf/v
-X-Google-Smtp-Source: ABdhPJwSDxouzP8D6734EA8fpYrXSwixl1FJKKaGzKk8Ee6TEpQt79esVExDoO3PJGM+WWqOyJq6+ArWEg==
+        bh=+JW2n6LLjgkLeZpu0VrK7uVIniA8Omo9w9YQRrZ1ImQ=;
+        b=XMV+Ww3VWPBqDAc1KoVaJT+nlq0qDF5MLWu8rZllYsCfzgAUrhbYOJL84qQGr406XU
+         d6r0C53NXnurbWkOrxOFPtfNz6gn3pm3iAv7llM7zx4L2JpuFW8XXJAgpg5s/SILWaJE
+         qHRc8uyDhKCGhPI4wI+KdXP47rc2Fo0+3ejKVCuFHgF/bF6ast04BGpP9OlpRTwrhKrz
+         kRxKGLp3D5iMj5QFerXRpPpyhy//7EESycU/6s3sUMGHcIw+7vFLa1rJiVd96aJTjexw
+         Ms4Wh2GiFGNbng7rTm0qjqmsKmrSFyG/xx3omOSwtgVPLoDcVu9e0YstikdYxYKcJps3
+         CqPg==
+X-Gm-Message-State: AOAM532fdK+wOp2MeFrhcAFricfcqfiLF3c3r4j8scsaIkqGwZrrkBDd
+	iHIvWVRCTv0JS3voVQxH86FosctF
+X-Google-Smtp-Source: ABdhPJxwIiVK0GwVN12g3ZMNH56OyPQzBgCjPEweYrbMYHqEsJdgXTONzisCGHUJLebHzTiLq5Vb6Q5FXg==
 X-Received: from fawn.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5795])
- (user=morbo job=sendgmr) by 2002:a25:76d5:0:b0:663:ad77:8d48 with SMTP id
- r204-20020a2576d5000000b00663ad778d48mr18678005ybc.633.1654813262959; Thu, 09
- Jun 2022 15:21:02 -0700 (PDT)
-Date: Thu,  9 Jun 2022 22:16:29 +0000
+ (user=morbo job=sendgmr) by 2002:a63:409:0:b0:3fd:77f0:9a75 with SMTP id
+ 9-20020a630409000000b003fd77f09a75mr25262295pge.149.1654813287223; Thu, 09
+ Jun 2022 15:21:27 -0700 (PDT)
+Date: Thu,  9 Jun 2022 22:16:30 +0000
 In-Reply-To: <20220609221702.347522-1-morbo@google.com>
-Message-Id: <20220609221702.347522-11-morbo@google.com>
+Message-Id: <20220609221702.347522-12-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220609221702.347522-1-morbo@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 10/12] ALSA: seq: use correct format characters
+Subject: [PATCH 11/12] ALSA: control: use correct format characters
 From: Bill Wendling <morbo@google.com>
 To: isanbard@gmail.com
 Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
@@ -60,7 +60,7 @@ Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
 	Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ross Philipson <ross.philipson@oracle.com>, Daniel Kiper <daniel.kiper@oracle.com>, 
+	Daniel Kiper <daniel.kiper@oracle.com>, Ross Philipson <ross.philipson@oracle.com>, 
 	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-acpi@vger.kernel.org, linux-mm@kvack.org, 
 	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
@@ -71,31 +71,31 @@ From: Bill Wendling <isanbard@gmail.com>
 
 When compiling with -Wformat, clang emits the following warnings:
 
-sound/core/sound.c:79:17: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-        request_module(str);
-                       ^~~
+sound/core/control.c:2062:24: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+        return request_module(module_name);
+                              ^~~~~~~~~~~
 
 Use a string literal for the format string.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/378
 Signed-off-by: Bill Wendling <isanbard@gmail.com>
 ---
- sound/core/sound.c | 2 +-
+ sound/core/control.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/core/sound.c b/sound/core/sound.c
-index df5571d98629..7866f29621bf 100644
---- a/sound/core/sound.c
-+++ b/sound/core/sound.c
-@@ -76,7 +76,7 @@ static void snd_request_other(int minor)
- 	case SNDRV_MINOR_TIMER:		str = "snd-timer";	break;
- 	default:			return;
- 	}
--	request_module(str);
-+	request_module("%s", str);
+diff --git a/sound/core/control.c b/sound/core/control.c
+index a25c0d64d104..a1778137147d 100644
+--- a/sound/core/control.c
++++ b/sound/core/control.c
+@@ -2059,7 +2059,7 @@ int snd_ctl_request_layer(const char *module_name)
+ 	up_read(&snd_ctl_layer_rwsem);
+ 	if (lops)
+ 		return 0;
+-	return request_module(module_name);
++	return request_module("%s", module_name);
  }
+ EXPORT_SYMBOL_GPL(snd_ctl_request_layer);
  
- #endif	/* modular kernel */
 -- 
 2.36.1.255.ge46751e96f-goog
 
