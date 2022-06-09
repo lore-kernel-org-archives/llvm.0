@@ -1,94 +1,73 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEA87A
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 00:06:35 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31332df12a6so77588307b3.4
-        for <llvm@lists.linux.dev>; Wed, 08 Jun 2022 17:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rWmXg+4rcMcMBm2s7YjpkCcdd6M/TYiOX6qHnnqhyKA=;
-        b=XkDvHxg+l2pqP3tUpPa58TwUKa05NcHTh5rKdyaGOQmzJQmB087nmkq6wgL6e+SNSj
-         YezaKK2Ngjf2oyEKZdCkOkKQoz5DRHYAlxWGSou39iNNyetkG7ZHRdUjnRBbJoJFUj/u
-         oxD1AJsylzkyygyCGZu8bl7IcvM82z9V3zntDKSdk6H0cC5Q7kCbbOlaOMWFUNofU2Rf
-         hKd4csBqWt2cr52DKZumxU9EfAKqEyhB6Ksh9HyiAaUL8EtglJ9Fr7j5d+BYtxDnpX96
-         A9YyZNI3c2WIN9FOoZEv1ABNuINhTqIqN9kGXzJMjVhO3qfYW1+u82Vg4cBba8cusKU4
-         Uxsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rWmXg+4rcMcMBm2s7YjpkCcdd6M/TYiOX6qHnnqhyKA=;
-        b=iovwwnYKziShcPffLilaCVKJz2QIdNq4nKcPiTX61h4LeKn1cqTnf1SeIOdcZetvmI
-         gRK9o/joxOPn5fH+BeZeLpfA0PsTXxpgqOKlOH+HMBNtBMP1kp3tIH28sMtYD9FcjvqO
-         edYiR31E1Kci8HsZjljxJArJ9ExyxMP77hCS2m4f8AL7xurxCf2/5rBiOT1TcEzjkS7u
-         0fjJ2X/v2unyhrb3S5VgoxCqTHUVIov571ZK80v7cDoNksODgHti9rGUk8veU+s5XwBC
-         IUru2QIJdGqJ0stfFtPcGOti6vzegZ/SRKYZItpS6rnGgMAR2LDmVOAKbSRCIrH5/T8c
-         fqRA==
-X-Gm-Message-State: AOAM533ExpF53WDegbB1QFpQmbF9H87hnfHEVqO3bjLRNdP+4VUHvNDR
-	B5HRvUtBgkpGBEL602tgUcPORQwgEJk+pGzaOh8mpw==
-X-Google-Smtp-Source: ABdhPJycg/VezgHOfXrGTsDTYajapWp9fPNJzHErESk4GuOmkrZZOMqTUdYdU0DF7IL5AGUlMcqg+z2tDRU4Ec0d+9E=
-X-Received: by 2002:a05:690c:b85:b0:313:2fee:a601 with SMTP id
- ck5-20020a05690c0b8500b003132feea601mr13521777ywb.243.1654733194645; Wed, 08
- Jun 2022 17:06:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D1B7C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 02:07:14 +0000 (UTC)
+X-UUID: e311924d03054f1f9e5d055706f7b538-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:a57bf51e-05c9-421e-8a4f-b7a18b94de2f,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:1f38b67e-c8dc-403a-96e8-6237210dceee,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+	,QS:0,BEC:nil
+X-UUID: e311924d03054f1f9e5d055706f7b538-20220609
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <rex-bc.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1323912437; Thu, 09 Jun 2022 10:07:08 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 9 Jun 2022 10:07:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 9 Jun 2022 10:07:06 +0800
+Message-ID: <50edf283bf5d48b3b19fe235a6beef3705409d02.camel@mediatek.com>
+Subject: Re: [PATCH v22 04/24] soc: mediatek: add mtk-mmsys ethdr and
+ mdp_rdma components
+From: Rex-BC Chen <rex-bc.chen@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<llvm@lists.linux.dev>, <singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date: Thu, 9 Jun 2022 10:07:06 +0800
+In-Reply-To: <20220526110233.20080-5-nancy.lin@mediatek.com>
+References: <20220526110233.20080-1-nancy.lin@mediatek.com>
+	 <20220526110233.20080-5-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20211122170301.764232470@infradead.org> <20211122170805.338489412@infradead.org>
- <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com> <202202081541.900F9E1B@keescook>
- <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com> <202202082003.FA77867@keescook>
- <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com> <20220211133803.GV23216@worktop.programming.kicks-ass.net>
- <Yh7fLRYl8KgMcOe5@google.com> <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
-In-Reply-To: <CAFP8O3JdYoMeF75XHCWue3fYG02W_95VGCU6AN+DYPj9F75kqw@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 8 Jun 2022 17:05:58 -0700
-Message-ID: <CABCJKueigY+oJ0HTV_YXKcTZG35ACxPE_YpKp_ZURgzxNYQ4WA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-To: =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Cc: Peter Collingbourne <pcc@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Joao Moreira <joao@overdrivepizza.com>, Kees Cook <keescook@chromium.org>, X86 ML <x86@kernel.org>, 
-	hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>, andrew.cooper3@citrix.com, 
-	LKML <linux-kernel@vger.kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-On Wed, Jun 8, 2022 at 10:53 AM F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@googl=
-e.com> wrote:
->
-> Hi Peter,
->
-> On Tue, Mar 1, 2022 at 7:06 PM Peter Collingbourne <pcc@google.com> wrote=
-:
-> >
-> > Hi Peter,
-> > One issue with this call sequence is that:
-> >
-> > On Fri, Feb 11, 2022 at 02:38:03PM +0100, Peter Zijlstra wrote:
-> > > caller:
-> > >       cmpl    $0xdeadbeef, -0x4(%rax)         # 7 bytes
-> >
-> > Because this instruction ends in the constant 0xdeadbeef, it may
-> > be used as a "gadget" that would effectively allow branching to an
-> > arbitrary address in %rax if the attacker can arrange to set ZF=3D1.
->
-> Do you mind elaborating how this instruction can be used as a gadget?
-> How does it look like?
+On Thu, 2022-05-26 at 19:02 +0800, Nancy.Lin wrote:
+> Add new mmsys component: ethdr_mixer and mdp_rdma. These components
+> will
+> use in mt8195 vdosys1.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
 
-With the offset of -4, the je instruction here can be an indirect call
-target because it's preceded by a valid type hash at the end of the
-cmpl instruction. If we change the offset to -6, only the ud2
-instruction is a potential call target in this sequence, which will be
-less useful to an attacker.
+[Bo-Chen: Test on MT8195 Tomato Chromebook with external display]
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-> The information will be useful to the summary of Sami's KCFI LLVM
-> patch: https://reviews.llvm.org/D119296
-
-I'll add more information about the X86 preamble to the description.
-
-Sami
