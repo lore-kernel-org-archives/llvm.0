@@ -1,31 +1,31 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7570D7C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 02:15:26 +0000 (UTC)
-X-UUID: dfcd95bee926480fa109f01242096194-20220609
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624A37C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 02:15:44 +0000 (UTC)
+X-UUID: e5e4adc7ac594c7096623fb921c84dc6-20220609
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:cf220b4a-f865-4e44-bf4e-ae186c629ea1,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.5,REQID:92428476-5cbf-41b4-8cb4-43ccf00a37ba,OB:0,LO
 	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
 	ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:d53a2ce5-2ba2-4dc1-b6c5-11feb6c769e0,C
+X-CID-META: VersionHash:2a19b09,CLOUDID:4f3e2ce5-2ba2-4dc1-b6c5-11feb6c769e0,C
 	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
 	,QS:0,BEC:nil
-X-UUID: dfcd95bee926480fa109f01242096194-20220609
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+X-UUID: e5e4adc7ac594c7096623fb921c84dc6-20220609
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
 	(envelope-from <rex-bc.chen@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1952213516; Thu, 09 Jun 2022 10:15:21 +0800
+	with ESMTP id 1717895425; Thu, 09 Jun 2022 10:15:39 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 9 Jun 2022 10:15:19 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 9 Jun 2022 10:15:37 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 9 Jun 2022 10:15:19 +0800
-Message-ID: <60385ac1279050954f17665a4472caa1406d6e96.camel@mediatek.com>
-Subject: Re: [PATCH v22 23/24] drm/mediatek: add drm ovl_adaptor sub driver
- for MT8195
+ Transport; Thu, 9 Jun 2022 10:15:37 +0800
+Message-ID: <b81ed164e9dd497f02efd5bb4df4362c0923948e.camel@mediatek.com>
+Subject: Re: [PATCH v22 24/24] drm/mediatek: add mediatek-drm of vdosys1
+ support for MT8195
 From: Rex-BC Chen <rex-bc.chen@mediatek.com>
 To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
@@ -48,10 +48,10 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
  =?UTF-8?Q?=28=E5=BC=B5=E8=88=88=E5=9C=8B=29?= <Singo.Chang@mediatek.com>,
 	Project_Global_Chrome_Upstream_Group
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Thu, 9 Jun 2022 10:15:19 +0800
-In-Reply-To: <20220526110233.20080-24-nancy.lin@mediatek.com>
+Date: Thu, 9 Jun 2022 10:15:37 +0800
+In-Reply-To: <20220526110233.20080-25-nancy.lin@mediatek.com>
 References: <20220526110233.20080-1-nancy.lin@mediatek.com>
-	 <20220526110233.20080-24-nancy.lin@mediatek.com>
+	 <20220526110233.20080-25-nancy.lin@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
@@ -64,8 +64,7 @@ Content-Transfer-Encoding: 7bit
 X-MTK: N
 
 On Thu, 2022-05-26 at 19:02 +0800, Nancy.Lin wrote:
-> Add drm ovl_adaptor sub driver. Bring up ovl_adaptor sub driver if
-> the component exists in the path.
+> Add driver data of mt8195 vdosys1 to mediatek-drm.
 > 
 > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 > Reviewed-by: AngeloGioacchino Del Regno <
