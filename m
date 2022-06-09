@@ -1,31 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2953D7C
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 20:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D972C34114;
-	Thu,  9 Jun 2022 20:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654806702;
-	bh=bnc6QDy2zL5myC/gga6GB6XNfibFDapswj73VFJ+UIM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mj793kUfM3FNXSBhquvSUtshW6AZZrZOhtvxtSARO5Vq6pM2XchCEcocr9WgH7U9G
-	 +WkgXomfe3HMZn1SGIUSD3Qj5eqOfhpk5im2l2WTqvk2p8ki+7Yp8fYq4wev6585eA
-	 pg5cho2yfu/IMajymQXFCGhYAhtCqXAsED6kUoHy1+4UHzhJbJ8uALJuy6/tUkuOaD
-	 wDnB/0TdR2lDctTJfP6pTXMPYVa/6DOKhhn24D1m8iJcB20Vh287omplxDOXmg+5OM
-	 zmytq3gG1/GgTDPUSH46hWkekQX33qLS/2YQTfXE4EQ3EulXhgYjlo5Q3vMS0meFgN
-	 nQ4LmZlYiYbEQ==
-Date: Thu, 9 Jun 2022 13:31:40 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <jstitt007@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3] include/uapi/linux/swab.h: move explicit cast outside
- ternary
-Message-ID: <YqJYrImC3Bk40H1H@dev-arch.thelio-3990X>
-References: <20220608223539.470472-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51227C
+	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 20:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654808342; x=1686344342;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SIIrenfbdVYvsmeA88bEpmXD3GGdFN0sjDFRgWiUWlg=;
+  b=TZu7Jqqq+yv+VpGsT2cblEhKuyAYXScPVJP0ZpC+VfBQETZqn/qHUheS
+   PSQ4uldS2VTHR2HvOTrlb0bZgYVc4keYjh90uCw5vrEcXzYyaULSjZRaF
+   RflADing7uDx90YO4qhSVZknXLex3pAzwr2vq6GCgNUXXmXsfzfF6p3GI
+   ElrsAqeVY2wCWAJxQnYJUa7qYXIQVeyMNfJ27K1rCxpVmnq/J5b912hed
+   3Aw1TecwKGTegtM//aQn96Hev5Ufp0CkxOj7L1UME3HNtmM0uP5RLq5Vz
+   WI9RB5zL01rJLZ40SMRtJzQTa4QAnU4YtR1eV+/UOhG1RFsiGD6qXy9DL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="339171641"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="339171641"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 13:58:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="637733488"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Jun 2022 13:58:49 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzPEu-000GNh-LA;
+	Thu, 09 Jun 2022 20:58:48 +0000
+Date: Fri, 10 Jun 2022 04:58:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:tiwai/sound/test/ctl-xarray 8/8] ld.lld: error:
+ undefined symbol: xa_store_range
+Message-ID: <202206100457.ZFP279WB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,77 +46,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608223539.470472-1-justinstitt@google.com>
 
-On Wed, Jun 08, 2022 at 03:35:39PM -0700, Justin Stitt wrote:
-> From: Justin Stitt <jstitt007@gmail.com>
-> 
-> A cast inside __builtin_constant_p doesn't do anything since it should
-> evaluate as constant at compile time irrespective of this cast. Instead,
-> I moved this cast outside the ternary to ensure the return type is as
-> expected.
-> 
-> Additionally, if __HAVE_BUILTIN_BSWAP16__ was not defined then __swab16
-> is actually returning an `int` not a `u16` due to integer promotion.
-> 
-> As Al Viro notes:
-> You *can't* get smaller-than-int out of ? :, same as you can't get it
-> out of addition, etc.
-> 
-> This also fixes some clang -Wformat warnings involving default
-> argument promotion.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+tree:   https://github.com/ammarfaizi2/linux-block tiwai/sound/test/ctl-xarray
+head:   2abf12b6cfb00c1904dc99425ad19a6c03a1fef3
+commit: 2abf12b6cfb00c1904dc99425ad19a6c03a1fef3 [8/8] ALSA: control: Use xarray for faster lookups
+config: hexagon-randconfig-r045-20220609 (https://download.01.org/0day-ci/archive/20220610/202206100457.ZFP279WB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/2abf12b6cfb00c1904dc99425ad19a6c03a1fef3
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tiwai/sound/test/ctl-xarray
+        git checkout 2abf12b6cfb00c1904dc99425ad19a6c03a1fef3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Thanks for the patch and sticking with it through all the review!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-> ---
->  diff from v2 -> v3:
->   * re-insert respective (u16, u32, u64) cast to __builtin_bswap as per
->      Nick's suggestion
->   * added note from Al Viro
-> 
->  include/uapi/linux/swab.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-> index 7272f85d6d6a..0723a9cce747 100644
-> --- a/include/uapi/linux/swab.h
-> +++ b/include/uapi/linux/swab.h
-> @@ -102,7 +102,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
->  #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->  #else
->  #define __swab16(x)				\
-> -	(__builtin_constant_p((__u16)(x)) ?	\
-> +	(__u16)(__builtin_constant_p(x) ?	\
->  	___constant_swab16(x) :			\
->  	__fswab16(x))
->  #endif
-> @@ -115,7 +115,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
->  #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
->  #else
->  #define __swab32(x)				\
-> -	(__builtin_constant_p((__u32)(x)) ?	\
-> +	(__u32)(__builtin_constant_p(x) ?	\
->  	___constant_swab32(x) :			\
->  	__fswab32(x))
->  #endif
-> @@ -128,7 +128,7 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
->  #define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
->  #else
->  #define __swab64(x)				\
-> -	(__builtin_constant_p((__u64)(x)) ?	\
-> +	(__u64)(__builtin_constant_p(x) ?	\
->  	___constant_swab64(x) :			\
->  	__fswab64(x))
->  #endif
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
-> 
-> 
+>> ld.lld: error: undefined symbol: xa_store_range
+   >>> referenced by control.c
+   >>>               core/control.o:(add_hash_entries) in archive sound/built-in.a
+   >>> referenced by control.c
+   >>>               core/control.o:(add_hash_entries) in archive sound/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
