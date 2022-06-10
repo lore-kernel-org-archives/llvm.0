@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B72C7C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:36:00 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-310061f47faso6132207b3.9
-        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:36:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDDF7C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:36:02 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id j2-20020a2597c2000000b0064b3e54191aso528006ybo.20
+        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:36:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=/YdoENWx/mAwIlav84XtzEM8pJp/ZShtiRERHwv8fgk=;
-        b=oDVWPxm862LO41p5JQli72cL6SC3b8g0Trkuno7CCXFvcBjRxpXttKaI/pVSanC/Zl
-         Vje4UGYZ39eBOwzo//aMXyNSEWxAdIsd1P0ZTOgqDoI1wod69+tNn1dzVJNB1Ulr8ImW
-         scaT2s3l2QriiH4QWW05s8qCU1Amf9b1a4kUP8O73C2Ww55Bi05flppgfkva/QUCzPnm
-         XEc6tpJQzpBgkiA+RbTJLVWbhLyu9Rp9sJlbSwJqOfE8hx6Z7Q357nFfHBjtH/1aBAVU
-         vqiHQWv6nRu/E2+ZeBLDLh4K2Wxqql+k0neKAZAOZJbjQ2wkknvI39xE1fnHVVuSCaT5
-         mMSg==
+        bh=NebnbUevd7O3L4DZUnHH2cfPN5CPKXFBfrXdmTOrusA=;
+        b=KKJz0ETKMeSBcMXnJZjZzeLcSxRSw/g6ohEJqB/0rJWBgf4O7ADHPH5kU9Xluuy/XT
+         3SlAe7Z2V+5bh51W0KcedotGu/qgjThHz6ojq/xqG3z9PbC4K4Xz+xgc6hTpQzNLaKgi
+         Xbsix6EkV+RvNC/YiWwda98NnsfGpQ4h7sS9l+4FoYRnJks6OhV2lU3T8FOmsDsgUBBT
+         3Y06pvNAxA2Sooe8D9naqKp7IjcYWnBD27Ep2iihcbGhxM2a9yPNv/UsuM19hWUqiHxo
+         crcwgtBlgH40phoQX67UjusAcKfvxfyDl2nXhnMBPgQWXrpXgZb+17RxEgaNl/ZxRXul
+         UJFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=/YdoENWx/mAwIlav84XtzEM8pJp/ZShtiRERHwv8fgk=;
-        b=nGo21nfJ3xvEG2fy/inHAQViCS/AHLuaYxc4tcSaQFFdDvPg0FAc+luViLE9vSdBpp
-         Q0EixNXH1MngZz7tfGqt8jzJTWzGquH+03Z9p4HeT77EMJtKFoVrltzZpp+ghD6jn9/g
-         6/WKU5UdG6IP7NpI62DFA3RBVC3zJPi6++R9F5cNLKzOumxQ4h7WeL4MfpCEXidApVFH
-         xOc4bIbmCsH7se6PLE+mavU/MxyxWN0FSgFuM8gQ1UnQMmQIS+UXNG3izzhmACl6WovK
-         2xqbVji55DRSa+d0tcK4NBZKSvczZ9Z+jzzxSoe0rfKxLCdUkNZ6UDo+1TKK287QO2Yy
-         TlOQ==
-X-Gm-Message-State: AOAM5331uLj1XWqVy8G6lOZfHef2HAG2PPBjBhkWS0+qMhvqPcaHA1tn
-	4VSmLCoxR5JfPc5ls9KajfXmsJXMQZWkVhjPPQM=
-X-Google-Smtp-Source: ABdhPJwEb7zWbrSyMsHOqlXSAsGrBX3LLXlDk5EbuAiIe6Ma4s8JgFljIZZK1OIRXbt6vvnW+6MZxtlKUU6AP06ljoc=
+        bh=NebnbUevd7O3L4DZUnHH2cfPN5CPKXFBfrXdmTOrusA=;
+        b=YWMYSgJYgq2L0OgBTJfrch5AF3NKZEB7TyRM/v46PNH7nJyuVPxVrHZWhZw/IraetZ
+         IDeuozf9iFqorxGxs4C1boy6DRhXU2dQ0KEyU3mSPTQd+Tf6pgM8sNQ/ZqZTDoMelD27
+         asrlHb+9vbtYNsPzL6RNwg8k0iX7VmoC7RhithTd6ovzgXXZhGJbA9mx/VXhBdkxvbxZ
+         GnqteU+OURfuT8baA1o8nNXqIfdrgatheJb20WtTHzQT0fcj6as9VWE/QMnM1HSP89Ex
+         O/kPeXI2Lj6ASnjwYPG9mko/rVVBdXxrJ9dPWiDuwWYLsKqdRzD4n5BvLjuSUKhLLKtH
+         yrGg==
+X-Gm-Message-State: AOAM53087gK6TGFnNQ1W67vmAF+mJc2JIXXVOO6q/UqrF8CDQ1M+eWwB
+	VZvxISa1TzgtNVAm08B5d7wymEFCYKyfRRSPpe8=
+X-Google-Smtp-Source: ABdhPJy73NkoCpX2nYrYNZCDIlzOJNtXCf9DaSoyKSy9IAHEUYo9ySkQOZFLTvi0faxx0KI52nrC8nXKkuoc7+egsDw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f464:6db6:3d47:ed14])
- (user=samitolvanen job=sendgmr) by 2002:a25:cb0e:0:b0:663:dc85:b07f with SMTP
- id b14-20020a25cb0e000000b00663dc85b07fmr21155170ybg.267.1654904159638; Fri,
- 10 Jun 2022 16:35:59 -0700 (PDT)
-Date: Fri, 10 Jun 2022 16:35:11 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:905:b0:64a:2089:f487 with
+ SMTP id bu5-20020a056902090500b0064a2089f487mr47802874ybb.202.1654904161997;
+ Fri, 10 Jun 2022 16:36:01 -0700 (PDT)
+Date: Fri, 10 Jun 2022 16:35:12 -0700
 In-Reply-To: <20220610233513.1798771-1-samitolvanen@google.com>
-Message-Id: <20220610233513.1798771-19-samitolvanen@google.com>
+Message-Id: <20220610233513.1798771-20-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220610233513.1798771-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1934; h=from:subject;
- bh=c5fielqFYGYpvsKedyilc/H2Rr+1afjZ3wdMFUGQUCc=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9Uv0/7/lO/mnIbFUgWSTs7dx39dQhfjXjGdMwcr
- RtG0qa+JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLwAKCRBMtfaEi7xW7gELC/
- 44se8OEED7KHWmOg7kDWnbI0YjEa91XqAWcQPsSxThOl3wAQ+rAffK0THfILdMD6dkBgSBFpXTAApK
- t7Y288tyNG52SNBAQ1ZojqnPYABcqVapktuafJehAy+4dWnWQF5fJ5mr+OhqF2UQGlPBcLCkeic9Co
- a9ch7dW02t9qBoM5ibEjhg5/eAvsKCqTgfq2KoSgOqSfcVDWR7I96kD8gdggX+t4laYAEGwnWi6U1o
- TJqzhBuL6wQkvQKh1eIIMIhs64WqdcpKTslcYYGr3zmeIHcrRLqpTwaq1j+P1Z+L+8cfdshksjinj2
- ymXZnhbliJRm977/Yfz42UQqApQfFzcNbBCCHJ/w61KvC2piZoLWn8wW54wrVn0A6MLDb71hJ83Vbc
- 4KX8y245LL9weyZHxmVHAn5sHims+Ewn1cNC6C1lndZQrRn+LfXrSEdYdUqOQofoinW/Q4ouN8C/UN
- 5juOkNkQLy1RKp9knBH+fAn7C95Nlx+TFJbZHYwT1ank0=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=915; h=from:subject;
+ bh=ArPYWKwU35vK9Q7fuJlo1ALDBI9fX95H0CE4usoZ/3Q=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UvnQCq/98P6oNAklKJC8WEg93jIEEZ3s64nlfE
+ jwrc2t2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLwAKCRBMtfaEi7xW7vmmC/
+ 9Qrdc+4b2GDVRqmqvGAW33iyBJiMYbCO4QDRAxsqvRUhT5K1vwyy6qVCAUsRMiltfbmxmPfrsqZJ4N
+ hVmPqbb/xFmJ4/2VWkeHN4jV/0Ms9EUsFTVsPjSguMqImRg0ydJ4IIkrzddZZATwLAd87WWt5x6woP
+ CtHUksEZGn7o4Pp5ct3NUz83Hb6LHo2m9mjOGPg1r33oforu2vx/OfVCEjx73Xcxo6RDIH3UsDuD/g
+ /s3THqOg4srXhMfFGuDwEKmrtvLlhmpsNQIsAHYQMsq+8GlhciaZg121OkGkS4sL/rnpTey/W3To3I
+ duP0DhDBHWFptNY8nhoygvOPOT7N9DVYfAJ0SrSvoOo2h7FmdAi5XhhyvjVZvys4tcp6shnIG175cb
+ 0lmK0RZFZpwqCNOr1PORsFlHiTeRUcKrve4AplmbR9zGkRHED1lI0LtXSbIIcWu+5IP8ooqVNxOVYr
+ sCtJLXG/F9yAngLbw5kbgWwO7iZTHLWHbfFTd8TAmbaqg=
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [RFC PATCH v3 18/20] x86: Add types to indirectly called assembly functions
+Subject: [RFC PATCH v3 19/20] x86/purgatory: Disable CFI
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -69,67 +69,31 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-With CONFIG_CFI_CLANG, assembly functions indirectly called from C code
-must be annotated with type identifiers to pass CFI checking. Add types
-to indirectly called functions.
+Disable CONFIG_CFI_CLANG for the stand-alone purgatory.ro.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- arch/x86/crypto/blowfish-x86_64-asm_64.S | 5 +++--
- arch/x86/lib/memcpy_64.S                 | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ arch/x86/purgatory/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/crypto/blowfish-x86_64-asm_64.S b/arch/x86/crypto/blowfish-x86_64-asm_64.S
-index 802d71582689..4a43e072d2d1 100644
---- a/arch/x86/crypto/blowfish-x86_64-asm_64.S
-+++ b/arch/x86/crypto/blowfish-x86_64-asm_64.S
-@@ -6,6 +6,7 @@
-  */
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index ae53d54d7959..b3fa947fa38b 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -55,6 +55,10 @@ ifdef CONFIG_RETPOLINE
+ PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
+ endif
  
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- 
- .file "blowfish-x86_64-asm.S"
- .text
-@@ -141,7 +142,7 @@ SYM_FUNC_START(__blowfish_enc_blk)
- 	RET;
- SYM_FUNC_END(__blowfish_enc_blk)
- 
--SYM_FUNC_START(blowfish_dec_blk)
-+SYM_TYPED_FUNC_START(blowfish_dec_blk)
- 	/* input:
- 	 *	%rdi: ctx
- 	 *	%rsi: dst
-@@ -332,7 +333,7 @@ SYM_FUNC_START(__blowfish_enc_blk_4way)
- 	RET;
- SYM_FUNC_END(__blowfish_enc_blk_4way)
- 
--SYM_FUNC_START(blowfish_dec_blk_4way)
-+SYM_TYPED_FUNC_START(blowfish_dec_blk_4way)
- 	/* input:
- 	 *	%rdi: ctx
- 	 *	%rsi: dst
-diff --git a/arch/x86/lib/memcpy_64.S b/arch/x86/lib/memcpy_64.S
-index d0d7b9bc6cad..e5d9b299577f 100644
---- a/arch/x86/lib/memcpy_64.S
-+++ b/arch/x86/lib/memcpy_64.S
-@@ -2,6 +2,7 @@
- /* Copyright 2002 Andi Kleen */
- 
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <asm/errno.h>
- #include <asm/cpufeatures.h>
- #include <asm/alternative.h>
-@@ -27,7 +28,7 @@
-  * Output:
-  * rax original destination
-  */
--SYM_FUNC_START(__memcpy)
-+__SYM_TYPED_FUNC_START(__memcpy, memcpy)
- 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
- 		      "jmp memcpy_erms", X86_FEATURE_ERMS
++ifdef CONFIG_CFI_CLANG
++PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
++endif
++
+ CFLAGS_REMOVE_purgatory.o	+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_purgatory.o		+= $(PURGATORY_CFLAGS)
  
 -- 
 2.36.1.476.g0c4daa206d-goog
