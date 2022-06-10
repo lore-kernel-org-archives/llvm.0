@@ -1,124 +1,69 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830C37C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 15:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654876787; x=1686412787;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5YjDkunHMrFL7VHzmCQxtIGp1/X3vd6xJwb1Np70V5o=;
-  b=dmYpCSn6034hMFZXtbhzl5pjkfsAsC8iDeUsXVcNXgiZ4BmcuAnrHmu2
-   ne3vDx3HLzpYE7yk4W+TPEvj9/jDWs11rhsfwA3nRwEzGeyvP0P5jMmrS
-   YrGqNowbz8v4tyAP3VOkPGu70nL0X/H5k3ajtlWUgsb6iW6tRMY2XmeDh
-   HEWivibnEj4aOy0veOsTXowxRWBO/pKbddGl10+zDwj9B4/K8hfwkccoY
-   yelQbKkjx4sOTuqjv/tBAbSp1bJsPm2O8oMzs8DYfdcfkP1xXpNyqU82p
-   n6VSinqINUYgH68r2SwJf2UOOq53wwgjBGsCaytbh5y0EjSgWZ7AT+jc7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="275196798"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275196798"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 08:59:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="710991379"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jun 2022 08:59:45 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nzh32-000I5h-BH;
-	Fri, 10 Jun 2022 15:59:44 +0000
-Date: Fri, 10 Jun 2022 23:59:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tom <support@vamrs.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 22/54] drivers/soc/sifive/sifive_l2_cache.c:152:3:
- error: call to undeclared function 'writeq'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202206102311.0QQHm3hS-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B25C2119
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:57:36 +0000 (UTC)
+X-UUID: 3074d9628a6c410286eeecd13f5fc3f3-20220611
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:a4bc0329-0515-494a-8883-0e46bb75846b,OB:0,LO
+	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:22
+X-CID-INFO: VERSION:1.1.5,REQID:a4bc0329-0515-494a-8883-0e46bb75846b,OB:0,LOB:
+	0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,ACTIO
+	N:release,TS:22
+X-CID-META: VersionHash:2a19b09,CLOUDID:e1dd5e50-276a-4a9a-a4c8-ea931023add4,C
+	OID:IGNORED,Recheck:0,SF:28|100|17|19|48|101,TC:nil,Content:-5,EDM:-3,IP:n
+	il,URL:0,File:nil,QS:0,BEC:nil
+X-UUID: 3074d9628a6c410286eeecd13f5fc3f3-20220611
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+	(envelope-from <miles.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 796968846; Sat, 11 Jun 2022 00:57:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Sat, 11 Jun 2022 00:57:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Sat, 11 Jun 2022 00:57:24 +0800
+From: Miles Chen <miles.chen@mediatek.com>
+To: <masahiroy@kernel.org>
+CC: <corbet@lwn.net>, <jonathanh@nvidia.com>, <linux-doc@vger.kernel.org>,
+	<linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <mpe@ellerman.id.au>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <penguin-kernel@I-love.SAKURA.ne.jp>,
+	<trix@redhat.com>, <wangyugui@e16-tech.com>
+Subject: Re: [PATCH v3] scripts/check-local-export: avoid 'wait $!' for process substitution
+Date: Sat, 11 Jun 2022 00:57:24 +0800
+Message-ID: <20220610165724.16214-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220608011100.486735-1-masahiroy@kernel.org>
+References: <20220608011100.486735-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-MTK: N
 
-tree:   https://github.com/esmil/linux visionfive
-head:   906be7ef2fb9e2f1fcb740d3d506768cddfc52ca
-commit: 1c9c971346b0ca811114ae00fce28cbf3c34232b [22/54] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-config: riscv-buildonly-randconfig-r006-20220609 (https://download.01.org/0day-ci/archive/20220610/202206102311.0QQHm3hS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/esmil/linux/commit/1c9c971346b0ca811114ae00fce28cbf3c34232b
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 1c9c971346b0ca811114ae00fce28cbf3c34232b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/
+>Bash 4.4, released in 2016, supports 'wait $!' to check the exit status
+>of a process substitution, but it seems too new.
+>
+>Some people using older bash versions (on CentOS 7, Ubuntu 16.04, etc.)
+>reported an error like this:
+>
+>  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for fixing this!
+I hit this issue and this patch fixes my problem.
 
-All errors (new ones prefixed by >>):
+Tested-by: Miles Chen <miles.chen@mediatek.com> 
 
->> drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
-   drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>
+>I used the process substitution to avoid a pipeline, which executes each
+>command in a subshell. If the while-loop is executed in the subshell
+>context, variable changes within are lost after the subshell terminates.
 
 
-vim +/writeq +152 drivers/soc/sifive/sifive_l2_cache.c
-
-   123	
-   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
-   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-   126	{
-   127		unsigned long line;
-   128	
-   129		if(!l2_base) {
-   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-   131			return;
-   132		}
-   133	
-   134		/* TODO: if (len == 0), skipping flush or going on? */
-   135		if(!len) {
-   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-   137			return;
-   138		}
-   139	
-   140		/* make sure the address is in the range */
-   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-   142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-   145				start, len);
-   146			return;
-   147		}
-   148	
-   149		mb();	/* sync */
-   150		for (line = start; line < start + len;
-   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
- > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-   153			mb();
-   154		}
-   155	}
-   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-   157	#endif
-   158	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
