@@ -1,140 +1,114 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35517A
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 00:33:00 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id i29so23703750lfp.3
-        for <llvm@lists.linux.dev>; Thu, 09 Jun 2022 17:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
-        b=GzLaviOqRCp4B7LqsBfA2qFyX6V1uMUAbIpS5ZG+ymr/9aN/hsQn1QW3PtN+GmgInQ
-         He0Q1Uquu8aHzwNdzglLiDyax/ofVj35MhNvH0zBU7U/FgsC8lV4WZcV1MRSavA6givw
-         MwwoH6cUS805gA1B/kna/OiRrljxuadDNbWQe2uk3jqSGIPZTj1Nggn2aFmaJOxpn0ee
-         keyXmIa2x54GZzES+MYP7V0JK7Y0RzKUk9jyYpIawwn1bBhBPn8bT+rMBalAXRhKRGqN
-         ws66+mukc8/rRLkWY5c5tACdnnEguXj7+LFVYthISMqK0wDGsAxLLnOu3EGgFefxrZxd
-         +Qcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M1G6Hf9v6f6xyLP2a6Gh7yfuFJ+6ipgBJHHWwU80v1c=;
-        b=O4E0Izvm9pwTj/2OigF/v7bRBqdbhQycPP39NFm0uxsRzZJVXX2AssGHplZlmZ0IZU
-         g1Aqn1l2fDjLYvbW460QnFyxT098OpCpbvTKD+NdWcxKrhroRtchgd2MfFmno8GGvOaV
-         P4pw/9RwiM5x/kTQszqILvTUXMSOpdD1Eh3/74PKBRJWbb6+ObbNauN9OWfH87E1xRYn
-         Ubh60KV4YD4vT931qWvkrLIhC3YQQbYqi/Yl6aDu2DMkSdcZGWp0wn8EXjdjn/dT7zZd
-         sqeGUSg6yW8dl+Mpkig7/pUW2lqJk8t4ssGEuON7+55/sTEcLy1rDyHVx/+RetQHqF/4
-         Isjw==
-X-Gm-Message-State: AOAM532ZLWbFyChuuk7v6R8BIqKrII3CgkKMj+ghsiEFRD7ftkzgcK6a
-	FXf7s39yqTxYtoAL0asCudprj9BzYsxGoOLz7ibNQg==
-X-Google-Smtp-Source: ABdhPJwmAai5PXOj7tGhLdM9ZQqNV5Wv1qkbCkukxf252/r1aHu4spL4q3u9asT4a5t/dEsKFtmgLChgmJAimWPi9do=
-X-Received: by 2002:a05:6512:ad6:b0:479:5599:d834 with SMTP id
- n22-20020a0565120ad600b004795599d834mr11951775lfu.103.1654821178297; Thu, 09
- Jun 2022 17:32:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8767A
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 00:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654821776; x=1686357776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Abtzv61gyD6m6j05PPOUneDmgVQBlhQiIiZAGKrh7tk=;
+  b=harO51onenVffh2PIh0dfNeg/e9ZHO3RAuhBqcKKdch9ZKvZ3Zqk3LgF
+   tAFyanvNZg6iG0WhDUYFZr4faukD6jyt95gGOnPpMPABZWTrpr7sGimzS
+   Fep875R0jUI8ZAqbqnM4XP//Ol9vhrZM9EDPl0zjWXiCRtN8jhwXbv+/D
+   SVlfwcDMw+UJojbDWWhK6BQLCbVnsAcimC1duIOzKGarfSkPEXoZuf+DI
+   xdvpxsC7G8Qx3zEH3kAr8dUe90LV7uHOLu7vZid7MJfi/61P6koA1a28J
+   X1qk+A9D1LxCnK9D40fRbPaitwqWGu8i1za7GHIUomUZieqwcS56s541F
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257898557"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="257898557"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:42:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="533853048"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 Jun 2022 17:42:54 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzSjl-000GX5-Rn;
+	Fri, 10 Jun 2022 00:42:53 +0000
+Date: Fri, 10 Jun 2022 08:42:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 2/3] jump_label: mips: move module NOP patching into arch
+ code
+Message-ID: <202206100833.t7F1rrMU-lkp@intel.com>
+References: <20220608104512.1176209-3-ardb@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-In-Reply-To: <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 9 Jun 2022 17:32:46 -0700
-Message-ID: <CAKwvOdmfC3kgGuimbtG8n74f8qJ5+vd3GeHg14oOxkKOfuQfBg@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-To: Andrew Morton <akpm@linux-foundation.org>, Bill Wendling <morbo@google.com>, 
-	Randy Dunlap <rdunlap@infradead.org>
-Cc: Bill Wendling <isanbard@gmail.com>, Tony Luck <tony.luck@intel.com>, 
-	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Phillip Potter <phil@philpotter.co.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Jan Kara <jack@suse.com>, 
-	Pablo Neira Ayuso <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, 
-	Florian Westphal <fw@strlen.de>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Ross Philipson <ross.philipson@oracle.com>, Daniel Kiper <daniel.kiper@oracle.com>, 
-	linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>, netfilter-devel@vger.kernel.org, 
-	coreteam@netfilter.org, Network Development <netdev@vger.kernel.org>, 
-	alsa-devel@alsa-project.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Justin Stitt <jstitt007@gmail.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608104512.1176209-3-ardb@kernel.org>
 
-On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
->
-> > This patch set fixes some clang warnings when -Wformat is enabled.
+Hi Ard,
 
-It looks like this series fixes -Wformat-security, which while being a
-member of the -Wformat group, is intentionally disabled in the kernel
-and somewhat orthogonal to enabling -Wformat with Clang.
+I love your patch! Yet something to improve:
 
--Wformat is a group flag (like -Wall) that enables multiple other
-flags implicitly.  Reading through
-clang/include/clang/Basic/DiagnosticGroups.td in clang's sources, it
-looks like:
+[auto build test ERROR on s390/features]
+[also build test ERROR on tip/x86/core vgupta-arc/for-next arm64/for-next/core deller-parisc/for-next linus/master v5.19-rc1 next-20220609]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-1. -Wformat is a group flag.
-2. -Wformat-security is a member of the -Wformat group; enabling
--Wformat will enable -Wformat-security.
-3. -Wformat itself is a member of -Wmost (never heard of -Wmost, but
-w/e). So -Wmost will enable -Wformat will enable -Wformat-security.
-4. -Wmost is itself a member of -Wall. -Wall enables -Wmost enables
--Wformat enables -Wformat security.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/jump_label-get-rid-of-NOP-patching-where-possible/20220608-184857
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+config: mips-rs90_defconfig (https://download.01.org/0day-ci/archive/20220610/202206100833.t7F1rrMU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0f76bf7e2cda1943571bcfa08d52505950425ef8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ard-Biesheuvel/jump_label-get-rid-of-NOP-patching-where-possible/20220608-184857
+        git checkout 0f76bf7e2cda1943571bcfa08d52505950425ef8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
-Looking now at Kbuild:
-1. Makefile:523 adds -Wall to KBUILD_CFLAGS.
-2. The same assignment expression but on line 526 immediately disables
--Wformat-security via -Wno-format-security.
-3. scripts/Makefile.extrawarn disables -Wformat via -Wno-format only
-for clang (via guard of CONFIG_CC_IS_CLANG).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-We _want_ -Wformat enabled for clang so that developers aren't sending
-patches that trigger -Wformat with GCC (if they didn't happen to test
-their code with both).  It's disabled for clang until we can build the
-kernel cleanly with it enabled, which we'd like to do.
+All error/warnings (new ones prefixed by >>):
 
-I don't think that we need to enable -Wformat-security to build with
--Wformat for clang.
-
-I suspect based on Randy's comment on patch 1/12 that perhaps -Wformat
-was _added_ to KBUILD_CFLAGS in scripts/Makefile.extrawarn rather than
--Wno-format being _removed_.  The former would re-enable
--Wformat-security due to the grouping logic described above.  The
-latter is probably closer to our ultimate goal of enabling -Wformat
-coverage for clang (or rather not disabling the coverage via
--Wno-format; a double negative).
-
-I'm pretty sure the kernel doesn't support %n in format strings...see
-the comment above vsnprintf in lib/vsprintf.c.  Are there other
-attacks other than %n that -Wformat-security guards against? Maybe
-there's some context on the commit that added -Wno-format-security to
-the kernel?  Regardless, I don't think enabling -Wformat-security is a
-blocker for enabling -Wformat (or...disabling -Wno-format...two sides
-of the same coin) for clang.
-
-> >
->
-> tldr:
->
-> -       printk(msg);
-> +       printk("%s", msg);
->
-> the only reason to make this change is where `msg' could contain a `%'.
-> Generally, it came from userspace.  Otherwise these changes are a
-> useless consumer of runtime resources.
->
-> I think it would be better to quieten clang in some fashion.
+>> arch/mips/kernel/jump_label.c:94:37: error: incomplete definition of type 'struct module'
+           struct jump_entry *iter_start = mod->jump_entries;
+                                           ~~~^
+   include/linux/jump_label.h:196:8: note: forward declaration of 'struct module'
+   struct module;
+          ^
+   arch/mips/kernel/jump_label.c:95:49: error: incomplete definition of type 'struct module'
+           struct jump_entry *iter_stop = iter_start + mod->num_jump_entries;
+                                                       ~~~^
+   include/linux/jump_label.h:196:8: note: forward declaration of 'struct module'
+   struct module;
+          ^
+>> arch/mips/kernel/jump_label.c:92:6: warning: no previous prototype for function 'jump_label_apply_nops' [-Wmissing-prototypes]
+   void jump_label_apply_nops(struct module *mod)
+        ^
+   arch/mips/kernel/jump_label.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void jump_label_apply_nops(struct module *mod)
+   ^
+   static 
+   1 warning and 2 errors generated.
 
 
+vim +94 arch/mips/kernel/jump_label.c
+
+    91	
+  > 92	void jump_label_apply_nops(struct module *mod)
+    93	{
+  > 94		struct jump_entry *iter_start = mod->jump_entries;
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
