@@ -1,125 +1,152 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C3A7C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 08:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654849995; x=1686385995;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0R43Vz3YgifWJAlqhudrQaI0uJxRsyIjybceh/8k9UM=;
-  b=i8XWfnzx+ZC53ASZpWnvovBP/5gulycKaC5l+INiBCofOYqQB07KBlaD
-   kWKym65EqbTfFI4PZw7WLKybQEYv7Rg46em5gXJMQ5vjDy1CErU5oFfrH
-   7Bw30LuaZG9Wn/H6D2FZHkfbZdE3cVUMpgUklKgj01qaRPzVD7t+iV+JL
-   Qk/s75uMBD4ayaNs4mMWwZ6NzBtGLujvdl8tQvXyHN76PkNLU2XR9nsgj
-   I67hJsuep4j6VLy/9ZdFQeS5T2pGipVvYkw+m5LKL/YZ/uKF73gwPuSxw
-   mnZ15lkav192a49+NsVoZNIzClDI7G4VgLuCw64lf5Z0sQfyV8FKLVU3p
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363890381"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="363890381"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 01:33:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="684432311"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Jun 2022 01:33:12 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nza4u-000H0J-4h;
-	Fri, 10 Jun 2022 08:33:12 +0000
-Date: Fri, 10 Jun 2022 16:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tom <support@vamrs.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 22/54]
- drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison
- of constant 36507222016 with expression of type 'unsigned long' is always
- false
-Message-ID: <202206101615.iqFYh0RG-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B65F7C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 08:36:51 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id a29so13217961lfk.2
+        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 01:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eicu7148pm/4x777cEThw3z5cRYIwfGOQ4/TvMVAHCg=;
+        b=VEsJD1EpHTtwZpiGwJunS27R9TD1UKBge1fJ8t2WtSv+quG309wZsJ/jAFZt90U9zJ
+         6jtvaPJI4Qt8txBzyMnqoXZP6aZkuo6pLQ9KtQW36Kqv8XQ5YgDc0aFr0R3EW7hcM38w
+         AXhCXfa5Bpp5Zw67Hud1ZT3XmWM0vc7cxghtMWUMM1RTQKfHX05sEMEVjvYzT9ooUAgz
+         GqU6L+dbRvjJ9LftnDpakXo7yAMHtMbQQFfWvlrFU9H0RTY2gLzerztouBO5ihHfS2XO
+         U+3R48tAdCFBp7ax1cB8r5f/Bl3dLlcv5SBKlAdl3x/tN32w6ncwdW99tZzZklZf3pkl
+         9yxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eicu7148pm/4x777cEThw3z5cRYIwfGOQ4/TvMVAHCg=;
+        b=Q102gpN0hnUz6RqXIPnp8V+IJfcGaiOQjnG3Zx/bEDVpJ+RCZrLrKd/t6z2nP3sfze
+         x7i+KQARir7OY5AqUiYYArxwL2XTri7hLrxPfo0/WmRmgWVvJwZmBDltcnxj1kx9mNYR
+         oSqxiNgynMM7XEvHs/B2ottsi45dfPyt5QbkdIf4QbJJtSgf7+KDbVUoOYHTkNYnap8b
+         M7jzm2IItwd7mXYvtHj2QP2JpUjdfQYbuKLzTWZ068MEq0eDnZDwdoRMq5Gm5+qUdGFM
+         ud9QiVLr8QVHcg9OpHi9huFC/iDqvCvwqj32doUsKBTIhAeR+TarA7vvy9EhWLI8CSMr
+         XjYg==
+X-Gm-Message-State: AOAM531vvertTsxxsJFJkyvv7BVLtzEXXkQore2YWG3SAOmmHp+XGhg6
+	S/bHn4zR+izTRF7vGR+8YKc6AaatwPD9xgt4gMbo0w==
+X-Google-Smtp-Source: ABdhPJyWO6tS8NeUxy/ypAEjfKWBR37YKuyIXcaEa64lgPxJzpyUGzNL2NS8qZc2GGHL2XozDYTxPfu30GvaJz5JpFs=
+X-Received: by 2002:a05:6512:48f:b0:479:1f1a:544d with SMTP id
+ v15-20020a056512048f00b004791f1a544dmr21465928lfq.206.1654850209333; Fri, 10
+ Jun 2022 01:36:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <0000000000008ea7ac05e09b46a6@google.com>
+In-Reply-To: <0000000000008ea7ac05e09b46a6@google.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Fri, 10 Jun 2022 10:36:37 +0200
+Message-ID: <CACT4Y+Z8fdbQ9Kq1gHSha2q7a6RrOajbPKrSVCFyLNS95XkVgQ@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: INFO: task hung in hwrng_register
+To: syzbot <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com>
+Cc: herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux@dominikbrodowski.net, 
+	llvm@lists.linux.dev, mpm@selenic.com, syzkaller-bugs@googlegroups.com, 
+	Jason Wang <jasowang@redhat.com>, Laurent Vivier <lvivier@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/esmil/linux visionfive
-head:   906be7ef2fb9e2f1fcb740d3d506768cddfc52ca
-commit: 1c9c971346b0ca811114ae00fce28cbf3c34232b [22/54] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-config: riscv-buildonly-randconfig-r006-20220609 (https://download.01.org/0day-ci/archive/20220610/202206101615.iqFYh0RG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/esmil/linux/commit/1c9c971346b0ca811114ae00fce28cbf3c34232b
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 1c9c971346b0ca811114ae00fce28cbf3c34232b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
+On Sat, 4 Jun 2022 at 10:46, syzbot
+<syzbot+6da75abeed821109137b@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    032dcf09e2bf Merge tag 'gpio-fixes-for-v5.19-rc1' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14409a93f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=99f457384a4fea79
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6da75abeed821109137b
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6da75abeed821109137b@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
++Jason, Laurent
 
-All warnings (new ones prefixed by >>):
+This started appearing at the same time as 'task hung in
+add_early_randomness" bug reports:
+https://syzkaller.appspot.com/bug?id=256d08cc261a3c38832064a33df4c928b3cd0ef0
+https://syzkaller.appspot.com/bug?id=be1d99e09e499aed3939dc678718371984104e5c
+https://syzkaller.appspot.com/bug?id=1cd11df5d984c694e3e7fc9fe271389b2340bed0
+https://syzkaller.appspot.com/bug?id=35496bafab4c3f81f0b0d6d72c69787300629740
 
-   drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-                   ^
->> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+Is this also fixed by "virtio-rng: make device ready before making
+request" patch?
 
 
-vim +142 drivers/soc/sifive/sifive_l2_cache.c
 
-   123	
-   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
-   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-   126	{
-   127		unsigned long line;
-   128	
-   129		if(!l2_base) {
-   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-   131			return;
-   132		}
-   133	
-   134		/* TODO: if (len == 0), skipping flush or going on? */
-   135		if(!len) {
-   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-   137			return;
-   138		}
-   139	
-   140		/* make sure the address is in the range */
-   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
- > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-   145				start, len);
-   146			return;
-   147		}
-   148	
-   149		mb();	/* sync */
-   150		for (line = start; line < start + len;
-   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
- > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-   153			mb();
-   154		}
-   155	}
-   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-   157	#endif
-   158	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> INFO: task swapper/0:1 blocked for more than 143 seconds.
+>       Not tainted 5.18.0-syzkaller-13760-g032dcf09e2bf #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:swapper/0       state:D stack:21080 pid:    1 ppid:     0 flags:0x00004000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5116 [inline]
+>  __schedule+0x957/0xec0 kernel/sched/core.c:6428
+>  schedule+0xeb/0x1b0 kernel/sched/core.c:6500
+>  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
+>  __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
+>  __mutex_lock kernel/locking/mutex.c:747 [inline]
+>  mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+>  add_early_randomness drivers/char/hw_random/core.c:69 [inline]
+>  hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
+>  virtrng_scan+0x3e/0x90 drivers/char/hw_random/virtio-rng.c:205
+>  virtio_dev_probe+0xa03/0xba0 drivers/virtio/virtio.c:313
+>  call_driver_probe+0x96/0x250
+>  really_probe+0x220/0x940 drivers/base/dd.c:634
+>  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:764
+>  driver_probe_device+0x50/0x240 drivers/base/dd.c:794
+>  __driver_attach+0x35f/0x5a0 drivers/base/dd.c:1163
+>  bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
+>  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
+>  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
+>  driver_register+0x2e9/0x3e0 drivers/base/driver.c:240
+>  do_one_initcall+0xbd/0x2b0 init/main.c:1295
+>  do_initcall_level+0x168/0x218 init/main.c:1368
+>  do_initcalls+0x4b/0x8c init/main.c:1384
+>  kernel_init_freeable+0x43a/0x5c3 init/main.c:1610
+>  kernel_init+0x19/0x2b0 init/main.c:1499
+>  ret_from_fork+0x1f/0x30
+>  </TASK>
+>
+> Showing all locks held in the system:
+> 2 locks held by swapper/0/1:
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1054 [inline]
+>  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x353/0x5a0 drivers/base/dd.c:1162
+>  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness drivers/char/hw_random/core.c:69 [inline]
+>  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
+> 2 locks held by pr/ttyS0/16:
+> 1 lock held by khungtaskd/29:
+>  #0: ffffffff8cb1eee0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+> 2 locks held by kworker/u4:4/56:
+>  #0: ffff888011c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
+>  #1: ffffc900013e7d00 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
+> 1 lock held by hwrng/755:
+>  #0: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0xec/0x470 drivers/char/hw_random/core.c:503
+>
+> =============================================
+>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000008ea7ac05e09b46a6%40google.com.
