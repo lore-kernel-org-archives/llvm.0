@@ -1,90 +1,378 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44AC7A
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 01:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107EEC34114;
-	Fri, 10 Jun 2022 01:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1654823959;
-	bh=NUfNzI+Lzqk+ZMoLBcXdIunumPdQxiKPTgtDE7N0Sgk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=k2K3VAI6SDQeixfuxmPLxZgpiSqDGd0SM+Ll9mgkEIzO4uveLGhDNJt0+TSFK+7Dy
-	 zU2YexZB9zyyJafX9UAhTSLsmxBgnx4E4qwGlBqJCxclBsikRqriCf9H277tXNvHi5
-	 35QHlBHe+SBvbWDdRMsPbHvFhnkfmzsajDvPN4sk=
-Date: Thu, 9 Jun 2022 18:19:17 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Bill Wendling <morbo@google.com>
-Cc: Jan Engelhardt <jengelh@inai.de>, Bill Wendling <isanbard@gmail.com>,
- Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Dave Hansen
- <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Phillip Potter <phil@philpotter.co.uk>,
- Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, Jan Kara <jack@suse.com>, Pablo Neira Ayuso
- <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>, Florian
- Westphal <fw@strlen.de>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, Ross Philipson
- <ross.philipson@oracle.com>, Daniel Kiper <daniel.kiper@oracle.com>,
- linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, ACPI Devel
- Maling List <linux-acpi@vger.kernel.org>, linux-mm@kvack.org,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org, Networking
- <netdev@vger.kernel.org>, alsa-devel@alsa-project.org, clang-built-linux
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH 00/12] Clang -Wformat warning fixes
-Message-Id: <20220609181917.32e0169b3d33e42b8eb8dcac@linux-foundation.org>
-In-Reply-To: <CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
-References: <20220609221702.347522-1-morbo@google.com>
-	<20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org>
-	<CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com>
-	<nssn2ps-6n86-nqq6-9039-72847760nnq@vanv.qr>
-	<CAGG=3QU0XJhQKJXLMayOkQSiF2yjBi2p2TEZ9KNTzU5mmye-gg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B107C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 02:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654829762; x=1686365762;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O0bL4sdftS81wR9WdNRMpX+rYzEHoW1ZVqEv1opZtjY=;
+  b=UCuizI27B/O0qV6zeq/oBOFqF4L93hlVGF3eE1yT5hqTcMv3c+wXsU8h
+   l7kBgZK0/ObHbJdwW3gI7YQExU/VgWvXadqAEXzi3/AA1/42eRlZWbx3l
+   kR6K3zl90bOPU3yHLngR3cXKAzKCrGWThaEyTtIlcQCv+9BnKlCD3b2Et
+   zUNZv18x/J0xKR/U0vWMbKfjU8+sw0V8tXIk9pMOBovTgl/rWtgXBSpX/
+   zO9O9z3lz+SS/C2y1cJJILrCF22PuFqk+S14/4RGW+MG7JGa4R9GM3reh
+   aVkXmUcdlwyV+3BR47qot5/+NpjYP8/Co7pfS8/ghv3dGRk3svPcbJGAb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275018256"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="275018256"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 19:56:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="616216426"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jun 2022 19:55:58 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzUoX-000GdB-Ub;
+	Fri, 10 Jun 2022 02:55:57 +0000
+Date: Fri, 10 Jun 2022 10:55:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, daniel.vetter@ffwll.ch,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	christian.koenig@amd.com, tzimmermann@suse.de,
+	Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [PATCH] iosys-map: Add word-sized reads
+Message-ID: <202206101010.IAvFUbqo-lkp@intel.com>
+References: <20220609232020.2292649-1-lucas.demarchi@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609232020.2292649-1-lucas.demarchi@intel.com>
 
-On Thu, 9 Jun 2022 16:16:16 -0700 Bill Wendling <morbo@google.com> wrote:
+Hi Lucas,
 
-> On Thu, Jun 9, 2022 at 4:03 PM Jan Engelhardt <jengelh@inai.de> wrote:
-> > On Friday 2022-06-10 00:49, Bill Wendling wrote:
-> > >On Thu, Jun 9, 2022 at 3:25 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >> On Thu,  9 Jun 2022 22:16:19 +0000 Bill Wendling <morbo@google.com> wrote:
-> > >>
-> > >> > This patch set fixes some clang warnings when -Wformat is enabled.
-> > >>
-> > >> tldr:
-> > >>
-> > >> -       printk(msg);
-> > >> +       printk("%s", msg);
-> > >>
-> > >> Otherwise these changes are a
-> > >> useless consumer of runtime resources.
-> > >
-> > >Calling a "printf" style function is already insanely expensive.
-> > >[...]
-> > >The "printk" and similar functions all have the "__printf" attribute.
-> > >I don't know of a modification to that attribute which can turn off
-> > >this type of check.
-> >
-> > Perhaps you can split vprintk_store in the middle (after the call to
-> > vsnprintf), and offer the second half as a function of its own (e.g.
-> > "puts"). Then the tldr could be
-> >
-> > - printk(msg);
-> > + puts(msg);
-> 
-> That might be a nice compromise. Andrew, what do you think?
-> 
+Thank you for the patch! Yet something to improve:
 
-Sure.  It's surprising that we don't already have a puts().
+[auto build test ERROR on drm-tip/drm-tip]
+[also build test ERROR on linus/master v5.19-rc1 next-20220609]
+[cannot apply to tegra-drm/drm/tegra/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/iosys-map-Add-word-sized-reads/20220610-072113
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220610/202206101010.IAvFUbqo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b9b2d6b8d738fe2857fa1a96f7f3c9d8c11e9cd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lucas-De-Marchi/iosys-map-Add-word-sized-reads/20220610-072113
+        git checkout 7b9b2d6b8d738fe2857fa1a96f7f3c9d8c11e9cd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1154:14: error: unknown type name '__iosys_map_rd_io_u64_case'
+                   *last_in = record_read(&rec_map, last_switch_in_stamp);
+                              ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1154:14: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                                     ^
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1154:14: error: expected ')'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:34: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1154:14: note: to match this '('
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:28: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1155:9: error: unknown type name '__iosys_map_rd_io_u64_case'
+                   *id = record_read(&rec_map, current_context_index);
+                         ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1155:9: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1155:9: error: expected ')'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:34: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1155:9: note: to match this '('
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:28: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1156:12: error: unknown type name '__iosys_map_rd_io_u64_case'
+                   *total = record_read(&rec_map, total_runtime);
+                            ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1156:12: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
+           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+--
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:165:6: error: unknown type name '__iosys_map_rd_io_u64_case'
+                      ads_blob_read(guc, policies.dpc_promote_time));
+                      ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:165:6: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                                     ^
+>> drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:165:6: error: expected ')'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:34: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:165:6: note: to match this '('
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:28: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:167:6: error: unknown type name '__iosys_map_rd_io_u64_case'
+                      ads_blob_read(guc, policies.max_num_work_items));
+                      ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:167:6: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:167:6: error: expected ')'
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:34: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:167:6: note: to match this '('
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:28: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+                                     ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:169:6: error: unknown type name '__iosys_map_rd_io_u64_case'
+                      ads_blob_read(guc, policies.global_flags));
+                      ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:3: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+                   ^
+   include/linux/iosys-map.h:347:2: note: expanded from macro '__iosys_map_rd_io'
+           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__)                \
+           ^
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:169:6: error: type-id cannot have a name
+   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
+           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
+           ^
+   include/linux/iosys-map.h:452:2: note: expanded from macro 'iosys_map_rd_field'
+           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
+           ^
+   include/linux/iosys-map.h:366:21: note: expanded from macro 'iosys_map_rd'
+                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + offset__, type__);\
+
+
+vim +/__iosys_map_rd_io_u64_case +1154 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+
+77cdd054dd2ced Umesh Nerlige Ramappa 2021-10-26  1132  
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1133  #define record_read(map_, field_) \
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1134  	iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1135  
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1136  /*
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1137   * GuC updates shared memory and KMD reads it. Since this is not synchronized,
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1138   * we run into a race where the value read is inconsistent. Sometimes the
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1139   * inconsistency is in reading the upper MSB bytes of the last_in value when
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1140   * this race occurs. 2 types of cases are seen - upper 8 bits are zero and upper
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1141   * 24 bits are zero. Since these are non-zero values, it is non-trivial to
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1142   * determine validity of these values. Instead we read the values multiple times
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1143   * until they are consistent. In test runs, 3 attempts results in consistent
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1144   * values. The upper bound is set to 6 attempts and may need to be tuned as per
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1145   * any new occurences.
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1146   */
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1147  static void __get_engine_usage_record(struct intel_engine_cs *engine,
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1148  				      u32 *last_in, u32 *id, u32 *total)
+77cdd054dd2ced Umesh Nerlige Ramappa 2021-10-26  1149  {
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1150  	struct iosys_map rec_map = intel_guc_engine_usage_record_map(engine);
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1151  	int i = 0;
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1152  
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1153  	do {
+4801b99588a2e0 Lucas De Marchi       2022-02-16 @1154  		*last_in = record_read(&rec_map, last_switch_in_stamp);
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1155  		*id = record_read(&rec_map, current_context_index);
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1156  		*total = record_read(&rec_map, total_runtime);
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1157  
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1158  		if (record_read(&rec_map, last_switch_in_stamp) == *last_in &&
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1159  		    record_read(&rec_map, current_context_index) == *id &&
+4801b99588a2e0 Lucas De Marchi       2022-02-16  1160  		    record_read(&rec_map, total_runtime) == *total)
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1161  			break;
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1162  	} while (++i < 6);
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1163  }
+512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1164  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
