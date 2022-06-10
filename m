@@ -1,43 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3403FF5
-	for <llvm@lists.linux.dev>; Thu,  9 Jun 2022 23:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04244362
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 00:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654816923; x=1686352923;
+  t=1654819989; x=1686355989;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZs4jRka2kIZp+xDSykoMtHa4470prxyVP0U9JcSCns=;
-  b=KZRvL0Rg6tbkNyuphUjV1OtSc1yS6hrw4PbZuPEvo03umCTSpDp3NCkQ
-   pi+r8BlGaLco+gQ/L0Zv2/s215ZD0M4MbcUMoQcAbXe92Riz08kxLCHTL
-   AUz6LkkpCcjAW7jV52u0piIJYx82kH0tyJtzhX1osFkH2WI5vgJqtL+3k
-   aqKUuOaQPM5yPNWDx3BE/KoZ+kmnnwGtqEn/Sn5qe/DDUhA/NmIUV/k43
-   yVo1KIm8soP6M1MOuQca0cDEL512nFpOdjct08jEKFhuWDhrROKclpNv4
-   kCwfrJ8PuZDUZ8bSF0RlgpKD1RJj0a2PM2K63JpicDDAI6rsVI1MkBBO4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278257736"
+  bh=muShz80N5WXbIaJ1H26l8GvCgTypGQ83+6ajKlOUXWg=;
+  b=c3gVUkWOWR8U4LZj9mjWNpzcRa7kB86WM++xmYBKd3Dr0T4Ta1sLgllH
+   G3M0FCFA/0INhsOjteWplebPByalhlwGgbIcIUkX4rBA2R6Q8eZwxStH5
+   hnsNbJYeJai7wFbubE16XPHf6Yc96cGTvBe/JENp4IBdlqDG0ZdRXqYlN
+   p+hBPUcgJgUNpZXuXpXKnLOo8wmP1eG62wl3RDT1sEPQ+dZKpGEZ37oKF
+   AP1nfqFwhurZ4T7wn8W/v1jqWeqiUUKsHYIkbSLh+vrA7cEtxohzmZGZA
+   CPCagKuimgGiLLDLNWvDqJKU/1pW3PYOupAVPD6MBJ8MCUxUJeEHmsYXf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="341530753"
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="278257736"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 16:21:54 -0700
+   d="scan'208";a="341530753"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 17:12:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="566612434"
+   d="scan'208";a="684247958"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2022 16:21:52 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 09 Jun 2022 17:12:53 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1nzRTL-000GUH-WE;
-	Thu, 09 Jun 2022 23:21:52 +0000
-Date: Fri, 10 Jun 2022 07:21:05 +0800
+	id 1nzSGj-000GW6-7U;
+	Fri, 10 Jun 2022 00:12:53 +0000
+Date: Fri, 10 Jun 2022 08:11:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Logan Gunthorpe <logang@deltatee.com>
+To: Ramesh Errabolu <Ramesh.Errabolu@amd.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [sbates130272-p2pmem:p2pdma_user_cmb_v7 20/21]
- include/linux/pci-p2pdma.h:99:1: error: non-void function does not return a
- value
-Message-ID: <202206100713.eqeobRjO-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>
+Subject: [agd5f:drm-next 156/174]
+ drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1542:11: warning:
+ variable 'i' set but not used
+Message-ID: <202206100824.0OO7jTU5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,280 +49,89 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git p2pdma_user_cmb_v7
-head:   45dd3bf6fe468175153066cb70820a2b2edbc61b
-commit: 54606cc552a950ad3eaa201cd8b1a2d1f2e6abd3 [20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-config: s390-randconfig-r005-20220608 (https://download.01.org/0day-ci/archive/20220610/202206100713.eqeobRjO-lkp@intel.com/config)
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   64f6516e60b0bbe6abfc9f1d9f1999012e0f11a6
+commit: 0f28cca87e9afc22280c44d378d2a6e249933977 [156/174] drm/amdkfd: Extend KFD device topology to surface peer-to-peer links
+config: arm64-randconfig-r023-20220609 (https://download.01.org/0day-ci/archive/20220610/202206100824.0OO7jTU5-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 971e13d69e3e7b687213fef22952be6a328c426c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/sbates130272/linux-p2pmem/commit/54606cc552a950ad3eaa201cd8b1a2d1f2e6abd3
-        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
-        git fetch --no-tags sbates130272-p2pmem p2pdma_user_cmb_v7
-        git checkout 54606cc552a950ad3eaa201cd8b1a2d1f2e6abd3
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 0f28cca87e9afc22280c44d378d2a6e249933977
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/nvme/target/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/nvme/target/configfs.c:12:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/nvme/target/configfs.c:12:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/nvme/target/configfs.c:12:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/nvme/target/configfs.c:13:
->> include/linux/pci-p2pdma.h:99:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   12 warnings and 1 error generated.
---
-   In file included from drivers/nvme/target/core.c:10:
-   In file included from include/linux/pci-p2pdma.h:14:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/nvme/target/core.c:10:
-   In file included from include/linux/pci-p2pdma.h:14:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/nvme/target/core.c:10:
-   In file included from include/linux/pci-p2pdma.h:14:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/nvme/target/core.c:10:
->> include/linux/pci-p2pdma.h:99:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   In file included from drivers/nvme/target/core.c:14:
-   In file included from drivers/nvme/target/trace.h:165:
-   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
-   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
-   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
-   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-   #define __stringify(x...)       __stringify_1(x)
-                                   ^~~~~~~~~~~~~~~~
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-   #define __stringify_1(x...)     #x
-                                   ^~
-   <scratch space>:87:1: note: expanded from here
-   "./trace.h"
-   ^~~~~~~~~~~
-   12 warnings and 2 errors generated.
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1542:11: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+           uint32_t i, k;
+                    ^
+   1 warning generated.
 
 
-vim +99 include/linux/pci-p2pdma.h
+vim +/i +1542 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c
 
-    18	
-    19	#ifdef CONFIG_PCI_P2PDMA
-    20	int pci_p2pdma_add_resource(struct pci_dev *pdev, int bar, size_t size,
-    21			u64 offset);
-    22	int pci_p2pdma_distance_many(struct pci_dev *provider, struct device **clients,
-    23				     int num_clients, bool verbose);
-    24	bool pci_has_p2pmem(struct pci_dev *pdev);
-    25	struct pci_dev *pci_p2pmem_find_many(struct device **clients, int num_clients);
-    26	void *pci_alloc_p2pmem(struct pci_dev *pdev, size_t size);
-    27	void pci_free_p2pmem(struct pci_dev *pdev, void *addr, size_t size);
-    28	pci_bus_addr_t pci_p2pmem_virt_to_bus(struct pci_dev *pdev, void *addr);
-    29	struct scatterlist *pci_p2pmem_alloc_sgl(struct pci_dev *pdev,
-    30						 unsigned int *nents, u32 length);
-    31	void pci_p2pmem_free_sgl(struct pci_dev *pdev, struct scatterlist *sgl);
-    32	void pci_p2pmem_publish(struct pci_dev *pdev, bool publish);
-    33	int pci_p2pdma_enable_store(const char *page, struct pci_dev **p2p_dev,
-    34				    bool *use_p2pdma);
-    35	ssize_t pci_p2pdma_enable_show(char *page, struct pci_dev *p2p_dev,
-    36				       bool use_p2pdma);
-    37	int pci_p2pdma_file_open(struct pci_dev *pdev, struct file *file);
-    38	void pci_p2pdma_file_release(struct file *file);
-    39	int pci_mmap_p2pmem(struct pci_dev *pdev, struct vm_area_struct *vma);
-    40	#else /* CONFIG_PCI_P2PDMA */
-    41	static inline int pci_p2pdma_add_resource(struct pci_dev *pdev, int bar,
-    42			size_t size, u64 offset)
-    43	{
-    44		return -EOPNOTSUPP;
-    45	}
-    46	static inline int pci_p2pdma_distance_many(struct pci_dev *provider,
-    47		struct device **clients, int num_clients, bool verbose)
-    48	{
-    49		return -1;
-    50	}
-    51	static inline bool pci_has_p2pmem(struct pci_dev *pdev)
-    52	{
-    53		return false;
-    54	}
-    55	static inline struct pci_dev *pci_p2pmem_find_many(struct device **clients,
-    56							   int num_clients)
-    57	{
-    58		return NULL;
-    59	}
-    60	static inline void *pci_alloc_p2pmem(struct pci_dev *pdev, size_t size)
-    61	{
-    62		return NULL;
-    63	}
-    64	static inline void pci_free_p2pmem(struct pci_dev *pdev, void *addr,
-    65			size_t size)
-    66	{
-    67	}
-    68	static inline pci_bus_addr_t pci_p2pmem_virt_to_bus(struct pci_dev *pdev,
-    69							    void *addr)
-    70	{
-    71		return 0;
-    72	}
-    73	static inline struct scatterlist *pci_p2pmem_alloc_sgl(struct pci_dev *pdev,
-    74			unsigned int *nents, u32 length)
-    75	{
-    76		return NULL;
-    77	}
-    78	static inline void pci_p2pmem_free_sgl(struct pci_dev *pdev,
-    79			struct scatterlist *sgl)
-    80	{
-    81	}
-    82	static inline void pci_p2pmem_publish(struct pci_dev *pdev, bool publish)
-    83	{
-    84	}
-    85	static inline int pci_p2pdma_enable_store(const char *page,
-    86			struct pci_dev **p2p_dev, bool *use_p2pdma)
-    87	{
-    88		*use_p2pdma = false;
-    89		return 0;
-    90	}
-    91	static inline ssize_t pci_p2pdma_enable_show(char *page,
-    92			struct pci_dev *p2p_dev, bool use_p2pdma)
-    93	{
-    94		return sprintf(page, "none\n");
-    95	}
-    96	static inline int pci_p2pdma_file_open(struct pci_dev *pdev,
-    97					       struct file *file)
-    98	{
-  > 99	}
-   100	static inline void pci_p2pdma_file_release(struct file *file)
-   101	{
-   102	}
-   103	static inline int pci_mmap_p2pmem(struct pci_dev *pdev,
-   104					  struct vm_area_struct *vma)
-   105	{
-   106		return -EOPNOTSUPP;
-   107	}
-   108	#endif /* CONFIG_PCI_P2PDMA */
-   109	
-   110	
+  1537	
+  1538	static int kfd_dev_create_p2p_links(void)
+  1539	{
+  1540		struct kfd_topology_device *dev;
+  1541		struct kfd_topology_device *new_dev;
+> 1542		uint32_t i, k;
+  1543		int ret = 0;
+  1544	
+  1545		k = 0;
+  1546		list_for_each_entry(dev, &topology_device_list, list)
+  1547			k++;
+  1548		if (k < 2)
+  1549			return 0;
+  1550	
+  1551		new_dev = list_last_entry(&topology_device_list, struct kfd_topology_device, list);
+  1552		if (WARN_ON(!new_dev->gpu))
+  1553			return 0;
+  1554	
+  1555		k--;
+  1556		i = 0;
+  1557	
+  1558		/* create in-direct links */
+  1559		ret = kfd_create_indirect_link_prop(new_dev, k);
+  1560		if (ret < 0)
+  1561			goto out;
+  1562	
+  1563		/* create p2p links */
+  1564	#if defined(CONFIG_HSA_AMD_P2P)
+  1565		list_for_each_entry(dev, &topology_device_list, list) {
+  1566			if (dev == new_dev)
+  1567				break;
+  1568			if (!dev->gpu || !dev->gpu->adev ||
+  1569			    (dev->gpu->hive_id &&
+  1570			     dev->gpu->hive_id == new_dev->gpu->hive_id))
+  1571				goto next;
+  1572	
+  1573			/* check if node(s) is/are peer accessible in one direction or bi-direction */
+  1574			ret = kfd_add_peer_prop(new_dev, dev, i, k);
+  1575			if (ret < 0)
+  1576				goto out;
+  1577	
+  1578			ret = kfd_add_peer_prop(dev, new_dev, k, i);
+  1579			if (ret < 0)
+  1580				goto out;
+  1581	next:
+  1582			i++;
+  1583		}
+  1584	#endif
+  1585	
+  1586	out:
+  1587		return ret;
+  1588	}
+  1589	
 
 -- 
 0-DAY CI Kernel Test Service
