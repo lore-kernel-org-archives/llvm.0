@@ -1,69 +1,125 @@
-Received: from a3.inai.de (a3.inai.de [88.198.85.195])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5007C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 08:32:15 +0000 (UTC)
-Received: by a3.inai.de (Postfix, from userid 25121)
-	id 43D6D5872870F; Fri, 10 Jun 2022 10:32:13 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by a3.inai.de (Postfix) with ESMTP id 4326A60C247DA;
-	Fri, 10 Jun 2022 10:32:13 +0200 (CEST)
-Date: Fri, 10 Jun 2022 10:32:13 +0200 (CEST)
-From: Jan Engelhardt <jengelh@inai.de>
-To: David Laight <David.Laight@ACULAB.COM>
-cc: 'Bill Wendling' <morbo@google.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    Bill Wendling <isanbard@gmail.com>, Tony Luck <tony.luck@intel.com>, 
-    Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, 
-    Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
-    "H. Peter Anvin" <hpa@zytor.com>, Phillip Potter <phil@philpotter.co.uk>, 
-    Arnd Bergmann <arnd@arndb.de>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Jan Kara <jack@suse.com>, 
-    Pablo Neira Ayuso <pablo@netfilter.org>, 
-    Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-    Paolo Abeni <pabeni@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
-    Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-    Ross Philipson <ross.philipson@oracle.com>, 
-    Daniel Kiper <daniel.kiper@oracle.com>, 
-    "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, 
-    LKML <linux-kernel@vger.kernel.org>, 
-    ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-    "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-    "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>, 
-    "coreteam@netfilter.org" <coreteam@netfilter.org>, 
-    Networking <netdev@vger.kernel.org>, 
-    "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>, 
-    clang-built-linux <llvm@lists.linux.dev>
-Subject: RE: [PATCH 00/12] Clang -Wformat warning fixes
-In-Reply-To: <01da36bfd13e421aadb2eff661e7a959@AcuMS.aculab.com>
-Message-ID: <o5496n8r-451p-751-3258-97112opns7s8@vanv.qr>
-References: <20220609221702.347522-1-morbo@google.com> <20220609152527.4ad7862d4126e276e6f76315@linux-foundation.org> <CAGG=3QXDt9AeCQOAp1311POFRSByJru4=Q=oFiQn3u2iZYk2_w@mail.gmail.com> <01da36bfd13e421aadb2eff661e7a959@AcuMS.aculab.com>
-User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C3A7C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 08:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654849995; x=1686385995;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0R43Vz3YgifWJAlqhudrQaI0uJxRsyIjybceh/8k9UM=;
+  b=i8XWfnzx+ZC53ASZpWnvovBP/5gulycKaC5l+INiBCofOYqQB07KBlaD
+   kWKym65EqbTfFI4PZw7WLKybQEYv7Rg46em5gXJMQ5vjDy1CErU5oFfrH
+   7Bw30LuaZG9Wn/H6D2FZHkfbZdE3cVUMpgUklKgj01qaRPzVD7t+iV+JL
+   Qk/s75uMBD4ayaNs4mMWwZ6NzBtGLujvdl8tQvXyHN76PkNLU2XR9nsgj
+   I67hJsuep4j6VLy/9ZdFQeS5T2pGipVvYkw+m5LKL/YZ/uKF73gwPuSxw
+   mnZ15lkav192a49+NsVoZNIzClDI7G4VgLuCw64lf5Z0sQfyV8FKLVU3p
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="363890381"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="363890381"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 01:33:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="684432311"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Jun 2022 01:33:12 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nza4u-000H0J-4h;
+	Fri, 10 Jun 2022 08:33:12 +0000
+Date: Fri, 10 Jun 2022 16:32:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom <support@vamrs.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 22/54]
+ drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison
+ of constant 36507222016 with expression of type 'unsigned long' is always
+ false
+Message-ID: <202206101615.iqFYh0RG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/esmil/linux visionfive
+head:   906be7ef2fb9e2f1fcb740d3d506768cddfc52ca
+commit: 1c9c971346b0ca811114ae00fce28cbf3c34232b [22/54] sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+config: riscv-buildonly-randconfig-r006-20220609 (https://download.01.org/0day-ci/archive/20220610/202206101615.iqFYh0RG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/esmil/linux/commit/1c9c971346b0ca811114ae00fce28cbf3c34232b
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 1c9c971346b0ca811114ae00fce28cbf3c34232b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/sifive/sifive_l2_cache.c:152:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:142:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-On Friday 2022-06-10 10:17, David Laight wrote:
->> 
->> Calling a "printf" style function is already insanely expensive. :-) I
->> understand that it's not okay blithely to increase runtime resources
->> simply because it's already slow, but in this case it's worthwhile.
->
->Yep, IMHO definitely should be fixed.
->It is even possible that using "%s" is faster because the printf
->code doesn't have to scan the string for format effectors.
+vim +142 drivers/soc/sifive/sifive_l2_cache.c
 
-I see no special handling; the vsnprintf function just loops
-over fmt as usual and I see no special casing of fmt by
-e.g. strcmp(fmt, "%s") == 0 to take a shortcut.
+   123	
+   124	#ifdef CONFIG_SIFIVE_L2_FLUSH
+   125	void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+   126	{
+   127		unsigned long line;
+   128	
+   129		if(!l2_base) {
+   130			pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+   131			return;
+   132		}
+   133	
+   134		/* TODO: if (len == 0), skipping flush or going on? */
+   135		if(!len) {
+   136			pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+   137			return;
+   138		}
+   139	
+   140		/* make sure the address is in the range */
+   141		if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+ > 142		   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+   143				     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+   144			pr_warn("L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+   145				start, len);
+   146			return;
+   147		}
+   148	
+   149		mb();	/* sync */
+   150		for (line = start; line < start + len;
+   151		     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+ > 152			writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+   153			mb();
+   154		}
+   155	}
+   156	EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+   157	#endif
+   158	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
