@@ -1,90 +1,242 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075E87C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654902321; x=1686438321;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6G7K9PLHT3WpnM85njUgGyQ7zZIAHOlnaQHj0mDwvx0=;
-  b=Q4JTBGJdD1m1UMB6Bq/Fg/sCO6rzABKZuTB3kF8Wz4Ql6yLE9Akc9GYI
-   hfe9pNpMrGsdkwQKzBGr4s9FOcQPuPjegdVUWD+SSk93NRyBdWTJeBXuz
-   qHi3o0FOPb8HFTQoqrzLVSHX1yJFkqt9dMbY05iWuo6VfXZb0NTaMH+0a
-   VvZELVK+WtE3UxPDypnax4Fnh0Jr+XmZGcXB2+rRnbu6QpfaikzmqQKG+
-   QGNKAU9eIK86+uN5w0YrJBwBrJRJceqRWjh4TbuwKeM1Ri4ijSot/+FbF
-   j+4vFDHyVBKkDhdT2AlzhMKYZQ4N/QgAAyqIXU7i696l/8lgp3manuQjC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278572723"
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="278572723"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:04:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="586437690"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2022 16:04:55 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nzngU-000ILh-S4;
-	Fri, 10 Jun 2022 23:04:54 +0000
-Date: Sat, 11 Jun 2022 07:04:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@profian.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jarkko-tpmdd:kprobes 3/3] arch/arm/kernel/module_alloc.c:24:7:
- warning: no previous prototype for function 'module_alloc'
-Message-ID: <202206110716.TCuKUFdZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0917C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:35:16 +0000 (UTC)
+Received: by mail-pg1-f202.google.com with SMTP id n6-20020a654886000000b003fda8768883so207630pgs.14
+        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=nsMGvakN23jGJwKQKSNiBedpAQCT/+oZZ53FMvpJmWE=;
+        b=TTSPz9mn3fOB4ve10WTtYfvod1PAt6nWdPvsN17q7/4saeuWmeuexh9VhPgCkS5pDb
+         f5gRy75iYIFhLPMAvisX1Oqd4oD8ZWNaqLTaxxxPtUAHP8Y0ecEOORdAZIU2C/Y/DKOm
+         nyoXugVxssag43IvWS8/pjSe0TCnIP72aYUgpBBAxda48sML5/s4c6m1tYfnik1HhNkH
+         VCNyyM1VHrL4JWanm+XqpeJUg/llXdoZmHhdeF0TE0Y7+EFUsgLS/sGrzW/NxnDX1ad4
+         vAiGN0d/8G6ZXtGM385+MPY4pp9zuYsCQ2EiF1NaDKONdQ9rOlNd8RH6++XT6lt40Tdk
+         OCeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=nsMGvakN23jGJwKQKSNiBedpAQCT/+oZZ53FMvpJmWE=;
+        b=2ZrW7xl+korGN1MaTSkKojJA46Wt7Iexzj09W0tugKbBspzM76RiAojdB30F6xY38q
+         Cr4GpRq8yTF8sUEkCNEfAtG19uMesKJfF70rbcIDC32HhQcn4OjWbq4wh7tvTQtwUPAw
+         p4dvRwf84YWM6GWUAVzVdAUeMjaFts8SPzw1BDxLT30uV7p/I7ihAN3AqjE/NmaGNXec
+         nlUfDXuvkrFb5kFKLjl4suNITdtnBkw7DskhbfTC3eh7N8hsZhykMHCsZd+nQOB5n7Z4
+         zpdeXA70DunOfCl8EAnOno2N9qAK+rUAZB49HYIz3Cmdins0wOm6rFgvc+KF1o7PXSre
+         QzQQ==
+X-Gm-Message-State: AOAM531h1Xv8ZId8nIFNpVSrXL5c7uJtekCec76ClKmNGZftvh2UdTpV
+	zbN4TXoa5Iqnu213OTosVYmPfTca6uxaWG3f6XA=
+X-Google-Smtp-Source: ABdhPJzdLof87FxFUwL7nMS7yP1RwHTMWgXL9tW9h4xwKDJuVFdFP6l21cUGZW05T9FvcBnHeDH2g5GB+ZU+RT5MXgw=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f464:6db6:3d47:ed14])
+ (user=samitolvanen job=sendgmr) by 2002:a17:90b:4b90:b0:1e8:48bd:453 with
+ SMTP id lr16-20020a17090b4b9000b001e848bd0453mr2189527pjb.86.1654904115869;
+ Fri, 10 Jun 2022 16:35:15 -0700 (PDT)
+Date: Fri, 10 Jun 2022 16:34:53 -0700
+Message-Id: <20220610233513.1798771-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7489; h=from:subject;
+ bh=nEoLqXNa3ykt1eGfRs/jvdsV+FhVXUy4vtw8erotAL0=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UswFKBhBOO2/9SIKqLIDgiaShLWcr9mJQQ6dfI
+ Oi0DjR+JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLAAKCRBMtfaEi7xW7svkC/
+ 9n4xT5mUM0FuTK43AIeV3s0iJFI/It59JH+MTCiDiGXGDCEJGkCO0pK9lGCfDDES6dL4PY8iQKF8P1
+ BOif4X/nNa/ykC/ILkxWs7dG5G4iExpiA3Nw14d8c251mLZKGPU6rok5GF7k7H6mQqgv4EYYeJAUC8
+ st9LzJ9EhK3bufhrAiwwIXR9RUlZVx7z3nD6z2XAyd/SSilV/Yy4QzkGO4g0qUmR+z9mkSwuvm2jnN
+ 4vDtRdvGzemSFp8Nj+6j3YCIQn3R+y8vX6Mrloje5lon5XoyAdVERBegFZMQo4NThZl1VPvBM+YjmW
+ e9VbLTEFUMtIeF9BNXaelAZw6gwJEBTiEkz96IIkHIwrSpzCOBJP7dGNpE/clTwzd8x0O9YWDy3Gqg
+ PuLh8K7ozjdJQ/y7qbtQO+Gx7dMEfOA+3GQ8o9OoKouYBVwnqdK3ohasSp2UX8/TkdMbNxl/xNgfNa
+ VG+WTqSZsnFOEv2n68TsYgUcoLR74vqKYZOh9vrWUxlAI=
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [RFC PATCH v3 00/20] KCFI support
+From: Sami Tolvanen <samitolvanen@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
-head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
-config: arm-mxs_defconfig (https://download.01.org/0day-ci/archive/20220611/202206110716.TCuKUFdZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 70d35fe1257e429266b83025997b400e9f79110e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd kprobes
-        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
+KCFI is a proposed forward-edge control-flow integrity scheme for
+Clang, which is more suitable for kernel use than the existing CFI
+scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+alter function references to point to a jump table, and won't break
+function address equality. The latest LLVM patch is here:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  https://reviews.llvm.org/D119296
 
-All warnings (new ones prefixed by >>):
+This RFC series replaces the current arm64 CFI implementation with
+KCFI and adds support for x86_64.
 
->> arch/arm/kernel/module_alloc.c:24:7: warning: no previous prototype for function 'module_alloc' [-Wmissing-prototypes]
-   void *module_alloc(unsigned long size)
-         ^
-   arch/arm/kernel/module_alloc.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *module_alloc(unsigned long size)
-   ^
-   static 
-   1 warning generated.
+KCFI requires assembly functions that are indirectly called from C
+code to be annotated with type identifiers. As type information is
+only available in C, the compiler emits expected type identifiers into
+the symbol table, so they can be referenced from assembly without
+having to hardcode type hashes. Patch 6 adds helper macros for
+annotating functions, and patches 8 and 18 add annotations.
 
+In case of a type mismatch, KCFI always traps. To support error
+handling, the compiler generates a .kcfi_traps section for x86_64,
+which contains the locations of each trap, and for arm64, encodes
+the necessary register information to the ESR. Patches 9 and 20 add
+arch-specific error handlers.
 
-vim +/module_alloc +24 arch/arm/kernel/module_alloc.c
+To test this series, you'll need to compile your own Clang toolchain
+with the patches linked above. You can also find the complete source
+tree here:
 
-    22	
-    23	#ifdef CONFIG_MMU
-  > 24	void *module_alloc(unsigned long size)
+  https://github.com/samitolvanen/llvm-project/commits/kcfi-rfc-v3
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This series is also available in GitHub:
+
+  https://github.com/samitolvanen/linux/commits/kcfi-rfc-v3
+
+---
+Changes in v3:
+- Merged the patches that split CC_FLAGS_CFI from CC_FLAGS_LTO.
+
+- Dropped the psci_initcall_t patch as Mark volunteered to send a
+  patch for this. Note that this patch is still needed to boot a
+  CFI kernel on certain arm64 systems:
+  https://lore.kernel.org/lkml/YoNhKaTT3EDukxXY@FVFF77S0Q05N/
+
+- Added a patch to remove the now unnecessary workarounds with
+  CFI+ThinLTO in kallsyms.
+
+- Added an lkdtm patch to ensure the test actually generates an
+  indirect call.
+
+- Changed report_cfi_failure to clearly indicate if we failed to
+  decode target address.
+
+- Switched to relative offsets for .kcfi_traps.
+
+- On x86_64, moved CFI error handling from traps.c to cfi.c, and
+  as we only call memcpy indirectly w/ CONFIG_MODULES, ensured that
+  the compiler emits __kcfi_typeid_memcpy also without modules.
+
+- On x86_64, added a check for the cmpl REX prefix to handle the
+  case where the compiler might not use r8-r15 registers for the
+  call target.
+
+- On the compiler side, ensured that on x86_64 calls are emitted
+  immediately after the CFI check, fixed the __cfi_ preamble
+  linkage, and changed the compiler to emit relative offsets in
+  .kcfi_traps.
+
+Changes in v2:
+- Changed the compiler patch to encode arm64 target and type details
+  in the ESR, and updated the kernel error handling patch accordingly.
+
+- Changed the compiler patch to embed the x86_64 type hash in a valid
+  instruction to avoid special casing objtool instruction decoding, and
+  added a __cfi_ symbol for the preamble. Changed the kernel error
+  handling and manual type annotations to match.
+
+- Dropped the .kcfi_types section as that=E2=80=99s no longer needed by
+  objtool, and changed the objtool patch to simply ignore the __cfi_
+  preambles falling through.
+
+- Dropped the .kcfi_traps section on arm64 as it=E2=80=99s no longer needed=
+,
+  and moved the trap look-up code behind CONFIG_ARCH_USES_CFI_TRAPS,
+  which is selected only for x86_64.
+
+- Dropped __nocfi attributes from arm64 code where CFI was disabled
+  due to address space confusion issues, and added type annotations to
+  relevant assembly functions.
+
+- Dropped __nocfi from __init.
+
+Sami Tolvanen (20):
+  treewide: Filter out CC_FLAGS_CFI
+  scripts/kallsyms: Ignore __kcfi_typeid_
+  cfi: Remove CONFIG_CFI_CLANG_SHADOW
+  cfi: Drop __CFI_ADDRESSABLE
+  cfi: Switch to -fsanitize=3Dkcfi
+  cfi: Add type helper macros
+  lkdtm: Emit an indirect call for CFI tests
+  arm64: Add types to indirect called assembly functions
+  arm64: Add CFI error handling
+  arm64: Drop unneeded __nocfi attributes
+  init: Drop __nocfi from __init
+  treewide: Drop function_nocfi
+  treewide: Drop WARN_ON_FUNCTION_MISMATCH
+  treewide: Drop __cficanonical
+  objtool: Disable CFI warnings
+  kallsyms: Drop CONFIG_CFI_CLANG workarounds
+  x86/tools/relocs: Ignore __kcfi_typeid_ relocations
+  x86: Add types to indirectly called assembly functions
+  x86/purgatory: Disable CFI
+  x86: Add support for CONFIG_CFI_CLANG
+
+ Makefile                                  |  13 +-
+ arch/Kconfig                              |  18 +-
+ arch/arm64/crypto/ghash-ce-core.S         |   5 +-
+ arch/arm64/crypto/sm3-ce-core.S           |   3 +-
+ arch/arm64/include/asm/brk-imm.h          |   6 +
+ arch/arm64/include/asm/ftrace.h           |   2 +-
+ arch/arm64/include/asm/mmu_context.h      |   4 +-
+ arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
+ arch/arm64/kernel/alternative.c           |   2 +-
+ arch/arm64/kernel/cpu-reset.S             |   5 +-
+ arch/arm64/kernel/cpufeature.c            |   4 +-
+ arch/arm64/kernel/ftrace.c                |   2 +-
+ arch/arm64/kernel/machine_kexec.c         |   2 +-
+ arch/arm64/kernel/psci.c                  |   2 +-
+ arch/arm64/kernel/smp_spin_table.c        |   2 +-
+ arch/arm64/kernel/traps.c                 |  47 ++-
+ arch/arm64/kernel/vdso/Makefile           |   3 +-
+ arch/arm64/mm/proc.S                      |   5 +-
+ arch/x86/Kconfig                          |   2 +
+ arch/x86/crypto/blowfish-x86_64-asm_64.S  |   5 +-
+ arch/x86/entry/vdso/Makefile              |   3 +-
+ arch/x86/include/asm/cfi.h                |  22 ++
+ arch/x86/include/asm/linkage.h            |  12 +
+ arch/x86/kernel/Makefile                  |   2 +
+ arch/x86/kernel/cfi.c                     |  83 ++++++
+ arch/x86/kernel/traps.c                   |   4 +-
+ arch/x86/lib/memcpy_64.S                  |   3 +-
+ arch/x86/purgatory/Makefile               |   4 +
+ arch/x86/tools/relocs.c                   |   1 +
+ drivers/firmware/efi/libstub/Makefile     |   2 +
+ drivers/firmware/psci/psci.c              |   4 +-
+ drivers/misc/lkdtm/cfi.c                  |  15 +-
+ drivers/misc/lkdtm/usercopy.c             |   2 +-
+ include/asm-generic/bug.h                 |  16 -
+ include/asm-generic/vmlinux.lds.h         |  37 +--
+ include/linux/cfi.h                       |  59 ++--
+ include/linux/cfi_types.h                 |  57 ++++
+ include/linux/compiler-clang.h            |  14 +-
+ include/linux/compiler.h                  |  16 +-
+ include/linux/compiler_types.h            |   4 -
+ include/linux/init.h                      |   6 +-
+ include/linux/module.h                    |  10 +-
+ include/linux/pci.h                       |   4 +-
+ kernel/cfi.c                              | 342 ++++------------------
+ kernel/kallsyms.c                         |  17 --
+ kernel/kthread.c                          |   3 +-
+ kernel/module/main.c                      |  49 +---
+ kernel/workqueue.c                        |   2 +-
+ scripts/kallsyms.c                        |   1 +
+ scripts/module.lds.S                      |  23 +-
+ tools/objtool/check.c                     |   7 +-
+ 51 files changed, 420 insertions(+), 538 deletions(-)
+ create mode 100644 arch/x86/include/asm/cfi.h
+ create mode 100644 arch/x86/kernel/cfi.c
+ create mode 100644 include/linux/cfi_types.h
+
+--=20
+2.36.1.476.g0c4daa206d-goog
+
