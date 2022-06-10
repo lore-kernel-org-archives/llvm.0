@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926F57C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:35:23 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-310061f47faso6124627b3.9
-        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:35:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6267C
+	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:35:25 +0000 (UTC)
+Received: by mail-pl1-f202.google.com with SMTP id q2-20020a170902dac200b00168b3978426so268514plx.17
+        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Si2zThK/cQ+YU/f1Z8SyXTE8x1Zbkj8sRWIw7mytKdI=;
-        b=lu1c815DHLO3vYYlHgv9VEC9cGMuG664QTS3S6iBxbRPe/UyZKjZaCKOIhfGpYS7W9
-         kiWgYizu2AWkTbne8QBPeHi1wCn2XRLj0Ku6y35X6YUfDPtcbnfin603ydhbiJPB+FnJ
-         7uq/xZtd26FkDKM2R2Jaw3Xo2Gt3s38v1H+KM2GM0PSLJz62kYDBpAalCuH4xMCES36+
-         1aQTG4y7qZF49jF/rbLRdzgomJ7XiuOZroeratV3bbaVq13ReuGrt0JV4oo4aM7wuBaT
-         fPWLWGY2h3kVz992fst8mCcYtjyi0c/IycDd9J2XXk0qO5wrxsj7FdZrrTQuRbmSUnvS
-         WycA==
+        bh=McmKeDfQU54OT2ddjesNbtVSHYxn5HOZJ/k/YIxSA2Q=;
+        b=pKSmswC9i7CgIKNd8Ueb3Mz+6W8hfA6K3s8z6NmKiL9LavoDEDZ6LuI6xYKZyL/Qkr
+         160+qtQ1m3Pr4c4JAr7nYajwE1TSz/y2E1Rrx9U++y9J2+JSWlXRC5Nl3ytA7Ul5xzdO
+         LISOUP2H04z2pfT/iuQxpK756TTuJdOX8Llgnt3mEUhHJ4JH2+YFORRQmfjqRsJn4Bha
+         d2lJj5ycPYMuGuK+7809rBwk55D2MIZfdYbMtD+yfSi3pj5+WYVoynmFYFomThVrwt7o
+         j7kMxaeyxnvLaVO3AbnVftP4ICSRzwZIOsIGKZKiAR/cybwHZ+1F8gwFFjHtiLh7Ahn2
+         MnjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Si2zThK/cQ+YU/f1Z8SyXTE8x1Zbkj8sRWIw7mytKdI=;
-        b=NcmVHt/gli+YqE6KCOj9diHlIPCer6C+NDiWU5iuJIhWJnhYnkVSMoHrTyDaOVgPUn
-         pYsBXsUCK3JCGN8bNg7ISLR6s8rX6OZAorpwzndnSAsv9J9WANz+J2hDfuqPwPExMfXk
-         vQWNneuRp4kh+OK7MheSlOd5Q7uzrBaHDzYV+ZSLgcC8RGeK7JWT7ZE8/cM4SC0l8Ucu
-         thI2xiXqrmZm9zd/OQ4vxdZzmIMOEArxdDTbkkcYxqz6dWo/xwPwYW96b//+VTSyaktl
-         4AORK92aLvM9UYxAk1so9i/Lxq/ISq+N6cYAbSZvwajph2Z8Zmr/lONS8UgMukLgd450
-         wxjg==
-X-Gm-Message-State: AOAM5313/B7XFCOcViYj1lW2HY3GfZGwh25ZxMz3jrCkAc80h8ly5QC+
-	HuAJp4mL3XoVfZyd9vcw46FrzprYYrsNBzX5vqQ=
-X-Google-Smtp-Source: ABdhPJypIJOd3i/1xJM9o6nKY162tuWeOAIfDIRloirJMFOZoyUs9zQ5+vDJpbaFJez7Qbi7ZSDv6IBRMyhxSHYIDBU=
+        bh=McmKeDfQU54OT2ddjesNbtVSHYxn5HOZJ/k/YIxSA2Q=;
+        b=yEh1ZYJPCGjZnJ5ZdJv7KebjICxaM0wWkfwTFWe/lFbD0ObVRMzfoVLWbs4kNFklVY
+         nF9KDCGiueZ+dcnbR8lu9WPBnsTHUY08+NXoyy19lw1SKLEQyETEKS4QPElsi+gjWvYQ
+         Vr1wtAhqo4Sv/u7U6GguRTkdaqySaq7GH5Bf2Ejm4KOXlnXfAmUnWcoYWIXwwGag5Myq
+         lSb/7t9CQxyzok/hY8s4vSAkDmm85aS7uqMZUuoZ8EZgTstAalEHzAOu6OkJCuVDe9p2
+         vuNX4ADF0Gjfr4NSo+PABaYCkQv6Nj+AZnxgkQUSGy3aFh88cNetvIHNtACaqXSo7gU8
+         wVvQ==
+X-Gm-Message-State: AOAM532eYWMGqMls6B4dR5TV7/NcLMdumFyH+fx3PZW0mzWAgGe4cYFe
+	kZyw0F3HZFmc0b2JTDwQk0BF553KJHtWk8KlHMw=
+X-Google-Smtp-Source: ABdhPJwgQhAUrkZ2E3ncordFI1QLNbwk0KpIEhulvG6cFyGBziAQCqlrz6Jc+ed47AfAPj4RJHLMezGZqpWcUfbVd+4=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f464:6db6:3d47:ed14])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:114b:b0:663:95f6:93d0 with
- SMTP id p11-20020a056902114b00b0066395f693d0mr30065092ybu.537.1654904122653;
- Fri, 10 Jun 2022 16:35:22 -0700 (PDT)
-Date: Fri, 10 Jun 2022 16:34:56 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a65:4149:0:b0:3fb:1476:d0dc with SMTP
+ id x9-20020a654149000000b003fb1476d0dcmr41179133pgp.373.1654904124994; Fri,
+ 10 Jun 2022 16:35:24 -0700 (PDT)
+Date: Fri, 10 Jun 2022 16:34:57 -0700
 In-Reply-To: <20220610233513.1798771-1-samitolvanen@google.com>
-Message-Id: <20220610233513.1798771-4-samitolvanen@google.com>
+Message-Id: <20220610233513.1798771-5-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,18 +45,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20220610233513.1798771-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10380; h=from:subject;
- bh=TO1/+zizgxwvKk5gJ1i/jsvxyM2WIa8oPqE6at3yJTE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBio9UtZaaKD00AgLCXnbFUQcRJN4V5XH2JS/UrQwby
- 4NY7oUCJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLQAKCRBMtfaEi7xW7gCSC/
- oCWUAZsYvDnr6guM4Z0VXVyIGQ3xMcO8ryEAOfNgHtSfxrfYoQFQFuWYCN/oJBuxAaIdW5idyZ7V7A
- yznVGd3TRYEC+3d00HYBSMFJ1lSBBa6l6388ueE+D+MSc2gk1hgr2EkcVUhCNwtdCxA7mOQ7MuhJXY
- pwtM/KjV2PZU26XyddlF/K0bzjyVmuicHzeS4BervTGA6NPS4CAk5iF3em244yY6vuyw3B/zLTi5oZ
- MpXIEp6DWOyf/a/afxR2L/+79AubJZC95UvNX8siPHe5duuWi8+uhMOC8wtTCB4pdL9qPZW4fT3oy0
- b9WkWPeLYUL4bWQvB4yGglzdYGwgu/VAFAZHtOP+pq9ZEQEN/NhdoOnUqi1fuvDCAPBfl82gy/YflT
- cmxjSdIn4P9K1/hcYdBZhAre3aGkljzVtEu/OSTOChllGyFT7W2tWoTjpvmzp1XNeDaA80K6apII2j
- 2tyDuq8u8/fM/tZ3VslvUX+0szdrtekizvdZn0GpII2QQ=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3262; h=from:subject;
+ bh=hbOGCW0Qi8kWOELjdrp8JGjjRWA8+I9n0fNulcEZcDg=; b=owEB7AET/pANAwAKAUy19oSLvFbuAcsmYgBio9UtgU/4jH18jloCAgXuwbucQRi4omU8/F8NLShQ
+ oWKWan2JAbIEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYqPVLQAKCRBMtfaEi7xW7sBKC/
+ iex5GdKDqwH+DynVX5SiIJ/O/kBiCxebuuv+PRNnuuu5NP3jE7hyT+5F6E93ER1zUiBBK717u3FgLM
+ L/KlhU6pU7G104AQ8tdX1EU7D34Q2YLaJaHJT0vOywEEKfCCVNO+h3Nx/jZ+PHXxg1QbXtXlSWqwD4
+ +/kvY1WrcT2i0BoLP1VvzxkSbZ3OIWtWezPEJtmHsP0Zy1M3HZLifJAwutTnmdIsdpv9vZQ68g8N1R
+ S/V+L3L0LNtSorcPqo4u5nmqsCPPmIuNp+YSGzEHyyTivV/J+hlSsjueuuG+FneyECj2fZXlEwrptx
+ UaYbxCmG+FVcXob7aFxve9hYP4mWfcFcfo7ktgXDRFpRdlXdFOIESUIV0VgVIUuD5GwLoCwcU7BXjp
+ LBOlYl7jufqbE7cbRH0s3GrWLWgb9tXfwvkRiQYvNAsCxgZdDhOJu/Agg+kRH9qOBXZVA7xHUVh+3c
+ PHYJe+YwgEv/MPvMx4VnjwfiMUUrjuw0CqB1kic5eKMA==
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [RFC PATCH v3 03/20] cfi: Remove CONFIG_CFI_CLANG_SHADOW
+Subject: [RFC PATCH v3 04/20] cfi: Drop __CFI_ADDRESSABLE
 From: Sami Tolvanen <samitolvanen@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
@@ -69,363 +69,91 @@ Cc: Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
 	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In preparation to switching to -fsanitize=kcfi, remove support for the
-CFI module shadow that will no longer be needed.
+The __CFI_ADDRESSABLE macro is used for init_module and cleanup_module
+to ensure we have the address of the CFI jump table, and with
+CONFIG_X86_KERNEL_IBT to ensure LTO won't optimize away the symbols.
+As __CFI_ADDRESSABLE is no longer necessary with -fsanitize=kcfi, add
+a more flexible version of the __ADDRESSABLE macro and always ensure
+these symbols won't be dropped.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/Kconfig         |  10 --
- include/linux/cfi.h  |  12 ---
- kernel/cfi.c         | 237 +------------------------------------------
- kernel/module/main.c |  15 ---
- 4 files changed, 1 insertion(+), 273 deletions(-)
+ include/linux/cfi.h      | 20 --------------------
+ include/linux/compiler.h |  6 ++++--
+ include/linux/module.h   |  4 ++--
+ 3 files changed, 6 insertions(+), 24 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index fcf9a41a4ef5..f95245dcab3b 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -745,16 +745,6 @@ config CFI_CLANG
- 
- 	    https://clang.llvm.org/docs/ControlFlowIntegrity.html
- 
--config CFI_CLANG_SHADOW
--	bool "Use CFI shadow to speed up cross-module checks"
--	default y
--	depends on CFI_CLANG && MODULES
--	help
--	  If you select this option, the kernel builds a fast look-up table of
--	  CFI check functions in loaded modules to reduce performance overhead.
--
--	  If unsure, say Y.
--
- config CFI_PERMISSIVE
- 	bool "Use CFI in permissive mode"
- 	depends on CFI_CLANG
 diff --git a/include/linux/cfi.h b/include/linux/cfi.h
-index c6dfc1ed0626..4ab51c067007 100644
+index 4ab51c067007..2cdbc0fbd0ab 100644
 --- a/include/linux/cfi.h
 +++ b/include/linux/cfi.h
-@@ -20,18 +20,6 @@ extern void __cfi_check(uint64_t id, void *ptr, void *diag);
- #define __CFI_ADDRESSABLE(fn, __attr) \
- 	const void *__cfi_jt_ ## fn __visible __attr = (void *)&fn
+@@ -13,26 +13,6 @@ typedef void (*cfi_check_fn)(uint64_t id, void *ptr, void *diag);
+ /* Compiler-generated function in each module, and the kernel */
+ extern void __cfi_check(uint64_t id, void *ptr, void *diag);
  
--#ifdef CONFIG_CFI_CLANG_SHADOW
--
--extern void cfi_module_add(struct module *mod, unsigned long base_addr);
--extern void cfi_module_remove(struct module *mod, unsigned long base_addr);
--
--#else
--
--static inline void cfi_module_add(struct module *mod, unsigned long base_addr) {}
--static inline void cfi_module_remove(struct module *mod, unsigned long base_addr) {}
--
--#endif /* CONFIG_CFI_CLANG_SHADOW */
--
- #else /* !CONFIG_CFI_CLANG */
- 
- #ifdef CONFIG_X86_KERNEL_IBT
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 9594cfd1cf2c..2cc0d01ea980 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -32,237 +32,6 @@ static inline void handle_cfi_failure(void *ptr)
- }
- 
- #ifdef CONFIG_MODULES
--#ifdef CONFIG_CFI_CLANG_SHADOW
 -/*
-- * Index type. A 16-bit index can address at most (2^16)-2 pages (taking
-- * into account SHADOW_INVALID), i.e. ~256M with 4k pages.
+- * Force the compiler to generate a CFI jump table entry for a function
+- * and store the jump table address to __cfi_jt_<function>.
 - */
--typedef u16 shadow_t;
--#define SHADOW_INVALID		((shadow_t)~0UL)
+-#define __CFI_ADDRESSABLE(fn, __attr) \
+-	const void *__cfi_jt_ ## fn __visible __attr = (void *)&fn
 -
--struct cfi_shadow {
--	/* Page index for the beginning of the shadow */
--	unsigned long base;
--	/* An array of __cfi_check locations (as indices to the shadow) */
--	shadow_t shadow[1];
--} __packed;
+-#else /* !CONFIG_CFI_CLANG */
 -
--/*
-- * The shadow covers ~128M from the beginning of the module region. If
-- * the region is larger, we fall back to __module_address for the rest.
-- */
--#define __SHADOW_RANGE		(_UL(SZ_128M) >> PAGE_SHIFT)
+-#ifdef CONFIG_X86_KERNEL_IBT
 -
--/* The in-memory size of struct cfi_shadow, always at least one page */
--#define __SHADOW_PAGES		((__SHADOW_RANGE * sizeof(shadow_t)) >> PAGE_SHIFT)
--#define SHADOW_PAGES		max(1UL, __SHADOW_PAGES)
--#define SHADOW_SIZE		(SHADOW_PAGES << PAGE_SHIFT)
+-#define __CFI_ADDRESSABLE(fn, __attr) \
+-	const void *__cfi_jt_ ## fn __visible __attr = (void *)&fn
 -
--/* The actual size of the shadow array, minus metadata */
--#define SHADOW_ARR_SIZE		(SHADOW_SIZE - offsetof(struct cfi_shadow, shadow))
--#define SHADOW_ARR_SLOTS	(SHADOW_ARR_SIZE / sizeof(shadow_t))
+-#endif /* CONFIG_X86_KERNEL_IBT */
 -
--static DEFINE_MUTEX(shadow_update_lock);
--static struct cfi_shadow __rcu *cfi_shadow __read_mostly;
--
--/* Returns the index in the shadow for the given address */
--static inline int ptr_to_shadow(const struct cfi_shadow *s, unsigned long ptr)
--{
--	unsigned long index;
--	unsigned long page = ptr >> PAGE_SHIFT;
--
--	if (unlikely(page < s->base))
--		return -1; /* Outside of module area */
--
--	index = page - s->base;
--
--	if (index >= SHADOW_ARR_SLOTS)
--		return -1; /* Cannot be addressed with shadow */
--
--	return (int)index;
--}
--
--/* Returns the page address for an index in the shadow */
--static inline unsigned long shadow_to_ptr(const struct cfi_shadow *s,
--	int index)
--{
--	if (unlikely(index < 0 || index >= SHADOW_ARR_SLOTS))
--		return 0;
--
--	return (s->base + index) << PAGE_SHIFT;
--}
--
--/* Returns the __cfi_check function address for the given shadow location */
--static inline unsigned long shadow_to_check_fn(const struct cfi_shadow *s,
--	int index)
--{
--	if (unlikely(index < 0 || index >= SHADOW_ARR_SLOTS))
--		return 0;
--
--	if (unlikely(s->shadow[index] == SHADOW_INVALID))
--		return 0;
--
--	/* __cfi_check is always page aligned */
--	return (s->base + s->shadow[index]) << PAGE_SHIFT;
--}
--
--static void prepare_next_shadow(const struct cfi_shadow __rcu *prev,
--		struct cfi_shadow *next)
--{
--	int i, index, check;
--
--	/* Mark everything invalid */
--	memset(next->shadow, 0xFF, SHADOW_ARR_SIZE);
--
--	if (!prev)
--		return; /* No previous shadow */
--
--	/* If the base address didn't change, an update is not needed */
--	if (prev->base == next->base) {
--		memcpy(next->shadow, prev->shadow, SHADOW_ARR_SIZE);
--		return;
--	}
--
--	/* Convert the previous shadow to the new address range */
--	for (i = 0; i < SHADOW_ARR_SLOTS; ++i) {
--		if (prev->shadow[i] == SHADOW_INVALID)
--			continue;
--
--		index = ptr_to_shadow(next, shadow_to_ptr(prev, i));
--		if (index < 0)
--			continue;
--
--		check = ptr_to_shadow(next,
--				shadow_to_check_fn(prev, prev->shadow[i]));
--		if (check < 0)
--			continue;
--
--		next->shadow[index] = (shadow_t)check;
--	}
--}
--
--static void add_module_to_shadow(struct cfi_shadow *s, struct module *mod,
--			unsigned long min_addr, unsigned long max_addr)
--{
--	int check_index;
--	unsigned long check = (unsigned long)mod->cfi_check;
--	unsigned long ptr;
--
--	if (unlikely(!PAGE_ALIGNED(check))) {
--		pr_warn("cfi: not using shadow for module %s\n", mod->name);
--		return;
--	}
--
--	check_index = ptr_to_shadow(s, check);
--	if (check_index < 0)
--		return; /* Module not addressable with shadow */
--
--	/* For each page, store the check function index in the shadow */
--	for (ptr = min_addr; ptr <= max_addr; ptr += PAGE_SIZE) {
--		int index = ptr_to_shadow(s, ptr);
--
--		if (index >= 0) {
--			/* Each page must only contain one module */
--			WARN_ON_ONCE(s->shadow[index] != SHADOW_INVALID);
--			s->shadow[index] = (shadow_t)check_index;
--		}
--	}
--}
--
--static void remove_module_from_shadow(struct cfi_shadow *s, struct module *mod,
--		unsigned long min_addr, unsigned long max_addr)
--{
--	unsigned long ptr;
--
--	for (ptr = min_addr; ptr <= max_addr; ptr += PAGE_SIZE) {
--		int index = ptr_to_shadow(s, ptr);
--
--		if (index >= 0)
--			s->shadow[index] = SHADOW_INVALID;
--	}
--}
--
--typedef void (*update_shadow_fn)(struct cfi_shadow *, struct module *,
--			unsigned long min_addr, unsigned long max_addr);
--
--static void update_shadow(struct module *mod, unsigned long base_addr,
--		update_shadow_fn fn)
--{
--	struct cfi_shadow *prev;
--	struct cfi_shadow *next;
--	unsigned long min_addr, max_addr;
--
--	next = vmalloc(SHADOW_SIZE);
--
--	mutex_lock(&shadow_update_lock);
--	prev = rcu_dereference_protected(cfi_shadow,
--					 mutex_is_locked(&shadow_update_lock));
--
--	if (next) {
--		next->base = base_addr >> PAGE_SHIFT;
--		prepare_next_shadow(prev, next);
--
--		min_addr = (unsigned long)mod->core_layout.base;
--		max_addr = min_addr + mod->core_layout.text_size;
--		fn(next, mod, min_addr & PAGE_MASK, max_addr & PAGE_MASK);
--
--		set_memory_ro((unsigned long)next, SHADOW_PAGES);
--	}
--
--	rcu_assign_pointer(cfi_shadow, next);
--	mutex_unlock(&shadow_update_lock);
--	synchronize_rcu();
--
--	if (prev) {
--		set_memory_rw((unsigned long)prev, SHADOW_PAGES);
--		vfree(prev);
--	}
--}
--
--void cfi_module_add(struct module *mod, unsigned long base_addr)
--{
--	update_shadow(mod, base_addr, add_module_to_shadow);
--}
--
--void cfi_module_remove(struct module *mod, unsigned long base_addr)
--{
--	update_shadow(mod, base_addr, remove_module_from_shadow);
--}
--
--static inline cfi_check_fn ptr_to_check_fn(const struct cfi_shadow __rcu *s,
--	unsigned long ptr)
--{
--	int index;
--
--	if (unlikely(!s))
--		return NULL; /* No shadow available */
--
--	index = ptr_to_shadow(s, ptr);
--	if (index < 0)
--		return NULL; /* Cannot be addressed with shadow */
--
--	return (cfi_check_fn)shadow_to_check_fn(s, index);
--}
--
--static inline cfi_check_fn find_shadow_check_fn(unsigned long ptr)
--{
--	cfi_check_fn fn;
--
--	rcu_read_lock_sched_notrace();
--	fn = ptr_to_check_fn(rcu_dereference_sched(cfi_shadow), ptr);
--	rcu_read_unlock_sched_notrace();
--
--	return fn;
--}
--
--#else /* !CONFIG_CFI_CLANG_SHADOW */
--
--static inline cfi_check_fn find_shadow_check_fn(unsigned long ptr)
--{
--	return NULL;
--}
--
--#endif /* CONFIG_CFI_CLANG_SHADOW */
+ #endif /* CONFIG_CFI_CLANG */
  
- static inline cfi_check_fn find_module_check_fn(unsigned long ptr)
- {
-@@ -291,11 +60,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
- 	 * up if necessary.
- 	 */
- 	RCU_NONIDLE({
--		if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
--			fn = find_shadow_check_fn(ptr);
--
--		if (!fn)
--			fn = find_module_check_fn(ptr);
-+		fn = find_module_check_fn(ptr);
- 	});
- 
- 	return fn;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index fed58d30725d..b576b9fccec2 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1139,8 +1139,6 @@ void __weak module_arch_freeing_init(struct module *mod)
- {
- }
- 
--static void cfi_cleanup(struct module *mod);
--
- /* Free a module, remove from lists, etc. */
- static void free_module(struct module *mod)
- {
-@@ -1185,9 +1183,6 @@ static void free_module(struct module *mod)
- 		       mod->name);
- 	mutex_unlock(&module_mutex);
- 
--	/* Clean up CFI for the module. */
--	cfi_cleanup(mod);
--
- 	/* This may be empty, but that's OK */
- 	module_arch_freeing_init(mod);
- 	module_memfree(mod->init_layout.base);
-@@ -2849,7 +2844,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	synchronize_rcu();
- 	kfree(mod->args);
-  free_arch_cleanup:
--	cfi_cleanup(mod);
- 	module_arch_cleanup(mod);
-  free_modinfo:
- 	free_modinfo(mod);
-@@ -2957,15 +2951,6 @@ static void cfi_init(struct module *mod)
- 	if (exit)
- 		mod->exit = *exit;
- #endif
--
--	cfi_module_add(mod, mod_tree.addr_min);
+-#ifndef __CFI_ADDRESSABLE
+-#define __CFI_ADDRESSABLE(fn, __attr)
 -#endif
--}
 -
--static void cfi_cleanup(struct module *mod)
--{
--#ifdef CONFIG_CFI_CLANG
--	cfi_module_remove(mod, mod_tree.addr_min);
+ #endif /* _LINUX_CFI_H */
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 01ce94b58b42..63be1c23d676 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -221,9 +221,11 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+  * otherwise, or eliminated entirely due to lack of references that are
+  * visible to the compiler.
+  */
+-#define __ADDRESSABLE(sym) \
+-	static void * __section(".discard.addressable") __used \
++#define ___ADDRESSABLE(sym, __attrs) \
++	static void * __used __attrs \
+ 		__UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)&sym;
++#define __ADDRESSABLE(sym) \
++	___ADDRESSABLE(sym, __section(".discard.addressable"))
+ 
+ /**
+  * offset_to_ptr - convert a relative memory offset to an absolute pointer
+diff --git a/include/linux/module.h b/include/linux/module.h
+index abd9fa916b7d..efecd65a976d 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -132,7 +132,7 @@ extern void cleanup_module(void);
+ 	{ return initfn; }					\
+ 	int init_module(void) __copy(initfn)			\
+ 		__attribute__((alias(#initfn)));		\
+-	__CFI_ADDRESSABLE(init_module, __initdata);
++	___ADDRESSABLE(init_module, __initdata);
+ 
+ /* This is only required if you want to be unloadable. */
+ #define module_exit(exitfn)					\
+@@ -140,7 +140,7 @@ extern void cleanup_module(void);
+ 	{ return exitfn; }					\
+ 	void cleanup_module(void) __copy(exitfn)		\
+ 		__attribute__((alias(#exitfn)));		\
+-	__CFI_ADDRESSABLE(cleanup_module, __exitdata);
++	___ADDRESSABLE(cleanup_module, __exitdata);
+ 
  #endif
- }
  
 -- 
 2.36.1.476.g0c4daa206d-goog
