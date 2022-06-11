@@ -1,60 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3D27A
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 18:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1827A
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 19:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654973192; x=1686509192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kyT6KKWjC/OdmE81Ef78B9jpCvknrCcdviqYlOzkN2I=;
-  b=dPCjKtaMJCYzLrmviWFc7ufW8qG9ZMrQ1RvuAvnHlqI1+HhvVBbxdgX7
-   /ubTuIq8hrsP3CyGlop4p1/3IAaLWK0fFiMkz2uQXfCqBUqXjkd+DaE+s
-   UhzHwuQNojP031oY1GMGXgE2IUGcdOdFxQ5ph838dZVRFNi1jNFx0yl+i
-   zWAJIIse+lIZ2drYQ/MoYzqPVHltnIJ2qX2b7hVlep6djXwK2oteEyWU6
-   EGLBCbKLVJ72PirOJmmzcovOe0AMoKM5eajPZGSlO0dJTE4sJAocjZaig
-   XmO41jAsA26Q4wiI5oJ/BoQ/8qiJkLP8kP6qfkIizYJKaGJQEdC2btug3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="279020602"
+  t=1654976983; x=1686512983;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/ZFGPLkyONf/JsUbHu0bGT5izJ3milxCWt08TzL/c08=;
+  b=gcL4rWxSa+3mP3zL+MesqNHLRu56dgjcf3PkpzvSRuBGcqEh5ivuWsRd
+   O5y747n/9JHoZa7d3fvxzWDBrHOak35NKgYL9HL7S8EaOGBP8Q77gkNvt
+   QNUUmAov6nyi1YeMlhFuGUQ2n5Ih+610+Sz/S6PNmwEjSMUg22leUXhPo
+   03HlbbohM3npVA7In3KRfR+0sFYv2dkxtGSpnQXh5MTp4WycoRLkZdbL+
+   Pi3m0NmtDAGgpX3Jlbk9/nTlsuHshMMZQj2LEpvf0ljQF7OiFG/6i9C71
+   0ByaUSYSapY22O4d4v30nVwvdpBUYiBLvaRY0hpCX+V05fsTW+oPA2SRc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="278695536"
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="279020602"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 11:46:32 -0700
+   d="scan'208";a="278695536"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 12:49:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="760973379"
+   d="scan'208";a="638837058"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 11 Jun 2022 11:46:26 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2022 12:49:41 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o067t-000JCD-Fy;
-	Sat, 11 Jun 2022 18:46:25 +0000
-Date: Sun, 12 Jun 2022 02:45:35 +0800
+	id 1o0776-000JEj-CI;
+	Sat, 11 Jun 2022 19:49:40 +0000
+Date: Sun, 12 Jun 2022 03:48:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Colin Foster <colin.foster@in-advantage.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org
+To: Jonathan McDowell <noodles@fb.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Lars Povlsen <lars.povlsen@microchip.com>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v10 net-next 7/7] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <202206120247.2zx79Zg9-lkp@intel.com>
-References: <20220610202330.799510-8-colin.foster@in-advantage.com>
+	linux-kernel@vger.kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>
+Subject: [daveh-devel:testme 2/2] drivers/of/kexec.c:126:5: warning: no
+ previous prototype for function 'ima_get_kexec_buffer'
+Message-ID: <202206120314.1cOFS37U-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,73 +47,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610202330.799510-8-colin.foster@in-advantage.com>
 
-Hi Colin,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b97dcb85750b7e8bc5aaed5403ddf4b0552c7993
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220612/202206120247.2zx79Zg9-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git testme
+head:   a217a1ebac788fd28ccf79499e9e12e5519d70b7
+commit: a217a1ebac788fd28ccf79499e9e12e5519d70b7 [2/2] x86/kexec: Carry forward IMA measurement log on kexec
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220612/202206120314.1cOFS37U-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/60523f7239bade660c86be121bd29954c24f53df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
-        git checkout 60523f7239bade660c86be121bd29954c24f53df
+        # https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/commit/?id=a217a1ebac788fd28ccf79499e9e12e5519d70b7
+        git remote add daveh-devel https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git
+        git fetch --no-tags daveh-devel testme
+        git checkout a217a1ebac788fd28ccf79499e9e12e5519d70b7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/of/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/mfd/ocelot-core.c:118:40: error: initializer element is not a compile-time constant
-                   .of_reg = vsc7512_miim0_resources[0].start,
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   1 error generated.
+>> drivers/of/kexec.c:126:5: warning: no previous prototype for function 'ima_get_kexec_buffer' [-Wmissing-prototypes]
+   int ima_get_kexec_buffer(void **addr, size_t *size)
+       ^
+   drivers/of/kexec.c:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ima_get_kexec_buffer(void **addr, size_t *size)
+   ^
+   static 
+>> drivers/of/kexec.c:153:5: warning: no previous prototype for function 'ima_free_kexec_buffer' [-Wmissing-prototypes]
+   int ima_free_kexec_buffer(void)
+       ^
+   drivers/of/kexec.c:153:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ima_free_kexec_buffer(void)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +118 drivers/mfd/ocelot-core.c
+vim +/ima_get_kexec_buffer +126 drivers/of/kexec.c
 
-   103	
-   104	static const struct mfd_cell vsc7512_devs[] = {
-   105		{
-   106			.name = "ocelot-pinctrl",
-   107			.of_compatible = "mscc,ocelot-pinctrl",
-   108			.num_resources = ARRAY_SIZE(vsc7512_pinctrl_resources),
-   109			.resources = vsc7512_pinctrl_resources,
-   110		}, {
-   111			.name = "ocelot-sgpio",
-   112			.of_compatible = "mscc,ocelot-sgpio",
-   113			.num_resources = ARRAY_SIZE(vsc7512_sgpio_resources),
-   114			.resources = vsc7512_sgpio_resources,
-   115		}, {
-   116			.name = "ocelot-miim0",
-   117			.of_compatible = "mscc,ocelot-miim",
- > 118			.of_reg = vsc7512_miim0_resources[0].start,
-   119			.use_of_reg = true,
-   120			.num_resources = ARRAY_SIZE(vsc7512_miim0_resources),
-   121			.resources = vsc7512_miim0_resources,
-   122		}, {
-   123			.name = "ocelot-miim1",
-   124			.of_compatible = "mscc,ocelot-miim",
-   125			.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
-   126			.of_reg = vsc7512_miim1_resources[0].start,
-   127			.use_of_reg = true,
-   128			.resources = vsc7512_miim1_resources,
-   129		},
-   130	};
-   131	
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  118  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  119  /**
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  120   * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  121   * @addr:	On successful return, set to point to the buffer contents.
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  122   * @size:	On successful return, set to the buffer size.
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  123   *
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  124   * Return: 0 on success, negative errno on error.
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  125   */
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21 @126  int ima_get_kexec_buffer(void **addr, size_t *size)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  127  {
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  128  	int ret, len;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  129  	unsigned long tmp_addr;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  130  	size_t tmp_size;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  131  	const void *prop;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  132  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  133  	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  134  		return -ENOTSUPP;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  135  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  136  	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  137  	if (!prop)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  138  		return -ENOENT;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  139  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  140  	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  141  	if (ret)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  142  		return ret;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  143  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  144  	*addr = __va(tmp_addr);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  145  	*size = tmp_size;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  146  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  147  	return 0;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  148  }
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  149  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  150  /**
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  151   * ima_free_kexec_buffer - free memory used by the IMA buffer
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  152   */
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21 @153  int ima_free_kexec_buffer(void)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  154  {
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  155  	int ret;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  156  	unsigned long addr;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  157  	size_t size;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  158  	struct property *prop;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  159  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  160  	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  161  		return -ENOTSUPP;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  162  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  163  	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  164  	if (!prop)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  165  		return -ENOENT;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  166  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  167  	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  168  	if (ret)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  169  		return ret;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  170  
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  171  	ret = of_remove_property(of_chosen, prop);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  172  	if (ret)
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  173  		return ret;
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  174  
+3ecc68349bbab6 Mike Rapoport           2021-11-05  175  	return memblock_phys_free(addr, size);
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  176  }
+fee3ff99bc6760 Lakshmi Ramasubramanian 2021-02-21  177  
+
+:::::: The code at line 126 was first introduced by commit
+:::::: fee3ff99bc67604fba77f19da0106f3ec52b1956 powerpc: Move arch independent ima kexec functions to drivers/of/kexec.c
+
+:::::: TO: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+:::::: CC: Rob Herring <robh@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
