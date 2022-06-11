@@ -1,102 +1,157 @@
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2458E620
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 08:43:57 +0000 (UTC)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 25B8ewkW029964
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 17:40:58 +0900
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 25B8ekaf027954
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 17:40:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25B8ekaf027954
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1654936847;
-	bh=GjObk4qkn+wKKzrcBcuYF59rT44eRBod2haAId0PbXY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PREvLjGPWl2vpwAWxu9YrCKddWls2iwOpHhGWM+1kaRRovK1JCxy+uSn609YV0gI3
-	 08EmkdWb1tfsUC5IIRcF9TVUwP2tsuiirzSg3n/Q/5KcSgJup393cJvlf8XIHkSOLq
-	 304Rmb98sPeK4Nix+tSz/RQgmbXaOLkBV0yssM2ySNpzx2x88QOUpmD6ssrxiP3mNr
-	 m7dnQhG+MZmxSvlpNzh281ddse/dHcTvqFdvIaBZobn3pqDYiBAsteRN1Iswjqoz24
-	 tKpNmExTO5+ytUN2BKTKoNdEjCDwykfiKV0j2dShtcgnxPnLWqhxYO+7DW75Pn7Y2C
-	 BF5+6NoT+6RPg==
-X-Nifty-SrcIP: [209.85.221.46]
-Received: by mail-wr1-f46.google.com with SMTP id s1so1255758wra.9
-        for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 01:40:47 -0700 (PDT)
-X-Gm-Message-State: AOAM5306qNaiqzWGGj8emhnQnQrBw3L47hyrem3FHVEtjxaMvCvaoIds
-	uCLzdgXH1104o9wPnGRH1pzXnzrArLnc4C7NLnE=
-X-Google-Smtp-Source: ABdhPJyiHW2W3e41O1pSCmct30Roanq1/4GAP7WtMOyFwG8Wk3ea+wpvffMHRIqX+Lt7EbWt196HX8/OmJhdHyIm+Iw=
-X-Received: by 2002:adf:f902:0:b0:20e:66db:b9d2 with SMTP id
- b2-20020adff902000000b0020e66dbb9d2mr48895378wrr.682.1654936845690; Sat, 11
- Jun 2022 01:40:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E427F3
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 10:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654942932; x=1686478932;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gC2juinoSHEY0+8X831/SBR5lbbv9snE6ZelIhvr+uA=;
+  b=B2y3MCmtlF0xGgp1nXVvE0T+yeY6XveglSQhRaGB4SRCQq6vBdavYFhD
+   XaZLvDU0v893dqeTm3L1uWGKGbo/YfbrVZMxuEkCsUZ98xwU0BQ+/G9kl
+   PtW+yzAWBhqUGOwub6c9Qtz/dA+ozpYU19eKx+Xh6nCY+01y7t4VzTuIV
+   DAx06LCk4bXJPJMBS+/jft785vIh0znBVmL9HXKAlQCpXIPeJ1mYn7QBZ
+   b7MKs2ulVrFHX8Vs436GZXmdyWLyYUbnd8HWSnQdDcYTNPHmK3fsrWKl3
+   23cui6HkoJJ/Y+dHoL3ILIbcd6mZ3/b5l2NORD0iUWWOZXk6pjcP52rYU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="341903615"
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="341903615"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 03:22:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
+   d="scan'208";a="828714157"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Jun 2022 03:22:10 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzyFu-000InV-3j;
+	Sat, 11 Jun 2022 10:22:10 +0000
+Date: Sat, 11 Jun 2022 18:22:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 57/57]
+ fs/netfs/buffered_write.c:934:2: warning: TRIGGER NEW FLUSH GROUP FOR
+ TESTING
+Message-ID: <202206111840.22bAafuo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220610213453.630304-1-alvin@pqrs.dk> <20220610213959.bjrw6nrxaby2lb3g@bang-olufsen.dk>
-In-Reply-To: <20220610213959.bjrw6nrxaby2lb3g@bang-olufsen.dk>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 11 Jun 2022 17:40:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQaN0pH01Ntsn9jRxciaiYtWUA8MJeJ9ELiXrrbQwms6g@mail.gmail.com>
-Message-ID: <CAK7LNAQaN0pH01Ntsn9jRxciaiYtWUA8MJeJ9ELiXrrbQwms6g@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: use a pipe rather than process substitution
-To: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Jun 11, 2022 at 6:40 AM Alvin =C5=A0ipraga <ALSI@bang-olufsen.dk> w=
-rote:
->
-> On Fri, Jun 10, 2022 at 11:34:52PM +0200, Alvin =C5=A0ipraga wrote:
-> > From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
-> >
-> > Bash process substitution of the form `foo < <(bar)`, as found in
-> > scripts/check-local-export, can cause issues in chrooted environments
-> > and with tools such as pseudo. The blamed commit started to cause build
-> > errors for me when using the Yocto project's devshell environment;
-> > devshell uses pseudo internally:
-> >
-> > .../scripts/check-local-export: line 51: /dev/fd/63: No such file or di=
-rectory
-> >
-> > Replace the process substitution with a simple pipe into the while loop=
-.
-> > This is functionally equivalent and more portable than the former. Note
-> > that pipefail is enabled so that the script terminates when ${NM} fails=
-.
-> >
-> > Link: https://bugzilla.yoctoproject.org/show_bug.cgi?id=3D13288
-> > Fixes: 31cb50b5590f ("kbuild: check static EXPORT_SYMBOL* by script ins=
-tead of modpost")
-> > Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
->
-> Oops, I forgot to check the linux-kbuild list before sending this patch. =
-I see
-> that a more robust patch has been posted which addresses a separate issue=
-, but
-> which also solves the issue I was trying to address:
->
-> https://lore.kernel.org/linux-kbuild/20220608011100.486735-1-masahiroy@ke=
-rnel.org/raw
->
-> Please ignore this. Thanks!
->
-> Kind regards,
-> Alvin
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
+commit: c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8 [57/57] netfs: Add a struct to group modifications together and flushed in order
+config: arm-randconfig-r034-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111840.22bAafuo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/netfs/ lib/
 
-No problem. I did not notice I had broken yocto builds,
-and it is good to know it has been solved as well.
-Thanks for the report.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/netfs/buffered_write.c:934:2: warning: TRIGGER NEW FLUSH GROUP FOR TESTING [-W#warnings]
+   #warning TRIGGER NEW FLUSH GROUP FOR TESTING
+    ^
+   fs/netfs/buffered_write.c:22:20: warning: unused function 'netfs_pgoff_before_touch' [-Wunused-function]
+   static inline bool netfs_pgoff_before_touch(pgoff_t a, pgoff_t b)
+                      ^
+   2 warnings generated.
 
 
+vim +934 fs/netfs/buffered_write.c
 
---=20
-Best Regards
-Masahiro Yamada
+   893	
+   894	/**
+   895	 * netfs_file_write_iter - write data to a file
+   896	 * @iocb:	IO state structure
+   897	 * @from:	iov_iter with data to write
+   898	 *
+   899	 * This is a wrapper around __generic_file_write_iter() to be used by most
+   900	 * filesystems. It takes care of syncing the file in case of O_SYNC file and
+   901	 * acquires i_mutex as needed.
+   902	 * Return:
+   903	 * * negative error code if no data has been written at all of
+   904	 *   vfs_fsync_range() failed for a synchronous write
+   905	 * * number of bytes written, even for truncated writes
+   906	 */
+   907	ssize_t netfs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+   908	{
+   909		struct file *file = iocb->ki_filp;
+   910		struct inode *inode = file->f_mapping->host;
+   911		struct netfs_inode *ctx = netfs_inode(inode);
+   912		ssize_t ret;
+   913	
+   914		_enter("%llx,%zx,%llx", iocb->ki_pos, iov_iter_count(from), i_size_read(inode));
+   915	
+   916		inode_lock(inode);
+   917		ret = generic_write_checks(iocb, from);
+   918		if (ret <= 0)
+   919			goto error_unlock;
+   920	
+   921		trace_netfs_write_iter(iocb, from);
+   922	
+   923		/* We can write back this queue in page reclaim */
+   924		current->backing_dev_info = inode_to_bdi(inode);
+   925		ret = file_remove_privs(file);
+   926		if (ret)
+   927			goto error;
+   928	
+   929		ret = file_update_time(file);
+   930		if (ret)
+   931			goto error;
+   932	
+   933		{
+ > 934	#warning TRIGGER NEW FLUSH GROUP FOR TESTING
+   935			static atomic_t jump;
+   936			ret = netfs_require_flush_group(inode, (atomic_inc_return(&jump) & 3) == 3);
+   937			if (ret < 0)
+   938				goto error;
+   939		}
+   940	
+   941		ret = netfs_flush_conflicting_writes(ctx, file, iocb->ki_pos,
+   942						     iov_iter_count(from), NULL);
+   943		if (ret < 0 && ret != -EAGAIN)
+   944			goto error;
+   945	
+   946		if (iocb->ki_flags & IOCB_DIRECT)
+   947			ret = netfs_direct_write_iter(iocb, from);
+   948		else
+   949			ret = netfs_perform_write(iocb, from);
+   950	
+   951	error:
+   952		inode_unlock(inode);
+   953		/* TODO: Wait for DSYNC region here. */
+   954		current->backing_dev_info = NULL;
+   955		return ret;
+   956	error_unlock:
+   957		inode_unlock(inode);
+   958		return ret;
+   959	}
+   960	EXPORT_SYMBOL(netfs_file_write_iter);
+   961	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
