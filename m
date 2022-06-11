@@ -1,44 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFD8A53
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 15:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791E6A21
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 15:52:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654960281; x=1686496281;
+  t=1654962742; x=1686498742;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ed9bTYR0nyjmJR2+k0jBVpXtKnsbpVI4upqyWb1Dflw=;
-  b=hw4eloXoqf4hMmhTgp1ituveXWLlkkSYt22Zs5IQed/rfcblsz86eBPR
-   jXQFCBGcwy219KfwC9NV/fRGZAuHHblarGbF7B558WQol3+td43ioGN7D
-   UahhFmKFHdnipvFGK3R0p2d2m6X4ccojCYkbiFu/8oHWwlFfutn8WIE6N
-   ppVCfqyne8lHrhbIOBNOkVNz9JtH4kcbjuUuwvvlndutF5n2LRSA8Ztel
-   KrZFriFD32+yIrTuXLgyf4FctM2HzAEmXZ8n2aGCF4Ajn0U7s89hVFhNy
-   mGoJdIqsL60JKAHCA4HqoZONdTE2w9erYuMFaOcv4MG1fU4h6WkxTyglB
+  bh=hUZ65Rg3EEiHgzz4LA4Q3Vxkj3mq3OjDaPirGkBxR60=;
+  b=EFhKTUpC9if6bpktPv9nhynajbFGNuTXSzDLYc0Mqmrw9EgSokBlJn8E
+   mvqGeYEU0frB6yGFqbZjNGaExY3m3LTSw36Jz8IyOWMUW9X2PwtVAO9Zc
+   p5sBEPMzR//J+PfnXzTOekmYqQYCuM3yQPpr5f+b4ORwwiJFZHVSdUZr3
+   m1YEYT8Y0AQYYCgd7p19LiANdfpGmnq+YItRiwinYCgaJl9m7epSz4OKG
+   q7ZKpDrOJkyec1HojcDn3vDS4xP82rjqI5nn75urNllQXxMDLvOyF2c/9
+   +l6jVw9fdqbwdZtKWZ1eqXWWJkS/WhX+kqP8A5y+b8kPqJiOSc2YhM3f6
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="341929136"
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258336585"
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="341929136"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:11:20 -0700
+   d="scan'208";a="258336585"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:52:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="611133218"
+   d="scan'208";a="711363163"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 Jun 2022 08:11:18 -0700
+  by orsmga004.jf.intel.com with ESMTP; 11 Jun 2022 08:52:20 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o02lh-000J09-UH;
-	Sat, 11 Jun 2022 15:11:17 +0000
-Date: Sat, 11 Jun 2022 23:10:30 +0800
+	id 1o03PP-000J2X-FP;
+	Sat, 11 Jun 2022 15:52:19 +0000
+Date: Sat, 11 Jun 2022 23:51:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	ceph-devel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-	Jeff Layton <jlayton@kernel.org>
-Subject: [ceph-client:testing 7/9] lib/iov_iter.c:1464:9: warning: comparison
- of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka
- 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *'))
-Message-ID: <202206112305.4DdsErK8-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 443/453]
+ arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used
+Message-ID: <202206112336.404YWKiT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,101 +46,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ceph/ceph-client.git testing
-head:   7b864d005b1f7f6a144420e180891b6401078407
-commit: 3adeefbfca0fd57cc943b7ec0330385f48041f0c [7/9] [DO NOT MERGE] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-config: riscv-randconfig-r034-20220611 (https://download.01.org/0day-ci/archive/20220611/202206112305.4DdsErK8-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
+commit: d4ee16fc8532473025338c594b8fbe6a6faa0887 [443/453] KVM: x86/mmu: update lpage_info on changing page_type
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220611/202206112336.404YWKiT-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/ceph/ceph-client/commit/3adeefbfca0fd57cc943b7ec0330385f48041f0c
-        git remote add ceph-client https://github.com/ceph/ceph-client.git
-        git fetch --no-tags ceph-client testing
-        git checkout 3adeefbfca0fd57cc943b7ec0330385f48041f0c
+        # https://github.com/intel/tdx/commit/d4ee16fc8532473025338c594b8fbe6a6faa0887
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout d4ee16fc8532473025338c594b8fbe6a6faa0887
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/ arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the intel-tdx/kvm-upstream-workaround HEAD 64f3ddf316eab9398414b94e62a01d185e6e94c8 builds fine.
+      It only hurts bisectability.
 
->> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kvm/mmu/mmu.c:18:
+   In file included from arch/x86/kvm/irq.h:15:
+   In file included from include/linux/kvm_host.h:47:
+   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static int memfile_register_notifier(struct file *file, flags,
+                                                           ^
+                                                           int
+>> arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
+           enum kvm_page_type type;
+                              ^
+   2 errors generated.
 
 
-vim +1464 lib/iov_iter.c
+vim +/type +982 arch/x86/kvm/mmu/mmu.c
 
-  1430	
-  1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
-  1432					     struct page **pages, size_t maxsize,
-  1433					     unsigned maxpages, size_t *_start_offset)
-  1434	{
-  1435		unsigned nr, offset;
-  1436		pgoff_t index, count;
-  1437		size_t size = maxsize;
-  1438		loff_t pos;
-  1439	
-  1440		if (!size || !maxpages)
-  1441			return 0;
-  1442	
-  1443		pos = i->xarray_start + i->iov_offset;
-  1444		index = pos >> PAGE_SHIFT;
-  1445		offset = pos & ~PAGE_MASK;
-  1446		*_start_offset = offset;
-  1447	
-  1448		count = 1;
-  1449		if (size > PAGE_SIZE - offset) {
-  1450			size -= PAGE_SIZE - offset;
-  1451			count += size >> PAGE_SHIFT;
-  1452			size &= ~PAGE_MASK;
-  1453			if (size)
-  1454				count++;
-  1455		}
-  1456	
-  1457		if (count > maxpages)
-  1458			count = maxpages;
-  1459	
-  1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
-  1461		if (nr == 0)
-  1462			return 0;
-  1463	
-> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
-  1465	}
-  1466	
+7c45d6a017129b Xiaoyao Li     2021-08-31  977  
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  978  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  979  			    enum pg_level level)
+7c45d6a017129b Xiaoyao Li     2021-08-31  980  {
+7c45d6a017129b Xiaoyao Li     2021-08-31  981  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
+7c45d6a017129b Xiaoyao Li     2021-08-31 @982  	enum kvm_page_type type;
+7c45d6a017129b Xiaoyao Li     2021-08-31  983  	gfn_t base_gfn;
+7c45d6a017129b Xiaoyao Li     2021-08-31  984  
+7c45d6a017129b Xiaoyao Li     2021-08-31  985  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
+7c45d6a017129b Xiaoyao Li     2021-08-31  986  		return;
+7c45d6a017129b Xiaoyao Li     2021-08-31  987  
+7c45d6a017129b Xiaoyao Li     2021-08-31  988  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
+7c45d6a017129b Xiaoyao Li     2021-08-31  989  	type = page_attr->type;
+09cbecc5a0e81f Xiaoyao Li     2022-05-25  990  
+7c45d6a017129b Xiaoyao Li     2021-08-31  991  	/*
+7c45d6a017129b Xiaoyao Li     2021-08-31  992  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
+7c45d6a017129b Xiaoyao Li     2021-08-31  993  	 * page needs to be split means one of the 4K page of it needs to be
+7c45d6a017129b Xiaoyao Li     2021-08-31  994  	 * changed to oppsite type
+7c45d6a017129b Xiaoyao Li     2021-08-31  995  	 */
+d4ee16fc853247 Isaku Yamahata 2022-06-02  996  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
+7c45d6a017129b Xiaoyao Li     2021-08-31  997  }
+7c45d6a017129b Xiaoyao Li     2021-08-31  998  
+
+:::::: The code at line 982 was first introduced by commit
+:::::: 7c45d6a017129b913c57fb0a2cc14a866f2434a4 KVM: MMU: Update page_attr->type when guest converts the page
+
+:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
+:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
