@@ -1,118 +1,179 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1977C
-	for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 23:44:03 +0000 (UTC)
-Received: by mail-lf1-f54.google.com with SMTP id be31so740766lfb.10
-        for <llvm@lists.linux.dev>; Fri, 10 Jun 2022 16:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0LsNMVk4QkQcHLkW7ut/k0O0Yaykk6wclPSmWZ5ifsY=;
-        b=AXZAoRjCkVTGzxCFmAzh/oJWaoE94oMVuck4U6PkHFXm8Manqvzoox91KP0798a6Vm
-         Iif2fnd5/zxMLU0WowWFmFD02PIvRdYbdM8AOKWN07FLf7W3i8ZgvaVIN6ZqOrxJi+Q+
-         SNwkOFBnJdiJ/iMD4ZIHySibtDyYLWJnDV2Jl+l/OlObxnNJPZ+Gp3oKP77OD8CHjZwZ
-         K23us6sh34xesB0jnd7qxO7B7+aQb/9BDyvvn90C40zKoUSvdukZv2F1wed/pqp4HhyW
-         RyYE0sGw1Hex9gbwwYSWvCdaNw4UJ2EJraztGTA91vxlzFCYZr6g/lyW+aOzEEe+E3Xp
-         PqJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0LsNMVk4QkQcHLkW7ut/k0O0Yaykk6wclPSmWZ5ifsY=;
-        b=ma81lrYUAWsEZJI198J348kGLRuTMWls2yozy/X+yGtEhkxFKj5ht30mKCedql/zvT
-         Juq2E8nDkCGCBEb805V1vr3v87jCo3TuZOjPzoyjq7AUC9JDyivI3uEwueaQK7a7QkN2
-         4C12mZLtuySsEb+qNAxOAiQDgSel+1TSzR4y+7lx5JRxFDNKtint9mmbbYj6GhxujWZm
-         UclX9MSzX6rQEv2hVOOvEyIcoJDML7w0jsGD25/nH2ujtro8dZDDD8yGSUxjTveXTb5u
-         eRM6Jr99U0b9rYGNnlnQ7lU37SIIaRn7YZumRo2bEsnnOwILjiCOkLq4Lp1M3Dhjo3mR
-         kHgA==
-X-Gm-Message-State: AOAM531dNyobLZX9FwA9y6Ot18ayohzLgnbsv3ONER+Cj0KCN0LUmDhR
-	RPsY7bPccrqIG4Y/hdIyyv5XtRHHkgfd0LGx9B5+9w==
-X-Google-Smtp-Source: ABdhPJzmnqMLhs1bfP/6LgEEcErMYRF7zruVcTTGgghAvhoIJQutFqUZdi12symO64L5cd0aKgb51yl0Fh7DWLzLDco=
-X-Received: by 2002:a05:6512:3f94:b0:478:7abe:de4a with SMTP id
- x20-20020a0565123f9400b004787abede4amr63212721lfa.401.1654904641567; Fri, 10
- Jun 2022 16:44:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0E164F
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 03:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654918863; x=1686454863;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=agqgZT7RLJJ/GHDSQgEfAwn3LSYYH6TOzTJNHpRnA9s=;
+  b=WzzOXZ9NzmzqLXuOzunVV061DrtXMFY+lXcWwBlVGGVOV+rgRBE3pcRB
+   9Jt//GWsk8rzp69KdwlfrSJgnMGuW9V8lB1d1MV2XtrOf3uOInUEloH/L
+   U96BYU6hOJsOlzZFSdjZhBYLO9LFSDJGpigbJ5Am6sHYN4DeIZOBbLC7e
+   GEwDD3nAfl96h9cxqVCY3n+tmk3R1z20QRcZlTvvcoFJZul6alO7vQ66c
+   F273IvusiSWWTc3z9jVZwhoFBa6C+l3Ii/hg/iXOkddh1+cWrwPxSA7bu
+   H78UfHhjxTwwMG9AoPur9SJlon4YBBwlWWJLB+iFqdTxrHs+HCt0jk7yv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="257650059"
+X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
+   d="scan'208";a="257650059"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 20:41:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,292,1647327600"; 
+   d="scan'208";a="611004674"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2022 20:41:00 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1nzrzg-000IVl-8y;
+	Sat, 11 Jun 2022 03:41:00 +0000
+Date: Sat, 11 Jun 2022 11:40:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 29/57]
+ include/linux/page-flags.h:788:20: error: passing 'const struct page *' to
+ parameter of type 'struct page *' discards qualifiers
+Message-ID: <202206111140.r2gAQWTY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220610233513.1798771-1-samitolvanen@google.com> <20220610233513.1798771-8-samitolvanen@google.com>
-In-Reply-To: <20220610233513.1798771-8-samitolvanen@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 10 Jun 2022 16:43:50 -0700
-Message-ID: <CAKwvOd=GRwL6K7GxhiLhRhJVaD3a1VT6MD5fMR4kcYPpd5=0PQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 07/20] lkdtm: Emit an indirect call for CFI tests
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 10, 2022 at 4:35 PM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> Clang can convert the indirect calls in lkdtm_CFI_FORWARD_PROTO into
-> direct calls. Move the call into a noinline function that accepts the
-> target address as an argument to ensure the compiler actually emits an
-> indirect call instead.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
+commit: f951c9604853872cf088bb3dbf7d49e3f96b090d [29/57] mm: Make some folio function arguments const
+config: mips-randconfig-r033-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111140.r2gAQWTY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/f951c9604853872cf088bb3dbf7d49e3f96b090d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout f951c9604853872cf088bb3dbf7d49e3f96b090d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  drivers/misc/lkdtm/cfi.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-> index 666a7f4bc137..b6b375112a2a 100644
-> --- a/drivers/misc/lkdtm/cfi.c
-> +++ b/drivers/misc/lkdtm/cfi.c
-> @@ -20,6 +20,13 @@ static noinline int lkdtm_increment_int(int *counter)
->
->         return *counter;
->  }
-> +
-> +/* Don't allow the compiler to inline the calls. */
-> +static noinline void lkdtm_indirect_call(void (*func)(int *))
-> +{
-> +       func(&called_count);
-> +}
-> +
->  /*
->   * This tries to call an indirect function with a mismatched prototype.
->   */
-> @@ -29,15 +36,11 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
->          * Matches lkdtm_increment_void()'s prototype, but not
->          * lkdtm_increment_int()'s prototype.
->          */
-> -       void (*func)(int *);
-> -
->         pr_info("Calling matched prototype ...\n");
-> -       func = lkdtm_increment_void;
-> -       func(&called_count);
-> +       lkdtm_indirect_call(lkdtm_increment_void);
->
->         pr_info("Calling mismatched prototype ...\n");
-> -       func = (void *)lkdtm_increment_int;
-> -       func(&called_count);
-> +       lkdtm_indirect_call((void *)lkdtm_increment_int);
->
->         pr_err("FAIL: survived mismatched prototype function call!\n");
->         pr_expected_config(CONFIG_CFI_CLANG);
-> --
-> 2.36.1.476.g0c4daa206d-goog
->
+All errors (new ones prefixed by >>):
 
+   In file included from arch/mips/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:13:
+   In file included from include/linux/list_lru.h:14:
+   In file included from include/linux/xarray.h:15:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:22:
+>> include/linux/page-flags.h:788:20: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           PF_POISONED_CHECK(page);
+                             ^~~~
+   include/linux/page-flags.h:370:41: note: expanded from macro 'PF_POISONED_CHECK'
+                   VM_BUG_ON_PGFLAGS(PagePoisoned(page), page);            \
+                                                         ^~~~
+   include/linux/mmdebug.h:94:60: note: expanded from macro 'VM_BUG_ON_PGFLAGS'
+   #define VM_BUG_ON_PGFLAGS(cond, page) VM_BUG_ON_PAGE(cond, page)
+                                                              ^~~~
+   include/linux/mmdebug.h:21:14: note: expanded from macro 'VM_BUG_ON_PAGE'
+                           dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
+                                     ^~~~
+   include/linux/mmdebug.h:12:29: note: passing argument to parameter 'page' here
+   void dump_page(struct page *page, const char *reason);
+                               ^
+   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
+   void output_ptreg_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_ptreg_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
+   void output_task_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_task_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
+   void output_thread_info_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_info_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
+   void output_thread_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
+   void output_mm_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_mm_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
+   void output_sc_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:218:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_sc_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
+   void output_signal_defined(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:253:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_signal_defined(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for function 'output_pm_defines' [-Wmissing-prototypes]
+   void output_pm_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:332:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_pm_defines(void)
+   ^
+   static 
+   8 warnings and 1 error generated.
+   make[2]: *** [scripts/Makefile.build:117: arch/mips/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1196: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +788 include/linux/page-flags.h
+
+e7d324850bfcb3 Muchun Song   2022-03-22  785  
+f951c960485387 David Howells 2022-06-08  786  static __always_inline int PageHead(const struct page *page)
+e7d324850bfcb3 Muchun Song   2022-03-22  787  {
+e7d324850bfcb3 Muchun Song   2022-03-22 @788  	PF_POISONED_CHECK(page);
+e7d324850bfcb3 Muchun Song   2022-03-22  789  	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
+e7d324850bfcb3 Muchun Song   2022-03-22  790  }
+e7d324850bfcb3 Muchun Song   2022-03-22  791  
+
+:::::: The code at line 788 was first introduced by commit
+:::::: e7d324850bfcb30df563d144c0363cc44595277d mm: hugetlb: free the 2nd vmemmap page associated with each HugeTLB page
+
+:::::: TO: Muchun Song <songmuchun@bytedance.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
