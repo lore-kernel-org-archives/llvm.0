@@ -1,150 +1,102 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8F37A
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 07:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654933570; x=1686469570;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oduHo1RFQ3stMxu/D+kXNU5eamN8lMTooY1qRApiuaY=;
-  b=ai/TSra+4HHrDc5Munln0w3/e5GugstT/v8pfwOf60r8xrcHyPcqkIi2
-   Ect2rCaSPsTAmukC4o9XnV63y6tg09dR4/LFtg8cIT/yUinV22O0LOl34
-   +m9vUXYwJDaIzyA6H3Jkbcn+1JJ73QCEDPYpXIqPdcP8r1ndi53wcQfH4
-   dKqQes4XdzoQz2Rqp52emnyWVznQEF0EQZrtMmcNg83boeVL55lpR6VfF
-   GNhOGkp0xYVq1TR5sGa/damlrhlr3exiKbB7VlHab6eJTrZ+v6hBXFpSX
-   QPACVOIkyfCzBdQUygNJvilImibAPmPBwq2EQPC5SwiMH/VweubfxcjG9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="258281540"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="258281540"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 00:46:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="616816996"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jun 2022 00:46:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1nzvot-000Iid-I1;
-	Sat, 11 Jun 2022 07:46:07 +0000
-Date: Sat, 11 Jun 2022 15:45:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 30/57]
- lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types
- ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and
- 'typeof (maxsize) *' (aka 'unsigned int *'))
-Message-ID: <202206111500.VcHCpPMw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2458E620
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 08:43:57 +0000 (UTC)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 25B8ewkW029964
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 17:40:58 +0900
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 25B8ekaf027954
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 17:40:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25B8ekaf027954
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1654936847;
+	bh=GjObk4qkn+wKKzrcBcuYF59rT44eRBod2haAId0PbXY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PREvLjGPWl2vpwAWxu9YrCKddWls2iwOpHhGWM+1kaRRovK1JCxy+uSn609YV0gI3
+	 08EmkdWb1tfsUC5IIRcF9TVUwP2tsuiirzSg3n/Q/5KcSgJup393cJvlf8XIHkSOLq
+	 304Rmb98sPeK4Nix+tSz/RQgmbXaOLkBV0yssM2ySNpzx2x88QOUpmD6ssrxiP3mNr
+	 m7dnQhG+MZmxSvlpNzh281ddse/dHcTvqFdvIaBZobn3pqDYiBAsteRN1Iswjqoz24
+	 tKpNmExTO5+ytUN2BKTKoNdEjCDwykfiKV0j2dShtcgnxPnLWqhxYO+7DW75Pn7Y2C
+	 BF5+6NoT+6RPg==
+X-Nifty-SrcIP: [209.85.221.46]
+Received: by mail-wr1-f46.google.com with SMTP id s1so1255758wra.9
+        for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 01:40:47 -0700 (PDT)
+X-Gm-Message-State: AOAM5306qNaiqzWGGj8emhnQnQrBw3L47hyrem3FHVEtjxaMvCvaoIds
+	uCLzdgXH1104o9wPnGRH1pzXnzrArLnc4C7NLnE=
+X-Google-Smtp-Source: ABdhPJyiHW2W3e41O1pSCmct30Roanq1/4GAP7WtMOyFwG8Wk3ea+wpvffMHRIqX+Lt7EbWt196HX8/OmJhdHyIm+Iw=
+X-Received: by 2002:adf:f902:0:b0:20e:66db:b9d2 with SMTP id
+ b2-20020adff902000000b0020e66dbb9d2mr48895378wrr.682.1654936845690; Sat, 11
+ Jun 2022 01:40:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220610213453.630304-1-alvin@pqrs.dk> <20220610213959.bjrw6nrxaby2lb3g@bang-olufsen.dk>
+In-Reply-To: <20220610213959.bjrw6nrxaby2lb3g@bang-olufsen.dk>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 11 Jun 2022 17:40:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQaN0pH01Ntsn9jRxciaiYtWUA8MJeJ9ELiXrrbQwms6g@mail.gmail.com>
+Message-ID: <CAK7LNAQaN0pH01Ntsn9jRxciaiYtWUA8MJeJ9ELiXrrbQwms6g@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use a pipe rather than process substitution
+To: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   c19d336b7f0c53bd31e73f6d7d6c1524f0df55b8
-commit: cce0a847405ef7d076fde956ba5dd1a4d7d901c2 [30/57] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-config: arm-randconfig-r034-20220610 (https://download.01.org/0day-ci/archive/20220611/202206111500.VcHCpPMw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/cce0a847405ef7d076fde956ba5dd1a4d7d901c2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout cce0a847405ef7d076fde956ba5dd1a4d7d901c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sat, Jun 11, 2022 at 6:40 AM Alvin =C5=A0ipraga <ALSI@bang-olufsen.dk> w=
+rote:
+>
+> On Fri, Jun 10, 2022 at 11:34:52PM +0200, Alvin =C5=A0ipraga wrote:
+> > From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+> >
+> > Bash process substitution of the form `foo < <(bar)`, as found in
+> > scripts/check-local-export, can cause issues in chrooted environments
+> > and with tools such as pseudo. The blamed commit started to cause build
+> > errors for me when using the Yocto project's devshell environment;
+> > devshell uses pseudo internally:
+> >
+> > .../scripts/check-local-export: line 51: /dev/fd/63: No such file or di=
+rectory
+> >
+> > Replace the process substitution with a simple pipe into the while loop=
+.
+> > This is functionally equivalent and more portable than the former. Note
+> > that pipefail is enabled so that the script terminates when ${NM} fails=
+.
+> >
+> > Link: https://bugzilla.yoctoproject.org/show_bug.cgi?id=3D13288
+> > Fixes: 31cb50b5590f ("kbuild: check static EXPORT_SYMBOL* by script ins=
+tead of modpost")
+> > Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>
+> Oops, I forgot to check the linux-kbuild list before sending this patch. =
+I see
+> that a more robust patch has been posted which addresses a separate issue=
+, but
+> which also solves the issue I was trying to address:
+>
+> https://lore.kernel.org/linux-kbuild/20220608011100.486735-1-masahiroy@ke=
+rnel.org/raw
+>
+> Please ignore this. Thanks!
+>
+> Kind regards,
+> Alvin
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           return min(nr * PAGE_SIZE - offset, maxsize);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
+No problem. I did not notice I had broken yocto builds,
+and it is good to know it has been solved as well.
+Thanks for the report.
 
 
-vim +1464 lib/iov_iter.c
 
-  1430	
-  1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
-  1432					     struct page **pages, size_t maxsize,
-  1433					     unsigned maxpages, size_t *_start_offset)
-  1434	{
-  1435		unsigned nr, offset;
-  1436		pgoff_t index, count;
-  1437		size_t size = maxsize;
-  1438		loff_t pos;
-  1439	
-  1440		if (!size || !maxpages)
-  1441			return 0;
-  1442	
-  1443		pos = i->xarray_start + i->iov_offset;
-  1444		index = pos >> PAGE_SHIFT;
-  1445		offset = pos & ~PAGE_MASK;
-  1446		*_start_offset = offset;
-  1447	
-  1448		count = 1;
-  1449		if (size > PAGE_SIZE - offset) {
-  1450			size -= PAGE_SIZE - offset;
-  1451			count += size >> PAGE_SHIFT;
-  1452			size &= ~PAGE_MASK;
-  1453			if (size)
-  1454				count++;
-  1455		}
-  1456	
-  1457		if (count > maxpages)
-  1458			count = maxpages;
-  1459	
-  1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
-  1461		if (nr == 0)
-  1462			return 0;
-  1463	
-> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
-  1465	}
-  1466	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Best Regards
+Masahiro Yamada
