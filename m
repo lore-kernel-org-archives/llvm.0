@@ -1,42 +1,49 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791E6A21
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 15:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7332DA21
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 16:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654962742; x=1686498742;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hUZ65Rg3EEiHgzz4LA4Q3Vxkj3mq3OjDaPirGkBxR60=;
-  b=EFhKTUpC9if6bpktPv9nhynajbFGNuTXSzDLYc0Mqmrw9EgSokBlJn8E
-   mvqGeYEU0frB6yGFqbZjNGaExY3m3LTSw36Jz8IyOWMUW9X2PwtVAO9Zc
-   p5sBEPMzR//J+PfnXzTOekmYqQYCuM3yQPpr5f+b4ORwwiJFZHVSdUZr3
-   m1YEYT8Y0AQYYCgd7p19LiANdfpGmnq+YItRiwinYCgaJl9m7epSz4OKG
-   q7ZKpDrOJkyec1HojcDn3vDS4xP82rjqI5nn75urNllQXxMDLvOyF2c/9
-   +l6jVw9fdqbwdZtKWZ1eqXWWJkS/WhX+kqP8A5y+b8kPqJiOSc2YhM3f6
+  t=1654964605; x=1686500605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5Zq9g8LTA+1hA+FsecBlfcG5IHjh6rZsFPf+8W/o9wk=;
+  b=S+mX/JYDfl+sbOm6BQ4zR0dpRvvGl5AC3g2rPidUU4qZ/Kb7lM3sk9Rv
+   S2zVPWB/ZUzbqKLsBYjhnorla1JiWBluqmZNn0O6Wwq1wYA6GG8HoWfjW
+   +6vQxqL0TKZXJk2qV24OfQXTwbzBvHbh4QuecI6RasR9bxVtUOCCFtBbQ
+   Fj8NzkwaX5ldQR7s2X/S6VOeel9taq7tnGWZEXtmkacSZ49UmOsdAVbsC
+   1IYYLE5GDYQnDafJza8aLCucORHC+ZbfZq4vEBeJwSfjcpquPS/deaqR1
+   Lz0eQHwFLks3doS/jEsmt6YqFG3m26fQbuxeSulRio3uY0DegRfINloig
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258336585"
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="257737226"
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="258336585"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:52:21 -0700
+   d="scan'208";a="257737226"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 09:23:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="711363163"
+   d="scan'208";a="725467052"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jun 2022 08:52:20 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jun 2022 09:23:21 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o03PP-000J2X-FP;
-	Sat, 11 Jun 2022 15:52:19 +0000
-Date: Sat, 11 Jun 2022 23:51:56 +0800
+	id 1o03tQ-000J4N-Qb;
+	Sat, 11 Jun 2022 16:23:20 +0000
+Date: Sun, 12 Jun 2022 00:22:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
+To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 443/453]
- arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used
-Message-ID: <202206112336.404YWKiT-lkp@intel.com>
+	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+	mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	Qin Jian <qinjian@cqplus1.com>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v17 07/10] irqchip: Add Sunplus SP7021 interrupt
+ controller driver
+Message-ID: <202206120014.snDYJsw8-lkp@intel.com>
+References: <0f1a1b0e38f4f0eaef245833c4c97a4e98619553.1654565776.git.qinjian@cqplus1.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,74 +52,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0f1a1b0e38f4f0eaef245833c4c97a4e98619553.1654565776.git.qinjian@cqplus1.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   64f3ddf316eab9398414b94e62a01d185e6e94c8
-commit: d4ee16fc8532473025338c594b8fbe6a6faa0887 [443/453] KVM: x86/mmu: update lpage_info on changing page_type
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220611/202206112336.404YWKiT-lkp@intel.com/config)
+Hi Qin,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.19-rc1 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220607-100746
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: arm64-buildonly-randconfig-r005-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120014.snDYJsw8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/d4ee16fc8532473025338c594b8fbe6a6faa0887
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout d4ee16fc8532473025338c594b8fbe6a6faa0887
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/5c7f5cae7ce9484dabe81e5a56fe42c5d1a37ca0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220607-100746
+        git checkout 5c7f5cae7ce9484dabe81e5a56fe42c5d1a37ca0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/ arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/ drivers/irqchip/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the intel-tdx/kvm-upstream-workaround HEAD 64f3ddf316eab9398414b94e62a01d185e6e94c8 builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kvm/mmu/mmu.c:18:
-   In file included from arch/x86/kvm/irq.h:15:
-   In file included from include/linux/kvm_host.h:47:
-   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
->> arch/x86/kvm/mmu/mmu.c:982:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
-           enum kvm_page_type type;
-                              ^
-   2 errors generated.
+>> drivers/irqchip/irq-sp7021-intc.c:170:16: warning: cast to smaller integer type 'int' from 'void *' [-Wvoid-pointer-to-int-cast]
+           int ext_num = (int)irq_desc_get_handler_data(desc);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/irqchip/irq-sp7021-intc.c:218:69: warning: cast to 'void *' from smaller integer type 'int' [-Wint-to-void-pointer-cast]
+           irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
+                                                                              ^~~~~~~~~
+   2 warnings generated.
 
 
-vim +/type +982 arch/x86/kvm/mmu/mmu.c
+vim +170 drivers/irqchip/irq-sp7021-intc.c
 
-7c45d6a017129b Xiaoyao Li     2021-08-31  977  
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  978  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  979  			    enum pg_level level)
-7c45d6a017129b Xiaoyao Li     2021-08-31  980  {
-7c45d6a017129b Xiaoyao Li     2021-08-31  981  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
-7c45d6a017129b Xiaoyao Li     2021-08-31 @982  	enum kvm_page_type type;
-7c45d6a017129b Xiaoyao Li     2021-08-31  983  	gfn_t base_gfn;
-7c45d6a017129b Xiaoyao Li     2021-08-31  984  
-7c45d6a017129b Xiaoyao Li     2021-08-31  985  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
-7c45d6a017129b Xiaoyao Li     2021-08-31  986  		return;
-7c45d6a017129b Xiaoyao Li     2021-08-31  987  
-7c45d6a017129b Xiaoyao Li     2021-08-31  988  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
-7c45d6a017129b Xiaoyao Li     2021-08-31  989  	type = page_attr->type;
-09cbecc5a0e81f Xiaoyao Li     2022-05-25  990  
-7c45d6a017129b Xiaoyao Li     2021-08-31  991  	/*
-7c45d6a017129b Xiaoyao Li     2021-08-31  992  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
-7c45d6a017129b Xiaoyao Li     2021-08-31  993  	 * page needs to be split means one of the 4K page of it needs to be
-7c45d6a017129b Xiaoyao Li     2021-08-31  994  	 * changed to oppsite type
-7c45d6a017129b Xiaoyao Li     2021-08-31  995  	 */
-d4ee16fc853247 Isaku Yamahata 2022-06-02  996  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
-7c45d6a017129b Xiaoyao Li     2021-08-31  997  }
-7c45d6a017129b Xiaoyao Li     2021-08-31  998  
-
-:::::: The code at line 982 was first introduced by commit
-:::::: 7c45d6a017129b913c57fb0a2cc14a866f2434a4 KVM: MMU: Update page_attr->type when guest converts the page
-
-:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
-:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
+   166	
+   167	static void sp_intc_handle_ext_cascaded(struct irq_desc *desc)
+   168	{
+   169		struct irq_chip *chip = irq_desc_get_chip(desc);
+ > 170		int ext_num = (int)irq_desc_get_handler_data(desc);
+   171		int hwirq;
+   172	
+   173		chained_irq_enter(chip, desc);
+   174	
+   175		while ((hwirq = sp_intc_get_ext_irq(ext_num)) >= 0) {
+   176			if (unlikely(IS_GPIO_INT(hwirq) && TEST_STATE(hwirq, _IS_ACTIVE))) { // WORKAROUND
+   177				ASSIGN_STATE(hwirq, _IS_ACTIVE, false);
+   178				sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, TEST_STATE(hwirq, _IS_LOW));
+   179			} else {
+   180				generic_handle_domain_irq(sp_intc.domain, hwirq);
+   181			}
+   182		}
+   183	
+   184		chained_irq_exit(chip, desc);
+   185	}
+   186	
+   187	static struct irq_chip sp_intc_chip = {
+   188		.name = "sp_intc",
+   189		.irq_ack = sp_intc_ack_irq,
+   190		.irq_mask = sp_intc_mask_irq,
+   191		.irq_unmask = sp_intc_unmask_irq,
+   192		.irq_set_type = sp_intc_set_type,
+   193	};
+   194	
+   195	static int sp_intc_irq_domain_map(struct irq_domain *domain,
+   196					  unsigned int irq, irq_hw_number_t hwirq)
+   197	{
+   198		irq_set_chip_and_handler(irq, &sp_intc_chip, handle_level_irq);
+   199		irq_set_chip_data(irq, &sp_intc_chip);
+   200		irq_set_noprobe(irq);
+   201	
+   202		return 0;
+   203	}
+   204	
+   205	static const struct irq_domain_ops sp_intc_dm_ops = {
+   206		.xlate = irq_domain_xlate_twocell,
+   207		.map = sp_intc_irq_domain_map,
+   208	};
+   209	
+   210	static int sp_intc_irq_map(struct device_node *node, int i)
+   211	{
+   212		unsigned int irq;
+   213	
+   214		irq = irq_of_parse_and_map(node, i);
+   215		if (!irq)
+   216			return -ENOENT;
+   217	
+ > 218		irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
+   219	
+   220		return 0;
+   221	}
+   222	
 
 -- 
 0-DAY CI Kernel Test Service
