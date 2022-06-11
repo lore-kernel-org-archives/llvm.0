@@ -1,49 +1,60 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5F97C
-	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 18:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3D27A
+	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 18:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654970729; x=1686506729;
+  t=1654973192; x=1686509192;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0F06aXtU5IgVgHppG2QEXxLO2CeAvZI7lDUyRNb2oU0=;
-  b=lD9tPDZxdWfykmPZQryCFFgAITJJgJuem30iUBoqrXvWKF1GrEgdgxxd
-   u/teYCoKnDrrYt+qyXW7ij2q2ojAoxLVRhEKUj3o8iLrVsZMYBGnt3wVw
-   niEUGkubWR7iiKP8IFXIC3LkrHe06aKXxvKc/IyW8x7SGJ32rVIkrbtQ5
-   O2ZWspRMQxYaHheLyozmoyNDwFuGlrwi1BaA9gyubTVaDU4zr0vc9/BlS
-   dcXPqUyYEWX0GMWV+A37u35lFkapmz5rw7G+V9lqAP+W988+r+LF0NnRv
-   chBh8RazbuoyVZJYC1dA/6Zu7Kv0wwm010VByg2bn47Lpu78h6zxn5P6W
+  bh=kyT6KKWjC/OdmE81Ef78B9jpCvknrCcdviqYlOzkN2I=;
+  b=dPCjKtaMJCYzLrmviWFc7ufW8qG9ZMrQ1RvuAvnHlqI1+HhvVBbxdgX7
+   /ubTuIq8hrsP3CyGlop4p1/3IAaLWK0fFiMkz2uQXfCqBUqXjkd+DaE+s
+   UhzHwuQNojP031oY1GMGXgE2IUGcdOdFxQ5ph838dZVRFNi1jNFx0yl+i
+   zWAJIIse+lIZ2drYQ/MoYzqPVHltnIJ2qX2b7hVlep6djXwK2oteEyWU6
+   EGLBCbKLVJ72PirOJmmzcovOe0AMoKM5eajPZGSlO0dJTE4sJAocjZaig
+   XmO41jAsA26Q4wiI5oJ/BoQ/8qiJkLP8kP6qfkIizYJKaGJQEdC2btug3
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="277958159"
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="277958159"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 11:05:28 -0700
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="279020602"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="279020602"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 11:46:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="556855043"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="760973379"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jun 2022 11:05:24 -0700
+  by orsmga005.jf.intel.com with ESMTP; 11 Jun 2022 11:46:26 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o05UC-000JA5-7c;
-	Sat, 11 Jun 2022 18:05:24 +0000
-Date: Sun, 12 Jun 2022 02:04:41 +0800
+	id 1o067t-000JCD-Fy;
+	Sat, 11 Jun 2022 18:46:25 +0000
+Date: Sun, 12 Jun 2022 02:45:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-	bjorn.andersson@linaro.org, mturquette@baylibre.com,
-	sboyd@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-	jonathan@marek.ca, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v5 3/6] dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
-Message-ID: <202206120103.ptlYOvp4-lkp@intel.com>
-References: <20220609092940.304740-4-robert.foss@linaro.org>
+To: Colin Foster <colin.foster@in-advantage.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Lars Povlsen <lars.povlsen@microchip.com>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v10 net-next 7/7] mfd: ocelot: add support for the
+ vsc7512 chip via spi
+Message-ID: <202206120247.2zx79Zg9-lkp@intel.com>
+References: <20220610202330.799510-8-colin.foster@in-advantage.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,60 +63,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609092940.304740-4-robert.foss@linaro.org>
+In-Reply-To: <20220610202330.799510-8-colin.foster@in-advantage.com>
 
-Hi Robert,
+Hi Colin,
 
 I love your patch! Yet something to improve:
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next v5.19-rc1 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Foss/SM8350-Display-GPU-clock-enablement/20220609-173149
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: arm64-buildonly-randconfig-r005-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120103.ptlYOvp4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git b97dcb85750b7e8bc5aaed5403ddf4b0552c7993
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220612/202206120247.2zx79Zg9-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e7acd4b7cc95e3f3ffaa4782f09245b44d4faa31
+        # https://github.com/intel-lab-lkp/linux/commit/60523f7239bade660c86be121bd29954c24f53df
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Robert-Foss/SM8350-Display-GPU-clock-enablement/20220609-173149
-        git checkout e7acd4b7cc95e3f3ffaa4782f09245b44d4faa31
+        git fetch --no-tags linux-review Colin-Foster/add-support-for-VSC7512-control-over-SPI/20220611-042931
+        git checkout 60523f7239bade660c86be121bd29954c24f53df
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/qcom/gpucc-sm8350.c:111:2: error: initializer element is not a compile-time constant
-           gpu_cc_parent,
-           ^~~~~~~~~~~~~
-   drivers/clk/qcom/gpucc-sm8350.c:126:2: error: initializer element is not a compile-time constant
-           gpu_cc_parent,
-           ^~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/mfd/ocelot-core.c:118:40: error: initializer element is not a compile-time constant
+                   .of_reg = vsc7512_miim0_resources[0].start,
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   1 error generated.
 
 
-vim +111 drivers/clk/qcom/gpucc-sm8350.c
+vim +118 drivers/mfd/ocelot-core.c
 
-05334fe2099d9b Robert Foss 2022-06-09  109  
-05334fe2099d9b Robert Foss 2022-06-09  110  static const struct clk_parent_data gpu_cc_parent_data_0[] = {
-05334fe2099d9b Robert Foss 2022-06-09 @111  	gpu_cc_parent,
-05334fe2099d9b Robert Foss 2022-06-09  112  	{ .hw = &gpu_cc_pll0.clkr.hw },
-05334fe2099d9b Robert Foss 2022-06-09  113  	{ .hw = &gpu_cc_pll1.clkr.hw },
-05334fe2099d9b Robert Foss 2022-06-09  114  	{ .fw_name = "gcc_gpu_gpll0_clk_src" },
-05334fe2099d9b Robert Foss 2022-06-09  115  	{ .fw_name = "gcc_gpu_gpll0_div_clk_src" },
-05334fe2099d9b Robert Foss 2022-06-09  116  };
-05334fe2099d9b Robert Foss 2022-06-09  117  
+   103	
+   104	static const struct mfd_cell vsc7512_devs[] = {
+   105		{
+   106			.name = "ocelot-pinctrl",
+   107			.of_compatible = "mscc,ocelot-pinctrl",
+   108			.num_resources = ARRAY_SIZE(vsc7512_pinctrl_resources),
+   109			.resources = vsc7512_pinctrl_resources,
+   110		}, {
+   111			.name = "ocelot-sgpio",
+   112			.of_compatible = "mscc,ocelot-sgpio",
+   113			.num_resources = ARRAY_SIZE(vsc7512_sgpio_resources),
+   114			.resources = vsc7512_sgpio_resources,
+   115		}, {
+   116			.name = "ocelot-miim0",
+   117			.of_compatible = "mscc,ocelot-miim",
+ > 118			.of_reg = vsc7512_miim0_resources[0].start,
+   119			.use_of_reg = true,
+   120			.num_resources = ARRAY_SIZE(vsc7512_miim0_resources),
+   121			.resources = vsc7512_miim0_resources,
+   122		}, {
+   123			.name = "ocelot-miim1",
+   124			.of_compatible = "mscc,ocelot-miim",
+   125			.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
+   126			.of_reg = vsc7512_miim1_resources[0].start,
+   127			.use_of_reg = true,
+   128			.resources = vsc7512_miim1_resources,
+   129		},
+   130	};
+   131	
 
 -- 
 0-DAY CI Kernel Test Service
