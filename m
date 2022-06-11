@@ -1,42 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5D8A21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFD8A53
 	for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 15:11:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654960280; x=1686496280;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sr6Hyoey14RLH11sYQd0LbbLyKPYmB2YzzdDzUDVWi8=;
-  b=Hej+8yCjDqBIhZMlOzimLxdvyEFXMH/e12uvEarNYltZuvs/7JO+t1Hp
-   25QhfyT2AXhJ+mFum6r4WxTjOGL/meP7G6KqE4UtPvgs17PCQJw8cZPn5
-   JN+cX9o90Pp+7FNjPf7fwS/Gt5zcPp6SDGoYtTSQQAo5ohR0JDyB+IiIy
-   EM6Vx/oDwa19AVhUXfhux5ohoEk3j82ARFaRwy/owZIvaTiSq6G+6/Col
-   VVeZUVX1UE771PAHwp1qxiq6ezlDUAAVkPHf7E66vyAuwASpV4d6iXrzk
-   qiDPoSaTTfxOBKdl3DL1jx/dWXXswlKj2x2cr0zIX+HbJqT2+3rwLcYvB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="364226230"
+  t=1654960281; x=1686496281;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ed9bTYR0nyjmJR2+k0jBVpXtKnsbpVI4upqyWb1Dflw=;
+  b=hw4eloXoqf4hMmhTgp1ituveXWLlkkSYt22Zs5IQed/rfcblsz86eBPR
+   jXQFCBGcwy219KfwC9NV/fRGZAuHHblarGbF7B558WQol3+td43ioGN7D
+   UahhFmKFHdnipvFGK3R0p2d2m6X4ccojCYkbiFu/8oHWwlFfutn8WIE6N
+   ppVCfqyne8lHrhbIOBNOkVNz9JtH4kcbjuUuwvvlndutF5n2LRSA8Ztel
+   KrZFriFD32+yIrTuXLgyf4FctM2HzAEmXZ8n2aGCF4Ajn0U7s89hVFhNy
+   mGoJdIqsL60JKAHCA4HqoZONdTE2w9erYuMFaOcv4MG1fU4h6WkxTyglB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="341929136"
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="364226230"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:11:19 -0700
+   d="scan'208";a="341929136"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 08:11:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,293,1647327600"; 
-   d="scan'208";a="586798958"
+   d="scan'208";a="611133218"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Jun 2022 08:11:18 -0700
+  by orsmga008.jf.intel.com with ESMTP; 11 Jun 2022 08:11:18 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o02lh-000J0D-Vj;
+	id 1o02lh-000J09-UH;
 	Sat, 11 Jun 2022 15:11:17 +0000
-Date: Sat, 11 Jun 2022 23:10:32 +0800
+Date: Sat, 11 Jun 2022 23:10:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Allison Henderson <allison.henderson@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v1 10/17] xfs: parent pointer attribute creation
-Message-ID: <202206112311.zPVsFae7-lkp@intel.com>
-References: <20220611094200.129502-11-allison.henderson@oracle.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	ceph-devel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+	Jeff Layton <jlayton@kernel.org>
+Subject: [ceph-client:testing 7/9] lib/iov_iter.c:1464:9: warning: comparison
+ of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka
+ 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *'))
+Message-ID: <202206112305.4DdsErK8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,93 +47,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220611094200.129502-11-allison.henderson@oracle.com>
 
-Hi Allison,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on v5.19-rc1 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Allison-Henderson/Return-of-the-Parent-Pointers/20220611-174444
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220611/202206112311.zPVsFae7-lkp@intel.com/config)
+tree:   https://github.com/ceph/ceph-client.git testing
+head:   7b864d005b1f7f6a144420e180891b6401078407
+commit: 3adeefbfca0fd57cc943b7ec0330385f48041f0c [7/9] [DO NOT MERGE] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
+config: riscv-randconfig-r034-20220611 (https://download.01.org/0day-ci/archive/20220611/202206112305.4DdsErK8-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f78cf1e945fc44e0022add251db2819f37b8d2ff
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Allison-Henderson/Return-of-the-Parent-Pointers/20220611-174444
-        git checkout f78cf1e945fc44e0022add251db2819f37b8d2ff
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/ceph/ceph-client/commit/3adeefbfca0fd57cc943b7ec0330385f48041f0c
+        git remote add ceph-client https://github.com/ceph/ceph-client.git
+        git fetch --no-tags ceph-client testing
+        git checkout 3adeefbfca0fd57cc943b7ec0330385f48041f0c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for function 'xfs_init_parent_name_rec' [-Wmissing-prototypes]
-   xfs_init_parent_name_rec(
-   ^
-   fs/xfs/libxfs/xfs_parent.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
->> fs/xfs/libxfs/xfs_parent.c:70:1: warning: no previous prototype for function 'xfs_init_parent_name_irec' [-Wmissing-prototypes]
-   xfs_init_parent_name_irec(
-   ^
-   fs/xfs/libxfs/xfs_parent.c:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
+>> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           return min(nr * PAGE_SIZE - offset, maxsize);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+           return min(nr * PAGE_SIZE - offset, maxsize);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
    2 warnings generated.
 
 
-vim +/xfs_init_parent_name_rec +55 fs/xfs/libxfs/xfs_parent.c
+vim +1464 lib/iov_iter.c
 
-    35	
-    36	/*
-    37	 * Parent pointer attribute handling.
-    38	 *
-    39	 * Because the attribute value is a filename component, it will never be longer
-    40	 * than 255 bytes. This means the attribute will always be a local format
-    41	 * attribute as it is xfs_attr_leaf_entsize_local_max() for v5 filesystems will
-    42	 * always be larger than this (max is 75% of block size).
-    43	 *
-    44	 * Creating a new parent attribute will always create a new attribute - there
-    45	 * should never, ever be an existing attribute in the tree for a new inode.
-    46	 * ENOSPC behavior is problematic - creating the inode without the parent
-    47	 * pointer is effectively a corruption, so we allow parent attribute creation
-    48	 * to dip into the reserve block pool to avoid unexpected ENOSPC errors from
-    49	 * occurring.
-    50	 */
-    51	
-    52	
-    53	/* Initializes a xfs_parent_name_rec to be stored as an attribute name */
-    54	void
-  > 55	xfs_init_parent_name_rec(
-    56		struct xfs_parent_name_rec	*rec,
-    57		struct xfs_inode		*ip,
-    58		uint32_t			p_diroffset)
-    59	{
-    60		xfs_ino_t			p_ino = ip->i_ino;
-    61		uint32_t			p_gen = VFS_I(ip)->i_generation;
-    62	
-    63		rec->p_ino = cpu_to_be64(p_ino);
-    64		rec->p_gen = cpu_to_be32(p_gen);
-    65		rec->p_diroffset = cpu_to_be32(p_diroffset);
-    66	}
-    67	
-    68	/* Initializes a xfs_parent_name_irec from an xfs_parent_name_rec */
-    69	void
-  > 70	xfs_init_parent_name_irec(
+  1430	
+  1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
+  1432					     struct page **pages, size_t maxsize,
+  1433					     unsigned maxpages, size_t *_start_offset)
+  1434	{
+  1435		unsigned nr, offset;
+  1436		pgoff_t index, count;
+  1437		size_t size = maxsize;
+  1438		loff_t pos;
+  1439	
+  1440		if (!size || !maxpages)
+  1441			return 0;
+  1442	
+  1443		pos = i->xarray_start + i->iov_offset;
+  1444		index = pos >> PAGE_SHIFT;
+  1445		offset = pos & ~PAGE_MASK;
+  1446		*_start_offset = offset;
+  1447	
+  1448		count = 1;
+  1449		if (size > PAGE_SIZE - offset) {
+  1450			size -= PAGE_SIZE - offset;
+  1451			count += size >> PAGE_SHIFT;
+  1452			size &= ~PAGE_MASK;
+  1453			if (size)
+  1454				count++;
+  1455		}
+  1456	
+  1457		if (count > maxpages)
+  1458			count = maxpages;
+  1459	
+  1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
+  1461		if (nr == 0)
+  1462			return 0;
+  1463	
+> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
+  1465	}
+  1466	
 
 -- 
 0-DAY CI Kernel Test Service
