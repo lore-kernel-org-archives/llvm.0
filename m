@@ -1,205 +1,784 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731ABA2D
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 04:22:05 +0000 (UTC)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220612041335epoutp0153d05b72ffe0022bf6af99bac94af0d9~3xEtHWtRF1348013480epoutp01S
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 04:13:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220612041335epoutp0153d05b72ffe0022bf6af99bac94af0d9~3xEtHWtRF1348013480epoutp01S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1655007215;
-	bh=SJZQOAHJw3wbHSdszVvP/HGvMn1TKA11C94/I9FoI+k=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=D75/PKXZFEhYmAeAYlgMuBpictGXpcIcf5N6uElSMNavATs4owTmHNOSdrrPEuhve
-	 DzYVkeFUCy+2yE3xvh1DjtptoYYaQdjPVbARJPNPqffMHQawPMZuleLDnxlE3iQ9lN
-	 EsyX3kWPs3qpQgkJit7vh8efJb5j/5f6ttjW+BcM=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20220612041334epcas5p3a08a1c6c22a7090207d108a4cd4675b9~3xEsVkV6q0380503805epcas5p3f;
-	Sun, 12 Jun 2022 04:13:34 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4LLLsm60ssz4x9Pp; Sun, 12 Jun
-	2022 04:13:32 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	CA.82.09762.CE765A26; Sun, 12 Jun 2022 13:13:32 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20220612041331epcas5p1ad8aa893e7278112eeb6759979d4aff6~3xEpUKaB_0735007350epcas5p1J;
-	Sun, 12 Jun 2022 04:13:31 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20220612041331epsmtrp2331d1f31e44d95f85fe307f5f7be3597~3xEpTbX3m0289902899epsmtrp2U;
-	Sun, 12 Jun 2022 04:13:31 +0000 (GMT)
-X-AuditID: b6c32a4b-213ff70000002622-94-62a567ec37c6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	69.F3.11276.BE765A26; Sun, 12 Jun 2022 13:13:31 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20220612041330epsmtip2a0eadb2a0b8ac42bcc0320ad743e3f77~3xEoMzLmd0555805558epsmtip2B;
-	Sun, 12 Jun 2022 04:13:30 +0000 (GMT)
-From: "Alim Akhtar" <alim.akhtar@samsung.com>
-To: "'kernel test robot'" <lkp@intel.com>
-Cc: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-	<linux-kernel@vger.kernel.org>, "'Martin K. Petersen'"
-	<martin.petersen@oracle.com>, "'Chanho Park'" <chanho61.park@samsung.com>,
-	"'Bharat Uppal'" <bharat.uppal@samsung.com>
-In-Reply-To: <202206120755.03gKC0ne-lkp@intel.com>
-Subject: RE: [mkp-scsi:for-next 31/41]
- drivers/phy/samsung/phy-fsd-ufs.c:50:3: error: field designator 'cfgs' does
- not refer to any field in type 'const struct samsung_ufs_phy_drvdata'; did
- you mean 'cfg'?
-Date: Sun, 12 Jun 2022 09:43:29 +0530
-Message-ID: <000001d87e12$c6962770$53c27650$@samsung.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB367FC
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 07:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1655017668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GW1Tl4y0dqinBfAXggV4CnfNrhAVuT7ylddo1DYkFgU=;
+	b=ZgwHzsbAUh5i1JcbxGq+XS8fzBOJcfdfAGrquS+JnAe5tjxetHJsPJm4/cttwgataO2171
+	KGbeRvQYyD8D86p801OWTpd/8pNy6/xC2b6iu8TjaxnktgqsL28wGCD6sJ1NYEichxifdl
+	S2BIBTUjIrBu3pRmYCPsuS0Qfs8m6Tg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-504-iuKz3-N9NHm_BOjka8bzoQ-1; Sun, 12 Jun 2022 03:07:46 -0400
+X-MC-Unique: iuKz3-N9NHm_BOjka8bzoQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97B573C01C11
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 07:07:46 +0000 (UTC)
+Received: from [172.64.0.92] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7F0CD1131A;
+	Sun, 12 Jun 2022 07:07:46 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEQai/Pc/D7KWC/Dc1oiNsuf0vQXwHf6YGgrsxP5xA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmuu6b9KVJBpuadS2uvbzAbnF5v7bF
-	2e5rjBaXd81hs3jV/IjN4smU/WwWy4//Y3Jg91i85yWTR/fsfyweLzbPZPT4+PQWi0ffllWM
-	Hp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl
-	5gCdoqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQw
-	MDIFKkzIzni7VLbguGzFvz89LA2MkyW7GDk5JARMJBZMvcHUxcjFISSwm1Fi5uNOVgjnE6PE
-	o43H2EGqhAS+MUo8v6QB03Hz3U4WiKK9jBKHpq9mh3BeMkq83dvNCFLFJqArsWNxGxuILSKg
-	KfH3/35mkCJmgVeMEgcPvwEr4hQwkjg37xFYt7DAZUaJp7dnsIAkWARUJe7P2gp0FQcHr4Cl
-	xNtOOZAwr4CgxMmZT8BKmAXkJba/ncMMcZKCxM+ny1ghlllJPN09F6pGXOLl0SNg8yUElnJI
-	3P+whRGiwUViWstkdghbWOLV8S1QtpTE53d72UD2Sgh4SCz6IwURzpB4u3w9VKu9xIErc1hA
-	SpiBHlu/Sx9iFZ9E7+8nTBCdvBIdbUIQ1aoSze+uskDY0hITu7tZYYY/vuQ8gVFxFpK/ZiH5
-	axaS+2ch7FrAyLKKUTK1oDg3PbXYtMA4L7UcHtvJ+bmbGMHJVMt7B+OjBx/0DjEycTAeYpTg
-	YFYS4Q24vShJiDclsbIqtSg/vqg0J7X4EKMpMKwnMkuJJucD03leSbyhiaWBiZmZmYmlsZmh
-	kjivwP/GJCGB9MSS1OzU1ILUIpg+Jg5OqQamIvnU+/MvW1zTibz4X3bWkohLUuvCL+yc8jLj
-	62n/Uo1/Lyfv4Onrr+4VXbAqga2l9Zz6n2ZVw1057F5xj1t6pjswG1scvXB1f0cch/XFhdHM
-	V5XOX/gf71UgLhI/feKu/8nLn7/r78twVVgSN0slKExAsOmm0V4GLwGnH3yPH3xpTH2j0PX5
-	wLtPBWuLOcP1d6dfNJNlX6vQHPPj4Y7fjw9s+Kw+Vfr6GcZ7GhffHGpMvvvHsHmDqcVdYYEN
-	Z28YHLUIvLk2kX1NptCFY8vWMfzRanVUOeKccmPmy/xW3RW2FxxCk/hbd7W9Puu8c/2m88yf
-	v0QITnW4ert8gcnSgwtWW03Z/aia6YWoTuvTQiWW4oxEQy3mouJEACnbtr4vBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXvd1+tIkg38XZCyuvbzAbnF5v7bF
-	2e5rjBaXd81hs3jV/IjN4smU/WwWy4//Y3Jg91i85yWTR/fsfyweLzbPZPT4+PQWi0ffllWM
-	Hp83yQWwRXHZpKTmZJalFunbJXBlvF0qW3BctuLfnx6WBsbJkl2MnBwSAiYSN9/tZOli5OIQ
-	EtjNKNF4ejs7REJa4vrGCVC2sMTKf8/ZIYqeM0r8PtDFDJJgE9CV2LG4jQ3EFhHQlPj7fz8z
-	SBGzwDtGiQdfFjGCJIQEmhklnsytBrE5BYwkzs17BDZJWOAso8SOu4dZQBIsAqoS92dtZepi
-	5ODgFbCUeNspBxLmFRCUODnzCQtImFlAT6JtI9hIZgF5ie1v5zBDHKcg8fPpMlaIG6wknu6e
-	ywJRIy7x8ugR9gmMwrOQTJqFMGkWkkmzkHQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeu
-	l5yfu4kRHFNamjsYt6/6oHeIkYmD8RCjBAezkghvwO1FSUK8KYmVValF+fFFpTmpxYcYpTlY
-	lMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwLQtf4hqr6eBQvFX/9bK3aWG362WivhcX7syY
-	8MVlh5T0GfXKxOu803/HXJ/s0JEs6iW0qVk0bNKvbR0HEw4K3FKxds2VnLPY0qvp85uPamau
-	579kpHnsSl8+f1tRvdgZ12/bZtTlh4rmSLTO/Ju4PuDS1L7bi5mbQhlr3n0pPpPOyvtyQara
-	nCtrL16cWlgrPts8OG9Ducr5xhX7rJV9rvNOlrF7osvNPL2o9FfeqrV9D7Zr3Ol4HdXHbLSL
-	+3PeQzlbjgst99UflipKq11i+stz9eP1+5JtZzVN09w13mUI667sspe94zFPzexRd3HEw6PJ
-	Ez8vXLzU+7vS7a5FTa131Pkq6ytmBCXZh01WYinOSDTUYi4qTgQAN0eVAxgDAAA=
-X-CMS-MailID: 20220612041331epcas5p1ad8aa893e7278112eeb6759979d4aff6
-X-Msg-Generator: CA
+From: CKI Project <cki-project@redhat.com>
+To: skt-results-master@redhat.com, llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for kernel 5.19.0-rc1
+ (mainline.kernel.org-clang, 1c27f1fc)
+Date: Sun, 12 Jun 2022 07:07:44 -0000
+Message-ID: <cki.J52Y09CE75XZ2GMS8RAK@redhat.com>
+X-Gitlab-Pipeline-ID: 561499282
+X-Gitlab-Url: https://gitlab.com
+X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
+ =?utf-8?q?nes/cki-trusted-contributors/pipelines/561499282?=
+X-DataWarehouse-Checkout-IID: 44879
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220611233355epcas5p1970bae9647eae17e20d330775b584695
-References: <CGME20220611233355epcas5p1970bae9647eae17e20d330775b584695@epcas5p1.samsung.com>
-	<202206120755.03gKC0ne-lkp@intel.com>
-
-Hi
-
->-----Original Message-----
->From: kernel test robot [mailto:lkp@intel.com]
->Sent: Sunday, June 12, 2022 5:03 AM
->To: Alim Akhtar <alim.akhtar@samsung.com>
->Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org;
-linux-kernel@vger.kernel.org;
->Martin K. Petersen <martin.petersen@oracle.com>; Chanho Park
-><chanho61.park@samsung.com>; Bharat Uppal
-><bharat.uppal@samsung.com>
->Subject: [mkp-scsi:for-next 31/41] drivers/phy/samsung/phy-fsd-ufs.c:50:3:
->error: field designator 'cfgs' does not refer to any field in type 'const
-struct
->samsung_ufs_phy_drvdata'; did you mean 'cfg'?
->
->tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
-for-next
->head:   b9f50e3cfd13687279f2170ff6ef5d71f6c7db11
->commit: f678ce49991950e4964cd82d3f3a8adfb63a9a70 [31/41] scsi: phy:
->samsung-ufs: Add support for FSD UFS PHY driver
->config: hexagon-randconfig-r045-20220612
->(https://protect2.fireeye.com/v1/url?k=5d7e4a21-3c05e0a8-5d7fc16e-
->74fe48600034-ee8489beaab56766&q=1&e=4cfcb9fa-8108-4551-8c4c-
->365a83dbb2ae&u=https%3A%2F%2Fdownload.01.org%2F0day-
->ci%2Farchive%2F20220612%2F202206120755.03gKC0ne-
->lkp%40intel.com%2Fconfig)
->compiler: clang version 15.0.0
->(https://protect2.fireeye.com/v1/url?k=2ec17c37-4fbad6be-2ec0f778-
->74fe48600034-5023bd0668516b05&q=1&e=4cfcb9fa-8108-4551-8c4c-
->365a83dbb2ae&u=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project
->ff4abe755279a3a47cc416ef80dbc900d9a98a19)
->reproduce (this is a W=1 build):
->        wget https://protect2.fireeye.com/v1/url?k=0f0eec04-6e75468d-
->0f0f674b-74fe48600034-eda10c46bdf9a9c9&q=1&e=4cfcb9fa-8108-4551-8c4c-
->365a83dbb2ae&u=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Fl
->kp-tests%2Fmaster%2Fsbin%2Fmake.cross -O ~/bin/make.cross
->        chmod +x ~/bin/make.cross
->        #
->https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?id=f67
->8ce49991950e4964cd82d3f3a8adfb63a9a70
->        git remote add mkp-scsi
->https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
->        git fetch --no-tags mkp-scsi for-next
->        git checkout f678ce49991950e4964cd82d3f3a8adfb63a9a70
->        # save the config file
->        mkdir build_dir && cp config build_dir/.config
->        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
->W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/phy/samsung/
->
->If you fix the issue, kindly add following tag where applicable
->Reported-by: kernel test robot <lkp@intel.com>
->
->All errors (new ones prefixed by >>):
->
->>> drivers/phy/samsung/phy-fsd-ufs.c:50:3: error: field designator 'cfgs'
-does
->not refer to any field in type 'const struct samsung_ufs_phy_drvdata'; did
-you
->mean 'cfg'?
->           .cfgs = fsd_ufs_phy_cfgs,
->            ^~~~
->            cfg
->   drivers/phy/samsung/phy-samsung-ufs.h:104:37: note: 'cfg' declared here
->           const struct samsung_ufs_phy_cfg **cfg;
->                
-
-[1] " patch:
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220607072907.1
-27000-3-chanho61.park@samsung.com/
-
-changes the cfg -> cfgs , and it is merged in Linux-next.
-This series was based on next-20220609
-
-I was expecting phy driver changes will go via phy tree, where [1] is
-available.
-
-@Martin, can you please take a look?
-
-You can just take the ufs changes (along with its device tree) and drop the
-phy change or take the [1] above.
+Content-Transfer-Encoding: quoted-printable
 
 
->   1 error generated.
->
->
->vim +50 drivers/phy/samsung/phy-fsd-ufs.c
->
->    48
->    49	const struct samsung_ufs_phy_drvdata fsd_ufs_phy = {
->  > 50		.cfgs = fsd_ufs_phy_cfgs,
->
->--
->0-DAY CI Kernel Test Service
->https://protect2.fireeye.com/v1/url?k=780e3ae5-1975906c-780fb1aa-
->74fe48600034-15b3e78a3eb1d3c6&q=1&e=4cfcb9fa-8108-4551-8c4c-
->365a83dbb2ae&u=https%3A%2F%2F01.org%2Flkp
+
+Check out this report and any autotriaged failures in our web dashboard:
+    https://datawarehouse.cki-project.org/kcidb/checkouts/44879
+
+Hello,
+
+We ran automated tests on a recent commit from this kernel tree:
+
+       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
+s/linux.git
+            Commit: 1c27f1fc1549 - iov_iter: fix build issue due to possibl=
+e type mis-match
+
+The results of these automated tests are provided below.
+
+    Overall result: FAILED (see details below)
+             Merge: OK
+           Compile: OK
+ Selftests compile: FAILED
+             Tests: FAILED
+    Targeted tests: NO
+
+All kernel binaries, config files, and logs are available for download here=
+:
+
+  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
+fix=3Ddatawarehouse-public/2022/06/11/561499282
+
+One or more kernel tests failed:
+
+    s390x:
+     =E2=9D=8C CIFS Connectathon
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C Storage: swraid mdadm raid_module test
+     =E2=9D=8C kdump - sysrq-c
+     =E2=9D=8C kdump - file-load
+     =E2=9D=8C Storage blktests - blk
+
+    aarch64:
+     =E2=9D=8C Boot test
+     =E2=9D=8C CIFS Connectathon
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C Networking cki netfilter test
+     =E2=9D=8C ALSA PCM loopback test
+     =E2=9D=8C storage: SCSI VPD
+     =E2=9D=8C storage: software RAID testing
+     =E2=9D=8C Storage: swraid mdadm raid_module test
+     =E2=9D=8C Reboot test
+     =E2=9D=8C xfstests - ext4
+     =E2=9D=8C xfstests - xfs
+
+    ppc64le:
+     =E2=9D=8C CIFS Connectathon
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C Storage: swraid mdadm raid_module test
+     =E2=9D=8C trace: ftrace/tracer
+     =E2=9D=8C selinux-policy: serge-testsuite
+     =E2=9D=8C kdump - sysrq-c
+
+    x86_64 (debug):
+     =E2=9D=8C Boot test
+     =E2=9D=8C CIFS Connectathon
+     =E2=9D=8C POSIX pjd-fstest suites
+     =E2=9D=8C Storage: swraid mdadm raid_module test
+     =E2=9D=8C Reboot test
+     =E2=9D=8C xfstests - ext4
+     =E2=9D=8C xfstests - xfs
+     =E2=9D=8C xfstests - nfsv4.2
+     =E2=9D=8C xfstests - cifsv3.11
+
+    x86_64:
+     =E2=9D=8C xfstests - ext4
+     =E2=9D=8C xfstests - xfs
+     =E2=9D=8C xfstests - nfsv4.2
+     =E2=9D=8C xfstests - cifsv3.11
+
+We hope that these logs can help you find the problem quickly. For the full
+detail on our testing procedures, please scroll to the bottom of this messa=
+ge.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
+Compile testing
+---------------
+
+We compiled the kernel for 5 architectures:
+
+    aarch64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    ppc64le:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    s390x:
+      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
+ targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+    x86_64:
+      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
+
+
+We built the following selftests:
+
+  x86_64:
+      net: fail
+      bpf: fail
+      seccomp: OK
+      lkdtm: OK
+      install and packaging: OK
+
+You can find the full log (build-selftests.log) in the artifact storage abo=
+ve.
+
+
+Hardware testing
+----------------
+We booted each kernel and ran the following tests:
+
+  aarch64:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Reboot test
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9D=8C Boot test
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9D=8C Storage block - storage fio numa
+       =E2=9C=85 Reboot test
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+       =E2=9C=85 Reboot test
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 ACPI enabled test
+       =E2=9C=85 i2c: i2cdetect sanity
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9D=8C CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking: igmp conformance test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9D=8C Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking tunnel: permtest
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Networking VRF: sanity
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9D=8C ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 Storage: block zstd compression test
+       =E2=9C=85 Storage: block zstd smoke test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 lvm thinp stqe test
+       =E2=9C=85 lvm snapper test
+       =E2=9D=8C storage: SCSI VPD
+       =E2=9D=8C storage: software RAID testing
+       =E2=9D=8C Storage: swraid mdadm raid_module test
+       =E2=9C=85 Storage: swraid scsi_raid
+       =E2=9C=85 storage: targetcli basic
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9C=85 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
+       =E2=9D=8C Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 kdump - sysrq-c
+       =E2=9C=85 Reboot test
+
+    Host 6:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C xfstests - ext4
+       =E2=9D=8C xfstests - xfs
+       =F0=9F=9A=A7 =E2=9D=8C xfstests - btrfs
+       =E2=9C=85 Reboot test
+
+  ppc64le:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9D=8C CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking tunnel: permtest
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Networking VRF: sanity
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 ALSA PCM loopback test
+       =E2=9C=85 ALSA Control (mixer) Userspace Element test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 lvm thinp stqe test
+       =E2=9C=85 lvm snapper test
+       =E2=9C=85 storage: software RAID testing
+       =E2=9D=8C Storage: swraid mdadm raid_module test
+       =E2=9C=85 Storage: swraid scsi_raid
+       =E2=9C=85 storage: targetcli basic
+       =E2=9D=8C trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =E2=9C=85 Reboot test
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C selinux-policy: serge-testsuite
+       =E2=9C=85 Reboot test
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+  s390x:
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9D=8C CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 jvm - jcstress tests
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Networking bridge: sanity
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking MACsec: sanity
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking tunnel: permtest
+       =E2=9C=85 Networking ipsec: basic netns - transport
+       =E2=9C=85 Networking ipsec: basic netns - tunnel
+       =E2=9C=85 Networking vnic: ipvlan/basic
+       =E2=9C=85 Networking VRF: sanity
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 Storage: block zstd compression test
+       =E2=9C=85 Storage: block zstd smoke test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 lvm thinp stqe test
+       =E2=9C=85 lvm snapper test
+       =E2=9D=8C Storage: swraid mdadm raid_module test
+       =E2=9C=85 Storage: swraid scsi_raid
+       =E2=9C=85 storage: targetcli basic
+       =E2=9C=85 trace: ftrace/tracer
+       =E2=9C=85 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as root
+       =F0=9F=9A=A7 =E2=9D=8C Podman system test - as user
+       =F0=9F=9A=A7 =E2=9C=85 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =F0=9F=9A=A7 =E2=9C=85 kdump - kexec-file-load
+       =E2=9C=85 Reboot test
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Reboot test
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C kdump - sysrq-c
+       =E2=9D=8C kdump - file-load
+       =E2=9C=85 Reboot test
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C Storage blktests - blk
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =E2=9C=85 Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvmeof-mp
+       =E2=9C=85 Reboot test
+
+  x86_64 (debug):
+    Host 1:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9D=8C Boot test
+       =E2=9C=85 ACPI table test
+       =E2=9C=85 LTP - cve
+       =E2=9C=85 LTP - sched
+       =E2=9C=85 LTP - syscalls
+       =E2=9C=85 LTP - can
+       =E2=9C=85 LTP - commands
+       =E2=9C=85 LTP - containers
+       =E2=9C=85 LTP - dio
+       =E2=9C=85 LTP - fs
+       =E2=9C=85 LTP - fsx
+       =E2=9C=85 LTP - math
+       =E2=9C=85 LTP - hugetlb
+       =E2=9C=85 LTP - mm
+       =E2=9C=85 LTP - nptl
+       =E2=9C=85 LTP - pty
+       =E2=9C=85 LTP - ipc
+       =E2=9C=85 LTP - tracing
+       =E2=9C=85 LTP: openposix test suite
+       =E2=9D=8C CIFS Connectathon
+       =E2=9D=8C POSIX pjd-fstest suites
+       =E2=9C=85 Loopdev Sanity
+       =E2=9C=85 Memory: fork_mem
+       =E2=9C=85 Memory function: memfd_create
+       =E2=9C=85 AMTU (Abstract Machine Test Utility)
+       =E2=9C=85 Ethernet drivers sanity
+       =E2=9C=85 Networking socket: fuzz
+       =E2=9C=85 Networking sctp-auth: sockopts test
+       =E2=9C=85 Networking: igmp conformance test
+       =E2=9C=85 Networking route: pmtu
+       =E2=9C=85 Networking route_func - local
+       =E2=9C=85 Networking route_func - forward
+       =E2=9C=85 Networking TCP: keepalive test
+       =E2=9C=85 Networking UDP: socket
+       =E2=9C=85 Networking cki netfilter test
+       =E2=9C=85 Networking tunnel: geneve basic test
+       =E2=9C=85 Networking tunnel: gre basic
+       =E2=9C=85 L2TP basic test
+       =E2=9C=85 Networking tunnel: vxlan basic
+       =E2=9C=85 Networking tunnel: permtest
+       =E2=9C=85 Networking VRF: sanity
+       =E2=9C=85 Libkcapi AF_ALG test
+       =E2=9C=85 pciutils: sanity smoke test
+       =E2=9C=85 pciutils: update pci ids test
+       =E2=9C=85 storage: dm/common
+       =E2=9C=85 lvm thinp sanity
+       =E2=9C=85 lvm thinp stqe test
+       =E2=9C=85 storage: SCSI VPD
+       =E2=9C=85 storage: software RAID testing
+       =E2=9D=8C Storage: swraid mdadm raid_module test
+       =E2=9C=85 Storage: swraid scsi_raid
+       =E2=9C=85 storage: targetcli basic
+       =E2=9C=85 trace: ftrace/tracer
+       =F0=9F=9A=A7 =E2=9D=8C Firmware test suite
+       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - forwarding
+       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - tc
+       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - bpf
+       =F0=9F=9A=A7 =E2=9C=85 kselftests upstream - bpf_test_progs
+       =F0=9F=9A=A7 =E2=9D=8C Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9C=85 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9C=85 lvm cache test
+       =E2=9D=8C Reboot test
+
+    Host 2:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C xfstests - ext4
+       =E2=9D=8C xfstests - xfs
+       =E2=9D=8C xfstests - nfsv4.2
+       =E2=9D=8C xfstests - cifsv3.11
+       =F0=9F=9A=A7 =E2=9D=8C xfstests - btrfs
+       =E2=9C=85 Reboot test
+
+    Host 3:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 selinux-policy: serge-testsuite
+       =E2=9C=85 Reboot test
+
+    Host 4:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 Reboot test
+
+  x86_64:
+    Host 1:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ACPI table test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 i2c: i2cdetect sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - cve
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - sched
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - syscalls
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - can
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - commands
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - containers
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - dio
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fs
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - fsx
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - math
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - hugetlb
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - mm
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - nptl
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - pty
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - ipc
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP - tracing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 LTP: openposix test suite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 CIFS Connectathon
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 POSIX pjd-fstest suites
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Loopdev Sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 jvm - jcstress tests
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory: fork_mem
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: memfd_create
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 AMTU (Abstract Machine Test Utility)
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking bridge: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Ethernet drivers sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking MACsec: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking socket: fuzz
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking sctp-auth: sockopts test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking: igmp conformance test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route: pmtu
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - local
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking route_func - forward
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking TCP: keepalive test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking UDP: socket
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking cki netfilter test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: geneve basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: gre basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 L2TP basic test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: vxlan basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking tunnel: permtest
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - transpor=
+t
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking ipsec: basic netns - tunnel
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking vnic: ipvlan/basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Networking VRF: sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Libkcapi AF_ALG test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: sanity smoke test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 pciutils: update pci ids test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA PCM loopback test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 ALSA Control (mixer) Userspace Element t=
+est
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd compression test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: block zstd smoke test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: dm/common
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp sanity
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm thinp stqe test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm snapper test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: SCSI VPD
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: software RAID testing
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid mdadm raid_module test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage: swraid scsi_raid
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 storage: targetcli basic
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 trace: ftrace/tracer
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec_boot
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as roo=
+t
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Podman system test - as use=
+r
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Firmware test suite
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - net
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - forwa=
+rding
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - tc
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kselftests upstream - bpf_t=
+est_progs
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Memory function: kaslr
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Usex - version 1.9-29
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 lvm cache test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - kexec-file-load
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 2:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 selinux-policy: serge-testsuite
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 3:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - sysrq-c
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 kdump - file-load
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 4:
+
+       =E2=9A=A1 Internal infrastructure issues prevented one or more tests=
+ (marked
+       with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
+       This is not the fault of the kernel that was tested.
+
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Boot test
+       =F0=9F=9A=A7 =E2=9A=A1=E2=9A=A1=E2=9A=A1 Storage blktests - nvmeof-m=
+p
+       =E2=9A=A1=E2=9A=A1=E2=9A=A1 Reboot test
+
+    Host 5:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9D=8C xfstests - ext4
+       =E2=9D=8C xfstests - xfs
+       =E2=9D=8C xfstests - nfsv4.2
+       =E2=9D=8C xfstests - cifsv3.11
+       =F0=9F=9A=A7 =E2=9D=8C xfstests - btrfs
+       =E2=9C=85 Reboot test
+
+    Host 6:
+       =F0=9F=9A=A7 =E2=9C=85 SELinux Custom Module Setup
+       =F0=9F=9A=A7 =E2=9C=85 machineinfo
+       =E2=9C=85 Boot test
+       =E2=9C=85 CPU: Die Test
+       =E2=9C=85 IPMI driver test
+       =E2=9C=85 IPMItool loop stress test
+       =E2=9C=85 Storage blktests - blk
+       =E2=9C=85 Storage block - filesystem fio test
+       =E2=9C=85 Storage block - queue scheduler test
+       =E2=9C=85 stress: stress-ng - cpu-cache
+       =E2=9C=85 stress: stress-ng - memory
+       =F0=9F=9A=A7 =E2=9C=85 CPU: Idle Test
+       =F0=9F=9A=A7 =E2=9C=85 Storage blktests - nvme-tcp
+       =F0=9F=9A=A7 =E2=9C=85 Storage block - storage fio numa
+       =E2=9C=85 Reboot test
+
+  Test sources: https://gitlab.com/cki-project/kernel-tests
+    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
+ existing tests!
+
+Aborted tests
+-------------
+Tests that didn't complete running successfully are marked with =E2=9A=A1=
+=E2=9A=A1=E2=9A=A1.
+If this was caused by an infrastructure issue, we try to mark that
+explicitly in the report.
+
+Waived tests
+------------
+If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
+uch tests are
+executed but their results are not taken into account. Tests are waived whe=
+n
+their results are not reliable enough, e.g. when they're just introduced or=
+ are
+being fixed.
+
+Testing timeout
+---------------
+We aim to provide a report within reasonable timeframe. Tests that haven't
+finished running yet are marked with =E2=8F=B1.
+Targeted tests
+--------------
+Test runs for patches always include a set of base tests, plus some
+tests chosen based on the file paths modified by the patch. The latter
+are called "targeted tests". If no targeted tests are run, that means
+no patch-specific tests are available. Please, consider contributing a
+targeted test for related patches to increase test coverage. See
+https://docs.engineering.redhat.com/x/_wEZB for more details.
 
