@@ -1,45 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E01EC0
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 12:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F15DEC0
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 13:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655038150; x=1686574150;
+  t=1655040622; x=1686576622;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wyw1SzrVB8IJKOlV176J9ZCu92I0WyZttvi9HwS1CE0=;
-  b=E8x9Bf/mcgVf5wHCP6gPu8GEgTugU2ifB7ysUF9VHqzlWmZA+aZJ8N/C
-   nqxlXgkzNXtm6tnNA9uhnTGwimmMqfVVmY+VNICLJDRe+9CtSozkG2gcl
-   H7jHNJoYKR+rWZeGXTp7BExeRKw2oTuLJDGkLtebk3Aq+WGq9ROvKngKH
-   33w6bTJb3+VSU9ZPQdGRfBqp52OAxnxhaxtE+Dny0fbP5MfyN9kh1Ei5r
-   J091G5JUTD0oo7b2femcdSPkYsMF+V3HPpQcY8V8xV1ffVBlxotfxD9pt
-   2dfGAW0g+r2cIGroBTNl4yHC0omG+jrMnxxQYU0gm6B6v/2Dp7ndSiyzw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="276817709"
+  bh=5LKXzQLCQoh0rjoFQjl+3HcDItBh/kLW3+qqm6Tqcn4=;
+  b=NRjoGW8qDgsTQqwM4O+u/OCLehtpIs+JLmR6bobAWA0qf2OXbNXxfR5i
+   VNJCBrW90E0RVhpJrlOW3KMGDV8FJos5OeYDfBAtFs2KuRGeZgpaMDzA+
+   YnMpMFKhQwnUf9caW1l6649GhwFh41EaMScAALfqRQfVhvONv4n8ukIco
+   4eymlMOcommeCDQWJmVRxBG33GyoRbzKzfPJtXCy60CY5abvnpQqoOVu5
+   zvG21N9MUDjg6zKf+6/NK78JQlCmpiqRygzgxajbA+UtZ9sxrtq8aZ8Vo
+   x6g4lDQzZM1XLEkKB5/S+2r5uRvMRJOP69s44notPftqNDtuZ+fZCZUKC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339740437"
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="276817709"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 05:49:10 -0700
+   d="scan'208";a="339740437"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 06:30:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="611363071"
+   d="scan'208";a="711600792"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2022 05:49:07 -0700
+  by orsmga004.jf.intel.com with ESMTP; 12 Jun 2022 06:30:08 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0N1f-000JvO-3w;
-	Sun, 12 Jun 2022 12:49:07 +0000
-Date: Sun, 12 Jun 2022 20:48:51 +0800
+	id 1o0NfL-000Jwb-Uc;
+	Sun, 12 Jun 2022 13:30:07 +0000
+Date: Sun, 12 Jun 2022 21:29:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [jic23-iio:testing 199/204]
- drivers/iio/adc/intel_mrfld_adc.c:222:58: error: array has incomplete
- element type 'const struct platform_device_id'
-Message-ID: <202206122000.ehsJVvx5-lkp@intel.com>
+	ceph-devel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>
+Subject: [ceph-client:testing 7/14] fs/ceph/addr.c:125:2: error: call to
+ undeclared function 'VM_WARN_ON_FOLIO'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202206122114.9T6bqADv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,51 +47,92 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   20b4fa69eeaa2b6389ff83662a96c8f0f1f414ab
-commit: 8e3460e351d063ba81c3f50ed946dd825848d892 [199/204] iio: core: drop of.h from iio.h
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220612/202206122000.ehsJVvx5-lkp@intel.com/config)
+tree:   https://github.com/ceph/ceph-client.git testing
+head:   3e303a58e3a89d254098138aa8488872bf73c9a4
+commit: 00043f493521923e81e179ef2e01a47941b07ef2 [7/14] ceph: switch back to testing for NULL folio->private in ceph_dirty_folio
+config: hexagon-randconfig-r023-20220612 (https://download.01.org/0day-ci/archive/20220612/202206122114.9T6bqADv-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6466c9abf3674bade1f6ee859f24ebc7aaf9cd88)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=8e3460e351d063ba81c3f50ed946dd825848d892
-        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-        git fetch --no-tags jic23-iio testing
-        git checkout 8e3460e351d063ba81c3f50ed946dd825848d892
+        # https://github.com/ceph/ceph-client/commit/00043f493521923e81e179ef2e01a47941b07ef2
+        git remote add ceph-client https://github.com/ceph/ceph-client.git
+        git fetch --no-tags ceph-client testing
+        git checkout 00043f493521923e81e179ef2e01a47941b07ef2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/adc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/iio/adc/intel_mrfld_adc.c:222:58: error: array has incomplete element type 'const struct platform_device_id'
-   static const struct platform_device_id mrfld_adc_id_table[] = {
-                                                            ^
-   include/linux/platform_device.h:21:8: note: forward declaration of 'struct platform_device_id'
-   struct platform_device_id;
-          ^
+>> fs/ceph/addr.c:125:2: error: call to undeclared function 'VM_WARN_ON_FOLIO'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           VM_WARN_ON_FOLIO(folio->private, folio);
+           ^
    1 error generated.
 
 
-vim +222 drivers/iio/adc/intel_mrfld_adc.c
+vim +/VM_WARN_ON_FOLIO +125 fs/ceph/addr.c
 
-a7118662734a3f Vincent Pelletier 2019-03-26  221  
-a7118662734a3f Vincent Pelletier 2019-03-26 @222  static const struct platform_device_id mrfld_adc_id_table[] = {
-a7118662734a3f Vincent Pelletier 2019-03-26  223  	{ .name = "mrfld_bcove_adc" },
-a7118662734a3f Vincent Pelletier 2019-03-26  224  	{}
-a7118662734a3f Vincent Pelletier 2019-03-26  225  };
-a7118662734a3f Vincent Pelletier 2019-03-26  226  MODULE_DEVICE_TABLE(platform, mrfld_adc_id_table);
-a7118662734a3f Vincent Pelletier 2019-03-26  227  
-
-:::::: The code at line 222 was first introduced by commit
-:::::: a7118662734a3f97622d8274708cb61fd53d693a iio: adc: intel_mrfld_adc: Add Basin Cove ADC driver
-
-:::::: TO: Vincent Pelletier <plr.vincent@gmail.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+    74	
+    75	/*
+    76	 * Dirty a page.  Optimistically adjust accounting, on the assumption
+    77	 * that we won't race with invalidate.  If we do, readjust.
+    78	 */
+    79	static bool ceph_dirty_folio(struct address_space *mapping, struct folio *folio)
+    80	{
+    81		struct inode *inode;
+    82		struct ceph_inode_info *ci;
+    83		struct ceph_snap_context *snapc;
+    84	
+    85		if (folio_test_dirty(folio)) {
+    86			dout("%p dirty_folio %p idx %lu -- already dirty\n",
+    87			     mapping->host, folio, folio->index);
+    88			VM_BUG_ON_FOLIO(!folio_test_private(folio), folio);
+    89			return false;
+    90		}
+    91	
+    92		inode = mapping->host;
+    93		ci = ceph_inode(inode);
+    94	
+    95		/* dirty the head */
+    96		spin_lock(&ci->i_ceph_lock);
+    97		BUG_ON(ci->i_wr_ref == 0); // caller should hold Fw reference
+    98		if (__ceph_have_pending_cap_snap(ci)) {
+    99			struct ceph_cap_snap *capsnap =
+   100					list_last_entry(&ci->i_cap_snaps,
+   101							struct ceph_cap_snap,
+   102							ci_item);
+   103			snapc = ceph_get_snap_context(capsnap->context);
+   104			capsnap->dirty_pages++;
+   105		} else {
+   106			BUG_ON(!ci->i_head_snapc);
+   107			snapc = ceph_get_snap_context(ci->i_head_snapc);
+   108			++ci->i_wrbuffer_ref_head;
+   109		}
+   110		if (ci->i_wrbuffer_ref == 0)
+   111			ihold(inode);
+   112		++ci->i_wrbuffer_ref;
+   113		dout("%p dirty_folio %p idx %lu head %d/%d -> %d/%d "
+   114		     "snapc %p seq %lld (%d snaps)\n",
+   115		     mapping->host, folio, folio->index,
+   116		     ci->i_wrbuffer_ref-1, ci->i_wrbuffer_ref_head-1,
+   117		     ci->i_wrbuffer_ref, ci->i_wrbuffer_ref_head,
+   118		     snapc, snapc->seq, snapc->num_snaps);
+   119		spin_unlock(&ci->i_ceph_lock);
+   120	
+   121		/*
+   122		 * Reference snap context in folio->private.  Also set
+   123		 * PagePrivate so that we get invalidate_folio callback.
+   124		 */
+ > 125		VM_WARN_ON_FOLIO(folio->private, folio);
+   126		folio_attach_private(folio, snapc);
+   127	
+   128		return ceph_fscache_dirty_folio(mapping, folio);
+   129	}
+   130	
 
 -- 
 0-DAY CI Kernel Test Service
