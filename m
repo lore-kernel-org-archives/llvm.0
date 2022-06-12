@@ -1,43 +1,46 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F15DEC0
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 13:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C466AEC0
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 13:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655040622; x=1686576622;
+  t=1655041211; x=1686577211;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5LKXzQLCQoh0rjoFQjl+3HcDItBh/kLW3+qqm6Tqcn4=;
-  b=NRjoGW8qDgsTQqwM4O+u/OCLehtpIs+JLmR6bobAWA0qf2OXbNXxfR5i
-   VNJCBrW90E0RVhpJrlOW3KMGDV8FJos5OeYDfBAtFs2KuRGeZgpaMDzA+
-   YnMpMFKhQwnUf9caW1l6649GhwFh41EaMScAALfqRQfVhvONv4n8ukIco
-   4eymlMOcommeCDQWJmVRxBG33GyoRbzKzfPJtXCy60CY5abvnpQqoOVu5
-   zvG21N9MUDjg6zKf+6/NK78JQlCmpiqRygzgxajbA+UtZ9sxrtq8aZ8Vo
-   x6g4lDQzZM1XLEkKB5/S+2r5uRvMRJOP69s44notPftqNDtuZ+fZCZUKC
+  bh=UGM/ADNUwmGyFflTyjWzM7h6423qH4hEnlmOb9hXOPk=;
+  b=ar1mrdvcgt5sGKxIgCLh3P4XeSvdWkyBIP4MWBwnKWQp2DmoY2SfNi2b
+   S9jyFS+OmfyR5MR8jP5Sm3ZPoIXBC+9D7pygMx3VwMxE+CaiTuFRteLg9
+   jt5HBM74zZK9gvxC0fvOH8+Hi8D6ZrDpaPb/XNoxMnpFeOoL6yZYkyk/+
+   FbNVg8OuXM+RoFMUqPkpGdmAhDiEO+0JM+l6/LPxHCD+Nq25z1CPH1jWX
+   Y0zfA/AHC3IS/ncGULT3uYSDGkNRB9+UbB38ige0XN3HhW+qu1lA6FSDf
+   DoSbRhxwUk1ziY0/Gpl1PE1H7/vSPrH+Ym8dOKhZ1pK9CIPuNAp/9I69l
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339740437"
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="257882947"
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="339740437"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 06:30:10 -0700
+   d="scan'208";a="257882947"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 06:40:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="711600792"
+   d="scan'208";a="639188705"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 12 Jun 2022 06:30:08 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2022 06:40:08 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0NfL-000Jwb-Uc;
-	Sun, 12 Jun 2022 13:30:07 +0000
-Date: Sun, 12 Jun 2022 21:29:46 +0800
+	id 1o0Np2-000Jwv-4h;
+	Sun, 12 Jun 2022 13:40:08 +0000
+Date: Sun, 12 Jun 2022 21:40:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
+To: Marek Vasut <marex@denx.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	ceph-devel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>
-Subject: [ceph-client:testing 7/14] fs/ceph/addr.c:125:2: error: call to
- undeclared function 'VM_WARN_ON_FOLIO'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202206122114.9T6bqADv-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [drm-misc:for-linux-next 9/10]
+ drivers/gpu/drm/msm/dp/dp_parser.c:110:5: error: use of undeclared
+ identifier 'data_lane_property'
+Message-ID: <202206122125.gkajULO7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,92 +50,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ceph/ceph-client.git testing
-head:   3e303a58e3a89d254098138aa8488872bf73c9a4
-commit: 00043f493521923e81e179ef2e01a47941b07ef2 [7/14] ceph: switch back to testing for NULL folio->private in ceph_dirty_folio
-config: hexagon-randconfig-r023-20220612 (https://download.01.org/0day-ci/archive/20220612/202206122114.9T6bqADv-lkp@intel.com/config)
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   d643daaf1694b7565fbe3982b630e1c7b95f1600
+commit: 185443efa26a62b7d1401c89b83c89a1a2601350 [9/10] drm/msm: Convert to drm_of_get_data_lanes_count
+config: hexagon-randconfig-r045-20220612 (https://download.01.org/0day-ci/archive/20220612/202206122125.gkajULO7-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6466c9abf3674bade1f6ee859f24ebc7aaf9cd88)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ceph/ceph-client/commit/00043f493521923e81e179ef2e01a47941b07ef2
-        git remote add ceph-client https://github.com/ceph/ceph-client.git
-        git fetch --no-tags ceph-client testing
-        git checkout 00043f493521923e81e179ef2e01a47941b07ef2
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc for-linux-next
+        git checkout 185443efa26a62b7d1401c89b83c89a1a2601350
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/ceph/addr.c:125:2: error: call to undeclared function 'VM_WARN_ON_FOLIO'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           VM_WARN_ON_FOLIO(folio->private, folio);
-           ^
+>> drivers/gpu/drm/msm/dp/dp_parser.c:110:5: error: use of undeclared identifier 'data_lane_property'
+                                   data_lane_property, DP_MAX_NUM_DP_LANES);
+                                   ^
+   1 error generated.
+--
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:1676:14: error: call to undeclared function 'drm_of_get_data_lanes_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           num_lanes = drm_of_get_data_lanes_count(ep, 1, 4);
+                       ^
    1 error generated.
 
 
-vim +/VM_WARN_ON_FOLIO +125 fs/ceph/addr.c
+vim +/data_lane_property +110 drivers/gpu/drm/msm/dp/dp_parser.c
 
-    74	
-    75	/*
-    76	 * Dirty a page.  Optimistically adjust accounting, on the assumption
-    77	 * that we won't race with invalidate.  If we do, readjust.
-    78	 */
-    79	static bool ceph_dirty_folio(struct address_space *mapping, struct folio *folio)
-    80	{
-    81		struct inode *inode;
-    82		struct ceph_inode_info *ci;
-    83		struct ceph_snap_context *snapc;
-    84	
-    85		if (folio_test_dirty(folio)) {
-    86			dout("%p dirty_folio %p idx %lu -- already dirty\n",
-    87			     mapping->host, folio, folio->index);
-    88			VM_BUG_ON_FOLIO(!folio_test_private(folio), folio);
-    89			return false;
-    90		}
-    91	
-    92		inode = mapping->host;
-    93		ci = ceph_inode(inode);
-    94	
-    95		/* dirty the head */
-    96		spin_lock(&ci->i_ceph_lock);
-    97		BUG_ON(ci->i_wr_ref == 0); // caller should hold Fw reference
-    98		if (__ceph_have_pending_cap_snap(ci)) {
-    99			struct ceph_cap_snap *capsnap =
-   100					list_last_entry(&ci->i_cap_snaps,
-   101							struct ceph_cap_snap,
-   102							ci_item);
-   103			snapc = ceph_get_snap_context(capsnap->context);
-   104			capsnap->dirty_pages++;
-   105		} else {
-   106			BUG_ON(!ci->i_head_snapc);
-   107			snapc = ceph_get_snap_context(ci->i_head_snapc);
-   108			++ci->i_wrbuffer_ref_head;
-   109		}
-   110		if (ci->i_wrbuffer_ref == 0)
-   111			ihold(inode);
-   112		++ci->i_wrbuffer_ref;
-   113		dout("%p dirty_folio %p idx %lu head %d/%d -> %d/%d "
-   114		     "snapc %p seq %lld (%d snaps)\n",
-   115		     mapping->host, folio, folio->index,
-   116		     ci->i_wrbuffer_ref-1, ci->i_wrbuffer_ref_head-1,
-   117		     ci->i_wrbuffer_ref, ci->i_wrbuffer_ref_head,
-   118		     snapc, snapc->seq, snapc->num_snaps);
-   119		spin_unlock(&ci->i_ceph_lock);
-   120	
-   121		/*
-   122		 * Reference snap context in folio->private.  Also set
-   123		 * PagePrivate so that we get invalidate_folio callback.
-   124		 */
- > 125		VM_WARN_ON_FOLIO(folio->private, folio);
-   126		folio_attach_private(folio, snapc);
-   127	
-   128		return ceph_fscache_dirty_folio(mapping, folio);
-   129	}
-   130	
+c943b4948b5848 Chandan Uddaraju 2020-08-27  101  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  102  static int dp_parser_misc(struct dp_parser *parser)
+c943b4948b5848 Chandan Uddaraju 2020-08-27  103  {
+c943b4948b5848 Chandan Uddaraju 2020-08-27  104  	struct device_node *of_node = parser->pdev->dev.of_node;
+185443efa26a62 Marek Vasut      2022-05-24  105  	int len;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  106  
+185443efa26a62 Marek Vasut      2022-05-24  107  	len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
+c943b4948b5848 Chandan Uddaraju 2020-08-27  108  	if (len < 0) {
+c943b4948b5848 Chandan Uddaraju 2020-08-27  109  		DRM_WARN("Invalid property %s, default max DP lanes = %d\n",
+c943b4948b5848 Chandan Uddaraju 2020-08-27 @110  				data_lane_property, DP_MAX_NUM_DP_LANES);
+c943b4948b5848 Chandan Uddaraju 2020-08-27  111  		len = DP_MAX_NUM_DP_LANES;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  112  	}
+c943b4948b5848 Chandan Uddaraju 2020-08-27  113  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  114  	parser->max_dp_lanes = len;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  115  	return 0;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  116  }
+c943b4948b5848 Chandan Uddaraju 2020-08-27  117  
+
+:::::: The code at line 110 was first introduced by commit
+:::::: c943b4948b5848fc0e07f875edbd35a973879e22 drm/msm/dp: add displayPort driver support
+
+:::::: TO: Chandan Uddaraju <chandanu@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service
