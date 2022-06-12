@@ -1,179 +1,205 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACC07C
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 02:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1655000787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Po+OITd9LduODB5Ll6LkiNrsN4yFiLHBsGMIZQJ3aw4=;
-	b=XuXyb3C+LrMmvFry/8khNl0UE1wcXQEY2Mp6J1Po0FeWoi1yY9b4MBI6ST/rXJSxKcDKwd
-	b37+Wb3sD5D3TfimOkaVASRvu9AOv77TSxupJPgyg7wYXKk8j6Hke1z0EUZaMUcvcc2zfz
-	KI8IXXq/jXrY391T0rGJSfWjgj5Qt5E=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-zxtyWeSvN6eBI7h4lqyV0A-1; Sat, 11 Jun 2022 22:26:24 -0400
-X-MC-Unique: zxtyWeSvN6eBI7h4lqyV0A-1
-Received: by mail-pg1-f197.google.com with SMTP id 78-20020a630051000000b003fe25580679so1713512pga.9
-        for <llvm@lists.linux.dev>; Sat, 11 Jun 2022 19:26:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Po+OITd9LduODB5Ll6LkiNrsN4yFiLHBsGMIZQJ3aw4=;
-        b=USj2uNOn4J4dOBxvN8SrxHVObfqOXrVUcdvvYyDceRvYt5zhMLzhoTN6TnQfzl1YYI
-         VMP9IGMv90EFP/i+zzmV5KrqNSdDYlsfJtx4eRRXBimLo/eCSOG0LGY4BlOlUYcX2V6I
-         nKAR5o6e+6/9fGbzPo4SDcueczErLHLZci7U+r17hWpUt427sEjTtn2Z8lmMOdb4Yc5N
-         rG+CCMf4CD+CxOhaMP7cCFYnFjBwVIDY3zNFrMCIa9Xq5kRUZzO/mbJm08sl3UdJ6GvZ
-         HwYeB8Igih0U8odiyyJnZGGAXI6/+EhxkI9MRzDzBHGdFCSAEpCSCOeIA9DFRGbR/B1e
-         lVrA==
-X-Gm-Message-State: AOAM532EmD6HtFbON3NQ6jG9Zsd+TMsH3x4GV8Y3SA272MdfIxTX+gMK
-	STnglIuIvU+v+VzUP+2MaoGg8S2ocCQO8F1ta3ND7wU3ElcONp/G9aEojKpWj1tEfQeKs1RlNPn
-	mEm69tyyuoivpLA==
-X-Received: by 2002:a17:902:7449:b0:167:9520:d063 with SMTP id e9-20020a170902744900b001679520d063mr26178526plt.146.1655000781883;
-        Sat, 11 Jun 2022 19:26:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxSUdWj0g6z3wcj79WuGy61sOTinJ+Xh99UhjKXW2wg576bkRRUKMKz5+wx7YOmEnrejlsPhA==
-X-Received: by 2002:a17:902:7449:b0:167:9520:d063 with SMTP id e9-20020a170902744900b001679520d063mr26178517plt.146.1655000781571;
-        Sat, 11 Jun 2022 19:26:21 -0700 (PDT)
-Received: from [10.72.12.41] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170903200400b0016223016d79sm2188658pla.90.2022.06.11.19.26.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 19:26:20 -0700 (PDT)
-Subject: Re: [ceph-client:testing 7/9] lib/iov_iter.c:1464:9: warning:
- comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset)
- *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *'))
-To: kernel test robot <lkp@intel.com>, David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- ceph-devel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-References: <202206112305.4DdsErK8-lkp@intel.com>
-From: Xiubo Li <xiubli@redhat.com>
-Message-ID: <a1a3edde-7b44-eb09-6695-e7c57356b96e@redhat.com>
-Date: Sun, 12 Jun 2022 10:26:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731ABA2D
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 04:22:05 +0000 (UTC)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220612041335epoutp0153d05b72ffe0022bf6af99bac94af0d9~3xEtHWtRF1348013480epoutp01S
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 04:13:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220612041335epoutp0153d05b72ffe0022bf6af99bac94af0d9~3xEtHWtRF1348013480epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1655007215;
+	bh=SJZQOAHJw3wbHSdszVvP/HGvMn1TKA11C94/I9FoI+k=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=D75/PKXZFEhYmAeAYlgMuBpictGXpcIcf5N6uElSMNavATs4owTmHNOSdrrPEuhve
+	 DzYVkeFUCy+2yE3xvh1DjtptoYYaQdjPVbARJPNPqffMHQawPMZuleLDnxlE3iQ9lN
+	 EsyX3kWPs3qpQgkJit7vh8efJb5j/5f6ttjW+BcM=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20220612041334epcas5p3a08a1c6c22a7090207d108a4cd4675b9~3xEsVkV6q0380503805epcas5p3f;
+	Sun, 12 Jun 2022 04:13:34 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4LLLsm60ssz4x9Pp; Sun, 12 Jun
+	2022 04:13:32 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	CA.82.09762.CE765A26; Sun, 12 Jun 2022 13:13:32 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20220612041331epcas5p1ad8aa893e7278112eeb6759979d4aff6~3xEpUKaB_0735007350epcas5p1J;
+	Sun, 12 Jun 2022 04:13:31 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20220612041331epsmtrp2331d1f31e44d95f85fe307f5f7be3597~3xEpTbX3m0289902899epsmtrp2U;
+	Sun, 12 Jun 2022 04:13:31 +0000 (GMT)
+X-AuditID: b6c32a4b-213ff70000002622-94-62a567ec37c6
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	69.F3.11276.BE765A26; Sun, 12 Jun 2022 13:13:31 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20220612041330epsmtip2a0eadb2a0b8ac42bcc0320ad743e3f77~3xEoMzLmd0555805558epsmtip2B;
+	Sun, 12 Jun 2022 04:13:30 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'kernel test robot'" <lkp@intel.com>
+Cc: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+	<linux-kernel@vger.kernel.org>, "'Martin K. Petersen'"
+	<martin.petersen@oracle.com>, "'Chanho Park'" <chanho61.park@samsung.com>,
+	"'Bharat Uppal'" <bharat.uppal@samsung.com>
+In-Reply-To: <202206120755.03gKC0ne-lkp@intel.com>
+Subject: RE: [mkp-scsi:for-next 31/41]
+ drivers/phy/samsung/phy-fsd-ufs.c:50:3: error: field designator 'cfgs' does
+ not refer to any field in type 'const struct samsung_ufs_phy_drvdata'; did
+ you mean 'cfg'?
+Date: Sun, 12 Jun 2022 09:43:29 +0530
+Message-ID: <000001d87e12$c6962770$53c27650$@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202206112305.4DdsErK8-lkp@intel.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=xiubli@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEQai/Pc/D7KWC/Dc1oiNsuf0vQXwHf6YGgrsxP5xA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmuu6b9KVJBpuadS2uvbzAbnF5v7bF
+	2e5rjBaXd81hs3jV/IjN4smU/WwWy4//Y3Jg91i85yWTR/fsfyweLzbPZPT4+PQWi0ffllWM
+	Hp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl
+	5gCdoqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQw
+	MDIFKkzIzni7VLbguGzFvz89LA2MkyW7GDk5JARMJBZMvcHUxcjFISSwm1Fi5uNOVgjnE6PE
+	o43H2EGqhAS+MUo8v6QB03Hz3U4WiKK9jBKHpq9mh3BeMkq83dvNCFLFJqArsWNxGxuILSKg
+	KfH3/35mkCJmgVeMEgcPvwEr4hQwkjg37xFYt7DAZUaJp7dnsIAkWARUJe7P2gp0FQcHr4Cl
+	xNtOOZAwr4CgxMmZT8BKmAXkJba/ncMMcZKCxM+ny1ghlllJPN09F6pGXOLl0SNg8yUElnJI
+	3P+whRGiwUViWstkdghbWOLV8S1QtpTE53d72UD2Sgh4SCz6IwURzpB4u3w9VKu9xIErc1hA
+	SpiBHlu/Sx9iFZ9E7+8nTBCdvBIdbUIQ1aoSze+uskDY0hITu7tZYYY/vuQ8gVFxFpK/ZiH5
+	axaS+2ch7FrAyLKKUTK1oDg3PbXYtMA4L7UcHtvJ+bmbGMHJVMt7B+OjBx/0DjEycTAeYpTg
+	YFYS4Q24vShJiDclsbIqtSg/vqg0J7X4EKMpMKwnMkuJJucD03leSbyhiaWBiZmZmYmlsZmh
+	kjivwP/GJCGB9MSS1OzU1ILUIpg+Jg5OqQamIvnU+/MvW1zTibz4X3bWkohLUuvCL+yc8jLj
+	62n/Uo1/Lyfv4Onrr+4VXbAqga2l9Zz6n2ZVw1057F5xj1t6pjswG1scvXB1f0cch/XFhdHM
+	V5XOX/gf71UgLhI/feKu/8nLn7/r78twVVgSN0slKExAsOmm0V4GLwGnH3yPH3xpTH2j0PX5
+	wLtPBWuLOcP1d6dfNJNlX6vQHPPj4Y7fjw9s+Kw+Vfr6GcZ7GhffHGpMvvvHsHmDqcVdYYEN
+	Z28YHLUIvLk2kX1NptCFY8vWMfzRanVUOeKccmPmy/xW3RW2FxxCk/hbd7W9Puu8c/2m88yf
+	v0QITnW4ert8gcnSgwtWW03Z/aia6YWoTuvTQiWW4oxEQy3mouJEACnbtr4vBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXvd1+tIkg38XZCyuvbzAbnF5v7bF
+	2e5rjBaXd81hs3jV/IjN4smU/WwWy4//Y3Jg91i85yWTR/fsfyweLzbPZPT4+PQWi0ffllWM
+	Hp83yQWwRXHZpKTmZJalFunbJXBlvF0qW3BctuLfnx6WBsbJkl2MnBwSAiYSN9/tZOli5OIQ
+	EtjNKNF4ejs7REJa4vrGCVC2sMTKf8/ZIYqeM0r8PtDFDJJgE9CV2LG4jQ3EFhHQlPj7fz8z
+	SBGzwDtGiQdfFjGCJIQEmhklnsytBrE5BYwkzs17BDZJWOAso8SOu4dZQBIsAqoS92dtZepi
+	5ODgFbCUeNspBxLmFRCUODnzCQtImFlAT6JtI9hIZgF5ie1v5zBDHKcg8fPpMlaIG6wknu6e
+	ywJRIy7x8ugR9gmMwrOQTJqFMGkWkkmzkHQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeu
+	l5yfu4kRHFNamjsYt6/6oHeIkYmD8RCjBAezkghvwO1FSUK8KYmVValF+fFFpTmpxYcYpTlY
+	lMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwLQtf4hqr6eBQvFX/9bK3aWG362WivhcX7syY
+	8MVlh5T0GfXKxOu803/HXJ/s0JEs6iW0qVk0bNKvbR0HEw4K3FKxds2VnLPY0qvp85uPamau
+	579kpHnsSl8+f1tRvdgZ12/bZtTlh4rmSLTO/Ju4PuDS1L7bi5mbQhlr3n0pPpPOyvtyQara
+	nCtrL16cWlgrPts8OG9Ducr5xhX7rJV9rvNOlrF7osvNPL2o9FfeqrV9D7Zr3Ol4HdXHbLSL
+	+3PeQzlbjgst99UflipKq11i+stz9eP1+5JtZzVN09w13mUI667sspe94zFPzexRd3HEw6PJ
+	Ez8vXLzU+7vS7a5FTa131Pkq6ytmBCXZh01WYinOSDTUYi4qTgQAN0eVAxgDAAA=
+X-CMS-MailID: 20220612041331epcas5p1ad8aa893e7278112eeb6759979d4aff6
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220611233355epcas5p1970bae9647eae17e20d330775b584695
+References: <CGME20220611233355epcas5p1970bae9647eae17e20d330775b584695@epcas5p1.samsung.com>
+	<202206120755.03gKC0ne-lkp@intel.com>
 
-Thanks for the warning report.
+Hi
 
-These was introduced by one DO NOT MEGE patch, which should go into 
-mainline via David Howells's tree IMO.
+>-----Original Message-----
+>From: kernel test robot [mailto:lkp@intel.com]
+>Sent: Sunday, June 12, 2022 5:03 AM
+>To: Alim Akhtar <alim.akhtar@samsung.com>
+>Cc: llvm@lists.linux.dev; kbuild-all@lists.01.org;
+linux-kernel@vger.kernel.org;
+>Martin K. Petersen <martin.petersen@oracle.com>; Chanho Park
+><chanho61.park@samsung.com>; Bharat Uppal
+><bharat.uppal@samsung.com>
+>Subject: [mkp-scsi:for-next 31/41] drivers/phy/samsung/phy-fsd-ufs.c:50:3:
+>error: field designator 'cfgs' does not refer to any field in type 'const
+struct
+>samsung_ufs_phy_drvdata'; did you mean 'cfg'?
+>
+>tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+for-next
+>head:   b9f50e3cfd13687279f2170ff6ef5d71f6c7db11
+>commit: f678ce49991950e4964cd82d3f3a8adfb63a9a70 [31/41] scsi: phy:
+>samsung-ufs: Add support for FSD UFS PHY driver
+>config: hexagon-randconfig-r045-20220612
+>(https://protect2.fireeye.com/v1/url?k=5d7e4a21-3c05e0a8-5d7fc16e-
+>74fe48600034-ee8489beaab56766&q=1&e=4cfcb9fa-8108-4551-8c4c-
+>365a83dbb2ae&u=https%3A%2F%2Fdownload.01.org%2F0day-
+>ci%2Farchive%2F20220612%2F202206120755.03gKC0ne-
+>lkp%40intel.com%2Fconfig)
+>compiler: clang version 15.0.0
+>(https://protect2.fireeye.com/v1/url?k=2ec17c37-4fbad6be-2ec0f778-
+>74fe48600034-5023bd0668516b05&q=1&e=4cfcb9fa-8108-4551-8c4c-
+>365a83dbb2ae&u=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project
+>ff4abe755279a3a47cc416ef80dbc900d9a98a19)
+>reproduce (this is a W=1 build):
+>        wget https://protect2.fireeye.com/v1/url?k=0f0eec04-6e75468d-
+>0f0f674b-74fe48600034-eda10c46bdf9a9c9&q=1&e=4cfcb9fa-8108-4551-8c4c-
+>365a83dbb2ae&u=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Fl
+>kp-tests%2Fmaster%2Fsbin%2Fmake.cross -O ~/bin/make.cross
+>        chmod +x ~/bin/make.cross
+>        #
+>https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?id=f67
+>8ce49991950e4964cd82d3f3a8adfb63a9a70
+>        git remote add mkp-scsi
+>https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+>        git fetch --no-tags mkp-scsi for-next
+>        git checkout f678ce49991950e4964cd82d3f3a8adfb63a9a70
+>        # save the config file
+>        mkdir build_dir && cp config build_dir/.config
+>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
+>W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/phy/samsung/
+>
+>If you fix the issue, kindly add following tag where applicable
+>Reported-by: kernel test robot <lkp@intel.com>
+>
+>All errors (new ones prefixed by >>):
+>
+>>> drivers/phy/samsung/phy-fsd-ufs.c:50:3: error: field designator 'cfgs'
+does
+>not refer to any field in type 'const struct samsung_ufs_phy_drvdata'; did
+you
+>mean 'cfg'?
+>           .cfgs = fsd_ufs_phy_cfgs,
+>            ^~~~
+>            cfg
+>   drivers/phy/samsung/phy-samsung-ufs.h:104:37: note: 'cfg' declared here
+>           const struct samsung_ufs_phy_cfg **cfg;
+>                
 
--- Xiubo
+[1] " patch:
+https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220607072907.1
+27000-3-chanho61.park@samsung.com/
+
+changes the cfg -> cfgs , and it is merged in Linux-next.
+This series was based on next-20220609
+
+I was expecting phy driver changes will go via phy tree, where [1] is
+available.
+
+@Martin, can you please take a look?
+
+You can just take the ufs changes (along with its device tree) and drop the
+phy change or take the [1] above.
 
 
-On 6/11/22 11:10 PM, kernel test robot wrote:
-> tree:   https://github.com/ceph/ceph-client.git testing
-> head:   7b864d005b1f7f6a144420e180891b6401078407
-> commit: 3adeefbfca0fd57cc943b7ec0330385f48041f0c [7/9] [DO NOT MERGE] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
-> config: riscv-randconfig-r034-20220611 (https://download.01.org/0day-ci/archive/20220611/202206112305.4DdsErK8-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ff4abe755279a3a47cc416ef80dbc900d9a98a19)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install riscv cross compiling tool for clang build
->          # apt-get install binutils-riscv-linux-gnu
->          # https://github.com/ceph/ceph-client/commit/3adeefbfca0fd57cc943b7ec0330385f48041f0c
->          git remote add ceph-client https://github.com/ceph/ceph-client.git
->          git fetch --no-tags ceph-client testing
->          git checkout 3adeefbfca0fd57cc943b7ec0330385f48041f0c
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> lib/iov_iter.c:1464:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
->             return min(nr * PAGE_SIZE - offset, maxsize);
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:45:19: note: expanded from macro 'min'
->     #define min(x, y)       __careful_cmp(x, y, <)
->                             ^~~~~~~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
->             __builtin_choose_expr(__safe_cmp(x, y), \
->                                   ^~~~~~~~~~~~~~~~
->     include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
->                     (__typecheck(x, y) && __no_side_effects(x, y))
->                      ^~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
->             (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
->                        ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->     lib/iov_iter.c:1628:9: warning: comparison of distinct pointer types ('typeof (nr * ((1UL) << (12)) - offset) *' (aka 'unsigned long *') and 'typeof (maxsize) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
->             return min(nr * PAGE_SIZE - offset, maxsize);
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:45:19: note: expanded from macro 'min'
->     #define min(x, y)       __careful_cmp(x, y, <)
->                             ^~~~~~~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
->             __builtin_choose_expr(__safe_cmp(x, y), \
->                                   ^~~~~~~~~~~~~~~~
->     include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
->                     (__typecheck(x, y) && __no_side_effects(x, y))
->                      ^~~~~~~~~~~~~~~~~
->     include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
->             (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
->                        ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->     2 warnings generated.
+>   1 error generated.
 >
 >
-> vim +1464 lib/iov_iter.c
+>vim +50 drivers/phy/samsung/phy-fsd-ufs.c
 >
->    1430	
->    1431	static ssize_t iter_xarray_get_pages(struct iov_iter *i,
->    1432					     struct page **pages, size_t maxsize,
->    1433					     unsigned maxpages, size_t *_start_offset)
->    1434	{
->    1435		unsigned nr, offset;
->    1436		pgoff_t index, count;
->    1437		size_t size = maxsize;
->    1438		loff_t pos;
->    1439	
->    1440		if (!size || !maxpages)
->    1441			return 0;
->    1442	
->    1443		pos = i->xarray_start + i->iov_offset;
->    1444		index = pos >> PAGE_SHIFT;
->    1445		offset = pos & ~PAGE_MASK;
->    1446		*_start_offset = offset;
->    1447	
->    1448		count = 1;
->    1449		if (size > PAGE_SIZE - offset) {
->    1450			size -= PAGE_SIZE - offset;
->    1451			count += size >> PAGE_SHIFT;
->    1452			size &= ~PAGE_MASK;
->    1453			if (size)
->    1454				count++;
->    1455		}
->    1456	
->    1457		if (count > maxpages)
->    1458			count = maxpages;
->    1459	
->    1460		nr = iter_xarray_populate_pages(pages, i->xarray, index, count);
->    1461		if (nr == 0)
->    1462			return 0;
->    1463	
->> 1464		return min(nr * PAGE_SIZE - offset, maxsize);
->    1465	}
->    1466	
+>    48
+>    49	const struct samsung_ufs_phy_drvdata fsd_ufs_phy = {
+>  > 50		.cfgs = fsd_ufs_phy_cfgs,
 >
+>--
+>0-DAY CI Kernel Test Service
+>https://protect2.fireeye.com/v1/url?k=780e3ae5-1975906c-780fb1aa-
+>74fe48600034-15b3e78a3eb1d3c6&q=1&e=4cfcb9fa-8108-4551-8c4c-
+>365a83dbb2ae&u=https%3A%2F%2F01.org%2Flkp
 
