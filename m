@@ -1,75 +1,40 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7573F10E0
-	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 16:23:54 +0000 (UTC)
-Received: by mail-wm1-f50.google.com with SMTP id m39-20020a05600c3b2700b0039c511ebbacso3392579wms.3
-        for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 09:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
-        b=R/sEjCaZtQEnfPFaK+UnnTh0wg4bRV6svzZB+oS2hfNNJzpfcRRfcZmCJOP8EySmQd
-         g+xcBgfqADhJshLEY78CKFvKjnbnDQTiZlNPaYQ4krJN4DIZr0DcF9zio2w2kHV8Sq+E
-         bLM/i/SzIos3D8gnl2FjBUdtUwk4BOXJ/p4Gz7UFvasXpv6HXMR+5PupsiPSPR0TnZya
-         F4NsEqC4DRhyBo+zGRqyKs6C3D88H2ZM6iKWsmgHMRXInXx2VY+xkqjwHyZXLhqJ9DIi
-         GLX8O48hgFb+6agiYOXIOISy12Ll9TGb3KH9UckWOW5W3iIlklqwzjxaxwQD5RPR2Sdf
-         1JcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bp1t0MAX0vF2MFrixDjLhlmP3KLo6hgWxyC3M+usaE8=;
-        b=V2s8JCjPyFKgNJ5wJzdqhEN9qLZjwPSHZjnUJ2bc071exGik1JfzDsGkQwCm0fzSqI
-         eIiyzTyAkOBFHihV0QIup63QqfeDswHBUv4o4froCjszPvpsrpatNhJ46s8XIBWGgIbq
-         0wQ8ZuZ7V2Yv/MZzgQax/fGPqWAZJ8pT7CWu7iLkKRTXcrr4IRxobt9axPQTrlw/Drb0
-         +MMbh+qGjnqhq8lb2JtE1mEOmyotI0+t9cKv05sBm08EjYXyu4le1uxYP0oDec9RGfiv
-         SetuxRs1lgwhyz6INCJP+DgewaFm74oiVr18/wUPyyB5DUJTxkNyeyUhgXykX+wUIVrY
-         Yl6Q==
-X-Gm-Message-State: AOAM531avAZSArM3cK5yBhnztgLykdWRs0cEGmYr8FDbOIyCsQWQ0blw
-	xNj5ETuNzm5RuBG2+6FL4PJgiA==
-X-Google-Smtp-Source: ABdhPJyPL0K+xAMvnRb2ONEX1jWjnGDkkA7zHOBZU3POgTFS7NF7cqaibZCvN8D1E1ysUwm9U4xflg==
-X-Received: by 2002:a05:600c:2682:b0:39c:8ec6:57d9 with SMTP id 2-20020a05600c268200b0039c8ec657d9mr3559545wmt.99.1655051032703;
-        Sun, 12 Jun 2022 09:23:52 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id bh8-20020a05600c3d0800b003942a244ee6sm6005715wmb.43.2022.06.12.09.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 09:23:51 -0700 (PDT)
-Date: Sun, 12 Jun 2022 17:23:47 +0100
-From: Phillip Potter <phil@philpotter.co.uk>
-To: Bill Wendling <morbo@google.com>
-Cc: isanbard@gmail.com, Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Phillip Potter <phil@philpotter.co.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Jan Kara <jack@suse.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Ross Philipson <ross.philipson@oracle.com>,
-	Daniel Kiper <daniel.kiper@oracle.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org,
-	alsa-devel@alsa-project.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 08/12] cdrom: use correct format characters
-Message-ID: <YqYTExy0IpVbunBL@equinox>
-References: <20220609221702.347522-1-morbo@google.com>
- <20220609221702.347522-9-morbo@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CF17C
+	for <llvm@lists.linux.dev>; Sun, 12 Jun 2022 16:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655051595; x=1686587595;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=K/M4bUDUHwO6lkaJH+M/rcNeRBg5xEGd5OXppwSYf5E=;
+  b=jQlR6cyufHmolQ39RItlBj9jQmKz6LIUCwIqSpKeBJ6MP53Vf/mAwwEA
+   SMYxYqO3bMKmeIG3tdQOgqap76yAvcUyiO3W+BY5LYYhqBbUuhLn1wj+c
+   8Znvi5+4gwKW2BTzO9lnr4+i2+WyDmAE3PZCMG0SvgfU8iGC/B+tVLEct
+   FZ8VoRVMbYi9TZlXku11DNRtm85YCTKtnLllZDeyMunpBvjZy3uLoxo4m
+   7Q4/y7mxlDjsUd7xI+cDipyua13CWEPoZWXNWz5dMXfc+3lI2U6Qkxaix
+   v0+5KrzarPRuhxO1m7UONcAkt14JP3WvJfkZ0gH8nK5x5N5gb37woAd6X
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258508093"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="258508093"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 09:33:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="567557761"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 Jun 2022 09:33:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o0QWW-000K3n-T9;
+	Sun, 12 Jun 2022 16:33:12 +0000
+Date: Mon, 13 Jun 2022 00:33:05 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 05/13] mm/demotion: Build demotion targets based on
+ explicit memory tiers
+Message-ID: <202206130019.hvS3Yhx7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,55 +43,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609221702.347522-9-morbo@google.com>
 
-On Thu, Jun 09, 2022 at 10:16:27PM +0000, Bill Wendling wrote:
-> From: Bill Wendling <isanbard@gmail.com>
-> 
-> When compiling with -Wformat, clang emits the following warnings:
-> 
-> drivers/cdrom/cdrom.c:3454:48: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
->         ret = scnprintf(info + *pos, max_size - *pos, header);
->                                                       ^~~~~~
-> 
-> Use a string literal for the format string.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Bill Wendling <isanbard@gmail.com>
-> ---
->  drivers/cdrom/cdrom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> index 416f723a2dbb..52b40120c76e 100644
-> --- a/drivers/cdrom/cdrom.c
-> +++ b/drivers/cdrom/cdrom.c
-> @@ -3451,7 +3451,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
->  	struct cdrom_device_info *cdi;
->  	int ret;
->  
-> -	ret = scnprintf(info + *pos, max_size - *pos, header);
-> +	ret = scnprintf(info + *pos, max_size - *pos, "%s", header);
->  	if (!ret)
->  		return 1;
->  
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
+BCC: lkp@intel.com
+In-Reply-To: <20220610135229.182859-6-aneesh.kumar@linux.ibm.com>
+References: <20220610135229.182859-6-aneesh.kumar@linux.ibm.com>
+TO: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+TO: linux-mm@kvack.org
+TO: akpm@linux-foundation.org
+CC: Wei Xu <weixugc@google.com>
+CC: Huang Ying <ying.huang@intel.com>
+CC: Greg Thelen <gthelen@google.com>
+CC: Yang Shi <shy828301@gmail.com>
+CC: Davidlohr Bueso <dave@stgolabs.net>
+CC: Tim C Chen <tim.c.chen@intel.com>
+CC: Brice Goglin <brice.goglin@gmail.com>
+CC: Michal Hocko <mhocko@kernel.org>
+CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+CC: Hesham Almatary <hesham.almatary@huawei.com>
+CC: Dave Hansen <dave.hansen@intel.com>
+CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC: Alistair Popple <apopple@nvidia.com>
+CC: Dan Williams <dan.j.williams@intel.com>
+CC: Feng Tang <feng.tang@intel.com>
+CC: Jagdish Gediya <jvgediya@linux.ibm.com>
+CC: Baolin Wang <baolin.wang@linux.alibaba.com>
+CC: David Rientjes <rientjes@google.com>
+CC: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 
-Hi Bill,
+Hi "Aneesh,
 
-Thank you for the patch, much appreciated.
+I love your patch! Perhaps something to improve:
 
-Looking at this though, all callers of cdrom_print_info() provide 'header'
-as a string literal defined within the driver, when making the call.
-Therefore, I'm not convinced this change is necessary for cdrom.c -
-that said, in this particular use case I don't think it would hurt
-either.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-I've followed the other responses on parts of this series, so I
-understand that a different solution is potentially in the works.
-Thought I'd respond anyway though out of courtesy.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220610-215800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220613/202206130019.hvS3Yhx7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6466c9abf3674bade1f6ee859f24ebc7aaf9cd88)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cd9f240a55298505b22fca3fec423d8972e3199a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220610-215800
+        git checkout cd9f240a55298505b22fca3fec423d8972e3199a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-All the best,
-Phil (Uniform CDROM Maintainer)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/vmscan.o: warning: objtool: shrink_node+0xe3f: sibling call from callable instruction with modified stack frame
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
