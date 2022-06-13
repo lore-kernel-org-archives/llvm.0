@@ -1,125 +1,101 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EE67C
-	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 19:20:06 +0000 (UTC)
-Received: by mail-lf1-f44.google.com with SMTP id h23so10431214lfe.4
-        for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 12:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N0O/0DmbRs+7MXOg+g7dkZYD+/tIewscyvV6ESK7mhQ=;
-        b=HOdkBVIWNqU056KIzOpAxtJ+hARPtbhKZh0UFqk2E42MCGc4NI0bbNvqot9YBdek/u
-         Aw3Ph3Cy725yYM58fI5EBjLaXvJ3IZA7sMs4+BRmmqE0M72v9SbnlbC8Djtl9NZNb8CU
-         H7xn5l0SUfo734b7nIBfFERs63lfF0xmfxBcgkMDR5XHhk1OpUfJdlbEbqovlOtM5bwf
-         703+UIJV5z9RrG9/Bi4GYdrekq9nxUWi4WJ77/+tLe180iF3OiNNIn/RGyj+dRjI2oiz
-         zU6XL7qBEOCef7JP8Y46wJZV9HCALTmVCCDqgkpsePw0O7mAQ4gHyYbPjTspGXPI7MHe
-         T/FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N0O/0DmbRs+7MXOg+g7dkZYD+/tIewscyvV6ESK7mhQ=;
-        b=DJnqHyAN1WiXhhL13tI+bCjFhQCUZf8fMhHdQP07zm+CXz8xHSQoRqfdAh0c9jEL6l
-         UHj4zGBktSrMJQ/zlfP8qNkIxhA9mFH8ON8lPslihWSISGcYkbCaBArLOyD/Hd1WERt7
-         QZhI6nT6p2cBnC3z1fF692ZnrwG4p6Tuci91Ri6puHfYSFdrgcSyo9WYliV/vSYGSIrE
-         g8M0xjC3Q0PhXagabhOQi8aavAyYZ49UNpRUEsNz/U2r2pZcZ5uXI+aZ5f0MFmemmgXW
-         GSDjRAsDql+WvCLmM0f9ndMPHSYTC5ZtxRXllKH7gc13qxGEwAxQY2bKtL2fKKTgHvta
-         sywQ==
-X-Gm-Message-State: AJIora88j4FJqKMa0YznqcIXDqyO2OQAwxUWTy6G6mghFzJogtMFx/hA
-	d3jGeKHesm77MJb4v1LrXz/10lw95SFwj2a54yZo
-X-Google-Smtp-Source: AGRyM1slaJnALPt1IdrnDQHmZ2dLpXWUN5aXU49HeMYiktjUgFM+PsAcD+NIJ/T25pitBW8x0Gqc0SCI0hzcZ0fBI0A=
-X-Received: by 2002:a05:6512:524:b0:479:898:fd3c with SMTP id
- o4-20020a056512052400b004790898fd3cmr773787lfc.252.1655148003935; Mon, 13 Jun
- 2022 12:20:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959CF1871
+	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 19:52:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655149920; x=1686685920;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=9LSlglj1ZKiP3TVv/Hh4gHkl8bX8MJPGE4L7AqI+jTo=;
+  b=VB7h76F/zv4TXk/aG0LPAISW8puXEUpTZDzK+O3+qBfCqr+EW2yW+J6F
+   7OdJ9sSwRDA2JwDM3EOl+VKE0SPwkkf8hEuwuEUH3VGn21ONMdi0zlDzh
+   wm+ZHWnOYDYoiP4gMtLpU8PwKEcbZhk5AzzMSLFQXrHx+vTEx/P0yNKvf
+   h0DsDnwHnYjehb5eg6i9yHkivfKtBGPhesaU9r1vIN/UGHmcjApYW17Jw
+   B7399w+vtVXcn0pqYsNlVWelOyDHB6+ni452ZF2RsMeN+4KNmpzBNiG4C
+   X44Si1dF6Ets+BB9cqU7I25CvCzTyvh2Abk+dbWXXtMsb2BVcSzqK8xwe
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258223762"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="258223762"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 12:52:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="673473022"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2022 12:51:59 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o0q6Q-000L5n-Eb;
+	Mon, 13 Jun 2022 19:51:58 +0000
+Date: Tue, 14 Jun 2022 03:51:50 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [peterz-queue:sched/idle 14/36] vmlinux.o: warning: objtool:
+ acpi_idle_enter+0x62: call to ftrace_likely_update() leaves .noinstr.text
+ section
+Message-ID: <202206140323.XSb6oFG4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <20220610233513.1798771-17-samitolvanen@google.com> <CAKwvOdm1Abmu+NQ82ZLgX3O5g4vYPni23A9c4FJ+xeSYVwPtJw@mail.gmail.com>
-In-Reply-To: <CAKwvOdm1Abmu+NQ82ZLgX3O5g4vYPni23A9c4FJ+xeSYVwPtJw@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Mon, 13 Jun 2022 12:19:52 -0700
-Message-ID: <CAGG=3QUt0mCA_Db93kuNkEMFGvO9AJUA4h9wxnVxvUn2Q1Mvqw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 16/20] kallsyms: Drop CONFIG_CFI_CLANG workarounds
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Joao Moreira <joao@overdrivepizza.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-hardening@vger.kernel.org, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jun 10, 2022 at 4:40 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Jun 10, 2022 at 4:35 PM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > With -fsanitize=kcfi, the compiler no longer renames static
-> > functions with CONFIG_CFI_CLANG + ThinLTO. Drop the code that cleans
-> > up the ThinLTO hash from the function names.
->
-> Good riddance!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-Much clapping!
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
 
--bw
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   73f85cfb5dcfb0f8a5ef155a7bf0ab08a7930054
+commit: ccff49b526b852adac9c6f9a9f5c4b53292b76f2 [14/36] cpuidle: Fix rcu_idle_*() usage
+config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140323.XSb6oFG4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=ccff49b526b852adac9c6f9a9f5c4b53292b76f2
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout ccff49b526b852adac9c6f9a9f5c4b53292b76f2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  kernel/kallsyms.c | 17 -----------------
-> >  1 file changed, 17 deletions(-)
-> >
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index fbdf8d3279ac..2fbb94817e02 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -179,7 +179,6 @@ static bool cleanup_symbol_name(char *s)
-> >          * character in an identifier in C. Suffixes observed:
-> >          * - foo.llvm.[0-9a-f]+
-> >          * - foo.[0-9a-f]+
-> > -        * - foo.[0-9a-f]+.cfi_jt
-> >          */
-> >         res = strchr(s, '.');
-> >         if (res) {
-> > @@ -187,22 +186,6 @@ static bool cleanup_symbol_name(char *s)
-> >                 return true;
-> >         }
-> >
-> > -       if (!IS_ENABLED(CONFIG_CFI_CLANG) ||
-> > -           !IS_ENABLED(CONFIG_LTO_CLANG_THIN) ||
-> > -           CONFIG_CLANG_VERSION >= 130000)
-> > -               return false;
-> > -
-> > -       /*
-> > -        * Prior to LLVM 13, the following suffixes were observed when thinLTO
-> > -        * and CFI are both enabled:
-> > -        * - foo$[0-9]+
-> > -        */
-> > -       res = strrchr(s, '$');
-> > -       if (res) {
-> > -               *res = '\0';
-> > -               return true;
-> > -       }
-> > -
-> >         return false;
-> >  }
-> >
-> > --
-> > 2.36.1.476.g0c4daa206d-goog
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x44: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_enter+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_exit+0x38: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_nmi_enter+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x42: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x60: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __context_tracking_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: acpi_idle_enter+0x62: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x83: call to acpi_idle_do_entry() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: crc_pcl+0x7c: missing int3 after indirect jump
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
