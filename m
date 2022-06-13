@@ -1,35 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20747A
-	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 21:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D2BC34114;
-	Mon, 13 Jun 2022 21:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655157107;
-	bh=DCjyDdz9XYX5R8qanr7z720XrBNBAxLhIEwjktiLU3A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ufD63Beez0sbUqWjHqSRuRzUM3wI+6aAZlh1bK20GbnupnMOR0wVBO/ywvRFxQ4ut
-	 6n4ABCHvgK9RZkoWgY1TMIBxnXndt4Msa2/NR4+ep30Wly+k1odvnzo6EMTAp6Np9W
-	 H+HCbf78dvTgeIw6kgtdy3Kavy+QJFRlNBN/62WkOXZ+AhnBW4HYft42wOzgJtSxV6
-	 qXE20pNb4cPUTyRdSgcpnpxgDsi1IehVvDQvJgbpkXpGEMWpFBnAAeUxp73fJK1iCl
-	 pSYpvVUqg/InWfwMOv5Z6h2XMeKe3s80Jxfs9UiIwGaHkit3iXD8IB6abzzjrmRUa/
-	 qCj4vll7VWYJQ==
-Date: Mon, 13 Jun 2022 14:51:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Jim Mattson <jmattson@google.com>, Joerg Roedel <joro@8bytes.org>,
-	Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Peter Gonda <pgonda@google.com>
-Subject: Re: [PATCH] KVM: SVM: Hide SEV migration lockdep goo behind
- CONFIG_DEBUG_LOCK_ALLOC
-Message-ID: <Yqexcdad6oghl8sv@dev-arch.thelio-3990X>
-References: <20220613214237.2538266-1-seanjc@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4347A
+	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 21:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655157254; x=1686693254;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gTWbJ5Wjcw4Fc4kGkde+bUCUS/ZDjaIGfoulkXK8WLs=;
+  b=hky1EUpaBmN+PM6Zhyq/BRjecHOtDwOOwUtBchU7dZSnmWWUwGdyVSOb
+   g/JEwltfXZYSni6ulddE9ir7Rv7+4maqHd5LUyK+hHvrSLYkHkC6zMgvb
+   VhNRdydnBWL6piaD+qIm9A+LiCOgDkDNuvekRCa/932j38WL+a+uESRmn
+   vd85S1a/+DzwyRGGM1Zz1ds6WPvHKd8Ccl6rmbSO+QZjXvom/Fjd9qRjE
+   oHcgk2w9eNUJGE0VmTfKM9bsK9OVPjIRj3wwDVcOfjpgnF4tlQ6F2fIK8
+   7Wi95hpoRvTp2zKPMFZA50LSZniJY2cf1JEmgC+S9QkyUaj4t32rlpvQW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261458949"
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="261458949"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 14:54:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="686282254"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2022 14:54:02 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o0s0Y-000LBp-2M;
+	Mon, 13 Jun 2022 21:54:02 +0000
+Date: Tue, 14 Jun 2022 05:53:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 27/33]
+ arch/powerpc/include/asm/page.h:237:9: error: call to undeclared function
+ 'WARN_ON'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202206140540.TntNERxC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,94 +46,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613214237.2538266-1-seanjc@google.com>
 
-On Mon, Jun 13, 2022 at 09:42:37PM +0000, Sean Christopherson wrote:
-> Wrap the manipulation of @role and the manual mutex_{release,acquire}()
-> invocations in CONFIG_PROVE_LOCKING=y to squash a clang-15 warning.  When
-> building with -Wunused-but-set-parameter and CONFIG_DEBUG_LOCK_ALLOC=n,
-> clang-15 seees there's no usage of @role in mutex_lock_killable_nested()
-> and yells.  PROVE_LOCKING selects DEBUG_LOCK_ALLOC, and the only reason
-> KVM manipulates @role is to make PROVE_LOCKING happy.
-> 
-> To avoid true ugliness, use "i" and "j" to detect the first pass in the
-> loops; the "idx" field that's used by kvm_for_each_vcpu() is guaranteed
-> to be '0' on the first pass as it's simply the first entry in the vCPUs
-> XArray, which is fully KVM controlled.  kvm_for_each_vcpu() passes '0'
-> for xa_for_each_range()'s "start", and xa_for_each_range() will not enter
-> the loop if there's no entry at '0'.
-> 
-> Fixes: 0c2c7c069285 ("KVM: SEV: Mark nested locking of vcpu->lock")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Peter Gonda <pgonda@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-> 
-> Compile tested only, still haven't figured out why SEV is busted on our
-> test systems with upstream kernels.  I also haven't verified this squashes
-> the clang-15 warning, so a thumbs up on that end would be helpful.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
+head:   62fa3e7c2288a1f8d5b9bb2c1f31cee3c26df806
+commit: d2b930128c4dfdce5bd9470bf79277bd457df960 [27/33] powerpc: Make virt_to_pfn() a static inline
+config: powerpc64-randconfig-r006-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140540.TntNERxC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=d2b930128c4dfdce5bd9470bf79277bd457df960
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
+        git checkout d2b930128c4dfdce5bd9470bf79277bd457df960
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-I can confirm that with the config that the kernel test robot provided,
-the warning disappears with this patch. If it is useful:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+All error/warnings (new ones prefixed by >>):
 
->  arch/x86/kvm/svm/sev.c | 17 +++++++----------
->  1 file changed, 7 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 51fd985cf21d..309bcdb2f929 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -1606,38 +1606,35 @@ static int sev_lock_vcpus_for_migration(struct kvm *kvm,
->  {
->  	struct kvm_vcpu *vcpu;
->  	unsigned long i, j;
-> -	bool first = true;
->  
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
->  		if (mutex_lock_killable_nested(&vcpu->mutex, role))
->  			goto out_unlock;
->  
-> -		if (first) {
-> +#ifdef CONFIG_PROVE_LOCKING
-> +		if (!i)
->  			/*
->  			 * Reset the role to one that avoids colliding with
->  			 * the role used for the first vcpu mutex.
->  			 */
->  			role = SEV_NR_MIGRATION_ROLES;
-> -			first = false;
-> -		} else {
-> +		else
->  			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
-> -		}
-> +#endif
->  	}
->  
->  	return 0;
->  
->  out_unlock:
->  
-> -	first = true;
->  	kvm_for_each_vcpu(j, vcpu, kvm) {
->  		if (i == j)
->  			break;
->  
-> -		if (first)
-> -			first = false;
-> -		else
-> +#ifdef CONFIG_PROVE_LOCKING
-> +		if (j)
->  			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
-> -
-> +#endif
->  
->  		mutex_unlock(&vcpu->mutex);
->  	}
-> 
-> base-commit: 8baacf67c76c560fed954ac972b63e6e59a6fba0
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
-> 
-> 
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+>> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
+           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
+                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
+           pfn_valid(virt_to_pfn(_addr));                                  \
+                                 ^~~~~
+   arch/powerpc/include/asm/bug.h:121:29: note: expanded from macro 'WARN_ON'
+                   if (__builtin_constant_p((x))) {                \
+                                             ^
+   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+                                                                ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+>> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
+           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
+                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
+           pfn_valid(virt_to_pfn(_addr));                                  \
+                                 ^~~~~
+   arch/powerpc/include/asm/bug.h:122:10: note: expanded from macro 'WARN_ON'
+                           if (!(x))                               \
+                                 ^
+   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+                                                                ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+>> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
+           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
+                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
+           pfn_valid(virt_to_pfn(_addr));                                  \
+                                 ^~~~~
+   arch/powerpc/include/asm/bug.h:132:28: note: expanded from macro 'WARN_ON'
+                                      "r" ((__force long)(x)));    \
+                                                          ^
+   arch/powerpc/include/asm/bug.h:84:7: note: expanded from macro 'WARN_ENTRY'
+                     ##__VA_ARGS__ : : label)
+                       ^~~~~~~~~~~
+   include/linux/compiler_types.h:283:42: note: expanded from macro 'asm_volatile_goto'
+   #define asm_volatile_goto(x...) asm goto(x)
+                                            ^
+   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+                                                                ^
+   3 warnings generated.
+   In file included from <built-in>:4:
+   In file included from lib/vdso/gettimeofday.c:5:
+   In file included from include/vdso/datapage.h:137:
+   In file included from arch/powerpc/include/asm/vdso/gettimeofday.h:7:
+>> arch/powerpc/include/asm/page.h:237:9: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return __pa(kaddr) >> PAGE_SHIFT;
+                  ^
+   arch/powerpc/include/asm/page.h:225:2: note: expanded from macro '__pa'
+           VIRTUAL_WARN_ON((unsigned long)(x) < PAGE_OFFSET);              \
+           ^
+   arch/powerpc/include/asm/page.h:210:28: note: expanded from macro 'VIRTUAL_WARN_ON'
+   #define VIRTUAL_WARN_ON(x)      WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && (x))
+                                   ^
+>> arch/powerpc/include/asm/page.h:237:9: warning: result of comparison of constant 13835058055282163712 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
+           return __pa(kaddr) >> PAGE_SHIFT;
+                  ^~~~~~~~~~~
+   arch/powerpc/include/asm/page.h:225:37: note: expanded from macro '__pa'
+           VIRTUAL_WARN_ON((unsigned long)(x) < PAGE_OFFSET);              \
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   arch/powerpc/include/asm/page.h:210:73: note: expanded from macro 'VIRTUAL_WARN_ON'
+   #define VIRTUAL_WARN_ON(x)      WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && (x))
+                                                                                ^
+   1 warning and 1 error generated.
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:74: arch/powerpc/kernel/vdso/vgettimeofday-32.o] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/WARN_ON +237 arch/powerpc/include/asm/page.h
+
+   234	
+   235	static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+   236	{
+ > 237		return __pa(kaddr) >> PAGE_SHIFT;
+   238	}
+   239	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+   240	#define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
+   241	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
