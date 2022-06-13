@@ -1,175 +1,138 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEF71878
-	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 20:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655152983; x=1686688983;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wxp5UrEGniWquPRir9qG4Wn/ZLM32hC17iMaC9mtEfU=;
-  b=H+RETdYE5gY5tOZlq2a79GPD13lLW7Hy7O6Fm+DeE+LHo8OyYxbUlfSu
-   CcArfcsMxaAUdpG2vzCL42sWdIBiY6Wrg6nqsawomMF4e/x5dDSJK7jAP
-   N4SA11ozJ6AFTX5CEjNvGxBI44dQble77NOf0y+iHXnrCOLGkjMicD3Ak
-   Po5atkahNNFsu9yjMDNCG9GG/Sgnb+NBW/fvWkcfkkscqdWj/+zPC5AuY
-   6uJt86iO1WjJ0K8XHNtVVeD7DOYnRYl/ejJIkDxhw2B+NGlg8XOPJ6zTc
-   KuIgd3y2u3XbW6RYF3lTw6TLK/z9Cuinq470KpsfCHtJySELQQg0zykQc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279128896"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="279128896"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 13:43:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="910586588"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Jun 2022 13:43:00 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o0qtn-000L87-T5;
-	Mon, 13 Jun 2022 20:42:59 +0000
-Date: Tue, 14 Jun 2022 04:42:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hsin-Yi Wang <hsinyi@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Nicolas Boichat <drinkcat@chromium.org>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 7737/9999]
- drivers/gpu/drm/bridge/parade-ps8640.c:399:5: warning: no previous prototype
- for function 'ps8640_bridge_attach'
-Message-ID: <202206140423.YnAsdC2D-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387EF7A
+	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 21:42:46 +0000 (UTC)
+Received: by mail-pj1-f74.google.com with SMTP id w36-20020a17090a6ba700b001e876698a01so6964072pjj.5
+        for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 14:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=RVy85ULONsPMosb1NmFt3NRY87u30o0irh/ZWjWjAQQ=;
+        b=SEpiP60SyyDEf/Tnm3zpDuQbs8gKvGqZQWxGmHhqNnIx2TWH/CkGAZ9qantBF7CRk6
+         a+mFjO2HObwDwvtZzU62OBzinGjx0MP01SfwVdRTRSFOoyxBVLH29eEbdeRYE423f9xF
+         Kl7aaN0WWWwrEbZ7SzaEYVhle5y6gfBRLn2dRSuMQwWAIbtMaDQaJqEINEK1YclQi3Pq
+         gwdYCsX72hMjPUGj7PQXWFrDRhuhvPK47GWICbL/v/nmgRvnjGnJuKVSx2r4BxQkgEno
+         NMC7vp5Op6Ui4qJahNYCLavsZN7o7hfmv147En8DCOyi82LSOxm6QHeXQnKRAFt/NOHi
+         n0Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=RVy85ULONsPMosb1NmFt3NRY87u30o0irh/ZWjWjAQQ=;
+        b=ZoEev1poiK+MaNbDqMFm7D1HiIKXSPCgikTUrA8/5RqsttSspLnVESXiMt/wIjGP0I
+         noH9Z0Q4fWJrjehT+Dw8ZTtS8nL3TTV/NMR22bu3Ah0S4WCh5k/5JufO5f/JsV04yhh/
+         1NIXgC9KfDYab2CcApLnCAdB9W4Ye5/uN6s8nM/NpVklP/ZC0Q2xx3QNHSqbJ4Q6fPzu
+         TWNilJg7a0n1mKUka9c61d8zt2HTaTSOM1Mc/B3Y8fwy95kaaoIJvpt3I1DnH6aBEbk6
+         MSWemiY/Qfz9zr7s40mDUww5BEvbuehFR89o9Q6VpWYXuQLMjcnR2FrxaekHrr4+DLiS
+         azhg==
+X-Gm-Message-State: AJIora+ofIEGZzu2Pay6R887tWnIENMkzAuMy6EhJVPTPoQ4eEK4rnpe
+	KcJrbomKdSDwIBtI1Fwo08BDpMWOXJg=
+X-Google-Smtp-Source: AGRyM1urKA7NScvmeBtxVRmnJcZPpHOq5ewz3AmNrW84SUP+NUFAo6x/+herBNp05LNlC6l+fSWyWo0gPnY=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
+ q15-20020a17090a178f00b001e303bac185mr47660pja.1.1655156565067; Mon, 13 Jun
+ 2022 14:42:45 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Mon, 13 Jun 2022 21:42:37 +0000
+Message-Id: <20220613214237.2538266-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH] KVM: SVM: Hide SEV migration lockdep goo behind CONFIG_DEBUG_LOCK_ALLOC
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sean Christopherson <seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, 
+	Joerg Roedel <joro@8bytes.org>, Tom Rix <trix@redhat.com>, kvm@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Peter Gonda <pgonda@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Hsin-Yi,
+Wrap the manipulation of @role and the manual mutex_{release,acquire}()
+invocations in CONFIG_PROVE_LOCKING=y to squash a clang-15 warning.  When
+building with -Wunused-but-set-parameter and CONFIG_DEBUG_LOCK_ALLOC=n,
+clang-15 seees there's no usage of @role in mutex_lock_killable_nested()
+and yells.  PROVE_LOCKING selects DEBUG_LOCK_ALLOC, and the only reason
+KVM manipulates @role is to make PROVE_LOCKING happy.
 
-FYI, the error/warning still remains.
+To avoid true ugliness, use "i" and "j" to detect the first pass in the
+loops; the "idx" field that's used by kvm_for_each_vcpu() is guaranteed
+to be '0' on the first pass as it's simply the first entry in the vCPUs
+XArray, which is fully KVM controlled.  kvm_for_each_vcpu() passes '0'
+for xa_for_each_range()'s "start", and xa_for_each_range() will not enter
+the loop if there's no entry at '0'.
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: e09a9439c5a794b24f73e6909d8eba778e3e3041 [7737/9999] FIXUP: FROMLIST: drm/bridge: Add I2C based driver for ps8640 bridge
-config: x86_64-randconfig-a001-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140423.YnAsdC2D-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/e09a9439c5a794b24f73e6909d8eba778e3e3041
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout e09a9439c5a794b24f73e6909d8eba778e3e3041
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/bridge/
-
-If you fix the issue, kindly add following tag where applicable
+Fixes: 0c2c7c069285 ("KVM: SEV: Mark nested locking of vcpu->lock")
 Reported-by: kernel test robot <lkp@intel.com>
+Cc: Peter Gonda <pgonda@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
 
-All warnings (new ones prefixed by >>):
+Compile tested only, still haven't figured out why SEV is busted on our
+test systems with upstream kernels.  I also haven't verified this squashes
+the clang-15 warning, so a thumbs up on that end would be helpful.
 
->> drivers/gpu/drm/bridge/parade-ps8640.c:399:5: warning: no previous prototype for function 'ps8640_bridge_attach' [-Wmissing-prototypes]
-   int ps8640_bridge_attach(struct drm_bridge *bridge)
-       ^
-   drivers/gpu/drm/bridge/parade-ps8640.c:399:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ps8640_bridge_attach(struct drm_bridge *bridge)
-   ^
-   static 
-   1 warning generated.
+ arch/x86/kvm/svm/sev.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 51fd985cf21d..309bcdb2f929 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1606,38 +1606,35 @@ static int sev_lock_vcpus_for_migration(struct kvm *kvm,
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	unsigned long i, j;
+-	bool first = true;
+ 
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+ 		if (mutex_lock_killable_nested(&vcpu->mutex, role))
+ 			goto out_unlock;
+ 
+-		if (first) {
++#ifdef CONFIG_PROVE_LOCKING
++		if (!i)
+ 			/*
+ 			 * Reset the role to one that avoids colliding with
+ 			 * the role used for the first vcpu mutex.
+ 			 */
+ 			role = SEV_NR_MIGRATION_ROLES;
+-			first = false;
+-		} else {
++		else
+ 			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+-		}
++#endif
+ 	}
+ 
+ 	return 0;
+ 
+ out_unlock:
+ 
+-	first = true;
+ 	kvm_for_each_vcpu(j, vcpu, kvm) {
+ 		if (i == j)
+ 			break;
+ 
+-		if (first)
+-			first = false;
+-		else
++#ifdef CONFIG_PROVE_LOCKING
++		if (j)
+ 			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
+-
++#endif
+ 
+ 		mutex_unlock(&vcpu->mutex);
+ 	}
 
-vim +/ps8640_bridge_attach +399 drivers/gpu/drm/bridge/parade-ps8640.c
-
-71e4156c5ec43f7 Jitao Shi    2016-11-14  398  
-71e4156c5ec43f7 Jitao Shi    2016-11-14 @399  int ps8640_bridge_attach(struct drm_bridge *bridge)
-71e4156c5ec43f7 Jitao Shi    2016-11-14  400  {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  401  	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  402  	struct device *dev = &ps_bridge->page[0]->dev;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  403  	struct device_node *in_ep, *dsi_node = NULL;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  404  	struct mipi_dsi_device *dsi;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  405  	struct mipi_dsi_host *host = NULL;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  406  	int ret;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  407  	const struct mipi_dsi_device_info info = { .type = "ps8640",
-71e4156c5ec43f7 Jitao Shi    2016-11-14  408  						   .channel = 0,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  409  						   .node = NULL,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  410  						 };
-71e4156c5ec43f7 Jitao Shi    2016-11-14  411  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  412  	ret = drm_connector_init(bridge->dev, &ps_bridge->connector,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  413  				 &ps8640_connector_funcs,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  414  				 DRM_MODE_CONNECTOR_eDP);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  415  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  416  	if (ret) {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  417  		DRM_ERROR("Failed to initialize connector with drm: %d\n", ret);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  418  		return ret;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  419  	}
-71e4156c5ec43f7 Jitao Shi    2016-11-14  420  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  421  	drm_connector_helper_add(&ps_bridge->connector,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  422  				 &ps8640_connector_helper_funcs);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  423  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  424  	ps_bridge->connector.dpms = DRM_MODE_DPMS_ON;
-e09a9439c5a794b Hsin-Yi Wang 2019-07-18  425  	drm_connector_attach_encoder(&ps_bridge->connector,
-71e4156c5ec43f7 Jitao Shi    2016-11-14  426  					  bridge->encoder);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  427  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  428  	if (ps_bridge->panel)
-71e4156c5ec43f7 Jitao Shi    2016-11-14  429  		drm_panel_attach(ps_bridge->panel, &ps_bridge->connector);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  430  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  431  	/* port@0 is ps8640 dsi input port */
-71e4156c5ec43f7 Jitao Shi    2016-11-14  432  	in_ep = of_graph_get_endpoint_by_regs(dev->of_node, 0, -1);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  433  	if (in_ep) {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  434  		dsi_node = of_graph_get_remote_port_parent(in_ep);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  435  		of_node_put(in_ep);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  436  	}
-71e4156c5ec43f7 Jitao Shi    2016-11-14  437  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  438  	if (dsi_node) {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  439  		host = of_find_mipi_dsi_host_by_node(dsi_node);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  440  		of_node_put(dsi_node);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  441  		if (!host) {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  442  			ret = -ENODEV;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  443  			goto err;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  444  		}
-71e4156c5ec43f7 Jitao Shi    2016-11-14  445  	}
-71e4156c5ec43f7 Jitao Shi    2016-11-14  446  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  447  	dsi = mipi_dsi_device_register_full(host, &info);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  448  	if (IS_ERR(dsi)) {
-71e4156c5ec43f7 Jitao Shi    2016-11-14  449  		dev_err(dev, "failed to create dsi device\n");
-71e4156c5ec43f7 Jitao Shi    2016-11-14  450  		ret = PTR_ERR(dsi);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  451  		goto err;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  452  	}
-71e4156c5ec43f7 Jitao Shi    2016-11-14  453  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  454  	ps_bridge->dsi = dsi;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  455  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  456  	dsi->host = host;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  457  	dsi->mode_flags = MIPI_DSI_MODE_VIDEO |
-71e4156c5ec43f7 Jitao Shi    2016-11-14  458  				     MIPI_DSI_MODE_VIDEO_SYNC_PULSE;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  459  	dsi->format = MIPI_DSI_FMT_RGB888;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  460  	dsi->lanes = 4;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  461  	ret = mipi_dsi_attach(dsi);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  462  	if (ret)
-71e4156c5ec43f7 Jitao Shi    2016-11-14  463  		goto err_dsi_attach;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  464  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  465  	return 0;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  466  
-71e4156c5ec43f7 Jitao Shi    2016-11-14  467  err_dsi_attach:
-71e4156c5ec43f7 Jitao Shi    2016-11-14  468  	mipi_dsi_device_unregister(dsi);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  469  err:
-71e4156c5ec43f7 Jitao Shi    2016-11-14  470  	if (ps_bridge->panel)
-71e4156c5ec43f7 Jitao Shi    2016-11-14  471  		drm_panel_detach(ps_bridge->panel);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  472  	drm_connector_cleanup(&ps_bridge->connector);
-71e4156c5ec43f7 Jitao Shi    2016-11-14  473  	return ret;
-71e4156c5ec43f7 Jitao Shi    2016-11-14  474  }
-71e4156c5ec43f7 Jitao Shi    2016-11-14  475  
-
-:::::: The code at line 399 was first introduced by commit
-:::::: 71e4156c5ec43f72077bb1f50882f588cfd71d71 FROMLIST: drm/bridge: Add I2C based driver for ps8640 bridge
-
-:::::: TO: Jitao Shi <jitao.shi@mediatek.com>
-:::::: CC: Commit Bot <commit-bot@chromium.org>
-
+base-commit: 8baacf67c76c560fed954ac972b63e6e59a6fba0
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.476.g0c4daa206d-goog
+
