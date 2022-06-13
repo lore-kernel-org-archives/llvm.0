@@ -1,98 +1,130 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BDE1360;
-	Mon, 13 Jun 2022 10:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560891364
+	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 11:03:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655116066; x=1686652066;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cJw4UTUEc+RWc+ehCramYX9/m6K3edEpj+3lirTKgJs=;
-  b=guBBIGxRXWq/FcAfgeac7E86SeYRDSqmImK0+578fV5QctRzNMMV+Abq
-   VzToExGKSoC7pwS50nYEqGig0vBiazINisfuZq6AVx1xQzEhM/Vw5uYnC
-   4x9DntNimnUiAMPikF4dp5tfBFalUaVcgnDVCZYojlp2Dk4W7RAdxHaAm
-   beQ9i8QgW1blNZhruf/eHVLPRcMgLW7eMw0Kb6j4xA1wju8pyMCCfs4IB
-   E74Lsq4oygtQq9JdxgDK9LdnRlpDelZfNIjYL3of5URXSHsMSXwEI5o/s
-   SNKlCH1StG/jDZD12DkfXmeKxFarrYla9h7j8ZG5QRN6Ii9Mlu8zevuij
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="339910619"
+  t=1655118211; x=1686654211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I0+AQdJdP0W9uMbzGijxcDYistK8Ld2UH8HmZHjvd38=;
+  b=NTTcVcTeAXZDv3MLrWhiLxEhI/ecERZ0G1tp3Ho8MsSO2CJ00v6lqKEB
+   EPJE4DTN7UJG5KWg89DMxFvaPkP8qmyrsiTFMOEMoUkgcNfiBZqgDHbNX
+   cLJ6dD6WWOLmHKpdhMr6OEVyQ/OPhaN88pXesImmzJOHyUZn/smHu/53m
+   MdCvxY/NcExYekKo27KjFr0dHNz05eslts+/7s/kIUm8+pjixqJvZjsuV
+   ZdW+bCOKq42r+QrJc5KMQj3yDetbTpraHxOZfFTUK6pxcWO2NLuWItjNg
+   lC6tGbNTkuVpAutWtWLfNOXCyVK382ggpiKKTeeYLb3QOPwlvNbd1Dtlp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="342220117"
 X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="339910619"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:27:43 -0700
+   d="scan'208";a="342220117"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 04:03:30 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="639662230"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.193])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:27:38 -0700
-Message-ID: <40b8507e-1da3-7ab8-cd11-e0d692e08352@intel.com>
-Date: Mon, 13 Jun 2022 13:27:36 +0300
+   d="scan'208";a="829742491"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2022 04:03:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o0hqy-000KkH-4J;
+	Mon, 13 Jun 2022 11:03:28 +0000
+Date: Mon, 13 Jun 2022 19:03:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Gonda <pgonda@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but
+ not used
+Message-ID: <202206131853.x4KJwC5Q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH] mmc: sdhci-brcmstb: Initialize base_clk to NULL in
- sdhci_brcmstb_probe()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, Al Cooper <alcooperx@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
- Florian Fainelli <f.fainelli@gmail.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Justin Stitt <jstitt007@gmail.com>, Dan Carpenter
- <dan.carpenter@oracle.com>, linux-mmc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-References: <20220608152757.82529-1-nathan@kernel.org>
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220608152757.82529-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 8/06/22 18:27, Nathan Chancellor wrote:
-> Clang warns a few times along the lines of:
-> 
->   drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->           if (res)
->               ^~~
->   drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
->           clk_disable_unprepare(base_clk);
->                                 ^~~~~~~~
-> 
-> base_clk is used in the error path before it is initialized. Initialize
-> it to NULL, as clk_disable_unprepare() calls clk_disable() and
-> clk_unprepare(), which both handle NULL pointers gracefully.
-> 
-> Fixes: 2cecaac1b21c ("mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1650
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Peter,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+FYI, the error/warning still remains.
 
-> ---
->  drivers/mmc/host/sdhci-brcmstb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-> index f8dff8537920..28e9cf995c41 100644
-> --- a/drivers/mmc/host/sdhci-brcmstb.c
-> +++ b/drivers/mmc/host/sdhci-brcmstb.c
-> @@ -256,7 +256,7 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
->  	struct sdhci_host *host;
->  	struct resource *iomem;
->  	struct clk *clk;
-> -	struct clk *base_clk;
-> +	struct clk *base_clk = NULL;
->  	int res;
->  
->  	match = of_match_node(sdhci_brcm_of_match, pdev->dev.of_node);
-> 
-> base-commit: 10980053142d8a3e86eb4d3014574424b42b7a45
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+commit: 0c2c7c069285374fc8feacddc0498f8ab7627117 KVM: SEV: Mark nested locking of vcpu->lock
+date:   5 weeks ago
+config: x86_64-buildonly-randconfig-r005-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131853.x4KJwC5Q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0c2c7c069285374fc8feacddc0498f8ab7627117
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0c2c7c069285374fc8feacddc0498f8ab7627117
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/ drivers/media/platform/qcom/camss/
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but not used [-Wunused-but-set-parameter]
+                                           enum sev_migration_role role)
+                                                                   ^
+   1 warning generated.
+
+
+vim +/role +1605 arch/x86/kvm/svm/sev.c
+
+  1603	
+  1604	static int sev_lock_vcpus_for_migration(struct kvm *kvm,
+> 1605						enum sev_migration_role role)
+  1606	{
+  1607		struct kvm_vcpu *vcpu;
+  1608		unsigned long i, j;
+  1609		bool first = true;
+  1610	
+  1611		kvm_for_each_vcpu(i, vcpu, kvm) {
+  1612			if (mutex_lock_killable_nested(&vcpu->mutex, role))
+  1613				goto out_unlock;
+  1614	
+  1615			if (first) {
+  1616				/*
+  1617				 * Reset the role to one that avoids colliding with
+  1618				 * the role used for the first vcpu mutex.
+  1619				 */
+  1620				role = SEV_NR_MIGRATION_ROLES;
+  1621				first = false;
+  1622			} else {
+  1623				mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+  1624			}
+  1625		}
+  1626	
+  1627		return 0;
+  1628	
+  1629	out_unlock:
+  1630	
+  1631		first = true;
+  1632		kvm_for_each_vcpu(j, vcpu, kvm) {
+  1633			if (i == j)
+  1634				break;
+  1635	
+  1636			if (first)
+  1637				first = false;
+  1638			else
+  1639				mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
+  1640	
+  1641	
+  1642			mutex_unlock(&vcpu->mutex);
+  1643		}
+  1644		return -EINTR;
+  1645	}
+  1646	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
