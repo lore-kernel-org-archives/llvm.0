@@ -1,43 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4347A
-	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 21:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86CF258F
+	for <llvm@lists.linux.dev>; Mon, 13 Jun 2022 22:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655157254; x=1686693254;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gTWbJ5Wjcw4Fc4kGkde+bUCUS/ZDjaIGfoulkXK8WLs=;
-  b=hky1EUpaBmN+PM6Zhyq/BRjecHOtDwOOwUtBchU7dZSnmWWUwGdyVSOb
-   g/JEwltfXZYSni6ulddE9ir7Rv7+4maqHd5LUyK+hHvrSLYkHkC6zMgvb
-   VhNRdydnBWL6piaD+qIm9A+LiCOgDkDNuvekRCa/932j38WL+a+uESRmn
-   vd85S1a/+DzwyRGGM1Zz1ds6WPvHKd8Ccl6rmbSO+QZjXvom/Fjd9qRjE
-   oHcgk2w9eNUJGE0VmTfKM9bsK9OVPjIRj3wwDVcOfjpgnF4tlQ6F2fIK8
-   7Wi95hpoRvTp2zKPMFZA50LSZniJY2cf1JEmgC+S9QkyUaj4t32rlpvQW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261458949"
+  t=1655160907; x=1686696907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nLVpemy9gxF1/zu+6uvWOe4ukzkTPIflDzRj+y3KhVk=;
+  b=myUN9EKfat41a5ox83q5AJ3p2npwZkW0C3SopPuDr+JkCNZWAR8Irmbc
+   fc56Ui4Kxe5AijMMv7vdoLTtySwBfV+kZvVrZPva8wwDSGgTbGYYb01K8
+   J4r9qSWBD91dd/r98/m+c6Y8Q1IfK+jWbG4+0SatANItweGhNdyy5/9gi
+   Mij+LAEPtnXzBPSRqzrek47Dd30eog+zSQUc10E/VVnI/iB+3WM1nNh+8
+   KCWokMvJhn+kViPC3HslVx5ZYM0/DFFX4ZA6dvrIjUI+aYES1jOkDsMYS
+   tDpbkOlf0aWy929AuI/uvTuk/gmJY2RC5mOpBklTg9SnexJLosrudXeqq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267126095"
 X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="261458949"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 14:54:04 -0700
+   d="scan'208";a="267126095"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 15:55:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="686282254"
+   d="scan'208";a="830046207"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2022 14:54:02 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2022 15:55:04 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0s0Y-000LBp-2M;
-	Mon, 13 Jun 2022 21:54:02 +0000
-Date: Tue, 14 Jun 2022 05:53:39 +0800
+	id 1o0sxb-000LER-EW;
+	Mon, 13 Jun 2022 22:55:03 +0000
+Date: Tue, 14 Jun 2022 06:54:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Andy Chiu <andy.chiu@sifive.com>, radhey.shyam.pandey@xilinx.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, michal.simek@xilinx.com, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.19-rc1 27/33]
- arch/powerpc/include/asm/page.h:237:9: error: call to undeclared function
- 'WARN_ON'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202206140540.TntNERxC-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	Andy Chiu <andy.chiu@sifive.com>, Max Hsu <max.hsu@sifive.com>
+Subject: Re: [PATCH net-next 2/2] net: axienet: Use iowrite64 to write all
+ 64b descriptor pointers
+Message-ID: <202206140650.4x173WyJ-lkp@intel.com>
+References: <20220613034202.3777248-3-andy.chiu@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,147 +50,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220613034202.3777248-3-andy.chiu@sifive.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.19-rc1
-head:   62fa3e7c2288a1f8d5b9bb2c1f31cee3c26df806
-commit: d2b930128c4dfdce5bd9470bf79277bd457df960 [27/33] powerpc: Make virt_to_pfn() a static inline
-config: powerpc64-randconfig-r006-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140540.TntNERxC-lkp@intel.com/config)
+Hi Andy,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Chiu/net-axienet-fix-DMA-Tx-error/20220613-114738
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 27f2533bcc6e909b85d3c1b738fa1f203ed8a835
+config: x86_64-randconfig-r002-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140650.4x173WyJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc64 cross compiling tool for clang build
-        # apt-get install binutils-powerpc64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=d2b930128c4dfdce5bd9470bf79277bd457df960
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.19-rc1
-        git checkout d2b930128c4dfdce5bd9470bf79277bd457df960
+        # https://github.com/intel-lab-lkp/linux/commit/6c45bbcce325f6c9c907ed0a11ddc13d8026bbcf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Chiu/net-axienet-fix-DMA-Tx-error/20220613-114738
+        git checkout 6c45bbcce325f6c9c907ed0a11ddc13d8026bbcf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
->> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
-           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
-                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
-           pfn_valid(virt_to_pfn(_addr));                                  \
-                                 ^~~~~
-   arch/powerpc/include/asm/bug.h:121:29: note: expanded from macro 'WARN_ON'
-                   if (__builtin_constant_p((x))) {                \
-                                             ^
-   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
-   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-                                                                ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
->> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
-           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
-                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
-           pfn_valid(virt_to_pfn(_addr));                                  \
-                                 ^~~~~
-   arch/powerpc/include/asm/bug.h:122:10: note: expanded from macro 'WARN_ON'
-                           if (!(x))                               \
-                                 ^
-   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
-   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-                                                                ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
->> arch/powerpc/include/asm/io.h:928:47: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const volatile void *' [-Wint-conversion]
-           WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && !virt_addr_valid(address));
-                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/page.h:245:24: note: expanded from macro 'virt_addr_valid'
-           pfn_valid(virt_to_pfn(_addr));                                  \
-                                 ^~~~~
-   arch/powerpc/include/asm/bug.h:132:28: note: expanded from macro 'WARN_ON'
-                                      "r" ((__force long)(x)));    \
-                                                          ^
-   arch/powerpc/include/asm/bug.h:84:7: note: expanded from macro 'WARN_ENTRY'
-                     ##__VA_ARGS__ : : label)
-                       ^~~~~~~~~~~
-   include/linux/compiler_types.h:283:42: note: expanded from macro 'asm_volatile_goto'
-   #define asm_volatile_goto(x...) asm goto(x)
-                                            ^
-   arch/powerpc/include/asm/page.h:235:62: note: passing argument to parameter 'kaddr' here
-   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-                                                                ^
-   3 warnings generated.
-   In file included from <built-in>:4:
-   In file included from lib/vdso/gettimeofday.c:5:
-   In file included from include/vdso/datapage.h:137:
-   In file included from arch/powerpc/include/asm/vdso/gettimeofday.h:7:
->> arch/powerpc/include/asm/page.h:237:9: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return __pa(kaddr) >> PAGE_SHIFT;
-                  ^
-   arch/powerpc/include/asm/page.h:225:2: note: expanded from macro '__pa'
-           VIRTUAL_WARN_ON((unsigned long)(x) < PAGE_OFFSET);              \
-           ^
-   arch/powerpc/include/asm/page.h:210:28: note: expanded from macro 'VIRTUAL_WARN_ON'
-   #define VIRTUAL_WARN_ON(x)      WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && (x))
-                                   ^
->> arch/powerpc/include/asm/page.h:237:9: warning: result of comparison of constant 13835058055282163712 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-           return __pa(kaddr) >> PAGE_SHIFT;
-                  ^~~~~~~~~~~
-   arch/powerpc/include/asm/page.h:225:37: note: expanded from macro '__pa'
-           VIRTUAL_WARN_ON((unsigned long)(x) < PAGE_OFFSET);              \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   arch/powerpc/include/asm/page.h:210:73: note: expanded from macro 'VIRTUAL_WARN_ON'
-   #define VIRTUAL_WARN_ON(x)      WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && (x))
-                                                                                ^
-   1 warning and 1 error generated.
-   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:74: arch/powerpc/kernel/vdso/vgettimeofday-32.o] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/WARN_ON +237 arch/powerpc/include/asm/page.h
-
-   234	
-   235	static inline unsigned long virt_to_pfn(const volatile void *kaddr)
-   236	{
- > 237		return __pa(kaddr) >> PAGE_SHIFT;
-   238	}
-   239	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-   240	#define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
-   241	
+>> ld.lld: error: undefined symbol: iowrite64
+   >>> referenced by amd_bus.c
+   >>>               vmlinux.o:(axienet_dma_out_addr)
 
 -- 
 0-DAY CI Kernel Test Service
