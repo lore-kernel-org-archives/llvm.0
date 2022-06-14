@@ -1,172 +1,202 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7D046A2
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 08:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1655194040;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=u5FFZJbMGepFeO9MKDW07tv29kCIYqf1wa6DFklYaWI=;
-	b=UClWx+8J/sCMaq7YYQTQU+I7zso/Vqyz/UPaxbpudtUmnqF2+SKU6A+Zb5iqAVr8rH1OI2
-	wTOBVavRZgHdCNnJ0MfiuUL4JQKtcsKyKRA4k4TRMGk6e/uKV4EfzjkrcXOWcudWjeBivp
-	Vc33Jdl1S3uZtLiPRAoGQIOhvbTI4jM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-HWYu0fGZMeidDFU_AegTkw-1; Tue, 14 Jun 2022 04:07:19 -0400
-X-MC-Unique: HWYu0fGZMeidDFU_AegTkw-1
-Received: by mail-lf1-f70.google.com with SMTP id br5-20020a056512400500b00479a5157134so4176637lfb.5
-        for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 01:07:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u5FFZJbMGepFeO9MKDW07tv29kCIYqf1wa6DFklYaWI=;
-        b=e2jmBXtHxINLl0VbrVJMQ+nZUflRJzRGhfFTmzMZOQZN9lMivjXQ74fFm8g5RCYDH1
-         8FgXVDrNl9a4r525OGFRhjUpipvJTEHpLdlBkl6qTQgYJrsXkeB/+r8cXDdPpi8cRiRM
-         URsGkdFYuPUbAJrxvuTwAm6HAgY3/Sw8h3W2r+fr95cwYOvCp8YFM2okTwiZyiitcoaD
-         xFHtU9naTt5wx57hIPcSVBXVtyoPPVDM4XRqFbGF7bcIX3h4QbVklqEVEK3jDXuY5V2H
-         6RF2Dtrn7OWedbcCFCvFrjsH/vFPw034Z0QZzqGMH6kr2ysWe1tmJ66FqPWmJkyoAqzd
-         nDgg==
-X-Gm-Message-State: AJIora8Alhy3BI+UkszsglDGfP6DvT8FxglxdAjMKvrAYQcV2k3L4VbK
-	cFTslU2xQA+gi4DwZcUn6OZBpsgQkABPJFg0Pj2GGRGMHmhQk6t+r4/gzaMYypRoRjeml4T+Xo5
-	s8USLO/vEspXcMaPi0NuAKB/IqOClrg==
-X-Received: by 2002:a2e:b52f:0:b0:258:f682:b7f9 with SMTP id z15-20020a2eb52f000000b00258f682b7f9mr1763711ljm.323.1655194037912;
-        Tue, 14 Jun 2022 01:07:17 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sYtiOBWY0tJ9aS6xRrlCbNlQLEAtW1TvYhCA79U27SkZcGBxHTt0UMcRLc5i+rhqg+eDwTO+tVYCm2j/ulmPY=
-X-Received: by 2002:a2e:b52f:0:b0:258:f682:b7f9 with SMTP id
- z15-20020a2eb52f000000b00258f682b7f9mr1763698ljm.323.1655194037708; Tue, 14
- Jun 2022 01:07:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F40E184A
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 08:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655194283; x=1686730283;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PILnaJq8+SdT0NewtsC2iirEizp1s1uKin5H6ZTUG8I=;
+  b=G4S4PbIONER+3356xqu/EAOzf0uyA7D05QggAfNp+ZomtXLfaamcmPBl
+   2ssuRrISTpe1qkMeTVEpW8W8Uxyu91ZlG6m4zvkQNgkINu4AwjiLYBpdv
+   p18CteR4TCyTuM3XO+sGl17kI6m3KYG5SCq0VCorSxnUgMmGwf9VFPwJE
+   /0Kt1u0mwpqjNy8KOPgWvZcZmWPuT4fqffyWT/DPBrS/4RDyv4k+Y4UTS
+   EenW1gsdFpwZBWQINPe9lnSKgjYoVTApGIARFu8jXKapQZ+lpLYaNMKn1
+   jf4c8jnzCOkL45HnOv0wEvZ25tStrdwNf17AmQWmWmnZ1CLGAuKXDI/nT
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364881960"
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="364881960"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 01:11:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="651900521"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jun 2022 01:11:21 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o11dw-000Leb-JO;
+	Tue, 14 Jun 2022 08:11:20 +0000
+Date: Tue, 14 Jun 2022 16:10:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Usama Arif <usama.arif@bytedance.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC 3/3] io_uring: add support for IORING_OP_MSGRCV
+Message-ID: <202206141643.zjDF6qdK-lkp@intel.com>
+References: <20220613192642.2040118-4-usama.arif@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0000000000008ea7ac05e09b46a6@google.com> <CACT4Y+Z8fdbQ9Kq1gHSha2q7a6RrOajbPKrSVCFyLNS95XkVgQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+Z8fdbQ9Kq1gHSha2q7a6RrOajbPKrSVCFyLNS95XkVgQ@mail.gmail.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Tue, 14 Jun 2022 16:07:06 +0800
-Message-ID: <CACGkMEuK=bYcpNfjcsh64K0_-nYX2btw9Mi9uWsCYcfENBcHuA@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: INFO: task hung in hwrng_register
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: syzbot <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, linux-crypto@vger.kernel.org, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux@dominikbrodowski.net, 
-	llvm@lists.linux.dev, mpm@selenic.com, syzkaller-bugs@googlegroups.com, 
-	Laurent Vivier <lvivier@redhat.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jasowang@redhat.com
-X-Mimecast-Spam-Score: 1
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613192642.2040118-4-usama.arif@bytedance.com>
 
-On Fri, Jun 10, 2022 at 4:36 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Sat, 4 Jun 2022 at 10:46, syzbot
-> <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    032dcf09e2bf Merge tag 'gpio-fixes-for-v5.19-rc1' of git:/..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=14409a93f00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=99f457384a4fea79
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=6da75abeed821109137b
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+6da75abeed821109137b@syzkaller.appspotmail.com
->
-> +Jason, Laurent
->
-> This started appearing at the same time as 'task hung in
-> add_early_randomness" bug reports:
-> https://syzkaller.appspot.com/bug?id=256d08cc261a3c38832064a33df4c928b3cd0ef0
-> https://syzkaller.appspot.com/bug?id=be1d99e09e499aed3939dc678718371984104e5c
-> https://syzkaller.appspot.com/bug?id=1cd11df5d984c694e3e7fc9fe271389b2340bed0
-> https://syzkaller.appspot.com/bug?id=35496bafab4c3f81f0b0d6d72c69787300629740
->
-> Is this also fixed by "virtio-rng: make device ready before making
-> request" patch?
+Hi Usama,
 
-Yes, I think so.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc2]
+[cannot apply to next-20220614]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks
+url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/io_uring-add-support-for-IORING_OP_MSGSND-IORING_OP_MSGRCV/20220614-043915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+config: hexagon-randconfig-r045-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141643.zjDF6qdK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/68c2ccd5226487853561a6eae75c70429721d46a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Usama-Arif/io_uring-add-support-for-IORING_OP_MSGSND-IORING_OP_MSGRCV/20220614-043915
+        git checkout 68c2ccd5226487853561a6eae75c70429721d46a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
->
->
->
->
-> > INFO: task swapper/0:1 blocked for more than 143 seconds.
-> >       Not tainted 5.18.0-syzkaller-13760-g032dcf09e2bf #0
-> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > task:swapper/0       state:D stack:21080 pid:    1 ppid:     0 flags:0x00004000
-> > Call Trace:
-> >  <TASK>
-> >  context_switch kernel/sched/core.c:5116 [inline]
-> >  __schedule+0x957/0xec0 kernel/sched/core.c:6428
-> >  schedule+0xeb/0x1b0 kernel/sched/core.c:6500
-> >  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
-> >  __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
-> >  __mutex_lock kernel/locking/mutex.c:747 [inline]
-> >  mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-> >  add_early_randomness drivers/char/hw_random/core.c:69 [inline]
-> >  hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
-> >  virtrng_scan+0x3e/0x90 drivers/char/hw_random/virtio-rng.c:205
-> >  virtio_dev_probe+0xa03/0xba0 drivers/virtio/virtio.c:313
-> >  call_driver_probe+0x96/0x250
-> >  really_probe+0x220/0x940 drivers/base/dd.c:634
-> >  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:764
-> >  driver_probe_device+0x50/0x240 drivers/base/dd.c:794
-> >  __driver_attach+0x35f/0x5a0 drivers/base/dd.c:1163
-> >  bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
-> >  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
-> >  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
-> >  driver_register+0x2e9/0x3e0 drivers/base/driver.c:240
-> >  do_one_initcall+0xbd/0x2b0 init/main.c:1295
-> >  do_initcall_level+0x168/0x218 init/main.c:1368
-> >  do_initcalls+0x4b/0x8c init/main.c:1384
-> >  kernel_init_freeable+0x43a/0x5c3 init/main.c:1610
-> >  kernel_init+0x19/0x2b0 init/main.c:1499
-> >  ret_from_fork+0x1f/0x30
-> >  </TASK>
-> >
-> > Showing all locks held in the system:
-> > 2 locks held by swapper/0/1:
-> >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
-> >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1054 [inline]
-> >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x353/0x5a0 drivers/base/dd.c:1162
-> >  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness drivers/char/hw_random/core.c:69 [inline]
-> >  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
-> > 2 locks held by pr/ttyS0/16:
-> > 1 lock held by khungtaskd/29:
-> >  #0: ffffffff8cb1eee0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-> > 2 locks held by kworker/u4:4/56:
-> >  #0: ffff888011c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
-> >  #1: ffffc900013e7d00 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
-> > 1 lock held by hwrng/755:
-> >  #0: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0xec/0x470 drivers/char/hw_random/core.c:503
-> >
-> > =============================================
-> >
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000008ea7ac05e09b46a6%40google.com.
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   fs/io_uring.c:8331:10: error: call to undeclared function 'io_msgsnd_prep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return io_msgsnd_prep(req, sqe);
+                          ^
+>> fs/io_uring.c:8333:10: error: call to undeclared function 'io_msgrcv_prep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return io_msgrcv_prep(req, sqe);
+                          ^
+   fs/io_uring.c:8679:9: error: call to undeclared function 'io_msgsnd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = io_msgsnd(req, issue_flags);
+                         ^
+>> fs/io_uring.c:8682:9: error: call to undeclared function 'io_msgrcv'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = io_msgrcv(req, issue_flags);
+                         ^
+   4 errors generated.
+
+
+vim +/io_msgrcv_prep +8333 fs/io_uring.c
+
+  8239	
+  8240	static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+  8241	{
+  8242		switch (req->opcode) {
+  8243		case IORING_OP_NOP:
+  8244			return io_nop_prep(req, sqe);
+  8245		case IORING_OP_READV:
+  8246		case IORING_OP_READ_FIXED:
+  8247		case IORING_OP_READ:
+  8248		case IORING_OP_WRITEV:
+  8249		case IORING_OP_WRITE_FIXED:
+  8250		case IORING_OP_WRITE:
+  8251			return io_prep_rw(req, sqe);
+  8252		case IORING_OP_POLL_ADD:
+  8253			return io_poll_add_prep(req, sqe);
+  8254		case IORING_OP_POLL_REMOVE:
+  8255			return io_poll_remove_prep(req, sqe);
+  8256		case IORING_OP_FSYNC:
+  8257			return io_fsync_prep(req, sqe);
+  8258		case IORING_OP_SYNC_FILE_RANGE:
+  8259			return io_sfr_prep(req, sqe);
+  8260		case IORING_OP_SENDMSG:
+  8261		case IORING_OP_SEND:
+  8262			return io_sendmsg_prep(req, sqe);
+  8263		case IORING_OP_RECVMSG:
+  8264		case IORING_OP_RECV:
+  8265			return io_recvmsg_prep(req, sqe);
+  8266		case IORING_OP_CONNECT:
+  8267			return io_connect_prep(req, sqe);
+  8268		case IORING_OP_TIMEOUT:
+  8269			return io_timeout_prep(req, sqe);
+  8270		case IORING_OP_TIMEOUT_REMOVE:
+  8271			return io_timeout_remove_prep(req, sqe);
+  8272		case IORING_OP_ASYNC_CANCEL:
+  8273			return io_async_cancel_prep(req, sqe);
+  8274		case IORING_OP_LINK_TIMEOUT:
+  8275			return io_link_timeout_prep(req, sqe);
+  8276		case IORING_OP_ACCEPT:
+  8277			return io_accept_prep(req, sqe);
+  8278		case IORING_OP_FALLOCATE:
+  8279			return io_fallocate_prep(req, sqe);
+  8280		case IORING_OP_OPENAT:
+  8281			return io_openat_prep(req, sqe);
+  8282		case IORING_OP_CLOSE:
+  8283			return io_close_prep(req, sqe);
+  8284		case IORING_OP_FILES_UPDATE:
+  8285			return io_files_update_prep(req, sqe);
+  8286		case IORING_OP_STATX:
+  8287			return io_statx_prep(req, sqe);
+  8288		case IORING_OP_FADVISE:
+  8289			return io_fadvise_prep(req, sqe);
+  8290		case IORING_OP_MADVISE:
+  8291			return io_madvise_prep(req, sqe);
+  8292		case IORING_OP_OPENAT2:
+  8293			return io_openat2_prep(req, sqe);
+  8294		case IORING_OP_EPOLL_CTL:
+  8295			return io_epoll_ctl_prep(req, sqe);
+  8296		case IORING_OP_SPLICE:
+  8297			return io_splice_prep(req, sqe);
+  8298		case IORING_OP_PROVIDE_BUFFERS:
+  8299			return io_provide_buffers_prep(req, sqe);
+  8300		case IORING_OP_REMOVE_BUFFERS:
+  8301			return io_remove_buffers_prep(req, sqe);
+  8302		case IORING_OP_TEE:
+  8303			return io_tee_prep(req, sqe);
+  8304		case IORING_OP_SHUTDOWN:
+  8305			return io_shutdown_prep(req, sqe);
+  8306		case IORING_OP_RENAMEAT:
+  8307			return io_renameat_prep(req, sqe);
+  8308		case IORING_OP_UNLINKAT:
+  8309			return io_unlinkat_prep(req, sqe);
+  8310		case IORING_OP_MKDIRAT:
+  8311			return io_mkdirat_prep(req, sqe);
+  8312		case IORING_OP_SYMLINKAT:
+  8313			return io_symlinkat_prep(req, sqe);
+  8314		case IORING_OP_LINKAT:
+  8315			return io_linkat_prep(req, sqe);
+  8316		case IORING_OP_MSG_RING:
+  8317			return io_msg_ring_prep(req, sqe);
+  8318		case IORING_OP_FSETXATTR:
+  8319			return io_fsetxattr_prep(req, sqe);
+  8320		case IORING_OP_SETXATTR:
+  8321			return io_setxattr_prep(req, sqe);
+  8322		case IORING_OP_FGETXATTR:
+  8323			return io_fgetxattr_prep(req, sqe);
+  8324		case IORING_OP_GETXATTR:
+  8325			return io_getxattr_prep(req, sqe);
+  8326		case IORING_OP_SOCKET:
+  8327			return io_socket_prep(req, sqe);
+  8328		case IORING_OP_URING_CMD:
+  8329			return io_uring_cmd_prep(req, sqe);
+  8330		case IORING_OP_MSGSND:
+  8331			return io_msgsnd_prep(req, sqe);
+  8332		case IORING_OP_MSGRCV:
+> 8333			return io_msgrcv_prep(req, sqe);
+  8334		}
+  8335	
+  8336		printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
+  8337				req->opcode);
+  8338		return -EINVAL;
+  8339	}
+  8340	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
