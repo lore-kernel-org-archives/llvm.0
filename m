@@ -1,47 +1,54 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FFD185F
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 13:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655213375; x=1686749375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N09Lo78A/vN3Z9Ilmb4LDXjX/Vl0OGOLeOGeV0vZZ5Y=;
-  b=U2WLZWsRXEcgYMP6y1mq4ttqVit5llvWpok1aunynkLBrRyvqxcVf/8l
-   2M6zxvaWUJQYoFMNtQYMZzvLulWg1DCHIfs1vrG/eDnPKRjnuaJNt4oIW
-   /ZqDJdsys7aCe8hH24WtqnIJ1jckFY5gp82VQmtkTK51pdcT7YQmMz1+P
-   MAj+giRJm9Mo16CEPycWRNpIrX4K+wKDcF3XTzucYVk+rGj7JfFX/ZiFI
-   sMEuySf4M1eLLhaqyvPYrSIoN1A4d2Kpxx0cyUhd9WzBqAdc3otowJmYO
-   T+dGQS7eaVseGzTDzWChdoM9t2S4tjAm/UK0ziJQUdRs15AkkeeHUgEwC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279654559"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="279654559"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 06:29:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="726820139"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jun 2022 06:29:32 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o16br-000Lvx-PJ;
-	Tue, 14 Jun 2022 13:29:31 +0000
-Date: Tue, 14 Jun 2022 21:28:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-	Daire Byrne <daire@dneg.com>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Chuck Lever <chuck.lever@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-	linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 06/12] VFS: support concurrent renames.
-Message-ID: <202206142141.w8ni6M0m-lkp@intel.com>
-References: <165516230199.21248.18142980966152036732.stgit@noble.brown>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20527A
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 15:01:56 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id u37so381970pfg.3
+        for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 08:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n3Z3Q/k7HSG6exH8gc+Mbf33wGJcooVYy9Jt7VeZHcI=;
+        b=QHWQ4B9PyQb/+O8khCkKGr0oaWjZhpgcKi1DRpexHRDSvXnceHXOlYk/XFqoJp3mEn
+         l/ofBKuQ91JYiOobjbnwRv4fVFc8e6M8FDiYzKwauqOHw0Fw/pFZUoL7rI8uLOtaivNX
+         I8GG+1tkUHT3+nT61vTT8A0vOo/1CSclt1ZFZ5V9uR/WmkFC/tjZMRYh5T/pzn9rbcBj
+         efZQQBs2qNq4t1oUVLuoS45krzaKbwF72JOXvG82Pn8a99pxNi9aYbEUT4OaPiWBSt7Z
+         rIXHB0ZbPLjshKbe8NrqvHY685MKtIgJUe41q9WaKMa0taz1EJ09+Tmm8vb/1X6rkSNp
+         xl2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n3Z3Q/k7HSG6exH8gc+Mbf33wGJcooVYy9Jt7VeZHcI=;
+        b=MqiALlVwY3p3aFB3qnApK1/wsb0SlZGf+e/kGpv746MMw0JDchBDDQNGUUpOtYHcGx
+         3+VChS5vtz0/4JVh/DGdPWXcyAvuAxLX5QTtt2OW2SBkyheFpQPcNdZof9nxl/VxRiDH
+         eqRiFZU2ZNW9SIBfJuJFef1ubkM7HlJj0xfDz0fxv8W+REpELYuOB3LpYGA/rE5/r8o+
+         lmSTnxYyfgUl4D38nAlPUBquJsPz2L03KkamtrQkpIPhydvH9C+SpB28NmtwgxmQ9clN
+         7IwlfHz6TMVyhUOVywlfK+B3KdUghMsUknB2gPeADLJPcg/0+TjQW4KjhmNWARA7jU7B
+         GErg==
+X-Gm-Message-State: AOAM530mQEOz8uunSQo2IVM48OAadvXxa+6qbB2vuonpawpeaiwN2yHm
+	/v/Zp2yguPBlYB7M1ZeAZbwtIQ==
+X-Google-Smtp-Source: ABdhPJwqbY/FIuqnPZS/XB2QtEVx9V2a5opDXcVaLC9AisFWbCe7pmTcXRBhGD+BGFO+bm3wdv1pyw==
+X-Received: by 2002:a65:4809:0:b0:3fc:878:49df with SMTP id h9-20020a654809000000b003fc087849dfmr4882582pgs.557.1655218916110;
+        Tue, 14 Jun 2022 08:01:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b0015eb200cc00sm7328151plg.138.2022.06.14.08.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 08:01:55 -0700 (PDT)
+Date: Tue, 14 Jun 2022 15:01:51 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, Maxim Levitsky <mlevitsk@redhat.com>,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org, kvm@vger.kernel.org,
+	Robert Hu <robert.hu@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>,
+	Danmei Wei <danmei.wei@intel.com>
+Subject: Re: [kvm:queue 5/184] arch/x86/kvm/svm/avic.c:913:6: warning: shift
+ count >= width of type
+Message-ID: <Yqii3+EN1SnQYnMJ@google.com>
+References: <202206132237.17DFkdFl-lkp@intel.com>
+ <7a5d48d0-d1b5-91aa-8966-54d9ac986126@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,111 +57,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165516230199.21248.18142980966152036732.stgit@noble.brown>
+In-Reply-To: <7a5d48d0-d1b5-91aa-8966-54d9ac986126@redhat.com>
 
-Hi NeilBrown,
+On Tue, Jun 14, 2022, Paolo Bonzini wrote:
+> On 6/13/22 16:49, kernel test robot wrote:
+> >     902	
+> >     903	bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+> >     904	{
+> >     905		ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+> >     906				  BIT(APICV_INHIBIT_REASON_ABSENT) |
+> >     907				  BIT(APICV_INHIBIT_REASON_HYPERV) |
+> >     908				  BIT(APICV_INHIBIT_REASON_NESTED) |
+> >     909				  BIT(APICV_INHIBIT_REASON_IRQWIN) |
+> >     910				  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
+> >     911				  BIT(APICV_INHIBIT_REASON_X2APIC) |
+> >     912				  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+> >   > 913				  BIT(APICV_INHIBIT_REASON_SEV      |
+> >     914				  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
+> >     915				  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED));
+> 
+> Ouch, saw this right after sending a pull request. :(
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19-rc2 next-20220614]
-[cannot apply to trondmy-nfs/linux-next viro-vfs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/Allow-concurrent-directory-updates/20220614-072355
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: i386-buildonly-randconfig-r005-20220613 (https://download.01.org/0day-ci/archive/20220614/202206142141.w8ni6M0m-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review NeilBrown/Allow-concurrent-directory-updates/20220614-072355
-        git checkout 46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/namei.c:3175:16: warning: no previous prototype for function 'lock_rename_lookup_excl' [-Wmissing-prototypes]
-   struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-                  ^
-   fs/namei.c:3175:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/lock_rename_lookup_excl +3175 fs/namei.c
-
-  3174	
-> 3175	struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-  3176					       struct dentry **d1p, struct dentry **d2p,
-  3177					       struct qstr *last1, struct qstr *last2,
-  3178					       unsigned int flags1, unsigned int flags2)
-  3179	{
-  3180		struct dentry *p;
-  3181		struct dentry *d1, *d2;
-  3182	
-  3183		if (p1 == p2) {
-  3184			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3185			d1 = __lookup_hash(last1, p1, flags1, NULL);
-  3186			if (IS_ERR(d1))
-  3187				goto out_unlock_1;
-  3188			d2 = __lookup_hash(last2, p2, flags2, NULL);
-  3189			if (IS_ERR(d2))
-  3190				goto out_unlock_2;
-  3191			*d1p = d1; *d2p = d2;
-  3192			return NULL;
-  3193		out_unlock_2:
-  3194			dput(d1);
-  3195			d1 = d2;
-  3196		out_unlock_1:
-  3197			inode_unlock(p1->d_inode);
-  3198			return d1;
-  3199		}
-  3200	
-  3201		mutex_lock(&p1->d_sb->s_vfs_rename_mutex);
-  3202	
-  3203		if ((p = d_ancestor(p2, p1)) != NULL) {
-  3204			inode_lock_nested(p2->d_inode, I_MUTEX_PARENT);
-  3205			inode_lock_nested(p1->d_inode, I_MUTEX_CHILD);
-  3206		} else if ((p = d_ancestor(p1, p2)) != NULL) {
-  3207			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3208			inode_lock_nested(p2->d_inode, I_MUTEX_CHILD);
-  3209		} else {
-  3210			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3211			inode_lock_nested(p2->d_inode, I_MUTEX_PARENT2);
-  3212		}
-  3213		d1 = __lookup_hash(last1, p1, flags1, NULL);
-  3214		if (IS_ERR(d1))
-  3215			goto unlock_out_3;
-  3216		d2 = __lookup_hash(last2, p2, flags2, NULL);
-  3217		if (IS_ERR(d2))
-  3218			goto unlock_out_4;
-  3219	
-  3220		*d1p = d1;
-  3221		*d2p = d2;
-  3222		return p;
-  3223	unlock_out_4:
-  3224		dput(d1);
-  3225		d1 = d2;
-  3226	unlock_out_3:
-  3227		inode_unlock(p1->d_inode);
-  3228		inode_unlock(p2->d_inode);
-  3229		mutex_unlock(&p1->d_sb->s_vfs_rename_mutex);
-  3230		return d1;
-  3231	}
-  3232	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+KVM_WERROR=y is your friend.  Or in my case, my enemy for the last few days :-D
