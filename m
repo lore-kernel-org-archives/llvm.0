@@ -1,42 +1,55 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C6B184A
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 06:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2478E184A
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 06:19:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655187559; x=1686723559;
+  t=1655187564; x=1686723564;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Zp0AxtuEgeC2k6xN7uyB1tG8n2U2PV+U1AX3y6gi+6M=;
-  b=gIVGmVTCpXGBZtwBozUkU4rWlQnVndXY/HOHFRD89tRAuEqiN9yQkIK9
-   oVusGNtI4lSuOMZ5iQO3WNfhxCKpplg+pi0sVQO2A63Ey0qAL+pxkbNQ7
-   a6mG3pC1WgG2Xd4vrQiN+6ljdQV1d/SklT+85gOKayekC9E5FO6X/5kVc
-   xIXL2eKLEvo7fM2lhcjK5T3CHZFtOOKUnwieWvXejVkJw/+ei0Zm3YMpU
-   g8nDyoohPXg6NzU5xyAosfmlLfoO5j9+STJpJY2pYgEK33JqZ7WpeHAzq
-   R4uLJLPxWY3SvmCA4mGz/DMUGLX+TrYIB5Uju2iksf7+kbZEZfOJ6o5pF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364854821"
+  bh=G7Y9H6pjfhFNNFt9HzcJbUr6NMbLnNfbUFKiekG8WDg=;
+  b=QIiGelqvQx6QCyXc4FiMYU+EYqDLjSEdxQmtYCaIW+piwrfEcJMccAS4
+   fFOo8qMIeFtoPHP1t+B5nrC/NL+K/swjm02KrriZeme0nUgCfnSE96uYY
+   JOmAIPsn2ChvgM6kHd6uRxBlM8s4ZCt/p15Z12I3AGX5HCOaUAoVW+ad+
+   TVxSfM26JVceiuCQf6JnHJBtBgHfFYiXxasUAa+My/5jeaktXXUOfzLhA
+   CHeMGTcDOjYtUcTes7Xu6rA9GZO5oZenNgaLPI4cyB409j90W5D83frLN
+   9l4D2Oy/R6V+EI1MIFw3BXuOCStu17mYq84MuK6XUrB4bD/FaaFNDEqYW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="340187214"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="364854821"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 23:19:19 -0700
+   d="scan'208";a="340187214"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 23:19:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="617831082"
+   d="scan'208";a="588249606"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2022 23:19:17 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 23:19:17 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0ztU-000LYp-R4;
+	id 1o0ztU-000LYn-QI;
 	Tue, 14 Jun 2022 06:19:16 +0000
-Date: Tue, 14 Jun 2022 14:18:35 +0800
+Date: Tue, 14 Jun 2022 14:18:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Usama Arif <usama.arif@bytedance.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC 2/3] io_uring: add support for IORING_OP_MSGSND
-Message-ID: <202206141405.lCMvrlaK-lkp@intel.com>
-References: <20220613192642.2040118-3-usama.arif@bytedance.com>
+To: Lecopzer Chen <lecopzer.chen@mediatek.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, pmladek@suse.com,
+	acme@kernel.org, akpm@linux-foundation.org,
+	alexander.shishkin@linux.intel.com, catalin.marinas@arm.com,
+	davem@davemloft.net, jolsa@redhat.com, jthierry@redhat.com,
+	keescook@chromium.org, kernelfans@gmail.com,
+	lecopzer.chen@mediatek.com, linux-mediatek@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+	masahiroy@kernel.org, matthias.bgg@gmail.com, maz@kernel.org,
+	mcgrof@kernel.org, mingo@redhat.com, namhyung@kernel.org,
+	nixiaoming@huawei.com, peterz@infradead.org,
+	sparclinux@vger.kernel.org, sumit.garg@linaro.org,
+	wangqing@vivo.com, will@kernel.org, yj.chiang@mediatek.com
+Subject: Re: [PATCH v5 4/6] kernel/watchdog: Adapt the watchdog_hld interface
+ for async model
+Message-ID: <202206141412.PeVDy6qk-lkp@intel.com>
+References: <20220613135956.15711-5-lecopzer.chen@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,28 +58,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613192642.2040118-3-usama.arif@bytedance.com>
+In-Reply-To: <20220613135956.15711-5-lecopzer.chen@mediatek.com>
 
-Hi Usama,
+Hi Lecopzer,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc2 next-20220610]
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on arm/for-next kvmarm/next soc/for-next]
+[cannot apply to xilinx-xlnx/master]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/io_uring-add-support-for-IORING_OP_MSGSND-IORING_OP_MSGRCV/20220614-043915
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: hexagon-randconfig-r041-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141405.lCMvrlaK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lecopzer-Chen/Support-hld-delayed-init-based-on-Pseudo-NMI-for/20220614-021318
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: hexagon-randconfig-r024-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141412.PeVDy6qk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/55ef2bd7a864162103bc17258d5426bb0847dc9d
+        # https://github.com/intel-lab-lkp/linux/commit/7df94eb967160312b005f9d8a29b558beec2d5a7
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Usama-Arif/io_uring-add-support-for-IORING_OP_MSGSND-IORING_OP_MSGRCV/20220614-043915
-        git checkout 55ef2bd7a864162103bc17258d5426bb0847dc9d
+        git fetch --no-tags linux-review Lecopzer-Chen/Support-hld-delayed-init-based-on-Pseudo-NMI-for/20220614-021318
+        git checkout 7df94eb967160312b005f9d8a29b558beec2d5a7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
@@ -74,46 +89,29 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: check_and_load_msgsnd
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
---
->> ld.lld: error: undefined symbol: __do_msgsnd
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
---
->> ld.lld: error: undefined symbol: free_msg
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_issue_sqe) in archive fs/built-in.a
-   >>> referenced by io_uring.c
-   >>> io_uring.o:(io_clean_op) in archive fs/built-in.a
-   >>> referenced 1 more times
---
->> fs/io_uring.c:6262:6: warning: variable 'flags' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (force_nonblock)
-               ^~~~~~~~~~~~~~
-   fs/io_uring.c:6266:22: note: uninitialized use occurs here
-                                           msg_sr->msg_sz, flags);
-                                                           ^~~~~
-   fs/io_uring.c:6262:2: note: remove the 'if' if its condition is always true
-           if (force_nonblock)
-           ^~~~~~~~~~~~~~~~~~~
-   fs/io_uring.c:6247:11: note: initialize the variable 'flags' to silence this warning
-           int flags;
-                    ^
-                     = 0
-   fs/io_uring.c:8737:28: warning: unused function 'io_file_from_index' [-Wunused-function]
-   static inline struct file *io_file_from_index(struct io_ring_ctx *ctx,
-                              ^
-   2 warnings generated.
+>> kernel/watchdog.c:915:3: error: use of undeclared identifier 'allow_lockup_detector_init_retry'
+                   allow_lockup_detector_init_retry = true;
+                   ^
+   1 error generated.
+
+
+vim +/allow_lockup_detector_init_retry +915 kernel/watchdog.c
+
+   903	
+   904	void __init lockup_detector_init(void)
+   905	{
+   906		if (tick_nohz_full_enabled())
+   907			pr_info("Disabling watchdog on nohz_full cores by default\n");
+   908	
+   909		cpumask_copy(&watchdog_cpumask,
+   910			     housekeeping_cpumask(HK_TYPE_TIMER));
+   911	
+   912		if (!watchdog_nmi_probe())
+   913			nmi_watchdog_available = true;
+   914		else
+ > 915			allow_lockup_detector_init_retry = true;
 
 -- 
 0-DAY CI Kernel Test Service
