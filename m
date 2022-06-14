@@ -1,116 +1,47 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FF07C
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 11:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655205198; x=1686741198;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=PkAwYlIH+LhC0yR/XXtEdoYqPZCdO4H6sUEzr+OM2pM=;
-  b=dwil8hW0o5C5StvUZV/q5/uEXxxzNm5KM5csMZ/MMQ5NYoT1i3azP/Ew
-   L7FUsqqpZ0BqVpSWSfOrTudBoBR0RvOtFYAoNn0VPnRoZinUVKaNp8K9g
-   T2OEgCfuEKBIuvIb7FyFm08hFyZsi6Wnj1JQyNLD/pYNItNGkiZtw+pjr
-   vOBRV839FrXa7jgndv/CJ48aAePgRGxT72zt6y4PniPozRX1+VTdpZmUc
-   xHWFL4AVq+gYtCmcIviOlQBxPLjPOUIR7qkIhLmvHPbffYAGAOtUXsd5+
-   /WwCHO7sG1kRyuiDD4mLWHbMrvYwDG+tOro7RB56Y/g0Hfv+2/qIPpRrY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="277368862"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="277368862"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:13:18 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="830358971"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.34]) ([10.255.28.34])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:13:12 -0700
-Subject: Re: [kbuild-all] Re: [PATCH 1/8] perf: Consolidate branch sample
- filter helpers
-To: Anshuman Khandual <anshuman.khandual@arm.com>,
- kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, peterz@infradead.org, acme@kernel.org,
- mark.rutland@arm.com, will@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Catalin Marinas <catalin.marinas@arm.com>, James Clark
- <james.clark@arm.com>, Rob Herring <robh@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- linux-perf-users@vger.kernel.org
-References: <20220613100119.684673-2-anshuman.khandual@arm.com>
- <202206140422.ttLxMHtq-lkp@intel.com>
- <7df0ca46-1ece-2f51-a7a7-a0129724e6bc@arm.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <e4cadb9a-2363-f446-0fce-1242e84396bc@intel.com>
-Date: Tue, 14 Jun 2022 19:13:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DA77C
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 11:58:38 +0000 (UTC)
+Received: by mail-ed1-f68.google.com with SMTP id w27so11273484edl.7
+        for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=QeljF/Na6SH6U2d2T2ly9opDwGxf2t5L8UvVHuUp4co=;
+        b=FCPPv4ZMkbzsyYtpY7HWp64Xi09rLXkLRZNF+dZr2T/kWqUDig9iNu+MBmzF3Cmicj
+         5Nj9+7Zf42QwpjZleJegr8jm+zq52f4eC1FNcd/+RHjyp3yvmgji7ep8mZN2ZPec96vw
+         MeGj+cogWYaKlXB5QDPcGPDdRwlGo7Sb+kkSO8Dz6ZEyaGb0npgcQF2P9JlVEBp41wBh
+         DnXehe9Qts6L6/rzba7GCFrAz3kHO9MiU2dweQcGYqCEvWYa+Bnp8EKU/+cm1U1bgfV9
+         4jSUQOeK3sCMr/GnjMzXq4Rapdiw4paIw9sTteV+BcqpVCdVzbERBi2uTxldhK9U1Usb
+         yeJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=QeljF/Na6SH6U2d2T2ly9opDwGxf2t5L8UvVHuUp4co=;
+        b=TlR/L14yz7ydm3C8mAKBvpV6xPUGVC2A2SGWVIOGL2Zgd/I4pLJBZlTkTcDqBQngYA
+         22HOhGwPIFRPmmFexk8vVajGbjhmGT0iFe3dwSRU/HfrcOUzAw/MASqEU+OUWP8dX9Nu
+         cTy0IYEaa0JGDgQjBgm84bhxlQihKjfDUUx1QRh7sl873MjtzRcMt8OWWc7Hh2Fn4huP
+         AC3DBe9hGz6Cz6PMtqRBMcOlDeEJJ7gTi1Rqeo6RMaPNTj3vYGFOrMzgtaeCibnyMqp9
+         CMoQyJA/ffKDiUZ5F7MwTci6bOWC2CGS2+bz2ot5TVLZ1H/a4xat1qBlCo0BdJWd/lSN
+         SJWQ==
+X-Gm-Message-State: AJIora9oSx2yUUH9NrNJjANZ5NWmvwsJtz+K9pTkMYt9A0OOvaPny6Pm
+	ueNPae8eOZrHcGc21DamwLqgNt6oH9WH8hswnSmAaFR6Z6b8o+uU5D0=
+X-Google-Smtp-Source: AGRyM1uYrY2ESDEaBI3KRAExGkXO8ccX7fGsksEAM+72PF7EgEF/kFu9562DGyzguK73a/yCu3oVYOnpDsRwsVN09SE=
+X-Received: by 2002:a05:6402:400a:b0:42d:f76a:78a2 with SMTP id
+ d10-20020a056402400a00b0042df76a78a2mr5543609eda.247.1655207917108; Tue, 14
+ Jun 2022 04:58:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <7df0ca46-1ece-2f51-a7a7-a0129724e6bc@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From: Qingwei Xu <xqw.kernel@gmail.com>
+Date: Tue, 14 Jun 2022 19:58:25 +0800
+Message-ID: <CAFRajNZf-1xbtLD6tGdQ=rxzNBHaqWv8veo6_mFBfEi5u8b4Rg@mail.gmail.com>
+Subject: 
+To: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On 6/14/2022 9:36 AM, Anshuman Khandual wrote:
-> 
-> On 6/14/22 02:02, kernel test robot wrote:
->> Hi Anshuman,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on tip/perf/core]
->> [also build test ERROR on acme/perf/core]
->> [cannot apply to arm64/for-next/core]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220613-180501
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git f0fe9f3c7abcc946a676dfb295478c50312523c2
->> config: x86_64-randconfig-a002-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140422.ttLxMHtq-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://github.com/intel-lab-lkp/linux/commit/1bd23b8ca1fc92f2f5b28a94ebd95432febfe96c
->>          git remote add linux-review https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220613-180501
->>          git checkout 1bd23b8ca1fc92f2f5b28a94ebd95432febfe96c
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>     In file included from drivers/acpi/acpi_pad.c:20:
->>>> include/linux/perf_event.h:1708:42: error: use of undeclared identifier 'PERF_SAMPLE_BRANCH_PRIV_SAVE'; did you mean 'PERF_SAMPLE_BRANCH_TYPE_SAVE'?
->>             return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
->>                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>                                                     PERF_SAMPLE_BRANCH_TYPE_SAVE
->>     include/uapi/linux/perf_event.h:231:2: note: 'PERF_SAMPLE_BRANCH_TYPE_SAVE' declared here
->>             PERF_SAMPLE_BRANCH_TYPE_SAVE    =
->>             ^
->>     1 error generated.
-> 
-> This series is dependent on another one which adds symbol PERF_SAMPLE_BRANCH_TYPE_SAVE
-> as mentioned in the cover letter. I understand the '--base' argument for git format-patch
-> output, but how to mention another prerequisite series before this can be built tested ?
-
-Hi Anshuman,
-
-git format-patch supports to set prerequisite-patch-id, kernel test robot
-can parse the information and apply patch to a proper branch to test.
-
-    https://git-scm.com/docs/git-format-patch#_base_tree_information
-
-Best Regards,
-Rong Chen
+subscribe llvm xqw.kernel@gmail.com
