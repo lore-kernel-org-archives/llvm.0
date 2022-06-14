@@ -1,42 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A8C7C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBDC468E
 	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1655180715; x=1686716715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z8W1cl+aFZxPztNwC8yt6Ovj2MbTR4bKrYvg2FMbTK8=;
-  b=ApvDToScloHoEZvzujZBe5uOn2ocPCqKfDrmgk+XpEX2FD3zcmiL7Gar
-   AwVKOwzCQp1Pwj0HL/5/NaLJYTItynmttTq27e4Wm/KaQap0/bkK5nmkH
-   YlxWthlhSdhXvPu45w7omknbBZoZLNPHWjC2QYMsil9crE+avib7IwyZq
-   EUauEmdMncsmJD2gaSAY1f9EWN2i4c9Xr3zoP+oN3zydg5Sf6cHDw6Pn2
-   KUd76Q/F5M1/ThkMqP4nh/0nRfDNGaVzMeoeR81hkckZbHs9TJr/Ia9bq
-   JHu7AC3WQztAzpSNKNFxW2055NjzFdppBsQdff2tUQrz55vsfKn7YE2YV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258329509"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p9sj/QiIVWiU9GsI+4aNT6Sg88ts13hszXjq4P/QBYo=;
+  b=BH+yTctCaIG4aDuLpARCXPZ1INylaSFFqTBsSIOtKTDUXrhr4374Dkxi
+   vdoJUWa0D6IF7DdEcI4QGKr9SFbLkVjwKFo8ki5+aOYzqa2VE+huNpf4r
+   5H/7/XFyKQ4k5W1G45j3B5vNYaJL7T3wBkJa7RMpQ/H+HayuGkwmg4BtL
+   HRf28ZAmOAha2W/C3Vzj5gDfkwtdOZ4Suxt637HXZa+0oQb57kkc6in79
+   oiiJoFFKz01fXtZbTFgdAQ4aamPNm9o740cc8QFBpNAi9FzeDH+QC+7Ha
+   PdwkC8FA1SKBlfVRThFcMuThHHR/ZwSUZq9axUAy7RCh+61qJYsfqzkzX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279218892"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258329509"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:25:14 -0700
+   d="scan'208";a="279218892"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:25:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="588199102"
+   d="scan'208";a="673653671"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 21:25:13 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2022 21:25:13 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0y77-000LTF-23;
+	id 1o0y77-000LTI-2c;
 	Tue, 14 Jun 2022 04:25:13 +0000
-Date: Tue, 14 Jun 2022 12:24:53 +0800
+Date: Tue, 14 Jun 2022 12:24:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH V8 3/3] rtc: zynqmp: Add calibration set and get support
-Message-ID: <202206141232.8nBAsby4-lkp@intel.com>
-References: <20220613125836.523449-3-srinivas.neeli@xilinx.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:guest-unaccepted-memory 6/17] mm/page_alloc.c:1015:40:
+ error: use of undeclared identifier 'NR_UNACCEPTED'
+Message-ID: <202206141219.Jr2jdIB3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,115 +45,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613125836.523449-3-srinivas.neeli@xilinx.com>
 
-Hi Srinivas,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on v5.19-rc2 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: arm-randconfig-r035-20220612 (https://download.01.org/0day-ci/archive/20220614/202206141232.8nBAsby4-lkp@intel.com/config)
+tree:   https://github.com/intel/tdx.git guest-unaccepted-memory
+head:   7a902d05477ac272558ba731d903c6b0c9d72903
+commit: e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea [6/17] mm: Report unaccepted memory in meminfo
+config: hexagon-randconfig-r041-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141219.Jr2jdIB3-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/2781fd75583878d86f256113b19bb005dc83fb70
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
-        git checkout 2781fd75583878d86f256113b19bb005dc83fb70
+        # https://github.com/intel/tdx/commit/e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-unaccepted-memory
+        git checkout e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/rtc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/rtc/rtc-zynqmp.c:223:7: warning: variable 'fract_tick' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:238:6: note: uninitialized use occurs here
-           if (fract_tick)
-               ^~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:223:3: note: remove the 'if' if its condition is always true
-                   if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:218:6: warning: variable 'fract_tick' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (fract_offset) {
-               ^~~~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:238:6: note: uninitialized use occurs here
-           if (fract_tick)
-               ^~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:218:2: note: remove the 'if' if its condition is always true
-           if (fract_offset) {
-           ^~~~~~~~~~~~~~~~~~
-   drivers/rtc/rtc-zynqmp.c:206:26: note: initialize the variable 'fract_tick' to silence this warning
-           unsigned char fract_tick;
-                                   ^
-                                    = '\0'
-   2 warnings generated.
+>> mm/page_alloc.c:1015:40: error: use of undeclared identifier 'NR_UNACCEPTED'
+           mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, -(1 << order));
+                                                 ^
+   mm/page_alloc.c:1152:43: error: use of undeclared identifier 'NR_UNACCEPTED'
+                   __mod_node_page_state(page_pgdat(page), NR_UNACCEPTED,
+                                                           ^
+   2 errors generated.
 
 
-vim +223 drivers/rtc/rtc-zynqmp.c
+vim +/NR_UNACCEPTED +1015 mm/page_alloc.c
 
-   200	
-   201	static int xlnx_rtc_set_offset(struct device *dev, long offset)
-   202	{
-   203		struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-   204		unsigned long long rtc_ppb = RTC_PPB;
-   205		unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
-   206		unsigned char fract_tick;
-   207		unsigned int calibval;
-   208		short int  max_tick;
-   209		int fract_offset;
-   210	
-   211		if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
-   212			return -ERANGE;
-   213	
-   214		/* Number ticks for given offset */
-   215		max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
-   216	
-   217		/* Number fractional ticks for given offset */
-   218		if (fract_offset) {
-   219			if (fract_offset < 0) {
-   220				fract_offset = fract_offset + tick_mult;
-   221				max_tick--;
-   222			}
- > 223			if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-   224				for (fract_tick = 1; fract_tick < 16; fract_tick++) {
-   225					if (fract_offset <=
-   226					    (fract_tick *
-   227					     (tick_mult / RTC_FR_MAX_TICKS)))
-   228						break;
-   229				}
-   230			}
-   231		}
-   232	
-   233		/* Zynqmp RTC uses second and fractional tick
-   234		 * counters for compensation
-   235		 */
-   236		calibval = max_tick + RTC_CALIB_DEF;
-   237	
-   238		if (fract_tick)
-   239			calibval |= RTC_FR_EN;
-   240	
-   241		calibval |= (fract_tick << RTC_FR_DATSHIFT);
-   242	
-   243		writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-   244	
-   245		return 0;
-   246	}
-   247	
+  1001	
+  1002	/*
+  1003	 * Page acceptance can be very slow. Do not call under critical locks.
+  1004	 */
+  1005	static void accept_page(struct page *page, unsigned int order)
+  1006	{
+  1007		phys_addr_t start = page_to_phys(page);
+  1008		int i;
+  1009	
+  1010		if (!PageUnaccepted(page))
+  1011			return;
+  1012	
+  1013		accept_memory(start, start + (PAGE_SIZE << order));
+  1014		__ClearPageUnaccepted(page);
+> 1015		mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, -(1 << order));
+  1016	
+  1017		/* Assert that there is no PageUnaccepted() on tail pages */
+  1018		if (IS_ENABLED(CONFIG_DEBUG_VM)) {
+  1019			for (i = 1; i < (1 << order); i++)
+  1020				VM_BUG_ON_PAGE(PageUnaccepted(page + i), page + i);
+  1021		}
+  1022	}
+  1023	
 
 -- 
 0-DAY CI Kernel Test Service
