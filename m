@@ -1,182 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978C846A7
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 08:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1655196787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vkrp4CO/9UvJmo5cc1dfyzRQg7YqDey+RKfYJG/5u98=;
-	b=J74pJr/MUwMLNrfzVsRqkZHUK44sd+3GlaZCdJ9Q5+3g54AZtQOqd/k1ldpsMWxjq26Lql
-	ppl+0vNqObcRpQGFMiThWHsfQ3ODYWPjKMK1em9UJS8a/kIJyrbN5NgSYYRIKzEEO/wiO+
-	nbyBpYOAEy2Wq0jteCjovyORQu6mwpQ=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-yqmPV92_NieRQDMohagPHw-1; Tue, 14 Jun 2022 04:53:04 -0400
-X-MC-Unique: yqmPV92_NieRQDMohagPHw-1
-Received: by mail-lf1-f71.google.com with SMTP id c25-20020ac25f79000000b00478f05f8f49so4203020lfc.20
-        for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 01:53:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vkrp4CO/9UvJmo5cc1dfyzRQg7YqDey+RKfYJG/5u98=;
-        b=ZXiqwxJ4ipq2p+FM0/jO57auqvRQA5tJ2vpnkR+R59WXot/iXScx6XLzRRk5wTbuBi
-         YFznKvVW4rm088XqpegVjTJrj56Ww0UuVPCo7pveJEPEAqkkLebZFVLVZBho+j4nG0Oa
-         E6OOxZBl9oZtVQ4bENB0fQp89zaKehyU+X+aqD//OQtvTBg2KI5q2uFwlM+53FV6nl9S
-         sXLurVhPdgHqTUJfmZz0EDuLShBCSDakPxJ7yIFe1f1jM7DDSIPVA2Gr9rwAjZY/udZZ
-         VrrwGayX6yBCgn0127je/A8byO+LP/fHGeCVdia+Kh8qcF8UXgKuR9OfQirx2EihH68F
-         qnLA==
-X-Gm-Message-State: AJIora9PXmR2O3+r/iJXtW6d6Tl9MDx7/hkSu57jJWPSrSErp0bixMkL
-	hpybjcafvzV7sqEMCuSsUYs80Ti9wT8/orh7plUssTCixI97M07oUiNxIfmc0HnTF1b/46E9Udj
-	N/T6nveEiSY8/5Y+T8bjcNtRuoNPj8g==
-X-Received: by 2002:a05:6512:3130:b0:479:385f:e2ac with SMTP id p16-20020a056512313000b00479385fe2acmr2413168lfd.575.1655196782570;
-        Tue, 14 Jun 2022 01:53:02 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v4GFXDXwQ+WJme+RK3CludKMXoAn8uXS7Pj1PsZfLPvN+oKO5SkXXzy51Kwnu4qCl2+DwKCFXMBbWyhCpH97A=
-X-Received: by 2002:a05:6512:3130:b0:479:385f:e2ac with SMTP id
- p16-20020a056512313000b00479385fe2acmr2413138lfd.575.1655196781990; Tue, 14
- Jun 2022 01:53:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FF07C
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 11:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655205198; x=1686741198;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=PkAwYlIH+LhC0yR/XXtEdoYqPZCdO4H6sUEzr+OM2pM=;
+  b=dwil8hW0o5C5StvUZV/q5/uEXxxzNm5KM5csMZ/MMQ5NYoT1i3azP/Ew
+   L7FUsqqpZ0BqVpSWSfOrTudBoBR0RvOtFYAoNn0VPnRoZinUVKaNp8K9g
+   T2OEgCfuEKBIuvIb7FyFm08hFyZsi6Wnj1JQyNLD/pYNItNGkiZtw+pjr
+   vOBRV839FrXa7jgndv/CJ48aAePgRGxT72zt6y4PniPozRX1+VTdpZmUc
+   xHWFL4AVq+gYtCmcIviOlQBxPLjPOUIR7qkIhLmvHPbffYAGAOtUXsd5+
+   /WwCHO7sG1kRyuiDD4mLWHbMrvYwDG+tOro7RB56Y/g0Hfv+2/qIPpRrY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="277368862"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="277368862"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:13:18 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="830358971"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.34]) ([10.255.28.34])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:13:12 -0700
+Subject: Re: [kbuild-all] Re: [PATCH 1/8] perf: Consolidate branch sample
+ filter helpers
+To: Anshuman Khandual <anshuman.khandual@arm.com>,
+ kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, peterz@infradead.org, acme@kernel.org,
+ mark.rutland@arm.com, will@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ Catalin Marinas <catalin.marinas@arm.com>, James Clark
+ <james.clark@arm.com>, Rob Herring <robh@kernel.org>,
+ Marc Zyngier <maz@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ linux-perf-users@vger.kernel.org
+References: <20220613100119.684673-2-anshuman.khandual@arm.com>
+ <202206140422.ttLxMHtq-lkp@intel.com>
+ <7df0ca46-1ece-2f51-a7a7-a0129724e6bc@arm.com>
+From: "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <e4cadb9a-2363-f446-0fce-1242e84396bc@intel.com>
+Date: Tue, 14 Jun 2022 19:13:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0000000000008ea7ac05e09b46a6@google.com> <CACT4Y+Z8fdbQ9Kq1gHSha2q7a6RrOajbPKrSVCFyLNS95XkVgQ@mail.gmail.com>
- <CACGkMEuK=bYcpNfjcsh64K0_-nYX2btw9Mi9uWsCYcfENBcHuA@mail.gmail.com> <CACT4Y+YF+Jo5kgjqBouw3NnKUq0pxF3geJhbACpN3QgtHSj8kQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+YF+Jo5kgjqBouw3NnKUq0pxF3geJhbACpN3QgtHSj8kQ@mail.gmail.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Tue, 14 Jun 2022 16:52:50 +0800
-Message-ID: <CACGkMEtaxSBzY+it6N8UmNssDxiCGJ48YrVQEPQSpEisedkwFg@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: INFO: task hung in hwrng_register
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: syzbot <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, linux-crypto@vger.kernel.org, 
-	linux-kernel <linux-kernel@vger.kernel.org>, linux@dominikbrodowski.net, 
-	llvm@lists.linux.dev, mpm@selenic.com, syzkaller-bugs@googlegroups.com, 
-	Laurent Vivier <lvivier@redhat.com>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jasowang@redhat.com
-X-Mimecast-Spam-Score: 1
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7df0ca46-1ece-2f51-a7a7-a0129724e6bc@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 14, 2022 at 4:50 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Tue, 14 Jun 2022 at 10:07, Jason Wang <jasowang@redhat.com> wrote:
-> > > On Sat, 4 Jun 2022 at 10:46, syzbot
-> > > <syzbot+6da75abeed821109137b@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    032dcf09e2bf Merge tag 'gpio-fixes-for-v5.19-rc1' of git:/..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=14409a93f00000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=99f457384a4fea79
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=6da75abeed821109137b
-> > > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+6da75abeed821109137b@syzkaller.appspotmail.com
-> > >
-> > > +Jason, Laurent
-> > >
-> > > This started appearing at the same time as 'task hung in
-> > > add_early_randomness" bug reports:
-> > > https://syzkaller.appspot.com/bug?id=256d08cc261a3c38832064a33df4c928b3cd0ef0
-> > > https://syzkaller.appspot.com/bug?id=be1d99e09e499aed3939dc678718371984104e5c
-> > > https://syzkaller.appspot.com/bug?id=1cd11df5d984c694e3e7fc9fe271389b2340bed0
-> > > https://syzkaller.appspot.com/bug?id=35496bafab4c3f81f0b0d6d72c69787300629740
-> > >
-> > > Is this also fixed by "virtio-rng: make device ready before making
-> > > request" patch?
-> >
-> > Yes, I think so.
-> >
-> > Thanks
->
-> Let's tell the bot so that it reports such bugs in future:
->
-> #syz fix: virtio-rng: make device ready before making request
 
-Ok.
 
-Thanks
+On 6/14/2022 9:36 AM, Anshuman Khandual wrote:
+> 
+> On 6/14/22 02:02, kernel test robot wrote:
+>> Hi Anshuman,
+>>
+>> Thank you for the patch! Yet something to improve:
+>>
+>> [auto build test ERROR on tip/perf/core]
+>> [also build test ERROR on acme/perf/core]
+>> [cannot apply to arm64/for-next/core]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220613-180501
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git f0fe9f3c7abcc946a676dfb295478c50312523c2
+>> config: x86_64-randconfig-a002-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140422.ttLxMHtq-lkp@intel.com/config)
+>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://github.com/intel-lab-lkp/linux/commit/1bd23b8ca1fc92f2f5b28a94ebd95432febfe96c
+>>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>          git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220613-180501
+>>          git checkout 1bd23b8ca1fc92f2f5b28a94ebd95432febfe96c
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     In file included from drivers/acpi/acpi_pad.c:20:
+>>>> include/linux/perf_event.h:1708:42: error: use of undeclared identifier 'PERF_SAMPLE_BRANCH_PRIV_SAVE'; did you mean 'PERF_SAMPLE_BRANCH_TYPE_SAVE'?
+>>             return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
+>>                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>                                                     PERF_SAMPLE_BRANCH_TYPE_SAVE
+>>     include/uapi/linux/perf_event.h:231:2: note: 'PERF_SAMPLE_BRANCH_TYPE_SAVE' declared here
+>>             PERF_SAMPLE_BRANCH_TYPE_SAVE    =
+>>             ^
+>>     1 error generated.
+> 
+> This series is dependent on another one which adds symbol PERF_SAMPLE_BRANCH_TYPE_SAVE
+> as mentioned in the cover letter. I understand the '--base' argument for git format-patch
+> output, but how to mention another prerequisite series before this can be built tested ?
 
->
->
-> > > > INFO: task swapper/0:1 blocked for more than 143 seconds.
-> > > >       Not tainted 5.18.0-syzkaller-13760-g032dcf09e2bf #0
-> > > > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > > > task:swapper/0       state:D stack:21080 pid:    1 ppid:     0 flags:0x00004000
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  context_switch kernel/sched/core.c:5116 [inline]
-> > > >  __schedule+0x957/0xec0 kernel/sched/core.c:6428
-> > > >  schedule+0xeb/0x1b0 kernel/sched/core.c:6500
-> > > >  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
-> > > >  __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
-> > > >  __mutex_lock kernel/locking/mutex.c:747 [inline]
-> > > >  mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-> > > >  add_early_randomness drivers/char/hw_random/core.c:69 [inline]
-> > > >  hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
-> > > >  virtrng_scan+0x3e/0x90 drivers/char/hw_random/virtio-rng.c:205
-> > > >  virtio_dev_probe+0xa03/0xba0 drivers/virtio/virtio.c:313
-> > > >  call_driver_probe+0x96/0x250
-> > > >  really_probe+0x220/0x940 drivers/base/dd.c:634
-> > > >  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:764
-> > > >  driver_probe_device+0x50/0x240 drivers/base/dd.c:794
-> > > >  __driver_attach+0x35f/0x5a0 drivers/base/dd.c:1163
-> > > >  bus_for_each_dev+0x188/0x1f0 drivers/base/bus.c:301
-> > > >  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
-> > > >  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
-> > > >  driver_register+0x2e9/0x3e0 drivers/base/driver.c:240
-> > > >  do_one_initcall+0xbd/0x2b0 init/main.c:1295
-> > > >  do_initcall_level+0x168/0x218 init/main.c:1368
-> > > >  do_initcalls+0x4b/0x8c init/main.c:1384
-> > > >  kernel_init_freeable+0x43a/0x5c3 init/main.c:1610
-> > > >  kernel_init+0x19/0x2b0 init/main.c:1499
-> > > >  ret_from_fork+0x1f/0x30
-> > > >  </TASK>
-> > > >
-> > > > Showing all locks held in the system:
-> > > > 2 locks held by swapper/0/1:
-> > > >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
-> > > >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1054 [inline]
-> > > >  #0: ffff8881468d4170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x353/0x5a0 drivers/base/dd.c:1162
-> > > >  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness drivers/char/hw_random/core.c:69 [inline]
-> > > >  #1: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_register+0x3bf/0x680 drivers/char/hw_random/core.c:599
-> > > > 2 locks held by pr/ttyS0/16:
-> > > > 1 lock held by khungtaskd/29:
-> > > >  #0: ffffffff8cb1eee0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-> > > > 2 locks held by kworker/u4:4/56:
-> > > >  #0: ffff888011c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
-> > > >  #1: ffffc900013e7d00 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
-> > > > 1 lock held by hwrng/755:
-> > > >  #0: ffffffff8d24ccc8 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0xec/0x470 drivers/char/hw_random/core.c:503
-> > > >
-> > > > =============================================
-> > > >
-> > > >
-> > > >
-> > > > ---
-> > > > This report is generated by a bot. It may contain errors.
-> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > >
-> > > > syzbot will keep track of this issue. See:
-> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > >
-> > > > --
-> > > > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> > > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000008ea7ac05e09b46a6%40google.com.
-> > >
-> >
->
+Hi Anshuman,
 
+git format-patch supports to set prerequisite-patch-id, kernel test robot
+can parse the information and apply patch to a proper branch to test.
+
+    https://git-scm.com/docs/git-format-patch#_base_tree_information
+
+Best Regards,
+Rong Chen
