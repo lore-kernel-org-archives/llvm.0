@@ -1,47 +1,92 @@
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DA77C
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 11:58:38 +0000 (UTC)
-Received: by mail-ed1-f68.google.com with SMTP id w27so11273484edl.7
-        for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=QeljF/Na6SH6U2d2T2ly9opDwGxf2t5L8UvVHuUp4co=;
-        b=FCPPv4ZMkbzsyYtpY7HWp64Xi09rLXkLRZNF+dZr2T/kWqUDig9iNu+MBmzF3Cmicj
-         5Nj9+7Zf42QwpjZleJegr8jm+zq52f4eC1FNcd/+RHjyp3yvmgji7ep8mZN2ZPec96vw
-         MeGj+cogWYaKlXB5QDPcGPDdRwlGo7Sb+kkSO8Dz6ZEyaGb0npgcQF2P9JlVEBp41wBh
-         DnXehe9Qts6L6/rzba7GCFrAz3kHO9MiU2dweQcGYqCEvWYa+Bnp8EKU/+cm1U1bgfV9
-         4jSUQOeK3sCMr/GnjMzXq4Rapdiw4paIw9sTteV+BcqpVCdVzbERBi2uTxldhK9U1Usb
-         yeJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=QeljF/Na6SH6U2d2T2ly9opDwGxf2t5L8UvVHuUp4co=;
-        b=TlR/L14yz7ydm3C8mAKBvpV6xPUGVC2A2SGWVIOGL2Zgd/I4pLJBZlTkTcDqBQngYA
-         22HOhGwPIFRPmmFexk8vVajGbjhmGT0iFe3dwSRU/HfrcOUzAw/MASqEU+OUWP8dX9Nu
-         cTy0IYEaa0JGDgQjBgm84bhxlQihKjfDUUx1QRh7sl873MjtzRcMt8OWWc7Hh2Fn4huP
-         AC3DBe9hGz6Cz6PMtqRBMcOlDeEJJ7gTi1Rqeo6RMaPNTj3vYGFOrMzgtaeCibnyMqp9
-         CMoQyJA/ffKDiUZ5F7MwTci6bOWC2CGS2+bz2ot5TVLZ1H/a4xat1qBlCo0BdJWd/lSN
-         SJWQ==
-X-Gm-Message-State: AJIora9oSx2yUUH9NrNJjANZ5NWmvwsJtz+K9pTkMYt9A0OOvaPny6Pm
-	ueNPae8eOZrHcGc21DamwLqgNt6oH9WH8hswnSmAaFR6Z6b8o+uU5D0=
-X-Google-Smtp-Source: AGRyM1uYrY2ESDEaBI3KRAExGkXO8ccX7fGsksEAM+72PF7EgEF/kFu9562DGyzguK73a/yCu3oVYOnpDsRwsVN09SE=
-X-Received: by 2002:a05:6402:400a:b0:42d:f76a:78a2 with SMTP id
- d10-20020a056402400a00b0042df76a78a2mr5543609eda.247.1655207917108; Tue, 14
- Jun 2022 04:58:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96E57C
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 12:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6236AC3411B;
+	Tue, 14 Jun 2022 12:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655208649;
+	bh=jTXh3pg4r4JVSPJpbdDULL6F7vPm8P/wgppadxIppv4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lQ6rNjh9sWcQuw6Xj4AZw+WYMmSRgmq44lvHB2GXnxisrMNrh2Z8P5wy3LBsr1+df
+	 Xi/5UwoK+TE9tB6N7TtxwrX43pMkMFxgvr73ytkRqyRvRLYfSX2gLz6P483FrZzJZk
+	 0vWMokdCXJgYFSIzhNSOoNVT7QGSDJgCwTjpvk6CDF1Tmr2lzBHh++JA+yD0PZgpfe
+	 C+UZbHFNlNENYeQbqa/FPYfd6mAc5WDzAzYcWtwuMqrWyWPYDx7GR15C2sxJYOQ8Ra
+	 nCK5DLVb2ezvZw9f24zqe2V6pybBYUmPl/OLKaj7XMY1jkl71HPBJP/NAai1NzOh+n
+	 oV+mwgJAV7t8w==
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH] selftests: Fix clang cross compilation
+Date: Tue, 14 Jun 2022 13:10:45 +0100
+Message-Id: <20220614121045.1046475-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Qingwei Xu <xqw.kernel@gmail.com>
-Date: Tue, 14 Jun 2022 19:58:25 +0800
-Message-ID: <CAFRajNZf-1xbtLD6tGdQ=rxzNBHaqWv8veo6_mFBfEi5u8b4Rg@mail.gmail.com>
-Subject: 
-To: llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2057; h=from:subject; bh=jTXh3pg4r4JVSPJpbdDULL6F7vPm8P/wgppadxIppv4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiqHoJiDw/PQsxnk/EsY6VXaDvetNtAP7zUGUZQJWb kRgSECqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYqh6CQAKCRAk1otyXVSH0DFdB/ 4uZ+mRNhmfLgebVAML6egW4p4iOvf7UcXJDpxbP6Z38LBFn6WxgdNIye4P5u68hZp4tU9ahNAkDIVv 4+2brWHYM2HAXTP/Ki+HSL6+VdCeTjZNSH5OGTfzZcHUt9BSsMcj61Jr3SOyyPXxdw4b9+wf1XKEsl 8bN8kLqVf9g27heyAqwTp6nyYCsVH7t7HinPhzH4a4JaLWBTAhlUXg+x+BWagEONTQD5iMcODdRFbB UVCz50dYvCNXX4BzlE1g1LKoclqq1G1oqwgCBw3B8fzohCnV4SM7hGNWJIkFqqG9/v7NUV0ZtpUkzZ oV3RRmnrOdVh6IKi5mjIkuTSTmJ5lf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 
-subscribe llvm xqw.kernel@gmail.com
+Unlike GCC clang uses a single compiler image to support multiple target
+architectures meaning that we can't simply rely on CROSS_COMPILE to select
+the output architecture. Instead we must pass --target to the compiler to
+tell it what to output, kselftest was not doing this so cross compilation
+of kselftest using clang resulted in kselftest being built for the host
+architecture.
+
+More work is required to fix tests using custom rules but this gets the
+bulk of things building.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/lib.mk | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 2a2d240cdc1b..1a5cc3cd97ec 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -7,10 +7,31 @@ else ifneq ($(filter -%,$(LLVM)),)
+ LLVM_SUFFIX := $(LLVM)
+ endif
+ 
+-CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
++CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
++CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
++CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
++CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
++CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
++CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
++CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
++CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
++CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
++CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
++
++ifeq ($(CROSS_COMPILE),)
++ifeq ($(CLANG_TARGET_FLAGS),)
++$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
++else
++CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
++endif # CLANG_TARGET_FLAGS
++else
++CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
++endif # CROSS_COMPILE
++
++CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
+ else
+ CC := $(CROSS_COMPILE)gcc
+-endif
++endif # LLVM
+ 
+ ifeq (0,$(MAKELEVEL))
+     ifeq ($(OUTPUT),)
+-- 
+2.30.2
+
