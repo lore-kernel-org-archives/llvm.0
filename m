@@ -1,50 +1,46 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018C1184A
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 07:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B9D1FA1
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 07:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655190043; x=1686726043;
+  t=1655193083; x=1686729083;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PHYT8LtTB+UCVv1AVqoKGvivIiIEQbiDWdQzxCZx89Q=;
-  b=mNga914b4kzUGz5zDDPZBTxluvpIv38YKwNI6AVmDq+WVOK228uNkCFb
-   1BL1iNp8FZka3W8OXjanj9Kp49l55cxWvlGFjUPd3a5W6ymklL1weQYpD
-   tIfGcini4bbqAq1jOJQLZ3pu4X8SiY0ZnqziMDjhS3SywCi5UXFQDX9SX
-   gYqRwSAZJL/RYE/JBzhqdLi1sGZEe26FR2fpkxuu95g77JDicP0ioTT9f
-   q76q57b/c/F5aCUHu3njkQyOplR1Er+j2ev83aqR2AOOGgIPa6wMgVIvA
-   mKgznl+klqkAYSxyOeYfP0b74sq34DCc6vMbFXnbHw5IYTCU4QNU6lmt7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="342496383"
+  bh=SJhpZ3HQ+EYM455wRZmEEJVkLQgK5F2p4nazZFlQj4I=;
+  b=bfZAJfTd+tkg7QO9ckojf53gIAZFfDnWbYMNBbzv3tfxBFbvfLsfGQq2
+   fJfrv1q4PZU3OX7QWeIsHT3XuXWCmNxC9Vcw+tEj3LqnIeTSupuBuqwq/
+   vtCUzpYJuSYx4bf4luJt7GX3yNoAG9eEDsZ0tmwd+GqBOtOP2vHif88F2
+   VEpK9dlM4gN8OLki+BjpCZ/K+295GL8mctiHne4nAXfKNdLz2pU+aIixw
+   Og75or52zolefvqaKzZXL2AtqPw7hNzhhn3igIHwZCbPWi5NBT661b5Qb
+   6/64LutKnx2Aqcw2LqnxJWSeTOuBM34g0JolrmZRzjrYuqPv0KwYY/Vz9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278578705"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="342496383"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:00:21 -0700
+   d="scan'208";a="278578705"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:51:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="617846962"
+   d="scan'208";a="673745017"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2022 00:00:18 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2022 00:51:20 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o10XC-000LbB-7B;
-	Tue, 14 Jun 2022 07:00:18 +0000
-Date: Tue, 14 Jun 2022 14:59:24 +0800
+	id 1o11KZ-000LdF-Kk;
+	Tue, 14 Jun 2022 07:51:19 +0000
+Date: Tue, 14 Jun 2022 15:50:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sibi Sankar <sibis@codeaurora.org>,
-	Saravana Kannan <skannan@codeaurora.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 1/5] PM / devfreq: Fix cpufreq passive unregister
- erroring on PROBE_DEFER
-Message-ID: <202206141415.1BsuJvCD-lkp@intel.com>
-References: <20220613134213.8904-2-ansuelsmth@gmail.com>
+To: Micah Morton <mortonm@chromium.org>,
+	linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, keescook@chromium.org,
+	jmorris@namei.org, serge@hallyn.com, linux-kernel@vger.kernel.org,
+	Micah Morton <mortonm@chromium.org>
+Subject: Re: [PATCH 2/2] LSM: SafeSetID: Add setgroups() security policy
+ handling
+Message-ID: <202206141555.zswTLROZ-lkp@intel.com>
+References: <20220613202852.447738-1-mortonm@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,88 +49,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613134213.8904-2-ansuelsmth@gmail.com>
+In-Reply-To: <20220613202852.447738-1-mortonm@chromium.org>
 
-Hi Christian,
+Hi Micah,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on chanwoo/devfreq-testing]
-[also build test ERROR on linus/master v5.19-rc2 next-20220610]
+[auto build test ERROR on linus/master]
+[also build test ERROR on jmorris-security/next-testing kees/for-next/pstore v5.19-rc2 next-20220610]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-config: arm-randconfig-r026-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141415.1BsuJvCD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+config: x86_64-randconfig-a001-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141555.zswTLROZ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/378807dd7da24162524c0ba84e996157b3e289c6
+        # https://github.com/intel-lab-lkp/linux/commit/248aa1aeef5c49d4af78b9c3d09e896413258c76
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-        git checkout 378807dd7da24162524c0ba84e996157b3e289c6
+        git fetch --no-tags linux-review Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
+        git checkout 248aa1aeef5c49d4af78b9c3d09e896413258c76
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/devfreq/governor_passive.c:235:72: error: too few arguments provided to function-like macro invocation
-           list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-                                                                                 ^
-   include/linux/list.h:760:9: note: macro 'list_for_each_entry_safe' defined here
-   #define list_for_each_entry_safe(pos, n, head, member)                  \
-           ^
->> drivers/devfreq/governor_passive.c:235:2: error: use of undeclared identifier 'list_for_each_entry_safe'
-           list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-           ^
-   2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-   Depends on ARCH_SUSPEND_POSSIBLE
-   Selected by
-   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
-   - ARM_QCOM_SPM_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_QCOM || COMPILE_TEST && !ARM64 && MMU
+>> security/safesetid/lsm.c:248:50: error: use of undeclared identifier 'group_info'
+                   if (!id_permitted_for_cred(old, (kid_t){.gid = group_info->gid[i]}, GID)) {
+                                                                  ^
+   1 error generated.
 
 
-vim +235 drivers/devfreq/governor_passive.c
+vim +/group_info +248 security/safesetid/lsm.c
 
-   220	
-   221	static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
-   222	{
-   223		struct devfreq_passive_data *p_data
-   224				= (struct devfreq_passive_data *)devfreq->data;
-   225		struct devfreq_cpu_data *parent_cpu_data;
-   226		int ret;
-   227	
-   228		if (p_data->nb.notifier_call) {
-   229			ret = cpufreq_unregister_notifier(&p_data->nb,
-   230						CPUFREQ_TRANSITION_NOTIFIER);
-   231			if (ret < 0)
-   232				return ret;
-   233		}
-   234	
- > 235		list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-   236			list_del(&parent_cpu_data->node);
    237	
-   238			if (parent_cpu_data->opp_table)
-   239				dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
-   240	
-   241			kfree(parent_cpu_data);
-   242		}
-   243	
-   244		return 0;
-   245	}
-   246	
+   238	static int safesetid_task_fix_setgroups(struct cred *new, const struct cred *old)
+   239	{
+   240		int i;
+   241	
+   242		/* Do nothing if there are no setgid restrictions for our old RGID. */
+   243		if (setid_policy_lookup((kid_t){.gid = old->gid}, INVALID_ID, GID) == SIDPOL_DEFAULT)
+   244			return 0;
+   245	
+   246		get_group_info(new->group_info);
+   247		for (i = 0; i < new->group_info->ngroups; i++) {
+ > 248			if (!id_permitted_for_cred(old, (kid_t){.gid = group_info->gid[i]}, GID)) {
+   249				put_group_info(new->group_info);
+   250				/*
+   251				 * Kill this process to avoid potential security vulnerabilities
+   252				 * that could arise from a missing allowlist entry preventing a
+   253				 * privileged process from dropping to a lesser-privileged one.
+   254				 */
+   255				force_sig(SIGKILL);
+   256				return -EACCES;
+   257			}
+   258		}
+   259	
+   260		put_group_info(new->group_info);
+   261		return 0;
+   262	}
+   263	
 
 -- 
 0-DAY CI Kernel Test Service
