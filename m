@@ -1,42 +1,41 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBDC468E
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFB2136A
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:36:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655180715; x=1686716715;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p9sj/QiIVWiU9GsI+4aNT6Sg88ts13hszXjq4P/QBYo=;
-  b=BH+yTctCaIG4aDuLpARCXPZ1INylaSFFqTBsSIOtKTDUXrhr4374Dkxi
-   vdoJUWa0D6IF7DdEcI4QGKr9SFbLkVjwKFo8ki5+aOYzqa2VE+huNpf4r
-   5H/7/XFyKQ4k5W1G45j3B5vNYaJL7T3wBkJa7RMpQ/H+HayuGkwmg4BtL
-   HRf28ZAmOAha2W/C3Vzj5gDfkwtdOZ4Suxt637HXZa+0oQb57kkc6in79
-   oiiJoFFKz01fXtZbTFgdAQ4aamPNm9o740cc8QFBpNAi9FzeDH+QC+7Ha
-   PdwkC8FA1SKBlfVRThFcMuThHHR/ZwSUZq9axUAy7RCh+61qJYsfqzkzX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279218892"
+  t=1655181375; x=1686717375;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=+NDgUjBHzhvKS3KEEHJCiS336jh3KE4+YEAhDwndiGo=;
+  b=OlYmpbQdw/ulNWLxmdqYgXO6VPnkTtSTE0bQ5SlheYaoacW0ThVAC65k
+   vR683ekhUkR83P/xOiTyVrLt1pL9lidvu9V/3wnZ5HQiUjRqC/NBbZ0F1
+   HhRdhICZw+R1845Z8coiPIB73Kejk9gDkOSFqEY27eWv24G7FF592wtGm
+   mfwzI3ccQCyXVBAiyWlofqA/cPATh7B5C+4FYK1sDFvd8CtS1qH0GmhBn
+   lC6deGsCQpG9Oi8XPx6ALPJnIRSiB4ILWq/52JfbW5MmuAOBRY2ejXnBS
+   K0EMt4i139YiWsR2/Yt867rxA9wL63waWcAspO3BVuw1e+giGWVGXEdFQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279542719"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="279218892"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:25:15 -0700
+   d="scan'208";a="279542719"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:36:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="673653671"
+   d="scan'208";a="588207178"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2022 21:25:13 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 21:36:14 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0y77-000LTI-2c;
-	Tue, 14 Jun 2022 04:25:13 +0000
-Date: Tue, 14 Jun 2022 12:24:55 +0800
+	id 1o0yHl-000LTw-Ep;
+	Tue, 14 Jun 2022 04:36:13 +0000
+Date: Tue, 14 Jun 2022 12:35:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest-unaccepted-memory 6/17] mm/page_alloc.c:1015:40:
- error: use of undeclared identifier 'NR_UNACCEPTED'
-Message-ID: <202206141219.Jr2jdIB3-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-q-release
+ 5202/7636] fs/crypto/keyinfo.o: warning: objtool: gelf_getehdr: invalid
+ `Elf' handle
+Message-ID: <202206141204.mIgNdOaY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +45,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/intel/tdx.git guest-unaccepted-memory
-head:   7a902d05477ac272558ba731d903c6b0c9d72903
-commit: e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea [6/17] mm: Report unaccepted memory in meminfo
-config: hexagon-randconfig-r041-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141219.Jr2jdIB3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
+BCC: lkp@intel.com
+TO: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-q-release
+head:   1a3500dc59324a85c20f025cfa6485a1a0debbdf
+commit: 205cde74877d624ef7d24a6692e6e9337b19a541 [5202/7636] ANDROID: x86: add support for CONFIG_LTO_CLANG
+config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141204.mIgNdOaY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-unaccepted-memory
-        git checkout e4fbeb9c5cb4aa02fcd17388eef920f389fc83ea
+        # https://github.com/ammarfaizi2/linux-block/commit/205cde74877d624ef7d24a6692e6e9337b19a541
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-q-release
+        git checkout 205cde74877d624ef7d24a6692e6e9337b19a541
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/ fs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/page_alloc.c:1015:40: error: use of undeclared identifier 'NR_UNACCEPTED'
-           mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, -(1 << order));
-                                                 ^
-   mm/page_alloc.c:1152:43: error: use of undeclared identifier 'NR_UNACCEPTED'
-                   __mod_node_page_state(page_pgdat(page), NR_UNACCEPTED,
-                                                           ^
-   2 errors generated.
+>> fs/crypto/keyinfo.o: warning: objtool: gelf_getehdr: invalid `Elf' handle
+--
+>> drivers/gpu/drm/virtio/virtgpu_drm_bus.o: warning: objtool: gelf_getehdr: invalid `Elf' handle
 
-
-vim +/NR_UNACCEPTED +1015 mm/page_alloc.c
-
-  1001	
-  1002	/*
-  1003	 * Page acceptance can be very slow. Do not call under critical locks.
-  1004	 */
-  1005	static void accept_page(struct page *page, unsigned int order)
-  1006	{
-  1007		phys_addr_t start = page_to_phys(page);
-  1008		int i;
-  1009	
-  1010		if (!PageUnaccepted(page))
-  1011			return;
-  1012	
-  1013		accept_memory(start, start + (PAGE_SIZE << order));
-  1014		__ClearPageUnaccepted(page);
-> 1015		mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, -(1 << order));
-  1016	
-  1017		/* Assert that there is no PageUnaccepted() on tail pages */
-  1018		if (IS_ENABLED(CONFIG_DEBUG_VM)) {
-  1019			for (i = 1; i < (1 << order); i++)
-  1020				VM_BUG_ON_PAGE(PageUnaccepted(page + i), page + i);
-  1021		}
-  1022	}
-  1023	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for STACK_VALIDATION
+   Depends on HAVE_STACK_VALIDATION
+   Selected by
+   - UNWINDER_ORC && <choice> && X86_64
 
 -- 
 0-DAY CI Kernel Test Service
