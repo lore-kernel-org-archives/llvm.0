@@ -1,41 +1,41 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9C97C
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A8C7C
+	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 04:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655179515; x=1686715515;
+  t=1655180715; x=1686716715;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Bt/ckk1wpriybu9wEVoXzdRDfUkMF+8F8/y75QcQlp4=;
-  b=A1k97pxuipxorMuu2alq0qkZAZPE7CGI5y107Jf6zqqA3tCu3CBjCU6d
-   xnFyJObovsQLi3ryvU0CMihZba8oFYXA4nnVx2zixQVBgVo83bX9OifFO
-   IZYVpBEKvTAnKlTg/3Js9zTKlpIZajgCK0t2KxHjhKcZJnqSIVR9C+6ye
-   eZ72tbxXA4rUW5iv0cx6f6UVztJA4QwSwWVI7zOzuC0SP+VCKjAcMY7Q9
-   2AXzp+fkf+djWXo4+a+PgizJa/V5Hn/trrOaoJm5FZeFN8jp6de4VnCv5
-   Gd+kZL9yP3ip0nvmQnX+GEUYSMuk/aMhXD9YUY6QWij2wzMQmMjujyucz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="277271566"
+  bh=Z8W1cl+aFZxPztNwC8yt6Ovj2MbTR4bKrYvg2FMbTK8=;
+  b=ApvDToScloHoEZvzujZBe5uOn2ocPCqKfDrmgk+XpEX2FD3zcmiL7Gar
+   AwVKOwzCQp1Pwj0HL/5/NaLJYTItynmttTq27e4Wm/KaQap0/bkK5nmkH
+   YlxWthlhSdhXvPu45w7omknbBZoZLNPHWjC2QYMsil9crE+avib7IwyZq
+   EUauEmdMncsmJD2gaSAY1f9EWN2i4c9Xr3zoP+oN3zydg5Sf6cHDw6Pn2
+   KUd76Q/F5M1/ThkMqP4nh/0nRfDNGaVzMeoeR81hkckZbHs9TJr/Ia9bq
+   JHu7AC3WQztAzpSNKNFxW2055NjzFdppBsQdff2tUQrz55vsfKn7YE2YV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258329509"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="277271566"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:05:14 -0700
+   d="scan'208";a="258329509"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:25:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="673643505"
+   d="scan'208";a="588199102"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2022 21:05:13 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 21:25:13 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o0xnk-000LSN-KO;
-	Tue, 14 Jun 2022 04:05:12 +0000
-Date: Tue, 14 Jun 2022 12:04:41 +0800
+	id 1o0y77-000LTF-23;
+	Tue, 14 Jun 2022 04:25:13 +0000
+Date: Tue, 14 Jun 2022 12:24:53 +0800
 From: kernel test robot <lkp@intel.com>
 To: Srinivas Neeli <srinivas.neeli@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
 Subject: Re: [PATCH V8 3/3] rtc: zynqmp: Add calibration set and get support
-Message-ID: <202206141140.xDnN0yu1-lkp@intel.com>
+Message-ID: <202206141232.8nBAsby4-lkp@intel.com>
 References: <20220613125836.523449-3-srinivas.neeli@xilinx.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,18 +59,20 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: i386-randconfig-a006-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141140.xDnN0yu1-lkp@intel.com/config)
+config: arm-randconfig-r035-20220612 (https://download.01.org/0day-ci/archive/20220614/202206141232.8nBAsby4-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/intel-lab-lkp/linux/commit/2781fd75583878d86f256113b19bb005dc83fb70
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Srinivas-Neeli/dt-bindings-rtc-zynqmp-Add-clock-information/20220614-013701
         git checkout 2781fd75583878d86f256113b19bb005dc83fb70
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/rtc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/rtc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
