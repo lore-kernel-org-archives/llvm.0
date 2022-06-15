@@ -1,41 +1,31 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464257A
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 18:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655318693; x=1686854693;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=KgdL+vSpVtviYD5Ujn4jjNxHXJRmCGtU+ceCVtpqd/Q=;
-  b=eJpwDFV3yplsNfxsxeTCt+EWGhfJTF8besMtHuzNqEKAIOSI8rpCSt6E
-   OV+2WCF6TArsQvCoX9c4yaSDtvLuZhgITYkCaYWipcAtwzXhwiVlwdzzx
-   cWKHgWPxOGTZkNkXnEXFKXTeMr70H0ub0VfpnlRCT3VSOwiXpjRB97cpx
-   AhFb2AxsRmZf3ga1mkd8Wa+XghbWIxeRu2oqE2JeIUg6zLy+6sm8rnVQw
-   hcNsJg8eh3KWRzKRSU/tgZIIWHTwjUhsUwC7VIzogUMQFfw6nfoBCy3tL
-   UoHTcLwQeQvYHLAAIh2mFryH0CYpkGcjEsBzW/7QAphKm7k+Mf2YqXqWJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="259533789"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="259533789"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 11:24:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="831193098"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2022 11:24:25 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o1Xgn-000N5Z-8h;
-	Wed, 15 Jun 2022 18:24:25 +0000
-Date: Thu, 16 Jun 2022 02:23:38 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 3517/3718] vmlinux.o: warning: objtool:
- ct_nmi_enter+0x34: call to ftrace_likely_update() leaves .noinstr.text
- section
-Message-ID: <202206160206.7v6ivUDZ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E207A
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 19:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C94C3411E;
+	Wed, 15 Jun 2022 19:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655322955;
+	bh=cMGsN4lRnGRmSyfnqRXMyxUoMSPApeamTo6HJshVyk4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=M7iI3RVSbP2HWUf1YznMNt7xWNiObefPzcnXlOJtlM/GgXUEVprDkuBC18mC1ncxy
+	 FS42zDYk71g1I6IJzHVVL1HeyLlImlLu2jcoSezMnhChcP+O3IGxCz4WHxErqcC1jw
+	 tkcwwv3tMrZfuOrY+BRdy1OW/YSNg/DpV+EBleRxHBSS156J25mpQSROmfouXLzKne
+	 EU5tuPlzqOIV2AVkGWDB/XtRLmibSzAtTY8LXVIRozVtKlYaFwJ1UD4el7iuSwZX4G
+	 oh5gsV/lgaY9jR7sLZn3wF495IPL0PfauOgL6PzpmLf0Dmqer19etrD6n/H879kKdE
+	 yiJCDyOvTwNfQ==
+Date: Wed, 15 Jun 2022 12:55:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Contextual conflict between kspp and rcu trees
+Message-ID: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,58 +35,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
+Hi Stephen et al.,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6012273897fefb12566580efedee10bb06e5e6ed
-commit: 4d79440c7f9f94961cde6c305b3039e5dfc07937 [3517/3718] rcu/context-tracking: Remove unused and/or unecessary middle functions
-config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220616/202206160206.7v6ivUDZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0b00432093be9680ed833af642bcafc3ca11586)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4d79440c7f9f94961cde6c305b3039e5dfc07937
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 4d79440c7f9f94961cde6c305b3039e5dfc07937
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+There is a contextual conflict between commit e1d337335207 ("cfi: Fix
+__cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
+dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
+the rcu tree, which is visible when building ARCH=arm64 defconfig +
+CONFIG_LTO_CLANG_THIN=y + CONFIG_CFI_CLANG=y with clang:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                  rcu_irq_enter();
+                  ^
+  kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
+  ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declared here
+  void ct_irq_enter(void);
+       ^
+  kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                  rcu_irq_exit();
+                  ^
+  kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
+  ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declared here
+  void ct_irq_exit(void);
+       ^
+  2 errors generated.
 
-All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x44: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x42: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x60: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x28: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_nmi_enter+0x34: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x28: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_idle_exit+0x48: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x24: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_enter+0x41: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: crc_pcl+0x7c: missing int3 after indirect jump
+Per the above RCU commit and commit 6c5218715286 ("context_tracking:
+Take IRQ eqs entrypoints over RCU"), it appears that the following diff
+is the proper fix up. Would you mind applying it to the merge of
+whichever tree comes second if possible? I did build and boot test it
+but it would not be a bad idea for Sami and Frederic to verify that it
+is correct so that Kees/Paul can mention it to Linus :)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
+
+diff --git a/kernel/cfi.c b/kernel/cfi.c
+index 08102d19ec15..2046276ee234 100644
+--- a/kernel/cfi.c
++++ b/kernel/cfi.c
+@@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+ 	rcu_idle = !rcu_is_watching();
+ 	if (rcu_idle) {
+ 		local_irq_save(flags);
+-		rcu_irq_enter();
++		ct_irq_enter();
+ 	}
+ 
+ 	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
+@@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+ 		fn = find_module_check_fn(ptr);
+ 
+ 	if (rcu_idle) {
+-		rcu_irq_exit();
++		ct_irq_exit();
+ 		local_irq_restore(flags);
+ 	}
+ 
