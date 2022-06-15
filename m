@@ -1,42 +1,41 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AAB7A
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 10:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D36B7A
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 10:46:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655289191; x=1686825191;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bflE+Fv+Ds9bdZj5+reorqos9CZfN0WoIAkHwsI8br4=;
-  b=Ox1MvFyGRblfwTdfmjoO6XzRYM6qCUt6f/TTW1RQUKil8UAqn1FEuS5T
-   StVVIQRwEErb0icUq+td4RI3yD5wSAZlp9lMLGwLTBJXFMJkho+2g/7wN
-   GkqvH4WStk1QqQKPa1hfxLxYdTB+6geThC4oMq2L7Fz+Os6tMtJ7e4R1A
-   /7eYsgJLwWsbdHCyCOR4LNuvW+wHzms9akuGqzirA+jJuEWJqILj0GPvh
-   X62z3A7sX0SKtAJX6WM40VnlNxDdqlry9lAWwLKMoQUjYmQRaQRE5FxAG
-   h/Q9KuGmc9MhnD7g3Dw2e4DgouR+083tTHpzTtHXplhFKvpFU4B/YmvW0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="304341671"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="304341671"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:33:10 -0700
+  t=1655289971; x=1686825971;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=/gstC0294uRtV8cObr9EOcdTRPS7YZszPm0RzNVqZGY=;
+  b=R9TUF/Sjn4OAiX4+Or1yjTDz41UKCwnDb7i3xHlq65EntG4D5Ij/W+Jf
+   HYlmfk8W0h2bDn+tBj8omQJCeY6Lhnxl6p+XoyHZQNK1W3uWiqMjNZ5KB
+   QMNkCfhdH4BwASXM5/K3Vmyrd456SIqfDT/GSaz6JDRq7B5XSYnISZvMZ
+   3FzBK55gmuCnhA88fkqJ4Ji1UdKhwvP7Yorj2Sg/NDc9gEVU4wz2hJdVv
+   /rMTNX9d68Rxlffml4CM3JowJ6RN8SnO85kJ6fRyS5Mb5t1y5zDxxcU+Z
+   l3JEJlpbaSZ/rx+uvig7uyd8YMHKLJG1hunMltQWD71awQuofmLZJjNO4
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="277707571"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="277707571"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:46:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="687231131"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="911580023"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Jun 2022 03:33:09 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2022 03:46:09 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o1QKi-000Mkx-Im;
-	Wed, 15 Jun 2022 10:33:08 +0000
-Date: Wed, 15 Jun 2022 18:33:06 +0800
+	id 1o1QXI-000Mlb-TO;
+	Wed, 15 Jun 2022 10:46:08 +0000
+Date: Wed, 15 Jun 2022 18:45:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: kernel/time/hrtimer.c:650:19: warning: unused function
- 'hrtimer_hres_active'
-Message-ID: <202206151820.2UttbZpK-lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 3500/3718] vmlinux.o: warning: objtool:
+ __ct_user_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text
+ section
+Message-ID: <202206151803.AN0dJvGe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,99 +45,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Thomas,
+BCC: lkp@intel.com
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Frederic Weisbecker <frederic@kernel.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   018ab4fabddd94f1c96f3b59e180691b9e88d5d8
-commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
-date:   10 months ago
-config: mips-randconfig-r022-20220615 (https://download.01.org/0day-ci/archive/20220615/202206151820.2UttbZpK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6012273897fefb12566580efedee10bb06e5e6ed
+commit: 500043d2408cad736b58477bfcaf9da5a2f47322 [3500/3718] context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
+config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220615/202206151803.AN0dJvGe-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0b00432093be9680ed833af642bcafc3ca11586)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=500043d2408cad736b58477bfcaf9da5a2f47322
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 500043d2408cad736b58477bfcaf9da5a2f47322
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma/dw-edma/ drivers/irqchip/ kernel/time/ mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
-   static inline int hrtimer_hres_active(void)
-   ^
-   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( (1 << 31) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: lld $0, $1
-   or $0, $2
-   scd $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project b0b00432093be9680ed833af642bcafc3ca11586)
-   Target: mips64el-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-b0b0043209/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers include kernel mm nr_bisected scripts sound source usr
-
-
-vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
-
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
-
-:::::: The code at line 650 was first introduced by commit
-:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
-
-:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x44: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_enter+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_idle_exit+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_exit+0x14: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_nmi_enter+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x42: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x60: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __ct_user_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: crc_pcl+0x7c: missing int3 after indirect jump
 
 -- 
 0-DAY CI Kernel Test Service
