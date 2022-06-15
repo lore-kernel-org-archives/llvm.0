@@ -1,102 +1,200 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D36B7A
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 10:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655289971; x=1686825971;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=/gstC0294uRtV8cObr9EOcdTRPS7YZszPm0RzNVqZGY=;
-  b=R9TUF/Sjn4OAiX4+Or1yjTDz41UKCwnDb7i3xHlq65EntG4D5Ij/W+Jf
-   HYlmfk8W0h2bDn+tBj8omQJCeY6Lhnxl6p+XoyHZQNK1W3uWiqMjNZ5KB
-   QMNkCfhdH4BwASXM5/K3Vmyrd456SIqfDT/GSaz6JDRq7B5XSYnISZvMZ
-   3FzBK55gmuCnhA88fkqJ4Ji1UdKhwvP7Yorj2Sg/NDc9gEVU4wz2hJdVv
-   /rMTNX9d68Rxlffml4CM3JowJ6RN8SnO85kJ6fRyS5Mb5t1y5zDxxcU+Z
-   l3JEJlpbaSZ/rx+uvig7uyd8YMHKLJG1hunMltQWD71awQuofmLZJjNO4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="277707571"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="277707571"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:46:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="911580023"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2022 03:46:09 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o1QXI-000Mlb-TO;
-	Wed, 15 Jun 2022 10:46:08 +0000
-Date: Wed, 15 Jun 2022 18:45:13 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 3500/3718] vmlinux.o: warning: objtool:
- __ct_user_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text
- section
-Message-ID: <202206151803.AN0dJvGe-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DF97A
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 11:52:13 +0000 (UTC)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+	by mailout3.rbg.tum.de (Postfix) with ESMTPS id 3D867100241;
+	Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+	s=20220209; t=1655293421;
+	bh=2kjF4oxVy3r0fd0SR9Tiy0/qNbtSE87Bz7BjdDbE1WQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NQ3JEMN2ZHuNO/jk9Av7B/H/0KpYlcVLlKXKDbQyjFUGHSs9eA9lMK8Lb5Slu6MdY
+	 HcTOP24C86scrmcGGk01sFNf5waZuYfo0K92v+lEx6j2EFBxU6rqq3RmGOzrcfu0m3
+	 hA/W9Q7JcCktMgWsoA4AP/p4CRaZz1jgznKU8IAd6uN9NTQwaHKiKLXZAoGFXruKg+
+	 7vbzwsy69l+TbNglfkS+nBbSJPe2tw3NYT13otO1+Ca4Dn6otyByXM0zhnI1rqfS4W
+	 kWyMb7r4EliCIh4QwQdEJS00rR1dWRg/4hM1staWVoKKc2EAFsRIF1x0aygVIyunKK
+	 pX9cOhuqMCCtw==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+	id 3D0B1DD; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 198DED6;
+	Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 14250CE;
+	Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+	id 087424A0220; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+	by mail.in.tum.de (Postfix) with ESMTPSA id A477F4A01E7;
+	Wed, 15 Jun 2022 13:43:40 +0200 (CEST)
+	(Extended-Queue-bit xtech_ko@fff.in.tum.de)
+From: =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+To: llvm@lists.linux.dev,
+	linux-toolchains@vger.kernel.org,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Palmer Dabbelt <palmerdabbelt@google.com>,
+	=?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Cc: Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+	Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+	Martin Fink <martin.fink@in.tum.de>
+Subject: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
+Date: Wed, 15 Jun 2022 11:43:29 +0000
+Message-Id: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
+Hi all,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6012273897fefb12566580efedee10bb06e5e6ed
-commit: 500043d2408cad736b58477bfcaf9da5a2f47322 [3500/3718] context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
-config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220615/202206151803.AN0dJvGe-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0b00432093be9680ed833af642bcafc3ca11586)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=500043d2408cad736b58477bfcaf9da5a2f47322
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 500043d2408cad736b58477bfcaf9da5a2f47322
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+I have been confused by explanation.txt's definition of control
+dependencies:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Finally, a read event and another memory access event are linked by a
+> control dependency if the value obtained by the read affects whether
+> the second event is executed at all.
 
-All warnings (new ones prefixed by >>):
+I'll go into the following:
 
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x44: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_exit+0x48: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x14: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x42: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x60: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __ct_user_enter+0x32: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: crc_pcl+0x7c: missing int3 after indirect jump
+====
+1. "At all", to me, is misleading
+  1.1 The code which confused me
+  1.2 The traditional definition via post-dominance doesn't work either
+2. Solution
+====
 
+1. "At all", to me, is misleading:
+
+"At all" to me suggests a question for which we require a definitive
+"yes" or "no" answer: given a programme and an input, can a certain
+piece of code be executed? Can we always answer this this question?
+Doesn't this sound similar to the halting problem?
+
+1.1 The Example which confused me:
+
+For the dependency checker project [1], I've been thinking about
+tracking dependency chains in code, and I stumbled upon the following
+edge case, which made me question the "at all" part of the current
+definition. The below C-code is derived from some optimised kernel code
+in LLVM intermediate representation (IR) I encountered:
+
+> int *x, *y;
+>
+> int foo()
+> {
+> /* More code */
+>
+> 	 loop:
+> 		/* More code */
+>
+> 	 	if(READ_ONCE(x)) {
+> 	 		WRITE_ONCE(y, 42);
+> 	 		return 0;
+> 	 	}
+>
+> 		/* More code */
+>
+> 	 	goto loop;
+>
+>       /* More code */
+> }
+
+Assuming that foo() will return, the READ_ONCE() does not determine
+whether the WRITE_ONCE() will be executed __at all__, as it will be
+executed exactly when the function returns, instead, it determines
+__when__ the WRITE_ONCE() will be executed.
+
+1.2. The definition via post-dominance doesn't work either:
+
+I have seen control dependencies being defined in terms of the first
+basic block that post-dominates the basic block of the if-condition,
+that is the first basic block control flow must take to reach the
+function return regardless of what the if condition returned.
+
+E.g. [2] defines control dependencies as follows:
+
+> A statement y is said to be control dependent on another statement x
+> if (1) there exists a nontrivial path from x to y such that every
+> statement z != x in the path is post-dominated by y, and (2) x is not
+> post-dominated by y.
+
+Again, this definition doesn't work for the example above. As the basic
+block of the if branch trivially post-dominates any other basic block,
+because it contains the function return.
+
+2. Solution:
+
+The definition I came up with instead is the following:
+
+> A basic block B is control-dependent on a basic block A if
+> B is reachable from A, but control flow can take a path through A
+> which avoids B. The scope of a control dependency ends at the first
+> basic block where all control flow paths running through A meet.
+
+Note that this allows control dependencies to remain "unresolved".
+
+I'm happy to submit a patch which covers more of what I mentioned above
+as part of explanation.txt, but figured that in the spirit of keeping
+things simple, leaving out "at all" might be enough?
+
+What do you think?
+
+Many thanks,
+Paul
+
+[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
+[2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
+Approach, Randy Allen, Ken Kennedy, 2002, p. 350
+
+Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+Cc: Marco Elver <elver@google.com>
+Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+Cc: Martin Fink <martin.fink@in.tum.de>
+---
+ tools/memory-model/Documentation/explanation.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index ee819a402b69..42af7ed91313 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -466,7 +466,7 @@ pointer.
+ 
+ Finally, a read event and another memory access event are linked by a
+ control dependency if the value obtained by the read affects whether
+-the second event is executed at all.  Simple example:
++the second event is executed.  Simple example:
+ 
+ 	int x, y;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
