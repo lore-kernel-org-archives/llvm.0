@@ -1,175 +1,247 @@
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A90C7A
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 09:34:02 +0000 (UTC)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-09.nifty.com with ESMTP id 25F9OG2Y026164
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 18:24:16 +0900
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 25F9O0bS025879
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 18:24:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 25F9O0bS025879
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1655285041;
-	bh=z11ovVAKqI6ZA7KGXOW96R1KX78wxZ9sWHcYkCBNvWg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ApQ8fSYtWZBsD7TbE6Ktx2ZrVkQyDEepc6TLORaln5uOlE9z6x8Pys64Uuqt/4Hx0
-	 eSXlBMR7sJoLVjsw5oAUTjE0OJjJJJVx7TGeRyxRGG1ZJ7tw7He73J8M90jDcWtEU0
-	 +ZwPmJ0QxCClZ3WdbGAShZREpuD0c0Pi6VOq31tg1KzcHONPaQfHbVL4MptqEL6yP/
-	 GUyz8E4q9Fs2NeKEUQnXZtOOMK0M4teDpbbIhtKQvCYxyX08APMxj6IL1TXym6IUHd
-	 qh3Hd9c2BIobtwgt19gYjztzCXqJzN/rDEcfiIrCULo43gf5jQilvENycbiaMVefA7
-	 97kGQg4RYUK4w==
-X-Nifty-SrcIP: [209.85.221.54]
-Received: by mail-wr1-f54.google.com with SMTP id q15so14470864wrc.11
-        for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 02:24:01 -0700 (PDT)
-X-Gm-Message-State: AJIora9UYPpiwpZs4/iJ844ALXMDFpU020d7IT9DSYj+rm94pLWorLsx
-	UxuUxVmNuC/jdXHquzGmTph1BOsmKitkeLyJ0o0=
-X-Google-Smtp-Source: AGRyM1sqFYEVeX64ueL9l7/Y7mETTav4VvtRR1t9Qr1JlCTC/16FkyM+glftepeHKk6lexJFVxZcY9atNgWvoVVAmUM=
-X-Received: by 2002:a05:6000:156d:b0:210:3135:ce1c with SMTP id
- 13-20020a056000156d00b002103135ce1cmr9167065wrz.409.1655285039469; Wed, 15
- Jun 2022 02:23:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251ED7A
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 09:47:11 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso1556498pjk.0
+        for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 02:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=aPwIjxBJdE9LB3wLZM0T7IS7g3U9vzTEOHBfxps9ey8=;
+        b=bAR4KmBASbtZXRr43JiN91ARnEH7EQCMIe7BpVXVlpqu1Cpr9D6rfS8czm5kDeSszS
+         F1zd69g+sejiA8ZcVQLUNWtPFlwyzKxwCC6nVYdeVs9JQYdDpkgzCGE6ID10MPkBoIIl
+         mpadVF4yIF9i9yherryo2iTCtx2FjNPO7plwgmzsiyuOVBrbD9x90307PFJYc3BtpCZG
+         U3Wvf/mhD+7MQKJlKJNvai2miWk4UPZI4V9iplcB1HS+YFewwIIokRMMZ0sB+G0sWCHZ
+         6G2Ua1Xn67YLeJ2Ii1Vp3VDeuJWJUr0iMiPS/3wCxyzLeE04JxxNKQjoFSznAVASOkvx
+         YU6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=aPwIjxBJdE9LB3wLZM0T7IS7g3U9vzTEOHBfxps9ey8=;
+        b=UAPm0aDq79V9mI19PFl7gnYaC1uZJ+9DiUFVEQCEcoxaOSLnc93e10KmcQd1Zcw8ZL
+         bC3eKyP1kAHnekuDxNzsEj18UT6m3KtGvAYo4jl7kYD0nofR0qGVFWhb9yW/I5Jtv6Gi
+         Tt37+gHgCoKelak9AXd2QAV7FuwdUIVyJlRECHNxIW4ZbMecKNfT5QUgDTUOQzFqgZVN
+         OqMRejQdtPrW6GYf986WwOvcZUR3pD4vx24rHBvGbFWsrvAFmMmt+76LQp0oBt/VsOcu
+         3aaqrUmSbPYj2cfjQQzzL8+po1mWMl5vipsLdlvUEkzK77QEAp4p+huW3GQWIfccVVML
+         rRAg==
+X-Gm-Message-State: AJIora8pmvFVqv0+hYQIfjCSlQqHRFaj/nmurfL8Ivcm+WW4algytj+I
+	/mwvAJ0pvcEzEVm/mhMMOKNKawQaUWwMGiuTqj8=
+X-Google-Smtp-Source: AGRyM1uIqjiVoY7rCnyvSEFOYomOC/PkDF/+05O7l+lti/RbIU0DGqpyrg+4D/4/RbCwc5v5Mb2N7A==
+X-Received: by 2002:a17:90b:4a42:b0:1e3:331e:d3ec with SMTP id lb2-20020a17090b4a4200b001e3331ed3ecmr9143346pjb.147.1655286430238;
+        Wed, 15 Jun 2022 02:47:10 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i6-20020aa78b46000000b0051bc721b838sm9299204pfd.188.2022.06.15.02.47.09
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 02:47:09 -0700 (PDT)
+Message-ID: <62a9aa9d.1c69fb81.18952.b4a6@mx.google.com>
+Date: Wed, 15 Jun 2022 02:47:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220615063315.279489-1-jhubbard@nvidia.com>
-In-Reply-To: <20220615063315.279489-1-jhubbard@nvidia.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 15 Jun 2022 18:23:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARsHxH1LF8Pq70EMAYW-p1btgAVC1cJMOkXSTjW5LZuKA@mail.gmail.com>
-Message-ID: <CAK7LNARsHxH1LF8Pq70EMAYW-p1btgAVC1cJMOkXSTjW5LZuKA@mail.gmail.com>
-Subject: Re: [PATCH] gen_compile_commands: fix overlooked module files
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220615
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 14 builds: 2 failed, 12 passed, 2 errors,
+ 15 warnings (next-20220615)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Wed, Jun 15, 2022 at 3:33 PM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
-> each .mod file only contains one line.
+next/master build: 14 builds: 2 failed, 12 passed, 2 errors, 15 warnings (n=
+ext-20220615)
 
-Thanks for catching this.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220615/
 
-That assumption was correct until recently.
-  The first line contained member objects.
-  The second line, if CONFIG_TRIM_UNUSED_KSYMS=y, contained unresolved symbols
+Tree: next
+Branch: master
+Git Describe: next-20220615
+Git Commit: 6012273897fefb12566580efedee10bb06e5e6ed
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
+Build Failures Detected:
 
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
+3) FAIL
 
-Commit 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
-changed the format of *.mod so member objects are listed per-line.
+Errors and Warnings Detected:
 
+arm64:
+    defconfig+arm64-chromebook (clang-13): 5 warnings
 
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
+error, 5 warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 1 error, 5 warnings
 
+x86_64:
 
-> In fact, such files contain one
-> entry per line, and for some subsystems, there can be many, many lines.
-> For example, Nouveau has 762 entries, but only the first entry was being
-> processed. This problem causes clangd to fail to provide references and
-> definitions for valid files that are part of the current kernel
-> configuration.
->
-> This problem only occurs when using Kbuild to generate, like this:
->
->    make CC=clang compile_commands.json
->
-> It does not occur if you just run gen_compile_commands.py "bare", like
-> this (below):
->
->    scripts/clang-tools/gen_compile_commands.py/gen_compile_commands.py .
->
-> Fix this by fully processing each .mod file. This fix causes the number
-> of build commands that clangd finds in my kernel build (these numbers
-> are heavily dependent upon .config), from 2848 to 5292, which is an 85%
-> increase.
->
-> Fixes: ecca4fea1ede4 ("gen_compile_commands: support *.o, *.a, modules.order in positional argument")
+Errors summary:
 
-This should be
+    2    lib/maple_tree.c:4202:20: error: stack frame size (1096) exceeds l=
+imit (1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
 
-Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
+Warnings summary:
 
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    1    drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_cl=
+k' is used uninitialized whenever 'if' condition is true [-Wsometimes-unini=
+tialized]
+    1    drivers/mmc/host/sdhci-brcmstb.c:295:6: warning: variable 'base_cl=
+k' is used uninitialized whenever 'if' condition is true [-Wsometimes-unini=
+tialized]
+    1    drivers/mmc/host/sdhci-brcmstb.c:280:6: warning: variable 'base_cl=
+k' is used uninitialized whenever 'if' condition is true [-Wsometimes-unini=
+tialized]
+    1    drivers/mmc/host/sdhci-brcmstb.c:259:22: note: initialize the vari=
+able 'base_clk' to silence this warning
+    1    3 warnings generated.
 
-Can you update the commit log?
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  scripts/clang-tools/gen_compile_commands.py | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 1d1bde1fd45e..53590e886889 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -157,10 +157,11 @@ def cmdfiles_for_modorder(modorder):
->              if ext != '.ko':
->                  sys.exit('{}: module path must end with .ko'.format(ko))
->              mod = base + '.mod'
-> -           # The first line of *.mod lists the objects that compose the module.
-> +           # Read from *.mod, to get a list of objects that compose the module.
->              with open(mod) as m:
-> -                for obj in m.readline().split():
-> -                    yield to_cmdfile(obj)
-> +                for line in m.readlines():
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
 
-                    for line in m:
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
 
-is simpler, (and maybe will work more efficiently).
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
 
-One more note, the 'line' iterator is shadowing (overwriting)
-the outer 'line' iterator, which has been used a few lines above.
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
 
-    with open(modorder) as f:
-        for line in f:
+Errors:
+    lib/maple_tree.c:4202:20: error: stack frame size (1096) exceeds limit =
+(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
 
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
 
-Maybe, it is safer to use a different name for the inner iterator
-because shadowing does not work in Python.
+Errors:
+    lib/maple_tree.c:4202:20: error: stack frame size (1096) exceeds limit =
+(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
 
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
-> +                    for obj in line.split():
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
 
-This loop is unneeded because each line
-contains only one word.
-.rstpip() will do.
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
 
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 5 wa=
+rnings, 0 section mismatches
 
+Warnings:
+    drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is=
+ used uninitialized whenever 'if' condition is true [-Wsometimes-uninitiali=
+zed]
+    drivers/mmc/host/sdhci-brcmstb.c:295:6: warning: variable 'base_clk' is=
+ used uninitialized whenever 'if' condition is true [-Wsometimes-uninitiali=
+zed]
+    drivers/mmc/host/sdhci-brcmstb.c:280:6: warning: variable 'base_clk' is=
+ used uninitialized whenever 'if' condition is true [-Wsometimes-uninitiali=
+zed]
+    drivers/mmc/host/sdhci-brcmstb.c:259:22: note: initialize the variable =
+'base_clk' to silence this warning
+    3 warnings generated.
 
-To sum up, this part can be simpler,
-for example like this:
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
-           # Read from *.mod, to get a list of objects that compose the module.
-            with open(mod) as m:
-                for line2 in m:
-                    yield to_cmdfile(line2.rstrip())
-
-
-
-
-
-> +                        yield to_cmdfile(obj)
->
->
->  def process_line(root_directory, command_prefix, file_path):
-> --
-> 2.36.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+---
+For more info write to <info@kernelci.org>
