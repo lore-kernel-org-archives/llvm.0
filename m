@@ -1,106 +1,102 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC457A
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 17:33:25 +0000 (UTC)
-Received: by mail-lf1-f48.google.com with SMTP id c4so19967980lfj.12
-        for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 10:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hd/cGjQ2Xjd6LDpefMqiTBtHv/N383B1PfAFMpFqhy4=;
-        b=ASUCE8+CrV643MgfwX5XdEPd6FlLM4uc/R29PsZSfVTEMoidZJyYKETJnkcSaq/IKA
-         +eA9/hNGuhv7cKf6dfWNuj4XaVHGdkVdkHgMAK3VvbsHc6Ih/EKXWeKHparRqcsI/5tD
-         koAls765sRUN+OJPW9AHvNm29+2wv7BtO0IfMeM/5ontyyEdZFRx49y3t/W4LoS6fLwh
-         ttAr+WadM4xaq8cgT0beYDVpS/PhrA6VwMgdHs/TByUlpS2kAR//ZUAYQs2ndtDDtA9z
-         3J/rC2KnaSpWtoz+CeJs1NgAKvoITWJyMMcHJNuAU/TOWnZY4AFQoYDw8Llgg3q7LDzw
-         MJpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hd/cGjQ2Xjd6LDpefMqiTBtHv/N383B1PfAFMpFqhy4=;
-        b=najuv4gON0fHRlCVhcUiHZsa1zsS4DVTUIsGnsLyPttPz+iijY8AwFtvoK5h4i9Qm0
-         jTWsuqAa+PflFtZvCBG6vQn2LBT+HeNKFpRcZSd4Yk3f4EPMjbSn9qTfskvcFZ8uT55E
-         qq4ko6KVMDzkarvvLv59yPU/qQUam4eBtRvURRWgvSN5w4nOKFysutzVVDdvEeO08HOa
-         04es/pWJp3V3XIGuJaochQMyVFjSgr/1bPuIJKhrJYTT0DNv5Gg4mEEyBNv0RsIc0k/G
-         aDnPwvcAFJ6OrSCLMKBTbAdUM8KQNHXe6nPel18ijuuU4psRWoQkOe3POz4Swc/spVg7
-         WnKA==
-X-Gm-Message-State: AJIora+IjQHBctYbIBrOE5f6jI/58syrQzUltrflCke3KI6DYTsCZSsx
-	hLiw6KY+HR3K8VzpF9+dcYM+A5sQzPqkqbYj/pnGZg==
-X-Google-Smtp-Source: AGRyM1u27a6LLCUdFJko6UXeDFBM5BXqgpTxDSyczmVj+igLdaSx3S3Mb5URwhYMTRmr6Cgd3jmIJBj/PuRWV1ddR3A=
-X-Received: by 2002:ac2:47f1:0:b0:479:7517:d41 with SMTP id
- b17-20020ac247f1000000b0047975170d41mr354755lfp.254.1655314403472; Wed, 15
- Jun 2022 10:33:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464257A
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 18:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655318693; x=1686854693;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=KgdL+vSpVtviYD5Ujn4jjNxHXJRmCGtU+ceCVtpqd/Q=;
+  b=eJpwDFV3yplsNfxsxeTCt+EWGhfJTF8besMtHuzNqEKAIOSI8rpCSt6E
+   OV+2WCF6TArsQvCoX9c4yaSDtvLuZhgITYkCaYWipcAtwzXhwiVlwdzzx
+   cWKHgWPxOGTZkNkXnEXFKXTeMr70H0ub0VfpnlRCT3VSOwiXpjRB97cpx
+   AhFb2AxsRmZf3ga1mkd8Wa+XghbWIxeRu2oqE2JeIUg6zLy+6sm8rnVQw
+   hcNsJg8eh3KWRzKRSU/tgZIIWHTwjUhsUwC7VIzogUMQFfw6nfoBCy3tL
+   UoHTcLwQeQvYHLAAIh2mFryH0CYpkGcjEsBzW/7QAphKm7k+Mf2YqXqWJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="259533789"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="259533789"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 11:24:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="831193098"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2022 11:24:25 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o1Xgn-000N5Z-8h;
+	Wed, 15 Jun 2022 18:24:25 +0000
+Date: Thu, 16 Jun 2022 02:23:38 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 3517/3718] vmlinux.o: warning: objtool:
+ ct_nmi_enter+0x34: call to ftrace_likely_update() leaves .noinstr.text
+ section
+Message-ID: <202206160206.7v6ivUDZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220608152757.82529-1-nathan@kernel.org>
-In-Reply-To: <20220608152757.82529-1-nathan@kernel.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 15 Jun 2022 10:32:46 -0700
-Message-ID: <CAPDyKFpx+s5noi69MhqMY6YqVXKkV5ALRZGuB1yVaFk9YzQ8Kw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-brcmstb: Initialize base_clk to NULL in sdhci_brcmstb_probe()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, Al Cooper <alcooperx@gmail.com>, 
-	Kamal Dasu <kdasu.kdev@gmail.com>, Florian Fainelli <f.fainelli@gmail.com>, 
-	bcm-kernel-feedback-list@broadcom.com, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Justin Stitt <jstitt007@gmail.com>, Dan Carpenter <dan.carpenter@oracle.com>, 
-	linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 8 Jun 2022 at 08:28, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang warns a few times along the lines of:
->
->   drivers/mmc/host/sdhci-brcmstb.c:302:6: warning: variable 'base_clk' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->           if (res)
->               ^~~
->   drivers/mmc/host/sdhci-brcmstb.c:376:24: note: uninitialized use occurs here
->           clk_disable_unprepare(base_clk);
->                                 ^~~~~~~~
->
-> base_clk is used in the error path before it is initialized. Initialize
-> it to NULL, as clk_disable_unprepare() calls clk_disable() and
-> clk_unprepare(), which both handle NULL pointers gracefully.
->
-> Fixes: 2cecaac1b21c ("mmc: sdhci-brcmstb: Add ability to increase max clock rate for 72116b0")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1650
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+BCC: lkp@intel.com
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Frederic Weisbecker <frederic@kernel.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
 
-Applied for next, thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6012273897fefb12566580efedee10bb06e5e6ed
+commit: 4d79440c7f9f94961cde6c305b3039e5dfc07937 [3517/3718] rcu/context-tracking: Remove unused and/or unecessary middle functions
+config: x86_64-randconfig-a005-20220613 (https://download.01.org/0day-ci/archive/20220616/202206160206.7v6ivUDZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0b00432093be9680ed833af642bcafc3ca11586)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=4d79440c7f9f94961cde6c305b3039e5dfc07937
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 4d79440c7f9f94961cde6c305b3039e5dfc07937
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Kind regards
-Uffe
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-> ---
->  drivers/mmc/host/sdhci-brcmstb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-> index f8dff8537920..28e9cf995c41 100644
-> --- a/drivers/mmc/host/sdhci-brcmstb.c
-> +++ b/drivers/mmc/host/sdhci-brcmstb.c
-> @@ -256,7 +256,7 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
->         struct sdhci_host *host;
->         struct resource *iomem;
->         struct clk *clk;
-> -       struct clk *base_clk;
-> +       struct clk *base_clk = NULL;
->         int res;
->
->         match = of_match_node(sdhci_brcm_of_match, pdev->dev.of_node);
->
-> base-commit: 10980053142d8a3e86eb4d3014574424b42b7a45
-> --
-> 2.36.1
->
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x44: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x62: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x42: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x60: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x28: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: ct_nmi_enter+0x34: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x28: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: ct_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_enter+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: ct_idle_exit+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: rcu_eqs_exit+0x24: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ct_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_enter+0x41: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: crc_pcl+0x7c: missing int3 after indirect jump
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
