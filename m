@@ -1,358 +1,147 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2088.outbound.protection.outlook.com [40.107.100.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3395F3D98
-	for <llvm@lists.linux.dev>; Tue, 14 Jun 2022 22:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655246516; x=1686782516;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NKciAO4qHgp24jfXYG+V+9J+3rZXQ+d+hg2Z4/u0bpc=;
-  b=nxg7gAcqj+hba9RTGZ2oEyqbj7qOWA8TCR1uSfoMJXvMKlqyKmAIFb5n
-   gdTlpOjt/kTibrRJvP0mlO3WALg9wlpwyBh4tqvqVFnM5TugqdLyRLt07
-   pLNYvK1sQGpPJg+xXC2OER1awD1B/Z9nGAyd7mmzPWgq3E4xB4SEz76t9
-   UaCybzzHG2JZNf3U37ZAhFVwhHdvzty3/FIwDQ2Oob1G0YHnLhHKCn74O
-   aUjNzJeftyPS4C7aido9jE+APdP2CA8y8Dg03jNN9jvZVbGS0qzARFnf9
-   5oGfiVLss6H+L35IbR3cVt5p0HHdgFLlp1NYPfmoO2VEbFN9qBhLVW1da
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340425621"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="340425621"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 15:41:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="612450643"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2022 15:41:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o1FEP-000MML-0F;
-	Tue, 14 Jun 2022 22:41:53 +0000
-Date: Wed, 15 Jun 2022 06:41:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Clark <robdclark@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Erico Nunes <nunes.erico@gmail.com>,
-	Eric Anholt <eric@anholt.net>
-Subject: [anholt:5.17-for-mesa-ci 2375/2390]
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c:1115:4: error: implicit declaration of
- function 'writeq'
-Message-ID: <202206150657.egHDOJhU-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691EE7C
+	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 06:33:24 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FGdC0/3RkFf95ePV1tEK/1rfwlooRJTDF0FOAThuZV9e62Sa7bY+7cCZGbQgoumLO/40gknH5FRijM9VWDSwVMtLaHSoHQv4C4oVcwCBhfg/RhY6mBYNSQ2wBucO9uBd0K+7eIXLdMo+tattcxGVbMYmVlni0M3EO53EqP44rwhbVL5BfsBmd/NrOJ1LqoZv2WX8onrVbkm6Cl0/YvtP6Q49eaVWdEDQfSuvUHUMHQuT7GWfCucVstXcwKuXZITpm+XRlxHk1AD6T975eP3xh6NVC0yqkUESYfry7L+acjf1wUd3vlrRdZFzZkxD8YFYbu+hWThij6+XNl7jrHekPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PkCpnN11D0i+VaS5uX5LfjIG9UiDM4zf7cNZMCXhGn8=;
+ b=GRDuYzsz8zPV5M+CN5juiJaiw9Xt5vtfgsyh0TpA2NB0fmUYV0DDPfGlDay0w8j+F1fCkhkrQ6VeWsDLi3mHOYVpgOdTt+xrSfQzxbcuXQaFvmaP+SYBrFpHL0aPxnGNXKYAYOPszPf3fJpm349Q7JLhLsw5FzSgi0L7HXoprwplsmbP89tOQ1lXJtsG0MSGxkus5atXTYo+K6RK5KMBP6ynw4qMIPfaLZvfEnem5wDkbFSySv/Ha2ysB7NK4Bz770OxnGyCMEs1YFoRMCWNMOxeGV1nLJdqWxOIhS2pt014WMEnvSVNt3drhFi8TmHk64lwmkdeOrM+trcx6g8/ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PkCpnN11D0i+VaS5uX5LfjIG9UiDM4zf7cNZMCXhGn8=;
+ b=l0ihUiI8z6W4MRShvj7jvSDhOFLqAAT8popiM1owkqtJ7jgTZQfoNtfO37SjdThh8OPVSySXaQ7RQqpHNVadIASMn1XWiX4NTb51RLmM6klp/5xMBJNR5de3PcqEyxfQjp9IOYULdmve6Dh36wPjRQN+sUEJvk9xFitLckRFHsfjgv7Z3NZpmjf24WjMREGBEeZ1LaChY6WIKLCHS8dDkpcuPCeK+n88jXz8m8cg5to1ehGfn0h7YCIVCgo0HxvRhA5yZbOPeYn9ffThaSS/Bi/XeIT7wvyxihvE1H47TvUgWfRvmCPecvXzDM6FhSTBi8twKGAyKtAN830HpguleA==
+Received: from BN6PR2001CA0037.namprd20.prod.outlook.com
+ (2603:10b6:405:16::23) by MWHPR12MB1629.namprd12.prod.outlook.com
+ (2603:10b6:301:3::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.17; Wed, 15 Jun
+ 2022 06:33:21 +0000
+Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:16:cafe::d3) by BN6PR2001CA0037.outlook.office365.com
+ (2603:10b6:405:16::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.19 via Frontend
+ Transport; Wed, 15 Jun 2022 06:33:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5332.12 via Frontend Transport; Wed, 15 Jun 2022 06:33:20 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 15 Jun
+ 2022 06:33:19 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
+ 2022 23:33:18 -0700
+Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 14 Jun 2022 23:33:18 -0700
+From: John Hubbard <jhubbard@nvidia.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
+	<nathan@kernel.org>, Tom Rix <trix@redhat.com>, Jason Gunthorpe
+	<jgg@nvidia.com>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH] gen_compile_commands: fix overlooked module files
+Date: Tue, 14 Jun 2022 23:33:15 -0700
+Message-ID: <20220615063315.279489-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7261c02-c64c-4a9d-6b5d-08da4e98f074
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1629:EE_
+X-Microsoft-Antispam-PRVS:
+	<MWHPR12MB162947BBDF068B86681F9435A8AD9@MWHPR12MB1629.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	zMHRYXzg5+acTB6e4lYsbS2w6Qk16B3JDiCDeSZuo6p+91Fn2g4IVqrAMwmmpwtf1HjB1iIrzJou3J4uMZwWqr/eyFc2r3/ZrMlpnXTcjFneUGPgVjDQpik4L7QhFx19wBHVioDLMBe3/TVyQlPfMjTP6B4pecKJ65iBVmPCTNB3nTaUCVn0uTU8UmdsmyQnYYyhY4SVdxRR2h1uRIYu0QuLfExTjHdzTA3KDboOFNhEHkUolEeqTM81d1PA2GMMcjEgTvu1borAAkLeu9YLj/kX+C3NJAUhOXr2kWM9PzSlzvEvy6UgIo5NR6GJBy6R3y/A6Yzj38hLHx9uGSmVTN88jWo6Ouyv5KmhJCiryi6YkBXep4XPMtZu7tVREkc/OK+atkmqh7WWg+hfBYBSfHXOyNc2EKF2POIPyviufcupq0lhto6tlKX1+Rd8ySpJGAGpmf8vc0s8OrrY6+McFSPcFZH7xPP/cnFEf3tMZhmi/zN3LejMeFsezNzy7v17ff9toDXiN95ZrvpwR9LLCNJNU5s4fOjGjTBKtbvGdSWBBvteCw4MMh2lieHcUUgoiSs4c/915hYxXQNrhBK0Mb3ugheVLc5g4O7g1aF/gqi0UYof8Y7a6POJP5Ia/qLMEdLDvO6H7nNbBNp/RZ7YYkHNH6mb/aiQ3VMYF9FAFKwBKe6Q2YnszDOo9Q7KWX3tURwwXDLM+ugH2mwv+shqHA==
+X-Forefront-Antispam-Report:
+	CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(36840700001)(46966006)(40470700004)(6666004)(508600001)(8676002)(2906002)(82310400005)(7696005)(4326008)(86362001)(316002)(36756003)(54906003)(26005)(83380400001)(6916009)(107886003)(81166007)(356005)(47076005)(2616005)(1076003)(40460700003)(186003)(336012)(426003)(70206006)(8936002)(70586007)(5660300002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 06:33:20.0784
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7261c02-c64c-4a9d-6b5d-08da4e98f074
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1629
 
-tree:   https://github.com/anholt/linux 5.17-for-mesa-ci
-head:   bc830a9e22faa411feb4b2ef4b25f7e6d04d36fe
-commit: 07aeca39b9491d3455451da0923b19dc0c480e41 [2375/2390] drm/msm/a6xx: make GPUs SMMU context bank available in it's aperture.
-config: hexagon-randconfig-r045-20220613 (https://download.01.org/0day-ci/archive/20220615/202206150657.egHDOJhU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/anholt/linux/commit/07aeca39b9491d3455451da0923b19dc0c480e41
-        git remote add anholt https://github.com/anholt/linux
-        git fetch --no-tags anholt 5.17-for-mesa-ci
-        git checkout 07aeca39b9491d3455451da0923b19dc0c480e41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
+scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
+each .mod file only contains one line. In fact, such files contain one
+entry per line, and for some subsystems, there can be many, many lines.
+For example, Nouveau has 762 entries, but only the first entry was being
+processed. This problem causes clangd to fail to provide references and
+definitions for valid files that are part of the current kernel
+configuration.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This problem only occurs when using Kbuild to generate, like this:
 
-All errors (new ones prefixed by >>):
+   make CC=clang compile_commands.json
 
->> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:1115:4: error: implicit declaration of function 'writeq' [-Werror,-Wimplicit-function-declaration]
-                           writeq(0x48000, reg); /* offset of cb0 from gpu's base */
-                           ^
-   1 error generated.
+It does not occur if you just run gen_compile_commands.py "bare", like
+this (below):
 
+   scripts/clang-tools/gen_compile_commands.py/gen_compile_commands.py .
 
-vim +/writeq +1115 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+Fix this by fully processing each .mod file. This fix causes the number
+of build commands that clangd finds in my kernel build (these numbers
+are heavily dependent upon .config), from 2848 to 5292, which is an 85%
+increase.
 
-   872	
-   873	#define A6XX_INT_MASK (A6XX_RBBM_INT_0_MASK_CP_AHB_ERROR | \
-   874		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_ASYNCFIFO_OVERFLOW | \
-   875		  A6XX_RBBM_INT_0_MASK_CP_HW_ERROR | \
-   876		  A6XX_RBBM_INT_0_MASK_CP_IB2 | \
-   877		  A6XX_RBBM_INT_0_MASK_CP_IB1 | \
-   878		  A6XX_RBBM_INT_0_MASK_CP_RB | \
-   879		  A6XX_RBBM_INT_0_MASK_CP_CACHE_FLUSH_TS | \
-   880		  A6XX_RBBM_INT_0_MASK_RBBM_ATB_BUS_OVERFLOW | \
-   881		  A6XX_RBBM_INT_0_MASK_RBBM_HANG_DETECT | \
-   882		  A6XX_RBBM_INT_0_MASK_UCHE_OOB_ACCESS | \
-   883		  A6XX_RBBM_INT_0_MASK_UCHE_TRAP_INTR)
-   884	
-   885	static int hw_init(struct msm_gpu *gpu)
-   886	{
-   887		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-   888		struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-   889		int ret;
-   890	
-   891		/* Make sure the GMU keeps the GPU on while we set it up */
-   892		a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
-   893	
-   894		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_CNTL, 0);
-   895	
-   896		/*
-   897		 * Disable the trusted memory range - we don't actually supported secure
-   898		 * memory rendering at this point in time and we don't want to block off
-   899		 * part of the virtual memory space.
-   900		 */
-   901		gpu_write64(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_LO,
-   902			REG_A6XX_RBBM_SECVID_TSB_TRUSTED_BASE_HI, 0x00000000);
-   903		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_TRUSTED_SIZE, 0x00000000);
-   904	
-   905		/* Turn on 64 bit addressing for all blocks */
-   906		gpu_write(gpu, REG_A6XX_CP_ADDR_MODE_CNTL, 0x1);
-   907		gpu_write(gpu, REG_A6XX_VSC_ADDR_MODE_CNTL, 0x1);
-   908		gpu_write(gpu, REG_A6XX_GRAS_ADDR_MODE_CNTL, 0x1);
-   909		gpu_write(gpu, REG_A6XX_RB_ADDR_MODE_CNTL, 0x1);
-   910		gpu_write(gpu, REG_A6XX_PC_ADDR_MODE_CNTL, 0x1);
-   911		gpu_write(gpu, REG_A6XX_HLSQ_ADDR_MODE_CNTL, 0x1);
-   912		gpu_write(gpu, REG_A6XX_VFD_ADDR_MODE_CNTL, 0x1);
-   913		gpu_write(gpu, REG_A6XX_VPC_ADDR_MODE_CNTL, 0x1);
-   914		gpu_write(gpu, REG_A6XX_UCHE_ADDR_MODE_CNTL, 0x1);
-   915		gpu_write(gpu, REG_A6XX_SP_ADDR_MODE_CNTL, 0x1);
-   916		gpu_write(gpu, REG_A6XX_TPL1_ADDR_MODE_CNTL, 0x1);
-   917		gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_ADDR_MODE_CNTL, 0x1);
-   918	
-   919		/* enable hardware clockgating */
-   920		a6xx_set_hwcg(gpu, true);
-   921	
-   922		/* VBIF/GBIF start*/
-   923		if (adreno_is_a640_family(adreno_gpu) ||
-   924		    adreno_is_a650_family(adreno_gpu)) {
-   925			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE0, 0x00071620);
-   926			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE1, 0x00071620);
-   927			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE2, 0x00071620);
-   928			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
-   929			gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
-   930			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x3);
-   931		} else {
-   932			gpu_write(gpu, REG_A6XX_RBBM_VBIF_CLIENT_QOS_CNTL, 0x3);
-   933		}
-   934	
-   935		if (adreno_is_a630(adreno_gpu))
-   936			gpu_write(gpu, REG_A6XX_VBIF_GATE_OFF_WRREQ_EN, 0x00000009);
-   937	
-   938		/* Make all blocks contribute to the GPU BUSY perf counter */
-   939		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_GPU_BUSY_MASKED, 0xffffffff);
-   940	
-   941		/* Disable L2 bypass in the UCHE */
-   942		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_LO, 0xffffffc0);
-   943		gpu_write(gpu, REG_A6XX_UCHE_WRITE_RANGE_MAX_HI, 0x0001ffff);
-   944		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_LO, 0xfffff000);
-   945		gpu_write(gpu, REG_A6XX_UCHE_TRAP_BASE_HI, 0x0001ffff);
-   946		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_LO, 0xfffff000);
-   947		gpu_write(gpu, REG_A6XX_UCHE_WRITE_THRU_BASE_HI, 0x0001ffff);
-   948	
-   949		if (!adreno_is_a650_family(adreno_gpu)) {
-   950			/* Set the GMEM VA range [0x100000:0x100000 + gpu->gmem - 1] */
-   951			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MIN_LO,
-   952				REG_A6XX_UCHE_GMEM_RANGE_MIN_HI, 0x00100000);
-   953	
-   954			gpu_write64(gpu, REG_A6XX_UCHE_GMEM_RANGE_MAX_LO,
-   955				REG_A6XX_UCHE_GMEM_RANGE_MAX_HI,
-   956				0x00100000 + adreno_gpu->gmem - 1);
-   957		}
-   958	
-   959		gpu_write(gpu, REG_A6XX_UCHE_FILTER_CNTL, 0x804);
-   960		gpu_write(gpu, REG_A6XX_UCHE_CACHE_WAYS, 0x4);
-   961	
-   962		if (adreno_is_a640_family(adreno_gpu) ||
-   963		    adreno_is_a650_family(adreno_gpu))
-   964			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x02000140);
-   965		else
-   966			gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x010000c0);
-   967		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
-   968	
-   969		if (adreno_is_a660_family(adreno_gpu))
-   970			gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
-   971	
-   972		/* Setting the mem pool size */
-   973		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
-   974	
-   975		/* Setting the primFifo thresholds default values,
-   976		 * and vccCacheSkipDis=1 bit (0x200) for A640 and newer
-   977		*/
-   978		if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
-   979			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-   980		else if (adreno_is_a640_family(adreno_gpu) || adreno_is_7c3(adreno_gpu))
-   981			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
-   982		else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
-   983			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-   984		else
-   985			gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00180000);
-   986	
-   987		/* Set the AHB default slave response to "ERROR" */
-   988		gpu_write(gpu, REG_A6XX_CP_AHB_CNTL, 0x1);
-   989	
-   990		/* Turn on performance counters */
-   991		gpu_write(gpu, REG_A6XX_RBBM_PERFCTR_CNTL, 0x1);
-   992	
-   993		/* Select CP0 to always count cycles */
-   994		gpu_write(gpu, REG_A6XX_CP_PERFCTR_CP_SEL(0), PERF_CP_ALWAYS_COUNT);
-   995	
-   996		a6xx_set_ubwc_config(gpu);
-   997	
-   998		/* Enable fault detection */
-   999		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL,
-  1000			(1 << 30) | 0x1fffff);
-  1001	
-  1002		gpu_write(gpu, REG_A6XX_UCHE_CLIENT_PF, 1);
-  1003	
-  1004		/* Set weights for bicubic filtering */
-  1005		if (adreno_is_a650_family(adreno_gpu)) {
-  1006			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_0, 0);
-  1007			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_1,
-  1008				0x3fe05ff4);
-  1009			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_2,
-  1010				0x3fa0ebee);
-  1011			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_3,
-  1012				0x3f5193ed);
-  1013			gpu_write(gpu, REG_A6XX_TPL1_BICUBIC_WEIGHTS_TABLE_4,
-  1014				0x3f0243f0);
-  1015		}
-  1016	
-  1017		/* Protect registers from the CP */
-  1018		a6xx_set_cp_protect(gpu);
-  1019	
-  1020		if (adreno_is_a660_family(adreno_gpu)) {
-  1021			gpu_write(gpu, REG_A6XX_CP_CHICKEN_DBG, 0x1);
-  1022			gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x0);
-  1023		}
-  1024	
-  1025		/* Set dualQ + disable afull for A660 GPU */
-  1026		if (adreno_is_a660(adreno_gpu))
-  1027			gpu_write(gpu, REG_A6XX_UCHE_CMDQ_CONFIG, 0x66906);
-  1028	
-  1029		/* Enable expanded apriv for targets that support it */
-  1030		if (gpu->hw_apriv) {
-  1031			gpu_write(gpu, REG_A6XX_CP_APRIV_CNTL,
-  1032				(1 << 6) | (1 << 5) | (1 << 3) | (1 << 2) | (1 << 1));
-  1033		}
-  1034	
-  1035		/* Enable interrupts */
-  1036		gpu_write(gpu, REG_A6XX_RBBM_INT_0_MASK, A6XX_INT_MASK);
-  1037	
-  1038		ret = adreno_hw_init(gpu);
-  1039		if (ret)
-  1040			goto out;
-  1041	
-  1042		ret = a6xx_ucode_init(gpu);
-  1043		if (ret)
-  1044			goto out;
-  1045	
-  1046		/* Set the ringbuffer address */
-  1047		gpu_write64(gpu, REG_A6XX_CP_RB_BASE, REG_A6XX_CP_RB_BASE_HI,
-  1048			gpu->rb[0]->iova);
-  1049	
-  1050		/* Targets that support extended APRIV can use the RPTR shadow from
-  1051		 * hardware but all the other ones need to disable the feature. Targets
-  1052		 * that support the WHERE_AM_I opcode can use that instead
-  1053		 */
-  1054		if (adreno_gpu->base.hw_apriv)
-  1055			gpu_write(gpu, REG_A6XX_CP_RB_CNTL, MSM_GPU_RB_CNTL_DEFAULT);
-  1056		else
-  1057			gpu_write(gpu, REG_A6XX_CP_RB_CNTL,
-  1058				MSM_GPU_RB_CNTL_DEFAULT | AXXX_CP_RB_CNTL_NO_UPDATE);
-  1059	
-  1060		/*
-  1061		 * Expanded APRIV and targets that support WHERE_AM_I both need a
-  1062		 * privileged buffer to store the RPTR shadow
-  1063		 */
-  1064	
-  1065		if (adreno_gpu->base.hw_apriv || a6xx_gpu->has_whereami) {
-  1066			if (!a6xx_gpu->shadow_bo) {
-  1067				a6xx_gpu->shadow = msm_gem_kernel_new(gpu->dev,
-  1068					sizeof(u32) * gpu->nr_rings,
-  1069					MSM_BO_WC | MSM_BO_MAP_PRIV,
-  1070					gpu->aspace, &a6xx_gpu->shadow_bo,
-  1071					&a6xx_gpu->shadow_iova);
-  1072	
-  1073				if (IS_ERR(a6xx_gpu->shadow))
-  1074					return PTR_ERR(a6xx_gpu->shadow);
-  1075	
-  1076				msm_gem_object_set_name(a6xx_gpu->shadow_bo, "shadow");
-  1077			}
-  1078	
-  1079			gpu_write64(gpu, REG_A6XX_CP_RB_RPTR_ADDR_LO,
-  1080				REG_A6XX_CP_RB_RPTR_ADDR_HI,
-  1081				shadowptr(a6xx_gpu, gpu->rb[0]));
-  1082		}
-  1083	
-  1084		/* Always come up on rb 0 */
-  1085		a6xx_gpu->cur_ring = gpu->rb[0];
-  1086	
-  1087		gpu->cur_ctx_seqno = 0;
-  1088	
-  1089		/* Enable the SQE_to start the CP engine */
-  1090		gpu_write(gpu, REG_A6XX_CP_SQE_CNTL, 1);
-  1091	
-  1092		ret = a6xx_cp_init(gpu);
-  1093		if (ret)
-  1094			goto out;
-  1095	
-  1096		/*
-  1097		 * Try to load a zap shader into the secure world. If successful
-  1098		 * we can use the CP to switch out of secure mode. If not then we
-  1099		 * have no resource but to try to switch ourselves out manually. If we
-  1100		 * guessed wrong then access to the RBBM_SECVID_TRUST_CNTL register will
-  1101		 * be blocked and a permissions violation will soon follow.
-  1102		 */
-  1103		ret = a6xx_zap_shader_init(gpu);
-  1104		if (!ret) {
-  1105			OUT_PKT7(gpu->rb[0], CP_SET_SECURE_MODE, 1);
-  1106			OUT_RING(gpu->rb[0], 0x00000000);
-  1107	
-  1108			a6xx_flush(gpu, gpu->rb[0]);
-  1109			if (!a6xx_idle(gpu, gpu->rb[0]))
-  1110				return -EINVAL;
-  1111		} else if (ret == -ENODEV) {
-  1112			static bool first = true;
-  1113			if (first) {
-  1114				void __iomem *reg = ioremap(0x05060000, 0x1000);
-> 1115				writeq(0x48000, reg); /* offset of cb0 from gpu's base */
-  1116				iounmap(reg);
-  1117			}
-  1118			/*
-  1119			 * This device does not use zap shader (but print a warning
-  1120			 * just in case someone got their dt wrong.. hopefully they
-  1121			 * have a debug UART to realize the error of their ways...
-  1122			 * if you mess this up you are about to crash horribly)
-  1123			 */
-  1124			dev_warn_once(gpu->dev->dev,
-  1125				"Zap shader not enabled - using SECVID_TRUST_CNTL instead\n");
-  1126			gpu_write(gpu, REG_A6XX_RBBM_SECVID_TRUST_CNTL, 0x0);
-  1127			ret = 0;
-  1128		} else {
-  1129			return ret;
-  1130		}
-  1131	
-  1132	out:
-  1133		/*
-  1134		 * Tell the GMU that we are done touching the GPU and it can start power
-  1135		 * management
-  1136		 */
-  1137		a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
-  1138	
-  1139		if (a6xx_gpu->gmu.legacy) {
-  1140			/* Take the GMU out of its special boot mode */
-  1141			a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_BOOT_SLUMBER);
-  1142		}
-  1143	
-  1144		return ret;
-  1145	}
-  1146	
+Fixes: ecca4fea1ede4 ("gen_compile_commands: support *.o, *.a, modules.order in positional argument")
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ scripts/clang-tools/gen_compile_commands.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index 1d1bde1fd45e..53590e886889 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -157,10 +157,11 @@ def cmdfiles_for_modorder(modorder):
+             if ext != '.ko':
+                 sys.exit('{}: module path must end with .ko'.format(ko))
+             mod = base + '.mod'
+-	    # The first line of *.mod lists the objects that compose the module.
++	    # Read from *.mod, to get a list of objects that compose the module.
+             with open(mod) as m:
+-                for obj in m.readline().split():
+-                    yield to_cmdfile(obj)
++                for line in m.readlines():
++                    for obj in line.split():
++                        yield to_cmdfile(obj)
+ 
+ 
+ def process_line(root_directory, command_prefix, file_path):
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
