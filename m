@@ -1,139 +1,114 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E66229A7
-	for <llvm@lists.linux.dev>; Wed, 15 Jun 2022 23:16:38 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNh5J1Rhgz4xbN;
-	Thu, 16 Jun 2022 09:16:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1655334996;
-	bh=i56oAXNwE3Q5VLAEiK9NM/Mnc/C+L7RsLPNrpupmL6Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rbP1XFqz52rd67eFs+BTKOvnyqAEL1G9B3afIov4ehKT8WgN2oNR0XMNXlw+glkd2
-	 cUwqoxiZYo9RvyFSEZPCC1L5gab7U1Omn40gb26IcZTqFEBSTq+sN6pHI+UJhlXJEl
-	 y/Ci3/6yo69/MhqPziHEILp2efGfjwnuVLvcthAABKI7+6rAakr72XhvgJgjgPnnc9
-	 as7idqpV1TFdWpZk+YaTXHnj6UdQRm9kbWlZ8TgWlzKiR7UYVCuEJ1hd6y3aTAufgF
-	 oZDJq2APRPWqMarpFg8+UgbSZC0D0GuMOSsQ30jfgjyJuf7sre3Jp9nZsHac/k6o7+
-	 6kxPd4KP5S85A==
-Date: Thu, 16 Jun 2022 09:16:34 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker
- <frederic@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Kees Cook
- <keescook@chromium.org>, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E1D7E
+	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 01:26:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01816C3411A;
+	Thu, 16 Jun 2022 01:26:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655342790;
+	bh=RVnT4ZhKcCC/rRu0iJrXXNZrI1VuclV9+DrhvH6u4bU=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=m8F26jI1i6uGOOKDtqA1FxbbM8hOQdLFCLpDMfzpCHfDhoDYCzdyzkP+oOBE3ora0
+	 1XtpZPTit4/HwPfcHp7jAPQ+pf8n+x+IWjkcKxSd0iU9uKqcFAGb6oMj8rH5QtgxAI
+	 9YXBV6O7okl7g7dcoNq0SNnlo/fQ0F5fMplHg9vBUJO3nG7FFRMccmSI+EL5rLmUaf
+	 Tjv70dYHf08MgWiz5AX3OK4/9RIGVFtQhO/GVQ4KzYNWnSPMeCT85coIVFvYrfW8Xh
+	 6TA6MPtt+LP5VHoRRJQm3XWxDAsqMg8eaqDt9/xNn7fngOJXN8MTXwJJywBWeOVXR/
+	 kW+/qtOoHFKAw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 932E05C0587; Wed, 15 Jun 2022 18:26:29 -0700 (PDT)
+Date: Wed, 15 Jun 2022 18:26:29 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
 Subject: Re: Contextual conflict between kspp and rcu trees
-Message-ID: <20220616091634.55ebbdb0@canb.auug.org.au>
-In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+Message-ID: <20220616012629.GL1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+ <20220616091634.55ebbdb0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3no60Zq5C=H6WqeVvlYJFXM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616091634.55ebbdb0@canb.auug.org.au>
 
---Sig_/3no60Zq5C=H6WqeVvlYJFXM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 16, 2022 at 09:16:34AM +1000, Stephen Rothwell wrote:
+> Hi Nathan,
+> 
+> On Wed, 15 Jun 2022 12:55:53 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > There is a contextual conflict between commit e1d337335207 ("cfi: Fix
+> > __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
+> > dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
+> > the rcu tree, which is visible when building ARCH=arm64 defconfig +
+> > CONFIG_LTO_CLANG_THIN=y + CONFIG_CFI_CLANG=y with clang:
+> > 
+> >   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >                   rcu_irq_enter();
+> >                   ^
+> >   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
+> >   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declared here
+> >   void ct_irq_enter(void);
+> >        ^
+> >   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >                   rcu_irq_exit();
+> >                   ^
+> >   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
+> >   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declared here
+> >   void ct_irq_exit(void);
+> >        ^
+> >   2 errors generated.
+> > 
+> > 
+> > Per the above RCU commit and commit 6c5218715286 ("context_tracking:
+> > Take IRQ eqs entrypoints over RCU"), it appears that the following diff
+> > is the proper fix up. Would you mind applying it to the merge of
+> > whichever tree comes second if possible? I did build and boot test it
+> > but it would not be a bad idea for Sami and Frederic to verify that it
+> > is correct so that Kees/Paul can mention it to Linus :)
+> > 
+> > Cheers,
+> > Nathan
+> > 
+> > diff --git a/kernel/cfi.c b/kernel/cfi.c
+> > index 08102d19ec15..2046276ee234 100644
+> > --- a/kernel/cfi.c
+> > +++ b/kernel/cfi.c
+> > @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+> >  	rcu_idle = !rcu_is_watching();
+> >  	if (rcu_idle) {
+> >  		local_irq_save(flags);
+> > -		rcu_irq_enter();
+> > +		ct_irq_enter();
+> >  	}
+> >  
+> >  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
+> > @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+> >  		fn = find_module_check_fn(ptr);
+> >  
+> >  	if (rcu_idle) {
+> > -		rcu_irq_exit();
+> > +		ct_irq_exit();
+> >  		local_irq_restore(flags);
+> >  	}
+> >  
+> 
+> I will apply that to the merge of the rcu tree today (unless Paul finds
+> time to update (and test :-) ) the rcu tree before I get to it) as the
+> CFI fix is now in Linus' tree.
 
-Hi Nathan,
+Please!
 
-On Wed, 15 Jun 2022 12:55:53 -0700 Nathan Chancellor <nathan@kernel.org> wr=
-ote:
->
-> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
-> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
-> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
-> the rcu tree, which is visible when building ARCH=3Darm64 defconfig +
-> CONFIG_LTO_CLANG_THIN=3Dy + CONFIG_CFI_CLANG=3Dy with clang:
->=20
->   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter';=
- ISO C99 and later do not support implicit function declarations [-Wimplici=
-t-function-declaration]
->                   rcu_irq_enter();
->                   ^
->   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
->   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declar=
-ed here
->   void ct_irq_enter(void);
->        ^
->   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; =
-ISO C99 and later do not support implicit function declarations [-Wimplicit=
--function-declaration]
->                   rcu_irq_exit();
->                   ^
->   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
->   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declare=
-d here
->   void ct_irq_exit(void);
->        ^
->   2 errors generated.
->=20
->=20
-> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
-> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
-> is the proper fix up. Would you mind applying it to the merge of
-> whichever tree comes second if possible? I did build and boot test it
-> but it would not be a bad idea for Sami and Frederic to verify that it
-> is correct so that Kees/Paul can mention it to Linus :)
->=20
-> Cheers,
-> Nathan
->=20
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08102d19ec15..2046276ee234 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
-g ptr)
->  	rcu_idle =3D !rcu_is_watching();
->  	if (rcu_idle) {
->  		local_irq_save(flags);
-> -		rcu_irq_enter();
-> +		ct_irq_enter();
->  	}
-> =20
->  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-> @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
-g ptr)
->  		fn =3D find_module_check_fn(ptr);
-> =20
->  	if (rcu_idle) {
-> -		rcu_irq_exit();
-> +		ct_irq_exit();
->  		local_irq_restore(flags);
->  	}
-> =20
+In theory, I could rebase -rcu to linus/master now, but in practice the
+odds of it producing something useful are all too low.  I will take care
+of it tomorrow (Thursday) morning, Pacific Time.
 
-I will apply that to the merge of the rcu tree today (unless Paul finds
-time to update (and test :-) ) the rcu tree before I get to it) as the
-CFI fix is now in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3no60Zq5C=H6WqeVvlYJFXM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqaFMACgkQAVBC80lX
-0GxMBgf+IZMzcN6XlmZSjaMP4poWD8ue8PXIFK8AC3CHx00YzJrLHI8XtGAXwD7G
-jmJLuJs4IogmJoEKDLVfl5jnNOmIypuKtSDsM59WaQeXwvdSFvhWStMXRKv75MZv
-7AsT2+/miaSp9F5y7H77NA//rezbpUVMaX/ypdsZ7JVAWUAjcSZgKfLB8FeCXaWC
-/rfLYqBStCdhc3A2fKryVYiyYH13x1x26XENLsKXjNn8yrCUR0oh+aMqk3mi12Ft
-f1VfjQNjMpElEx1yq+JXGTKAM6zh/eqyJTuU0yOBAYad7ZcTHT2OIynjQINbD9y/
-iYbsPjnSpd6mETGVim+95TqYFogVOA==
-=7PdO
------END PGP SIGNATURE-----
-
---Sig_/3no60Zq5C=H6WqeVvlYJFXM--
+							Thanx, Paul
