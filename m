@@ -1,86 +1,83 @@
-Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.194.16])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CCF6AA6
-	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 22:47:33 +0000 (UTC)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-	by gateway30.websitewelcome.com (Postfix) with ESMTP id D0584845C
-	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 17:26:17 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with SMTP
-	id 1xwPoCqtt7B0O1xwPonk9f; Thu, 16 Jun 2022 17:26:17 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=h5zz4gXmeyKQq141JoXnEndda8Y+1z5nbmNrA8Hh7GI=; b=ZddVWYugTRVwUQ9+xBSOwoZ69g
-	hAnA0CIMArl+brdZzHTgR+mPlYeHw1d0B5EPigNcn+dKjHAtRTLm0jlubb5ZgclL3NcST+CaIYOWr
-	WALaCQJOlvqogBmS8BKirX1Fp26FMgm3zAwdfT9+FvQeid7zjgA8h3AhSPXI8wKmTrgbubh+HwQkL
-	WXAZblsgYOmmL/5vrFocIKlW7Q3wk9+J1pzO4Jx/5pGCiJ1znVKhOjEzvGSH8J+Hr9x98IifLjIO+
-	BdhaEx5H9GjmhnXzpvSyUI4V+x6Es9Ijs0m/KwG01A958+VsnmKwsJTFrcpOhwvy3vHZqG1slFvI2
-	1V0sqDhw==;
-Received: from 193.254.29.93.rev.sfr.net ([93.29.254.193]:36014 helo=[192.168.0.101])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.95)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1o1xwN-002J6q-Me;
-	Thu, 16 Jun 2022 17:26:16 -0500
-Message-ID: <1a60b867-1551-5301-f6f4-19bd93420d36@embeddedor.com>
-Date: Fri, 17 Jun 2022 00:26:05 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7916AA6
+	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 22:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655420300; x=1686956300;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=gZDIln4R4v1GecgQMVWbV44VyldG07MeOv876GHmWyw=;
+  b=k0m0JAvTnvd5c4j1lHQTZkDHzB2aRjqa/6eptSWplB4oHQ2kfbRzuY2R
+   aMNEexTXXeYMko306U6SCCvb0Or9F5inQz9ktspYo51EcmxLJoYJWQbuQ
+   WzSLM+edq2bzkd6NtEXtmjDbI4KIBvsy65TdwySV926xCdncArdbDsAwU
+   Jz0Dpnm7txeRNY7IBjUtWyqCh2HSKk5zLPYDeuGYD57TR0t6ez3R59VdA
+   uqv52s2imj5Nvay9P48wXuw7mvBsDdbCAWxiVM6j3FHHOTaV40SGc1Y0B
+   C0P2IH1MA6xwhDF44WOngZrABNYE2s+x5MLb5TiRPF4qFr0agRfgEVYDQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262389619"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="262389619"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 15:58:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="641760557"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Jun 2022 15:58:18 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o1yRN-000Oqf-Lv;
+	Thu, 16 Jun 2022 22:58:17 +0000
+Date: Fri, 17 Jun 2022 06:58:02 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:linux-5.18.y 1350/1352] vmlinux.o: warning:
+ objtool: vmx_vcpu_enter_exit()+0x17a: call to do_trace_write_msr() leaves
+ .noinstr.text section
+Message-ID: <202206170628.KvJyzdfX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Jiri Pirko <jiri@nvidia.com>, Vladimir Oltean <olteanv@gmail.com>,
- Simon Horman <simon.horman@corigine.com>, netdev@vger.kernel.org,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20220616052312.292861-1-keescook@chromium.org>
- <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 93.29.254.193
-X-Source-L: No
-X-Exim-ID: 1o1xwN-002J6q-Me
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 193.254.29.93.rev.sfr.net ([192.168.0.101]) [93.29.254.193]:36014
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Borislav Petkov <bp@suse.de>
+CC: Thomas Gleixner <tglx@linutronix.de>
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+head:   71563d69a8ec34d41857aca6040e90d54f566ee4
+commit: 0b4bd3f44c674ba215f8f7918e4145d045bf5396 [1350/1352] KVM: x86/speculation: Disable Fill buffer clear within guests
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220617/202206170628.KvJyzdfX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0b4bd3f44c674ba215f8f7918e4145d045bf5396
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.18.y
+        git checkout 0b4bd3f44c674ba215f8f7918e4145d045bf5396
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On 6/16/22 19:19, Nathan Chancellor wrote:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+All warnings (new ones prefixed by >>):
 
-I think in this case the tag should be "Build-tested-by" instead.
+>> vmlinux.o: warning: objtool: vmx_vcpu_enter_exit()+0x17a: call to do_trace_write_msr() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_stack() leaves .noinstr.text section
 
-Thanks
---
-Gustavo
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
