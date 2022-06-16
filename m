@@ -1,42 +1,35 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E784A2F48
-	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 17:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655399590; x=1686935590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A+VKyUwo6r/29IE+tEGCUobPdPvJ+Sqrh0mVlDij3s4=;
-  b=RJ3r3/eD1NNsakJiAaX5kA/hWNcxcNk9f7t6m5sCeApGZCxgaScAvjGp
-   9pxATMpGOxX+dabTg28NnTc+xUTxb3FF0lswQQ5Vj2t+VXHmiQKCD/e0C
-   NM8G1Fhe6AVbOBOZBC7H8UXYobs8/VuQ9wSVAtgjXlCyKEWExa6Afj+Z4
-   ZNtllJ28dj4CNS2dY5aJG8ZajP5DJLgtjj5E0BBdswr07aVyvYawqtWn0
-   pmT9+Yzy+Njxt5qVVuRbTrkf0g7zcBWJKB+1sduoZlAYyALoXT43xUCqv
-   MQgAFi6U9SxzoXfpRbZsDqfS8IYLgm9nUvs3XVN8yfVtxc/+HJlWD2H3K
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259153343"
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="259153343"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 10:13:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="653246345"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jun 2022 10:13:09 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o1t3M-000ObN-Cf;
-	Thu, 16 Jun 2022 17:13:08 +0000
-Date: Fri, 17 Jun 2022 01:12:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eli Cohen <elic@nvidia.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC 1/3] vdpa/mlx5: Implement susupend virtqueue callback
-Message-ID: <202206170119.3hXbEXxz-lkp@intel.com>
-References: <20220616132725.50599-2-elic@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB7C2F48
+	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 17:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800D0C34114;
+	Thu, 16 Jun 2022 17:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655399971;
+	bh=dVuVhPmEkC9puN9Rze1DZ34ZIAYl9igVaP1wUSkTnZw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UvRzKL82Afj1pQ+Lgxowkk0MRYXG+iBGz/N9ndvOmSmZRkK32/FmzJOgPfyetmDWq
+	 o/xgytYUn/+3nkWCrb5RhgDP8qZr6a9USvDoD701VgSJtNg4ldTJR6vGCfyHa7+oFf
+	 Dim3Ym/VX/LHRt7gZrV52SmaJ5ZmqLU4/vNyhqqypQDHL9bU9vTRygB5L/Pmm8MsN6
+	 uemMupVS1yMnFkCyTNCucZt6RZawSdxdxfpF4pJGQr8kGiMcM8046i++o4LV7ohc7F
+	 YDUXJhyEyTLAaNyN1GKBvNhg15bqcX4/P4heFUSSYHuiI4Ee4dFSYcfykA+r/5fTsd
+	 zat27tGVbKOgQ==
+Date: Thu, 16 Jun 2022 10:19:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+	Jiri Pirko <jiri@nvidia.com>, Vladimir Oltean <olteanv@gmail.com>,
+	Simon Horman <simon.horman@corigine.com>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] hinic: Replace memcpy() with direct assignment
+Message-ID: <YqtmIIAOH7uRNAZ5@dev-arch.thelio-3990X>
+References: <20220616052312.292861-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,136 +38,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616132725.50599-2-elic@nvidia.com>
+In-Reply-To: <20220616052312.292861-1-keescook@chromium.org>
 
-Hi Eli,
+On Wed, Jun 15, 2022 at 10:23:12PM -0700, Kees Cook wrote:
+> Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+> here for calculating the size of the destination buffer (0x10 instead of
+> 0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+> the source and dest being struct fw_section_info_st, so the memcpy should
+> be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+> responsibility to figure out.
+> 
+> Avoid the whole thing and just do a direct assignment. This results in
+> no change to the executable code.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Jiri Pirko <jiri@nvidia.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Simon Horman <simon.horman@corigine.com>
+> Cc: netdev@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1592
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eli-Cohen/Support-live-migration-with-mlx5_vdpa/20220616-213010
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 30306f6194cadcc29c77f6ddcd416a75bf5c0232
-config: riscv-randconfig-r042-20220616 (https://download.01.org/0day-ci/archive/20220617/202206170119.3hXbEXxz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3c2592433495f8e099adf6734416c288e847c8f8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eli-Cohen/Support-live-migration-with-mlx5_vdpa/20220616-213010
-        git checkout 3c2592433495f8e099adf6734416c288e847c8f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/vdpa/mlx5/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/vdpa/mlx5/net/mlx5_vnet.c:5:
-   In file included from include/linux/vdpa.h:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/vdpa/mlx5/net/mlx5_vnet.c:5:
-   In file included from include/linux/vdpa.h:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/vdpa/mlx5/net/mlx5_vnet.c:5:
-   In file included from include/linux/vdpa.h:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/vdpa/mlx5/net/mlx5_vnet.c:2819:3: error: field designator 'suspend' does not refer to any field in type 'const struct vdpa_config_ops'
-           .suspend = mlx5_vdpa_suspend,
-            ^
-   7 warnings and 1 error generated.
-
-
-vim +2819 drivers/vdpa/mlx5/net/mlx5_vnet.c
-
-  2788	
-  2789	static const struct vdpa_config_ops mlx5_vdpa_ops = {
-  2790		.set_vq_address = mlx5_vdpa_set_vq_address,
-  2791		.set_vq_num = mlx5_vdpa_set_vq_num,
-  2792		.kick_vq = mlx5_vdpa_kick_vq,
-  2793		.set_vq_cb = mlx5_vdpa_set_vq_cb,
-  2794		.set_vq_ready = mlx5_vdpa_set_vq_ready,
-  2795		.get_vq_ready = mlx5_vdpa_get_vq_ready,
-  2796		.set_vq_state = mlx5_vdpa_set_vq_state,
-  2797		.get_vq_state = mlx5_vdpa_get_vq_state,
-  2798		.get_vendor_vq_stats = mlx5_vdpa_get_vendor_vq_stats,
-  2799		.get_vq_notification = mlx5_get_vq_notification,
-  2800		.get_vq_irq = mlx5_get_vq_irq,
-  2801		.get_vq_align = mlx5_vdpa_get_vq_align,
-  2802		.get_vq_group = mlx5_vdpa_get_vq_group,
-  2803		.get_device_features = mlx5_vdpa_get_device_features,
-  2804		.set_driver_features = mlx5_vdpa_set_driver_features,
-  2805		.get_driver_features = mlx5_vdpa_get_driver_features,
-  2806		.set_config_cb = mlx5_vdpa_set_config_cb,
-  2807		.get_vq_num_max = mlx5_vdpa_get_vq_num_max,
-  2808		.get_device_id = mlx5_vdpa_get_device_id,
-  2809		.get_vendor_id = mlx5_vdpa_get_vendor_id,
-  2810		.get_status = mlx5_vdpa_get_status,
-  2811		.set_status = mlx5_vdpa_set_status,
-  2812		.reset = mlx5_vdpa_reset,
-  2813		.get_config_size = mlx5_vdpa_get_config_size,
-  2814		.get_config = mlx5_vdpa_get_config,
-  2815		.set_config = mlx5_vdpa_set_config,
-  2816		.get_generation = mlx5_vdpa_get_generation,
-  2817		.set_map = mlx5_vdpa_set_map,
-  2818		.free = mlx5_vdpa_free,
-> 2819		.suspend = mlx5_vdpa_suspend,
-  2820	};
-  2821	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/net/ethernet/huawei/hinic/hinic_devlink.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> index 60ae8bfc5f69..1749d26f4bef 100644
+> --- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> +++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+> @@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
+>  
+>  	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
+>  		len += fw_image->fw_section_info[i].fw_section_len;
+> -		memcpy(&host_image->image_section_info[i],
+> -		       &fw_image->fw_section_info[i],
+> -		       sizeof(struct fw_section_info_st));
+> +		host_image->image_section_info[i] = fw_image->fw_section_info[i];
+>  	}
+>  
+>  	if (len != fw_image->fw_len ||
+> -- 
+> 2.32.0
+> 
