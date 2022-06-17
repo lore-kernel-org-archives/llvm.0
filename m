@@ -1,48 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829846AA6
-	for <llvm@lists.linux.dev>; Thu, 16 Jun 2022 23:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FF17F
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 02:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655421564; x=1686957564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i6pKhvbadUKiA+uhy9tcEuNOI31mATOPj0ZcUE4rcAU=;
-  b=mIiKmSZZOevpDSfCOIHLo7hBmN1J+y+xbmp7+fGbW4nVJDR8B+VvpP7P
-   Zsl/O4CwYgIvYKs58M70/phItksZeYym+iwfJLlA4L5R0d85XUUdfz2Ei
-   nE0zIVOnD8+iH/BfdDttjMn/rosbC8pcB35QaZBva/yvFgSog+JcNJ4sh
-   dBdhMk2FTWuU2YJhAD659cccSj8ZJ50zLP8eZxDsk8q/C4f4tXY7JffH3
-   v7ykVrcL5guLOppEvNVFDhmhNNhKdg8qUlhgD7Mv3GWVZf26+JxeaJ5OW
-   5QAyaVAC/Dz3LDwazl2qi8mjU74wSot5hsFLT72c5kmyok07BQZ45xQZz
+  t=1655431286; x=1686967286;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RXAIbDFor1MhxYtU0bhLLC6fEyGVFdj9A9S8d/BDJyQ=;
+  b=aqbARdsnWdBckzaZMl3w9jh3K0nABypc+E8jkl293JtzEwn2AMNC8LnU
+   U4eEshFKHjG0JsdrPOFEsKI04MQTeOxLQGEXzL2/mFkGTFpmc7qAHb5gS
+   HGhGcnVuPZY30fStPgx8xSFcYj/IvWeDRMDxVg6LW/hNcox06LynxIfgz
+   H0nlrwoeJf7tXAlBtfObPotsHT9SQXLv/j+GaMYwQUU7BTcOxw9lNBihl
+   hXAUaEvwNMxotRO+/jJ+Qb2Ef+6wl46qV6gYDaxYAnRAoTLQeIVdFYJlT
+   lY+7FLxgCfxtm2sRMmikkIK4a/jc+WmKX0hb1gQUJeDWj+dj9q1XblJm/
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279432797"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280429919"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="279432797"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 16:19:23 -0700
+   d="scan'208";a="280429919"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 19:01:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="613340184"
+   d="scan'208";a="583864625"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2022 16:19:19 -0700
+  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2022 19:01:24 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o1ylj-000Ort-05;
-	Thu, 16 Jun 2022 23:19:19 +0000
-Date: Fri, 17 Jun 2022 07:18:22 +0800
+	id 1o21IZ-000Oyj-EN;
+	Fri, 17 Jun 2022 02:01:23 +0000
+Date: Fri, 17 Jun 2022 10:00:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, festevam@gmail.com,
-	linux-imx@nxp.com, laurent.pinchart@ideasonboard.com,
-	paul.elder@ideasonboard.com, marex@denx.de, aford173@gmail.com,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 4/8] soc: imx: add icc paths for i.MX8MP media blk ctrl
-Message-ID: <202206170720.eTetqCJ6-lkp@intel.com>
-References: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
+To: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 760/1181]
+ drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c:1091:6: warning: format
+ specifies type 'unsigned long long' but the argument has type 'dma_addr_t'
+ (aka 'unsigned int')
+Message-ID: <202206170917.IoB7tiDo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,195 +48,184 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616073953.2204978-5-peng.fan@oss.nxp.com>
 
-Hi "Peng,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on shawnguo/for-next linus/master v5.19-rc2 next-20220616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-randconfig-r045-20220616 (https://download.01.org/0day-ci/archive/20220617/202206170720.eTetqCJ6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   59523b5c4aca0174f1f8cba2a07d3b3328b7c80e
+commit: ae063a9e0b59f584573826b8bab401039d7b74d3 [760/1181] staging: xlnx_tsmux: Initial version of xlnx mpeg2tsmux driver
+config: hexagon-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220617/202206170917.IoB7tiDo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/118c632adf7409c5a51e85fa0c61286665116b10
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/Add-interconnect-for-i-MX8MP-blk-ctrl/20220616-153932
-        git checkout 118c632adf7409c5a51e85fa0c61286665116b10
+        # https://github.com/Xilinx/linux-xlnx/commit/ae063a9e0b59f584573826b8bab401039d7b74d3
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout ae063a9e0b59f584573826b8bab401039d7b74d3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/xlnx_tsmux/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/soc/imx/imx8m-blk-ctrl.c:247:9: error: call to undeclared function 'devm_of_icc_bulk_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
-                         ^
-   1 error generated.
+>> drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c:1091:6: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+                                           mpgmuxts->src_dmabufintl[i].dmabuf_addr,
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c:1118:6: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+                                           mpgmuxts->dst_dmabufintl[i].dmabuf_addr,
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/devm_of_icc_bulk_get +247 drivers/soc/imx/imx8m-blk-ctrl.c
+vim +1091 drivers/staging/xlnx_tsmux/xlnx_mpg2tsmux.c
 
-   178	
-   179	static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
-   180	{
-   181		const struct imx8m_blk_ctrl_data *bc_data;
-   182		struct device *dev = &pdev->dev;
-   183		struct imx8m_blk_ctrl *bc;
-   184		void __iomem *base;
-   185		int i, ret;
-   186	
-   187		struct regmap_config regmap_config = {
-   188			.reg_bits	= 32,
-   189			.val_bits	= 32,
-   190			.reg_stride	= 4,
-   191		};
-   192	
-   193		bc = devm_kzalloc(dev, sizeof(*bc), GFP_KERNEL);
-   194		if (!bc)
-   195			return -ENOMEM;
-   196	
-   197		bc->dev = dev;
-   198	
-   199		bc_data = of_device_get_match_data(dev);
-   200	
-   201		base = devm_platform_ioremap_resource(pdev, 0);
-   202		if (IS_ERR(base))
-   203			return PTR_ERR(base);
-   204	
-   205		regmap_config.max_register = bc_data->max_reg;
-   206		bc->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
-   207		if (IS_ERR(bc->regmap))
-   208			return dev_err_probe(dev, PTR_ERR(bc->regmap),
-   209					     "failed to init regmap\n");
-   210	
-   211		bc->domains = devm_kcalloc(dev, bc_data->num_domains,
-   212					   sizeof(struct imx8m_blk_ctrl_domain),
-   213					   GFP_KERNEL);
-   214		if (!bc->domains)
-   215			return -ENOMEM;
-   216	
-   217		bc->onecell_data.num_domains = bc_data->num_domains;
-   218		bc->onecell_data.xlate = imx8m_blk_ctrl_xlate;
-   219		bc->onecell_data.domains =
-   220			devm_kcalloc(dev, bc_data->num_domains,
-   221				     sizeof(struct generic_pm_domain *), GFP_KERNEL);
-   222		if (!bc->onecell_data.domains)
-   223			return -ENOMEM;
-   224	
-   225		bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
-   226		if (IS_ERR(bc->bus_power_dev))
-   227			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-   228					     "failed to attach power domain\n");
-   229	
-   230		for (i = 0; i < bc_data->num_domains; i++) {
-   231			const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
-   232			struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
-   233			int j;
-   234	
-   235			domain->data = data;
-   236	
-   237			for (j = 0; j < data->num_clks; j++)
-   238				domain->clks[j].id = data->clk_names[j];
-   239	
-   240			for (j = 0; j < data->num_paths; j++) {
-   241				domain->paths[j].name = data->path_names[j];
-   242				/* Fake value for now, just let ICC could configure NoC mode/priority */
-   243				domain->paths[j].avg_bw = 1;
-   244				domain->paths[j].peak_bw = 1;
-   245			}
-   246	
- > 247			ret = devm_of_icc_bulk_get(dev, data->num_paths, domain->paths);
-   248			if (ret) {
-   249				dev_err_probe(dev, ret, "failed to get noc entries\n");
-   250				goto cleanup_pds;
-   251			}
-   252	
-   253			ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
-   254			if (ret) {
-   255				dev_err_probe(dev, ret, "failed to get clock\n");
-   256				goto cleanup_pds;
-   257			}
-   258	
-   259			domain->power_dev =
-   260				dev_pm_domain_attach_by_name(dev, data->gpc_name);
-   261			if (IS_ERR(domain->power_dev)) {
-   262				dev_err_probe(dev, PTR_ERR(domain->power_dev),
-   263					      "failed to attach power domain\n");
-   264				ret = PTR_ERR(domain->power_dev);
-   265				goto cleanup_pds;
-   266			}
-   267			dev_set_name(domain->power_dev, "%s", data->name);
-   268	
-   269			domain->genpd.name = data->name;
-   270			domain->genpd.power_on = imx8m_blk_ctrl_power_on;
-   271			domain->genpd.power_off = imx8m_blk_ctrl_power_off;
-   272			domain->bc = bc;
-   273	
-   274			ret = pm_genpd_init(&domain->genpd, NULL, true);
-   275			if (ret) {
-   276				dev_err_probe(dev, ret, "failed to init power domain\n");
-   277				dev_pm_domain_detach(domain->power_dev, true);
-   278				goto cleanup_pds;
-   279			}
-   280	
-   281			/*
-   282			 * We use runtime PM to trigger power on/off of the upstream GPC
-   283			 * domain, as a strict hierarchical parent/child power domain
-   284			 * setup doesn't allow us to meet the sequencing requirements.
-   285			 * This means we have nested locking of genpd locks, without the
-   286			 * nesting being visible at the genpd level, so we need a
-   287			 * separate lock class to make lockdep aware of the fact that
-   288			 * this are separate domain locks that can be nested without a
-   289			 * self-deadlock.
-   290			 */
-   291			lockdep_set_class(&domain->genpd.mlock,
-   292					  &blk_ctrl_genpd_lock_class);
-   293	
-   294			bc->onecell_data.domains[i] = &domain->genpd;
-   295		}
-   296	
-   297		ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
-   298		if (ret) {
-   299			dev_err_probe(dev, ret, "failed to add power domain provider\n");
-   300			goto cleanup_pds;
-   301		}
-   302	
-   303		bc->power_nb.notifier_call = bc_data->power_notifier_fn;
-   304		ret = dev_pm_genpd_add_notifier(bc->bus_power_dev, &bc->power_nb);
-   305		if (ret) {
-   306			dev_err_probe(dev, ret, "failed to add power notifier\n");
-   307			goto cleanup_provider;
-   308		}
-   309	
-   310		dev_set_drvdata(dev, bc);
-   311	
-   312		return 0;
-   313	
-   314	cleanup_provider:
-   315		of_genpd_del_provider(dev->of_node);
-   316	cleanup_pds:
-   317		for (i--; i >= 0; i--) {
-   318			pm_genpd_remove(&bc->domains[i].genpd);
-   319			dev_pm_domain_detach(bc->domains[i].power_dev, true);
-   320		}
-   321	
-   322		dev_pm_domain_detach(bc->bus_power_dev, true);
-   323	
-   324		return ret;
-   325	}
-   326	
+  1016	
+  1017	static int xlnx_tsmux_ioctl_verify_dmabuf(struct xlnx_tsmux *mpgmuxts,
+  1018						  void __user *arg)
+  1019	{
+  1020		struct dma_buf *dbuf;
+  1021		struct dma_buf_attachment *attach;
+  1022		struct sg_table *sgt;
+  1023		struct xlnx_tsmux_dmabuf_info *dbuf_info;
+  1024		s32 i;
+  1025		int ret = 0;
+  1026	
+  1027		dbuf_info = kzalloc(sizeof(*dbuf_info), GFP_KERNEL);
+  1028		if (!dbuf_info)
+  1029			return -ENOMEM;
+  1030	
+  1031		ret = copy_from_user(dbuf_info, arg,
+  1032				     sizeof(struct xlnx_tsmux_dmabuf_info));
+  1033		if (ret) {
+  1034			dev_err(mpgmuxts->dev, "Failed to copy from user");
+  1035			goto dmak_free;
+  1036		}
+  1037		if (dbuf_info->dir != DMA_TO_MPG2MUX &&
+  1038		    dbuf_info->dir != DMA_FROM_MPG2MUX) {
+  1039			dev_err(mpgmuxts->dev, "Incorrect DMABUF direction %d",
+  1040				dbuf_info->dir);
+  1041			ret = -EINVAL;
+  1042			goto dmak_free;
+  1043		}
+  1044		dbuf = dma_buf_get(dbuf_info->buf_fd);
+  1045		if (IS_ERR(dbuf)) {
+  1046			dev_err(mpgmuxts->dev, "dma_buf_get fail fd %d direction %d",
+  1047				dbuf_info->buf_fd, dbuf_info->dir);
+  1048			ret = PTR_ERR(dbuf);
+  1049			goto dmak_free;
+  1050		}
+  1051		attach = dma_buf_attach(dbuf, mpgmuxts->dev);
+  1052		if (IS_ERR(attach)) {
+  1053			dev_err(mpgmuxts->dev, "dma_buf_attach fail fd %d dir %d",
+  1054				dbuf_info->buf_fd, dbuf_info->dir);
+  1055			ret = PTR_ERR(attach);
+  1056			goto err_dmabuf_put;
+  1057		}
+  1058		sgt = dma_buf_map_attachment(attach,
+  1059					     (enum dma_data_direction)(dbuf_info->dir));
+  1060		if (IS_ERR(sgt)) {
+  1061			dev_err(mpgmuxts->dev, "dma_buf_map_attach fail fd %d dir %d",
+  1062				dbuf_info->buf_fd, dbuf_info->dir);
+  1063			ret = PTR_ERR(sgt);
+  1064			goto err_dmabuf_detach;
+  1065		}
+  1066	
+  1067		if (sgt->nents > 1) {
+  1068			ret = -EIO;
+  1069			dev_dbg(mpgmuxts->dev, "Not contig nents %d fd %d direction %d",
+  1070				sgt->nents, dbuf_info->buf_fd, dbuf_info->dir);
+  1071			goto err_dmabuf_unmap_attachment;
+  1072		}
+  1073		dev_dbg(mpgmuxts->dev, "dmabuf %s is physically contiguous",
+  1074			(dbuf_info->dir ==
+  1075			 DMA_TO_MPG2MUX ? "Source" : "Destination"));
+  1076	
+  1077		if (dbuf_info->dir == DMA_TO_MPG2MUX) {
+  1078			for (i = 0; i < XTSMUX_MAXIN_STRM; i++) {
+  1079				if (!mpgmuxts->src_dmabufintl[i].buf_id) {
+  1080					mpgmuxts->src_dmabufintl[i].dbuf = dbuf;
+  1081					mpgmuxts->src_dmabufintl[i].attach = attach;
+  1082					mpgmuxts->src_dmabufintl[i].sgt = sgt;
+  1083					mpgmuxts->src_dmabufintl[i].dmabuf_addr =
+  1084							sg_dma_address(sgt->sgl);
+  1085					mpgmuxts->src_dmabufintl[i].dmabuf_fd =
+  1086								dbuf_info->buf_fd;
+  1087					mpgmuxts->src_dmabufintl[i].buf_id = i + 1;
+  1088					dev_dbg(mpgmuxts->dev,
+  1089						"%s: phy-addr=0x%llx for src dmabuf=%d",
+  1090						__func__,
+> 1091						mpgmuxts->src_dmabufintl[i].dmabuf_addr,
+  1092						mpgmuxts->src_dmabufintl[i].dmabuf_fd);
+  1093					break;
+  1094				}
+  1095			}
+  1096			/* External src streams more than XTSMUX_MAXIN_STRM
+  1097			 * can not be handled
+  1098			 */
+  1099			if (i == XTSMUX_MAXIN_STRM) {
+  1100				ret = -EIO;
+  1101				dev_dbg(mpgmuxts->dev, "src DMA bufs more than %d",
+  1102					XTSMUX_MAXIN_STRM);
+  1103				goto err_dmabuf_unmap_attachment;
+  1104			}
+  1105		} else {
+  1106			for (i = 0; i < XTSMUX_MAXOUT_STRM; i++) {
+  1107				if (!mpgmuxts->dst_dmabufintl[i].buf_id) {
+  1108					mpgmuxts->dst_dmabufintl[i].dbuf = dbuf;
+  1109					mpgmuxts->dst_dmabufintl[i].attach = attach;
+  1110					mpgmuxts->dst_dmabufintl[i].sgt = sgt;
+  1111					mpgmuxts->dst_dmabufintl[i].dmabuf_addr =
+  1112							sg_dma_address(sgt->sgl);
+  1113					mpgmuxts->dst_dmabufintl[i].dmabuf_fd =
+  1114							dbuf_info->buf_fd;
+  1115					mpgmuxts->dst_dmabufintl[i].buf_id = i + 1;
+  1116					dev_dbg(mpgmuxts->dev,
+  1117						"phy-addr=0x%llx for src dmabuf=%d",
+  1118						mpgmuxts->dst_dmabufintl[i].dmabuf_addr,
+  1119						mpgmuxts->dst_dmabufintl[i].dmabuf_fd);
+  1120					break;
+  1121				}
+  1122			}
+  1123			/* External dst streams more than XTSMUX_MAXOUT_STRM
+  1124			 * can not be handled
+  1125			 */
+  1126			if (i == XTSMUX_MAXOUT_STRM) {
+  1127				ret = -EIO;
+  1128				dev_dbg(mpgmuxts->dev, "dst DMA bufs more than %d",
+  1129					XTSMUX_MAXOUT_STRM);
+  1130				goto err_dmabuf_unmap_attachment;
+  1131			}
+  1132		}
+  1133	
+  1134		return 0;
+  1135	
+  1136	err_dmabuf_unmap_attachment:
+  1137		dma_buf_unmap_attachment(attach, sgt,
+  1138					 (enum dma_data_direction)dbuf_info->dir);
+  1139	err_dmabuf_detach:
+  1140		dma_buf_detach(dbuf, attach);
+  1141	err_dmabuf_put:
+  1142		dma_buf_put(dbuf);
+  1143	dmak_free:
+  1144		kfree(dbuf_info);
+  1145	
+  1146		return ret;
+  1147	}
+  1148	
 
 -- 
 0-DAY CI Kernel Test Service
