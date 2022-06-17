@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026C517E6
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 16:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E823201
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 16:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655484007; x=1687020007;
+  t=1655484075; x=1687020075;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=guZ5f+07/dbNfP6Q/11h2HZtzwQUR44yHoBg7H+FvUM=;
-  b=eSxLG/ulRFg9kXuut3Xe/pdq8yceRc7ThhhMKBYL7HHaUnyHHy6WtHFH
-   Jb5n8aRRMxDfpaLUu+6ZZhpYj4jiYrFjje6Ifx1+5RpmiVfuWT8rB/WK7
-   QU+DnJhDoRD68QeTkmJsBYuyGx6StPTTBqBHZNB/SmyVcNPdolvHZfvsc
-   z4Zwk8x/726//Qz3s7WBpji/NlTuQt4YFHc8bklra1a8MWpd5UC7h5by4
-   3yXZCXDkUcQLOXu3lasSM3d7nF7ttkc6TUA65IKDrP7+3wX8BVgHw9GvZ
-   JrXWo3ymgcdxG0LLCDlX+JpTU6hApp5JdlRuhYD6MZlgs2FmZfV20P/1z
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277062081"
+  bh=668uDU/sASSfAktCzQOI/YXPVgTX1rB+v9u1BzSgtFc=;
+  b=b5sBYA6YVLeVVZud9eiuaEPM4yIKTFZM4EOn9D60Dz3w0OJS1M1dyd4L
+   pFsAZ9ixmyfUOcY98kgpeXzfcPQZhokTbLUmSXV72W86N8AM/bs8ddBEC
+   BSsnfOP9H71Hsal0xpE0n4lwzPQGznThEhDx4Lyk8R+ix891WGedoAj7x
+   RsNbKTjMvBEPY30W/GL7Q2n7I6/HI/gr2sS9K3Iir8s2igDfruwlAUmkG
+   PvYeNYGG9vo1ccLQqMv3X0sdwxsotju4Dlv2B2jjdh8i/hJBL8dGCEOYW
+   nIH4h/Ot2znmVS46Z+w5rWEh/sL/S8yPfrEsGPQaKew+5qGd7AQeiGeXn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278283787"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="277062081"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:26:51 -0700
+   d="scan'208";a="278283787"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:26:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="578262525"
+   d="scan'208";a="832077675"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 17 Jun 2022 09:26:49 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 17 Jun 2022 09:26:49 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2Eo4-000PbW-VE;
+	id 1o2Eo4-000PbN-Ig;
 	Fri, 17 Jun 2022 16:26:48 +0000
-Date: Sat, 18 Jun 2022 00:26:02 +0800
+Date: Sat, 18 Jun 2022 00:26:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To: Neil Armstrong <narmstrong@baylibre.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 470/1181]
- drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for
- function 'jesd204_phy_set_speed'
-Message-ID: <202206180042.mZv4R82R-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.20/g12-dsi-wip 9/12]
+ drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared
+ function 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202206180004.GHjxyBau-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,53 +48,76 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Shubhrajyoti,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
-head:   59523b5c4aca0174f1f8cba2a07d3b3328b7c80e
-commit: 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486 [470/1181] misc: jesd204b: Add driver for Xilinx jesd204b
-config: hexagon-randconfig-r022-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180042.mZv4R82R-lkp@intel.com/config)
+tree:   https://github.com/superna9999/linux amlogic/v5.20/g12-dsi-wip
+head:   0e725ea0a5ab9f70fc54c2e76475b8d594b90c4e
+commit: 927953782b0c6c12a73654c526a12678e348f817 [9/12] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
+config: arm-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180004.GHjxyBau-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
-        git checkout 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/superna9999/linux/commit/927953782b0c6c12a73654c526a12678e348f817
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.20/g12-dsi-wip
+        git checkout 927953782b0c6c12a73654c526a12678e348f817
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/misc/jesd204b/jesd_phy.c:97:6: warning: variable 'pll' set but not used [-Wunused-but-set-variable]
-           int pll = st->pll;
-               ^
->> drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for function 'jesd204_phy_set_speed' [-Wmissing-prototypes]
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-        ^
-   drivers/misc/jesd204b/jesd_phy.c:172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-   ^
-   static 
-   2 warnings generated.
+>> drivers/gpu/drm/meson/meson_venc.c:1595:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                          FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+                          ^
+   1 error generated.
 
 
-vim +/jesd204_phy_set_speed +172 drivers/misc/jesd204b/jesd_phy.c
+vim +/FIELD_PREP +1595 drivers/gpu/drm/meson/meson_venc.c
 
-   171	
- > 172	void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
-   173	{
-   174		/* make sure we have the correct PLL's selected. */
-   175		configure_channel_drp(st, band);
-   176	}
-   177	
+  1579	
+  1580	static void meson_encl_set_gamma_table(struct meson_drm *priv, u16 *data,
+  1581					       u32 rgb_mask)
+  1582	{
+  1583		int i, ret;
+  1584		u32 reg;
+  1585	
+  1586		writel_bits_relaxed(L_GAMMA_CNTL_PORT_EN, 0,
+  1587				    priv->io_base + _REG(L_GAMMA_CNTL_PORT));
+  1588	
+  1589		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1590						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1591		if (ret)
+  1592			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1593	
+  1594		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+> 1595			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0),
+  1596			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1597	
+  1598		for (i = 0; i < 256; i++) {
+  1599			ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1600							 reg, reg & L_GAMMA_CNTL_PORT_WR_RDY,
+  1601							 10, 10000);
+  1602			if (ret)
+  1603				pr_warn_once("%s: GAMMA WR_RDY timeout\n", __func__);
+  1604	
+  1605			writel_relaxed(data[i], priv->io_base + _REG(L_GAMMA_DATA_PORT));
+  1606		}
+  1607	
+  1608		ret = readl_relaxed_poll_timeout(priv->io_base + _REG(L_GAMMA_CNTL_PORT),
+  1609						 reg, reg & L_GAMMA_CNTL_PORT_ADR_RDY, 10, 10000);
+  1610		if (ret)
+  1611			pr_warn("%s: GAMMA ADR_RDY timeout\n", __func__);
+  1612	
+  1613		writel_relaxed(L_GAMMA_ADDR_PORT_AUTO_INC | rgb_mask |
+  1614			       FIELD_PREP(L_GAMMA_ADDR_PORT_ADDR, 0x23),
+  1615			       priv->io_base + _REG(L_GAMMA_ADDR_PORT));
+  1616	}
+  1617	
 
 -- 
 0-DAY CI Kernel Test Service
