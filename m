@@ -1,120 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBB533C7;
-	Fri, 17 Jun 2022 18:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B7EC3411B;
-	Fri, 17 Jun 2022 18:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655489704;
-	bh=QUh4kC7NXGm1YEXl3pKZXaJzSvNx6+iaW+R315T3U6U=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QgZ5tfMIqGFau4nNzCvsqcbXS4Qeth6Xu/MxBTR34OtX0oITanNZUiKgHXIvqx77P
-	 fQaFNIBsEdeCvzAXC02upYo+kSY/xuyAXeW2lsdTS8hxoFrVM5GxndNEPAtX/aw4Tt
-	 KnwljZzltunV6Ny+OKAKWV53igJoiXdaEmN5F+Fh2LD0rvnJP+P2QzvicHBozyQIHE
-	 I8Q/FwQib+OCJ9AvjKhAjqJ/eddzlgUQgnlepxSJebMcbQrxBw9dbJsLKolSWFjXW+
-	 GDdSalz/bhjOvgYBYOjlPTMLsgXboLgljM3tRPgS0TmigorIOXePej19rLiLAyCkic
-	 T6Ob51Cv+YXQg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Daniel Kolesa <daniel@octaforge.org>,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when cross compiling with clang
-Date: Fri, 17 Jun 2022 11:08:46 -0700
-Message-Id: <20220617180845.2788442-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262A733C7
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 18:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655489875; x=1687025875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mdJexJRngEj3g12OLIu0Kv8q9SXJ16g4FSwegKZqiFM=;
+  b=Pi1B9hDSK3I1ZZ+MqwSb+qcFwVxH5vrCjFPoKxGbmwPmw7NIFl1fJ4y8
+   rN2reiwLXZz16Ma7Bs4ImfLLEpdqqFGyktzWLUdj5EXzVgzGLoNmsVCtP
+   HKRisEagpOLaedJeXJb6ORZlfOM07Tw+IVNQwhIWao2fcQxKA0ueyBL8c
+   Hpd/Kql/V7VVCk6bkh6CnPLU13jCj8ORMmjcP1gX4R/pQ2KjtsSE734ul
+   cM2sLuAok48I96pdb2TmKTq41oOr+MhEO+tl7vtISwc2yw9k+Mfn5s421
+   nCv6kpyvRR7bNxpHLByMKGIr0ne5wlFTbz8kkXm67APYjl1Nff9vCnOrz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279590310"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="279590310"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 11:17:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="713859647"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 11:17:51 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o2GXX-000Pf7-4C;
+	Fri, 17 Jun 2022 18:17:51 +0000
+Date: Sat, 18 Jun 2022 02:17:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
+	Amit Shah <aams@amazon.com>, Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH v1 net-next 3/6] af_unix: Define a per-netns hash table.
+Message-ID: <202206180244.SIWZxbAo-lkp@intel.com>
+References: <20220616234714.4291-4-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616234714.4291-4-kuniyu@amazon.com>
 
-Chimera Linux notes that CONFIG_CC_HAS_SANE_STACKPROTECTOR cannot be
-enabled when cross compiling an x86_64 kernel with clang, even though it
-does work when natively compiling.
+Hi Kuniyuki,
 
-When building on aarch64:
+Thank you for the patch! Perhaps something to improve:
 
-  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
+[auto build test WARNING on net-next/master]
 
-  $ grep STACKPROTECTOR .config
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/af_unix-Introduce-per-netns-socket-hash-table/20220617-075046
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 5dcb50c009c9f8ec1cfca6a81a05c0060a5bbf68
+config: hexagon-randconfig-r045-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180244.SIWZxbAo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d0da436e1c42550dbd332f48fd11992d5f4af487
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kuniyuki-Iwashima/af_unix-Introduce-per-netns-socket-hash-table/20220617-075046
+        git checkout d0da436e1c42550dbd332f48fd11992d5f4af487
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/unix/
 
-When building on x86_64:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
+All warnings (new ones prefixed by >>):
 
-  $ grep STACKPROTECTOR .config
-  CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
-  CONFIG_HAVE_STACKPROTECTOR=y
-  CONFIG_STACKPROTECTOR=y
-  CONFIG_STACKPROTECTOR_STRONG=y
+>> net/unix/af_unix.c:3590:1: warning: unused label 'err_sysctl' [-Wunused-label]
+   err_sysctl:
+   ^~~~~~~~~~~
+   1 warning generated.
 
-When clang is invoked without a '--target' flag, code is generated for
-the default target, which is usually the host (it is configurable via
-cmake). As a result, the has-stack-protector scripts will generate code
-for the default target but check for x86 specific segment registers,
-which cannot succeed if the default target is not x86.
 
-$(CLANG_FLAGS) contains an explicit '--target' flag so pass that
-variable along to the has-stack-protector scripts so that the stack
-protector can be enabled when cross compiling with clang. The 32-bit
-stack protector cannot currently be enabled with clang, as it does not
-support '-mstack-protector-guard-symbol', so this results in no
-functional change for ARCH=i386 when cross compiling.
+vim +/err_sysctl +3590 net/unix/af_unix.c
 
-Link: https://github.com/chimera-linux/cports/commit/0fb7e506d5f83fdf2104feb22cdac34934561226
-Link: https://github.com/llvm/llvm-project/issues/48553
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
+  3573	
+  3574		net->unx.hash = kmalloc(sizeof(struct unix_hashbucket) * UNIX_HASH_SIZE,
+  3575					GFP_KERNEL);
+  3576		if (!net->unx.hash)
+  3577			goto err_proc;
+  3578	
+  3579		for (i = 0; i < UNIX_HASH_SIZE; i++) {
+  3580			INIT_HLIST_HEAD(&net->unx.hash[i].head);
+  3581			spin_lock_init(&net->unx.hash[i].lock);
+  3582		}
+  3583	
+  3584		return 0;
+  3585	
+  3586	err_proc:
+  3587	#ifdef CONFIG_PROC_FS
+  3588		remove_proc_entry("unix", net->proc_net);
+  3589	#endif
+> 3590	err_sysctl:
+  3591		unix_sysctl_unregister(net);
+  3592	out:
+  3593		return -ENOMEM;
+  3594	}
+  3595	
 
-Fixes: 2a61f4747eea ("stack-protector: test compiler capability in Kconfig and drop AUTO mode")
-
-might be appropriate; I am conflicted on fixes tags for problems that
-that arise due to use cases that were not considered at the time of a
-change, as it feels wrong to blame the commit for not looking far enough
-into the future where it might be common for people to have workstations
-running another architecture other than x86_64.
-
-Chimera appears to use a 5.15 kernel so a
-
-Cc: stable@vger.kernel.org
-
-might be nice but some maintainers are picky about that so I leave it up
-to you all.
-
- arch/x86/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..076adde7ead9 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -391,8 +391,8 @@ config PGTABLE_LEVELS
- 
- config CC_HAS_SANE_STACKPROTECTOR
- 	bool
--	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC)) if 64BIT
--	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC))
-+	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC) $(CLANG_FLAGS)) if 64BIT
-+	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC) $(CLANG_FLAGS))
- 	help
- 	  We have to make sure stack protector is unconditionally disabled if
- 	  the compiler produces broken code or if it does not let us control
-
-base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
