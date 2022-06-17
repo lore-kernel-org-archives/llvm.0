@@ -1,42 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7B73201
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 17:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05B033C7
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 17:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655485727; x=1687021727;
+  t=1655486366; x=1687022366;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=r96wt8WoN/IVK+ZsxfQrb4xoxbtYs4h2oCFcW/FI1yQ=;
-  b=XuULs6q+X/JYTZjoIorB8SkrxiChKK9joafDJtPL63NgB8eXDYoX6P61
-   P7hHcGQnu0Q6NvzNYfsKoaKu+FWGr+khqbLrT+ROcJpci5UIjMXGBkTnS
-   ahUaU3/SADt5Zbzg7AVStHquV7cr1VVy4L5bjGdchRs7YzlOfjoVgiZ2P
-   48WGH+J/LDvBP4iJUMd+W0hjmX4cRM7EDDXxieAWRY/naBSqNr7JP7gdK
-   TZafkJjB83xRMCaDlgUR338UXh7cjyIqpDjd4cvYAaTR6EwVv+oj+v55e
-   BmY1snL3HSU+i8p8yglxvuXEeKC8AdxJubcB5rXKgp0UjdBmGM+KNm6X/
+  bh=nUf3VSmAhMT7KhA0SZgvMeAAppiMPu6TfIssmeBBkZ0=;
+  b=JGAuiFBFq3Aq/HnT6KwarYpD3wg8ZhawJvVVFRRbvZAoOAj3uiQU3AGt
+   R26/JUl/C3Uk2w1JgXrIMm5XRmZJbKEJDd1LKHrCThoFaAAmDvjhgmhp5
+   7EZOX0+gMNmMmZXljcxk3wy6Jg7KLroSJDP6pHxHBnEDkIYupuyMfVP7a
+   iiLW+Euixmq009fLGly/nw0E9qP2OInhz9bV62A03q+UjJQIF0o4my87x
+   abRVXRRw5n/ap6udGXW0nUbpAnsQf9+PI7Nzprk4a8qxDp2FThXT8E/58
+   pPzstHz8Elob9uLMBOCrwdy11ozUE6SIM1sLAt6OeAnV8bhtlwvW8L9a2
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259940986"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280246890"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="259940986"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:29:45 -0700
+   d="scan'208";a="280246890"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="536836599"
+   d="scan'208";a="713789777"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2022 07:29:44 -0700
+  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 07:40:44 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2Cyl-000PVW-Fn;
-	Fri, 17 Jun 2022 14:29:43 +0000
-Date: Fri, 17 Jun 2022 22:29:22 +0800
+	id 1o2D9P-000PVx-Mp;
+	Fri, 17 Jun 2022 14:40:43 +0000
+Date: Fri, 17 Jun 2022 22:40:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH 1/2] iosys-map: Add per-word read
-Message-ID: <202206172216.2dx0SuDN-lkp@intel.com>
-References: <20220617085204.1678035-1-lucas.demarchi@intel.com>
+To: Ricardo Ribalda <ribalda@chromium.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org, tfiga@chromium.org,
+	senozhatsky@chromium.org, yunkec@google.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-media@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: [PATCH v7 2/8] media: uvcvideo: Add support for per-device
+ control mapping overrides
+Message-ID: <202206172239.M4dQBUhz-lkp@intel.com>
+References: <20220617103645.71560-3-ribalda@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,274 +51,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617085204.1678035-1-lucas.demarchi@intel.com>
+In-Reply-To: <20220617103645.71560-3-ribalda@chromium.org>
 
-Hi Lucas,
+Hi Ricardo,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on drm-tip/drm-tip]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/iosys-map-Add-per-word-read/20220617-165219
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220617/202206172216.2dx0SuDN-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
+base:   git://linuxtv.org/media_tree.git master
+config: hexagon-randconfig-r045-20220617 (https://download.01.org/0day-ci/archive/20220617/202206172239.M4dQBUhz-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ba3376fb07b117d35e6c61c7522340a3a2842ef9
+        # https://github.com/intel-lab-lkp/linux/commit/10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lucas-De-Marchi/iosys-map-Add-per-word-read/20220617-165219
-        git checkout ba3376fb07b117d35e6c61c7522340a3a2842ef9
+        git fetch --no-tags linux-review Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
+        git checkout 10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/usb/uvc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1154:14: error: use of undeclared identifier 'vaddr_iomem__'
-                   *last_in = record_read(&rec_map, last_switch_in_stamp);
-                              ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1155:9: error: use of undeclared identifier 'vaddr_iomem__'
-                   *id = record_read(&rec_map, current_context_index);
-                         ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1156:12: error: use of undeclared identifier 'vaddr_iomem__'
-                   *total = record_read(&rec_map, total_runtime);
-                            ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1158:7: error: use of undeclared identifier 'vaddr_iomem__'
-                   if (record_read(&rec_map, last_switch_in_stamp) == *last_in &&
-                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1159:7: error: use of undeclared identifier 'vaddr_iomem__'
-                       record_read(&rec_map, current_context_index) == *id &&
-                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1160:7: error: use of undeclared identifier 'vaddr_iomem__'
-                       record_read(&rec_map, total_runtime) == *total)
-                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:1134:2: note: expanded from macro 'record_read'
-           iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
---
->> drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:165:6: error: use of undeclared identifier 'vaddr_iomem__'
-                      ads_blob_read(guc, policies.dpc_promote_time));
-                      ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
-           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:167:6: error: use of undeclared identifier 'vaddr_iomem__'
-                      ads_blob_read(guc, policies.max_num_work_items));
-                      ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
-           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:169:6: error: use of undeclared identifier 'vaddr_iomem__'
-                      ads_blob_read(guc, policies.global_flags));
-                      ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
-           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:192:23: error: use of undeclared identifier 'vaddr_iomem__'
-           scheduler_policies = ads_blob_read(guc, ads.scheduler_policies);
-                                ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
-           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:505:8: error: use of undeclared identifier 'vaddr_iomem__'
-                   if (!info_map_read(&info_map, engine_enabled_masks[guc_class]))
-                        ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:75:2: note: expanded from macro 'info_map_read'
-           iosys_map_rd_field(map_, 0, struct guc_gt_system_info, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
-                   ^
-   include/linux/iosys-map.h:349:2: note: expanded from macro '__iosys_map_rd_io'
-           __iosys_map_rd_io_u64_case(val__, vaddr_iomem__))
-           ^
-   include/linux/iosys-map.h:342:30: note: expanded from macro '__iosys_map_rd_io_u64_case'
-           u64: memcpy_fromio(&(val_), vaddr_iomem__, sizeof(u64))
-                                       ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:584:8: error: use of undeclared identifier 'vaddr_iomem__'
-                   if (!ads_blob_read(guc, system_info.engine_enabled_masks[guc_class]))
-                        ^
-   drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c:65:2: note: expanded from macro 'ads_blob_read'
-           iosys_map_rd_field(&(guc_)->ads_map, 0, struct __guc_ads_blob, field_)
-           ^
-   include/linux/iosys-map.h:461:2: note: expanded from macro 'iosys_map_rd_field'
-           iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__), \
-           ^
-   include/linux/iosys-map.h:374:3: note: expanded from macro 'iosys_map_rd'
-                   __iosys_map_rd_io(val, (map__)->vaddr_iomem + (offset__), type__);\
+>> drivers/media/usb/uvc/uvc_ctrl.c:2442:6: warning: variable 'mapping' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (chain->dev->info->mappings) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/usb/uvc/uvc_ctrl.c:2459:9: note: uninitialized use occurs here
+           mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
+                  ^~~~~~~
+   drivers/media/usb/uvc/uvc_ctrl.c:2442:2: note: remove the 'if' if its condition is always true
+           if (chain->dev->info->mappings) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/usb/uvc/uvc_ctrl.c:2406:43: note: initialize the variable 'mapping' to silence this warning
+           const struct uvc_control_mapping *mapping;
+                                                    ^
+                                                     = NULL
+   1 warning generated.
 
 
-vim +/vaddr_iomem__ +1154 drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
+vim +2442 drivers/media/usb/uvc/uvc_ctrl.c
 
-77cdd054dd2ced Umesh Nerlige Ramappa 2021-10-26  1132  
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1133  #define record_read(map_, field_) \
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1134  	iosys_map_rd_field(map_, 0, struct guc_engine_usage_record, field_)
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1135  
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1136  /*
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1137   * GuC updates shared memory and KMD reads it. Since this is not synchronized,
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1138   * we run into a race where the value read is inconsistent. Sometimes the
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1139   * inconsistency is in reading the upper MSB bytes of the last_in value when
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1140   * this race occurs. 2 types of cases are seen - upper 8 bits are zero and upper
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1141   * 24 bits are zero. Since these are non-zero values, it is non-trivial to
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1142   * determine validity of these values. Instead we read the values multiple times
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1143   * until they are consistent. In test runs, 3 attempts results in consistent
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1144   * values. The upper bound is set to 6 attempts and may need to be tuned as per
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1145   * any new occurences.
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1146   */
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1147  static void __get_engine_usage_record(struct intel_engine_cs *engine,
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1148  				      u32 *last_in, u32 *id, u32 *total)
-77cdd054dd2ced Umesh Nerlige Ramappa 2021-10-26  1149  {
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1150  	struct iosys_map rec_map = intel_guc_engine_usage_record_map(engine);
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1151  	int i = 0;
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1152  
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1153  	do {
-4801b99588a2e0 Lucas De Marchi       2022-02-16 @1154  		*last_in = record_read(&rec_map, last_switch_in_stamp);
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1155  		*id = record_read(&rec_map, current_context_index);
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1156  		*total = record_read(&rec_map, total_runtime);
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1157  
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1158  		if (record_read(&rec_map, last_switch_in_stamp) == *last_in &&
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1159  		    record_read(&rec_map, current_context_index) == *id &&
-4801b99588a2e0 Lucas De Marchi       2022-02-16  1160  		    record_read(&rec_map, total_runtime) == *total)
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1161  			break;
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1162  	} while (++i < 6);
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1163  }
-512712a824de9b Umesh Nerlige Ramappa 2022-01-24  1164  
+  2396	
+  2397	/*
+  2398	 * Add control information and hardcoded stock control mappings to the given
+  2399	 * device.
+  2400	 */
+  2401	static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
+  2402				       struct uvc_control *ctrl)
+  2403	{
+  2404		const struct uvc_control_info *info = uvc_ctrls;
+  2405		const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
+  2406		const struct uvc_control_mapping *mapping;
+  2407		const struct uvc_control_mapping *mend;
+  2408	
+  2409		/* XU controls initialization requires querying the device for control
+  2410		 * information. As some buggy UVC devices will crash when queried
+  2411		 * repeatedly in a tight loop, delay XU controls initialization until
+  2412		 * first use.
+  2413		 */
+  2414		if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
+  2415			return;
+  2416	
+  2417		for (; info < iend; ++info) {
+  2418			if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
+  2419			    ctrl->index == info->index) {
+  2420				uvc_ctrl_add_info(chain->dev, ctrl, info);
+  2421				/*
+  2422				 * Retrieve control flags from the device. Ignore errors
+  2423				 * and work with default flag values from the uvc_ctrl
+  2424				 * array when the device doesn't properly implement
+  2425				 * GET_INFO on standard controls.
+  2426				 */
+  2427				uvc_ctrl_get_flags(chain->dev, ctrl, &ctrl->info);
+  2428				break;
+  2429			 }
+  2430		}
+  2431	
+  2432		if (!ctrl->initialized)
+  2433			return;
+  2434	
+  2435		/*
+  2436		 * First check if the device provides a custom mapping for this control,
+  2437		 * used to override standard mappings for non-conformant devices. Don't
+  2438		 * process standard mappings if a custom mapping is found. This
+  2439		 * mechanism doesn't support combining standard and custom mappings for
+  2440		 * a single control.
+  2441		 */
+> 2442		if (chain->dev->info->mappings) {
+  2443			bool custom = false;
+  2444			unsigned int i;
+  2445	
+  2446			for (i = 0; (mapping = chain->dev->info->mappings[i]); ++i) {
+  2447				if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+  2448				    ctrl->info.selector == mapping->selector) {
+  2449					__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+  2450					custom = true;
+  2451				}
+  2452			}
+  2453	
+  2454			if (custom)
+  2455				return;
+  2456		}
+  2457	
+  2458		/* Process common mappings next. */
+  2459		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
+  2460		for (mapping = uvc_ctrl_mappings; mapping < mend; ++mapping) {
+  2461			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+  2462			    ctrl->info.selector == mapping->selector)
+  2463				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+  2464		}
+  2465	
+  2466		/* Finally process version-specific mappings. */
+  2467		if (chain->dev->uvc_version < 0x0150) {
+  2468			mapping = uvc_ctrl_mappings_uvc11;
+  2469			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc11);
+  2470		} else {
+  2471			mapping = uvc_ctrl_mappings_uvc15;
+  2472			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc15);
+  2473		}
+  2474	
+  2475		for (; mapping < mend; ++mapping) {
+  2476			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+  2477			    ctrl->info.selector == mapping->selector)
+  2478				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+  2479		}
+  2480	}
+  2481	
 
 -- 
 0-DAY CI Kernel Test Service
