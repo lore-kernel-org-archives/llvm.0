@@ -1,113 +1,113 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262A733C7
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 18:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112684C78
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 19:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655489875; x=1687025875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mdJexJRngEj3g12OLIu0Kv8q9SXJ16g4FSwegKZqiFM=;
-  b=Pi1B9hDSK3I1ZZ+MqwSb+qcFwVxH5vrCjFPoKxGbmwPmw7NIFl1fJ4y8
-   rN2reiwLXZz16Ma7Bs4ImfLLEpdqqFGyktzWLUdj5EXzVgzGLoNmsVCtP
-   HKRisEagpOLaedJeXJb6ORZlfOM07Tw+IVNQwhIWao2fcQxKA0ueyBL8c
-   Hpd/Kql/V7VVCk6bkh6CnPLU13jCj8ORMmjcP1gX4R/pQ2KjtsSE734ul
-   cM2sLuAok48I96pdb2TmKTq41oOr+MhEO+tl7vtISwc2yw9k+Mfn5s421
-   nCv6kpyvRR7bNxpHLByMKGIr0ne5wlFTbz8kkXm67APYjl1Nff9vCnOrz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279590310"
+  t=1655494796; x=1687030796;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5SgFd7WkR3Wqzp/vk0OtAaks+k5JfvTv93sayUfSxWw=;
+  b=Z+knRYh8YcCiIsKkymh6qnoUN65UV14wBTIh/3XTHtPo47VWSVsCXxPE
+   XISATpq9nSjv59EjJ/f8VG9erv+7hzcD0GmDpFdi5llXq0KRFcZDlbsxw
+   jMOPKIJZDpJCLFjzFwe00mKknquJMHPTsU0KKXZc8lcziS1B/OPemsoB1
+   Zs7opteSCH1a0sR7/RzqUjxqqIgkYxw8E7uzm/4aPRMLZ2PZ4Gl9Sg0I/
+   Gtw3O5/MShlQrZ8Al/yLSuzgfz3IbPZSeKTtJ4APqkzwArCvV7f/xe86f
+   GgxGPgmvYe7hEpdRKBAadOPVYOeS+2ded3/561zEDO+P/eTO7JBOjB0cS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305002365"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="279590310"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 11:17:54 -0700
+   d="scan'208";a="305002365"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:39:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="713859647"
+   d="scan'208";a="642160152"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 11:17:51 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2022 12:39:53 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2GXX-000Pf7-4C;
-	Fri, 17 Jun 2022 18:17:51 +0000
-Date: Sat, 18 Jun 2022 02:17:44 +0800
+	id 1o2Hov-000Pi5-AF;
+	Fri, 17 Jun 2022 19:39:53 +0000
+Date: Sat, 18 Jun 2022 03:39:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, netdev@vger.kernel.org,
-	Amit Shah <aams@amazon.com>, Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v1 net-next 3/6] af_unix: Define a per-netns hash table.
-Message-ID: <202206180244.SIWZxbAo-lkp@intel.com>
-References: <20220616234714.4291-4-kuniyu@amazon.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202206180318.LDlpyiIW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220616234714.4291-4-kuniyu@amazon.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Kuniyuki,
+Hi Mauro,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/af_unix-Introduce-per-netns-socket-hash-table/20220617-075046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 5dcb50c009c9f8ec1cfca6a81a05c0060a5bbf68
-config: hexagon-randconfig-r045-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180244.SIWZxbAo-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   274295c6e53f8b8b8dfa8b24a3fcb8a9d670c22c
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   3 months ago
+config: mips-randconfig-c004-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180318.LDlpyiIW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d0da436e1c42550dbd332f48fd11992d5f4af487
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuniyuki-Iwashima/af_unix-Introduce-per-netns-socket-hash-table/20220617-075046
-        git checkout d0da436e1c42550dbd332f48fd11992d5f4af487
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/unix/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> net/unix/af_unix.c:3590:1: warning: unused label 'err_sysctl' [-Wunused-label]
-   err_sysctl:
-   ^~~~~~~~~~~
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
    1 warning generated.
 
 
-vim +/err_sysctl +3590 net/unix/af_unix.c
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
 
-  3573	
-  3574		net->unx.hash = kmalloc(sizeof(struct unix_hashbucket) * UNIX_HASH_SIZE,
-  3575					GFP_KERNEL);
-  3576		if (!net->unx.hash)
-  3577			goto err_proc;
-  3578	
-  3579		for (i = 0; i < UNIX_HASH_SIZE; i++) {
-  3580			INIT_HLIST_HEAD(&net->unx.hash[i].head);
-  3581			spin_lock_init(&net->unx.hash[i].lock);
-  3582		}
-  3583	
-  3584		return 0;
-  3585	
-  3586	err_proc:
-  3587	#ifdef CONFIG_PROC_FS
-  3588		remove_proc_entry("unix", net->proc_net);
-  3589	#endif
-> 3590	err_sysctl:
-  3591		unix_sysctl_unregister(net);
-  3592	out:
-  3593		return -ENOMEM;
-  3594	}
-  3595	
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 
 -- 
 0-DAY CI Kernel Test Service
