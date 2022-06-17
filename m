@@ -1,43 +1,46 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1EF7F
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 09:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BFE290C
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 09:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655457038; x=1686993038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rjIu0hRj9Au2fBo3hcktlcy1xH2kIhDY7L7DFWn+9ko=;
-  b=WNW1wZKgT2r+JMIm1IVqepJIb8CmQdIR7evkG1CqyZyTn8/Wb5WA9KJ3
-   CyZKQ4VH4PQ30hlbPLQ4EMSrtM1A0E8RDQmxLO9juPmM84u6/xFCF5lP6
-   azzU9Wc4IfsZKwDKU21LZ01hymdW2junLQGZoppVoA71swokAsD0IgJfV
-   kXSpoMtxHAbN7wuBblS2eH8Wt4xBwo7zk9JLx/X4BOauIrHH0ZtozT1KK
-   D/MsEHNMDmMob+3miFKDl9yrFYCMQp1fO4QlSXVT5FEKpNaQSt7rcLizi
-   dnyWDIJLT1RP7Bl+S1msQBq0eEG0cshjUU4WG2OK+CiXVzVfUT3ubWU1s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277035240"
+  t=1655457039; x=1686993039;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=txu5nXwfugBdPMptUG1ObaO/2vppNf8XOQ7TcUxCbgw=;
+  b=ZUGbu4v41Iz5HW9LkXGE9fp7QY2m/RaQg/6B7UsIh0n7G8eeOSYxy/n9
+   g7G32OwBtvh6CDe5gnqNwvt1hWTiuvwluAlsnFFyhztvsyWJuozPYFi4a
+   A+JaUW7UpzUZD7C6chF6h6Ho/PZ7PxwzKayeDcYI/eZdjXEHkX6TuiuXm
+   uGBPGFMc7/yQadxFQzUUiOjLJ7JJ/G5ts5jRxKObXDBHIXPkjD1MZVG1M
+   nekhbZdn28wPMObQdvTOdtqBNfyANE0WbpGQgX/jJzI+TYzVRqgahxyIB
+   zJRFFywVdWkzGbF98X8vHmZb8ZILP/pyfTz7CrdWxFV1E4Fn/j9nJVc27
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278256329"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="277035240"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 02:10:37 -0700
+   d="scan'208";a="278256329"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 02:10:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="688217392"
+   d="scan'208";a="536766552"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Jun 2022 02:10:36 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2022 02:10:36 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o27zv-000PHp-IO;
+	id 1o27zv-000PHr-Iu;
 	Fri, 17 Jun 2022 09:10:35 +0000
-Date: Fri, 17 Jun 2022 17:10:13 +0800
+Date: Fri, 17 Jun 2022 17:10:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH v2 2/3] drm/i915: Update i915 uapi
- documentation
-Message-ID: <202206171655.ypHKJ5Tg-lkp@intel.com>
-References: <20220617051445.8901-3-niranjana.vishwanathapura@intel.com>
+To: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Luca Coelho <luciano.coelho@intel.com>
+Subject: drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2: warning: field
+  within 'struct iwl_rx_mpdu_desc_v1' is less aligned than 'union
+ iwl_rx_mpdu_desc_v1::(anonymous at
+ drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2)' and is usually due to
+ 'struct i...
+Message-ID: <202206171648.tLa7qWNK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,153 +49,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617051445.8901-3-niranjana.vishwanathapura@intel.com>
 
-Hi Niranjana,
+Hi Mordechay,
 
-Thank you for the patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Niranjana-Vishwanathapura/drm-doc-rfc-i915-VM_BIND-feature-design-uapi/20220617-131543
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220617/202206171655.ypHKJ5Tg-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   47700948a4abb4a5ae13ef943ff682a7f327547a
+commit: 9cd243f24ec1960403de5f24f45155af24d94b13 iwlwifi: move iwl_configure_rxq to be used by other op_modes
+date:   1 year, 2 months ago
+config: arm-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220617/202206171648.tLa7qWNK-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/036987efcc7c66ca2bc7a2dff4da7716c3459480
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Niranjana-Vishwanathapura/drm-doc-rfc-i915-VM_BIND-feature-design-uapi/20220617-131543
-        git checkout 036987efcc7c66ca2bc7a2dff4da7716c3459480
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9cd243f24ec1960403de5f24f45155af24d94b13
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9cd243f24ec1960403de5f24f45155af24d94b13
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/intel/iwlwifi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/i915/i915_driver.c:52:
-   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:48:
-   In file included from drivers/gpu/drm/i915/i915_vma.h:33:
-   In file included from drivers/gpu/drm/i915/gt/intel_ggtt_fencing.h:12:
-   In file included from drivers/gpu/drm/i915/i915_active.h:13:
-   In file included from drivers/gpu/drm/i915/i915_request.h:34:
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_context_types.h:20:
-   In file included from drivers/gpu/drm/i915/gt/intel_context_types.h:18:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine_types.h:21:
-   In file included from drivers/gpu/drm/i915/i915_pmu.h:13:
->> include/uapi/drm/i915_drm.h:1934:2: warning: '/*' within block comment [-Wcomment]
-           /** @param: Parameter to set or query */
+   In file included from drivers/net/wireless/intel/iwlwifi/fw/init.c:13:
+>> drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2: warning: field  within 'struct iwl_rx_mpdu_desc_v1' is less aligned than 'union iwl_rx_mpdu_desc_v1::(anonymous at drivers/net/wireless/intel/iwlwifi/fw/api/rx.h:442:2)' and is usually due to 'struct iwl_rx_mpdu_desc_v1' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
            ^
    1 warning generated.
---
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_context.c:74:
-   In file included from drivers/gpu/drm/i915/gt/gen6_ppgtt.h:9:
-   In file included from drivers/gpu/drm/i915/gt/intel_gtt.h:28:
-   In file included from drivers/gpu/drm/i915/gt/intel_reset.h:13:
-   In file included from drivers/gpu/drm/i915/gt/intel_engine_types.h:21:
-   In file included from drivers/gpu/drm/i915/i915_pmu.h:13:
->> include/uapi/drm/i915_drm.h:1934:2: warning: '/*' within block comment [-Wcomment]
-           /** @param: Parameter to set or query */
-           ^
->> drivers/gpu/drm/i915/gem/i915_gem_context.c:177:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size)
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:370:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size)
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:749:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size < sizeof(*user) ||
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:750:24: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-               !IS_ALIGNED(args->size - sizeof(*user), sizeof(*user->engines))) {
-                           ~~~~  ^
-   include/linux/align.h:13:30: note: expanded from macro 'IS_ALIGNED'
-   #define IS_ALIGNED(x, a)                (((x) & ((typeof(x))(a) - 1)) == 0)
-                                              ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:750:24: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-               !IS_ALIGNED(args->size - sizeof(*user), sizeof(*user->engines))) {
-                           ~~~~  ^
-   include/linux/align.h:13:44: note: expanded from macro 'IS_ALIGNED'
-   #define IS_ALIGNED(x, a)                (((x) & ((typeof(x))(a) - 1)) == 0)
-                                                            ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:752:10: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                           args->size);
-                           ~~~~  ^
-   include/drm/drm_print.h:461:63: note: expanded from macro 'drm_dbg'
-           drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
-                                                                        ^~~~~~~~~~~
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:756:27: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           set.num_engines = (args->size - sizeof(*user)) / sizeof(*user->engines);
-                              ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:821:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size < sizeof(user_sseu))
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:870:8: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           args->size = sizeof(user_sseu);
-           ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:883:13: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                   if (args->size)
-                       ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:892:13: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                   if (args->size)
-                       ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:905:13: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                   if (args->size)
-                       ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:934:13: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                   if (args->size)
-                       ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:1866:8: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           args->size = 0;
-           ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:1981:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size < sizeof(user_sseu))
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:2019:8: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           args->size = sizeof(user_sseu);
-           ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:2030:12: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           if (args->size)
-               ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:2067:8: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-           args->size = 0;
-           ~~~~  ^
-   drivers/gpu/drm/i915/gem/i915_gem_context.c:2081:13: error: no member named 'size' in 'struct drm_i915_gem_context_param'
-                   if (args->size)
-                       ~~~~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
 
 
-vim +177 drivers/gpu/drm/i915/gem/i915_gem_context.c
+vim +442 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h
 
-6b736de5746a30 drivers/gpu/drm/i915/i915_gem_context.c     Chris Wilson   2019-04-26  171  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  172  static int validate_priority(struct drm_i915_private *i915,
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  173  			     const struct drm_i915_gem_context_param *args)
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  174  {
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  175  	s64 priority = args->value;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  176  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08 @177  	if (args->size)
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  178  		return -EINVAL;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  179  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  180  	if (!(i915->caps.scheduler & I915_SCHEDULER_CAP_PRIORITY))
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  181  		return -ENODEV;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  182  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  183  	if (priority > I915_CONTEXT_MAX_USER_PRIORITY ||
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  184  	    priority < I915_CONTEXT_MIN_USER_PRIORITY)
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  185  		return -EINVAL;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  186  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  187  	if (priority > I915_CONTEXT_DEFAULT_PRIORITY &&
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  188  	    !capable(CAP_SYS_NICE))
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  189  		return -EPERM;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  190  
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  191  	return 0;
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  192  }
-aaa5957c97592b drivers/gpu/drm/i915/gem/i915_gem_context.c Jason Ekstrand 2021-07-08  193  
+8a6171a7b601e3 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Luca Coelho    2018-06-26  383  
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  384  /**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  385   * struct iwl_rx_mpdu_desc_v1 - RX MPDU descriptor
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  386   */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  387  struct iwl_rx_mpdu_desc_v1 {
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  388  	/* DW7 - carries rss_hash only when rpa_en == 1 */
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  389  	union {
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  390  		/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  391  		 * @rss_hash: RSS hash value
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  392  		 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  393  		__le32 rss_hash;
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  394  
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  395  		/**
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  396  		 * @phy_data2: depends on info type (see @phy_data1)
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  397  		 */
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  398  		__le32 phy_data2;
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  399  	};
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  400  
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  401  	/* DW8 - carries filter_match only when rpa_en == 1 */
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  402  	union {
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  403  		/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  404  		 * @filter_match: filter match value
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  405  		 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  406  		__le32 filter_match;
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  407  
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  408  		/**
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  409  		 * @phy_data3: depends on info type (see @phy_data1)
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  410  		 */
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  411  		__le32 phy_data3;
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  412  	};
+dabf9844385885 drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Johannes Berg  2018-04-26  413  
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  414  	/* DW9 */
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  415  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  416  	 * @rate_n_flags: RX rate/flags encoding
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  417  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  418  	__le32 rate_n_flags;
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  419  	/* DW10 */
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  420  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  421  	 * @energy_a: energy chain A
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  422  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  423  	u8 energy_a;
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  424  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  425  	 * @energy_b: energy chain B
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  426  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  427  	u8 energy_b;
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  428  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  429  	 * @channel: channel number
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  430  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  431  	u8 channel;
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  432  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  433  	 * @mac_context: MAC context mask
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  434  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  435  	u8 mac_context;
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  436  	/* DW11 */
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  437  	/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  438  	 * @gp2_on_air_rise: GP2 timer value on air rise (INA)
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  439  	 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  440  	__le32 gp2_on_air_rise;
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  441  	/* DW12 & DW13 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05 @442  	union {
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  443  		/**
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  444  		 * @tsf_on_air_rise:
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  445  		 * TSF value on air rise (INA), only valid if
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  446  		 * %IWL_RX_MPDU_PHY_TSF_OVERLOAD isn't set
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  447  		 */
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  448  		__le64 tsf_on_air_rise;
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  449  
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  450  		struct {
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  451  			/**
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  452  			 * @phy_data0: depends on info_type, see @phy_data1
+6857df8c10e698 drivers/net/wireless/intel/iwlwifi/mvm/fw-api-rx.h Johannes Berg  2017-03-15  453  			 */
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  454  			__le32 phy_data0;
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  455  			/**
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  456  			 * @phy_data1: valid only if
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  457  			 * %IWL_RX_MPDU_PHY_TSF_OVERLOAD is set,
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  458  			 * see &enum iwl_rx_phy_data1.
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  459  			 */
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  460  			__le32 phy_data1;
+bdf180c8d375ee drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Shaul Triebitz 2018-07-02  461  		};
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  462  	};
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  463  } __packed;
+18ead597daa17a drivers/net/wireless/intel/iwlwifi/fw/api/rx.h     Golan Ben Ami  2018-02-05  464  
+
+:::::: The code at line 442 was first introduced by commit
+:::::: 18ead597daa17a557249cf4b2f494361d836ed52 iwlwifi: support new rx_mpdu_desc api
+
+:::::: TO: Golan Ben Ami <golan.ben.ami@intel.com>
+:::::: CC: Luca Coelho <luciano.coelho@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
