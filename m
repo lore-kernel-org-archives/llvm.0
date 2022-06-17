@@ -1,125 +1,105 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFAE3201
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 16:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655484532; x=1687020532;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2VC7mik9w+9dUx7rYCUaY4bTWFXVK+BGRfFpvu1g5bI=;
-  b=RO6j4LNo556dHz6Om+ZAxiNuTwPfb8GeLxZOb8Cq5rrvm1durkuj8wah
-   hp+85GpwvLZgy/7ObdA6c0xeAbzrDK9hpSkKzAj9Lr4rCEVFreXvrVldu
-   oxcGljAhv9M/EkJhGAe2V3lkIdJeh8TAryUIv4RRtXvSCqQgP+tP74a82
-   FljX8/7/zAM3luTgd2n7eZRGW/PvLgZiPBb+pfgmhbrjWpVJp6e8wV9Zd
-   vVMEdr1au04KymyV0SUEMKvRbUMcrznqCbYtgMHT5bNp5pjmFVXugqTDX
-   5mO3k61v7lqLK1wiyIw4aYPHN6w66xCohWAPBbklrD1TZYm0whFNqDxx3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268229682"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="268229682"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 09:05:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="763288840"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Jun 2022 09:05:48 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2ETj-000Pa9-JG;
-	Fri, 17 Jun 2022 16:05:47 +0000
-Date: Sat, 18 Jun 2022 00:05:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuogee Hsieh <quic_khsieh@quicinc.com>, dri-devel@lists.freedesktop.org,
-	robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-	dianders@chromium.org, vkoul@kernel.org, daniel@ffwll.ch,
-	airlied@linux.ie, agross@kernel.org, dmitry.baryshkov@linaro.org,
-	bjorn.andersson@linaro.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	quic_sbillaka@quicinc.com, linux-arm-msm@vger.kernel.org,
-	quic_abhinavk@quicinc.com, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-	quic_aravindh@quicinc.com, freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] drm/msm/dp: clean up pixel_rate from dp_ctrl.c
-Message-ID: <202206172356.J5CB8zDf-lkp@intel.com>
-References: <1655399361-10842-3-git-send-email-quic_khsieh@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350FB3201
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 16:58:41 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id o199-20020a25d7d0000000b00668ab46306bso3548141ybg.6
+        for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 09:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HIkosMxJu0DsWXpVdxpWrXztbgfsO84tS9Or7dZuu1Q=;
+        b=hNEMukuOffSzyw5d6QBcwxNcqKUnC8L7F85D8e4DMiaNmNOcfyuY3Zx7l9WU+TMSNN
+         bng7bOJtVv2lMxmVy9WRgT/M1tn0wUyWP+6xcjbbtGndZqD195wLuodEcCItkC1CZnwm
+         /yxrwNI4Jl3rGOwj9tm7zr/ciXe+j2yqDhblmTlIoLedlOlLT8hBZJzfF50f4JP6HsDE
+         TTStfbmqBaNN8+9kBYjLLKaASBEYJYJhXGYhCWWlCOyrbr25ynvp1kJOOXIRI90IP9Jv
+         y88Cvk9Toe3vn+iXOoUKaaV/nJk7QeRSxPxV71CsQGaCI4XKbAKe8LGojB2WJ/BVl/2m
+         PH6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HIkosMxJu0DsWXpVdxpWrXztbgfsO84tS9Or7dZuu1Q=;
+        b=5wD3dYjL1Jm1lIHsGuxxVXku2LOSIOFqhhFi8ZlFmKJhC7r971v/28RlPGT+j+KQ18
+         2H5O3ZpB+SWMfbeplCD1EPf53rZaHNLmhtRvo58LRtTfSKzG1sW9Xw8eGYmAI0EH0u4d
+         8UdB0FSKj0xdxMgev+iOVx7QKOFEoSjCrYzWsoaTVRexO6lq9ne62PPBhnRytL89SiSj
+         fOWZfbJqSEyAnQq7ighXARymnfQlfe6HNd76cOrkHk1/+x8hqLVsFQk9tD5kC6BMbEUH
+         h+dT8hIU0R+n1i7c049pzL/bilAGu+VlGqwwfc3lM0BlEUZN+CfiI0WOo+YTnYfkPDpp
+         z+5g==
+X-Gm-Message-State: AJIora+gA9VfWG2JTgTy4c2O+nbilwtjOgqspsyKwd+fI5dLftEuYO6H
+	TfTVUINOukWr2vWaoG4kCjo5GHF3hKhPS9uTpqM=
+X-Google-Smtp-Source: AGRyM1uaTYh1F8LDuoxG1oRipLMJSHEmWpZiFQyuyySsXPgzvm1S5MjCu7Uh4zVtK17/lbBhl7nz67P0zLVAEzLDqRc=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:7e0c:dc00:6576:994e])
+ (user=ndesaulniers job=sendgmr) by 2002:a0d:cf04:0:b0:30f:c6e3:b62c with SMTP
+ id r4-20020a0dcf04000000b0030fc6e3b62cmr12128627ywd.306.1655485120058; Fri,
+ 17 Jun 2022 09:58:40 -0700 (PDT)
+Date: Fri, 17 Jun 2022 09:58:17 -0700
+Message-Id: <20220617165817.3204917-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655399361-10842-3-git-send-email-quic_khsieh@quicinc.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655485097; l=1310;
+ s=20211004; h=from:subject; bh=pe+YwCN7a/5bmdaqbfY3NE5BJF4TRtPW3C6ELb8zZF8=;
+ b=eNQ0gyHPhuoYjZ/pWdaRl9A62Rla+ymyhL1crK6lecZwFPypboi8Y9gWiEqW6dcb1XWwvQeLFVZ1
+ KEYzifuFCQCYqa7UTDNE+9DgoPPpMYO6Qjfxhtbg/G3o5f3JfD/C
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH] Documentation/llvm: Update Supported Arch table
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michael Opdenacker <michael.opdenacker@bootlin.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michal Marek <michal.lkml@markovi.net>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kuogee,
+While watching Michael's new talk on Clang-built-Linux, I noticed the
+arch table in our docs that he refers to is outdated.
 
-Thank you for the patch! Perhaps something to improve:
+Add hexagon and User Mode.  Bump MIPS and RISCV to LLVM=1.  PowerPC is
+almost LLVM=1 capable; ppc64le works, but ppc64 (big endian) and ppc32
+still need more work.
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-exynos/exynos-drm-next]
-[cannot apply to drm-intel/for-linux-next tegra-drm/drm/tegra/for-next airlied/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Link: https://youtu.be/W4zdEDpvR5c?t=399
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ Documentation/kbuild/llvm.rst | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuogee-Hsieh/force-link-training-for-display-resolution-change/20220617-011110
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220617/202206172356.J5CB8zDf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b04f0b39a03a9fc3728e9414157f9d5f0b8b2366
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kuogee-Hsieh/force-link-training-for-display-resolution-change/20220617-011110
-        git checkout b04f0b39a03a9fc3728e9414157f9d5f0b8b2366
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/dp/dp_ctrl.c:1587:5: warning: no previous prototype for function 'dp_ctrl_on_stream_phy_test_report' [-Wmissing-prototypes]
-   int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-       ^
-   drivers/gpu/drm/msm/dp/dp_ctrl.c:1587:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/dp_ctrl_on_stream_phy_test_report +1587 drivers/gpu/drm/msm/dp/dp_ctrl.c
-
-  1586	
-> 1587	int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-  1588	{
-  1589		int ret = 0;
-  1590		struct dp_ctrl_private *ctrl;
-  1591		unsigned long pixel_rate;
-  1592	
-  1593		ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-  1594	
-  1595		pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-  1596		ret = dp_ctrl_enable_stream_clocks(ctrl, pixel_rate);
-  1597		if (ret) {
-  1598			DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
-  1599			return ret;
-  1600		}
-  1601	
-  1602		dp_ctrl_send_phy_test_pattern(ctrl);
-  1603	
-  1604		return 0;
-  1605	}
-  1606	
-
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index b854bb413164..6b2bac8e9ce0 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -129,18 +129,24 @@ yet. Bug reports are always welcome at the issue tracker below!
+    * - arm64
+      - Supported
+      - ``LLVM=1``
++   * - hexagon
++     - Maintained
++     - ``LLVM=1``
+    * - mips
+      - Maintained
+-     - ``CC=clang``
++     - ``LLVM=1``
+    * - powerpc
+      - Maintained
+      - ``CC=clang``
+    * - riscv
+      - Maintained
+-     - ``CC=clang``
++     - ``LLVM=1``
+    * - s390
+      - Maintained
+      - ``CC=clang``
++   * - um (User Mode)
++     - Maintained
++     - ``LLVM=1``
+    * - x86
+      - Supported
+      - ``LLVM=1``
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.476.g0c4daa206d-goog
+
