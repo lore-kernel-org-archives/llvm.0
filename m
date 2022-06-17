@@ -1,123 +1,164 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229522F25
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 12:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655468265; x=1687004265;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tz/jD2Salb21vnVNTIoALhjVotJpZYYZiJs32UY8QMI=;
-  b=Zr//+V52MZwB9l2QGq9LpzN5UBFmQDHN4d4pxk7zSmz9F1Ub/E05iVfu
-   cgQWa0W/yDKMbniNTcLbKjAMz5MO4cwsu+YpaFzLBluFG6cgNhb31+6qj
-   M6jnVQ4mvkGll4AoamXIyqNMljoY5jlMfHpo8DeP5FzpReuz5OD/Y1Yxz
-   oobkQgxEQSRqwSpRZ8f64qZaggTAIh5GynA1awzzmbLLQB368iA3FpOKW
-   koc4r99yLkd+jQw4uF2jOyxDMgHKbqVP3Ffgtto8rOqmt8Jh0yOdUU8Rt
-   sxY8CKv1VN0QRHP92m+SMMj85naia8eAX4F1O5jgSDZayYltQ3/8Xbg9s
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280211320"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280211320"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 05:17:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="584013616"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2022 05:17:41 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2Auz-000PRE-6l;
-	Fri, 17 Jun 2022 12:17:41 +0000
-Date: Fri, 17 Jun 2022 20:17:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>, mike.kravetz@oracle.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, songmuchun@bytedance.com,
-	akpm@linux-foundation.org, catalin.marinas@arm.com, will@kernel.org,
-	anshuman.khandual@arm.com, baolin.wang@linux.alibaba.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH] arm64/hugetlb: Implement arm64 specific
- hugetlb_mask_last_hp
-Message-ID: <202206172000.6Fwmo99P-lkp@intel.com>
-References: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8724E3201
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 15:22:27 +0000 (UTC)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 25HFM6fb026767
+	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 00:22:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25HFM6fb026767
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1655479327;
+	bh=vvgHqTh1wXE7hKhLuY8TbWdkyuEIhZfbEWS5VwgPLWY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cOhw7EC0b08gudg9umyob1bJwEpW/9gwNi19r2R3h6ee2+O0VOh2ZikmOyg93iBNw
+	 4JApVO9XsOOkgnMMjxCowcJ3hkoCvIjWXEBaccZDpXgoJauYp9TywX0OIjQ2E1tkhp
+	 2MXfPqpc1t41FUF6HuTzyvvskXjjBAKGgmYXIx691NQinh+X15JMOw6CB3cUNOYNnm
+	 F7K1xY/eLP0ysPIgbhLFVOzRpv5EIyzfTz1U5Uzwb/Z0W9MkVLHvRAjhKrh1hcMcFg
+	 LK/xSRD6xfZUYW2ljpr+0U5pwXhpQwuSNxXE8Hgl+25jN9TcR2gXf3jfm2e4oohwCm
+	 ZfUiGipTAAJCg==
+X-Nifty-SrcIP: [209.85.128.42]
+Received: by mail-wm1-f42.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso2573060wml.1
+        for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 08:22:06 -0700 (PDT)
+X-Gm-Message-State: AOAM532KHoHkPezXa3bNeKF0vB7k+xaAjGgIjAkrEjTubh6GaZMT8OMR
+	XcEzAnzsF7JGaPx/w8sgANooX8ZqHNrMFjgXL2g=
+X-Google-Smtp-Source: ABdhPJyH38D6N7CsO2MxwY1ptWXxzTktDOO0nHF1abeRdJfr3gtU2ythFA8M74KbgUO0c9L6WDiXK9Sv7m5KAspRB1o=
+X-Received: by 2002:a7b:c346:0:b0:397:626d:d2c4 with SMTP id
+ l6-20020a7bc346000000b00397626dd2c4mr21355129wmj.172.1655479325296; Fri, 17
+ Jun 2022 08:22:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7256dbe078d7231f45b0f47c2c52a3bd3aa10da7.1655350193.git.baolin.wang@linux.alibaba.com>
+References: <20220616104541.16289-1-jslaby@suse.cz> <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
+ <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
+ <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com> <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
+In-Reply-To: <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 18 Jun 2022 00:21:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
+Message-ID: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Jiri Slaby <jslaby@suse.cz>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Baolin,
+(+LLVM list, Fangrui Song)
 
-I love your patch! Perhaps something to improve:
+On Fri, Jun 17, 2022 at 7:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Jun 17, 2022 at 12:35 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > >
+> > > > On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
+> > > > >
+> > > > > Until the link-vmlinux.sh split (cf. the commit below), the linker was
+> > > > > run with jobserver set in MAKEFLAGS. After the split, the command in
+> > > > > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+> > > > > is lost.
+> > > > >
+> > > > > Restore it as linkers working in parallel (esp. the LTO ones) make a use
+> > > > > of i
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on linus/master v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi Jiri,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-randconfig-r011-20220616 (https://download.01.org/0day-ci/archive/20220617/202206172000.6Fwmo99P-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f0e608de27b3d568000046eebf3712ab542979d6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baolin-Wang/arm64-hugetlb-Implement-arm64-specific-hugetlb_mask_last_hp/20220616-113640
-        git checkout f1309dfbc2b70ec5dd72ac38e95a49b7be42b9b6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
+Please let me clarify first.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/mm/hugetlbpage.c:371:15: warning: no previous prototype for function 'hugetlb_mask_last_hp' [-Wmissing-prototypes]
-   unsigned long hugetlb_mask_last_hp(struct hstate *h)
-                 ^
-   arch/arm64/mm/hugetlbpage.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long hugetlb_mask_last_hp(struct hstate *h)
-   ^
-   static 
-   1 warning generated.
+Here, is it OK to assume you are talking about Clang LTO
+instead of GCC LTO because the latter is not upstreamed ?
 
 
-vim +/hugetlb_mask_last_hp +371 arch/arm64/mm/hugetlbpage.c
 
-   370	
- > 371	unsigned long hugetlb_mask_last_hp(struct hstate *h)
-   372	{
-   373		unsigned long hp_size = huge_page_size(h);
-   374	
-   375		switch (hp_size) {
-   376		case PUD_SIZE:
-   377			return PGDIR_SIZE - PUD_SIZE;
-   378		case CONT_PMD_SIZE:
-   379			return PUD_SIZE - CONT_PMD_SIZE;
-   380		case PMD_SIZE:
-   381			return PUD_SIZE - PMD_SIZE;
-   382		case CONT_PTE_SIZE:
-   383			return PMD_SIZE - CONT_PTE_SIZE;
-   384		default:
-   385			break;
-   386		}
-   387	
-   388		return ~0UL;
-   389	}
-   390	
+
+
+I tested this patch but I did not see any performance change for Clang LTO.
+
+
+[1] CONFIG_CLANG_LTO_FULL
+
+   lld always runs sequential.
+   It never runs in parallel even if you pass -j option to Make
+
+
+[2] CONFIG_CLANG_LTO_THIN
+
+   lld always runs in parallel even if you do not pass -j option
+
+   In my machine, lld always allocated 12 threads.
+   This is irrespective of the Make parallelisms.
+
+
+
+
+One more thing, if a program wants to participate in
+Make's jobserver, it must parse MAKEFLAGS, and extract
+file descriptors to be used to communicate to the jobserver.
+
+As a code example in the kernel tree,
+scripts/jobserver-exec parses "MAKEFLAGS" and "--jobserver".
+
+
+
+
+I grepped the lld source code, but it does not contain
+"MAKEFLAGS" or "jobserver".
+
+
+masahiro@oscar:~/ref/lld$ git remote  show origin
+* remote origin
+  Fetch URL: https://github.com/llvm-mirror/lld.git
+  Push  URL: https://github.com/llvm-mirror/lld.git
+  HEAD branch: master
+  Remote branches:
+    master     tracked
+    release_36 tracked
+    release_37 tracked
+    release_38 tracked
+    release_39 tracked
+    release_40 tracked
+    release_50 tracked
+    release_60 tracked
+    release_70 tracked
+    release_80 tracked
+    release_90 tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (up to date)
+masahiro@oscar:~/ref/lld$ git grep MAKEFLAGS
+masahiro@oscar:~/ref/lld$ git grep jobserver
+
+
+So, in my research, LLD does not seem to support the jobserver.
+
+
+
+
+
+If you are talking about GCC LTO, yes, the code
+tries to parse "--jobserver-auth=" from the MAKEFLAGS
+environment variable.  [1]
+
+[1]:  https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/lto-wrapper.cc#L1341
+
+
+But, as you may know, GCC LTO works in a different way,
+at least, we cannot do it before modpost.
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
