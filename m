@@ -1,39 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ACE4C84
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 21:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714BA4C84
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 21:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655502178; x=1687038178;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=VYWYf1XhYgEzESIV+/R+cQnLngVgNEVrTPClG/0PsAU=;
-  b=AV/DLW4gvUbN5Q+pQr3h4i3go/0oYfO7Yo8Dp8OOeh++Ovgb1ZxT5pcP
-   3jKsL0quSmlweM5mlpFjCfreFACn2YXxc31RaM7ajA+34edicYotuKbjC
-   IM8SL7oa79nrT1QUEF29aLBCg3Xx1bYwsFF4tuxheV+RiK1WuwvZ5HYac
-   q+7sZg2DoehYNcKg1KzF0+0eNGYQD9oCGhxiHVmcv5s9Ukj0RQuqIV28+
-   9pPOwTcpKruiOLWFM6TgfYqTVHeTmyvSwTu+yEWSAFxuYeCfJRTcyomI7
-   JXrAwOeZnQqKk1m8qRjf0Dd26j4CeowXCEtsP1ssJLXaYcmmk98Qx0G+o
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260022642"
+  t=1655502839; x=1687038839;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OEVj7qRYcWdYOKZdoaxbP+KqpdA0+bCSlrK2QBOmGcI=;
+  b=LDYllqFiOyvO5BndqI5uUC/5iJOa2v+n6F0Xzo4CNovNHjfEgCk9nWVn
+   /mZPRpU8TCegJeW8N6TN9lluWthS0LOA8nHpM66T5trj0nVUQJ0crxvN9
+   hvRNJfPwo0C+0WNot496wUwywfFJQNogOkGdC7edSYmjJVv9m7EypowF7
+   FN8hgKRRzUyaxg6dS6ObDGk9JNieh+fJ9UghvHNsBQw+sFGFgQX4H3im6
+   gZ54gKKioiO73u6YDeAMSXd+3kTRfOudXAwqtOCSo6HHBO/jbiN3OL7mQ
+   bsi57BJ/A6KxwYm9JEx/PI/8ocyY2sMo95hDDJcrdVRqmbGp+cR1mlw0b
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280327175"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260022642"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:42:58 -0700
+   d="scan'208";a="280327175"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 14:53:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="688477884"
+   d="scan'208";a="675647089"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Jun 2022 14:42:57 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2022 14:53:57 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2Jk0-000Pmw-8q;
-	Fri, 17 Jun 2022 21:42:56 +0000
-Date: Sat, 18 Jun 2022 05:42:10 +0800
+	id 1o2Jue-000PnL-Ff;
+	Fri, 17 Jun 2022 21:53:56 +0000
+Date: Sat, 18 Jun 2022 05:53:13 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
-Message-ID: <202206180522.hKvNt25Z-lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:locking/core 2/4] ld.lld: error: undefined symbol:
+ jump_label_apply_nops
+Message-ID: <202206180532.mOqwM8Wu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,49 +46,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Tiezhu Yang <yangtiezhu@loongson.cn>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: Masahiro Yamada <masahiroy@kernel.org>
-
-Hi Tiezhu,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-commit: 048cc2378c2494519d940597629465b3ea44a96f MIPS: SGI-IP22: Remove unnecessary check of GCC option
-date:   6 months ago
-config: mips-randconfig-r014-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180522.hKvNt25Z-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   c4e2db802ebbc639960404b97c9b8a6284634428
+commit: 74c632a2a5738bd18864610e34f6b6d2db664bb7 [2/4] jump_label: mips: move module NOP patching into arch code
+config: mips-randconfig-r026-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180532.mOqwM8Wu-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=048cc2378c2494519d940597629465b3ea44a96f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 048cc2378c2494519d940597629465b3ea44a96f
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=74c632a2a5738bd18864610e34f6b6d2db664bb7
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue locking/core
+        git checkout 74c632a2a5738bd18864610e34f6b6d2db664bb7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
->> clang-15: error: unknown argument: '-mr10k-cache-barrier=store'
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target 'missing-syscalls' not remade because of errors.
-   make[1]: *** [arch/mips/Makefile:415: archprepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> ld.lld: error: undefined symbol: jump_label_apply_nops
+   >>> referenced by module.c
+   >>>               kernel/module.o:(module_finalize) in archive arch/mips/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service
