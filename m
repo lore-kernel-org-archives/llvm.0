@@ -1,43 +1,31 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEA24C95
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 23:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655507760; x=1687043760;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3HtJUaL6AK+hQVPvouGgMZ1sHbLrkehe8G2v8dPZwQs=;
-  b=FfIC5bEdvtL+4T5QqAo5K99TQW3ti7t3L8B3AijedYLL1rB0nsCUjUf8
-   s9z7sBaZsaNm9mDSLHLM4gJCLldMvjQfzmCLK0fhmoq9lV4JWHCmuXJ4h
-   YXGd5JFvQXQmbh66znVfJrA+LvZB4UZ2uOooXj6/WZaDXk03NqT2AYzj8
-   vONQdL4Rlmb4WHjsujs1BznAvaaycCkac1gkpjJfjw8m17pnMnA3ju5NC
-   0YGqmPCFI8p6ZJvh+W2cLyEhWAqANuObUUiGSyp+ig2CG0FOAMh02OFxf
-   B8GJy/BcbM5Qc7UXf/bF4ah8Vti8IntcELYvrZy57wKQezaz9BMm7ue12
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365930157"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365930157"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 16:16:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642226603"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2022 16:15:58 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2LC2-000PqH-6H;
-	Fri, 17 Jun 2022 23:15:58 +0000
-Date: Sat, 18 Jun 2022 07:14:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	linux-kernel@vger.kernel.org
-Subject: [cilium:pr/meta4 2/2] include/net/sch_generic.h:744:14: error: no
- member named 'tc_at_ingress' in 'struct sk_buff'
-Message-ID: <202206180759.g5Fqzf3d-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F344C95
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 23:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E45C3411B;
+	Fri, 17 Jun 2022 23:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655508058;
+	bh=rGQzkd/UiwUfhQgTDoLXwSrTOXjHekgheMJITyy09uA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DIxpLU7+kssPmhfoNmY4ItatQtANUCZiyuF4u5aMlisfvlnT0ESt60Zl5bKpNKfyW
+	 aT3iYZ11rgDHBlrPoJ+SO6pYiEg1aOesizeXYRtX+vFAbXTj0YDFmHV9u64bYK4p5+
+	 Vv1mtbsDQRmvMoVC7QEyynrc6x8Po+Jg09eRbue+6wJHZsfKj2i006Mjx1K70cks8k
+	 7tnN49u/VFd8Kj4SeG43ltbog/mshHR5pwRSd4lk+jXEafdegg0y9kAfUP8vQwU237
+	 oJa6H74fvuRinmyH3ujlKoDZfm06Benh0STXmaqmscJ6ed1f6u5JCYeoMLotCeoH+p
+	 tcf/LY8yZOv5g==
+Date: Fri, 17 Jun 2022 16:20:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] scripts/Makefile.clang: set --target for host based on
+ make -v
+Message-ID: <Yq0MV2Z/hqSuSYbt@dev-arch.thelio-3990X>
+References: <20220617203948.3714905-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,168 +34,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220617203948.3714905-1-ndesaulniers@google.com>
 
-tree:   https://github.com/cilium/linux.git pr/meta4
-head:   dcea837b60f0d9f8f3cdae284680659042f560d1
-commit: dcea837b60f0d9f8f3cdae284680659042f560d1 [2/2] bpf: Add fd-based API to attach tc BPF programs
-config: arm-buildonly-randconfig-r002-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180759.g5Fqzf3d-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/cilium/linux/commit/dcea837b60f0d9f8f3cdae284680659042f560d1
-        git remote add cilium https://github.com/cilium/linux.git
-        git fetch --no-tags cilium pr/meta4
-        git checkout dcea837b60f0d9f8f3cdae284680659042f560d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/packet/
+On Fri, Jun 17, 2022 at 01:39:48PM -0700, Nick Desaulniers wrote:
+> We're working on providing statically linked images of clang to host on
+> kernel.org. We're building them in Alpine Linux based Docker containers,
+> which are MUSL based systems.
+> 
+> In order to keep bootstrapping simpler, I'd like for them to have an
+> implicit default --target of x86_64-alpine-linux-musl (set via LLVM's
+> cmake variable LLVM_DEFAULT_TARGET_TRIPLE).
+> 
+> Similarly, if one were to use a different build of clang meant for a
+> glibc or bionic based system on a MUSL based host, we'd prefer to use
+> the correct MUSL based triple for target hosts.
+> 
+> Borrowed from the Zen of Python: Explicit is better than implicit. Let's
+> be explicit about the target triple for HOSTCC when building with
+> HOSTCC=clang or LLVM=1.
+> 
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I have tested this with a few different distributions on both aarch64
+and x86_64:
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-   In file included from net/packet/af_packet.c:52:
-   In file included from include/linux/filter.h:26:
->> include/net/sch_generic.h:744:14: error: no member named 'tc_at_ingress' in 'struct sk_buff'
-           return skb->tc_at_ingress;
-                  ~~~  ^
->> include/net/sch_generic.h:753:11: error: no member named 'tc_skip_classify' in 'struct sk_buff'
-           if (skb->tc_skip_classify) {
-               ~~~  ^
-   include/net/sch_generic.h:754:8: error: no member named 'tc_skip_classify' in 'struct sk_buff'
-                   skb->tc_skip_classify = 0;
-                   ~~~  ^
-   include/net/sch_generic.h:1361:27: error: no member named 'sch_ingress' in 'struct net_device'
-                   rcu_assign_pointer(dev->sch_ingress, entry);
-                                      ~~~  ^
-   include/linux/rcupdate.h:454:15: note: expanded from macro 'rcu_assign_pointer'
-                   WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
-                               ^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   In file included from net/packet/af_packet.c:52:
-   In file included from include/linux/filter.h:26:
-   include/net/sch_generic.h:1361:27: error: no member named 'sch_ingress' in 'struct net_device'
-                   rcu_assign_pointer(dev->sch_ingress, entry);
-                                      ~~~  ^
-   include/linux/rcupdate.h:454:15: note: expanded from macro 'rcu_assign_pointer'
-                   WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
-                               ^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   In file included from net/packet/af_packet.c:52:
-   In file included from include/linux/filter.h:26:
-   include/net/sch_generic.h:1361:27: error: no member named 'sch_ingress' in 'struct net_device'
-                   rcu_assign_pointer(dev->sch_ingress, entry);
-                                      ~~~  ^
-   include/linux/rcupdate.h:454:15: note: expanded from macro 'rcu_assign_pointer'
-                   WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
-                               ^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   In file included from net/packet/af_packet.c:52:
-   In file included from include/linux/filter.h:26:
-   include/net/sch_generic.h:1361:27: error: no member named 'sch_ingress' in 'struct net_device'
-                   rcu_assign_pointer(dev->sch_ingress, entry);
-                                      ~~~  ^
-   include/linux/rcupdate.h:454:15: note: expanded from macro 'rcu_assign_pointer'
-                   WRITE_ONCE((p), (typeof(p))(_r_a_p__v));                      \
-                               ^
-   include/asm-generic/rwonce.h:60:33: note: expanded from macro 'WRITE_ONCE'
-           compiletime_assert_rwonce_type(x);                              \
-                                          ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-           compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-                                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                               ^~~~~~~~~
-   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-                                ^~~~~~~~~
-   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   In file included from net/packet/af_packet.c:52:
+One small comment below.
 
+> ---
+>  Makefile               |  3 +--
+>  scripts/Makefile.clang | 10 ++++++++++
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 1a6678d817bd..87712d9b043c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -600,10 +600,9 @@ endif
+>  # CC_VERSION_TEXT is referenced from Kconfig (so it needs export),
+>  # and from include/config/auto.conf.cmd to detect the compiler upgrade.
+>  CC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(CC) --version 2>/dev/null | head -n 1))
+> +HOSTCC_VERSION_TEXT = $(subst $(pound),,$(shell LC_ALL=C $(HOSTCC) --version 2>/dev/null | head -n 1))
+>  
+> -ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
+>  include $(srctree)/scripts/Makefile.clang
+> -endif
+>  
+>  # Include this also for config targets because some architectures need
+>  # cc-cross-prefix to determine CROSS_COMPILE.
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 87285b76adb2..a4505cd62d7b 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -1,3 +1,4 @@
+> +ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
+>  # Individual arch/{arch}/Makefiles should use -EL/-EB to set intended
+>  # endianness and -m32/-m64 to set word size based on Kconfigs instead of
+>  # relying on the target triple.
+> @@ -39,3 +40,12 @@ CLANG_FLAGS	+= -Werror=ignored-optimization-argument
+>  KBUILD_CFLAGS	+= $(CLANG_FLAGS)
+>  KBUILD_AFLAGS	+= $(CLANG_FLAGS)
+>  export CLANG_FLAGS
+> +endif
+> +
+> +# If HOSTCC is clang, set the host target triple explicitly; do not rely on
+> +# implicit defaults.
+> +ifneq ($(findstring clang,$(HOSTCC_VERSION_TEXT)),)
+> +HOST_TRIPLE		:= --target=$(shell make --version | head -n2 | tail -n1 | cut -d ' ' -f 3)
 
-vim +744 include/net/sch_generic.h
+Should we use $(MAKE) instead of make here? I guess the only case where
+it would matter is if someone was calling make via an explicit path and
+did not have it available in their PATH so maybe it is not worth
+worrying about.
 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  740  
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  741  static inline bool skb_at_tc_ingress(const struct sk_buff *skb)
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  742  {
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  743  #ifdef CONFIG_NET_CLS_ACT
-8dc07fdbf2054f Willem de Bruijn 2017-01-07 @744  	return skb->tc_at_ingress;
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  745  #else
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  746  	return false;
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  747  #endif
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  748  }
-fdc5432a7b44ab Daniel Borkmann  2016-01-07  749  
-e7246e122aaa99 Willem de Bruijn 2017-01-07  750  static inline bool skb_skip_tc_classify(struct sk_buff *skb)
-e7246e122aaa99 Willem de Bruijn 2017-01-07  751  {
-e7246e122aaa99 Willem de Bruijn 2017-01-07  752  #ifdef CONFIG_NET_CLS_ACT
-e7246e122aaa99 Willem de Bruijn 2017-01-07 @753  	if (skb->tc_skip_classify) {
-e7246e122aaa99 Willem de Bruijn 2017-01-07  754  		skb->tc_skip_classify = 0;
-e7246e122aaa99 Willem de Bruijn 2017-01-07  755  		return true;
-e7246e122aaa99 Willem de Bruijn 2017-01-07  756  	}
-e7246e122aaa99 Willem de Bruijn 2017-01-07  757  #endif
-e7246e122aaa99 Willem de Bruijn 2017-01-07  758  	return false;
-e7246e122aaa99 Willem de Bruijn 2017-01-07  759  }
-e7246e122aaa99 Willem de Bruijn 2017-01-07  760  
-
-:::::: The code at line 744 was first introduced by commit
-:::::: 8dc07fdbf2054f157e8333f940a1ad728916c786 net-tc: convert tc_at to tc_at_ingress
-
-:::::: TO: Willem de Bruijn <willemb@google.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +KBUILD_HOSTCFLAGS	+= $(HOST_TRIPLE)
+> +KBUILD_HOSTLDFLAGS	+= $(HOST_TRIPLE)
+> +endif
+> 
+> base-commit: 79fe0f863f920c5fcf9dea61676742f813f0b7a6
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+> 
+> 
