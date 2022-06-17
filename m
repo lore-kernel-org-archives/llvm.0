@@ -1,114 +1,203 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112684C78
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 19:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655494796; x=1687030796;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5SgFd7WkR3Wqzp/vk0OtAaks+k5JfvTv93sayUfSxWw=;
-  b=Z+knRYh8YcCiIsKkymh6qnoUN65UV14wBTIh/3XTHtPo47VWSVsCXxPE
-   XISATpq9nSjv59EjJ/f8VG9erv+7hzcD0GmDpFdi5llXq0KRFcZDlbsxw
-   jMOPKIJZDpJCLFjzFwe00mKknquJMHPTsU0KKXZc8lcziS1B/OPemsoB1
-   Zs7opteSCH1a0sR7/RzqUjxqqIgkYxw8E7uzm/4aPRMLZ2PZ4Gl9Sg0I/
-   Gtw3O5/MShlQrZ8Al/yLSuzgfz3IbPZSeKTtJ4APqkzwArCvV7f/xe86f
-   GgxGPgmvYe7hEpdRKBAadOPVYOeS+2ded3/561zEDO+P/eTO7JBOjB0cS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305002365"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="305002365"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 12:39:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642160152"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2022 12:39:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2Hov-000Pi5-AF;
-	Fri, 17 Jun 2022 19:39:53 +0000
-Date: Sat, 18 Jun 2022 03:39:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202206180318.LDlpyiIW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9659A4C78
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 20:05:58 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id bo5so5020449pfb.4
+        for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 13:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vVRxoQn7AiO7gd76vj7+dz8M6TQagl0KShpJJUpQGGI=;
+        b=QjF7kc43eYBmG0w8ifoYZTIss00kABg2PBjxvBFNwNGsG3PoOUuTdVrmbUbxXJ/Hxd
+         NttQU77Jb+buy+tG0Uq0kI/kTJVyr/TkcnlSv/RdpsvDtehLCa0qfgKXgnpnLIhx2BXJ
+         GzrIZ0ENJBiT4loorikudoKlk6C1cRg9ojPTI1KZ5N/NEgiqSHOQ4e94ElVEPiFVW2dF
+         k+pgTxOubFE0f6wB0CF6PU9Qr7SmQfvEuyXmoCcEoPkzyw780smdlx8ABkCyHFPcbYSe
+         hmoRs6lyFtHshpJpepRkaylYSD3iPY7Z1UnVxIlruBFKxTD38TevtKQn+haiwYuOVQ4K
+         EqPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vVRxoQn7AiO7gd76vj7+dz8M6TQagl0KShpJJUpQGGI=;
+        b=lrpmiHn42Gn8mqYIG8ZZ9mXhyfJ5Tp+mEC+jlcdtDdaZBE5KrfAJAVzcidQTd4HYHm
+         HKYn33Ku6EHXRxjKVIATLirJfYG97/N1MfoH1V9epY/gmLY1ADAmkQZOHPf8qrUQf52W
+         aMx2SLRK5QJ8Y7zgR7xXzTkWssH7CTuboJxg58JxgckWdWfklljxrlk1a+J9zAot8ARQ
+         jdvsitD9Q6lYuUnbHjObI3J2KVUmtdR0EPFHuc7VWwYtXz1iXPEdirIUmkjcX5UJ+uWl
+         r1GQUaB98UEo0U4S1SJzgQpjMe/8vokvzt8leVXoRZdjXYzqg/XNA7naYW7SM2rxHuHN
+         crKg==
+X-Gm-Message-State: AJIora9VMi2fqV3kChlAiIr4GpI8lT8SMkE7RAw5kVcXuwxIl7T7Drbv
+	gNEZ+6iqVCB8pKoJKVO17KtDRg==
+X-Google-Smtp-Source: AGRyM1st2CG2AdmtntN9Jqu1IV3b6SNwk+wp9wcEH0NpBFa/YvSGrL4jwiO2gM2uS4gjE32LtiffRg==
+X-Received: by 2002:a63:91c2:0:b0:3fc:bcef:5681 with SMTP id l185-20020a6391c2000000b003fcbcef5681mr10853869pge.236.1655496357755;
+        Fri, 17 Jun 2022 13:05:57 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:3e97:dac1:ecec:f016])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b00162037fbb68sm3930796plm.215.2022.06.17.13.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 13:05:57 -0700 (PDT)
+Date: Fri, 17 Jun 2022 13:05:53 -0700
+From: Fangrui Song <maskray@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>, Jiri Slaby <jslaby@suse.cz>,
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
+Message-ID: <20220617200553.kg7jmkvwdp7yqfkm@google.com>
+References: <20220616104541.16289-1-jslaby@suse.cz>
+ <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
+ <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
+ <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com>
+ <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
+ <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
 
-Hi Mauro,
+On 2022-06-18, Masahiro Yamada wrote:
+>(+LLVM list, Fangrui Song)
 
-FYI, the error/warning still remains.
+Thanks for tagging me. I'll clarify some stuff.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   274295c6e53f8b8b8dfa8b24a3fcb8a9d670c22c
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   3 months ago
-config: mips-randconfig-c004-20220617 (https://download.01.org/0day-ci/archive/20220618/202206180318.LDlpyiIW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+>On Fri, Jun 17, 2022 at 7:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>
+>> On Fri, Jun 17, 2022 at 12:35 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> >
+>> > On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> > >
+>> > > On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>> > > >
+>> > > > On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>> > > > >
+>> > > > > Until the link-vmlinux.sh split (cf. the commit below), the linker was
+>> > > > > run with jobserver set in MAKEFLAGS. After the split, the command in
+>> > > > > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+>> > > > > is lost.
+>> > > > >
+>> > > > > Restore it as linkers working in parallel (esp. the LTO ones) make a use
+>> > > > > of i
+>
+>Hi Jiri,
+>
+>Please let me clarify first.
+>
+>Here, is it OK to assume you are talking about Clang LTO
+>instead of GCC LTO because the latter is not upstreamed ?
+>
+>
+>
+>
+>
+>I tested this patch but I did not see any performance change for Clang LTO.
+>
+>
+>[1] CONFIG_CLANG_LTO_FULL
+>
+>   lld always runs sequential.
+>   It never runs in parallel even if you pass -j option to Make
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+"lld always runs sequential" is not accurate. There are a number of
+parallel linker passes.  ld.lld --threads= defaults to
+llvm::hardware_concurrency (similar to
+https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency,
+but uses sched_getaffinity to compute the number of available cores).
 
-All warnings (new ones prefixed by >>):
+"lld always runs sequential" is only correct only when --threads=1 is
+specified or the system only provides one thread to the lld process.
 
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
+I think people may be more interested in LTO parallelism here.  Regular
+LTO (sometimes called full LTO when there is mixed-thin-and-regular LTO)
+supports limited parallelism which applies to code generation, but not
+IR-level optimization.  (IR-level optimization has many interprocedural
+optimizations passes.  Splitting will make LTO less effective. Code
+generation is per function, so parallelism does not regress
+optimization.)
+
+>
+>[2] CONFIG_CLANG_LTO_THIN
+>
+>   lld always runs in parallel even if you do not pass -j option
+>
+>   In my machine, lld always allocated 12 threads.
+>   This is irrespective of the Make parallelisms.
+>
+>
+>
+>
+>One more thing, if a program wants to participate in
+>Make's jobserver, it must parse MAKEFLAGS, and extract
+>file descriptors to be used to communicate to the jobserver.
+>
+>As a code example in the kernel tree,
+>scripts/jobserver-exec parses "MAKEFLAGS" and "--jobserver".
+>
+>
+>I grepped the lld source code, but it does not contain
+>"MAKEFLAGS" or "jobserver".
+
+>masahiro@oscar:~/ref/lld$ git remote  show origin
+>* remote origin
+>  Fetch URL: https://github.com/llvm-mirror/lld.git
+>  Push  URL: https://github.com/llvm-mirror/lld.git
+>  HEAD branch: master
+>  Remote branches:
+>    master     tracked
+>    release_36 tracked
+>    release_37 tracked
+>    release_38 tracked
+>    release_39 tracked
+>    release_40 tracked
+>    release_50 tracked
+>    release_60 tracked
+>    release_70 tracked
+>    release_80 tracked
+>    release_90 tracked
+>  Local branch configured for 'git pull':
+>    master merges with remote master
+>  Local ref configured for 'git push':
+>    master pushes to master (up to date)
+>masahiro@oscar:~/ref/lld$ git grep MAKEFLAGS
+>masahiro@oscar:~/ref/lld$ git grep jobserver
+>
+>
+>So, in my research, LLD does not seem to support the jobserver.
 
 
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+Correct. lld does not support GNU make's jobserver.  On the other hand,
+I don't think the jobserver implementation supports flexible "give this
+target N hardware concurrency". A heavy link target does not necessarily
+get more resources than a quick target.
 
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+If a make target knows how many hardware concurrency it gets, we can
+pass --threads= to lld. LTO easily takes 95+% link time, so LTO
+parallelism may needs a dedicated setting. lld has --thinlto-jobs=.
 
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+>
+>
+>If you are talking about GCC LTO, yes, the code
+>tries to parse "--jobserver-auth=" from the MAKEFLAGS
+>environment variable.  [1]
+>
+>[1]:  https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/lto-wrapper.cc#L1341
+>
+>
+>But, as you may know, GCC LTO works in a different way,
+>at least, we cannot do it before modpost.
+>
+>
+>-- 
+>Best Regards
+>Masahiro Yamada
+>
