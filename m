@@ -1,164 +1,126 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8724E3201
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 15:22:27 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 25HFM6fb026767
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 00:22:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 25HFM6fb026767
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1655479327;
-	bh=vvgHqTh1wXE7hKhLuY8TbWdkyuEIhZfbEWS5VwgPLWY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cOhw7EC0b08gudg9umyob1bJwEpW/9gwNi19r2R3h6ee2+O0VOh2ZikmOyg93iBNw
-	 4JApVO9XsOOkgnMMjxCowcJ3hkoCvIjWXEBaccZDpXgoJauYp9TywX0OIjQ2E1tkhp
-	 2MXfPqpc1t41FUF6HuTzyvvskXjjBAKGgmYXIx691NQinh+X15JMOw6CB3cUNOYNnm
-	 F7K1xY/eLP0ysPIgbhLFVOzRpv5EIyzfTz1U5Uzwb/Z0W9MkVLHvRAjhKrh1hcMcFg
-	 LK/xSRD6xfZUYW2ljpr+0U5pwXhpQwuSNxXE8Hgl+25jN9TcR2gXf3jfm2e4oohwCm
-	 ZfUiGipTAAJCg==
-X-Nifty-SrcIP: [209.85.128.42]
-Received: by mail-wm1-f42.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso2573060wml.1
-        for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 08:22:06 -0700 (PDT)
-X-Gm-Message-State: AOAM532KHoHkPezXa3bNeKF0vB7k+xaAjGgIjAkrEjTubh6GaZMT8OMR
-	XcEzAnzsF7JGaPx/w8sgANooX8ZqHNrMFjgXL2g=
-X-Google-Smtp-Source: ABdhPJyH38D6N7CsO2MxwY1ptWXxzTktDOO0nHF1abeRdJfr3gtU2ythFA8M74KbgUO0c9L6WDiXK9Sv7m5KAspRB1o=
-X-Received: by 2002:a7b:c346:0:b0:397:626d:d2c4 with SMTP id
- l6-20020a7bc346000000b00397626dd2c4mr21355129wmj.172.1655479325296; Fri, 17
- Jun 2022 08:22:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33293201
+	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 15:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16630C3411F;
+	Fri, 17 Jun 2022 15:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655480109;
+	bh=VPkBkFvD/Xnk7A4j7m76oh1cYQnr7qtUqD6cTQbTnNo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lSwH1ee6epFMg63mrxjAXLHMfYkB8YEpBZ5dw7vY1YpEo81huYDAI+a6npp5Fdbbp
+	 l4NsakmpB4I8ktYEDrdVVzLc6kdlpcw3AZPXMd05+d6Rr5p/+K1Hi0dSTfIo9fl1XK
+	 Y0DlTIAlzxTPO/Vi860UmyR9s7zACRj40cy9kcMxey2dG0+DKfd303esiNB9a03/6R
+	 jQhNWaSLT6ll1PgT/VBdxRwUjkybS0fmAQODoMIXb/Pm7noA6qy7R1bLYVPjh2I5cs
+	 HII3pZN1vWq5aCx68oQmXUWbfTAIRSEptskGJShOFQvEfqFahNUzCO+LK6wv9Oxkkv
+	 nm5gmFpxzJocg==
+Date: Fri, 17 Jun 2022 08:35:07 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH for-next v3 16/16] io_uring: mutex locked poll hashing
+Message-ID: <YqyfK34NJakiLiVe@dev-arch.thelio-3990X>
+References: <cover.1655371007.git.asml.silence@gmail.com>
+ <1bbad9c78c454b7b92f100bbf46730a37df7194f.1655371007.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220616104541.16289-1-jslaby@suse.cz> <CA+icZUW8O-HUSpw-656o6YZOiR2ZiCXjxsJwm2kctT6DHrs=4g@mail.gmail.com>
- <CA+icZUV6bM2_jxyROK5B4XRid6fv8oX6YYNEdHUX8e_1OAdQYA@mail.gmail.com>
- <CA+icZUUSTcrJqZB-gwNYt5objVg1J5+Ous6_hof0_A6eVCM-Kg@mail.gmail.com> <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
-In-Reply-To: <CA+icZUXDGdPrPKUnevt99LUpTRPe=ogqF33uHQRYrQ6Kh-iTAw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 18 Jun 2022 00:21:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
-Message-ID: <CAK7LNATHY88PbJ_=A6g7v8NMQnBcQ9g06k1+SCe+NM+xd5dLwA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: pass jobserver to cmd_ld_vmlinux.o
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Jiri Slaby <jslaby@suse.cz>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1bbad9c78c454b7b92f100bbf46730a37df7194f.1655371007.git.asml.silence@gmail.com>
 
-(+LLVM list, Fangrui Song)
+On Thu, Jun 16, 2022 at 10:22:12AM +0100, Pavel Begunkov wrote:
+> Currently we do two extra spin lock/unlock pairs to add a poll/apoll
+> request to the cancellation hash table and remove it from there.
+> 
+> On the submission side we often already hold ->uring_lock and tw
+> completion is likely to hold it as well. Add a second cancellation hash
+> table protected by ->uring_lock. In concerns for latency because of a
+> need to have the mutex locked on the completion side, use the new table
+> only in following cases:
+> 
+> 1) IORING_SETUP_SINGLE_ISSUER: only one task grabs uring_lock, so there
+>    is little to no contention and so the main tw hander will almost
+>    always end up grabbing it before calling callbacks.
+> 
+> 2) IORING_SETUP_SQPOLL: same as with single issuer, only one task is
+>    a major user of ->uring_lock.
+> 
+> 3) apoll: we normally grab the lock on the completion side anyway to
+>    execute the request, so it's free.
+> 
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 
-On Fri, Jun 17, 2022 at 7:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Jun 17, 2022 at 12:35 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Fri, Jun 17, 2022 at 12:53 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Thu, Jun 16, 2022 at 4:09 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > >
-> > > > On Thu, Jun 16, 2022 at 12:45 PM Jiri Slaby <jslaby@suse.cz> wrote:
-> > > > >
-> > > > > Until the link-vmlinux.sh split (cf. the commit below), the linker was
-> > > > > run with jobserver set in MAKEFLAGS. After the split, the command in
-> > > > > Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
-> > > > > is lost.
-> > > > >
-> > > > > Restore it as linkers working in parallel (esp. the LTO ones) make a use
-> > > > > of i
+<snip>
 
-Hi Jiri,
+> -/*
+> - * Returns true if we found and killed one or more poll requests
+> - */
+> -__cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+> -			       bool cancel_all)
+> +static __cold bool io_poll_remove_all_table(struct task_struct *tsk,
+> +					    struct io_hash_table *table,
+> +					    bool cancel_all)
+>  {
+> -	struct io_hash_table *table = &ctx->cancel_table;
+>  	unsigned nr_buckets = 1U << table->hash_bits;
+>  	struct hlist_node *tmp;
+>  	struct io_kiocb *req;
+> @@ -557,6 +592,17 @@ __cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+>  	return found;
+>  }
+>  
+> +/*
+> + * Returns true if we found and killed one or more poll requests
+> + */
+> +__cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+> +			       bool cancel_all)
+> +	__must_hold(&ctx->uring_lock)
+> +{
+> +	return io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all) |
+> +	       io_poll_remove_all_table(tsk, &ctx->cancel_table_locked, cancel_all);
+> +}
 
-Please let me clarify first.
+Clang warns:
 
-Here, is it OK to assume you are talking about Clang LTO
-instead of GCC LTO because the latter is not upstreamed ?
+  io_uring/poll.c:602:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+          return io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all) |
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                               ||
+  io_uring/poll.c:602:9: note: cast one or both operands to int to silence this warning
+  1 error generated.
 
+I assume this is intentional so io_poll_remove_all_table() gets called
+twice every time? If so, would you be opposed to unrolling this a bit to
+make it clear to the compiler? Alternatively, we could change the return
+type of io_poll_remove_all_table to be an int or add a cast to int like
+the note mentioned but that is rather ugly to me. I can send a formal
+patch depending on your preference.
 
+Cheers,
+Nathan
 
-
-
-I tested this patch but I did not see any performance change for Clang LTO.
-
-
-[1] CONFIG_CLANG_LTO_FULL
-
-   lld always runs sequential.
-   It never runs in parallel even if you pass -j option to Make
-
-
-[2] CONFIG_CLANG_LTO_THIN
-
-   lld always runs in parallel even if you do not pass -j option
-
-   In my machine, lld always allocated 12 threads.
-   This is irrespective of the Make parallelisms.
-
-
-
-
-One more thing, if a program wants to participate in
-Make's jobserver, it must parse MAKEFLAGS, and extract
-file descriptors to be used to communicate to the jobserver.
-
-As a code example in the kernel tree,
-scripts/jobserver-exec parses "MAKEFLAGS" and "--jobserver".
-
-
-
-
-I grepped the lld source code, but it does not contain
-"MAKEFLAGS" or "jobserver".
-
-
-masahiro@oscar:~/ref/lld$ git remote  show origin
-* remote origin
-  Fetch URL: https://github.com/llvm-mirror/lld.git
-  Push  URL: https://github.com/llvm-mirror/lld.git
-  HEAD branch: master
-  Remote branches:
-    master     tracked
-    release_36 tracked
-    release_37 tracked
-    release_38 tracked
-    release_39 tracked
-    release_40 tracked
-    release_50 tracked
-    release_60 tracked
-    release_70 tracked
-    release_80 tracked
-    release_90 tracked
-  Local branch configured for 'git pull':
-    master merges with remote master
-  Local ref configured for 'git push':
-    master pushes to master (up to date)
-masahiro@oscar:~/ref/lld$ git grep MAKEFLAGS
-masahiro@oscar:~/ref/lld$ git grep jobserver
-
-
-So, in my research, LLD does not seem to support the jobserver.
-
-
-
-
-
-If you are talking about GCC LTO, yes, the code
-tries to parse "--jobserver-auth=" from the MAKEFLAGS
-environment variable.  [1]
-
-[1]:  https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/lto-wrapper.cc#L1341
-
-
-But, as you may know, GCC LTO works in a different way,
-at least, we cannot do it before modpost.
-
-
--- 
-Best Regards
-Masahiro Yamada
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index 2e068e05732a..6a70bc220971 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -599,8 +599,12 @@ __cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+ 			       bool cancel_all)
+ 	__must_hold(&ctx->uring_lock)
+ {
+-	return io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all) |
+-	       io_poll_remove_all_table(tsk, &ctx->cancel_table_locked, cancel_all);
++	bool ret;
++
++	ret = io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all);
++	ret |= io_poll_remove_all_table(tsk, &ctx->cancel_table_locked, cancel_all);
++
++	return ret;
+ }
+ 
+ static struct io_kiocb *io_poll_find(struct io_ring_ctx *ctx, bool poll_only,
