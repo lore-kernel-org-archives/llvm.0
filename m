@@ -1,193 +1,120 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05B033C7
-	for <llvm@lists.linux.dev>; Fri, 17 Jun 2022 17:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655486366; x=1687022366;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nUf3VSmAhMT7KhA0SZgvMeAAppiMPu6TfIssmeBBkZ0=;
-  b=JGAuiFBFq3Aq/HnT6KwarYpD3wg8ZhawJvVVFRRbvZAoOAj3uiQU3AGt
-   R26/JUl/C3Uk2w1JgXrIMm5XRmZJbKEJDd1LKHrCThoFaAAmDvjhgmhp5
-   7EZOX0+gMNmMmZXljcxk3wy6Jg7KLroSJDP6pHxHBnEDkIYupuyMfVP7a
-   iiLW+Euixmq009fLGly/nw0E9qP2OInhz9bV62A03q+UjJQIF0o4my87x
-   abRVXRRw5n/ap6udGXW0nUbpAnsQf9+PI7Nzprk4a8qxDp2FThXT8E/58
-   pPzstHz8Elob9uLMBOCrwdy11ozUE6SIM1sLAt6OeAnV8bhtlwvW8L9a2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280246890"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280246890"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 07:40:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="713789777"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jun 2022 07:40:44 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2D9P-000PVx-Mp;
-	Fri, 17 Jun 2022 14:40:43 +0000
-Date: Fri, 17 Jun 2022 22:40:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ricardo Ribalda <ribalda@chromium.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-kernel@vger.kernel.org, tfiga@chromium.org,
-	senozhatsky@chromium.org, yunkec@google.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-media@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: [PATCH v7 2/8] media: uvcvideo: Add support for per-device
- control mapping overrides
-Message-ID: <202206172239.M4dQBUhz-lkp@intel.com>
-References: <20220617103645.71560-3-ribalda@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBB533C7;
+	Fri, 17 Jun 2022 18:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B7EC3411B;
+	Fri, 17 Jun 2022 18:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655489704;
+	bh=QUh4kC7NXGm1YEXl3pKZXaJzSvNx6+iaW+R315T3U6U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QgZ5tfMIqGFau4nNzCvsqcbXS4Qeth6Xu/MxBTR34OtX0oITanNZUiKgHXIvqx77P
+	 fQaFNIBsEdeCvzAXC02upYo+kSY/xuyAXeW2lsdTS8hxoFrVM5GxndNEPAtX/aw4Tt
+	 KnwljZzltunV6Ny+OKAKWV53igJoiXdaEmN5F+Fh2LD0rvnJP+P2QzvicHBozyQIHE
+	 I8Q/FwQib+OCJ9AvjKhAjqJ/eddzlgUQgnlepxSJebMcbQrxBw9dbJsLKolSWFjXW+
+	 GDdSalz/bhjOvgYBYOjlPTMLsgXboLgljM3tRPgS0TmigorIOXePej19rLiLAyCkic
+	 T6Ob51Cv+YXQg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Daniel Kolesa <daniel@octaforge.org>,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when cross compiling with clang
+Date: Fri, 17 Jun 2022 11:08:46 -0700
+Message-Id: <20220617180845.2788442-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617103645.71560-3-ribalda@chromium.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Ricardo,
+Chimera Linux notes that CONFIG_CC_HAS_SANE_STACKPROTECTOR cannot be
+enabled when cross compiling an x86_64 kernel with clang, even though it
+does work when natively compiling.
 
-I love your patch! Perhaps something to improve:
+When building on aarch64:
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
-base:   git://linuxtv.org/media_tree.git master
-config: hexagon-randconfig-r045-20220617 (https://download.01.org/0day-ci/archive/20220617/202206172239.M4dQBUhz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d764aa7fc6b9cc3fbe960019018f5f9e941eb0a6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ricardo-Ribalda/uvcvideo-Fix-handling-of-power_line_frequency/20220617-185644
-        git checkout 10bdca4191d7a8be97c77dbe4ba89c05713ee0e2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/usb/uvc/
+  $ grep STACKPROTECTOR .config
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+When building on x86_64:
 
-All warnings (new ones prefixed by >>):
+  $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
 
->> drivers/media/usb/uvc/uvc_ctrl.c:2442:6: warning: variable 'mapping' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (chain->dev->info->mappings) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2459:9: note: uninitialized use occurs here
-           mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-                  ^~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2442:2: note: remove the 'if' if its condition is always true
-           if (chain->dev->info->mappings) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/usb/uvc/uvc_ctrl.c:2406:43: note: initialize the variable 'mapping' to silence this warning
-           const struct uvc_control_mapping *mapping;
-                                                    ^
-                                                     = NULL
-   1 warning generated.
+  $ grep STACKPROTECTOR .config
+  CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
+  CONFIG_HAVE_STACKPROTECTOR=y
+  CONFIG_STACKPROTECTOR=y
+  CONFIG_STACKPROTECTOR_STRONG=y
 
+When clang is invoked without a '--target' flag, code is generated for
+the default target, which is usually the host (it is configurable via
+cmake). As a result, the has-stack-protector scripts will generate code
+for the default target but check for x86 specific segment registers,
+which cannot succeed if the default target is not x86.
 
-vim +2442 drivers/media/usb/uvc/uvc_ctrl.c
+$(CLANG_FLAGS) contains an explicit '--target' flag so pass that
+variable along to the has-stack-protector scripts so that the stack
+protector can be enabled when cross compiling with clang. The 32-bit
+stack protector cannot currently be enabled with clang, as it does not
+support '-mstack-protector-guard-symbol', so this results in no
+functional change for ARCH=i386 when cross compiling.
 
-  2396	
-  2397	/*
-  2398	 * Add control information and hardcoded stock control mappings to the given
-  2399	 * device.
-  2400	 */
-  2401	static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
-  2402				       struct uvc_control *ctrl)
-  2403	{
-  2404		const struct uvc_control_info *info = uvc_ctrls;
-  2405		const struct uvc_control_info *iend = info + ARRAY_SIZE(uvc_ctrls);
-  2406		const struct uvc_control_mapping *mapping;
-  2407		const struct uvc_control_mapping *mend;
-  2408	
-  2409		/* XU controls initialization requires querying the device for control
-  2410		 * information. As some buggy UVC devices will crash when queried
-  2411		 * repeatedly in a tight loop, delay XU controls initialization until
-  2412		 * first use.
-  2413		 */
-  2414		if (UVC_ENTITY_TYPE(ctrl->entity) == UVC_VC_EXTENSION_UNIT)
-  2415			return;
-  2416	
-  2417		for (; info < iend; ++info) {
-  2418			if (uvc_entity_match_guid(ctrl->entity, info->entity) &&
-  2419			    ctrl->index == info->index) {
-  2420				uvc_ctrl_add_info(chain->dev, ctrl, info);
-  2421				/*
-  2422				 * Retrieve control flags from the device. Ignore errors
-  2423				 * and work with default flag values from the uvc_ctrl
-  2424				 * array when the device doesn't properly implement
-  2425				 * GET_INFO on standard controls.
-  2426				 */
-  2427				uvc_ctrl_get_flags(chain->dev, ctrl, &ctrl->info);
-  2428				break;
-  2429			 }
-  2430		}
-  2431	
-  2432		if (!ctrl->initialized)
-  2433			return;
-  2434	
-  2435		/*
-  2436		 * First check if the device provides a custom mapping for this control,
-  2437		 * used to override standard mappings for non-conformant devices. Don't
-  2438		 * process standard mappings if a custom mapping is found. This
-  2439		 * mechanism doesn't support combining standard and custom mappings for
-  2440		 * a single control.
-  2441		 */
-> 2442		if (chain->dev->info->mappings) {
-  2443			bool custom = false;
-  2444			unsigned int i;
-  2445	
-  2446			for (i = 0; (mapping = chain->dev->info->mappings[i]); ++i) {
-  2447				if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2448				    ctrl->info.selector == mapping->selector) {
-  2449					__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2450					custom = true;
-  2451				}
-  2452			}
-  2453	
-  2454			if (custom)
-  2455				return;
-  2456		}
-  2457	
-  2458		/* Process common mappings next. */
-  2459		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings);
-  2460		for (mapping = uvc_ctrl_mappings; mapping < mend; ++mapping) {
-  2461			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2462			    ctrl->info.selector == mapping->selector)
-  2463				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2464		}
-  2465	
-  2466		/* Finally process version-specific mappings. */
-  2467		if (chain->dev->uvc_version < 0x0150) {
-  2468			mapping = uvc_ctrl_mappings_uvc11;
-  2469			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc11);
-  2470		} else {
-  2471			mapping = uvc_ctrl_mappings_uvc15;
-  2472			mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc15);
-  2473		}
-  2474	
-  2475		for (; mapping < mend; ++mapping) {
-  2476			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-  2477			    ctrl->info.selector == mapping->selector)
-  2478				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-  2479		}
-  2480	}
-  2481	
+Link: https://github.com/chimera-linux/cports/commit/0fb7e506d5f83fdf2104feb22cdac34934561226
+Link: https://github.com/llvm/llvm-project/issues/48553
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
 
+Fixes: 2a61f4747eea ("stack-protector: test compiler capability in Kconfig and drop AUTO mode")
+
+might be appropriate; I am conflicted on fixes tags for problems that
+that arise due to use cases that were not considered at the time of a
+change, as it feels wrong to blame the commit for not looking far enough
+into the future where it might be common for people to have workstations
+running another architecture other than x86_64.
+
+Chimera appears to use a 5.15 kernel so a
+
+Cc: stable@vger.kernel.org
+
+might be nice but some maintainers are picky about that so I leave it up
+to you all.
+
+ arch/x86/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index be0b95e51df6..076adde7ead9 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -391,8 +391,8 @@ config PGTABLE_LEVELS
+ 
+ config CC_HAS_SANE_STACKPROTECTOR
+ 	bool
+-	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC)) if 64BIT
+-	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC))
++	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC) $(CLANG_FLAGS)) if 64BIT
++	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC) $(CLANG_FLAGS))
+ 	help
+ 	  We have to make sure stack protector is unconditionally disabled if
+ 	  the compiler produces broken code or if it does not let us control
+
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
