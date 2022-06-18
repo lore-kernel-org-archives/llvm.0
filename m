@@ -1,101 +1,137 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397947B
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 11:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655552238; x=1687088238;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aOYo46dpjPADJUZif/M9VCCs/cdqw1jhFQJdCWKAs90=;
-  b=jYplqyboqo4PaY+z4EyMbHo3ywZBfxQlwrr8Lz5VXK53Adc6Cer6p/Ay
-   qLcRnfCQr2+cdCXn/a+RgeAODSWbJlmNxs7G03ASrYcMbYL/GIp41wPxG
-   1tGGAm8Fw1F2yFv/4Gaun3m+AksvzCDkO5iiZfc4PfIG5EjAQ2lrqgPaJ
-   NrfV7ckNn3BXPzzpqi5eA2RuIrXYiYvSECI7zbFnYAUxp+G34Nz1mISFU
-   bRYp5g0HIRLTXIw45Bf2l0URF1eUiZpwxKoDkylnkLmleUq9mnVEuSpXq
-   CgtrTJ67RjyFt4O41tJijTOyGHJmtItUlRcrNSrUDD3UxR4zp+SpK/K0T
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268365753"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="268365753"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 04:37:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="763557267"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 04:37:16 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o2WlP-000QHx-DQ;
-	Sat, 18 Jun 2022 11:37:15 +0000
-Date: Sat, 18 Jun 2022 19:36:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liang He <windhl@126.com>, linux@armlinux.org.uk
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, windhl@126.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm: mm: (cache-feroceon-l2) Add missing of_node_put()
-Message-ID: <202206181916.KzyEh57x-lkp@intel.com>
-References: <20220616030232.3974254-1-windhl@126.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C3F7B
+	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 12:08:16 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id es26so7605843edb.4
+        for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 05:08:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LomvdWvqgBhsPwcw6xFc/20qQFIhXtLS6hXt3K0gAfw=;
+        b=XfRTA6M6BiZmFDOi14GICJzIjbXRUCniw4aIoxkaKSv0Gg73p8hg0NTU3TR8UVijiU
+         hnUHKnyFtVFD0GbuwzTy4lODOKb1nDX7fegSBEQtM4k0t5MYpWO9dJKv5MZReIid5pra
+         /tJFH2jU3H/iBOshhUP/9Bsxh7U8t6ySv+kN5SNitNjDqz7oJxVmipv6Vtjo1nf0YhZp
+         wQHJ+9D27eZa2WclNc5wd6wcAKtSvgxfkjeJPet4mAGqOea7MlcbKCOptrFuA/CJteeq
+         h8RYaBqcCisgq4mgP9LKUAqnjLA4pOfR6ch+sunMgY69Ezx9uGuAEH7xOGWLXn/aX2sM
+         KC2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LomvdWvqgBhsPwcw6xFc/20qQFIhXtLS6hXt3K0gAfw=;
+        b=HkWqBmoEQJrpPQQjlC+HcuvyqdgPp5MnpxrLzFgNBYYy9Kiesc7u/pFc6HnQOh3YDa
+         V2mMCQgexw8E0TEjlSlxEfePhy1WlKhp54t/MBp+a3SrBIhea43p2MONRIxeqf2XYuq3
+         JchUeNiPIqaHuIr4giItXhw8F7+aHJ1mkY/QUrbdYARDBNn1TmZfPg5C9EFpUrgcd8JP
+         WGuhW3eM8eO78Elt9OWDZLdZVLmy+lAIdr3k/wF9pPlyuSbIiGTLUJcCVhH0YSLXxiq3
+         CaVYTqkgFmW2lmdKiQo+4rxyfTxpRVzxONrjGobIIp9RoJaM4tZGFgykg1375s1J/ndz
+         PkPA==
+X-Gm-Message-State: AJIora/Dl2NoPinQZMomsyKutV/+87A7nrSm7dkgJpSxNogHQWlJaAzX
+	3V26+jMLtb3waT38OjiKxCM=
+X-Google-Smtp-Source: AGRyM1tCky+3UYwGQcNdb0qDQIOcfKaBZqaaYxGwWw1OfZzQuNMoPNMZ46IfNoCd3rHxDbiFQ/XMfg==
+X-Received: by 2002:a05:6402:401f:b0:433:406a:82c2 with SMTP id d31-20020a056402401f00b00433406a82c2mr18207278eda.289.1655554094641;
+        Sat, 18 Jun 2022 05:08:14 -0700 (PDT)
+Received: from [192.168.8.198] (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id y11-20020a056402270b00b0042e1cbc4471sm5832934edd.3.2022.06.18.05.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jun 2022 05:08:14 -0700 (PDT)
+Message-ID: <36f85d32-4238-9461-72d1-38a2c3468041@gmail.com>
+Date: Sat, 18 Jun 2022 13:07:54 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616030232.3974254-1-windhl@126.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH for-next v3 16/16] io_uring: mutex locked poll hashing
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+ llvm@lists.linux.dev
+References: <cover.1655371007.git.asml.silence@gmail.com>
+ <1bbad9c78c454b7b92f100bbf46730a37df7194f.1655371007.git.asml.silence@gmail.com>
+ <YqyfK34NJakiLiVe@dev-arch.thelio-3990X>
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <YqyfK34NJakiLiVe@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Liang,
+On 6/17/22 16:35, Nathan Chancellor wrote:
+> On Thu, Jun 16, 2022 at 10:22:12AM +0100, Pavel Begunkov wrote:
+>> Currently we do two extra spin lock/unlock pairs to add a poll/apoll
+>> request to the cancellation hash table and remove it from there.
+>>
+>> On the submission side we often already hold ->uring_lock and tw
+>> completion is likely to hold it as well. Add a second cancellation hash
+>> table protected by ->uring_lock. In concerns for latency because of a
+>> need to have the mutex locked on the completion side, use the new table
+>> only in following cases:
+>>
+>> 1) IORING_SETUP_SINGLE_ISSUER: only one task grabs uring_lock, so there
+>>     is little to no contention and so the main tw hander will almost
+>>     always end up grabbing it before calling callbacks.
+>>
+>> 2) IORING_SETUP_SQPOLL: same as with single issuer, only one task is
+>>     a major user of ->uring_lock.
+>>
+>> 3) apoll: we normally grab the lock on the completion side anyway to
+>>     execute the request, so it's free.
+>>
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> 
+> <snip>
+> 
+>> -/*
+>> - * Returns true if we found and killed one or more poll requests
+>> - */
+>> -__cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+>> -			       bool cancel_all)
+>> +static __cold bool io_poll_remove_all_table(struct task_struct *tsk,
+>> +					    struct io_hash_table *table,
+>> +					    bool cancel_all)
+>>   {
+>> -	struct io_hash_table *table = &ctx->cancel_table;
+>>   	unsigned nr_buckets = 1U << table->hash_bits;
+>>   	struct hlist_node *tmp;
+>>   	struct io_kiocb *req;
+>> @@ -557,6 +592,17 @@ __cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+>>   	return found;
+>>   }
+>>   
+>> +/*
+>> + * Returns true if we found and killed one or more poll requests
+>> + */
+>> +__cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct task_struct *tsk,
+>> +			       bool cancel_all)
+>> +	__must_hold(&ctx->uring_lock)
+>> +{
+>> +	return io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all) |
+>> +	       io_poll_remove_all_table(tsk, &ctx->cancel_table_locked, cancel_all);
+>> +}
+> 
+> Clang warns:
+> 
+>    io_uring/poll.c:602:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>            return io_poll_remove_all_table(tsk, &ctx->cancel_table, cancel_all) |
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                                                                 ||
+>    io_uring/poll.c:602:9: note: cast one or both operands to int to silence this warning
+>    1 error generated.
+> 
+> I assume this is intentional so io_poll_remove_all_table() gets called
+> twice every time? If so, would you be opposed to unrolling this a bit to
+> make it clear to the compiler? Alternatively, we could change the return
+> type of io_poll_remove_all_table to be an int or add a cast to int like
+> the note mentioned but that is rather ugly to me. I can send a formal
+> patch depending on your preference.
 
-Thank you for the patch! Yet something to improve:
+Thanks for the heads up. Yes, it's intentional, and I'm fine with either
+version. Are you going to send a patch?
 
-[auto build test ERROR on arm/for-next]
-[also build test ERROR on arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master keystone/next v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
-base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
-config: arm-mv78xx0_defconfig (https://download.01.org/0day-ci/archive/20220618/202206181916.KzyEh57x-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/bfe3f64dcc525721223aeb2d18594832ac9273c5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
-        git checkout bfe3f64dcc525721223aeb2d18594832ac9273c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/arm/mm/cache-feroceon-l2.c:382:9: error: use of undeclared label 'out_put'
-                           goto out_put;
-                                ^
-   1 error generated.
-
-
-vim +/out_put +382 arch/arm/mm/cache-feroceon-l2.c
-
-   376	
-   377		node = of_find_matching_node(NULL, feroceon_ids);
-   378		if (node && of_device_is_compatible(node, "marvell,kirkwood-cache")) {
-   379			base = of_iomap(node, 0);
-   380			if (!base) {
-   381				ret = -ENOMEM;
- > 382				goto out_put;
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Pavel Begunkov
