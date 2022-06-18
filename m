@@ -1,204 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206127B
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 09:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1655544216;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9iFG5T6NMiCjzNOtL0/bC1I7iWLFq6JShv5uuLZJ1uw=;
-	b=Pc5d59+6E8NUJM4zXzXmmmcIMscqvncF3cHYTRH1QLblN1kIjA0JXx7guObSZsGKq84dLl
-	jtDjrFhz1bu2O4mCXYnoebCfr37Vylv0EZhjNsTmPs2JtZijnWqVFl/1xO2X/vuyzdFLmy
-	7ZwuYJ+cVNo/bafs719056rJN78tJQI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-pc7SJBXvNt2vVl_IMNaAvg-1; Sat, 18 Jun 2022 05:23:35 -0400
-X-MC-Unique: pc7SJBXvNt2vVl_IMNaAvg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4537329AA388
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 09:23:35 +0000 (UTC)
-Received: from [172.64.10.32] (unknown [10.30.33.152])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 37B15492C3B;
-	Sat, 18 Jun 2022 09:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DC67B
+	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 09:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655544553; x=1687080553;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FZTpgPb5ZMmV97zM29tbzRVe1LRVIroAaiNLt081iXw=;
+  b=l9yxPHSTcNJVCRj5r6NL05daf0GKC1yQUGwpCu6uhYzjNAxLaaNcmNTk
+   TEWO1SV745kAv9GwFLyHe2QVwjgJk1ZbASY8nVib3tZa2FYbWz9+9B90S
+   hfGcos1xIbLjZbrNim6drGJVBTine3tgjVKzhjxTeMD/ajoHSVgCX8Hfd
+   QEEjnscIwGyqrwi5KqeDE1LxlA8qUbHelqbaZNR198o01pj829caqbhGY
+   fgrE55vDKtP9cvVJp+mM/GrZoyCa6yewUkBGpq95+X0PpnxlvZ/pYz4im
+   Y9SyS0OZ67/mxJYpc/12OPWWTBspAnYQZPJKV2SlPcsXoUImzXbeRWlD6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343634471"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="343634471"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 02:29:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="560998187"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2022 02:29:11 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o2UlT-000QCd-9q;
+	Sat, 18 Jun 2022 09:29:11 +0000
+Date: Sat, 18 Jun 2022 17:28:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
+ 'imx93_clk_of_match'
+Message-ID: <202206181724.AJ9MP0Jw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: CKI Project <cki-project@redhat.com>
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS: Test report for kernel 5.19.0-rc2
- (mainline.kernel.org-clang, 4b35035b)
-Date: Sat, 18 Jun 2022 09:23:35 -0000
-Message-ID: <cki.FAY8W3B3UGSD2Q7R1ECB@redhat.com>
-X-Gitlab-Pipeline-ID: 566993970
-X-Gitlab-Url: https://gitlab.com
-X-Gitlab-Path: =?utf-8?q?/redhat/red-hat-ci-tools/kernel/cki-internal-pipeli?=
- =?utf-8?q?nes/cki-trusted-contributors/pipelines/566993970?=
-X-DataWarehouse-Checkout-IID: 45563
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Peng,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
+date:   4 months ago
+config: hexagon-randconfig-r041-20220618 (https://download.01.org/0day-ci/archive/20220618/202206181724.AJ9MP0Jw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 24defbe194b650218680fcd9dec8cd103537b531
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
+   static const struct of_device_id imx93_clk_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
+vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
 
-Check out this report and any autotriaged failures in our web dashboard:
-    https://datawarehouse.cki-project.org/kcidb/checkouts/45563
+   323	
+ > 324	static const struct of_device_id imx93_clk_of_match[] = {
+   325		{ .compatible = "fsl,imx93-ccm" },
+   326		{ /* Sentinel */ },
+   327	};
+   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+   329	
 
-Hello,
-
-We ran automated tests on a recent commit from this kernel tree:
-
-       Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvald=
-s/linux.git
-            Commit: 4b35035bcf80 - Merge tag 'nfs-for-5.19-2' of git://git.=
-linux-nfs.org/projects/anna/linux-nfs
-
-The results of these automated tests are provided below.
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
- Selftests compile: FAILED
-             Tests: OK
-    Targeted tests: NO
-
-All kernel binaries, config files, and logs are available for download here=
-:
-
-  https://arr-cki-prod-datawarehouse-public.s3.amazonaws.com/index.html?pre=
-fix=3Ddatawarehouse-public/2022/06/18/566993970
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
-Compile testing
----------------
-
-We compiled the kernel for 5 architectures:
-
-    aarch64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    ppc64le:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    s390x:
-      make options: make CC=3Dclang LLVM_IAS=3D0 -j24 INSTALL_MOD_STRIP=3D1=
- targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-    x86_64:
-      make options: make LLVM=3D1 -j24 INSTALL_MOD_STRIP=3D1 targz-pkg
-
-
-We built the following selftests:
-
-  x86_64:
-      net: fail
-      bpf: fail
-      seccomp: OK
-      lkdtm: OK
-      install and packaging: OK
-
-You can find the full log (build-selftests.log) in the artifact storage abo=
-ve.
-
-
-Hardware testing
-----------------
-We booted each kernel and ran the following tests:
-
-  aarch64:
-
-    =E2=9A=A1 Internal infrastructure issues prevented one or more tests (m=
-arked
-    with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-    This is not the fault of the kernel that was tested.
-
-  ppc64le:
-
-    =E2=9A=A1 Internal infrastructure issues prevented one or more tests (m=
-arked
-    with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-    This is not the fault of the kernel that was tested.
-
-  s390x:
-
-    =E2=9A=A1 Internal infrastructure issues prevented one or more tests (m=
-arked
-    with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-    This is not the fault of the kernel that was tested.
-
-  x86_64 (debug):
-
-    =E2=9A=A1 Internal infrastructure issues prevented one or more tests (m=
-arked
-    with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-    This is not the fault of the kernel that was tested.
-
-  x86_64:
-
-    =E2=9A=A1 Internal infrastructure issues prevented one or more tests (m=
-arked
-    with =E2=9A=A1=E2=9A=A1=E2=9A=A1) from running on this architecture.
-    This is not the fault of the kernel that was tested.
-
-  Test sources: https://gitlab.com/redhat/centos-stream/tests/kernel/kernel=
--tests
-    =F0=9F=92=9A Pull requests are welcome for new tests or improvements to=
- existing tests!
-
-Aborted tests
--------------
-Tests that didn't complete running successfully are marked with =E2=9A=A1=
-=E2=9A=A1=E2=9A=A1.
-If this was caused by an infrastructure issue, we try to mark that
-explicitly in the report.
-
-Waived tests
-------------
-If the test run included waived tests, they are marked with =F0=9F=9A=A7. S=
-uch tests are
-executed but their results are not taken into account. Tests are waived whe=
-n
-their results are not reliable enough, e.g. when they're just introduced or=
- are
-being fixed.
-
-Testing timeout
----------------
-We aim to provide a report within reasonable timeframe. Tests that haven't
-finished running yet are marked with =E2=8F=B1.
-Targeted tests
---------------
-Test runs for patches always include a set of base tests, plus some
-tests chosen based on the file paths modified by the patch. The latter
-are called "targeted tests". If no targeted tests are run, that means
-no patch-specific tests are available. Please, consider contributing a
-targeted test for related patches to increase test coverage. See
-https://docs.engineering.redhat.com/x/_wEZB for more details.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
