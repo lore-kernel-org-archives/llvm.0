@@ -1,42 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32667B
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 10:54:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397947B
+	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 11:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655549657; x=1687085657;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XVBj2xTWoIjiAu0XJ7omPdzCfVeMzAYy4QQ0PJzjJ8A=;
-  b=cnj74v6/f+z/YhHTxPPbPZi4cRD+M5kdnixW+G4QeZg43IgG9Zw7z8Jz
-   P4Er8NjrAUGLKAhNEtaOrWgUC1NNFLdP0FEb15ywyiZ4pGro2J5YZlPZw
-   UFG6kMR839os2oXRbCfVJPfzMOT7vSdLYQVWeQ0mdsYrcVIij+vHIZa/x
-   g9C7WldZn0BA+qj59v4/ZbuihI9i19JAChgthpEJXPFvDq0U0PyGriBma
-   /BBP3KAFopNuwA4HxhUBSMW0NDN7Q2NYrbYyFDGNaytEEF78qCrTL6mUc
-   3owhUAo6di7SXFTpf33s+fnWcIVnRJrSFeuFN1IFedgSPNTr6gQgzxRWo
+  t=1655552238; x=1687088238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aOYo46dpjPADJUZif/M9VCCs/cdqw1jhFQJdCWKAs90=;
+  b=jYplqyboqo4PaY+z4EyMbHo3ywZBfxQlwrr8Lz5VXK53Adc6Cer6p/Ay
+   qLcRnfCQr2+cdCXn/a+RgeAODSWbJlmNxs7G03ASrYcMbYL/GIp41wPxG
+   1tGGAm8Fw1F2yFv/4Gaun3m+AksvzCDkO5iiZfc4PfIG5EjAQ2lrqgPaJ
+   NrfV7ckNn3BXPzzpqi5eA2RuIrXYiYvSECI7zbFnYAUxp+G34Nz1mISFU
+   bRYp5g0HIRLTXIw45Bf2l0URF1eUiZpwxKoDkylnkLmleUq9mnVEuSpXq
+   CgtrTJ67RjyFt4O41tJijTOyGHJmtItUlRcrNSrUDD3UxR4zp+SpK/K0T
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="259469597"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="268365753"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="259469597"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 03:54:17 -0700
+   d="scan'208";a="268365753"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 04:37:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="619544494"
+   d="scan'208";a="763557267"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2022 03:54:15 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 04:37:16 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2W5m-000QGd-Cy;
-	Sat, 18 Jun 2022 10:54:14 +0000
-Date: Sat, 18 Jun 2022 18:53:36 +0800
+	id 1o2WlP-000QHx-DQ;
+	Sat, 18 Jun 2022 11:37:15 +0000
+Date: Sat, 18 Jun 2022 19:36:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [viro-vfs:work.iov_iter_get_pages 21/33] lib/iov_iter.c:1392:24:
- warning: variable 'len' is uninitialized when used here
-Message-ID: <202206181816.oFNEwB8K-lkp@intel.com>
+To: Liang He <windhl@126.com>, linux@armlinux.org.uk
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, windhl@126.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm: mm: (cache-feroceon-l2) Add missing of_node_put()
+Message-ID: <202206181916.KzyEh57x-lkp@intel.com>
+References: <20220616030232.3974254-1-windhl@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,113 +46,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220616030232.3974254-1-windhl@126.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.iov_iter_get_pages
-head:   eaf51d32a6d0a79ce7096996fd432ebb03b725e1
-commit: 380244e4bdf81bb2e69ed68827d9718d5bfc1bb4 [21/33] iov_iter: massage calling conventions for first_{iovec,bvec}_segment()
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220618/202206181816.oFNEwB8K-lkp@intel.com/config)
+Hi Liang,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on arm/for-next]
+[also build test ERROR on arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master keystone/next v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
+base:   git://git.armlinux.org.uk/~rmk/linux-arm.git for-next
+config: arm-mv78xx0_defconfig (https://download.01.org/0day-ci/archive/20220618/202206181916.KzyEh57x-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/commit/?id=380244e4bdf81bb2e69ed68827d9718d5bfc1bb4
-        git remote add viro-vfs https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git
-        git fetch --no-tags viro-vfs work.iov_iter_get_pages
-        git checkout 380244e4bdf81bb2e69ed68827d9718d5bfc1bb4
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/bfe3f64dcc525721223aeb2d18594832ac9273c5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liang-He/arm-mm-cache-feroceon-l2-Add-missing-of_node_put/20220616-110418
+        git checkout bfe3f64dcc525721223aeb2d18594832ac9273c5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> lib/iov_iter.c:1392:24: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   return min_t(size_t, len, res * PAGE_SIZE - *start);
-                                        ^~~
-   include/linux/minmax.h:104:48: note: expanded from macro 'min_t'
-   #define min_t(type, x, y)       __careful_cmp((type)(x), (type)(y), <)
-                                                        ^
-   include/linux/minmax.h:38:14: note: expanded from macro '__careful_cmp'
-                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-                              ^
-   include/linux/minmax.h:31:25: note: expanded from macro '__cmp_once'
-                   typeof(x) unique_x = (x);               \
-                                         ^
-   lib/iov_iter.c:1361:12: note: initialize the variable 'len' to silence this warning
-           size_t len;
-                     ^
-                      = 0
-   1 warning generated.
+>> arch/arm/mm/cache-feroceon-l2.c:382:9: error: use of undeclared label 'out_put'
+                           goto out_put;
+                                ^
+   1 error generated.
 
 
-vim +/len +1392 lib/iov_iter.c
+vim +/out_put +382 arch/arm/mm/cache-feroceon-l2.c
 
-  1356	
-  1357	static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
-  1358			   struct page ***pages, size_t maxsize,
-  1359			   unsigned int maxpages, size_t *start)
-  1360	{
-  1361		size_t len;
-  1362		int n, res;
-  1363	
-  1364		if (maxsize > i->count)
-  1365			maxsize = i->count;
-  1366		if (!maxsize)
-  1367			return 0;
-  1368		if (maxsize > LONG_MAX)
-  1369			maxsize = LONG_MAX;
-  1370	
-  1371		if (likely(user_backed_iter(i))) {
-  1372			unsigned int gup_flags = 0;
-  1373			unsigned long addr;
-  1374	
-  1375			if (iov_iter_rw(i) != WRITE)
-  1376				gup_flags |= FOLL_WRITE;
-  1377			if (i->nofault)
-  1378				gup_flags |= FOLL_NOFAULT;
-  1379	
-  1380			addr = first_iovec_segment(i, &maxsize, start);
-  1381			n = DIV_ROUND_UP(maxsize + *start, PAGE_SIZE);
-  1382			if (n > maxpages)
-  1383				n = maxpages;
-  1384			if (*pages) {
-  1385				*pages = get_pages_array(n);
-  1386				if (!*pages)
-  1387					return -ENOMEM;
-  1388			}
-  1389			res = get_user_pages_fast(addr, n, gup_flags, *pages);
-  1390			if (unlikely(res <= 0))
-  1391				return res;
-> 1392			return min_t(size_t, len, res * PAGE_SIZE - *start);
-  1393		}
-  1394		if (iov_iter_is_bvec(i)) {
-  1395			struct page **p;
-  1396			struct page *page;
-  1397	
-  1398			page = first_bvec_segment(i, &maxsize, start);
-  1399			n = DIV_ROUND_UP(maxsize + *start, PAGE_SIZE);
-  1400			if (n > maxpages)
-  1401				n = maxpages;
-  1402			p = *pages;
-  1403			if (!p) {
-  1404				*pages = p = get_pages_array(n);
-  1405				if (!p)
-  1406					return -ENOMEM;
-  1407			}
-  1408			for (int k = 0; k < n; k++)
-  1409				get_page(*p++ = page++);
-  1410			return min_t(size_t, maxsize, n * PAGE_SIZE - *start);
-  1411		}
-  1412		if (iov_iter_is_pipe(i))
-  1413			return pipe_get_pages(i, pages, maxsize, maxpages, start);
-  1414		if (iov_iter_is_xarray(i))
-  1415			return iter_xarray_get_pages(i, pages, maxsize, maxpages,
-  1416						     start);
-  1417		return -EFAULT;
-  1418	}
-  1419	
+   376	
+   377		node = of_find_matching_node(NULL, feroceon_ids);
+   378		if (node && of_device_is_compatible(node, "marvell,kirkwood-cache")) {
+   379			base = of_iomap(node, 0);
+   380			if (!base) {
+   381				ret = -ENOMEM;
+ > 382				goto out_put;
 
 -- 
 0-DAY CI Kernel Test Service
