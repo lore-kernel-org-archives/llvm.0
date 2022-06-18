@@ -1,59 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBAA7B
-	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 12:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADB07B
+	for <llvm@lists.linux.dev>; Sat, 18 Jun 2022 16:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655556503; x=1687092503;
+  t=1655570303; x=1687106303;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=L0u3OGCTfFetGTTP1NGlLb83GnefDKjn1DOmKdkgXls=;
-  b=M8V4C/ToubdcIkw1UqoPb4GPNNHnEeNEzkDij+gcqKg0CA83QAVXS+15
-   9v612iugAXgOUc+Is4C18ty0Hp2MeneFdSy54yliRkE9ymSk4W85I/uaJ
-   vWQil5SM6TiEMP/MUQOUEOdSNTSq/cTTqVeqZLeYsFhEAcYgDKRif+8WZ
-   c7J1H7WvPuPJLOblsvcBxXI9AEoe/ZbyL0x72rXcah8lEg5xmMjGG7abd
-   44b/zwfTNKI9euRHVCDmyejO+FNxy07zEv5RkbWyKnfwqi2cwPf9en4Bf
-   CFpsbgNholx9TZTVhL4vw3u4KvlB35M36Qx49/H+UwArQt8GjCnNFj35c
+  bh=44olcdvemTrn1KIWWSAtJXkg8zEmREhBPCabj39AkE4=;
+  b=Xg28tXYvL9IeBNBGbaLuQUJq4Yi4EMXj0WimkayVR7GIPUjOMGaNCFYr
+   46aNg4EZP64M0pCa6aOcRw+VOaZw0RRIKEUGOoMVdeuiUSsHP6dePwMil
+   nZazK0H0lHnYNeahencJIgWIT37eW7OLGSlfQhcjWwKTD78YX7rUjCN2S
+   MDxCtnPpKlFQ3e4KVVp/asvCJo1TE6kI03b+7JRLbjcBmkti71tV2fvUD
+   teJ2TuRKHEPj+qurFxDsDHFK8hrLqZmBDyn6fR3Foueh6fKfBMhdJt5YC
+   hLOlYXtEbPdv7g8zpfh07QUaCJkNEGHPQ3/MZCW5wdEQ4vh+HZXi94Nng
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365979106"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260096815"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365979106"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 05:48:22 -0700
+   d="scan'208";a="260096815"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 09:38:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="763567439"
+   d="scan'208";a="688768828"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 05:48:17 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 09:38:22 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2Xs8-000QKB-QM;
-	Sat, 18 Jun 2022 12:48:16 +0000
-Date: Sat, 18 Jun 2022 20:47:26 +0800
+	id 1o2bSn-000QRH-Bw;
+	Sat, 18 Jun 2022 16:38:21 +0000
+Date: Sun, 19 Jun 2022 00:37:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Jeremy Kerr <jk@codeconstruct.com.au>,
-	Daniel Latypov <dlatypov@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andra Paraschiv <andraprs@amazon.com>,
-	Longpeng <longpeng2@huawei.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-	linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	Matt Johnston <matt@codeconstruct.com.au>,
-	David Gow <davidgow@google.com>
-Subject: Re: [PATCH 1/5] kunit: unify module and builtin suite definitions
-Message-ID: <202206182025.UNVY0coI-lkp@intel.com>
-References: <20220618090310.1174932-2-davidgow@google.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH RFC] iov_iter: import single segments iovecs as ITER_UBUF
+Message-ID: <202206190044.xokGx8NW-lkp@intel.com>
+References: <b3e19eb1-18c4-8599-b68d-bf28673237d1@kernel.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,68 +45,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220618090310.1174932-2-davidgow@google.com>
+In-Reply-To: <b3e19eb1-18c4-8599-b68d-bf28673237d1@kernel.dk>
 
-Hi David,
+Hi Jens,
 
-I love your patch! Yet something to improve:
-
+[FYI, it's a private test report for your RFC patch.]
 [auto build test ERROR on linus/master]
 [also build test ERROR on v5.19-rc2 next-20220617]
-[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+url:    https://github.com/intel-lab-lkp/linux/commits/Jens-Axboe/iov_iter-import-single-segments-iovecs-as-ITER_UBUF/20220618-221039
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-config: riscv-randconfig-r034-20220617 (https://download.01.org/0day-ci/archive/20220618/202206182025.UNVY0coI-lkp@intel.com/config)
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220619/202206190044.xokGx8NW-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        # https://github.com/intel-lab-lkp/linux/commit/ec74a6fdd818738cf8e0c0f10798fa001970bb81
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
-        git checkout 14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        git fetch --no-tags linux-review Jens-Axboe/iov_iter-import-single-segments-iovecs-as-ITER_UBUF/20220618-221039
+        git checkout ec74a6fdd818738cf8e0c0f10798fa001970bb81
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash lib/kunit/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> lib/kunit/test.c:618:23: error: no member named 'num_kunit_suites' in 'struct module'
-           for (i = 0; i < mod->num_kunit_suites; i++)
-                           ~~~  ^
->> lib/kunit/test.c:619:33: error: no member named 'kunit_suites' in 'struct module'
-                   __kunit_test_suites_init(mod->kunit_suites[i]);
-                                            ~~~  ^
-   lib/kunit/test.c:626:23: error: no member named 'num_kunit_suites' in 'struct module'
-           for (i = 0; i < mod->num_kunit_suites; i++)
-                           ~~~  ^
-   lib/kunit/test.c:627:33: error: no member named 'kunit_suites' in 'struct module'
-                   __kunit_test_suites_exit(mod->kunit_suites[i]);
-                                            ~~~  ^
-   4 errors generated.
+>> lib/iov_iter.c:1950:9: error: call to undeclared function 'import_ubuf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = import_ubuf(type, iovp[0]->iov_base, total_len, i);
+                         ^
+   lib/iov_iter.c:1950:9: note: did you mean 'import_uuid'?
+   include/linux/uuid.h:71:20: note: 'import_uuid' declared here
+   static inline void import_uuid(uuid_t *dst, const __u8 *src)
+                      ^
+   1 error generated.
 
 
-vim +618 lib/kunit/test.c
+vim +/import_ubuf +1950 lib/iov_iter.c
 
-   612	
-   613	#ifdef CONFIG_MODULES
-   614	static void kunit_module_init(struct module *mod)
-   615	{
-   616		unsigned int i;
-   617	
- > 618		for (i = 0; i < mod->num_kunit_suites; i++)
- > 619			__kunit_test_suites_init(mod->kunit_suites[i]);
-   620	}
-   621	
+  1927	
+  1928	ssize_t __import_iovec(int type, const struct iovec __user *uvec,
+  1929			 unsigned nr_segs, unsigned fast_segs, struct iovec **iovp,
+  1930			 struct iov_iter *i, bool compat)
+  1931	{
+  1932		ssize_t total_len = 0;
+  1933		unsigned long seg;
+  1934		struct iovec *iov;
+  1935	
+  1936		iov = iovec_from_user(uvec, nr_segs, fast_segs, *iovp, compat);
+  1937		if (IS_ERR(iov)) {
+  1938			*iovp = NULL;
+  1939			return PTR_ERR(iov);
+  1940		}
+  1941	
+  1942		/*
+  1943		 * Fast path - single segment import. Use UBUF for these, rather
+  1944		 * than setup an ITER_IOV.
+  1945		 */
+  1946		if (nr_segs == 1) {
+  1947			ssize_t ret;
+  1948	
+  1949			total_len = iovp[0]->iov_len;
+> 1950			ret = import_ubuf(type, iovp[0]->iov_base, total_len, i);
+  1951			*iovp = NULL;
+  1952			if (unlikely(ret < 0))
+  1953				return ret;
+  1954			return total_len;
+  1955		}
+  1956	
+  1957		/*
+  1958		 * According to the Single Unix Specification we should return EINVAL if
+  1959		 * an element length is < 0 when cast to ssize_t or if the total length
+  1960		 * would overflow the ssize_t return value of the system call.
+  1961		 *
+  1962		 * Linux caps all read/write calls to MAX_RW_COUNT, and avoids the
+  1963		 * overflow case.
+  1964		 */
+  1965		for (seg = 0; seg < nr_segs; seg++) {
+  1966			ssize_t len = (ssize_t)iov[seg].iov_len;
+  1967	
+  1968			if (!access_ok(iov[seg].iov_base, len)) {
+  1969				if (iov != *iovp)
+  1970					kfree(iov);
+  1971				*iovp = NULL;
+  1972				return -EFAULT;
+  1973			}
+  1974	
+  1975			if (len > MAX_RW_COUNT - total_len) {
+  1976				len = MAX_RW_COUNT - total_len;
+  1977				iov[seg].iov_len = len;
+  1978			}
+  1979			total_len += len;
+  1980		}
+  1981	
+  1982		iov_iter_init(i, type, iov, nr_segs, total_len);
+  1983		if (iov == *iovp)
+  1984			*iovp = NULL;
+  1985		else
+  1986			*iovp = iov;
+  1987		return total_len;
+  1988	}
+  1989	
 
 -- 
 0-DAY CI Kernel Test Service
