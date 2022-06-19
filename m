@@ -1,46 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491C37B
-	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 15:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E757B
+	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 18:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655653270; x=1687189270;
+  t=1655662870; x=1687198870;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T8YFDdRhYrxweQVdK5kIPl50L9VpxARzAZ85FGoOmXg=;
-  b=iJF4MTob4hWKVGuMyfrWSUBSeHPcKHYizknxD9vuw8ZgJBcPL3zXnKKg
-   93Foubae2k0T8KYUcwzzzKZ1w3lK1/qYFrnglZoi6whi7QWi7kwbB9QMj
-   r8d2CrslWyJoFlaU20ZiHNF9fTF6fbbmR2WU3PtMaVNPr2sM8SKS/tYOF
-   jdqzKa6c641pz6iTvAxvZBH7LcyzSBbqQdvd9yX4JO7w9tH9gDl37IKSE
-   pVUHa0xVGBKQZRtcV4uU5Z1CxqupYBZTBhEj/670fMWnsXt1MdBd3mpV9
-   2vO6Qaym+/IFcY/vLbFhHxyCbZetDFOIgLdL6V4/jMmcSKgyR7YLnkTsY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278512919"
+  bh=ISdsMX8AZREPhr5s0k5z11ipC8khu3xTR28v4N7gXc0=;
+  b=dFHQ4YCNGxvOleStaCiOh14Jdym7rEJZBPpBYoAFn4XUkPuvgsPiBMX4
+   khZRkh8fgkn/A7DhqANf1OxKHPcRjdIQPrVeSCR+xa6oQ6kNgoJ9/tHil
+   F8WvTjqlCDjYPt/qA+CC8d3D8NXlurKuMqFQ0DfjXzPL3JHXOJVF7S4S7
+   kXh1/2yPHSxsW5RaRUaD1bsO3/J+vDtCPSZU5RBFdR+ZkqmFTGaRuBGlm
+   N1B/1En4m+es4ZAt3RZMClL2VLlHQCnxw1jQBFqNStKssnvLH/h4eMXwJ
+   KBorPnKMb69nyCtew16pqe2T+SBPpiISLKEtfpkoW6ASLGVxbgzR5+cnM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260180992"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278512919"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 08:41:09 -0700
+   d="scan'208";a="260180992"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 11:21:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="913316661"
+   d="scan'208";a="561676782"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jun 2022 08:41:07 -0700
+  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2022 11:21:07 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2x2r-000RKN-Py;
-	Sun, 19 Jun 2022 15:41:01 +0000
-Date: Sun, 19 Jun 2022 23:40:36 +0800
+	id 1o2zXm-000RSG-Op;
+	Sun, 19 Jun 2022 18:21:06 +0000
+Date: Mon, 20 Jun 2022 02:21:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Nava kishore Manne <nava.manne@xilinx.com>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 79/1181]
- drivers/of/configfs.c:134:9: warning: no previous prototype for function
- 'cfs_overlay_item_dtbo_read'
-Message-ID: <202206192308.yTnjMB3r-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [willy-pagecache:for-next 3/81] mm/huge_memory.c:2380:21: warning:
+ incompatible pointer to integer conversion assigning to 'unsigned long' from
+ 'void *'
+Message-ID: <202206200151.WMsNVIYY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,104 +47,110 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Pantelis,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
-head:   59523b5c4aca0174f1f8cba2a07d3b3328b7c80e
-commit: 92450eff19894419e326623c7b720e83aeb57b96 [79/1181] OF: DT-Overlay configfs interface (v8)
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220619/202206192308.yTnjMB3r-lkp@intel.com/config)
+tree:   git://git.infradead.org/users/willy/pagecache for-next
+head:   a4483039b0e88f52c72975b99ea131a111b35a8e
+commit: ddf632ba3fd866d92f0ec9343984c6b2c18a788c [3/81] mm: Clear page->private when splitting or migrating a page
+config: s390-randconfig-r033-20220619 (https://download.01.org/0day-ci/archive/20220620/202206200151.WMsNVIYY-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/92450eff19894419e326623c7b720e83aeb57b96
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
-        git checkout 92450eff19894419e326623c7b720e83aeb57b96
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
+        git fetch --no-tags willy-pagecache for-next
+        git checkout ddf632ba3fd866d92f0ec9343984c6b2c18a788c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/media/i2c/ drivers/media/platform/xilinx/ drivers/of/ drivers/phy/xilinx/ drivers/ptp/ drivers/staging/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/of/configfs.c:134:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_read' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-           ^
-   drivers/of/configfs.c:134:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   ^
-   static 
->> drivers/of/configfs.c:156:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_write' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-           ^
-   drivers/of/configfs.c:156:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-   ^
-   static 
-   2 warnings generated.
+>> mm/huge_memory.c:2380:21: warning: incompatible pointer to integer conversion assigning to 'unsigned long' from 'void *' [-Wint-conversion]
+           page_tail->private = NULL;
+                              ^ ~~~~
+   1 warning generated.
 
 
-vim +/cfs_overlay_item_dtbo_read +134 drivers/of/configfs.c
+vim +2380 mm/huge_memory.c
 
-   133	
- > 134	ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   135					   void *buf, size_t max_count)
-   136	{
-   137		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   138	
-   139		pr_debug("%s: buf=%p max_count=%zu\n", __func__, buf, max_count);
-   140	
-   141		if (!overlay->dtbo)
-   142			return 0;
-   143	
-   144		/* copy if buffer provided */
-   145		if (buf) {
-   146			/* the buffer must be large enough */
-   147			if (overlay->dtbo_size > max_count)
-   148				return -ENOSPC;
-   149	
-   150			memcpy(buf, overlay->dtbo, overlay->dtbo_size);
-   151		}
-   152	
-   153		return overlay->dtbo_size;
-   154	}
-   155	
- > 156	ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-   157					    const void *buf, size_t count)
-   158	{
-   159		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   160		int err;
-   161	
-   162		/* if it's set do not allow changes */
-   163		if (overlay->path[0] != '\0' || overlay->dtbo_size > 0)
-   164			return -EPERM;
-   165	
-   166		/* copy the contents */
-   167		overlay->dtbo = kmemdup(buf, count, GFP_KERNEL);
-   168		if (!overlay->dtbo)
-   169			return -ENOMEM;
-   170	
-   171		overlay->dtbo_size = count;
-   172	
-   173		err = create_overlay(overlay, overlay->dtbo);
-   174		if (err < 0)
-   175			goto out_err;
-   176	
-   177		return count;
-   178	
-   179	out_err:
-   180		kfree(overlay->dtbo);
-   181		overlay->dtbo = NULL;
-   182		overlay->dtbo_size = 0;
-   183	
-   184		return err;
-   185	}
-   186	
+  2338	
+  2339	static void __split_huge_page_tail(struct page *head, int tail,
+  2340			struct lruvec *lruvec, struct list_head *list)
+  2341	{
+  2342		struct page *page_tail = head + tail;
+  2343	
+  2344		VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+  2345	
+  2346		/*
+  2347		 * Clone page flags before unfreezing refcount.
+  2348		 *
+  2349		 * After successful get_page_unless_zero() might follow flags change,
+  2350		 * for example lock_page() which set PG_waiters.
+  2351		 *
+  2352		 * Note that for mapped sub-pages of an anonymous THP,
+  2353		 * PG_anon_exclusive has been cleared in unmap_page() and is stored in
+  2354		 * the migration entry instead from where remap_page() will restore it.
+  2355		 * We can still have PG_anon_exclusive set on effectively unmapped and
+  2356		 * unreferenced sub-pages of an anonymous THP: we can simply drop
+  2357		 * PG_anon_exclusive (-> PG_mappedtodisk) for these here.
+  2358		 */
+  2359		page_tail->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+  2360		page_tail->flags |= (head->flags &
+  2361				((1L << PG_referenced) |
+  2362				 (1L << PG_swapbacked) |
+  2363				 (1L << PG_swapcache) |
+  2364				 (1L << PG_mlocked) |
+  2365				 (1L << PG_uptodate) |
+  2366				 (1L << PG_active) |
+  2367				 (1L << PG_workingset) |
+  2368				 (1L << PG_locked) |
+  2369				 (1L << PG_unevictable) |
+  2370	#ifdef CONFIG_64BIT
+  2371				 (1L << PG_arch_2) |
+  2372	#endif
+  2373				 (1L << PG_dirty)));
+  2374	
+  2375		/* ->mapping in first tail page is compound_mapcount */
+  2376		VM_BUG_ON_PAGE(tail > 2 && page_tail->mapping != TAIL_MAPPING,
+  2377				page_tail);
+  2378		page_tail->mapping = head->mapping;
+  2379		page_tail->index = head->index + tail;
+> 2380		page_tail->private = NULL;
+  2381	
+  2382		/* Page flags must be visible before we make the page non-compound. */
+  2383		smp_wmb();
+  2384	
+  2385		/*
+  2386		 * Clear PageTail before unfreezing page refcount.
+  2387		 *
+  2388		 * After successful get_page_unless_zero() might follow put_page()
+  2389		 * which needs correct compound_head().
+  2390		 */
+  2391		clear_compound_head(page_tail);
+  2392	
+  2393		/* Finally unfreeze refcount. Additional reference from page cache. */
+  2394		page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
+  2395						  PageSwapCache(head)));
+  2396	
+  2397		if (page_is_young(head))
+  2398			set_page_young(page_tail);
+  2399		if (page_is_idle(head))
+  2400			set_page_idle(page_tail);
+  2401	
+  2402		page_cpupid_xchg_last(page_tail, page_cpupid_last(head));
+  2403	
+  2404		/*
+  2405		 * always add to the tail because some iterators expect new
+  2406		 * pages to show after the currently processed elements - e.g.
+  2407		 * migrate_pages
+  2408		 */
+  2409		lru_add_page_tail(head, page_tail, lruvec, list);
+  2410	}
+  2411	
 
 -- 
 0-DAY CI Kernel Test Service
