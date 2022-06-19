@@ -1,43 +1,45 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC2563E
-	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 18:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546CD7B
+	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 19:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655664190; x=1687200190;
+  t=1655665273; x=1687201273;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bJ9DQNoxuiGc4MSaXCZIH9Pcmy8Rno+hSDAD0GsBYfg=;
-  b=MEBVsixMwo4IcbW86mML9EAt2iQEHwzbSg+HZ9n8sZjWpxXQZ1oTzFc0
-   s0rRpZXN4hn3dGDQcUfy8UxJSnyCpW9Qu4WyU8vfCxlNw1+WQ9OXdnwP0
-   8MFA1p15pU4dHQF68C1QKLNYeKCk57JgCRCIAnrMsqAEO+A/R5x4yWhqR
-   YYyjmBwuZ/iHCPnf9zChMqf54xh3XLy0MIrKtIrtSqxAamC2o5Qfx/4Nv
-   BoQ+XO5qqK8aic6Rcf6FqrYtuP4FdLuUgact0GIC+pqbAy0X3LRpaCAsz
-   pWK5Mn4wZlERMgbSJlGuotmb89jK76W33lhSUlZSlYsDWANG8USHw7LI/
+  bh=y2JGGr+2MqaWyy81fnyZ1AdZXvQ0dCtMdzPtySPUDlo=;
+  b=kBtvoVVKbNe1oy2y2QZVN2eYjAh0KsWCgAouNb9+km6hnTjFlQq4s+QN
+   7Ql3oIdBQjCMRzD8eWJ4z7KpYJzSp6qtFD/M8Q9/0yEKtjZETqrXBU9PY
+   E/gL+ow9waubuwun1ZCLs8/J312FLJBSpNwdP/Y5ceyKukhgizRIQBfK/
+   yKYL5e0EPDkfxNiL5L/T7WwduW2Mb69JMdMZaoGCiYoyN0+ENfmjVt2P9
+   juWfVQxmOw8YVNr4dqhvjVHKlhq0RSoPWnu1co3469r4fh1CcBgikhkMR
+   o/74WMTMgbuoJHWlw51PbyTyMRA4kiedYxFM3n8mJ0t2JIY8qkI+ltWQO
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260182570"
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341435608"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260182570"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 11:43:10 -0700
+   d="scan'208";a="341435608"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 12:01:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="561679708"
+   d="scan'208";a="689124900"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2022 11:43:08 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2022 12:01:09 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2zt5-000RU9-T3;
-	Sun, 19 Jun 2022 18:43:07 +0000
-Date: Mon, 20 Jun 2022 02:42:33 +0800
+	id 1o30AW-000RUp-Aa;
+	Sun, 19 Jun 2022 19:01:08 +0000
+Date: Mon, 20 Jun 2022 03:00:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.18 97/146]
- drivers/platform/mpam/mpam_devices.c:71:14: warning: variable 'cache' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202206200258.OlfMsjF6-lkp@intel.com>
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS 484/1181]
+ drivers/clk/clk-xlnx-clock-wizard-v.c:229:20: warning: integer literal is
+ too large to be represented in type 'long', interpreting as 'unsigned long'
+ per C89; this literal will have type 'long long' in C99 onwards
+Message-ID: <202206200251.YTzyVMGU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,90 +49,148 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.18
-head:   bac90d25cbdee0fc233b9b1c47d5b6f44101a384
-commit: 49e55977a0ed88794b6abe4c959e3e28ccd54913 [97/146] arm_mpam: Add probe/remove for mpam msc driver and kbuild boiler plate
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220620/202206200258.OlfMsjF6-lkp@intel.com/config)
+Hi Shubhrajyoti,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
+head:   59523b5c4aca0174f1f8cba2a07d3b3328b7c80e
+commit: 8b5383767cb4c856283824baee568f4286ecc0db [484/1181] clocking-wizard: Add versal clocking wizard support
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220620/202206200251.YTzyVMGU-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=49e55977a0ed88794b6abe4c959e3e28ccd54913
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.18
-        git checkout 49e55977a0ed88794b6abe4c959e3e28ccd54913
+        # https://github.com/Xilinx/linux-xlnx/commit/8b5383767cb4c856283824baee568f4286ecc0db
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS
+        git checkout 8b5383767cb4c856283824baee568f4286ecc0db
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/perf/ drivers/platform/mpam/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/media/i2c/ drivers/media/platform/xilinx/ drivers/phy/xilinx/ drivers/ptp/ drivers/staging/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/platform/mpam/mpam_devices.c:71:14: warning: variable 'cache' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   } else if (of_device_is_compatible(np->parent, "cache")) {
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/mpam/mpam_devices.c:93:14: note: uninitialized use occurs here
-           of_node_put(cache);
-                       ^~~~~
-   drivers/platform/mpam/mpam_devices.c:71:10: note: remove the 'if' if its condition is always true
-                   } else if (of_device_is_compatible(np->parent, "cache")) {
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/mpam/mpam_devices.c:62:27: note: initialize the variable 'cache' to silence this warning
-           struct device_node *cache;
-                                    ^
-                                     = NULL
-   1 warning generated.
+   drivers/clk/clk-xlnx-clock-wizard-v.c:164:9: error: implicit declaration of function 'FIELD_GET' [-Werror,-Wimplicit-function-declaration]
+           regl = FIELD_GET(WZRD_CLKFBOUT_L_MASK, reg);
+                  ^
+>> drivers/clk/clk-xlnx-clock-wizard-v.c:229:20: warning: integer literal is too large to be represented in type 'long', interpreting as 'unsigned long' per C89; this literal will have type 'long long' in C99 onwards [-Wc99-compat]
+                           if (vco_freq >= WZRD_VCO_MIN && vco_freq <= WZRD_VCO_MAX) {
+                                           ^
+   drivers/clk/clk-xlnx-clock-wizard-v.c:78:24: note: expanded from macro 'WZRD_VCO_MIN'
+   #define WZRD_VCO_MIN                    2160000000
+                                           ^
+   drivers/clk/clk-xlnx-clock-wizard-v.c:276:12: error: implicit declaration of function 'FIELD_PREP' [-Werror,-Wimplicit-function-declaration]
+           regval1 = FIELD_PREP(WZRD_DIVCLK_EDGE, edged);
+                     ^
+>> drivers/clk/clk-xlnx-clock-wizard-v.c:601:63: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+                   if (of_property_read_string_index(np, "clock-output-names", i,
+                                                                               ^
+   drivers/clk/clk-xlnx-clock-wizard-v.c:545:7: note: initialize the variable 'i' to silence this warning
+           int i, ret;
+                ^
+                 = 0
+   2 warnings and 2 errors generated.
 
 
-vim +71 drivers/platform/mpam/mpam_devices.c
+vim +229 drivers/clk/clk-xlnx-clock-wizard-v.c
 
-    55	
-    56	static int mpam_dt_parse_resource(struct mpam_msc *msc, struct device_node *np,
-    57					  u32 ris_idx)
-    58	{
-    59		int err = 0;
-    60		u32 level = 0;
-    61		unsigned long cache_id;
-    62		struct device_node *cache;
-    63	
-    64		do {
-    65			if (of_device_is_compatible(np, "arm,mpam-cache")) {
-    66				cache = of_parse_phandle(np, "arm,mpam-device", 0);
-    67				if (!cache) {
-    68					pr_err("Failed to read phandle\n");
-    69					break;
-    70				}
-  > 71			} else if (of_device_is_compatible(np->parent, "cache")) {
-    72				cache = np->parent;
-    73			} else {
-    74				pr_err("Not a cache\n");
-    75				break;
-    76			}
-    77	
-    78			err = of_property_read_u32(cache, "cache-level", &level);
-    79			if (err) {
-    80				pr_err("Failed to read cache-level\n");
-    81				break;
-    82			}
-    83	
-    84			cache_id = cache_of_get_id(cache);
-    85			if (cache_id == ~0UL) {
-    86				err = -ENOENT;
-    87				break;
-    88			}
-    89	
-    90			err = mpam_ris_create(msc, ris_idx, MPAM_CLASS_CACHE, level,
-    91					      cache_id);
-    92		} while (0);
-    93		of_node_put(cache);
-    94	
-    95		return err;
-    96	}
-    97	
+   154	
+   155	static unsigned long clk_wzrd_recalc_rate_all(struct clk_hw *hw,
+   156						      unsigned long parent_rate)
+   157	{
+   158		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   159		u32 edged, div, div2, p5en, edge, prediv2, all, regl, regh, mult, reg;
+   160	
+   161		edge = !!(readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKFBOUT_1)) & WZRD_CLKFBOUT_EDGE);
+   162	
+   163		reg = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKFBOUT_2));
+ > 164		regl = FIELD_GET(WZRD_CLKFBOUT_L_MASK, reg);
+   165		regh = FIELD_GET(WZRD_CLKFBOUT_H_MASK, reg);
+   166	
+   167		mult = regl + regh + edge;
+   168		if (!mult)
+   169			mult = 1;
+   170	
+   171		regl = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKFBOUT_4)) &
+   172			     WZRD_CLKFBOUT_FRAC_EN;
+   173		if (regl) {
+   174			regl = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKFBOUT_3)) &
+   175				WZRD_CLKFBOUT_FRAC_MASK;
+   176			mult = mult * WZRD_FRAC_GRADIENT + regl;
+   177			parent_rate = DIV_ROUND_CLOSEST((parent_rate * mult), WZRD_FRAC_GRADIENT);
+   178		} else {
+   179			parent_rate = parent_rate * mult;
+   180		}
+   181	
+   182		/* O Calculation */
+   183		reg = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKOUT0_1));
+   184		edged = FIELD_GET(WZRD_CLKFBOUT_EDGE, reg);
+   185		p5en = FIELD_GET(WZRD_P5EN, reg);
+   186		prediv2 = FIELD_GET(WZRD_CLKOUT0_PREDIV2, reg);
+   187	
+   188		reg = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_CLKOUT0_2));
+   189		/* Low time */
+   190		regl = FIELD_GET(WZRD_CLKFBOUT_L_MASK, reg);
+   191		/* High time */
+   192		regh = FIELD_GET(WZRD_CLKFBOUT_H_MASK, reg);
+   193		all = regh + regl + edged;
+   194		if (!all)
+   195			all = 1;
+   196	
+   197		if (prediv2)
+   198			div2 = PREDIV2_MULT * all + p5en;
+   199		else
+   200			div2 = all;
+   201	
+   202		/* D calculation */
+   203		edged = !!(readl(divider->base + WZRD_CLK_CFG_REG(WZRD_DESKEW_2)) &
+   204			     WZRD_DIVCLK_EDGE);
+   205		reg = readl(divider->base + WZRD_CLK_CFG_REG(WZRD_DIVCLK));
+   206		/* Low time */
+   207		regl = FIELD_GET(WZRD_CLKFBOUT_L_MASK, reg);
+   208		/* High time */
+   209		regh = FIELD_GET(WZRD_CLKFBOUT_H_MASK, reg);
+   210		div = regl + regh + edged;
+   211		if (!div)
+   212			div = 1;
+   213	
+   214		div = div * div2;
+   215		return divider_recalc_rate(hw, parent_rate, div, divider->table,
+   216				divider->flags, divider->width);
+   217	}
+   218	
+   219	static int clk_wzrd_get_divisors(struct clk_hw *hw, unsigned long rate,
+   220					 unsigned long parent_rate)
+   221	{
+   222		struct clk_wzrd_divider *divider = to_clk_wzrd_divider(hw);
+   223		u64 vco_freq, freq, diff;
+   224		u32 m, d, o;
+   225	
+   226		for (m = WZRD_M_MIN; m <= WZRD_M_MAX; m++) {
+   227			for (d = WZRD_D_MIN; d <= WZRD_D_MAX; d++) {
+   228				vco_freq = DIV_ROUND_CLOSEST((parent_rate * m), d);
+ > 229				if (vco_freq >= WZRD_VCO_MIN && vco_freq <= WZRD_VCO_MAX) {
+   230					for (o = WZRD_O_MIN; o <= WZRD_O_MAX; o++) {
+   231						freq = DIV_ROUND_CLOSEST(vco_freq, o);
+   232						diff = abs(freq - rate);
+   233	
+   234						if (diff < WZRD_MIN_ERR) {
+   235							divider->valuem = m;
+   236							divider->valued = d;
+   237							divider->valueo = o;
+   238							return 0;
+   239						}
+   240					}
+   241				}
+   242			}
+   243		}
+   244		return -EBUSY;
+   245	}
+   246	
 
 -- 
 0-DAY CI Kernel Test Service
