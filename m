@@ -1,43 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E757B
-	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 18:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D047B
+	for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 18:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655662870; x=1687198870;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ISdsMX8AZREPhr5s0k5z11ipC8khu3xTR28v4N7gXc0=;
-  b=dFHQ4YCNGxvOleStaCiOh14Jdym7rEJZBPpBYoAFn4XUkPuvgsPiBMX4
-   khZRkh8fgkn/A7DhqANf1OxKHPcRjdIQPrVeSCR+xa6oQ6kNgoJ9/tHil
-   F8WvTjqlCDjYPt/qA+CC8d3D8NXlurKuMqFQ0DfjXzPL3JHXOJVF7S4S7
-   kXh1/2yPHSxsW5RaRUaD1bsO3/J+vDtCPSZU5RBFdR+ZkqmFTGaRuBGlm
-   N1B/1En4m+es4ZAt3RZMClL2VLlHQCnxw1jQBFqNStKssnvLH/h4eMXwJ
-   KBorPnKMb69nyCtew16pqe2T+SBPpiISLKEtfpkoW6ASLGVxbgzR5+cnM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260180992"
+  t=1655664190; x=1687200190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4hcsQ2ZL5Eo4paoX1c7IcXxlXro8fECeAEHwGZ2undM=;
+  b=USefUf3y+UcAb4+KrY5HONtj6TbfNJQNhNmBrzRJaBDTLyWUbQyA0KUS
+   ZeEv+cY2bqZkA9o15mus/zYo08XMzZsyYsFlfIIR6lO9ljFq0dybyzEjM
+   3wOMPE2ycWRU5fEUccI2JtHOZT4u+hdj3xWtwgJIPt2BCbnhfIlOV9uT3
+   kjU8K+T8O/1gsAxUwvVT2y5Z2VJsAfOuxsuT7rpcXQkZx4Rh5xffr9zVV
+   ZAqKsfo1FgfN4EOj2fttr+QoEbf0xCzhdnTKQBVhFvOu7bpEDRFlMP9rc
+   xBSZ15eDCYg94QuCPpUqksv68r6OuUdEa05k/fifCAGj/4+NfLvkL/DQV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262789808"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260180992"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 11:21:09 -0700
+   d="scan'208";a="262789808"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 11:43:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="561676782"
+   d="scan'208";a="676220131"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2022 11:21:07 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Jun 2022 11:43:08 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o2zXm-000RSG-Op;
-	Sun, 19 Jun 2022 18:21:06 +0000
-Date: Mon, 20 Jun 2022 02:21:01 +0800
+	id 1o2zt5-000RU0-QY;
+	Sun, 19 Jun 2022 18:43:07 +0000
+Date: Mon, 20 Jun 2022 02:42:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 3/81] mm/huge_memory.c:2380:21: warning:
- incompatible pointer to integer conversion assigning to 'unsigned long' from
- 'void *'
-Message-ID: <202206200151.WMsNVIYY-lkp@intel.com>
+To: Conor Dooley <mail@conchuod.ie>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC 4/6] reset: add polarfire soc reset support
+Message-ID: <202206200240.8WfceWnu-lkp@intel.com>
+References: <20220619164935.1492823-5-mail@conchuod.ie>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,111 +45,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220619164935.1492823-5-mail@conchuod.ie>
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   a4483039b0e88f52c72975b99ea131a111b35a8e
-commit: ddf632ba3fd866d92f0ec9343984c6b2c18a788c [3/81] mm: Clear page->private when splitting or migrating a page
-config: s390-randconfig-r033-20220619 (https://download.01.org/0day-ci/archive/20220620/202206200151.WMsNVIYY-lkp@intel.com/config)
+Hi Conor,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/PolarFire-SoC-Reset-controller/20220620-005055
+base:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+config: riscv-randconfig-r031-20220619 (https://download.01.org/0day-ci/archive/20220620/202206200240.8WfceWnu-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout ddf632ba3fd866d92f0ec9343984c6b2c18a788c
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/760155ed7d4eb45e0d8cfbbf8c471b4b1548bc1e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Conor-Dooley/PolarFire-SoC-Reset-controller/20220620-005055
+        git checkout 760155ed7d4eb45e0d8cfbbf8c471b4b1548bc1e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/reset/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/huge_memory.c:2380:21: warning: incompatible pointer to integer conversion assigning to 'unsigned long' from 'void *' [-Wint-conversion]
-           page_tail->private = NULL;
-                              ^ ~~~~
-   1 warning generated.
+>> drivers/reset/reset-mpfs.c:39:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                   id);
+                   ^~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/reset/reset-mpfs.c:53:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                   id);
+                   ^~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/reset/reset-mpfs.c:69:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+                   id);
+                   ^~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   3 warnings and 20 errors generated.
 
 
-vim +2380 mm/huge_memory.c
+vim +39 drivers/reset/reset-mpfs.c
 
-  2338	
-  2339	static void __split_huge_page_tail(struct page *head, int tail,
-  2340			struct lruvec *lruvec, struct list_head *list)
-  2341	{
-  2342		struct page *page_tail = head + tail;
-  2343	
-  2344		VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
-  2345	
-  2346		/*
-  2347		 * Clone page flags before unfreezing refcount.
-  2348		 *
-  2349		 * After successful get_page_unless_zero() might follow flags change,
-  2350		 * for example lock_page() which set PG_waiters.
-  2351		 *
-  2352		 * Note that for mapped sub-pages of an anonymous THP,
-  2353		 * PG_anon_exclusive has been cleared in unmap_page() and is stored in
-  2354		 * the migration entry instead from where remap_page() will restore it.
-  2355		 * We can still have PG_anon_exclusive set on effectively unmapped and
-  2356		 * unreferenced sub-pages of an anonymous THP: we can simply drop
-  2357		 * PG_anon_exclusive (-> PG_mappedtodisk) for these here.
-  2358		 */
-  2359		page_tail->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
-  2360		page_tail->flags |= (head->flags &
-  2361				((1L << PG_referenced) |
-  2362				 (1L << PG_swapbacked) |
-  2363				 (1L << PG_swapcache) |
-  2364				 (1L << PG_mlocked) |
-  2365				 (1L << PG_uptodate) |
-  2366				 (1L << PG_active) |
-  2367				 (1L << PG_workingset) |
-  2368				 (1L << PG_locked) |
-  2369				 (1L << PG_unevictable) |
-  2370	#ifdef CONFIG_64BIT
-  2371				 (1L << PG_arch_2) |
-  2372	#endif
-  2373				 (1L << PG_dirty)));
-  2374	
-  2375		/* ->mapping in first tail page is compound_mapcount */
-  2376		VM_BUG_ON_PAGE(tail > 2 && page_tail->mapping != TAIL_MAPPING,
-  2377				page_tail);
-  2378		page_tail->mapping = head->mapping;
-  2379		page_tail->index = head->index + tail;
-> 2380		page_tail->private = NULL;
-  2381	
-  2382		/* Page flags must be visible before we make the page non-compound. */
-  2383		smp_wmb();
-  2384	
-  2385		/*
-  2386		 * Clear PageTail before unfreezing page refcount.
-  2387		 *
-  2388		 * After successful get_page_unless_zero() might follow put_page()
-  2389		 * which needs correct compound_head().
-  2390		 */
-  2391		clear_compound_head(page_tail);
-  2392	
-  2393		/* Finally unfreeze refcount. Additional reference from page cache. */
-  2394		page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
-  2395						  PageSwapCache(head)));
-  2396	
-  2397		if (page_is_young(head))
-  2398			set_page_young(page_tail);
-  2399		if (page_is_idle(head))
-  2400			set_page_idle(page_tail);
-  2401	
-  2402		page_cpupid_xchg_last(page_tail, page_cpupid_last(head));
-  2403	
-  2404		/*
-  2405		 * always add to the tail because some iterators expect new
-  2406		 * pages to show after the currently processed elements - e.g.
-  2407		 * migrate_pages
-  2408		 */
-  2409		lru_add_page_tail(head, page_tail, lruvec, list);
-  2410	}
-  2411	
+    24	
+    25	/*
+    26	 * Peripheral clock resets
+    27	 */
+    28	
+    29	static int mpfs_assert(struct reset_controller_dev *rcdev, unsigned long id)
+    30	{
+    31		u32 reg;
+    32	
+    33		reg = mpfs_reset_read(rcdev->dev);
+    34		reg |= (1u << id);
+    35		mpfs_reset_write(rcdev->dev, reg);
+    36	
+    37		dev_dbg(rcdev->dev,
+    38			"Asserting reset for device with REG_SUBBLK_RESET_CR index: %u\n",
+  > 39			id);
+    40		return 0;
+    41	}
+    42	
 
 -- 
 0-DAY CI Kernel Test Service
