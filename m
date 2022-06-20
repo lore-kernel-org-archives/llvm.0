@@ -1,21 +1,21 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C349804
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D61805
 	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:19:42 +0000 (UTC)
-X-UUID: da09cf18439441d3b373eff4a761064c-20220620
+X-UUID: 0d51c9a777ba42bca683415d3eda64c8-20220620
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:640ca0bd-8f32-4af4-a96e-fb1709127ac7,OB:0,LO
-	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:5
-X-CID-META: VersionHash:b14ad71,CLOUDID:7a1c882d-1756-4fa3-be7f-474a6e4be921,C
+X-CID-O-INFO: VERSION:1.1.6,REQID:affeb662-3c11-44ea-a4da-95473039bc39,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+	ION:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:7c1c882d-1756-4fa3-be7f-474a6e4be921,C
 	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
 	,QS:nil,BEC:nil,COL:0
-X-UUID: da09cf18439441d3b373eff4a761064c-20220620
+X-UUID: 0d51c9a777ba42bca683415d3eda64c8-20220620
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1564993028; Mon, 20 Jun 2022 17:19:34 +0800
+	with ESMTP id 1844359160; Mon, 20 Jun 2022 17:19:34 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
@@ -37,9 +37,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v23 07/14] drm/mediatek: add display merge async reset control
-Date: Mon, 20 Jun 2022 17:19:23 +0800
-Message-ID: <20220620091930.27797-8-nancy.lin@mediatek.com>
+Subject: [PATCH v23 05/14] drm/mediatek: add display merge start/stop API for cmdq support
+Date: Mon, 20 Jun 2022 17:19:21 +0800
+Message-ID: <20220620091930.27797-6-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220620091930.27797-1-nancy.lin@mediatek.com>
 References: <20220620091930.27797-1-nancy.lin@mediatek.com>
@@ -52,62 +52,71 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add merge async reset control in mtk_merge_stop. Async hw doesn't do self
-reset on each sof signal(start of frame), so need to reset the async to
-clear the hw status for the next merge start.
+Add merge start/stop API for cmdq support. The ovl_adaptor merges
+are configured with each drm plane update. Need to enable/disable
+merge with cmdq making sure all the settings taken effect in the
+same vblank.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_disp_merge.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 ++
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c | 18 +++++++++++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+index e847e90f436d..33e61a136bbc 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
++++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+@@ -66,6 +66,8 @@ void mtk_merge_stop(struct device *dev);
+ void mtk_merge_advance_config(struct device *dev, unsigned int l_w, unsigned int r_w,
+ 			      unsigned int h, unsigned int vrefresh, unsigned int bpc,
+ 			      struct cmdq_pkt *cmdq_pkt);
++void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
++void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt);
+ 
+ void mtk_ovl_bgclr_in_on(struct device *dev);
+ void mtk_ovl_bgclr_in_off(struct device *dev);
 diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-index 2e13d2fb429e..6428b6203ffe 100644
+index 40da0555416d..c7af5ccab916 100644
 --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
 +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-@@ -8,6 +8,7 @@
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
-+#include <linux/reset.h>
- #include <linux/soc/mediatek/mtk-cmdq.h>
- 
- #include "mtk_drm_ddp_comp.h"
-@@ -67,6 +68,7 @@ struct mtk_disp_merge {
- 	struct cmdq_client_reg		cmdq_reg;
- 	bool				fifo_en;
- 	bool				mute_support;
-+	struct reset_control		*reset_ctl;
+@@ -67,17 +67,29 @@ struct mtk_disp_merge {
  };
  
  void mtk_merge_start(struct device *dev)
-@@ -101,6 +103,9 @@ void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
- 
- 	mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
- 		      DISP_REG_MERGE_CTRL);
++{
++	mtk_merge_start_cmdq(dev, NULL);
++}
 +
-+	if (priv->async_clk)
-+		reset_control_reset(priv->reset_ctl);
++void mtk_merge_stop(struct device *dev)
++{
++	mtk_merge_stop_cmdq(dev, NULL);
++}
++
++void mtk_merge_start_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+ 
+-	writel(MERGE_EN, priv->regs + DISP_REG_MERGE_CTRL);
++	mtk_ddp_write(cmdq_pkt, 1, &priv->cmdq_reg, priv->regs,
++		      DISP_REG_MERGE_CTRL);
+ }
+ 
+-void mtk_merge_stop(struct device *dev)
++void mtk_merge_stop_cmdq(struct device *dev, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+ 
+-	writel(0x0, priv->regs + DISP_REG_MERGE_CTRL);
++	mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
++		      DISP_REG_MERGE_CTRL);
  }
  
  static void mtk_merge_fifo_setting(struct mtk_disp_merge *priv,
-@@ -264,6 +269,12 @@ static int mtk_disp_merge_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->async_clk);
- 	}
- 
-+	if (priv->async_clk) {
-+		priv->reset_ctl = devm_reset_control_get_optional_exclusive(dev, NULL);
-+		if (IS_ERR(priv->reset_ctl))
-+			return PTR_ERR(priv->reset_ctl);
-+	}
-+
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
- 	ret = cmdq_dev_get_client_reg(dev, &priv->cmdq_reg, 0);
- 	if (ret)
 -- 
 2.18.0
 
