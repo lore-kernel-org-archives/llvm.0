@@ -1,119 +1,142 @@
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6517B
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 00:41:13 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 25K0eqKr014064
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:40:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 25K0eqKr014064
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1655685653;
-	bh=KO2bT9e9o1IlLF54RMsY4B67RQeQIcc8YsGFuQTNKLY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gCEMMxAqgN5MkR3ByO6vuxpk0MZ5UA1pn2VZ4l5Iz/W90yG1BTegn5Bg/VSYOgpEq
-	 FngUKyK5CjlZBSHDgmb3HarTPBPhucgdGVE07JG/FDcVaULahPASP2aw5OV7GOB9/I
-	 5PoL7VpRozqBtrFukWbVh0/FdOiCwnZ31AKfJvBu7v9/QPPltOjR5fPnLLIF12FnY1
-	 H2OKr19oEhpvapzIvIfEaU79N6jHZTJcA61RDZynSPOrRe0Imj8D0cXMu+3XGwPi1W
-	 +vcKr2Y6J3++n+EpRKXiVJTKtuV3QMGlqNM8dpfTHf5xD7kjJsVSsl6vReqJcM5idC
-	 lOFl290quIv+w==
-X-Nifty-SrcIP: [209.85.221.52]
-Received: by mail-wr1-f52.google.com with SMTP id o8so12505398wro.3
-        for <llvm@lists.linux.dev>; Sun, 19 Jun 2022 17:40:52 -0700 (PDT)
-X-Gm-Message-State: AJIora/67iY++t1+pa5Xp8fxQF1Q/8CDzcL21mtcQikgeKdkRn5l6W1t
-	dGexYNvKJ0LvGBowCGMP99Q9D5gqXWVYvP/DCQw=
-X-Google-Smtp-Source: AGRyM1uugHpW+HpdtWiopVlodunIpeGyQF/T1HRP+yqxZMsIwBu975CxA4O4ugSBs0fyZGtwh8RmiCWj7jfTUPOc6As=
-X-Received: by 2002:a5d:5e92:0:b0:21a:278c:b901 with SMTP id
- ck18-20020a5d5e92000000b0021a278cb901mr20414562wrb.461.1655685651233; Sun, 19
- Jun 2022 17:40:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9C37B
+	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 00:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655686397; x=1687222397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eSyhWoubqxOZgI663razC/xezSx5QTWdtR1Lli1ARrY=;
+  b=K7xalG92vzq6a1062UC8yS4L9zw80OkzmGFvUNU6IGk9kT+WpbYLjPuN
+   M1u6huk6cw2J6ZehZRYOcAW2BPh5szWQNyqDWlcBqL0UAjT1341Kn3Frb
+   iD3018qkzb8/Y0hBEk/hR7MczFc1M+5T6OmEirsrAwf/yzbBZhqFqVSRq
+   4MqslWiSvU+mJD1Wp3fpeN77aEhAVsabylABF7L3PHyGz7awLL2illh+8
+   5ojPYmJZtTzJ27eXSkEB9wUnPgO8u3jaDbUb6Qqim5436vGbVvK+yz5ft
+   OaSifQ3UqKTMT7YSiwClQMfyEBnnkwmgD+3qofC06yJWy6j3mV64U8LXz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279825391"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="279825391"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 17:53:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="642862147"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jun 2022 17:53:16 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o35fH-000Rih-D7;
+	Mon, 20 Jun 2022 00:53:15 +0000
+Date: Mon, 20 Jun 2022 08:53:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH 4/4] riscv: implement cache-management errata for T-Head
+ SoCs
+Message-ID: <202206200818.xjxUdFxv-lkp@intel.com>
+References: <20220619203212.3604485-5-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220617165817.3204917-1-ndesaulniers@google.com> <Yqy0EkraT0O52Na7@dev-arch.thelio-3990X>
-In-Reply-To: <Yqy0EkraT0O52Na7@dev-arch.thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 20 Jun 2022 09:40:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQfDC-qGoqwaAsEpoevu8oawPjQMoyJ7pEthbdBn30f4Q@mail.gmail.com>
-Message-ID: <CAK7LNAQfDC-qGoqwaAsEpoevu8oawPjQMoyJ7pEthbdBn30f4Q@mail.gmail.com>
-Subject: Re: [PATCH] Documentation/llvm: Update Supported Arch table
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-        Michael Opdenacker <michael.opdenacker@bootlin.com>,
-        Tom Rix <trix@redhat.com>, Michal Marek <michal.lkml@markovi.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619203212.3604485-5-heiko@sntech.de>
 
-On Sat, Jun 18, 2022 at 2:04 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Fri, Jun 17, 2022 at 09:58:17AM -0700, Nick Desaulniers wrote:
-> > While watching Michael's new talk on Clang-built-Linux, I noticed the
-> > arch table in our docs that he refers to is outdated.
-> >
-> > Add hexagon and User Mode.  Bump MIPS and RISCV to LLVM=1.  PowerPC is
-> > almost LLVM=1 capable; ppc64le works, but ppc64 (big endian) and ppc32
-> > still need more work.
-> >
-> > Link: https://youtu.be/W4zdEDpvR5c?t=399
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> Thanks for updating this!
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Hi Heiko,
 
+I love your patch! Yet something to improve:
 
-Applied to linux-kbuild/fixes.
-Thanks.
+[auto build test ERROR on next-20220617]
+[cannot apply to robh/for-next linus/master v5.19-rc2 v5.19-rc1 v5.18 v5.19-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/riscv-implement-Zicbom-based-CMO-instructions-the-t-head-variant/20220620-043420
+base:    07dc787be2316e243a16a33d0a9b734cd9365bd3
+config: riscv-randconfig-r042-20220620 (https://download.01.org/0day-ci/archive/20220620/202206200818.xjxUdFxv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/df19d619d986c028837235ac90ff3cdaf770bb10
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Heiko-Stuebner/riscv-implement-Zicbom-based-CMO-instructions-the-t-head-variant/20220620-043420
+        git checkout df19d619d986c028837235ac90ff3cdaf770bb10
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
->
-> > ---
-> >  Documentation/kbuild/llvm.rst | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > index b854bb413164..6b2bac8e9ce0 100644
-> > --- a/Documentation/kbuild/llvm.rst
-> > +++ b/Documentation/kbuild/llvm.rst
-> > @@ -129,18 +129,24 @@ yet. Bug reports are always welcome at the issue tracker below!
-> >     * - arm64
-> >       - Supported
-> >       - ``LLVM=1``
-> > +   * - hexagon
-> > +     - Maintained
-> > +     - ``LLVM=1``
-> >     * - mips
-> >       - Maintained
-> > -     - ``CC=clang``
-> > +     - ``LLVM=1``
-> >     * - powerpc
-> >       - Maintained
-> >       - ``CC=clang``
-> >     * - riscv
-> >       - Maintained
-> > -     - ``CC=clang``
-> > +     - ``LLVM=1``
-> >     * - s390
-> >       - Maintained
-> >       - ``CC=clang``
-> > +   * - um (User Mode)
-> > +     - Maintained
-> > +     - ``LLVM=1``
-> >     * - x86
-> >       - Supported
-> >       - ``LLVM=1``
-> > --
-> > 2.36.1.476.g0c4daa206d-goog
-> >
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/mm/dma-noncoherent.c:24:3: error: expected ')'
+                   ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:128:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(6),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:27:3: error: expected ')'
+                   ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:128:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(6),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:30:3: error: expected ')'
+                   ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:128:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(6),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:47:3: error: expected ')'
+                   ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:128:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(6),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:58:2: error: expected ')'
+           ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
+           ^
+   arch/riscv/include/asm/errata_list.h:128:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(6),                                                      \
+           ^
+   5 errors generated.
 
 
+vim +24 arch/riscv/mm/dma-noncoherent.c
+
+16051acb7ada26 Heiko Stuebner 2022-06-19  16  
+16051acb7ada26 Heiko Stuebner 2022-06-19  17  void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+16051acb7ada26 Heiko Stuebner 2022-06-19  18  			      enum dma_data_direction dir)
+16051acb7ada26 Heiko Stuebner 2022-06-19  19  {
+16051acb7ada26 Heiko Stuebner 2022-06-19  20  	void *vaddr = phys_to_virt(paddr);
+16051acb7ada26 Heiko Stuebner 2022-06-19  21  
+16051acb7ada26 Heiko Stuebner 2022-06-19  22  	switch (dir) {
+16051acb7ada26 Heiko Stuebner 2022-06-19  23  	case DMA_TO_DEVICE:
+16051acb7ada26 Heiko Stuebner 2022-06-19 @24  		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+16051acb7ada26 Heiko Stuebner 2022-06-19  25  		break;
+16051acb7ada26 Heiko Stuebner 2022-06-19  26  	case DMA_FROM_DEVICE:
+16051acb7ada26 Heiko Stuebner 2022-06-19  27  		ALT_CMO_OP(inval, vaddr, size, riscv_cbom_block_size);
+16051acb7ada26 Heiko Stuebner 2022-06-19  28  		break;
+16051acb7ada26 Heiko Stuebner 2022-06-19  29  	case DMA_BIDIRECTIONAL:
+16051acb7ada26 Heiko Stuebner 2022-06-19  30  		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+16051acb7ada26 Heiko Stuebner 2022-06-19  31  		break;
+16051acb7ada26 Heiko Stuebner 2022-06-19  32  	default:
+16051acb7ada26 Heiko Stuebner 2022-06-19  33  		break;
+16051acb7ada26 Heiko Stuebner 2022-06-19  34  	}
+16051acb7ada26 Heiko Stuebner 2022-06-19  35  }
+16051acb7ada26 Heiko Stuebner 2022-06-19  36  
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
