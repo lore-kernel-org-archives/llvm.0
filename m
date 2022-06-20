@@ -1,41 +1,47 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1913D6E
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 20:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32DE3D6E
+	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 20:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655755736; x=1687291736;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Rw/YyR8KzMNSjksmV6Tzc+8yzOKGmflI9bnBoEpcFSk=;
-  b=EgtpoCnzdIhvg3BVZKHdFjALf5m2xd5bzhRmAQAtzDpAMwFxQczLYK9l
-   MD6970Irh2q/UaMbBZmEQq78EI26362Ro9xJs546839u262MZBxYPXMXe
-   gmlLqqz1hGI2fJLyhjiSlOGwOuHZOSzmMvSCd8kIxRcf5KM9mOSy35HX3
-   I9nk+ciNh4ptbYjjhgizhrPurmr+VTqsww46iaAJB8CBzo9FsBzaru67X
-   uVtCmNgkFyYWrFIWCwODkslbz49DCpNs/3/cusEb8FnwhTmzVMos9Yy9O
-   ukCnlLlGSZxTl3M1ML5AgskeI10alIaArD8z1PCy5E3gsmn4l88D5wt3b
+  t=1655756940; x=1687292940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hUBdBb6ILpffwHa7sM2Q3sEI4C6GxR3yhUVEP/IqeC4=;
+  b=Ay8UAeJWXE81Pq2LaoMWjaLDauOZR3E6py24qCFJztcdCcuPSYuDw9f/
+   0dB1FGpibk4r/wXgAwl4GgPyg4DrDE8lH4gffFCFEtsJ4NWefb5GHWmVi
+   XxCb+WrnW3J+qagTUYrUbDHV3E8gd9RLJ6DknH7cWNI3FH8OwkuAb5UWq
+   Y0ZOhljul2boPZbsj2AQ+2s+9aOg4Nzcq8o2cEF071AK6OuRFi8GjQKYn
+   PeLug0wxInjiPfbk8v2cpyQ2NI5rktV3JWY3FeG6LZJqWW8MVokA3ekdi
+   N93/G0tizTt7uwX8R7LBJr9sib0cfYXqPPOSNh1ddk4bQTDvAsLtxCT28
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="268688248"
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259790802"
 X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="268688248"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 13:08:56 -0700
+   d="scan'208";a="259790802"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 13:28:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,207,1650956400"; 
-   d="scan'208";a="591317230"
+   d="scan'208";a="676671689"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2022 13:08:55 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2022 13:28:57 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3Nhe-000VnT-S0;
-	Mon, 20 Jun 2022 20:08:54 +0000
-Date: Tue, 21 Jun 2022 04:08:03 +0800
+	id 1o3O13-000VxH-8v;
+	Mon, 20 Jun 2022 20:28:57 +0000
+Date: Tue, 21 Jun 2022 04:28:36 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.06.15c 12/12]
- vmlinux.o: warning: objtool: __ct_user_enter+0x75: call to
- __kasan_check_write() leaves .noinstr.text section
-Message-ID: <202206210326.jhkcWRkx-lkp@intel.com>
+To: Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-block@vger.kernel.org,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Niklas Cassel <Niklas.Cassel@wdc.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH 4/8] block: Fix handling of tasks without ioprio in
+ ioprio_get(2)
+Message-ID: <202206210431.uTcCuUoS-lkp@intel.com>
+References: <20220620161153.11741-4-jack@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,44 +50,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220620161153.11741-4-jack@suse.cz>
 
-BCC: lkp@intel.com
-CC: "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
-CC: linux-kernel@vger.kernel.org
-TO: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Marco Elver <elver@google.com>
+Hi Jan,
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.06.15c
-head:   39a7b06a0b5a00fc57b117d6abebf2d8dae21517
-commit: 39a7b06a0b5a00fc57b117d6abebf2d8dae21517 [12/12] context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-config: x86_64-randconfig-r012-20220620 (https://download.01.org/0day-ci/archive/20220621/202206210326.jhkcWRkx-lkp@intel.com/config)
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v5.19-rc2 next-20220617]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jan-Kara/block-Fix-IO-priority-mess/20220621-001427
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: s390-randconfig-r044-20220620 (https://download.01.org/0day-ci/archive/20220621/202206210431.uTcCuUoS-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/39a7b06a0b5a00fc57b117d6abebf2d8dae21517
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.06.15c
-        git checkout 39a7b06a0b5a00fc57b117d6abebf2d8dae21517
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/73f39284cec50db7a3e973a9a4ed56f7f706dd1b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jan-Kara/block-Fix-IO-priority-mess/20220621-001427
+        git checkout 73f39284cec50db7a3e973a9a4ed56f7f706dd1b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: balance_leaf+0xe882: stack state mismatch: cfa1=4+400 cfa2=4+416
-   vmlinux.o: warning: objtool: leaf_move_items+0xf8e: stack state mismatch: cfa1=4+160 cfa2=4+152
-   vmlinux.o: warning: objtool: leaf_copy_boundary_item+0x3239: stack state mismatch: cfa1=4+240 cfa2=4+232
-   vmlinux.o: warning: objtool: leaf_copy_items_entirely+0xd1d: stack state mismatch: cfa1=4+256 cfa2=4+248
-   vmlinux.o: warning: objtool: balance_internal+0x5991: stack state mismatch: cfa1=4+312 cfa2=4+320
-   vmlinux.o: warning: objtool: internal_move_pointers_items+0x7a0: stack state mismatch: cfa1=4+216 cfa2=4+208
-   vmlinux.o: warning: objtool: sync_regs+0x23: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __ct_user_enter+0x75: call to __kasan_check_write() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __ct_user_exit+0x4a: call to __kasan_check_write() leaves .noinstr.text section
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: fs/read_write.o: in function `get_current_ioprio':
+>> include/linux/ioprio.h:53: undefined reference to `__get_task_ioprio'
+>> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: include/linux/ioprio.h:53: undefined reference to `__get_task_ioprio'
+>> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: include/linux/ioprio.h:53: undefined reference to `__get_task_ioprio'
+>> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: include/linux/ioprio.h:53: undefined reference to `__get_task_ioprio'
+>> /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: include/linux/ioprio.h:53: undefined reference to `__get_task_ioprio'
+   /opt/cross/gcc-11.3.0-nolibc/s390x-linux/bin/s390x-linux-ld: fs/seq_file.o:include/linux/ioprio.h:53: more undefined references to `__get_task_ioprio' follow
+
+
+vim +53 include/linux/ioprio.h
+
+    50	
+    51	static inline int get_current_ioprio(void)
+    52	{
+  > 53		return __get_task_ioprio(current);
+    54	}
+    55	
 
 -- 
 0-DAY CI Kernel Test Service
