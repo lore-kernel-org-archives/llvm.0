@@ -1,96 +1,107 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FAE7FB
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:23:22 +0000 (UTC)
-X-UUID: 125cba58dd5f42009ce0806aa0f3a13e-20220620
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:a70c4a93-adc5-4629-805f-4bf9dd2a3deb,OB:0,LO
-	B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:7487ffe9-f7af-4e69-92ee-0fd74a0c286c,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-	,QS:nil,BEC:nil,COL:0
-X-UUID: 125cba58dd5f42009ce0806aa0f3a13e-20220620
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-	(envelope-from <nancy.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 1355537549; Mon, 20 Jun 2022 17:18:06 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 20 Jun 2022 17:18:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 20 Jun 2022 17:18:04 +0800
-From: Nancy.Lin <nancy.lin@mediatek.com>
-To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
-	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
-	<singo.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v23 08/10] soc: mediatek: mmsys: add reset control for MT8195 vdosys1
-Date: Mon, 20 Jun 2022 17:17:59 +0800
-Message-ID: <20220620091801.27680-9-nancy.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220620091801.27680-1-nancy.lin@mediatek.com>
-References: <20220620091801.27680-1-nancy.lin@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D83651
+	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 10:34:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655721289; x=1687257289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TEXGFS9mwiCk/RdnSXnlola2s7v3zNZiPNGFXC38NVA=;
+  b=l2TpWH1PDRwJUGg51e1hVn1cJgv40YCf7O6yKeCYHKX3GaLtLK01MSyT
+   e+vY2tPRjm4+YcDCePXc4YQV8E2j9J48389qG6aODtUnCGN16DUNDGFaa
+   7iKLtbSRTGorumwrhY5xRJ+oJolt8sZ7sxQH9p1RkLlqPlc04qB8vKRha
+   8qR8icDZoYiSwO9YM4rtTfWZuCBGB68zL+tT0Ae8bgWnw+w9pVnI80MTE
+   SuQE/FcoTcDYFwZBFNlK6Ai7LrwebmaVZwUGbpkRB/N77WY6xVJJn0OaU
+   fgYJrYwMwfRiwJ7zAyNDzyHA2w2CmWYCdTEb09QY3FHZ/uJo7zF2BAJkd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="279910770"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="279910770"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:34:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="591119720"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2022 03:34:47 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o3Ek2-000Sfv-RJ;
+	Mon, 20 Jun 2022 10:34:46 +0000
+Date: Mon, 20 Jun 2022 18:33:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nadav Amit <nadav.amit@gmail.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH v2 2/5] userfaultfd: introduce access-likely mode for
+ copy/wp operations
+Message-ID: <202206201856.LMF3y588-lkp@intel.com>
+References: <20220619233449.181323-3-namit@vmware.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619233449.181323-3-namit@vmware.com>
 
-MT8195 vdosys1 has more than 32 reset bits and a different reset base
-than other chips. Add the number of reset bits and reset base in mmsys
-private data.
+Hi Nadav,
 
-Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
----
- drivers/soc/mediatek/mt8195-mmsys.h | 1 +
- drivers/soc/mediatek/mtk-mmsys.c    | 2 ++
- 2 files changed, 3 insertions(+)
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v5.19-rc2 next-20220617]
+[cannot apply to shuah-kselftest/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-index 454944a9409c..a6652ae63431 100644
---- a/drivers/soc/mediatek/mt8195-mmsys.h
-+++ b/drivers/soc/mediatek/mt8195-mmsys.h
-@@ -75,6 +75,7 @@
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
- #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
- 
-+#define MT8195_VDO1_SW0_RST_B					0x1d0
- #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				0xe30
- #define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				0xe70
- #define MT8195_VDO1_HDR_TOP_CFG					0xd00
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index ec4f2d90c05a..9bbf0103b225 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -154,6 +154,8 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
- 	.clk_driver = "clk-mt8195-vdo1",
- 	.routes = mmsys_mt8195_vdo1_routing_table,
- 	.num_routes = ARRAY_SIZE(mmsys_mt8195_vdo1_routing_table),
-+	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
-+	.num_resets = 64,
- };
- 
- static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
+url:    https://github.com/intel-lab-lkp/linux/commits/Nadav-Amit/userfaultfd-support-access-write-hints/20220620-150942
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-buildonly-randconfig-r001-20220620 (https://download.01.org/0day-ci/archive/20220620/202206201856.LMF3y588-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ad1b8120bf00d273f9c786fe63c5c1fbcd7ff43c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nadav-Amit/userfaultfd-support-access-write-hints/20220620-150942
+        git checkout ad1b8120bf00d273f9c786fe63c5c1fbcd7ff43c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/userfaultfd.c:700:23: warning: parameter 'uffd_flags' set but not used [-Wunused-but-set-parameter]
+                          uffd_flags_t uffd_flags)
+                                       ^
+   mm/userfaultfd.c:711:23: warning: parameter 'uffd_flags' set but not used [-Wunused-but-set-parameter]
+                          uffd_flags_t uffd_flags)
+                                       ^
+   2 warnings generated.
+
+
+vim +/uffd_flags +700 mm/userfaultfd.c
+
+c1a4de99fada21 Andrea Arcangeli 2015-09-04  697  
+c1a4de99fada21 Andrea Arcangeli 2015-09-04  698  ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
+0b36999093ff22 Nadav Amit       2022-06-19  699  		       unsigned long len, atomic_t *mmap_changing,
+0b36999093ff22 Nadav Amit       2022-06-19 @700  		       uffd_flags_t uffd_flags)
+c1a4de99fada21 Andrea Arcangeli 2015-09-04  701  {
+ad1b8120bf00d2 Nadav Amit       2022-06-19  702  	/* There is no cost for setting the access bit of a zeropage */
+ad1b8120bf00d2 Nadav Amit       2022-06-19  703  	uffd_flags |= UFFD_FLAGS_ACCESS_LIKELY;
+ad1b8120bf00d2 Nadav Amit       2022-06-19  704  
+f619147104c8ea Axel Rasmussen   2021-05-04  705  	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
+f619147104c8ea Axel Rasmussen   2021-05-04  706  			      mmap_changing, 0);
+f619147104c8ea Axel Rasmussen   2021-05-04  707  }
+f619147104c8ea Axel Rasmussen   2021-05-04  708  
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
