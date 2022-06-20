@@ -1,21 +1,21 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2284803
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:19:43 +0000 (UTC)
-X-UUID: 895b5afd4893429a812504fdbc003d9e-20220620
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AF9807
+	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:19:44 +0000 (UTC)
+X-UUID: 74f56a22a63e430babb32ad4eb6be351-20220620
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:1cd327c0-1f77-4a1a-971e-711144f1b588,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.6,REQID:7aca498f-c7a1-471b-a94b-17890ea1f10d,OB:0,LO
 	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
 	ON:release,TS:5
-X-CID-META: VersionHash:b14ad71,CLOUDID:7d1c882d-1756-4fa3-be7f-474a6e4be921,C
+X-CID-META: VersionHash:b14ad71,CLOUDID:7b1c882d-1756-4fa3-be7f-474a6e4be921,C
 	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
 	,QS:nil,BEC:nil,COL:0
-X-UUID: 895b5afd4893429a812504fdbc003d9e-20220620
+X-UUID: 74f56a22a63e430babb32ad4eb6be351-20220620
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-	with ESMTP id 634917934; Mon, 20 Jun 2022 17:19:34 +0800
+	with ESMTP id 1815140220; Mon, 20 Jun 2022 17:19:34 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
@@ -37,9 +37,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v23 11/14] drm/mediatek: add dma dev get function
-Date: Mon, 20 Jun 2022 17:19:27 +0800
-Message-ID: <20220620091930.27797-12-nancy.lin@mediatek.com>
+Subject: [PATCH v23 09/14] drm/mediatek: add mediatek-drm plane color encoding info
+Date: Mon, 20 Jun 2022 17:19:25 +0800
+Message-ID: <20220620091930.27797-10-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220620091930.27797-1-nancy.lin@mediatek.com>
 References: <20220620091930.27797-1-nancy.lin@mediatek.com>
@@ -52,98 +52,44 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-This is a preparation for adding support for the ovl_adaptor sub driver
-Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
-dma_dev_get function for getting representative dma dev in ovl_adaptor.
+Add plane color encoding information for color space conversion.
+It's a preparation for adding support for mt8195 ovl_adaptor mdp_rdma
+csc control.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
- 3 files changed, 24 insertions(+)
+ drivers/gpu/drm/mediatek/mtk_drm_plane.c | 1 +
+ drivers/gpu/drm/mediatek/mtk_drm_plane.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 42cc7052b050..5251bf070e6e 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -59,6 +59,7 @@ struct mtk_drm_crtc {
- #endif
- 
- 	struct device			*mmsys_dev;
-+	struct device			*dma_dev;
- 	struct mtk_mutex		*mutex;
- 	unsigned int			ddp_comp_nr;
- 	struct mtk_ddp_comp		**ddp_comp;
-@@ -866,6 +867,13 @@ static int mtk_drm_crtc_init_comp_planes(struct drm_device *drm_dev,
- 	return 0;
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+index e5fae4ec2337..39cb9a80d976 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+@@ -138,6 +138,7 @@ static void mtk_plane_update_new_state(struct drm_plane_state *new_state,
+ 	mtk_plane_state->pending.width = drm_rect_width(&new_state->dst);
+ 	mtk_plane_state->pending.height = drm_rect_height(&new_state->dst);
+ 	mtk_plane_state->pending.rotation = new_state->rotation;
++	mtk_plane_state->pending.color_encoding = new_state->color_encoding;
  }
  
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
-+{
-+	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
-+
-+	return mtk_crtc->dma_dev;
-+}
-+
- int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
- {
-@@ -954,6 +962,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			return ret;
- 	}
- 
-+	/*
-+	 * Default to use the first component as the dma dev.
-+	 * In the case of ovl_adaptor sub driver, it needs to use the
-+	 * dma_dev_get function to get representative dma dev.
-+	 */
-+	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
-+
- 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-index cb9a36c48d4f..f5a6e80c5265 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
- 			     struct mtk_plane_state *state);
- void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
- 			       struct drm_atomic_state *plane_state);
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
- 
- #endif /* MTK_DRM_CRTC_H */
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-index a43d82c12a9a..b04e656cb251 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-@@ -70,6 +70,7 @@ struct mtk_ddp_comp_funcs {
- 	void (*bgclr_in_off)(struct device *dev);
- 	void (*ctm_set)(struct device *dev,
- 			struct drm_crtc_state *state);
-+	struct device * (*dma_dev_get)(struct device *dev);
+ static void mtk_plane_atomic_async_update(struct drm_plane *plane,
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.h b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
+index d454bece9535..2d5ec66e3df1 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.h
+@@ -24,6 +24,7 @@ struct mtk_plane_pending_state {
+ 	bool				dirty;
+ 	bool				async_dirty;
+ 	bool				async_config;
++	enum drm_color_encoding		color_encoding;
  };
  
- struct mtk_ddp_comp {
-@@ -202,6 +203,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp *comp,
- 		comp->funcs->ctm_set(comp->dev, state);
- }
- 
-+static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp *comp)
-+{
-+	if (comp->funcs && comp->funcs->dma_dev_get)
-+		return comp->funcs->dma_dev_get(comp->dev);
-+	return comp->dev;
-+}
-+
- int mtk_ddp_comp_get_id(struct device_node *node,
- 			enum mtk_ddp_comp_type comp_type);
- unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
+ struct mtk_plane_state {
 -- 
 2.18.0
 
