@@ -1,177 +1,253 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B93B7F6
-	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655716042; x=1687252042;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=yE0sYolA28odjwqHlF8UTbPGPqdwVkp66FhqarJnG6Y=;
-  b=ZhTgAzBAYxwDbyoVcZd2Pgwx2V+TjkHIepayqYLOpqlCiwFja/H/CmiA
-   PhpL55ynLe79YFBbX14r3W6T4/EAFGGNCvXY/ffQ+bUPube95JVXI9gNb
-   OAUcgkVsb0hOXUvdxkN997Vay9PE+RytsKFY9WxdFtp3U3YdQE7D8oqxy
-   PgpdK0sXWZQHkwuicMcU7NQaXL6XWc1eyu29WKjLSzPm9Ew0iV9qOGRA4
-   u81CBct7rerI9Svr2oyPKK9cDhnVp/UteFlG6c8n9J8/19oQOcwOb3pLq
-   Q0V39qSFsZ196lVKsmU79W+tR+Uc3y+RL8fzgL3MNtHGs3mWAW0kbcAlk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="341527107"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="341527107"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 02:07:21 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="643024196"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.30.150]) ([10.255.30.150])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 02:07:19 -0700
-Subject: Re: [kbuild-all] Re: [RFC 4/6] reset: add polarfire soc reset support
-To: Conor Dooley <mail@conchuod.ie>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-References: <20220619164935.1492823-5-mail@conchuod.ie>
- <202206200343.mg3VsC0H-lkp@intel.com>
- <2b30919a-ccb9-9891-d145-e2e4107d244e@conchuod.ie>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <75352a1f-cdd5-bd56-48db-6c27c4a4ccf9@intel.com>
-Date: Mon, 20 Jun 2022 17:07:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9115A7F6
+	for <llvm@lists.linux.dev>; Mon, 20 Jun 2022 09:19:38 +0000 (UTC)
+X-UUID: c5b60405d23c4ff3879a3520133ae3bf-20220620
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:1b660c48-6f3c-4560-b75f-d4e03bdb45b3,OB:30,L
+	OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:95
+X-CID-INFO: VERSION:1.1.6,REQID:1b660c48-6f3c-4560-b75f-d4e03bdb45b3,OB:30,LOB
+	:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+	TION:quarantine,TS:95
+X-CID-META: VersionHash:b14ad71,CLOUDID:8193ffe9-f7af-4e69-92ee-0fd74a0c286c,C
+	OID:673befd01902,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c5b60405d23c4ff3879a3520133ae3bf-20220620
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1145364698; Mon, 20 Jun 2022 17:19:32 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 20 Jun 2022 17:19:32 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Mon, 20 Jun 2022 17:19:32 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v23 00/14] Add MediaTek SoC DRM (vdosys1) support for mt8195
+Date: Mon, 20 Jun 2022 17:19:16 +0800
+Message-ID: <20220620091930.27797-1-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <2b30919a-ccb9-9891-d145-e2e4107d244e@conchuod.ie>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Conor,
+The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
 
-Thanks for the reply, we have ignored the series in our CI.
+Add DRM and these modules support by the patches below:
 
-Best Regards,
-Rong Chen
+Changes in v23:
+- separate[7] mmsys/mutex and drm patches into two series
 
-On 6/20/2022 3:54 AM, Conor Dooley wrote:
-> Can I just make it stop trying to build the series?
-> Clearly I screwed up the kconfig depends...
-> 
-> On 19/06/2022 20:52, kernel test robot wrote:
->> Hi Conor,
->>
->> [FYI, it's a private test report for your RFC patch.]
->> [auto build test ERROR on b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/PolarFire-SoC-Reset-controller/20220620-005055
->> base:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
->> config: riscv-randconfig-r026-20220620 (https://download.01.org/0day-ci/archive/20220620/202206200343.mg3VsC0H-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install riscv cross compiling tool for clang build
->>          # apt-get install binutils-riscv-linux-gnu
->>          # https://github.com/intel-lab-lkp/linux/commit/760155ed7d4eb45e0d8cfbbf8c471b4b1548bc1e
->>          git remote add linux-review https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review Conor-Dooley/PolarFire-SoC-Reset-controller/20220620-005055
->>          git checkout 760155ed7d4eb45e0d8cfbbf8c471b4b1548bc1e
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/reset/
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/reset/reset-mpfs.c:33:8: error: call to undeclared function 'mpfs_reset_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>             reg = mpfs_reset_read(rcdev->dev);
->>                   ^
->>>> drivers/reset/reset-mpfs.c:35:2: error: call to undeclared function 'mpfs_reset_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>             mpfs_reset_write(rcdev->dev, reg);
->>             ^
->>     drivers/reset/reset-mpfs.c:39:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
->>                     id);
->>                     ^~
->>     include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
->>             dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
->>                                          ~~~     ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
->>                                dev, fmt, ##__VA_ARGS__)
->>                                     ~~~    ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
->>             __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
->>                                                                   ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
->>                     func(&id, ##__VA_ARGS__);               \
->>                                 ^~~~~~~~~~~
->>     drivers/reset/reset-mpfs.c:47:8: error: call to undeclared function 'mpfs_reset_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>             reg = mpfs_reset_read(rcdev->dev);
->>                   ^
->>     drivers/reset/reset-mpfs.c:49:2: error: call to undeclared function 'mpfs_reset_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>             mpfs_reset_write(rcdev->dev, val);
->>             ^
->>     drivers/reset/reset-mpfs.c:53:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
->>                     id);
->>                     ^~
->>     include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
->>             dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
->>                                          ~~~     ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
->>                                dev, fmt, ##__VA_ARGS__)
->>                                     ~~~    ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
->>             __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
->>                                                                   ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
->>                     func(&id, ##__VA_ARGS__);               \
->>                                 ^~~~~~~~~~~
->>     drivers/reset/reset-mpfs.c:60:12: error: call to undeclared function 'mpfs_reset_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>             u32 reg = mpfs_reset_read(rcdev->dev);
->>                       ^
->>     drivers/reset/reset-mpfs.c:69:3: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
->>                     id);
->>                     ^~
->>     include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
->>             dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
->>                                          ~~~     ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
->>                                dev, fmt, ##__VA_ARGS__)
->>                                     ~~~    ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
->>             __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
->>                                                                   ^~~~~~~~~~~
->>     include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
->>                     func(&id, ##__VA_ARGS__);               \
->>                                 ^~~~~~~~~~~
->>     3 warnings and 5 errors generated.
->>
->>
->> vim +/mpfs_reset_read +33 drivers/reset/reset-mpfs.c
->>
->>      24	
->>      25	/*
->>      26	 * Peripheral clock resets
->>      27	 */
->>      28	
->>      29	static int mpfs_assert(struct reset_controller_dev *rcdev, unsigned long id)
->>      30	{
->>      31		u32 reg;
->>      32	
->>    > 33		reg = mpfs_reset_read(rcdev->dev);
->>      34		reg |= (1u << id);
->>    > 35		mpfs_reset_write(rcdev->dev, reg);
->>      36	
->>      37		dev_dbg(rcdev->dev,
->>      38			"Asserting reset for device with REG_SUBBLK_RESET_CR index: %u\n",
->>      39			id);
->>      40		return 0;
->>      41	}
->>      42	
->>
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+Changes in v22:
+- rebase to next-20220525
+- rebase to vdosys0 series v22
+- separate dts to a new patch
+
+Changes in v21:
+- fix reviewer comment
+  - fix rdma and ethdr binding doc and dts
+
+Changes in v20:
+- fix reviewer comment
+  - update mmsys update bit api name
+  - add mtk_mmsys_update_bits error message if lose gce property
+  - list all mt8195 vdosys1 reset bits
+
+Changes in v19:
+- fix reviewer comment
+  - separate mt8195 mmsys component to a new patch
+  - separate mt8195 vdo0 and vdo1 routing table
+  - separate mmsys_write_reg api to a new patch and simplify write reg code
+  - separate mmsys 64 bit reset to a new patch
+  - separate mtk-mutex dp_intf1 component to a new patch
+
+Changes in v18:
+- fix reviewer comment
+  - fix rdma binding doc
+  - fix ethdr binding doc
+  - refine mmsys config cmdq support
+  - refine merge reset control flow, get reset control in probe function
+  - add ethdr reset control error handling and remove dbg log
+- rebase to vdosys0 series v20 (ref [5])
+
+Changes in v17:
+- fix reviewer comment in v16
+  - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
+  - separate mmsys config API
+  - move mdp_rdma binding yaml
+- fix ovl adaptor pm runtime get sync timing issue
+- rebase to vdosys0 series v19 (ref [5])
+- rebase to [7] for modify vblank register change
+
+Changes in v16:
+- fix reviewer comment in v 15
+  - fix mtk_drm_ddp_comp.c alignment
+  - fix vdosys0 mmsys num before adding vdosys1 patch
+
+Changes in v15:
+- fix ethdr uppercase hex number in dts
+
+Changes in v14:
+- remove MTK_MMSYS 64 bit dependency
+- add ethdr.yaml back and fix dt_schema check fail
+
+Resend v13
+- add related maintainer in maillist
+
+Changes in v13:
+- fix reviewer comment in v12
+  - fix rdma dt-binding format
+  - fix dts node naming
+- fix 32 bit build error
+  - modify 64bit dependency for mtk-mmsys
+- rebase to vdosys0 series v16. (ref [5])
+
+Changes in v12:
+- fix reviewer comment in v11
+  - modify mbox index
+  - refine dma dev for ovl_adaptor sub driver
+
+Changes in v11:
+- remove ethdr vblank spin lock
+- refine ovl_adaptor print message
+
+Changes in v10:
+- refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
+- fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
+
+Changes in v9:
+- rebase on kernel-5.16-rc1
+- rebase on vdosys0 series v13. (ref [5])
+- fix ovl_adaptor sub driver is brought up unintentionally
+- fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue 
+
+Changes in v8:
+- separate merge async reset to new patch.
+- separate drm ovl_adaptor sub driver to new patch.
+- fix reviewer comment in v7.
+
+Changes in v7:
+- rebase on vdosys0 series v12 (ref[5])
+- add dma description in ethdr binding document.
+- refine vdosys1 bit definition of mmsys routing table.
+- separate merge modification into 3 pathces.
+- separate mutex modification into 2 patches.
+- add plane color coding for mdp_rdma csc.
+- move mdp_rdma pm control to ovl_adaptor.
+- fix reviewer comment in v6.
+
+Changes in v6:
+- rebase on kernel-5.15-rc1.
+- change mbox label to gce0 for dts node of vdosys1.
+- modify mmsys reset num for mt8195.
+- rebase on vdosys0 series v10. (ref [5])
+- use drm to bring up ovl_adaptor driver.
+- move drm iommu/mutex check from kms init to drm bind.
+- modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
+- modify for reviewer's comment in v5.
+
+Changes in v5:
+- add mmsys reset controller reference.
+
+Changes in v4:
+- use merge common driver for merge1~4.
+- refine ovl_adaptor rdma driver.
+- use ovl_adaptor ddp_comp function instead of ethdr.
+- modify for reviewer's comment in v3.
+
+Changes in v3:
+- modify for reviewer's comment in v2.
+- add vdosys1 2 pixels align limit.
+- add mixer odd offset support.
+
+Changes in v2:
+- Merge PSEUDO_OVL and ETHDR into one DRM component.
+- Add mmsys config API for vdosys1 hardware setting.
+- Add mmsys reset control using linux reset framework.
+
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+
+This series are based on the following patch:
+[1] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+    20220112114724.1953-4-tinghan.shen@mediatek.com
+[2] arm64: dts: mt8195: add IOMMU and smi nodes
+    20210615173233.26682-15-tinghan.shen@mediatek.com
+[3] arm64: dts: mt8195: add gce node
+    20220126090109.32143-1-jason-jh.lin@mediatek.com
+[4] [v2] arm64: dts: mt8195: add display node for vdosys0
+    20220225021535.2655-1-jason-jh.lin@mediatek.com
+[5] Add MediaTek SoC DRM (vdosys0) support for mt8195 - v22 series
+    20220526102126.19756-1-jason-jh.lin@mediatek.com
+[6] dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+    20220407075726.17771-2-yong.wu@mediatek.com
+[7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+    20220526110233.20080-1-nancy.lin@mediatek.com
+
+Nancy.Lin (14):
+  dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+  dt-bindings: mediatek: add ethdr definition for mt8195
+  drm/mediatek: add display MDP RDMA support for MT8195
+  drm/mediatek: add display merge advance config API for MT8195
+  drm/mediatek: add display merge start/stop API for cmdq support
+  drm/mediatek: add display merge mute/unmute support for MT8195
+  drm/mediatek: add display merge async reset control
+  drm/mediatek: add ETHDR support for MT8195
+  drm/mediatek: add mediatek-drm plane color encoding info
+  drm/mediatek: add ovl_adaptor support for MT8195
+  drm/mediatek: add dma dev get function
+  drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
+  drm/mediatek: add drm ovl_adaptor sub driver for MT8195
+  drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
+
+ .../display/mediatek/mediatek,ethdr.yaml      | 188 +++++++
+ .../display/mediatek/mediatek,mdp-rdma.yaml   |  88 +++
+ drivers/gpu/drm/mediatek/Makefile             |   5 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  38 ++
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c     |  94 +++-
+ .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 514 ++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  96 ++--
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 125 +++--
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 360 ++++++++----
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  25 +-
+ drivers/gpu/drm/mediatek/mtk_drm_plane.c      |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_plane.h      |   1 +
+ drivers/gpu/drm/mediatek/mtk_ethdr.c          | 369 +++++++++++++
+ drivers/gpu/drm/mediatek/mtk_ethdr.h          |  26 +
+ drivers/gpu/drm/mediatek/mtk_mdp_rdma.c       | 315 +++++++++++
+ drivers/gpu/drm/mediatek/mtk_mdp_rdma.h       |  20 +
+ 18 files changed, 2123 insertions(+), 206 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
+
+-- 
+2.18.0
+
