@@ -1,305 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BB810E0
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40494C341C6
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655823457;
-	bh=1w3ELH6FhnKTMp/aAUXabwlWVSg9Z9CE4WFemmnUsEs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GzgrKNHGBAhTaX2MjfCY21Bi6QjEEJOhvy+I8oedc/A/Kyv0l9+oYavGFZRFVA3Ib
-	 bCslybB+JssUwQOZCBC1KiIGksWCdZ5M/gFthvmqoYgpl/sSPjr07rINH7vDRQDSuU
-	 ntZx2xoLNdDVjfY2Xk30LGOolLqQ3OLyEiMHl5dz1roy539UPQE+6HX8T0xXEMU61P
-	 iXW/fXyJVl+uhAn+vPpJl1rtVY+EruxqNlThNAFYB036L1qm6UYVcPCxlrfj7bfuq6
-	 M5y4ss8rgY+mBNr6X8+Pidcs/YBU9NK1u/njCJ1cT9g8l5o52shmCnD239mDlla37W
-	 Z6OhfEdv7YU0w==
-Received: by mail-vk1-f178.google.com with SMTP id c11so6802012vkn.5
-        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:57:37 -0700 (PDT)
-X-Gm-Message-State: AJIora9aXNZIXYNKuv2HbC7nB7qxo+1VZX8WpwuNhUfXuifaZs8TbRY9
-	0vl24YYj5TmhFV72iqzHzJmpi9LNaVlRE7A+n2Y=
-X-Google-Smtp-Source: AGRyM1uWyyUJQ0UyBp5q+f7Fxs01MDqffDPEJtCcflVQwjX0fmBOX2yDOXb7WRZN7zemi3Wd/1HMm+rHbBQqT+hTO/M=
-X-Received: by 2002:a05:6122:239:b0:36c:1187:a347 with SMTP id
- e25-20020a056122023900b0036c1187a347mr4096305vko.28.1655823456161; Tue, 21
- Jun 2022 07:57:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF3C10E1
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 15:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655824937; x=1687360937;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1flX2RejbeqfiODphgVCmQ1ehxJD9lWgF0DaPcQBkuA=;
+  b=DbTirIg1muUM+0BeyH1Ed5bUZO0/qqAD3W68JouiZWW+OmogSCrJWl4k
+   LgyhrYNlDtV2Nvcu8LAXLt5rC5sFbhCMFh4+Ztk7LnD342dscFnQEqqxO
+   BS5u6xeRezO6YdXAHEL3X/q75BjMUb5KdcRSbvI5ki0kVQpPOwVsM1UmC
+   mc0LubVB5icp60JmuNUZPNAaeIiB3ATC3hF3NUj59qsA5p1CHlDzSmjNK
+   mXZqbBV1na6QXFjGYXyR0+1xgSKzWVs7MIdBpVAqpOUDC1lSQ2WwsK1zP
+   2iP4dBEeayxyFxAB2EL2oMQLa6p5Nesq20+BtqPRfhl3yPuNqRh/2vuWQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="280876499"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="280876499"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 08:22:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="585807080"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2022 08:22:02 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o3fhZ-00004Z-LC;
+	Tue, 21 Jun 2022 15:22:01 +0000
+Date: Tue, 21 Jun 2022 23:21:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nava kishore Manne <nava.manne@xilinx.com>, michal.simek@xilinx.com,
+	hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+	yilun.xu@intel.com, gregkh@linuxfoundation.org,
+	ronak.jain@xilinx.com, rajan.vaja@xilinx.com,
+	abhyuday.godhasara@xilinx.com, piyush.mehta@xilinx.com,
+	harsha.harsha@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-fpga@vger.kernel.org, git@xilinx.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v2 2/3] firmware: xilinx: Add pm api function for PL
+ readback
+Message-ID: <202206212247.2Ky8WLW2-lkp@intel.com>
+References: <20220621092833.1057408-3-nava.manne@xilinx.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220620155404.1968739-1-guoren@kernel.org> <202206210303.Vjl4rpPv-lkp@intel.com>
-In-Reply-To: <202206210303.Vjl4rpPv-lkp@intel.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 21 Jun 2022 22:57:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSyvS=52kkHiBB2BdhyVFxKL1Lym90LFC6tmsNO_5_RCQ@mail.gmail.com>
-Message-ID: <CAJF2gTSyvS=52kkHiBB2BdhyVFxKL1Lym90LFC6tmsNO_5_RCQ@mail.gmail.com>
-Subject: Re: [PATCH V5] riscv: Add qspinlock support
-To: kernel test robot <lkp@intel.com>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621092833.1057408-3-nava.manne@xilinx.com>
 
-Fixed: with "{}" protect to meet clang requirement.
+Hi Nava,
 
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 12debce235e5..492104d45a23 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -17,6 +17,23 @@
-        __typeof__(new) __new = (new);                                  \
-        __typeof__(*(ptr)) __ret;                                       \
-        switch (size) {                                                 \
-+       case 2: {                                                       \
-+               u32 temp;                                               \
-+               u32 shif = ((ulong)__ptr & 2) ? 16 : 0;                 \
-+               u32 mask = 0xffff << shif;                              \
-+               __ptr = (__typeof__(ptr))((ulong)__ptr & ~(ulong)2);    \
-+               __asm__ __volatile__ (                                  \
-+                       "0:     lr.w %0, %2\n"                          \
-+                       "       and  %1, %0, %z3\n"                     \
-+                       "       or   %1, %1, %z4\n"                     \
-+                       "       sc.w %1, %1, %2\n"                      \
-+                       "       bnez %1, 0b\n"                          \
-+                       : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
-+                       : "rJ" (~mask), "rJ" (__new << shif)            \
-+                       : "memory");                                    \
-+               __ret = (__ret & mask) >> shif;                         \
-+               break;                                                  \
-+       }                                                               \
-        case 4:                                                         \
-                __asm__ __volatile__ (                                  \
-                        "       amoswap.w %0, %2, %1\n"                 \
+Thank you for the patch! Yet something to improve:
 
-On Tue, Jun 21, 2022 at 3:58 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on soc/for-next]
-> [also build test ERROR on linus/master v5.19-rc2 next-20220617]
-> [cannot apply to tip/locking/core]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-> config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220621/202206210303.Vjl4rpPv-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/326f4a13941845b6ef1c4f4eaba049fe265f52bf
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
->         git checkout 326f4a13941845b6ef1c4f4eaba049fe265f52bf
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All error/warnings (new ones prefixed by >>):
->
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:7:
->    In file included from include/linux/gfp.h:6:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:62:
->    In file included from include/linux/lockdep.h:14:
->    In file included from include/linux/smp.h:13:
->    In file included from include/linux/cpumask.h:13:
->    In file included from include/linux/atomic.h:7:
-> >> arch/riscv/include/asm/atomic.h:299:1: error: expected expression
->    ATOMIC_OPS()
->    ^
->    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
->            ATOMIC_OP(int,   , 4)
->            ^
->    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
->            return __xchg_relaxed(&(v->counter), n, size);                  \
->                   ^
->    arch/riscv/include/asm/cmpxchg.h:21:3: note: expanded from macro '__xchg_relaxed'
->                    u32 temp;                                               \
->                    ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:7:
->    In file included from include/linux/gfp.h:6:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:62:
->    In file included from include/linux/lockdep.h:14:
->    In file included from include/linux/smp.h:13:
->    In file included from include/linux/cpumask.h:13:
->    In file included from include/linux/atomic.h:7:
-> >> arch/riscv/include/asm/atomic.h:299:1: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
->    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
->            ATOMIC_OP(int,   , 4)
->            ^
->    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
->            return __xchg_relaxed(&(v->counter), n, size);                  \
->                   ^
->    arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
->                            : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
->                                                    ^
->    include/linux/string.h:159:12: note: 'bcmp' declared here
->    extern int bcmp(const void *,const void *,__kernel_size_t);
->               ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:7:
->    In file included from include/linux/gfp.h:6:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:62:
->    In file included from include/linux/lockdep.h:14:
->    In file included from include/linux/smp.h:13:
->    In file included from include/linux/cpumask.h:13:
->    In file included from include/linux/atomic.h:7:
-> >> arch/riscv/include/asm/atomic.h:299:1: error: invalid lvalue in asm output
->    ATOMIC_OPS()
->    ^~~~~~~~~~~~
->    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
->            ATOMIC_OP(int,   , 4)
->            ^~~~~~~~~~~~~~~~~~~~~
->    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
->            return __xchg_relaxed(&(v->counter), n, size);                  \
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
->                            : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
->                                                    ^~~~
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:7:
->    In file included from include/linux/gfp.h:6:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:62:
->    In file included from include/linux/lockdep.h:14:
->    In file included from include/linux/smp.h:13:
->    In file included from include/linux/cpumask.h:13:
->    In file included from include/linux/atomic.h:7:
-> >> arch/riscv/include/asm/atomic.h:299:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
->    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
->            ATOMIC_OP(int,   , 4)
->            ^
->    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
->            return __xchg_relaxed(&(v->counter), n, size);                  \
->                   ^
->    arch/riscv/include/asm/cmpxchg.h:22:7: note: expanded from macro '__xchg_relaxed'
->                    u32 shif = ((ulong)__ptr & 2) ? 16 : 0;                 \
->                        ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                    return (set->sig[3] | set->sig[2] |
->                            ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                    return (set->sig[3] | set->sig[2] |
->                                          ^        ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                    return  (set1->sig[3] == set2->sig[3]) &&
->                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                    return  (set1->sig[3] == set2->sig[3]) &&
->                                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                            (set1->sig[2] == set2->sig[2]) &&
->                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->                            (set1->sig[2] == set2->sig[2]) &&
->                                             ^         ~
->    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
->            unsigned long sig[_NSIG_WORDS];
->            ^
->    In file included from arch/riscv/kernel/asm-offsets.c:10:
->    In file included from include/linux/mm.h:700:
->    In file included from include/linux/huge_mm.h:8:
->    In file included from include/linux/fs.h:33:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
->    _SIG_SET_BINOP(sigorsets, _sig_or)
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
->                    a3 = a->sig[3]; a2 = a->sig[2];                         \
->                         ^      ~
->
->
-> vim +299 arch/riscv/include/asm/atomic.h
->
-> fab957c11efe2f Palmer Dabbelt 2017-07-10  298
-> 5ce6c1f3535fa8 Andrea Parri   2018-03-09 @299  ATOMIC_OPS()
-> fab957c11efe2f Palmer Dabbelt 2017-07-10  300
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc3 next-20220621]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nava-kishore-Manne/fpga-manager-change-status-api-prototype-don-t-use-older/20220621-183524
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 78ca55889a549a9a194c6ec666836329b774ab6d
+config: hexagon-randconfig-r003-20220620 (https://download.01.org/0day-ci/archive/20220621/202206212247.2Ky8WLW2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6b66792a9e4acd718d58c0e5a33ca2426837be87
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nava-kishore-Manne/fpga-manager-change-status-api-prototype-don-t-use-older/20220621-183524
+        git checkout 6b66792a9e4acd718d58c0e5a33ca2426837be87
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/fpga/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/fpga/zynqmp-fpga.c:13:
+>> include/linux/firmware/xlnx-zynqmp.h:747:1: error: expected identifier or '('
+   {
+   ^
+   1 error generated.
 
 
+vim +747 include/linux/firmware/xlnx-zynqmp.h
+
+   743	
+   744	static int zynqmp_pm_fpga_read(const u32 reg_numframes,
+   745				       const phys_addr_t phys_address,
+   746				       bool readback_type, u32 *value);
+ > 747	{
+   748		return -ENODEV;
+   749	}
+   750	#endif
+   751	
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+0-DAY CI Kernel Test Service
+https://01.org/lkp
