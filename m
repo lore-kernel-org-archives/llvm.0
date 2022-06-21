@@ -1,357 +1,145 @@
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E88EC1
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 12:06:03 +0000 (UTC)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-	by mailout1.rbg.tum.de (Postfix) with ESMTPS id DFFFC24C;
-	Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-	s=20220209; t=1655812768;
-	bh=HJy0kdLOn3sZzNx6HdmqXo8gxMramx22W2vHUjsA2e0=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-	b=qBeSiEI2A0dsK/gqxs78bN5dnKH6PeqrMzyddNPIIJAk57CvaI21fnWF84QUl68/k
-	 6f7VC4bA76KtLEQOVBlP/YjzveDKWuJ9rWOWT1n8O8aDTk+bLjsTY+AKaveSyYZSwE
-	 +l2UXhSnKpBMkMCoMx0NZnu2yZeGJHLBtf9+ot19D5PH80IU/k5Yr7sQ5wpnd9h0TD
-	 PVY12UrHz2NIY1s85xs2Fz4oMyfQJ2zWiPzoRPji7OIERKo+hIygKPqGhEREom0IxZ
-	 8VEmUe5Nh3SQPpDK/cn+tg3PD9zCxQYucvUDtF3k3WBgzyJ+84f4SlirmXKJ71QQ+t
-	 Ds1jYZz1rm/mQ==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-	id DAC1DDD; Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTP id A4DE9D6;
-	Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-	by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 9F9C0CE;
-	Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-	id 9A1864A02D7; Tue, 21 Jun 2022 13:59:28 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-	by mail.in.tum.de (Postfix) with ESMTPSA id 6BF584A0107;
-	Tue, 21 Jun 2022 13:59:27 +0200 (CEST)
-	(Extended-Queue-bit xtech_sz@fff.in.tum.de)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D622FECF
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 12:41:39 +0000 (UTC)
+Received: by mail-pg1-f195.google.com with SMTP id d129so12999578pgc.9
+        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 05:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e7ENr1H0aV6W45zGV/4bz4+Kuctr067y9ar8/0vuczY=;
+        b=OwspgshMn6BiCdMLukmPqPUWedaDeDUsS87hh+q2/VwZel9RV+40LU0UAypwXkpPCI
+         zOBLMm1WV5mYeXylPEtvCwxa4vIAyg8j6wC8Te4oBueI1NyYjeGr459L4ZMCQO+6VFLm
+         2R65Ztdx3MESFs3b1ogeZYGWFtx04rHxQ+RCX5GlnaW9Lni/neNq294X58bZpXhxqhfm
+         JXf7GPRaPo6GiEy2FmZ8xbYU6+so67HbDQOpyJi973Fm+e3A6j3LQJznVbJGGMMK+g76
+         cS9lCAqPTpb/KjRx1v4eQTjvdwbeE0QXFZlUUO4CkgMJEGFBIgyIec+gHTbBPzB7CnVN
+         BpKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e7ENr1H0aV6W45zGV/4bz4+Kuctr067y9ar8/0vuczY=;
+        b=14OVAPKxIm4HTpMpjhOLu+wjoajp3zvGXoZbK7KsfWrY/LSL7mV9WrD54PEG1Joq1x
+         yyiR8frxxJfBnDPgsMx37VfYpXNDUd4hdLgegdTJTzQhqFMN44ne3j/VUP+Tkg8H6p6W
+         VziXpZKSY3TpyP7G2s0TKeQfzZ0psMNAjuREc5nZU0JO6kEnso7nTprvUimqBlAlu0Xp
+         JiBm242og/bVYi6GUM8xzR/4FyQCyQo3pZeNQPvtInb/rs/jFE2lreT9Xj0qCkHmfGM2
+         tTtCD5oG8vpZMNoYvi0mMQGIqMHYnByWZQLl16DH4T+p85INaj6UVPIv0Sk/YxF+85km
+         8A+g==
+X-Gm-Message-State: AJIora8BGoG5PiAXs9vdGbDLlHb9gAv7SZ+/TexhNPPUvTiZAwkZwki0
+	r/gnuM/0ZGEPlDb/kGuD8kY=
+X-Google-Smtp-Source: AGRyM1uOFqaAapmIbJdhCxBNlvQSrIVj8puFpOadXOKN35qH08m9ZNG9ICgVO16DfNJIDZCeAi05vA==
+X-Received: by 2002:a63:3c14:0:b0:40c:a228:c3c3 with SMTP id j20-20020a633c14000000b0040ca228c3c3mr11368667pga.256.1655815299158;
+        Tue, 21 Jun 2022 05:41:39 -0700 (PDT)
+Received: from localhost ([2405:201:6014:d0c0:79de:f3f4:353c:8616])
+        by smtp.gmail.com with ESMTPSA id h13-20020a17090a3d0d00b001ea5d9ae7d9sm12234210pjc.40.2022.06.21.05.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 05:41:38 -0700 (PDT)
+Date: Tue, 21 Jun 2022 18:11:15 +0530
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: KP Singh <kpsingh@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v2 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
+Message-ID: <20220621124115.7daxj2csuyfxfvq5@apollo.legion>
+References: <20220621012811.2683313-5-kpsingh@kernel.org>
+ <202206211035.p3LxbVfK-lkp@intel.com>
+ <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-From: =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
-Date: Tue, 21 Jun 2022 13:59:27 +0200
-Cc: llvm@lists.linux.dev,
- linux-toolchains@vger.kernel.org,
- Andrea Parri <parri.andrea@gmail.com>,
- Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>,
- Joel Fernandes <joel@joelfernandes.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- Marco Elver <elver@google.com>,
- Charalampos Mainas <charalampos.mainas@gmail.com>,
- Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
- Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
- Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
-To: Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3696.100.31)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
 
-Thanks for taking the time to read and provide feedback - much =
-appreciated!
+On Tue, Jun 21, 2022 at 12:48:08PM IST, KP Singh wrote:
+> On Tue, Jun 21, 2022 at 5:20 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi KP,
+> >
+> > I love your patch! Perhaps something to improve:
+> >
+> > [auto build test WARNING on bpf-next/master]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/KP-Singh/Add-bpf_getxattr/20220621-093013
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> > config: x86_64-randconfig-a015-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211035.p3LxbVfK-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://github.com/intel-lab-lkp/linux/commit/dd49d2ffb18adceafa98bd517008f59aa9bc910b
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review KP-Singh/Add-bpf_getxattr/20220621-093013
+> >         git checkout dd49d2ffb18adceafa98bd517008f59aa9bc910b
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> kernel/trace/bpf_trace.c:1185:25: warning: no previous prototype for function 'bpf_getxattr' [-Wmissing-prototypes]
+> >    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
+> >                            ^
+> >    kernel/trace/bpf_trace.c:1185:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
+> >    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
+> >                    ^
+> >                    static
+> >    1 warning generated.
+> >
+>
+> So it looks like this needs a function prototype. Let's do an initial round
+> of reviews on this series and I can respin with something like:
+>
+> diff --git a/kernel/trace/bpf_trace.h b/kernel/trace/bpf_trace.h
+> index 9acbc11ac7bb..3f62e5d35037 100644
+> --- a/kernel/trace/bpf_trace.h
+> +++ b/kernel/trace/bpf_trace.h
+> @@ -25,6 +25,11 @@ TRACE_EVENT(bpf_trace_printk,
+>         TP_printk("%s", __get_str(bpf_string))
+>  );
+>
+> +/* Prototypes for kernel functions exposed to tracing and LSM
+> + * programs
+> + */
+> +ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
+> +                    const char *name, void *value, int size);
+>  #endif /* _TRACE_BPF_TRACE_H */
+>
+> (or anything else folks suggest)
+>
 
-> On 15. Jun 2022, at 16:16, Alan Stern <stern@rowland.harvard.edu> =
-wrote:
->=20
-> On Wed, Jun 15, 2022 at 11:43:29AM +0000, Paul Heidekr=C3=BCger wrote:
->> Hi all,
->>=20
->> I have been confused by explanation.txt's definition of control
->> dependencies:
->>=20
->>> Finally, a read event and another memory access event are linked by =
-a
->>> control dependency if the value obtained by the read affects whether
->>> the second event is executed at all.
->>=20
->> I'll go into the following:
->>=20
->> =3D=3D=3D=3D
->> 1. "At all", to me, is misleading
->> 1.1 The code which confused me
->> 1.2 The traditional definition via post-dominance doesn't work either
->> 2. Solution
->> =3D=3D=3D=3D
->>=20
->> 1. "At all", to me, is misleading:
->>=20
->> "At all" to me suggests a question for which we require a definitive
->> "yes" or "no" answer: given a programme and an input, can a certain
->> piece of code be executed? Can we always answer this this question?
->> Doesn't this sound similar to the halting problem?
->=20
-> No. You're not thinking about this the right way.
->=20
-> The point of view we take in this document and in the LKMM is not like=20=
+You can silence this warning using __diag_push, e.g. see kfunc definitions in
+net/netfilter/nf_conntrack_bpf.c.
 
-> the view in a static analysis of a program. It is a dynamic analysis =
-of=20
-> one particular execution of a program. The halting problem does not=20
-> apply. Note for instance that explanation.txt talks about "events"=20
-> rather than instructions or pieces of code.
->=20
-> (The single-execution-at-a-time point of view has its own limitations,=20=
-
-> which do have some adverse affects on the LKMM. But we don't want to=20=
-
-> exceed the capabilities of the herd7 tool.)
->=20
->> 1.1 The Example which confused me:
->>=20
->> For the dependency checker project [1], I've been thinking about
->> tracking dependency chains in code, and I stumbled upon the following
->> edge case, which made me question the "at all" part of the current
->> definition. The below C-code is derived from some optimised kernel =
-code
->> in LLVM intermediate representation (IR) I encountered:
->>=20
->>> int *x, *y;
->>>=20
->>> int foo()
->>> {
->>> /* More code */
->>>=20
->>> 	 loop:
->>> 		/* More code */
->>>=20
->>> 	 	if(READ_ONCE(x)) {
->>> 	 		WRITE_ONCE(y, 42);
->>> 	 		return 0;
->>> 	 	}
->>>=20
->>> 		/* More code */
->>>=20
->>> 	 	goto loop;
->>>=20
->>> /* More code */
->>> }
->>=20
->> Assuming that foo() will return, the READ_ONCE() does not determine
->> whether the WRITE_ONCE() will be executed __at all__, as it will be
->> executed exactly when the function returns, instead, it determines
->> __when__ the WRITE_ONCE() will be executed.
->=20
-> But what if your assumption is wrong?
->=20
-> In any case, your question displays an incorrect viewpoint. For=20
-> instance, the READ_ONCE() does not count as a single event. Rather,=20
-> each iteration through the loop executes a separate instance of the=20
-> READ_ONCE(), and each instance counts as its own event. Think of =
-events=20
-> not as static entities in the program source but instead as the items =
-in=20
-> the queue that gets fed into the CPU's execution unit at run time.
->=20
-> Strictly speaking, one could say there is a control dependency from =
-each=20
-> of these READ_ONCE() events to the final WRITE_ONCE(). However the =
-LKMM=20
-> takes a more limited viewpoint, saying that a dependency from a load =
-to=20
-> the controlling expression of an "if" statement only affects the=20
-> execution of the events corresponding to statements lying statically =
-in=20
-> the two arms of the "if". In your example the "if" has a single arm,=20=
-
-> and so only the access in that arm is considered to have a control=20
-> dependency from the preceding instance of the READ_ONCE(). And it=20
-> doesn't have a control dependency from any of the earlier iterations =
-of=20
-> the READ_ONCE(), because it doesn't lie in any of the arms of the=20
-> earlier iterations of the "if".
-
-OK. So, LKMM limits the scope of control dependencies to its arm(s), =
-hence
-there is a control dependency from the last READ_ONCE() before the loop
-exists to the WRITE_ONCE().
-
-But then what about the following:
-
-> int *x, *y;
->=20
-> int foo()
-> {
-> 	/* More code */
->=20
-> 	if(READ_ONCE(x))
-> 		return 42;
->=20
-> 	/* More code */
->=20
-> 	WRITE_ONCE(y, 42);
->=20
-> 	/* More code */
->=20
-> 	return 0;
-> }
-
-The READ_ONCE() determines whether the WRITE_ONCE() will be executed at =
-all,
-but the WRITE_ONCE() doesn't lie in the if condition's arm. However, by
-"inverting" the if, we get the following equivalent code:
-
-> if(!READ_ONCE(x)) {
-> 	/* More code */
->=20
-> 	WRITE_ONCE(y, 42);
->=20
-> 	/* More code */
->=20
-> 	return 0;
-> }
->=20
-> return 42;
-
-Now, the WRITE_ONCE() is in the if's arm, and there is clearly a control
-dependency.
-
-Similar cases:
-
-> if(READ_ONCE())
-> 	foo(); /* WRITE_ONCE() in foo() */
-> return 42;
-
-or
-
-> if(READ_ONCE())
->     goto foo; /* WRITE_ONCE() after foo */
-> return 42;
-
-In both cases, the WRITE_ONCE() again isn't in the if's arm =
-syntactically
-speaking, but again, with rewriting, you can end up with a control
-dependency; in the first case via inlining, in the second case by simply
-copying the code after the "foo" marker.
-
->> 1.2. The definition via post-dominance doesn't work either:
->>=20
->> I have seen control dependencies being defined in terms of the first
->> basic block that post-dominates the basic block of the if-condition,
->> that is the first basic block control flow must take to reach the
->> function return regardless of what the if condition returned.
->>=20
->> E.g. [2] defines control dependencies as follows:
->>=20
->>> A statement y is said to be control dependent on another statement x
->>> if (1) there exists a nontrivial path from x to y such that every
->>> statement z !=3D x in the path is post-dominated by y, and (2) x is =
-not
->>> post-dominated by y.
->>=20
->> Again, this definition doesn't work for the example above. As the =
-basic
->> block of the if branch trivially post-dominates any other basic =
-block,
->> because it contains the function return.
->=20
-> Again, not applicable as basic blocks, multiple paths, and so on =
-belong=20
-> to static analysis.
->=20
->> 2. Solution:
->>=20
->> The definition I came up with instead is the following:
->>=20
->>> A basic block B is control-dependent on a basic block A if
->>> B is reachable from A, but control flow can take a path through A
->>> which avoids B. The scope of a control dependency ends at the first
->>> basic block where all control flow paths running through A meet.
->>=20
->> Note that this allows control dependencies to remain "unresolved".
-
-The "unresolved" part in my initial definition was inspired by cases =
-such as
-the ones above and the loop example from my previous email, where the
-"paths" could be somewhat thought of as executions. But yes, as you =
-said,
-that's static analysis and not the position LKMM takes.
-
-Many thanks,
-Paul
+> - KP
+>
+> >
+> > vim +/bpf_getxattr +1185 kernel/trace/bpf_trace.c
+> >
+> >   1184
+> > > 1185  noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
+> >   1186                                       const char *name, void *value, int size)
+> >   1187  {
+> >   1188          return __vfs_getxattr(dentry, inode, name, value, size);
+> >   1189  }
+> >   1190
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
 
 --
-PS replacing "Palmer Dabbelt <palmerdabbelt@google.com>" with "Palmer
-Dabbelt <palmer@dabbelt.com>" in recipients - my maintainers file was
-outdated.
-
->> I'm happy to submit a patch which covers more of what I mentioned =
-above
->> as part of explanation.txt, but figured that in the spirit of keeping
->> things simple, leaving out "at all" might be enough?
->>=20
->> What do you think?
->=20
-> Not so good. A better description would be that there is a control=20
-> dependency from a read event X to a memory access event Y if there is =
-a=20
-> dependency (data or address) from X to the conditional branch event of=20=
-
-> an "if" statement which contains Y in one of its arms. And similarly=20=
-
-> for "switch" statements.
->=20
-> Alan
->=20
->> Many thanks,
->> Paul
->>=20
->> [1]: =
-https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#=
-u
->> [2]: Optimizing Compilers for Modern Architectures: A =
-Dependence-Based
->> Approach, Randy Allen, Ken Kennedy, 2002, p. 350
->>=20
->> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> ---
->> tools/memory-model/Documentation/explanation.txt | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/tools/memory-model/Documentation/explanation.txt =
-b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..42af7ed91313 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -466,7 +466,7 @@ pointer.
->>=20
->> Finally, a read event and another memory access event are linked by a
->> control dependency if the value obtained by the read affects whether
->> -the second event is executed at all. Simple example:
->> +the second event is executed. Simple example:
->>=20
->> 	int x, y;
->>=20
->> --=20
->> 2.35.1
+Kartikeya
