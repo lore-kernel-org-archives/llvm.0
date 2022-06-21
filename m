@@ -1,290 +1,113 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38691A44
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0780A44
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 08:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655797093; x=1687333093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FgU26SCL1f3P/2iJJL8VP95qp5dhxxdGWAbnrjurC3Y=;
-  b=DjGl4IWUZSpqb5xXwaRj4t8Zt7CE7v4GTlA6Gl4fIPYPMK5xUxONPTYq
-   FQDfUkwfNC2m0ReUqyj8p9459SKmIBFEAa+EWKzZJwaKu8xd89ezsSryL
-   XPudhN91ytD0VseJtBBm8EcNJa/oO3pjRXghse56r1qGes02JcHTw/+qI
-   v7bD/amUlLdOh+nljB/iTZM6L/1meL3Jo7zyOkYgoCDBwxN93dNnzTRhC
-   t8drlWOV7n5pq/IwzWeNmvBCXsG6kpHxuJoWSbC05JilFEMucizpGV8Dy
-   Fp5kKujlAAnj9d6gAu1RC5J3i76F46ooXS5kSQyj1OuIEZ3YKbvmLHGXo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="305494869"
+  t=1655799552; x=1687335552;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VnOb25EE+Xbwm3fJVJkXzX3ptStChGTjWuHiXzYZZDY=;
+  b=VUctaRUxW05Wr3yf71nMshUEFI1tnrCjBzFvbbt/w0TuYf1HNHvdilvY
+   sj7UFAK4+hM0NS7taMPGo+iwCE9jDZ3joU8rGF18G2rMD6nbsgAFMQYdV
+   fffh0HdKQreTBaZzagicsRnxPZcyXGKI/EhzE4tNICrkwQcHD6+sMzHbU
+   4pDa1+OJu74nxt8QNRXr9Zcj6SbsuwB2Rhioy9ausDjPJeUGDD68yMHta
+   fGC9sFB3VHVB0tzfbyUZ1NtVbnNLN5TZrY+l6KBzMbR2WA5t72uvCUjNB
+   a9T/QPX8CNaMnavgs4P24HM81NzX61F0GGq2oI+m97uIlkC+cAuiAsMjs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="281118025"
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="305494869"
+   d="scan'208";a="281118025"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 00:38:10 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 01:19:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="676882291"
+   d="scan'208";a="676894865"
 Received: from lkp-server01.sh.intel.com (HELO e0735e231192) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 00:38:08 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 01:19:09 -0700
 Received: from kbuild by e0735e231192 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3YSd-00002H-PU;
-	Tue, 21 Jun 2022 07:38:07 +0000
-Date: Tue, 21 Jun 2022 15:37:23 +0800
+	id 1o3Z6L-00004d-1e;
+	Tue, 21 Jun 2022 08:19:09 +0000
+Date: Tue, 21 Jun 2022 16:18:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Adri=E1n?= Larumbe <adrian.larumbe@collabora.com>,
-	robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
-	alyssa.rosenzweig@collabora.com, dri-devel@lists.freedesktop.org
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	adrian.larumbe@collabora.com
-Subject: Re: [PATCH v2 1/1] drm/panfrost: Add support for devcoredump
-Message-ID: <202206211507.zzo0qSdL-lkp@intel.com>
-References: <20220621023204.94179-2-adrian.larumbe@collabora.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [rafael-pm:bleeding-edge 20/24] drivers/acpi/scan.c:2449:5: warning:
+ no previous prototype for function 'acpi_bus_trim_one'
+Message-ID: <202206211629.ncqadywd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220621023204.94179-2-adrian.larumbe@collabora.com>
 
-Hi "Adrián,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on linus/master v5.19-rc3 next-20220620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adri-n-Larumbe/devcoredump-support-for-Panfrost-GPU-driver/20220621-103431
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: s390-buildonly-randconfig-r006-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211507.zzo0qSdL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   ef9088c776e0c49411bfb413ad43d110a9de1519
+commit: e511ff6b4174fa81ca7ee16f8c17f7362c08fadf [20/24] ACPI: scan: Walk ACPI device's children using driver core
+config: x86_64-randconfig-a013-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211629.ncqadywd-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/297bd4948ab1f4eeb78389d57adc1edc819cb6f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Adri-n-Larumbe/devcoredump-support-for-Panfrost-GPU-driver/20220621-103431
-        git checkout 297bd4948ab1f4eeb78389d57adc1edc819cb6f2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=e511ff6b4174fa81ca7ee16f8c17f7362c08fadf
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout e511ff6b4174fa81ca7ee16f8c17f7362c08fadf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/panfrost/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/panfrost/panfrost_dump.c:115:15: error: no member named 'file_priv' in 'struct panfrost_job'
-           as_nr = job->file_priv->mmu->as;
-                   ~~~  ^
->> drivers/gpu/drm/panfrost/panfrost_dump.c:225:27: warning: implicit conversion from '__le64' (aka 'unsigned long long') to '__le32' (aka 'unsigned int') changes value from 72057594037927936 to 0 [-Wconstant-conversion]
-                   iter.hdr->bomap.valid = cpu_to_le64(1);
-                                         ~ ^~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:86:21: note: expanded from macro 'cpu_to_le64'
-   #define cpu_to_le64 __cpu_to_le64
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:32:27: note: expanded from macro '__cpu_to_le64'
-   #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   13 warnings and 1 error generated.
+>> drivers/acpi/scan.c:2449:5: warning: no previous prototype for function 'acpi_bus_trim_one' [-Wmissing-prototypes]
+   int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+       ^
+   drivers/acpi/scan.c:2449:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +115 drivers/gpu/drm/panfrost/panfrost_dump.c
+vim +/acpi_bus_trim_one +2449 drivers/acpi/scan.c
 
-   102	
-   103	void panfrost_core_dump(struct panfrost_job *job)
-   104	{
-   105		struct panfrost_device *pfdev = job->pfdev;
-   106		struct panfrost_dump_iterator iter;
-   107		struct drm_gem_object *dbo;
-   108		unsigned int n_obj, n_bomap_pages;
-   109		__le64 *bomap, *bomap_start;
-   110		size_t file_size;
-   111		u32 as_nr;
-   112		int slot;
-   113		int ret, i;
-   114	
- > 115		as_nr = job->file_priv->mmu->as;
-   116		slot = panfrost_job_get_slot(job);
-   117		slot = slot ? slot : 0;
-   118	
-   119		/* Only catch the first event, or when manually re-armed */
-   120		if (!panfrost_dump_core)
-   121			return;
-   122		panfrost_dump_core = false;
-   123	
-   124		/* At least, we dump registers and end marker */
-   125		n_obj = 2;
-   126		n_bomap_pages = 0;
-   127		file_size = ARRAY_SIZE(panfrost_dump_registers) *
-   128				sizeof(struct panfrost_dump_registers);
-   129	
-   130		/* Add in the active buffer objects */
-   131		for (i = 0; i < job->bo_count; i++) {
-   132			dbo = job->bos[i];
-   133			file_size += dbo->size;
-   134			n_bomap_pages += dbo->size >> PAGE_SHIFT;
-   135			n_obj++;
-   136		}
-   137	
-   138		/* If we have any buffer objects, add a bomap object */
-   139		if (n_bomap_pages) {
-   140			file_size += n_bomap_pages * sizeof(*bomap);
-   141			n_obj++;
-   142		}
-   143	
-   144		/* Add the size of the headers */
-   145		file_size += sizeof(*iter.hdr) * n_obj;
-   146	
-   147		/* Allocate the file in vmalloc memory, it's likely to be big */
-   148		iter.start = __vmalloc(file_size, GFP_KERNEL | __GFP_NOWARN |
-   149				__GFP_NORETRY);
-   150		if (!iter.start) {
-   151			dev_warn(pfdev->dev, "failed to allocate devcoredump file\n");
-   152			return;
-   153		}
-   154	
-   155		/* Point the data member after the headers */
-   156		iter.hdr = iter.start;
-   157		iter.data = &iter.hdr[n_obj];
-   158	
-   159		memset(iter.hdr, 0, iter.data - iter.start);
-   160	
-   161		/*
-   162		 * For now, we write the job identifier in the register dump header,
-   163		 * so that we can decode the entire dump later with pandecode
-   164		 */
-   165		iter.hdr->reghdr.jc = cpu_to_le64(job->jc);
-   166		iter.hdr->reghdr.version = cpu_to_le32(PANFROSTDUMP_VERSION_1);
-   167		iter.hdr->reghdr.gpu_id = cpu_to_le32(pfdev->features.id);
-   168		iter.hdr->reghdr.nbos = cpu_to_le64(job->bo_count);
-   169	
-   170		panfrost_core_dump_registers(&iter, pfdev, as_nr, slot);
-   171	
-   172		/* Reserve space for the bomap */
-   173		if (job->bo_count) {
-   174			bomap_start = bomap = iter.data;
-   175			memset(bomap, 0, sizeof(*bomap) * n_bomap_pages);
-   176			panfrost_core_dump_header(&iter, PANFROSTDUMP_BUF_BOMAP,
-   177						  bomap + n_bomap_pages);
-   178		}
-   179	
-   180		for (i = 0; i < job->bo_count; i++) {
-   181			struct iosys_map map;
-   182			struct panfrost_gem_mapping *mapping;
-   183			struct panfrost_gem_object *bo;
-   184			struct sg_page_iter page_iter;
-   185			void *vaddr;
-   186	
-   187			bo = to_panfrost_bo(job->bos[i]);
-   188			mapping = job->mappings[i];
-   189	
-   190			if (!bo->base.sgt) {
-   191				dev_err(pfdev->dev, "Panfrost Dump: BO has no sgt, cannot dump\n");
-   192				iter.hdr->bomap.valid = 0;
-   193				goto dump_header;
-   194			}
-   195	
-   196			ret = drm_gem_shmem_vmap(&bo->base, &map);
-   197			if (ret) {
-   198				dev_err(pfdev->dev, "Panfrost Dump: couldn't map Buffer Object\n");
-   199				iter.hdr->bomap.valid = 0;
-   200				goto dump_header;
-   201			}
-   202	
-   203			WARN_ON(!mapping->active);
-   204	
-   205			iter.hdr->bomap.data[0] = cpu_to_le32((bomap - bomap_start));
-   206	
-   207			for_each_sgtable_page(bo->base.sgt, &page_iter, 0) {
-   208				struct page *page = sg_page_iter_page(&page_iter);
-   209	
-   210				if (!IS_ERR(page))
-   211					*bomap++ = cpu_to_le64(page_to_phys(page));
-   212				else {
-   213					dev_err(pfdev->dev, "Panfrost Dump: wrong page\n");
-   214					*bomap++ = ~cpu_to_le64(0);
-   215				}
-   216			}
-   217	
-   218			iter.hdr->bomap.iova = cpu_to_le64(mapping->mmnode.start << PAGE_SHIFT);
-   219	
-   220			vaddr = map.vaddr;
-   221			memcpy(iter.data, vaddr, bo->base.base.size);
-   222	
-   223			drm_gem_shmem_vunmap(&bo->base, &map);
-   224	
- > 225			iter.hdr->bomap.valid = cpu_to_le64(1);
-   226	
+  2448	
+> 2449	int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+  2450	{
+  2451		struct acpi_scan_handler *handler = adev->handler;
+  2452	
+  2453		acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
+  2454	
+  2455		adev->flags.match_driver = false;
+  2456		if (handler) {
+  2457			if (handler->detach)
+  2458				handler->detach(adev);
+  2459	
+  2460			adev->handler = NULL;
+  2461		} else {
+  2462			device_release_driver(&adev->dev);
+  2463		}
+  2464		/*
+  2465		 * Most likely, the device is going away, so put it into D3cold before
+  2466		 * that.
+  2467		 */
+  2468		acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+  2469		adev->flags.initialized = false;
+  2470		acpi_device_clear_enumerated(adev);
+  2471	
+  2472		return 0;
+  2473	}
+  2474	
 
 -- 
 0-DAY CI Kernel Test Service
