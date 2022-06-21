@@ -1,146 +1,172 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C522F47
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 20:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655843115; x=1687379115;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7e+ir0VyaDL/t9/cJ3Sqhdxf9f68AWW8rKGLisVcpJ8=;
-  b=Hzik7xqGvRZEfgpKnQAWFpPvs02/gWLjMENuRtYsi9H8/fjXz+uwRiQP
-   5OXOWNPq8G5c+ov14g2mZwxDo0R3017d6FE2nuMWZQSpRr62iuaL0IhJ1
-   ZvLBp09LfSd+bEk7Zkm41QxU3/hZZPlJuFULUQIrL7rQK8usjXZVqBtaI
-   ouswc/D6B18E+pIDbKLPOq28wW0WR4wVMXSzXzRvYj/wnEPN2B88oUopT
-   B0vSwlpm7oGz2sb0e/8ZyMPBRUvf4kgLf3Pg81zv7b6XSKG8SU/gI/k3Q
-   ldYHvrQceTpID6IV8Qj/uWUqCnPgdQU8Ja1KRmN+/sIOB/At503UAt8PV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="278998300"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="278998300"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:25:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="591818035"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2022 13:25:13 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o3kQy-0000O9-WC;
-	Tue, 21 Jun 2022 20:25:12 +0000
-Date: Wed, 22 Jun 2022 04:25:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [drm-misc:drm-misc-next 3/4]
- drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared
- function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202206220449.j02XFvCg-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99B77499
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 21:19:15 +0000 (UTC)
+Received: by mail-lf1-f48.google.com with SMTP id a13so14602378lfr.10
+        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bWh9VRdZl1u3+H7jOVmIdNMxltD0sU3JDPWB8VuaPYc=;
+        b=GaCRkRp65UFibVgjZ8jwNLwqZjAAQ91yIDFfaR1WpHRiZn2VmkUghBiK/w7aKV6wgP
+         yQh/c630tmA+TO6D09+qRV/5VNmM00ubrCRiS7AHjAd0ZbntqEq2cw9KrAfhPah5dMVJ
+         xz5sHs2leK33QQ67QYj0m+Q2B6rxnpQJI9/IXsg6jppScsx/M+jIHWvnwcRcDGRbai+o
+         Ws9vTEJ1rP1Hm131G1cz48l4nn89K2tpAPdpjp/i8qB3VKZCCiB0vvzi1mMg4ca10A2u
+         U9gdxu1V6qKQDYmxVU1WyBU6nTeFQx+/Ry6OVhO/IO1ahYva1IcZJEAIt2YGyAKGRlWM
+         1AMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bWh9VRdZl1u3+H7jOVmIdNMxltD0sU3JDPWB8VuaPYc=;
+        b=0fZCVTEcFc+pQPZTHIS3Wvcr4lRM/QMyVEicS8/zX5r72LOR4qmq+bLKYxDxic0pks
+         9rvMUmS6aQFsoloMlbcNmYRtBzU04NHXAvcn563h2j5c7T1WCw4pw5123u34wrU7VBUp
+         AgQaejQgQUIcqK/vJzTyzabaMaKCiUYoJbHxyRdVGZ8v+aD2ybsH+1hr5Jvzw8u/EDgV
+         ivhfsZC6AxazodJlOVG6CIqZ1TOA664nL2BhRwikpnDuTftMOfHFizYTU4COnqjqgBwj
+         Iz6XBm/4V0ySxdIqKy+eft68X+4wOH5rDIDyqx0zadK/qWMvaOS1yD8egqyDrjQLUdgc
+         PQXA==
+X-Gm-Message-State: AJIora9hz7v5z3wMiS+S7E9sFht3vF0TLiZ8/siZDyhEyl4T/nZ9RM6F
+	UflNHT+iAtLcdb7vZrlTXkDCfQgdYQP48+XXJh8MMQ==
+X-Google-Smtp-Source: AGRyM1vbMNE2gVKmfFfSh4kTQIBakPO8vQBuEt2gKIJwqhpVwVHjN/BNgvlEXgQPNym96rNWYL6ik9iNPGRdlCvdNCo=
+X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id
+ b13-20020a0565120b8d00b0047f74f0729bmr118613lfv.403.1655846353718; Tue, 21
+ Jun 2022 14:19:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAKwvOdnb-MV+Fw2oeZ5qiGQH9FPOjgYTDtVrYc1=ynY7=NReDQ@mail.gmail.com>
+ <87fsm7rbec.fsf@oracle.com> <CAGvU0H=sjwsWEmq1R7LKHiPjB3aBkzQ_qJqXDxhT_rFJShgVFg@mail.gmail.com>
+ <2651230.KlZ2vcFHjT@sali> <CAJFNNnoWDS547q-MDye4L_2WkT9odxAvhD2JQkALH7Erm2YJtQ@mail.gmail.com>
+In-Reply-To: <CAJFNNnoWDS547q-MDye4L_2WkT9odxAvhD2JQkALH7Erm2YJtQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 21 Jun 2022 14:19:02 -0700
+Message-ID: <CAKwvOdmUXcapfojgcRK1OAZuCDCeQmD_cx9=y_iz6-L_uv0eHA@mail.gmail.com>
+Subject: Re: Kernel ABI Monitoring and toolchain support
+To: =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
+Cc: "Guillermo E. Martinez" <guillermo.e.martinez@oracle.com>, Giuliano Procida <gprocida@google.com>, 
+	Dodji Seketeli <dodji@seketeli.org>, Elena Zannoni <elena.zannoni@oracle.com>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   87a3451e346be3f9a5d8943ae094888044314631
-commit: 90bb087f66745ca48f6f5e43df99a1212d89e712 [3/4] drm: Drop drm_blend.h from drm_crtc.h
-config: powerpc-buildonly-randconfig-r002-20220622 (https://download.01.org/0day-ci/archive/20220622/202206220449.j02XFvCg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout 90bb087f66745ca48f6f5e43df99a1212d89e712
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/xlnx/
+On Mon, Jun 20, 2022 at 6:42 AM Matthias M=C3=A4nnich <maennich@google.com>=
+ wrote:
+>
+> Hi!
+>
+> That is a very late response, sorry about that.
+>
+> In the Android MC we will have a talk about the latest news monitoring
+> Android Kernel ABIs already, but I definitely see value in a more
+> generic session in the Kernel+Toolchain MC. Is that schedule already
+> finalized or is there still a slot available and interest from your
+> side?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We haven't finalized the schedule yet.  Matthias, Guillermo, Giuliano
+can one of you perhaps fill out a proposal then for the ideas
+discussed in this thread on https://lpc.events/event/16/abstracts/
+with the "Track" set to "Toolchains Track?"
 
-Note: the drm-misc/drm-misc-next HEAD 87a3451e346be3f9a5d8943ae094888044314631 builds fine.
-      It only hurts bisectability.
+>
+> In particular, I would be interested in discussing ways to standardize
+> ABI and type information in a way that it can be embedded into
+> binaries in a less ambiguous way. In other words, what can we do to
+> not rely entirely on intermediate formats like CTF or DWARF to make
+> sense of an ABI? Maybe CTF is already a good starting point, yet some
+> additions are needed (e.g. other language features like for C++)?
+>
+> Cheers,
+> Matthias
+>
+>
+> On Sat, May 7, 2022 at 3:15 AM Guillermo E. Martinez
+> <guillermo.e.martinez@oracle.com> wrote:
+> >
+> > Hello guys,
+> >
+> > On our side we are working on:
+> >
+> >   * Gives the support  to extract the ABI for Linux kernel image
+> >   and Linux  kernel modules using the CFT backed in with
+> >   libabigail tools.
+> >   * Add support to compare packages with CTF debug format by using
+> >   abipkgdiff and other related libabigail tools.
+> >
+> >    * https://sourceware.org/pipermail/libabigail/2022q2/004340.html
+> >    * https://sourceware.org/pipermail/libabigail/2022q2/004345.html
+> >
+> > If you think that it could be a point to talk as part of your MC,  I ca=
+n for sure
+> > provides more details about it.
+> >
+> > Thanks for your comments,
+> > Guillermo
+> >
+> > On Wednesday, April 20, 2022 12:34:59 PM CDT Giuliano Procida wrote:
+> > > Sorry for the late reply, I've been on leave and Mattias is still on =
+leave.
+> > >
+> > > That sounds quite interesting.
+> > >
+> > > Matthias and I could certainly talk about what we've been busy with a=
+nd
+> > > what are the main pain points for Android (not just the kernel).
+> > >
+> > > On what more would we like from the toolchain... it falls into at lea=
+st two
+> > > buckets:
+> > >
+> > > 1. make the possible easier - stricter conformance to DWARF standards=
+, full
+> > > DWARF 5 support, getting things like ARM64 ABI extensions (e.g., for
+> > > HWASAN) into things like elfutils at the same time as the compile-lin=
+k
+> > > toolchain, more consistency between Clang and GCC debug info for the =
+same
+> > > sources, the same for Clang and Clang with full LTO
+> > > 2. make the impossible possible - extending ABI monitoring coverage b=
+eyond
+> > > just architecture, symbols and types / dealing with header constants,
+> > > macros and more
+> > >
+> > > Giuliano.
+> > >
+> > >
+> > > On Wed, 20 Apr 2022 at 17:02, Jose E. Marchesi <jose.marchesi@oracle.=
+com>
+> > > wrote:
+> > >
+> > > >
+> > > > [Adding Dodji Seketeli, libabigail maintainer,
+> > > >  and Guillermo Martinez, who works in the CTF support for libabigai=
+l
+> > > >  including kernel support.]
+> > > >
+> > > > > Hi Matthias and Giuliano,
+> > > > > Jose and I are currently in the planning process to put together =
+a
+> > > > > Kernel+Toolchain microconference track at Linux Plumbers Conferen=
+ce
+> > > > > this year (Sept 12-14) in Dublin, Ireland.
+> > > > >
+> > > > > Would you all be interested in a leading session on Kernel ABI
+> > > > > Monitoring and perhaps what toolchain vendors can do to help, as =
+part
+> > > > > of our MC (which itself is currently still in planning phase).
+> > > >
+> > >
+> >
+> >
+> >
+> >
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   drm_plane_create_zpos_immutable_property(&layer->plane, i);
-                   ^
-   drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: note: did you mean 'drm_plane_create_scaling_filter_property'?
-   include/drm/drm_plane.h:908:5: note: 'drm_plane_create_scaling_filter_property' declared here
-   int drm_plane_create_scaling_filter_property(struct drm_plane *plane,
-       ^
->> drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: error: call to undeclared function 'drm_plane_create_alpha_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           drm_plane_create_alpha_property(&layer->plane);
-                           ^
-   drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: note: did you mean 'drm_plane_create_color_properties'?
-   include/drm/drm_color_mgmt.h:90:5: note: 'drm_plane_create_color_properties' declared here
-   int drm_plane_create_color_properties(struct drm_plane *plane,
-       ^
-   2 errors generated.
 
 
-vim +/drm_plane_create_zpos_immutable_property +1260 drivers/gpu/drm/xlnx/zynqmp_disp.c
-
-d76271d22694e8 Hyun Kwon        2018-07-07  1226  
-d76271d22694e8 Hyun Kwon        2018-07-07  1227  static int zynqmp_disp_create_planes(struct zynqmp_disp *disp)
-d76271d22694e8 Hyun Kwon        2018-07-07  1228  {
-d76271d22694e8 Hyun Kwon        2018-07-07  1229  	unsigned int i, j;
-d76271d22694e8 Hyun Kwon        2018-07-07  1230  	int ret;
-d76271d22694e8 Hyun Kwon        2018-07-07  1231  
-d76271d22694e8 Hyun Kwon        2018-07-07  1232  	for (i = 0; i < ZYNQMP_DISP_NUM_LAYERS; i++) {
-d76271d22694e8 Hyun Kwon        2018-07-07  1233  		struct zynqmp_disp_layer *layer = &disp->layers[i];
-d76271d22694e8 Hyun Kwon        2018-07-07  1234  		enum drm_plane_type type;
-d76271d22694e8 Hyun Kwon        2018-07-07  1235  		u32 *drm_formats;
-d76271d22694e8 Hyun Kwon        2018-07-07  1236  
-d76271d22694e8 Hyun Kwon        2018-07-07  1237  		drm_formats = drmm_kcalloc(disp->drm, sizeof(*drm_formats),
-d76271d22694e8 Hyun Kwon        2018-07-07  1238  					   layer->info->num_formats,
-d76271d22694e8 Hyun Kwon        2018-07-07  1239  					   GFP_KERNEL);
-d76271d22694e8 Hyun Kwon        2018-07-07  1240  		if (!drm_formats)
-d76271d22694e8 Hyun Kwon        2018-07-07  1241  			return -ENOMEM;
-d76271d22694e8 Hyun Kwon        2018-07-07  1242  
-d76271d22694e8 Hyun Kwon        2018-07-07  1243  		for (j = 0; j < layer->info->num_formats; ++j)
-d76271d22694e8 Hyun Kwon        2018-07-07  1244  			drm_formats[j] = layer->info->formats[j].drm_fmt;
-d76271d22694e8 Hyun Kwon        2018-07-07  1245  
-d76271d22694e8 Hyun Kwon        2018-07-07  1246  		/* Graphics layer is primary, and video layer is overlay. */
-1e42874b0df79a Quanyang Wang    2021-05-18  1247  		type = zynqmp_disp_layer_is_video(layer)
-1e42874b0df79a Quanyang Wang    2021-05-18  1248  		     ? DRM_PLANE_TYPE_OVERLAY : DRM_PLANE_TYPE_PRIMARY;
-d76271d22694e8 Hyun Kwon        2018-07-07  1249  		ret = drm_universal_plane_init(disp->drm, &layer->plane, 0,
-d76271d22694e8 Hyun Kwon        2018-07-07  1250  					       &zynqmp_disp_plane_funcs,
-d76271d22694e8 Hyun Kwon        2018-07-07  1251  					       drm_formats,
-d76271d22694e8 Hyun Kwon        2018-07-07  1252  					       layer->info->num_formats,
-d76271d22694e8 Hyun Kwon        2018-07-07  1253  					       NULL, type, NULL);
-d76271d22694e8 Hyun Kwon        2018-07-07  1254  		if (ret)
-d76271d22694e8 Hyun Kwon        2018-07-07  1255  			return ret;
-d76271d22694e8 Hyun Kwon        2018-07-07  1256  
-d76271d22694e8 Hyun Kwon        2018-07-07  1257  		drm_plane_helper_add(&layer->plane,
-d76271d22694e8 Hyun Kwon        2018-07-07  1258  				     &zynqmp_disp_plane_helper_funcs);
-650f12042b8532 Laurent Pinchart 2021-03-07  1259  
-8c772f0b2b8e94 Laurent Pinchart 2021-03-07 @1260  		drm_plane_create_zpos_immutable_property(&layer->plane, i);
-650f12042b8532 Laurent Pinchart 2021-03-07  1261  		if (zynqmp_disp_layer_is_gfx(layer))
-650f12042b8532 Laurent Pinchart 2021-03-07 @1262  			drm_plane_create_alpha_property(&layer->plane);
-d76271d22694e8 Hyun Kwon        2018-07-07  1263  	}
-d76271d22694e8 Hyun Kwon        2018-07-07  1264  
-d76271d22694e8 Hyun Kwon        2018-07-07  1265  	return 0;
-d76271d22694e8 Hyun Kwon        2018-07-07  1266  }
-d76271d22694e8 Hyun Kwon        2018-07-07  1267  
-
-:::::: The code at line 1260 was first introduced by commit
-:::::: 8c772f0b2b8e94bfd68f9bf19d7aba293332e4bf drm: xlnx: zynqmp_dpsub: Expose plane ordering to userspace
-
-:::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-:::::: CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Thanks,
+~Nick Desaulniers
