@@ -1,108 +1,86 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDA11C00
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655849239; x=1687385239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yx+xqCYZ1czt8iGf9eBDH2GDsxsY06enHRz2YagSzdg=;
-  b=CvBwWi5Jz1dEnEoiB8+UT3JajWKudSjYW7AqQUg48hctgmjGPwR2+9OE
-   mVjVy+bi3YEwN9xRW/8d6GdqGEPZZ7mvQemKFtjVXlCxwIFYEZcnqs1yV
-   XuTTuBwj9yJf5MgjpcRfCBHobopfa9Iggcu2mgm6s+7uVRxdYE5YwWCfC
-   gTWybFiDQSync/IosDPMeV6pSabLvyHJlWVrbaHxzV69s47nUt0ZbTfjH
-   bjeOAWQsUFtDfOF89X1OrfUcOgCPx0JvqB07n4C7ZeEnTfLbp0oShDKBu
-   n8OTkKu8MHjKAc4tMyluFAHaDgVVz/yV6S+dMzrFvw29cTfixBDooDN64
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260680813"
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="260680813"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:07:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="643844755"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Jun 2022 15:07:16 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o3m1k-0000Tx-0g;
-	Tue, 21 Jun 2022 22:07:16 +0000
-Date: Wed, 22 Jun 2022 06:06:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matthew Auld <matthew.auld@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-	Kenneth Graunke <kenneth@whitecape.org>,
-	Jon Bloomfield <jon.bloomfield@intel.com>,
-	dri-devel@lists.freedesktop.org,
-	Jordan Justen <jordan.l.justen@intel.com>,
-	Akeem G Abodunrin <akeem.g.abodunrin@intel.com>
-Subject: Re: [PATCH v2 08/12] drm/i915/uapi: tweak error capture on
- recoverable contexts
-Message-ID: <202206220649.BZGTz35f-lkp@intel.com>
-References: <20220621104434.190962-9-matthew.auld@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8C31C00
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:08:08 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id c2so24687493lfk.0
+        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 15:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KXWwIJvBgndA3WhK3GL3i3aCpDws4Fk1OlRLme0f82A=;
+        b=mRKePrjtbODAs180aZDsLAEONbuWrZ7iGPXcpUcfSsrbTaJykoYbaixY19NrzKgz7j
+         1/my6u6yhWkZb5L5apnLqQX9tN9kuwSNicpksyprremF6LMxq2Iy334TSqxCxNTO94NL
+         bo9B0OdZSvL3+EoKfiLr4jPe6x/Okg94myvTB7LOBFfxM2w8kpRF8rIsJ2B91aZxzjp2
+         OizmhlznIuMCkJWavRj5GCmTeE4RqozPM5Tx3k0xtMn0R8rQsPIBQPhu2LRW2AwpXJN8
+         Qoens8HmrxcVEMMc2WJpaBQeFUfS9L2PvzbNgnc/KBmZgVP2q8DPl0VpJILYyw6zURnN
+         Nkhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KXWwIJvBgndA3WhK3GL3i3aCpDws4Fk1OlRLme0f82A=;
+        b=xSWVHAGifVKLu4l3dhPReVynSNIwc+gCci1NYk9siiNesNzJSWN3pS2Ktd2Cngp+Ub
+         T+xbU8Uge/hkIvM+WSk7ZKLpX/5DqtqvrmQ7HNYTUDDUD/x97VsBx94qrQFIKYSZ2pQY
+         UZV1H0ngnb1d8v0Q8tmqy3mubqBrGO5JpoHY72/gax5J9hF1dmWqkgh2ecq3JTby4SWk
+         DLn5ZC2cLupin6meApcy5U+Ow2XNUYA5+xyyUIpF/u5l654ksQwaqoXQTcD2Pe5KdwEN
+         piJ2umyRw/CsigkeC3G7mkvkHmYZllkZzkGFoAr1V+bqJNHWVi1AXYlcw8GW7MMj56IR
+         JDew==
+X-Gm-Message-State: AJIora9VtD9XVBHOrhd90duVE4OLTGLDlDGHwVDCzgvOXWx99fz6nDmI
+	mSE8Wazzxr/gWgCmHdaWRH+xVPh0k0pVMGuEjI6pJA==
+X-Google-Smtp-Source: AGRyM1tLMp5Ggp2CW7vw70R1i+unH7HMYj8AjZRj1bFWF1Nw2npoZKI4aWcJQ+py3yCG2KULLc91IK4cn22E3FnjVOc=
+X-Received: by 2002:a05:6512:118f:b0:47f:69ef:91b4 with SMTP id
+ g15-20020a056512118f00b0047f69ef91b4mr261672lfr.100.1655849286267; Tue, 21
+ Jun 2022 15:08:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220621104434.190962-9-matthew.auld@intel.com>
+References: <CAKwvOd=nEddFaTVQ80JrHcpjVv34=EhxJ9bb7rUFrRapuGFj2A@mail.gmail.com>
+In-Reply-To: <CAKwvOd=nEddFaTVQ80JrHcpjVv34=EhxJ9bb7rUFrRapuGFj2A@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 21 Jun 2022 15:07:55 -0700
+Message-ID: <CAKwvOdnG3YWLEJ87a2HptA5y4mDBKWp3ZpEV_g6jN9t9uJZA0Q@mail.gmail.com>
+Subject: Re: Fast Kernel Headers talk @ Plumbers?
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	"Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Matthew,
+On Wed, Apr 20, 2022 at 11:14 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Ingo,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
+>
+> We were very excited to see numbers posted about improvements to
+> kernel build times from your work.  If you're planning on attending
+> plumbers and our MC gets approved, would you be able to present on
+> this work?
+>
+> Would others be interested in such a topic?
 
-Thank you for the patch! Yet something to improve:
+Hi Ingo,
+Any interest in talking more about your fast kernel headers work at
+plumbers this year?
+If you're still considering attending Linux Plumbers conf, please
+submit a proposal:
+https://lpc.events/event/16/abstracts/
+Please make sure to select "Toolchains Track" as the "Track" after
+clicking on "Submit new abstract."
 
-[auto build test ERROR on drm-tip/drm-tip]
-[also build test ERROR on linus/master v5.19-rc3 next-20220621]
-[cannot apply to drm-intel/for-linux-next drm/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Auld/small-BAR-uapi-bits/20220621-184858
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220622/202206220649.BZGTz35f-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/74d1c5140770ba24cdde39293db3dc3cf05321c9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Auld/small-BAR-uapi-bits/20220621-184858
-        git checkout 74d1c5140770ba24cdde39293db3dc3cf05321c9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2028:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   1 error generated.
+> --
+> Thanks,
+> ~Nick Desaulniers
 
 
-vim +2028 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-
-ff20afc4cee7b6 Thomas Hellström 2021-11-29  2025  
-74d1c5140770ba Matthew Auld     2022-06-21  2026  static int eb_capture_stage(struct i915_execbuffer *eb)
-ff20afc4cee7b6 Thomas Hellström 2021-11-29  2027  {
-ff20afc4cee7b6 Thomas Hellström 2021-11-29 @2028  }
-ff20afc4cee7b6 Thomas Hellström 2021-11-29  2029  
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
