@@ -1,119 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4709BA44
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02CECC341C6
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655795900;
-	bh=PrW2JmkVe635LtZauvjaDngX3UFmkVgC2u2wZOJoJ5U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DOIWO6MSXY+27P6Qk5o7PJjI3zVVOuUaYgG3MeOZPTkzy4YDqaMfE9/uCG4eGjJJJ
-	 frFg3+FvYxzA32XFuaSLQ71SxYS518co9tSdWLNnpfEc7KpZwPFSS4nqlNoL5CBmyQ
-	 VDozhXosR0sIvxXhs3We9Dbm0xg/ng/5u4hGaNe8EAtqp0OWH4Vd0hZYwT/bvTho8H
-	 4uidvrtNeXt9iYIQ6yHYdCSprXMFs6tRdmUCFofak0YK0+GTFDZDtNsED1+PK86VuS
-	 V0Jtuzjk9RRnWNvbelg6eicLUuHfQ2cck4XH1m0EUMPqBDEY3EqFSY2kuW9mgSHvwu
-	 V26+8S0la6p7A==
-Received: by mail-yb1-f179.google.com with SMTP id v81so23000390ybe.0
-        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 00:18:19 -0700 (PDT)
-X-Gm-Message-State: AJIora+CbZUuOYI4LEDj5XTZb0JhXbgXtCTCPsG9Ytz556M8MyxBNHge
-	Y48yPDsX66DyTbsMs0oO3gmVo0UMYHgMT+fJIezJdw==
-X-Google-Smtp-Source: AGRyM1tmZ/hrSSyI7Q/zSQe4IsCX/m8vN2wQQJUJg9SL7kfnLLROrvth65eg5nZRQ/aYAm5hEB49j+NfmIzkhDxRwjw=
-X-Received: by 2002:a25:a0ca:0:b0:664:c86b:4c24 with SMTP id
- i10-20020a25a0ca000000b00664c86b4c24mr29431836ybm.65.1655795899031; Tue, 21
- Jun 2022 00:18:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A75A44
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:21:51 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPU0JbULzzoNdDulplWh3/1yvs/VWOKbxUB305xUAr2cEBXAe3LyW39/alRcsDynUaj03DjIgswWKRcCP546J3MapKRwI7bwcEIoraoimi4Ys11FkSsz/Q/TBhMRXQ2hTWuIsaK9OG4OnKAONCKIQcvWCttfcmbvXjxNW3WYY4rPdajV9k7l5zc6Obq1BPutbTnNn6XavBdajjQjki+VABMqbEHUKPhYQ6y2fTmgHsQfbT3YqCKCTlGhu5BOQRkzcHrKv5qd0ThQUEwkRY1iC+FWuYzAJmQfh9HtrCXvgq45Il27pXM4HIArZKMrBNjl5mt+2oz9PtjyjTAkTkPyDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n7tY4FQ0X5MAPtS92RIlkBs3NZVwiyt1CXGQ71rWyas=;
+ b=dkIcs69dcwKgk5jyQnjBhACzqv/GCl6zjbvR304eCJrdWWKdaamQyTr3ZzYNTdq4T25jicfREl+AEaFIFP7eSECKStG259QwJQiN0FN4QW8Io870JEZykviENH8XNoHc9qQsnmwrb2BUDl0SV63YgwVrRMhYapcX+lx5D6eCFPUrWZdYN4dfIP69dpuYPY14i19U14OA4eHhG1z3mRPAnx/4dO0xCuXW6OXRIvYVfJZDKtl3Qcr2q7hSj+qCK7Rhv9Z4qQT6l3LYPd61J66OhNO4vCP2nCdxzlODbq9LDEXXyUGYPsEKTeIngiPWazRmDZBOHvVUEuVP/MR1k92+WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n7tY4FQ0X5MAPtS92RIlkBs3NZVwiyt1CXGQ71rWyas=;
+ b=P32W9/OXuiydiN2lMQozxYsakNwYZLqVc8A+RFWLd8WBlIxNJCCPdO72/5Wp7rJfeG9ePS9iRoVhJ9uWRSQdZRjB/S8KhATI1p6QHHje3yNdCfkYr62kU18N/p4sci0tcnK1kmfOel7NqTJ/kAj5rykkTHiLm6GEp8azDVTVXM0T1ptpFO1iS7Lb9+lCE3l282qxzUNi8oeFClaZJHPTMZpZ6dycGgS0lwxxgtRB0r/MBUE0Pk1H9VGWcjyoPsfOo/WXxMLyCCsxBPRyDemxV2oBypeBQ1xhE/tz2YP8ZNXyEJFSsYzkcVGxqfF4KYBd6BaZp2kmSI8HHdmv4umSAQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Tue, 21 Jun
+ 2022 07:21:47 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::15e3:d746:57e8:4de0%7]) with mapi id 15.20.5353.022; Tue, 21 Jun 2022
+ 07:21:47 +0000
+Message-ID: <f8dede84-eb74-2cdd-c630-21d57a7b3648@nvidia.com>
+Date: Tue, 21 Jun 2022 00:21:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] gen_compile_commands: fix overlooked module files
+Content-Language: en-US
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, LKML <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>
+References: <20220616021149.327587-1-jhubbard@nvidia.com>
+ <CAK7LNAQ1j-c-Kb-FffscwLqR0aHtx1=_cH2VtWw7vAFQRF_LTg@mail.gmail.com>
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CAK7LNAQ1j-c-Kb-FffscwLqR0aHtx1=_cH2VtWw7vAFQRF_LTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0122.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::7) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220621012811.2683313-5-kpsingh@kernel.org> <202206211035.p3LxbVfK-lkp@intel.com>
-In-Reply-To: <202206211035.p3LxbVfK-lkp@intel.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Tue, 21 Jun 2022 09:18:08 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
-Message-ID: <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
-To: kernel test robot <lkp@intel.com>
-Cc: bpf@vger.kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36e51d0c-5ad6-4c7c-3eda-08da5356b3bc
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5673:EE_
+X-Microsoft-Antispam-PRVS:
+	<SJ0PR12MB5673902D2E5F4ABE543C5C32A8B39@SJ0PR12MB5673.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	4ioo6hRVcemrCjbd4DMkJz4uSyIelUDIZf8SuBeViK8TejrNA1mwBq0f467LhloFh9bNTgUU7Evi1IQDFV8KRDSIdl7gdGxY2t/fFqI6j1juCBBZ3VZVgYmKr2pOjdl8zsIbHAE3sKHWYu5LSQ84ZJ1OXlasolOF5vSn8o9zeQnb0vnHna47GivL3csrOUU2WkDlNhnvTBXkg9tgYfkQU/r2uKxqnXDhdz9Byg9ZvGnbHAcu4WVPpv7EnUTfGUpx4G2fN08E5cvrhVyEJm3Mn8b/aV04/AhiGcPA3ssnNbRksZ82jlJtouAcSm21CKVAuKuFjOX/idt1ppSen2XRMYal5MMZlQbMb2T4zNeSjhxBeH8Z358L2wJdtGx+W8TXkpmxKTWHm4XccOnWzMkob1hOUfaDotSOJHJsmzFmV7VtsIEVkvtU7OEH1OsiceNptDjfafgwZsuIqZtT+GpLVtsRCjGK+RfV9zd+G2Q0EuogNhDbCyYp0uwniekvnAjbiVQeuBJGgl6kQAPr/him7zHpI/7MpZKwpw8pcsMWQhVj29vD3qmLZQ8x/U6kvqg2fDsrNJm38lX/D4Ipy8MiLVEqBH4SAIZfvoxKGhOXSOe2hilDh7qdkUmdPECmG+M5d5klkkxd/OX2gdOPPYOcf1/mx9eDpnCM03cxFfwgJRKRhE4ls6IlBsLU+sg3EKt+BjGaAUCbKSuidh619wvrAwzp0k7Okp1XtWBV9HUGG0M=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(346002)(376002)(136003)(39860400002)(66946007)(186003)(41300700001)(38100700002)(2906002)(26005)(36756003)(31686004)(5660300002)(53546011)(2616005)(316002)(8936002)(6512007)(86362001)(6506007)(66556008)(8676002)(4326008)(66476007)(478600001)(83380400001)(54906003)(6486002)(6916009)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dmM2WHBnU2tGcXRxSVptQWlFbVdHVW1PTXJBRVZ0SGc4STBJcXVXU2N4QVUy?=
+ =?utf-8?B?NVE3cVovMnU3eTE0RXNmWXk1R2pCaFZNOHVQMGxBT01UZEx1Y29IOFB0MGZY?=
+ =?utf-8?B?dVRvc2xwRkNRK28rR2c1RTczb0krMWdMWHhwSGh3TTUvYkkxc3RJV0duMC9Q?=
+ =?utf-8?B?SzVWUGppdzJ0OUhVYmZuY2ptUVk3dHltMXR6cDdraUwvY1JsMXFIdStMcmxl?=
+ =?utf-8?B?M2U1UzJFemZTVjIwc3RONWZGZ3luQ3VHaWFGQzllVVEzK0FtRDRHNVlvWmZV?=
+ =?utf-8?B?dW5Bdm01aEZ1TG4zdGg3cVBETHlzRFBQaE0vM25ONmpwMnhsNFhUYWRmWXJK?=
+ =?utf-8?B?NVEyWC80T081ZXdCUnJLM096Y2RDUXpZaEl5T1o3VUpqTjZjNU1HM09ZOXVp?=
+ =?utf-8?B?Y1hENlFsQ25qL0lzSmRYK1Rjek5kZkk5UG9HbElybVBQaTliV2IxbTFMcUlj?=
+ =?utf-8?B?MG1zeUoyNXppaktYQ0dUTHpHOWY1dytIT1pzWERDbjkwL0ZqTVd0QTE2cW9x?=
+ =?utf-8?B?T0FwcnRYNm5kR2FkY2UvUVpad05MZ0xLS281R1o5M0UxUU5EQ2dZUHA0Z0tU?=
+ =?utf-8?B?SDBFWmJHU1cwSEp3ZE5kUEUycGRoeHRJeEpmOFRoZ0FXN3NkT0UrNUJWVU9I?=
+ =?utf-8?B?Z3dMT3MwbWp2MHE5Zjd4T2twOXBsVHJxOG5lamVOTUpST2NBcHdDejd4TDVm?=
+ =?utf-8?B?amgvOHBkWExTK2RNLzNkdThMbnI1K2Y0b1RQR3VxQTRpU045cnpjbll2bkJo?=
+ =?utf-8?B?S3gvTEFRdnlhQ0tkcW1NcXQ5SHNZZFZ2VEFZSVlqNjdab3QxRWFUbFU2U0Ev?=
+ =?utf-8?B?S1hxejJNclFDaVBiTDFSUjdSVjBueTFib2pLUkh5R1JmMGpYTTB0MGo1MHhT?=
+ =?utf-8?B?RTA3dmZuNUFFVE1TUE9nNUhCQzlTd2VnRjFNQVRPRXd0Q0h2RnhRN21seDV4?=
+ =?utf-8?B?MUovNlQvOGNLZjRZOENiK3U2SFFaL1NEMnlXU1ozbUVLc3g2b2VmWUtRaTB0?=
+ =?utf-8?B?TXp5UGthSkQ5YTFyZmhXaWhNeUtFQlg4Y0JaVWVQK002Y01TcVBIMGFVOG5o?=
+ =?utf-8?B?bEF4SmUwRmFLdnVjY2Z0YWJDeU5TYWgralI1VG83djYvUVJwMmE5YmJzcTdE?=
+ =?utf-8?B?OXpXU09jVkNMTG9XSVdtcjQxekxTMzczd1h0c1BIVWk4SHVhSnVITXNTNjBQ?=
+ =?utf-8?B?b0MydnFyMno5Vk9mdUROenlyTlg3OVNibnpJSDdISU90L2VpdEM1U011ZlhD?=
+ =?utf-8?B?TDFmTy9HYXNZVXlFdksrMXhjdnpTVlZxSzF1cHZ4WFVlZkRuZ0l6Y2Izcmw4?=
+ =?utf-8?B?ZGZBR2prd0VRcFU5Vk5mUjdUSnd3SDJ6WHA0Z25xU1NYTjJFTmJUOVU5YVRW?=
+ =?utf-8?B?ZHBIZ3I3NVVtcSs1b2d6UVFMa2kxVkt0WjJoSSswQzlPTEJzNzdEd1NwVDNs?=
+ =?utf-8?B?MkhZVGJhVWpqSXk0bkw5eStVK01XVVZLOXg4ay9tU1pNeVdxTlFhRVNNaEM2?=
+ =?utf-8?B?LzY2RllHcE43Kzc2Ym9oQ2kwdTdpSjlqUThURHdRZTBwRExqb00xaWxHT3Ex?=
+ =?utf-8?B?VkZUYnVJU1FUMGR5L0N5RzJ2K2MrWEFneGZ1VWFYeGNaOVBZUElOS2RqZ0lx?=
+ =?utf-8?B?V0k5bnh1VGNDTkNTdkIxalBUemhITTdPN1FNVGFFdm8ybmlZOC9ZNmozcHVH?=
+ =?utf-8?B?NGlNV2lqWVhIYzJaQUY5eWpyZlF4cUg0K1R2bzFRc2x1Y2N6aFh4ZXpKa0Jq?=
+ =?utf-8?B?a3dxZFBIaTB0cHNjN0ZRL255cEwxVHJwV2p0UHh3OUd0UWdEd0R5QjFKNGl6?=
+ =?utf-8?B?SXBhOGs0NkJBeE9Za0x2UkNGUzRvWldWak9QYzN6ckltV3BYbVdoUE9pVlln?=
+ =?utf-8?B?YUhyV2t4VlJvMENwMHlBMnF4ek03NFp3Nmt6USt0MFVDS3JabW9LbGsxb20z?=
+ =?utf-8?B?bGhLV3V6ZkNhYm16LzVjaEFRa2pETjhjZ1lCRTByNENmZnFvVWNiRkVseXZ6?=
+ =?utf-8?B?UXFqRHUzalk3aEhFQjhkbEVucG5lYjVVSjlHSUNaeDBrWjM4SFF6eEdnbytH?=
+ =?utf-8?B?eVExK0Z2RUYyQnVrck54TDlwZ0o2eERKaVk1citMbkI4SzJWcExkVGhvNG1z?=
+ =?utf-8?B?UHYvejh5N2lBd2J3dEc3cmtZYnB6cGZXcHpKUHhmODhYWDRQSXEyWEh5c2l5?=
+ =?utf-8?B?TDRkazJRNUtnWkZwcTFJa3lqZ1ZPbFdHU2J3OXpxRmo4cHVNdm9mQkZEa0J4?=
+ =?utf-8?B?YlkrSHFES285M1lPT0xtbjdFaURRWEFIb2Z0aTAxNktVSXJQS3NrVkhxMlN6?=
+ =?utf-8?B?ckUxaE1hajhxT1hGbjFZVmI4dU9iTHc0ZGN0VldjTmFzTzh2Y0I5UT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36e51d0c-5ad6-4c7c-3eda-08da5356b3bc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2022 07:21:47.5816
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mSziJ04MBIUZ+soInCi3rJN5juBqjB8LDRnBvdbMGUnYhBGXfjPNT7zrKyz4GNko/sdXxcZNu1WlZJysOPbKLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
 
-On Tue, Jun 21, 2022 at 5:20 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi KP,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on bpf-next/master]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/KP-Singh/Add-bpf_getxattr/20220621-093013
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> config: x86_64-randconfig-a015-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211035.p3LxbVfK-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/dd49d2ffb18adceafa98bd517008f59aa9bc910b
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review KP-Singh/Add-bpf_getxattr/20220621-093013
->         git checkout dd49d2ffb18adceafa98bd517008f59aa9bc910b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/trace/bpf_trace.c:1185:25: warning: no previous prototype for function 'bpf_getxattr' [-Wmissing-prototypes]
->    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
->                            ^
->    kernel/trace/bpf_trace.c:1185:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
->                    ^
->                    static
->    1 warning generated.
->
+On 6/19/22 17:15, Masahiro Yamada wrote:
+> On Thu, Jun 16, 2022 at 11:12 AM John Hubbard <jhubbard@nvidia.com> wrote:
+>>
+>> scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
+>> each .mod file only contains one line. In fact, such files contain one
+>> entry per line, and for some subsystems, there can be many, many lines.
+>> For example, Nouveau has 762 entries, but only the first entry was being
+>> processed. This problem causes clangd to fail to provide references and
+>> definitions for valid files that are part of the current kernel
+>> configuration.
+> 
+> 
+> My previous comment "Can you update the commit log?"
+> meant, "Can you rewrite the commit log (in a more concise way)?".
+> 
+> 
+> 
+> I am not sure the Nouveau example is needed here, but
+> more important information is that
+> ecca4fea1ede4 changed the .mod file
+> from "all entries at the first line" to "one entry per line".
+> 
+> 
+> 
+> 
+>> This problem only occurs when using Kbuild to generate, like this:
+>>
+>>     make CC=clang compile_commands.json
+>>
+>> It does not occur if you just run gen_compile_commands.py "bare", like
+>> this (below):
+>>
+>>     scripts/clang-tools/gen_compile_commands.py/gen_compile_commands.py .
+> 
+> I am not sure if this is needed, but at least, the command line is wrong.
+> 
+> scripts/clang-tools/gen_compile_commands.py/gen_compile_commands.py .
+>      -->
+> scripts/clang-tools/gen_compile_commands.py .
 
-So it looks like this needs a function prototype. Let's do an initial round
-of reviews on this series and I can respin with something like:
+Good catch, not sure how that typo leaked in!
 
-diff --git a/kernel/trace/bpf_trace.h b/kernel/trace/bpf_trace.h
-index 9acbc11ac7bb..3f62e5d35037 100644
---- a/kernel/trace/bpf_trace.h
-+++ b/kernel/trace/bpf_trace.h
-@@ -25,6 +25,11 @@ TRACE_EVENT(bpf_trace_printk,
-        TP_printk("%s", __get_str(bpf_string))
- );
+> 
+> 
+>> Fix this by fully processing each .mod file. This fix causes the number
+>> of build commands that clangd finds in my kernel build (these numbers
+>> are heavily dependent upon .config), from 2848 to 5292, which is an 85%
+>> increase.
+> 
+> I am not sure if the second sentence is needed
+> because this patch is just an obvious fix.
+> 
+> 
+> 
+> Sorry, I missed to adjust this file in ecca4fea1ede4,
+> and ended up bothering you too much.
+> 
 
-+/* Prototypes for kernel functions exposed to tracing and LSM
-+ * programs
-+ */
-+ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-+                    const char *name, void *value, int size);
- #endif /* _TRACE_BPF_TRACE_H */
+I'll have a go at rewriting the commit description, sure.
 
-(or anything else folks suggest)
+> 
+> 
+>> Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
+>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>> Cc: Nick Desaulniers <ndesaulniers@google.com>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+>>
+>> Changes since v1:
+>>
+>> Applied changes recommended by Masahiro Yamada (thanks!): corrected the
+>> "Fixes" tag, and improved the python code for parsing .mod files.
+>>
+>>
+>>   scripts/clang-tools/gen_compile_commands.py | 7 +++----
+>>   1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+>> index 1d1bde1fd45e..acf4ec28aaf1 100755
+>> --- a/scripts/clang-tools/gen_compile_commands.py
+>> +++ b/scripts/clang-tools/gen_compile_commands.py
+>> @@ -157,11 +157,10 @@ def cmdfiles_for_modorder(modorder):
+>>               if ext != '.ko':
+>>                   sys.exit('{}: module path must end with .ko'.format(ko))
+>>               mod = base + '.mod'
+>> -           # The first line of *.mod lists the objects that compose the module.
+>> +            # Read from *.mod, to get a list of objects that compose the module.
+>>               with open(mod) as m:
+>> -                for obj in m.readline().split():
+>> -                    yield to_cmdfile(obj)
+>> -
+>> +                for mod_line in m:
+>> +                    yield to_cmdfile(mod_line.rstrip())
+>>
+> 
+> 
+> Please do not remove the blank line.
 
-- KP
+Sure, I didn't really intend to change the vertical whitespace. I'll restore that.
 
->
-> vim +/bpf_getxattr +1185 kernel/trace/bpf_trace.c
->
->   1184
-> > 1185  noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
->   1186                                       const char *name, void *value, int size)
->   1187  {
->   1188          return __vfs_getxattr(dentry, inode, name, value, size);
->   1189  }
->   1190
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+I'll send out a v3 shortly.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
