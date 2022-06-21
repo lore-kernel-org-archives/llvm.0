@@ -1,111 +1,305 @@
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 111E5ECF
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:24:24 +0000 (UTC)
-Received: (qmail 876587 invoked by uid 1000); 21 Jun 2022 10:24:17 -0400
-Date: Tue, 21 Jun 2022 10:24:17 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
-Cc: llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
-  Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
-  Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
-  Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
-  Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
-  "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
-  Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
-  Nathan Chancellor <nathan@kernel.org>,
-  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-  Palmer Dabbelt <palmer@dabbelt.com>, linux-kernel@vger.kernel.org,
-  linux-arch@vger.kernel.org, Marco Elver <elver@google.com>,
-  Charalampos Mainas <charalampos.mainas@gmail.com>,
-  Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-  Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-  Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Message-ID: <YrHUkfDWsexHRUKj@rowland.harvard.edu>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BB810E0
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40494C341C6
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 14:57:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655823457;
+	bh=1w3ELH6FhnKTMp/aAUXabwlWVSg9Z9CE4WFemmnUsEs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GzgrKNHGBAhTaX2MjfCY21Bi6QjEEJOhvy+I8oedc/A/Kyv0l9+oYavGFZRFVA3Ib
+	 bCslybB+JssUwQOZCBC1KiIGksWCdZ5M/gFthvmqoYgpl/sSPjr07rINH7vDRQDSuU
+	 ntZx2xoLNdDVjfY2Xk30LGOolLqQ3OLyEiMHl5dz1roy539UPQE+6HX8T0xXEMU61P
+	 iXW/fXyJVl+uhAn+vPpJl1rtVY+EruxqNlThNAFYB036L1qm6UYVcPCxlrfj7bfuq6
+	 M5y4ss8rgY+mBNr6X8+Pidcs/YBU9NK1u/njCJ1cT9g8l5o52shmCnD239mDlla37W
+	 Z6OhfEdv7YU0w==
+Received: by mail-vk1-f178.google.com with SMTP id c11so6802012vkn.5
+        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 07:57:37 -0700 (PDT)
+X-Gm-Message-State: AJIora9aXNZIXYNKuv2HbC7nB7qxo+1VZX8WpwuNhUfXuifaZs8TbRY9
+	0vl24YYj5TmhFV72iqzHzJmpi9LNaVlRE7A+n2Y=
+X-Google-Smtp-Source: AGRyM1uWyyUJQ0UyBp5q+f7Fxs01MDqffDPEJtCcflVQwjX0fmBOX2yDOXb7WRZN7zemi3Wd/1HMm+rHbBQqT+hTO/M=
+X-Received: by 2002:a05:6122:239:b0:36c:1187:a347 with SMTP id
+ e25-20020a056122023900b0036c1187a347mr4096305vko.28.1655823456161; Tue, 21
+ Jun 2022 07:57:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
+References: <20220620155404.1968739-1-guoren@kernel.org> <202206210303.Vjl4rpPv-lkp@intel.com>
+In-Reply-To: <202206210303.Vjl4rpPv-lkp@intel.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 21 Jun 2022 22:57:24 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSyvS=52kkHiBB2BdhyVFxKL1Lym90LFC6tmsNO_5_RCQ@mail.gmail.com>
+Message-ID: <CAJF2gTSyvS=52kkHiBB2BdhyVFxKL1Lym90LFC6tmsNO_5_RCQ@mail.gmail.com>
+Subject: Re: [PATCH V5] riscv: Add qspinlock support
+To: kernel test robot <lkp@intel.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Peter Zijlstra <peterz@infradead.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	linux-riscv <linux-riscv@lists.infradead.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 21, 2022 at 01:59:27PM +0200, Paul Heidekrüger wrote:
-> OK. So, LKMM limits the scope of control dependencies to its arm(s), hence
-> there is a control dependency from the last READ_ONCE() before the loop
-> exists to the WRITE_ONCE().
-> 
-> But then what about the following:
-> 
-> > int *x, *y;
-> > 
-> > int foo()
-> > {
-> > 	/* More code */
-> > 
-> > 	if(READ_ONCE(x))
-> > 		return 42;
-> > 
-> > 	/* More code */
-> > 
-> > 	WRITE_ONCE(y, 42);
-> > 
-> > 	/* More code */
-> > 
-> > 	return 0;
-> > }
-> 
-> The READ_ONCE() determines whether the WRITE_ONCE() will be executed at all,
-> but the WRITE_ONCE() doesn't lie in the if condition's arm.
+Fixed: with "{}" protect to meet clang requirement.
 
-So in this case the LKMM would not recognize that there's a control 
-dependency, even though it clearly exists.
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 12debce235e5..492104d45a23 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -17,6 +17,23 @@
+        __typeof__(new) __new = (new);                                  \
+        __typeof__(*(ptr)) __ret;                                       \
+        switch (size) {                                                 \
++       case 2: {                                                       \
++               u32 temp;                                               \
++               u32 shif = ((ulong)__ptr & 2) ? 16 : 0;                 \
++               u32 mask = 0xffff << shif;                              \
++               __ptr = (__typeof__(ptr))((ulong)__ptr & ~(ulong)2);    \
++               __asm__ __volatile__ (                                  \
++                       "0:     lr.w %0, %2\n"                          \
++                       "       and  %1, %0, %z3\n"                     \
++                       "       or   %1, %1, %z4\n"                     \
++                       "       sc.w %1, %1, %2\n"                      \
++                       "       bnez %1, 0b\n"                          \
++                       : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
++                       : "rJ" (~mask), "rJ" (__new << shif)            \
++                       : "memory");                                    \
++               __ret = (__ret & mask) >> shif;                         \
++               break;                                                  \
++       }                                                               \
+        case 4:                                                         \
+                __asm__ __volatile__ (                                  \
+                        "       amoswap.w %0, %2, %1\n"                 \
 
->   However, by
-> "inverting" the if, we get the following equivalent code:
-> 
-> > if(!READ_ONCE(x)) {
-> > 	/* More code */
-> > 
-> > 	WRITE_ONCE(y, 42);
-> > 
-> > 	/* More code */
-> > 
-> > 	return 0;
-> > }
-> > 
-> > return 42;
-> 
-> Now, the WRITE_ONCE() is in the if's arm, and there is clearly a control
-> dependency.
+On Tue, Jun 21, 2022 at 3:58 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on soc/for-next]
+> [also build test ERROR on linus/master v5.19-rc2 next-20220617]
+> [cannot apply to tip/locking/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220621/202206210303.Vjl4rpPv-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/326f4a13941845b6ef1c4f4eaba049fe265f52bf
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-qspinlock-support/20220620-235653
+>         git checkout 326f4a13941845b6ef1c4f4eaba049fe265f52bf
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All error/warnings (new ones prefixed by >>):
+>
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:7:
+>    In file included from include/linux/gfp.h:6:
+>    In file included from include/linux/mmzone.h:8:
+>    In file included from include/linux/spinlock.h:62:
+>    In file included from include/linux/lockdep.h:14:
+>    In file included from include/linux/smp.h:13:
+>    In file included from include/linux/cpumask.h:13:
+>    In file included from include/linux/atomic.h:7:
+> >> arch/riscv/include/asm/atomic.h:299:1: error: expected expression
+>    ATOMIC_OPS()
+>    ^
+>    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+>            ATOMIC_OP(int,   , 4)
+>            ^
+>    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+>            return __xchg_relaxed(&(v->counter), n, size);                  \
+>                   ^
+>    arch/riscv/include/asm/cmpxchg.h:21:3: note: expanded from macro '__xchg_relaxed'
+>                    u32 temp;                                               \
+>                    ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:7:
+>    In file included from include/linux/gfp.h:6:
+>    In file included from include/linux/mmzone.h:8:
+>    In file included from include/linux/spinlock.h:62:
+>    In file included from include/linux/lockdep.h:14:
+>    In file included from include/linux/smp.h:13:
+>    In file included from include/linux/cpumask.h:13:
+>    In file included from include/linux/atomic.h:7:
+> >> arch/riscv/include/asm/atomic.h:299:1: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+>    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+>            ATOMIC_OP(int,   , 4)
+>            ^
+>    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+>            return __xchg_relaxed(&(v->counter), n, size);                  \
+>                   ^
+>    arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
+>                            : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
+>                                                    ^
+>    include/linux/string.h:159:12: note: 'bcmp' declared here
+>    extern int bcmp(const void *,const void *,__kernel_size_t);
+>               ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:7:
+>    In file included from include/linux/gfp.h:6:
+>    In file included from include/linux/mmzone.h:8:
+>    In file included from include/linux/spinlock.h:62:
+>    In file included from include/linux/lockdep.h:14:
+>    In file included from include/linux/smp.h:13:
+>    In file included from include/linux/cpumask.h:13:
+>    In file included from include/linux/atomic.h:7:
+> >> arch/riscv/include/asm/atomic.h:299:1: error: invalid lvalue in asm output
+>    ATOMIC_OPS()
+>    ^~~~~~~~~~~~
+>    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+>            ATOMIC_OP(int,   , 4)
+>            ^~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+>            return __xchg_relaxed(&(v->counter), n, size);                  \
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/cmpxchg.h:31:28: note: expanded from macro '__xchg_relaxed'
+>                            : "=&r" (__ret), "=&r" (temp), "+A" (*__ptr)    \
+>                                                    ^~~~
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:7:
+>    In file included from include/linux/gfp.h:6:
+>    In file included from include/linux/mmzone.h:8:
+>    In file included from include/linux/spinlock.h:62:
+>    In file included from include/linux/lockdep.h:14:
+>    In file included from include/linux/smp.h:13:
+>    In file included from include/linux/cpumask.h:13:
+>    In file included from include/linux/atomic.h:7:
+> >> arch/riscv/include/asm/atomic.h:299:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+>    arch/riscv/include/asm/atomic.h:292:2: note: expanded from macro 'ATOMIC_OPS'
+>            ATOMIC_OP(int,   , 4)
+>            ^
+>    arch/riscv/include/asm/atomic.h:249:9: note: expanded from macro 'ATOMIC_OP'
+>            return __xchg_relaxed(&(v->counter), n, size);                  \
+>                   ^
+>    arch/riscv/include/asm/cmpxchg.h:22:7: note: expanded from macro '__xchg_relaxed'
+>                    u32 shif = ((ulong)__ptr & 2) ? 16 : 0;                 \
+>                        ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                    return (set->sig[3] | set->sig[2] |
+>                            ^        ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                    return (set->sig[3] | set->sig[2] |
+>                                          ^        ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                    return  (set1->sig[3] == set2->sig[3]) &&
+>                             ^         ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                    return  (set1->sig[3] == set2->sig[3]) &&
+>                                             ^         ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                            (set1->sig[2] == set2->sig[2]) &&
+>                             ^         ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>                            (set1->sig[2] == set2->sig[2]) &&
+>                                             ^         ~
+>    include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+>            unsigned long sig[_NSIG_WORDS];
+>            ^
+>    In file included from arch/riscv/kernel/asm-offsets.c:10:
+>    In file included from include/linux/mm.h:700:
+>    In file included from include/linux/huge_mm.h:8:
+>    In file included from include/linux/fs.h:33:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+>    _SIG_SET_BINOP(sigorsets, _sig_or)
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+>                    a3 = a->sig[3]; a2 = a->sig[2];                         \
+>                         ^      ~
+>
+>
+> vim +299 arch/riscv/include/asm/atomic.h
+>
+> fab957c11efe2f Palmer Dabbelt 2017-07-10  298
+> 5ce6c1f3535fa8 Andrea Parri   2018-03-09 @299  ATOMIC_OPS()
+> fab957c11efe2f Palmer Dabbelt 2017-07-10  300
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-Correct.
 
-> Similar cases:
-> 
-> > if(READ_ONCE())
-> > 	foo(); /* WRITE_ONCE() in foo() */
-> > return 42;
-> 
-> or
-> 
-> > if(READ_ONCE())
-> >     goto foo; /* WRITE_ONCE() after foo */
-> > return 42;
-> 
-> In both cases, the WRITE_ONCE() again isn't in the if's arm syntactically
-> speaking, but again, with rewriting, you can end up with a control
-> dependency; in the first case via inlining, in the second case by simply
-> copying the code after the "foo" marker.
 
-Again, correct.  The LKMM isn't always consistent, and it behaves this 
-way to try to avoid presuming too much about the optimizations that 
-compilers may apply.
+-- 
+Best Regards
+ Guo Ren
 
-Alan
+ML: https://lore.kernel.org/linux-csky/
