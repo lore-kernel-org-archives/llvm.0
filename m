@@ -1,49 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AC67490
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 19:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C522F47
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 20:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655840716; x=1687376716;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vsbfVpxfgyqj2cCX1DPFNEi5ehN4eJRrw639yIQfgqk=;
-  b=aujmbj25dbJY7vLxrgMvHMaJCudcL+TLa6YWeX1haCWNhjmFq2wHZwHq
-   RaGbxCzp/F/mam4KmlsQW2Km4RiKaH0m5Gx42w36A09lM/7uMAVn7FP0I
-   AEdOfQBz7JGCq9wq6ppfW0s1QBgb2d1aBc86sl0w80rZCISt5WTxgq/Ow
-   H9dYc4p3fsRi4Ouy0ycEnw9GR4oOVWfqZxGFEBzcHYgbSQx5L+x5/r1JX
-   BvDOYv1W5VkUMyhh4nsIjiMWjgl8OtiVnh9B79RV5NMTqPk5ivdiOs1x6
-   RBSiM7OkVO89nXKGMguS7kSxJwaE5dS3I4ZUejzg9t1PbblkkChups9tf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260651562"
+  t=1655843115; x=1687379115;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7e+ir0VyaDL/t9/cJ3Sqhdxf9f68AWW8rKGLisVcpJ8=;
+  b=Hzik7xqGvRZEfgpKnQAWFpPvs02/gWLjMENuRtYsi9H8/fjXz+uwRiQP
+   5OXOWNPq8G5c+ov14g2mZwxDo0R3017d6FE2nuMWZQSpRr62iuaL0IhJ1
+   ZvLBp09LfSd+bEk7Zkm41QxU3/hZZPlJuFULUQIrL7rQK8usjXZVqBtaI
+   ouswc/D6B18E+pIDbKLPOq28wW0WR4wVMXSzXzRvYj/wnEPN2B88oUopT
+   B0vSwlpm7oGz2sb0e/8ZyMPBRUvf4kgLf3Pg81zv7b6XSKG8SU/gI/k3Q
+   ldYHvrQceTpID6IV8Qj/uWUqCnPgdQU8Ja1KRmN+/sIOB/At503UAt8PV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="278998300"
 X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="260651562"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 12:45:15 -0700
+   d="scan'208";a="278998300"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 13:25:14 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
-   d="scan'208";a="586075571"
+   d="scan'208";a="591818035"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2022 12:45:11 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2022 13:25:13 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3joF-0000LD-7Q;
-	Tue, 21 Jun 2022 19:45:11 +0000
-Date: Wed, 22 Jun 2022 03:44:22 +0800
+	id 1o3kQy-0000O9-WC;
+	Tue, 21 Jun 2022 20:25:12 +0000
+Date: Wed, 22 Jun 2022 04:25:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tilak Tangudu <tilak.tangudu@intel.com>,
-	intel-gfx@lists.freedesktop.org, jon.ewins@intel.com,
-	rodrigo.vivi@intel.com, vinay.belgaumkar@intel.com,
-	chris.p.wilson@intel.com, ashutosh.dixit@intel.com,
-	badal.nilawar@intel.com, anshuman.gupta@intel.com,
-	matthew.d.roper@intel.com, saurabhg.gupta@intel.com,
-	Aravind.Iddamsetty@intel.com, Sujaritha.Sundaresan@intel.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [Intel-gfx] [PATCH 09/11] drm/i915: Add i915_save/load_pci_state
- helpers
-Message-ID: <202206220303.UvbFJUZD-lkp@intel.com>
-References: <20220621123516.370479-10-tilak.tangudu@intel.com>
+To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [drm-misc:drm-misc-next 3/4]
+ drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared
+ function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202206220449.j02XFvCg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,101 +47,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621123516.370479-10-tilak.tangudu@intel.com>
 
-Hi Tilak,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tilak-Tangudu/drm-i915-Add-D3Cold-Off-support-for-runtime-pm/20220621-202453
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220622/202206220303.UvbFJUZD-lkp@intel.com/config)
+tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+head:   87a3451e346be3f9a5d8943ae094888044314631
+commit: 90bb087f66745ca48f6f5e43df99a1212d89e712 [3/4] drm: Drop drm_blend.h from drm_crtc.h
+config: powerpc-buildonly-randconfig-r002-20220622 (https://download.01.org/0day-ci/archive/20220622/202206220449.j02XFvCg-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ad0aa2eb6293edc066466ecf3b82ce2e4e0a9636
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tilak-Tangudu/drm-i915-Add-D3Cold-Off-support-for-runtime-pm/20220621-202453
-        git checkout ad0aa2eb6293edc066466ecf3b82ce2e4e0a9636
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc drm-misc-next
+        git checkout 90bb087f66745ca48f6f5e43df99a1212d89e712
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/xlnx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+Note: the drm-misc/drm-misc-next HEAD 87a3451e346be3f9a5d8943ae094888044314631 builds fine.
+      It only hurts bisectability.
 
->> drivers/gpu/drm/i915/i915_driver.c:108:6: warning: no previous prototype for function 'i915_save_pci_state' [-Wmissing-prototypes]
-   bool i915_save_pci_state(struct pci_dev *pdev)
-        ^
-   drivers/gpu/drm/i915/i915_driver.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool i915_save_pci_state(struct pci_dev *pdev)
-   ^
-   static 
->> drivers/gpu/drm/i915/i915_driver.c:127:6: warning: no previous prototype for function 'i915_load_pci_state' [-Wmissing-prototypes]
-   void i915_load_pci_state(struct pci_dev *pdev)
-        ^
-   drivers/gpu/drm/i915/i915_driver.c:127:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void i915_load_pci_state(struct pci_dev *pdev)
-   ^
-   static 
-   2 warnings generated.
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: error: call to undeclared function 'drm_plane_create_zpos_immutable_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   drm_plane_create_zpos_immutable_property(&layer->plane, i);
+                   ^
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:3: note: did you mean 'drm_plane_create_scaling_filter_property'?
+   include/drm/drm_plane.h:908:5: note: 'drm_plane_create_scaling_filter_property' declared here
+   int drm_plane_create_scaling_filter_property(struct drm_plane *plane,
+       ^
+>> drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: error: call to undeclared function 'drm_plane_create_alpha_property'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           drm_plane_create_alpha_property(&layer->plane);
+                           ^
+   drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:4: note: did you mean 'drm_plane_create_color_properties'?
+   include/drm/drm_color_mgmt.h:90:5: note: 'drm_plane_create_color_properties' declared here
+   int drm_plane_create_color_properties(struct drm_plane *plane,
+       ^
+   2 errors generated.
 
 
-vim +/i915_save_pci_state +108 drivers/gpu/drm/i915/i915_driver.c
+vim +/drm_plane_create_zpos_immutable_property +1260 drivers/gpu/drm/xlnx/zynqmp_disp.c
 
-   107	
- > 108	bool i915_save_pci_state(struct pci_dev *pdev)
-   109	{
-   110		struct drm_i915_private *i915 = pci_get_drvdata(pdev);
-   111	
-   112		if (pci_save_state(pdev))
-   113			return false;
-   114	
-   115		kfree(i915->pci_state);
-   116	
-   117		i915->pci_state = pci_store_saved_state(pdev);
-   118	
-   119		if (!i915->pci_state) {
-   120			drm_err(&i915->drm, "Failed to store PCI saved state\n");
-   121			return false;
-   122		}
-   123	
-   124		return true;
-   125	}
-   126	
- > 127	void i915_load_pci_state(struct pci_dev *pdev)
-   128	{
-   129		struct drm_i915_private *i915 = pci_get_drvdata(pdev);
-   130		int ret;
-   131	
-   132		if (!i915->pci_state)
-   133			return;
-   134	
-   135		ret = pci_load_saved_state(pdev, i915->pci_state);
-   136		if (!ret) {
-   137			pci_restore_state(pdev);
-   138		} else {
-   139			drm_warn(&i915->drm, "Failed to load PCI state, err:%d\n", ret);
-   140		}
-   141	}
-   142	static int i915_get_bridge_dev(struct drm_i915_private *dev_priv)
-   143	{
-   144		int domain = pci_domain_nr(to_pci_dev(dev_priv->drm.dev)->bus);
-   145	
-   146		dev_priv->bridge_dev =
-   147			pci_get_domain_bus_and_slot(domain, 0, PCI_DEVFN(0, 0));
-   148		if (!dev_priv->bridge_dev) {
-   149			drm_err(&dev_priv->drm, "bridge device not found\n");
-   150			return -EIO;
-   151		}
-   152		return 0;
-   153	}
-   154	
+d76271d22694e8 Hyun Kwon        2018-07-07  1226  
+d76271d22694e8 Hyun Kwon        2018-07-07  1227  static int zynqmp_disp_create_planes(struct zynqmp_disp *disp)
+d76271d22694e8 Hyun Kwon        2018-07-07  1228  {
+d76271d22694e8 Hyun Kwon        2018-07-07  1229  	unsigned int i, j;
+d76271d22694e8 Hyun Kwon        2018-07-07  1230  	int ret;
+d76271d22694e8 Hyun Kwon        2018-07-07  1231  
+d76271d22694e8 Hyun Kwon        2018-07-07  1232  	for (i = 0; i < ZYNQMP_DISP_NUM_LAYERS; i++) {
+d76271d22694e8 Hyun Kwon        2018-07-07  1233  		struct zynqmp_disp_layer *layer = &disp->layers[i];
+d76271d22694e8 Hyun Kwon        2018-07-07  1234  		enum drm_plane_type type;
+d76271d22694e8 Hyun Kwon        2018-07-07  1235  		u32 *drm_formats;
+d76271d22694e8 Hyun Kwon        2018-07-07  1236  
+d76271d22694e8 Hyun Kwon        2018-07-07  1237  		drm_formats = drmm_kcalloc(disp->drm, sizeof(*drm_formats),
+d76271d22694e8 Hyun Kwon        2018-07-07  1238  					   layer->info->num_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1239  					   GFP_KERNEL);
+d76271d22694e8 Hyun Kwon        2018-07-07  1240  		if (!drm_formats)
+d76271d22694e8 Hyun Kwon        2018-07-07  1241  			return -ENOMEM;
+d76271d22694e8 Hyun Kwon        2018-07-07  1242  
+d76271d22694e8 Hyun Kwon        2018-07-07  1243  		for (j = 0; j < layer->info->num_formats; ++j)
+d76271d22694e8 Hyun Kwon        2018-07-07  1244  			drm_formats[j] = layer->info->formats[j].drm_fmt;
+d76271d22694e8 Hyun Kwon        2018-07-07  1245  
+d76271d22694e8 Hyun Kwon        2018-07-07  1246  		/* Graphics layer is primary, and video layer is overlay. */
+1e42874b0df79a Quanyang Wang    2021-05-18  1247  		type = zynqmp_disp_layer_is_video(layer)
+1e42874b0df79a Quanyang Wang    2021-05-18  1248  		     ? DRM_PLANE_TYPE_OVERLAY : DRM_PLANE_TYPE_PRIMARY;
+d76271d22694e8 Hyun Kwon        2018-07-07  1249  		ret = drm_universal_plane_init(disp->drm, &layer->plane, 0,
+d76271d22694e8 Hyun Kwon        2018-07-07  1250  					       &zynqmp_disp_plane_funcs,
+d76271d22694e8 Hyun Kwon        2018-07-07  1251  					       drm_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1252  					       layer->info->num_formats,
+d76271d22694e8 Hyun Kwon        2018-07-07  1253  					       NULL, type, NULL);
+d76271d22694e8 Hyun Kwon        2018-07-07  1254  		if (ret)
+d76271d22694e8 Hyun Kwon        2018-07-07  1255  			return ret;
+d76271d22694e8 Hyun Kwon        2018-07-07  1256  
+d76271d22694e8 Hyun Kwon        2018-07-07  1257  		drm_plane_helper_add(&layer->plane,
+d76271d22694e8 Hyun Kwon        2018-07-07  1258  				     &zynqmp_disp_plane_helper_funcs);
+650f12042b8532 Laurent Pinchart 2021-03-07  1259  
+8c772f0b2b8e94 Laurent Pinchart 2021-03-07 @1260  		drm_plane_create_zpos_immutable_property(&layer->plane, i);
+650f12042b8532 Laurent Pinchart 2021-03-07  1261  		if (zynqmp_disp_layer_is_gfx(layer))
+650f12042b8532 Laurent Pinchart 2021-03-07 @1262  			drm_plane_create_alpha_property(&layer->plane);
+d76271d22694e8 Hyun Kwon        2018-07-07  1263  	}
+d76271d22694e8 Hyun Kwon        2018-07-07  1264  
+d76271d22694e8 Hyun Kwon        2018-07-07  1265  	return 0;
+d76271d22694e8 Hyun Kwon        2018-07-07  1266  }
+d76271d22694e8 Hyun Kwon        2018-07-07  1267  
+
+:::::: The code at line 1260 was first introduced by commit
+:::::: 8c772f0b2b8e94bfd68f9bf19d7aba293332e4bf drm: xlnx: zynqmp_dpsub: Expose plane ordering to userspace
+
+:::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+:::::: CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 -- 
 0-DAY CI Kernel Test Service
