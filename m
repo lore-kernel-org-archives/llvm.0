@@ -1,137 +1,87 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FCA1C00
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:05:26 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id s10so17050906ljh.12
-        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 15:05:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEE61C00
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:06:19 +0000 (UTC)
+Received: by mail-lf1-f51.google.com with SMTP id c4so24606223lfj.12
+        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 15:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
-        b=PksK/pvVejHaPuJXQTH64r9lAa+BSxcqKlrp/YdZR0LE3hMPpWsFWMmQlN59uGmqpC
-         NGtOHmEng/i/D9QbisoA6LN/yBGK4iJJU/k3KEURwdY+ntci4FCk3uFB9wCf3zkTyyph
-         ujW4+5Ew683yYv1nlMz+a1NfvCpJtah5v1ZIP9FAYrl/OBRwO35C0h4y6vt/5DidZ0aA
-         VDgDJZB5O2+5JjDtUDq97kAzxKFMzbHUTgi+BlLmCK8Vaoeh9ARNa840AGaHLk8g7jiE
-         HhIIQ5x6G6w07sWsUsLL5/c4nKukLWjXG7Og10dAonWaQ2gTR4W0jlT/QAo+ZavHaGtb
-         stUw==
+         :cc;
+        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
+        b=eJQBYtmvEHSqRbZSbiMYBb0Af4lOvLWdbaqfzOi/mavmjcPHXudqxs0/8DcAOEd1E1
+         Q6DTzllxxeZVj00vYojpiTMGw/Rch/Atoq7QS8sGL56difveeOsZW5g2D5iIqhMqJULz
+         VsGEdoHkAacQ8BaeqtkdvNhZ7LuZDwQ2DbCm87RVaQIfJcNxjKz3avfCsJLTvCM4Hbxt
+         c+APLFfOm2uNLCA1lq4UyZ2L0ro12ho5cFSNTQ01fGatdurXr047nYPa/YoHp8qpTWOh
+         1kv8iPu0ZaJDYzyp29ORL8Fb+Cy79IMcpO02nYbkfK+t5Y7bishSTSMN2Ap+TPiY5MUY
+         f8Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
-        b=em3qiGwgIuuisKu7u5u5YMe9LbyeX+nmZn3B4aHv4WeWzp9rElybNYblVl2mggaRAD
-         DYDmIP4SzAcYmdhcl8+aP1EcuKMHf3xri1DSepGI5WSXLjHncU8kcite4efZKmiG36f7
-         o42lggUl9QDe1U+7mcAkZImnnYcXkmA/aVMV9VdnwABQDsWl/xnXLK5r4lx28MZpCKbL
-         NTXrksRLdOXaY0qcoLFGqmJ2YnGEBK3IElLxq+jeLT95eiAroor6a4Iy7/vxsboLm62V
-         myXeXH0XBqDNCjF4Un8vs6S8B/uOuU+yXHEXwPeHQjSajjOi4AWya1HM8cfQORP38KB/
-         YRZA==
-X-Gm-Message-State: AJIora8C9OeGCvF2Dky38x5fLwu9yAZ9pRyHiLuppFBorglpk4s0uxK+
-	BYmx3BiA4PDDkt6r8+l9xKEoD8TEERID3Y8UAr0njw==
-X-Google-Smtp-Source: AGRyM1s8ItdZNicXgy4vfEI31Rcdko+391VPjrdp8750VHiNV/XVuGohJzT8zmLpof5YTXJPo8fI2yLlcamrBqB4reA=
-X-Received: by 2002:a05:651c:23b:b0:259:fee:cc2a with SMTP id
- z27-20020a05651c023b00b002590feecc2amr130672ljn.400.1655849123759; Tue, 21
- Jun 2022 15:05:23 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
+        b=MqDgIk7OP4OtXGI/86UTwKT8lVfynLKmbNNIuo74YfRLqFjJmjegS3/M95INDSwDyp
+         EJfb65Y6y2SIY1LSyUPsm0isHU5s8Kl9JzXXNXiqEdVEhZbNafbqtmssT0NV3WXas+XD
+         ZhQI9N0oaK9DFHTvsJMZklNy+/4DC/Mrx6wulCrUGlrkd14WVvDTi38sWIH84t0PfFM9
+         DmKmi5sx07rxR/jvNo3TFVFOmoKFFbSsenFPH2eO7yXy0mjT0t5QFlz5ba0yTOgKlDyt
+         PkjLHSvlN3UcRv11SaPpUyLAldp9lv3Y6C7XROHysLEOpLJGAFHJgpq4uCiYKFz0bKgx
+         +TWQ==
+X-Gm-Message-State: AJIora8kytSymASM6+r3EvnLQlPKsXNd+4KXUuKP87KP0S7prnGmR/8w
+	V59EweUyJJ0T4HKVSa43N37qQTj9GmQ1eO3YflHLx1FjjvLGBw==
+X-Google-Smtp-Source: AGRyM1v8wo7hwa2uixvj6gCTLmESdbXg1gm7BPj/ZZLC1D/uXa0EJN44zvwdPUncmLNKd/yrJlJKQGixM27d4moFLnk=
+X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
+ x31-20020a0565123f9f00b0047dc87ef8f3mr219129lfa.401.1655849177384; Tue, 21
+ Jun 2022 15:06:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local> <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
- <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local> <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
+References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
+ <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
+In-Reply-To: <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 21 Jun 2022 15:05:12 -0700
-Message-ID: <CAKwvOdkrZbRTfrK_cFRseoONGi7qQ-_4vB=Zm9KH3Bb2KZ5tww@mail.gmail.com>
-Subject: Re: Dangerous addr to ctrl dependency transformation in fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-To: =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
-	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Marco Elver <elver@google.com>, 
-	Charalampos Mainas <charalampos.mainas@gmail.com>, Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Date: Tue, 21 Jun 2022 15:06:06 -0700
+Message-ID: <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
+Subject: Re: Plumbers conf presentation on -fanalyze?
+To: David Malcolm <dmalcolm@redhat.com>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 17, 2022 at 3:29 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com> wrote:
 >
-> On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
-> <paul.heidekrueger@in.tum.de> wrote:
+> On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
+> > Hi David,
+> > Jose and I are currently in the planning process to put together a
+> > Kernel+Toolchain microconference track at Linux Plumbers Conference
+> > this year (Sept 12-14) in Dublin, Ireland.
 > >
-> > On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
-> > > On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
-> > > <paul.heidekrueger@in.tum.de> wrote:
-> > > >
-> > > > Hi all,
-> > > >
-> > > > work on my dependency checker tool is progressing nicely, and it is
-> > > > flagging, what I believe is, a harmful addr to ctrl dependency
-> > > > transformation. For context, see [1] and [2]. I'm using the Clang
-> > > > compiler.
-> > > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attach=
-ments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> > > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-=
-Pro/T/#u
-> > >
-> > > Hi Paul,
-> > > Thanks for the report and your (and your team's) work on this tool.
-> > > Orthogonal to your report, Jose (cc'ed) and I are currently in the
-> > > planning process to put together a Kernel+Toolchain microconference
-> > > track at Linux Plumbers Conference [0] this year (Sept 12-14) in
-> > > Dublin, Ireland.  Would you or someone from your group be able and
-> > > interested in presenting more information about your work to an
-> > > audience of kernel and toolchain developers at such an event?
-> > >
-> > > Would others be interested in such a topic? (What do they say in
-> > > Starship Troopers...?...Would you like to know more?)
-> > >
-> > > [0] https://lpc.events/event/16/
-> > > --
-> > > Thanks,
-> > > ~Nick Desaulniers
-> >
-> > Hi Nick and Jose,
-> >
-> > Many thanks for inviting us! I would love to do a talk at LPC! Hopefull=
-y
-> > in person too.
-> >
-> > Given that there have been several talks around this topic at LPC
-> > already, it seems very fitting, and we'll hopefully have more to share
-> > by then. Actually we have more to share already :-)
-> >
-> > https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/=
-T/#u
-> >
-> > I assume we will have to submit an abstract soon?
+> > We had seen
+> > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
+> > particularly the section on The Linux kernel and were wondering if
+> > you'd be interested in presenting more information about -fanalyze to
+> > kernel and toolchain developers there?
 >
-> Yes, if you go to: https://lpc.events/event/16/abstracts/
->
-> click "Submit new abstract" in the bottom right.
->
-> Under the "Track" dropdown, please select "Toolchains Track."
+> Thanks!  I'm very much interested, but am not yet sure about travel
+> (both in terms of (a) budget and (b) possible new virus strains).  Is
+> this conference going to be purely in-person, or hybrid virtual/in-
+> person?
 
-Hi Paul, we'll need all proposals soon.
+Hi David,
 If you're still considering attending Linux Plumbers conf, please
 submit a proposal:
 https://lpc.events/event/16/abstracts/
 Please make sure to select "Toolchains Track" as the "Track" after
 clicking on "Submit new abstract."
 
-> --
-> Thanks,
-> ~Nick Desaulniers
+>
+> Dave
+>
 
 
-
---=20
+-- 
 Thanks,
 ~Nick Desaulniers
