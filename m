@@ -1,56 +1,42 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D622FECF
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 12:41:39 +0000 (UTC)
-Received: by mail-pg1-f195.google.com with SMTP id d129so12999578pgc.9
-        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 05:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e7ENr1H0aV6W45zGV/4bz4+Kuctr067y9ar8/0vuczY=;
-        b=OwspgshMn6BiCdMLukmPqPUWedaDeDUsS87hh+q2/VwZel9RV+40LU0UAypwXkpPCI
-         zOBLMm1WV5mYeXylPEtvCwxa4vIAyg8j6wC8Te4oBueI1NyYjeGr459L4ZMCQO+6VFLm
-         2R65Ztdx3MESFs3b1ogeZYGWFtx04rHxQ+RCX5GlnaW9Lni/neNq294X58bZpXhxqhfm
-         JXf7GPRaPo6GiEy2FmZ8xbYU6+so67HbDQOpyJi973Fm+e3A6j3LQJznVbJGGMMK+g76
-         cS9lCAqPTpb/KjRx1v4eQTjvdwbeE0QXFZlUUO4CkgMJEGFBIgyIec+gHTbBPzB7CnVN
-         BpKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e7ENr1H0aV6W45zGV/4bz4+Kuctr067y9ar8/0vuczY=;
-        b=14OVAPKxIm4HTpMpjhOLu+wjoajp3zvGXoZbK7KsfWrY/LSL7mV9WrD54PEG1Joq1x
-         yyiR8frxxJfBnDPgsMx37VfYpXNDUd4hdLgegdTJTzQhqFMN44ne3j/VUP+Tkg8H6p6W
-         VziXpZKSY3TpyP7G2s0TKeQfzZ0psMNAjuREc5nZU0JO6kEnso7nTprvUimqBlAlu0Xp
-         JiBm242og/bVYi6GUM8xzR/4FyQCyQo3pZeNQPvtInb/rs/jFE2lreT9Xj0qCkHmfGM2
-         tTtCD5oG8vpZMNoYvi0mMQGIqMHYnByWZQLl16DH4T+p85INaj6UVPIv0Sk/YxF+85km
-         8A+g==
-X-Gm-Message-State: AJIora8BGoG5PiAXs9vdGbDLlHb9gAv7SZ+/TexhNPPUvTiZAwkZwki0
-	r/gnuM/0ZGEPlDb/kGuD8kY=
-X-Google-Smtp-Source: AGRyM1uOFqaAapmIbJdhCxBNlvQSrIVj8puFpOadXOKN35qH08m9ZNG9ICgVO16DfNJIDZCeAi05vA==
-X-Received: by 2002:a63:3c14:0:b0:40c:a228:c3c3 with SMTP id j20-20020a633c14000000b0040ca228c3c3mr11368667pga.256.1655815299158;
-        Tue, 21 Jun 2022 05:41:39 -0700 (PDT)
-Received: from localhost ([2405:201:6014:d0c0:79de:f3f4:353c:8616])
-        by smtp.gmail.com with ESMTPSA id h13-20020a17090a3d0d00b001ea5d9ae7d9sm12234210pjc.40.2022.06.21.05.41.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 05:41:38 -0700 (PDT)
-Date: Tue, 21 Jun 2022 18:11:15 +0530
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: KP Singh <kpsingh@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v2 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
-Message-ID: <20220621124115.7daxj2csuyfxfvq5@apollo.legion>
-References: <20220621012811.2683313-5-kpsingh@kernel.org>
- <202206211035.p3LxbVfK-lkp@intel.com>
- <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A95ECF
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 12:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655815355; x=1687351355;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a3ITVFA7pxBXJGXl0Jy4pUo5eTmtVLr6fUn8i9W9U4M=;
+  b=e7/k1ueXPIscA1FlCn0xBP72nVXEYOgOXWEk9zUIbxxIh8FJkhwTVarg
+   tg5sl6/Ga6dqjdCv970PUtqWWSG5YrXoj7x+TfnwXy7tVAiQwvE52i3wq
+   98EHGxUVImiRweyC4946u06qmBfvKEpQxpSP4OtySqD3wYGqchcjHxbH4
+   NaRsCqQZarcrWT6Tg1H58VkIm5Q4+C2D8hKsJtb08/5QQq/vTKa05YhNP
+   dOO3mv8KmB7+c9hPnD1y+11rU7/v2linXQG5zzCkDBLc8M4SIbtSUemZo
+   3MwyzZjabEcHImjRRaV0xGJ/GWI/hr4Ic6y1aHFdgT0ljS6gGi4hIVi0E
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341791843"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="341791843"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:42:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="676983477"
+Received: from lkp-server02.sh.intel.com (HELO afd2e3565656) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 05:42:33 -0700
+Received: from kbuild by afd2e3565656 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o3dDE-00005n-Q8;
+	Tue, 21 Jun 2022 12:42:32 +0000
+Date: Tue, 21 Jun 2022 20:42:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 3790/4834] net/ipv6/raw.c:338:33: warning:
+ variable 'daddr' set but not used
+Message-ID: <202206212033.3lgl72Fw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,87 +45,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACYkzJ775f+EGSpFiKUXkYdtx5x1mygbGC9P+knqvapio9XUyg@mail.gmail.com>
 
-On Tue, Jun 21, 2022 at 12:48:08PM IST, KP Singh wrote:
-> On Tue, Jun 21, 2022 at 5:20 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi KP,
-> >
-> > I love your patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on bpf-next/master]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/KP-Singh/Add-bpf_getxattr/20220621-093013
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> > config: x86_64-randconfig-a015-20220620 (https://download.01.org/0day-ci/archive/20220621/202206211035.p3LxbVfK-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/dd49d2ffb18adceafa98bd517008f59aa9bc910b
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review KP-Singh/Add-bpf_getxattr/20220621-093013
-> >         git checkout dd49d2ffb18adceafa98bd517008f59aa9bc910b
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> kernel/trace/bpf_trace.c:1185:25: warning: no previous prototype for function 'bpf_getxattr' [-Wmissing-prototypes]
-> >    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-> >                            ^
-> >    kernel/trace/bpf_trace.c:1185:17: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> >    noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-> >                    ^
-> >                    static
-> >    1 warning generated.
-> >
->
-> So it looks like this needs a function prototype. Let's do an initial round
-> of reviews on this series and I can respin with something like:
->
-> diff --git a/kernel/trace/bpf_trace.h b/kernel/trace/bpf_trace.h
-> index 9acbc11ac7bb..3f62e5d35037 100644
-> --- a/kernel/trace/bpf_trace.h
-> +++ b/kernel/trace/bpf_trace.h
-> @@ -25,6 +25,11 @@ TRACE_EVENT(bpf_trace_printk,
->         TP_printk("%s", __get_str(bpf_string))
->  );
->
-> +/* Prototypes for kernel functions exposed to tracing and LSM
-> + * programs
-> + */
-> +ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-> +                    const char *name, void *value, int size);
->  #endif /* _TRACE_BPF_TRACE_H */
->
-> (or anything else folks suggest)
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   34d1d36073ea4d4c532e8c8345627a9702be799e
+commit: ba44f8182ec299c5d1c8a72fc0fde4ec127b5a6d [3790/4834] raw: use more conventional iterators
+config: i386-randconfig-a012-20220620 (https://download.01.org/0day-ci/archive/20220621/202206212033.3lgl72Fw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ba44f8182ec299c5d1c8a72fc0fde4ec127b5a6d
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout ba44f8182ec299c5d1c8a72fc0fde4ec127b5a6d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv6/
 
-You can silence this warning using __diag_push, e.g. see kfunc definitions in
-net/netfilter/nf_conntrack_bpf.c.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> - KP
->
-> >
-> > vim +/bpf_getxattr +1185 kernel/trace/bpf_trace.c
-> >
-> >   1184
-> > > 1185  noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-> >   1186                                       const char *name, void *value, int size)
-> >   1187  {
-> >   1188          return __vfs_getxattr(dentry, inode, name, value, size);
-> >   1189  }
-> >   1190
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+All warnings (new ones prefixed by >>):
 
---
-Kartikeya
+>> net/ipv6/raw.c:338:33: warning: variable 'daddr' set but not used [-Wunused-but-set-variable]
+           const struct in6_addr *saddr, *daddr;
+                                          ^
+>> net/ipv6/raw.c:338:25: warning: variable 'saddr' set but not used [-Wunused-but-set-variable]
+           const struct in6_addr *saddr, *daddr;
+                                  ^
+   2 warnings generated.
+
+
+vim +/daddr +338 net/ipv6/raw.c
+
+   334	
+   335	void raw6_icmp_error(struct sk_buff *skb, int nexthdr,
+   336			u8 type, u8 code, int inner_offset, __be32 info)
+   337	{
+ > 338		const struct in6_addr *saddr, *daddr;
+   339		struct net *net = dev_net(skb->dev);
+   340		struct hlist_head *head;
+   341		struct sock *sk;
+   342		int hash;
+   343	
+   344		hash = nexthdr & (RAW_HTABLE_SIZE - 1);
+   345		head = &raw_v6_hashinfo.ht[hash];
+   346		read_lock(&raw_v6_hashinfo.lock);
+   347		sk_for_each(sk, head) {
+   348			/* Note: ipv6_hdr(skb) != skb->data */
+   349			const struct ipv6hdr *ip6h = (const struct ipv6hdr *)skb->data;
+   350			saddr = &ip6h->saddr;
+   351			daddr = &ip6h->daddr;
+   352	
+   353			if (!raw_v6_match(net, sk, nexthdr, &ip6h->saddr, &ip6h->daddr,
+   354					  inet6_iif(skb), inet6_iif(skb)))
+   355				continue;
+   356			rawv6_err(sk, skb, NULL, type, code, inner_offset, info);
+   357		}
+   358		read_unlock(&raw_v6_hashinfo.lock);
+   359	}
+   360	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
