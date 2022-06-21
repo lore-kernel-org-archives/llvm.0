@@ -1,87 +1,108 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEE61C00
-	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:06:19 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id c4so24606223lfj.12
-        for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 15:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
-        b=eJQBYtmvEHSqRbZSbiMYBb0Af4lOvLWdbaqfzOi/mavmjcPHXudqxs0/8DcAOEd1E1
-         Q6DTzllxxeZVj00vYojpiTMGw/Rch/Atoq7QS8sGL56difveeOsZW5g2D5iIqhMqJULz
-         VsGEdoHkAacQ8BaeqtkdvNhZ7LuZDwQ2DbCm87RVaQIfJcNxjKz3avfCsJLTvCM4Hbxt
-         c+APLFfOm2uNLCA1lq4UyZ2L0ro12ho5cFSNTQ01fGatdurXr047nYPa/YoHp8qpTWOh
-         1kv8iPu0ZaJDYzyp29ORL8Fb+Cy79IMcpO02nYbkfK+t5Y7bishSTSMN2Ap+TPiY5MUY
-         f8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rWSQrXn4FKbri7bJtVQ68GL0P+1bReHIxO5pBLDYc2w=;
-        b=MqDgIk7OP4OtXGI/86UTwKT8lVfynLKmbNNIuo74YfRLqFjJmjegS3/M95INDSwDyp
-         EJfb65Y6y2SIY1LSyUPsm0isHU5s8Kl9JzXXNXiqEdVEhZbNafbqtmssT0NV3WXas+XD
-         ZhQI9N0oaK9DFHTvsJMZklNy+/4DC/Mrx6wulCrUGlrkd14WVvDTi38sWIH84t0PfFM9
-         DmKmi5sx07rxR/jvNo3TFVFOmoKFFbSsenFPH2eO7yXy0mjT0t5QFlz5ba0yTOgKlDyt
-         PkjLHSvlN3UcRv11SaPpUyLAldp9lv3Y6C7XROHysLEOpLJGAFHJgpq4uCiYKFz0bKgx
-         +TWQ==
-X-Gm-Message-State: AJIora8kytSymASM6+r3EvnLQlPKsXNd+4KXUuKP87KP0S7prnGmR/8w
-	V59EweUyJJ0T4HKVSa43N37qQTj9GmQ1eO3YflHLx1FjjvLGBw==
-X-Google-Smtp-Source: AGRyM1v8wo7hwa2uixvj6gCTLmESdbXg1gm7BPj/ZZLC1D/uXa0EJN44zvwdPUncmLNKd/yrJlJKQGixM27d4moFLnk=
-X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
- x31-20020a0565123f9f00b0047dc87ef8f3mr219129lfa.401.1655849177384; Tue, 21
- Jun 2022 15:06:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDA11C00
+	for <llvm@lists.linux.dev>; Tue, 21 Jun 2022 22:07:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655849239; x=1687385239;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=yx+xqCYZ1czt8iGf9eBDH2GDsxsY06enHRz2YagSzdg=;
+  b=CvBwWi5Jz1dEnEoiB8+UT3JajWKudSjYW7AqQUg48hctgmjGPwR2+9OE
+   mVjVy+bi3YEwN9xRW/8d6GdqGEPZZ7mvQemKFtjVXlCxwIFYEZcnqs1yV
+   XuTTuBwj9yJf5MgjpcRfCBHobopfa9Iggcu2mgm6s+7uVRxdYE5YwWCfC
+   gTWybFiDQSync/IosDPMeV6pSabLvyHJlWVrbaHxzV69s47nUt0ZbTfjH
+   bjeOAWQsUFtDfOF89X1OrfUcOgCPx0JvqB07n4C7ZeEnTfLbp0oShDKBu
+   n8OTkKu8MHjKAc4tMyluFAHaDgVVz/yV6S+dMzrFvw29cTfixBDooDN64
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="260680813"
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="260680813"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 15:07:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,210,1650956400"; 
+   d="scan'208";a="643844755"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jun 2022 15:07:16 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o3m1k-0000Tx-0g;
+	Tue, 21 Jun 2022 22:07:16 +0000
+Date: Wed, 22 Jun 2022 06:06:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Auld <matthew.auld@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
+	Kenneth Graunke <kenneth@whitecape.org>,
+	Jon Bloomfield <jon.bloomfield@intel.com>,
+	dri-devel@lists.freedesktop.org,
+	Jordan Justen <jordan.l.justen@intel.com>,
+	Akeem G Abodunrin <akeem.g.abodunrin@intel.com>
+Subject: Re: [PATCH v2 08/12] drm/i915/uapi: tweak error capture on
+ recoverable contexts
+Message-ID: <202206220649.BZGTz35f-lkp@intel.com>
+References: <20220621104434.190962-9-matthew.auld@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdnb-DiAnq4bT7XiJpFtqyJYpWNw1shEp8gWYpVmUpRBaA@mail.gmail.com>
- <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-In-Reply-To: <8c5012c88989a8f05a3b67540b9172336c57ddf7.camel@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 21 Jun 2022 15:06:06 -0700
-Message-ID: <CAKwvOdmJgU_MZjwuVXz5QvFdA4+eTHKqxT06HMAq=Hau03ar9Q@mail.gmail.com>
-Subject: Re: Plumbers conf presentation on -fanalyze?
-To: David Malcolm <dmalcolm@redhat.com>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220621104434.190962-9-matthew.auld@intel.com>
 
-On Thu, Apr 14, 2022 at 3:08 PM David Malcolm <dmalcolm@redhat.com> wrote:
->
-> On Thu, 2022-04-14 at 14:42 -0700, Nick Desaulniers wrote:
-> > Hi David,
-> > Jose and I are currently in the planning process to put together a
-> > Kernel+Toolchain microconference track at Linux Plumbers Conference
-> > this year (Sept 12-14) in Dublin, Ireland.
-> >
-> > We had seen
-> > https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler#scaling_up_the_analyzer
-> > particularly the section on The Linux kernel and were wondering if
-> > you'd be interested in presenting more information about -fanalyze to
-> > kernel and toolchain developers there?
->
-> Thanks!  I'm very much interested, but am not yet sure about travel
-> (both in terms of (a) budget and (b) possible new virus strains).  Is
-> this conference going to be purely in-person, or hybrid virtual/in-
-> person?
+Hi Matthew,
 
-Hi David,
-If you're still considering attending Linux Plumbers conf, please
-submit a proposal:
-https://lpc.events/event/16/abstracts/
-Please make sure to select "Toolchains Track" as the "Track" after
-clicking on "Submit new abstract."
+Thank you for the patch! Yet something to improve:
 
->
-> Dave
->
+[auto build test ERROR on drm-tip/drm-tip]
+[also build test ERROR on linus/master v5.19-rc3 next-20220621]
+[cannot apply to drm-intel/for-linux-next drm/drm-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Auld/small-BAR-uapi-bits/20220621-184858
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220622/202206220649.BZGTz35f-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/74d1c5140770ba24cdde39293db3dc3cf05321c9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthew-Auld/small-BAR-uapi-bits/20220621-184858
+        git checkout 74d1c5140770ba24cdde39293db3dc3cf05321c9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2028:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   1 error generated.
+
+
+vim +2028 drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+
+ff20afc4cee7b6 Thomas Hellström 2021-11-29  2025  
+74d1c5140770ba Matthew Auld     2022-06-21  2026  static int eb_capture_stage(struct i915_execbuffer *eb)
+ff20afc4cee7b6 Thomas Hellström 2021-11-29  2027  {
+ff20afc4cee7b6 Thomas Hellström 2021-11-29 @2028  }
+ff20afc4cee7b6 Thomas Hellström 2021-11-29  2029  
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
