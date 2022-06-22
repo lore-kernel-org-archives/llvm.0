@@ -1,44 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2046B10FF
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 05:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEAD10FF
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 05:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655875537; x=1687411537;
+  t=1655876736; x=1687412736;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tKGo7VSpILTuiVUU3R3fW3eghnyKH14NdGlEIpUPeuY=;
-  b=cI01hHt653onG6L8phrhU11kSpMUc0yBXr3rKKMZrO5MasxYcVuFbt7L
-   /QbiT/M4gbQ5DNpZ55Hpok3BvN6v5pUQVpKDSpMMtpbTFqiO7kJxVLR3j
-   qJmbnWIxcgi88/PlSF3tYhuZLIdT1UFAojxDinQ5ZWAh4Ehi+hZWKFicz
-   6edseMXMHCdrfSgR+nG/xEgmP03QFN/Pjg9ORVWJF8f6L0sF/HAYjj+8x
-   UYCrk28m92uUVBAL5S1mWhWVZWNItzkhWjj8787bvUCQorELWVOu/Qn8x
-   pOD5gl7LHwpnXr+SOAqPs/LYbC5UoU4dweWiVZjS+i6oAFZHu4icO/5h1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342000572"
+  bh=1al0NA0DcInJ4srWwF8okteA4Fime0izH6k8duXBSao=;
+  b=BX0SaoAvFwbTTfH+QVoMpB83dLNsHRtB4twqj5seAScaV+u+v8FeAW8P
+   MMn5XnWI629je6tGbHHrSch8Qwr5l9lA3AmVbBMqY31KNZdLs7pi7zGcs
+   gfjTvvBI9zmZlKxwVIsJlwdpPqY9iCLrsqasR6dYZjbg8Ex5URqe+Hqti
+   SCJGXqDBC3mOLDVUuW4B1HUAgJ421J+/2p0hHk9ofn5W5Hnu/Q+xHmKwP
+   TMZkiLIUsRgqpepEXt+Vg445LLefZx/A8/kRTT7tHhxhyiAp4droPgEh1
+   9TEqXvG6+Pp+6hAlwpno9+8fMSY6x5715t2bffc2N2NW1cdu0JmdOXSQZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366643051"
 X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="342000572"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 22:25:36 -0700
+   d="scan'208";a="366643051"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 22:45:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="538310176"
+   d="scan'208";a="690308734"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jun 2022 22:25:34 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 22:45:34 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3srs-0000sL-Ma;
-	Wed, 22 Jun 2022 05:25:32 +0000
-Date: Wed, 22 Jun 2022 13:25:01 +0800
+	id 1o3tBF-0000tj-MK;
+	Wed, 22 Jun 2022 05:45:33 +0000
+Date: Wed, 22 Jun 2022 13:45:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kalle Valo <quic_kvalo@quicinc.com>
+To: Alexander Lobakin <alexandr.lobakin@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [kvalo-ath:ath12k-bringup 49/53]
- drivers/net/wireless/ath/ath12k/dp_mon.c:2140:18: warning: variable
- 'rx_buf_sz' is uninitialized when used here
-Message-ID: <202206221338.iV0Co3Bt-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [alobakin:bitops 8/8] lib/test_bitmap.c:904:2: error: call to
+ __compiletime_assert_233 declared with 'error' attribute: BUILD_BUG_ON
+ failed: !__builtin_constant_p(res)
+Message-ID: <202206221354.8jzbVLLL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,167 +48,100 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath12k-bringup
-head:   cc108fac9c287f5624daedca923743587adcafd1
-commit: caa2f39cd59ba34be73e788ca2f6d8ed45de980f [49/53] ath12k: remove debugfs support
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220622/202206221338.iV0Co3Bt-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+tree:   https://github.com/alobakin/linux bitops
+head:   53dc46e3f72d9b77c9c4ec23a3261d452b3bd67a
+commit: 53dc46e3f72d9b77c9c4ec23a3261d452b3bd67a [8/8] lib: test_bitmap: add compile-time optimization/evaluations assertions
+config: s390-randconfig-r044-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221354.8jzbVLLL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=caa2f39cd59ba34be73e788ca2f6d8ed45de980f
-        git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
-        git fetch --no-tags kvalo-ath ath12k-bringup
-        git checkout caa2f39cd59ba34be73e788ca2f6d8ed45de980f
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/alobakin/linux/commit/53dc46e3f72d9b77c9c4ec23a3261d452b3bd67a
+        git remote add alobakin https://github.com/alobakin/linux
+        git fetch --no-tags alobakin bitops
+        git checkout 53dc46e3f72d9b77c9c4ec23a3261d452b3bd67a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ drivers/pci/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash lib/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/net/wireless/ath/ath12k/dp_mon.c:884:13: warning: variable 'pkt_type' set but not used [-Wunused-but-set-variable]
-           static u32 pkt_type;
-                      ^
->> drivers/net/wireless/ath/ath12k/dp_mon.c:2140:18: warning: variable 'rx_buf_sz' is uninitialized when used here [-Wuninitialized]
-                                                           log_type, rx_buf_sz);
-                                                                     ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/dp_mon.c:2080:15: note: initialize the variable 'rx_buf_sz' to silence this warning
-           u32 rx_buf_sz;
-                        ^
-                         = 0
-   2 warnings generated.
+>> lib/test_bitmap.c:904:2: error: call to __compiletime_assert_233 declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+           BUILD_BUG_ON(!__builtin_constant_p(res));
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:352:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:180:1: note: expanded from here
+   __compiletime_assert_233
+   ^
+   1 error generated.
 
 
-vim +/rx_buf_sz +2140 drivers/net/wireless/ath/ath12k/dp_mon.c
+vim +/error +904 lib/test_bitmap.c
 
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2059  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2060  int ath12k_dp_mon_srng_process(struct ath12k *ar, int mac_id, int *budget,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2061  			       bool flag, struct napi_struct *napi)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2062  {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2063  	struct hal_mon_dest_desc *mon_dst_desc;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2064  	struct ath12k_pdev_dp *pdev_dp = &ar->dp;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2065  	struct ath12k_mon_data *pmon = (struct ath12k_mon_data *)&pdev_dp->mon_data;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2066  	struct ath12k_base *ab = ar->ab;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2067  	struct ath12k_dp *dp = &ab->dp;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2068  	struct sk_buff *skb;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2069  	struct ath12k_skb_rxcb *rxcb;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2070  	struct dp_srng *mon_dst_ring;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2071  	struct hal_srng *srng;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2072  	struct dp_rxdma_ring *buf_ring;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2073  	u64 cookie;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2074  	u32 ppdu_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2075  	int num_buffs_reaped = 0, srng_id, buf_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2076  	u8 dest_idx = 0, i;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2077  	bool end_of_ppdu;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2078  	struct hal_rx_mon_ppdu_info *ppdu_info;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2079  	struct ath12k_peer *peer = NULL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2080  	u32 rx_buf_sz;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2081  	u16 log_type = 0;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2082  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2083  	ppdu_info = &pmon->mon_ppdu_info;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2084  	memset(ppdu_info, 0, sizeof(*ppdu_info));
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2085  	ppdu_info->peer_id = HAL_INVALID_PEERID;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2086  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2087  	srng_id = ath12k_hw_mac_id_to_srng_id(&ab->hw_params, mac_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2088  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2089  	if (flag == ATH12K_DP_RX_MONITOR_MODE) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2090  		mon_dst_ring = &pdev_dp->rxdma_mon_dst_ring[srng_id];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2091  		buf_ring = &dp->rxdma_mon_buf_ring;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2092  	} else {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2093  		mon_dst_ring = &pdev_dp->tx_mon_dst_ring[srng_id];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2094  		buf_ring = &dp->tx_mon_buf_ring;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2095  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2096  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2097  	srng = &ab->hal.srng_list[mon_dst_ring->ring_id];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2098  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2099  	spin_lock_bh(&srng->lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2100  	ath12k_hal_srng_access_begin(ab, srng);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2101  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2102  	while (likely(*budget)) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2103  		*budget -= 1;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2104  		mon_dst_desc = (struct hal_mon_dest_desc *)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2105  				ath12k_hal_srng_dst_peek(ab, srng);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2106  		if (unlikely(!mon_dst_desc))
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2107  			break;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2108  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2109  		cookie = mon_dst_desc->cookie;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2110  		buf_id = u32_get_bits(cookie, DP_RXDMA_BUF_COOKIE_BUF_ID);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2111  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2112  		spin_lock_bh(&buf_ring->idr_lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2113  		skb = idr_remove(&buf_ring->bufs_idr, buf_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2114  		spin_unlock_bh(&buf_ring->idr_lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2115  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2116  		if (unlikely(!skb)) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2117  			ath12k_warn(ab, "montior destination with invalid buf_id %d\n",
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2118  				    buf_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2119  			goto move_next;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2120  		}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2121  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2122  		rxcb = ATH12K_SKB_RXCB(skb);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2123  		dma_unmap_single(ab->dev, rxcb->paddr,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2124  				 skb->len + skb_tailroom(skb),
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2125  				 DMA_FROM_DEVICE);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2126  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2127  		pmon->dest_skb_q[dest_idx] = skb;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2128  		dest_idx++;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2129  		ppdu_id = mon_dst_desc->ppdu_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2130  		end_of_ppdu = u32_get_bits(mon_dst_desc->info0,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2131  					   HAL_MON_DEST_INFO0_END_OF_PPDU);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2132  		if (!end_of_ppdu)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2133  			continue;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2134  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2135  		for (i = 0; i < dest_idx; i++) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2136  			skb = pmon->dest_skb_q[i];
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2137  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2138  			if (log_type)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2139  				trace_ath12k_htt_rxdesc(ar, skb->data,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01 @2140  							log_type, rx_buf_sz);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2141  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2142  			if (flag == ATH12K_DP_RX_MONITOR_MODE)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2143  				ath12k_dp_mon_rx_parse_mon_status(ar, pmon, mac_id,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2144  								  skb, napi);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2145  			else
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2146  				ath12k_dp_mon_tx_parse_mon_status(ar, pmon, mac_id,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2147  								  skb, napi, ppdu_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2148  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2149  			peer = ath12k_peer_find_by_id(ab, ppdu_info->peer_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2150  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2151  			if (!peer || !peer->sta) {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2152  				ath12k_dbg(ab, ATH12K_DBG_DATA,
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2153  					   "failed to find the peer with peer_id %d\n",
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2154  					   ppdu_info->peer_id);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2155  				dev_kfree_skb_any(skb);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2156  				continue;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2157  			}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2158  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2159  			dev_kfree_skb_any(skb);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2160  			pmon->dest_skb_q[i] = NULL;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2161  		}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2162  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2163  		dest_idx = 0;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2164  move_next:
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2165  		ath12k_dp_mon_buf_replenish(ab, buf_ring, 1);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2166  		ath12k_hal_srng_src_get_next_entry(ab, srng);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2167  		num_buffs_reaped++;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2168  	}
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2169  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2170  	ath12k_hal_srng_access_end(ab, srng);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2171  	spin_unlock_bh(&srng->lock);
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2172  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2173  	return num_buffs_reaped;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2174  }
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  2175  
-
-:::::: The code at line 2140 was first introduced by commit
-:::::: f40abb4788a2a3868606a29d99583421e0874350 ath12k: New driver for Qualcomm 11be hw family
-
-:::::: TO: Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
-:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+   871	
+   872	static void __init test_bitmap_const_eval(void)
+   873	{
+   874		DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+   875		unsigned long initvar = BIT(2);
+   876		unsigned long bitopvar = 0;
+   877		unsigned long var = 0;
+   878		int res;
+   879	
+   880		/*
+   881		 * Compilers must be able to optimize all of those to compile-time
+   882		 * constants on any supported optimization level (-O2, -Os) and any
+   883		 * architecture. Otherwise, trigger a build bug.
+   884		 * The whole function gets optimized out then, there's nothing to do
+   885		 * in runtime.
+   886		 */
+   887	
+   888		/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
+   889		bitmap_clear(bitmap, 0, BITS_PER_LONG);
+   890		if (!test_bit(7, bitmap))
+   891			bitmap_set(bitmap, 5, 1);
+   892	
+   893		/* Equals to `unsigned long bitopvar = BIT(20)` */
+   894		__change_bit(31, &bitopvar);
+   895		bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+   896	
+   897		/* Equals to `unsigned long var = BIT(25)` */
+   898		var |= BIT(25);
+   899		if (var & BIT(0))
+   900			var ^= GENMASK(9, 6);
+   901	
+   902		/* __const_hweight<32|64>(BIT(5)) == 1 */
+   903		res = bitmap_weight(bitmap, 20);
+ > 904		BUILD_BUG_ON(!__builtin_constant_p(res));
+   905	
+   906		/* !(BIT(31) & BIT(18)) == 1 */
+   907		res = !test_bit(18, &bitopvar);
+   908		BUILD_BUG_ON(!__builtin_constant_p(res));
+   909	
+   910		/* BIT(2) & GENMASK(14, 8) == 0 */
+   911		BUILD_BUG_ON(!__builtin_constant_p(initvar & GENMASK(14, 8)));
+   912		/* ~BIT(25) */
+   913		BUILD_BUG_ON(!__builtin_constant_p(~var));
+   914	}
+   915	
 
 -- 
 0-DAY CI Kernel Test Service
