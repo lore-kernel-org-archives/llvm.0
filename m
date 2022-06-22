@@ -1,177 +1,197 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5246510E8
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 08:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655887003; x=1687423003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Asx2uLZqEWA1Ku8lHPlIL6BlvP7Vxo6bP4XGBrldJgE=;
-  b=nE1Y3T4p7z17RpcLYwdRpYzbWJF07mj0WUV8CYeX5vKZ3JdpZfhKLa9x
-   7Zx1H/2CT1QFgz/tt+XPwzZXaFaiE4sFI5oSLTwbRVM/hho51GHLmWiK+
-   mg0YrMrBAzsw6EWhpQRmJyifmmTeysCZ6307eIBpjh4lpak/WhRZOCKIi
-   h4AsTWnqk7CVqsQmLCPReLqdfbqZbHpwD/2lWUgK2vVTSHq0BZ0OKLeap
-   xFDmdWgE6pSaQMyMUToAzEFtAxTlFbw5qnnbRonG/C0Dmd//pXRAbhcF3
-   Qzh+e19VYIb/kZeRdr+qk6rMvGp+IzOJoei2MoYFjhGnz86Oh8+WEKWye
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342040413"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342040413"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 01:36:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="615080835"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 22 Jun 2022 01:36:40 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o3vqp-00013U-Op;
-	Wed, 22 Jun 2022 08:36:39 +0000
-Date: Wed, 22 Jun 2022 16:35:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liang He <windhl@126.com>, krzysztof.kozlowski@linaro.org,
-	thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, windhl@126.com,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] memory/tegra: Add missing of_node_get() in
- tegra_emc_find_node_by_ram_code
-Message-ID: <202206221602.odN70SHs-lkp@intel.com>
-References: <20220622042824.4094625-1-windhl@126.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674E610E8
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 09:10:31 +0000 (UTC)
+X-UUID: b3ef4931bde04d52bc9f167795624ef0-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:e75d7dcb-cd20-4817-b6f4-7bdfc6a1aef3,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:5
+X-CID-META: VersionHash:b14ad71,CLOUDID:92732a38-5e4b-44d7-80b2-bb618cb09d29,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+	,QS:nil,BEC:nil,COL:0
+X-UUID: b3ef4931bde04d52bc9f167795624ef0-20220622
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1180519457; Wed, 22 Jun 2022 17:10:26 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 17:10:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 22 Jun 2022 17:10:25 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 17:10:25 +0800
+Message-ID: <71bcd318d1bc3c730cb2587bf98d81207eafa8d6.camel@mediatek.com>
+Subject: Re: [PATCH v23 04/10] soc: mediatek: add mtk_mmsys_update_bits API
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>, "Matthias
+ Brugger" <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	<linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Wed, 22 Jun 2022 17:10:25 +0800
+In-Reply-To: <9265790479c0822796ec7cd02ae6304014edde33.camel@mediatek.com>
+References: <20220620091801.27680-1-nancy.lin@mediatek.com>
+	 <20220620091801.27680-5-nancy.lin@mediatek.com>
+	 <9265790479c0822796ec7cd02ae6304014edde33.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622042824.4094625-1-windhl@126.com>
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-Hi Liang,
+Hi CK,
 
-Thank you for the patch! Yet something to improve:
+Thanks for the review.
 
-[auto build test ERROR on tegra/for-next]
-[also build test ERROR on tegra-drm/drm/tegra/for-next linus/master v5.19-rc3 next-20220621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Wed, 2022-06-22 at 11:01 +0800, CK Hu wrote:
+> Hi, Nancy:
+> 
+> On Mon, 2022-06-20 at 17:17 +0800, Nancy.Lin wrote:
+> > Add mtk_mmsys_update_bits API. Simplify code for update  mmsys reg.
+> > It is a preparation for adding support for mmsys config API.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Tested-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/soc/mediatek/mtk-mmsys.c | 36 ++++++++++++++--------------
+> > ----
+> >  1 file changed, 16 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> > b/drivers/soc/mediatek/mtk-mmsys.c
+> > index a74c86197d6a..b7c7cd469343 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -192,22 +192,27 @@ static int
+> > mtk_mmsys_find_match_drvdata(struct
+> > mtk_mmsys *mmsys,
+> >  	return -EINVAL;
+> >  }
+> >  
+> > +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32
+> > offset, u32 mask, u32 val)
+> > +{
+> > +	u32 tmp;
+> > +
+> > +	tmp = readl_relaxed(mmsys->regs + offset);
+> > +	tmp = (tmp & ~mask) | val;
+> > +	writel_relaxed(tmp, mmsys->regs + offset);
+> > +}
+> > +
+> >  void mtk_mmsys_ddp_connect(struct device *dev,
+> >  			   enum mtk_ddp_comp_id cur,
+> >  			   enum mtk_ddp_comp_id next)
+> >  {
+> >  	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> >  	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> > -	u32 reg;
+> >  	int i;
+> >  
+> >  	for (i = 0; i < mmsys->data->num_routes; i++)
+> > -		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp) {
+> > -			reg = readl_relaxed(mmsys->regs +
+> > routes[i].addr);
+> > -			reg &= ~routes[i].mask;
+> > -			reg |= routes[i].val;
+> > -			writel_relaxed(reg, mmsys->regs +
+> > routes[i].addr);
+> > -		}
+> > +		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp)
+> > +			mtk_mmsys_update_bits(mmsys, routes[i].addr,
+> > routes[i].mask,
+> > +					      routes[i].val);
+> >  }
+> >  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
+> >  
+> > @@ -217,15 +222,11 @@ void mtk_mmsys_ddp_disconnect(struct device
+> > *dev,
+> >  {
+> >  	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> >  	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> > -	u32 reg;
+> >  	int i;
+> >  
+> >  	for (i = 0; i < mmsys->data->num_routes; i++)
+> > -		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp) {
+> > -			reg = readl_relaxed(mmsys->regs +
+> > routes[i].addr);
+> > -			reg &= ~routes[i].mask;
+> > -			writel_relaxed(reg, mmsys->regs +
+> > routes[i].addr);
+> > -		}
+> > +		if (cur == routes[i].from_comp && next ==
+> > routes[i].to_comp)
+> > +			mtk_mmsys_update_bits(mmsys, routes[i].addr,
+> > routes[i].mask, 0);
+> >  }
+> >  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+> >  
+> > @@ -234,18 +235,13 @@ static int mtk_mmsys_reset_update(struct
+> > reset_controller_dev *rcdev, unsigned l
+> >  {
+> >  	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys,
+> > rcdev);
+> >  	unsigned long flags;
+> > -	u32 reg;
+> >  
+> >  	spin_lock_irqsave(&mmsys->lock, flags);
+> >  
+> > -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> > -
+> >  	if (assert)
+> > -		reg &= ~BIT(id);
+> > +		mtk_mmsys_update_bits(mmsys, mmsys->data-
+> > > sw0_rst_offset, BIT(id), 0);
+> > 
+> >  	else
+> > -		reg |= BIT(id);
+> > -
+> > -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> > +		mtk_mmsys_update_bits(mmsys, mmsys->data-
+> > > sw0_rst_offset, BIT(id), BIT(id));
+> 
+> More simple code:
+> mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id),
+> assert ? 0 : BIT(id));
+> 
+> After this modification,
+> 
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> 
+OK, I will fix it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Liang-He/memory-tegra-Add-missing-of_node_get-in-tegra_emc_find_node_by_ram_code/20220622-123052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-config: hexagon-randconfig-r041-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221602.odN70SHs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6f5dd7a2fb5c7d45a25cdf4409c5aa03c4df0a96
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Liang-He/memory-tegra-Add-missing-of_node_get-in-tegra_emc_find_node_by_ram_code/20220622-123052
-        git checkout 6f5dd7a2fb5c7d45a25cdf4409c5aa03c4df0a96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/memory/tegra/
+BRs,
+Nancy
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> >  
+> >  	spin_unlock_irqrestore(&mmsys->lock, flags);
+> >  
+> 
+> 
 
-All errors (new ones prefixed by >>):
-
->> drivers/memory/tegra/tegra20-emc.c:480:2: error: call to undeclared function 'of_get_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           of_get_node(dev->of_node);
-           ^
-   1 error generated.
-
-
-vim +/of_get_node +480 drivers/memory/tegra/tegra20-emc.c
-
-   456	
-   457	static struct device_node *
-   458	tegra_emc_find_node_by_ram_code(struct tegra_emc *emc)
-   459	{
-   460		struct device *dev = emc->dev;
-   461		struct device_node *np;
-   462		u32 value, ram_code;
-   463		int err;
-   464	
-   465		if (emc->mrr_error) {
-   466			dev_warn(dev, "memory timings skipped due to MRR error\n");
-   467			return NULL;
-   468		}
-   469	
-   470		if (of_get_child_count(dev->of_node) == 0) {
-   471			dev_info_once(dev, "device-tree doesn't have memory timings\n");
-   472			return NULL;
-   473		}
-   474	
-   475		if (!of_property_read_bool(dev->of_node, "nvidia,use-ram-code"))
-   476			return of_node_get(dev->of_node);
-   477	
-   478		ram_code = tegra_read_ram_code();
-   479	
- > 480		of_get_node(dev->of_node);
-   481		for (np = of_find_node_by_name(dev->of_node, "emc-tables"); np;
-   482		     np = of_find_node_by_name(np, "emc-tables")) {
-   483			err = of_property_read_u32(np, "nvidia,ram-code", &value);
-   484			if (err || value != ram_code) {
-   485				struct device_node *lpddr2_np;
-   486				bool cfg_mismatches = false;
-   487	
-   488				of_node_get(np);
-   489				lpddr2_np = of_find_node_by_name(np, "lpddr2");
-   490				if (lpddr2_np) {
-   491					const struct lpddr2_info *info;
-   492	
-   493					info = of_lpddr2_get_info(lpddr2_np, dev);
-   494					if (info) {
-   495						if (info->manufacturer_id >= 0 &&
-   496						    info->manufacturer_id != emc->manufacturer_id)
-   497							cfg_mismatches = true;
-   498	
-   499						if (info->revision_id1 >= 0 &&
-   500						    info->revision_id1 != emc->revision_id1)
-   501							cfg_mismatches = true;
-   502	
-   503						if (info->revision_id2 >= 0 &&
-   504						    info->revision_id2 != emc->revision_id2)
-   505							cfg_mismatches = true;
-   506	
-   507						if (info->density != emc->basic_conf4.density)
-   508							cfg_mismatches = true;
-   509	
-   510						if (info->io_width != emc->basic_conf4.io_width)
-   511							cfg_mismatches = true;
-   512	
-   513						if (info->arch_type != emc->basic_conf4.arch_type)
-   514							cfg_mismatches = true;
-   515					} else {
-   516						dev_err(dev, "failed to parse %pOF\n", lpddr2_np);
-   517						cfg_mismatches = true;
-   518					}
-   519	
-   520					of_node_put(lpddr2_np);
-   521				} else {
-   522					cfg_mismatches = true;
-   523				}
-   524	
-   525				if (cfg_mismatches) {
-   526					continue;
-   527				}
-   528			}
-   529	
-   530			return np;
-   531		}
-   532	
-   533		dev_err(dev, "no memory timings for RAM code %u found in device tree\n",
-   534			ram_code);
-   535	
-   536		return NULL;
-   537	}
-   538	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
