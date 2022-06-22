@@ -1,42 +1,47 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B85136F
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 10:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666E4137A
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 10:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655893725; x=1687429725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lJUPcnq2nrFDvl/18U2dLdLU11sG6S/hZeKoKy5RGGQ=;
-  b=Z9UI4WrifDek6npYJFKK19OLrNk291f4t17yuS/S8GAMP6CxwzypqqNP
-   mKi82vpIMthogxRgZU/CW4RWlk6n+Ao247wjousDWIGm6uSMPTPTZcL2I
-   0FievtLCwtVqExhx53smwkq5BI7189VDU8lQrX9OIa0Hn3tClJtuOwtBW
-   8GN7dOToatJ6FmfuBdQa5XrxHz/6Ci+cmUdA6v++CYG5jdwxwV2oJUDfj
-   pWo61Ly0ex8mRxEvUUktmXR8jt4pwfgkHKTclK6+Tc2ZAQKawwpCVBQS2
-   hErdk+s+SisdvuOh6IN0as8mFDp/ZayOk40i5PPUpUrkFqtVu33WzG40P
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342064535"
+  t=1655894326; x=1687430326;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rr5UuRYwdMhBPI+HAfBKvBZnzaU7T68eFKU3fNNebpg=;
+  b=Bn8VPxQu0n8yTTTRLvQ/qvTfTEa/0dx+jQRvHnfLav68U6K07DswxP6I
+   7mAfkWKz+PxQk+IPIdHHubiMTni6Q/UBY5JvqqQrWw3E1C5OJXTVuM81X
+   OcFI8jPGsRvfuKv0Qar5PHjPaVuNVJTUDhDzbOWjyUh/DbZbNzN7aVmwW
+   iRmqKES9RtGq4bIxYEoVHbUBvtE1mjm+vrIwSU1zX/liGqtTTZhMrPiaE
+   F/4g+YL2NYqF0qgNESy4UpKgOAA+O/xR4T61o+Yxn/ypy30O/VA6+wRp0
+   qLsqOGzU9xUoOarWrYfqx3s19ZmnYZ1ziqwSX8taUQc+378Y/K4YX7co+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="280428389"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342064535"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:28:45 -0700
+   d="scan'208";a="280428389"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:38:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="834044369"
+   d="scan'208";a="677472778"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 03:28:43 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Jun 2022 03:38:43 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3xbG-00018w-GK;
-	Wed, 22 Jun 2022 10:28:42 +0000
-Date: Wed, 22 Jun 2022 18:27:59 +0800
+	id 1o3xkw-00019d-TV;
+	Wed, 22 Jun 2022 10:38:42 +0000
+Date: Wed, 22 Jun 2022 18:38:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vfedorenko@novek.ru>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH 3/3] ptp_ocp: implement DPLL ops
-Message-ID: <202206221822.9TNJ02fp-lkp@intel.com>
-References: <20220622000651.27299-4-vfedorenko@novek.ru>
+To: Haijun Liu <haijun.liu@mediatek.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+	Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Subject: include/asm-generic/io.h:464:31: error: performing pointer
+ arithmetic on a null pointer has undefined behavior
+Message-ID: <202206221853.R4O7PFFI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,282 +50,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622000651.27299-4-vfedorenko@novek.ru>
 
-Hi Vadim,
+Hi Haijun,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc3 next-20220622]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+FYI, the error/warning still remains.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/Create-common-DPLL-clock-configuration-API/20220622-080746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220622/202206221822.9TNJ02fp-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ca1fdab7fd27eb069df1384b2850dcd0c2bebe8d
+commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
+date:   6 weeks ago
+config: s390-buildonly-randconfig-r004-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221853.R4O7PFFI-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bb2b52ab297193cfb419e71db72823a36b11e031
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vadim-Fedorenko/Create-common-DPLL-clock-configuration-API/20220622-080746
-        git checkout bb2b52ab297193cfb419e71db72823a36b11e031
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/wwan/t7xx/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/ptp/ptp_ocp.c:3721:45: error: incomplete definition of type 'struct dpll_device'
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-                                                  ~~~~^
-   drivers/ptp/ptp_ocp.c:339:9: note: forward declaration of 'struct dpll_device'
-           struct dpll_device *dpll;
-                  ^
-   drivers/ptp/ptp_ocp.c:3730:45: error: incomplete definition of type 'struct dpll_device'
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-                                                  ~~~~^
-   drivers/ptp/ptp_ocp.c:339:9: note: forward declaration of 'struct dpll_device'
-           struct dpll_device *dpll;
-                  ^
-   drivers/ptp/ptp_ocp.c:3739:45: error: incomplete definition of type 'struct dpll_device'
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-                                                  ~~~~^
-   drivers/ptp/ptp_ocp.c:339:9: note: forward declaration of 'struct dpll_device'
-           struct dpll_device *dpll;
-                  ^
-   drivers/ptp/ptp_ocp.c:3763:45: error: incomplete definition of type 'struct dpll_device'
-           struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-                                                  ~~~~^
-   drivers/ptp/ptp_ocp.c:339:9: note: forward declaration of 'struct dpll_device'
-           struct dpll_device *dpll;
-                  ^
-   drivers/ptp/ptp_ocp.c:3787:31: warning: tentative definition of variable with internal linkage has incomplete non-array type 'struct dpll_device_ops' [-Wtentative-definition-incomplete-type]
-   static struct dpll_device_ops ptp_ocp_dpll_ops {
-                                 ^
-   drivers/ptp/ptp_ocp.c:3787:15: note: forward declaration of 'struct dpll_device_ops'
-   static struct dpll_device_ops ptp_ocp_dpll_ops {
-                 ^
->> drivers/ptp/ptp_ocp.c:3787:47: error: expected ';' after top level declarator
-   static struct dpll_device_ops ptp_ocp_dpll_ops {
-                                                 ^
-                                                 ;
->> drivers/ptp/ptp_ocp.c:3850:13: error: call to undeclared function 'dpll_device_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma));
-                      ^
->> drivers/ptp/ptp_ocp.c:3850:32: error: use of undeclared identifier 'dpll_ops'
-           bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma));
-                                         ^
->> drivers/ptp/ptp_ocp.c:3855:2: error: call to undeclared function 'dpll_device_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           dpll_device_register(bp->dpll);
-           ^
-   drivers/ptp/ptp_ocp.c:3855:2: note: did you mean 'device_register'?
-   include/linux/device.h:895:18: note: 'device_register' declared here
-   int __must_check device_register(struct device *dev);
-                    ^
->> drivers/ptp/ptp_ocp.c:3787:31: error: tentative definition has type 'struct dpll_device_ops' that is never completed
-   static struct dpll_device_ops ptp_ocp_dpll_ops {
-                                 ^
-   drivers/ptp/ptp_ocp.c:3787:15: note: forward declaration of 'struct dpll_device_ops'
-   static struct dpll_device_ops ptp_ocp_dpll_ops {
-                 ^
-   1 warning and 9 errors generated.
---
-   drivers/dpll/dpll_core.c:19:28: error: redefinition of 'dpll_device_xa'
-   static DEFINE_XARRAY_FLAGS(dpll_device_xa, XA_FLAGS_ALLOC);
-                              ^
-   drivers/dpll/dpll_core.c:18:28: note: previous definition is here
-   static DEFINE_XARRAY_ALLOC(dpll_device_xa);
-                              ^
->> drivers/dpll/dpll_core.c:37:4: error: expected ')'
-                           continue;
-                           ^
-   drivers/dpll/dpll_core.c:36:6: note: to match this '('
-                   if (!xa_get_mark(&dpll_device_xa, index, DPLL_REGISTERED)
-                      ^
->> drivers/dpll/dpll_core.c:73:21: error: conflicting types for 'dpll_device_alloc'
-   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
-                       ^
-   include/linux/dpll.h:21:21: note: previous declaration is here
-   struct dpll_device *dpll_device_alloc(struct dpll_device_ops *ops, int sources_count,
-                       ^
-   3 errors generated.
---
->> drivers/dpll/dpll_netlink.c:227:28: error: use of undeclared identifier 'id'
-           dpll_notify_source_change(id, src_id, type);
-                                     ^
-   drivers/dpll/dpll_netlink.c:252:28: error: use of undeclared identifier 'id'
-           dpll_notify_source_change(id, out_id, type);
-                                     ^
-   drivers/dpll/dpll_netlink.c:580:13: warning: no previous prototype for function 'dpll_netlink_fini' [-Wmissing-prototypes]
-   void __exit dpll_netlink_fini(void)
-               ^
-   drivers/dpll/dpll_netlink.c:580:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __exit dpll_netlink_fini(void)
-   ^
-   static 
-   1 warning and 2 errors generated.
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+>> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   12 errors generated.
 
 
-vim +3721 drivers/ptp/ptp_ocp.c
+vim +464 include/asm-generic/io.h
 
-  3718	
-  3719	static int ptp_ocp_dpll_get_status(struct dpll_device *dpll)
-  3720	{
-> 3721		struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-  3722		int sync;
-  3723	
-  3724		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
-  3725		return sync;
-  3726	}
-  3727	
-  3728	static int ptp_ocp_dpll_get_lock_status(struct dpll_device *dpll)
-  3729	{
-  3730		struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-  3731		int sync;
-  3732	
-  3733		sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
-  3734		return sync;
-  3735	}
-  3736	
-  3737	static int ptp_ocp_dpll_get_source_type(struct dpll_device *dpll, int sma)
-  3738	{
-  3739		struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-  3740		int ret;
-  3741	
-  3742		if (bp->sma[sma].mode != SMA_MODE_IN)
-  3743			return -1;
-  3744	
-  3745		switch (ptp_ocp_sma_get(bp, sma)) {
-  3746		case 0:
-  3747			ret = DPLL_TYPE_EXT_10MHZ;
-  3748			break;
-  3749		case 1:
-  3750		case 2:
-  3751			ret = DPLL_TYPE_EXT_1PPS;
-  3752			break;
-  3753		default:
-  3754			ret = DPLL_TYPE_INT_OSCILLATOR;
-  3755		}
-  3756	
-  3757		return ret;
-  3758	}
-  3759	
-  3760	
-  3761	static int ptp_ocp_dpll_get_output_type(struct dpll_device *dpll, int sma)
-  3762	{
-  3763		struct ptp_ocp *bp = (struct ptp_ocp *)dpll->priv;
-  3764		int ret;
-  3765	
-  3766		if (bp->sma[sma].mode != SMA_MODE_IN)
-  3767			return -1;
-  3768	
-  3769		switch (ptp_ocp_sma_get(bp, sma)) {
-  3770		case 0:
-  3771			ret = DPLL_TYPE_EXT_10MHZ;
-  3772			break;
-  3773		case 1:
-  3774		case 2:
-  3775			ret = DPLL_TYPE_INT_OSCILLATOR;
-  3776		case 4:
-  3777		case 8:
-  3778			ret = DPLL_TYPE_GNSS;
-  3779			break;
-  3780		default:
-  3781			ret = DPLL_TYPE_INT_OSCILLATOR;
-  3782		}
-  3783	
-  3784		return ret;
-  3785	}
-  3786	
-> 3787	static struct dpll_device_ops ptp_ocp_dpll_ops {
-  3788		.get_status			= ptp_ocp_dpll_get_status;
-  3789		.get_lock_status	= ptp_ocp_dpll_get_lock_status;
-  3790		.get_source_type	= ptp_ocp_dpll_get_source_type;
-  3791		.get_output_type	= ptp_ocp_dpll_get_output_type;
-  3792	};
-  3793	
-  3794	static int
-  3795	ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-  3796	{
-  3797		struct devlink *devlink;
-  3798		struct ptp_ocp *bp;
-  3799		int err;
-  3800	
-  3801		devlink = devlink_alloc(&ptp_ocp_devlink_ops, sizeof(*bp), &pdev->dev);
-  3802		if (!devlink) {
-  3803			dev_err(&pdev->dev, "devlink_alloc failed\n");
-  3804			return -ENOMEM;
-  3805		}
-  3806	
-  3807		err = pci_enable_device(pdev);
-  3808		if (err) {
-  3809			dev_err(&pdev->dev, "pci_enable_device\n");
-  3810			goto out_free;
-  3811		}
-  3812	
-  3813		bp = devlink_priv(devlink);
-  3814		err = ptp_ocp_device_init(bp, pdev);
-  3815		if (err)
-  3816			goto out_disable;
-  3817	
-  3818		/* compat mode.
-  3819		 * Older FPGA firmware only returns 2 irq's.
-  3820		 * allow this - if not all of the IRQ's are returned, skip the
-  3821		 * extra devices and just register the clock.
-  3822		 */
-  3823		err = pci_alloc_irq_vectors(pdev, 1, 17, PCI_IRQ_MSI | PCI_IRQ_MSIX);
-  3824		if (err < 0) {
-  3825			dev_err(&pdev->dev, "alloc_irq_vectors err: %d\n", err);
-  3826			goto out;
-  3827		}
-  3828		bp->n_irqs = err;
-  3829		pci_set_master(pdev);
-  3830	
-  3831		err = ptp_ocp_register_resources(bp, id->driver_data);
-  3832		if (err)
-  3833			goto out;
-  3834	
-  3835		bp->ptp = ptp_clock_register(&bp->ptp_info, &pdev->dev);
-  3836		if (IS_ERR(bp->ptp)) {
-  3837			err = PTR_ERR(bp->ptp);
-  3838			dev_err(&pdev->dev, "ptp_clock_register: %d\n", err);
-  3839			bp->ptp = NULL;
-  3840			goto out;
-  3841		}
-  3842	
-  3843		err = ptp_ocp_complete(bp);
-  3844		if (err)
-  3845			goto out;
-  3846	
-  3847		ptp_ocp_info(bp);
-  3848		devlink_register(devlink);
-  3849	
-> 3850		bp->dpll = dpll_device_alloc(&dpll_ops, ARRAY_SIZE(bp->sma), ARRAY_SIZE(bp->sma));
-  3851		if (!bp->dpll) {
-  3852			dev_err(&pdev->dev, "dpll_device_alloc failed\n");
-  3853			return 0;
-  3854		}
-> 3855		dpll_device_register(bp->dpll);
-  3856	
-  3857		return 0;
-  3858	
-  3859	out:
-  3860		ptp_ocp_detach(bp);
-  3861		pci_set_drvdata(pdev, NULL);
-  3862	out_disable:
-  3863		pci_disable_device(pdev);
-  3864	out_free:
-  3865		devlink_free(devlink);
-  3866		return err;
-  3867	}
-  3868	
+3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
+9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
+9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
+9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
+9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
+9216efafc52ff9 Thierry Reding 2014-10-01  455   */
+9216efafc52ff9 Thierry Reding 2014-10-01  456  
+f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
+f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
+214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
+9216efafc52ff9 Thierry Reding 2014-10-01  460  {
+87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
+87fe2d543f8173 Sinan Kaya     2018-04-05  462  
+87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
+87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
+abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
+87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
+9216efafc52ff9 Thierry Reding 2014-10-01  467  }
+9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
+9216efafc52ff9 Thierry Reding 2014-10-01  469  
+
+:::::: The code at line 464 was first introduced by commit
+:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+
+:::::: TO: Sinan Kaya <okaya@codeaurora.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
 0-DAY CI Kernel Test Service
