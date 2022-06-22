@@ -1,44 +1,44 @@
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82944111F
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 10:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0909136F
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 10:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655892464; x=1687428464;
+  t=1655893068; x=1687429068;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cc/TCIsEYW1PMEk9yJmil6X0x14+wRVccmqBRFmtOWA=;
-  b=AzoHLHPFyCci0ruSquXLql0rjmgDALnqvsfMtI5NYuLPvvJtGxgInPaP
-   H61EsVMBFvtr3+7V69sBS1/XeBCJU+zILpOnpMdvi+E2ZjpbxHPdA9tIG
-   eKtA4iiDUCNWzwiqtmRCCwQk6Y3qc0i1/oTxYoemPgnZDt2E+da3mMn4z
-   F4A0c/N6iCx0MvGC2PFd3yOqbbXR3sWe9Zh6tOIGZ0Fv+l8UQ3pJ9xWFo
-   X3gZh7xoYeQNGBJcIaVKKKqGZO/upAWKpCrEBx9SjedvNITzPc+FtCUcE
-   GR7MECn7H93kRaz3UuIBHfceuWHYAzrQVgBMuCCh8XUsmTaPWjoyAFSjM
+  bh=ib7Jxvpxhyto6qxZuzBuKdNUpPcqFiHeFBVLswbBh84=;
+  b=nKGSFMC+yYGjuK4DtcPHnOU5arza9QYJsfui76TMdpzQK8r5lP3dS+P8
+   7FY9UcOBZ36sgDaaBcOxxTBtGO6YZOLAoR44+MpLj6iRITcVO6cjbDzob
+   /xooo4fe1UjO9CfjPmPLEDWzpJboxvRi/Y2V6y9mVicfJywcU5O7CW+NE
+   /Cz+S/HjZanxbfd1dy3joZxtD8RZcLPi3gqd+R7iQFtcsRQJIxCgiODtm
+   te00ZGtlqr+lvY1ssXHOlJ5XEpMFHFA01J/L042wdGytqL/6CIcMY/YT+
+   zefnCaeLcC5qoZHxM3Q909rlPg7ii/s3WTKM5SkJR3BGAzksQubW3R8JG
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342061011"
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="342062744"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="342061011"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:07:44 -0700
+   d="scan'208";a="342062744"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 03:17:44 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="834035083"
+   d="scan'208";a="644120768"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2022 03:07:42 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 03:17:42 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o3xGv-00017Z-PR;
-	Wed, 22 Jun 2022 10:07:41 +0000
-Date: Wed, 22 Jun 2022 18:07:24 +0800
+	id 1o3xQc-00017w-2I;
+	Wed, 22 Jun 2022 10:17:42 +0000
+Date: Wed, 22 Jun 2022 18:17:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ruijing Dong <ruijing.dong@amd.com>
+To: Frank Li <Frank.Li@nxp.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 224/274]
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:6: warning: no previous
- prototype for function 'amdgpu_vcn_using_unified_queue'
-Message-ID: <202206221801.KxFJ3e97-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jon Mason <jdmason@kudzu.us>
+Subject: [linux-next:master 3913/4996]
+ drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous
+ prototype for function 'pci_read'
+Message-ID: <202206221813.Dn1s6uuh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,113 +48,63 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   eec53143b7fe1ccaace434e03b5959c9117bf9c5
-commit: 4ed49c954e35559cb4a34ba049a15f54ec7fccf6 [224/274] drm/amdgpu/vcn: add unified queue ib test
-config: s390-buildonly-randconfig-r004-20220622 (https://download.01.org/0day-ci/archive/20220622/202206221801.KxFJ3e97-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ac0ba5454ca85162c08dc429fef1999e077ca976
+commit: ff32fac00d97661c715ee47bbfd867cae1f3aaf8 [3913/4996] NTB: EPF: support NTB transfer between PCI RC and EP connection
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220622/202206221813.Dn1s6uuh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 4ed49c954e35559cb4a34ba049a15f54ec7fccf6
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ff32fac00d97661c715ee47bbfd867cae1f3aaf8
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout ff32fac00d97661c715ee47bbfd867cae1f3aaf8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/panfrost/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ drivers/pci/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:29:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:6: warning: no previous prototype for function 'amdgpu_vcn_using_unified_queue' [-Wmissing-prototypes]
-   bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
-        ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c:333:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
+>> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for function 'pci_read' [-Wmissing-prototypes]
+   int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:975:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
    ^
    static 
-   13 warnings generated.
+>> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for function 'pci_write' [-Wmissing-prototypes]
+   int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
+       ^
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:984:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +/amdgpu_vcn_using_unified_queue +333 drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c
+vim +/pci_read +975 drivers/pci/endpoint/functions/pci-epf-vntb.c
 
-   331	
-   332	/* from vcn4 and above, only unified queue is used */
- > 333	bool amdgpu_vcn_using_unified_queue(struct amdgpu_ring *ring)
-   334	{
-   335		struct amdgpu_device *adev = ring->adev;
-   336		bool ret = false;
-   337	
-   338		if (adev->ip_versions[UVD_HWIP][0] >= IP_VERSION(4, 0, 0))
-   339			ret = true;
-   340	
-   341		return ret;
-   342	}
-   343	
+   974	
+ > 975	int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
+   976	{
+   977		if (devfn == 0) {
+   978			memcpy(val, ((uint8_t *)pci_space) + where, size);
+   979			return 0;
+   980		}
+   981		return -1;
+   982	}
+   983	
+ > 984	int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
+   985	{
+   986		return 0;
+   987	}
+   988	
 
 -- 
 0-DAY CI Kernel Test Service
