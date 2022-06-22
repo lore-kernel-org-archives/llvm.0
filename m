@@ -1,298 +1,93 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA56810F0
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 12:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655901049; x=1687437049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=U0GHTG1wygWsndSDZ6EiTgSxO7v50b9808TbFEW0jf4=;
-  b=d0V5EQ5bV410IS9nNEBCY7zcBSRZm/gcgpSRCYPOYCVf5h8IDlhanwEL
-   ll281ejYfXtmkzoiZSEwvtUjTjsqBJMGkRngp/j6Kw+xocHqbEohOi0Cs
-   TyFvjPQg53R091eePMe3dH0Mivj/QTIsPRwSi35P/VcZNPbtlXvtKmzc4
-   Fx5le0JTux1bR97kwhJIAccwmcG1D0LMhLD9xoolbZRXrxJc4royF/0Pd
-   scTLTigPP84fM55KPdx43FaDF4IiOUgb9MOk9aHUZRkAEa4oGfq0Ova0v
-   z+/f8Ll4d1DrLPkHvdnov1h7uoaLnFu5eqPh7UQDLnzDnm0DqW4in7zBA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366726124"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="366726124"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 05:30:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="620893634"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2022 05:30:46 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o3zVO-0001GN-6Q;
-	Wed, 22 Jun 2022 12:30:46 +0000
-Date: Wed, 22 Jun 2022 20:29:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Adri=E1n?= Larumbe <adrian.larumbe@collabora.com>,
-	robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
-	alyssa.rosenzweig@collabora.com, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	adrian.larumbe@collabora.com
-Subject: Re: [PATCH v3 1/1] drm/panfrost: Add support for devcoredump
-Message-ID: <202206222000.JafXnPo9-lkp@intel.com>
-References: <20220622015420.1130814-2-adrian.larumbe@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D045C139A
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 13:08:35 +0000 (UTC)
+X-UUID: 2e43dc23338041548b2398cb780613b6-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:3d149d6a-77f2-48aa-a9ee-1a925521ea4f,OB:40,L
+	OB:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+	CTION:release,TS:100
+X-CID-INFO: VERSION:1.1.6,REQID:3d149d6a-77f2-48aa-a9ee-1a925521ea4f,OB:40,LOB
+	:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+	CTION:quarantine,TS:100
+X-CID-META: VersionHash:b14ad71,CLOUDID:83d439ea-f7af-4e69-92ee-0fd74a0c286c,C
+	OID:38c5312ec497,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2e43dc23338041548b2398cb780613b6-20220622
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1674968696; Wed, 22 Jun 2022 21:08:29 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 21:08:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 22 Jun 2022 21:08:28 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v24 02/10] soc: mediatek: add mtk-mmsys ethdr and mdp_rdma components
+Date: Wed, 22 Jun 2022 21:08:16 +0800
+Message-ID: <20220622130824.29143-3-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220622130824.29143-1-nancy.lin@mediatek.com>
+References: <20220622130824.29143-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220622015420.1130814-2-adrian.larumbe@collabora.com>
+Content-Type: text/plain
+X-MTK: N
 
-Hi "Adrián,
+Add new mmsys component: ethdr_mixer and mdp_rdma. These components will
+use in mt8195 vdosys1.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ include/linux/soc/mediatek/mtk-mmsys.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on linus/master v5.19-rc3 next-20220622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adri-n-Larumbe/devcoredump-support-for-Panfrost-GPU-driver/20220622-095645
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: s390-buildonly-randconfig-r004-20220622 (https://download.01.org/0day-ci/archive/20220622/202206222000.JafXnPo9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8b8d126598ce7bd5243da7f94f69fa1104288bee)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/966f660f30dc5a9ff854e61d189b81e92f3453fa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Adri-n-Larumbe/devcoredump-support-for-Panfrost-GPU-driver/20220622-095645
-        git checkout 966f660f30dc5a9ff854e61d189b81e92f3453fa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/amd/display/dc/ drivers/gpu/drm/panfrost/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/panfrost/panfrost_dump.c:6:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/panfrost/panfrost_dump.c:235:27: warning: implicit conversion from '__le64' (aka 'unsigned long long') to '__le32' (aka 'unsigned int') changes value from 72057594037927936 to 0 [-Wconstant-conversion]
-                   iter.hdr->bomap.valid = cpu_to_le64(1);
-                                         ~ ^~~~~~~~~~~~~~
-   include/linux/byteorder/generic.h:86:21: note: expanded from macro 'cpu_to_le64'
-   #define cpu_to_le64 __cpu_to_le64
-                       ^
-   include/uapi/linux/byteorder/big_endian.h:32:27: note: expanded from macro '__cpu_to_le64'
-   #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   13 warnings generated.
-
-
-vim +235 drivers/gpu/drm/panfrost/panfrost_dump.c
-
-   102	
-   103	void panfrost_core_dump(struct panfrost_job *job)
-   104	{
-   105		struct panfrost_device *pfdev = job->pfdev;
-   106		struct panfrost_dump_iterator iter;
-   107		struct drm_gem_object *dbo;
-   108		unsigned int n_obj, n_bomap_pages;
-   109		__le64 *bomap, *bomap_start;
-   110		size_t file_size;
-   111		u32 as_nr;
-   112		int slot;
-   113		int ret, i;
-   114	
-   115		as_nr = job->mmu->as;
-   116		slot = panfrost_job_get_slot(job);
-   117		slot = slot ? slot : 0;
-   118	
-   119		/* Only catch the first event, or when manually re-armed */
-   120		if (!panfrost_dump_core)
-   121			return;
-   122		panfrost_dump_core = false;
-   123	
-   124		/* At least, we dump registers and end marker */
-   125		n_obj = 2;
-   126		n_bomap_pages = 0;
-   127		file_size = ARRAY_SIZE(panfrost_dump_registers) *
-   128				sizeof(struct panfrost_dump_registers);
-   129	
-   130		/* Add in the active buffer objects */
-   131		for (i = 0; i < job->bo_count; i++) {
-   132			/*
-   133			 * Even though the CPU could be configured to use 16K or 64K pages, this
-   134			 * is a very unusual situation for most kernel setups on SoCs that have
-   135			 * a Panfrost device. Also many places across the driver make the somewhat
-   136			 * arbitrary assumption that Panfrost's MMU page size is the same as the CPU's,
-   137			 * so let's have a sanity check to ensure that's always the case
-   138			 */
-   139			WARN_ON(!IS_ALIGNED(dbo->size, PAGE_SIZE));
-   140	
-   141			dbo = job->bos[i];
-   142			file_size += dbo->size;
-   143			n_bomap_pages += dbo->size >> PAGE_SHIFT;
-   144			n_obj++;
-   145		}
-   146	
-   147		/* If we have any buffer objects, add a bomap object */
-   148		if (n_bomap_pages) {
-   149			file_size += n_bomap_pages * sizeof(*bomap);
-   150			n_obj++;
-   151		}
-   152	
-   153		/* Add the size of the headers */
-   154		file_size += sizeof(*iter.hdr) * n_obj;
-   155	
-   156		/* Allocate the file in vmalloc memory, it's likely to be big */
-   157		iter.start = __vmalloc(file_size, GFP_KERNEL | __GFP_NOWARN |
-   158				__GFP_NORETRY);
-   159		if (!iter.start) {
-   160			dev_warn(pfdev->dev, "failed to allocate devcoredump file\n");
-   161			return;
-   162		}
-   163	
-   164		/* Point the data member after the headers */
-   165		iter.hdr = iter.start;
-   166		iter.data = &iter.hdr[n_obj];
-   167	
-   168		memset(iter.hdr, 0, iter.data - iter.start);
-   169	
-   170		/*
-   171		 * For now, we write the job identifier in the register dump header,
-   172		 * so that we can decode the entire dump later with pandecode
-   173		 */
-   174		iter.hdr->reghdr.jc = cpu_to_le64(job->jc);
-   175		iter.hdr->reghdr.major = cpu_to_le32(PANFROSTDUMP_MAJOR);
-   176		iter.hdr->reghdr.minor = cpu_to_le32(PANFROSTDUMP_MINOR);
-   177		iter.hdr->reghdr.gpu_id = cpu_to_le32(pfdev->features.id);
-   178		iter.hdr->reghdr.nbos = cpu_to_le64(job->bo_count);
-   179	
-   180		panfrost_core_dump_registers(&iter, pfdev, as_nr, slot);
-   181	
-   182		/* Reserve space for the bomap */
-   183		if (job->bo_count) {
-   184			bomap_start = bomap = iter.data;
-   185			memset(bomap, 0, sizeof(*bomap) * n_bomap_pages);
-   186			panfrost_core_dump_header(&iter, PANFROSTDUMP_BUF_BOMAP,
-   187						  bomap + n_bomap_pages);
-   188		}
-   189	
-   190		for (i = 0; i < job->bo_count; i++) {
-   191			struct iosys_map map;
-   192			struct panfrost_gem_mapping *mapping;
-   193			struct panfrost_gem_object *bo;
-   194			struct sg_page_iter page_iter;
-   195			void *vaddr;
-   196	
-   197			bo = to_panfrost_bo(job->bos[i]);
-   198			mapping = job->mappings[i];
-   199	
-   200			if (!bo->base.sgt) {
-   201				dev_err(pfdev->dev, "Panfrost Dump: BO has no sgt, cannot dump\n");
-   202				iter.hdr->bomap.valid = 0;
-   203				goto dump_header;
-   204			}
-   205	
-   206			ret = drm_gem_shmem_vmap(&bo->base, &map);
-   207			if (ret) {
-   208				dev_err(pfdev->dev, "Panfrost Dump: couldn't map Buffer Object\n");
-   209				iter.hdr->bomap.valid = 0;
-   210				goto dump_header;
-   211			}
-   212	
-   213			WARN_ON(!mapping->active);
-   214	
-   215			iter.hdr->bomap.data[0] = cpu_to_le32((bomap - bomap_start));
-   216	
-   217			for_each_sgtable_page(bo->base.sgt, &page_iter, 0) {
-   218				struct page *page = sg_page_iter_page(&page_iter);
-   219	
-   220				if (!IS_ERR(page))
-   221					*bomap++ = cpu_to_le64(page_to_phys(page));
-   222				else {
-   223					dev_err(pfdev->dev, "Panfrost Dump: wrong page\n");
-   224					*bomap++ = ~cpu_to_le64(0);
-   225				}
-   226			}
-   227	
-   228			iter.hdr->bomap.iova = cpu_to_le64(mapping->mmnode.start << PAGE_SHIFT);
-   229	
-   230			vaddr = map.vaddr;
-   231			memcpy(iter.data, vaddr, bo->base.base.size);
-   232	
-   233			drm_gem_shmem_vunmap(&bo->base, &map);
-   234	
- > 235			iter.hdr->bomap.valid = cpu_to_le64(1);
-   236	
-
+diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+index fb719fd1281c..b4388ba43341 100644
+--- a/include/linux/soc/mediatek/mtk-mmsys.h
++++ b/include/linux/soc/mediatek/mtk-mmsys.h
+@@ -28,7 +28,16 @@ enum mtk_ddp_comp_id {
+ 	DDP_COMPONENT_DSI1,
+ 	DDP_COMPONENT_DSI2,
+ 	DDP_COMPONENT_DSI3,
++	DDP_COMPONENT_ETHDR_MIXER,
+ 	DDP_COMPONENT_GAMMA,
++	DDP_COMPONENT_MDP_RDMA0,
++	DDP_COMPONENT_MDP_RDMA1,
++	DDP_COMPONENT_MDP_RDMA2,
++	DDP_COMPONENT_MDP_RDMA3,
++	DDP_COMPONENT_MDP_RDMA4,
++	DDP_COMPONENT_MDP_RDMA5,
++	DDP_COMPONENT_MDP_RDMA6,
++	DDP_COMPONENT_MDP_RDMA7,
+ 	DDP_COMPONENT_MERGE0,
+ 	DDP_COMPONENT_MERGE1,
+ 	DDP_COMPONENT_MERGE2,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+
