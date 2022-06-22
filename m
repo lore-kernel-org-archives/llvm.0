@@ -1,200 +1,88 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A095B10F1
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 03:55:32 +0000 (UTC)
-X-UUID: 40dd44a5c38f42638ea7b76b3ba0e156-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:c0de80b1-54ab-4057-ba35-70745e3f5fe3,OB:0,LO
-	B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-	ION:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:a4342138-5e4b-44d7-80b2-bb618cb09d29,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-	,QS:nil,BEC:nil,COL:0
-X-UUID: 40dd44a5c38f42638ea7b76b3ba0e156-20220622
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <ck.hu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1771487544; Wed, 22 Jun 2022 11:55:26 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 11:55:25 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jun 2022 11:55:24 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jun 2022 11:55:24 +0800
-Message-ID: <9749550d1f0cd8fd08d8bf684ea80cb6defc90d3.camel@mediatek.com>
-Subject: Re: [PATCH v23 01/14] dt-bindings: mediatek: add vdosys1 RDMA
- definition for mt8195
-From: CK Hu <ck.hu@mediatek.com>
-To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
-	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
-	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
- lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
-	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
- Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Date: Wed, 22 Jun 2022 11:55:24 +0800
-In-Reply-To: <20220620091930.27797-2-nancy.lin@mediatek.com>
-References: <20220620091930.27797-1-nancy.lin@mediatek.com>
-	 <20220620091930.27797-2-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB3010F1
+	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 04:00:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655870433; x=1687406433;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q6h8WulSh+ENgoPqn3e+4bZfRdJ5VakAV3CDijVfD/g=;
+  b=cUV17a/TeNbVH/58AtO7vcJxkCw/vtOh410jw7X0yjEh1IqOxxWvV9xY
+   MUpb62bWgN0roo2i7058HUweAWeFrvReV55+21lURkjpAEZ8+Dg9yeD4i
+   xbfLvr+Xl2rV2yIdx3i65kVtTDeeBpGCfECnyvqD60zgAKoRWJNnJmZM+
+   V0QWde9wsAs3CEJ+4sjEe36QkAXTsUevPh49eNaOm8QIRxgcvCtu2771m
+   U8jlH8siNsHF5Ir4zMVZ8IH1sviLJad62EHxULDCxzaFtQHGoqgW4/dpq
+   10mzlsEIqb6Fsu05BYdpNCFqB3o3htiZQ1BsXv8f2ZxR05Zd6UH5I283w
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="344297078"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="344297078"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:00:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="833892571"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Jun 2022 21:00:30 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o3rXZ-0000oH-SQ;
+	Wed, 22 Jun 2022 04:00:29 +0000
+Date: Wed, 22 Jun 2022 12:00:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@profian.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [jarkko-tpmdd:kprobes 3/3] arch/powerpc/kernel/module_alloc.c:31:39:
+ error: use of undeclared identifier '_etext'
+Message-ID: <202206221119.cyyF058c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, Rob:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git kprobes
+head:   8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+commit: 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3 [3/3] kprobes: Enable tracing for mololithic kernel images
+config: powerpc-mpc8313_rdb_defconfig (https://download.01.org/0day-ci/archive/20220622/202206221119.cyyF058c-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+        git fetch --no-tags jarkko-tpmdd kprobes
+        git checkout 8a45ec8f64f51131c2e98dcb9ee56edf0ca0a0b3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-You have ask Nancy question in old version and Nancy has reply in [1],
-how do you think about Nancy's reply?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1] 
-http://lists.infradead.org/pipermail/linux-mediatek/2022-April/039890.html
+All errors (new ones prefixed by >>):
 
-Regards,
-CK
+>> arch/powerpc/kernel/module_alloc.c:31:39: error: use of undeclared identifier '_etext'
+           unsigned long limit = (unsigned long)_etext - SZ_32M;
+                                                ^
+   1 error generated.
 
-On Mon, 2022-06-20 at 17:19 +0800, Nancy.Lin wrote:
-> Add vdosys1 RDMA definition.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Tested-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  .../display/mediatek/mediatek,mdp-rdma.yaml   | 88
-> +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> rdma.yaml
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> rdma.yaml
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> rdma.yaml
-> new file mode 100644
-> index 000000000000..dd12e2ff685c
-> --- /dev/null
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> rdma.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: 
-> https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!2V-LPisZwDTVUkpQ5cJnZhaUV4iBSohT_B1_8bY3yar4Iuacq_NaTManclYLSA$
->  
-> +$schema: 
-> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!2V-LPisZwDTVUkpQ5cJnZhaUV4iBSohT_B1_8bY3yar4Iuacq_NaTMZYdJgbgQ$
->  
-> +
-> +title: MediaTek MDP RDMA
-> +
-> +maintainers:
-> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> +  - Philipp Zabel <p.zabel@pengutronix.de>
-> +
-> +description:
-> +  The MediaTek MDP RDMA stands for Read Direct Memory Access.
-> +  It provides real time data to the back-end panel driver, such as
-> DSI,
-> +  DPI and DP_INTF.
-> +  It contains one line buffer to store the sufficient pixel data.
-> +  RDMA device node must be siblings to the central MMSYS_CONFIG
-> node.
-> +  For a description of the MMSYS_CONFIG binding, see
-> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> for details.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8195-vdo1-rdma
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: RDMA Clock
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  mediatek,gce-client-reg:
-> +    description:
-> +      The register of display function block to be set by gce. There
-> are 4 arguments,
-> +      such as gce node, subsys id, offset and register size. The
-> subsys id that is
-> +      mapping to the register of display function blocks is defined
-> in the gce header
-> +      include/dt-bindings/gce/<chip>-gce.h of each chips.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle of GCE
-> +        - description: GCE subsys id
-> +        - description: register offset
-> +        - description: register size
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - clocks
-> +  - iommus
-> +  - mediatek,gce-client-reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +    #include <dt-bindings/gce/mt8195-gce.h>
-> +    #include <dt-bindings/memory/mt8195-memory-port.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        rdma@1c104000 {
-> +            compatible = "mediatek,mt8195-vdo1-rdma";
-> +            reg = <0 0x1c104000 0 0x1000>;
-> +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
-> +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
-> +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-> +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
-> +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000
-> 0x1000>;
-> +        };
-> +    };
 
+vim +/_etext +31 arch/powerpc/kernel/module_alloc.c
+
+    27	
+    28	void *module_alloc(unsigned long size)
+    29	{
+    30	#ifdef MODULES_VADDR
+  > 31		unsigned long limit = (unsigned long)_etext - SZ_32M;
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
