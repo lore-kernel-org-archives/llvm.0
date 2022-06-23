@@ -1,45 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC8E1C26
-	for <llvm@lists.linux.dev>; Wed, 22 Jun 2022 22:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CCC138A
+	for <llvm@lists.linux.dev>; Thu, 23 Jun 2022 01:27:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655937759; x=1687473759;
+  t=1655947676; x=1687483676;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/Aaew8nRjRBHQPVL+GtCxzvJIjfYGF2f4VfBi1VtCUU=;
-  b=Wdv86hveQCQYoXOJkSNEaZ/fQG34jS9QX231JhUqpG4G+QuhhvSpsTlp
-   lgg1e1qcIRCIrjuSvoThXtsrhljyltvts9aqXLsMtu12Y3xPvKMu57zgT
-   i9pifd6U9fVQkYdqpkcmAY7pBgYpX2Z6bFje9R9WKdMaD8VmCr3kMWZyc
-   sTlfQpug12auzdOOOCmdiNNVk6QZe0cjY2zjooCfb/gBXTMgGW2i4gq2r
-   kOSXJLGKmwfANMqv0jzVZ54zK3C+LxSEwPS2QbOb9kGbWxNapQJm6K0cM
-   YVlx5A/56b1foghoQQePkcjXGd+/uJZHWF13Dl+LwcE4I18XVgZJdtvCO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="306022353"
+  bh=aDnpcfeHyA5MPRXxBfp+Cv9dCpW6YCbzNtf0xkZa0ZE=;
+  b=h65UuD9TBFqjshqyzlZAxPjqd8STLQ7wIPfOHdgG+k0BRig2q19eNiCg
+   0wlrZIaWHaft/8P4j0cZIBTr4tk5HOYszPlehY9qCzIwwcYaJgQ5We7K7
+   rFK8FnaPYOI1mOeZpKT5/ESsav27yHN62SoKdPNF6aN2Wz7zpLhnmqV+X
+   HpCloQGguyiZYx0VX5bB93DYAT2X4qMXiEq53qJ6bi/ImgQLQInTftSV3
+   vQ9x5tSbnABE59Ajgkl0iQB8tptptjcUGAVNsaGzcgJSdueUB8gLT5hPZ
+   s990VcIDMAHHSG1SWGyigRhO99ZYpfvN67HJsE6uuGWMD6uQMKAtKYQzb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280640421"
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="306022353"
+   d="scan'208";a="280640421"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 15:42:39 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 18:27:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="585918516"
-Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2022 15:42:37 -0700
-Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+   d="scan'208";a="585967246"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2022 18:27:53 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o493U-0001ls-Co;
-	Wed, 22 Jun 2022 22:42:36 +0000
-Date: Thu, 23 Jun 2022 06:42:25 +0800
+	id 1o4BdQ-000090-Vt;
+	Thu, 23 Jun 2022 01:27:52 +0000
+Date: Thu, 23 Jun 2022 09:27:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kalle Valo <kvalo@kernel.org>
+To: Sam Ravnborg <sam@ravnborg.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:kvalo/ath/ath12k-bringup-extras 2/3]
- drivers/net/wireless/ath/ath12k/pci.c:678:7: error: call to undeclared
- function 'of_property_read_u32'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202206230637.ojZSI1do-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Maxime Ripard <maxime@cerno.tech>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [kbingham-rcar:kbingham/drm-misc/next/sn65dsi86/hpd 10/21]
+ drivers/gpu/drm/bridge/parade-ps8640.c:524:2: error: call to undeclared
+ function 'drm_bridge_chain_pre_enable'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202206230923.AHVRLVRb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,63 +51,79 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Kalle,
-
-First bad commit (maybe != root cause):
-
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/ath12k-bringup-extras
-head:   cc108fac9c287f5624daedca923743587adcafd1
-commit: f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf [2/3] Merge ath-next into ath12k-bringup
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220623/202206230637.ojZSI1do-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git kbingham/drm-misc/next/sn65dsi86/hpd
+head:   69c67e7d89e9e68e6ffb17deec7112af1d529ac9
+commit: b88732c0df106217e663da0458bd46d061ec3ce4 [10/21] drm/bridge: Drop unused drm_bridge_chain functions
+config: hexagon-randconfig-r045-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230923.AHVRLVRb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 46be5faaf03466c3751f8a2882bef5a217e15926)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/ath12k-bringup-extras
-        git checkout f6fc8dfbdd4f8aa245e4d22691f7ae3057a01dbf
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git/commit/?id=b88732c0df106217e663da0458bd46d061ec3ce4
+        git remote add kbingham-rcar https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git
+        git fetch --no-tags kbingham-rcar kbingham/drm-misc/next/sn65dsi86/hpd
+        git checkout b88732c0df106217e663da0458bd46d061ec3ce4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/ath/ath12k/pci.c:678:7: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!of_property_read_u32(ab->dev->of_node, "qrtr_instance_id", &instance_id))
-                ^
-   1 error generated.
+>> drivers/gpu/drm/bridge/parade-ps8640.c:524:2: error: call to undeclared function 'drm_bridge_chain_pre_enable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           drm_bridge_chain_pre_enable(bridge);
+           ^
+>> drivers/gpu/drm/bridge/parade-ps8640.c:534:3: error: call to undeclared function 'drm_bridge_chain_post_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   drm_bridge_chain_post_disable(bridge);
+                   ^
+   2 errors generated.
 
 
-vim +/of_property_read_u32 +678 drivers/net/wireless/ath/ath12k/pci.c
+vim +/drm_bridge_chain_pre_enable +524 drivers/gpu/drm/bridge/parade-ps8640.c
 
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  666  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  667  static void ath12k_pci_init_qmi_ce_config(struct ath12k_base *ab)
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  668  {
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  669  	struct ath12k_qmi_ce_cfg *cfg = &ab->qmi.ce_cfg;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  670  	u32 instance_id = 0;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  671  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  672  	cfg->tgt_ce = ab->hw_params.target_ce_config;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  673  	cfg->tgt_ce_len = ab->hw_params.target_ce_count;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  674  
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  675  	cfg->svc_to_ce_map = ab->hw_params.svc_to_ce_map;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  676  	cfg->svc_to_ce_map_len = ab->hw_params.svc_to_ce_map_len;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  677  	ab->qmi.service_ins_id = ab->hw_params.qmi_service_ins_id;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01 @678  	if (!of_property_read_u32(ab->dev->of_node, "qrtr_instance_id", &instance_id))
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  679  		ab->qmi.service_ins_id = instance_id + ATH12K_QMI_WLFW_NODE_ID_BASE;
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  680  }
-f40abb4788a2a3 Vasanthakumar Thiagarajan 2022-02-01  681  
+13afcdd7277eff Philip Chen            2021-09-21  504  
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  505  static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  506  					   struct drm_connector *connector)
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  507  {
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  508  	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+826cff3f7ebba4 Philip Chen            2021-10-28  509  	bool poweroff = !ps_bridge->pre_enabled;
+46f206304db031 Enric Balletbo i Serra 2020-08-27  510  	struct edid *edid;
+46f206304db031 Enric Balletbo i Serra 2020-08-27  511  
+46f206304db031 Enric Balletbo i Serra 2020-08-27  512  	/*
+46f206304db031 Enric Balletbo i Serra 2020-08-27  513  	 * When we end calling get_edid() triggered by an ioctl, i.e
+46f206304db031 Enric Balletbo i Serra 2020-08-27  514  	 *
+46f206304db031 Enric Balletbo i Serra 2020-08-27  515  	 *   drm_mode_getconnector (ioctl)
+46f206304db031 Enric Balletbo i Serra 2020-08-27  516  	 *     -> drm_helper_probe_single_connector_modes
+46f206304db031 Enric Balletbo i Serra 2020-08-27  517  	 *        -> drm_bridge_connector_get_modes
+46f206304db031 Enric Balletbo i Serra 2020-08-27  518  	 *           -> ps8640_bridge_get_edid
+46f206304db031 Enric Balletbo i Serra 2020-08-27  519  	 *
+46f206304db031 Enric Balletbo i Serra 2020-08-27  520  	 * We need to make sure that what we need is enabled before reading
+46f206304db031 Enric Balletbo i Serra 2020-08-27  521  	 * EDID, for this chip, we need to do a full poweron, otherwise it will
+46f206304db031 Enric Balletbo i Serra 2020-08-27  522  	 * fail.
+46f206304db031 Enric Balletbo i Serra 2020-08-27  523  	 */
+46f206304db031 Enric Balletbo i Serra 2020-08-27 @524  	drm_bridge_chain_pre_enable(bridge);
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  525  
+46f206304db031 Enric Balletbo i Serra 2020-08-27  526  	edid = drm_get_edid(connector,
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  527  			    ps_bridge->page[PAGE0_DP_CNTL]->adapter);
+46f206304db031 Enric Balletbo i Serra 2020-08-27  528  
+46f206304db031 Enric Balletbo i Serra 2020-08-27  529  	/*
+46f206304db031 Enric Balletbo i Serra 2020-08-27  530  	 * If we call the get_edid() function without having enabled the chip
+46f206304db031 Enric Balletbo i Serra 2020-08-27  531  	 * before, return the chip to its original power state.
+46f206304db031 Enric Balletbo i Serra 2020-08-27  532  	 */
+46f206304db031 Enric Balletbo i Serra 2020-08-27  533  	if (poweroff)
+46f206304db031 Enric Balletbo i Serra 2020-08-27 @534  		drm_bridge_chain_post_disable(bridge);
+46f206304db031 Enric Balletbo i Serra 2020-08-27  535  
+46f206304db031 Enric Balletbo i Serra 2020-08-27  536  	return edid;
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  537  }
+d82c12ab16b847 Enric Balletbo i Serra 2020-08-26  538  
 
-:::::: The code at line 678 was first introduced by commit
-:::::: f40abb4788a2a3868606a29d99583421e0874350 ath12k: New driver for Qualcomm 11be hw family
+:::::: The code at line 524 was first introduced by commit
+:::::: 46f206304db0311b0920479f42accaa7cb472fdc drm/bridge: ps8640: Rework power state handling
 
-:::::: TO: Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
-:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+:::::: TO: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+:::::: CC: Neil Armstrong <narmstrong@baylibre.com>
 
 -- 
 0-DAY CI Kernel Test Service
