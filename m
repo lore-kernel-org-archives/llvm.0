@@ -1,90 +1,79 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD8643E8
-	for <llvm@lists.linux.dev>; Thu, 23 Jun 2022 14:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655995727; x=1687531727;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a+M6xTI8fcv0XoP4gDaiPmN5PUSrKQKhNoe1i4lIUXU=;
-  b=f8VwdEuQxbYQwW28dFb9CERykyqf91wuBYqyzi1BuO679YLpQxE+zQMC
-   8q8DmuqyEAmha2wUnqiSWjUHSrOap14rEfWNIxDcqM0ugsQIqjVQoLvek
-   yaU5tnAukR0mZ+ob0/yaOuySPysmz634O9ZCAMJpNHLtLWCyAbWoz6KsR
-   q2TwTSDRX+1yGWCOZsnFfLDJz7x8d5tTLHYtxHkmBORLiDaGQ8kBDOJH2
-   1Q5h1vK7gPa2HqNUc6IeLUZM283Irx08a/NxXGQfrLqAtMe8Kc8l6xaQQ
-   58TE0z0dCjECMfAMKAw6cbOT2SP1M5AdODJAh1RHTQ7ISBG1A47GamJwt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="261170031"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="261170031"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 07:48:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="588645360"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Jun 2022 07:48:45 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o4O8S-0001QH-Lz;
-	Thu, 23 Jun 2022 14:48:44 +0000
-Date: Thu, 23 Jun 2022 22:48:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_11 19/21] kernel/bpf/trampoline.c:81:17:
- warning: address of stack memory associated with parameter 'id' returned
-Message-ID: <202206232231.u4YhpRYy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDEA1FB3;
+	Thu, 23 Jun 2022 15:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7644AC3411B;
+	Thu, 23 Jun 2022 15:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1655998222;
+	bh=9IiqPYfcXWURVQnYyP27liVmnWflaj9GvYBZVI6svWw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VSZmB7xf4/SgxNoMlzYMakEXgG68yZQNpr4AwFXTTU6VPvnK41sUGZNxsqeJ2WCks
+	 bBw1JIE3oOGe+cvo81j5ul18o+q5Px0nvnVtS7LtcBwXeYcSYqeu7QMRz2fK2rfSRM
+	 Bpzs6XvXPKN3hDZb2t3Cjdb5byCCcxrLqSRcVfU7p3eAW9a4ohC53zt5yeRbJgILAW
+	 yN52+pp0ILALKyepOIv/1t6IeidtNEWdM3Sy9lBl9Hybhle3SP27txTVXncerSRZKD
+	 9e9Dm+Z6TDy0pkSsJrbNg8mbMZnBaMTGfr/z2kxjL4/TixwvGPH84kx7CPb1EQMWP6
+	 NdZatZcRmnTHw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/amd/display: Fix indentation in dcn32_get_vco_frequency_from_reg()
+Date: Thu, 23 Jun 2022 08:30:01 -0700
+Message-Id: <20220623153001.3136739-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_11
-head:   c807110aa605281263da02a78af57847f5c4275e
-commit: a2660a85cc98b2db2577fd844985884cff0e5cae [19/21] bpf: Add support to store multiple ids in bpf_tramp_id object
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220623/202206232231.u4YhpRYy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 46be5faaf03466c3751f8a2882bef5a217e15926)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=a2660a85cc98b2db2577fd844985884cff0e5cae
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tramp_11
-        git checkout a2660a85cc98b2db2577fd844985884cff0e5cae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
+Clang warns:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c:549:4: warning: misleading indentation; statement is not part of the previous 'else' [-Wmisleading-indentation]
+                          pll_req = dc_fixpt_from_int(pll_req_reg & clk_mgr->clk_mgr_mask->FbMult_int);
+                          ^
+  drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c:542:3: note: previous statement is here
+                  else
+                  ^
+  1 warning generated.
 
-All warnings (new ones prefixed by >>):
+Indent this statement to the left, as it was clearly intended to be
+called unconditionally, which will fix the warning.
 
->> kernel/bpf/trampoline.c:81:17: warning: address of stack memory associated with parameter 'id' returned [-Wreturn-stack-address]
-                   return (u64) &id;
-                                 ^~
-   1 warning generated.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1655
+Fixes: 3e838f7ccf64 ("drm/amd/display: Get VCO frequency from registers")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+index 113f93b3d3b2..4e8059f20007 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+@@ -546,7 +546,7 @@ static uint32_t dcn32_get_vco_frequency_from_reg(struct clk_mgr_internal *clk_mg
+ 		 * this works because the int part is on the right edge of the register
+ 		 * and the frac part is on the left edge
+ 		 */
+-			pll_req = dc_fixpt_from_int(pll_req_reg & clk_mgr->clk_mgr_mask->FbMult_int);
++		pll_req = dc_fixpt_from_int(pll_req_reg & clk_mgr->clk_mgr_mask->FbMult_int);
+ 		pll_req.value |= pll_req_reg & clk_mgr->clk_mgr_mask->FbMult_frac;
+ 
+ 		/* multiply by REFCLK period */
 
-vim +/id +81 kernel/bpf/trampoline.c
-
-    77	
-    78	static u64 bpf_tramp_id_key(struct bpf_tramp_id *id)
-    79	{
-    80		if (bpf_tramp_id_is_multi(id))
-  > 81			return (u64) &id;
-    82		else
-    83			return ((u64) id->obj_id << 32) | id->id[0];
-    84	}
-    85	
-
+base-commit: fdf249c70a36e2daa7ddf1252cf3b71faed87abc
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
