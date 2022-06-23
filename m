@@ -1,152 +1,125 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E000E468C
-	for <llvm@lists.linux.dev>; Thu, 23 Jun 2022 22:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656022734; x=1687558734;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E1sBYABT4py5zAJMSQ/pzFIamEDTB5lsNR6ELNXl7FE=;
-  b=PG30wVhR/IhfyY+LChRu7buRLFybq5DAnzKBre+SuRTYJq5dD3+3WUAK
-   BTF78iVEnMgupLvvRo7i9r8vpBi7m1NGTsiNzC9ug89ZKwVl9l+4bqwS4
-   xkeAsH/HsLPS8u7hHnkxDZuJxNTwSBUYrXrs3K9ffgZN81KNkF6CGx4BN
-   SBrw2okptH4+vUtw2HU2nA9Ixy+wMyeNOkRVzoqzJWCaw0EMAX4NVtahi
-   z3dbiiz6TrvNgDkjhHrwbM/6zLKHLDW0xEk0OVKKnzwom3ZPCJGYO29gm
-   zgqZEUiW4XmHLnWC7YoChy0vu7iyEIWhSPwf9WH6nrs8NIr7k5kFSwBzU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="280901190"
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="280901190"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 15:18:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="621489449"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jun 2022 15:18:44 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o4V9w-0003EB-1M;
-	Thu, 23 Jun 2022 22:18:44 +0000
-Date: Fri, 24 Jun 2022 06:18:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nayna Jain <nayna@linux.ibm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
- named fwsecurityfs
-Message-ID: <202206240601.5oMCfW72-lkp@intel.com>
-References: <20220622215648.96723-3-nayna@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEB01FAC
+	for <llvm@lists.linux.dev>; Thu, 23 Jun 2022 23:33:49 +0000 (UTC)
+Received: by mail-lf1-f48.google.com with SMTP id y32so1559884lfa.6
+        for <llvm@lists.linux.dev>; Thu, 23 Jun 2022 16:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5t2HdHgbQDM3fVs9f9inVKfPOgEozAtWYglMYVXHeo=;
+        b=RuFxaVmx5XYRY5cqHS6MXL8FQOv9P3Qc6bXQm6YEdOifK6a/lTAFCGFL2J4ATAQQFY
+         lwCKS6zC7RJM/DUvxNJJCHOVPnF/6IJjID28NEl412feqsYv1uZFexivMdsdVa+7tn2X
+         MGMfYO0AbTXmbcfSxsQPuGgp2ZmB8OmFzHZSms9FbzYCu1SojnuuERyeWei46ML1VAnI
+         f5+edDfn3TD/BIFurtpH6q80H076WYN2G7TkGUjrLTpAyNcYDfaVP63FXe76kdTu9nr2
+         KhrmWXUNpaXlUGfWHxfTczNfXxGUYutkiGRxGjmVn9kcsMYI2nS4Wkona1TX4gvI67M/
+         gwMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5t2HdHgbQDM3fVs9f9inVKfPOgEozAtWYglMYVXHeo=;
+        b=is1GefETaeYrp4X9/D1WTjx3j46PUUazwqww5v3BgPOMA1hQEJcZhoxZftjtbIBSWd
+         5XMEYc4BSALDQ1E7PyPxpA73PvYd+wbmY0VtcKQvhFbVJtQutJ/dnStxWBbgUbHFulgy
+         tq2J/ui83fWRboaCZomwzx60pOpe4ZdGzDV/I0xcoHn2ROQnTXN+rMUdOCKAYMKzLnL/
+         +HK4zB5ad73mLhyOHPxHInOuD+IiLMYpniqGALF8FZI8sNHMiQxUuBJB4dLc/Vr3PnGs
+         FzdgVmOLxMd7yPu494N5ohFxIxEa75puwpwWcr2ioWctQCehA79AV87kUN1sC9iQhYJP
+         AuDg==
+X-Gm-Message-State: AJIora8fQhUdCI4WXrb4NrbNRXT8X+feDUzOhPj+pHoXRsukJC1ssbCw
+	gkJnfecJ0YEPAN9wCcLBRpcdGWZcFSqOEj3mD0vvpg==
+X-Google-Smtp-Source: AGRyM1uUYWe4B92qbAxaSPcEuzt1Jad6zUUVtzIlYMTYhqB8ii9Dkg/YbHjka/rpdX0fYjsiE40wpIwNUslwOZjEXpY=
+X-Received: by 2002:a05:6512:3f9f:b0:47d:c87e:f8f3 with SMTP id
+ x31-20020a0565123f9f00b0047dc87ef8f3mr6953750lfa.401.1656027227275; Thu, 23
+ Jun 2022 16:33:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622215648.96723-3-nayna@linux.ibm.com>
+References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X> <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
+ <YrNQrPNF/XfriP99@debian> <CAHk-=wjje8UdsQ_mjGVF4Bc_TcjAWRgOps7E_Cytg4xTbXfyig@mail.gmail.com>
+ <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
+In-Reply-To: <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 23 Jun 2022 16:33:35 -0700
+Message-ID: <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To: Linus Torvalds <torvalds@linux-foundation.org>, Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nayna,
+On Wed, Jun 22, 2022 at 3:40 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 10:49 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 12:26 PM Sudip Mukherjee
+> > <sudipm.mukherjee@gmail.com> wrote:
+> > >
+> > > Tried it after applying your patch. There was no build failure, but some warnings:
+> >
+> > So some of those objtool warnings are, I think, because clang does odd
+> > and crazy things for when it decides "this is not reachable" code.
+> >
+> > I don't much like it, and neither does objtool, but it is what it is.
+> > When clang decides "I'm calling a function that cannot return", it
+> > will have a "call" instruction and then it will just fall off the face
+> > of the earth after that.
+> >
+> > That includes falling through to the next function, or just to random
+> > other labels after the function, and then objtool as a result
+> > complains about a stack state mismatch (when the fallthrough is the
+> > same function, but now the stack pointer is different in different
+> > parts), or of the "falls through to next function".
+> >
+> > I think it's a clang misfeature in that if something goes wrong, you
+> > basically execute random code. I'd much rather see clang insert a real
+> > 'ud' instruction or 'int3' or whatever. But it doesn't.
+>
+> So adding `-mllvm -trap-unreachable` will turn these
+> `__builtin_unreachable()`'s into trapping instructions.  I think we
+> should just do that/enable that in the kernel.  The following patch
+> eliminates ALL of the fallthrough warnings observed from objtool on
+> x86_64 defconfig builds.
+>
+> ```
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 87285b76adb2..1fbf8a8f3751 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -36,6 +36,7 @@ endif
+>  # so they can be implemented or wrapped in cc-option.
+>  CLANG_FLAGS    += -Werror=unknown-warning-option
+>  CLANG_FLAGS    += -Werror=ignored-optimization-argument
+> +CLANG_FLAGS    += -mllvm -trap-unreachable
+>  KBUILD_CFLAGS  += $(CLANG_FLAGS)
+>  KBUILD_AFLAGS  += $(CLANG_FLAGS)
+>  export CLANG_FLAGS
+> ```
+>
+> There's more I need to do for LTO; `-mllvm` flags need to be passed to
+> the linker in that case.  Let me do a few more builds, collect
+> statistics on build size differences (guessing neglidgeable), then
+> will send out a more formal patch.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on linus/master v5.19-rc3 next-20220623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Looks like these are actually from calls to
+__ubsan_handle_divrem_overflow which is __noreturn when panic_on_warn
+is set by the corresponding config.  I wonder if we should be
+unconditionally adding __ubsan_handle_divrem_overflow to the allow
+list `global_noreturns` in tools/objtool/check.c?  It seems like the
+kconfig defines aren't passed through to the tools/ sources.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nayna-Jain/powerpc-pseries-add-support-for-local-secure-storage-called-Platform-KeyStore-PKS/20220623-060048
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240601.5oMCfW72-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 46be5faaf03466c3751f8a2882bef5a217e15926)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/02d7d8ac9272e2e56bac334a16100784450e8902
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nayna-Jain/powerpc-pseries-add-support-for-local-secure-storage-called-Platform-KeyStore-PKS/20220623-060048
-        git checkout 02d7d8ac9272e2e56bac334a16100784450e8902
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+List of fallthrough warnings from allmodconfig for reference:
+https://lore.kernel.org/lkml/YrNQrPNF%2FXfriP99@debian/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/fwsecurityfs/super.c:152:20: error: expected parameter declarator
-   MODULE_DESCRIPTION("Firmware Security Filesystem");
-                      ^
->> fs/fwsecurityfs/super.c:152:20: error: expected ')'
-   fs/fwsecurityfs/super.c:152:19: note: to match this '('
-   MODULE_DESCRIPTION("Firmware Security Filesystem");
-                     ^
->> fs/fwsecurityfs/super.c:152:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_DESCRIPTION("Firmware Security Filesystem");
-   ^
-   int
->> fs/fwsecurityfs/super.c:152:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_DESCRIPTION("Firmware Security Filesystem");
-                     ^
-                                                    void
-   fs/fwsecurityfs/super.c:153:15: error: expected parameter declarator
-   MODULE_AUTHOR("Nayna Jain");
-                 ^
-   fs/fwsecurityfs/super.c:153:15: error: expected ')'
-   fs/fwsecurityfs/super.c:153:14: note: to match this '('
-   MODULE_AUTHOR("Nayna Jain");
-                ^
-   fs/fwsecurityfs/super.c:153:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_AUTHOR("Nayna Jain");
-   ^
-   int
-   fs/fwsecurityfs/super.c:153:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_AUTHOR("Nayna Jain");
-                ^
-                             void
-   fs/fwsecurityfs/super.c:154:16: error: expected parameter declarator
-   MODULE_LICENSE("GPL");
-                  ^
-   fs/fwsecurityfs/super.c:154:16: error: expected ')'
-   fs/fwsecurityfs/super.c:154:15: note: to match this '('
-   MODULE_LICENSE("GPL");
-                 ^
-   fs/fwsecurityfs/super.c:154:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_LICENSE("GPL");
-   ^
-   int
-   fs/fwsecurityfs/super.c:154:15: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_LICENSE("GPL");
-                 ^
-                       void
-   12 errors generated.
-
-
-vim +152 fs/fwsecurityfs/super.c
-
-   134	
-   135	static int __init fwsecurityfs_init(void)
-   136	{
-   137		int retval;
-   138	
-   139		retval = sysfs_create_mount_point(firmware_kobj, "security");
-   140		if (retval)
-   141			return retval;
-   142	
-   143		retval = register_filesystem(&fs_type);
-   144		if (retval) {
-   145			sysfs_remove_mount_point(firmware_kobj, "security");
-   146			return retval;
-   147		}
-   148	
-   149		return 0;
-   150	}
-   151	core_initcall(fwsecurityfs_init);
- > 152	MODULE_DESCRIPTION("Firmware Security Filesystem");
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+Thanks,
+~Nick Desaulniers
