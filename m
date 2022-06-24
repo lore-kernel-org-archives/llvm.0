@@ -1,34 +1,34 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C53E28EB
-	for <llvm@lists.linux.dev>; Fri, 24 Jun 2022 12:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C430928EA
+	for <llvm@lists.linux.dev>; Fri, 24 Jun 2022 12:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656072817; x=1687608817;
+  t=1656072818; x=1687608818;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UwGnL3cKrVpIYdUCZi0g8IIvLiuF1HHfK1nv3YKvvvI=;
-  b=WitzaqL5ZK6Pbggm+YUdNVI01iBvUWBxf/VitY30SMEKR1sMdk29ex/S
-   vgGRcsvHF+hc/UbW7Uep3XhuOFwQ4opSxNnWjcGcnXjBX5sCFgWvhTA52
-   pSkPUoNMLf39YVMXMmlW0HE6HnxRU4DsK1e+U49CJKHRgpmvCncjeoDKT
-   mVLgzejUZioOPTvrW7Y8eBy72gQYUq+1TxwtmudLznYdK++2/bln0bL6V
-   gx0QyXaqPFnRHl3piklsCNxFB0UNNCY+Y5OTZTU/LRV513dpfqq+vXM1Z
-   Q+tv7DEtX7K14cZXp28nKwveFh2VcNNV21FF4saHbRmnsBp//qj65/O8b
+  bh=w9jL8NMkwUoLyGdxlrOaxo4xSZkgTsdTKbiPOLXLDqI=;
+  b=FnG0Bn0PfQ/NJfMh8L11vb7yibzPeKgsnNOfPX18Zf5XK6G66dtFZUuj
+   bzIwsn24Nr/KC5tYKpxvGmXW3zdL06GuSdnNSqkZu/JuZBdwEwde7GQFV
+   aNYAW37AmkWiQrLYkmZKqvWTZ0yxDlb2P68hCWJdtmPpqJwjiGEZ0iETh
+   KjAxmVzTt22plm2zrCyd8d6XE2MJ7ZSRICBnBjdxSCK8MjeyP5bnJkeMq
+   OYd6A4quKT0m16bE2609QQmnJVy+0XwEJMRzFYEkP7R8J78ckG1qDIoXg
+   OwQuApYRDRG4MKD5xVTYSj62bIQw5e+u5E74Hl57DNOJCFT4GfKLntLiI
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="281722738"
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="264027549"
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="281722738"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:13:37 -0700
+   d="scan'208";a="264027549"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:13:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="765726377"
+   d="scan'208";a="563831558"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jun 2022 05:13:30 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Jun 2022 05:13:32 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25OCDEo8014999;
-	Fri, 24 Jun 2022 13:13:28 +0100
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25OCDEo9014999;
+	Fri, 24 Jun 2022 13:13:29 +0100
 From: Alexander Lobakin <alexandr.lobakin@intel.com>
 To: Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
 Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -52,9 +52,9 @@ Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
         llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 8/9] bitmap: don't assume compiler evaluates small mem*() builtins calls
-Date: Fri, 24 Jun 2022 14:13:12 +0200
-Message-Id: <20220624121313.2382500-9-alexandr.lobakin@intel.com>
+Subject: [PATCH v5 9/9] lib: test_bitmap: add compile-time optimization/evaluations assertions
+Date: Fri, 24 Jun 2022 14:13:13 +0200
+Message-Id: <20220624121313.2382500-10-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
 References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
@@ -66,111 +66,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Intel kernel bot triggered the build bug on ARC architecture that
-in fact is as follows:
+Add a function to the bitmap test suite, which will ensure that
+compilers are able to evaluate operations performed by the
+bitops/bitmap helpers to compile-time constants when all of the
+arguments are compile-time constants as well, or trigger a build
+bug otherwise. This should work on all architectures and all the
+optimization levels supported by Kbuild.
+The function doesn't perform any runtime tests and gets optimized
+out to nothing after passing the build assertions.
+Unfortunately, Clang for s390 is currently broken (up to the latest
+Git snapshots) -- see the comment in the code -- so for now there's
+a small workaround for it which doesn't alter the logics. Hope we'll
+be able to remove it one day (bugreport is on its way).
 
-	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-
-	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-	BUILD_BUG_ON(!__builtin_constant_p(*bitmap));
-
-which can be expanded to:
-
-	unsigned long bitmap[1];
-
-	memset(bitmap, 0, sizeof(*bitmap));
-	BUILD_BUG_ON(!__builtin_constant_p(*bitmap));
-
-In most cases, a compiler is able to expand small/simple mem*()
-calls to simple assignments or bitops, in this case that would mean:
-
-	unsigned long bitmap[1] = { 0 };
-
-	BUILD_BUG_ON(!__builtin_constant_p(*bitmap));
-
-and on most architectures this works, but not on ARC, despite having
--O3 for every build.
-So, to make this work, in case when the last bit to modify is still
-within the first long (small_const_nbits()), just use plain
-assignments for the rest of bitmap_*() functions which still use
-mem*(), but didn't receive such compile-time optimizations yet.
-This doesn't have the same coverage as compilers provide, but at
-least something to start:
-
-text: add/remove: 3/7 grow/shrink: 43/78 up/down: 1848/-3370 (-1546)
-data: add/remove: 1/11 grow/shrink: 0/8 up/down: 4/-356 (-352)
-
-notably cpumask_*() family when NR_CPUS <= BITS_PER_LONG:
-
-netif_get_num_default_rss_queues              38       4     -34
-cpumask_copy                                  90       -     -90
-cpumask_clear                                146       -    -146
-
-and the abovementioned assertion started passing.
-
+Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/bitmap.h | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ lib/test_bitmap.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 2e6cd5681040..a0f4f3af8d30 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -238,20 +238,32 @@ extern int bitmap_print_list_to_buf(char *buf, const unsigned long *maskp,
- static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
- {
- 	unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
--	memset(dst, 0, len);
-+
-+	if (small_const_nbits(nbits))
-+		*dst = 0;
-+	else
-+		memset(dst, 0, len);
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index d5923a640457..25967cfa4ab2 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -869,6 +869,67 @@ static void __init test_bitmap_print_buf(void)
+ 	}
  }
  
- static inline void bitmap_fill(unsigned long *dst, unsigned int nbits)
- {
- 	unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
--	memset(dst, 0xff, len);
++static void __init test_bitmap_const_eval(void)
++{
++	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
++	unsigned long initvar = BIT(2);
++	unsigned long bitopvar = 0;
++	unsigned long var = 0;
++	int res;
 +
-+	if (small_const_nbits(nbits))
-+		*dst = ~0UL;
-+	else
-+		memset(dst, 0xff, len);
++	/*
++	 * Compilers must be able to optimize all of those to compile-time
++	 * constants on any supported optimization level (-O2, -Os) and any
++	 * architecture. Otherwise, trigger a build bug.
++	 * The whole function gets optimized out then, there's nothing to do
++	 * in runtime.
++	 */
++
++	/*
++	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
++	 * Clang on s390 optimizes bitops at compile-time as intended, but at
++	 * the same time stops treating @bitmap and @bitopvar as compile-time
++	 * constants after regular test_bit() is executed, thus triggering the
++	 * build bugs below. So, call const_test_bit() there directly until
++	 * the compiler is fixed.
++	 */
++	bitmap_clear(bitmap, 0, BITS_PER_LONG);
++#if defined(__s390__) && defined(__clang__)
++	if (!const_test_bit(7, bitmap))
++#else
++	if (!test_bit(7, bitmap))
++#endif
++		bitmap_set(bitmap, 5, 2);
++
++	/* Equals to `unsigned long bitopvar = BIT(20)` */
++	__change_bit(31, &bitopvar);
++	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
++
++	/* Equals to `unsigned long var = BIT(25)` */
++	var |= BIT(25);
++	if (var & BIT(0))
++		var ^= GENMASK(9, 6);
++
++	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
++	res = bitmap_weight(bitmap, 20);
++	BUILD_BUG_ON(!__builtin_constant_p(res));
++	BUILD_BUG_ON(res != 2);
++
++	/* !(BIT(31) & BIT(18)) == 1 */
++	res = !test_bit(18, &bitopvar);
++	BUILD_BUG_ON(!__builtin_constant_p(res));
++	BUILD_BUG_ON(!res);
++
++	/* BIT(2) & GENMASK(14, 8) == 0 */
++	res = initvar & GENMASK(14, 8);
++	BUILD_BUG_ON(!__builtin_constant_p(res));
++	BUILD_BUG_ON(res);
++
++	/* ~BIT(25) */
++	BUILD_BUG_ON(!__builtin_constant_p(~var));
++	BUILD_BUG_ON(~var != ~BIT(25));
++}
++
+ static void __init selftest(void)
+ {
+ 	test_zero_clear();
+@@ -884,6 +945,7 @@ static void __init selftest(void)
+ 	test_for_each_set_clump8();
+ 	test_bitmap_cut();
+ 	test_bitmap_print_buf();
++	test_bitmap_const_eval();
  }
  
- static inline void bitmap_copy(unsigned long *dst, const unsigned long *src,
- 			unsigned int nbits)
- {
- 	unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
--	memcpy(dst, src, len);
-+
-+	if (small_const_nbits(nbits))
-+		*dst = *src;
-+	else
-+		memcpy(dst, src, len);
- }
- 
- /*
-@@ -431,6 +443,8 @@ static __always_inline void bitmap_set(unsigned long *map, unsigned int start,
- {
- 	if (__builtin_constant_p(nbits) && nbits == 1)
- 		__set_bit(start, map);
-+	else if (small_const_nbits(start + nbits))
-+		*map |= GENMASK(start + nbits - 1, start);
- 	else if (__builtin_constant_p(start & BITMAP_MEM_MASK) &&
- 		 IS_ALIGNED(start, BITMAP_MEM_ALIGNMENT) &&
- 		 __builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
-@@ -445,6 +459,8 @@ static __always_inline void bitmap_clear(unsigned long *map, unsigned int start,
- {
- 	if (__builtin_constant_p(nbits) && nbits == 1)
- 		__clear_bit(start, map);
-+	else if (small_const_nbits(start + nbits))
-+		*map &= ~GENMASK(start + nbits - 1, start);
- 	else if (__builtin_constant_p(start & BITMAP_MEM_MASK) &&
- 		 IS_ALIGNED(start, BITMAP_MEM_ALIGNMENT) &&
- 		 __builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
+ KSTM_MODULE_LOADERS(test_bitmap);
 -- 
 2.36.1
 
