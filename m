@@ -1,46 +1,42 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3207C
-	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 13:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6066B7C
+	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 13:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656163211; x=1687699211;
+  t=1656164711; x=1687700711;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E+g1LfATPd0ZspZntzH4NSUypF/JsTen+sy1/xUT8wk=;
-  b=U+DUwXVSJb7emDnfxO4r/KmcvXhL5l2EPqwV9Tkt6zLr1qH6WfB81SoX
-   rlWB0RlKh4WrHrdYj5LCJlxSjtzXU0ioeat2qpCgKcSbHj+yzs7LaTlUk
-   HvBtYSJrCtfP0NuVRkAAbHk0fuoFNCRu3t8U3YUvjkG7exBoAQqBMQEA3
-   RrvAoVf90RPqqoGNdFuCw0qZf/KYL/svT+Rx1bU7S0Ajna7PbDLhPingr
-   t/WOrlgUoQb23PyrZ/zCWlv81C9NZl6zz1hxnOHKOP/AQgIN2nKvgKZi7
-   4ugpmj/zG3AuDoaiUOIumuodIlX9sHmk0FJ/3ATRPUhpNUWvtgopseh+z
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="281920148"
+  bh=iEqJKAAtzjtT4BX9303ZZYCiuDWW8v2XVYI0lREZy8c=;
+  b=AlmtVQLeolQao6lIxcPDUaLJE0ZcVsdcTbfiIzF2KS5LEhLL36cRXPhv
+   lbPvPiv1iaF8ChK/KPE3dNX0nI3w/kSl03jk2t2s7tsZFPKTDyAeP1U61
+   chq59Oi1gFVb0oTM4NkoyPYG4pdX+xPzwKmX04nIdpIU3NsPKVVw1uXn1
+   x/ngao2QDyHgKm7ULCMZLsY75NSwvYytXBQPUHIit+AR4m69pTtJbDXE0
+   lYQlShUkDv4ZrIIMK8UJPHd70VYmZ/8/R3a1LjsdeEX5PAn9lEmdxiYlF
+   k7cf5uLqpSb6GVk7O5aSG9RjaOOc7juwh+QLRl0hHsjnIBcKuo6oFJAvz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="264233409"
 X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="281920148"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 06:20:10 -0700
+   d="scan'208";a="264233409"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 06:45:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="716521170"
+   d="scan'208";a="539586351"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jun 2022 06:20:08 -0700
+  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2022 06:45:09 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o55hn-0005ml-Vy;
-	Sat, 25 Jun 2022 13:20:07 +0000
-Date: Sat, 25 Jun 2022 21:19:30 +0800
+	id 1o5660-0005nl-Od;
+	Sat, 25 Jun 2022 13:45:08 +0000
+Date: Sat, 25 Jun 2022 21:44:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tong Tiangen <tongtiangen@huawei.com>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>
-Subject: mm/page_table_check.c:148:6: error: call to undeclared function
- 'pte_user_accessible_page'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202206252135.7VbdJEIx-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-pxa/eseries.c:46:13: warning: no previous prototype
+ for function 'eseries_fixup'
+Message-ID: <202206252134.dWKA4YaD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,226 +46,164 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Tong,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   8c23f235a6a8ae43abea215812eb9d8cf4dd165e
-commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
-date:   6 weeks ago
-config: riscv-randconfig-r003-20220625
+commit: 8c1fb11b8a77dc489a8ef6d96c38c1297b629d06 ARM: s3c: enable s3c24xx multiplatform support
+date:   3 months ago
+config: arm-buildonly-randconfig-r006-20220625
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8c1fb11b8a77dc489a8ef6d96c38c1297b629d06
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        git checkout 8c1fb11b8a77dc489a8ef6d96c38c1297b629d06
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/page_table_check.c:148:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pte_user_accessible_page(pte)) {
+>> arch/arm/mach-pxa/eseries.c:46:13: warning: no previous prototype for function 'eseries_fixup' [-Wmissing-prototypes]
+   void __init eseries_fixup(struct tag *tags, char **cmdline)
                ^
->> mm/page_table_check.c:149:36: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_clear(mm, addr, pte_pfn(pte),
-                                                    ^
->> mm/page_table_check.c:161:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pmd_user_accessible_page(pmd)) {
+   arch/arm/mach-pxa/eseries.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init eseries_fixup(struct tag *tags, char **cmdline)
+   ^
+   static 
+>> arch/arm/mach-pxa/eseries.c:75:5: warning: no previous prototype for function 'eseries_tmio_enable' [-Wmissing-prototypes]
+   int eseries_tmio_enable(struct platform_device *dev)
+       ^
+   arch/arm/mach-pxa/eseries.c:75:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int eseries_tmio_enable(struct platform_device *dev)
+   ^
+   static 
+>> arch/arm/mach-pxa/eseries.c:88:5: warning: no previous prototype for function 'eseries_tmio_disable' [-Wmissing-prototypes]
+   int eseries_tmio_disable(struct platform_device *dev)
+       ^
+   arch/arm/mach-pxa/eseries.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int eseries_tmio_disable(struct platform_device *dev)
+   ^
+   static 
+>> arch/arm/mach-pxa/eseries.c:95:5: warning: no previous prototype for function 'eseries_tmio_suspend' [-Wmissing-prototypes]
+   int eseries_tmio_suspend(struct platform_device *dev)
+       ^
+   arch/arm/mach-pxa/eseries.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int eseries_tmio_suspend(struct platform_device *dev)
+   ^
+   static 
+>> arch/arm/mach-pxa/eseries.c:101:5: warning: no previous prototype for function 'eseries_tmio_resume' [-Wmissing-prototypes]
+   int eseries_tmio_resume(struct platform_device *dev)
+       ^
+   arch/arm/mach-pxa/eseries.c:101:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int eseries_tmio_resume(struct platform_device *dev)
+   ^
+   static 
+>> arch/arm/mach-pxa/eseries.c:108:6: warning: no previous prototype for function 'eseries_get_tmio_gpios' [-Wmissing-prototypes]
+   void eseries_get_tmio_gpios(void)
+        ^
+   arch/arm/mach-pxa/eseries.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void eseries_get_tmio_gpios(void)
+   ^
+   static 
+   6 warnings generated.
+--
+>> arch/arm/mach-pxa/colibri-pxa270-income.c:224:13: warning: no previous prototype for function 'colibri_pxa270_income_boardinit' [-Wmissing-prototypes]
+   void __init colibri_pxa270_income_boardinit(void)
                ^
->> mm/page_table_check.c:162:36: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_clear(mm, addr, pmd_pfn(pmd),
-                                                    ^
-   mm/page_table_check.c:162:36: note: did you mean '_pmd_pfn'?
-   arch/riscv/include/asm/pgtable-64.h:144:29: note: '_pmd_pfn' declared here
-   static inline unsigned long _pmd_pfn(pmd_t pmd)
-                               ^
->> mm/page_table_check.c:174:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pud_user_accessible_page(pud)) {
-               ^
->> mm/page_table_check.c:175:36: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_clear(mm, addr, pud_pfn(pud),
-                                                    ^
-   mm/page_table_check.c:175:36: note: did you mean '_pud_pfn'?
-   arch/riscv/include/asm/pgtable-64.h:104:29: note: '_pud_pfn' declared here
-   static inline unsigned long _pud_pfn(pud_t pud)
-                               ^
-   mm/page_table_check.c:188:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pte_user_accessible_page(pte)) {
-               ^
-   mm/page_table_check.c:189:34: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_set(mm, addr, pte_pfn(pte),
-                                                  ^
->> mm/page_table_check.c:191:10: error: call to undeclared function 'pte_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                        pte_write(pte));
-                                        ^
-   mm/page_table_check.c:203:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pmd_user_accessible_page(pmd)) {
-               ^
-   mm/page_table_check.c:204:34: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_set(mm, addr, pmd_pfn(pmd),
-                                                  ^
->> mm/page_table_check.c:206:10: error: call to undeclared function 'pmd_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                        pmd_write(pmd));
-                                        ^
-   mm/page_table_check.c:218:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (pud_user_accessible_page(pud)) {
-               ^
-   mm/page_table_check.c:219:34: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   page_table_check_set(mm, addr, pud_pfn(pud),
-                                                  ^
->> mm/page_table_check.c:221:10: error: call to undeclared function 'pud_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                        pud_write(pud));
-                                        ^
-   mm/page_table_check.c:221:10: note: did you mean 'up_write'?
-   include/linux/rwsem.h:202:13: note: 'up_write' declared here
-   extern void up_write(struct rw_semaphore *sem);
-               ^
->> mm/page_table_check.c:233:7: error: call to undeclared function 'pmd_bad'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
-                ^
->> mm/page_table_check.c:234:17: error: call to undeclared function 'pte_offset_map'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   pte_t *ptep = pte_offset_map(&pmd, addr);
-                                 ^
-   mm/page_table_check.c:234:10: warning: incompatible integer to pointer conversion initializing 'pte_t *' with an expression of type 'int' [-Wint-conversion]
-                   pte_t *ptep = pte_offset_map(&pmd, addr);
-                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> mm/page_table_check.c:237:3: error: call to undeclared function 'pte_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   pte_unmap(ptep);
-                   ^
-   mm/page_table_check.c:237:3: note: did you mean 'pte_devmap'?
-   include/linux/mm.h:2113:19: note: 'pte_devmap' declared here
-   static inline int pte_devmap(pte_t pte)
-                     ^
->> mm/page_table_check.c:238:19: error: use of undeclared identifier 'PTRS_PER_PTE'
-                   for (i = 0; i < PTRS_PER_PTE; i++) {
-                                   ^
-   1 warning and 19 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_TTM
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_TTM_HELPER && HAS_IOMEM && DRM
-   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
+   arch/arm/mach-pxa/colibri-pxa270-income.c:224:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init colibri_pxa270_income_boardinit(void)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/pte_user_accessible_page +148 mm/page_table_check.c
+vim +/eseries_fixup +46 arch/arm/mach-pxa/eseries.c
 
-df4e817b710809 Pasha Tatashin 2022-01-14  141  
-df4e817b710809 Pasha Tatashin 2022-01-14  142  void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  143  				  pte_t pte)
-df4e817b710809 Pasha Tatashin 2022-01-14  144  {
-df4e817b710809 Pasha Tatashin 2022-01-14  145  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  146  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  147  
-df4e817b710809 Pasha Tatashin 2022-01-14 @148  	if (pte_user_accessible_page(pte)) {
-df4e817b710809 Pasha Tatashin 2022-01-14 @149  		page_table_check_clear(mm, addr, pte_pfn(pte),
-df4e817b710809 Pasha Tatashin 2022-01-14  150  				       PAGE_SIZE >> PAGE_SHIFT);
-df4e817b710809 Pasha Tatashin 2022-01-14  151  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  152  }
-df4e817b710809 Pasha Tatashin 2022-01-14  153  EXPORT_SYMBOL(__page_table_check_pte_clear);
-df4e817b710809 Pasha Tatashin 2022-01-14  154  
-df4e817b710809 Pasha Tatashin 2022-01-14  155  void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  156  				  pmd_t pmd)
-df4e817b710809 Pasha Tatashin 2022-01-14  157  {
-df4e817b710809 Pasha Tatashin 2022-01-14  158  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  159  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  160  
-df4e817b710809 Pasha Tatashin 2022-01-14 @161  	if (pmd_user_accessible_page(pmd)) {
-df4e817b710809 Pasha Tatashin 2022-01-14 @162  		page_table_check_clear(mm, addr, pmd_pfn(pmd),
-92fb05242a1b1e Tong Tiangen   2022-05-12  163  				       PMD_SIZE >> PAGE_SHIFT);
-df4e817b710809 Pasha Tatashin 2022-01-14  164  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  165  }
-df4e817b710809 Pasha Tatashin 2022-01-14  166  EXPORT_SYMBOL(__page_table_check_pmd_clear);
-df4e817b710809 Pasha Tatashin 2022-01-14  167  
-df4e817b710809 Pasha Tatashin 2022-01-14  168  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  169  				  pud_t pud)
-df4e817b710809 Pasha Tatashin 2022-01-14  170  {
-df4e817b710809 Pasha Tatashin 2022-01-14  171  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  172  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  173  
-df4e817b710809 Pasha Tatashin 2022-01-14 @174  	if (pud_user_accessible_page(pud)) {
-df4e817b710809 Pasha Tatashin 2022-01-14 @175  		page_table_check_clear(mm, addr, pud_pfn(pud),
-92fb05242a1b1e Tong Tiangen   2022-05-12  176  				       PUD_SIZE >> PAGE_SHIFT);
-df4e817b710809 Pasha Tatashin 2022-01-14  177  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  178  }
-df4e817b710809 Pasha Tatashin 2022-01-14  179  EXPORT_SYMBOL(__page_table_check_pud_clear);
-df4e817b710809 Pasha Tatashin 2022-01-14  180  
-df4e817b710809 Pasha Tatashin 2022-01-14  181  void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  182  				pte_t *ptep, pte_t pte)
-df4e817b710809 Pasha Tatashin 2022-01-14  183  {
-df4e817b710809 Pasha Tatashin 2022-01-14  184  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  185  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  186  
-64d8b9e14512ce Pasha Tatashin 2022-02-03  187  	__page_table_check_pte_clear(mm, addr, *ptep);
-df4e817b710809 Pasha Tatashin 2022-01-14  188  	if (pte_user_accessible_page(pte)) {
-df4e817b710809 Pasha Tatashin 2022-01-14  189  		page_table_check_set(mm, addr, pte_pfn(pte),
-df4e817b710809 Pasha Tatashin 2022-01-14  190  				     PAGE_SIZE >> PAGE_SHIFT,
-df4e817b710809 Pasha Tatashin 2022-01-14 @191  				     pte_write(pte));
-df4e817b710809 Pasha Tatashin 2022-01-14  192  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  193  }
-df4e817b710809 Pasha Tatashin 2022-01-14  194  EXPORT_SYMBOL(__page_table_check_pte_set);
-df4e817b710809 Pasha Tatashin 2022-01-14  195  
-df4e817b710809 Pasha Tatashin 2022-01-14  196  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  197  				pmd_t *pmdp, pmd_t pmd)
-df4e817b710809 Pasha Tatashin 2022-01-14  198  {
-df4e817b710809 Pasha Tatashin 2022-01-14  199  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  200  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  201  
-64d8b9e14512ce Pasha Tatashin 2022-02-03  202  	__page_table_check_pmd_clear(mm, addr, *pmdp);
-df4e817b710809 Pasha Tatashin 2022-01-14  203  	if (pmd_user_accessible_page(pmd)) {
-df4e817b710809 Pasha Tatashin 2022-01-14  204  		page_table_check_set(mm, addr, pmd_pfn(pmd),
-92fb05242a1b1e Tong Tiangen   2022-05-12  205  				     PMD_SIZE >> PAGE_SHIFT,
-df4e817b710809 Pasha Tatashin 2022-01-14 @206  				     pmd_write(pmd));
-df4e817b710809 Pasha Tatashin 2022-01-14  207  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  208  }
-df4e817b710809 Pasha Tatashin 2022-01-14  209  EXPORT_SYMBOL(__page_table_check_pmd_set);
-df4e817b710809 Pasha Tatashin 2022-01-14  210  
-df4e817b710809 Pasha Tatashin 2022-01-14  211  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
-df4e817b710809 Pasha Tatashin 2022-01-14  212  				pud_t *pudp, pud_t pud)
-df4e817b710809 Pasha Tatashin 2022-01-14  213  {
-df4e817b710809 Pasha Tatashin 2022-01-14  214  	if (&init_mm == mm)
-df4e817b710809 Pasha Tatashin 2022-01-14  215  		return;
-df4e817b710809 Pasha Tatashin 2022-01-14  216  
-64d8b9e14512ce Pasha Tatashin 2022-02-03  217  	__page_table_check_pud_clear(mm, addr, *pudp);
-df4e817b710809 Pasha Tatashin 2022-01-14  218  	if (pud_user_accessible_page(pud)) {
-df4e817b710809 Pasha Tatashin 2022-01-14  219  		page_table_check_set(mm, addr, pud_pfn(pud),
-92fb05242a1b1e Tong Tiangen   2022-05-12  220  				     PUD_SIZE >> PAGE_SHIFT,
-df4e817b710809 Pasha Tatashin 2022-01-14 @221  				     pud_write(pud));
-df4e817b710809 Pasha Tatashin 2022-01-14  222  	}
-df4e817b710809 Pasha Tatashin 2022-01-14  223  }
-df4e817b710809 Pasha Tatashin 2022-01-14  224  EXPORT_SYMBOL(__page_table_check_pud_set);
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  225  
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  226  void __page_table_check_pte_clear_range(struct mm_struct *mm,
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  227  					unsigned long addr,
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  228  					pmd_t pmd)
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  229  {
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  230  	if (&init_mm == mm)
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  231  		return;
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  232  
-80110bbfbba6f0 Pasha Tatashin 2022-02-03 @233  	if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
-80110bbfbba6f0 Pasha Tatashin 2022-02-03 @234  		pte_t *ptep = pte_offset_map(&pmd, addr);
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  235  		unsigned long i;
-80110bbfbba6f0 Pasha Tatashin 2022-02-03  236  
-80110bbfbba6f0 Pasha Tatashin 2022-02-03 @237  		pte_unmap(ptep);
-80110bbfbba6f0 Pasha Tatashin 2022-02-03 @238  		for (i = 0; i < PTRS_PER_PTE; i++) {
+3abcd199db312a Ian Molton       2007-11-19   44  
+3abcd199db312a Ian Molton       2007-11-19   45  /* Only e800 has 128MB RAM */
+1c2f87c22566cd Laura Abbott     2014-04-13  @46  void __init eseries_fixup(struct tag *tags, char **cmdline)
+3abcd199db312a Ian Molton       2007-11-19   47  {
+3abcd199db312a Ian Molton       2007-11-19   48  	if (machine_is_e800())
+1c2f87c22566cd Laura Abbott     2014-04-13   49  		memblock_add(0xa0000000, SZ_128M);
+3abcd199db312a Ian Molton       2007-11-19   50  	else
+1c2f87c22566cd Laura Abbott     2014-04-13   51  		memblock_add(0xa0000000, SZ_64M);
+3abcd199db312a Ian Molton       2007-11-19   52  }
+3abcd199db312a Ian Molton       2007-11-19   53  
+fdabc466f335bc Linus Walleij    2020-01-23   54  static struct gpiod_lookup_table e7xx_gpio_vbus_gpiod_table __maybe_unused = {
+fdabc466f335bc Linus Walleij    2020-01-23   55  	.dev_id = "gpio-vbus",
+fdabc466f335bc Linus Walleij    2020-01-23   56  	.table = {
+fdabc466f335bc Linus Walleij    2020-01-23   57  		GPIO_LOOKUP("gpio-pxa", GPIO_E7XX_USB_DISC,
+fdabc466f335bc Linus Walleij    2020-01-23   58  			    "vbus", GPIO_ACTIVE_HIGH),
+fdabc466f335bc Linus Walleij    2020-01-23   59  		GPIO_LOOKUP("gpio-pxa", GPIO_E7XX_USB_PULLUP,
+fdabc466f335bc Linus Walleij    2020-01-23   60  			    "pullup", GPIO_ACTIVE_LOW),
+fdabc466f335bc Linus Walleij    2020-01-23   61  		{ },
+fdabc466f335bc Linus Walleij    2020-01-23   62  	},
+ebcce7b13be837 Ian Molton       2008-08-19   63  };
+ebcce7b13be837 Ian Molton       2008-08-19   64  
+0a137a1a38c64d Arnd Bergmann    2016-01-29   65  static struct platform_device e7xx_gpio_vbus __maybe_unused = {
+133dce0687b4c3 Dmitry Baryshkov 2011-02-14   66  	.name	= "gpio-vbus",
+133dce0687b4c3 Dmitry Baryshkov 2011-02-14   67  	.id	= -1,
+133dce0687b4c3 Dmitry Baryshkov 2011-02-14   68  };
+133dce0687b4c3 Dmitry Baryshkov 2011-02-14   69  
+36033422639913 Ian Molton       2008-08-24   70  struct pxaficp_platform_data e7xx_ficp_platform_data = {
+c4bd01727380ce Marek Vasut      2009-07-17   71  	.gpio_pwdown		= GPIO_E7XX_IR_OFF,
+36033422639913 Ian Molton       2008-08-24   72  	.transceiver_cap	= IR_SIRMODE | IR_OFF,
+36033422639913 Ian Molton       2008-08-24   73  };
+36033422639913 Ian Molton       2008-08-24   74  
+b1ae1b7b274f67 Ian Molton       2008-09-26  @75  int eseries_tmio_enable(struct platform_device *dev)
+b1ae1b7b274f67 Ian Molton       2008-09-26   76  {
+b1ae1b7b274f67 Ian Molton       2008-09-26   77  	/* Reset - bring SUSPEND high before PCLR */
+b1ae1b7b274f67 Ian Molton       2008-09-26   78  	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26   79  	gpio_set_value(GPIO_ESERIES_TMIO_PCLR, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26   80  	msleep(1);
+b1ae1b7b274f67 Ian Molton       2008-09-26   81  	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 1);
+b1ae1b7b274f67 Ian Molton       2008-09-26   82  	msleep(1);
+b1ae1b7b274f67 Ian Molton       2008-09-26   83  	gpio_set_value(GPIO_ESERIES_TMIO_PCLR, 1);
+b1ae1b7b274f67 Ian Molton       2008-09-26   84  	msleep(1);
+b1ae1b7b274f67 Ian Molton       2008-09-26   85  	return 0;
+b1ae1b7b274f67 Ian Molton       2008-09-26   86  }
+b1ae1b7b274f67 Ian Molton       2008-09-26   87  
+b1ae1b7b274f67 Ian Molton       2008-09-26  @88  int eseries_tmio_disable(struct platform_device *dev)
+b1ae1b7b274f67 Ian Molton       2008-09-26   89  {
+b1ae1b7b274f67 Ian Molton       2008-09-26   90  	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26   91  	gpio_set_value(GPIO_ESERIES_TMIO_PCLR, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26   92  	return 0;
+b1ae1b7b274f67 Ian Molton       2008-09-26   93  }
+b1ae1b7b274f67 Ian Molton       2008-09-26   94  
+b1ae1b7b274f67 Ian Molton       2008-09-26  @95  int eseries_tmio_suspend(struct platform_device *dev)
+b1ae1b7b274f67 Ian Molton       2008-09-26   96  {
+b1ae1b7b274f67 Ian Molton       2008-09-26   97  	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26   98  	return 0;
+b1ae1b7b274f67 Ian Molton       2008-09-26   99  }
+b1ae1b7b274f67 Ian Molton       2008-09-26  100  
+b1ae1b7b274f67 Ian Molton       2008-09-26 @101  int eseries_tmio_resume(struct platform_device *dev)
+b1ae1b7b274f67 Ian Molton       2008-09-26  102  {
+b1ae1b7b274f67 Ian Molton       2008-09-26  103  	gpio_set_value(GPIO_ESERIES_TMIO_SUSPEND, 1);
+b1ae1b7b274f67 Ian Molton       2008-09-26  104  	msleep(1);
+b1ae1b7b274f67 Ian Molton       2008-09-26  105  	return 0;
+b1ae1b7b274f67 Ian Molton       2008-09-26  106  }
+b1ae1b7b274f67 Ian Molton       2008-09-26  107  
+b1ae1b7b274f67 Ian Molton       2008-09-26 @108  void eseries_get_tmio_gpios(void)
+b1ae1b7b274f67 Ian Molton       2008-09-26  109  {
+b1ae1b7b274f67 Ian Molton       2008-09-26  110  	gpio_request(GPIO_ESERIES_TMIO_SUSPEND, NULL);
+b1ae1b7b274f67 Ian Molton       2008-09-26  111  	gpio_request(GPIO_ESERIES_TMIO_PCLR, NULL);
+b1ae1b7b274f67 Ian Molton       2008-09-26  112  	gpio_direction_output(GPIO_ESERIES_TMIO_SUSPEND, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26  113  	gpio_direction_output(GPIO_ESERIES_TMIO_PCLR, 0);
+b1ae1b7b274f67 Ian Molton       2008-09-26  114  }
+b1ae1b7b274f67 Ian Molton       2008-09-26  115  
 
-:::::: The code at line 148 was first introduced by commit
-:::::: df4e817b710809425d899340dbfa8504a3ca4ba5 mm: page table check
+:::::: The code at line 46 was first introduced by commit
+:::::: 1c2f87c22566cd057bc8cde10c37ae9da1a1bb76 ARM: 8025/1: Get rid of meminfo
 
-:::::: TO: Pasha Tatashin <pasha.tatashin@soleen.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: TO: Laura Abbott <lauraa@codeaurora.org>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
 
 -- 
 0-DAY CI Kernel Test Service
