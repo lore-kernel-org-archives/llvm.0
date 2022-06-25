@@ -1,94 +1,112 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E570D23DA
-	for <llvm@lists.linux.dev>; Fri, 24 Jun 2022 12:51:21 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B0ADA21A8B;
-	Fri, 24 Jun 2022 12:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1656075079; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/ufyLq98aM5sPCb/A9DZ82OxnbOu+snINKekaV1aDRU=;
-	b=z/SG5u8nE+UvZJM1KMXfsdsJS4gFo9gKNUD1jqnZCEfQktOpJL+HUho2xWseFYUUxljXxm
-	4Vbo35uQa3H7cCMHdFOtFc7bAQUGtQsQgAEW5RP+6bwSdbrCaZOzz/8N0BYLpyE6Dp73T/
-	bEaYS6aVjoMfSGXUcWCoGG+0KRxQxvM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1656075079;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/ufyLq98aM5sPCb/A9DZ82OxnbOu+snINKekaV1aDRU=;
-	b=cITdCFre6nFiuMrbQP1LlPRDxLJEO+oY2+mpe4FddCjNeDzFUXzaMlRw1mDzLIdh6rfNdW
-	DQtygG0C3l0HHwAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F7C413ACA;
-	Fri, 24 Jun 2022 12:51:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id SAvqJkeztWI7bwAAMHmgww
-	(envelope-from <bp@suse.de>); Fri, 24 Jun 2022 12:51:19 +0000
-Date: Fri, 24 Jun 2022 14:51:15 +0200
-From: Borislav Petkov <bp@suse.de>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matt Turner <mattst88@gmail.com>, Brian Cain <bcain@quicinc.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Kees Cook <keescook@chromium.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Marco Elver <elver@google.com>, Tony Luck <tony.luck@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-	linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3ED15A7
+	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 02:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656125086; x=1687661086;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lhf2cpaLyrgMFW/oM/kAcIqZ1W3FB8AGWbSkn2LzutQ=;
+  b=OJD5cvcisbrt2X9Iyf6J8gCuF/kZXAOpvVg9cC7S2L9oxn0G7GhB3YlC
+   YFynoK1vDNl4WUns6ar9VmM2y5qWs8Fi1qtTb23SsPkAi9D6+cd/FRZoQ
+   eSRo8GcFfarBZg7IG1mY5s/sKPTi0QNTDDza7t+K6a8nJwpV5HtEHTZrx
+   U+8SjtGcWA+E435NRIPRcnBssj1YZ7lI7vZQUeav8n1CF6etpyJW8F0cm
+   nd1VljNXh0CJfMYV5LefgZGNE8gJTfDUXpGuJ3hv1emD9qYPESah8Aher
+   tpHFyDrLn+URzHDaaqsYI9tOVL9GYuhS2fz9M1DTEp+L+LeJyjqJ9+O1a
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="278684607"
+X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
+   d="scan'208";a="278684607"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:44:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
+   d="scan'208";a="731553152"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2022 19:44:44 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o4vmu-0005Bx-4r;
+	Sat, 25 Jun 2022 02:44:44 +0000
+Date: Sat, 25 Jun 2022 10:43:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karsten Graul <kgraul@linux.ibm.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/9] bitops: let optimize out non-atomic bitops on
- compile-time constants
-Message-ID: <YrWzQ6GleophO75b@zn.tnic>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+Subject: net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr'
+ is less aligned than 'union smc_llc_hdr::(anonymous at
+ net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being
+ packed, which can lead to unaligned accesses
+Message-ID: <202206240723.OOu0nUgA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
 
-On Fri, Jun 24, 2022 at 02:13:04PM +0200, Alexander Lobakin wrote:
-> While I was working on converting some structure fields from a fixed
+Hi Karsten,
 
-Can you please send your patchset once a week instead of spamming people
-with it every three days?
+FYI, the error/warning still remains.
 
-Thank you.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   92f20ff72066d8d7e2ffb655c2236259ac9d1c5d
+commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
+date:   8 months ago
+config: arm-randconfig-c002-20220622 (https://download.01.org/0day-ci/archive/20220624/202206240723.OOu0nUgA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af6d2a0b6825e71965f3e2701a63c239fa0ad70f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/smc/smc_llc.c:26:2: warning: field  within 'struct smc_llc_hdr' is less aligned than 'union smc_llc_hdr::(anonymous at net/smc/smc_llc.c:26:2)' and is usually due to 'struct smc_llc_hdr' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   1 warning generated.
+
+
+vim +26 net/smc/smc_llc.c
+
+    23	
+    24	struct smc_llc_hdr {
+    25		struct smc_wr_rx_hdr common;
+  > 26		union {
+    27			struct {
+    28				u8 length;	/* 44 */
+    29		#if defined(__BIG_ENDIAN_BITFIELD)
+    30				u8 reserved:4,
+    31				   add_link_rej_rsn:4;
+    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
+    33				u8 add_link_rej_rsn:4,
+    34				   reserved:4;
+    35	#endif
+    36			};
+    37			u16 length_v2;	/* 44 - 8192*/
+    38		};
+    39		u8 flags;
+    40	} __packed;		/* format defined in
+    41				 * IBM Shared Memory Communications Version 2
+    42				 * (https://www.ibm.com/support/pages/node/6326337)
+    43				 */
+    44	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+0-DAY CI Kernel Test Service
+https://01.org/lkp
