@@ -1,103 +1,134 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D05C7C
-	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 04:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656131632; x=1687667632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W8ERiG5aSsAljoIt3xOl/MaLfKI2i9Wb2rrd/G1FEao=;
-  b=UTVFySjJKVBvamsPy4fcmzgnY3nzto/2gHAr0BJlaTvffe9mstli+i/l
-   3SDYWOujEqTGwSYdGXJDfm9ruwc6U7fcRztoxhdNVovQho0rxJJe0DVdj
-   lsNg/YKvVtWqZ/3z2VzFC9dlwPjZbU2cu7YcCWnkHBHq5D6A2N08c6+f2
-   AZC49EQgQadLG84qBvTC79+HKKzEx2nu1z+f12jzN75VVrkisET4YUc39
-   DYw9zpVNV9bIZsO6AdS+m6LgIBsN1JVc1bnWaBTIUQfyC9xeSbXpwYYeM
-   oQJAbMuCEwlvcPGgGdznoSmmU6qs2cSTqvIN1khyDhINet3ZIWYgadand
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="281190380"
-X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="281190380"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 21:33:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="593507604"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Jun 2022 21:33:50 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o4xUU-0005Lz-8v;
-	Sat, 25 Jun 2022 04:33:50 +0000
-Date: Sat, 25 Jun 2022 12:33:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [RFC bpf-next 1/2] bpf: add a kallsyms BPF iterator
-Message-ID: <202206251225.nDavCyPn-lkp@intel.com>
-References: <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DC07A
+	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 07:27:12 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id jb13so3912391plb.9
+        for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 00:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aK0OouJ7vj79B3CKhHBNrE1LgvDzY0FwEUqvzc5U2io=;
+        b=ah3bFiqJbvOkS77zS58PHpqgSCsOJLA33/tQciJ5ahsHGdcQ4S0Z28AfnEpgmcgVPT
+         c2JyiLUESs5eFVsx6CY4urzNt9pWPIGJSZJigt35B9o0U20fBBDe0MFikZb07hRsWZ9C
+         IRZ06HrnPDO3xi/qSmzW1WNyphVN8WdgEFY6V2f0YapfjS8ibHvXxsPal4c7re44TAaF
+         yajKjjbbj21Ps/QNytNL3BSyayV0Uk4RBvhl0YR7dnIlIm5mJf4ohAKSRbv6BMgLCFIp
+         UF9DYkSbfOLWVHrgX5gxlgZxYMNqenBmHsVEW3fH+HFWA+OOp+bTDAHsr1BloVFaNrk0
+         uPbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=aK0OouJ7vj79B3CKhHBNrE1LgvDzY0FwEUqvzc5U2io=;
+        b=eikl8ErCFWTzuQQ6dth5mSvl1LZ07Nz9wgs5zUSNC8k4XHOo6WpmeKdhCCNBttsoHS
+         iDlIUV2u0OgGGSN0x4q9zU+ym4a+Kn9MdkE4LlvkC2NywwCX5Hq3caKuGW4aAgJ50F/Q
+         dqW5mINgDOhmD55clX5fOZeoYA7IxIvRYgDBNTJEDa7iNHWZmgI8KYhjlbykcq+BRmbh
+         bDOzKVDuYFynpS9N9r4z9Y1StKAUSS6Dn3MSEq1XfAoBkP309R5ASsAUUJU/+jlMHtE1
+         kyDrmVSAuKmuhKdG3hsoRSiC3oaI5M+nPstvWs8ccS457QjoZBDGad5fS8lReeB2rklI
+         FYWg==
+X-Gm-Message-State: AJIora/IpQhSmg1YOIT41FSZJUB5ARP7N7Mkl1f/kE4f4Ij9RO0hPuAe
+	YVsTBajFFK+7gbA38y2KmME=
+X-Google-Smtp-Source: AGRyM1ue3umiPhKv03BlLEsunv/7tTkIDrPvgOnOYKIFmUx8R3lV7YOiOfYFZuWA53Bqw0E+d+qSEQ==
+X-Received: by 2002:a17:903:2452:b0:16a:3b58:48fd with SMTP id l18-20020a170903245200b0016a3b5848fdmr2996311pls.67.1656142031812;
+        Sat, 25 Jun 2022 00:27:11 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id o12-20020a17090a5b0c00b001e29ddf9f4fsm2973821pji.3.2022.06.25.00.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jun 2022 00:27:11 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org,
+	Peter Zijlstra <peterz@infradead.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	David Howells <dhowells@redhat.com>,
+	Jan Beulich <JBeulich@suse.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Joe Perches <joe@perches.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [RESEND PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date: Sat, 25 Jun 2022 16:26:43 +0900
+Message-Id: <20220625072645.251828-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Alan,
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() function of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be optimized when used
+on constant expression.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on bpf-next/master]
+This series relies on __builtin_constant_p to select the optimal solution:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alan-Maguire/bpf-add-a-kallsyms-BPF-iterator/20220625-004938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: mips-randconfig-r031-20220624
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bee65a1c850426a5b6f798753bb50c74a6dca06b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alan-Maguire/bpf-add-a-kallsyms-BPF-iterator/20220625-004938
-        git checkout bee65a1c850426a5b6f798753bb50c74a6dca06b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+  * use kernel assembly for non constant expressions
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/kallsyms.c:591:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-              ^
-   kernel/kallsyms.c:591:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-   ^
-   static 
->> kernel/kallsyms.c:839:36: warning: unused variable 'bpf_iter_kallsyms_ops' [-Wunused-const-variable]
-   static const struct seq_operations bpf_iter_kallsyms_ops = {
-                                      ^
-   2 warnings generated.
+  * use compiler's __builtin function for constant expressions.
 
 
-vim +/bpf_iter_kallsyms_ops +839 kernel/kallsyms.c
+** Statistics **
 
-   838	
- > 839	static const struct seq_operations bpf_iter_kallsyms_ops = {
-   840		.start = s_start,
-   841		.next = s_next,
-   842		.stop = bpf_iter_s_seq_stop,
-   843		.show = bpf_iter_s_seq_show,
-   844	};
-   845	
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
+
+
+** Changelog **
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
