@@ -1,74 +1,72 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7354815B9
-	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 02:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3EE15BC
+	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 02:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656125929; x=1687661929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dO9SPu7+l3ltNS5/DPyg/dwLd/dlLm73s9vqM31R2fE=;
-  b=V1VfP12nPSKJB5gPalCuvKxsIvRakcSQaDB7DsrOMQHRbCuGJ24rnGvp
-   Do7DRfNaBeP1hSkAEXYWMlwkP2p7af3Rrn7slzt62wzo4/ot9qk60b9cR
-   KBR9aiEKbgww70aX0oFjUsMYZm2clAH2nLN/LPZ/QxvX1mQQffoD4Z+oe
-   MBXCLmxt9neOgTadGwkRRHoJQQwCokYCALei1wu6D1jiKkFJPvT8zEerP
-   +NHdTx8ENC95DNDhrqXH4xG48cBixZLk/Myjnb2l3KQyMdotPUzTYCr3x
-   rrV8qrDVt3rC80Ywa3LYgwqaSjCu8etY43Jdoflx+Iao5uwVzIOHebJJ2
+  t=1656125930; x=1687661930;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GfG2qQMK70mwqj2VUy5yvVfLXNeCyRdVLNI2/Xfdoa8=;
+  b=WX9uypzLu4kVfBI6UMFDb3006SqfEbJwMQsEhqbxQ6yBIte4oKpC6/53
+   cdjL4gMeijNkQLQ8IpfxOGf3PDD926g6MyjPeT/zbCkU1egWy9+pM9kyc
+   L2659umJ16nr5idpFq3XbkIh2ksA5u+AeNYRmRdPYcLJWKShaaIJm49lP
+   TYaq7PL1f0UefLhOWePX2YFw9jyoz0yyCs2l+FXPWWsd0lx7LhF/X1c9Z
+   zjoMRbAoBC1HHZeYKkA/R0vtVlT/en2tIT2/yJt+3xGARHijFcayEWY35
+   SGqISJJnpfb6QKxLOt6aw+iQl0AnaVHyQQwnLEjjRikQuVlrsbrDsQU9m
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="279901668"
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="281873851"
 X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="279901668"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:58:48 -0700
+   d="scan'208";a="281873851"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:58:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="716423632"
+   d="scan'208";a="731555087"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jun 2022 19:58:46 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2022 19:58:46 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o4w0T-0005E1-AA;
-	Sat, 25 Jun 2022 02:58:45 +0000
-Date: Sat, 25 Jun 2022 10:58:25 +0800
+	id 1o4w0U-0005EY-1r;
+	Sat, 25 Jun 2022 02:58:46 +0000
+Date: Sat, 25 Jun 2022 10:57:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH RFC net-next 3/4] net: phylink: add
- phylink_set_max_fixed_link()
-Message-ID: <202206242242.cJgdPpqT-lkp@intel.com>
-References: <E1o4hhM-004Aoy-Df@rmk-PC.armlinux.org.uk>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/for-next-fam0-uapi 1/1]
+ usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable
+ sized type 'union ib_uverbs_flow_spec_eth::(anonymous at
+ usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class
+ is a GNU extension
+Message-ID: <202206241055.Eh9MKMAE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="G8YGm4O5EuxCyBV3"
+Content-Type: multipart/mixed; boundary="R3P/7sqYANiOaYd4"
 Content-Disposition: inline
-In-Reply-To: <E1o4hhM-004Aoy-Df@rmk-PC.armlinux.org.uk>
 
 
---G8YGm4O5EuxCyBV3
+--R3P/7sqYANiOaYd4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi "Russell,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-dsa-add-support-for-retrieving-the-interface-mode/20220624-195728
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 23f94f1bc144469efc45370a8be6a73965cf4b68
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/for-next-fam0-uapi
+head:   a4ce15b7c918104a2a8689b7b312059ff0eff23a
+commit: a4ce15b7c918104a2a8689b7b312059ff0eff23a [1/1] treewide: uapi: Replace zero-length arrays with flexible-array members
 config: x86_64-randconfig-a016
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6fa9120080c35a5ff851c3fc3358692c4ef7ce0d)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 46be5faaf03466c3751f8a2882bef5a217e15926)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5cbcd5e982de75f41164469be2137df6578e1053
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Russell-King-Oracle/net-dsa-add-support-for-retrieving-the-interface-mode/20220624-195728
-        git checkout 5cbcd5e982de75f41164469be2137df6578e1053
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=a4ce15b7c918104a2a8689b7b312059ff0eff23a
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/for-next-fam0-uapi
+        git checkout a4ce15b7c918104a2a8689b7b312059ff0eff23a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
@@ -76,91 +74,92 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/phy/phylink.c:1368:10: error: call to undeclared function 'phylink_interface_to_caps'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           caps &= phylink_interface_to_caps(pl->link_config.interface);
-                   ^
-   1 error generated.
-
-
-vim +/phylink_interface_to_caps +1368 drivers/net/phy/phylink.c
-
-  1340	
-  1341	/**
-  1342	 * phylink_set_max_fixed_link() - set a fixed link configuration for phylink
-  1343	 * @pl: a pointer to a &struct phylink returned from phylink_create()
-  1344	 *
-  1345	 * Set a maximum speed fixed-link configuration for the chosen interface
-  1346	 * mode and MAC capabilities for the phylink instance. Only valid for use
-  1347	 * immediately after creation. Must not be used at any other time.
-  1348	 *
-  1349	 * The user must have initialised mac_capabilities and set a valid interface.
-  1350	 */
-  1351	int phylink_set_max_fixed_link(struct phylink *pl)
-  1352	{
-  1353		unsigned long caps;
-  1354		int speed, duplex;
-  1355		int i;
-  1356	
-  1357		/* If we are not in PHY mode, or have a PHY, or have a SFP bus,
-  1358		 * then we must not default to a fixed link.
-  1359		 */
-  1360		if (pl->cfg_link_an_mode != MLO_AN_PHY || pl->phydev || pl->sfp_bus)
-  1361			return -EBUSY;
-  1362	
-  1363		/* Get the speed/duplex capabilities and reduce according to the
-  1364		 * interface mode.
-  1365		 */
-  1366		caps = pl->config->mac_capabilities;
-  1367		caps &= ~(MAC_SYM_PAUSE | MAC_ASYM_PAUSE);
-> 1368		caps &= phylink_interface_to_caps(pl->link_config.interface);
-  1369	
-  1370		/* If there are no capabilities, then we are not using this default. */
-  1371		if (!caps)
-  1372			return -EINVAL;
-  1373	
-  1374		/* Decode to fastest speed and duplex */
-  1375		duplex = DUPLEX_UNKNOWN;
-  1376		speed = SPEED_UNKNOWN;
-  1377		for (i = 0; i < ARRAY_SIZE(phylink_caps_speeds); i++) {
-  1378			if (caps & phylink_caps_speeds[i].fd_mask) {
-  1379				duplex = DUPLEX_FULL;
-  1380				speed = phylink_caps_speeds[i].speed;
-  1381				break;
-  1382			} else if (caps & phylink_caps_speeds[i].hd_mask) {
-  1383				duplex = DUPLEX_HALF;
-  1384				speed = phylink_caps_speeds[i].speed;
-  1385				break;
-  1386			}
-  1387		}
-  1388	
-  1389		/* If we didn't find anything, bail. */
-  1390		if (speed == SPEED_UNKNOWN)
-  1391			return -EINVAL;
-  1392	
-  1393		pl->link_config.speed = speed;
-  1394		pl->link_config.duplex = duplex;
-  1395		pl->link_config.link = 1;
-  1396		pl->cfg_link_an_mode = MLO_AN_FIXED;
-  1397		pl->cur_link_an_mode = MLO_AN_FIXED;
-  1398	
-  1399		return 0;
-  1400	}
-  1401	EXPORT_SYMBOL_GPL(phylink_set_max_fixed_link);
-  1402	
+   In file included from <built-in>:1:
+   In file included from ./usr/include/rdma/rdma_user_cm.h:40:
+>> usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   11 warnings generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at ./usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at ./usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at ./usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at ./usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   11 warnings generated.
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---G8YGm4O5EuxCyBV3
+--R3P/7sqYANiOaYd4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 5.19.0-rc3 Kernel Configuration
+# Linux/x86_64 5.19.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 15.0.0 (git://gitmirror/llvm_project 6fa9120080c35a5ff851c3fc3358692c4ef7ce0d)"
 CONFIG_GCC_VERSION=0
@@ -5482,7 +5481,6 @@ CONFIG_PWM_NTXEC=y
 #
 CONFIG_IRQCHIP=y
 # CONFIG_AL_FIC is not set
-# CONFIG_XILINX_INTC is not set
 # end of IRQ chip support
 
 CONFIG_IPACK_BUS=y
@@ -6138,7 +6136,6 @@ CONFIG_CRYPTO_LIB_CHACHA20POLY1305=y
 CONFIG_CRYPTO_LIB_SHA256=y
 # end of Crypto library routines
 
-CONFIG_LIB_MEMNEQ=y
 CONFIG_CRC_CCITT=y
 CONFIG_CRC16=y
 CONFIG_CRC_T10DIF=y
@@ -6526,4 +6523,4 @@ CONFIG_MEMTEST=y
 # end of Kernel Testing and Coverage
 # end of Kernel hacking
 
---G8YGm4O5EuxCyBV3--
+--R3P/7sqYANiOaYd4--
