@@ -1,40 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22A37A
-	for <llvm@lists.linux.dev>; Sun, 26 Jun 2022 21:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8487A
+	for <llvm@lists.linux.dev>; Sun, 26 Jun 2022 22:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656280431; x=1687816431;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=H07viSSgSUXi3HcaTTZSWpyMjNpjTYhzjVg/alZzlKo=;
-  b=DUcODkv5mxWM+sH7l+6ah5FRcFzq18Myh6/EsoyXF1/pOuusklyZ6Bw2
-   2KVpPXVOJ3EhijtmrV53VW9EKLhhozBm2P/AuKH/DbBmoI/ozJUHEjDfK
-   SlX58KQhjoBF/ObNBYrjb3D3+5T8jJ+z6bDtAXKXJYMZiYDSn75Y/6jPZ
-   pULpi1U6J/n63C5t0kAJaavp14Uo6ycjWC0VzytXFRzXjeit2ls67moth
-   hAIKVTqaPoZ86IM/7OlbJ1TyMK26N5ol4oOAoh72dIDMV5ZrtfqrMXKmQ
-   c0Rwvq2LDmiD48SVI3+CKh4JfDoC62GzUXnG7asbRwBUj8yPF/uzZhbdF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="278859841"
+  t=1656281693; x=1687817693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OZL7K1mViMb7vr2FfnrJigpA/jVLhC9gESDVflwSfCU=;
+  b=enOSqIRyrZo3hmikRuIocc3vU0Bw6kVCJuvnFORuuDZ7h2m2/zlgUPim
+   PCNQNfNZjzpK4SW3vQF+5IxKjGKL1jwdnknhvFCTyk1ag+2Rvi9rxBCKB
+   HTRw3XHjthbqxyD5peZIp8WvhmuCWHXoK1cngaDkxbl6DVi4zv1odozpN
+   F5hpWszVLzFTUmscxlQu4kvBolh6lsi4MeGjs/VuK3GYyOSzW4aDcGx+f
+   TXmLUHLqX4rRM+dyI11LEarkJS5GJzip9UIepEKfUTxrHVnaSS0qhV3io
+   cOrQB1y8Bl9v/1l48Rs+aS5KgIjivfTPl+vZJl/gO/5zBLwnEZnbOMbp2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="281357998"
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="278859841"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 14:53:50 -0700
+   d="scan'208";a="281357998"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 15:14:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="916446878"
+   d="scan'208";a="539880045"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Jun 2022 14:53:49 -0700
+  by orsmga003.jf.intel.com with ESMTP; 26 Jun 2022 15:14:50 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o5aCS-0007rX-RH;
-	Sun, 26 Jun 2022 21:53:48 +0000
-Date: Mon, 27 Jun 2022 05:53:46 +0800
+	id 1o5aWn-0007sv-R9;
+	Sun, 26 Jun 2022 22:14:49 +0000
+Date: Mon, 27 Jun 2022 06:14:05 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: dlfb_ops_write() falls through to next
- function dlfb_ops_setcolreg()
-Message-ID: <202206270517.xiP2fV3B-lkp@intel.com>
+To: Oded Gabbay <ogabbay@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [ogabbay:gaudi2 49/54]
+ drivers/misc/habanalabs/gaudi2/gaudi2.c:5816:13: error: call to
+ __compiletime_assert_449 declared with 'error' attribute: FIELD_PREP: value
+ too large for the field
+Message-ID: <202206270601.q7mU43HC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,51 +48,166 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Josh Poimboeuf <jpoimboe@redhat.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   893d1eaa56e8ed8ebf0726556454c9e53c0bf047
-commit: 08feafe8d1958febf3a9733a3d1564d8fc23340e objtool: Fix function fallthrough detection for vmlinux
-date:   10 weeks ago
-config: x86_64-buildonly-randconfig-r002-20220627
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git gaudi2
+head:   46d258b93c9e6795f366c8b5159b33cfeb7d3bd8
+commit: bb6edeab4c9679a00b7bb85fb20fb0a11e015509 [49/54] habanalabs: add gaudi2 asic-specific code
+config: x86_64-randconfig-a002-20220627
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08feafe8d1958febf3a9733a3d1564d8fc23340e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 08feafe8d1958febf3a9733a3d1564d8fc23340e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=bb6edeab4c9679a00b7bb85fb20fb0a11e015509
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay gaudi2
+        git checkout bb6edeab4c9679a00b7bb85fb20fb0a11e015509
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: crc_pcl()+0x7c: missing int3 after indirect jump
-   vmlinux.o: warning: objtool: fault_in_readable()+0xe2: call to __tsan_volatile_write1() with UACCESS enabled
->> vmlinux.o: warning: objtool: dlfb_ops_write() falls through to next function dlfb_ops_setcolreg()
->> vmlinux.o: warning: objtool: ufx_ops_write() falls through to next function ufx_ops_setcolreg()
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP()+0xd0: relocation to !ENDBR: native_write_cr4+0x4
-   vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP()+0xdc: relocation to !ENDBR: native_write_cr4+0x4
->> vmlinux.o: warning: objtool: __startup_64() falls through to next function startup_64_setup_env()
-   vmlinux.o: warning: objtool: do_syscall_64()+0x1e: call to static_key_count() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x33: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_task_stack()+0x10: call to task_stack_page() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: in_entry_stack()+0x14: call to cpu_entry_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x2c: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x34: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x2c: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exit_to_user_mode()+0x2a: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_exit_to_user_mode()+0x88: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x2c: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit_to_user_mode()+0x31: call to __kcsan_check_access() leaves .noinstr.text section
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:1828:6: warning: variable 'hbm_drv_base_offset' set but not used [-Wunused-but-set-variable]
+           u64 hbm_drv_base_offset = 0;
+               ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:6845:39: warning: variable 'glbl_sts_clr_val' set but not used [-Wunused-but-set-variable]
+           u32 i, j, glbl_sts_val, arb_err_val, glbl_sts_clr_val, num_error_causes;
+                                                ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:9825:6: warning: no previous prototype for function 'gaudi2_set_asic_funcs' [-Wmissing-prototypes]
+   void gaudi2_set_asic_funcs(struct hl_device *hdev)
+        ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:9825:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void gaudi2_set_asic_funcs(struct hl_device *hdev)
+   ^
+   static 
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:672:1: warning: unused variable 'gaudi2_nic_rxb_core_sei_interrupts_cause' [-Wunused-const-variable]
+   gaudi2_nic_rxb_core_sei_interrupts_cause[GAUDI2_NUM_OF_NIC_RXB_CORE_SEI_CAUSE] = {
+   ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:678:1: warning: unused variable 'gaudi2_nic_rxb_core_spi_interrupts_cause' [-Wunused-const-variable]
+   gaudi2_nic_rxb_core_spi_interrupts_cause[GAUDI2_NUM_OF_NIC_RXB_CORE_SPI_CAUSE] = {
+   ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:687:27: warning: unused variable 'gaudi2_nic_rxe_sei_interrupts_cause' [-Wunused-const-variable]
+   static const char * const gaudi2_nic_rxe_sei_interrupts_cause[GAUDI2_NUM_OF_NIC_RXE_SEI_CAUSE] = {
+                             ^
+   drivers/misc/habanalabs/gaudi2/gaudi2.c:694:27: warning: unused variable 'gaudi2_nic_rxe_spi_interrupts_cause' [-Wunused-const-variable]
+   static const char * const gaudi2_nic_rxe_spi_interrupts_cause[GAUDI2_NUM_OF_NIC_RXE_SPI_CAUSE] = {
+                             ^
+>> drivers/misc/habanalabs/gaudi2/gaudi2.c:5816:13: error: call to __compiletime_assert_449 declared with 'error' attribute: FIELD_PREP: value too large for the field
+           mon_arm |= FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_MON_ARM_MASK_MASK, mask);
+                      ^
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+                   ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:53:1: note: expanded from here
+   __compiletime_assert_449
+   ^
+>> drivers/misc/habanalabs/gaudi2/gaudi2.c:5816:13: error: call to __compiletime_assert_449 declared with 'error' attribute: FIELD_PREP: value too large for the field
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+                   ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:53:1: note: expanded from here
+   __compiletime_assert_449
+   ^
+>> drivers/misc/habanalabs/gaudi2/gaudi2.c:5816:13: error: call to __compiletime_assert_449 declared with 'error' attribute: FIELD_PREP: value too large for the field
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+                   ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:53:1: note: expanded from here
+   __compiletime_assert_449
+   ^
+>> drivers/misc/habanalabs/gaudi2/gaudi2.c:5816:13: error: call to __compiletime_assert_449 declared with 'error' attribute: FIELD_PREP: value too large for the field
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^
+   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+                   ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:340:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:333:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:53:1: note: expanded from here
+   __compiletime_assert_449
+   ^
+   7 warnings and 4 errors generated.
+
+
+vim +/error +5816 drivers/misc/habanalabs/gaudi2/gaudi2.c
+
+  5794	
+  5795	static void gaudi2_arm_cq_monitor(struct hl_device *hdev, u32 index, u32 cq_id,
+  5796							u32 mon_payload, u32 sync_value)
+  5797	{
+  5798		int offset = index * 4;
+  5799		u32 sync_group_id, mask, mode, mon_arm;
+  5800	
+  5801		/* Reset the SOB value */
+  5802		WREG32(mmDCORE0_SYNC_MNGR_OBJS_SOB_OBJ_0 + offset, 0);
+  5803	
+  5804		/* Configure this address with CQ_ID 0 because CQ_EN is set */
+  5805		WREG32(mmDCORE0_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0 + offset, cq_id);
+  5806	
+  5807		/* Configure this address with CS index because CQ_EN is set */
+  5808		WREG32(mmDCORE0_SYNC_MNGR_OBJS_MON_PAY_DATA_0 + offset, mon_payload);
+  5809	
+  5810		sync_group_id = index / 8;
+  5811		mask = ~(1 << (index & 0x7));
+  5812		mode = 1; /* comparison mode is "equal to" */
+  5813	
+  5814		mon_arm = FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_MON_ARM_SOD_MASK, sync_value);
+  5815		mon_arm |= FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_MON_ARM_SOP_MASK, mode);
+> 5816		mon_arm |= FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_MON_ARM_MASK_MASK, mask);
+  5817		mon_arm |= FIELD_PREP(DCORE0_SYNC_MNGR_OBJS_MON_ARM_SID_MASK, sync_group_id);
+  5818		WREG32(mmDCORE0_SYNC_MNGR_OBJS_MON_ARM_0 + offset, mon_arm);
+  5819	}
+  5820	
 
 -- 
 0-DAY CI Kernel Test Service
