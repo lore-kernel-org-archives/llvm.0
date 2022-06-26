@@ -1,55 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA26B33D3
-	for <llvm@lists.linux.dev>; Sun, 26 Jun 2022 22:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FC73236
+	for <llvm@lists.linux.dev>; Sun, 26 Jun 2022 22:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656282895; x=1687818895;
+  t=1656283494; x=1687819494;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VuQ8SAN2v4p+N7GX5Ni+shsp+WCkuv4B5DPGkSSD/jY=;
-  b=WjjHX/7QRv+MbYfXmgt0kBENO6xRW91iBAK2gZENkC3Iw/msjnlpF7G0
-   CBfGpvp1MW3sNohL2zwxLL+qjh8dRzS02xhBkTvNm70UCZFuq2gpZjpcN
-   gO/3asWrW5stjbDpZlrY6GPDm+6bnXXjWe3X2xjtDAvz1Z828vVCnpeFZ
-   0VWe7cXWbeHbGQTr9HO0ZOdHvWanHQPnH0QNFE5IYaDTh4va+WHZsUOj5
-   okcWlJK4z7TkZiQ4yYo3oGCsRNNCWhKKypX9Vaq45YgeXnArKlH3uxB5D
-   qjQ8u531foeR3oIPFrN1Oiq1GPfAAVx4b1qHtNbomYhi8UWVYNzFuZbWT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="261732380"
+  bh=6ldNtxryiGQA157R36YiyLpP+MEeDc4uJSIYeTMYoMY=;
+  b=aQ2CtKBmCxsR+xUVxUM1W6/2HZH7YMwu1jOEQKvkb3mUW9VWtHQAPbsu
+   cbb9+ef14BnpZzw5/Vs2337o378eVSNHKED7zwm97Dxa8wzMzh+L1BoUO
+   PYBDQWiK6lTKFWgToaX6HyFBtk/xSMSey4G1c9n6QZQiOxycLSisAMFR7
+   Rt5JI9du1qwg3Ou/zYH258fvwUKqdd78koscIBTT/GB6qiLT13juxInmC
+   LiakjT9KwyvwSIlHyRhqqVIaxmsYu/31yxhd5aC4vQZZflWoB7tkpDHsb
+   FgOk9f1H3vUqs/NQ1sE5Se5Ah05mgIG6FYkWwFNCmwKncaeVKHepgKccT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282408816"
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="261732380"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 15:34:55 -0700
+   d="scan'208";a="282408816"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 15:44:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="732060615"
+   d="scan'208";a="589697177"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Jun 2022 15:34:51 -0700
+  by orsmga002.jf.intel.com with ESMTP; 26 Jun 2022 15:44:52 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o5aqA-0007u6-UB;
-	Sun, 26 Jun 2022 22:34:50 +0000
-Date: Mon, 27 Jun 2022 06:34:20 +0800
+	id 1o5azr-0007up-CL;
+	Sun, 26 Jun 2022 22:44:51 +0000
+Date: Mon, 27 Jun 2022 06:44:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Eric W. Biederman" <ebiederm@xmission.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE
- (INCOMPLETE)
-Message-ID: <202206270617.4pI23V1L-lkp@intel.com>
-References: <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
+To: Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>,
+	laurent.pinchart@ideasonboard.com, sam@ravnborg.org,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, airlied@linux.ie,
+	vgannava@xilinx.com,
+	Venkateshwar Rao Gannavarapu <venkateshwar.rao.gannavarapu@xilinx.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] drm: xlnx: dsi: Add Xilinx MIPI DSI-Tx subsystem
+ driver
+Message-ID: <202206270612.vJbBPJ9r-lkp@intel.com>
+References: <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,50 +51,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 
-Hi "Eric,
+Hi Venkateshwar,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v5.19-rc3]
-[cannot apply to linux/master next-20220624]
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on linus/master v5.19-rc3 next-20220624]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-W-Biederman/kthread-Remove-the-flags-argument-from-kernel_thread/20220627-041557
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-config: x86_64-randconfig-a012
+url:    https://github.com/intel-lab-lkp/linux/commits/Venkateshwar-Rao-Gannavarapu/Add-Xilinx-DSI-Tx-subsystem-DRM-driver/20220616-222008
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: mips-randconfig-c004-20220626
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/950f4922fa2aef3d2e68b4b2ab728c6945830991
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/28aa62ffdc1901029bf75961166f4ebba948b9b7
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eric-W-Biederman/kthread-Remove-the-flags-argument-from-kernel_thread/20220627-041557
-        git checkout 950f4922fa2aef3d2e68b4b2ab728c6945830991
+        git fetch --no-tags linux-review Venkateshwar-Rao-Gannavarapu/Add-Xilinx-DSI-Tx-subsystem-DRM-driver/20220616-222008
+        git checkout 28aa62ffdc1901029bf75961166f4ebba948b9b7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-ERROR: modpost: "wake_up_new_task" [kernel/rcu/rcutorture.ko] undefined!
-ERROR: modpost: "wake_up_new_task" [fs/nfs/nfsv4.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/ext4/ext4.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/jbd2/jbd2.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/ecryptfs/ecryptfs.ko] undefined!
-ERROR: modpost: "wake_up_new_task" [fs/cifs/cifs.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/nilfs2/nilfs2.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/gfs2/gfs2.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [fs/f2fs/f2fs.ko] undefined!
->> ERROR: modpost: "wake_up_new_task" [drivers/char/ipmi/ipmi_si.ko] undefined!
-WARNING: modpost: suppressed 30 unresolved symbol warnings because there were too many)
+>> drivers/gpu/drm/xlnx/xlnx_dsi.c:255:10: error: label at end of compound statement: expected statement
+           default: /* define */
+                   ^
+                    ;
+   1 error generated.
+
+
+vim +255 drivers/gpu/drm/xlnx/xlnx_dsi.c
+
+   227	
+   228	#define MAX_INPUT_SEL_FORMATS   3
+   229	static u32
+   230	*xlnx_dsi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+   231						   struct drm_bridge_state *bridge_state,
+   232						   struct drm_crtc_state *crtc_state,
+   233						   struct drm_connector_state *conn_state,
+   234						   u32 output_fmt,
+   235						   unsigned int *num_input_fmts)
+   236	{
+   237		u32 *input_fmts;
+   238		unsigned int i = 0;
+   239	
+   240		*num_input_fmts = 0;
+   241		input_fmts = kcalloc(MAX_INPUT_SEL_FORMATS, sizeof(*input_fmts), GFP_KERNEL);
+   242		if (!input_fmts)
+   243			return NULL;
+   244	
+   245		switch (output_fmt) {
+   246		case MEDIA_BUS_FMT_FIXED:
+   247			input_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
+   248			break;
+   249		case MEDIA_BUS_FMT_RGB666_1X18:
+   250			input_fmts[i++] = MEDIA_BUS_FMT_RGB666_1X18;
+   251			break;
+   252		case MEDIA_BUS_FMT_RGB565_1X16:
+   253			input_fmts[i++] = MEDIA_BUS_FMT_RGB565_1X16;
+   254			break;
+ > 255		default: /* define */
+   256		}
+   257	
+   258		*num_input_fmts = i;
+   259		if (*num_input_fmts == 0) {
+   260			kfree(input_fmts);
+   261			input_fmts = NULL;
+   262		}
+   263	
+   264		return input_fmts;
+   265	}
+   266	
 
 -- 
 0-DAY CI Kernel Test Service
