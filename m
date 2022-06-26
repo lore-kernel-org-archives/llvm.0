@@ -1,50 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D0B290B
-	for <llvm@lists.linux.dev>; Sat, 25 Jun 2022 18:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8A07A
+	for <llvm@lists.linux.dev>; Sun, 26 Jun 2022 01:14:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656180024; x=1687716024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8tYjHyY4Ax6Joz9chEzUSENBJB8v9lRCTyqfGbwzEPE=;
-  b=E0Ovwxg/VuoRlOY9RDpAsVDK6ynACT02DDFyYDQ+5sH5UXylWdW0fA8s
-   RJm18zmj2g8+DlpR6kaXaw7837EYoaBuxLYb/gJvlWKK6pVfp3l0PBe6D
-   RsdLPB+WmV9CdgKYo5ORYyIvlERcFV5JkouH7UgK20jrwSfxNIC2/2FfS
-   eRWN0ipJIoJKixY+Ws+14UrrTwlCGsmS2YGaT9m5/367heJ7gvbtz+gck
-   VahMe+wU0xxpIFFlcpVREd8ocSmST0cqHrbgoq1OHMjTowVKt1bNxlJnc
-   zLLqd2sb1kQZXEx1Vp56rD+61eaJ1HuOtzxZNQ5JGiqsJmRLZxMhuPUFA
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="367524088"
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="367524088"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 11:00:23 -0700
+  t=1656206083; x=1687742083;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9YUx/ia4ZXoU1I26EZo2cnKfqnlMluvbKpEQBK01d8M=;
+  b=eNEg7LXfdozyvU60hGyI3Ys2I1aRvUDm8vRDU1JFeIaZ9l8oHabU/PmH
+   kXcrhsfQDFU2Ssm/MbRNw9CKqXPtCBw9WdN7vsxp0Mb7PdGnwIqKKPU6O
+   869KXN8JHkkcUHtZFnPj62fTtiK5C0TrUf9Sj3pOthfg/BzYpYdC1jGWl
+   0V5xTwUpdulTu1QdEI6LPl174vCGJLo39kHE/gCtFGTdczuI931oxG5JX
+   AS7P2GeMCK0/VluGtX397N5tU2DcrTTPGk7+Tc3ucyZqI2xUVy1BAbKX/
+   SX0//xh1sVLGIpzlYHCcdDsotGiC6/b4ptUw7LQdRfjj96nqUfnEWU/H5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="281969536"
+X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
+   d="scan'208";a="281969536"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 18:14:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="616307820"
+X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
+   d="scan'208";a="539687955"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jun 2022 11:00:21 -0700
+  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2022 18:14:41 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o5A4y-000667-OO;
-	Sat, 25 Jun 2022 18:00:20 +0000
-Date: Sun, 26 Jun 2022 01:59:58 +0800
+	id 1o5GrJ-0006Wv-5k;
+	Sun, 26 Jun 2022 01:14:41 +0000
+Date: Sun, 26 Jun 2022 09:14:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Angel Iglesias <ang.iglesiasg@gmail.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Angel Iglesias <ang.iglesiasg@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Paul Cercueil <paul@crapouillou.net>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: pressure: bmp280: Add support for BMP380 sensor
- family
-Message-ID: <202206260111.QN0oWihy-lkp@intel.com>
-References: <20220625150921.47769-1-ang.iglesiasg@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5:
+ warning: no previous prototype for function
+ 'LZ4_decompress_safe_forceExtDict'
+Message-ID: <202206260948.akgsho1q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,119 +47,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220625150921.47769-1-ang.iglesiasg@gmail.com>
 
-Hi Angel,
+Hi Tiezhu,
 
-Thank you for the patch! Yet something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on robh/for-next linus/master v5.19-rc3 next-20220624]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/dt-bindings-iio-pressure-bmp085-Add-BMP380-compatible-string/20220625-231424
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: i386-randconfig-a002
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0840a7914caa14315a3191178a9f72c742477860
+commit: 7e4fd16b38923028b01d3dbadf4ca973d885c53e MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
+date:   4 weeks ago
+config: mips-randconfig-r035-20220626
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/56e3f8aecddacdbe204fbe5e28032ef2befae647
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Angel-Iglesias/dt-bindings-iio-pressure-bmp085-Add-BMP380-compatible-string/20220625-231424
-        git checkout 56e3f8aecddacdbe204fbe5e28032ef2befae647
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7e4fd16b38923028b01d3dbadf4ca973d885c53e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7e4fd16b38923028b01d3dbadf4ca973d885c53e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/pressure/bmp280-core.c:1000:10: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-if (tmp && BMP380_ERR_CONF_MASK) {
-^  ~~~~~~~~~~~~~~~~~~~~
-drivers/iio/pressure/bmp280-core.c:1000:10: note: use '&' for a bitwise operation
-if (tmp && BMP380_ERR_CONF_MASK) {
-^~
-&
-drivers/iio/pressure/bmp280-core.c:1000:10: note: remove constant to silence this warning
-if (tmp && BMP380_ERR_CONF_MASK) {
-~^~~~~~~~~~~~~~~~~~~~~~~
-1 warning generated.
+   arch/mips/boot/compressed/decompress.c:42:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
+   void error(char *x)
+        ^
+   arch/mips/boot/compressed/decompress.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void error(char *x)
+   ^
+   static 
+   In file included from arch/mips/boot/compressed/decompress.c:64:
+   In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
+>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+       ^
+   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+   ^
+   static 
+   arch/mips/boot/compressed/decompress.c:85:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
+   void __stack_chk_fail(void)
+        ^
+   arch/mips/boot/compressed/decompress.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __stack_chk_fail(void)
+   ^
+   static 
+   arch/mips/boot/compressed/decompress.c:90:6: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
+   void decompress_kernel(unsigned long boot_heap_start)
+        ^
+   arch/mips/boot/compressed/decompress.c:90:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void decompress_kernel(unsigned long boot_heap_start)
+   ^
+   static 
+   4 warnings generated.
 --
->> ERROR: modpost: "__divdi3" [drivers/iio/pressure/bmp280.ko] undefined!
+>> arch/mips/boot/compressed/dbg.c:12:13: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void __weak putc(char c)
+               ^
+   arch/mips/boot/compressed/dbg.c:12:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak putc(char c)
+   ^
+   static 
+>> arch/mips/boot/compressed/dbg.c:16:6: warning: no previous prototype for function 'puts' [-Wmissing-prototypes]
+   void puts(const char *s)
+        ^
+   arch/mips/boot/compressed/dbg.c:16:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void puts(const char *s)
+   ^
+   static 
+>> arch/mips/boot/compressed/dbg.c:26:6: warning: no previous prototype for function 'puthex' [-Wmissing-prototypes]
+   void puthex(unsigned long long val)
+        ^
+   arch/mips/boot/compressed/dbg.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void puthex(unsigned long long val)
+   ^
+   static 
+   3 warnings generated.
 
 
-vim +1000 drivers/iio/pressure/bmp280-core.c
+vim +/LZ4_decompress_safe_forceExtDict +510 arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c
 
-   945	
-   946	static int bmp380_chip_config(struct bmp280_data *data)
-   947	{
-   948		u8 osrs;
-   949		unsigned int tmp;
-   950		int ret;
-   951	
-   952		/* configure power control register */
-   953		ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
-   954					BMP380_CTRL_SENSORS_MASK |
-   955					BMP380_MODE_MASK,
-   956					BMP380_CTRL_SENSORS_PRESS_EN |
-   957					BMP380_CTRL_SENSORS_TEMP_EN |
-   958					BMP380_MODE_NORMAL);
-   959		if (ret < 0) {
-   960			dev_err(data->dev,
-   961				"failed to write operation control register\n");
-   962			return ret;
-   963		}
-   964	
-   965		/* configure oversampling */
-   966		osrs = BMP380_OSRS_TEMP_X(data->oversampling_temp) |
-   967					BMP380_OSRS_PRESS_X(data->oversampling_press);
-   968	
-   969		ret = regmap_write_bits(data->regmap, BMP380_REG_OSR,
-   970					BMP380_OSRS_TEMP_MASK | BMP380_OSRS_PRESS_MASK,
-   971					osrs);
-   972		if (ret < 0) {
-   973			dev_err(data->dev, "failed to write oversampling register\n");
-   974			return ret;
-   975		}
-   976	
-   977		/* configure output data rate */
-   978		ret = regmap_write_bits(data->regmap, BMP380_REG_ODR,
-   979					BMP380_ODRS_MASK, BMP380_ODRS_50HZ);
-   980		if (ret < 0) {
-   981			dev_err(data->dev, "failed to write ODR selection register\n");
-   982			return ret;
-   983		}
-   984	
-   985		/* set filter data */
-   986		ret = regmap_update_bits(data->regmap, BMP380_REG_CONFIG,
-   987					BMP380_FILTER_MASK, BMP380_FILTER_3X);
-   988		if (ret < 0) {
-   989			dev_err(data->dev, "failed to write config register\n");
-   990			return ret;
-   991		}
-   992	
-   993		/* check config error flag */
-   994		ret = regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
-   995		if (ret < 0) {
-   996			dev_err(data->dev,
-   997				"failed to read error register\n");
-   998			return ret;
-   999		}
-> 1000		if (tmp && BMP380_ERR_CONF_MASK) {
-  1001			dev_warn(data->dev,
-  1002				 "sensor flagged configuration as incompatible\n");
-  1003			ret = -EINVAL;
-  1004		}
-  1005	
-  1006		return ret;
-  1007	}
-  1008	
+cffb78b0e0b3a3 Kyungsik Lee 2013-07-08  509  
+2209fda323e2fd Gao Xiang    2018-10-30 @510  int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+2209fda323e2fd Gao Xiang    2018-10-30  511  				     int compressedSize, int maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  512  				     const void *dictStart, size_t dictSize)
+2209fda323e2fd Gao Xiang    2018-10-30  513  {
+2209fda323e2fd Gao Xiang    2018-10-30  514  	return LZ4_decompress_generic(source, dest,
+2209fda323e2fd Gao Xiang    2018-10-30  515  				      compressedSize, maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  516  				      endOnInputSize, decode_full_block,
+2209fda323e2fd Gao Xiang    2018-10-30  517  				      usingExtDict, (BYTE *)dest,
+2209fda323e2fd Gao Xiang    2018-10-30  518  				      (const BYTE *)dictStart, dictSize);
+2209fda323e2fd Gao Xiang    2018-10-30  519  }
+2209fda323e2fd Gao Xiang    2018-10-30  520  
+
+:::::: The code at line 510 was first introduced by commit
+:::::: 2209fda323e2fd2a2d0885595fd5097717f8d2aa lib/lz4: update LZ4 decompressor module
+
+:::::: TO: Gao Xiang <gaoxiang25@huawei.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
