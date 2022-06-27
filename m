@@ -1,131 +1,202 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936834C89
-	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 21:44:38 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F276A1758;
-	Mon, 27 Jun 2022 14:44:37 -0700 (PDT)
-Received: from [10.57.85.164] (unknown [10.57.85.164])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCFD33F792;
-	Mon, 27 Jun 2022 14:44:35 -0700 (PDT)
-Message-ID: <6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com>
-Date: Mon, 27 Jun 2022 22:44:34 +0100
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3AE4C89
+	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 22:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656368457; x=1687904457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1p92oKGtpDrqQ9Y9oS4vEBYwwNfh4RPe5QSBZhO1TkE=;
+  b=On1cZHg6i+f01evJIs+d8Zvsl4dadcmNAlNTltSW546fPBbuoN2gRJMu
+   qn2NcAKHiy34DI6zyCJslxO539uxJQ7yeSKREIIJ61QdvWPuoNyxhTZ3D
+   eFnUTy5HYdvRCPxxE/ayJgr0wh9NKWTRfRFAQ7U856a1CtXHApe1ioHQ7
+   M2JeazWEpyjpMVNIZsmPd6fvI+1dkezEOLxXWZD0P7KkLaEdHJce5sHAC
+   j60BTsvy3YgCMmGc1Z2++qGIFoQlfQB5Cq3xnq5fwo4vXoVDjMPlHzra0
+   liZcGQOSM93aLpnjU71eE09/mzspMBsNyKCvUc7+yW7Ir/+0nV/rcPcaQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="261380672"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="261380672"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:20:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="590077925"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Jun 2022 15:20:55 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o5x6F-00097b-0P;
+	Mon, 27 Jun 2022 22:20:55 +0000
+Date: Tue, 28 Jun 2022 06:20:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthias Kaehlcke <mka@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v23 2/3] usb: misc: Add onboard_usb_hub driver
+Message-ID: <202206280628.JyfBwOj6-lkp@intel.com>
+References: <20220622144857.v23.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v5] coresight: etm4x: avoid build failure with unrolled
- loops
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Tao Zhang <quic_taozha@quicinc.com>,
- Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
- coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <17600de3-b295-ebdf-b9fa-323d2bc3cb93@arm.com>
- <20220623174131.3818333-1-ndesaulniers@google.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220623174131.3818333-1-ndesaulniers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622144857.v23.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
 
-Hi Nick,
+Hi Matthias,
 
-Thanks for the rework.
+I love your patch! Perhaps something to improve:
 
-On 23/06/2022 18:41, Nick Desaulniers wrote:
-> When the following configs are enabled:
-> * CORESIGHT
-> * CORESIGHT_SOURCE_ETM4X
-> * UBSAN
-> * UBSAN_TRAP
-> 
-> Clang fails assemble the kernel with the error:
-> <instantiation>:1:7: error: expected constant expression in '.inst' directive
-> .inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
->        ^
-> drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
-> macro instantiation
-> etm4x_relaxed_read32(csa, TRCCNTVRn(i));
-> ^
-> drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
-> macro 'etm4x_relaxed_read32'
-> read_etm4x_sysreg_offset((offset), false)))
-> ^
-> drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
-> from macro 'read_etm4x_sysreg_offset'
-> __val = read_etm4x_sysreg_const_offset((offset));       \
->          ^
-> drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
-> macro 'read_etm4x_sysreg_const_offset'
-> READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
-> ^
-> drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
-> macro 'READ_ETM4x_REG'
-> read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
-> ^
-> arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
-> 'read_sysreg_s'
-> asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
->               ^
-> arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
-> "       mrs_s " v ", " __stringify(r) "\n"                      \
->   ^
-> 
-> Consider the definitions of TRCSSCSRn and TRCCNTVRn:
-> drivers/hwtracing/coresight/coresight-etm4x.h:56
->   #define TRCCNTVRn(n)      (0x160 + (n * 4))
-> drivers/hwtracing/coresight/coresight-etm4x.h:81
->   #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
-> 
-> Where the macro parameter is expanded to i; a loop induction variable
-> from etm4_disable_hw.
-> 
-> When any compiler can determine that loops may be unrolled, then the
-> __builtin_constant_p check in read_etm4x_sysreg_offset() defined in
-> drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
-> can lead to the expression `(0x160 + (i * 4))` being passed to
-> read_etm4x_sysreg_const_offset. Via the trace above, this is passed
-> through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
-> is string-ified and used directly in inline asm.
-> 
-> Regardless of which compiler or compiler options determine whether a
-> loop can or can't be unrolled, which determines whether
-> __builtin_constant_p evaluates to true when passed an expression using a
-> loop induction variable, it is NEVER safe to allow the preprocessor to
-> construct inline asm like:
->    asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
->                                   ^ expected constant expression
-> 
-> Replace unsafe uses of calls to etm4x_relaxed_read32 with
-> csdev_access_relaxed_read32 when the parameter is an expression that
-> would be invalid inline asm so that it does not depend on the ability of
-> the compiler to optimize __builtin_constant_p of the expression to true.
-> Only when the second parameter of etm4x_relaxed_read32 expands to an
-> expression dependent on a loop induction variable do we need to fix
-> this.
-> 
-> For such cases where the induction variable is used in an expression,
-> perform the following function call replacements:
-> * etm4x_relaxed_write32 -> csdev_access_relaxed_write32
-> * etm4x_relaxed_write64 -> csdev_access_relaxed_write64
-> * etm4x_relaxed_read32 -> csdev_access_relaxed_read32
-> * etm4x_read32 -> csdev_access_read32
-> * etm4x_read64 -> csdev_access_read64
-> 
-> This is not a bug in clang; it's a potentially unsafe use of the macro
-> arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1310
-> Reported-by: Arnd Bergmann <arnd@kernel.org>
-> Suggested-by: Arnd Bergmann <arnd@kernel.org>
-> Suggested-by: Tao Zhang <quic_taozha@quicinc.com>
-> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on robh/for-next driver-core/driver-core-testing linus/master v5.19-rc4 next-20220627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthias-Kaehlcke/usb-misc-Add-onboard_usb_hub-driver/20220623-055345
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: powerpc-randconfig-c003-20220626 (https://download.01.org/0day-ci/archive/20220628/202206280628.JyfBwOj6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/ca463a6be5677cdb098dd5a431dd4aa06da8a0fe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthias-Kaehlcke/usb-misc-Add-onboard_usb_hub-driver/20220623-055345
+        git checkout ca463a6be5677cdb098dd5a431dd4aa06da8a0fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/usb/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:44:6: warning: no previous prototype for function 'onboard_hub_create_pdevs' [-Wmissing-prototypes]
+   void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+        ^
+   drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+   ^
+   static 
+>> drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:127:6: warning: no previous prototype for function 'onboard_hub_destroy_pdevs' [-Wmissing-prototypes]
+   void onboard_hub_destroy_pdevs(struct list_head *pdev_list)
+        ^
+   drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:127:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void onboard_hub_destroy_pdevs(struct list_head *pdev_list)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/onboard_hub_create_pdevs +44 drivers/usb/core/../misc/onboard_usb_hub_pdevs.c
+
+    30	
+    31	/**
+    32	 * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
+    33	 * @parent_hub	: parent hub to scan for connected onboard hubs
+    34	 * @pdev_list	: list of onboard hub platform devices owned by the parent hub
+    35	 *
+    36	 * Creates a platform device for each supported onboard hub that is connected to
+    37	 * the given parent hub. The platform device is in charge of initializing the
+    38	 * hub (enable regulators, take the hub out of reset, ...) and can optionally
+    39	 * control whether the hub remains powered during system suspend or not.
+    40	
+    41	 * To keep track of the platform devices they are added to
+    42	 * a list that is owned by the parent hub.
+    43	 */
+  > 44	void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+    45	{
+    46		int i;
+    47		struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
+    48		struct device_node *np, *npc;
+    49		struct platform_device *pdev;
+    50		struct pdev_list_entry *pdle;
+    51	
+    52		if (!parent_hub->dev.of_node)
+    53			return;
+    54	
+    55		/*
+    56		 * We only want one platform device for each physical hub. For root hubs
+    57		 * this function can be called multiple times with the same root hub
+    58		 * node (the HCD node). Only create pdevs if the root hub is the one of
+    59		 * the primary HCD.
+    60		 */
+    61		if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
+    62			return;
+    63	
+    64		for (i = 1; i <= parent_hub->maxchild; i++) {
+    65			np = usb_of_get_device_node(parent_hub, i);
+    66			if (!np)
+    67				continue;
+    68	
+    69			if (!of_is_onboard_usb_hub(np))
+    70				goto node_put;
+    71	
+    72			npc = of_parse_phandle(np, "companion-hub", 0);
+    73			if (npc) {
+    74				/*
+    75				 * Hubs with companions share the same platform device.
+    76				 * Create the plaform device only if 'parent_hub' is
+    77				 * connected to the primary HCD (directly or through
+    78				 * other hubs).
+    79				 */
+    80				if (!usb_hcd_is_primary_hcd(hcd)) {
+    81					of_node_put(npc);
+    82					goto node_put;
+    83				}
+    84	
+    85				pdev = of_find_device_by_node(npc);
+    86				of_node_put(npc);
+    87	
+    88				if (pdev) {
+    89					/*
+    90					 * The companion hub already has a platform device,
+    91					 * nothing to do here.
+    92					 */
+    93					put_device(&pdev->dev);
+    94					goto node_put;
+    95				}
+    96			}
+    97	
+    98			pdev = of_platform_device_create(np, NULL, &parent_hub->dev);
+    99			if (!pdev) {
+   100				dev_err(&parent_hub->dev,
+   101					"failed to create platform device for onboard hub '%pOF'\n", np);
+   102				goto node_put;
+   103			}
+   104	
+   105			pdle = kzalloc(sizeof(*pdle), GFP_KERNEL);
+   106			if (!pdle) {
+   107				of_platform_device_destroy(&pdev->dev, NULL);
+   108				goto node_put;
+   109			}
+   110	
+   111			pdle->pdev = pdev;
+   112			list_add(&pdle->node, pdev_list);
+   113	
+   114	node_put:
+   115			of_node_put(np);
+   116		}
+   117	}
+   118	EXPORT_SYMBOL_GPL(onboard_hub_create_pdevs);
+   119	
+   120	/**
+   121	 * onboard_hub_destroy_pdevs -- free resources of onboard hub platform devices
+   122	 * @pdev_list	: list of onboard hub platform devices
+   123	 *
+   124	 * Destroys the platform devices in the given list and frees the memory associated
+   125	 * with the list entry.
+   126	 */
+ > 127	void onboard_hub_destroy_pdevs(struct list_head *pdev_list)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
