@@ -1,91 +1,81 @@
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id B75C82F5B
-	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 14:56:15 +0000 (UTC)
-Received: (qmail 121219 invoked by uid 1000); 27 Jun 2022 10:56:09 -0400
-Date: Mon, 27 Jun 2022 10:56:09 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
-  linux-toolchains@vger.kernel.org, Andrea Parri <parri.andrea@gmail.com>,
-  Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-  Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
-  David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>,
-  Luc Maranget <luc.maranget@inria.fr>,
-  "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
-  Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
-  Nathan Chancellor <nathan@kernel.org>,
-  Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-  Palmer Dabbelt <palmer@dabbelt.com>, LKML <linux-kernel@vger.kernel.org>,
-  linux-arch <linux-arch@vger.kernel.org>, Marco Elver <elver@google.com>,
-  Charalampos Mainas <charalampos.mainas@gmail.com>,
-  Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-  Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-  Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Message-ID: <YrnFCSjESpeQdciv@rowland.harvard.edu>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
- <YrHUkfDWsexHRUKj@rowland.harvard.edu>
- <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAFB33E4
+	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 15:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656344071; x=1687880071;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=bWgNmCdGNmS6yG0Tb9J/xFHz1TMxgZyhbhqQlY+TbxU=;
+  b=Hi7b5DrpRuH0oo1VcOhCjsYQtfZ+R78yNi9CKd0O9MPisXknc+XkZttK
+   Z72X6IxHv11ZeIFa6awtRaolO8NnymXjnKaSrBskWT391tFcNX0aNJ/WZ
+   k1ubBMvtaZQwr9gCON1pOxjocY7ZB4LRMVLeKIy0MVzPB01zU6rEvWV8L
+   b/VEEradm1vosoMGqlAqK/VDvcQwAQ9Ygnh/O4lz5nq1IAh9PKm5rZPw8
+   HvVKZzncmp3sCcajZzrpEqZj+6oqbm2yd9mwqG6yUazUGvwzc7p4Plpe/
+   mi68p6+KoJ92OY9YH1jKj43+9U2CekwuXkb5od39EK0wvvLUlbsrfyBNX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282206669"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="282206669"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 08:34:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="564679045"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2022 08:34:30 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o5qkw-0008i5-1U;
+	Mon, 27 Jun 2022 15:34:30 +0000
+Date: Mon, 27 Jun 2022 23:33:30 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-stable-rc:linux-5.15.y 5773/8107] arch/x86/kernel/head64.o:
+ warning: objtool: __startup_64() falls through to next function
+ startup_64_setup_env()
+Message-ID: <202206272327.X6yeZ9sN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
 
-On Mon, Jun 27, 2022 at 11:47:43AM +0200, Paul Heidekrüger wrote:
-> 
-> > On 21. Jun 2022, at 16:24, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> > On Tue, Jun 21, 2022 at 01:59:27PM +0200, Paul Heidekrüger wrote:
-> >> OK. So, LKMM limits the scope of control dependencies to its arm(s), hence
-> >> there is a control dependency from the last READ_ONCE() before the loop
-> >> exists to the WRITE_ONCE().
-> >> 
-> >> But then what about the following:
-> >> 
-> >>> int *x, *y;
-> >>> 
-> >>> int foo()
-> >>> {
-> >>> 	/* More code */
-> >>> 
-> >>> 	if(READ_ONCE(x))
-> >>> 		return 42;
-> >>> 
-> >>> 	/* More code */
-> >>> 
-> >>> 	WRITE_ONCE(y, 42);
-> >>> 
-> >>> 	/* More code */
-> >>> 
-> >>> 	return 0;
-> >>> }
-> >> 
-> >> The READ_ONCE() determines whether the WRITE_ONCE() will be executed at all,
-> >> but the WRITE_ONCE() doesn't lie in the if condition's arm.
-> > 
-> > So in this case the LKMM would not recognize that there's a control 
-> > dependency, even though it clearly exists.
-> 
-> Oh, that's unfortunate.
-> 
-> Then I would still argue that the "at all" definition is misleading. This
+BCC: lkp@intel.com
+CC: linux-kernel@vger.kernel.org
+TO: Kees Cook <keescook@chromium.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Marco Elver <elver@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
 
-I agree, and I would welcome a patch improving the definition.  Perhaps 
-something along the lines of what I wrote earlier in this email thread.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   2c21dc5c2cb635c1b549c0f3eb0ff3d3744be11a
+commit: 33db9912ff7c491f839c89a08e98f755aa09598f [5773/8107] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: x86_64-buildonly-randconfig-r002-20220627 (https://download.01.org/0day-ci/archive/20220627/202206272327.X6yeZ9sN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-> time in the other direction as I had initially proposed though, as the above
-> example is a case where "at all" holds true, but LKMM doesn't cover it. Or
-> do you think that caveating this in litmus-tests.txt, e.g. via the patch we
-> had recently worked out [1], is enough?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-No, the explanation should be improved.
+All warnings (new ones prefixed by >>):
 
-Alan
+>> arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls through to next function startup_64_setup_env()
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
