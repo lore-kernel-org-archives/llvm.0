@@ -1,133 +1,106 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6557217FE
-	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 02:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656298323; x=1687834323;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QrT5ao9preo/N4kReVsNvY5n6xqX0XIHa2T/Gy7NBMM=;
-  b=DQGnu3Cx7St/HA6IRZX19GVYCM+lccPiKUWsyWRbtcWtqTYDhOgU1AaL
-   1qGaSKKveac82Zyc4eB1jOL3WHs1Pt8rTJezSFEewQP82PZ91lzOICAvj
-   CeDrlCakuNMmtrLkHuK6XVQCA+OhBW/ozYHfWw6PEKyvkqtlXp4DCVoas
-   IOwCD3MPTRaLou3iL1F+FuSfWjjm+VH3IrGelwp95vA0Qy9zOZ5F9JIeB
-   tkB2ZzS8NevrJpMIxUCjuIkSG7YKeT9uMUj4hPpCB+uNFk8vaJbZfNI7W
-   +Sod9kii3ZOr/Y0S+xjyh1PziMT3XJE9IJmiK7COUTqzJvGZtuJUtIxoW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282430027"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="282430027"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:52:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="835997743"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Jun 2022 19:51:54 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o5eqw-00088L-2J;
-	Mon, 27 Jun 2022 02:51:54 +0000
-Date: Mon, 27 Jun 2022 10:51:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ash Logan <ash@heyquark.com>, paulus@samba.org, mpe@ellerman.id.au,
-	christophe.leroy@csgroup.eu, robh+dt@kernel.org,
-	benh@kernel.crashing.org
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8865C20E8
+	for <llvm@lists.linux.dev>; Mon, 27 Jun 2022 03:12:56 +0000 (UTC)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+	by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX9gqILlisZ9fAA--.5897S3;
+	Mon, 27 Jun 2022 11:12:43 +0800 (CST)
+Subject: Re:
+ arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5:
+ warning: no previous prototype for function
+ 'LZ4_decompress_safe_forceExtDict'
+To: kernel test robot <lkp@intel.com>
+References: <202206260948.akgsho1q-lkp@intel.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	j.ne@posteo.net, linkmauve@linkmauve.fr, rw-r-r-0644@protonmail.com,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 08/12] powerpc: wiiu: latte interrupt controller
- support
-Message-ID: <202206271019.YEn99lfz-lkp@intel.com>
-References: <20220622131037.57604-9-ash@heyquark.com>
+ linux-kernel@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <5753fd35-9848-0481-3a77-6a9c02e2170d@loongson.cn>
+Date: Mon, 27 Jun 2022 11:12:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622131037.57604-9-ash@heyquark.com>
-
-Hi Ash,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on robh/for-next]
-[cannot apply to mpe/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ash-Logan/dt-bindings-wiiu-Document-the-Nintendo-Wii-U-devicetree/20220622-221056
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-randconfig-c003-20220626 (https://download.01.org/0day-ci/archive/20220627/202206271019.YEn99lfz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/533a7cf49cc00c4eaafd2afee5ecd9e23bac99f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ash-Logan/dt-bindings-wiiu-Document-the-Nintendo-Wii-U-devicetree/20220622-221056
-        git checkout 533a7cf49cc00c4eaafd2afee5ecd9e23bac99f2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/wiiu/ drivers/usb/misc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/powerpc/platforms/wiiu/latte-pic.c:155:14: warning: no previous prototype for function 'latte_pic_get_irq' [-Wmissing-prototypes]
-   unsigned int latte_pic_get_irq(struct irq_domain *h)
-                ^
-   arch/powerpc/platforms/wiiu/latte-pic.c:155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int latte_pic_get_irq(struct irq_domain *h)
-   ^
-   static 
-   1 warning generated.
+In-Reply-To: <202206260948.akgsho1q-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:AQAAf9DxX9gqILlisZ9fAA--.5897S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1fAF17Gw48try8ZF4xJFb_yoW5Aryfpa
+	1jkws5Kr1rWF18J3y0gayFg3WxXrZ5J3sruw1UJr1DZF4YqFyvqrnakrZ5Xr47Krn5X3yq
+	ya18W3Wjgw12yaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+	xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
+	r21lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+	8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+	xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+	8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
+	IFyTuYvjxUy8nYDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 
 
-vim +/latte_pic_get_irq +155 arch/powerpc/platforms/wiiu/latte-pic.c
 
-   150	
-   151	/*
-   152	 * Determinate if there are interrupts pending
-   153	 * Checks AHBALL (0-32) and AHBLT (32-64)
-   154	 */
- > 155	unsigned int latte_pic_get_irq(struct irq_domain *h)
-   156	{
-   157		struct lt_pic *pic = *this_cpu_ptr(&lt_pic_cpu);
-   158		u32 irq_status, irq;
-   159	
-   160		/* Check AHBALL first */
-   161		irq_status = in_be32(&pic->ahball_icr) & in_be32(&pic->ahball_imr);
-   162	
-   163		if (irq_status == 0) {
-   164			/* Try AHBLT */
-   165			irq_status =
-   166				in_be32(&pic->ahblt_icr) & in_be32(&pic->ahblt_imr);
-   167			if (irq_status == 0)
-   168				return 0; /* No IRQs pending */
-   169	
-   170			/* AHBLT is mapped above 32 (LATTE_AHBALL_NR_IRQS) */
-   171			irq = __ffs(irq_status) + LATTE_AHBALL_NR_IRQS;
-   172			return irq_linear_revmap(h, irq);
-   173		}
-   174	
-   175		irq = __ffs(irq_status);
-   176		return irq_linear_revmap(h, irq);
-   177	}
-   178	
+On 06/26/2022 09:14 AM, kernel test robot wrote:
+> Hi Tiezhu,
+>
+> First bad commit (maybe != root cause):
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yes, I think the first bad commit is not the root cause.
+
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   0840a7914caa14315a3191178a9f72c742477860
+> commit: 7e4fd16b38923028b01d3dbadf4ca973d885c53e MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
+> date:   4 weeks ago
+> config: mips-randconfig-r035-20220626
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mipsel-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7e4fd16b38923028b01d3dbadf4ca973d885c53e
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 7e4fd16b38923028b01d3dbadf4ca973d885c53e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    arch/mips/boot/compressed/decompress.c:42:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
+>    void error(char *x)
+>         ^
+>    arch/mips/boot/compressed/decompress.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void error(char *x)
+>    ^
+>    static
+>    In file included from arch/mips/boot/compressed/decompress.c:64:
+>    In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
+>>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+>    int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+>        ^
+>    arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+>    ^
+[...]
+
+I think the following patch can fix the above build warning:
+
+[PATCH] lib: Make LZ4_decompress_safe_forceExtDict() static
+https://lore.kernel.org/lkml/1656298965-8698-1-git-send-email-yangtiezhu@loongson.cn/T/#u
+
+Thanks,
+Tiezhu
+
