@@ -1,38 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72BD7A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2C3C341CB;
-	Tue, 28 Jun 2022 02:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AFA7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:20:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91363C385A9;
+	Tue, 28 Jun 2022 02:20:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656382740;
-	bh=79bXSpWjGPh6CzHNAJvqzaDpWV02fZudh2qvMmluaos=;
+	s=k20201202; t=1656382849;
+	bh=fnbjg2y5q4ORZyOyzWa2ckHS44WEdmOAUqXEWcMqugI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Glb9aijZ76eLTniIJ+AFDiPZL5DDrD/vGsM/9WfvSOLTcuzWDlGn7Um9tDSM6Je6y
-	 BCPqteDb8OvDpVoMB6BUd31CHH9DSbfiP86JBPQnhtKnG7gMySSocpfSFaOS0JvnZD
-	 5hZPLHV4HpuqoyBRROQsDvhrHwFR4x6/ApSiS9ZIGTl63OtLd9T8VhRjcVPKeus8Gc
-	 pCuERs6IGd28sQhUPqGUEJlKcwLk3UCIW0nf6b1Jiu1sVnYUoxuLF2jfgy2STBM+Zq
-	 TuPzDjWLBTjY5lCvahwTmY33f3lmVJygdzFaTBa06/sTEg9tKfnwxHZmjdAdpQCC48
-	 obtE7iLGCuGpA==
+	b=ka2Up4koD9AAuSD6T8RqcnF0V/6UYnJG6MyPk2oUtP8uC6Z/dm/0kn5Vc9NWWA0ZS
+	 jeaH3+Bpi6ZO/LMf3Ct++cIciM+sUXUe3s/ce539vInxug7CDqKBt43F7dm/wj2hI5
+	 E8DD/vlnyDEmpZG86C2DWTvMFsn+9lKT+ZFzXaqITIwbVa0UdC+d12ap7bh6djbEqi
+	 TnC1lEa1EJJoJIJMjKbMV3zfgGJ8MFURdfg2bVtQG8PLf8hSAn8H3QSn3jtvSdnRuM
+	 clx5Fywu0BWJg7TYQUjsNaObkJq5L9tP8/8cmM55X+s8Snu0n07LqyvG8+A9tNNGnz
+	 4Ur0Q6aVLl5yQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
+Cc: Kees Cook <keescook@chromium.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.18 09/53] selftests: Fix clang cross compilation
-Date: Mon, 27 Jun 2022 22:17:55 -0400
-Message-Id: <20220628021839.594423-9-sashal@kernel.org>
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	jiri@nvidia.com,
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 49/53] hinic: Replace memcpy() with direct assignment
+Date: Mon, 27 Jun 2022 22:18:35 -0400
+Message-Id: <20220628021839.594423-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220628021839.594423-1-sashal@kernel.org>
 References: <20220628021839.594423-1-sashal@kernel.org>
@@ -46,65 +48,52 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Mark Brown <broonie@kernel.org>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 795285ef242543bb636556b7225f20adb7d3795c ]
+[ Upstream commit 1e70212e031528918066a631c9fdccda93a1ffaa ]
 
-Unlike GCC clang uses a single compiler image to support multiple target
-architectures meaning that we can't simply rely on CROSS_COMPILE to select
-the output architecture. Instead we must pass --target to the compiler to
-tell it what to output, kselftest was not doing this so cross compilation
-of kselftest using clang resulted in kselftest being built for the host
-architecture.
+Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+here for calculating the size of the destination buffer (0x10 instead of
+0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+the source and dest being struct fw_section_info_st, so the memcpy should
+be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+responsibility to figure out.
 
-More work is required to fix tests using custom rules but this gets the
-bulk of things building.
+Avoid the whole thing and just do a direct assignment. This results in
+no change to the executable code.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+[This is a duplicate of commit 2c0ab32b73cf ("hinic: Replace memcpy()
+ with direct assignment") which was applied to net-next.]
+
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev
+Link: https://github.com/ClangBuiltLinux/linux/issues/1592
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Link: https://lore.kernel.org/r/20220616052312.292861-1-keescook@chromium.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/lib.mk | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_devlink.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 2a2d240cdc1b..1a5cc3cd97ec 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -7,10 +7,31 @@ else ifneq ($(filter -%,$(LLVM)),)
- LLVM_SUFFIX := $(LLVM)
- endif
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+index 60ae8bfc5f69..1749d26f4bef 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+@@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
  
--CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-+CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
-+CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
-+CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
-+CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
-+CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
-+CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
-+CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
-+CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
-+CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
-+CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
-+
-+ifeq ($(CROSS_COMPILE),)
-+ifeq ($(CLANG_TARGET_FLAGS),)
-+$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
-+else
-+CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
-+endif # CLANG_TARGET_FLAGS
-+else
-+CLANG_FLAGS     += --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif # CROSS_COMPILE
-+
-+CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
- else
- CC := $(CROSS_COMPILE)gcc
--endif
-+endif # LLVM
+ 	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
+ 		len += fw_image->fw_section_info[i].fw_section_len;
+-		memcpy(&host_image->image_section_info[i],
+-		       &fw_image->fw_section_info[i],
+-		       sizeof(struct fw_section_info_st));
++		host_image->image_section_info[i] = fw_image->fw_section_info[i];
+ 	}
  
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
+ 	if (len != fw_image->fw_len ||
 -- 
 2.35.1
 
