@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21AB7A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8839C34115;
-	Tue, 28 Jun 2022 02:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39DF7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A854DC341CB;
+	Tue, 28 Jun 2022 02:24:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656382951;
-	bh=uhhm1hQwl9GEenymTrnKlp8FI+WMSqOom27CaC4a0TE=;
+	s=k20201202; t=1656383043;
+	bh=5e7JyayC3qycLLc+5mmA4i9WttRILWlgqRQ1TvvpG7o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FytOubyi8kx1X0BhRQZaPpcIwxEJbmswkAWLVcDvV+dxXkWi3K4i6sq29f4BQ753J
-	 wbetYaIc/W68lo2CjBXvQ1mC1zajx/YhH1ZhHRKmSj4Cymr9cwEtDtGYZIWWoh+vng
-	 1LlIQjHyRBdQWQTQGZlsNqxySNEOflWliZa+1ADt6Vi0Fib0JZB4UoOQf3rs/TWl3G
-	 NmRvPxnuuJ3qf1c/tU4B1jIbZiPtJjgovuILtdH23+NKZXDHy/XNIR7dT3qzH+/7iB
-	 CRsUyjZRKqOe5l60y4LTQ/mca5JXZ5EKRdG/nT71fOvUJcwkzdve3M8rr1a/6nnAgn
-	 GZjPnnT0FFiFQ==
+	b=VZcHTbJnH6CZ8bv7lMEL/Kp203Bzbf2k/qhG7R79xQXCX2xTuvcjViescxa/wd7Lm
+	 qdsfiIwPtJ4798mY1pI9YHdXTxlvkd66QwKA3zzwuxPf2SBcvHtv1E1rI7/PHX6oX0
+	 QC7tjBxBE2hZ3xEX01FPjDDKgInEC49foSieRenuCyMDpsNRkr8OrXcAvhNXZLIzJ8
+	 2a+tt0IY2jfQkuYQ9nF7/nkmt9NxgHJuT4GTEiodxBw4qluU2XRb9QUm46S7s8bZ7b
+	 SX9u2e+iNQm7LcbGKDnEA7KFC4xjkUINrGJgt7xkDaZLkbp/NTtoQRnFpJfxIlqYG5
+	 8a0DSqTzkKNYA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,17 +29,15 @@ Cc: Kees Cook <keescook@chromium.org>,
 	davem@davemloft.net,
 	edumazet@google.com,
 	pabeni@redhat.com,
-	leon@kernel.org,
 	jiri@nvidia.com,
-	olteanv@gmail.com,
-	simon.horman@corigine.com,
+	leon@kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 37/41] hinic: Replace memcpy() with direct assignment
-Date: Mon, 27 Jun 2022 22:20:56 -0400
-Message-Id: <20220628022100.595243-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 30/34] hinic: Replace memcpy() with direct assignment
+Date: Mon, 27 Jun 2022 22:22:37 -0400
+Message-Id: <20220628022241.595835-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022100.595243-1-sashal@kernel.org>
-References: <20220628022100.595243-1-sashal@kernel.org>
+In-Reply-To: <20220628022241.595835-1-sashal@kernel.org>
+References: <20220628022241.595835-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-index 6e11ee339f12..92d4e0039565 100644
+index 2630d667f393..b5b95177f11f 100644
 --- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
 +++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
 @@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
