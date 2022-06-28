@@ -1,42 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B47367
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 06:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC24362
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 06:39:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656397632; x=1687933632;
+  t=1656398352; x=1687934352;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VwpkHRbckHfhNUb4oL5+dzv724A12Fx42ijmC1IsKvo=;
-  b=cUnYyWztlYLTFd//JTm7VgGbsokhSAyzahq7ubSrkadB6lZ5PosTbxbr
-   4EVqt1ctTvEl6I+aLd4OB3xFcpHmGV1RJ+Ls7X0rWNHkjUDggIGDCbZ16
-   9fVy46euLA63VZg+wbiz6asWRlUVPR3RG7zb5UN+76BzA6u3/S2DGy0Gz
-   RnXR+n67AeHnMt9r/1Q8YMwN81cpkvcb67Dh+59cu8ES0WGUzMxoe2aKr
-   29Vhn21JLupe8vT7cnwLfXZ3xOWYTYeIkHD4C3yPW8ApvKTxh5Fqbt/Ii
-   u7QmVtut6uw3V9xOg3/toVInEGEu/RVhj7UhNiuxA5Lw8UP3hstaCZxgd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="367961352"
+  bh=GAj10GC5cKmyodp4SYGSnnywAUIdTK7sBJzvdE/uR0M=;
+  b=eJkzFw9rnGpM5/ibwc1Dv56yRhF3Z5rV+7aVw7mLZGNuVX5OtMrTe4iZ
+   BMxETrbG6SdRBRgGHLv/CKqXSw70Cg682rCOlwSlsN8scG8H6K8ryQYHP
+   p3ec0oGkYZtaXJJ2GdJyELvsYq+6tSn83tl4K8tH1TS9bfQxvcJ23byUY
+   vl1mEgGO9nCcdrfK2PaN7XltxGPg//P8nKmh9raFOhASLNjstx7ewDPyH
+   xa1+RA+YU9kmnZ3bfOOTWOwAQUl7mPRU+Zzzcx9pn8kRYz9yWWnrVO+ey
+   c1XZjL2LMAh8QZMkSG3aavdr5Umv7CsbD6Lr2Cv+51q+d7w/2x3TpnT79
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="280410992"
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="367961352"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 23:27:11 -0700
+   d="scan'208";a="280410992"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 23:39:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="836542352"
+   d="scan'208";a="590199556"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Jun 2022 23:27:09 -0700
+  by orsmga002.jf.intel.com with ESMTP; 27 Jun 2022 23:39:10 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o64gn-0009cf-7l;
-	Tue, 28 Jun 2022 06:27:09 +0000
-Date: Tue, 28 Jun 2022 14:26:53 +0800
+	id 1o64sP-0009dG-NY;
+	Tue, 28 Jun 2022 06:39:09 +0000
+Date: Tue, 28 Jun 2022 14:38:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Moti Haimovski <mhaimovski@habana.ai>
+To: Hannes Reinecke <hare@suse.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:gaudi2 59/61]
- drivers/misc/habanalabs/common/mmu/mmu.c:785:16: error: invalid instruction
-Message-ID: <202206281401.zrwZ9lWF-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>
+Subject: [hare-scsi-devel:auth.v15 6/11] drivers/nvme/common/auth.c:59:31:
+ warning: address of array 'dhgroup_map[dhgroup_id].name' will always
+ evaluate to 'true'
+Message-ID: <202206281449.L1Gh7eYz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,120 +47,169 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git gaudi2
-head:   a76819ab38942fcb341142a55e9dc81f3eaf08e3
-commit: 950d1a3888fe751fb5b2e51a44ebf89d963fdde5 [59/61] habanalabs: add gaudi2 MMU support
-config: s390-buildonly-randconfig-r003-20220628 (https://download.01.org/0day-ci/archive/20220628/202206281401.zrwZ9lWF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git auth.v15
+head:   2a3a7d0493841ac5944dc0ba861b53d1c2b28014
+commit: e0c48505224ab6f6e86eea90b254ae202ecd0bb6 [6/11] nvme: Implement In-Band authentication
+config: riscv-randconfig-c006-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281449.L1Gh7eYz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=950d1a3888fe751fb5b2e51a44ebf89d963fdde5
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay gaudi2
-        git checkout 950d1a3888fe751fb5b2e51a44ebf89d963fdde5
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=e0c48505224ab6f6e86eea90b254ae202ecd0bb6
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel auth.v15
+        git checkout e0c48505224ab6f6e86eea90b254ae202ecd0bb6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/nvme/common/ drivers/nvme/target/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/misc/habanalabs/common/mmu/mmu.c:10:
-   In file included from drivers/misc/habanalabs/common/mmu/../habanalabs.h:11:
-   In file included from drivers/misc/habanalabs/common/mmu/../../include/common/cpucp_if.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/misc/habanalabs/common/mmu/mmu.c:10:
-   In file included from drivers/misc/habanalabs/common/mmu/../habanalabs.h:11:
-   In file included from drivers/misc/habanalabs/common/mmu/../../include/common/cpucp_if.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/misc/habanalabs/common/mmu/mmu.c:10:
-   In file included from drivers/misc/habanalabs/common/mmu/../habanalabs.h:11:
-   In file included from drivers/misc/habanalabs/common/mmu/../../include/common/cpucp_if.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:31:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/misc/habanalabs/common/mmu/mmu.c:785:16: error: invalid instruction
-           asm volatile ("mfence" : : : "memory");
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           mfence
-           ^~~~~~
-   12 warnings and 1 error generated.
+>> drivers/nvme/common/auth.c:59:31: warning: address of array 'dhgroup_map[dhgroup_id].name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+               !dhgroup_map[dhgroup_id].name ||
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+>> drivers/nvme/common/auth.c:69:31: warning: address of array 'dhgroup_map[dhgroup_id].kpp' will always evaluate to 'true' [-Wpointer-bool-conversion]
+               !dhgroup_map[dhgroup_id].kpp ||
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+>> drivers/nvme/common/auth.c:81:23: warning: address of array 'dhgroup_map[i].name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+                   if (!dhgroup_map[i].name ||
+                       ~~~~~~~~~~~~~~~~^~~~
+>> drivers/nvme/common/auth.c:117:25: warning: address of array 'hash_map[hmac_id].hmac' will always evaluate to 'true' [-Wpointer-bool-conversion]
+               !hash_map[hmac_id].hmac ||
+               ~~~~~~~~~~~~~~~~~~~^~~~
+>> drivers/nvme/common/auth.c:127:25: warning: address of array 'hash_map[hmac_id].digest' will always evaluate to 'true' [-Wpointer-bool-conversion]
+               !hash_map[hmac_id].digest ||
+               ~~~~~~~~~~~~~~~~~~~^~~~~~
+>> drivers/nvme/common/auth.c:139:20: warning: address of array 'hash_map[i].hmac' will always evaluate to 'true' [-Wpointer-bool-conversion]
+                   if (!hash_map[i].hmac || !strlen(hash_map[i].hmac))
+                       ~~~~~~~~~~~~~^~~~
+   drivers/nvme/common/auth.c:152:25: warning: address of array 'hash_map[hmac_id].hmac' will always evaluate to 'true' [-Wpointer-bool-conversion]
+               !hash_map[hmac_id].hmac ||
+               ~~~~~~~~~~~~~~~~~~~^~~~
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   7 warnings and 20 errors generated.
 
 
-vim +785 drivers/misc/habanalabs/common/mmu/mmu.c
+vim +59 drivers/nvme/common/auth.c
 
-   780	
-   781	void hl_mmu_hr_flush(struct hl_ctx *ctx)
-   782	{
-   783		/* a flush operation requires memory barrier */
-   784		mb();
- > 785		asm volatile ("mfence" : : : "memory");
-   786	}
-   787	
+    55	
+    56	const char *nvme_auth_dhgroup_name(u8 dhgroup_id)
+    57	{
+    58		if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
+  > 59		    !dhgroup_map[dhgroup_id].name ||
+    60		    !strlen(dhgroup_map[dhgroup_id].name))
+    61			return NULL;
+    62		return dhgroup_map[dhgroup_id].name;
+    63	}
+    64	EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_name);
+    65	
+    66	const char *nvme_auth_dhgroup_kpp(u8 dhgroup_id)
+    67	{
+    68		if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
+  > 69		    !dhgroup_map[dhgroup_id].kpp ||
+    70		    !strlen(dhgroup_map[dhgroup_id].kpp))
+    71			return NULL;
+    72		return dhgroup_map[dhgroup_id].kpp;
+    73	}
+    74	EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_kpp);
+    75	
+    76	u8 nvme_auth_dhgroup_id(const char *dhgroup_name)
+    77	{
+    78		int i;
+    79	
+    80		for (i = 0; i < ARRAY_SIZE(dhgroup_map); i++) {
+  > 81			if (!dhgroup_map[i].name ||
+    82			    !strlen(dhgroup_map[i].name))
+    83				continue;
+    84			if (!strncmp(dhgroup_map[i].name, dhgroup_name,
+    85				     strlen(dhgroup_map[i].name)))
+    86				return i;
+    87		}
+    88		return NVME_AUTH_DHGROUP_INVALID;
+    89	}
+    90	EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_id);
+    91	
+    92	static struct nvme_dhchap_hash_map {
+    93		int len;
+    94		const char hmac[15];
+    95		const char digest[8];
+    96	} hash_map[] = {
+    97		[NVME_AUTH_HASH_SHA256] = {
+    98			.len = 32,
+    99			.hmac = "hmac(sha256)",
+   100			.digest = "sha256",
+   101		},
+   102		[NVME_AUTH_HASH_SHA384] = {
+   103			.len = 48,
+   104			.hmac = "hmac(sha384)",
+   105			.digest = "sha384",
+   106		},
+   107		[NVME_AUTH_HASH_SHA512] = {
+   108			.len = 64,
+   109			.hmac = "hmac(sha512)",
+   110			.digest = "sha512",
+   111		},
+   112	};
+   113	
+   114	const char *nvme_auth_hmac_name(u8 hmac_id)
+   115	{
+   116		if ((hmac_id > ARRAY_SIZE(hash_map)) ||
+ > 117		    !hash_map[hmac_id].hmac ||
+   118		    !strlen(hash_map[hmac_id].hmac))
+   119			return NULL;
+   120		return hash_map[hmac_id].hmac;
+   121	}
+   122	EXPORT_SYMBOL_GPL(nvme_auth_hmac_name);
+   123	
+   124	const char *nvme_auth_digest_name(u8 hmac_id)
+   125	{
+   126		if ((hmac_id > ARRAY_SIZE(hash_map)) ||
+ > 127		    !hash_map[hmac_id].digest ||
+   128		    !strlen(hash_map[hmac_id].digest))
+   129			return NULL;
+   130		return hash_map[hmac_id].digest;
+   131	}
+   132	EXPORT_SYMBOL_GPL(nvme_auth_digest_name);
+   133	
+   134	u8 nvme_auth_hmac_id(const char *hmac_name)
+   135	{
+   136		int i;
+   137	
+   138		for (i = 0; i < ARRAY_SIZE(hash_map); i++) {
+ > 139			if (!hash_map[i].hmac || !strlen(hash_map[i].hmac))
+   140				continue;
+   141			if (!strncmp(hash_map[i].hmac, hmac_name,
+   142				     strlen(hash_map[i].hmac)))
+   143				return i;
+   144		}
+   145		return NVME_AUTH_HASH_INVALID;
+   146	}
+   147	EXPORT_SYMBOL_GPL(nvme_auth_hmac_id);
+   148	
 
 -- 
 0-DAY CI Kernel Test Service
