@@ -1,44 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78192624
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 07:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8737A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 08:33:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656401476; x=1687937476;
+  t=1656405198; x=1687941198;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MEDXCJKlUeRWDEf8GYWxhQSY4NEFo4w2mQeBhKA8GQ8=;
-  b=iEUztBbReX4s4GEkndjSeUskwT9KEY24rcnrf4nVVYetMfBPjKawcWDB
-   1aZuWe77g8oI4pCM6udyJ5RsJ7trkKZxsarSfaBCenySIWlrDqEE+/kkA
-   WfZ8db1ctKoWkxSFxi5Q2yuadOR4naGJ9QyU3+7jS3L7UA529pSLj1Fn/
-   RC9+lMvuBoHkH9+Rq/78hu7Z0iNccRmj2bleAPWF77g873wfRd8963JiE
-   Lk4ZoIaqIxxv9cK8g0EEk80xpPhbCMGzjVgp9OOtNUd4nbDf7/J3UnmYc
-   gFDqXb7qGswzt9GaofEtt2NCTM0XETa2u+8UOvK5Nhva9KWPgEacZPriY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343351859"
+  bh=PqOZK4p5iy5VlTvZkF+x67ZPH9QxdCWJtvI/8U16WnI=;
+  b=HJe8yvAB2dHJn/Di9dyPzM6p5oszldxamStj/LMhtoROswyjjP86Nbw7
+   HLDYlxJToM/p3rWBojYqPuLHOJccelx/G2UcUQSPkZKDJxirZhoBo+tIi
+   bc14fdhym6I19wVBb5+y0XmJMoXvbsUp0zGVQeSuC0l8Df0QdsSifkvS+
+   ng0GJC1uo9uN+3GjOUC2uvqs9hYqtjIUEOeEDGSMcghIxQTqAgJ3cTguh
+   6gEASqM2BprQnEEjd+QUggnGI6OwMlf5AAwFxTuI+XxvtJ4SVCjoaF19m
+   asaNBkA5dvZrhwtrJLYbu1+VzV4ff3Rwm5jkdMQZ+SQQBL3UwS1LcWrBd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="367987901"
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="343351859"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 00:31:15 -0700
+   d="scan'208";a="367987901"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 01:33:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="836564054"
+   d="scan'208";a="646818500"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 00:31:13 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2022 01:33:16 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o65gn-0009gs-3T;
-	Tue, 28 Jun 2022 07:31:13 +0000
-Date: Tue, 28 Jun 2022 15:30:34 +0800
+	id 1o66eq-0009lT-2Q;
+	Tue, 28 Jun 2022 08:33:16 +0000
+Date: Tue, 28 Jun 2022 16:32:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
+To: Hannes Reinecke <hare@suse.de>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Subject: [akpm-mm:mm-unstable 137/269] mm/memory-failure.c:1728:19: error:
- redefinition of 'mf_generic_kill_procs'
-Message-ID: <202206281524.6A02wFc0-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>
+Subject: [hare-scsi-devel:auth.v15 10/11] drivers/nvme/target/auth.c:491:18:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'size_t' (aka 'unsigned int')
+Message-ID: <202206281641.MOCcvNmX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,69 +47,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   e75a11c67c2bbfefe57713b8bd62e488a9196baf
-commit: 4184e8d7d056b7943348dabb99a37ca9ba51fb8d [137/269] mm-factor-helpers-for-memory_failure_dev_pagemap-fix
-config: x86_64-randconfig-a002-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281524.6A02wFc0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git auth.v15
+head:   2a3a7d0493841ac5944dc0ba861b53d1c2b28014
+commit: 59e3ea5fe9113bf2026d17fc969d69001bc1b746 [10/11] nvmet-auth: Diffie-Hellman key exchange support
+config: riscv-randconfig-c006-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281641.MOCcvNmX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=4184e8d7d056b7943348dabb99a37ca9ba51fb8d
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 4184e8d7d056b7943348dabb99a37ca9ba51fb8d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=59e3ea5fe9113bf2026d17fc969d69001bc1b746
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel auth.v15
+        git checkout 59e3ea5fe9113bf2026d17fc969d69001bc1b746
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/nvme/target/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/memory-failure.c:1728:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-   static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
-          ^
-   include/linux/compiler_types.h:155:23: note: expanded from macro 'inline'
-   #define inline inline __gnu_inline __inline_maybe_unused notrace
-                         ^
-   include/linux/compiler_attributes.h:173:56: note: expanded from macro '__gnu_inline'
-   #define __gnu_inline                    __attribute__((__gnu_inline__))
-                                                          ^
-   mm/memory-failure.c:1526:12: note: previous definition is here
-   static int mf_generic_kill_procs(unsigned long long pfn, int flags,
-              ^
->> mm/memory-failure.c:1728:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-   static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
-          ^
-   include/linux/compiler_types.h:155:58: note: expanded from macro 'inline'
-   #define inline inline __gnu_inline __inline_maybe_unused notrace
-                                                            ^
-   arch/x86/include/asm/linkage.h:9:32: note: expanded from macro 'notrace'
-   #define notrace __attribute__((no_instrument_function))
-                                  ^
-   mm/memory-failure.c:1526:12: note: previous definition is here
-   static int mf_generic_kill_procs(unsigned long long pfn, int flags,
-              ^
->> mm/memory-failure.c:1728:19: error: redefinition of 'mf_generic_kill_procs'
-   static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
-                     ^
-   mm/memory-failure.c:1526:12: note: previous definition is here
-   static int mf_generic_kill_procs(unsigned long long pfn, int flags,
-              ^
-   2 warnings and 1 error generated.
+>> drivers/nvme/target/auth.c:491:18: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                           ctrl->cntlid, ctrl->dh_keysize, buf_size);
+                                         ^~~~~~~~~~~~~~~~
+   include/linux/printk.h:528:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                      ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:475:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:447:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
 
-vim +/mf_generic_kill_procs +1728 mm/memory-failure.c
+vim +491 drivers/nvme/target/auth.c
 
-  1727	
-> 1728	static inline int mf_generic_kill_procs(unsigned long long pfn, int flags,
-  1729						struct dev_pagemap *pgmap)
-  1730	{
-  1731		return 0;
-  1732	}
-  1733	
+   478	
+   479	int nvmet_auth_ctrl_exponential(struct nvmet_req *req,
+   480					u8 *buf, int buf_size)
+   481	{
+   482		struct nvmet_ctrl *ctrl = req->sq->ctrl;
+   483		int ret = 0;
+   484	
+   485		if (!ctrl->dh_key) {
+   486			pr_warn("ctrl %d no DH public key!\n", ctrl->cntlid);
+   487			return -ENOKEY;
+   488		}
+   489		if (buf_size != ctrl->dh_keysize) {
+   490			pr_warn("ctrl %d DH public key size mismatch, need %lu is %d\n",
+ > 491				ctrl->cntlid, ctrl->dh_keysize, buf_size);
+   492			ret = -EINVAL;
+   493		} else {
+   494			memcpy(buf, ctrl->dh_key, buf_size);
+   495			pr_debug("%s: ctrl %d public key %*ph\n", __func__,
+   496				 ctrl->cntlid, (int)buf_size, buf);
+   497		}
+   498	
+   499		return ret;
+   500	}
+   501	
 
 -- 
 0-DAY CI Kernel Test Service
