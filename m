@@ -1,125 +1,130 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E65F7A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 18:45:19 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id y32so23852907lfa.6
-        for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 11:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4A7JptdsYkzAASzc4tkybkZDdctkCSB8PkmFN8uYVCI=;
-        b=jKK9ituFZ+ubZapMzrh1ZUAkCQdnD2GwgEoK2/+06e9by7rYWo0M21RwB9RhuDTOV1
-         sirjg4cgMk5iTnWIgO/+RUZo522q2VNlm3/BCjQf+4qD4a6c6eiPx5pIFCswicWwjnhh
-         rhYcXDmIFoyQjq13x1jth2oavyXK/dUCXGEE4lWGNKeBIuydRbjvM1rGqIjKsa6Wkg/k
-         YV939/4UKnIdOKjckr8oZEg0t/sPqlnXVdjgpGPnnVBInQGYes1UDs8hfszL7rdS3Ees
-         9JNvIGIPqXvcy1JFsGvcZyroGMvo4EOcspdtr74iFRTQQU0H7qywfOosyr7VMYz/MnVg
-         E8jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4A7JptdsYkzAASzc4tkybkZDdctkCSB8PkmFN8uYVCI=;
-        b=gGNMukJSo8MD459NeUyLyLHTmcyMB0F4RNJN9KazIbfKEAsopQpfYF21JAkORPgX/9
-         eVJ+cmYW6IhC8aVTeqCKqb7s5+FNjLaHSMYdR+anIqsKFZcYsuf4K7JDlR5FLpqEI0nX
-         LJD8Lgx8/BFApnv3gkt/2xb5y5E6mEV2oO4Rhn5j04+JuewsIDQWXMUXnsPLwK37qk7k
-         jcIpu/i4HNFMCf0nSILvV1U8bTxXZbW1L7Vt/n3waLSub3zwbYxzri++y6emviOeRs4t
-         OHaA3KcpNhuvPcXnXuH7HYbYAtMUwO6ksKe8U5xXkgeOOUuouTS9byES45khqrp+NgFI
-         zxbw==
-X-Gm-Message-State: AJIora9pZeMO4YT3x0lM32u2MEr1x/Loc5AyGRij4t13P8KYLzjiyDn+
-	XMvYmRrVWWpuDvvWbuNuoa/w1bvOyWupYIc4AQu0dg==
-X-Google-Smtp-Source: AGRyM1vT0A85nTZOQqS3XNPxs7XxozWywoh4CvpbznRddJchqP81sTLCvsoMEeNPd7QxyA7myNcILnRQ+L+b6muQqqw=
-X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
- x7-20020a056512130700b0047fbaa452c5mr11957896lfu.103.1656441917176; Tue, 28
- Jun 2022 11:45:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E59A7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 19:25:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656444332; x=1687980332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vA8AUe3SseTOUfL/Kcn/DK0nH5CwMA0z/lVwts4sJYU=;
+  b=L32RYIfZFbnmWVcDJVEStGCMY+ayIGcdUhFi+wIxGx5s/3lSY2qe/Zyd
+   vwmLaAIj8VJchuSB1sx198Odd3bF9LcsbbvpN88D0rgi+TpUUIXU550Zu
+   wTlMSKTbL6YF16/oH32odrLYoLA+cL7P/w6XCGLWQkYtdmBMd7JBhjpwG
+   0sqgIvEtfbuGu9DPTTa5qocq+/yNPmUWEPwVw9NeMlfglBFnqleL0aDrV
+   P20/bp1XCm9xPdW20/HonV5WOzNQv9ijLXZk0E7b6Ex5Dtd6B6hK1Xh8t
+   RFqCQSdAmRqnBzNUb8F+OTgwy1bpoZL2M/c0FvkP3Wdn6KITa2cRlEYI7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="261632091"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="261632091"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="658251282"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 12:25:30 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6Gq1-000AYE-Bu;
+	Tue, 28 Jun 2022 19:25:29 +0000
+Date: Wed, 29 Jun 2022 03:25:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
+Subject: [jlayton:netfs-linked-list 32/54] fs/netfs/output.c:274:25: warning:
+ unused variable 'cookie'
+Message-ID: <202206290345.wPdhFKn5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220628012353.13995-1-jhubbard@nvidia.com>
-In-Reply-To: <20220628012353.13995-1-jhubbard@nvidia.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 28 Jun 2022 11:45:05 -0700
-Message-ID: <CAKwvOd=FmKYse9NEvMt5MHev5wRzeZH6AcBd1uQEL5k0GLP+Zw@mail.gmail.com>
-Subject: Re: [PATCH v3] gen_compile_commands: handle multiple lines per .mod file
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, LKML <linux-kernel@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jun 27, 2022 at 6:24 PM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
-> each .mod file only contains one line. That assumption was correct when
-> the script was originally created, but commit 9413e7640564 ("kbuild:
-> split the second line of *.mod into *.usyms") changed the .mod file
-> format so that there is one entry per line, and potentially many lines.
->
-> The problem can be reproduced by using Kbuild to generate
-> compile_commands.json, like this:
->
->     make CC=clang compile_commands.json
->
-> In many cases, the problem might be overlooked because many subsystems
-> only have one line anyway. However, in some subsystems (Nouveau, with
-> 762 entries, is a notable example) it results in skipping most of the
-> subsystem.
->
-> Fix this by fully processing each .mod file.
->
-> Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netfs-linked-list
+head:   d35a2461e039c9131e97bb125eac59a0f04e9161
+commit: feb78625e48b167397af0355efac9bcf3b545d42 [32/54] netfs: Dispatch write requests to process a writeback slice
+config: x86_64-randconfig-a004-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290345.wPdhFKn5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=feb78625e48b167397af0355efac9bcf3b545d42
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton netfs-linked-list
+        git checkout feb78625e48b167397af0355efac9bcf3b545d42
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
 
-Thanks for the fix, John!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->
-> Link to v2:
-> https://lore.kernel.org/all/20220616021149.327587-1-jhubbard@nvidia.com/
->
-> Changes since v2:
->
->   * Restored a blank line.
->
->   * Rewrote the commit description.
->
-> thanks,
-> John Hubbard
->
->
->  scripts/clang-tools/gen_compile_commands.py | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 1d1bde1fd45e..47da25b3ba7d 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -157,10 +157,10 @@ def cmdfiles_for_modorder(modorder):
->              if ext != '.ko':
->                  sys.exit('{}: module path must end with .ko'.format(ko))
->              mod = base + '.mod'
-> -           # The first line of *.mod lists the objects that compose the module.
-> +            # Read from *.mod, to get a list of objects that compose the module.
->              with open(mod) as m:
-> -                for obj in m.readline().split():
-> -                    yield to_cmdfile(obj)
-> +                for mod_line in m:
-> +                    yield to_cmdfile(mod_line.rstrip())
->
->
->  def process_line(root_directory, command_prefix, file_path):
-> --
-> 2.36.1
->
+All warnings (new ones prefixed by >>):
 
+   fs/netfs/output.c:274:49: error: incompatible pointer types passing 'struct inode *' to parameter of type 'struct netfs_inode *' [-Werror,-Wincompatible-pointer-types]
+           struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
+                                                          ^~~~~~~~~~~
+   include/linux/netfs.h:413:73: note: passing argument to parameter 'ctx' here
+   static inline struct fscache_cookie *netfs_i_cookie(struct netfs_inode *ctx)
+                                                                           ^
+>> fs/netfs/output.c:274:25: warning: unused variable 'cookie' [-Wunused-variable]
+           struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
+                                  ^
+   1 warning and 1 error generated.
+
+
+vim +/cookie +274 fs/netfs/output.c
+
+   266	
+   267	/*
+   268	 * Set up a op for writing to the cache.
+   269	 */
+   270	static void netfs_set_up_write_to_cache(struct netfs_io_request *wreq)
+   271	{
+   272		struct netfs_cache_resources *cres;
+   273		struct netfs_io_subrequest *subreq;
+ > 274		struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
+   275		loff_t start = wreq->first * PAGE_SIZE;
+   276		size_t len = (wreq->last - wreq->first + 1) * PAGE_SIZE;
+   277		int ret;
+   278	
+   279		if (!fscache_cookie_enabled(cookie)) {
+   280			clear_bit(NETFS_RREQ_WRITE_TO_CACHE, &wreq->flags);
+   281			return;
+   282		}
+   283	
+   284		_debug("write to cache");
+   285		subreq = netfs_create_write_request(wreq, NETFS_WRITE_TO_CACHE, start, len,
+   286						    netfs_write_to_cache_op_worker);
+   287		if (!subreq)
+   288			return;
+   289	
+   290		cres = &wreq->cache_resources;
+   291		ret = -ENOBUFS;
+   292		if (wreq->netfs_ops->begin_cache_operation)
+   293			ret = wreq->netfs_ops->begin_cache_operation(wreq);
+   294		if (ret < 0) {
+   295			netfs_write_subrequest_terminated(subreq, ret, false);
+   296			return;
+   297		}
+   298	
+   299		ret = cres->ops->prepare_write(cres, &start, &len, i_size_read(wreq->inode),
+   300					       true);
+   301		if (ret < 0) {
+   302			netfs_write_subrequest_terminated(subreq, ret, false);
+   303			return;
+   304		}
+   305	
+   306		netfs_queue_write_request(subreq);
+   307	}
+   308	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
