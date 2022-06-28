@@ -1,208 +1,225 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484807A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 01:29:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656379764; x=1687915764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zVM39Trhl2hg5S6mqEpQJmIRMAE8wh097bxFRFFGXL8=;
-  b=UqBlh+WFRwNriisGeo3gPJMzGWf5R2riGiL6EFOdqGFGsg5QVCzOYVI/
-   beAoV5homf380glQVOIMx1kqO+6kHnuYe9igyZRItq20rWAdHQJnpKpa4
-   R09aVj4ogWeNlgNAXSWNFmfDlVdP18sz6K0cIJ8HL8qh9DP9C0J8SScUN
-   nfDxfBgYBCQ219gFR06jcdFGO4dyjrK5BwANUNwvfESckYN8CTbr7fj2S
-   CyNyfshkOwF/V4rf1i/WxeGhok+U6szT4s7aXxIj5LbBWeT9Tt1L9V4TD
-   WNOp9I8asMVQitE87EeqvHiY4tMEM98notlpMU9hTbLlBhefJrKLPqmVv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="279149561"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="279149561"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 18:29:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732546014"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jun 2022 18:29:19 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o602T-0009LC-S6;
-	Tue, 28 Jun 2022 01:29:13 +0000
-Date: Tue, 28 Jun 2022 09:28:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sricharan R <quic_srichara@quicinc.com>, agross@kernel.org,
-	bjorn.andersson@linaro.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-	sboyd@kernel.org, linus.walleij@linaro.org, catalin.marinas@arm.com,
-	p.zabel@pengutronix.de, quic_varada@quicinc.com,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH V2 3/8] clk: qcom: Add Global Clock controller (GCC)
- driver for IPQ5018
-Message-ID: <202206280917.m3YJRqsF-lkp@intel.com>
-References: <20220621161126.15883-4-quic_srichara@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BED7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 01:32:35 +0000 (UTC)
+X-UUID: 10075e183627463b93609fb1f3fe1787-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:74026413-4d4e-4d4f-8345-5339b776a1ae,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:5
+X-CID-META: VersionHash:87442a2,CLOUDID:c369cb62-0b3f-4b2c-b3a6-ed5c044366a0,C
+	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+	,QS:nil,BEC:nil,COL:0
+X-UUID: 10075e183627463b93609fb1f3fe1787-20220628
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 773146642; Tue, 28 Jun 2022 09:32:23 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 28 Jun 2022 09:32:21 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 28 Jun 2022 09:32:20 +0800
+Message-ID: <eb096460b04fed32d29db9f6b66c839e964d2a74.camel@mediatek.com>
+Subject: Re: [PATCH v23 04/14] drm/mediatek: add display merge advance
+ config API for MT8195
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Tue, 28 Jun 2022 09:32:21 +0800
+In-Reply-To: <20220620091930.27797-5-nancy.lin@mediatek.com>
+References: <20220620091930.27797-1-nancy.lin@mediatek.com>
+	 <20220620091930.27797-5-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621161126.15883-4-quic_srichara@quicinc.com>
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-Hi Sricharan,
+Hi, Nancy:
 
-Thank you for the patch! Perhaps something to improve:
+On Mon, 2022-06-20 at 17:19 +0800, Nancy.Lin wrote:
+> Add merge new advance config API. The original merge API is
+> mtk_ddp_comp_funcs function prototype. The API interface parameters
+> cannot be modified, so add a new config API for extension. This is
+> the preparation for ovl_adaptor merge control.
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on robh/for-next linusw-pinctrl/devel linus/master v5.19-rc4 next-20220627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Applied to mediatek-drm-next [1], thanks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sricharan-R/Add-minimal-boot-support-for-IPQ5018/20220622-001751
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220628/202206280917.m3YJRqsF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/d7a0e1d14ecebd407df120468035592246a71cd6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sricharan-R/Add-minimal-boot-support-for-IPQ5018/20220622-001751
-        git checkout d7a0e1d14ecebd407df120468035592246a71cd6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/clk/qcom/ drivers/pinctrl/qcom/
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Regards,
+CK
 
-All warnings (new ones prefixed by >>):
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Tested-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  3 ++
+>  drivers/gpu/drm/mediatek/mtk_disp_merge.c | 52 ++++++++++++++++++++-
+> --
+>  2 files changed, 48 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> index 2cd1c660ace3..e847e90f436d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> @@ -63,6 +63,9 @@ void mtk_merge_config(struct device *dev, unsigned
+> int width,
+>  		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+>  void mtk_merge_start(struct device *dev);
+>  void mtk_merge_stop(struct device *dev);
+> +void mtk_merge_advance_config(struct device *dev, unsigned int l_w,
+> unsigned int r_w,
+> +			      unsigned int h, unsigned int vrefresh,
+> unsigned int bpc,
+> +			      struct cmdq_pkt *cmdq_pkt);
+>  
+>  void mtk_ovl_bgclr_in_on(struct device *dev);
+>  void mtk_ovl_bgclr_in_off(struct device *dev);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> index 45face638153..40da0555416d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+> @@ -17,6 +17,7 @@
+>  #define DISP_REG_MERGE_CTRL		0x000
+>  #define MERGE_EN				1
+>  #define DISP_REG_MERGE_CFG_0		0x010
+> +#define DISP_REG_MERGE_CFG_1		0x014
+>  #define DISP_REG_MERGE_CFG_4		0x020
+>  #define DISP_REG_MERGE_CFG_10		0x038
+>  /* no swap */
+> @@ -25,9 +26,12 @@
+>  #define DISP_REG_MERGE_CFG_12		0x040
+>  #define CFG_10_10_1PI_2PO_BUF_MODE		6
+>  #define CFG_10_10_2PI_2PO_BUF_MODE		8
+> +#define CFG_11_10_1PI_2PO_MERGE			18
+>  #define FLD_CFG_MERGE_MODE			GENMASK(4, 0)
+>  #define DISP_REG_MERGE_CFG_24		0x070
+>  #define DISP_REG_MERGE_CFG_25		0x074
+> +#define DISP_REG_MERGE_CFG_26		0x078
+> +#define DISP_REG_MERGE_CFG_27		0x07c
+>  #define DISP_REG_MERGE_CFG_36		0x0a0
+>  #define ULTRA_EN				BIT(0)
+>  #define PREULTRA_EN				BIT(4)
+> @@ -98,12 +102,19 @@ static void mtk_merge_fifo_setting(struct
+> mtk_disp_merge *priv,
+>  void mtk_merge_config(struct device *dev, unsigned int w,
+>  		      unsigned int h, unsigned int vrefresh,
+>  		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt)
+> +{
+> +	mtk_merge_advance_config(dev, w, 0, h, vrefresh, bpc,
+> cmdq_pkt);
+> +}
+> +
+> +void mtk_merge_advance_config(struct device *dev, unsigned int l_w,
+> unsigned int r_w,
+> +			      unsigned int h, unsigned int vrefresh,
+> unsigned int bpc,
+> +			      struct cmdq_pkt *cmdq_pkt)
+>  {
+>  	struct mtk_disp_merge *priv = dev_get_drvdata(dev);
+>  	unsigned int mode = CFG_10_10_1PI_2PO_BUF_MODE;
+>  
+> -	if (!h || !w) {
+> -		dev_err(dev, "%s: input width(%d) or height(%d) is
+> invalid\n", __func__, w, h);
+> +	if (!h || !l_w) {
+> +		dev_err(dev, "%s: input width(%d) or height(%d) is
+> invalid\n", __func__, l_w, h);
+>  		return;
+>  	}
+>  
+> @@ -112,14 +123,41 @@ void mtk_merge_config(struct device *dev,
+> unsigned int w,
+>  		mode = CFG_10_10_2PI_2PO_BUF_MODE;
+>  	}
+>  
+> -	mtk_ddp_write(cmdq_pkt, h << 16 | w, &priv->cmdq_reg, priv-
+> >regs,
+> +	if (r_w)
+> +		mode = CFG_11_10_1PI_2PO_MERGE;
+> +
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | l_w, &priv->cmdq_reg, priv-
+> >regs,
+>  		      DISP_REG_MERGE_CFG_0);
+> -	mtk_ddp_write(cmdq_pkt, h << 16 | w, &priv->cmdq_reg, priv-
+> >regs,
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | r_w, &priv->cmdq_reg, priv-
+> >regs,
+> +		      DISP_REG_MERGE_CFG_1);
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | (l_w + r_w), &priv->cmdq_reg, 
+> priv->regs,
+>  		      DISP_REG_MERGE_CFG_4);
+> -	mtk_ddp_write(cmdq_pkt, h << 16 | w, &priv->cmdq_reg, priv-
+> >regs,
+> +	/*
+> +	 * DISP_REG_MERGE_CFG_24 is merge SRAM0 w/h
+> +	 * DISP_REG_MERGE_CFG_25 is merge SRAM1 w/h.
+> +	 * If r_w > 0, the merge is in merge mode (input0 and input1
+> merge together),
+> +	 * the input0 goes to SRAM0, and input1 goes to SRAM1.
+> +	 * If r_w = 0, the merge is in buffer mode, the input goes
+> through SRAM0 and
+> +	 * then to SRAM1. Both SRAM0 and SRAM1 are set to the same
+> size.
+> +	 */
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | l_w, &priv->cmdq_reg, priv-
+> >regs,
+>  		      DISP_REG_MERGE_CFG_24);
+> -	mtk_ddp_write(cmdq_pkt, h << 16 | w, &priv->cmdq_reg, priv-
+> >regs,
+> -		      DISP_REG_MERGE_CFG_25);
+> +	if (r_w)
+> +		mtk_ddp_write(cmdq_pkt, h << 16 | r_w, &priv->cmdq_reg, 
+> priv->regs,
+> +			      DISP_REG_MERGE_CFG_25);
+> +	else
+> +		mtk_ddp_write(cmdq_pkt, h << 16 | l_w, &priv->cmdq_reg, 
+> priv->regs,
+> +			      DISP_REG_MERGE_CFG_25);
+> +
+> +	/*
+> +	 * DISP_REG_MERGE_CFG_26 and DISP_REG_MERGE_CFG_27 is only used
+> in LR merge.
+> +	 * Only take effect when the merge is setting to merge mode.
+> +	 */
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | l_w, &priv->cmdq_reg, priv-
+> >regs,
+> +		      DISP_REG_MERGE_CFG_26);
+> +	mtk_ddp_write(cmdq_pkt, h << 16 | r_w, &priv->cmdq_reg, priv-
+> >regs,
+> +		      DISP_REG_MERGE_CFG_27);
+> +
+>  	mtk_ddp_write_mask(cmdq_pkt, SWAP_MODE, &priv->cmdq_reg, priv-
+> >regs,
+>  			   DISP_REG_MERGE_CFG_10, FLD_SWAP_MODE);
+>  	mtk_ddp_write_mask(cmdq_pkt, mode, &priv->cmdq_reg, priv->regs,
 
->> drivers/clk/qcom/gcc-ipq5018.c:118:37: warning: unused variable 'gcc_xo_gpll0_out_main_div2' [-Wunused-const-variable]
-   static const struct clk_parent_data gcc_xo_gpll0_out_main_div2[] = {
-                                       ^
->> drivers/clk/qcom/gcc-ipq5018.c:123:32: warning: unused variable 'gcc_xo_gpll0_out_main_div2_map' [-Wunused-const-variable]
-   static const struct parent_map gcc_xo_gpll0_out_main_div2_map[] = {
-                                  ^
->> drivers/clk/qcom/gcc-ipq5018.c:201:37: warning: unused variable 'gcc_xo_gpll0_gpll4_gpll2' [-Wunused-const-variable]
-   static const struct clk_parent_data gcc_xo_gpll0_gpll4_gpll2[] = {
-                                       ^
->> drivers/clk/qcom/gcc-ipq5018.c:208:32: warning: unused variable 'gcc_xo_gpll0_gpll4_gpll2_map' [-Wunused-const-variable]
-   static const struct parent_map gcc_xo_gpll0_gpll4_gpll2_map[] = {
-                                  ^
-   4 warnings generated.
-
-
-vim +/gcc_xo_gpll0_out_main_div2 +118 drivers/clk/qcom/gcc-ipq5018.c
-
-   117	
- > 118	static const struct clk_parent_data gcc_xo_gpll0_out_main_div2[] = {
-   119		{ .fw_name = "xo", .name = "xo", },
-   120		{ .fw_name = "gpll0_out_main_div2", .name = "gpll0_out_main_div2", },
-   121	};
-   122	
- > 123	static const struct parent_map gcc_xo_gpll0_out_main_div2_map[] = {
-   124		{ P_XO, 0 },
-   125		{ P_GPLL0_DIV2, 1 },
-   126	};
-   127	
-   128	static const struct clk_parent_data gcc_xo_gpll0_gpll4[] = {
-   129		{ .fw_name = "xo", .name = "xo", },
-   130		{ .fw_name = "gpll0", .name = "gpll0", },
-   131		{ .fw_name = "gpll4", .name = "gpll4", },
-   132	};
-   133	
-   134	static const struct parent_map gcc_xo_gpll0_gpll4_map[] = {
-   135		{ P_XO, 0 },
-   136		{ P_GPLL0, 1 },
-   137		{ P_GPLL4, 2 },
-   138	};
-   139	
-   140	static const struct clk_parent_data gcc_xo_gpll0_core_pi_sleep_clk[] = {
-   141		{ .fw_name = "xo", .name = "xo", },
-   142		{ .fw_name = "gpll0", .name = "gpll0", },
-   143		{ .fw_name = "sleep_clk", .name = "sleep_clk", },
-   144	};
-   145	
-   146	static const struct parent_map gcc_xo_gpll0_core_pi_sleep_clk_map[] = {
-   147		{ P_XO, 0 },
-   148		{ P_GPLL0, 2 },
-   149		{ P_CORE_PI_SLEEP_CLK, 6 },
-   150	};
-   151	
-   152	static const struct clk_parent_data gcc_xo_gpll0_gpll0_out_main_div2_sleep_clk[] = {
-   153		{ .fw_name = "xo", .name = "xo", },
-   154		{ .fw_name = "gpll0", .name = "gpll0", },
-   155		{ .fw_name = "gpll0_out_main_div2", .name = "gpll0_out_main_div2", },
-   156		{ .fw_name = "sleep_clk", .name = "sleep_clk", },
-   157	};
-   158	
-   159	static const struct parent_map gcc_xo_gpll0_gpll0_out_main_div2_sleep_clk_map[] = {
-   160		{ P_XO, 0 },
-   161		{ P_GPLL0, 1 },
-   162		{ P_GPLL0_DIV2, 4 },
-   163		{ P_CORE_PI_SLEEP_CLK, 6 },
-   164	};
-   165	
-   166	static const struct clk_parent_data gcc_xo_gpll0_gpll2_gpll0_out_main_div2[] = {
-   167		{ .fw_name = "xo", .name = "xo", },
-   168		{ .fw_name = "gpll0", .name = "gpll0", },
-   169		{ .fw_name = "gpll2", .name = "gpll2", },
-   170		{ .fw_name = "gpll0_out_main_div2", .name = "gpll0_out_main_div2", },
-   171	};
-   172	
-   173	static const struct parent_map gcc_xo_gpll0_gpll2_gpll0_out_main_div2_map[] = {
-   174		{ P_XO, 0 },
-   175		{ P_GPLL0, 1 },
-   176		{ P_GPLL2, 2 },
-   177		{ P_GPLL0_DIV2, 4 },
-   178	};
-   179	
-   180	static const struct clk_parent_data gcc_xo_gpll4_gpll0_gpll0_out_main_div2[] = {
-   181		{ .fw_name = "xo", .name = "xo", },
-   182		{ .fw_name = "gpll4", .name = "gpll4", },
-   183		{ .fw_name = "gpll0", .name = "gpll0", },
-   184		{ .fw_name = "gpll0_out_main_div2", .name = "gpll0_out_main_div2", },
-   185	};
-   186	
-   187	static const struct parent_map gcc_xo_gpll4_gpll0_gpll0_out_main_div2_map1[] = {
-   188		{ P_XO, 0 },
-   189		{ P_GPLL4, 1 },
-   190		{ P_GPLL0, 2 },
-   191		{ P_GPLL0_DIV2, 4 },
-   192	};
-   193	
-   194	static const struct parent_map gcc_xo_gpll4_gpll0_gpll0_out_main_div2_map2[] = {
-   195		{ P_XO, 0 },
-   196		{ P_GPLL4, 1 },
-   197		{ P_GPLL0, 3 },
-   198		{ P_GPLL0_DIV2, 4 },
-   199	};
-   200	
- > 201	static const struct clk_parent_data gcc_xo_gpll0_gpll4_gpll2[] = {
-   202		{ .fw_name = "xo", .name = "xo", },
-   203		{ .fw_name = "gpll0", .name = "gpll0", },
-   204		{ .fw_name = "gpll4", .name = "gpll4", },
-   205		{ .fw_name = "gpll2", .name = "gpll2", },
-   206	};
-   207	
- > 208	static const struct parent_map gcc_xo_gpll0_gpll4_gpll2_map[] = {
-   209		{ P_XO, 0 },
-   210		{ P_GPLL0, 1 },
-   211		{ P_GPLL4, 3 },
-   212		{ P_GPLL2, 4 },
-   213	};
-   214	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
