@@ -1,43 +1,42 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76247A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 19:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D999636
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 20:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656444932; x=1687980932;
+  t=1656448594; x=1687984594;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2oUw14+QB/xaskcnfyCWcya1uXzyvTLVtoyz0zSKhs8=;
-  b=UQeniPKvHPGJyonpeT7vLZc4aWUdXKNTXfelygJ7NVsER6bdCQvOfSMu
-   uzC3v+4lGVDZGIRH6a2zxPN4V3bT4njiKonhVNjSBEgEcNyD6w2sD2Uda
-   oRZsKYBbLcobJowwSs2uV0UEAg1VB4Yuc2rXll/NwlTyGMeqCU9SEAnrg
-   9AKuaL7DjEloOmV//j16Z+kowAIIu3PxImZVe5mEuNHcanRU45lOt4YIh
-   YmKU+evgbzMV0j8EIishUs8Y/+tTmc+FkVTQACqxDzmsxFhSG/udhUYDI
-   m18NkE+A/JQuCzRAozDA2GLnVsEVyBvd+tAhe3JWveNaXQ84LVpO6biZz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280593550"
+  bh=LLpjV/n09Le7C4sSxRt4nmp7B4TOejGA02DeFSXr69Y=;
+  b=VaGACfUcLrGlHJjLkZai+c4VWjcaULOc3RBM8zuBCZar3rj4KnzveqpF
+   fFpYkQ9kBZvnGH8abBR2+te13BHrpjdFWBts/q1T9KVs1O7iCHsGELuyK
+   PcdPN5kz4JdKB/3ItOSEOMr6+dJhWZEo38s8Hl5x8oI21wiyNMQX5zapI
+   gPH0z9HaarV7pUoyxw44aFUZXFdc4kmpzHvn024cegyuxuN5zDSlOriTC
+   hpfslaZrqeblvI+8YF0IwMRcGk+xvCRsG+XdVg7Q9VK5itSfeBxYNDJWu
+   74DDOGMxQhbA9e8I4ykXfvA8dnRDtW58riFwPOmRNjx2Lvv5YGROBODmE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264882651"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="280593550"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:35:32 -0700
+   d="scan'208";a="264882651"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 13:36:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="658253835"
+   d="scan'208";a="917319796"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 12:35:30 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2022 13:36:31 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o6Gzi-000AZA-2Y;
-	Tue, 28 Jun 2022 19:35:30 +0000
-Date: Wed, 29 Jun 2022 03:35:22 +0800
+	id 1o6Hwl-000Aas-6f;
+	Tue, 28 Jun 2022 20:36:31 +0000
+Date: Wed, 29 Jun 2022 04:36:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-Subject: [jlayton:netfs-linked-list 26/54] include/linux/page-flags.h:788:20:
- error: passing 'const struct page *' to parameter of type 'struct page *'
- discards qualifiers
-Message-ID: <202206290318.tpiiSqSW-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [zx2c4:master 9/10] ERROR: modpost: "wake_up_state"
+ [drivers/char/hw_random/rng-core.ko] undefined!
+Message-ID: <202206290408.ua4IX9mh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,71 +46,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netfs-linked-list
-head:   d35a2461e039c9131e97bb125eac59a0f04e9161
-commit: 06b03c53376206f3b98cc4dbb1f061a10085309b [26/54] mm: Make some folio function arguments const
-config: x86_64-randconfig-a003-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290318.tpiiSqSW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git master
+head:   9b3548a2475866d26bdeee84d62eecf1bc94d22a
+commit: 78223ae64136d911588115c6c317a31305100ce4 [9/10] ath9k: let sleep be interrupted when unregistering hwrng
+config: i386-randconfig-a003-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290408.ua4IX9mh-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=06b03c53376206f3b98cc4dbb1f061a10085309b
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton netfs-linked-list
-        git checkout 06b03c53376206f3b98cc4dbb1f061a10085309b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git/commit/?id=78223ae64136d911588115c6c317a31305100ce4
+        git remote add zx2c4 https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git
+        git fetch --no-tags zx2c4 master
+        git checkout 78223ae64136d911588115c6c317a31305100ce4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:20:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/page-flags.h:788:20: error: passing 'const struct page *' to parameter of type 'struct page *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           PF_POISONED_CHECK(page);
-                             ^~~~
-   include/linux/page-flags.h:370:41: note: expanded from macro 'PF_POISONED_CHECK'
-                   VM_BUG_ON_PGFLAGS(PagePoisoned(page), page);            \
-                                                         ^~~~
-   include/linux/mmdebug.h:94:60: note: expanded from macro 'VM_BUG_ON_PGFLAGS'
-   #define VM_BUG_ON_PGFLAGS(cond, page) VM_BUG_ON_PAGE(cond, page)
-                                                              ^~~~
-   include/linux/mmdebug.h:21:14: note: expanded from macro 'VM_BUG_ON_PAGE'
-                           dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
-                                     ^~~~
-   include/linux/mmdebug.h:12:29: note: passing argument to parameter 'page' here
-   void dump_page(struct page *page, const char *reason);
-                               ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +788 include/linux/page-flags.h
-
-e7d324850bfcb30 Muchun Song   2022-03-22  785  
-06b03c53376206f David Howells 2022-06-08  786  static __always_inline int PageHead(const struct page *page)
-e7d324850bfcb30 Muchun Song   2022-03-22  787  {
-e7d324850bfcb30 Muchun Song   2022-03-22 @788  	PF_POISONED_CHECK(page);
-e7d324850bfcb30 Muchun Song   2022-03-22  789  	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
-e7d324850bfcb30 Muchun Song   2022-03-22  790  }
-e7d324850bfcb30 Muchun Song   2022-03-22  791  
-
-:::::: The code at line 788 was first introduced by commit
-:::::: e7d324850bfcb30df563d144c0363cc44595277d mm: hugetlb: free the 2nd vmemmap page associated with each HugeTLB page
-
-:::::: TO: Muchun Song <songmuchun@bytedance.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> ERROR: modpost: "wake_up_state" [drivers/char/hw_random/rng-core.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
