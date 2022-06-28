@@ -1,54 +1,43 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43466624
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 15:15:57 +0000 (UTC)
-Received: by mail-wm1-f51.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so9673069wmq.0
-        for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 08:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rK0qJO7Dh7n2l25BJgf7UBZiynAmtJpBCfoCvPDnO4w=;
-        b=xRSQt6foeVbB30dhdwxyxqUnzVkRBbvKhGtLjmke8wzbj+crJfxtcFXiQ7zPGjJpt1
-         0oWyDsu7++7KvLMMAUW9tdRn6NrHmHMI62yUC+ILerhLEEPaKq+e3Dasz8bfX0pyNPoq
-         uefb0bHKVv6Zwbju4SLfJcGR1MfIX0/UZis2RqCw69N6iMNIcSLvRRjcFafRmQDb1+C7
-         i3rWHPhysbmNQiwHsbEdoXyDej698nOA+5XVU1hEz0EY1jWRM9stCTkz4c4VozoUjSL7
-         +tx72X5+4ATOmANEAEULLh4FfJ20xTg4poFCslTnvxFJbcfW+zX9VhwsKfhmnj2CnrP+
-         xVnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rK0qJO7Dh7n2l25BJgf7UBZiynAmtJpBCfoCvPDnO4w=;
-        b=h/cnC08dRGRnvN+ZW81mlW9mL/UV17OhSylSC4BpnxaUx0HuUMty1XKahlcFMPXQzO
-         xY7EaLQ1nZVh/8gjKd2BTjsz46Qj/Oktlv3e5xN77h+xz43vk3MmmphRRucScMRVYJeP
-         S6RDuLUpuS7gZqI10qRngbxG2HnaqRDrqntzpBzTTJJVLprJHO/IcslqoSSHyeLM2T3k
-         VcxWbymm6Ie6Tbm/I3TnntxTyfi31k9yl4rFSPr785wySz2SoY2VKIxtvueDkvbVHp6w
-         edGprpj6lse93JN1x1wsbf2RdyBOCX/Hxd3sMnsXbOOY68vy+oBPiIiGzEcJCIW7dv99
-         KgPQ==
-X-Gm-Message-State: AJIora8CYyO+HzXdn3rQ35CkoStVM+d6iIo5FWUMkWddN3FpgJNzZSPx
-	wQ3J6hAlJb9Ur5CJU3IybFtaAA==
-X-Google-Smtp-Source: AGRyM1uWG6ktrbOE3BNKs0s25HDywKOhd7I0UvloEYVw1p//zHLTRdlDoRXER6oW+GWf5kX+u9L+Cg==
-X-Received: by 2002:a05:600c:a03:b0:39e:4f0c:938c with SMTP id z3-20020a05600c0a0300b0039e4f0c938cmr92194wmp.145.1656429355425;
-        Tue, 28 Jun 2022 08:15:55 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id f18-20020a7bc8d2000000b0039c747a1e8fsm21258152wml.7.2022.06.28.08.15.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 08:15:54 -0700 (PDT)
-Date: Tue, 28 Jun 2022 16:15:52 +0100
-From: Daniel Thompson <daniel.thompson@linaro.org>
-To: Tom Rix <trix@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Enable clang tools for kernels build using gcc
-Message-ID: <20220628151552.zkbvof7fyu3wtjqe@maple.lan>
-References: <20220628122741.93641-1-daniel.thompson@linaro.org>
- <0478d832-d902-69ed-7c1c-4f19d942cddf@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668063C05
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 15:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656430207; x=1687966207;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DkHXO1XAtfgSFlm4XIyu0K59BkHqpN7Fhdck9GG/JyY=;
+  b=bsHHQqgmMiNWIoatUOv21o2aUGxNyfGKjbIH46rPP3jR82I7Hh/rLz2f
+   iQuPD0DzymrAZmpenHyK6KO6gn0g/BYPe1rcAdk5u6Zb7ECGcd5hV72kT
+   hhuqY9wrVE2qJ8wtLsObQB7/7vdC2QHqOsSITm/D1Q620ytf+JItissHT
+   PmQ3f22AAconDMN75ue6VQEsOG3nb3iQGJ368+a/iV1mXe8FZVUz4F2OT
+   7aEqmngH5Srug5uSRPFYOqgPRzxYwIZt3q5niRpRxtSlU8VJVP9I3CGSF
+   aCJj1aRxEflJa9YyBkbjbPWjx+X+jWOgf7XO4dBw3phhDq6wlEkN8bnCl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="307256334"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="307256334"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 08:30:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
+   d="scan'208";a="680094473"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jun 2022 08:29:58 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6DA6-000AJs-3T;
+	Tue, 28 Jun 2022 15:29:58 +0000
+Date: Tue, 28 Jun 2022 23:29:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-filter 10/28] arch/x86/kernel/head64.c:527:2:
+ error: call to undeclared function 'tdx_filter_init'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202206282311.jGZChFVY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,76 +46,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0478d832-d902-69ed-7c1c-4f19d942cddf@redhat.com>
 
-On Tue, Jun 28, 2022 at 06:19:09AM -0700, Tom Rix wrote:
-> The limitations of the compilation db are not limited to the kernel.
-> 
-> Why shouldn't the change be made in the llvm project ?
+tree:   https://github.com/intel/tdx.git guest-filter
+head:   0a555e67b143701a81612d819e693cf5786de418
+commit: f0270b8da57a2d69e1eb8aa9c79ad9b6a01c90ab [10/28] x86/tdx: Add command line option to disable TDX guest filter support
+config: x86_64-randconfig-a002-20220627 (https://download.01.org/0day-ci/archive/20220628/202206282311.jGZChFVY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/f0270b8da57a2d69e1eb8aa9c79ad9b6a01c90ab
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-filter
+        git checkout f0270b8da57a2d69e1eb8aa9c79ad9b6a01c90ab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I'd rather answer the question why should it be in the kernel ;-).
-That's somewhat easier to answer because the kernel does have some
-unusual properties:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-1. It makes heavy use of kernel command line options, especially
-   when compared to most user space components where the default
-   compiler flags are something very simple ("-g -O2" plus include
-   directories).
+All errors (new ones prefixed by >>):
 
-2. The kernel provides it's own tooling to generate the compilation
-   database. For example, if tools like codechecker added features to
-   their front end to mitigate this problem[1] the kernel wouldn't
-   benefit from them anyway.
-
-3. Rules like `make clang-analyzer` generate *and* consume the
-   compilation database in a single pass. That makes it impossible to
-   run fixup tools between generating the database and consuming
-   it.
-
-However going back to the original question:
-> Why shouldn't the change be made in the llvm project ?
-
-clang can (and probably will) learn about some of the newer gcc options
-over time. However that doesn't actually help much since all that
-achieves is a game of whack-a-mole where clang has to constantly play
-catch up or the tooling will break.
-
-Some other aspects could be added to the various different projects that
-use the compilation database that would improve things (better automatic
-handling of --target for example). That sort of change should still
-peacefully coexist with an approach based on gen_compile_commands.json
-though.
+>> arch/x86/kernel/head64.c:527:2: error: call to undeclared function 'tdx_filter_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           tdx_filter_init();
+           ^
+   1 error generated.
 
 
-Daniel.
+vim +/tdx_filter_init +527 arch/x86/kernel/head64.c
 
+   471	
+   472	asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+   473	{
+   474		/*
+   475		 * Build-time sanity checks on the kernel image and module
+   476		 * area mappings. (these are purely build-time and produce no code)
+   477		 */
+   478		BUILD_BUG_ON(MODULES_VADDR < __START_KERNEL_map);
+   479		BUILD_BUG_ON(MODULES_VADDR - __START_KERNEL_map < KERNEL_IMAGE_SIZE);
+   480		BUILD_BUG_ON(MODULES_LEN + KERNEL_IMAGE_SIZE > 2*PUD_SIZE);
+   481		BUILD_BUG_ON((__START_KERNEL_map & ~PMD_MASK) != 0);
+   482		BUILD_BUG_ON((MODULES_VADDR & ~PMD_MASK) != 0);
+   483		BUILD_BUG_ON(!(MODULES_VADDR > __START_KERNEL));
+   484		MAYBE_BUILD_BUG_ON(!(((MODULES_END - 1) & PGDIR_MASK) ==
+   485					(__START_KERNEL & PGDIR_MASK)));
+   486		BUILD_BUG_ON(__fix_to_virt(__end_of_fixed_addresses) <= MODULES_END);
+   487	
+   488		cr4_init_shadow();
+   489	
+   490		/* Kill off the identity-map trampoline */
+   491		reset_early_page_tables();
+   492	
+   493		clear_bss();
+   494	
+   495		/*
+   496		 * This needs to happen *before* kasan_early_init() because latter maps stuff
+   497		 * into that page.
+   498		 */
+   499		clear_page(init_top_pgt);
+   500	
+   501		/*
+   502		 * SME support may update early_pmd_flags to include the memory
+   503		 * encryption mask, so it needs to be called before anything
+   504		 * that may generate a page fault.
+   505		 */
+   506		sme_early_init();
+   507	
+   508		kasan_early_init();
+   509	
+   510		/*
+   511		 * Flush global TLB entries which could be left over from the trampoline page
+   512		 * table.
+   513		 *
+   514		 * This needs to happen *after* kasan_early_init() as KASAN-enabled .configs
+   515		 * instrument native_write_cr4() so KASAN must be initialized for that
+   516		 * instrumentation to work.
+   517		 */
+   518		__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+   519	
+   520		idt_setup_early_handler();
+   521	
+   522		/* Needed before cc_platform_has() can be used for TDX */
+   523		tdx_early_init();
+   524	
+   525		copy_bootdata(__va(real_mode_data));
+   526	
+ > 527		tdx_filter_init();
+   528	
+   529		/*
+   530		 * Load microcode early on BSP.
+   531		 */
+   532		load_ucode_bsp();
+   533	
+   534		/* set init_top_pgt kernel high mapping*/
+   535		init_top_pgt[511] = early_top_pgt[511];
+   536	
+   537		x86_64_start_reservations(real_mode_data);
+   538	}
+   539	
 
-[1] Currently they don't workaround it automatically. They just imply
-    that you may have to "fine tune" compile_commands.json after
-    generating it:
-    https://codechecker.readthedocs.io/en/latest/usage/#step-7-fine-tune-analysis-configuration
-
-
-> On 6/28/22 5:27 AM, Daniel Thompson wrote:
-> > This patch set makes it possible to use clang based tools, such as
-> > the clangd completion engine, regardless of our choice of compiler
-> > for the actual kernel build.
-> > 
-> > Most of the fine details are included in the patch header for the
-> > first patch (since we'd like them to appear in the kernel history so
-> > they can help future archaeologists).
-> > 
-> > Daniel Thompson (2):
-> >    clang-tools: Generate clang compatible output even with gcc builds
-> >    Makefile: Enable clang-tidy and clang-analyzer for gcc builds
-> > 
-> >   Makefile                                    | 11 ++--
-> >   scripts/clang-tools/gen_compile_commands.py | 71 ++++++++++++++++++++-
-> >   2 files changed, 74 insertions(+), 8 deletions(-)
-> > 
-> > 
-> > base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
-> > --
-> > 2.35.1
-> > 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
