@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AFA7A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91363C385A9;
-	Tue, 28 Jun 2022 02:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21AB7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 02:22:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8839C34115;
+	Tue, 28 Jun 2022 02:22:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656382849;
-	bh=fnbjg2y5q4ORZyOyzWa2ckHS44WEdmOAUqXEWcMqugI=;
+	s=k20201202; t=1656382951;
+	bh=uhhm1hQwl9GEenymTrnKlp8FI+WMSqOom27CaC4a0TE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ka2Up4koD9AAuSD6T8RqcnF0V/6UYnJG6MyPk2oUtP8uC6Z/dm/0kn5Vc9NWWA0ZS
-	 jeaH3+Bpi6ZO/LMf3Ct++cIciM+sUXUe3s/ce539vInxug7CDqKBt43F7dm/wj2hI5
-	 E8DD/vlnyDEmpZG86C2DWTvMFsn+9lKT+ZFzXaqITIwbVa0UdC+d12ap7bh6djbEqi
-	 TnC1lEa1EJJoJIJMjKbMV3zfgGJ8MFURdfg2bVtQG8PLf8hSAn8H3QSn3jtvSdnRuM
-	 clx5Fywu0BWJg7TYQUjsNaObkJq5L9tP8/8cmM55X+s8Snu0n07LqyvG8+A9tNNGnz
-	 4Ur0Q6aVLl5yQ==
+	b=FytOubyi8kx1X0BhRQZaPpcIwxEJbmswkAWLVcDvV+dxXkWi3K4i6sq29f4BQ753J
+	 wbetYaIc/W68lo2CjBXvQ1mC1zajx/YhH1ZhHRKmSj4Cymr9cwEtDtGYZIWWoh+vng
+	 1LlIQjHyRBdQWQTQGZlsNqxySNEOflWliZa+1ADt6Vi0Fib0JZB4UoOQf3rs/TWl3G
+	 NmRvPxnuuJ3qf1c/tU4B1jIbZiPtJjgovuILtdH23+NKZXDHy/XNIR7dT3qzH+/7iB
+	 CRsUyjZRKqOe5l60y4LTQ/mca5JXZ5EKRdG/nT71fOvUJcwkzdve3M8rr1a/6nnAgn
+	 GZjPnnT0FFiFQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,13 +31,15 @@ Cc: Kees Cook <keescook@chromium.org>,
 	pabeni@redhat.com,
 	leon@kernel.org,
 	jiri@nvidia.com,
+	olteanv@gmail.com,
+	simon.horman@corigine.com,
 	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 49/53] hinic: Replace memcpy() with direct assignment
-Date: Mon, 27 Jun 2022 22:18:35 -0400
-Message-Id: <20220628021839.594423-49-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 37/41] hinic: Replace memcpy() with direct assignment
+Date: Mon, 27 Jun 2022 22:20:56 -0400
+Message-Id: <20220628022100.595243-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628021839.594423-1-sashal@kernel.org>
-References: <20220628021839.594423-1-sashal@kernel.org>
+In-Reply-To: <20220628022100.595243-1-sashal@kernel.org>
+References: <20220628022100.595243-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-index 60ae8bfc5f69..1749d26f4bef 100644
+index 6e11ee339f12..92d4e0039565 100644
 --- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
 +++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
 @@ -43,9 +43,7 @@ static bool check_image_valid(struct hinic_devlink_priv *priv, const u8 *buf,
