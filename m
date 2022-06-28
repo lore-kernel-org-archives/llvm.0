@@ -1,55 +1,118 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from eggs.gnu.org (eggs.gnu.org [209.51.188.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E79C7B
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 08:38:57 +0000 (UTC)
-Received: from zn.tnic (p200300ea97156ae0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:6ae0:329c:23ff:fea6:a903])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 520D11EC026E;
-	Wed, 29 Jun 2022 10:38:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1656491931;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=L9WE3gWi6m03dtemylFUuHBiKHvsHD0gyP8Y9dCvOfA=;
-	b=qawEfIkdwRiq4adAOjjqQWpL2o8cLOpZ8kNu/ZxHFEgmdmHGOIeOZh77P9eLKa75gklo4W
-	M8kr2p661xWJQVcvlKhVOR5f5R3buAFrghPjkV+pRBx9Lh5tnKuLMJLSV6hFIVHcB26Ux5
-	2m3SrbXjGMTMV3/TpJXLT3X1qRzz8YA=
-Date: Wed, 29 Jun 2022 10:38:46 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Jonathan McDowell <noodles@fb.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-	Baoquan He <bhe@redhat.com>
-Subject: Re: [tip:x86/kdump 1/1] WARNING: modpost:
- vmlinux.o(.text+0x1e7210c): Section mismatch in reference from the function
- ima_free_kexec_buffer() to the function .meminit.text:memblock_phys_free()
-Message-ID: <YrwPjnxBk3Xyuakg@zn.tnic>
-References: <202206291039.yGgljGbx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D017B
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 09:00:08 +0000 (UTC)
+Received: from fencepost.gnu.org ([2001:470:142:3::e]:53108)
+	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1o6TYF-0005Kw-9z; Wed, 29 Jun 2022 04:59:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+	s=fencepost-gnu-org; h=MIME-Version:In-Reply-To:Date:References:Subject:To:
+	From; bh=yWORYvO8IZ9m60ZBZWENFQneFKxqNCr4t6RwBfhrer8=; b=ZLZ9KuZCd2SDqrpxJkqG
+	+voaKIJHCJpC+q0cXtrUfhueCJsMy9b5IpuYNrBi1ZsisbdXzVeW8k198uXzUTQjRCqxtQApieX1R
+	MlzEblWkgl7NvdGKemQ/k3Y6sIsQ8pXgH0L9I9kRNsI8ahjLP/kmoVm8rd5IiMo9w43cFOfIxCJ0N
+	JrjZIw461zbNGHFQh2WX91YCN+NWzn5AuwvBzULSP6VED+1Z3PBxtWs+0U4riWxM4tdsFLXw6dpSx
+	c+4JxUsfnnUyIHNe7vsb93q8jyjp/aWhivj7IAs6xF58Gs0w5hd+8goOCdCYnMDHgMhurqlqUAA4C
+	t2mdmgcf0S2KPg==;
+Received: from dynamic-077-182-178-150.77.182.pool.telefonica.de ([77.182.178.150]:54142 helo=termi.gnu.org)
+	by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1o6TYE-0002JL-IW; Wed, 29 Jun 2022 04:59:59 -0400
+From: "Jose E. Marchesi" <jemarch@gnu.org>
+To: Ruud van der Pas <ruud.vanderpas@oracle.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,  Sami Tolvanen
+ <samitolvanen@google.com>,  Bill Wendling <morbo@google.com>,  Vladimir
+ Mezentsev <vladimir.mezentsev@oracle.com>,  clang-built-linux
+ <llvm@lists.linux.dev>,  LKML <linux-kernel@vger.kernel.org>,  Yonghong
+ Song <yhs@fb.com>,  Wenlei He <wenlei@fb.com>,  Hongtao Yu <hoy@fb.com>,
+  Ingo Molnar <mingo@kernel.org>, linux-toolchains@vger.kernel.org,
+ elena.zannoni@oracle.com
+Subject: Re: plumbers session on profiling?
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+	<CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+	<87mtf7z0rt.fsf@gnu.org>
+	<6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+	<CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+	<B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
+Date: Tue, 28 Jun 2022 19:08:48 +0200
+In-Reply-To: <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> (Ruud van der
+	Pas's message of "Thu, 23 Jun 2022 23:21:07 +0200")
+Message-ID: <878rpgpvfj.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202206291039.yGgljGbx-lkp@intel.com>
+Content-Type: text/plain
 
-On Wed, Jun 29, 2022 at 10:52:13AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/kdump
-> head:   69243968bd526641e549ed231c750ce92e3eeb35
-> commit: 69243968bd526641e549ed231c750ce92e3eeb35 [1/1] x86/kexec: Carry forward IMA measurement log on kexec
 
-I've zapped it from tip for the time being.
+[Added linux-toolchains@vger in CC]
 
-Thx.
+It would be interesting to have some discussion in the Toolchains track
+on building the kernel with PGO/FDO.  I have seen a raise on interest on
+the topic in several companies, but it would make very little sense if
+no kernel hacker is interested in participating... anybody?
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Hi Nick,
+>
+> Apologies for the delay. It's been a busy week with gprofng related work.
+>
+>> If you're still considering attending Linux Plumbers conf, please
+>> submit a proposal:
+>> https://lpc.events/event/16/abstracts/
+>> Please make sure to select "Toolchains Track" as the "Track" after
+>> clicking on "Submit new abstract."
+>
+> Thanks for asking!
+>
+> Our presence largely depends on a discussion on kernel profiling and
+> to see what we might be able to do with gprofng regarding this.
+>
+>>From our side, the main person will be Vladimir. He knows the code
+> inside and out, but I will also try to attend such a session.
+>
+> Is there any news regarding such a session on kernel profiling?
+>
+> Kind regards, Ruud
+>
+>> 
+>>> 
+>>> Kind regards, Ruud
+>>> 
+>>>> On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
+>>>> 
+>>>> 
+>>>> I am adding Ruud van der Pas in CC. He works in gprofng and would be
+>>>> willing to participate in a discussion on kernel profiling.
+>>>> 
+>>>>> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
+>>>>> 
+>>>>> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
+>>>>> <ndesaulniers@google.com> wrote:
+>>>>>> 
+>>>>>> Hi Sami, Bill, Jose, and Vladamir,
+>>>>>> Jose and I are currently in the planning process to put together a
+>>>>>> Kernel+Toolchain microconference track at Linux Plumbers Conference
+>>>>>> this year (Sept 12-14) in Dublin, Ireland.
+>>>>>> 
+>>>>>> Would you all be interested in leading a session discussing various
+>>>>>> profiling related topics such as:
+>>>>>> * gprofng
+>>>>>> * PGO
+>>>>>> * AutoFDO
+>>>>>> 
+>>>>>> Would others find such a discussion useful?
+>>>>>> --
+>>>>>> Thanks,
+>>>>>> ~Nick Desaulniers
+>>> 
+>> 
+>> 
+>> -- 
+>> Thanks,
+>> ~Nick Desaulniers
