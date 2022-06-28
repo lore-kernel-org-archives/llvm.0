@@ -1,154 +1,219 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2048.outbound.protection.outlook.com [40.107.96.48])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689057A
-	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 01:24:01 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MnuBvgr/OCzMiyPjqOwF2FQVWV3ioA7gIm2vdY/FeZ0HOtfstYcPA66peg8f2pDAWuZdICQMToA6fZ1a7T3gs/M6nay2qeQ3QetPgPPx6e7SBb4I4Nid6ukAKViI4AlXFWSHVnRwo7URxAz5V5x+mYdjaQbtTqEmkbuxmCwZbwqgcdlv8OMySuDq4xRSftAO0SLBqoR6zNeHyybdtgIhBuCmit1uZ+e9s5NF2V46WDu0FtDY1tKIY7G2LyBX2Hr04kBYUJJIuQ1sJjFo3sqXY3DEO7JwdpxSXRizeJvQOG5ltgCJ7ehECUOKoJBjbtyGT+0A1rnlZ6DCfFqHoOpAfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AAMRenqPSW7+Ofh9sizJRojoXhFhn3UYruuqoaKcgzE=;
- b=C+JmpjDaNgHlNFROrKOf03MASVFU7FShXjkhOr48D0b/oHXvAwyLGOQxpOYholS4ByhgRsUX6g550H17L5NjfZ40OcOZjuR2CFm68ZbJdCn83NezINLPTS1B/1SNTUGkTS7OqrjC1h0EhVrc9J8QJfNxNAevzbhLsRRAwO/ZSi6HJFyXpz7RhRp1dFweXwRI2bI0TON0JlUHwAxIfFKDkiiuK4UIfdGoJry16KQ3TVehc8dAhE9jbLYuC15HvX80LJM6ypkRykZ/ZnOVa/5LSI6UyH3TVLTWu7Osl+ktgNypco9BbFcQ4zZDW53dixShqDb641pcH2kYaYiyL0DaUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AAMRenqPSW7+Ofh9sizJRojoXhFhn3UYruuqoaKcgzE=;
- b=OLqvHqjuPtgMFYb3/31CVxXPlNmLdmyQGGnuGg+pT6UIIyk+xqEAS91G4iQVfocrkitfXAWnOVMXc91m+2WEvNDJ0liSytiQwR1h2x0WxhyIWRnpUGjnAakNMaWz0RTo5oC8biRdSjm4eUpt1JP4V+JZdM13pmLSV6QJBgTbiP1r5Luv91OFNjQhf4iS/07Q9lZXPc4jhTdqPVOlAAuIAATVmCwK9hHmPghS+k7RdL2xPzX5WDUamzvTSX+sfn64lQFQ2rYLn419r5xs8rfOoYwSe528ExWTjBrvCjt0SKRNt8RBFAcyLBRBuF28yZVya53dSUTM9jmyu5VlobJnJQ==
-Received: from DS7PR03CA0146.namprd03.prod.outlook.com (2603:10b6:5:3b4::31)
- by DM6PR12MB2986.namprd12.prod.outlook.com (2603:10b6:5:39::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 01:23:59 +0000
-Received: from DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b4:cafe::37) by DS7PR03CA0146.outlook.office365.com
- (2603:10b6:5:3b4::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15 via Frontend
- Transport; Tue, 28 Jun 2022 01:23:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT057.mail.protection.outlook.com (10.13.172.252) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5373.15 via Frontend Transport; Tue, 28 Jun 2022 01:23:58 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 28 Jun
- 2022 01:23:58 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 27 Jun
- 2022 18:23:57 -0700
-Received: from sandstorm.attlocal.net (10.127.8.10) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Mon, 27 Jun 2022 18:23:57 -0700
-From: John Hubbard <jhubbard@nvidia.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Tom Rix <trix@redhat.com>, Jason Gunthorpe
-	<jgg@nvidia.com>, LKML <linux-kernel@vger.kernel.org>, clang-built-linux
-	<llvm@lists.linux.dev>, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3] gen_compile_commands: handle multiple lines per .mod file
-Date: Mon, 27 Jun 2022 18:23:53 -0700
-Message-ID: <20220628012353.13995-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8ABB7A
+	for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 01:29:05 +0000 (UTC)
+X-UUID: d25a3e05e8e04b07975f69cd97f093c1-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:598d69e1-2e86-4ed9-88fe-39ec2e4df200,OB:0,LO
+	B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+	TION:release,TS:45
+X-CID-INFO: VERSION:1.1.7,REQID:598d69e1-2e86-4ed9-88fe-39ec2e4df200,OB:0,LOB:
+	0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+	ON:release,TS:45
+X-CID-META: VersionHash:87442a2,CLOUDID:9081fdd5-5d6d-4eaf-a635-828a3ee48b7c,C
+	OID:654ee3ec7d39,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d25a3e05e8e04b07975f69cd97f093c1-20220628
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 42291440; Tue, 28 Jun 2022 09:28:52 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 28 Jun 2022 09:28:50 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 28 Jun 2022 09:28:50 +0800
+Message-ID: <f005cbd101130cb8f9b6a347a9c24f6a437e6140.camel@mediatek.com>
+Subject: Re: [PATCH v23 01/14] dt-bindings: mediatek: add vdosys1 RDMA
+ definition for mt8195
+From: CK Hu <ck.hu@mediatek.com>
+To: Nancy.Lin <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<wim@linux-watchdog.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>
+CC: <devicetree@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Yongqiang Niu
+	<yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, "jason-jh .
+ lin" <jason-jh.lin@mediatek.com>, <singo.chang@mediatek.com>,
+	<llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
+	<linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Date: Tue, 28 Jun 2022 09:28:50 +0800
+In-Reply-To: <9749550d1f0cd8fd08d8bf684ea80cb6defc90d3.camel@mediatek.com>
+References: <20220620091930.27797-1-nancy.lin@mediatek.com>
+	 <20220620091930.27797-2-nancy.lin@mediatek.com>
+	 <9749550d1f0cd8fd08d8bf684ea80cb6defc90d3.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d22a9a02-2a03-42bb-0f60-08da58a4e08d
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2986:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	v4z6jmrUcxp2n+Kskis9AerUGyVdz6uy/0hgtmmnPEU9P7OLUAX2cIujYBTpLyq/BbmWMLaBlRcg2Hc7qJRl+Dxj5yK0x0slSg8EmgBy2ulnIwTcod5a2Vx56v9V1BeP5NNWAf9fB1ofTzGB5twxI3PozHfJa5cG/tokD8OqzdSLANC3soIE7ShgYMtcQ7Ou6myhb0DebCXUMdQqSo0tu3lUwQpG148xBE1+Q4cpEcspffXlphxh74vZs7F8jKv40Lg6cEI3kBBPAePAkLfkaUoctgCstBL8dGtWfyE3q5cKshGgYl4/rxDFvA0VC6jCUUfT/K/E7aZ+fHplTXA6pqESGZ1ueeAw6m88IdOyHbmuT+jdR8kXSBVLqGmlQHDfgxhgFFD2Ikz0PAZq/ZIPGzlf9gftTXVzgFiW/LPO9fAXkda8rAAl03zoOn6OpArs2R4eEpnfu5tGc+0Ue3Lo/C0SgzcQ9iRkVFCGSj68nY2Xy3sSFjgdOtrXHLNtcHT7/TP1ojnptnfmLZyFk5VAVk7D5JLRs+CMbrXsdRDhfTfihYxzB3v3xOTVtASuek46TwZWmKWtnhjdZOZoD1xZZz78d5EDVKJjgB1lvQWH+x2Hr1DKnPcIWez0C9IZr9pXaxITYe3m1i+XKn2W+YCn1Sdq+MBpbT4BetZMwzLvLerj88MX6r+Rqb58SFvAe3aByWxtK74m8X4n0C0jrLnH7LZmz27IZiz8N/pWDN4cTClM8VmLd9L1zg7HXK/xGYVyQS3PAPkUO8ut3JaaZ0Fo6MQEfYhYo2Cd/itL2SpoLYNihHtrW18PDud8oOTG5izq4s42X9mE+y7M4//KKbN408NtQ0RS3qpez1F5boSMuod00/LKSXRsysG5hwbG+OhcLI/ECeuba9uaCa15VfSk9jLODD9QmuZgXySe4yAhpYFsFTLXZyEvi9qSdOFv15vB
-X-Forefront-Antispam-Report:
-	CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(39860400002)(40470700004)(36840700001)(46966006)(2616005)(86362001)(1076003)(4326008)(316002)(83380400001)(81166007)(426003)(40480700001)(478600001)(54906003)(82740400003)(6916009)(336012)(82310400005)(8676002)(26005)(107886003)(186003)(70586007)(36756003)(5660300002)(356005)(40460700003)(36860700001)(70206006)(41300700001)(2906002)(8936002)(6666004)(966005)(47076005)(142923001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 01:23:58.9693
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d22a9a02-2a03-42bb-0f60-08da58a4e08d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2986
+Content-Transfer-Encoding: 7bit
+X-MTK: N
 
-scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
-each .mod file only contains one line. That assumption was correct when
-the script was originally created, but commit 9413e7640564 ("kbuild:
-split the second line of *.mod into *.usyms") changed the .mod file
-format so that there is one entry per line, and potentially many lines.
+OK, it seems no one has comment on this patch, so applied to mediatek-
+drm-next [1], thanks.
 
-The problem can be reproduced by using Kbuild to generate
-compile_commands.json, like this:
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
 
-    make CC=clang compile_commands.json
+Regards,
+CK
 
-In many cases, the problem might be overlooked because many subsystems
-only have one line anyway. However, in some subsystems (Nouveau, with
-762 entries, is a notable example) it results in skipping most of the
-subsystem.
-
-Fix this by fully processing each .mod file.
-
-Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
-
-Link to v2:
-https://lore.kernel.org/all/20220616021149.327587-1-jhubbard@nvidia.com/
-
-Changes since v2:
-
-  * Restored a blank line.
-
-  * Rewrote the commit description.
-
-thanks,
-John Hubbard
-
-
- scripts/clang-tools/gen_compile_commands.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 1d1bde1fd45e..47da25b3ba7d 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -157,10 +157,10 @@ def cmdfiles_for_modorder(modorder):
-             if ext != '.ko':
-                 sys.exit('{}: module path must end with .ko'.format(ko))
-             mod = base + '.mod'
--	    # The first line of *.mod lists the objects that compose the module.
-+            # Read from *.mod, to get a list of objects that compose the module.
-             with open(mod) as m:
--                for obj in m.readline().split():
--                    yield to_cmdfile(obj)
-+                for mod_line in m:
-+                    yield to_cmdfile(mod_line.rstrip())
- 
- 
- def process_line(root_directory, command_prefix, file_path):
--- 
-2.36.1
+On Wed, 2022-06-22 at 11:55 +0800, CK Hu wrote:
+> Hi, Rob:
+> 
+> You have ask Nancy question in old version and Nancy has reply in
+> [1],
+> how do you think about Nancy's reply?
+> 
+> [1] 
+> 
+http://lists.infradead.org/pipermail/linux-mediatek/2022-April/039890.html
+> 
+> Regards,
+> CK
+> 
+> On Mon, 2022-06-20 at 17:19 +0800, Nancy.Lin wrote:
+> > Add vdosys1 RDMA definition.
+> > 
+> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Tested-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  .../display/mediatek/mediatek,mdp-rdma.yaml   | 88
+> > +++++++++++++++++++
+> >  1 file changed, 88 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
+> > rdma.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
+> > rdma.yaml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
+> > rdma.yaml
+> > new file mode 100644
+> > index 000000000000..dd12e2ff685c
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
+> > rdma.yaml
+> > @@ -0,0 +1,88 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > 
+https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!2V-LPisZwDTVUkpQ5cJnZhaUV4iBSohT_B1_8bY3yar4Iuacq_NaTManclYLSA$
+> >  
+> > +$schema: 
+> > 
+https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!2V-LPisZwDTVUkpQ5cJnZhaUV4iBSohT_B1_8bY3yar4Iuacq_NaTMZYdJgbgQ$
+> >  
+> > +
+> > +title: MediaTek MDP RDMA
+> > +
+> > +maintainers:
+> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > +  - Philipp Zabel <p.zabel@pengutronix.de>
+> > +
+> > +description:
+> > +  The MediaTek MDP RDMA stands for Read Direct Memory Access.
+> > +  It provides real time data to the back-end panel driver, such as
+> > DSI,
+> > +  DPI and DP_INTF.
+> > +  It contains one line buffer to store the sufficient pixel data.
+> > +  RDMA device node must be siblings to the central MMSYS_CONFIG
+> > node.
+> > +  For a description of the MMSYS_CONFIG binding, see
+> > +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.ya
+> > ml
+> > for details.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt8195-vdo1-rdma
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: RDMA Clock
+> > +
+> > +  iommus:
+> > +    maxItems: 1
+> > +
+> > +  mediatek,gce-client-reg:
+> > +    description:
+> > +      The register of display function block to be set by gce.
+> > There
+> > are 4 arguments,
+> > +      such as gce node, subsys id, offset and register size. The
+> > subsys id that is
+> > +      mapping to the register of display function blocks is
+> > defined
+> > in the gce header
+> > +      include/dt-bindings/gce/<chip>-gce.h of each chips.
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    items:
+> > +      items:
+> > +        - description: phandle of GCE
+> > +        - description: GCE subsys id
+> > +        - description: register offset
+> > +        - description: register size
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - power-domains
+> > +  - clocks
+> > +  - iommus
+> > +  - mediatek,gce-client-reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/mt8195-clk.h>
+> > +    #include <dt-bindings/power/mt8195-power.h>
+> > +    #include <dt-bindings/gce/mt8195-gce.h>
+> > +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> > +
+> > +    soc {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        rdma@1c104000 {
+> > +            compatible = "mediatek,mt8195-vdo1-rdma";
+> > +            reg = <0 0x1c104000 0 0x1000>;
+> > +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
+> > +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
+> > +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
+> > +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX
+> > 0x4000
+> > 0x1000>;
+> > +        };
+> > +    };
 
