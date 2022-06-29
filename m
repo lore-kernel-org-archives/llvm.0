@@ -1,198 +1,185 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B447B
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 17:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656524768; x=1688060768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U9HK4ylooK7Tf08M3sTXhqwwWVQ3meqXzDez1Ryq2rc=;
-  b=gwXz9B0ToE+Hv+rEh+tlIgeT4zrDxh7XePjasfQHxX/vakxWWPp0id8L
-   ETpkXiq82WiCU7wNeJ8XpRuKb5hsRz9QgIBYJ/GnkeGuevEBLa3TeGBPz
-   zIqfMqxIrVk1aBDCVZfxq0QBvua02+ixrOSMb6vKulRdg6g+eLjJd9rnP
-   CXfIEjg0EpNVlBzuu2SYovgijnSt1SzYU5aS3SgjHb1MnFG9OFh3qiKKc
-   V1XVrOtRbRs1VeAmRqnN/FeFKszF5OES+60XbNeWxog4K+CppmpuxhVv3
-   jxEluQW+avUvrtwkjiQk5UTciW3ZGWAT7ioEBwKIkmiTI9QR2J0mEsVuN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="282836266"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="282836266"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 10:46:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="595331945"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Jun 2022 10:46:06 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6blN-000BNo-F0;
-	Wed, 29 Jun 2022 17:46:05 +0000
-Date: Thu, 30 Jun 2022 01:45:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alan Adamson <alan.adamson@oracle.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
-	Keith Busch <kbusch@kernel.org>,
-	Chaitanya Kulkarni <kch@nvidia.com>
-Subject: [linux-nvme:nvme-5.19 5/5] drivers/nvme/target/core.c:1379:11:
- error: no member named 'clear_ids' in 'struct nvmet_subsys'
-Message-ID: <202206300158.HnaC96OB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E727B
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 17:50:19 +0000 (UTC)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25THPOIO025016;
+	Wed, 29 Jun 2022 10:49:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=WMet+BdDL/R3Be5zIuOjXw/4a65nSQx2RgD62Pli/qs=;
+ b=iAck51Dqd8z5IJVVSJbpqVJTh4iM2tpFU8cM07h3DrZRxiakQ4aeeNZL+ZbMnoBUJQjl
+ XegDDNrmzY6OTBMZhD0xboz+3H92Hjv2QofvqafeWzV5Q7wTH8niXpsCNAmmEK9mB3LI
+ V2otfC04gUveU8HgWmjnfYS4vGOdMHwC9Bw= 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h0691fvdx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jun 2022 10:49:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NPxiVE8jW5jdGw4T+EbUvn3uEeao/8v1RUthsDWQIE7vLocYAH9AXC5bfu6PvBGg+ZAO+PtSXBy8rdx2M5JsFpBJLJRH0A0NPLUka4eONBThhb4zs1NDHxiv1oGJ+bciPJ1oWJjQ3B7YXbsgxpFWZOLqrqaELSmhVsRexVLRY40neijVsIc7hZITyQcUrQMBJ5qysC7PUUZUMxFv3eb3EOCM3eBpgBgElp0I4B2tpx/Mz2CT1RaRW3qsybhzNQz/WU0UHE4DSorAVBqHEuvMtnMqFK/sbEZpK0HzKYKNNZhYJHb5c0Nd+580uNcenZgJ7uGYNTtycAGV4NSp0GQzTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WMet+BdDL/R3Be5zIuOjXw/4a65nSQx2RgD62Pli/qs=;
+ b=EwQIzhJyjL216mMpDJzqSWAVZi9Ii2WDblBEi28kwkg21O/kJDGOh9wQQO+1Py0Ut25RIx7M8w+mcp/FdMHIWlDCmRPZJPF5Bkb8t/kZxkOU0osvjyKi/57GRT1i9JtNjMnFCK6VAnah+Yh99coDtM0SvJcDeVwMs8wZHQTtkZ+rv9LCyetq0N+zWBJdrwQr4JR8c0WHJIKLlfF8/U2nRfbzlg5ftK7DYmslytgKxejBtVvuhu77AKN+1vjCKF780Tz+ENk/i4Yb47pidqfAB60Al4o3Xmrt7lhZYZP7SNIHX97M5/kBCB8GcnHLDPCmTXIRkgMSv4WKrvd7rpJVGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by MW2PR1501MB2138.namprd15.prod.outlook.com (2603:10b6:302:d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
+ 2022 17:49:53 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::81f9:c21c:c5bf:e174%8]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
+ 17:49:53 +0000
+From: Jonathan McDowell <noodles@fb.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: kernel test robot <lkp@intel.com>,
+        "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+        Baoquan
+ He <bhe@redhat.com>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org"
+	<linux-integrity@vger.kernel.org>,
+        "kexec@lists.infradead.org"
+	<kexec@lists.infradead.org>
+Subject: Re: [PATCH] of: Correctly annotate IMA kexec buffer functions
+Thread-Topic: [PATCH] of: Correctly annotate IMA kexec buffer functions
+Thread-Index: AQHYi53+57Uf9qOfm0WoCzCAOs74RK1maiiAgAA/3YA=
+Date: Wed, 29 Jun 2022 17:49:53 +0000
+Message-ID: <YryQvUtupEgn+vO1@noodles-fedora.dhcp.thefacebook.com>
+References: <202206291039.yGgljGbx-lkp@intel.com> <YrwPjnxBk3Xyuakg@zn.tnic>
+ <Yrwg1aYEnFz38V6+@noodles-fedora.dhcp.thefacebook.com>
+ <YrxbK4IsYb6yls5d@zn.tnic>
+In-Reply-To: <YrxbK4IsYb6yls5d@zn.tnic>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1e5192c0-baad-4f51-a4cc-08da59f7c5e5
+x-ms-traffictypediagnostic: MW2PR1501MB2138:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ OaCO3z03gMMdaYwgt0cuMu8/E2UobNBdagZrVVsR/jf/8q7MSW5NndZAW8b91s4natRiZ1gyznTjyunYsTHWzbCxYgDrGjgh7oKAm5S56saCiTCXwqbWcbi8QiuWgaervvYDygYg4P4sWAspVjGeeDqh8X3XZfk8Al9ioULiwDlylLgXYPUgkNPxBAUgSWMixBi7gMPWuZvSgw9wE+b7GNmosYpTg5AxAbel3hBbW+txL9L+gBPV28w4Jq+FSXRaCC4Os6pyz5Q0fKEJ7Z3rqNUJdvX0+MGX92lMBo9kXDtsrSz7IlUNOAA6BcSeYgx3zbjiUtOLCDpbarnjU5/Dpinuc+rUQBwHc4xl9clMBjRYeTZPTwJ4LOJE3RiZxqLe/arejxByRQqQ5OE6FIdAt8lssu5g91DpAk9uu/sfMKg73Fd6Rve9wo2pd0d8KTzeTkkUaCorJTpbMOQZ2jcvLRItfkEyqT3LyY2/h5bWnSaCtK+J9+PHfE1WYORy8EO/pxTWGdTq5OtyrQVworkYNCUyNX77it3fS9c4hdJtD9a0zYmDX2dceuTyIrosym9idBRZPjZEun9pj8pNAZPyMbJ02ixBcQ1qThP9F26GECkOELS3S14uaxzmAcY0Pu2efkRFwvpMoguP92nrQ9TE/7/b/Cqu0z4RkAo4hze6tBjqzYovhXGdqK+6gVGsH1NA9+TMKZhBMDxWv56CEu+RdwpllTOC2Wqbf3Mtn3+pSlP41FcCi7VIV1iMlzPb6oHqsA79E6Gv5+S7DJExaozC22o+bMoaajmUbj7H7/UbWHAWao2FobushtnI9Isj6TW96a7pLkxIs0aQUWEfCrFr+Q==
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(7416002)(5660300002)(64756008)(8936002)(478600001)(76116006)(6916009)(4326008)(66556008)(66446008)(66946007)(54906003)(316002)(38100700002)(71200400001)(2906002)(122000001)(86362001)(66476007)(186003)(6506007)(26005)(6486002)(8676002)(6512007)(91956017)(41300700001)(9686003)(38070700005)(83380400001)(67856001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?fqRfJmrHwRgObcAjiNaVlQxzDganonTLZciS4lxrwHsp9QoQA3d+U9PdQtJw?=
+ =?us-ascii?Q?YeeN+d0gKMAMuY2iQbBTOoPNhnyUlA6a1GJQkL4z++R84NOd+bVuEUhiWFHw?=
+ =?us-ascii?Q?+W+iGdTc1Yz2/+sOkKuBj4js+LuIDIdBHia+9mgWyBA3F0PzceITZ0rKb5Cj?=
+ =?us-ascii?Q?fIyZXm23nFUJ4YFQJ8cQt/MgRrdOZhQHzavU59yetO3hypF+W2MncSqcHkkT?=
+ =?us-ascii?Q?HZn+o1GanR4k25wIudsAWbfijMyc1LZTNQK98+hFrQVvEbQ5nZuNws9hZhfJ?=
+ =?us-ascii?Q?qLIHcyriNAcKqUK9nyv1gkI/SKkkALWOGm9fQacKBtIAgZDv4NBTts7bzZj3?=
+ =?us-ascii?Q?AqOM03Qc9YRFqr8Hr6lnLItWK3l95a5VR30wnSK/zs3sFnP2YF94V0MWiula?=
+ =?us-ascii?Q?xE5m9ufhIjqC2hbkE4xvBLbB/X4kHgcwrS1Jgf11BLtjtKHHXrH99csbXw8W?=
+ =?us-ascii?Q?R7lQn3ZtoRt8ICoLcz4Vh79aYwxtqAAIXv9sc9eWp8YUaryENqKaWvIpMHJh?=
+ =?us-ascii?Q?5AkFwL+aizSfltXumfR1nhSc5lZZLNmtgzhow9rAs28xl6iPRWrI7WSuCF9M?=
+ =?us-ascii?Q?TlzrVswvTNrXdAgFNTzc67+CmSW9wIqxgdkGUlgnxp9etNkniRYDe+E+amCr?=
+ =?us-ascii?Q?Wzvq3X6bHiKZuma0BJqTv9ppvJDYI5dLIu4Z2HfhQYmUHljUyIo2PQ3/nIzT?=
+ =?us-ascii?Q?pYo2e2yejIcxfFUKxyDbQs9svgsI/ZaqBMwTLzEBEIXoTHcI/gkm6Rj4bpwC?=
+ =?us-ascii?Q?6wDUW5H63Mcoy7DydnXaZyugwjALzvRCTt9xVcP+bBCQBURT26i5bD/ULRP+?=
+ =?us-ascii?Q?fBmd3YthvLyLJg/s9Lz0T+56JDnkc+JRjvOv7n+sl3gLSdVQKlkZ1PLe2K4I?=
+ =?us-ascii?Q?OEb1jMXPtUIkZ+BIeXwpFiG48gfRKRpg5JFDW9mGfXoN73uDOGZ62m/5qwea?=
+ =?us-ascii?Q?kpJHbouo9SHH8VYK1SLgHpwfuH6h9iJbSI+nFsf4S39ITvrW+4ZUdxjFb1Pi?=
+ =?us-ascii?Q?xS+RoI0hmWz4+j6qcpI2/ChTITsGPisHIy1eKWCocjRXfXbbNFW5L/S9w1pP?=
+ =?us-ascii?Q?YExHii/yuXHICptpUNRfeNqylKdF6SyyF4kqlwr7TZwV2oh1dPUyL97RR6bY?=
+ =?us-ascii?Q?TCUmzPqci0PWC6GIvUwSxugHvZ31MwUkpos3aJju4YzmyCnKqEJOzAZuOgAs?=
+ =?us-ascii?Q?Nibq8F2xwe9BLHiVxzTRDCjoxAj7I5jFZWXJ8jKb9EM+WHclbF9rxx9l9oxW?=
+ =?us-ascii?Q?GVu6twBcs6xcCazyDgPdz/161qT8NqdPNjgxd54DCUtTOU0EzxDWZp72KfUv?=
+ =?us-ascii?Q?M4zLgAzy3E8pJW4dgCAkGMhcrDu8DAb7YIoNXrmcJH5G/90N7SNs2bG2CGSL?=
+ =?us-ascii?Q?JhlhnXb4aYDeSUS8odkW0C4g33Y0penqLq2rCUNu4dXNeFC5s1Tlk+8ziBeo?=
+ =?us-ascii?Q?bgb9B7OXk4wV4GgvuP+7B7fB7YgyQh7KiSuq8b6abuQH8MeaSbzDsbwM1W5m?=
+ =?us-ascii?Q?bn0Q/j0ySspt7aJwJugibVX51l5GTIFwOsqr0f3IG42PSp3z0a1T+LnhrDT2?=
+ =?us-ascii?Q?nyOKqGoTTr9WwseNDJbVWeVp9btnm/OqKy8cS46w?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <FEF843EE23EF17499CFEA0C245CB1925@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e5192c0-baad-4f51-a4cc-08da59f7c5e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 17:49:53.7677
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yuNjCu74Oi5sTvw0R4Rz4iboFaiZ/JS6ckeWl8Ts0w1Lz7KlYN0A7Z5720NFYABP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR1501MB2138
+X-Proofpoint-GUID: KpfNuhKFJCcOn5v9o2R4X5xK-BmcuRDB
+X-Proofpoint-ORIG-GUID: KpfNuhKFJCcOn5v9o2R4X5xK-BmcuRDB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-29_18,2022-06-28_01,2022-06-22_01
 
-tree:   git://git.infradead.org/nvme.git nvme-5.19
-head:   74138c25fae3f1989bef321bfffa324b1cb19dbc
-commit: 74138c25fae3f1989bef321bfffa324b1cb19dbc [5/5] nvmet: add a clear_ids attribute for passthru targets
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220630/202206300158.HnaC96OB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add linux-nvme git://git.infradead.org/nvme.git
-        git fetch --no-tags linux-nvme nvme-5.19
-        git checkout 74138c25fae3f1989bef321bfffa324b1cb19dbc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/target/
+On Wed, Jun 29, 2022 at 04:01:15PM +0200, Borislav Petkov wrote:
+> On Wed, Jun 29, 2022 at 09:52:50AM +0000, Jonathan McDowell wrote:
+> > Below is on top of what was in tip; I can roll a v7 if preferred but
+> > I think seeing the fix on its own is clearer.
+>=20
+> Yes, and you don't have to base it on top because, as I've said, I've
+> zapped your other patch there.
+>=20
+> Once IMA folks are fine with that fix of yours I can take both, if they
+> wish so.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I'll roll a v7 collapsing them together and moving to __init as per
+below.
 
-All errors (new ones prefixed by >>):
+> > ima_free_kexec_buffer() calls into memblock_phys_free() so must be
+> > annotated __meminit.
+>=20
+> Why __meminit?
+>=20
+> The very sparse comment over it says:
+>=20
+> /* Used for MEMORY_HOTPLUG */
+> #define __meminit        __section(".meminit.text") __cold notrace \
+>                                                   __latent_entropy
+>=20
+> so how does ima_free_kexec_buffer() have anything to do with
+> MEMORY_HOTPLUG?
+>=20
+> It calls memblock_phys_free() which is __init_memblock.
+>=20
+> Now __init_memblock is defined as
+>=20
+> #define __init_memblock __meminit
+>=20
+> for some CONFIG_ARCH_KEEP_MEMBLOCK thing so I guess that is the
+> connection.
+>=20
+> But then the couple other functions which call into memblock are all
+> __init...
+>=20
+> IOW, I probably am missing something...
 
->> drivers/nvme/target/core.c:1379:11: error: no member named 'clear_ids' in 'struct nvmet_subsys'
-                   subsys->clear_ids = 1;
-                   ~~~~~~  ^
-   1 error generated.
+I think the answer is that __meminit (or __init_memblock) works out as
+the minimum required annotation, because memblock_phys_free() has that
+annotation, but having looked closer at the call stack all of the usage
+is under ima_init() which is marked __init, so it's more appropriate to
+use that and discard the code after boot. There's no need for the ima
+related functions to stay hanging around in the case memory hotplug is
+enabled, because it's purely a boot time mechanism for passing the
+buffer over a kexec boundary.
 
-
-vim +1379 drivers/nvme/target/core.c
-
-  1337	
-  1338	u16 nvmet_alloc_ctrl(const char *subsysnqn, const char *hostnqn,
-  1339			struct nvmet_req *req, u32 kato, struct nvmet_ctrl **ctrlp)
-  1340	{
-  1341		struct nvmet_subsys *subsys;
-  1342		struct nvmet_ctrl *ctrl;
-  1343		int ret;
-  1344		u16 status;
-  1345	
-  1346		status = NVME_SC_CONNECT_INVALID_PARAM | NVME_SC_DNR;
-  1347		subsys = nvmet_find_get_subsys(req->port, subsysnqn);
-  1348		if (!subsys) {
-  1349			pr_warn("connect request for invalid subsystem %s!\n",
-  1350				subsysnqn);
-  1351			req->cqe->result.u32 = IPO_IATTR_CONNECT_DATA(subsysnqn);
-  1352			req->error_loc = offsetof(struct nvme_common_command, dptr);
-  1353			goto out;
-  1354		}
-  1355	
-  1356		down_read(&nvmet_config_sem);
-  1357		if (!nvmet_host_allowed(subsys, hostnqn)) {
-  1358			pr_info("connect by host %s for subsystem %s not allowed\n",
-  1359				hostnqn, subsysnqn);
-  1360			req->cqe->result.u32 = IPO_IATTR_CONNECT_DATA(hostnqn);
-  1361			up_read(&nvmet_config_sem);
-  1362			status = NVME_SC_CONNECT_INVALID_HOST | NVME_SC_DNR;
-  1363			req->error_loc = offsetof(struct nvme_common_command, dptr);
-  1364			goto out_put_subsystem;
-  1365		}
-  1366		up_read(&nvmet_config_sem);
-  1367	
-  1368		status = NVME_SC_INTERNAL;
-  1369		ctrl = kzalloc(sizeof(*ctrl), GFP_KERNEL);
-  1370		if (!ctrl)
-  1371			goto out_put_subsystem;
-  1372		mutex_init(&ctrl->lock);
-  1373	
-  1374		ctrl->port = req->port;
-  1375		ctrl->ops = req->ops;
-  1376	
-  1377		/* By default, set loop targets to clear IDS by default */
-  1378		if (ctrl->port->disc_addr.trtype == NVMF_TRTYPE_LOOP)
-> 1379			subsys->clear_ids = 1;
-  1380	
-  1381		INIT_WORK(&ctrl->async_event_work, nvmet_async_event_work);
-  1382		INIT_LIST_HEAD(&ctrl->async_events);
-  1383		INIT_RADIX_TREE(&ctrl->p2p_ns_map, GFP_KERNEL);
-  1384		INIT_WORK(&ctrl->fatal_err_work, nvmet_fatal_error_handler);
-  1385		INIT_DELAYED_WORK(&ctrl->ka_work, nvmet_keep_alive_timer);
-  1386	
-  1387		memcpy(ctrl->subsysnqn, subsysnqn, NVMF_NQN_SIZE);
-  1388		memcpy(ctrl->hostnqn, hostnqn, NVMF_NQN_SIZE);
-  1389	
-  1390		kref_init(&ctrl->ref);
-  1391		ctrl->subsys = subsys;
-  1392		nvmet_init_cap(ctrl);
-  1393		WRITE_ONCE(ctrl->aen_enabled, NVMET_AEN_CFG_OPTIONAL);
-  1394	
-  1395		ctrl->changed_ns_list = kmalloc_array(NVME_MAX_CHANGED_NAMESPACES,
-  1396				sizeof(__le32), GFP_KERNEL);
-  1397		if (!ctrl->changed_ns_list)
-  1398			goto out_free_ctrl;
-  1399	
-  1400		ctrl->sqs = kcalloc(subsys->max_qid + 1,
-  1401				sizeof(struct nvmet_sq *),
-  1402				GFP_KERNEL);
-  1403		if (!ctrl->sqs)
-  1404			goto out_free_changed_ns_list;
-  1405	
-  1406		if (subsys->cntlid_min > subsys->cntlid_max)
-  1407			goto out_free_sqs;
-  1408	
-  1409		ret = ida_alloc_range(&cntlid_ida,
-  1410				     subsys->cntlid_min, subsys->cntlid_max,
-  1411				     GFP_KERNEL);
-  1412		if (ret < 0) {
-  1413			status = NVME_SC_CONNECT_CTRL_BUSY | NVME_SC_DNR;
-  1414			goto out_free_sqs;
-  1415		}
-  1416		ctrl->cntlid = ret;
-  1417	
-  1418		/*
-  1419		 * Discovery controllers may use some arbitrary high value
-  1420		 * in order to cleanup stale discovery sessions
-  1421		 */
-  1422		if (nvmet_is_disc_subsys(ctrl->subsys) && !kato)
-  1423			kato = NVMET_DISC_KATO_MS;
-  1424	
-  1425		/* keep-alive timeout in seconds */
-  1426		ctrl->kato = DIV_ROUND_UP(kato, 1000);
-  1427	
-  1428		ctrl->err_counter = 0;
-  1429		spin_lock_init(&ctrl->error_lock);
-  1430	
-  1431		nvmet_start_keep_alive_timer(ctrl);
-  1432	
-  1433		mutex_lock(&subsys->lock);
-  1434		list_add_tail(&ctrl->subsys_entry, &subsys->ctrls);
-  1435		nvmet_setup_p2p_ns_map(ctrl, req);
-  1436		mutex_unlock(&subsys->lock);
-  1437	
-  1438		*ctrlp = ctrl;
-  1439		return 0;
-  1440	
-  1441	out_free_sqs:
-  1442		kfree(ctrl->sqs);
-  1443	out_free_changed_ns_list:
-  1444		kfree(ctrl->changed_ns_list);
-  1445	out_free_ctrl:
-  1446		kfree(ctrl);
-  1447	out_put_subsystem:
-  1448		nvmet_subsys_put(subsys);
-  1449	out:
-  1450		return status;
-  1451	}
-  1452	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+J.=
