@@ -1,38 +1,44 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C363FE6
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 21:21:38 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id n15so20537370ljg.8
-        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 14:21:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5833FE6
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 21:40:05 +0000 (UTC)
+Received: by mail-ej1-f52.google.com with SMTP id mf9so35269119ejb.0
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 14:40:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0PwKwpQLLF9Wx/gSr3MYc18IBLW4Vq6WXee7EmmVZzE=;
-        b=Nh0GvePQZdPLDPpVm1bbOP/ozbuGK50Vpq/Z3OIgAaEmpGTDWuOpTEQOpkf4ZWq9fZ
-         A8anC4CovA0hh5WmcF2Rv8wrCTwCILBRaUeUisxwQM3QHHdweL9Hm41cVmcv9uLXFQdR
-         8tIqJ0HDOd2zAqv1I0ppEhdh71NS6SemVLKFIwZgNAzz/7rznuisse4czpv26p9qPPFB
-         3ENRLlD1Ghtd4KYy8jF6ZC+X/CtEMZ4WW6hGggIwImkIvkCPnASfGJVMWsQyD7JITWSr
-         WNzDb2cESbqvCW9S2mODKqs+XaLrLnj144LRFTgOKhhcEBT5ypNl827UtjtLMDcDvS15
-         Jbdg==
+        bh=klf2T5uOmYkulw+Ytxhor7E1jRh+wZUXX4z/9h4gYAk=;
+        b=hAQm1c13W/XqzJEQGpVDQndjuXTIF/hnLGFygg19fcRMwVFwwvtwTnuY62qNkTKPsN
+         ummZuhAltApu5WzcBlZRapxwbWg7c0aLtThrKLZaU63b6nHxlLMnebmA/0hCeagDrFcn
+         hagyyVyTMpXMrTeCXHSAtT7Z8257jVCbYTvK4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0PwKwpQLLF9Wx/gSr3MYc18IBLW4Vq6WXee7EmmVZzE=;
-        b=Y4d6JQaWU7csO14DsrWVwUG4xXFLDHBbgGhY7GsMiHZ/uQIDKXzvG3vRoIJY9FbKcd
-         CM/qwzdbhoSdbQ+1ieQQx3Smbe0Xhlg9RpsQaOtC/DX5E/20mXrhkDFy0WiYizH/NJQw
-         dEcuHQcyvnfTaxVj7jkHLI9GsM8pPDoHCkJBZWT7iKlqyL2QzU6q8o2HEKY5D5KyyqNC
-         00W6Si71VIlJBViImjhSIIECgdrx4rtTEjRMGyQDxz7YBjw0NMBZtRZXFX0z6Mc3Aeox
-         mrhLvTyNKMJ5YKo90Mu9iMAAHLEBkK9UqPLAfmesZtOA+Hx7Do/paUv4VyrsR9bVIpBy
-         32Sg==
-X-Gm-Message-State: AJIora8OURRyl6OW9+hVkCc7XJSm6tjRvOE2fB577Vzl6b2v1tdWTJ1P
-	SRffnhDIvaGzZDjK2VnnhWO9C/ks+yL9+M9Zp68zhQ==
-X-Google-Smtp-Source: AGRyM1vg1ycQXO0cRaiqy3RblWUH6i/XJr7OcEGztOHZOU4+8d5DVDP4vt3bXSWJWiXbN5xo+oDq6Txx+gQQAubXPqI=
-X-Received: by 2002:a05:651c:2104:b0:25b:f4ed:db93 with SMTP id
- a4-20020a05651c210400b0025bf4eddb93mr166254ljq.295.1656537696638; Wed, 29 Jun
- 2022 14:21:36 -0700 (PDT)
+        bh=klf2T5uOmYkulw+Ytxhor7E1jRh+wZUXX4z/9h4gYAk=;
+        b=c0zYBLkUn0bhWfxHh9d+NX6lL4ldxQr3zPdZCvRfr7wGcI4PsyYG8znKuF1moiNXh8
+         H8jAZZISDMNbuQEUb4nsZnrgiXOXSPJXsRtPI759opbaGXU6pEn8y53+V01xwYEBOXkg
+         N/MzWr5ku4lJjFjKk/gN3hWTz36B0d5rbPQCX3orHheiz8+kHGv5OS9G0GvjhtjW1z6b
+         /DBxBQXlRLe8zQaI8SES4JYiVza1YM5cTkRXjdzWgXISnzFNP/sEE2QddeJdvKb97pqi
+         jkQGTaLFtLf592RjdYkqk1vrZf2w7FlJ3qGqH1aqsaxVk7allr/MolmonzuLhXRoaAmo
+         GTVA==
+X-Gm-Message-State: AJIora/H4Q2smUY5KGU5jQOhNW/j7ydsagwZ5hkV0ub5WMsvPfC+bqDl
+	IIgPkZDFkoLxRLSyenRxjl1Ei9EE4kT53yrJ
+X-Google-Smtp-Source: AGRyM1svd4din+qjltEe3K+yEtq+UwdxC8P05ulpehyXu1YzLiAm3ZhjPQH91P89F+wJVlUOWO9xbg==
+X-Received: by 2002:a17:907:3e05:b0:71c:2ba5:1ab with SMTP id hp5-20020a1709073e0500b0071c2ba501abmr5336435ejc.93.1656538803826;
+        Wed, 29 Jun 2022 14:40:03 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id k20-20020a1709063fd400b00722f66fb36csm8060136ejj.112.2022.06.29.14.40.01
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 14:40:03 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id m184so10147035wme.1
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 14:40:01 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ecc:b0:3a1:68bf:d17a with SMTP id
+ g12-20020a05600c4ecc00b003a168bfd17amr5659198wmq.154.1656538801585; Wed, 29
+ Jun 2022 14:40:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,109 +51,76 @@ References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J5
  <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
  <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com>
  <20220628224255.w4lmzalkx3qejuyg@treble> <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
- <20220629163400.cgeqmuu45zsyxtwq@treble>
-In-Reply-To: <20220629163400.cgeqmuu45zsyxtwq@treble>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 29 Jun 2022 14:21:25 -0700
-Message-ID: <CAKwvOdm7=6M3pdHnqLFYkV21ypYpN4rTaNCe48dN3hWOOd+T2A@mail.gmail.com>
+ <20220629163400.cgeqmuu45zsyxtwq@treble> <CAKwvOdm7=6M3pdHnqLFYkV21ypYpN4rTaNCe48dN3hWOOd+T2A@mail.gmail.com>
+In-Reply-To: <CAKwvOdm7=6M3pdHnqLFYkV21ypYpN4rTaNCe48dN3hWOOd+T2A@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 29 Jun 2022 14:39:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com>
+Message-ID: <CAHk-=wj1qhf7y3VNACEexyp5EbkNpdcu_542k-xZpzmYLOjiCg@mail.gmail.com>
 Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>, 
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
 	Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jun 29, 2022 at 9:34 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On Wed, Jun 29, 2022 at 2:21 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> On Wed, Jun 29, 2022 at 09:08:20AM -0700, Linus Torvalds wrote:
-> > On Tue, Jun 28, 2022 at 3:43 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > >
-> > > So, something like this:
-> >
-> > No, clang should just be fixed.
-> >
-> > These UBSAN reports should usually be WARN_ON_ONCE.
-> >
-> > It's all the same issues we've had before: causing a panic will just
-> > kill the machine, and gets us fewer reports.
-> >
-> > Now, UBSAN is something that presumably normal people don't actually
-> > run on real hardware, so it's probably less of a deal than some. But
-> > hey, maybe somebody wants to actually run an UBSAN kernel on a real
-> > load with a full accelerated graphical UI and real drivers: a panic
-> > may end up killing the kernel, and there you sit, with a dead machine
-> > and no idea what went wrong.
-> >
-> > So the whole "panic if UBSAN reports something" is COMPLETE GARBAGE.
-> > It actually makes the whole point of running UBSAN go away. You *lose*
-> > coverage.
-> >
-> > So please don't make the kernel worse because clang got something like
-> > this wrong.
-> >
-> > Just fix clang.
-> >
-> > And fix your mindset.
+> For hahas I tried:
 >
-> Yeah, good point.  All the other UBSAN handlers (other than builtin
-> unreachable) try to recover.  There's nothing special about divrem
-> overflow which requires it to be fatal.
->
-> So clang needs to stop assuming the divrem overflow handler is noreturn.
+> ```
+> diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
 
-I haven't been able to verify in the generated IR or in LLVM sources
-that that is the case; it doesn't appear to be any assumption about
-__ubsan_handle_divrem_overflow being noreturn.
+Yeah, no.
 
-Instead, it looks like this has more to do with undefined behavior,
-IIUC.  It seems that for `-fsanitize=integer-divide-by-zero`
-(CONFIG_UBSAN_DIV_ZERO), we introduce new control flow to warn on div
-by zero, but the results of the division are undefined, so
-unconditionally trying to consume the result is UB.
+I think the proper fix is to just say
 
-So:
+     depends on !CLANG
 
-int foo (int x, int y) {
-  return x / y;
-}
+in the UBSAN Kconfig.
 
-doesn't check for divide by zero, -fsanitize=integer-divide-by-zero
-introduces control flow to check for divide by zero and call
-__ubsan_handle_divrem_overflow in that exceptional case, but the
-result of the division is still undefined for that case, so control
-flow that tries to use that result is simplified into using the result
-in the non-zero divisor case, and calls to
-__ubsan_handle_divrem_overflow followed by (what is effectively)
-__builtin_unreachable().
+The whole point of UBSAN is to *detect* undefined behavior, but continue.
 
-For hahas I tried:
+If we wanted to crash on undefined behavior, we'd just leave it alone,
+without any compiler option.
 
-```
-diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
-index d7aa5511c361..cb2eab660fd2 100644
---- a/drivers/video/fbdev/smscufx.c
-+++ b/drivers/video/fbdev/smscufx.c
-@@ -907,8 +907,11 @@ static ssize_t ufx_ops_write(struct fb_info
-*info, const char __user *buf,
-        result = fb_sys_write(info, buf, count, ppos);
+Think of it this way: you have a user (corporate-speak: "customer")
+that is seeing behavior you can't figure out. You enable a lot of
+these debug options to see "are they triggering something I can't
+trigger?".
 
-        if (result > 0) {
--               int start = max((int)(offset / info->fix.line_length), 0);
--               int lines = min((u32)((result / info->fix.line_length) + 1),
-+               int start, lines;
-+               if (!info->fix.line_length)
-+                       return 0;
-+               start = max((int)(offset / info->fix.line_length), 0);
-+               lines = min((u32)((result / info->fix.line_length) + 1),
-                                (u32)info->var.yres);
+But you want to get the *report* about that, you don't want to
+actually break the users load.  You want the user to be able to do
+what they always did, knowing that at least you're not making their
+problem any worse. Sure, it's slower, but it should just continue as
+well as it ever did.
 
-                ufx_handle_damage(dev, 0, start, info->var.xres, lines);
-```
-That way we don't unconditionally consume the results of a possible
-divide by zero, and that fixes the warning from that TU.  Does
-inserting guards against divide by zero on the kernel side seem like
-reasonable fixes for these warnings?
--- 
-Thanks,
-~Nick Desaulniers
+Whatever UBSAN then detects may OR MAY NOT be the actual cause of the
+user report. So no, it's not ok to say "Ahh, I found it, I will now
+print out the report and crash".
+
+So at no point is it ok to say "oh, that's undefined, so we can do
+anything we want". NOT AT ALL. That's actually true in general, but
+it's _particularly_ true when you build with UBSAN, since now you're
+actively trying to get reports about undefined behavior, and crashing
+will destroy that.
+
+It will destroy that particularly for a kernel where crashing in an
+unusual place that the developer doesn't see quite possibly means "odd
+device driver". In this case it would be the particular frame buffer
+the user uses - crashing there probably means that there is no output
+to help debug things.
+
+But this is actually true even for non-kernel uses: if you are running
+an app as a developer, and you're looking for problems, having one
+place with undefined behavior in no way means that you don't care
+about any other undefined places. So crashing is literally *never* the
+right thing to do.
+
+So no, the whole "it's still undefined, so we can't return" argument
+is completely broken.
+
+                Linus
