@@ -1,91 +1,116 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512B22F33
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 14:01:26 +0000 (UTC)
-Received: from zn.tnic (p200300ea97156ae0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:6ae0:329c:23ff:fea6:a903])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AF6A31EC04C2;
-	Wed, 29 Jun 2022 16:01:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1656511279;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=1nfA4bd39uY9wmMuXeUB/WuKXARluBCBaMbOeIYcBnY=;
-	b=LRK5ezlYQtIou/WwjqaCHEkzUwF537MTzAq2lHavZu/AFBFt05GjuZvi60LPc/HaFKAxzq
-	8gWqVL7Mu26tnpybnyjQJEPDCModDkJIdXd2axk+QkTaTDn2Byx0on7m3eWcQgCLlHow8m
-	WLyN6KMa6BsOQrx4FEIgjDu5NbaXcMM=
-Date: Wed, 29 Jun 2022 16:01:15 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Jonathan McDowell <noodles@fb.com>
-Cc: kernel test robot <lkp@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Baoquan He <bhe@redhat.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-	"kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Subject: Re: [PATCH] of: Correctly annotate IMA kexec buffer functions
-Message-ID: <YrxbK4IsYb6yls5d@zn.tnic>
-References: <202206291039.yGgljGbx-lkp@intel.com>
- <YrwPjnxBk3Xyuakg@zn.tnic>
- <Yrwg1aYEnFz38V6+@noodles-fedora.dhcp.thefacebook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB2C3237
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 15:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656515705; x=1688051705;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UK+Pk1CTEhwna1MRInrlEyhGNhzeJwTDQKbLxawS+PE=;
+  b=PS7dI2BsnclTkF5zkAEJW+HnLDQI6YTTZvli3jtmtgPRNUQG5KYuqmjT
+   SmDeDFvwl0l2McHL+Cpbzi50HVAdD/+/TVUd27csQLLqLW2H5i+gWSoCb
+   fXubvuqRN8Vi4hUKCC/nGNiFvRl8CR2odJni4OWpxxMD8jLDPSOQtQ9dI
+   9pInQXeQ+ooGHU4TpHvzNpWRNq9XNhHUXpR3f65DUMg5EfO00nJAKEjtX
+   pmko5C6xfntYNTJnfEfdBJetXnhwPYAPq0X8x/hK3vr3gVMs2qlZasTnA
+   XGC0jpG/ZnU0k6YtAhMl0lrpifgfk/u2OEWs/afo/EAzeffGUbQ0oGEgs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368368233"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="368368233"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:15:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="917636890"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 08:15:03 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6ZPC-000BK6-PY;
+	Wed, 29 Jun 2022 15:15:02 +0000
+Date: Wed, 29 Jun 2022 23:14:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 434/442]
+ arch/x86/kvm/mmu/mmu.c:981:21: error: variable 'type' set but not used
+Message-ID: <202206292314.Byr20MEd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yrwg1aYEnFz38V6+@noodles-fedora.dhcp.thefacebook.com>
 
-On Wed, Jun 29, 2022 at 09:52:50AM +0000, Jonathan McDowell wrote:
-> Below is on top of what was in tip; I can roll a v7 if preferred but
-> I think seeing the fix on its own is clearer.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   8af973ebaf30642129fc1ca63f155a469f9615ed
+commit: 2cf2a8208ae24b96f074aac76f0feef63489137d [434/442] KVM: x86/mmu: update lpage_info on changing page_type
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220629/202206292314.Byr20MEd-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/2cf2a8208ae24b96f074aac76f0feef63489137d
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 2cf2a8208ae24b96f074aac76f0feef63489137d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Yes, and you don't have to base it on top because, as I've said, I've
-zapped your other patch there.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Once IMA folks are fine with that fix of yours I can take both, if they
-wish so.
+All errors (new ones prefixed by >>):
 
-> ima_free_kexec_buffer() calls into memblock_phys_free() so must be
-> annotated __meminit.
+   In file included from arch/x86/kvm/mmu/mmu.c:18:
+   In file included from arch/x86/kvm/irq.h:15:
+   In file included from include/linux/kvm_host.h:47:
+   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static int memfile_register_notifier(struct file *file, flags,
+                                                           ^
+                                                           int
+>> arch/x86/kvm/mmu/mmu.c:981:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
+           enum kvm_page_type type;
+                              ^
+   2 errors generated.
 
-Why __meminit?
 
-The very sparse comment over it says:
+vim +/type +981 arch/x86/kvm/mmu/mmu.c
 
-/* Used for MEMORY_HOTPLUG */
-#define __meminit        __section(".meminit.text") __cold notrace \
-                                                  __latent_entropy
+aa7e272e931503d Xiaoyao Li     2021-08-31  976  
+dbe93493d574730 Xiaoyao Li     2022-05-25  977  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
+dbe93493d574730 Xiaoyao Li     2022-05-25  978  			    enum pg_level level)
+aa7e272e931503d Xiaoyao Li     2021-08-31  979  {
+aa7e272e931503d Xiaoyao Li     2021-08-31  980  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
+aa7e272e931503d Xiaoyao Li     2021-08-31 @981  	enum kvm_page_type type;
+aa7e272e931503d Xiaoyao Li     2021-08-31  982  	gfn_t base_gfn;
+aa7e272e931503d Xiaoyao Li     2021-08-31  983  
+aa7e272e931503d Xiaoyao Li     2021-08-31  984  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
+aa7e272e931503d Xiaoyao Li     2021-08-31  985  		return;
+aa7e272e931503d Xiaoyao Li     2021-08-31  986  
+aa7e272e931503d Xiaoyao Li     2021-08-31  987  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
+aa7e272e931503d Xiaoyao Li     2021-08-31  988  	type = page_attr->type;
+dbe93493d574730 Xiaoyao Li     2022-05-25  989  
+aa7e272e931503d Xiaoyao Li     2021-08-31  990  	/*
+aa7e272e931503d Xiaoyao Li     2021-08-31  991  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
+aa7e272e931503d Xiaoyao Li     2021-08-31  992  	 * page needs to be split means one of the 4K page of it needs to be
+aa7e272e931503d Xiaoyao Li     2021-08-31  993  	 * changed to oppsite type
+aa7e272e931503d Xiaoyao Li     2021-08-31  994  	 */
+2cf2a8208ae24b9 Isaku Yamahata 2022-06-02  995  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
+aa7e272e931503d Xiaoyao Li     2021-08-31  996  }
+aa7e272e931503d Xiaoyao Li     2021-08-31  997  
 
-so how does ima_free_kexec_buffer() have anything to do with
-MEMORY_HOTPLUG?
+:::::: The code at line 981 was first introduced by commit
+:::::: aa7e272e931503dda524bd4f15d098a0d4ac28d7 KVM: MMU: Update page_attr->type when guest converts the page
 
-It calls memblock_phys_free() which is __init_memblock.
-
-Now __init_memblock is defined as
-
-#define __init_memblock __meminit
-
-for some CONFIG_ARCH_KEEP_MEMBLOCK thing so I guess that is the
-connection.
-
-But then the couple other functions which call into memblock are all
-__init...
-
-IOW, I probably am missing something...
-
-Thx.
+:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
+:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://01.org/lkp
