@@ -1,87 +1,132 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639E47B
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 18:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656526628; x=1688062628;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=ERfQEz62jnH6BKVyrtwcJwTjXSyE4ph+P8/8tt/LcLA=;
-  b=UIJhZInuO1enAzwCh39mRfixhKE9w0BFTWLe+BpjJ6XzkBIVza3L1lXq
-   xrRO0rnIl3YNMQ2/1jw+n0Nul1XrGch3d80I8byYYzuJQi0neQfZYWGqW
-   mqKrF9bthWfu4FO0NAEpyn0AAnsVmbLdntlhdocjbUkJAJJMOhwonIQGK
-   V9LE0TvqBPFjc0bJmdggKAFsbBq9cnZQ2NArfjUuC8tDgKXki/K+2UIg4
-   vYKrNxUiECrODba4Eai06xroI6d0qCpBBwyVF5yCqITF7ejG2lc59w9wO
-   9Ne0MmD+qIRjTG/FK1FwjR9ECWHSHaZt6HKFUQ8P3A1ul3PDZOsZj+mCy
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="265145571"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="265145571"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 11:17:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="733277750"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2022 11:17:07 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6cFO-000BPG-EP;
-	Wed, 29 Jun 2022 18:17:06 +0000
-Date: Thu, 30 Jun 2022 02:16:39 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: [linux-next:master 3856/6619] ld.lld: error:
- arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_parent_hartid:
- .text+0xf0): relocation R_RISCV_HI20 out of range: 528476 is not in
- [-524288, 524287]; references .L.str
-Message-ID: <202206300247.kaEAUdBB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4D16AB4
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 19:48:44 +0000 (UTC)
+Received: by mail-lf1-f53.google.com with SMTP id j21so29913337lfe.1
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 12:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GDpRTVhKkWSy2MvVKUZ3Z3z1Bt+bBeXV0KIHaszmkuA=;
+        b=g3Uaclg64d1TGHzQcBfl7t9w3I1ww5YYtVkypt3S0N5+TmABgMDxTUWvOXt+9mE0Le
+         is4FHdD4ZkcI9SN/SIcqtii+qeRjvjZe6VAIbiqCVXchroWHh2LwaXMpwGCocA1tbv0B
+         hjr7V6fjm/b+USYataYNnwfHfWPE0kQxbi15bDZMZ58npPO/z1/6UndlovS7hWHSG67i
+         cQLWaO3ZHi2zkaIKnEUd44KY6MliZhLMN928/SwMz5yzbgz3jszpOfA90ilDArEe1HUI
+         8r3NhHwX5cnxRMZvHR8E+HsLScWoSk0y+DodSdeK7w7KCcyrnAph846jsrTCUnHseGvh
+         4nMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GDpRTVhKkWSy2MvVKUZ3Z3z1Bt+bBeXV0KIHaszmkuA=;
+        b=7FyeDfqW17SgDVbEG8EQ8GtXPP0TGDMSzcL/Es572L+RywXEYWqdrWr/B0o2DSEOpc
+         7tGfDmx+RrdH1YeXj035tMuXa4SjKn92fCqeFZRO3KoueBRv8u3V3Az9vxXwfgjtGG8h
+         wYzJrtR3/swo47Ng5iOo+B68JNHL+xIe5rE8XF7q/NtBTGjiYYjREo+qleZN4Iqa4Wl6
+         fKc7QOk8j5gsGvfQ7DfvTelDh/eN7PUklJcfNuzLpi6cPA4Uk96c07dJ2INkM9Zj/bqs
+         atPE2/BhfLeE9YY6p+WMBKQTGUknz4N6CZD3gQPQc2oOfNqdbOH8oaBa8F40RPlNMBD1
+         QuNw==
+X-Gm-Message-State: AJIora/rjhNdX+B74nH8D6F7vTIHjwpA3dM5P/FTsI91z4vNaJlET6/n
+	Quk0JouO7c2v3TWiwqIU5DLQ3EAuC6uy5q1P85yi
+X-Google-Smtp-Source: AGRyM1vOzYL8y+rYaHubXte6XVU+zHTAwaKw4l5hfw2LEvmAQQHulkepcxbBzAjO3GZRm1rXAwzmuBMIM7rYOPMx+fg=
+X-Received: by 2002:a05:6512:3503:b0:481:4470:4128 with SMTP id
+ h3-20020a056512350300b0048144704128mr2025991lfs.303.1656532122803; Wed, 29
+ Jun 2022 12:48:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org> <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> <878rpgpvfj.fsf@gnu.org>
+In-Reply-To: <878rpgpvfj.fsf@gnu.org>
+From: Bill Wendling <morbo@google.com>
+Date: Wed, 29 Jun 2022 12:48:31 -0700
+Message-ID: <CAGG=3QVNid_s5QFCtPF1hVChsm89hax=KuHTt8Z=huP+CV_edQ@mail.gmail.com>
+Subject: Re: plumbers session on profiling?
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+Cc: Ruud van der Pas <ruud.vanderpas@oracle.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, 
+	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>, Wenlei He <wenlei@fb.com>, 
+	Hongtao Yu <hoy@fb.com>, Ingo Molnar <mingo@kernel.org>, 
+	linux-toolchains <linux-toolchains@vger.kernel.org>, elena.zannoni@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 
-BCC: lkp@intel.com
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Liu Ying <victor.liu@nxp.com>
-CC: Robert Foss <robert.foss@linaro.org>
-CC: Rob Herring <robh@kernel.org>
+I have experience in this area with our internal production kernel.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   c4ef528bd006febc7de444d9775b28706d924f78
-commit: 48ed447c698b97ac6150e516139982d88231175d [3856/6619] dt-bindings: display: bridge: Add i.MX8qm/qxp LVDS display bridge binding
-config: riscv-randconfig-r032-20220629 (https://download.01.org/0day-ci/archive/20220630/202206300247.kaEAUdBB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=48ed447c698b97ac6150e516139982d88231175d
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 48ed447c698b97ac6150e516139982d88231175d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+-bw
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the linux-next/master HEAD c4ef528bd006febc7de444d9775b28706d924f78 builds fine.
-      It may have been fixed somewhere.
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: arch/riscv/built-in.a(kernel/cpu.o):(function riscv_of_parent_hartid: .text+0xf0): relocation R_RISCV_HI20 out of range: 528476 is not in [-524288, 524287]; references .L.str
-   >>> referenced by cpu.c
-   >>> defined in arch/riscv/built-in.a(kernel/cpu.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Wed, Jun 29, 2022 at 2:00 AM Jose E. Marchesi <jemarch@gnu.org> wrote:
+>
+>
+> [Added linux-toolchains@vger in CC]
+>
+> It would be interesting to have some discussion in the Toolchains track
+> on building the kernel with PGO/FDO.  I have seen a raise on interest on
+> the topic in several companies, but it would make very little sense if
+> no kernel hacker is interested in participating... anybody?
+>
+> > Hi Nick,
+> >
+> > Apologies for the delay. It's been a busy week with gprofng related work.
+> >
+> >> If you're still considering attending Linux Plumbers conf, please
+> >> submit a proposal:
+> >> https://lpc.events/event/16/abstracts/
+> >> Please make sure to select "Toolchains Track" as the "Track" after
+> >> clicking on "Submit new abstract."
+> >
+> > Thanks for asking!
+> >
+> > Our presence largely depends on a discussion on kernel profiling and
+> > to see what we might be able to do with gprofng regarding this.
+> >
+> >>From our side, the main person will be Vladimir. He knows the code
+> > inside and out, but I will also try to attend such a session.
+> >
+> > Is there any news regarding such a session on kernel profiling?
+> >
+> > Kind regards, Ruud
+> >
+> >>
+> >>>
+> >>> Kind regards, Ruud
+> >>>
+> >>>> On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
+> >>>>
+> >>>>
+> >>>> I am adding Ruud van der Pas in CC. He works in gprofng and would be
+> >>>> willing to participate in a discussion on kernel profiling.
+> >>>>
+> >>>>> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
+> >>>>>
+> >>>>> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
+> >>>>> <ndesaulniers@google.com> wrote:
+> >>>>>>
+> >>>>>> Hi Sami, Bill, Jose, and Vladamir,
+> >>>>>> Jose and I are currently in the planning process to put together a
+> >>>>>> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> >>>>>> this year (Sept 12-14) in Dublin, Ireland.
+> >>>>>>
+> >>>>>> Would you all be interested in leading a session discussing various
+> >>>>>> profiling related topics such as:
+> >>>>>> * gprofng
+> >>>>>> * PGO
+> >>>>>> * AutoFDO
+> >>>>>>
+> >>>>>> Would others find such a discussion useful?
+> >>>>>> --
+> >>>>>> Thanks,
+> >>>>>> ~Nick Desaulniers
+> >>>
+> >>
+> >>
+> >> --
+> >> Thanks,
+> >> ~Nick Desaulniers
