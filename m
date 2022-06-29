@@ -1,74 +1,153 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990056AA2
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 20:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656536348; x=1688072348;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eI37OGL13Hq09p26Lvb+cTfEdQ84i7ieM9yAE1uQ6qU=;
-  b=cD3QY+kdAOGSaJObfq7TWODpgQYvf2eTV1Qllqvc2XfaoxlMFbfc7Fp4
-   TCEfKngQw5cGDdS/8ZlqC/jlLlpXN8/989NFox3mBI6xHmeV0PuqZNRPZ
-   eH0COZR5zBVvppVoMNGovAnKZ2Q+5rA/pZsKd9qsuZilHA9OKdn9HT7aI
-   kM2e2Bv2vDrvpaofwuXMyVoZtDsduL0sYxFjcIconGWsppTEQsd9hlvJP
-   cFA1athakwtFKqh3yxZZnFttOPr/fXKX/fapZqs2hwJmur4z2H4IIxhse
-   Ra+4kac2NmsEJPD+u56feT55HL2ISHeCqxATaEGnfYNoJ+KYR7w6Tzs+X
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="283253259"
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="283253259"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 13:59:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,232,1650956400"; 
-   d="scan'208";a="658709167"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Jun 2022 13:59:06 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6emA-000BgA-7m;
-	Wed, 29 Jun 2022 20:59:06 +0000
-Date: Thu, 30 Jun 2022 04:59:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oded Gabbay <ogabbay@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [ogabbay:gaudi2 52/62] ERROR: modpost: "__umoddi3"
- [drivers/misc/habanalabs/habanalabs.ko] undefined!
-Message-ID: <202206300434.0CSfpTs9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C363FE6
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 21:21:38 +0000 (UTC)
+Received: by mail-lj1-f173.google.com with SMTP id n15so20537370ljg.8
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 14:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0PwKwpQLLF9Wx/gSr3MYc18IBLW4Vq6WXee7EmmVZzE=;
+        b=Nh0GvePQZdPLDPpVm1bbOP/ozbuGK50Vpq/Z3OIgAaEmpGTDWuOpTEQOpkf4ZWq9fZ
+         A8anC4CovA0hh5WmcF2Rv8wrCTwCILBRaUeUisxwQM3QHHdweL9Hm41cVmcv9uLXFQdR
+         8tIqJ0HDOd2zAqv1I0ppEhdh71NS6SemVLKFIwZgNAzz/7rznuisse4czpv26p9qPPFB
+         3ENRLlD1Ghtd4KYy8jF6ZC+X/CtEMZ4WW6hGggIwImkIvkCPnASfGJVMWsQyD7JITWSr
+         WNzDb2cESbqvCW9S2mODKqs+XaLrLnj144LRFTgOKhhcEBT5ypNl827UtjtLMDcDvS15
+         Jbdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0PwKwpQLLF9Wx/gSr3MYc18IBLW4Vq6WXee7EmmVZzE=;
+        b=Y4d6JQaWU7csO14DsrWVwUG4xXFLDHBbgGhY7GsMiHZ/uQIDKXzvG3vRoIJY9FbKcd
+         CM/qwzdbhoSdbQ+1ieQQx3Smbe0Xhlg9RpsQaOtC/DX5E/20mXrhkDFy0WiYizH/NJQw
+         dEcuHQcyvnfTaxVj7jkHLI9GsM8pPDoHCkJBZWT7iKlqyL2QzU6q8o2HEKY5D5KyyqNC
+         00W6Si71VIlJBViImjhSIIECgdrx4rtTEjRMGyQDxz7YBjw0NMBZtRZXFX0z6Mc3Aeox
+         mrhLvTyNKMJ5YKo90Mu9iMAAHLEBkK9UqPLAfmesZtOA+Hx7Do/paUv4VyrsR9bVIpBy
+         32Sg==
+X-Gm-Message-State: AJIora8OURRyl6OW9+hVkCc7XJSm6tjRvOE2fB577Vzl6b2v1tdWTJ1P
+	SRffnhDIvaGzZDjK2VnnhWO9C/ks+yL9+M9Zp68zhQ==
+X-Google-Smtp-Source: AGRyM1vg1ycQXO0cRaiqy3RblWUH6i/XJr7OcEGztOHZOU4+8d5DVDP4vt3bXSWJWiXbN5xo+oDq6Txx+gQQAubXPqI=
+X-Received: by 2002:a05:651c:2104:b0:25b:f4ed:db93 with SMTP id
+ a4-20020a05651c210400b0025bf4eddb93mr166254ljq.295.1656537696638; Wed, 29 Jun
+ 2022 14:21:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X> <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
+ <YrNQrPNF/XfriP99@debian> <CAHk-=wjje8UdsQ_mjGVF4Bc_TcjAWRgOps7E_Cytg4xTbXfyig@mail.gmail.com>
+ <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
+ <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com>
+ <20220628224255.w4lmzalkx3qejuyg@treble> <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
+ <20220629163400.cgeqmuu45zsyxtwq@treble>
+In-Reply-To: <20220629163400.cgeqmuu45zsyxtwq@treble>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 29 Jun 2022 14:21:25 -0700
+Message-ID: <CAKwvOdm7=6M3pdHnqLFYkV21ypYpN4rTaNCe48dN3hWOOd+T2A@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git gaudi2
-head:   cdf0db9c5190d3f87662583db935ef9f5c0b7e4a
-commit: db0c0cf75ce55851443487f3b7c6e033f112102d [52/62] habanalabs: add gaudi2 asic-specific code
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220630/202206300434.0CSfpTs9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=db0c0cf75ce55851443487f3b7c6e033f112102d
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay gaudi2
-        git checkout db0c0cf75ce55851443487f3b7c6e033f112102d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Jun 29, 2022 at 9:34 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Wed, Jun 29, 2022 at 09:08:20AM -0700, Linus Torvalds wrote:
+> > On Tue, Jun 28, 2022 at 3:43 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > >
+> > > So, something like this:
+> >
+> > No, clang should just be fixed.
+> >
+> > These UBSAN reports should usually be WARN_ON_ONCE.
+> >
+> > It's all the same issues we've had before: causing a panic will just
+> > kill the machine, and gets us fewer reports.
+> >
+> > Now, UBSAN is something that presumably normal people don't actually
+> > run on real hardware, so it's probably less of a deal than some. But
+> > hey, maybe somebody wants to actually run an UBSAN kernel on a real
+> > load with a full accelerated graphical UI and real drivers: a panic
+> > may end up killing the kernel, and there you sit, with a dead machine
+> > and no idea what went wrong.
+> >
+> > So the whole "panic if UBSAN reports something" is COMPLETE GARBAGE.
+> > It actually makes the whole point of running UBSAN go away. You *lose*
+> > coverage.
+> >
+> > So please don't make the kernel worse because clang got something like
+> > this wrong.
+> >
+> > Just fix clang.
+> >
+> > And fix your mindset.
+>
+> Yeah, good point.  All the other UBSAN handlers (other than builtin
+> unreachable) try to recover.  There's nothing special about divrem
+> overflow which requires it to be fatal.
+>
+> So clang needs to stop assuming the divrem overflow handler is noreturn.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I haven't been able to verify in the generated IR or in LLVM sources
+that that is the case; it doesn't appear to be any assumption about
+__ubsan_handle_divrem_overflow being noreturn.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Instead, it looks like this has more to do with undefined behavior,
+IIUC.  It seems that for `-fsanitize=integer-divide-by-zero`
+(CONFIG_UBSAN_DIV_ZERO), we introduce new control flow to warn on div
+by zero, but the results of the division are undefined, so
+unconditionally trying to consume the result is UB.
 
->> ERROR: modpost: "__umoddi3" [drivers/misc/habanalabs/habanalabs.ko] undefined!
+So:
 
+int foo (int x, int y) {
+  return x / y;
+}
+
+doesn't check for divide by zero, -fsanitize=integer-divide-by-zero
+introduces control flow to check for divide by zero and call
+__ubsan_handle_divrem_overflow in that exceptional case, but the
+result of the division is still undefined for that case, so control
+flow that tries to use that result is simplified into using the result
+in the non-zero divisor case, and calls to
+__ubsan_handle_divrem_overflow followed by (what is effectively)
+__builtin_unreachable().
+
+For hahas I tried:
+
+```
+diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
+index d7aa5511c361..cb2eab660fd2 100644
+--- a/drivers/video/fbdev/smscufx.c
++++ b/drivers/video/fbdev/smscufx.c
+@@ -907,8 +907,11 @@ static ssize_t ufx_ops_write(struct fb_info
+*info, const char __user *buf,
+        result = fb_sys_write(info, buf, count, ppos);
+
+        if (result > 0) {
+-               int start = max((int)(offset / info->fix.line_length), 0);
+-               int lines = min((u32)((result / info->fix.line_length) + 1),
++               int start, lines;
++               if (!info->fix.line_length)
++                       return 0;
++               start = max((int)(offset / info->fix.line_length), 0);
++               lines = min((u32)((result / info->fix.line_length) + 1),
+                                (u32)info->var.yres);
+
+                ufx_handle_damage(dev, 0, start, info->var.xres, lines);
+```
+That way we don't unconditionally consume the results of a possible
+divide by zero, and that fixes the warning from that TU.  Does
+inserting guards against divide by zero on the kernel side seem like
+reasonable fixes for these warnings?
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers
