@@ -1,185 +1,134 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E727B
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 17:50:19 +0000 (UTC)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25THPOIO025016;
-	Wed, 29 Jun 2022 10:49:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=WMet+BdDL/R3Be5zIuOjXw/4a65nSQx2RgD62Pli/qs=;
- b=iAck51Dqd8z5IJVVSJbpqVJTh4iM2tpFU8cM07h3DrZRxiakQ4aeeNZL+ZbMnoBUJQjl
- XegDDNrmzY6OTBMZhD0xboz+3H92Hjv2QofvqafeWzV5Q7wTH8niXpsCNAmmEK9mB3LI
- V2otfC04gUveU8HgWmjnfYS4vGOdMHwC9Bw= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h0691fvdx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Jun 2022 10:49:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NPxiVE8jW5jdGw4T+EbUvn3uEeao/8v1RUthsDWQIE7vLocYAH9AXC5bfu6PvBGg+ZAO+PtSXBy8rdx2M5JsFpBJLJRH0A0NPLUka4eONBThhb4zs1NDHxiv1oGJ+bciPJ1oWJjQ3B7YXbsgxpFWZOLqrqaELSmhVsRexVLRY40neijVsIc7hZITyQcUrQMBJ5qysC7PUUZUMxFv3eb3EOCM3eBpgBgElp0I4B2tpx/Mz2CT1RaRW3qsybhzNQz/WU0UHE4DSorAVBqHEuvMtnMqFK/sbEZpK0HzKYKNNZhYJHb5c0Nd+580uNcenZgJ7uGYNTtycAGV4NSp0GQzTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WMet+BdDL/R3Be5zIuOjXw/4a65nSQx2RgD62Pli/qs=;
- b=EwQIzhJyjL216mMpDJzqSWAVZi9Ii2WDblBEi28kwkg21O/kJDGOh9wQQO+1Py0Ut25RIx7M8w+mcp/FdMHIWlDCmRPZJPF5Bkb8t/kZxkOU0osvjyKi/57GRT1i9JtNjMnFCK6VAnah+Yh99coDtM0SvJcDeVwMs8wZHQTtkZ+rv9LCyetq0N+zWBJdrwQr4JR8c0WHJIKLlfF8/U2nRfbzlg5ftK7DYmslytgKxejBtVvuhu77AKN+1vjCKF780Tz+ENk/i4Yb47pidqfAB60Al4o3Xmrt7lhZYZP7SNIHX97M5/kBCB8GcnHLDPCmTXIRkgMSv4WKrvd7rpJVGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
- by MW2PR1501MB2138.namprd15.prod.outlook.com (2603:10b6:302:d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Wed, 29 Jun
- 2022 17:49:53 +0000
-Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
- ([fe80::81f9:c21c:c5bf:e174]) by SJ0PR15MB4552.namprd15.prod.outlook.com
- ([fe80::81f9:c21c:c5bf:e174%8]) with mapi id 15.20.5395.014; Wed, 29 Jun 2022
- 17:49:53 +0000
-From: Jonathan McDowell <noodles@fb.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: kernel test robot <lkp@intel.com>,
-        "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-        Baoquan
- He <bhe@redhat.com>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org"
-	<linux-integrity@vger.kernel.org>,
-        "kexec@lists.infradead.org"
-	<kexec@lists.infradead.org>
-Subject: Re: [PATCH] of: Correctly annotate IMA kexec buffer functions
-Thread-Topic: [PATCH] of: Correctly annotate IMA kexec buffer functions
-Thread-Index: AQHYi53+57Uf9qOfm0WoCzCAOs74RK1maiiAgAA/3YA=
-Date: Wed, 29 Jun 2022 17:49:53 +0000
-Message-ID: <YryQvUtupEgn+vO1@noodles-fedora.dhcp.thefacebook.com>
-References: <202206291039.yGgljGbx-lkp@intel.com> <YrwPjnxBk3Xyuakg@zn.tnic>
- <Yrwg1aYEnFz38V6+@noodles-fedora.dhcp.thefacebook.com>
- <YrxbK4IsYb6yls5d@zn.tnic>
-In-Reply-To: <YrxbK4IsYb6yls5d@zn.tnic>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1e5192c0-baad-4f51-a4cc-08da59f7c5e5
-x-ms-traffictypediagnostic: MW2PR1501MB2138:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- OaCO3z03gMMdaYwgt0cuMu8/E2UobNBdagZrVVsR/jf/8q7MSW5NndZAW8b91s4natRiZ1gyznTjyunYsTHWzbCxYgDrGjgh7oKAm5S56saCiTCXwqbWcbi8QiuWgaervvYDygYg4P4sWAspVjGeeDqh8X3XZfk8Al9ioULiwDlylLgXYPUgkNPxBAUgSWMixBi7gMPWuZvSgw9wE+b7GNmosYpTg5AxAbel3hBbW+txL9L+gBPV28w4Jq+FSXRaCC4Os6pyz5Q0fKEJ7Z3rqNUJdvX0+MGX92lMBo9kXDtsrSz7IlUNOAA6BcSeYgx3zbjiUtOLCDpbarnjU5/Dpinuc+rUQBwHc4xl9clMBjRYeTZPTwJ4LOJE3RiZxqLe/arejxByRQqQ5OE6FIdAt8lssu5g91DpAk9uu/sfMKg73Fd6Rve9wo2pd0d8KTzeTkkUaCorJTpbMOQZ2jcvLRItfkEyqT3LyY2/h5bWnSaCtK+J9+PHfE1WYORy8EO/pxTWGdTq5OtyrQVworkYNCUyNX77it3fS9c4hdJtD9a0zYmDX2dceuTyIrosym9idBRZPjZEun9pj8pNAZPyMbJ02ixBcQ1qThP9F26GECkOELS3S14uaxzmAcY0Pu2efkRFwvpMoguP92nrQ9TE/7/b/Cqu0z4RkAo4hze6tBjqzYovhXGdqK+6gVGsH1NA9+TMKZhBMDxWv56CEu+RdwpllTOC2Wqbf3Mtn3+pSlP41FcCi7VIV1iMlzPb6oHqsA79E6Gv5+S7DJExaozC22o+bMoaajmUbj7H7/UbWHAWao2FobushtnI9Isj6TW96a7pLkxIs0aQUWEfCrFr+Q==
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(7416002)(5660300002)(64756008)(8936002)(478600001)(76116006)(6916009)(4326008)(66556008)(66446008)(66946007)(54906003)(316002)(38100700002)(71200400001)(2906002)(122000001)(86362001)(66476007)(186003)(6506007)(26005)(6486002)(8676002)(6512007)(91956017)(41300700001)(9686003)(38070700005)(83380400001)(67856001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?fqRfJmrHwRgObcAjiNaVlQxzDganonTLZciS4lxrwHsp9QoQA3d+U9PdQtJw?=
- =?us-ascii?Q?YeeN+d0gKMAMuY2iQbBTOoPNhnyUlA6a1GJQkL4z++R84NOd+bVuEUhiWFHw?=
- =?us-ascii?Q?+W+iGdTc1Yz2/+sOkKuBj4js+LuIDIdBHia+9mgWyBA3F0PzceITZ0rKb5Cj?=
- =?us-ascii?Q?fIyZXm23nFUJ4YFQJ8cQt/MgRrdOZhQHzavU59yetO3hypF+W2MncSqcHkkT?=
- =?us-ascii?Q?HZn+o1GanR4k25wIudsAWbfijMyc1LZTNQK98+hFrQVvEbQ5nZuNws9hZhfJ?=
- =?us-ascii?Q?qLIHcyriNAcKqUK9nyv1gkI/SKkkALWOGm9fQacKBtIAgZDv4NBTts7bzZj3?=
- =?us-ascii?Q?AqOM03Qc9YRFqr8Hr6lnLItWK3l95a5VR30wnSK/zs3sFnP2YF94V0MWiula?=
- =?us-ascii?Q?xE5m9ufhIjqC2hbkE4xvBLbB/X4kHgcwrS1Jgf11BLtjtKHHXrH99csbXw8W?=
- =?us-ascii?Q?R7lQn3ZtoRt8ICoLcz4Vh79aYwxtqAAIXv9sc9eWp8YUaryENqKaWvIpMHJh?=
- =?us-ascii?Q?5AkFwL+aizSfltXumfR1nhSc5lZZLNmtgzhow9rAs28xl6iPRWrI7WSuCF9M?=
- =?us-ascii?Q?TlzrVswvTNrXdAgFNTzc67+CmSW9wIqxgdkGUlgnxp9etNkniRYDe+E+amCr?=
- =?us-ascii?Q?Wzvq3X6bHiKZuma0BJqTv9ppvJDYI5dLIu4Z2HfhQYmUHljUyIo2PQ3/nIzT?=
- =?us-ascii?Q?pYo2e2yejIcxfFUKxyDbQs9svgsI/ZaqBMwTLzEBEIXoTHcI/gkm6Rj4bpwC?=
- =?us-ascii?Q?6wDUW5H63Mcoy7DydnXaZyugwjALzvRCTt9xVcP+bBCQBURT26i5bD/ULRP+?=
- =?us-ascii?Q?fBmd3YthvLyLJg/s9Lz0T+56JDnkc+JRjvOv7n+sl3gLSdVQKlkZ1PLe2K4I?=
- =?us-ascii?Q?OEb1jMXPtUIkZ+BIeXwpFiG48gfRKRpg5JFDW9mGfXoN73uDOGZ62m/5qwea?=
- =?us-ascii?Q?kpJHbouo9SHH8VYK1SLgHpwfuH6h9iJbSI+nFsf4S39ITvrW+4ZUdxjFb1Pi?=
- =?us-ascii?Q?xS+RoI0hmWz4+j6qcpI2/ChTITsGPisHIy1eKWCocjRXfXbbNFW5L/S9w1pP?=
- =?us-ascii?Q?YExHii/yuXHICptpUNRfeNqylKdF6SyyF4kqlwr7TZwV2oh1dPUyL97RR6bY?=
- =?us-ascii?Q?TCUmzPqci0PWC6GIvUwSxugHvZ31MwUkpos3aJju4YzmyCnKqEJOzAZuOgAs?=
- =?us-ascii?Q?Nibq8F2xwe9BLHiVxzTRDCjoxAj7I5jFZWXJ8jKb9EM+WHclbF9rxx9l9oxW?=
- =?us-ascii?Q?GVu6twBcs6xcCazyDgPdz/161qT8NqdPNjgxd54DCUtTOU0EzxDWZp72KfUv?=
- =?us-ascii?Q?M4zLgAzy3E8pJW4dgCAkGMhcrDu8DAb7YIoNXrmcJH5G/90N7SNs2bG2CGSL?=
- =?us-ascii?Q?JhlhnXb4aYDeSUS8odkW0C4g33Y0penqLq2rCUNu4dXNeFC5s1Tlk+8ziBeo?=
- =?us-ascii?Q?bgb9B7OXk4wV4GgvuP+7B7fB7YgyQh7KiSuq8b6abuQH8MeaSbzDsbwM1W5m?=
- =?us-ascii?Q?bn0Q/j0ySspt7aJwJugibVX51l5GTIFwOsqr0f3IG42PSp3z0a1T+LnhrDT2?=
- =?us-ascii?Q?nyOKqGoTTr9WwseNDJbVWeVp9btnm/OqKy8cS46w?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <FEF843EE23EF17499CFEA0C245CB1925@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777BD7B
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 17:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656525428; x=1688061428;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8Z8d+vB+c+oayRdApzeWjdqIaMdxqCy+aayzn7wVe34=;
+  b=dxnB2NYDNhbmwwP6E5UNGvPrCGRUYJkU/U0NysusoWf6bTuQOb4f5hdD
+   cuOsagveOiX/mpDjTwX69DDbNZQt/SUPSgzeiBqPLMBGjn3wuQPQlB90V
+   9T6yNoENsJRSMt0CGUrRX+rZOZcHX46I3dP7sx9ZQnle6E0jsckTvnOk5
+   O2tyVkABAoSF1uv2fYkqz1SIUL9GvNipxcv/k+C7KTW0QeqdKwyIyaNWf
+   azKX0suePAz+AaEzA10sqp2kq0J5vBtI4XHVbXiKfE9yCL17XfsaMO4RK
+   TcyNmSwGpJA7syey0XN6U1saJ1dJOhUC7u/YJM0iuGdCYm9LzFGiHTgWu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="280867536"
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="280867536"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 10:57:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
+   d="scan'208";a="917698336"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 10:57:06 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6bw1-000BOM-QL;
+	Wed, 29 Jun 2022 17:57:05 +0000
+Date: Thu, 30 Jun 2022 01:56:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function
+ 'set_test_mode_src_osc_freq_target_low_bits'
+Message-ID: <202206300147.qdDDrtfw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e5192c0-baad-4f51-a4cc-08da59f7c5e5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2022 17:49:53.7677
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yuNjCu74Oi5sTvw0R4Rz4iboFaiZ/JS6ckeWl8Ts0w1Lz7KlYN0A7Z5720NFYABP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR1501MB2138
-X-Proofpoint-GUID: KpfNuhKFJCcOn5v9o2R4X5xK-BmcuRDB
-X-Proofpoint-ORIG-GUID: KpfNuhKFJCcOn5v9o2R4X5xK-BmcuRDB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-29_18,2022-06-28_01,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jun 29, 2022 at 04:01:15PM +0200, Borislav Petkov wrote:
-> On Wed, Jun 29, 2022 at 09:52:50AM +0000, Jonathan McDowell wrote:
-> > Below is on top of what was in tip; I can roll a v7 if preferred but
-> > I think seeing the fix on its own is clearer.
->=20
-> Yes, and you don't have to base it on top because, as I've said, I've
-> zapped your other patch there.
->=20
-> Once IMA folks are fine with that fix of yours I can take both, if they
-> wish so.
+Hi Geert,
 
-I'll roll a v7 collapsing them together and moving to __init as per
-below.
+First bad commit (maybe != root cause):
 
-> > ima_free_kexec_buffer() calls into memblock_phys_free() so must be
-> > annotated __meminit.
->=20
-> Why __meminit?
->=20
-> The very sparse comment over it says:
->=20
-> /* Used for MEMORY_HOTPLUG */
-> #define __meminit        __section(".meminit.text") __cold notrace \
->                                                   __latent_entropy
->=20
-> so how does ima_free_kexec_buffer() have anything to do with
-> MEMORY_HOTPLUG?
->=20
-> It calls memblock_phys_free() which is __init_memblock.
->=20
-> Now __init_memblock is defined as
->=20
-> #define __init_memblock __meminit
->=20
-> for some CONFIG_ARCH_KEEP_MEMBLOCK thing so I guess that is the
-> connection.
->=20
-> But then the couple other functions which call into memblock are all
-> __init...
->=20
-> IOW, I probably am missing something...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d9b2ba67917c18822c6a09af41c32fa161f1606b
+commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
+date:   1 year, 8 months ago
+config: mips-randconfig-r016-20220629 (https://download.01.org/0day-ci/archive/20220630/202206300147.qdDDrtfw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ drivers/net/ethernet/mellanox/mlxsw/ drivers/scsi/ufs/ drivers/staging/ fs/xfs/
 
-I think the answer is that __meminit (or __init_memblock) works out as
-the minimum required annotation, because memblock_phys_free() has that
-annotation, but having looked closer at the call stack all of the usage
-is under ima_init() which is marked __init, so it's more appropriate to
-use that and discard the code after boot. There's no need for the ima
-related functions to stay hanging around in the case memory hotplug is
-enabled, because it's purely a boot time mechanism for passing the
-buffer over a kexec boundary.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-J.=
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
+   set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
+   ^
+>> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
+   set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-a774ba7f60/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers fs include kernel mm nr_bisected scripts source usr
+
+
+vim +/set_test_mode_src_osc_freq_target_low_bits +812 drivers/gpu/drm/kmb/kmb_dsi.c
+
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  810  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  811  static inline void
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @812  	set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  813  						   u32 dphy_no,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  814  						   u32 freq)
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  815  {
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  816  	/* Typical rise/fall time=166, refer Table 1207 databook,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  817  	 * sr_osc_freq_target[7:0]
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  818  	 */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  819  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  820  		       (freq & 0x7f));
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  821  }
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  822  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  823  static inline void
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @824  	set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  825  						  u32 dphy_no,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  826  						  u32 freq)
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  827  {
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  828  	u32 data;
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  829  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  830  	/* Flag this as high nibble */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  831  	data = ((freq >> 6) & 0x1f) | (1 << 7);
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  832  
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  833  	/* Typical rise/fall time=166, refer Table 1207 databook,
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  834  	 * sr_osc_freq_target[11:7]
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  835  	 */
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  836  	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, data);
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  837  }
+98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  838  
+
+:::::: The code at line 812 was first introduced by commit
+:::::: 98521f4d4b4cb265374a4b1e13b41287a1960243 drm/kmb: Mipi DSI part of the display driver
+
+:::::: TO: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
+:::::: CC: Sam Ravnborg <sam@ravnborg.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
