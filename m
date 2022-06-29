@@ -1,43 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2827B
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 02:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B703A7A
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 02:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656468105; x=1688004105;
+  t=1656470571; x=1688006571;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jQkvQR2VzgqaVYrbPKi4Gw7+HM1ufl5gQO6hyb2+pZs=;
-  b=Pr37H3rdz3eNu5pcE5cn6QnsUsMt7k2FSb7EL6GNspEqgqubaSw3Hg1k
-   4nZg4aIaslUdXtLf7G8HOKzGxQJjAJAvN6LoHkdISfvgH9cVvjUP4vNlQ
-   ZCqrwEkM2o/JxHe/YBC6+qq5XhUEr1wNIaJybMesI1IbOEI8KqG/43YeM
-   TEx1lvpPXdsIWytSyATYoE/PCQzCelMLX6Bkiy1ApovLjrL+uLFpTclVH
-   6OUNtZyLLSVrD8VSRrhT/ppDAaqAYK19py8StbcNUWav5JqLgytmOJkfl
-   +F9Mp3lGhmbljidC5IMJxaPuAHZoXW6BaKULaRB6GLlSrvIiXk3fBDiG6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264936129"
+  bh=yBJwPxOV/Z5pXj6LNzXeAszVLgZscqWYN5ocKbH08eU=;
+  b=hfqE6Nnm33yWJvYpYUMcurlfNIhghvJdY07bvJh6929avzOWaoybru2C
+   ETlDQHl4hmOpv/KMFsPawzDk/Hvh/NvOruP1LL2XTfn4nSDZ4oqE2cirm
+   aj5mYKyUy+UlktD4BubfjVXAEjd5GKSAayh4PgffDw1Av3tPFSpAecjSQ
+   6ZhVBcVRYeJtJwl8+CkgGdJm9FaQ4LYNOAh7WJrIkzHJraBg1Ov/KxHXe
+   2BoQbwOC1cYNCtwcAWL6V0IyFqZ2uAk0QfCgAgbAIGZ9W1GDsIwCbYIZ0
+   JomeY/ELSPaTLLgO9kV9ozmZw0/1LfmJqhCU/cNTwkllKMY6oookI6kIO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="279448299"
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="264936129"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:01:44 -0700
+   d="scan'208";a="279448299"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:42:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="917411138"
+   d="scan'208";a="595047814"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2022 19:01:43 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2022 19:42:45 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o6N1S-000Ap0-Ez;
-	Wed, 29 Jun 2022 02:01:42 +0000
-Date: Wed, 29 Jun 2022 10:01:25 +0800
+	id 1o6NfA-000AqI-L8;
+	Wed, 29 Jun 2022 02:42:44 +0000
+Date: Wed, 29 Jun 2022 10:41:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andreas Gruenbacher <agruenba@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, cluster-devel@redhat.com,
-	linux-kernel@vger.kernel.org
-Subject: [gfs2:nopid 1/5] fs/gfs2/glock.c:2785:3: error: call to undeclared
- function 'fput'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206290953.iT9zAjZQ-lkp@intel.com>
+To: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-gpio@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Stephen Boyd <swboyd@chromium.org>
+Subject: [linusw-pinctrl:devel 10/32]
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:391:48: error: use of undeclared
+ identifier 'np'
+Message-ID: <202206291029.ESdnQ2Ja-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,67 +49,132 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git nopid
-head:   b1d0ed94e881ca5b5aee15e05f13db75445398f2
-commit: 13ba8572506201aa85020970f776597fbcdcda56 [1/5] gfs2: Add glockfd debugfs file
-config: arm64-buildonly-randconfig-r005-20220627 (https://download.01.org/0day-ci/archive/20220629/202206290953.iT9zAjZQ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+head:   c3f464542b7099692827f0094c00aa9a26a2acbc
+commit: 36fe26843d6dde34b65c3273c63bb12fd036239d [10/32] pinctrl: qcom: sc7280: Add clock optional check for ADSP bypass targets
+config: arm64-buildonly-randconfig-r003-20220627 (https://download.01.org/0day-ci/archive/20220629/202206291029.ESdnQ2Ja-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=13ba8572506201aa85020970f776597fbcdcda56
-        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
-        git fetch --no-tags gfs2 nopid
-        git checkout 13ba8572506201aa85020970f776597fbcdcda56
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/commit/?id=36fe26843d6dde34b65c3273c63bb12fd036239d
+        git remote add linusw-pinctrl https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+        git fetch --no-tags linusw-pinctrl devel
+        git checkout 36fe26843d6dde34b65c3273c63bb12fd036239d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+Note: the linusw-pinctrl/devel HEAD c3f464542b7099692827f0094c00aa9a26a2acbc builds fine.
+      It only hurts bisectability.
+
 All errors (new ones prefixed by >>):
 
->> fs/gfs2/glock.c:2785:3: error: call to undeclared function 'fput'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   fput(i->file);
-                   ^
-   fs/gfs2/glock.c:2842:3: error: call to undeclared function 'fput'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   fput(i->file);
-                   ^
-   2 errors generated.
+>> drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:391:48: error: use of undeclared identifier 'np'
+           data->is_clk_optional = of_property_read_bool(np, "qcom,adsp-bypass-mode");
+                                                         ^
+   1 error generated.
 
 
-vim +/fput +2785 fs/gfs2/glock.c
+vim +/np +391 drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
 
-  2781	
-  2782	static struct file *gfs2_glockfd_next_file(struct gfs2_glockfd_iter *i)
-  2783	{
-  2784		if (i->file) {
-> 2785			fput(i->file);
-  2786			i->file = NULL;
-  2787		}
-  2788	
-  2789		rcu_read_lock();
-  2790		for(;; i->fd++) {
-  2791			struct inode *inode;
-  2792	
-  2793			i->file = task_lookup_next_fd_rcu(i->task, &i->fd);
-  2794			if (!i->file) {
-  2795				i->fd = 0;
-  2796				break;
-  2797			}
-  2798			inode = file_inode(i->file);
-  2799			if (inode->i_sb != i->sb)
-  2800				continue;
-  2801			if (get_file_rcu(i->file))
-  2802				break;
-  2803		}
-  2804		rcu_read_unlock();
-  2805		return i->file;
-  2806	}
-  2807	
+   370	
+   371	int lpi_pinctrl_probe(struct platform_device *pdev)
+   372	{
+   373		const struct lpi_pinctrl_variant_data *data;
+   374		struct device *dev = &pdev->dev;
+   375		struct lpi_pinctrl *pctrl;
+   376		int ret;
+   377	
+   378		pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
+   379		if (!pctrl)
+   380			return -ENOMEM;
+   381	
+   382		platform_set_drvdata(pdev, pctrl);
+   383	
+   384		data = of_device_get_match_data(dev);
+   385		if (!data)
+   386			return -EINVAL;
+   387	
+   388		pctrl->data = data;
+   389		pctrl->dev = &pdev->dev;
+   390	
+ > 391		data->is_clk_optional = of_property_read_bool(np, "qcom,adsp-bypass-mode");
+   392	
+   393		pctrl->clks[0].id = "core";
+   394		pctrl->clks[1].id = "audio";
+   395	
+   396		pctrl->tlmm_base = devm_platform_ioremap_resource(pdev, 0);
+   397		if (IS_ERR(pctrl->tlmm_base))
+   398			return dev_err_probe(dev, PTR_ERR(pctrl->tlmm_base),
+   399					     "TLMM resource not provided\n");
+   400	
+   401		pctrl->slew_base = devm_platform_ioremap_resource(pdev, 1);
+   402		if (IS_ERR(pctrl->slew_base))
+   403			return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
+   404					     "Slew resource not provided\n");
+   405	
+   406		if (data->is_clk_optional)
+   407			ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+   408		else
+   409			ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+   410	
+   411		if (ret)
+   412			return ret;
+   413	
+   414		ret = clk_bulk_prepare_enable(MAX_LPI_NUM_CLKS, pctrl->clks);
+   415		if (ret)
+   416			return dev_err_probe(dev, ret, "Can't enable clocks\n");
+   417	
+   418		pctrl->desc.pctlops = &lpi_gpio_pinctrl_ops;
+   419		pctrl->desc.pmxops = &lpi_gpio_pinmux_ops;
+   420		pctrl->desc.confops = &lpi_gpio_pinconf_ops;
+   421		pctrl->desc.owner = THIS_MODULE;
+   422		pctrl->desc.name = dev_name(dev);
+   423		pctrl->desc.pins = data->pins;
+   424		pctrl->desc.npins = data->npins;
+   425		pctrl->chip = lpi_gpio_template;
+   426		pctrl->chip.parent = dev;
+   427		pctrl->chip.base = -1;
+   428		pctrl->chip.ngpio = data->npins;
+   429		pctrl->chip.label = dev_name(dev);
+   430		pctrl->chip.of_gpio_n_cells = 2;
+   431		pctrl->chip.can_sleep = false;
+   432	
+   433		mutex_init(&pctrl->slew_access_lock);
+   434	
+   435		pctrl->ctrl = devm_pinctrl_register(dev, &pctrl->desc, pctrl);
+   436		if (IS_ERR(pctrl->ctrl)) {
+   437			ret = PTR_ERR(pctrl->ctrl);
+   438			dev_err(dev, "failed to add pin controller\n");
+   439			goto err_pinctrl;
+   440		}
+   441	
+   442		ret = lpi_build_pin_desc_groups(pctrl);
+   443		if (ret)
+   444			goto err_pinctrl;
+   445	
+   446		ret = devm_gpiochip_add_data(dev, &pctrl->chip, pctrl);
+   447		if (ret) {
+   448			dev_err(pctrl->dev, "can't add gpio chip\n");
+   449			goto err_pinctrl;
+   450		}
+   451	
+   452		return 0;
+   453	
+   454	err_pinctrl:
+   455		mutex_destroy(&pctrl->slew_access_lock);
+   456		clk_bulk_disable_unprepare(MAX_LPI_NUM_CLKS, pctrl->clks);
+   457	
+   458		return ret;
+   459	}
+   460	EXPORT_SYMBOL_GPL(lpi_pinctrl_probe);
+   461	
 
 -- 
 0-DAY CI Kernel Test Service
