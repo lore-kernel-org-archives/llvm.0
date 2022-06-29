@@ -1,89 +1,83 @@
-Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723A17A
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 03:00:19 +0000 (UTC)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-01.nifty.com with ESMTP id 25T2kDL6009778
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 11:46:13 +0900
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 25T2jrdJ006246
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 11:45:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25T2jrdJ006246
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1656470754;
-	bh=XuRRlV6DEIohD5LwyniED6YKhD1PNvGzty9vC0eaPEQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VYAeGbpN0CHJ3SntlK30JJguH7UZgMetFseKlwixXVAtSheRMEWSXpvDkL8IelisQ
-	 LdwoNEp/cFLNJgaf4gQkv8iky9sJ5ys8hxmwgHk8P1QCsvKjjGnDmIWWGZOsuXf/tG
-	 0wcuFLlP1inhBeS9khIDdraktlpREvr1aK51UPcpZicgCh5oZLN4FOW7pMy0Vd92cl
-	 c0fviKw44cIAL8FZklxksUC57eV9sj3AOVj1wq3RqwtN48pIqLgN2AfrGBGz3unn4g
-	 FfSZD6sauc6zbW1V/m5pkYgy+YdDqlPTybETtea2cLazk9ALfc9GJaj5/KSF/MLQzX
-	 icyZn4KrxmsFg==
-X-Nifty-SrcIP: [209.85.128.52]
-Received: by mail-wm1-f52.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so6143617wmi.0
-        for <llvm@lists.linux.dev>; Tue, 28 Jun 2022 19:45:53 -0700 (PDT)
-X-Gm-Message-State: AJIora/e6qT/yqf2yAaV43a8xzamNvixR5G7A0AeNISpIN9BwchzoCJv
-	g5OTPWAsN4IzYPFMooZ0sX8ht0XcA+8IynYW8RQ=
-X-Google-Smtp-Source: AGRyM1ut30owDvv4LD+D7QwQ8t9dPthCnosocOkLOBSLKfdzxyW9Jyt0o7WQIGA8+R3aSMTrPRKuJ+0eutSDqouMbyo=
-X-Received: by 2002:a1c:6a06:0:b0:3a0:5099:f849 with SMTP id
- f6-20020a1c6a06000000b003a05099f849mr2804764wmc.14.1656470752486; Tue, 28 Jun
- 2022 19:45:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86757EB
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 07:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656488573; x=1688024573;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VxcVHOI4WyRQf1u0CtMfKEVzp0ThCoPjKwjMJ7tLxwY=;
+  b=hE0hPS7eGbtM6pzIFsYEowzzg3cWyTxnOAs6+71TJcbLHfdLZgEfR+iJ
+   51KaTf1OFuouQeZQovCst3OSwSDaRKX+Ya/pfmA+RTXop6TR5FzlccMkZ
+   a0KW1seoyxVztdrW2vOqOo73w1txbBizUsqgpajdOR5wK0junVvBCFCvl
+   sCP1eRh5EHK6JvKmjogFNtB0M39+hArhzmmMbo0xCGmEZGk1X2MovSygG
+   5e6/hEaVj+T5S0s6hzqEr35J2x4nInMbYav8PYWRC8OjQWSbJo8yGv8gS
+   HLYLbqeduXXPiPBbbzJ9XImmDn2Bsw78yAzo6uLhfFJiy26m1blvdIxV0
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262361168"
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="262361168"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 00:42:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
+   d="scan'208";a="837017432"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Jun 2022 00:42:51 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6SLa-000Aza-Fh;
+	Wed, 29 Jun 2022 07:42:50 +0000
+Date: Wed, 29 Jun 2022 15:42:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: [ammarfaizi2-block:arm64/linux/for-next/boot 20/21] ld.lld: error:
+ undefined hidden symbol: __pi___memmove
+Message-ID: <202206291516.Nr0bqPCp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220628012353.13995-1-jhubbard@nvidia.com> <CAKwvOd=FmKYse9NEvMt5MHev5wRzeZH6AcBd1uQEL5k0GLP+Zw@mail.gmail.com>
-In-Reply-To: <CAKwvOd=FmKYse9NEvMt5MHev5wRzeZH6AcBd1uQEL5k0GLP+Zw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 29 Jun 2022 11:45:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT5cmfAvZWy-QrrrBZcOoHwcuRO=JY9SUgBGbOxv=Kt5A@mail.gmail.com>
-Message-ID: <CAK7LNAT5cmfAvZWy-QrrrBZcOoHwcuRO=JY9SUgBGbOxv=Kt5A@mail.gmail.com>
-Subject: Re: [PATCH v3] gen_compile_commands: handle multiple lines per .mod file
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: John Hubbard <jhubbard@nvidia.com>, Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jun 29, 2022 at 3:45 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Jun 27, 2022 at 6:24 PM John Hubbard <jhubbard@nvidia.com> wrote:
-> >
-> > scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
-> > each .mod file only contains one line. That assumption was correct when
-> > the script was originally created, but commit 9413e7640564 ("kbuild:
-> > split the second line of *.mod into *.usyms") changed the .mod file
-> > format so that there is one entry per line, and potentially many lines.
-> >
-> > The problem can be reproduced by using Kbuild to generate
-> > compile_commands.json, like this:
-> >
-> >     make CC=clang compile_commands.json
-> >
-> > In many cases, the problem might be overlooked because many subsystems
-> > only have one line anyway. However, in some subsystems (Nouveau, with
-> > 762 entries, is a notable example) it results in skipping most of the
-> > subsystem.
-> >
-> > Fix this by fully processing each .mod file.
-> >
-> > Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
->
-> Thanks for the fix, John!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/for-next/boot
+head:   7559d9f97581654fbd0c3fa21878b6d043bbe439
+commit: aacd149b62382c63911060b8f64c1e3d89bd405a [20/21] arm64: head: avoid relocating the kernel twice for KASLR
+config: arm64-buildonly-randconfig-r006-20220627 (https://download.01.org/0day-ci/archive/20220629/202206291516.Nr0bqPCp-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/aacd149b62382c63911060b8f64c1e3d89bd405a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/boot
+        git checkout aacd149b62382c63911060b8f64c1e3d89bd405a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Applied to linux-kbuild/fixes with Nick's reviewed-by.
-Thanks.
-
+>> ld.lld: error: undefined hidden symbol: __pi___memmove
+   >>> referenced by fdt.c:333 (lib/../scripts/dtc/libfdt/fdt.c:333)
+   >>> kernel/pi/lib-fdt.pi.o:(__pi_fdt_move) in archive arch/arm64/built-in.a
+--
+>> ld.lld: error: undefined hidden symbol: __pi___memcpy
+   >>> referenced by fdt_ro.c:568 (lib/../scripts/dtc/libfdt/fdt_ro.c:568)
+   >>> kernel/pi/lib-fdt_ro.pi.o:(__pi_fdt_get_path) in archive arch/arm64/built-in.a
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp
