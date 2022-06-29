@@ -1,116 +1,95 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB2C3237
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 15:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656515705; x=1688051705;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UK+Pk1CTEhwna1MRInrlEyhGNhzeJwTDQKbLxawS+PE=;
-  b=PS7dI2BsnclTkF5zkAEJW+HnLDQI6YTTZvli3jtmtgPRNUQG5KYuqmjT
-   SmDeDFvwl0l2McHL+Cpbzi50HVAdD/+/TVUd27csQLLqLW2H5i+gWSoCb
-   fXubvuqRN8Vi4hUKCC/nGNiFvRl8CR2odJni4OWpxxMD8jLDPSOQtQ9dI
-   9pInQXeQ+ooGHU4TpHvzNpWRNq9XNhHUXpR3f65DUMg5EfO00nJAKEjtX
-   pmko5C6xfntYNTJnfEfdBJetXnhwPYAPq0X8x/hK3vr3gVMs2qlZasTnA
-   XGC0jpG/ZnU0k6YtAhMl0lrpifgfk/u2OEWs/afo/EAzeffGUbQ0oGEgs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368368233"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="368368233"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 08:15:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="917636890"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2022 08:15:03 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6ZPC-000BK6-PY;
-	Wed, 29 Jun 2022 15:15:02 +0000
-Date: Wed, 29 Jun 2022 23:14:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 434/442]
- arch/x86/kvm/mmu/mmu.c:981:21: error: variable 'type' set but not used
-Message-ID: <202206292314.Byr20MEd-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0263D6C
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 16:08:41 +0000 (UTC)
+Received: by mail-ed1-f52.google.com with SMTP id r18so15016306edb.9
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 09:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Os4mayMMpFsaTesvNE1De3rTgq6xRWw/qV7BZPpOtpk=;
+        b=WKBtC/f/OZCaP/FFnlHcOyXMiWjUU7ynF9xFnSGYbWvYA/X2Ax01CmrgO82VoImDvh
+         X6nmUOcLu5gKe4FtBVG+K8vhI82rRrROpHqYLC06NPtTZeImiePzTylR71l1sfllzP/6
+         UQBikD4IORsuI4Y/FcT9ULSZA2hI2EQYkZ0Ac=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Os4mayMMpFsaTesvNE1De3rTgq6xRWw/qV7BZPpOtpk=;
+        b=Mlc5Ntvu6EP5KfPUxkioz8vxxvcihM1of19ZxpRJ4bATZceIYii/FnxJTnk0OTBLNy
+         ZQOoexh+je5vawR5jRdWmclT3ItrKxuc8o/zsRUJTngpRuPTRt48xB+69AjQU8ZUm26v
+         OaSi22X2W/Gce72nP5r/1GmA7f2fB9eN+hYMN9xYWGIn2+6cLjPEdqcVIcozxfBabPr+
+         BbzZtipptmkdUxVTZq4gj2v6cQWNIQDGixtiXgN8pg4oJddCGJ5Z/FHx0YDRGt6fCq5P
+         zBdSD/M6RHNp5HAIwyisk6Q57f3DQtdzXuPTfkmm2dBB+bD5abkR8PcFeNYLx1AsPhoJ
+         uAXA==
+X-Gm-Message-State: AJIora+Vm5xan2N8jUVIBlkOZq9D1AR7NfaqdMpEqdPFKAVhYebF5JlJ
+	fWvuQovrT5aM4xPKxz+tprPhNcRvFAMSfLwX
+X-Google-Smtp-Source: AGRyM1s87cVocbhR+uUxR2zcJKkooKFBQkP3FD7vu0rJWOIZCS7A+y41whK7B0GZTVZfhfxkXL28Kw==
+X-Received: by 2002:a05:6402:448e:b0:435:9926:1acc with SMTP id er14-20020a056402448e00b0043599261accmr5184156edb.179.1656518919336;
+        Wed, 29 Jun 2022 09:08:39 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id pj10-20020a170906d78a00b006fa84a0af2asm7948472ejb.16.2022.06.29.09.08.37
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 09:08:38 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so1384033wmr.0
+        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 09:08:37 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ecc:b0:3a1:68bf:d17a with SMTP id
+ g12-20020a05600c4ecc00b003a168bfd17amr4140154wmq.154.1656518917270; Wed, 29
+ Jun 2022 09:08:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YrLtpixBqWDmZT/V@debian> <CAHk-=wiN1ujyVTgyt1GuZiyWAPfpLwwg-FY1V-J56saMyiA1Lg@mail.gmail.com>
+ <YrMu5bdhkPzkxv/X@dev-arch.thelio-3990X> <CAHk-=wjTS9OJzggD8=tqtj0DoRCKhjjhpYWoB=bPQAv3QMa+eA@mail.gmail.com>
+ <YrNQrPNF/XfriP99@debian> <CAHk-=wjje8UdsQ_mjGVF4Bc_TcjAWRgOps7E_Cytg4xTbXfyig@mail.gmail.com>
+ <CAKwvOdmQKo4tZRLWxK2tTvd+OEtUmKJM7XiijLAF8JWMeUzFMA@mail.gmail.com>
+ <CAKwvOdnfRnqBF8exO-Y1ooX=67TrO_8fSzgZwvUtidN_P31hzw@mail.gmail.com> <20220628224255.w4lmzalkx3qejuyg@treble>
+In-Reply-To: <20220628224255.w4lmzalkx3qejuyg@treble>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 29 Jun 2022 09:08:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
+Message-ID: <CAHk-=wivq+i2-xp3WagixzQMBXaD4etMDmiTp5f-mgsfwOjxtA@mail.gmail.com>
+Subject: Re: mainline build failure due to 281d0c962752 ("fortify: Add Clang support")
+To: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   8af973ebaf30642129fc1ca63f155a469f9615ed
-commit: 2cf2a8208ae24b96f074aac76f0feef63489137d [434/442] KVM: x86/mmu: update lpage_info on changing page_type
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220629/202206292314.Byr20MEd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/2cf2a8208ae24b96f074aac76f0feef63489137d
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 2cf2a8208ae24b96f074aac76f0feef63489137d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Tue, Jun 28, 2022 at 3:43 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> So, something like this:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+No, clang should just be fixed.
 
-All errors (new ones prefixed by >>):
+These UBSAN reports should usually be WARN_ON_ONCE.
 
-   In file included from arch/x86/kvm/mmu/mmu.c:18:
-   In file included from arch/x86/kvm/irq.h:15:
-   In file included from include/linux/kvm_host.h:47:
-   include/linux/memfile_notifier.h:87:57: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   static int memfile_register_notifier(struct file *file, flags,
-                                                           ^
-                                                           int
->> arch/x86/kvm/mmu/mmu.c:981:21: error: variable 'type' set but not used [-Werror,-Wunused-but-set-variable]
-           enum kvm_page_type type;
-                              ^
-   2 errors generated.
+It's all the same issues we've had before: causing a panic will just
+kill the machine, and gets us fewer reports.
 
+Now, UBSAN is something that presumably normal people don't actually
+run on real hardware, so it's probably less of a deal than some. But
+hey, maybe somebody wants to actually run an UBSAN kernel on a real
+load with a full accelerated graphical UI and real drivers: a panic
+may end up killing the kernel, and there you sit, with a dead machine
+and no idea what went wrong.
 
-vim +/type +981 arch/x86/kvm/mmu/mmu.c
+So the whole "panic if UBSAN reports something" is COMPLETE GARBAGE.
+It actually makes the whole point of running UBSAN go away. You *lose*
+coverage.
 
-aa7e272e931503d Xiaoyao Li     2021-08-31  976  
-dbe93493d574730 Xiaoyao Li     2022-05-25  977  static void split_page_type(gfn_t gfn, struct kvm_memory_slot *slot,
-dbe93493d574730 Xiaoyao Li     2022-05-25  978  			    enum pg_level level)
-aa7e272e931503d Xiaoyao Li     2021-08-31  979  {
-aa7e272e931503d Xiaoyao Li     2021-08-31  980  	struct kvm_page_attr *page_attr = page_attr_slot(gfn, slot, level);
-aa7e272e931503d Xiaoyao Li     2021-08-31 @981  	enum kvm_page_type type;
-aa7e272e931503d Xiaoyao Li     2021-08-31  982  	gfn_t base_gfn;
-aa7e272e931503d Xiaoyao Li     2021-08-31  983  
-aa7e272e931503d Xiaoyao Li     2021-08-31  984  	if (WARN_ON_ONCE(!kvm_page_type_valid(page_attr) || level <= PG_LEVEL_4K))
-aa7e272e931503d Xiaoyao Li     2021-08-31  985  		return;
-aa7e272e931503d Xiaoyao Li     2021-08-31  986  
-aa7e272e931503d Xiaoyao Li     2021-08-31  987  	base_gfn = gfn & ~(KVM_PAGES_PER_HPAGE(level) - 1);
-aa7e272e931503d Xiaoyao Li     2021-08-31  988  	type = page_attr->type;
-dbe93493d574730 Xiaoyao Li     2022-05-25  989  
-aa7e272e931503d Xiaoyao Li     2021-08-31  990  	/*
-aa7e272e931503d Xiaoyao Li     2021-08-31  991  	 * Set the type to KVM_PAGE_TYPE_MIXED in advance since when a large
-aa7e272e931503d Xiaoyao Li     2021-08-31  992  	 * page needs to be split means one of the 4K page of it needs to be
-aa7e272e931503d Xiaoyao Li     2021-08-31  993  	 * changed to oppsite type
-aa7e272e931503d Xiaoyao Li     2021-08-31  994  	 */
-2cf2a8208ae24b9 Isaku Yamahata 2022-06-02  995  	page_type_set(page_attr, KVM_PAGE_TYPE_MIXED, base_gfn, slot, level);
-aa7e272e931503d Xiaoyao Li     2021-08-31  996  }
-aa7e272e931503d Xiaoyao Li     2021-08-31  997  
+So please don't make the kernel worse because clang got something like
+this wrong.
 
-:::::: The code at line 981 was first introduced by commit
-:::::: aa7e272e931503dda524bd4f15d098a0d4ac28d7 KVM: MMU: Update page_attr->type when guest converts the page
+Just fix clang.
 
-:::::: TO: Xiaoyao Li <xiaoyao.li@intel.com>
-:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
+And fix your mindset.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+                  Linus
