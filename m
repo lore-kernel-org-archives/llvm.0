@@ -1,132 +1,185 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4D16AB4
-	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 19:48:44 +0000 (UTC)
-Received: by mail-lf1-f53.google.com with SMTP id j21so29913337lfe.1
-        for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 12:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GDpRTVhKkWSy2MvVKUZ3Z3z1Bt+bBeXV0KIHaszmkuA=;
-        b=g3Uaclg64d1TGHzQcBfl7t9w3I1ww5YYtVkypt3S0N5+TmABgMDxTUWvOXt+9mE0Le
-         is4FHdD4ZkcI9SN/SIcqtii+qeRjvjZe6VAIbiqCVXchroWHh2LwaXMpwGCocA1tbv0B
-         hjr7V6fjm/b+USYataYNnwfHfWPE0kQxbi15bDZMZ58npPO/z1/6UndlovS7hWHSG67i
-         cQLWaO3ZHi2zkaIKnEUd44KY6MliZhLMN928/SwMz5yzbgz3jszpOfA90ilDArEe1HUI
-         8r3NhHwX5cnxRMZvHR8E+HsLScWoSk0y+DodSdeK7w7KCcyrnAph846jsrTCUnHseGvh
-         4nMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GDpRTVhKkWSy2MvVKUZ3Z3z1Bt+bBeXV0KIHaszmkuA=;
-        b=7FyeDfqW17SgDVbEG8EQ8GtXPP0TGDMSzcL/Es572L+RywXEYWqdrWr/B0o2DSEOpc
-         7tGfDmx+RrdH1YeXj035tMuXa4SjKn92fCqeFZRO3KoueBRv8u3V3Az9vxXwfgjtGG8h
-         wYzJrtR3/swo47Ng5iOo+B68JNHL+xIe5rE8XF7q/NtBTGjiYYjREo+qleZN4Iqa4Wl6
-         fKc7QOk8j5gsGvfQ7DfvTelDh/eN7PUklJcfNuzLpi6cPA4Uk96c07dJ2INkM9Zj/bqs
-         atPE2/BhfLeE9YY6p+WMBKQTGUknz4N6CZD3gQPQc2oOfNqdbOH8oaBa8F40RPlNMBD1
-         QuNw==
-X-Gm-Message-State: AJIora/rjhNdX+B74nH8D6F7vTIHjwpA3dM5P/FTsI91z4vNaJlET6/n
-	Quk0JouO7c2v3TWiwqIU5DLQ3EAuC6uy5q1P85yi
-X-Google-Smtp-Source: AGRyM1vOzYL8y+rYaHubXte6XVU+zHTAwaKw4l5hfw2LEvmAQQHulkepcxbBzAjO3GZRm1rXAwzmuBMIM7rYOPMx+fg=
-X-Received: by 2002:a05:6512:3503:b0:481:4470:4128 with SMTP id
- h3-20020a056512350300b0048144704128mr2025991lfs.303.1656532122803; Wed, 29
- Jun 2022 12:48:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAA56AB4
+	for <llvm@lists.linux.dev>; Wed, 29 Jun 2022 20:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69938C34114;
+	Wed, 29 Jun 2022 20:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1656533412;
+	bh=lJWsVrDNk1KsypoK6LDHs1HKY6OBI6806PEcTBF+j4Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KjbdLuk+9+LJj9qj01bEsxCf7mWWwMUZycPpSpVWZETvgiNP4xw3XkPQy+o6hgjCa
+	 6XHpTlygi1k+FLOuQDP1lWrJMU1fvz/jTVE8uPY5/8H6Hu2m/i72pGEQ1cOq6/VRZm
+	 2csvOiHupPFTGPJ5Qt6sSUUs7qMqQZ5N33iWOoxzqPzuyeGsal+sp+v3bKyw59e8y4
+	 mnfTgrdLDfj93xyI6qWPl+eHp6tDO5mq9CbjGWpbVx8qKkBkHAnfJuISWr+14q0ED5
+	 JR0Tm1Wfmm324DWkDk3/Sfe1iNtH+FHIwoHwhNu5kik7kCDip/P0XOxC7Kfcts3QHp
+	 W6hag6Fg1tdtw==
+Date: Wed, 29 Jun 2022 13:10:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	Will Deacon <will@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 1/2] arm64: vdso32: add ARM.exidx* sections
+Message-ID: <YryxouOYOJLM+DDK@dev-arch.thelio-3990X>
+References: <20220628151307.35561-1-joey.gouly@arm.com>
+ <20220628151307.35561-2-joey.gouly@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
- <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
- <87mtf7z0rt.fsf@gnu.org> <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
- <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
- <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> <878rpgpvfj.fsf@gnu.org>
-In-Reply-To: <878rpgpvfj.fsf@gnu.org>
-From: Bill Wendling <morbo@google.com>
-Date: Wed, 29 Jun 2022 12:48:31 -0700
-Message-ID: <CAGG=3QVNid_s5QFCtPF1hVChsm89hax=KuHTt8Z=huP+CV_edQ@mail.gmail.com>
-Subject: Re: plumbers session on profiling?
-To: "Jose E. Marchesi" <jemarch@gnu.org>
-Cc: Ruud van der Pas <ruud.vanderpas@oracle.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, 
-	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>, Wenlei He <wenlei@fb.com>, 
-	Hongtao Yu <hoy@fb.com>, Ingo Molnar <mingo@kernel.org>, 
-	linux-toolchains <linux-toolchains@vger.kernel.org>, elena.zannoni@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628151307.35561-2-joey.gouly@arm.com>
 
-I have experience in this area with our internal production kernel.
+Hi Joey,
 
--bw
+On Tue, Jun 28, 2022 at 04:13:06PM +0100, Joey Gouly wrote:
+> These show up when building with clang+lld.
+> 
+> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/arm64/kernel/vdso32/vdso.lds.S | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
+> index 120cf422036f..e2f8ced571d6 100644
+> --- a/arch/arm64/kernel/vdso32/vdso.lds.S
+> +++ b/arch/arm64/kernel/vdso32/vdso.lds.S
+> @@ -60,6 +60,7 @@ SECTIONS
+>  	}
+>  
+>  	ELF_DETAILS
+> +	.ARM.exidx : { *(.ARM.exidx*) }
+>  	.ARM.attributes 0 : { *(.ARM.attributes) }
+>  
+>  	/DISCARD/	: {
+> -- 
+> 2.17.1
+> 
 
-On Wed, Jun 29, 2022 at 2:00 AM Jose E. Marchesi <jemarch@gnu.org> wrote:
->
->
-> [Added linux-toolchains@vger in CC]
->
-> It would be interesting to have some discussion in the Toolchains track
-> on building the kernel with PGO/FDO.  I have seen a raise on interest on
-> the topic in several companies, but it would make very little sense if
-> no kernel hacker is interested in participating... anybody?
->
-> > Hi Nick,
-> >
-> > Apologies for the delay. It's been a busy week with gprofng related work.
-> >
-> >> If you're still considering attending Linux Plumbers conf, please
-> >> submit a proposal:
-> >> https://lpc.events/event/16/abstracts/
-> >> Please make sure to select "Toolchains Track" as the "Track" after
-> >> clicking on "Submit new abstract."
-> >
-> > Thanks for asking!
-> >
-> > Our presence largely depends on a discussion on kernel profiling and
-> > to see what we might be able to do with gprofng regarding this.
-> >
-> >>From our side, the main person will be Vladimir. He knows the code
-> > inside and out, but I will also try to attend such a session.
-> >
-> > Is there any news regarding such a session on kernel profiling?
-> >
-> > Kind regards, Ruud
-> >
-> >>
-> >>>
-> >>> Kind regards, Ruud
-> >>>
-> >>>> On 24 May 2022, at 12:24, Jose E. Marchesi <jemarch@gnu.org> wrote:
-> >>>>
-> >>>>
-> >>>> I am adding Ruud van der Pas in CC. He works in gprofng and would be
-> >>>> willing to participate in a discussion on kernel profiling.
-> >>>>
-> >>>>> (Re-sending with Vladamir's email addr fixed; sorry for the noise)
-> >>>>>
-> >>>>> On Fri, Apr 15, 2022 at 10:54 AM Nick Desaulniers
-> >>>>> <ndesaulniers@google.com> wrote:
-> >>>>>>
-> >>>>>> Hi Sami, Bill, Jose, and Vladamir,
-> >>>>>> Jose and I are currently in the planning process to put together a
-> >>>>>> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> >>>>>> this year (Sept 12-14) in Dublin, Ireland.
-> >>>>>>
-> >>>>>> Would you all be interested in leading a session discussing various
-> >>>>>> profiling related topics such as:
-> >>>>>> * gprofng
-> >>>>>> * PGO
-> >>>>>> * AutoFDO
-> >>>>>>
-> >>>>>> Would others find such a discussion useful?
-> >>>>>> --
-> >>>>>> Thanks,
-> >>>>>> ~Nick Desaulniers
-> >>>
-> >>
-> >>
-> >> --
-> >> Thanks,
-> >> ~Nick Desaulniers
+This patch is now in -next as commit 5c4fb60816ea ("arm64: vdso32: add
+ARM.exidx* sections"), which causes the following errors with ld.lld 11:
+
+  ld.lld: error: could not allocate headers
+  ld.lld: error: unable to place section .text at file offset [0x2A0, 0xBB1]; check your linker script for overflows
+  ld.lld: error: unable to place section .comment at file offset [0xBB2, 0xC8A]; check your linker script for overflows
+  ld.lld: error: unable to place section .symtab at file offset [0xC8C, 0xE0B]; check your linker script for overflows
+  ld.lld: error: unable to place section .strtab at file offset [0xE0C, 0xF1C]; check your linker script for overflows
+  ld.lld: error: unable to place section .shstrtab at file offset [0xF1D, 0xFAA]; check your linker script for overflows
+  ld.lld: error: section .ARM.exidx file range overlaps with .hash
+  >>> .ARM.exidx range is [0x90, 0xCF]
+  >>> .hash range is [0xB4, 0xE3]
+
+  ld.lld: error: section .hash file range overlaps with .ARM.attributes
+  >>> .hash range is [0xB4, 0xE3]
+  >>> .ARM.attributes range is [0xD0, 0x10B]
+
+  ld.lld: error: section .ARM.attributes file range overlaps with .dynsym
+  >>> .ARM.attributes range is [0xD0, 0x10B]
+  >>> .dynsym range is [0xE4, 0x133]
+
+  ld.lld: error: section .ARM.exidx virtual address range overlaps with .hash
+  >>> .ARM.exidx range is [0x90, 0xCF]
+  >>> .hash range is [0xB4, 0xE3]
+
+  ld.lld: error: section .ARM.exidx load address range overlaps with .hash
+  >>> .ARM.exidx range is [0x90, 0xCF]
+  >>> .hash range is [0xB4, 0xE3]
+
+I bisected LLVM to see what fixed this in ld.lld 12 and I landed on
+commit ec29538af2e0 ("[ELF] Assign file offsets of non-SHF_ALLOC after
+SHF_ALLOC and set sh_addr=0 to non-SHF_ALLOC") [1].
+
+We could bump the minimum version of LLVM to 12 over this but the
+following diff appears to resolve it for me, although I am not sure as
+to why.
+
+diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
+index 6e67a6524d58..c25bed8e6df1 100644
+--- a/arch/arm64/kernel/vdso32/vdso.lds.S
++++ b/arch/arm64/kernel/vdso32/vdso.lds.S
+@@ -56,8 +56,8 @@ SECTIONS
+ 
+ 	.rel.dyn	: { *(.rel*) }
+ 
+-	ELF_DETAILS
+ 	.ARM.exidx : { *(.ARM.exidx*) }
++	ELF_DETAILS
+ 	.ARM.attributes 0 : { *(.ARM.attributes) }
+ 
+ 	/DISCARD/	: {
+
+I just noticed that the .ARM.exidx section (ARM_UNWIND_SECTIONS)
+is placed before the sections the error mentions (ARM_DETAILS) in
+arch/arm/kernel/vmlinux.lds.S, where we do not see any errors with LLVM
+11. Looking at the section headers, it seems like it should be okay?
+
+With LLVM 15 (current git) at 4274929c7ee6f442:
+
+  arch/arm64/kernel/vdso32/vdso.so:        file format elf32-littlearm
+
+  Sections:
+  Idx Name            Size     VMA      Type
+    0                 00000000 00000000
+    1 .hash           00000030 000000b4
+    2 .dynsym         00000050 000000e4
+    3 .dynstr         0000006f 00000134
+    4 .gnu.version    0000000a 000001a4
+    5 .gnu.version_d  00000038 000001b0
+    6 .note           00000054 000001e8
+    7 .dynamic        00000058 0000023c
+    8 .text           0000092a 00000294 TEXT
+    9 .shstrtab       0000006d 00000000
+   10 .ARM.exidx      00000040 00000bc0
+   11 .ARM.attributes 0000003c 00000000
+
+With LLVM 11 at 4274929c7ee6f442 + above diff:
+
+  arch/arm64/kernel/vdso32/vdso.so:        file format elf32-littlearm
+
+  Sections:
+  Idx Name            Size     VMA      Type
+    0                 00000000 00000000
+    1 .hash           00000030 000000b4
+    2 .dynsym         00000050 000000e4
+    3 .dynstr         0000006f 00000134
+    4 .gnu.version    0000000a 000001a4
+    5 .gnu.version_d  00000038 000001b0
+    6 .note           00000054 000001e8
+    7 .dynamic        00000058 0000023c
+    8 .rodata         00000000 000002a0 TEXT
+    9 .text           00000912 000002a0 TEXT
+   10 .ARM.exidx      00000040 00000bb4
+   11 .shstrtab       00000075 00000000
+   12 .ARM.attributes 0000003c 00000000
+
+With LLVM 15 at 4274929c7ee6f442 + above diff:
+
+  arch/arm64/kernel/vdso32/vdso.so:        file format elf32-littlearm
+
+  Sections:
+  Idx Name            Size     VMA      Type
+    0                 00000000 00000000
+    1 .hash           00000030 000000b4
+    2 .dynsym         00000050 000000e4
+    3 .dynstr         0000006f 00000134
+    4 .gnu.version    0000000a 000001a4
+    5 .gnu.version_d  00000038 000001b0
+    6 .note           00000054 000001e8
+    7 .dynamic        00000058 0000023c
+    8 .rodata         00000000 000002a0 TEXT
+    9 .text           00000912 000002a0 TEXT
+   10 .ARM.exidx      00000040 00000bb4
+   11 .shstrtab       00000075 00000000
+   12 .ARM.attributes 0000003c 00000000
+
+[1]: https://github.com/llvm/llvm-project/commit/ec29538af2e0886a65f479d6a533956a1c478132
+
+Cheers,
+Nathan
