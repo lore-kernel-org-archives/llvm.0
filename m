@@ -1,119 +1,158 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31136D19
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:19:54 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id r3so34668459ybr.6
-        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 09:19:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1267B;
+	Thu, 30 Jun 2022 16:35:35 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id l68so6660147wml.3;
+        Thu, 30 Jun 2022 09:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=siGKi/dIfvfe8+iskQhGtDTJS7NXa0bDAndCilNFqRU=;
-        b=PY172wygPNzbXx/MtlL0kVYhRqHP/PMSgMPKfMe5d3bzaiPOFgDA24BfmJk1n+zPMX
-         fc/bD2b+O9jTkZx6hTCu9mc5JivMe1meY8jOCRsG//k9b88HjGzDX8h8Y69vjuHcXDCy
-         xOoQL6P5l7QZgCNx+04KtnwvzbIl2DoRn3J24x5aHkRHyB1J6Dz3f/03FXjJ2oV40NI3
-         h+LLWTCGpXw7DUWpa9ZIxtFe99Y48TMHMZfWnjuIh7rvMkm1AdEkL4gjOPQE4a0SFeZd
-         i5/7o/AYKlRkjlV+w7+lMcU1gD2PdeXYLEPIxdLD1dPp9eAwQRuekkzRPpPNu8Pt+g4m
-         Fj/w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lZIrTmlOnvUkLrFbSOhPtwGibISpt/RODIchaEd1CDY=;
+        b=gvOxH2z87z7QsFkRgTQuNhQyyz+dHV1+8rh1sM7GpDupM74IOa6Ym2zyVx4Y0mEnkA
+         xFy3h+4BLgQAGQb7kHWwxfMcgIUz4Tef84LuOZORClSobvlsqYZZA4JRBDfKNY3iS9A8
+         W3vDemOPYtYp6bt4LA+muwinmH5c50oo9YbK3ghNa7sz/mzg54ZgVTtrFKX2Cgzw+P3N
+         ELSRjvVF4ivQ1YmTMe+MNMmYKoyNYpV+LtXu6h2BXUafKGQrVOGF0X6LVvrsdTzc/XfD
+         EcDDOVPqA+9w2kvc7GCTWMKYCQjY0KUvF3eMQA1meIaibaLIqLPbyUm6YJoKiAbmsj+a
+         uGnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=siGKi/dIfvfe8+iskQhGtDTJS7NXa0bDAndCilNFqRU=;
-        b=zJKzl1H+QJ1GAY0HZHO1olaoXj63Dh2I9ppgCQBN0jiHYN3It3LOkiz0lrUqbMoJZC
-         ph5odZG9Hqcbv/+WZM9Dx5PmoqpRewUwRkXGpUn66y2RQInBViPafkx8xIPtKp3gLKeS
-         CQH/3yeaDJHT0TMk2DU2kydsddER2XsZstbLLY8mTsymaAhV2kr1iIaCz4mP26bp7ZrF
-         HjuUnBVa86JhUKzdcSu14bQ0ixMNjlnHU8ZaMADP/Ku2t6fn4nxGYZnvX80jOpzd/CeZ
-         x81iNNc9hBxpKQS+znF8MqI6jMRqmEoqMwYHU4e3qJxJplNnkSy4xh6HNsBz9lZFUsQs
-         X8kA==
-X-Gm-Message-State: AJIora8M6Hn0sZdAND2oz7Y8zGpM3jXnZembG93/b6KWFONOPaJxNcJG
-	nS7jv0p/4ay+d+kXnwz83TzsjujZNTabQM5GYv229Q==
-X-Google-Smtp-Source: AGRyM1u8XSsovv5uNzas0O9wEpepGNCy07fQqznwcLEuYGbRz6VCy/lpNKM9Tcq6oR2CJ4QgsTgK4lCOy2Z0yZIqcoU=
-X-Received: by 2002:a25:c646:0:b0:669:b341:a595 with SMTP id
- k67-20020a25c646000000b00669b341a595mr10978550ybf.304.1656605993493; Thu, 30
- Jun 2022 09:19:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lZIrTmlOnvUkLrFbSOhPtwGibISpt/RODIchaEd1CDY=;
+        b=W2jsSNnaYrLwpbKkLNqdtIJ/60IEKxIa64JCsfIbRcdE0xySu0gK+9zk3d11scG9Yg
+         aHqXorx5i/PTfcWANKkCVWoYQsuE/CUWpvxoO7MkuYrRxOsJTugiM4LEBSS0vXm+8oQR
+         QukFmvgDE/aH96kVh+9c25tivstLE9+tjfmiEl2oGx4tG/Uf0Gdbdrk6Q+nk04deFxXE
+         at47ywlb4dw3j21urQWF7m9r45XWkNTJBN1gwQ1qAiLB7eiNoj3NhHgq6x34ziJ6Nq39
+         BJuMGzGHT02s0WUWdszkDqn+Tf5Xky5nmYL6xd56ZM4f6FwEwz72n/IkOq0VghbRPjLM
+         +cQA==
+X-Gm-Message-State: AJIora+Lj42/DZGfM1op+MCbd+wvn3gbSTVP1CcPdOlC1/unGX4SAGLf
+	vqx7muzU93ax17EWTVj1cFo=
+X-Google-Smtp-Source: AGRyM1sQNe4+WIPmqW10XET/JjOyzodgMYKlJLfdcugPO9fE6FCvfEevPFPhlgS/sBSR469fLSNDFQ==
+X-Received: by 2002:a1c:4b11:0:b0:3a0:4270:fcfa with SMTP id y17-20020a1c4b11000000b003a04270fcfamr12974836wma.53.1656606933805;
+        Thu, 30 Jun 2022 09:35:33 -0700 (PDT)
+Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05600c210300b003a044fe7fe7sm7112303wml.9.2022.06.30.09.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 09:35:32 -0700 (PDT)
+From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To: Benjamin LaHaise <bcrl@kvack.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-aio@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	nvdimm@lists.linux.dev,
+	io-uring@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs: Replace kmap{,_atomic}() with kmap_local_page()
+Date: Thu, 30 Jun 2022 18:35:27 +0200
+Message-Id: <20220630163527.9776-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220630094646.91837-1-haibo.li@mediatek.com> <20220630094646.91837-2-haibo.li@mediatek.com>
-In-Reply-To: <20220630094646.91837-2-haibo.li@mediatek.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 30 Jun 2022 09:19:17 -0700
-Message-ID: <CABCJKucgdTqDFyTumSCBHiyRVWgvJEhR2Fn=MxyMpTjWtvCV=Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ANDROID: cfi: enable sanitize for cfi.c
-To: Haibo Li <haibo.li@mediatek.com>
-Cc: xiaoming.yu@mediatek.com, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Aaron Tomlin <atomlin@redhat.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, LKML <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, 
-	Lecopzer Chen <lecopzer.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 30, 2022 at 2:47 AM Haibo Li <haibo.li@mediatek.com> wrote:
->
-> currenly,cfi.c is excluded from cfi sanitize because of cfi handler.
-> The side effect is that we can not transfer function pointer to
-> other files which enable cfi sanitize.
->
-> Enable cfi sanitize for cfi.c and bypass cfi check for __cfi_slowpath_diag
->
-> Signed-off-by: Haibo Li <haibo.li@mediatek.com>
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-> ---
->  kernel/Makefile | 3 ---
->  kernel/cfi.c    | 8 +++++++-
->  2 files changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index a7e1f49ab2b3..a997bef1a200 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -40,9 +40,6 @@ KCSAN_SANITIZE_kcov.o := n
->  UBSAN_SANITIZE_kcov.o := n
->  CFLAGS_kcov.o := $(call cc-option, -fno-conserve-stack) -fno-stack-protector
->
-> -# Don't instrument error handlers
-> -CFLAGS_REMOVE_cfi.o := $(CC_FLAGS_CFI)
-> -
->  obj-y += sched/
->  obj-y += locking/
->  obj-y += power/
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08102d19ec15..456771c8e454 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -311,7 +311,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
->         return fn;
->  }
->
-> -void __cfi_slowpath_diag(uint64_t id, void *ptr, void *diag)
-> +static inline void __nocfi _run_cfi_check(u64 id, void *ptr, void *diag)
->  {
->         cfi_check_fn fn = find_check_fn((unsigned long)ptr);
->
-> @@ -320,6 +320,12 @@ void __cfi_slowpath_diag(uint64_t id, void *ptr, void *diag)
->         else /* Don't allow unchecked modules */
->                 handle_cfi_failure(ptr);
->  }
-> +
-> +void __cfi_slowpath_diag(u64 id, void *ptr, void *diag)
-> +{
-> +       /*run cfi check without cfi sanitize to avoid calling cfi handler recursively*/
-> +       _run_cfi_check(id, ptr, diag);
-> +}
->  EXPORT_SYMBOL(__cfi_slowpath_diag);
+The use of kmap() and kmap_atomic() are being deprecated in favor of
+kmap_local_page().
 
-You can just add __nocfi to __cfi_slowpath_diag, right? There's no
-need for the separate function.
+With kmap_local_page(), the mappings are per thread, CPU local and not
+globally visible. Furthermore, the mappings can be acquired from any
+context (including interrupts).
 
-Sami
+Therefore, use kmap_local_page() in exec.c because these mappings are per
+thread, CPU local, and not globally visible.
+
+Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
+HIGHMEM64GB enabled.
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/exec.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 0989fb8472a1..4a2129c0d422 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -583,11 +583,11 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
+ 
+ 				if (kmapped_page) {
+ 					flush_dcache_page(kmapped_page);
+-					kunmap(kmapped_page);
++					kunmap_local(kaddr);
+ 					put_arg_page(kmapped_page);
+ 				}
+ 				kmapped_page = page;
+-				kaddr = kmap(kmapped_page);
++				kaddr = kmap_local_page(kmapped_page);
+ 				kpos = pos & PAGE_MASK;
+ 				flush_arg_page(bprm, kpos, kmapped_page);
+ 			}
+@@ -601,7 +601,7 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
+ out:
+ 	if (kmapped_page) {
+ 		flush_dcache_page(kmapped_page);
+-		kunmap(kmapped_page);
++		kunmap_local(kaddr);
+ 		put_arg_page(kmapped_page);
+ 	}
+ 	return ret;
+@@ -883,11 +883,11 @@ int transfer_args_to_stack(struct linux_binprm *bprm,
+ 
+ 	for (index = MAX_ARG_PAGES - 1; index >= stop; index--) {
+ 		unsigned int offset = index == stop ? bprm->p & ~PAGE_MASK : 0;
+-		char *src = kmap(bprm->page[index]) + offset;
++		char *src = kmap_local_page(bprm->page[index]) + offset;
+ 		sp -= PAGE_SIZE - offset;
+ 		if (copy_to_user((void *) sp, src, PAGE_SIZE - offset) != 0)
+ 			ret = -EFAULT;
+-		kunmap(bprm->page[index]);
++		kunmap_local(src);
+ 		if (ret)
+ 			goto out;
+ 	}
+@@ -1680,13 +1680,13 @@ int remove_arg_zero(struct linux_binprm *bprm)
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+-		kaddr = kmap_atomic(page);
++		kaddr = kmap_local_page(page);
+ 
+ 		for (; offset < PAGE_SIZE && kaddr[offset];
+ 				offset++, bprm->p++)
+ 			;
+ 
+-		kunmap_atomic(kaddr);
++		kunmap_local(kaddr);
+ 		put_arg_page(page);
+ 	} while (offset == PAGE_SIZE);
+ 
+-- 
+2.36.1
+
