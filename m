@@ -1,164 +1,67 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57A9EBB
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 09:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656580095; x=1688116095;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=YpJeVoBUt7DQ3iJVmz9iDFIwyu5EIFlIt/UXeUIAKyk=;
-  b=GTH4LdgMMHc9O5yFEFiHiwnLN+7ig89BexhUoovODtVvPGeoBHZ2AGy4
-   eyBVTHrlwjZsl7N+5yie4f2qyqhhuITWFntGXI+TdMyqN8/TowU/OcTDp
-   WuUPWLlVPPsjHwZ1w7Rkrre8V7PaLITYLznAvapRr/Cqb3GAFONAddi9w
-   a+MskbNQTeOQ483wRebuLPelc5OjCNn5rwnd/NzvD6DTA1gkwVzeBU+T4
-   /UF1CxStBGiY/RzEtNkDAd3E4wsZseAYkCaSZwJRoTFAwL4ypmL+UD4m/
-   Ts2F3iasWKzopGxLAwS57DJ4UJsJRLB0RC8y2gQwpFVukgVqmtIAwox2+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="368609831"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="368609831"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 02:08:15 -0700
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="647808130"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.61]) ([10.255.28.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 02:08:13 -0700
-Subject: Re: [kbuild-all] Re: drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning:
- unused function 'set_test_mode_src_osc_freq_target_low_bits'
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- Anitha Chrisanthus <anitha.chrisanthus@intel.com>
-References: <202206300147.qdDDrtfw-lkp@intel.com>
- <CAMuHMdXA5fNgGxoYfb=9GNxYtXyVn-ENH8u5gXkKcVufhnciXQ@mail.gmail.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <8e9e1143-f2ea-3a56-71b0-e34105bc1d01@intel.com>
-Date: Thu, 30 Jun 2022 17:08:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB6AEBB
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 09:41:25 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1o6qfO-0006FH-Vp; Thu, 30 Jun 2022 11:40:55 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1o6qfH-003Z1L-B7; Thu, 30 Jun 2022 11:40:50 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1o6qfJ-0003vf-W9; Thu, 30 Jun 2022 11:40:50 +0200
+Message-ID: <c22c3421942b5d2a74694c1d5530c0dd5fdc34b3.camel@pengutronix.de>
+Subject: Re: [PATCH v24 01/10] dt-bindings: reset: mt8195: add vdosys1 reset
+ control bit
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, Chun-Kuang Hu
+ <chunkuang.hu@kernel.org>, wim@linux-watchdog.org,  AngeloGioacchino Del
+ Regno <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>, Yongqiang Niu
+ <yongqiang.niu@mediatek.com>,  devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org,  dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+Date: Thu, 30 Jun 2022 11:40:49 +0200
+In-Reply-To: <20220622130824.29143-2-nancy.lin@mediatek.com>
+References: <20220622130824.29143-1-nancy.lin@mediatek.com>
+	 <20220622130824.29143-2-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.38.3-1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXA5fNgGxoYfb=9GNxYtXyVn-ENH8u5gXkKcVufhnciXQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
+On Mi, 2022-06-22 at 21:08 +0800, Nancy.Lin wrote:
+> Add vdosys1 reset control bit for MT8195 platform.
+>=20
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabor=
+a.com>
 
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-On 6/30/2022 2:03 AM, Geert Uytterhoeven wrote:
-> Hi Kernel Test Robot,
-> 
-> On Wed, Jun 29, 2022 at 7:57 PM kernel test robot <lkp@intel.com> wrote:
->> First bad commit (maybe != root cause):
-> 
-> Definitely not introduced by my patch.
-> Looks like these functions were never used at all.
-
-Hi Geert,
-
-Sorry for the inconvenience, we'll add the commit to ignore list.
-
-Best Regards,
-Rong Chen
-
-> 
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   d9b2ba67917c18822c6a09af41c32fa161f1606b
->> commit: ade896460e4a62f5e4a892a98d254937f6f5b64c drm: DRM_KMB_DISPLAY should depend on ARCH_KEEMBAY
->> date:   1 year, 8 months ago
->> config: mips-randconfig-r016-20220629 (https://download.01.org/0day-ci/archive/20220630/202206300147.qdDDrtfw-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install mips cross compiling tool for clang build
->>          # apt-get install binutils-mipsel-linux-gnu
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ade896460e4a62f5e4a892a98d254937f6f5b64c
->>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>          git fetch --no-tags linus master
->>          git checkout ade896460e4a62f5e4a892a98d254937f6f5b64c
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/kmb/ drivers/net/ethernet/mellanox/mlxsw/ drivers/scsi/ufs/ drivers/staging/ fs/xfs/
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/gpu/drm/kmb/kmb_dsi.c:812:2: warning: unused function 'set_test_mode_src_osc_freq_target_low_bits'
->>     set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi
->>     ^
->>>> drivers/gpu/drm/kmb/kmb_dsi.c:824:2: warning: unused function 'set_test_mode_src_osc_freq_target_hi_bits'
->>     set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi
->>     ^
->>     fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif'
->>     clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
->>     clang version 15.0.0 (git://gitmirror/llvm_project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
->>     Target: mipsel-unknown-linux
->>     Thread model: posix
->>     InstalledDir: /opt/cross/clang-a774ba7f60/bin
->>     clang-15: note: diagnostic msg:
->>     Makefile arch drivers fs include kernel mm nr_bisected scripts source usr
->>
->>
->> vim +/set_test_mode_src_osc_freq_target_low_bits +812 drivers/gpu/drm/kmb/kmb_dsi.c
->>
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  810
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  811  static inline void
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @812       set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  813                                                  u32 dphy_no,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  814                                                  u32 freq)
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  815  {
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  816       /* Typical rise/fall time=166, refer Table 1207 databook,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  817        * sr_osc_freq_target[7:0]
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  818        */
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  819       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  820                      (freq & 0x7f));
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  821  }
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  822
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  823  static inline void
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04 @824       set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  825                                                 u32 dphy_no,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  826                                                 u32 freq)
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  827  {
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  828       u32 data;
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  829
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  830       /* Flag this as high nibble */
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  831       data = ((freq >> 6) & 0x1f) | (1 << 7);
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  832
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  833       /* Typical rise/fall time=166, refer Table 1207 databook,
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  834        * sr_osc_freq_target[11:7]
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  835        */
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  836       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, data);
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  837  }
->> 98521f4d4b4cb2 Anitha Chrisanthus 2020-11-04  838
->>
->> :::::: The code at line 812 was first introduced by commit
->> :::::: 98521f4d4b4cb265374a4b1e13b41287a1960243 drm/kmb: Mipi DSI part of the display driver
->>
->> :::::: TO: Anitha Chrisanthus <anitha.chrisanthus@intel.com>
->> :::::: CC: Sam Ravnborg <sam@ravnborg.org>
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+regards
+Philipp
