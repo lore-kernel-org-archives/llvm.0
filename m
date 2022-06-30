@@ -1,131 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AABC6D19
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF8FC34115;
-	Thu, 30 Jun 2022 16:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656604986;
-	bh=DQKte8QS+TVqPnOnSBE/VfWDC3wbJgvjDUj/KcleL74=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KZ2x2AkSgcdOGnR5SqaKGb2DdjHEmSuK1nsLYmAxHBKR4kX5zcYlQ5EtZZWjRiTfT
-	 Q4nPBSiL8jPEWj0Kqs54KguUCn8BwYIDFBjtg/qfDlJzjz+5f+P1IcVf9ULqg3i+3v
-	 vcJ29ejaNokYfpgHlB4HT1FXAz43taLKxUKwKMiaL+ulnMK8l313PwSV0Ia28Zux00
-	 VXtrcTGThBVTkOCzX+fDxzafKgGB8FGp47dJTTEEIB8117adnvffMAyccqT+1i7GZg
-	 LPxuDxgBwDGIuBSDv0HVtH/5G1kji0Wi3FYbaKLGbz8gBsYXG/V3VrbMx1yZRfKftc
-	 GAS4p/pv9Jm6Q==
-Date: Thu, 30 Jun 2022 09:03:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] lib/test_printf.c: fix clang -Wformat warnings
-Message-ID: <Yr3JN/mMn4K+7WnR@dev-arch.thelio-3990X>
-References: <20220629235326.480858-1-justinstitt@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB1C6D19
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:17:31 +0000 (UTC)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2ef5380669cso184122457b3.9
+        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 09:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+tJf/17a3GQ00Kn5C7fSPbfS+nGvxRvX74INNcvd7FM=;
+        b=V3IQdTjwGtjHq/wY732Ok5nzPOJUJqa005Rjh4xsvyjkOvxBhqe9k6+vrZGL/tcswq
+         47DBJDjy1pOYDTaYRu5k7So0tFRo9qf8mXCvatq9gaoBf1DfxkRKsX5tf624n1A1J5WZ
+         23IEz9yDN2Y/rJ+PWcc8WSpdQ78EJGf0hq4xxvWzUL/F30sfLXWEwn+HtiiyFfUjveIj
+         MP4bYCJgaRY+wnD7da1+nEh6j6LLAvYE83G3gNqaoAIoxf+pBcAmnHAkw1DHEBHRFon+
+         FM9Wb4svFi8uTslDwmzkHDu41Z74gJ+iVOd2a9U2wskWBSIIlgZuSzeZDm9dnV3BuQXN
+         xpBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+tJf/17a3GQ00Kn5C7fSPbfS+nGvxRvX74INNcvd7FM=;
+        b=SlFmd5eHt0g4dNFDj4b3VnhoHSQXRuha84Ge44CjuxhCxzo6QKTUVex/pkUQFjhYv5
+         lWar3sLZAMNGNLnevIWa34Ylgf/Lb6NlCZPf2p9O484Gr+R0+jeROZZbVZKP15+8pIf9
+         wiT5H1iRVsuc12gaNmq40GP6cj5TavlFz7/Dylif7sEQoUARdn6U2HsivLP1pXDWUFea
+         EZQIWttJJqBs5+N1ApZvBrTjtZCbVQHQurDbPEVInNdo/zojZZYrG7z567Ooc/Lv4/dt
+         aEvCauiCrY9CQ9b2+KfBuOKk4fKwri6SDFQzsp9imXS9q6D89/BHrSXwikBjjRtvYP+w
+         9Rjw==
+X-Gm-Message-State: AJIora8HSCsdmi7jV0xHKv7kE5AX/zTWHHyQrKye4jJMHQLkq+ungaP9
+	MG28qUbxv8AVRUKxX08UNKmzr8pNyPMZFBHP1gvAfA==
+X-Google-Smtp-Source: AGRyM1sbaK65wf5OF7UYo6reMNsQ9IKIvv8vWLIjJgL97P1kM6VEZuZlgN8a9YFYBeLnAT80hQNyEvy2X6rmMVj68I0=
+X-Received: by 2002:a81:68e:0:b0:317:ca36:5807 with SMTP id
+ 136-20020a81068e000000b00317ca365807mr10798982ywg.314.1656605849995; Thu, 30
+ Jun 2022 09:17:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629235326.480858-1-justinstitt@google.com>
+References: <20220630094646.91837-1-haibo.li@mediatek.com> <20220630094646.91837-3-haibo.li@mediatek.com>
+In-Reply-To: <20220630094646.91837-3-haibo.li@mediatek.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 30 Jun 2022 09:16:53 -0700
+Message-ID: <CABCJKudz5O5_-1q1H0o2DFRcnpMQDBPv4STUVa2bOE9ePaeyDA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ANDROID: cfi: free old cfi shadow asynchronously
+To: Haibo Li <haibo.li@mediatek.com>
+Cc: xiaoming.yu@mediatek.com, Kees Cook <keescook@chromium.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Aaron Tomlin <atomlin@redhat.com>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev, linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, 
+	Lecopzer Chen <lecopzer.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Justin,
+Hi,
 
-On Wed, Jun 29, 2022 at 04:53:26PM -0700, Justin Stitt wrote:
-> see warnings:
-> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
-> | but the argument has type 'int' [-Werror,-Wformat] test("0|1|1|128|255",
-> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-> -
-> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
-> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
-> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-> -
-> | lib/test_printf.c:159:41: error: format specifies type 'unsigned short'
-> | but the argument has type 'int' [-Werror,-Wformat]
-> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-> 
-> There's an ongoing movement to eventually enable the -Wformat flag for
-> clang. Previous patches have targeted incorrect usage of
-> format specifiers. In this case, however, the "incorrect" format
-> specifiers are intrinsically part of the test cases. Hence, fixing them
-> would be misaligned with their intended purpose. My proposed fix is to
-> simply disable the warnings so that one day a clean build of the kernel
-> with clang (and -Wformat enabled) would be possible. It would also keep
-> us in the green for alot of the CI bots.
-> 
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
->  lib/test_printf.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/lib/test_printf.c b/lib/test_printf.c
-> index 07309c45f327..748591a0c55c 100644
-> --- a/lib/test_printf.c
-> +++ b/lib/test_printf.c
-> @@ -4,6 +4,12 @@
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +#define DO_PRAGMA(x) _Pragma(#x)
-> +#define NOWARN(warnoption, ...)
-> +	    DO_PRAGMA(GCC diagnostic push)
-> +		    DO_PRAGMA(GCC diagnostic ignored #warnoption)
-> +			    __VA_ARGS__
-> +				    DO_PRAGMA(GCC diagnostic pop)
+On Thu, Jun 30, 2022 at 2:47 AM Haibo Li <haibo.li@mediatek.com> wrote:
+>
+> Currenly, it uses synchronize_rcu() to wait old rcu reader to go away
+> in update_shadow.In embedded platform like ARM CA7X,
+> load_module blocks 40~50ms in update_shadow.
+> When there are more than one hundred kernel modules,
+> it blocks several seconds.
+>
+> To accelerate load_module,change synchronize_rcu to call_rcu.
+>
+> Signed-off-by: Haibo Li <haibo.li@mediatek.com>
+> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
 
-This is basically a duplicate of the __diag infrastructure that exists
-in include/linux/compiler_types.h and include/linux/compiler-clang.h, I
-think we should just reuse that here. It eliminates this hunk and the
-hunk below...
+Thanks for the patch! Please drop ANDROID: from the subject line,
+that's only used in the Android kernel trees.
 
->  #include <linux/init.h>
->  #include <linux/kernel.h>
-> @@ -154,9 +160,13 @@ test_number(void)
->  	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
->  	test("  0x1234abcd", "%#12x", 0x1234abcd);
->  	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0, 1, 12, 123, 1234, -123, -1234);
-> +	/* disable -Wformat for this chunk */
-> +	NOWARN(-Wformat, 
->  	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
->  	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
->  	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-> +	)
-> +	/* end chunk */
->  	/*
->  	 * POSIX/C99: »The result of converting zero with an explicit
->  	 * precision of zero shall be no characters.« Hence the output
+>  kernel/cfi.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/cfi.c b/kernel/cfi.c
+> index 456771c8e454..a4836d59ca27 100644
+> --- a/kernel/cfi.c
+> +++ b/kernel/cfi.c
+> @@ -43,6 +43,8 @@ typedef u16 shadow_t;
+>  struct cfi_shadow {
+>         /* Page index for the beginning of the shadow */
+>         unsigned long base;
+> +       /* rcu to free old cfi_shadow asynchronously */
+> +       struct rcu_head rcu;
+>         /* An array of __cfi_check locations (as indices to the shadow) */
+>         shadow_t shadow[1];
+>  } __packed;
+> @@ -182,6 +184,13 @@ static void remove_module_from_shadow(struct cfi_shadow *s, struct module *mod,
+>         }
+>  }
+>
+> +static void _cfi_shadow_free_rcu(struct rcu_head *rcu)
 
-...becomes a lot simpler in my opinion (feel free to reword the comment
-however you want).
+I think this can be simply renamed to free_shadow.
 
-Cheers,
-Nathan
+> +{
+> +       struct cfi_shadow *old = container_of(rcu, struct cfi_shadow, rcu);
+> +
+> +       vfree(old);
+> +}
+> +
+>  typedef void (*update_shadow_fn)(struct cfi_shadow *, struct module *,
+>                         unsigned long min_addr, unsigned long max_addr);
+>
+> @@ -211,11 +220,10 @@ static void update_shadow(struct module *mod, unsigned long base_addr,
+>
+>         rcu_assign_pointer(cfi_shadow, next);
+>         mutex_unlock(&shadow_update_lock);
+> -       synchronize_rcu();
+>
+>         if (prev) {
+>                 set_memory_rw((unsigned long)prev, SHADOW_PAGES);
+> -               vfree(prev);
+> +               call_rcu(&prev->rcu, _cfi_shadow_free_rcu);
+>         }
+>  }
 
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 8010de49b6c5..86e088ad9e48 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -154,9 +154,12 @@ test_number(void)
- 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
- 	test("  0x1234abcd", "%#12x", 0x1234abcd);
- 	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0, 1, 12, 123, 1234, -123, -1234);
-+	__diag_push();
-+	__diag_ignore(clang, 11, "-Wformat", "These trigger clang's -Wformat and the specifiers should not be changed.");
- 	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
- 	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
- 	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-+	__diag_pop();
- 	/*
- 	 * POSIX/C99: »The result of converting zero with an explicit
- 	 * precision of zero shall be no characters.« Hence the output
+It's probably better to keep the pages read-only until they're
+actually released. Can you move the set_memory_rw call to the new
+function?
+
+Sami
