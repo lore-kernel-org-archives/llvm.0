@@ -1,210 +1,131 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45346D19
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656604924; x=1688140924;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=haMnF6yagbAO7UNiHiEeFD6q+diMkTPVk3w5GTGVIvs=;
-  b=K+DL4O8L3tUlOXX+vHxUW6RsM6oAK56P5y4Nz0Is7pyfpPLHAD4gfyF7
-   gWHXH2lx1ol5qhOs1UIncA61HCj0HbFh3GtMMSbMK+DgZg4Fh24IoMln8
-   c6C3ov+Gq3e3rerznt62RlWY5k+efTK/tciVuWSYTa/WfdrPeqbzg0q+a
-   Ys+0wV3rIVUxwVmNpncHfk5DhA3E2f+JGMIJRDARH394GoWdU2hGA5G59
-   isgnnw7Rmtz9fcerY5DNs53+Ks4+h6x99DLOiBFSxMfcoWeJo/TqT0bX9
-   jyMR6j+zlBYKcCObncvx5ZEvgLlcEEhZamsDrg5C+w0hFs8yey3VLhzId
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262791017"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="262791017"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:02:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="918103001"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2022 09:01:59 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6wcA-000CwM-Vq;
-	Thu, 30 Jun 2022 16:01:58 +0000
-Date: Fri, 1 Jul 2022 00:01:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 55/55]
- fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long'
- but the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202206302322.xyUBUa80-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AABC6D19
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF8FC34115;
+	Thu, 30 Jun 2022 16:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1656604986;
+	bh=DQKte8QS+TVqPnOnSBE/VfWDC3wbJgvjDUj/KcleL74=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KZ2x2AkSgcdOGnR5SqaKGb2DdjHEmSuK1nsLYmAxHBKR4kX5zcYlQ5EtZZWjRiTfT
+	 Q4nPBSiL8jPEWj0Kqs54KguUCn8BwYIDFBjtg/qfDlJzjz+5f+P1IcVf9ULqg3i+3v
+	 vcJ29ejaNokYfpgHlB4HT1FXAz43taLKxUKwKMiaL+ulnMK8l313PwSV0Ia28Zux00
+	 VXtrcTGThBVTkOCzX+fDxzafKgGB8FGp47dJTTEEIB8117adnvffMAyccqT+1i7GZg
+	 LPxuDxgBwDGIuBSDv0HVtH/5G1kji0Wi3FYbaKLGbz8gBsYXG/V3VrbMx1yZRfKftc
+	 GAS4p/pv9Jm6Q==
+Date: Thu, 30 Jun 2022 09:03:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] lib/test_printf.c: fix clang -Wformat warnings
+Message-ID: <Yr3JN/mMn4K+7WnR@dev-arch.thelio-3990X>
+References: <20220629235326.480858-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220629235326.480858-1-justinstitt@google.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   e0aed6defb4fe6c570e77e8fd8d899651b40366e
-commit: e0aed6defb4fe6c570e77e8fd8d899651b40366e [55/55] netfs: Implement truncation
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220630/202206302322.xyUBUa80-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e0aed6defb4fe6c570e77e8fd8d899651b40366e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout e0aed6defb4fe6c570e77e8fd8d899651b40366e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+Hi Justin,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Jun 29, 2022 at 04:53:26PM -0700, Justin Stitt wrote:
+> see warnings:
+> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
+> | but the argument has type 'int' [-Werror,-Wformat] test("0|1|1|128|255",
+> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
+> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
+> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:159:41: error: format specifies type 'unsigned short'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+> 
+> There's an ongoing movement to eventually enable the -Wformat flag for
+> clang. Previous patches have targeted incorrect usage of
+> format specifiers. In this case, however, the "incorrect" format
+> specifiers are intrinsically part of the test cases. Hence, fixing them
+> would be misaligned with their intended purpose. My proposed fix is to
+> simply disable the warnings so that one day a clean build of the kernel
+> with clang (and -Wformat enabled) would be possible. It would also keep
+> us in the green for alot of the CI bots.
+> 
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
+>  lib/test_printf.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/lib/test_printf.c b/lib/test_printf.c
+> index 07309c45f327..748591a0c55c 100644
+> --- a/lib/test_printf.c
+> +++ b/lib/test_printf.c
+> @@ -4,6 +4,12 @@
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +#define DO_PRAGMA(x) _Pragma(#x)
+> +#define NOWARN(warnoption, ...)
+> +	    DO_PRAGMA(GCC diagnostic push)
+> +		    DO_PRAGMA(GCC diagnostic ignored #warnoption)
+> +			    __VA_ARGS__
+> +				    DO_PRAGMA(GCC diagnostic pop)
 
-All warnings (new ones prefixed by >>):
+This is basically a duplicate of the __diag infrastructure that exists
+in include/linux/compiler_types.h and include/linux/compiler-clang.h, I
+think we should just reuse that here. It eliminates this hunk and the
+hunk below...
 
->> fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                          from, to, folio->index, fto, seg, offset);
-                                                       ^~~
-   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
-   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
-                                      ~~~    ^~~~~~~~~~~
-   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
-           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
-                             ~~~                       ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/truncate.c:191:44: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                          from, to, folio->index, fto, seg, offset);
-                                                            ^~~~~~
-   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
-   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
-                                      ~~~    ^~~~~~~~~~~
-   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
-           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
-                             ~~~                       ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/truncate.c:202:18: warning: variable 'to' is uninitialized when used here [-Wuninitialized]
-           } while (from < to);
-                           ^~
-   fs/netfs/truncate.c:149:18: note: initialize the variable 'to' to silence this warning
-           pgoff_t from, to, fto;
-                           ^
-                            = 0
-   fs/netfs/truncate.c:170:6: warning: variable 'from' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (ret < 0)
-               ^~~~~~~
-   fs/netfs/truncate.c:176:45: note: uninitialized use occurs here
-                   folio = read_mapping_folio(treq->mapping, from, NULL);
-                                                             ^~~~
-   fs/netfs/truncate.c:170:2: note: remove the 'if' if its condition is always true
-           if (ret < 0)
-           ^~~~~~~~~~~~
-   fs/netfs/truncate.c:149:14: note: initialize the variable 'from' to silence this warning
-           pgoff_t from, to, fto;
-                       ^
-                        = 0
-   4 warnings generated.
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> @@ -154,9 +160,13 @@ test_number(void)
+>  	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
+>  	test("  0x1234abcd", "%#12x", 0x1234abcd);
+>  	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0, 1, 12, 123, 1234, -123, -1234);
+> +	/* disable -Wformat for this chunk */
+> +	NOWARN(-Wformat, 
+>  	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+>  	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+>  	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+> +	)
+> +	/* end chunk */
+>  	/*
+>  	 * POSIX/C99: »The result of converting zero with an explicit
+>  	 * precision of zero shall be no characters.« Hence the output
 
+...becomes a lot simpler in my opinion (feel free to reword the comment
+however you want).
 
-vim +191 fs/netfs/truncate.c
+Cheers,
+Nathan
 
-   133	
-   134	/*
-   135	 * Set up a pair of buffers with which we can perform an RMW cycle to
-   136	 * reconstitute the block containing the EOF marker.  One buffer will hold the
-   137	 * proposed modification in unencrypted form, the other will hold the
-   138	 * encrypted/compressed data.
-   139	 *
-   140	 * We don't want to make our proposed changes to the pagecache yet as we would
-   141	 * have to back them out if an error occurs.
-   142	 */
-   143	static int netfs_prepare_trunc_buffers(struct netfs_io_request *treq)
-   144	{
-   145		struct netfs_inode *ctx = netfs_inode(treq->inode);
-   146		struct iov_iter iter;
-   147		struct folio *folio;
-   148		unsigned long long base;
-   149		pgoff_t from, to, fto;
-   150		size_t offset, seg;
-   151		size_t bsize = max_t(size_t, 1UL << ctx->min_bshift, PAGE_SIZE);
-   152		int ret;
-   153	
-   154		/* We want to hold the entire replacement block, but we round that out
-   155		 * to a multiple of pages.
-   156		 */
-   157		base = round_down(treq->trunc_i_size, bsize);
-   158		treq->start	= base;
-   159		treq->len	= bsize;
-   160		treq->first	= base / PAGE_SIZE;
-   161		treq->last	= (base + bsize + 1) / PAGE_SIZE;
-   162	
-   163		ret = netfs_add_folios_to_buffer(&treq->buffer, treq->first, treq->last,
-   164						 GFP_KERNEL);
-   165		if (ret < 0)
-   166			return ret;
-   167	
-   168		ret = netfs_add_folios_to_buffer(&treq->bounce, treq->first, treq->last,
-   169						 GFP_KERNEL);
-   170		if (ret < 0)
-   171			return ret;
-   172	
-   173		/* We need to fill the buffer. */
-   174		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
-   175		do {
-   176			folio = read_mapping_folio(treq->mapping, from, NULL);
-   177			if (IS_ERR(folio))
-   178				return PTR_ERR(folio);
-   179			if (folio->index > from ||
-   180			    folio->index + folio_nr_pages(folio) <= folio->index) {
-   181				folio_put(folio);
-   182				kleave("-EIO [unexpected folio %lx != %lx]", folio->index, from);
-   183				return -EIO;
-   184			}
-   185	
-   186			offset = (from - folio->index);
-   187			fto = folio->index + folio_nr_pages(folio) - 1;
-   188			seg = min(to, fto);
-   189			seg = (seg - from) + 1;
-   190			kdebug("buf=%lx-%lx fol=%lx-%lx s=%lx@%lx",
- > 191			       from, to, folio->index, fto, seg, offset);
-   192			if (copy_folio_to_iter(folio, offset * PAGE_SIZE, seg * PAGE_SIZE, &iter)) {
-   193				folio_put(folio);
-   194				kleave(" = -EIO [copy failure]");
-   195				return -EIO;
-   196			}
-   197	
-   198			/* We keep the refs to discard later - we don't want read
-   199			 * interfering with what we're up to.
-   200			 */
-   201			from = fto;
-   202		} while (from < to);
-   203	
-   204		/* Lock the folios and clear the uptodate flag.  Read must wait. */
-   205	
-   206		/* Clear the region after the new EOF */
-   207		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
-   208		iov_iter_advance(&iter, treq->trunc_i_size - treq->start);
-   209		iov_iter_zero(iov_iter_count(&iter), &iter);
-   210		return 0;
-   211	}
-   212	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 8010de49b6c5..86e088ad9e48 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -154,9 +154,12 @@ test_number(void)
+ 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
+ 	test("  0x1234abcd", "%#12x", 0x1234abcd);
+ 	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0, 1, 12, 123, 1234, -123, -1234);
++	__diag_push();
++	__diag_ignore(clang, 11, "-Wformat", "These trigger clang's -Wformat and the specifiers should not be changed.");
+ 	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+ 	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+ 	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
++	__diag_pop();
+ 	/*
+ 	 * POSIX/C99: »The result of converting zero with an explicit
+ 	 * precision of zero shall be no characters.« Hence the output
