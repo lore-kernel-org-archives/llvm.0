@@ -1,74 +1,64 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1267B;
-	Thu, 30 Jun 2022 16:35:35 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id l68so6660147wml.3;
-        Thu, 30 Jun 2022 09:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lZIrTmlOnvUkLrFbSOhPtwGibISpt/RODIchaEd1CDY=;
-        b=gvOxH2z87z7QsFkRgTQuNhQyyz+dHV1+8rh1sM7GpDupM74IOa6Ym2zyVx4Y0mEnkA
-         xFy3h+4BLgQAGQb7kHWwxfMcgIUz4Tef84LuOZORClSobvlsqYZZA4JRBDfKNY3iS9A8
-         W3vDemOPYtYp6bt4LA+muwinmH5c50oo9YbK3ghNa7sz/mzg54ZgVTtrFKX2Cgzw+P3N
-         ELSRjvVF4ivQ1YmTMe+MNMmYKoyNYpV+LtXu6h2BXUafKGQrVOGF0X6LVvrsdTzc/XfD
-         EcDDOVPqA+9w2kvc7GCTWMKYCQjY0KUvF3eMQA1meIaibaLIqLPbyUm6YJoKiAbmsj+a
-         uGnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lZIrTmlOnvUkLrFbSOhPtwGibISpt/RODIchaEd1CDY=;
-        b=W2jsSNnaYrLwpbKkLNqdtIJ/60IEKxIa64JCsfIbRcdE0xySu0gK+9zk3d11scG9Yg
-         aHqXorx5i/PTfcWANKkCVWoYQsuE/CUWpvxoO7MkuYrRxOsJTugiM4LEBSS0vXm+8oQR
-         QukFmvgDE/aH96kVh+9c25tivstLE9+tjfmiEl2oGx4tG/Uf0Gdbdrk6Q+nk04deFxXE
-         at47ywlb4dw3j21urQWF7m9r45XWkNTJBN1gwQ1qAiLB7eiNoj3NhHgq6x34ziJ6Nq39
-         BJuMGzGHT02s0WUWdszkDqn+Tf5Xky5nmYL6xd56ZM4f6FwEwz72n/IkOq0VghbRPjLM
-         +cQA==
-X-Gm-Message-State: AJIora+Lj42/DZGfM1op+MCbd+wvn3gbSTVP1CcPdOlC1/unGX4SAGLf
-	vqx7muzU93ax17EWTVj1cFo=
-X-Google-Smtp-Source: AGRyM1sQNe4+WIPmqW10XET/JjOyzodgMYKlJLfdcugPO9fE6FCvfEevPFPhlgS/sBSR469fLSNDFQ==
-X-Received: by 2002:a1c:4b11:0:b0:3a0:4270:fcfa with SMTP id y17-20020a1c4b11000000b003a04270fcfamr12974836wma.53.1656606933805;
-        Thu, 30 Jun 2022 09:35:33 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05600c210300b003a044fe7fe7sm7112303wml.9.2022.06.30.09.35.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 09:35:32 -0700 (PDT)
-From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To: Benjamin LaHaise <bcrl@kvack.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-aio@kvack.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	nvdimm@lists.linux.dev,
-	io-uring@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] fs: Replace kmap{,_atomic}() with kmap_local_page()
-Date: Thu, 30 Jun 2022 18:35:27 +0200
-Message-Id: <20220630163527.9776-1-fmdefrancesco@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBAD7B
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:57:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656608229; x=1688144229;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bL9nkQHpWXRcPQiclQNvTJObFea+2bIOo5Icywa3vMA=;
+  b=fmrnj/6XuSpY1hnOWZabHa7oDtPIZ/7Bh+RzopLp14OHknBAX57nHps+
+   hL5jBriVpX/QkW93R0zu0Im+Scz9SCMknY/iOCVSHSS2S8n+mKecZgyHQ
+   Bj7eBMp9wg9++qnorxgkRFae5QI68Ufol1Zw3FVTWM9ltXapLCo//Tj26
+   9Kxt8LZ2qLG3s4QZZ6QJUPHIBI+jiJrwD8thm/mMC7PGeyX+J3CV/8SMn
+   PUlmia2grWt0+sj7f7hIdMOsNypeNBNyPtP/nF2FJrYVf6/8tUDwXrhTm
+   a/SMH+lmmn9h8jAOslm763iFDv28yTpVnQqU9eUHwUpe3DyX9d9HKP6LI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283506027"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="283506027"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:57:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="623800223"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 30 Jun 2022 09:57:02 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25UGv0GF022621;
+	Thu, 30 Jun 2022 17:57:00 +0100
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>, Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        kernel test robot <lkp@intel.com>, linux-alpha@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/9] bitops: let optimize out non-atomic bitops on compile-time constants
+Date: Thu, 30 Jun 2022 18:56:11 +0200
+Message-Id: <20220630165611.1551808-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,82 +67,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The use of kmap() and kmap_atomic() are being deprecated in favor of
-kmap_local_page().
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+Date: Fri, 24 Jun 2022 14:13:04 +0200
 
-With kmap_local_page(), the mappings are per thread, CPU local and not
-globally visible. Furthermore, the mappings can be acquired from any
-context (including interrupts).
+> While I was working on converting some structure fields from a fixed
+> type to a bitmap, I started observing code size increase not only in
+> places where the code works with the converted structure fields, but
+> also where the converted vars were on the stack. That said, the
+> following code:
 
-Therefore, use kmap_local_page() in exec.c because these mappings are per
-thread, CPU local, and not globally visible.
+Hey,
 
-Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
-HIGHMEM64GB enabled.
+Seems like everything is fine this time. I got some reports, but
+those aren't caused by any of the changes from the series.
+Maybe we can take it to -next and see how it goes?
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/exec.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+[...]
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 0989fb8472a1..4a2129c0d422 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -583,11 +583,11 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
- 
- 				if (kmapped_page) {
- 					flush_dcache_page(kmapped_page);
--					kunmap(kmapped_page);
-+					kunmap_local(kaddr);
- 					put_arg_page(kmapped_page);
- 				}
- 				kmapped_page = page;
--				kaddr = kmap(kmapped_page);
-+				kaddr = kmap_local_page(kmapped_page);
- 				kpos = pos & PAGE_MASK;
- 				flush_arg_page(bprm, kpos, kmapped_page);
- 			}
-@@ -601,7 +601,7 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
- out:
- 	if (kmapped_page) {
- 		flush_dcache_page(kmapped_page);
--		kunmap(kmapped_page);
-+		kunmap_local(kaddr);
- 		put_arg_page(kmapped_page);
- 	}
- 	return ret;
-@@ -883,11 +883,11 @@ int transfer_args_to_stack(struct linux_binprm *bprm,
- 
- 	for (index = MAX_ARG_PAGES - 1; index >= stop; index--) {
- 		unsigned int offset = index == stop ? bprm->p & ~PAGE_MASK : 0;
--		char *src = kmap(bprm->page[index]) + offset;
-+		char *src = kmap_local_page(bprm->page[index]) + offset;
- 		sp -= PAGE_SIZE - offset;
- 		if (copy_to_user((void *) sp, src, PAGE_SIZE - offset) != 0)
- 			ret = -EFAULT;
--		kunmap(bprm->page[index]);
-+		kunmap_local(src);
- 		if (ret)
- 			goto out;
- 	}
-@@ -1680,13 +1680,13 @@ int remove_arg_zero(struct linux_binprm *bprm)
- 			ret = -EFAULT;
- 			goto out;
- 		}
--		kaddr = kmap_atomic(page);
-+		kaddr = kmap_local_page(page);
- 
- 		for (; offset < PAGE_SIZE && kaddr[offset];
- 				offset++, bprm->p++)
- 			;
- 
--		kunmap_atomic(kaddr);
-+		kunmap_local(kaddr);
- 		put_arg_page(page);
- 	} while (offset == PAGE_SIZE);
- 
--- 
-2.36.1
+>  arch/alpha/include/asm/bitops.h               |  32 ++--
+>  arch/hexagon/include/asm/bitops.h             |  24 ++-
+>  arch/ia64/include/asm/bitops.h                |  42 ++---
+>  arch/ia64/include/asm/processor.h             |   2 +-
+>  arch/m68k/include/asm/bitops.h                |  49 ++++--
+>  arch/s390/include/asm/bitops.h                |  61 +++----
+>  arch/sh/include/asm/bitops-op32.h             |  34 ++--
+>  arch/sparc/include/asm/bitops_32.h            |  18 +-
+>  arch/sparc/lib/atomic32.c                     |  12 +-
+>  arch/x86/include/asm/bitops.h                 |  22 +--
+>  drivers/net/ethernet/intel/ice/ice_switch.c   |   2 +-
+>  .../asm-generic/bitops/generic-non-atomic.h   | 161 ++++++++++++++++++
+>  .../bitops/instrumented-non-atomic.h          |  35 ++--
+>  include/asm-generic/bitops/non-atomic.h       | 121 +------------
+>  .../bitops/non-instrumented-non-atomic.h      |  16 ++
+>  include/linux/bitmap.h                        |  22 ++-
+>  include/linux/bitops.h                        |  50 ++++++
+>  lib/test_bitmap.c                             |  62 +++++++
+>  tools/include/asm-generic/bitops/non-atomic.h |  34 ++--
+>  tools/include/linux/bitops.h                  |  16 ++
+>  20 files changed, 544 insertions(+), 271 deletions(-)
+>  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
+>  create mode 100644 include/asm-generic/bitops/non-instrumented-non-atomic.h
+> 
+> -- 
+> 2.36.1
 
+Thanks,
+Olek
