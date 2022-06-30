@@ -1,89 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDB16D1B
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 15:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DB7C341CC;
-	Thu, 30 Jun 2022 15:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0266D19
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 15:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D92C34115;
+	Thu, 30 Jun 2022 15:35:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656603123;
-	bh=DMoXyBY8anTUJp0z5XM+bV0yDDpw0G7731nqB1esFYQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZcYHX7j34PqL86ygQiByoktv5ZxOg5p0qqwuvZlD2xxc/DIBosQtSMBLlmsm6rs4p
-	 +SW6b8jtsrCQTkWx0KqMnuCk7j1i64FNAutDF+0HGtcNsxoIiU7U+RyhivqP8ZVB1q
-	 lkiXBA4JarrAhhHIKqoWeQAjlnjXFt5wvzol+ranak6I/76jO6ywEH3B5ruZxsWabd
-	 9m0wooGnOlGftVn4MP8w+Ugx2gAtRgsUPIx8qnR7wm+gOKpWw6mS2Jr2ld+rQ8vKQY
-	 TogUk4QCyagiIMj75KLzTiXDos5nk34v3jp9I4F8LSrNPcvnNQzKyZqRE3dEms6g8U
-	 be0lYglwtp1BA==
+	s=k20201202; t=1656603349;
+	bh=xeXcHBHJp18s20H0r59IvRA/+hEOgADzH+b65yvr46c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UjTOs5sbsSdtav/pxqHza2CWHFFSzUSvDOE9ETGhBq7kgCdhjtYj50WSIvi6VCK18
+	 xRlG38FDsPK1oeEplAFaqdsxFFo68VlYe2Y/IocLBP0Zy7ztOh3Gu0J/3c2Iuv1/cN
+	 nM1Q/VULCJpbCgaK4+wJKfA7w6fY/xm8dKzwT6hofjn5AfHvbalYllpeXbwfnsj3JH
+	 jdbKzF4X+4rm3wauNwkAEH58Zu3UaOml99To6kB8GaxUjpGHxYV5JG4iWJWfjEiIaO
+	 pVcA+MilbrvWX7kxa8qwpuCgqmR0B/j0SpG8kJ4PUJlC2zn1ymG6jpqCmj750o50/B
+	 nbJdAhxmuLz7Q==
+Date: Thu, 30 Jun 2022 08:35:47 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>
 Cc: Joey Gouly <joey.gouly@arm.com>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linudx.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] arm64: vdso32: Add DWARF_DEBUG
-Date: Thu, 30 Jun 2022 08:31:21 -0700
-Message-Id: <20220630153121.1317045-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630153121.1317045-1-nathan@kernel.org>
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] arm64: vdso32: Shuffle .ARM.exidx section above
+ ELF_DETAILS
+Message-ID: <Yr3C04jufBhzGJe2@dev-arch.thelio-3990X>
 References: <20220630153121.1317045-1-nathan@kernel.org>
+ <20220630153121.1317045-2-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220630153121.1317045-2-nathan@kernel.org>
 
-When building the 32-bit vDSO with LLVM 15 and CONFIG_DEBUG_INFO, there
-are the following orphan section warnings:
+On Thu, Jun 30, 2022 at 08:31:20AM -0700, Nathan Chancellor wrote:
+> When building the 32-bit vDSO after commit 5c4fb60816ea ("arm64: vdso32:
+> add ARM.exidx* sections"), ld.lld 11 fails to link:
+> 
+>   ld.lld: error: could not allocate headers
+>   ld.lld: error: unable to place section .text at file offset [0x2A0, 0xBB1]; check your linker script for overflows
+>   ld.lld: error: unable to place section .comment at file offset [0xBB2, 0xC8A]; check your linker script for overflows
+>   ld.lld: error: unable to place section .symtab at file offset [0xC8C, 0xE0B]; check your linker script for overflows
+>   ld.lld: error: unable to place section .strtab at file offset [0xE0C, 0xF1C]; check your linker script for overflows
+>   ld.lld: error: unable to place section .shstrtab at file offset [0xF1D, 0xFAA]; check your linker script for overflows
+>   ld.lld: error: section .ARM.exidx file range overlaps with .hash
+>   >>> .ARM.exidx range is [0x90, 0xCF]
+>   >>> .hash range is [0xB4, 0xE3]
+> 
+>   ld.lld: error: section .hash file range overlaps with .ARM.attributes
+>   >>> .hash range is [0xB4, 0xE3]
+>   >>> .ARM.attributes range is [0xD0, 0x10B]
+> 
+>   ld.lld: error: section .ARM.attributes file range overlaps with .dynsym
+>   >>> .ARM.attributes range is [0xD0, 0x10B]
+>   >>> .dynsym range is [0xE4, 0x133]
+> 
+>   ld.lld: error: section .ARM.exidx virtual address range overlaps with .hash
+>   >>> .ARM.exidx range is [0x90, 0xCF]
+>   >>> .hash range is [0xB4, 0xE3]
+> 
+>   ld.lld: error: section .ARM.exidx load address range overlaps with .hash
+>   >>> .ARM.exidx range is [0x90, 0xCF]
+>   >>> .hash range is [0xB4, 0xE3]
+> 
+> This was fixed in ld.lld 12 with a change to match GNU ld's semantics of
+> placing non-SHF_ALLOC sections after SHF_ALLOC sections.
+> 
+> To workaround this issue, move the .ARM.exidx section before the
+> .comment, .symtab, .strtab, and .shstrtab sections (ELF_DETAILS) so that
+> those sections remain contiguous with the .ARM.attributes section.
+> 
+> Fixes: 5c4fb60816ea ("arm64: vdso32: add ARM.exidx* sections")
 
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_abbrev) is being placed in '.debug_abbrev'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_info) is being placed in '.debug_info'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str) is being placed in '.debug_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_addr) is being placed in '.debug_addr'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line) is being placed in '.debug_line'
-  ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line_str) is being placed in '.debug_line_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_loclists) is being placed in '.debug_loclists'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_abbrev) is being placed in '.debug_abbrev'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_info) is being placed in '.debug_info'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_rnglists) is being placed in '.debug_rnglists'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str) is being placed in '.debug_str'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_addr) is being placed in '.debug_addr'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_frame) is being placed in '.debug_frame'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line) is being placed in '.debug_line'
-  ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line_str) is being placed in '.debug_line_str'
+This should have been included to point out the exact commit that fixed
+this in ld.lld, I can resend if necessary (since I also screwed up the
+patches@lists.linux.dev domain...)
 
-These are DWARF5 sections, as that is the implicit default version for
-clang-14 and newer when just '-g' is used. All DWARF sections are
-handled by the DWARF_DEBUG macro from include/asm-generic/vmlinux.lds.h
-so use that macro here to fix the warnings regardless of DWARF version.
+Link: https://github.com/llvm/llvm-project/commit/ec29538af2e0886a65f479d6a533956a1c478132
 
-Fixes: 9d4775b332e1 ("arm64: vdso32: enable orphan handling for VDSO")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/arm64/kernel/vdso32/vdso.lds.S | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
-index c25bed8e6df1..8d95d7d35057 100644
---- a/arch/arm64/kernel/vdso32/vdso.lds.S
-+++ b/arch/arm64/kernel/vdso32/vdso.lds.S
-@@ -57,6 +57,7 @@ SECTIONS
- 	.rel.dyn	: { *(.rel*) }
- 
- 	.ARM.exidx : { *(.ARM.exidx*) }
-+	DWARF_DEBUG
- 	ELF_DETAILS
- 	.ARM.attributes 0 : { *(.ARM.attributes) }
- 
--- 
-2.37.0
-
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/arm64/kernel/vdso32/vdso.lds.S | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
+> index 6e67a6524d58..c25bed8e6df1 100644
+> --- a/arch/arm64/kernel/vdso32/vdso.lds.S
+> +++ b/arch/arm64/kernel/vdso32/vdso.lds.S
+> @@ -56,8 +56,8 @@ SECTIONS
+>  
+>  	.rel.dyn	: { *(.rel*) }
+>  
+> -	ELF_DETAILS
+>  	.ARM.exidx : { *(.ARM.exidx*) }
+> +	ELF_DETAILS
+>  	.ARM.attributes 0 : { *(.ARM.attributes) }
+>  
+>  	/DISCARD/	: {
+> -- 
+> 2.37.0
+> 
