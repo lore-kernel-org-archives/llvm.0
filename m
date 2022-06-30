@@ -1,87 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB1C3D7C
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 13:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4130FC34115;
-	Thu, 30 Jun 2022 13:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1656597355;
-	bh=0Pztk4mzBqgFgfsq/p8hGIUhrVzLBaGck9BeRq7gqEM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W6IC1Y9er6nY8OAIsJdxyjxEd6xUB1dB4a98jULLELviemI5b/cr1p/q2XZu1huWD
-	 7KjyEM90BZYCglP64/Z4e9w8oAhshPUp3X3hhkZFp2IkfOsRk9hnAbwyF4ruRYRSjT
-	 Z9n89b7u+jGp9dnNW3C6ckvOCji6dfQVwgGc4sA0=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.18 4/6] hinic: Replace memcpy() with direct assignment
-Date: Thu, 30 Jun 2022 15:47:30 +0200
-Message-Id: <20220630133230.371942781@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220630133230.239507521@linuxfoundation.org>
-References: <20220630133230.239507521@linuxfoundation.org>
-User-Agent: quilt/0.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4B833EF
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 15:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656602519; x=1688138519;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yiYz8vdooXhVk/sQ5P6PvDSLbmKcTaLw8bm48QtQlOU=;
+  b=AUBwLkhVaxtFtnV/5Nuo94mboDVbSuzPtN3UrgzAOjQgUR9qFp5SbdES
+   JNiTMY/T/HH21upFh2/5dul+/7qryK4Nc0Pvg/TOUVmgfjsiDnxB6YzBf
+   gBYuYBkau4xzh00oIjJrvN5F1/kXwB0lZDPmHWDLGi4aALNbHliNkmTYW
+   ki3g00FZVUuGA7JYWkzKLG3Hx0TxxCn9mQT8d+QUvom5iG3KWCCC56rCD
+   t6m6E3g5TqcoequVDz7YxFFaXSb3iuAk85dUheudzycT9NFt8eWF7LrZ4
+   EmAxbR9wAapsM0FRDOJ7O4CA1WLUXptjShfeTTLchbJzsNk4bD8UMMbOl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="279923530"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="279923530"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 08:21:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="647931443"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2022 08:21:57 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6vzQ-000Cte-Ve;
+	Thu, 30 Jun 2022 15:21:56 +0000
+Date: Thu, 30 Jun 2022 23:21:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 55/55]
+ fs/netfs/truncate.c:202:18: warning: variable 'to' is uninitialized when
+ used here
+Message-ID: <202206302311.Gx0KZCgq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Kees Cook <keescook@chromium.org>
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   e0aed6defb4fe6c570e77e8fd8d899651b40366e
+commit: e0aed6defb4fe6c570e77e8fd8d899651b40366e [55/55] netfs: Implement truncation
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220630/202206302311.Gx0KZCgq-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
 
-commit 1e70212e031528918066a631c9fdccda93a1ffaa upstream.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
-here for calculating the size of the destination buffer (0x10 instead of
-0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
-the source and dest being struct fw_section_info_st, so the memcpy should
-be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
-responsibility to figure out.
+All warnings (new ones prefixed by >>):
 
-Avoid the whole thing and just do a direct assignment. This results in
-no change to the executable code.
-
-[This is a duplicate of commit 2c0ab32b73cf ("hinic: Replace memcpy()
- with direct assignment") which was applied to net-next.]
-
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>
-Cc: llvm@lists.linux.dev
-Link: https://github.com/ClangBuiltLinux/linux/issues/1592
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-Link: https://lore.kernel.org/r/20220616052312.292861-1-keescook@chromium.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/ethernet/huawei/hinic/hinic_devlink.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
---- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
-@@ -43,9 +43,7 @@ static bool check_image_valid(struct hin
- 
- 	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
- 		len += fw_image->fw_section_info[i].fw_section_len;
--		memcpy(&host_image->image_section_info[i],
--		       &fw_image->fw_section_info[i],
--		       sizeof(struct fw_section_info_st));
-+		host_image->image_section_info[i] = fw_image->fw_section_info[i];
- 	}
- 
- 	if (len != fw_image->fw_len ||
+>> fs/netfs/truncate.c:202:18: warning: variable 'to' is uninitialized when used here [-Wuninitialized]
+           } while (from < to);
+                           ^~
+   fs/netfs/truncate.c:149:18: note: initialize the variable 'to' to silence this warning
+           pgoff_t from, to, fto;
+                           ^
+                            = 0
+>> fs/netfs/truncate.c:170:6: warning: variable 'from' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (ret < 0)
+               ^~~~~~~
+   fs/netfs/truncate.c:176:45: note: uninitialized use occurs here
+                   folio = read_mapping_folio(treq->mapping, from, NULL);
+                                                             ^~~~
+   fs/netfs/truncate.c:170:2: note: remove the 'if' if its condition is always true
+           if (ret < 0)
+           ^~~~~~~~~~~~
+   fs/netfs/truncate.c:149:14: note: initialize the variable 'from' to silence this warning
+           pgoff_t from, to, fto;
+                       ^
+                        = 0
+   2 warnings generated.
 
 
+vim +/to +202 fs/netfs/truncate.c
+
+   133	
+   134	/*
+   135	 * Set up a pair of buffers with which we can perform an RMW cycle to
+   136	 * reconstitute the block containing the EOF marker.  One buffer will hold the
+   137	 * proposed modification in unencrypted form, the other will hold the
+   138	 * encrypted/compressed data.
+   139	 *
+   140	 * We don't want to make our proposed changes to the pagecache yet as we would
+   141	 * have to back them out if an error occurs.
+   142	 */
+   143	static int netfs_prepare_trunc_buffers(struct netfs_io_request *treq)
+   144	{
+   145		struct netfs_inode *ctx = netfs_inode(treq->inode);
+   146		struct iov_iter iter;
+   147		struct folio *folio;
+   148		unsigned long long base;
+   149		pgoff_t from, to, fto;
+   150		size_t offset, seg;
+   151		size_t bsize = max_t(size_t, 1UL << ctx->min_bshift, PAGE_SIZE);
+   152		int ret;
+   153	
+   154		/* We want to hold the entire replacement block, but we round that out
+   155		 * to a multiple of pages.
+   156		 */
+   157		base = round_down(treq->trunc_i_size, bsize);
+   158		treq->start	= base;
+   159		treq->len	= bsize;
+   160		treq->first	= base / PAGE_SIZE;
+   161		treq->last	= (base + bsize + 1) / PAGE_SIZE;
+   162	
+   163		ret = netfs_add_folios_to_buffer(&treq->buffer, treq->first, treq->last,
+   164						 GFP_KERNEL);
+   165		if (ret < 0)
+   166			return ret;
+   167	
+   168		ret = netfs_add_folios_to_buffer(&treq->bounce, treq->first, treq->last,
+   169						 GFP_KERNEL);
+ > 170		if (ret < 0)
+   171			return ret;
+   172	
+   173		/* We need to fill the buffer. */
+   174		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   175		do {
+   176			folio = read_mapping_folio(treq->mapping, from, NULL);
+   177			if (IS_ERR(folio))
+   178				return PTR_ERR(folio);
+   179			if (folio->index > from ||
+   180			    folio->index + folio_nr_pages(folio) <= folio->index) {
+   181				folio_put(folio);
+   182				kleave("-EIO [unexpected folio %lx != %lx]", folio->index, from);
+   183				return -EIO;
+   184			}
+   185	
+   186			offset = (from - folio->index);
+   187			fto = folio->index + folio_nr_pages(folio) - 1;
+   188			seg = min(to, fto);
+   189			seg = (seg - from) + 1;
+   190			kdebug("buf=%lx-%lx fol=%lx-%lx s=%lx@%lx",
+   191			       from, to, folio->index, fto, seg, offset);
+   192			if (copy_folio_to_iter(folio, offset * PAGE_SIZE, seg * PAGE_SIZE, &iter)) {
+   193				folio_put(folio);
+   194				kleave(" = -EIO [copy failure]");
+   195				return -EIO;
+   196			}
+   197	
+   198			/* We keep the refs to discard later - we don't want read
+   199			 * interfering with what we're up to.
+   200			 */
+   201			from = fto;
+ > 202		} while (from < to);
+   203	
+   204		/* Lock the folios and clear the uptodate flag.  Read must wait. */
+   205	
+   206		/* Clear the region after the new EOF */
+   207		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   208		iov_iter_advance(&iter, treq->trunc_i_size - treq->start);
+   209		iov_iter_zero(iov_iter_count(&iter), &iter);
+   210		return 0;
+   211	}
+   212	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
