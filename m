@@ -1,34 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0266D19
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 15:35:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D92C34115;
-	Thu, 30 Jun 2022 15:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656603349;
-	bh=xeXcHBHJp18s20H0r59IvRA/+hEOgADzH+b65yvr46c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UjTOs5sbsSdtav/pxqHza2CWHFFSzUSvDOE9ETGhBq7kgCdhjtYj50WSIvi6VCK18
-	 xRlG38FDsPK1oeEplAFaqdsxFFo68VlYe2Y/IocLBP0Zy7ztOh3Gu0J/3c2Iuv1/cN
-	 nM1Q/VULCJpbCgaK4+wJKfA7w6fY/xm8dKzwT6hofjn5AfHvbalYllpeXbwfnsj3JH
-	 jdbKzF4X+4rm3wauNwkAEH58Zu3UaOml99To6kB8GaxUjpGHxYV5JG4iWJWfjEiIaO
-	 pVcA+MilbrvWX7kxa8qwpuCgqmR0B/j0SpG8kJ4PUJlC2zn1ymG6jpqCmj750o50/B
-	 nbJdAhxmuLz7Q==
-Date: Thu, 30 Jun 2022 08:35:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] arm64: vdso32: Shuffle .ARM.exidx section above
- ELF_DETAILS
-Message-ID: <Yr3C04jufBhzGJe2@dev-arch.thelio-3990X>
-References: <20220630153121.1317045-1-nathan@kernel.org>
- <20220630153121.1317045-2-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45346D19
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:02:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656604924; x=1688140924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=haMnF6yagbAO7UNiHiEeFD6q+diMkTPVk3w5GTGVIvs=;
+  b=K+DL4O8L3tUlOXX+vHxUW6RsM6oAK56P5y4Nz0Is7pyfpPLHAD4gfyF7
+   gWHXH2lx1ol5qhOs1UIncA61HCj0HbFh3GtMMSbMK+DgZg4Fh24IoMln8
+   c6C3ov+Gq3e3rerznt62RlWY5k+efTK/tciVuWSYTa/WfdrPeqbzg0q+a
+   Ys+0wV3rIVUxwVmNpncHfk5DhA3E2f+JGMIJRDARH394GoWdU2hGA5G59
+   isgnnw7Rmtz9fcerY5DNs53+Ks4+h6x99DLOiBFSxMfcoWeJo/TqT0bX9
+   jyMR6j+zlBYKcCObncvx5ZEvgLlcEEhZamsDrg5C+w0hFs8yey3VLhzId
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262791017"
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="262791017"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:02:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
+   d="scan'208";a="918103001"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2022 09:01:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o6wcA-000CwM-Vq;
+	Thu, 30 Jun 2022 16:01:58 +0000
+Date: Fri, 1 Jul 2022 00:01:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 55/55]
+ fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long'
+ but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202206302322.xyUBUa80-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,72 +47,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220630153121.1317045-2-nathan@kernel.org>
 
-On Thu, Jun 30, 2022 at 08:31:20AM -0700, Nathan Chancellor wrote:
-> When building the 32-bit vDSO after commit 5c4fb60816ea ("arm64: vdso32:
-> add ARM.exidx* sections"), ld.lld 11 fails to link:
-> 
->   ld.lld: error: could not allocate headers
->   ld.lld: error: unable to place section .text at file offset [0x2A0, 0xBB1]; check your linker script for overflows
->   ld.lld: error: unable to place section .comment at file offset [0xBB2, 0xC8A]; check your linker script for overflows
->   ld.lld: error: unable to place section .symtab at file offset [0xC8C, 0xE0B]; check your linker script for overflows
->   ld.lld: error: unable to place section .strtab at file offset [0xE0C, 0xF1C]; check your linker script for overflows
->   ld.lld: error: unable to place section .shstrtab at file offset [0xF1D, 0xFAA]; check your linker script for overflows
->   ld.lld: error: section .ARM.exidx file range overlaps with .hash
->   >>> .ARM.exidx range is [0x90, 0xCF]
->   >>> .hash range is [0xB4, 0xE3]
-> 
->   ld.lld: error: section .hash file range overlaps with .ARM.attributes
->   >>> .hash range is [0xB4, 0xE3]
->   >>> .ARM.attributes range is [0xD0, 0x10B]
-> 
->   ld.lld: error: section .ARM.attributes file range overlaps with .dynsym
->   >>> .ARM.attributes range is [0xD0, 0x10B]
->   >>> .dynsym range is [0xE4, 0x133]
-> 
->   ld.lld: error: section .ARM.exidx virtual address range overlaps with .hash
->   >>> .ARM.exidx range is [0x90, 0xCF]
->   >>> .hash range is [0xB4, 0xE3]
-> 
->   ld.lld: error: section .ARM.exidx load address range overlaps with .hash
->   >>> .ARM.exidx range is [0x90, 0xCF]
->   >>> .hash range is [0xB4, 0xE3]
-> 
-> This was fixed in ld.lld 12 with a change to match GNU ld's semantics of
-> placing non-SHF_ALLOC sections after SHF_ALLOC sections.
-> 
-> To workaround this issue, move the .ARM.exidx section before the
-> .comment, .symtab, .strtab, and .shstrtab sections (ELF_DETAILS) so that
-> those sections remain contiguous with the .ARM.attributes section.
-> 
-> Fixes: 5c4fb60816ea ("arm64: vdso32: add ARM.exidx* sections")
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   e0aed6defb4fe6c570e77e8fd8d899651b40366e
+commit: e0aed6defb4fe6c570e77e8fd8d899651b40366e [55/55] netfs: Implement truncation
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220630/202206302322.xyUBUa80-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout e0aed6defb4fe6c570e77e8fd8d899651b40366e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
-This should have been included to point out the exact commit that fixed
-this in ld.lld, I can resend if necessary (since I also screwed up the
-patches@lists.linux.dev domain...)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Link: https://github.com/llvm/llvm-project/commit/ec29538af2e0886a65f479d6a533956a1c478132
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/arm64/kernel/vdso32/vdso.lds.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
-> index 6e67a6524d58..c25bed8e6df1 100644
-> --- a/arch/arm64/kernel/vdso32/vdso.lds.S
-> +++ b/arch/arm64/kernel/vdso32/vdso.lds.S
-> @@ -56,8 +56,8 @@ SECTIONS
->  
->  	.rel.dyn	: { *(.rel*) }
->  
-> -	ELF_DETAILS
->  	.ARM.exidx : { *(.ARM.exidx*) }
-> +	ELF_DETAILS
->  	.ARM.attributes 0 : { *(.ARM.attributes) }
->  
->  	/DISCARD/	: {
-> -- 
-> 2.37.0
-> 
+>> fs/netfs/truncate.c:191:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                          from, to, folio->index, fto, seg, offset);
+                                                       ^~~
+   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
+   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+                                      ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
+           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+                             ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/truncate.c:191:44: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                          from, to, folio->index, fto, seg, offset);
+                                                            ^~~~~~
+   fs/netfs/internal.h:282:43: note: expanded from macro 'kdebug'
+   #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+                                      ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:278:46: note: expanded from macro 'dbgprintk'
+           printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+                             ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   fs/netfs/truncate.c:202:18: warning: variable 'to' is uninitialized when used here [-Wuninitialized]
+           } while (from < to);
+                           ^~
+   fs/netfs/truncate.c:149:18: note: initialize the variable 'to' to silence this warning
+           pgoff_t from, to, fto;
+                           ^
+                            = 0
+   fs/netfs/truncate.c:170:6: warning: variable 'from' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (ret < 0)
+               ^~~~~~~
+   fs/netfs/truncate.c:176:45: note: uninitialized use occurs here
+                   folio = read_mapping_folio(treq->mapping, from, NULL);
+                                                             ^~~~
+   fs/netfs/truncate.c:170:2: note: remove the 'if' if its condition is always true
+           if (ret < 0)
+           ^~~~~~~~~~~~
+   fs/netfs/truncate.c:149:14: note: initialize the variable 'from' to silence this warning
+           pgoff_t from, to, fto;
+                       ^
+                        = 0
+   4 warnings generated.
+
+
+vim +191 fs/netfs/truncate.c
+
+   133	
+   134	/*
+   135	 * Set up a pair of buffers with which we can perform an RMW cycle to
+   136	 * reconstitute the block containing the EOF marker.  One buffer will hold the
+   137	 * proposed modification in unencrypted form, the other will hold the
+   138	 * encrypted/compressed data.
+   139	 *
+   140	 * We don't want to make our proposed changes to the pagecache yet as we would
+   141	 * have to back them out if an error occurs.
+   142	 */
+   143	static int netfs_prepare_trunc_buffers(struct netfs_io_request *treq)
+   144	{
+   145		struct netfs_inode *ctx = netfs_inode(treq->inode);
+   146		struct iov_iter iter;
+   147		struct folio *folio;
+   148		unsigned long long base;
+   149		pgoff_t from, to, fto;
+   150		size_t offset, seg;
+   151		size_t bsize = max_t(size_t, 1UL << ctx->min_bshift, PAGE_SIZE);
+   152		int ret;
+   153	
+   154		/* We want to hold the entire replacement block, but we round that out
+   155		 * to a multiple of pages.
+   156		 */
+   157		base = round_down(treq->trunc_i_size, bsize);
+   158		treq->start	= base;
+   159		treq->len	= bsize;
+   160		treq->first	= base / PAGE_SIZE;
+   161		treq->last	= (base + bsize + 1) / PAGE_SIZE;
+   162	
+   163		ret = netfs_add_folios_to_buffer(&treq->buffer, treq->first, treq->last,
+   164						 GFP_KERNEL);
+   165		if (ret < 0)
+   166			return ret;
+   167	
+   168		ret = netfs_add_folios_to_buffer(&treq->bounce, treq->first, treq->last,
+   169						 GFP_KERNEL);
+   170		if (ret < 0)
+   171			return ret;
+   172	
+   173		/* We need to fill the buffer. */
+   174		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   175		do {
+   176			folio = read_mapping_folio(treq->mapping, from, NULL);
+   177			if (IS_ERR(folio))
+   178				return PTR_ERR(folio);
+   179			if (folio->index > from ||
+   180			    folio->index + folio_nr_pages(folio) <= folio->index) {
+   181				folio_put(folio);
+   182				kleave("-EIO [unexpected folio %lx != %lx]", folio->index, from);
+   183				return -EIO;
+   184			}
+   185	
+   186			offset = (from - folio->index);
+   187			fto = folio->index + folio_nr_pages(folio) - 1;
+   188			seg = min(to, fto);
+   189			seg = (seg - from) + 1;
+   190			kdebug("buf=%lx-%lx fol=%lx-%lx s=%lx@%lx",
+ > 191			       from, to, folio->index, fto, seg, offset);
+   192			if (copy_folio_to_iter(folio, offset * PAGE_SIZE, seg * PAGE_SIZE, &iter)) {
+   193				folio_put(folio);
+   194				kleave(" = -EIO [copy failure]");
+   195				return -EIO;
+   196			}
+   197	
+   198			/* We keep the refs to discard later - we don't want read
+   199			 * interfering with what we're up to.
+   200			 */
+   201			from = fto;
+   202		} while (from < to);
+   203	
+   204		/* Lock the folios and clear the uptodate flag.  Read must wait. */
+   205	
+   206		/* Clear the region after the new EOF */
+   207		iov_iter_xarray(&iter, READ, &treq->buffer, base, base + bsize);
+   208		iov_iter_advance(&iter, treq->trunc_i_size - treq->start);
+   209		iov_iter_zero(iov_iter_count(&iter), &iter);
+   210		return 0;
+   211	}
+   212	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
