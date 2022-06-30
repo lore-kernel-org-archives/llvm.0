@@ -1,115 +1,84 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBAD7B
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 16:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656608229; x=1688144229;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bL9nkQHpWXRcPQiclQNvTJObFea+2bIOo5Icywa3vMA=;
-  b=fmrnj/6XuSpY1hnOWZabHa7oDtPIZ/7Bh+RzopLp14OHknBAX57nHps+
-   hL5jBriVpX/QkW93R0zu0Im+Scz9SCMknY/iOCVSHSS2S8n+mKecZgyHQ
-   Bj7eBMp9wg9++qnorxgkRFae5QI68Ufol1Zw3FVTWM9ltXapLCo//Tj26
-   9Kxt8LZ2qLG3s4QZZ6QJUPHIBI+jiJrwD8thm/mMC7PGeyX+J3CV/8SMn
-   PUlmia2grWt0+sj7f7hIdMOsNypeNBNyPtP/nF2FJrYVf6/8tUDwXrhTm
-   a/SMH+lmmn9h8jAOslm763iFDv28yTpVnQqU9eUHwUpe3DyX9d9HKP6LI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283506027"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="283506027"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 09:57:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="623800223"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jun 2022 09:57:02 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-	by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25UGv0GF022621;
-	Thu, 30 Jun 2022 17:57:00 +0100
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>, Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        kernel test robot <lkp@intel.com>, linux-alpha@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/9] bitops: let optimize out non-atomic bitops on compile-time constants
-Date: Thu, 30 Jun 2022 18:56:11 +0200
-Message-Id: <20220630165611.1551808-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B81C7B
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 17:31:48 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id t25so34934084lfg.7
+        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 10:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
+        b=KiMJPhP6xYYFUTWaCNcg8Z9VnzBD8Sm0oGGvMtn8MvEbc8PTHuawBiezi89pfsM7Qg
+         Weaotn/+nwWWMTsRSzSg3qRF0kqlRQQhIV56sfRjnhfJlsreFVjkQwOx56O2r6XGhDIE
+         5MwNLhFeUXTLv7GhRSR68Rj4yk3AT6dh4zwiNg6OLPp3JgFANNXzgIlgbjJGJVPQTKnx
+         MCEUiDTeM+atlaHz/soeTiQbt2NENBGmLKydg6UEQBFGBoYX7OfGhPE0X3Fm27YP4uzU
+         UqdaYdcuGBsxGYIcG7YALT7F6u1V1TWM2roEZKCy53hl8+dLM5hWEuupgxTAOg99+qcZ
+         o7Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
+        b=jHQwML4YdB0ychaWGiqvfgcBQoil9IyGdHKBZxGESyBpj25TeUkUPFk2U+6Ygx2M1+
+         mRz4RQZ1DiSLN/W/GuN/Ozk7+QHOFymzQoqP993SjGGoAuNNT/7yFxaBuxuc2DKx9S7t
+         BTXvakuSHi7cpYW6JByNBjYlsQlYqNsF0UudBeFXPKoY4K5YX2M2chxSLq/K/WugqCzP
+         mzZ2caTqbEL+IMO2k/RnM4SibeQ2KRmL07aP73kwbTufnAubaduc3CL7GWOZ1EhOPKTf
+         o6t5ci4mstEIlCJoRXu5v3SzK2e26rjIpOXatu7idMPG32yxTgdh9DmfuCi1xuuwZkeN
+         vtZQ==
+X-Gm-Message-State: AJIora+dKV7fFhNJGE14Jrj1Lpr6d7/GwKx+wZyImE1+D8OQOjOdWcOZ
+	TPPrjA2lLV4Q2y5XQ2H/Y3HbQ/LTEwXa0LOqgiHa5w==
+X-Google-Smtp-Source: AGRyM1vC8qvT64BKHvXZRWx0+8khtoYbG2fNUSn6dQgJUNzOHR73qJQimcWU1Ouvt7DOWBH7/hK5HihBjOUZbkXXK/U=
+X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id
+ b13-20020a0565120b8d00b0047f74f0729bmr6261421lfv.403.1656610306179; Thu, 30
+ Jun 2022 10:31:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220629235326.480858-1-justinstitt@google.com> <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
+In-Reply-To: <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 30 Jun 2022 10:31:34 -0700
+Message-ID: <CAKwvOdmyXX=P4k_ymT=3EmzEuTZryozOTbe=F08bokw=axieUQ@mail.gmail.com>
+Subject: Re: [PATCH] lib/test_printf.c: fix clang -Wformat warnings
+To: Justin Stitt <justinstitt@google.com>
+Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Fri, 24 Jun 2022 14:13:04 +0200
+On Thu, Jun 30, 2022 at 1:14 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Jun 30, 2022 at 2:11 AM Justin Stitt <justinstitt@google.com> wrote:
+> >
+> > +       /* disable -Wformat for this chunk */
+> > +       NOWARN(-Wformat,
+> >         test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> >         test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> >         test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+>
+> Perhaps shift right the lines as well?
 
-> While I was working on converting some structure fields from a fixed
-> type to a bitmap, I started observing code size increase not only in
-> places where the code works with the converted structure fields, but
-> also where the converted vars were on the stack. That said, the
-> following code:
+Along these lines, I think it would look nicer to pass a block
+statement (a group of statements) to the macro rather than use
+__VA_ARGS__.  Here's an example:
+https://godbolt.org/z/fsYcGGEMb
 
-Hey,
+You have to be careful with control flow out of blocks like this
+sometimes, but for these simple localized cases it looks like that
+should be fine.
 
-Seems like everything is fine this time. I got some reports, but
-those aren't caused by any of the changes from the series.
-Maybe we can take it to -next and see how it goes?
-
-[...]
-
->  arch/alpha/include/asm/bitops.h               |  32 ++--
->  arch/hexagon/include/asm/bitops.h             |  24 ++-
->  arch/ia64/include/asm/bitops.h                |  42 ++---
->  arch/ia64/include/asm/processor.h             |   2 +-
->  arch/m68k/include/asm/bitops.h                |  49 ++++--
->  arch/s390/include/asm/bitops.h                |  61 +++----
->  arch/sh/include/asm/bitops-op32.h             |  34 ++--
->  arch/sparc/include/asm/bitops_32.h            |  18 +-
->  arch/sparc/lib/atomic32.c                     |  12 +-
->  arch/x86/include/asm/bitops.h                 |  22 +--
->  drivers/net/ethernet/intel/ice/ice_switch.c   |   2 +-
->  .../asm-generic/bitops/generic-non-atomic.h   | 161 ++++++++++++++++++
->  .../bitops/instrumented-non-atomic.h          |  35 ++--
->  include/asm-generic/bitops/non-atomic.h       | 121 +------------
->  .../bitops/non-instrumented-non-atomic.h      |  16 ++
->  include/linux/bitmap.h                        |  22 ++-
->  include/linux/bitops.h                        |  50 ++++++
->  lib/test_bitmap.c                             |  62 +++++++
->  tools/include/asm-generic/bitops/non-atomic.h |  34 ++--
->  tools/include/linux/bitops.h                  |  16 ++
->  20 files changed, 544 insertions(+), 271 deletions(-)
->  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
->  create mode 100644 include/asm-generic/bitops/non-instrumented-non-atomic.h
-> 
-> -- 
-> 2.36.1
-
+As Nathan mentions, you can probably re-use the existing infra in your
+definition of NOWARN.  I do prefer some macro to make it appear that
+the pragma is scoped to a block statement, rather than multiple lines
+for the diag push + pop inline.
+-- 
 Thanks,
-Olek
+~Nick Desaulniers
