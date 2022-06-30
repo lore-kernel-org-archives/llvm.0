@@ -1,125 +1,87 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560AD3D7C
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 13:40:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656596454; x=1688132454;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=9m7ExAuUbLHRnrr4ygSyyZuNUqX5eORbDGAlsRzoe4Q=;
-  b=g88Or2v205JF7VyBrFWVwACi3+NdDNTALrI2E5KVIyoLhlBYs94xcfC3
-   cyacqOm4VbAWXZJXyDPUucCkILjziVQ+atRhRi8f+rvlfxvwXCLo3I+kE
-   ktew5kS4lx3GEyQx4uesgs0vGKZHukdGb1Z8VAcCQXV019Sfk2YPQKm3i
-   tRobakC8BfU6izzh+zWRZa5I3sBjP5qE0FwnfeQyhPpODbjByUtSLR/+J
-   Y8OmROrdVfSY13n7G6JnZQVGS/a7dvVBOZiwYXdCL2pPDZvvUcuqtew8I
-   QKzkt3+T7nC62ln+wRLn4ZjBabtiBjVrtB/kbWGIKpy7wv3TQ7utzYI7q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="344036469"
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="344036469"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 06:40:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,234,1650956400"; 
-   d="scan'208";a="541331051"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jun 2022 06:40:52 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o6uPb-000Co6-Vi;
-	Thu, 30 Jun 2022 13:40:51 +0000
-Date: Thu, 30 Jun 2022 21:40:00 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 1/2] sched: Add per_cpu cluster domain info and
- cpus_share_lowest_cache API
-Message-ID: <202206302141.nFFCjekB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB1C3D7C
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 13:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4130FC34115;
+	Thu, 30 Jun 2022 13:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1656597355;
+	bh=0Pztk4mzBqgFgfsq/p8hGIUhrVzLBaGck9BeRq7gqEM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=W6IC1Y9er6nY8OAIsJdxyjxEd6xUB1dB4a98jULLELviemI5b/cr1p/q2XZu1huWD
+	 7KjyEM90BZYCglP64/Z4e9w8oAhshPUp3X3hhkZFp2IkfOsRk9hnAbwyF4ruRYRSjT
+	 Z9n89b7u+jGp9dnNW3C6ckvOCji6dfQVwgGc4sA0=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.18 4/6] hinic: Replace memcpy() with direct assignment
+Date: Thu, 30 Jun 2022 15:47:30 +0200
+Message-Id: <20220630133230.371942781@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220630133230.239507521@linuxfoundation.org>
+References: <20220630133230.239507521@linuxfoundation.org>
+User-Agent: quilt/0.66
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-BCC: lkp@intel.com
-In-Reply-To: <20220630065527.38544-2-yangyicong@hisilicon.com>
-References: <20220630065527.38544-2-yangyicong@hisilicon.com>
-TO: Yicong Yang <yangyicong@hisilicon.com>
-TO: peterz@infradead.org
-TO: mingo@redhat.com
-TO: juri.lelli@redhat.com
-TO: vincent.guittot@linaro.org
-TO: tim.c.chen@linux.intel.com
-TO: gautham.shenoy@amd.com
-TO: linux-kernel@vger.kernel.org
-TO: linux-arm-kernel@lists.infradead.org
-CC: dietmar.eggemann@arm.com
-CC: rostedt@goodmis.org
-CC: bsegall@google.com
-CC: bristot@redhat.com
-CC: prime.zeng@huawei.com
-CC: yangyicong@hisilicon.com
-CC: jonathan.cameron@huawei.com
-CC: ego@linux.vnet.ibm.com
-CC: srikar@linux.vnet.ibm.com
-CC: linuxarm@huawei.com
-CC: 21cnbao@gmail.com
-CC: guodong.xu@linaro.org
-CC: hesham.almatary@huawei.com
-CC: john.garry@huawei.com
-CC: shenyang39@huawei.com
-CC: kprateek.nayak@amd.com
-CC: yu.c.chen@intel.com
-CC: wuyun.abel@bytedance.com
+From: Kees Cook <keescook@chromium.org>
 
-Hi Yicong,
+commit 1e70212e031528918066a631c9fdccda93a1ffaa upstream.
 
-Thank you for the patch! Yet something to improve:
+Under CONFIG_FORTIFY_SOURCE=y and CONFIG_UBSAN_BOUNDS=y, Clang is bugged
+here for calculating the size of the destination buffer (0x10 instead of
+0x14). This copy is a fixed size (sizeof(struct fw_section_info_st)), with
+the source and dest being struct fw_section_info_st, so the memcpy should
+be safe, assuming the index is within bounds, which is UBSAN_BOUNDS's
+responsibility to figure out.
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on next-20220630]
-[cannot apply to linus/master v5.19-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Avoid the whole thing and just do a direct assignment. This results in
+no change to the executable code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/sched-fair-Scan-cluster-before-scanning-LLC-in-wake-up-path/20220630-145742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 70fb5ccf2ebb09a0c8ebba775041567812d45f86
-config: riscv-randconfig-r032-20220629 (https://download.01.org/0day-ci/archive/20220630/202206302141.nFFCjekB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/50ff7c627bf5a989311a194127ef0e87b2a1c453
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yicong-Yang/sched-fair-Scan-cluster-before-scanning-LLC-in-wake-up-path/20220630-145742
-        git checkout 50ff7c627bf5a989311a194127ef0e87b2a1c453
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+[This is a duplicate of commit 2c0ab32b73cf ("hinic: Replace memcpy()
+ with direct assignment") which was applied to net-next.]
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev
+Link: https://github.com/ClangBuiltLinux/linux/issues/1592
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Link: https://lore.kernel.org/r/20220616052312.292861-1-keescook@chromium.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/ethernet/huawei/hinic/hinic_devlink.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-All errors (new ones prefixed by >>):
+--- a/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+@@ -43,9 +43,7 @@ static bool check_image_valid(struct hin
+ 
+ 	for (i = 0; i < fw_image->fw_info.fw_section_cnt; i++) {
+ 		len += fw_image->fw_section_info[i].fw_section_len;
+-		memcpy(&host_image->image_section_info[i],
+-		       &fw_image->fw_section_info[i],
+-		       sizeof(struct fw_section_info_st));
++		host_image->image_section_info[i] = fw_image->fw_section_info[i];
+ 	}
+ 
+ 	if (len != fw_image->fw_len ||
 
->> ld.lld: error: init/built-in.a(main.o):(.text+0x9c): relocation R_RISCV_HI20 out of range: 526768 is not in [-524288, 524287]; references __init_end
-   >>> referenced by main.c
-   >>> defined in ./arch/riscv/kernel/vmlinux.lds:64
---
->> ld.lld: error: init/built-in.a(main.o):(.text+0xa4): relocation R_RISCV_HI20 out of range: 528523 is not in [-524288, 524287]; references .L.str.52
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
---
->> ld.lld: error: init/built-in.a(main.o):(function rcu_lock_acquire: .text+0xe0): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references .Ltmp6
-   >>> referenced by main.c
-   >>> defined in init/built-in.a(main.o)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
