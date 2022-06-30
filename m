@@ -1,84 +1,63 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B81C7B
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 17:31:48 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id t25so34934084lfg.7
-        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 10:31:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0E03D83
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 18:46:22 +0000 (UTC)
+Received: by mail-lf1-f45.google.com with SMTP id z13so35204909lfj.13
+        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 11:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
-        b=KiMJPhP6xYYFUTWaCNcg8Z9VnzBD8Sm0oGGvMtn8MvEbc8PTHuawBiezi89pfsM7Qg
-         Weaotn/+nwWWMTsRSzSg3qRF0kqlRQQhIV56sfRjnhfJlsreFVjkQwOx56O2r6XGhDIE
-         5MwNLhFeUXTLv7GhRSR68Rj4yk3AT6dh4zwiNg6OLPp3JgFANNXzgIlgbjJGJVPQTKnx
-         MCEUiDTeM+atlaHz/soeTiQbt2NENBGmLKydg6UEQBFGBoYX7OfGhPE0X3Fm27YP4uzU
-         UqdaYdcuGBsxGYIcG7YALT7F6u1V1TWM2roEZKCy53hl8+dLM5hWEuupgxTAOg99+qcZ
-         o7Cg==
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=vIzLXlrqi0BRAmiWe3RX0HjlFWXqa2cLufMgMBs+YGE=;
+        b=Glhcpf/Zl6vRHcA0KVhKQe/uUE4/8TXRGPrgaThJqxxAHok2zyTSU6DJJhD+p0vLl5
+         1+DBMi5me7Yi3J3RUwpsKcyIm1W7pZHHyLoipKrLYqCzbbUTu4llVECqdbEFIQgHN9Ke
+         qKR25Q375DqZEXrB8zFTF4OHaeBir3NdptlPnK8DYgSLKgOIgigrqArh245WQ2GF9Vdh
+         rH6ZCy18STQBC12T4PSYm0om4IZ6qSyRLlslUBqWNtQnEfJsE+gSbRP1jPfBsBzzWeca
+         rHJ57RhBYJg1LqQbPK+hZcsni7yYPLj1JXw30QzWQgB4J69ZvLRK29h1V/aWD6boPg+S
+         Tb+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bKovRKzTTq8kVAKncWkMW8HntSojKecvaV7C1Tiy6gA=;
-        b=jHQwML4YdB0ychaWGiqvfgcBQoil9IyGdHKBZxGESyBpj25TeUkUPFk2U+6Ygx2M1+
-         mRz4RQZ1DiSLN/W/GuN/Ozk7+QHOFymzQoqP993SjGGoAuNNT/7yFxaBuxuc2DKx9S7t
-         BTXvakuSHi7cpYW6JByNBjYlsQlYqNsF0UudBeFXPKoY4K5YX2M2chxSLq/K/WugqCzP
-         mzZ2caTqbEL+IMO2k/RnM4SibeQ2KRmL07aP73kwbTufnAubaduc3CL7GWOZ1EhOPKTf
-         o6t5ci4mstEIlCJoRXu5v3SzK2e26rjIpOXatu7idMPG32yxTgdh9DmfuCi1xuuwZkeN
-         vtZQ==
-X-Gm-Message-State: AJIora+dKV7fFhNJGE14Jrj1Lpr6d7/GwKx+wZyImE1+D8OQOjOdWcOZ
-	TPPrjA2lLV4Q2y5XQ2H/Y3HbQ/LTEwXa0LOqgiHa5w==
-X-Google-Smtp-Source: AGRyM1vC8qvT64BKHvXZRWx0+8khtoYbG2fNUSn6dQgJUNzOHR73qJQimcWU1Ouvt7DOWBH7/hK5HihBjOUZbkXXK/U=
-X-Received: by 2002:a05:6512:b8d:b0:47f:74f0:729b with SMTP id
- b13-20020a0565120b8d00b0047f74f0729bmr6261421lfv.403.1656610306179; Thu, 30
- Jun 2022 10:31:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=vIzLXlrqi0BRAmiWe3RX0HjlFWXqa2cLufMgMBs+YGE=;
+        b=wVPrKsKmpUXy5FxS1jL9XGmYbf07E/Avp0gZm3rtK9fvGKt49ifRMB0kvoZ+Omi2T1
+         jK9MlyJ54OpQ/jEjSe67OUkvhPOvjydXwJ7QCIgEWJ8XlGmEodSQbnABz8LR+Spm1KGb
+         TJgxN9KdVkBdW4ODBr9+LGv6fKaV6PiABiBr9p/2kDiviS92fOWTGoEeZ5s9hdOOV3iG
+         Z9wXPZdeXGUJqHacN0esUn+lJMsvBL/txgalVtPgYo8CLuJ95Osih5lmw1HOquLXpfe5
+         /H9sHpHYWhJ6HgN58DB95/fZKQgCxqAUvIjXIVG/zfsnLCcxSSrk72hfP+r3/nszH74T
+         1KOA==
+X-Gm-Message-State: AJIora8FaP3kAOXLdTwT3z7J8HdSh9mxDPnHHi934VY1j1DHO8z8GjtJ
+	nFqu9S3bfrCNSkVh01jiTCrHTBEx8NY4XzEXnmR6Xk+iOLI9PA==
+X-Google-Smtp-Source: AGRyM1u7OlcxkLnxNQfzZdYm9LllGscLxp2X1a0PAH85+0uTB/DokyM3Wzrs4ssUrhLhHqTKGIAVpTPJ/E/yfUny3ys=
+X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
+ x7-20020a056512130700b0047fbaa452c5mr6241305lfu.103.1656614779817; Thu, 30
+ Jun 2022 11:46:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220629235326.480858-1-justinstitt@google.com> <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
-In-Reply-To: <CAHp75VdQws+Q8aoh0BZkq1K4Grw0ugo_=NZ1uYO0g38xFjT9Lw@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 30 Jun 2022 10:31:34 -0700
-Message-ID: <CAKwvOdmyXX=P4k_ymT=3EmzEuTZryozOTbe=F08bokw=axieUQ@mail.gmail.com>
-Subject: Re: [PATCH] lib/test_printf.c: fix clang -Wformat warnings
-To: Justin Stitt <justinstitt@google.com>
-Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 30 Jun 2022 11:46:08 -0700
+Message-ID: <CAKwvOdnouptmT+CSQWWKH_wr3vvggt-SXYWGiY0sEKpBKAQ43Q@mail.gmail.com>
+Subject: shout out from Bero @ EuroLLVM '22
+To: clang-built-linux <llvm@lists.linux.dev>
+Cc: Bernhard Rosenkraenzer <bero@lindev.ch>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 30, 2022 at 1:14 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jun 30, 2022 at 2:11 AM Justin Stitt <justinstitt@google.com> wrote:
-> >
-> > +       /* disable -Wformat for this chunk */
-> > +       NOWARN(-Wformat,
-> >         test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-> >         test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-> >         test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
->
-> Perhaps shift right the lines as well?
+Check out this shoutout from Bero @ EuroLLVM '22:
+https://www.youtube.com/watch?v=3Dh9xg8Y8byIg&t=3D573s
 
-Along these lines, I think it would look nicer to pass a block
-statement (a group of statements) to the macro rather than use
-__VA_ARGS__.  Here's an example:
-https://godbolt.org/z/fsYcGGEMb
+> Next thing that used to be a problem in the past is building Linux kernel=
+s [with clang]. That was quite tricky early on because VLAIS but that has a=
+ll been fixed. There's an active project, [clang-built-linux], that makes i=
+t better.  Even including the LLVM versions of binutils, even linking with =
+LLD works _perfectly_ these days, so there's no reason anymore to build a s=
+eparate kernel, compiler, or anything.
 
-You have to be careful with control flow out of blocks like this
-sometimes, but for these simple localized cases it looks like that
-should be fine.
-
-As Nathan mentions, you can probably re-use the existing infra in your
-definition of NOWARN.  I do prefer some macro to make it appear that
-the pragma is scoped to a block statement, rather than multiple lines
-for the diag push + pop inline.
--- 
+--=20
 Thanks,
 ~Nick Desaulniers
