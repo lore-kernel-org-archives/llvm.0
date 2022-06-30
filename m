@@ -1,115 +1,77 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636342F59
-	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 21:08:48 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id s10so189061ljh.12
-        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 14:08:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469A76D19
+	for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 21:43:07 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-31bf3656517so6032537b3.12
+        for <llvm@lists.linux.dev>; Thu, 30 Jun 2022 14:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1ZoCzbq4enWBVchP9RP44MqGpIFw4W432LhKj2F/Ovs=;
-        b=JPpSnMTCb87zEzKFyOpGz0aoNzR5cYSj+hUDxxSOlkCRnvE1VRKqGctg22nrcuqCgn
-         SF990zjUvZFUPM82RpA3A/N9rK/+VLjG6teSA3BXQBsljxyPYnTH2OcdRk407319vuRr
-         EU7T9MGIgwjADBrCkHdDdP7YrkrZA2uvx3RCOjlqPe6tBVytl08nu2JQyv4SapqxHBBQ
-         RH8m/msvnTMGSSrR+dcgX56RxtoSbrrY+UyBAR8ixv098rSIOYbXI5Bb+7dRKFCe/cfn
-         9+vOCLti2oXp0AxUH8P6f/9criLrFQ/tnZUDHpTXj9wJtqSH1whhK+8AM94718jPKHJb
-         s5Qg==
+        bh=dMHt42bJ1YlW7qsjn88JwOKrZtD6Yx+xury8B4lI9tk=;
+        b=QZX9HPFJkD9+fzjjZWsSCiOlE2J/2LsSXswBgBMfa0v9fHzcoWvnjb3VEHfacRDxYt
+         p83HHAoDzMPStKdrx0jpo73c8H8L9bqEGASwti9PF8dOP3fCoFE5oH/ju2WQmAQFEEIu
+         2Xz2bGf3ke5KIZ7wLDOHukz6+UP1FeL/mHrTRw4YBe0bei7LrMaWHv9MK4+4nSVTMqqG
+         ymgvGNvQO0Nd0WelNyhtBiIiaOFrQcB9iNsxPXb3n1Ms9Cifpj/jY5RcFc0VRFuYaxzm
+         5n57zZG1SqXMuAv13Cm4jvQDrnSDsKNEgKpD6Nce8ZdKUymPJnZdqir5kYHPe0ea6UPb
+         aTTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1ZoCzbq4enWBVchP9RP44MqGpIFw4W432LhKj2F/Ovs=;
-        b=hel5U4Fd0Yye1eJO54iXwcpA30LqIcoKBWuPiHqYcETvPrT7OCGd9b3LFVlqVIIGto
-         28G25sBhDSO+EEPMBSqnecSOYGwbBot2dOUpHgnRgoMFuOoFMuImhK49fqVgGh/AHaWq
-         JlvOADa1/9hejhzBsjf6/2cxq3gpkUXP1afWUFXzAl+YE8UBG4OSKk5RGjvoQ/+Wln/k
-         9Cht4aRU3Z5wh+4FLk7A9nrk48nM2DaOmhT7wc/9pBz8bqGbpFmJFwd6juZbpkS0fwbj
-         kfV1o3X6UG1ThXNy8Mg1uGMMcg/HouySCRW10TLak0yXobFMLt9YuyuFtn50uyQ5f5FM
-         iKTA==
-X-Gm-Message-State: AJIora96Kg0LEtnkMzZXiReFDUnFjQV17ZDFQ/uX3MP0g6W26anmrYst
-	+/ekZivN0hft8EkcCE9qA7BgzXFxcRlQ8PTQuqdC9w==
-X-Google-Smtp-Source: AGRyM1vBEvtf7ov+JoIEPe7L4X7srxN3a2/MCUADh+0tWA0mWFZJNSmPn9Itfl63NL6pqyJURE6SqRGtOGHQ2yZqCT0=
-X-Received: by 2002:a2e:720f:0:b0:25a:9f46:6f5e with SMTP id
- n15-20020a2e720f000000b0025a9f466f5emr6013417ljc.103.1656623326207; Thu, 30
- Jun 2022 14:08:46 -0700 (PDT)
+        bh=dMHt42bJ1YlW7qsjn88JwOKrZtD6Yx+xury8B4lI9tk=;
+        b=oryujCUdnEXQUjf+pqPU2gJmY8p+nWtP/KGS6fzXEVHOJ4XM0Rk77YpdCwrbUe09u1
+         coCLHFgm3r5jnE2I1xaWInDnO8mc200/jQ0WgYCC/Hmqv5pPmRcIDqBykt40EyZRrbuo
+         A/Va+VHtAb5H749ktnUCKAIK7cv/ne+ezKVhrKYWYiAYtkEvY5H/8r2tHdEGivUH+RZc
+         pbxNGYOnzXXbRIFnsgs4Z4eTmE5tDWevg+wbW4k9WCQVFxZnuy/GkRaatW9bgAs6fyd1
+         lnXMEjXdZEhiQfckkn2J8g5cOztZm0Wp7eKoKhUPaPkYRpsPTpbOsLwjvPPdeRf6ENWj
+         Nixg==
+X-Gm-Message-State: AJIora/ZqhC3wpk++qKQ9HiTj1Mgg19opyiRVs/gaoDEVFBiohXdMxyR
+	uvea/RBZOLnGRf7izq5kCmEbqg3kyFbwngBQhxE=
+X-Google-Smtp-Source: AGRyM1t2UrK1hzV79ai9XXNCfm4iNtTsbANUmoYqfQmUHleEfY0pxh0cpqQXRU3xd7K+u5jePVWW1lw/QC+ZRlYpm3Q=
+X-Received: by 2002:a81:2386:0:b0:317:6586:8901 with SMTP id
+ j128-20020a812386000000b0031765868901mr12916894ywj.195.1656625386155; Thu, 30
+ Jun 2022 14:43:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220630153121.1317045-1-nathan@kernel.org> <20220630153121.1317045-3-nathan@kernel.org>
-In-Reply-To: <20220630153121.1317045-3-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 30 Jun 2022 14:08:34 -0700
-Message-ID: <CAKwvOd=UdmcP0Ef8gbyO7QWqS6kRTC2JLNH8LE4QdjQAXX=EbQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: vdso32: Add DWARF_DEBUG
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Joey Gouly <joey.gouly@arm.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linudx.dev
+References: <20220629235326.480858-1-justinstitt@google.com> <20220630195738.904505-1-justinstitt@google.com>
+In-Reply-To: <20220630195738.904505-1-justinstitt@google.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 30 Jun 2022 23:42:28 +0200
+Message-ID: <CAHp75VfYPfvcySRJboSO8YsXTfO61j7QM=mYrDDPJquRAwzw0A@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/test_printf.c: fix clang -Wformat warnings
+To: Justin Stitt <justinstitt@google.com>
+Cc: Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Andy Shevchenko <andy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 30, 2022 at 8:32 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, Jun 30, 2022 at 9:59 PM Justin Stitt <justinstitt@google.com> wrote:
 >
-> When building the 32-bit vDSO with LLVM 15 and CONFIG_DEBUG_INFO, there
-> are the following orphan section warnings:
+> changes from v1:
+> * moved NOWARN macro definition to a more appropriate location
+> * using __diag_ignore_all (thanks Nathan)
+> * using local scoping for code blocks instead of __VA_ARGS__ (thanks Nick)
+> * indented affected test cases (thanks Andy)
 >
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_abbrev) is being placed in '.debug_abbrev'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_info) is being placed in '.debug_info'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_str) is being placed in '.debug_str'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_addr) is being placed in '.debug_addr'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line) is being placed in '.debug_line'
->   ld.lld: warning: arch/arm64/kernel/vdso32/note.o:(.debug_line_str) is being placed in '.debug_line_str'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_loclists) is being placed in '.debug_loclists'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_abbrev) is being placed in '.debug_abbrev'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_info) is being placed in '.debug_info'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_rnglists) is being placed in '.debug_rnglists'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str_offsets) is being placed in '.debug_str_offsets'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_str) is being placed in '.debug_str'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_addr) is being placed in '.debug_addr'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_frame) is being placed in '.debug_frame'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line) is being placed in '.debug_line'
->   ld.lld: warning: arch/arm64/kernel/vdso32/vgettimeofday.o:(.debug_line_str) is being placed in '.debug_line_str'
->
-> These are DWARF5 sections, as that is the implicit default version for
+> Suggested-by: Andy Shevchenko <andy@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-Most of these are DWARF v5, but some like .debug_info and .debug_line
-are DWARF v2; this isn't specifically a DWARF v5 issue, more so just
-an issue with CONFIG_DEBUG_INFO.  Not worth a v2 IMO though.  Thanks
-for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> clang-14 and newer when just '-g' is used. All DWARF sections are
-> handled by the DWARF_DEBUG macro from include/asm-generic/vmlinux.lds.h
-> so use that macro here to fix the warnings regardless of DWARF version.
->
-> Fixes: 9d4775b332e1 ("arm64: vdso32: enable orphan handling for VDSO")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/arm64/kernel/vdso32/vdso.lds.S | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/kernel/vdso32/vdso.lds.S b/arch/arm64/kernel/vdso32/vdso.lds.S
-> index c25bed8e6df1..8d95d7d35057 100644
-> --- a/arch/arm64/kernel/vdso32/vdso.lds.S
-> +++ b/arch/arm64/kernel/vdso32/vdso.lds.S
-> @@ -57,6 +57,7 @@ SECTIONS
->         .rel.dyn        : { *(.rel*) }
->
->         .ARM.exidx : { *(.ARM.exidx*) }
-> +       DWARF_DEBUG
->         ELF_DETAILS
->         .ARM.attributes 0 : { *(.ARM.attributes) }
->
-> --
-> 2.37.0
->
-
+Somehow you replaced the commit message with a changelog. On top of
+that, I didn't suggest anything important here, so to me it is
+considered as a credit in the changelog (see previous sentence as
+well).
 
 -- 
-Thanks,
-~Nick Desaulniers
+With Best Regards,
+Andy Shevchenko
