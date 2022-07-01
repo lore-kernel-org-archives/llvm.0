@@ -1,158 +1,229 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5620C3C14
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 16:59:14 +0000 (UTC)
-Received: by mail-il1-f169.google.com with SMTP id n14so1762526ilt.10
-        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 09:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VEszNyKVwtIDou70xdE4vCFc6o5wY4jfOpRp+w8sJVo=;
-        b=hRmd+YPSjVJD7PL/0wX/gFt/D4QwwFRpsNxXvl7D3Kyr71gJKK0BHzCEZJNnWPX54S
-         QZUlxFJ2Xh8ALTedXvGzDtpNm72pB76hrwv4tN2Uh0m7HctzeTBxpGJhtuWfdwpw3mRa
-         Of1HtTxs9FgEIfUMt28m4sMfHtVHUdEtNVGXE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VEszNyKVwtIDou70xdE4vCFc6o5wY4jfOpRp+w8sJVo=;
-        b=Q79oWbVtvQ6FBhyR26Py/nbaJreyJpDSTh+iLEbqhU49xKdMDVHw/JwG15ILtJtGRq
-         x73THQ7IMlFKubLr9WoS24FPKnq4DJbMvn9WUfgAT6La1xhnyjfrTwQkrgI1uRw+2pDr
-         uLsNBM/q2WIbTEmm9ar9egwu8ZhlnlIH1fT+TwjmoiwlMXkMM8XKbg4LcN11u/y6KDtK
-         z7GSkYeRyC4o2Yr3V+lZlo1gAL5R0W7We5SxQ49yE5oYfyY8WSMbsbpA/qBmNws48lr2
-         zNkY6igA1eS8Vydfx14zDjLRZNePPFWgMWUjKoB14KArf3TRmD67cV8t1LMXEDq1ouOU
-         3XeQ==
-X-Gm-Message-State: AJIora+ZncQXDNS8pJ8OTSsMEqvAEW+KHzowYZ6M/x9kvzuSVrOh6Q3b
-	067zk3CnElcW3gPz3L4KyF6MMg==
-X-Google-Smtp-Source: AGRyM1tZ1o3WYbngjSls4BbtWnjSAncI4ln2sXFWSZOddCGq4foxHqD2cVBPDm380WYaZH5HmXHGxQ==
-X-Received: by 2002:a05:6e02:1e05:b0:2da:e2da:5509 with SMTP id g5-20020a056e021e0500b002dae2da5509mr3695626ila.266.1656694753373;
-        Fri, 01 Jul 2022 09:59:13 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id bg13-20020a0566383c4d00b00339edc9d877sm5670646jab.120.2022.07.01.09.59.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Jul 2022 09:59:13 -0700 (PDT)
-Subject: Re: [char-misc:char-misc-linus 3/3]
- drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <202207011658.rHJFVLWA-lkp@intel.com> <Yr63Zyvj49o8U/ti@kroah.com>
- <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
- <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
- <1c13496a-9e45-38b6-1563-c09d412cf576@linuxfoundation.org>
- <6e148c41-4a31-f173-f5ea-d52e115c268c@linuxfoundation.org>
- <Yr8giNcxMQyxx+KZ@dev-arch.thelio-3990X>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <909a0c61-d151-2d60-1f3c-a2c22d590b33@linuxfoundation.org>
-Date: Fri, 1 Jul 2022 10:59:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2393C14
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 17:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656695824; x=1688231824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=78PtGUkKSp36JzVKi0xJJNA9YET195hTgBzl+p/xvmM=;
+  b=A2gnsFjE3ZPeTI+x9CA1JXAN5UA24mJHbH+t855fd3gSTISb6545KugD
+   Z+rXdRSJvCy7vgb039XagZXlAclk4980/8UzYJoPdsvgzX566F6wrHjm3
+   rEqZWJIhCHoKhJtcW6odgZfsQ6Df+i0YZtx1lzkFSVtbAzfNthcb42jcd
+   zgs0biuXedqEEzXboMsdxEflq2dFnRaY4oWUL5eUjAI9IQQPz1UDbvtIB
+   umnA/JImmuJvpE6q8yrUN3ux3zBPn1QdVe9xHRK4DHnw9eDbLqr2FDl+1
+   tDrx0yN+rtGXsPUOqfMr1bIygby2G/12G+3V21XBsSsXCZsKke5HUKxZ2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="263099018"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="263099018"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:17:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="566417554"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jul 2022 10:16:56 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o7KGG-000EBO-5W;
+	Fri, 01 Jul 2022 17:16:56 +0000
+Date: Sat, 2 Jul 2022 01:16:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Gow <davidgow@google.com>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <skhan@linuxfoundation.org>, Greg KH <greg@kroah.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Gow <davidgow@google.com>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Joe Fradley <joefradley@google.com>,
+	Daniel Latypov <dlatypov@google.com>, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Aaron Tomlin <atomlin@redhat.com>, linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
+Message-ID: <202207020131.L5kV3eDf-lkp@intel.com>
+References: <20220701084744.3002019-4-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Yr8giNcxMQyxx+KZ@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
 
-On 7/1/22 10:27 AM, Nathan Chancellor wrote:
-> On Fri, Jul 01, 2022 at 10:09:45AM -0600, Shuah Khan wrote:
->> On 7/1/22 9:52 AM, Shuah Khan wrote:
->>> On 7/1/22 9:39 AM, Nathan Chancellor wrote:
->>>> On Fri, Jul 01, 2022 at 08:48:11AM -0600, Shuah Khan wrote:
->>>>> On 7/1/22 2:59 AM, Greg Kroah-Hartman wrote:
->>
->>>>>>> All warnings (new ones prefixed by >>):
->>>>>>>
->>>>>>>>> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->>>>>>>               if (!ucr->rsp_buf)
->>>>>>>                   ^~~~~~~~~~~~~
->>>>>>>       drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
->>>>>>>               return ret;
->>>>>>>                      ^~~
->>>>>>>       drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
->>>>>>>               if (!ucr->rsp_buf)
->>>>>>>               ^~~~~~~~~~~~~~~~~~
->>>>>>>       drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
->>>>>>>               int ret;
->>>>>>>                      ^
->>>>>>>                       = 0
->>>>>>>       1 warning generated.
->>>>>>
->>>>>> Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
->>>>>> patch to fix this?  The warning does look correct.
->>>>>>
->>>>>
->>>>> gcc didn't complain when I compiled either. I will send a follow-on patch.
->>>>
->>>> Unfortunately, GCC won't warn for most uninitialized variables by
->>>> default after 5.7, which included commit 78a5255ffb6a ("Stop the ad-hoc
->>>> games with -Wno-maybe-initialized"). They will potentially show up at
->>>> W=2 or with an explicit KCFLAGS=-Wmaybe-uninitialized (it does in this
->>>> case):
->>>>
->>>
->>> Thank you.
->>>
->>>> | drivers/misc/cardreader/rtsx_usb.c: In function ‘rtsx_usb_probe’:
->>>> | drivers/misc/cardreader/rtsx_usb.c:678:16: error: ‘ret’ may be used uninitialized [-Werror=maybe-uninitialized]
->>>> |   678 |         return ret;
->>>> |       |                ^~~
->>>> | drivers/misc/cardreader/rtsx_usb.c:622:13: note: ‘ret’ was declared here
->>>> |   622 |         int ret;
->>>> |       |             ^~~
->>>> | cc1: all warnings being treated as errors
->>>>
->>>
->>> This is a bug and a good find. ret should have been set
->>> in the if (!ucr->rsp_buf) before going to error handling.
->>>
->>> I wonder if it would have been flagged if ret were to be
->>> initialized to 0. Something to experiment.
->>>
->>
->> I had to try. As I suspected initializing ret will mask this bug.
->>
->> KCFLAGS=-Wmaybe-uninitialized will not flag it even though
->> the bug still exists. It will return 0 w hen memory allocation
->> fails.
-> 
-> Right, if the variable is unconditonally initialized at the top of the
-> function, it can never be flagged as uninitialized but that doesn't mean
-> the value is correct for every branch within the function.
-> 
+Hi David,
 
-+1
+I love your patch! Yet something to improve:
 
->> Initializing isn't always the right answer for these kinds of
->> warnings.
-> 
-> I would say "unconditional initialization", as ret has to be initialized
-> somewhere to fix this warning, right? If you are referring to clang's
-> 'ret = 0' suggestion, I agree that it can be misleading (especially in
-> the case of suggesting initializing dereferenced pointers to NULL...,
-> see [1]) but at the end of the day, it is still on the programmer to
-> analyze their code fully in light of the warning before implementing a
-> fix. Clang cannot know that the return code should be set in the if
-> statement rather than at the top of the function.
-> 
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc4 next-20220701]
+[cannot apply to mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-+1 on "programmer to analyze their code fully in light of the warning"
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: arm-randconfig-r024-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020131.L5kV3eDf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/42b6461d6cca4baeeeed474b1400e203057c2b9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+        git checkout 42b6461d6cca4baeeeed474b1400e203057c2b9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
 
-I am not necessarily referring to the clang warning. I agree that it could
-be misleading and suggest or send us towards a wrong fix. It is on us to
-be careful - this would be when fixing the problem and reviewing the fix.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-thanks,
--- Shuah
+All errors (new ones prefixed by >>):
+
+   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                     ~~~          ^~~~
+                                     %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                        ~~~             ^~~~
+                                        %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                           ~~~~               ^~~~~~
+                                           %#o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+>> lib/test_printf.c:801:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_printf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   13 warnings and 1 error generated.
+--
+>> lib/test_scanf.c:811:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_scanf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
+--
+>> lib/test_bitmap.c:889:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_bitmap);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
 
 
+vim +/TAINT_KUNIT +801 lib/test_printf.c
+
+707cc7280f452a1 Rasmus Villemoes 2015-11-06  800  
+6b1a4d5b1a26ae8 Tobin C. Harding 2019-04-05 @801  KSTM_MODULE_LOADERS(test_printf);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
