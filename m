@@ -1,51 +1,79 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4434410E9
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 02:27:35 +0000 (UTC)
-X-UUID: 35726f30895b4b20a7553415274ad838-20220701
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:0943adc9-aca0-4ee7-a222-28265af42680,OB:0,LO
-	B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:cde83e86-57f0-47ca-ba27-fe8c57fbf305,C
-	OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
-	l,QS:nil,BEC:nil,COL:0
-X-UUID: 35726f30895b4b20a7553415274ad838-20220701
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-	(envelope-from <haibo.li@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 923492784; Fri, 01 Jul 2022 10:27:23 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 1 Jul 2022 10:27:21 +0800
-Received: from mszsdtcf10.gcn.mediatek.inc (10.16.4.60) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 1 Jul 2022 10:27:21 +0800
-From: Haibo Li <haibo.li@mediatek.com>
-To: <samitolvanen@google.com>
-CC: <andrealmeid@igalia.com>, <atomlin@redhat.com>,
-	<christophe.leroy@csgroup.eu>, <dmitry.torokhov@gmail.com>,
-	<haibo.li@mediatek.com>, <jgross@suse.com>, <keescook@chromium.org>,
-	<lecopzer.chen@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<llvm@lists.linux.dev>, <matthias.bgg@gmail.com>, <mcgrof@kernel.org>,
-	<mhiramat@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<peterz@infradead.org>, <xiaoming.yu@mediatek.com>, <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH 2/2] ANDROID: cfi: free old cfi shadow asynchronously
-Date: Fri, 1 Jul 2022 10:27:20 +0800
-Message-ID: <20220701022720.49999-1-haibo.li@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABCJKudz5O5_-1q1H0o2DFRcnpMQDBPv4STUVa2bOE9ePaeyDA@mail.gmail.com>
-References: <CABCJKudz5O5_-1q1H0o2DFRcnpMQDBPv4STUVa2bOE9ePaeyDA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648ACECA
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 02:41:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656643283; x=1688179283;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oDk6q32MtovJ4lorASbnkX/SG98a50WieSs/VcndFyw=;
+  b=Qm/XGscFdwpaR9U2Qn5z4B/+BYxSFRGh0rWGZZlvdDJPSnBpYQydS8OA
+   ZQVWrEKla6FaEa5XfouLRQh8HW1znkajlMXAvOZ8pY2b5M0rf5ZGhewEo
+   Vu0ffxP71fgFEAT54iHxgsvWGwAQf2mQgmHJj16nj8UCeBBxhb6mNxzvw
+   RJLOtFNv+nynKuqqRR5AGcg4wnASPmiY5MbmSYZkDrLxiDE6oXvjTZRfD
+   zK+P84iR8Jy7jOqtKscL9m+DMTSmthvIL+uCJhmNZy+ahJuAo4lmcA3BC
+   rbuJsR2agiI8XgI50Z+7IzYIP/eDiX4NHZqhawVLmwB8GeTUTVJBXNXak
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="262935097"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="262935097"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 19:41:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="596067783"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jun 2022 19:41:21 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o76au-000DRq-Sm;
+	Fri, 01 Jul 2022 02:41:20 +0000
+Date: Fri, 1 Jul 2022 10:40:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 56/56]
+ ld.lld: error: undefined symbol: __fscache_resize_cookie
+Message-ID: <202207011046.63cgHZ5l-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   acac17cdb0f9f6db9fc03eea371e399906146f96
+commit: acac17cdb0f9f6db9fc03eea371e399906146f96 [56/56] netfs: Implement truncation
+config: arm64-randconfig-r001-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011046.63cgHZ5l-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a774ba7f60d1fef403b5507b1b1a7475d3684d71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/acac17cdb0f9f6db9fc03eea371e399906146f96
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout acac17cdb0f9f6db9fc03eea371e399906146f96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __fscache_resize_cookie
+   >>> referenced by fscache.h:387 (include/linux/fscache.h:387)
+   >>> netfs/truncate.o:(netfs_truncate) in archive fs/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
