@@ -1,65 +1,45 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2393C14
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 17:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F2C6D24
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 17:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656695824; x=1688231824;
+  t=1656696419; x=1688232419;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=78PtGUkKSp36JzVKi0xJJNA9YET195hTgBzl+p/xvmM=;
-  b=A2gnsFjE3ZPeTI+x9CA1JXAN5UA24mJHbH+t855fd3gSTISb6545KugD
-   Z+rXdRSJvCy7vgb039XagZXlAclk4980/8UzYJoPdsvgzX566F6wrHjm3
-   rEqZWJIhCHoKhJtcW6odgZfsQ6Df+i0YZtx1lzkFSVtbAzfNthcb42jcd
-   zgs0biuXedqEEzXboMsdxEflq2dFnRaY4oWUL5eUjAI9IQQPz1UDbvtIB
-   umnA/JImmuJvpE6q8yrUN3ux3zBPn1QdVe9xHRK4DHnw9eDbLqr2FDl+1
-   tDrx0yN+rtGXsPUOqfMr1bIygby2G/12G+3V21XBsSsXCZsKke5HUKxZ2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="263099018"
+  bh=Vck+4XbfKzgiBiwFSWO94G/QusWXFYDCXSQdw3JT4zY=;
+  b=ENHFa4UhpbU90DUwMW2BB+/+r6KvFXqrhQUcKoOS/xA9BD4fulsRUvBQ
+   aEPXY0QHY/Ih7x2R//BeXBI4JCp7XZclOtBzoRvgfGI3Gmf16C0JcoLYg
+   NU3D7q6e4Ui+l2L1/iLIyI5fHHohY4AXqkFCDT3SWNTizU40HRmNJQimk
+   v0ZEkNj+MUbGDyP0iBI1tHFKcaxyRLcUNYRF+3i2Q/rqhrxA9fuRQ/iez
+   Z89DFD8Ic2cPatGk7aOOzEq29LADbbbSh8C9bxi1vF6ZyzVPGmM2weu/K
+   gsZdjSgnzuEMKdQcIc+Al7NDuUJTfXl5ns0d/DC12S1MFF2zYv+evMQGk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="308227632"
 X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="263099018"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:17:04 -0700
+   d="scan'208";a="308227632"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:26:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="566417554"
+   d="scan'208";a="596332334"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Jul 2022 10:16:56 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jul 2022 10:26:57 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o7KGG-000EBO-5W;
-	Fri, 01 Jul 2022 17:16:56 +0000
-Date: Sat, 2 Jul 2022 01:16:31 +0800
+	id 1o7KPw-000EBu-Fp;
+	Fri, 01 Jul 2022 17:26:56 +0000
+Date: Sat, 2 Jul 2022 01:26:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	Shuah Khan <skhan@linuxfoundation.org>, Greg KH <greg@kroah.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Gow <davidgow@google.com>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Joe Fradley <joefradley@google.com>,
-	Daniel Latypov <dlatypov@google.com>, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Aaron Tomlin <atomlin@redhat.com>, linux-fsdevel@vger.kernel.org,
-	linux-block@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
-Message-ID: <202207020131.L5kV3eDf-lkp@intel.com>
-References: <20220701084744.3002019-4-davidgow@google.com>
+To: Yupeng Li <liyupeng@zbhlos.com>, fweisbec@gmail.com, tglx@linutronix.de,
+	mingo@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, caizp2008@163.com,
+	linux-kernel@vger.kernel.org, Yupeng Li <liyupeng@zbhlos.com>
+Subject: Re: [PATCH 1/1] timers/nohz: fix build with CONFIG_NO_HZ_FULL
+ warnning.
+Message-ID: <202207020130.RZbvd92n-lkp@intel.com>
+References: <20220701033647.911334-1-liyupeng@zbhlos.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,161 +48,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
+In-Reply-To: <20220701033647.911334-1-liyupeng@zbhlos.com>
 
-Hi David,
+Hi Yupeng,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on masahiroy-kbuild/for-next]
-[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc4 next-20220701]
-[cannot apply to mcgrof/modules-next]
+[auto build test WARNING on tip/timers/nohz]
+[also build test WARNING on linus/master v5.19-rc4 next-20220701]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-config: arm-randconfig-r024-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020131.L5kV3eDf-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yupeng-Li/timers-nohz-fix-build-with-CONFIG_NO_HZ_FULL-warnning/20220701-114723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 09fe880ed7a160ebbffb84a0a9096a075e314d2f
+config: x86_64-randconfig-k001 (https://download.01.org/0day-ci/archive/20220702/202207020130.RZbvd92n-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/42b6461d6cca4baeeeed474b1400e203057c2b9b
+        # https://github.com/intel-lab-lkp/linux/commit/d7397dd311be292d170c1fbd0f3bdc5104c06849
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
-        git checkout 42b6461d6cca4baeeeed474b1400e203057c2b9b
+        git fetch --no-tags linux-review Yupeng-Li/timers-nohz-fix-build-with-CONFIG_NO_HZ_FULL-warnning/20220701-114723
+        git checkout d7397dd311be292d170c1fbd0f3bdc5104c06849
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                  ~~~~                       ^
-                                  %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                       ~~~~                     ^
-                                       %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                            ~~~~                   ^~~
-                                            %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                                 ~~~~                   ^~~
-                                                 %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-                                                      ~~~~                   ^~
-                                                      %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                  ~~~~                       ^
-                                  %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                       ~~~~                     ^
-                                       %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                            ~~~~                   ^~~
-                                            %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                                 ~~~~                   ^~~
-                                                 %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
-           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-                                                      ~~~~                   ^~
-                                                      %d
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                     ~~~          ^~~~
-                                     %o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                        ~~~             ^~~~
-                                        %o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
-   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-                                           ~~~~               ^~~~~~
-                                           %#o
-   lib/test_printf.c:137:40: note: expanded from macro 'test'
-           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-                                          ~~~    ^~~~~~~~~~~
->> lib/test_printf.c:801:1: error: use of undeclared identifier 'TAINT_KUNIT'
-   KSTM_MODULE_LOADERS(test_printf);
-   ^
-   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
-           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
-                     ^
-   13 warnings and 1 error generated.
---
->> lib/test_scanf.c:811:1: error: use of undeclared identifier 'TAINT_KUNIT'
-   KSTM_MODULE_LOADERS(test_scanf);
-   ^
-   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
-           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
-                     ^
-   1 error generated.
---
->> lib/test_bitmap.c:889:1: error: use of undeclared identifier 'TAINT_KUNIT'
-   KSTM_MODULE_LOADERS(test_bitmap);
-   ^
-   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
-           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
-                     ^
-   1 error generated.
-
-
-vim +/TAINT_KUNIT +801 lib/test_printf.c
-
-707cc7280f452a1 Rasmus Villemoes 2015-11-06  800  
-6b1a4d5b1a26ae8 Tobin C. Harding 2019-04-05 @801  KSTM_MODULE_LOADERS(test_printf);
+>> WARNING: modpost: vmlinux.o(.text+0x19a091): Section mismatch in reference from the function tick_nohz_full_setup() to the function .init.text:alloc_bootmem_cpumask_var()
+The function tick_nohz_full_setup() references
+the function __init alloc_bootmem_cpumask_var().
+This is often because tick_nohz_full_setup lacks a __init
+annotation or the annotation of alloc_bootmem_cpumask_var is wrong.
 
 -- 
 0-DAY CI Kernel Test Service
