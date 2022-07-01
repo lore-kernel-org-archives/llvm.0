@@ -1,101 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B36B3C1E
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 15:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656691186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3ViBZTo7+P6CuULplF5aZdglMlpqIG92IWrr6hqoZuI=;
-	b=I/n09aH79VrSg2NJeUgnEscLkthitS4V/jqPZ9kw6JEHJtsV5dcxXwEU9q2T/TXqeesH3e
-	/fRz8QYkNv/9jjVaoyY8keV3km6IZeisJBduHFd/SKWLfIJUKhSKqA6oPy6uO3LKRgEr+T
-	y+p957CRUsPkr5PB7bkN76l7b2Vr2NM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-xOsLJQ-SPVuSqX4aR2eW-Q-1; Fri, 01 Jul 2022 11:59:35 -0400
-X-MC-Unique: xOsLJQ-SPVuSqX4aR2eW-Q-1
-Received: by mail-qv1-f69.google.com with SMTP id ld6-20020a056214418600b004708c5a26edso2816238qvb.23
-        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 08:59:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE0E3C1E
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 16:09:47 +0000 (UTC)
+Received: by mail-oi1-f179.google.com with SMTP id be10so4098899oib.7
+        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 09:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ylzGgIW56JtJ+Phcp0uf+6gzrZ/i3VWAXHPNQQtzAWM=;
+        b=DHAUe+A4qjTc41GJSiV+PjOxeQ9qzPJDfg7GO1jvNbqCxv8/NW8r5Ys0a3xrSL+s9/
+         DOkvlR/v5wWKxkFhCxYtF1x5brKocWxKQHvWbtqr0IOhXaEuG1NGrGieL4B9QXf21nbz
+         esuohjZoo//7UEeVW/sHk8ksax6rmKOJgKtfE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3ViBZTo7+P6CuULplF5aZdglMlpqIG92IWrr6hqoZuI=;
-        b=TSMlCxvVTIR1cYbIvjqZRJKoUiXc9KNlavP4BlRqju3Cg/ezyCB42/rPZSChKN4Z2/
-         v3Gx5I5kRuyiT2XFPUar4HffSXKfkWPLaNGJyYmrrYnTbVKlcnm7A5LMKCcI53HdvlLk
-         5Dg2CL7p+xV9FuAq/RjomgFrodoeUx6lDnDq1DO4Ii3+DHYhcpYev8BKAOrk/qzCSBga
-         6A1QIJavUBGOEIhmNy/Zvj3/NSFpdjK8oHcDyKIevqlQ1koPyyj4xtEm1YlFWHBLqA5T
-         nCAkmibiR3ZD3UBFB0/Mc6XwD7AOPKZBuMLJVeHenwkz8n11+IfqIHvwrF8ZARLYCxU0
-         XDfA==
-X-Gm-Message-State: AJIora9P4IZbQok/cEmitfUMvV37fh+vrTcsjH+ZDqF1EFYw+oiwoGAN
-	Tk6hIvs+2Q8qiyAdJzLzH9XyohffSbEaYWK/wilaR92SinAs5/vOaPOyVcyQgJGVugo2MUpzoyM
-	v98Hma2JVNvGQAQ==
-X-Received: by 2002:a37:887:0:b0:6af:147c:fed8 with SMTP id 129-20020a370887000000b006af147cfed8mr11398398qki.70.1656691175343;
-        Fri, 01 Jul 2022 08:59:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uDN5DQ7LAZQpRQ7ZnFyAXmPCSLgKuUxkxMsCn5VlYgkvegKTTuDpjUoPZ9Z4CpwnlALkDIAA==
-X-Received: by 2002:a37:887:0:b0:6af:147c:fed8 with SMTP id 129-20020a370887000000b006af147cfed8mr11398381qki.70.1656691175122;
-        Fri, 01 Jul 2022 08:59:35 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y18-20020a05622a121200b002f90a33c78csm16127153qtx.67.2022.07.01.08.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 08:59:34 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: srinivas.kandagatla@linaro.org,
-	bgoswami@quicinc.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ASoC: codecs: wsa883x: fix fallthrough error
-Date: Fri,  1 Jul 2022 11:59:30 -0400
-Message-Id: <20220701155930.262278-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        bh=ylzGgIW56JtJ+Phcp0uf+6gzrZ/i3VWAXHPNQQtzAWM=;
+        b=hqM/tr182O8B8xmXcFJY0oEK6X5TlUADFlZI1SKtkfq0ULtTH+ad48QKMmo97ygrGy
+         4v26y12fhUMwNetopF50nIttj0e1K2q32PxNk8ksTvEgZ/9RY26wZ1Lc/dma7/qWTupD
+         JUZyA4GmIfnAD6FOChQDE09vfSNRkXnFXGnXVNzRXNpervzCV4Od6Y24Yd0q3aXoMxTA
+         R6UAwrf9W8CZqenKBwAkhpp20fZTWs5Np9KVrhPSYzfOKIl1AMhJJgfoFgihVbxPgLY5
+         gqKuApsw3A32OsvNjSZOid8QZRgSs3uvDQL6A6iZWE82lbN2QKdYF0n4QiYmjPHuP4nf
+         J6kA==
+X-Gm-Message-State: AJIora9fM79+FkhFSa8GjbErl5D/vt58h0Q7nW1iykq6yVdtOe2HL9C8
+	BkVP/ix7CF+3IshTJBPd7oCATQ==
+X-Google-Smtp-Source: AGRyM1t/xiZvd8TroOht8NceIy5jewtQuGpG1HewViQhK528mcp3YhtGr1Xr7JCG6AKvE8+NJGcD/w==
+X-Received: by 2002:a05:6808:ec7:b0:322:2bcc:42c2 with SMTP id q7-20020a0568080ec700b003222bcc42c2mr10555343oiv.168.1656691786667;
+        Fri, 01 Jul 2022 09:09:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x31-20020a4a97e2000000b00425beedad70sm5493918ooi.32.2022.07.01.09.09.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 09:09:46 -0700 (PDT)
+Subject: Re: [char-misc:char-misc-linus 3/3]
+ drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <202207011658.rHJFVLWA-lkp@intel.com> <Yr63Zyvj49o8U/ti@kroah.com>
+ <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
+ <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
+ <1c13496a-9e45-38b6-1563-c09d412cf576@linuxfoundation.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6e148c41-4a31-f173-f5ea-d52e115c268c@linuxfoundation.org>
+Date: Fri, 1 Jul 2022 10:09:45 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+In-Reply-To: <1c13496a-9e45-38b6-1563-c09d412cf576@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-clang build fails with
-sound/soc/codecs/wsa883x.c:1207:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                default:
+On 7/1/22 9:52 AM, Shuah Khan wrote:
+> On 7/1/22 9:39 AM, Nathan Chancellor wrote:
+>> On Fri, Jul 01, 2022 at 08:48:11AM -0600, Shuah Khan wrote:
+>>> On 7/1/22 2:59 AM, Greg Kroah-Hartman wrote:
 
-Add the missing break.
+>>>>> All warnings (new ones prefixed by >>):
+>>>>>
+>>>>>>> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>>>>>              if (!ucr->rsp_buf)
+>>>>>                  ^~~~~~~~~~~~~
+>>>>>      drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
+>>>>>              return ret;
+>>>>>                     ^~~
+>>>>>      drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
+>>>>>              if (!ucr->rsp_buf)
+>>>>>              ^~~~~~~~~~~~~~~~~~
+>>>>>      drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
+>>>>>              int ret;
+>>>>>                     ^
+>>>>>                      = 0
+>>>>>      1 warning generated.
+>>>>
+>>>> Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
+>>>> patch to fix this?  The warning does look correct.
+>>>>
+>>>
+>>> gcc didn't complain when I compiled either. I will send a follow-on patch.
+>>
+>> Unfortunately, GCC won't warn for most uninitialized variables by
+>> default after 5.7, which included commit 78a5255ffb6a ("Stop the ad-hoc
+>> games with -Wno-maybe-initialized"). They will potentially show up at
+>> W=2 or with an explicit KCFLAGS=-Wmaybe-uninitialized (it does in this
+>> case):
+>>
+> 
+> Thank you.
+> 
+>> | drivers/misc/cardreader/rtsx_usb.c: In function ‘rtsx_usb_probe’:
+>> | drivers/misc/cardreader/rtsx_usb.c:678:16: error: ‘ret’ may be used uninitialized [-Werror=maybe-uninitialized]
+>> |   678 |         return ret;
+>> |       |                ^~~
+>> | drivers/misc/cardreader/rtsx_usb.c:622:13: note: ‘ret’ was declared here
+>> |   622 |         int ret;
+>> |       |             ^~~
+>> | cc1: all warnings being treated as errors
+>>
+> 
+> This is a bug and a good find. ret should have been set
+> in the if (!ucr->rsp_buf) before going to error handling.
+> 
+> I wonder if it would have been flagged if ret were to be
+> initialized to 0. Something to experiment.
+> 
 
-Fixes: cdb09e623143 ("ASoC: codecs: wsa883x: add control, dapm widgets and map")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- sound/soc/codecs/wsa883x.c | 1 +
- 1 file changed, 1 insertion(+)
+I had to try. As I suspected initializing ret will mask this bug.
 
-diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
-index 40c7d64a9c41..dcd88175b9cd 100644
---- a/sound/soc/codecs/wsa883x.c
-+++ b/sound/soc/codecs/wsa883x.c
-@@ -1204,6 +1204,7 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
- 						      WSA883X_SPKR_PWM_FREQ_F300KHZ);
- 			snd_soc_component_write_field(component, WSA883X_DRE_CTL_0,
- 						       WSA883X_DRE_PROG_DELAY_MASK, 0x9);
-+			break;
- 		default:
- 			break;
- 		}
--- 
-2.27.0
+KCFLAGS=-Wmaybe-uninitialized will not flag it even though
+the bug still exists. It will return 0 when memory allocation
+fails.
+
+Initializing isn't always the right answer for these kinds of
+warnings.
+
+thanks,
+-- Shuah
+
 
