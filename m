@@ -1,47 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A611850
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 11:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9CC1850
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 11:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656675044; x=1688211044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3kPfOHfjIBf7W20Epp+1WTMTDsoD04Mm5nrBBI9O6RE=;
-  b=HOjYwk0qCOVGuXSDIeUCPbXoq36CsWyihD/FWRzteyOTvoxLgBTzo9zM
-   dOPvLNwCSlIVgrDTX8EN8Lf/uw0HWBrVEAYYrIsqMSm2YIT01Qa8hGaDG
-   H2ZKGlzzGrONK8l9FXC9up3jVqPG1Pu8KV/q7/tmtkohTb0en1mQRP+cP
-   ZHra8m+4ldBs8khoMdl416LD1pvGJ0PgeUCX9gGZKfk7xNvMDYVSFqTLW
-   KLJFxq6aVuZBDcUBWdET92yQ7sklUul/7PVmEdMGhblD4dt0GKwDF8wXP
-   lfhqOSXrvxteBWYlA8REF75PBEsa4kzKeLTDdEyzM2DNdcatKCzSqCBva
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="283731528"
+  t=1656675644; x=1688211644;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JFpolPhGQq5I4L9Y0C0pRXeNioxYIoHcbYFJ0nyb110=;
+  b=jvga1AYpheXwOVza6ak3HhULr31U+Yux7hS/ORmzLLuqOTrjGQ2+wllN
+   MCKHnRQvThPoAQVDz9obfI0BI1QJSEdHcFo7CpiCeGM4n7FYWfkoN3NZW
+   tfaZ/qSgc0khXP+SdsOSMVeOJEqp4oRuOLC1l1qQR30Pig50PlD5ajQR8
+   CcdYnEbzzJGLRE41ulCW+Qx3i41LhnI+OF3us/7bAMt5FXtnxL2zJ4hEz
+   3HaaOHomNuyz/HhbhfL/BAm1FyfgFrhI7N61tNPrR5Jcp1YRVkFNGEUIM
+   IEdEQDH7RLQHiyb9A1f88G++ld9YaxYgfF51wgq7jn0kn7sHJ8937jV2/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="265663189"
 X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="283731528"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 04:30:44 -0700
+   d="scan'208";a="265663189"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 04:40:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="648317252"
+   d="scan'208";a="659405979"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 04:30:42 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 01 Jul 2022 04:40:42 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o7ErB-000DtL-D9;
-	Fri, 01 Jul 2022 11:30:41 +0000
-Date: Fri, 1 Jul 2022 19:30:14 +0800
+	id 1o7F0r-000Dte-Iu;
+	Fri, 01 Jul 2022 11:40:41 +0000
+Date: Fri, 1 Jul 2022 19:40:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-	Richard Gong <richard.gong@amd.com>, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 10/10] HID: usbhid: Set USB mice as s2idle wakeup
- resources
-Message-ID: <202207011931.a4oqLMtN-lkp@intel.com>
-References: <20220701023328.2783-10-mario.limonciello@amd.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 5093/7282]
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:391:24: error: cannot assign to
+ variable 'data' with const-qualified type 'const struct
+ lpi_pinctrl_variant_data *'
+Message-ID: <202207011904.5vaoNPBb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,212 +47,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701023328.2783-10-mario.limonciello@amd.com>
 
-Hi Mario,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on drm-misc/drm-misc-next hid/for-next linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220701/202207011931.a4oqLMtN-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   c4185b16aba73929aa76f0d030efbe79ae867808
+commit: 61a2cc093bdcb96cd3e3ed2082c3c30e3795d87e [5093/7282] pinctrl: qcom: sc7280: Fix compile bug
+config: arm64-randconfig-r001-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011904.5vaoNPBb-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/54a1cce9cd825e0570d307b44a695f04bba77fd2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
-        git checkout 54a1cce9cd825e0570d307b44a695f04bba77fd2
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=61a2cc093bdcb96cd3e3ed2082c3c30e3795d87e
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 61a2cc093bdcb96cd3e3ed2082c3c30e3795d87e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/usbhid/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+Note: the linux-next/master HEAD c4185b16aba73929aa76f0d030efbe79ae867808 builds fine.
+      It may have been fixed somewhere.
+
 All errors (new ones prefixed by >>):
 
->> drivers/hid/usbhid/hid-core.c:1200:8: error: call to undeclared function 'pm_suspend_preferred_s2idle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           if (pm_suspend_preferred_s2idle() &&
-                               ^
-   drivers/hid/usbhid/hid-core.c:1200:8: note: did you mean 'pm_suspend_default_s2idle'?
-   include/linux/suspend.h:343:20: note: 'pm_suspend_default_s2idle' declared here
-   static inline bool pm_suspend_default_s2idle(void) { return false; }
-                      ^
+>> drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:391:24: error: cannot assign to variable 'data' with const-qualified type 'const struct lpi_pinctrl_variant_data *'
+           data->is_clk_optional = of_property_read_bool(dev->of_node,
+           ~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:373:41: note: variable 'data' declared const here
+           const struct lpi_pinctrl_variant_data *data;
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
    1 error generated.
 
 
-vim +/pm_suspend_preferred_s2idle +1200 drivers/hid/usbhid/hid-core.c
+vim +391 drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
 
-  1060	
-  1061	static int usbhid_start(struct hid_device *hid)
-  1062	{
-  1063		struct usb_interface *intf = to_usb_interface(hid->dev.parent);
-  1064		struct usb_host_interface *interface = intf->cur_altsetting;
-  1065		struct usb_device *dev = interface_to_usbdev(intf);
-  1066		struct usbhid_device *usbhid = hid->driver_data;
-  1067		unsigned int n, insize = 0;
-  1068		int ret;
-  1069	
-  1070		mutex_lock(&usbhid->mutex);
-  1071	
-  1072		clear_bit(HID_DISCONNECTED, &usbhid->iofl);
-  1073	
-  1074		usbhid->bufsize = HID_MIN_BUFFER_SIZE;
-  1075		hid_find_max_report(hid, HID_INPUT_REPORT, &usbhid->bufsize);
-  1076		hid_find_max_report(hid, HID_OUTPUT_REPORT, &usbhid->bufsize);
-  1077		hid_find_max_report(hid, HID_FEATURE_REPORT, &usbhid->bufsize);
-  1078	
-  1079		if (usbhid->bufsize > HID_MAX_BUFFER_SIZE)
-  1080			usbhid->bufsize = HID_MAX_BUFFER_SIZE;
-  1081	
-  1082		hid_find_max_report(hid, HID_INPUT_REPORT, &insize);
-  1083	
-  1084		if (insize > HID_MAX_BUFFER_SIZE)
-  1085			insize = HID_MAX_BUFFER_SIZE;
-  1086	
-  1087		if (hid_alloc_buffers(dev, hid)) {
-  1088			ret = -ENOMEM;
-  1089			goto fail;
-  1090		}
-  1091	
-  1092		for (n = 0; n < interface->desc.bNumEndpoints; n++) {
-  1093			struct usb_endpoint_descriptor *endpoint;
-  1094			int pipe;
-  1095			int interval;
-  1096	
-  1097			endpoint = &interface->endpoint[n].desc;
-  1098			if (!usb_endpoint_xfer_int(endpoint))
-  1099				continue;
-  1100	
-  1101			interval = endpoint->bInterval;
-  1102	
-  1103			/* Some vendors give fullspeed interval on highspeed devides */
-  1104			if (hid->quirks & HID_QUIRK_FULLSPEED_INTERVAL &&
-  1105			    dev->speed == USB_SPEED_HIGH) {
-  1106				interval = fls(endpoint->bInterval*8);
-  1107				pr_info("%s: Fixing fullspeed to highspeed interval: %d -> %d\n",
-  1108					hid->name, endpoint->bInterval, interval);
-  1109			}
-  1110	
-  1111			/* Change the polling interval of mice, joysticks
-  1112			 * and keyboards.
-  1113			 */
-  1114			switch (hid->collection->usage) {
-  1115			case HID_GD_MOUSE:
-  1116				if (hid_mousepoll_interval > 0)
-  1117					interval = hid_mousepoll_interval;
-  1118				break;
-  1119			case HID_GD_JOYSTICK:
-  1120				if (hid_jspoll_interval > 0)
-  1121					interval = hid_jspoll_interval;
-  1122				break;
-  1123			case HID_GD_KEYBOARD:
-  1124				if (hid_kbpoll_interval > 0)
-  1125					interval = hid_kbpoll_interval;
-  1126				break;
-  1127			}
-  1128	
-  1129			ret = -ENOMEM;
-  1130			if (usb_endpoint_dir_in(endpoint)) {
-  1131				if (usbhid->urbin)
-  1132					continue;
-  1133				if (!(usbhid->urbin = usb_alloc_urb(0, GFP_KERNEL)))
-  1134					goto fail;
-  1135				pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
-  1136				usb_fill_int_urb(usbhid->urbin, dev, pipe, usbhid->inbuf, insize,
-  1137						 hid_irq_in, hid, interval);
-  1138				usbhid->urbin->transfer_dma = usbhid->inbuf_dma;
-  1139				usbhid->urbin->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-  1140			} else {
-  1141				if (usbhid->urbout)
-  1142					continue;
-  1143				if (!(usbhid->urbout = usb_alloc_urb(0, GFP_KERNEL)))
-  1144					goto fail;
-  1145				pipe = usb_sndintpipe(dev, endpoint->bEndpointAddress);
-  1146				usb_fill_int_urb(usbhid->urbout, dev, pipe, usbhid->outbuf, 0,
-  1147						 hid_irq_out, hid, interval);
-  1148				usbhid->urbout->transfer_dma = usbhid->outbuf_dma;
-  1149				usbhid->urbout->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-  1150			}
-  1151		}
-  1152	
-  1153		usbhid->urbctrl = usb_alloc_urb(0, GFP_KERNEL);
-  1154		if (!usbhid->urbctrl) {
-  1155			ret = -ENOMEM;
-  1156			goto fail;
-  1157		}
-  1158	
-  1159		usb_fill_control_urb(usbhid->urbctrl, dev, 0, (void *) usbhid->cr,
-  1160				     usbhid->ctrlbuf, 1, hid_ctrl, hid);
-  1161		usbhid->urbctrl->transfer_dma = usbhid->ctrlbuf_dma;
-  1162		usbhid->urbctrl->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-  1163	
-  1164		set_bit(HID_STARTED, &usbhid->iofl);
-  1165	
-  1166		if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
-  1167			ret = usb_autopm_get_interface(usbhid->intf);
-  1168			if (ret)
-  1169				goto fail;
-  1170			set_bit(HID_IN_POLLING, &usbhid->iofl);
-  1171			usbhid->intf->needs_remote_wakeup = 1;
-  1172			ret = hid_start_in(hid);
-  1173			if (ret) {
-  1174				dev_err(&hid->dev,
-  1175					"failed to start in urb: %d\n", ret);
-  1176			}
-  1177			usb_autopm_put_interface(usbhid->intf);
-  1178		}
-  1179	
-  1180		if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-  1181			switch (interface->desc.bInterfaceProtocol) {
-  1182			/* Some keyboards don't work until their LEDs have been set.
-  1183			 * Since BIOSes do set the LEDs, it must be safe for any device
-  1184			 * that supports the keyboard boot protocol.
-  1185			 * In addition, enable remote wakeup by default for all keyboard
-  1186			 * devices supporting the boot protocol.
-  1187			 */
-  1188			case USB_INTERFACE_PROTOCOL_KEYBOARD:
-  1189				usbhid_set_leds(hid);
-  1190				device_set_wakeup_enable(&dev->dev, 1);
-  1191				break;
-  1192			/*
-  1193			 * Windows configures USB mice to be a wakeup source from Modern
-  1194			 * Standby, and users have expectations that s2idle wakeup sources
-  1195			 * behave the same.  Thus setup remote wakeup by default for mice
-  1196			 * supporting boot protocol if the system supports s2idle and the user
-  1197			 * has not disabled it on the kernel command line.
-  1198			 */
-  1199			case USB_INTERFACE_PROTOCOL_MOUSE:
-> 1200				if (pm_suspend_preferred_s2idle() &&
-  1201				    pm_suspend_default_s2idle())
-  1202					device_set_wakeup_enable(&dev->dev, 1);
-  1203				break;
-  1204			}
-  1205		}
-  1206	
-  1207		mutex_unlock(&usbhid->mutex);
-  1208		return 0;
-  1209	
-  1210	fail:
-  1211		usb_free_urb(usbhid->urbin);
-  1212		usb_free_urb(usbhid->urbout);
-  1213		usb_free_urb(usbhid->urbctrl);
-  1214		usbhid->urbin = NULL;
-  1215		usbhid->urbout = NULL;
-  1216		usbhid->urbctrl = NULL;
-  1217		hid_free_buffers(dev, hid);
-  1218		mutex_unlock(&usbhid->mutex);
-  1219		return ret;
-  1220	}
-  1221	
+   370	
+   371	int lpi_pinctrl_probe(struct platform_device *pdev)
+   372	{
+   373		const struct lpi_pinctrl_variant_data *data;
+   374		struct device *dev = &pdev->dev;
+   375		struct lpi_pinctrl *pctrl;
+   376		int ret;
+   377	
+   378		pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
+   379		if (!pctrl)
+   380			return -ENOMEM;
+   381	
+   382		platform_set_drvdata(pdev, pctrl);
+   383	
+   384		data = of_device_get_match_data(dev);
+   385		if (!data)
+   386			return -EINVAL;
+   387	
+   388		pctrl->data = data;
+   389		pctrl->dev = &pdev->dev;
+   390	
+ > 391		data->is_clk_optional = of_property_read_bool(dev->of_node,
+   392							      "qcom,adsp-bypass-mode");
+   393	
+   394		pctrl->clks[0].id = "core";
+   395		pctrl->clks[1].id = "audio";
+   396	
+   397		pctrl->tlmm_base = devm_platform_ioremap_resource(pdev, 0);
+   398		if (IS_ERR(pctrl->tlmm_base))
+   399			return dev_err_probe(dev, PTR_ERR(pctrl->tlmm_base),
+   400					     "TLMM resource not provided\n");
+   401	
+   402		pctrl->slew_base = devm_platform_ioremap_resource(pdev, 1);
+   403		if (IS_ERR(pctrl->slew_base))
+   404			return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
+   405					     "Slew resource not provided\n");
+   406	
+   407		if (data->is_clk_optional)
+   408			ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+   409		else
+   410			ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+   411	
+   412		if (ret)
+   413			return ret;
+   414	
+   415		ret = clk_bulk_prepare_enable(MAX_LPI_NUM_CLKS, pctrl->clks);
+   416		if (ret)
+   417			return dev_err_probe(dev, ret, "Can't enable clocks\n");
+   418	
+   419		pctrl->desc.pctlops = &lpi_gpio_pinctrl_ops;
+   420		pctrl->desc.pmxops = &lpi_gpio_pinmux_ops;
+   421		pctrl->desc.confops = &lpi_gpio_pinconf_ops;
+   422		pctrl->desc.owner = THIS_MODULE;
+   423		pctrl->desc.name = dev_name(dev);
+   424		pctrl->desc.pins = data->pins;
+   425		pctrl->desc.npins = data->npins;
+   426		pctrl->chip = lpi_gpio_template;
+   427		pctrl->chip.parent = dev;
+   428		pctrl->chip.base = -1;
+   429		pctrl->chip.ngpio = data->npins;
+   430		pctrl->chip.label = dev_name(dev);
+   431		pctrl->chip.of_gpio_n_cells = 2;
+   432		pctrl->chip.can_sleep = false;
+   433	
+   434		mutex_init(&pctrl->slew_access_lock);
+   435	
+   436		pctrl->ctrl = devm_pinctrl_register(dev, &pctrl->desc, pctrl);
+   437		if (IS_ERR(pctrl->ctrl)) {
+   438			ret = PTR_ERR(pctrl->ctrl);
+   439			dev_err(dev, "failed to add pin controller\n");
+   440			goto err_pinctrl;
+   441		}
+   442	
+   443		ret = lpi_build_pin_desc_groups(pctrl);
+   444		if (ret)
+   445			goto err_pinctrl;
+   446	
+   447		ret = devm_gpiochip_add_data(dev, &pctrl->chip, pctrl);
+   448		if (ret) {
+   449			dev_err(pctrl->dev, "can't add gpio chip\n");
+   450			goto err_pinctrl;
+   451		}
+   452	
+   453		return 0;
+   454	
+   455	err_pinctrl:
+   456		mutex_destroy(&pctrl->slew_access_lock);
+   457		clk_bulk_disable_unprepare(MAX_LPI_NUM_CLKS, pctrl->clks);
+   458	
+   459		return ret;
+   460	}
+   461	EXPORT_SYMBOL_GPL(lpi_pinctrl_probe);
+   462	
 
 -- 
 0-DAY CI Kernel Test Service
