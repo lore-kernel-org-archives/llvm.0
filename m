@@ -1,82 +1,93 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22BF1855
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 10:18:07 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id s14so2068580ljs.3
-        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 03:18:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3471850
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 11:27:27 +0000 (UTC)
+Received: by mail-ed1-f54.google.com with SMTP id fd6so2558986edb.5
+        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 04:27:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cIolBCU7gcHiWTJ7Gpz8DTqiA6rqBEHvQmHzGRqousg=;
-        b=Tsu50rHkMeDdYBlop1NXOkXacqld+/mROcbAkLLL9IKpVpS0O3IMeEC6FDNB9QY+Cp
-         cpVOpFWBaz9xIVZjtXFyQBP4RcWq7dtN/dMivs5vyH0EiZItaddL0DTr+mlDqx4HRBcV
-         gjNgyNT2mAKgIRG+ywfq4XeeqVHO4HGodUM5fPjc0rEaFB+Kw5XeQsMbbNuuC/4kLguA
-         eRrc6ZZkUt6ZCDHu/b/5XUr9OJalXfaYStCIapCM2GkCXVxYKUu/sJKlGg7o18UvQQXh
-         EKVzTOymN4rDUGUQPsqDOljADJSq9ZN3tOlLt3W4YJxchaCvp38lp+XkUv/tTuYyhrsw
-         XGyQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kPJJjylIpBkQ8W7Ml6hHpSSjjYliXppQHMQmyiUop9Q=;
+        b=L1IPD8ninOruMAbXZlKHku59T3sS5xXk+D9sBBiOg/rk1J6jDylYkWEK/coJsiGpB9
+         /4sjWjEaryt0I3Is97qYC5cqLSxIonGDXwChh47Mz5LKZbjz+Iw4moJxMCQhbxjGW+pX
+         ihNGXvBG6j0giHRLnYrOm9/QxgDrUvTbOU2Dsier3V+MuxvZqXbCXFOxA3YjKyRxATYm
+         yT8RhhHKAOiRXpvyWAvjZlkTBoXsHftq4IqpedCo9dIQN1QWzivBcIjkuIm8jkEi3k+A
+         F6k7xaRNMKW0QS9vNOI9Ye6/c9i8j1udo8US4ftQqAX+KBEMz/0wNEnxFIuVAEDLGh1V
+         DXuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cIolBCU7gcHiWTJ7Gpz8DTqiA6rqBEHvQmHzGRqousg=;
-        b=cFlv91sdAp5lKkQMVExIMg/09uc4vycAVuGugP4IiBdcGEXgtGuccUkFg6Qwl/5PGx
-         jAdP0lIkVZ8EMkn825jYL+HaYd7VCApxRbh5E/BwL5x/7DHld6QxDihwRhu5DIKxU2KK
-         lDBBt3HldVRgrdrUdKDuEWI3ORHOryO78pUxy3gcpDdkNiXsT+XmLHo0j94MN+q5Fhtp
-         MSlpzl5VM8OoiTzEkGddJxeJ0Arpa8JNXHeAlPH9HwsoMYnduiC5RpV+UpSh6hP/FABu
-         u5NViXfGhALhfgagKKbDieQ7O8gHDENYG6RyVhPmRCtjkeh63mTmXxQRuD1evyyjIAsE
-         QedQ==
-X-Gm-Message-State: AJIora8FAbWN9pBhF+67McOkpGnG31lHoyXLqJMN7qYLTWlFYbR9Sh8T
-	FjOGcSMXftVRS+zoUjrjMV8JrJP5lK275beS1VU1
-X-Google-Smtp-Source: AGRyM1t3lOfOZoHXwVnMDWhboz8bguGORAaLuR/2mXXUBqIljjrfUi+TFS8tmnoskTXPHfF5tw9dISFc3NVLOay3d08=
-X-Received: by 2002:a2e:8794:0:b0:25a:69cc:382d with SMTP id
- n20-20020a2e8794000000b0025a69cc382dmr7582956lji.424.1656670685813; Fri, 01
- Jul 2022 03:18:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kPJJjylIpBkQ8W7Ml6hHpSSjjYliXppQHMQmyiUop9Q=;
+        b=bF9N9UtdH+qwtS1bh+krigFp3b4A5D1X6bXHKsX+5Np2p8QQogaKJzIJBUJK2MQ0yZ
+         /gv35YEKmFJ4tVDYy2SqrP7MBsvYRHdSt8TOPqpi316x5lNOr+Io4jDAoIAgADXla6yD
+         0xX5VMNwZhaFtL3A9AjxedrsiAkkCExLDxhjJHKqV9CRQTSmun2rPisHulIm3qkc+9+f
+         w5Bn5tw8zoy/Os6mVsTEsh4gowpoeZBVv80qzys4gc4zSIW9GOsP0p6ri07+xX7YPP5J
+         ueZI2L71/FGYeUYP7wLhqNlngX/wsCFmoFdlEKSlCl43cE2AJE5W2EiNkwhz7Jj/fk6I
+         EPTw==
+X-Gm-Message-State: AJIora+B1a1oOZQgSZlMK/lsZgBO47fPmbF0OHEp0YxBgsh8tlgQ98Gm
+	kIzxwnY7Y6S7seWjNDarB+0=
+X-Google-Smtp-Source: AGRyM1susy/qfIZI1T1yxmxSf7281014snIkVQO+0mLyOdyCK9p25FB2sMMTP+WEOQ99BhQIt+uCNw==
+X-Received: by 2002:a50:fc15:0:b0:435:7897:e8ab with SMTP id i21-20020a50fc15000000b004357897e8abmr18287719edr.17.1656674846155;
+        Fri, 01 Jul 2022 04:27:26 -0700 (PDT)
+Received: from felia.fritz.box (200116b826fa4e0041b3c167ba41e809.dip.versatel-1u1.de. [2001:16b8:26fa:4e00:41b3:c167:ba41:e809])
+        by smtp.gmail.com with ESMTPSA id ds12-20020a0564021ccc00b00437d3e6c4c7sm4764548edb.53.2022.07.01.04.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 04:27:25 -0700 (PDT)
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	linux-input@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] HID: core: remove unneeded assignment in hid_process_report()
+Date: Fri,  1 Jul 2022 13:27:20 +0200
+Message-Id: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
- <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
- <87mtf7z0rt.fsf@gnu.org> <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
- <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
- <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> <878rpgpvfj.fsf@gnu.org> <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
-In-Reply-To: <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 1 Jul 2022 03:17:54 -0700
-Message-ID: <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
-Subject: Re: plumbers session on profiling?
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>, Ruud van der Pas <ruud.vanderpas@oracle.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>, Wenlei He <wenlei@fb.com>, 
-	Hongtao Yu <hoy@fb.com>, Ingo Molnar <mingo@kernel.org>, 
-	linux-toolchains <linux-toolchains@vger.kernel.org>, elena.zannoni@oracle.com
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jul 1, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Jun 28, 2022 at 07:08:48PM +0200, Jose E. Marchesi wrote:
-> >
-> > [Added linux-toolchains@vger in CC]
-> >
-> > It would be interesting to have some discussion in the Toolchains track
-> > on building the kernel with PGO/FDO.  I have seen a raise on interest on
-> > the topic in several companies, but it would make very little sense if
-> > no kernel hacker is interested in participating... anybody?
->
-> I know there's been a lot of work in this area, but none of it seems to
-> have trickled down to be easy enough for me to use it.
+Commit bebcc522fbee ("HID: core: for input reports, process the usages by
+priority list") split the iteration into two distinct loops in
+hid_process_report().
 
-We use an instrumented kernel to collect the data we need. It gives us
-the best payoff, because the profiling data is more fine-grained and
-accurate. (PGO does much more than make inlining decisions.)
+After this change, the variable field is only used while iterating in the
+second loop and the assignment of values to this variable in the first loop
+is simply not needed.
 
-If I recall correctly, you previously suggested using sampling data.
-(Correct?) Is there a document or article that outlines that process?
+Remove the unneeded assignment during retrieval. No functional change and
+no change in the resulting object code.
 
--bw
+This was discovered as a dead store with clang-analyzer.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Benjamin, Jiri, please pick this minor non-urgent clean-up patch.
+
+ drivers/hid/hid-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 00154a1cd2d8..b7f5566e338d 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
+ 
+ 	/* first retrieve all incoming values in data */
+ 	for (a = 0; a < report->maxfield; a++)
+-		hid_input_fetch_field(hid, field = report->field[a], data);
++		hid_input_fetch_field(hid, report->field[a], data);
+ 
+ 	if (!list_empty(&report->field_entry_list)) {
+ 		/* INPUT_REPORT, we have a priority list of fields */
+-- 
+2.17.1
+
