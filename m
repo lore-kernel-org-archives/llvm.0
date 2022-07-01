@@ -1,91 +1,106 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F2C6D24
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 17:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656696419; x=1688232419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vck+4XbfKzgiBiwFSWO94G/QusWXFYDCXSQdw3JT4zY=;
-  b=ENHFa4UhpbU90DUwMW2BB+/+r6KvFXqrhQUcKoOS/xA9BD4fulsRUvBQ
-   aEPXY0QHY/Ih7x2R//BeXBI4JCp7XZclOtBzoRvgfGI3Gmf16C0JcoLYg
-   NU3D7q6e4Ui+l2L1/iLIyI5fHHohY4AXqkFCDT3SWNTizU40HRmNJQimk
-   v0ZEkNj+MUbGDyP0iBI1tHFKcaxyRLcUNYRF+3i2Q/rqhrxA9fuRQ/iez
-   Z89DFD8Ic2cPatGk7aOOzEq29LADbbbSh8C9bxi1vF6ZyzVPGmM2weu/K
-   gsZdjSgnzuEMKdQcIc+Al7NDuUJTfXl5ns0d/DC12S1MFF2zYv+evMQGk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="308227632"
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="308227632"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:26:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="596332334"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jul 2022 10:26:57 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o7KPw-000EBu-Fp;
-	Fri, 01 Jul 2022 17:26:56 +0000
-Date: Sat, 2 Jul 2022 01:26:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yupeng Li <liyupeng@zbhlos.com>, fweisbec@gmail.com, tglx@linutronix.de,
-	mingo@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, caizp2008@163.com,
-	linux-kernel@vger.kernel.org, Yupeng Li <liyupeng@zbhlos.com>
-Subject: Re: [PATCH 1/1] timers/nohz: fix build with CONFIG_NO_HZ_FULL
- warnning.
-Message-ID: <202207020130.RZbvd92n-lkp@intel.com>
-References: <20220701033647.911334-1-liyupeng@zbhlos.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514A51C36
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 18:57:39 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id k15so5294344lfv.11
+        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 11:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E0KdEbiynSy3UiWxTupG4zXX+ERXEfCNO0HgPeCNmcQ=;
+        b=ajUY5R62oawU/SkqqkYkb2oyPNb5Rqyoaw0WEy6B57lexEox+Ca/1k23nyG8nSwGsj
+         o/oC0s5/9d7PI71ONrUVHURSljx/ubpX+mo6vbvK8JxoqJy79UbjONaKKP5sk/iem3i8
+         Yj4si367nalMxeUlEReftDFyEF+MiF5YqWJPxOOzkjQxK002qWxD2LTlzsG1cMzbncBL
+         V/15bdZatMk/VHihrJnTceXsAP4zfxh+lNHzRQ4Fro1rUUKqUi7pCljyoH/+1GjRdpf3
+         9LmjitaGowZuX5MrGdnpGupeubdavj9s47dxtUZnEhopxuy8oPi9xko+FYjyS4VZc/XS
+         vR4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E0KdEbiynSy3UiWxTupG4zXX+ERXEfCNO0HgPeCNmcQ=;
+        b=Q6Ik6pD1i6znkV5F46SCcxDy/1WJgGo5likj0h3XXl5ZEd/crSxnhvKNdtfkP0FShn
+         D2IIBrOEsGq3kh7THYRbWHOR8eFk0auFqQjli5uwZp4DIBsneRuFHEjFy/sjpEAcRcfd
+         9V5wvV8uPp9oqr7IbIVObwVP5bavXGkBLVZX8vbtqFG0pwcFe/1VHT9xMXpODzJp17Dr
+         0RyUuJWWChL8cDQo1MPm0vM7Y3WvxIqgVBYu5E0hzvn4aoRn+5sEAprh8axC5WcAUBig
+         Vb+u50jdhCx3GBK04MpKwUfSjQy7PMxGIOkIJBWOPZPZQGfuemn0pPHcmRInn/I2W424
+         e+aA==
+X-Gm-Message-State: AJIora8aVSTcFHup/keShULz2W7SpmYgqJ5Aa/5qCmyl6V62ODdX5grn
+	huZi/wWSIYhpd/rlbe9cWv2cEiZ5d7WndjQPR3Mg
+X-Google-Smtp-Source: AGRyM1t8yk+8taY+B/TVH2Z5UU4gYFK1wvUBxVy0PKD0NKAKcpREKJV7lHzMmmRUhrIhVy3FRiiW7Emjl4dZhJcbhTE=
+X-Received: by 2002:a05:6512:3088:b0:47f:77df:45be with SMTP id
+ z8-20020a056512308800b0047f77df45bemr10721828lfd.134.1656701857195; Fri, 01
+ Jul 2022 11:57:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701033647.911334-1-liyupeng@zbhlos.com>
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org> <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com> <878rpgpvfj.fsf@gnu.org>
+ <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net> <CAGG=3QWbW-Dang49Jx3fyNExWtL8syuMkMJmcPHA7J25cHQ0zw@mail.gmail.com>
+ <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
+In-Reply-To: <Yr7fMre18pUMz9rA@worktop.programming.kicks-ass.net>
+From: Bill Wendling <morbo@google.com>
+Date: Fri, 1 Jul 2022 11:57:25 -0700
+Message-ID: <CAGG=3QUA8BnhN9QaJao6nH6EyNks0yWO+cWWyvE0pJbOUm+cMw@mail.gmail.com>
+Subject: Re: plumbers session on profiling?
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, Ruud van der Pas <ruud.vanderpas@oracle.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>, Wenlei He <wenlei@fb.com>, 
+	Hongtao Yu <hoy@fb.com>, Ingo Molnar <mingo@kernel.org>, 
+	linux-toolchains <linux-toolchains@vger.kernel.org>, elena.zannoni@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Yupeng,
+On Fri, Jul 1, 2022 at 4:49 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> On Fri, Jul 01, 2022 at 03:17:54AM -0700, Bill Wendling wrote:
+> > On Fri, Jul 1, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Tue, Jun 28, 2022 at 07:08:48PM +0200, Jose E. Marchesi wrote:
+> > > >
+> > > > [Added linux-toolchains@vger in CC]
+> > > >
+> > > > It would be interesting to have some discussion in the Toolchains track
+> > > > on building the kernel with PGO/FDO.  I have seen a raise on interest on
+> > > > the topic in several companies, but it would make very little sense if
+> > > > no kernel hacker is interested in participating... anybody?
+> > >
+> > > I know there's been a lot of work in this area, but none of it seems to
+> > > have trickled down to be easy enough for me to use it.
+> >
+> > We use an instrumented kernel to collect the data we need. It gives us
+> > the best payoff, because the profiling data is more fine-grained and
+> > accurate. (PGO does much more than make inlining decisions.)
+> >
+> > If I recall correctly, you previously suggested using sampling data.
+> > (Correct?) Is there a document or article that outlines that process?
+>
+> IIRC Google has LBR sample driven PGO somewhere as well. ISTR that being
+> the whole motivation for that gruesome Zen3 BRS hack.
+>
+> Google got me this: https://research.google.com/pubs/archive/45290.pdf
+>
+Right. However, there's a chicken-and-egg issue with AutoFDO for the
+production kernel. We can't release a kernel that hasn't been compiled
+with PGO/FDO. We could only release it in a test environment, in which
+case we could use AutoFDO. However, the document says that AutoFDO
+only reaches ~90% of FDO. They list some reasons for this, but
+nonetheless I suspect that the delta would be too severe for us to
+release the kernel.
 
-Thank you for the patch! Perhaps something to improve:
+As for LBR, that will work with Intel/AMD, but I thought that LBR
+doesn't exist for Arm processors (my knowledge could be out of date on
+this).
 
-[auto build test WARNING on tip/timers/nohz]
-[also build test WARNING on linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+What would make PGO (sample-based or instrumented) easy enough for you
+to use? What're the key elements missing?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yupeng-Li/timers-nohz-fix-build-with-CONFIG_NO_HZ_FULL-warnning/20220701-114723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 09fe880ed7a160ebbffb84a0a9096a075e314d2f
-config: x86_64-randconfig-k001 (https://download.01.org/0day-ci/archive/20220702/202207020130.RZbvd92n-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d7397dd311be292d170c1fbd0f3bdc5104c06849
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yupeng-Li/timers-nohz-fix-build-with-CONFIG_NO_HZ_FULL-warnning/20220701-114723
-        git checkout d7397dd311be292d170c1fbd0f3bdc5104c06849
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0x19a091): Section mismatch in reference from the function tick_nohz_full_setup() to the function .init.text:alloc_bootmem_cpumask_var()
-The function tick_nohz_full_setup() references
-the function __init alloc_bootmem_cpumask_var().
-This is often because tick_nohz_full_setup lacks a __init
-annotation or the annotation of alloc_bootmem_cpumask_var is wrong.
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-bw
