@@ -1,105 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114D13C1E
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 15:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F74EC3411E;
-	Fri,  1 Jul 2022 15:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78B73C1E
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 15:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79913C341CA;
+	Fri,  1 Jul 2022 15:41:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656689955;
-	bh=p7AFYhpLzu2M8xFRXsuTfQ8FA/Ky7BhHq49tuvGwm5s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VL6ajgYlc/roGvV/pCojyfj9H8DxMV2uT5XtOmupqACTAGtU9cmbRdCalHNg0Nkb7
-	 8hFdmtVQfiWvu9T6FpLdApyqWrAw6GJ//DaK4IikjlSx3u68liGyrND3pGNHbCbOi5
-	 YDI4HzmoQwlu812+DHJNbFfteMlIil3QFVlYGwnw09rkogSA+3qNkGue9EVq9t8Zk0
-	 E9zx9rAiM/n5lVhEIIfJrbe/aehq6LsHmqalKTmSnbBw2Q9HpNffrbb/xIGgCZmwq9
-	 XUztMhzmDLdQQaNdS2UEQeNTN7CjLFz7kBwCJOIUdt0UTZU7FL4CAUeazV7xwnILYP
-	 ieGNxb5vtfZ0w==
-Date: Fri, 1 Jul 2022 08:39:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [char-misc:char-misc-linus 3/3]
- drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <Yr8VIT2vjvGYrbmR@dev-arch.thelio-3990X>
-References: <202207011658.rHJFVLWA-lkp@intel.com>
- <Yr63Zyvj49o8U/ti@kroah.com>
- <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
+	s=k20201202; t=1656690118;
+	bh=KE9L0tDbPeP+2KwHW8x6C/X6n9rpV5btZ9jddRU2woE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YBKe2PDdaOeUh+PJyv9BDuO8aN6QCNZ4d3nTvbF1wOlzRkzUBhzBKj/7HKrnhdBA4
+	 4Sr9yO2GXT1ARgC4yJBiZGkJ92x9RHQX2/UuVlNo/Ms0OUJYcYI51pFOW0Cp/FwP1e
+	 URyLyESP4MaWYi5qAXU+oxUPTBmqldY2R5hIrr3ZHgr8g1nWBWdJQrgffamcSNpQ4U
+	 3kPev+6IY/gkJfDREd/cUK3fZepl0hDiNtG58q7+wcDEGpmaD9mZTWOXBoYyp5HOZ4
+	 OCC3rD6ORLlhYn/CmJsFTTbmc00JeoKRL00cggrWlGDa1VQO5/+Wj2dE4T8ecDBmaN
+	 C74ObxcWWxtWw==
+From: Will Deacon <will@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Joey Gouly <joey.gouly@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	patches@lists.linudx.dev,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] arm64: vdso32: Small fixes for ld.lld 11 and CONFIG_DEBUG_INFO
+Date: Fri,  1 Jul 2022 16:41:31 +0100
+Message-Id: <165667366428.570517.2534125343588123289.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220630153121.1317045-1-nathan@kernel.org>
+References: <20220630153121.1317045-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <67a09516-ec1f-d0b6-c027-fd52159318ed@linuxfoundation.org>
 
-On Fri, Jul 01, 2022 at 08:48:11AM -0600, Shuah Khan wrote:
-> On 7/1/22 2:59 AM, Greg Kroah-Hartman wrote:
-> > On Fri, Jul 01, 2022 at 04:49:50PM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-linus
-> > > head:   3776c78559853fd151be7c41e369fd076fb679d5
-> > > commit: 3776c78559853fd151be7c41e369fd076fb679d5 [3/3] misc: rtsx_usb: use separate command and response buffers
-> > > config: arm-buildonly-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011658.rHJFVLWA-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-> > > reproduce (this is a W=1 build):
-> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >          chmod +x ~/bin/make.cross
-> > >          # install arm cross compiling tool for clang build
-> > >          # apt-get install binutils-arm-linux-gnueabi
-> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3776c78559853fd151be7c41e369fd076fb679d5
-> > >          git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-> > >          git fetch --no-tags char-misc char-misc-linus
-> > >          git checkout 3776c78559853fd151be7c41e369fd076fb679d5
-> > >          # save the config file
-> > >          mkdir build_dir && cp config build_dir/.config
-> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/cardreader/
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > > > > drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-> > >             if (!ucr->rsp_buf)
-> > >                 ^~~~~~~~~~~~~
-> > >     drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
-> > >             return ret;
-> > >                    ^~~
-> > >     drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
-> > >             if (!ucr->rsp_buf)
-> > >             ^~~~~~~~~~~~~~~~~~
-> > >     drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
-> > >             int ret;
-> > >                    ^
-> > >                     = 0
-> > >     1 warning generated.
-> > 
-> > Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
-> > patch to fix this?  The warning does look correct.
-> > 
+On Thu, 30 Jun 2022 08:31:19 -0700, Nathan Chancellor wrote:
+> This small series fixes two issues I noticed with the orphan section
+> warnings in the 32-bit vDSO. See the individual commits for the boring
+> details.
 > 
-> gcc didn't complain when I compiled either. I will send a follow-on patch.
+> They are based on for-next/vdso. I compiled with LLVM 11, LLVM 15, and
+> GCC 12.1.0 + binutils 2.38 with no additional warnings/errors.
+> 
+> [...]
 
-Unfortunately, GCC won't warn for most uninitialized variables by
-default after 5.7, which included commit 78a5255ffb6a ("Stop the ad-hoc
-games with -Wno-maybe-initialized"). They will potentially show up at
-W=2 or with an explicit KCFLAGS=-Wmaybe-uninitialized (it does in this
-case):
+Applied to arm64 (for-next/vdso), thanks!
 
-| drivers/misc/cardreader/rtsx_usb.c: In function ‘rtsx_usb_probe’:
-| drivers/misc/cardreader/rtsx_usb.c:678:16: error: ‘ret’ may be used uninitialized [-Werror=maybe-uninitialized]
-|   678 |         return ret;
-|       |                ^~~
-| drivers/misc/cardreader/rtsx_usb.c:622:13: note: ‘ret’ was declared here
-|   622 |         int ret;
-|       |             ^~~
-| cc1: all warnings being treated as errors
+[1/2] arm64: vdso32: Shuffle .ARM.exidx section above ELF_DETAILS
+      https://git.kernel.org/arm64/c/859716b4131f
+[2/2] arm64: vdso32: Add DWARF_DEBUG
+      https://git.kernel.org/arm64/c/9e07352ef779
 
 Cheers,
-Nathan
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
