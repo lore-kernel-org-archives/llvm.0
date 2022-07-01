@@ -1,121 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D96C5803;
-	Fri,  1 Jul 2022 22:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78602C3411E;
-	Fri,  1 Jul 2022 22:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656713844;
-	bh=qn8KeIcg6p6x70nlZj4sdymg43tnl9ycS8r/KVGYWBo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H83TOqsTu9Z06vEdS6cQCCvGtd0fvP4dXtldHjHFjMHXk01g0BVNzWlZRQrCCFYzK
-	 ABV9AmFU9GFLxfaC7rQWPgMbX6NKXYHMG6VeTR5f6W0T70V11W8EptbsABwPxt4W4g
-	 i6Wu97DhB1Db6gpS6sR6siOpcV6Qp9Vp9kinSYxRE5xMvFJcn55lQEoMy4ExOiRELX
-	 ers5txkf4Ad15PqCkiE/M33G6l07jCKank6GMPjUSVZmUeRSLOflNbh3FKsL+Tmzx7
-	 pPD/8UMytSm1y7nErPSxTJlxv0dy3ofPLBrrrqxTMtqw0fHzWymI6aUpmRGY/VME5o
-	 aT6xl9JyjNfhg==
-Date: Fri, 1 Jul 2022 15:17:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Daniel Kolesa <daniel@octaforge.org>,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when
- cross compiling with clang
-Message-ID: <Yr9ycVVIfzHtsYyz@dev-arch.thelio-3990X>
-References: <20220617180845.2788442-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF875809
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 23:21:51 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id h198-20020a25d0cf000000b0066e14d5ad1dso631401ybg.8
+        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 16:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=r1hNWMzTHbP1T3u0oJfFG4ATF129b7TBwtFs10zIbH0=;
+        b=AfniH5QTWUN+wqcSlLlKuJx5yJp8JJHk89CfEEMl5lQ1ICN/xG92kx5WNxs+hwMLDj
+         y1MPwtf1lGA1NblcuJoqXrs4bHlUiq1iRR4w2azrECLCuIIInWJydMnwbeDO9A1gacJ3
+         6MGIh5dly4GfP0UxK6LkaOJEKAyc0fb9wkYVNqLZI/LJvBlKOBg9aYrMP5pGDiKej7u1
+         +TSLG69EXbh9UkRVy1yh07pPtZuKzomVtNA3mYLLapw8CWSLayla3G2XPDgskRdknVyf
+         NEpGzNbVutswz0xnFL6MooUMFGxU0t5boARFQ0DJRPTPIgfUU9whtp2A/smT/aBmeW2C
+         fGJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=r1hNWMzTHbP1T3u0oJfFG4ATF129b7TBwtFs10zIbH0=;
+        b=mAZUwAgLgu+raMyIHhM6+Ltbv9pEfxpUVWFc2un6JA2Py6CwXbvtSUregG5EWA/804
+         T+xIoA56okG+KJ6Ha7XqqKEKI8EnMDbWQ/WluyX1VLeL2Ld3otsJfSHsKot9erpGnmD+
+         xdqmkKDdzrBabC2/T9q2QFj9Mm5g3Mj7QNkrNncX/Qv4lC+axtfdd3bQko5W8P9Nbcme
+         vlBFIJokspnFAMIgBU/kmgc2eegsjEdrBZuou+u+vr1jdT/K6u6dswirYalec3pMkuMi
+         lJv12bedGnwNjcyaeUdp8Ef6+kgXKU5rCHFBma5SygUdX7wydzNf8SB6GWbtgYoV3VbT
+         vkvQ==
+X-Gm-Message-State: AJIora9K62bk7WjSwuPZFVO22+A1uqPi67PqVE1dfPeounWFbJtpyXVp
+	60glX2Ma3UNTgqS7RTGnEQMJogQk2pNJPmOFgg==
+X-Google-Smtp-Source: AGRyM1vS8lR6ohgVW9YKUmSTvCAVBF+D2wOLXwW/aqjioj8VQIMa9zehx7RkG7my6+BiriAauGh24+9hI4ngKzSURg==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:a7a5:71:ddd5:892b])
+ (user=justinstitt job=sendgmr) by 2002:a0d:f9c1:0:b0:31b:726f:9ef2 with SMTP
+ id j184-20020a0df9c1000000b0031b726f9ef2mr20290827ywf.252.1656717710164; Fri,
+ 01 Jul 2022 16:21:50 -0700 (PDT)
+Date: Fri,  1 Jul 2022 16:20:31 -0700
+Message-Id: <20220701232031.2639134-1-justinstitt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617180845.2788442-1-nathan@kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] eeprom: idt_89hpesx: fix clang -Wformat warnings
+From: Justin Stitt <justinstitt@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Gentle ping for review.
+see warnings:
+| drivers/misc/eeprom/idt_89hpesx.c:570:5: error: format specifies type
+| 'unsigned char' but the argument has type 'u16' (aka 'unsigned short')
+| [-Werror,-Wformat] memaddr);
+-
+| drivers/misc/eeprom/idt_89hpesx.c:579:5: error: format specifies type
+| 'unsigned char' but the argument has type 'u16' (aka 'unsigned short')
+| [-Werror,-Wformat] memaddr);
+-
+| drivers/misc/eeprom/idt_89hpesx.c:814:4: error: format specifies type
+| 'unsigned short' but the argument has type 'unsigned int'
+| [-Werror,-Wformat] CSR_REAL_ADDR(csraddr));
 
-On Fri, Jun 17, 2022 at 11:08:46AM -0700, Nathan Chancellor wrote:
-> Chimera Linux notes that CONFIG_CC_HAS_SANE_STACKPROTECTOR cannot be
-> enabled when cross compiling an x86_64 kernel with clang, even though it
-> does work when natively compiling.
-> 
-> When building on aarch64:
-> 
->   $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
-> 
->   $ grep STACKPROTECTOR .config
-> 
-> When building on x86_64:
-> 
->   $ make -sj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
-> 
->   $ grep STACKPROTECTOR .config
->   CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
->   CONFIG_HAVE_STACKPROTECTOR=y
->   CONFIG_STACKPROTECTOR=y
->   CONFIG_STACKPROTECTOR_STRONG=y
-> 
-> When clang is invoked without a '--target' flag, code is generated for
-> the default target, which is usually the host (it is configurable via
-> cmake). As a result, the has-stack-protector scripts will generate code
-> for the default target but check for x86 specific segment registers,
-> which cannot succeed if the default target is not x86.
-> 
-> $(CLANG_FLAGS) contains an explicit '--target' flag so pass that
-> variable along to the has-stack-protector scripts so that the stack
-> protector can be enabled when cross compiling with clang. The 32-bit
-> stack protector cannot currently be enabled with clang, as it does not
-> support '-mstack-protector-guard-symbol', so this results in no
-> functional change for ARCH=i386 when cross compiling.
-> 
-> Link: https://github.com/chimera-linux/cports/commit/0fb7e506d5f83fdf2104feb22cdac34934561226
-> Link: https://github.com/llvm/llvm-project/issues/48553
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> 
-> Fixes: 2a61f4747eea ("stack-protector: test compiler capability in Kconfig and drop AUTO mode")
-> 
-> might be appropriate; I am conflicted on fixes tags for problems that
-> that arise due to use cases that were not considered at the time of a
-> change, as it feels wrong to blame the commit for not looking far enough
-> into the future where it might be common for people to have workstations
-> running another architecture other than x86_64.
-> 
-> Chimera appears to use a 5.15 kernel so a
-> 
-> Cc: stable@vger.kernel.org
-> 
-> might be nice but some maintainers are picky about that so I leave it up
-> to you all.
-> 
->  arch/x86/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index be0b95e51df6..076adde7ead9 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -391,8 +391,8 @@ config PGTABLE_LEVELS
->  
->  config CC_HAS_SANE_STACKPROTECTOR
->  	bool
-> -	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC)) if 64BIT
-> -	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC))
-> +	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC) $(CLANG_FLAGS)) if 64BIT
-> +	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC) $(CLANG_FLAGS))
->  	help
->  	  We have to make sure stack protector is unconditionally disabled if
->  	  the compiler produces broken code or if it does not let us control
-> 
-> base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-> -- 
-> 2.36.1
-> 
-> 
+There's an ongoing movement to eventually enable the -Wformat flag for
+clang. See: https://github.com/ClangBuiltLinux/linux/issues/378
+
+The format specifier for idt_89hpesx.c:570 and 579 was `0x%02hhx`. The
+part we care about `%hhx` describes a single byte format, wherein the
+leftmost byte of our u16 type (of which memaddr is) is truncated.
+
+example:
+```
+uint16_t x = 0xbabe;
+printf("%hhx\n", x);
+// output is: be
+// we lost 'ba'
+```
+
+There exists a similar issue at idt_89hpesx.c:814 which involves the
+CSR_REAL_ADDR macro. This macro returns a u16 but due to default
+argument promotion for variadic functions (printf-like) actually
+provides an int to the dev_err method.
+
+My proposed solution is to expand the width of the format specifier to
+fully encompass the provided argument (which is promoted to an int, see
+below). I opted for '%x' as this specifies an unsigned hexadecimal
+integer which, with a guarantee, can represent all the values of a u16.
+
+As per C11 6.3.1.1:
+(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
+`If an int can represent all values of the original type ..., the
+value is converted to an int; otherwise, it is converted to an
+unsigned int. These are called the integer promotions.`
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ drivers/misc/eeprom/idt_89hpesx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/misc/eeprom/idt_89hpesx.c b/drivers/misc/eeprom/idt_89hpesx.c
+index b0cff4b152da..42eac114edd7 100644
+--- a/drivers/misc/eeprom/idt_89hpesx.c
++++ b/drivers/misc/eeprom/idt_89hpesx.c
+@@ -566,7 +566,7 @@ static int idt_eeprom_read_byte(struct idt_89hpesx_dev *pdev, u16 memaddr,
+ 		eeseq.memaddr = cpu_to_le16(memaddr);
+ 		ret = pdev->smb_write(pdev, &smbseq);
+ 		if (ret != 0) {
+-			dev_err(dev, "Failed to init eeprom addr 0x%02hhx",
++			dev_err(dev, "Failed to init eeprom addr 0x%02x",
+ 				memaddr);
+ 			break;
+ 		}
+@@ -575,7 +575,7 @@ static int idt_eeprom_read_byte(struct idt_89hpesx_dev *pdev, u16 memaddr,
+ 		smbseq.bytecnt = EEPROM_RD_CNT;
+ 		ret = pdev->smb_read(pdev, &smbseq);
+ 		if (ret != 0) {
+-			dev_err(dev, "Failed to read eeprom data 0x%02hhx",
++			dev_err(dev, "Failed to read eeprom data 0x%02x",
+ 				memaddr);
+ 			break;
+ 		}
+@@ -810,7 +810,7 @@ static int idt_csr_read(struct idt_89hpesx_dev *pdev, u16 csraddr, u32 *data)
+ 	smbseq.bytecnt = CSR_RD_CNT;
+ 	ret = pdev->smb_read(pdev, &smbseq);
+ 	if (ret != 0) {
+-		dev_err(dev, "Failed to read csr 0x%04hx",
++		dev_err(dev, "Failed to read csr 0x%04x",
+ 			CSR_REAL_ADDR(csraddr));
+ 		goto err_mutex_unlock;
+ 	}
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+
