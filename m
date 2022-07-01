@@ -1,91 +1,146 @@
-Received: from sonic315-55.consmr.mail.gq1.yahoo.com (sonic315-55.consmr.mail.gq1.yahoo.com [98.137.65.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CAE1860
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 21:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1656709488; bh=9Ab6xgNj5PtuiyxXfeQMXpkH7HijIo0PSP2H54i4vy8=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=D1iQUQS38g4BOfgnfBme8TyDU2Zj+FumGOlqnnGZ12YK4ts2pUNwa3t3x8JfBKC/8jZFCqCLytNBCAqw3ARvjqp827WYacf96sPciiyPcqY4IkTmq3GZYMS61kv3WRH9eehUIJFTsil598u5kWhs7c1ddZm5Oj5IAohjxb5QSP/XRB9JIoJVKj3OuYZgIG5CkVvgHlPp9ZZBxrtcFczVFiD3w/pRLFJGw3TGhigOprX10/qVVRQP8NzqwbulMVcByq9OjWMZe48QgI52XBROE9uZ7xPAa4eCSNREYhqVMV9mt6VsAhFV+1k18BDQUQzQymcd8jHqhajwaZ1bNz5FvQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1656709488; bh=EOi6gM3terRj944+hkG3raif54ag1ZICwMZFSQy2joB=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=MYUfNqjwxzARrZDH3z1tgOwK+XtXMQ2/tLEcKuNjh3tv8/LIqL1rYZm8P5X/B0RpVy9U/HWPzEp2vLbbzrRB8rrPV8RGU+JbrK7uCV99dNFH3/+l2vteooO2Ezra2Owh2o5yNNVo+cfkypk3C+wEjMksWVTTpq74VWK3chqkDmLwFZepieMoUZh8AKjtY0NVl/WhYsSe7f2KFHodGJBKJDAHrXUyoTn/XoJHcavsX2J7WL9tjzrQ91HcN7spvxDWyUCa7lZv4/5GVfsQ0lC3QAdg3/4DX+nyNwEqcQ9L/oMy87E04/euzvzTGnrUAEFmgYMCXnpGMjrWafIGMfAGNw==
-X-YMail-OSG: W2EEy_wVM1nOr1HLCtu51Bey116UsM9pMw2Ap35HBst3DlnMiHPJ7pvtM41k71o
- .i9VO3p6V0crEjD5QxkXn7ku_l9J4rKAYZ400J0b72HN0E6rwhoXa4K8pjiK6nidm8s44b5Xar4w
- mHmZSMD4wSFLpOotBhpg6HrkQmZ6_WojsuBadUYqe5f22cVuzD5nk19OM4EAmvtLJoo3xhUDLFXS
- t77VIxDdzuL3RzhU.6bch6fYfOKn5Q9VKDp7oBKbnwFbQXGnlGTUhdQJVLihcCfsKyZ_l2jL84S3
- bj1cALVz0M2T04L3oc1Jefj2bemMCgFzQSqRSjH2kuyAwKWLs2s9UQ6cLanG.FKuNi.KHevPkb4P
- 3aA98_Nzfbh_fgyOb6KTIQlwxsKlnqdG5QVKeobUXOCo4A3X.eIDMZmATwTlDYb4Iv.vqRpK.d32
- 5QrijHwVtPmQ1KPMSdWrm5_XlpbrfMH_aZqebuhKrkZt6WWKlhNAtjgIElWR1oJoMTwSm86pzuY7
- mt0UUZM6pL5odcQ3eH1MAy_FZ1h7uV5yZ7HThvEm0ABWAVaYvqiwO4nfTcWHIPzbClPEM1WHfUUd
- pe3iY86eprM3ec2muG1UGau0.t.vW9cd06t0KDzu9PO7_dLOd9kJhDMU9gXkZqGq5t9kBN_pyQOA
- 74tb2_9.yQMRnXbP.NSzZxAzQugeJV1V_Ae1rkpx5xX3rOODWnjrpSbsx.Cp3nvAe8Wzg9l3XLxj
- GuW2wlM2KcUBTBCH8h2.5KtwoWR1BZJHvpX1rPct9Fl4TOneJhA9U1XhAa4QQnZxjBxhWFUrOK7r
- LVv9laRTIcbItlF9rN17weuHLB06cQl_BRaw2bxlUtiDcqUPoZy0J2iq5lXt4c8BXC1f_o.ndbkt
- .z2h9DhuZNyDe3fEEZMUMZsPF62nJJXo2YgBanuG5mHrr8mX7pKYr4IiVNYlvs0LjaS1r7SCH.WT
- upY4xRwCFfxJkUr275kxdWImhDw3QHi7URHhQE7Dkdsas2mbfqStApGT0VTush2BHQAysTPBxKgV
- 70gorGerHfb.jfomGF7angN4.mskFCzANfNI5KwAtMtxiYxB28m0SreCzLXATMHOgKhK934oynuW
- jn355VM8tXOmO4INeePrwPsQAEkBOJ_TmPbchz9u0M3nNnIRWUBW6.zUHMnERT0ujKOog0MXjEYg
- m4IT5WYLUZCthNawSUzQk__jOPmtQxgFbv1zJp8lmhHAXHcZzniBTf.jzouJWd1LFXR7ttKRWYSt
- l5_dqB0mr3qRWO37aRad3CvA0ccMJaXKziDH3WdDqZFjC070HjUx4AbxZBjZSBK3s9TZ7_GlUFhm
- XpyEyWKGdtEOL.yMxRPwEMEjA2Se6dJAcZDebrsec2WPcbePGZUX67RtIDNWlSo4HvZe6YglieXC
- KuMnGSjsXnQBOzXQ0OogtsS5Hwe087qa_9DBpLZJ.pC_iAnT3WatA7D6KIdBRxuhJZyRrfuSAbxF
- WiAg8ujlTwkTpSMIzwHjvjRj2C8Wb3eE8JQmGn3sGfOFxHLnRurgTQxUFQVKB9Qf5_VBBHAhTYeo
- Cjd.j4b0.aaBm7hKs7Fj8hcFLm5INA46Agz0RblM2u7JbLRuG.i.Khzp928EpALa8WPJ1tW0KosC
- YUZItR85x1ZnCGCsc6OqJNetzs5lEnEkf7cJ18ktanijLplFBu2ZuRVibKgLcr88Nb1zRMGo5cit
- tG6mYTMzDLX9n3WbLtYmOlDFUvqPSIL9R0hN9Qavbx15_1YSOlk7QWR7nLNbahGP41uPAvbXWYwn
- nKf1WXy8tnHNFq2sS5vUkqSpiC7jFg3Py6q281t5jME3h5xoZAzE1xsw5etboi2X841SLkkac2MU
- JobHYvjab28WUy8lOrfN_WKSTt7a.kb2Kkij2aGB7M376hq5n1Q4XTq1sWIQWhj.urhvW528VawJ
- ExIgF3hW.JgF58kzfaTzLldQvqKI8_FdQ5tnfZvgsSWisIXdQMy4w7UVBVat6GiMfNEe6DCIz1c3
- TC3WNziJO0Oxrgr4jarizxVxZv4JJN4aIciemMFSjm4f1PgKOhzgn2hxgYRG.pyIwgR2IuUlaPUQ
- 1ul3wGO4yOLo54H9dVlcd7f2rxe1wb8UhxK18W.BqSskKDfDlfz7NfEjc2zwjX5xqRaOQcz9_Hzj
- ByNt23IfvolXS2QRWg.wsQxn_is4PcGC6fx2HKR.kvClAIOCpFCoPPYSi6ZjH3eHA8UfK_gyhbrX
- MLNjiiLavgTo5cYy00aNgTojuKIeZEqhinq4CtXk1VJJJy3bZRHWKb_ReYJEoOZc-
-X-Sonic-MF: <alex_y_xu@yahoo.ca>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Fri, 1 Jul 2022 21:04:48 +0000
-Received: by hermes--production-bf1-58957fb66f-dd4hs (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID fa1946aa1fae24efe50afcfc6dcc1acb;
-          Fri, 01 Jul 2022 21:04:42 +0000 (UTC)
-From: "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	x86@kernel.org,
-	llvm@lists.linux.dev
-Cc: Andy Lutomirski <luto@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	"Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Subject: [PATCH] x86/Kconfig: Allow X86_X32_ABI with llvm-objcopy in some cases
-Date: Fri,  1 Jul 2022 17:04:37 -0400
-Message-Id: <20220701210437.579322-1-alex_y_xu@yahoo.ca>
-X-Mailer: git-send-email 2.36.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8A657F6
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 21:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656710407; x=1688246407;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xQztFlq0ZKX8BYUluyNmxNJjWTjGpPdukOq4mKgkaFc=;
+  b=P8o+gZgk00FP65+8c7hgGcvz+GymG++LHBL8YoqataCDX1lnCE/G7Pvp
+   UeE/XP7+eVC7Gt/ULHzE+PtS/fmWTw+/Zh9CpfKilM2TFNxMnDoEOwP/r
+   wF4OYoOiFAeNe3DeVEBbLZFI/NE1UEfmhZOcs5OoXnKOyIw7YATDSXYVd
+   7496vdsvlpgV+5dm2or/dRsWH7bqGUqL0JgHo6rbIXFcaPhsE2jbVbjRD
+   834n0EwupjMaJtlIZhfx0o8Lw/dz5OxcAR6tVI4pvExOdvh2Zn9BUxBta
+   JwVR+XyAEiX0OsmLOMeQSbd0Vw1Qs9agZiHUMKZ8zLkwfqiysaMBLtxRG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="344430750"
+X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
+   d="scan'208";a="344430750"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 14:20:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
+   d="scan'208";a="648494561"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 14:20:05 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o7O3Y-000EMa-MX;
+	Fri, 01 Jul 2022 21:20:04 +0000
+Date: Sat, 2 Jul 2022 05:20:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 59/61]
+ fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function
+ 'netfs_file_write_iter_locked'
+Message-ID: <202207020506.BJYCPSrC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20220701210437.579322-1-alex_y_xu.ref@yahoo.ca>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-According to the comment and commit message, there are issues compiling
-with IBT and/or compressed debug sections. Therefore, the condition
-should be restricted to when those are enabled.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
+commit: e237ecdc44f74b59d00230cc4e6e8067a4bed176 [59/61] netfs: add new buffered/direct exclusive locking scheme
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220702/202207020506.BJYCPSrC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/e237ecdc44f74b59d00230cc4e6e8067a4bed176
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout e237ecdc44f74b59d00230cc4e6e8067a4bed176
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
 
-Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
----
- arch/x86/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..e5af1088420e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2847,7 +2847,7 @@ config X86_X32_ABI
- 	# compressed debug sections to x86_x32 properly:
- 	# https://github.com/ClangBuiltLinux/linux/issues/514
- 	# https://github.com/ClangBuiltLinux/linux/issues/1141
--	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
-+	depends on !X86_KERNEL_IBT || !DEBUG_INFO_COMPRESSED || $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
- 	help
- 	  Include code to run binaries for the x32 native 32-bit ABI
- 	  for 64-bit processors.  An x32 process gets access to the
+All warnings (new ones prefixed by >>):
+
+>> fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function 'netfs_file_write_iter_locked' [-Wmissing-prototypes]
+   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
+           ^
+   fs/netfs/buffered_write.c:815:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
+   ^
+   static 
+   fs/netfs/buffered_write.c:23:20: warning: unused function 'netfs_pgoff_before_touch' [-Wunused-function]
+   static inline bool netfs_pgoff_before_touch(pgoff_t a, pgoff_t b)
+                      ^
+   2 warnings generated.
+
+
+vim +/netfs_file_write_iter_locked +815 fs/netfs/buffered_write.c
+
+   801	
+   802	/**
+   803	 * netfs_file_write_iter_locked - write data to a file
+   804	 * @iocb:	IO state structure
+   805	 * @from:	iov_iter with data to write
+   806	 *
+   807	 * This is a wrapper around __generic_file_write_iter() to be used by most
+   808	 * filesystems that want to deal with the locking themselves. It takes care
+   809	 * of syncing the file in case of O_SYNC.
+   810	 * Return:
+   811	 * * negative error code if no data has been written at all of
+   812	 *   vfs_fsync_range() failed for a synchronous write
+   813	 * * number of bytes written, even for truncated writes
+   814	 */
+ > 815	ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
+   816	{
+   817		struct file *file = iocb->ki_filp;
+   818		struct inode *inode = file->f_mapping->host;
+   819		struct netfs_inode *ctx = netfs_inode(inode);
+   820		ssize_t ret;
+   821	
+   822		_enter("%llx,%zx,%llx", iocb->ki_pos, iov_iter_count(from), i_size_read(inode));
+   823	
+   824		ret = generic_write_checks(iocb, from);
+   825		if (ret <= 0)
+   826			return ret;
+   827	
+   828		trace_netfs_write_iter(iocb, from);
+   829	
+   830		/* We can write back this queue in page reclaim */
+   831		current->backing_dev_info = inode_to_bdi(inode);
+   832		ret = file_remove_privs(file);
+   833		if (ret)
+   834			goto error;
+   835	
+   836		ret = file_update_time(file);
+   837		if (ret)
+   838			goto error;
+   839	
+   840		ret = netfs_flush_conflicting_writes(ctx, file, iocb->ki_pos,
+   841						     iov_iter_count(from), NULL);
+   842		if (ret < 0 && ret != -EAGAIN)
+   843			goto error;
+   844	
+   845		if (iocb->ki_flags & IOCB_DIRECT)
+   846			ret = netfs_direct_write_iter(iocb, from);
+   847		else
+   848			ret = netfs_perform_write(iocb, from);
+   849	
+   850	error:
+   851		/* TODO: Wait for DSYNC region here. */
+   852		current->backing_dev_info = NULL;
+   853		return ret;
+   854	}
+   855	EXPORT_SYMBOL(netfs_file_write_iter_locked);
+   856	
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
