@@ -1,27 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2740C1855
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 08:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1CFC3411E;
-	Fri,  1 Jul 2022 08:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1656665961;
-	bh=Cp+VKrrZ5YR+oIkwv5yfto2VBhn5YWAggfrsVnGgAJo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VGZAOKEoR1mdokjuWTdCEVkGdj5IQz8U19GroifZMlSyofONTzzsFLt7OtNgEVR/m
-	 tl7YfdD98PG+xIk2GIwPfaPej7zFEzYuP9nQwC+sVqGR0156Ozl2Nvv/JiYTnnKqiK
-	 87rQtKgtR4vIlXGXjxFoyug0d2gu1nN2urnKgUPQ=
-Date: Fri, 1 Jul 2022 10:59:19 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [char-misc:char-misc-linus 3/3]
- drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <Yr63Zyvj49o8U/ti@kroah.com>
-References: <202207011658.rHJFVLWA-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278B41855
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 09:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=0/2zvonDcE3Fklpe/jarNXLTTDqCN2xFbwhTdVMbRho=; b=F6BYYBOSnF6QrD1t3Oziop62MF
+	3VjhUBpC4lFaMLIGRMl32DI5uYtwFrEw4YPo0pNH+97ooDPQHISHAb2Ki3OE+1Ogu64u77WvL+z40
+	Z0iE2A3Mi5/uRafY2WmLrH2BnqfwK7dlX62jnJ5/p6OienKV6ohiEdHTx5wIDURfJDfPX+pOeuF9W
+	TRGCx7RIrvSt2yNnZ2NqghxGdwnsmZRjYeMafZ5vlz5S2yG5aU+b0m9K98+rnyGmkFuxIRHi+ajWT
+	E59zMAcJSXcNZsBPDSjjfb8xC2GzFvRiE9qjOEZEYiklU4yDC1TUn8wL4JjWPVzT7GLMAJk8CAdKb
+	uQAa7hfA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1o7CWw-00Fe4k-40; Fri, 01 Jul 2022 09:01:48 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A278F980017; Fri,  1 Jul 2022 11:01:37 +0200 (CEST)
+Date: Fri, 1 Jul 2022 11:01:37 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+Cc: Ruud van der Pas <ruud.vanderpas@oracle.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Vladimir Mezentsev <vladimir.mezentsev@oracle.com>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	LKML <linux-kernel@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+	Wenlei He <wenlei@fb.com>, Hongtao Yu <hoy@fb.com>,
+	Ingo Molnar <mingo@kernel.org>, linux-toolchains@vger.kernel.org,
+	elena.zannoni@oracle.com
+Subject: Re: plumbers session on profiling?
+Message-ID: <Yr638aOIaaEBPICy@worktop.programming.kicks-ass.net>
+References: <CAKwvOdkyY9rsH3eViMK-_4iz_W_usumz5nD+3AhbNCVQ3FRCjA@mail.gmail.com>
+ <CAKwvOdnsZekEM77axBf67MDqQVP0n6PTKH=njSyPSWTNiWAOiA@mail.gmail.com>
+ <87mtf7z0rt.fsf@gnu.org>
+ <6F9E9D93-3913-4022-9384-D809C8EF7715@oracle.com>
+ <CAKwvOdm=_YqBpuBzouqoWHYNe6MMUE10vqF0PUkU=hcOj+UqrQ@mail.gmail.com>
+ <B0A01DE7-1B50-479A-92DF-DAFAB3F06E0F@oracle.com>
+ <878rpgpvfj.fsf@gnu.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -30,50 +48,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202207011658.rHJFVLWA-lkp@intel.com>
+In-Reply-To: <878rpgpvfj.fsf@gnu.org>
 
-On Fri, Jul 01, 2022 at 04:49:50PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-linus
-> head:   3776c78559853fd151be7c41e369fd076fb679d5
-> commit: 3776c78559853fd151be7c41e369fd076fb679d5 [3/3] misc: rtsx_usb: use separate command and response buffers
-> config: arm-buildonly-randconfig-r006-20220629 (https://download.01.org/0day-ci/archive/20220701/202207011658.rHJFVLWA-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=3776c78559853fd151be7c41e369fd076fb679d5
->         git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
->         git fetch --no-tags char-misc char-misc-linus
->         git checkout 3776c78559853fd151be7c41e369fd076fb679d5
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/cardreader/
+On Tue, Jun 28, 2022 at 07:08:48PM +0200, Jose E. Marchesi wrote:
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> [Added linux-toolchains@vger in CC]
 > 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->            if (!ucr->rsp_buf)
->                ^~~~~~~~~~~~~
->    drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
->            return ret;
->                   ^~~
->    drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
->            if (!ucr->rsp_buf)
->            ^~~~~~~~~~~~~~~~~~
->    drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    = 0
->    1 warning generated.
+> It would be interesting to have some discussion in the Toolchains track
+> on building the kernel with PGO/FDO.  I have seen a raise on interest on
+> the topic in several companies, but it would make very little sense if
+> no kernel hacker is interested in participating... anybody?
 
-Odd, gcc doesn't show this for me.  Shuah, can you send a follow-on
-patch to fix this?  The warning does look correct.
-
-thanks,
-
-greg k-h
+I know there's been a lot of work in this area, but none of it seems to
+have trickled down to be easy enough for me to use it.
