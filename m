@@ -1,44 +1,34 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8A657F6
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 21:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656710407; x=1688246407;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xQztFlq0ZKX8BYUluyNmxNJjWTjGpPdukOq4mKgkaFc=;
-  b=P8o+gZgk00FP65+8c7hgGcvz+GymG++LHBL8YoqataCDX1lnCE/G7Pvp
-   UeE/XP7+eVC7Gt/ULHzE+PtS/fmWTw+/Zh9CpfKilM2TFNxMnDoEOwP/r
-   wF4OYoOiFAeNe3DeVEBbLZFI/NE1UEfmhZOcs5OoXnKOyIw7YATDSXYVd
-   7496vdsvlpgV+5dm2or/dRsWH7bqGUqL0JgHo6rbIXFcaPhsE2jbVbjRD
-   834n0EwupjMaJtlIZhfx0o8Lw/dz5OxcAR6tVI4pvExOdvh2Zn9BUxBta
-   JwVR+XyAEiX0OsmLOMeQSbd0Vw1Qs9agZiHUMKZ8zLkwfqiysaMBLtxRG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="344430750"
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="344430750"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 14:20:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="648494561"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Jul 2022 14:20:05 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o7O3Y-000EMa-MX;
-	Fri, 01 Jul 2022 21:20:04 +0000
-Date: Sat, 2 Jul 2022 05:20:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 59/61]
- fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function
- 'netfs_file_write_iter_locked'
-Message-ID: <202207020506.BJYCPSrC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC0E1860
+	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 21:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A0BC3411E;
+	Fri,  1 Jul 2022 21:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1656710436;
+	bh=K7S1iwMVt9Tc6gO7LsvHgFsvq9tpH1mg4DvGikanxtI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PhKIX2tswW7aIYABkIs9jIKx7jtmPxHBZoDvk28tt7OWcBEcNQ+v2cFkFdDXAgZyv
+	 Zc900AXCfKNdAU7CesT11EGXkC+PVsTZNBlnQVlVTCepSX4vLLu4l5QfyzWblA7MS3
+	 9Qc0+u7NStXro9STs0Yo0HT25uo5uoTf+4S6R+ZcSfbtcGnK9gqOwKxZw2Qtl/ofOm
+	 aId3x8C2gew5//yYxR0fFcGQGIQAo4G7Wj7neE38aosZjriXCznxsGwNUP8TzFwXdd
+	 8Qb5i2NE0DXh+T/nU80rdlOzpM3p4o2nAXlcL0vu8kZPxb7P5ZnP6aeYsUlnl35tJH
+	 14R2BYSd70h9A==
+Date: Fri, 1 Jul 2022 14:20:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/Kconfig: Allow X86_X32_ABI with llvm-objcopy in some
+ cases
+Message-ID: <Yr9lIs6H03uq+UuV@dev-arch.thelio-3990X>
+References: <20220701210437.579322-1-alex_y_xu.ref@yahoo.ca>
+ <20220701210437.579322-1-alex_y_xu@yahoo.ca>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,100 +37,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220701210437.579322-1-alex_y_xu@yahoo.ca>
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
-head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
-commit: e237ecdc44f74b59d00230cc4e6e8067a4bed176 [59/61] netfs: add new buffered/direct exclusive locking scheme
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220702/202207020506.BJYCPSrC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e237ecdc44f74b59d00230cc4e6e8067a4bed176
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
-        git checkout e237ecdc44f74b59d00230cc4e6e8067a4bed176
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
+Hi Alex,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Jul 01, 2022 at 05:04:37PM -0400, Alex Xu (Hello71) wrote:
+> According to the comment and commit message, there are issues compiling
+> with IBT and/or compressed debug sections. Therefore, the condition
+> should be restricted to when those are enabled.
+> 
+> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+> ---
+>  arch/x86/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index be0b95e51df6..e5af1088420e 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2847,7 +2847,7 @@ config X86_X32_ABI
+>  	# compressed debug sections to x86_x32 properly:
+>  	# https://github.com/ClangBuiltLinux/linux/issues/514
+>  	# https://github.com/ClangBuiltLinux/linux/issues/1141
+> -	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
+> +	depends on !X86_KERNEL_IBT || !DEBUG_INFO_COMPRESSED || $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
+>  	help
+>  	  Include code to run binaries for the x32 native 32-bit ABI
+>  	  for 64-bit processors.  An x32 process gets access to the
+> -- 
+> 2.36.1
+> 
 
-All warnings (new ones prefixed by >>):
+Personally, I would rather not play whack-a-mole with these dependencies
+here. To me, https://github.com/ClangBuiltLinux/linux/issues/1141
+appears to be a pretty fundamental problem. Right now, IBT is the only
+known configuration that results in a .note.gnu.property section but
+there might be other configurations in the future that will necessitate
+adding other configurations here, which I am not a fan of. See commit
+8cdd23c23c3d ("arm64: Restrict ARM64_BTI_KERNEL to clang 12.0.0 and
+newer") for a similar situation on the arm64 side. I would much rather
+effort be put towards fixing llvm-objcopy or coming up with a solution
+that avoids using objcopy for x32 altogether.
 
->> fs/netfs/buffered_write.c:815:9: warning: no previous prototype for function 'netfs_file_write_iter_locked' [-Wmissing-prototypes]
-   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
-           ^
-   fs/netfs/buffered_write.c:815:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
-   ^
-   static 
-   fs/netfs/buffered_write.c:23:20: warning: unused function 'netfs_pgoff_before_touch' [-Wunused-function]
-   static inline bool netfs_pgoff_before_touch(pgoff_t a, pgoff_t b)
-                      ^
-   2 warnings generated.
+That is just my two cents though, I'll leave it up to the x86 folks if
+they want to have this allowlist of configurations.
 
-
-vim +/netfs_file_write_iter_locked +815 fs/netfs/buffered_write.c
-
-   801	
-   802	/**
-   803	 * netfs_file_write_iter_locked - write data to a file
-   804	 * @iocb:	IO state structure
-   805	 * @from:	iov_iter with data to write
-   806	 *
-   807	 * This is a wrapper around __generic_file_write_iter() to be used by most
-   808	 * filesystems that want to deal with the locking themselves. It takes care
-   809	 * of syncing the file in case of O_SYNC.
-   810	 * Return:
-   811	 * * negative error code if no data has been written at all of
-   812	 *   vfs_fsync_range() failed for a synchronous write
-   813	 * * number of bytes written, even for truncated writes
-   814	 */
- > 815	ssize_t netfs_file_write_iter_locked(struct kiocb *iocb, struct iov_iter *from)
-   816	{
-   817		struct file *file = iocb->ki_filp;
-   818		struct inode *inode = file->f_mapping->host;
-   819		struct netfs_inode *ctx = netfs_inode(inode);
-   820		ssize_t ret;
-   821	
-   822		_enter("%llx,%zx,%llx", iocb->ki_pos, iov_iter_count(from), i_size_read(inode));
-   823	
-   824		ret = generic_write_checks(iocb, from);
-   825		if (ret <= 0)
-   826			return ret;
-   827	
-   828		trace_netfs_write_iter(iocb, from);
-   829	
-   830		/* We can write back this queue in page reclaim */
-   831		current->backing_dev_info = inode_to_bdi(inode);
-   832		ret = file_remove_privs(file);
-   833		if (ret)
-   834			goto error;
-   835	
-   836		ret = file_update_time(file);
-   837		if (ret)
-   838			goto error;
-   839	
-   840		ret = netfs_flush_conflicting_writes(ctx, file, iocb->ki_pos,
-   841						     iov_iter_count(from), NULL);
-   842		if (ret < 0 && ret != -EAGAIN)
-   843			goto error;
-   844	
-   845		if (iocb->ki_flags & IOCB_DIRECT)
-   846			ret = netfs_direct_write_iter(iocb, from);
-   847		else
-   848			ret = netfs_perform_write(iocb, from);
-   849	
-   850	error:
-   851		/* TODO: Wait for DSYNC region here. */
-   852		current->backing_dev_info = NULL;
-   853		return ret;
-   854	}
-   855	EXPORT_SYMBOL(netfs_file_write_iter_locked);
-   856	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
