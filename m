@@ -1,69 +1,63 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB64B1FC5
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 15:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67C723AA
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 15:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656774626;
+	s=mimecast20190719; t=1656776362;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
-	b=iHChBTlhi0ZO4t/yuEFiwq283rbT2hz5Jx9MEGIU4SsbwMmivwdIjSpikCuTTo3UFxMfvq
-	3/KvPihmtnGR7cWpNvUYRbvyim+UvAFvjDw0Wp31WRAHpghLhBObgb+kN4XEhfZOLzSRzZ
-	9/AbxZKtAhO2dZFCsaWfNiJhL3qK9hQ=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=W8c1SlBUxYM10s99ei02CiGdLvmIh2XzeBEOuTV4Qx0=;
+	b=DguW85NjAy2G9pBYQLphd9AtI2PiVZQsm7Z7H8gSNbU3gQ4WTwj7LXKWn1ZOlTRQXLpvjg
+	3Lj5DMu8leLFu1CriYhY9kwkX9Xt+k6x47KLCBosd0CAPtUsmjFZgJlENyZHWC/E9C8Rko
+	hpJZrntri6/8BXjIIWTOh2+lZAcYWL4=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-1b_aKMHjPvqYiCMF_uOJ1g-1; Sat, 02 Jul 2022 11:10:25 -0400
-X-MC-Unique: 1b_aKMHjPvqYiCMF_uOJ1g-1
-Received: by mail-qt1-f198.google.com with SMTP id q21-20020ac84115000000b0031bf60d9b35so2791211qtl.4
-        for <llvm@lists.linux.dev>; Sat, 02 Jul 2022 08:10:25 -0700 (PDT)
+ us-mta-373-1slIqS4PNcKPfvh92ySc8Q-1; Sat, 02 Jul 2022 11:39:14 -0400
+X-MC-Unique: 1slIqS4PNcKPfvh92ySc8Q-1
+Received: by mail-qt1-f200.google.com with SMTP id f28-20020ac8015c000000b003183eca483bso2821989qtg.2
+        for <llvm@lists.linux.dev>; Sat, 02 Jul 2022 08:39:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Cqp43LfXGvDDWLcjAcU0nNREspk+kElXMNXTMGJ8P1E=;
-        b=PwaCN4mZF2IPpH5H4YXECVqrivVhcAmVb4H2h5C+ry1o0L9mqGVPx8+6yflzdtFMLG
-         fc2AHMb8TNBf1uX+VNp5Vsd39/PyPISlu6oiMhQFchdUvv5InhCQiWkqkfNGydmiD0JP
-         Y6qtUL7kOZVN1zeuRkgxEv868Yhy/lR/sk2B4WhLgAIBGVFu9tvE8Is5FN5OucXW6IAJ
-         Ou/5Em2ZEPfdEwrREYEG/NALfwr6aoEMePW2pJ/07gfjk+klG+2KtidXYy7yNYrvrpuL
-         TriSXfeffqU+6cJO00M8KqWrlGXWgE3dJFAGIXAKo2Tlm3IkkpW6fQ90FL24bV3iQtjH
-         F7Nw==
-X-Gm-Message-State: AJIora9U+Q9WS8wIJEGXsgWmeDwpBCkGlk4Ynk/1eK/5fOMpMxWsKqKm
-	AzhEkVwxBQkqb5HQn8ro8+vSMfCd0A9/J+2e6EQIzeEr8VQb3Z+uwPYAe9V/CUWjbVEL3eAEwfw
-	kusqv1ywVt6BhUQ==
-X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632037qtg.253.1656774624761;
-        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vl3/Ai5Vps6cqyXNHSW43QW8v5SfQxKSachr4YHT8JFyALP6kBEa7qly/qiC2VBYhdMdg8Gg==
-X-Received: by 2002:ac8:5816:0:b0:31d:4178:5fd0 with SMTP id g22-20020ac85816000000b0031d41785fd0mr1632016qtg.253.1656774624536;
-        Sat, 02 Jul 2022 08:10:24 -0700 (PDT)
+        bh=W8c1SlBUxYM10s99ei02CiGdLvmIh2XzeBEOuTV4Qx0=;
+        b=TuJedFk1gbL/lUsCqw6IhAhIuUdYAypc3zFk8b2RPCgq+GiCPrSOqfwLmw1FCA5eeE
+         N8a5nMUdLyuYZtecCboUBCj3EjNNiATJdtYzRLUsvsi3uG9ZVdIWhqpKpwnb1vLejqWp
+         TmPr3AwKmC3CT0QTlfqN5xmm0RR+DICzVJJbvwXdPuxhjT4NyNolGYhhuYut22D6A0kA
+         YPkM5LsEIuK5ARXS7w5uYKR6T2B0sKmM41zbHv7Gq1eZ1g6/7BJ9k/YVXkckaSEPmYxo
+         zeHyrPMhUcOMpInlDshI7HbNgKhJzShoUT8rM3MgmdTTVFPq68eSNQauHwlbLvL8BOk8
+         mDVQ==
+X-Gm-Message-State: AJIora99Y9uHqMsne3hpAvfRrMTZavpP0akljztkey5a7so1otIxqxWU
+	Vd5eX4VbOPbcaEzabCj6pcmC0Y41OvIX/OoFS+Aa8/XHrSqN6ZJIVhZucbSlzTE+ReAE78wEQIS
+	2bJDLnvuIgYmVOA==
+X-Received: by 2002:a37:4549:0:b0:69f:556c:4e38 with SMTP id s70-20020a374549000000b0069f556c4e38mr13936447qka.202.1656776353549;
+        Sat, 02 Jul 2022 08:39:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s4kMDCJkO3l6rc/tzkcDONaBzbN/O5Ul2p3pH701RTsQYUDroNVnzGAdCYv5GPNqp46q1+Vw==
+X-Received: by 2002:a37:4549:0:b0:69f:556c:4e38 with SMTP id s70-20020a374549000000b0069f556c4e38mr13936437qka.202.1656776353290;
+        Sat, 02 Jul 2022 08:39:13 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id hh10-20020a05622a618a00b003154e7466casm16292230qtb.51.2022.07.02.08.10.22
+        by smtp.gmail.com with ESMTPSA id x9-20020a05620a448900b006a708baa069sm14569688qkp.101.2022.07.02.08.39.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 08:10:23 -0700 (PDT)
+        Sat, 02 Jul 2022 08:39:12 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: gregory.greenman@intel.com,
-	kvalo@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+To: bskeggs@redhat.com,
+	kherbst@redhat.com,
+	lyude@redhat.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
 	nathan@kernel.org,
-	ndesaulniers@google.com,
-	luciano.coelho@intel.com,
-	ayala.barazani@intel.com,
-	miriam.rachel.korenblit@intel.com,
-	johannes.berg@intel.com,
-	matt.chen@intel.com
-Cc: linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org,
+	ndesaulniers@google.com
+Cc: dri-devel@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] iwlwifi: mvm: return an error if setting tbl_rev fails
-Date: Sat,  2 Jul 2022 11:10:20 -0400
-Message-Id: <20220702151020.2524220-1-trix@redhat.com>
+Subject: [PATCH] drm/nouveau/bios: set info only when the return is not 0
+Date: Sat,  2 Jul 2022 11:39:04 -0400
+Message-Id: <20220702153904.1696595-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,35 +73,40 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang static analysis reports
-drivers/net/wireless/intel/iwlwifi/fw/acpi.c:1048:17: warning: Assigned value is garbage or undefined [core.uninitialized.Assign]
-        fwrt->ppag_ver = tbl_rev;
-                       ^ ~~~~~~~
-tbl_rev is optionaly set by a series of calls to iwl_acpi_get_wifi_pkg()
-and then jumping to the read_table when a call is successful.  The
-error case when all the call fails is not handled.  On all failed,
-the code flow falls through to the read_table label.  Add an error
-handler for the all fail case.
+drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c:68:17: warning: The right operand of '*' is a garbage value [core.UndefinedBinaryOperatorResult]
+        switch (!!data * *ver) {
+                       ^ ~~~~
+A switch statement with only a default should be reduced to an if.
 
-Fixes: e8e10a37c51c ("iwlwifi: acpi: move ppag code from mvm to fw/acpi")
+If nvbios_pmuEp() returns 0, via the data variable, the output info parameter
+is not used.  So set info only when data is not 0.
+
+The struct nvbios_pmuE only has the type and data elements.  Since both of these
+are explicitly set, memset is not needed.  So remove it.
+
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/net/wireless/intel/iwlwifi/fw/acpi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-index e6d64152c81a..1ef1e26c3206 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
-@@ -1044,6 +1044,9 @@ int iwl_acpi_get_ppag_table(struct iwl_fw_runtime *fwrt)
- 		goto read_table;
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+index b4a308f3cf7b..49e2664a734c 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
+@@ -64,12 +64,9 @@ nvbios_pmuEp(struct nvkm_bios *bios, int idx, u8 *ver, u8 *hdr,
+ 	     struct nvbios_pmuE *info)
+ {
+ 	u32 data = nvbios_pmuEe(bios, idx, ver, hdr);
+-	memset(info, 0x00, sizeof(*info));
+-	switch (!!data * *ver) {
+-	default:
++	if (data) {
+ 		info->type = nvbios_rd08(bios, data + 0x00);
+ 		info->data = nvbios_rd32(bios, data + 0x02);
+-		break;
  	}
- 
-+	ret = -EINVAL;
-+	goto out_free;
-+
- read_table:
- 	fwrt->ppag_ver = tbl_rev;
- 	flags = &wifi_pkg->package.elements[1];
+ 	return data;
+ }
 -- 
 2.27.0
 
