@@ -1,135 +1,145 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF875809
-	for <llvm@lists.linux.dev>; Fri,  1 Jul 2022 23:21:51 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id h198-20020a25d0cf000000b0066e14d5ad1dso631401ybg.8
-        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 16:21:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09B21365
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 00:46:42 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id jb13so3793570plb.9
+        for <llvm@lists.linux.dev>; Fri, 01 Jul 2022 17:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=r1hNWMzTHbP1T3u0oJfFG4ATF129b7TBwtFs10zIbH0=;
-        b=AfniH5QTWUN+wqcSlLlKuJx5yJp8JJHk89CfEEMl5lQ1ICN/xG92kx5WNxs+hwMLDj
-         y1MPwtf1lGA1NblcuJoqXrs4bHlUiq1iRR4w2azrECLCuIIInWJydMnwbeDO9A1gacJ3
-         6MGIh5dly4GfP0UxK6LkaOJEKAyc0fb9wkYVNqLZI/LJvBlKOBg9aYrMP5pGDiKej7u1
-         +TSLG69EXbh9UkRVy1yh07pPtZuKzomVtNA3mYLLapw8CWSLayla3G2XPDgskRdknVyf
-         NEpGzNbVutswz0xnFL6MooUMFGxU0t5boARFQ0DJRPTPIgfUU9whtp2A/smT/aBmeW2C
-         fGJA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z5RCZ7eFf7DG+bb/K0Fo4I4OVu7EXZEP7BsL1eeuLJo=;
+        b=bmwgsoe8otKVtotDYJhzt/jQr6yWchQ0guIlu1EFiVjMr0KOIcQ/nKIuVo1Ps7+spj
+         S9MwjARzDWcYO4eMSuFK8OccdxI8Bq0u0zJmssAkdgSk9YmNIkUMnwm1uysp2saw8HMU
+         gQLZqQ+eT0ZR96CQsbuem7QsUOQkwDSXcqIY4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=r1hNWMzTHbP1T3u0oJfFG4ATF129b7TBwtFs10zIbH0=;
-        b=mAZUwAgLgu+raMyIHhM6+Ltbv9pEfxpUVWFc2un6JA2Py6CwXbvtSUregG5EWA/804
-         T+xIoA56okG+KJ6Ha7XqqKEKI8EnMDbWQ/WluyX1VLeL2Ld3otsJfSHsKot9erpGnmD+
-         xdqmkKDdzrBabC2/T9q2QFj9Mm5g3Mj7QNkrNncX/Qv4lC+axtfdd3bQko5W8P9Nbcme
-         vlBFIJokspnFAMIgBU/kmgc2eegsjEdrBZuou+u+vr1jdT/K6u6dswirYalec3pMkuMi
-         lJv12bedGnwNjcyaeUdp8Ef6+kgXKU5rCHFBma5SygUdX7wydzNf8SB6GWbtgYoV3VbT
-         vkvQ==
-X-Gm-Message-State: AJIora9K62bk7WjSwuPZFVO22+A1uqPi67PqVE1dfPeounWFbJtpyXVp
-	60glX2Ma3UNTgqS7RTGnEQMJogQk2pNJPmOFgg==
-X-Google-Smtp-Source: AGRyM1vS8lR6ohgVW9YKUmSTvCAVBF+D2wOLXwW/aqjioj8VQIMa9zehx7RkG7my6+BiriAauGh24+9hI4ngKzSURg==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:a7a5:71:ddd5:892b])
- (user=justinstitt job=sendgmr) by 2002:a0d:f9c1:0:b0:31b:726f:9ef2 with SMTP
- id j184-20020a0df9c1000000b0031b726f9ef2mr20290827ywf.252.1656717710164; Fri,
- 01 Jul 2022 16:21:50 -0700 (PDT)
-Date: Fri,  1 Jul 2022 16:20:31 -0700
-Message-Id: <20220701232031.2639134-1-justinstitt@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z5RCZ7eFf7DG+bb/K0Fo4I4OVu7EXZEP7BsL1eeuLJo=;
+        b=xHKiCZWZUwNKTncdVc43K3Zzg/GBdlnt/XZj8mVyiOm/AgLJ/VLo9qRJVnVZVf8U8m
+         oPMs6HjkRfM6m+366gH1lXev/EuR5UWXZ3CI+jaWGo2w7k1c9rUHD1JuLMYXuWPozoAv
+         TLz3B7tlRA0RdfYjjxgdqQaSkT9bmep+3inZFxCHE7nbuvbFyG2DhRriXoRn2zPFIoXr
+         ct+N73rN+UdlrzgpRA66qL2nUYlirO3nFyFzxSFftfl+CNIRfg1M5J9U4Yp4HB7CVU1Z
+         ELwMWFA69xKVJ6I/uBt1btdrvXQvrs6k9GOBr8OVpnzJvAu493m5PTBDLr+IMNZXBnvB
+         TWbg==
+X-Gm-Message-State: AJIora9pp8Gw7yzaYzIHiNXAwxdCZQurHzKe4sLhY0zyCkEEyj8SZEtx
+	qbnA5JEqKtyrk+1M/EGoWt6C3A==
+X-Google-Smtp-Source: AGRyM1ve4YUGA7V2Z9Wnx8QjYt12AgSq4PN+wkt7vlENvY7OoY5yig3Cy+8JuDYeTNu7QIRgdAw+sQ==
+X-Received: by 2002:a17:902:db0b:b0:16b:a4ff:c9d6 with SMTP id m11-20020a170902db0b00b0016ba4ffc9d6mr14613002plx.15.1656722802266;
+        Fri, 01 Jul 2022 17:46:42 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v14-20020aa7808e000000b00518e1251197sm16842396pff.148.2022.07.01.17.46.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 17:46:41 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: keescook@chromium.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add a general "kernel hardening" section
+Date: Fri,  1 Jul 2022 17:46:38 -0700
+Message-Id: <20220702004638.2486003-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] eeprom: idt_89hpesx: fix clang -Wformat warnings
-From: Justin Stitt <justinstitt@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3372; h=from:subject; bh=D5UHUo1K/mbMYL0LorOoDOvKGWk+5IBEegx+/wvLazw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiv5VtcKZMiRsnO85YZL+A4W3igpu+YcXZHhE34+sS F6IJn2yJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYr+VbQAKCRCJcvTf3G3AJgQzEA CqKReyJ1ivVmHrIMPx5edQh5vStKNRJWzpqrd7EwtsXHGfKB2sO995YJjmY++Jc79VDVmUexB0fQFm ppLAqXdHChJ6WdA9ifdBoJde4S4AvABkO7NpVfkCCKcC6/jJnEgLl62wStHckxzwD+OxHpvOsYR6Iy jQR6rnIR3BjXeqp3eMYUoqsJSWoNSFZb6Lp65sbBLLCKqgCww2QEpkhHHm3edc/oeLwLnBnwlJ9R3k VXPSfv6hdTszUiXU/yUaefuU4IFEbT/kd2eftnIcTbNf7PMvI9Ie6hvurrFBXwyLFknXsuQwPmnZ5E WmuH+JGoYOGzfLrEm4/u9YfyzFbvwT6cHIcXm/vzPg/4+79/5YRQlKoMsZ0rxwGMFHDZ43cEG11xdb fxRtb54NwQ36yBIXVYRPxVMxvSCXpOJHpjMcyk854i+XeBfqLetMUBi85OPSDeP9DGPssxUrqRAf3+ 8Tkcb+HvQhSXN8oPd4LjfYNqJ3KjMFQhOc+Y5CCSMGlCruQ4BYFsrUfKdfNDpYqbCZN+tYLalvoU3J MDpyAC6X1N4wCo9DXzf3DFo5DjaGtWNUCJmNfS2Y9QJqhCIlZ6xscg2qwEEkY+pXXPU+olip8Rg+7z iwcglNkqA/BtHSkCWxrNGFXfnCvuTK9BbbS4BJY9uI2hnZXH+IjRM8dAKkRw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-see warnings:
-| drivers/misc/eeprom/idt_89hpesx.c:570:5: error: format specifies type
-| 'unsigned char' but the argument has type 'u16' (aka 'unsigned short')
-| [-Werror,-Wformat] memaddr);
--
-| drivers/misc/eeprom/idt_89hpesx.c:579:5: error: format specifies type
-| 'unsigned char' but the argument has type 'u16' (aka 'unsigned short')
-| [-Werror,-Wformat] memaddr);
--
-| drivers/misc/eeprom/idt_89hpesx.c:814:4: error: format specifies type
-| 'unsigned short' but the argument has type 'unsigned int'
-| [-Werror,-Wformat] CSR_REAL_ADDR(csraddr));
+While many large subsystems related to kernel hardening have their own
+distinct MAINTAINERS entries, there are some smaller collections that
+don't, but are maintained/reviewed by linux-hardening@vger.kernel.org.
+Add a section to capture these, add (or replace defunct) trees that are
+now all carried in the hardening tree.
 
-There's an ongoing movement to eventually enable the -Wformat flag for
-clang. See: https://github.com/ClangBuiltLinux/linux/issues/378
-
-The format specifier for idt_89hpesx.c:570 and 579 was `0x%02hhx`. The
-part we care about `%hhx` describes a single byte format, wherein the
-leftmost byte of our u16 type (of which memaddr is) is truncated.
-
-example:
-```
-uint16_t x = 0xbabe;
-printf("%hhx\n", x);
-// output is: be
-// we lost 'ba'
-```
-
-There exists a similar issue at idt_89hpesx.c:814 which involves the
-CSR_REAL_ADDR macro. This macro returns a u16 but due to default
-argument promotion for variadic functions (printf-like) actually
-provides an int to the dev_err method.
-
-My proposed solution is to expand the width of the format specifier to
-fully encompass the provided argument (which is promoted to an int, see
-below). I opted for '%x' as this specifies an unsigned hexadecimal
-integer which, with a guarantee, can represent all the values of a u16.
-
-As per C11 6.3.1.1:
-(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
-`If an int can represent all values of the original type ..., the
-value is converted to an int; otherwise, it is converted to an
-unsigned int. These are called the integer promotions.`
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/eeprom/idt_89hpesx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/eeprom/idt_89hpesx.c b/drivers/misc/eeprom/idt_89hpesx.c
-index b0cff4b152da..42eac114edd7 100644
---- a/drivers/misc/eeprom/idt_89hpesx.c
-+++ b/drivers/misc/eeprom/idt_89hpesx.c
-@@ -566,7 +566,7 @@ static int idt_eeprom_read_byte(struct idt_89hpesx_dev *pdev, u16 memaddr,
- 		eeseq.memaddr = cpu_to_le16(memaddr);
- 		ret = pdev->smb_write(pdev, &smbseq);
- 		if (ret != 0) {
--			dev_err(dev, "Failed to init eeprom addr 0x%02hhx",
-+			dev_err(dev, "Failed to init eeprom addr 0x%02x",
- 				memaddr);
- 			break;
- 		}
-@@ -575,7 +575,7 @@ static int idt_eeprom_read_byte(struct idt_89hpesx_dev *pdev, u16 memaddr,
- 		smbseq.bytecnt = EEPROM_RD_CNT;
- 		ret = pdev->smb_read(pdev, &smbseq);
- 		if (ret != 0) {
--			dev_err(dev, "Failed to read eeprom data 0x%02hhx",
-+			dev_err(dev, "Failed to read eeprom data 0x%02x",
- 				memaddr);
- 			break;
- 		}
-@@ -810,7 +810,7 @@ static int idt_csr_read(struct idt_89hpesx_dev *pdev, u16 csraddr, u32 *data)
- 	smbseq.bytecnt = CSR_RD_CNT;
- 	ret = pdev->smb_read(pdev, &smbseq);
- 	if (ret != 0) {
--		dev_err(dev, "Failed to read csr 0x%04hx",
-+		dev_err(dev, "Failed to read csr 0x%04x",
- 			CSR_REAL_ADDR(csraddr));
- 		goto err_mutex_unlock;
- 	}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3cf9842d9233..2702b29e922f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4873,7 +4873,7 @@ R:	Nick Desaulniers <ndesaulniers@google.com>
+ L:	llvm@lists.linux.dev
+ S:	Supported
+ B:	https://github.com/ClangBuiltLinux/linux/issues
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/clang/features
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	include/linux/cfi.h
+ F:	kernel/cfi.c
+ 
+@@ -7783,6 +7783,7 @@ FORTIFY_SOURCE
+ M:	Kees Cook <keescook@chromium.org>
+ L:	linux-hardening@vger.kernel.org
+ S:	Supported
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	include/linux/fortify-string.h
+ F:	lib/test_fortify/*
+ F:	scripts/test_fortify.sh
+@@ -8225,6 +8226,7 @@ GCC PLUGINS
+ M:	Kees Cook <keescook@chromium.org>
+ L:	linux-hardening@vger.kernel.org
+ S:	Maintained
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	Documentation/kbuild/gcc-plugins.rst
+ F:	scripts/Makefile.gcc-plugins
+ F:	scripts/gcc-plugins/
+@@ -10742,6 +10744,17 @@ F:	scripts/mk*
+ F:	scripts/mod/
+ F:	scripts/package/
+ 
++KERNEL HARDENING (not covered by other areas)
++M:	Kees Cook <keescook@chromium.org>
++L:	linux-hardening@vger.kernel.org
++S:	Supported
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
++F:	include/linux/overflow.h
++F:	include/linux/randomize_kstack.h
++F:	mm/usercopy.c
++K:	\b(add|choose)_random_kstack_offset\b
++K:	\b__check_(object_size|heap_object)\b
++
+ KERNEL JANITORS
+ L:	kernel-janitors@vger.kernel.org
+ S:	Odd Fixes
+@@ -11542,7 +11555,7 @@ F:	drivers/media/usb/dvb-usb-v2/lmedm04*
+ LOADPIN SECURITY MODULE
+ M:	Kees Cook <keescook@chromium.org>
+ S:	Supported
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git lsm/loadpin
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	Documentation/admin-guide/LSM/LoadPin.rst
+ F:	security/loadpin/
+ 
+@@ -17857,7 +17870,7 @@ M:	Kees Cook <keescook@chromium.org>
+ R:	Andy Lutomirski <luto@amacapital.net>
+ R:	Will Drewry <wad@chromium.org>
+ S:	Supported
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git seccomp
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/seccomp
+ F:	Documentation/userspace-api/seccomp_filter.rst
+ F:	include/linux/seccomp.h
+ F:	include/uapi/linux/seccomp.h
+@@ -21993,7 +22006,7 @@ F:	include/linux/yam.h
+ YAMA SECURITY MODULE
+ M:	Kees Cook <keescook@chromium.org>
+ S:	Supported
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git yama/tip
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+ F:	Documentation/admin-guide/LSM/Yama.rst
+ F:	security/yama/
+ 
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+2.32.0
 
