@@ -1,43 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5C21867
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 05:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E82A1867
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 05:50:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656739891;
+	s=mimecast20190719; t=1656741034;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=zjL3YEJ8IgFNKmFBAokTiJJTUlJnpxJXLu4Wk/BusAY=;
-	b=Mq55KTBguDgi2OHhwYfyVbZ3t8xl41NoLrFDzot8VtQM+hOnsEIQTRUaPrhA6QubltXAy6
-	yuSbLRXn+P+uJDYxe1yp+mrFhUA24+IwGVckgy4zcoYrRhxSc6/iZb+TeRjt2UICqq2mQo
-	qkZtBr/RW1Ah7Qwem+Kq5TPvI8v+aDM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=WAMuVTDQuSDjVSIG/F9+mnAEwyvp1ue72DgAMZ2LnDg=;
+	b=V5jy2L+ZgmTyabWE5fMbrlD/nbnMzhWRZX4DeLWfAXbC1DDgZ2po/syctRFwPBf+VWnOqE
+	C0bYe9bV8q4dkE+PtEKzdKCB6vNz9SIeUv5AbPPnm1hLLVvjrEZ0275zt9a/J6GO+3OrK3
+	mdAWSDcNsS3HErPh1+uuj89YTaDpkKw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-WqAlijqBPH6ZDzs60yBCLg-1; Sat, 02 Jul 2022 01:31:30 -0400
-X-MC-Unique: WqAlijqBPH6ZDzs60yBCLg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-277-2PxpaVOXNm2qwAw89b1SGA-1; Sat, 02 Jul 2022 01:50:33 -0400
+X-MC-Unique: 2PxpaVOXNm2qwAw89b1SGA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B66D801231
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 05:31:30 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F1961C0CE74
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 05:50:33 +0000 (UTC)
 Received: from [172.64.0.111] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0B97040D282E;
-	Sat,  2 Jul 2022 05:31:30 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1F87FC52D63;
+	Sat,  2 Jul 2022 05:50:33 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 76ff294e
+Subject: =?utf-8?b?4pyF?= PASS (13/492 SKIPPED): Test report for d0f67adb
  (mainline.kernel.org-clang)
-Date: Sat, 02 Jul 2022 05:31:29 -0000
+Date: Sat, 02 Jul 2022 05:50:33 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-Message-Id: <11461.122070201313000495@us-mta-154.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Message-Id: <35164.122070201503300175@us-mta-277.us.mimecast.lan>
 Authentication-Results: relay.mimecast.com;
 	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
 X-Mimecast-Spam-Score: 0
@@ -47,27 +47,25 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi, we tested your kernel and here are the results:
 
-    Overall result: FAILED
+    Overall result: PASSED
              Merge: OK
            Compile: OK
               Test: OK
 
+Tested-by: CKI Project <cki-project@redhat.com>
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/46812
+    https://datawarehouse.cki-project.org/kcidb/checkouts/46814
 
 One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         ppc64le - LTP - cve
-                   Issue: LTP - cve: cve-2020-29373 tst_test.c:1345: TINFO:=
- Timeout per run is 0h 05m 00s
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/723
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4183011
 
     We also see the following known issues which are not related to your ch=
 anges:
+         aarch64 - Boot test
+                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
+ht-etm4x: probe of ARMHC500:20 failed with error -17
+                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
+BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
          aarch64 - Networking cki netfilter test
                    Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
 m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
@@ -138,11 +136,6 @@ nel/kernel-tests/-/issues/1213
 emory function: kaslr
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1169
-         ppc64le - AMTU (Abstract Machine Test Utility)
-                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
-AIL
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1162
          ppc64le - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
@@ -223,11 +216,6 @@ nel/kernel-tests/-/issues/513
 =80=98-Qunused-arguments=E2=80=99
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/513
-          x86_64 - Boot test
-                   Issue: IBM System X3250 M4 - kernel: irq 16: nobody care=
-d (try booting with the "irqpoll" option)
-                          https://redhat.service-now.com/surl.do?n=3DRITM12=
-02693
           x86_64 - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
@@ -242,11 +230,6 @@ nel/kernel-tests/-/issues/513
 untime not found
                           https://gitlab.com/redhat/centos-stream/tests/ker=
 nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
           x86_64 - Reboot test
                    Issue: SELinux prevents sendmail.service while running M=
 emory function: kaslr
@@ -259,11 +242,6 @@ t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
 =3D1
                           https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
 3604#c3
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
           x86_64 - Storage - targetcli basic
                    Issue: targetcli - module 'inspect' has no attribute 'ge=
 targspec'
