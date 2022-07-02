@@ -1,44 +1,44 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67021FA1
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 07:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096A11383
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 09:34:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656748363; x=1688284363;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IiPjeF+jRRWUM7VkcVZOcmis1bognjh9b+zwzFC7KpU=;
-  b=ZV+TOSrqP0JxuOjXcw+rTmHkPPdmbGjX8SVp/wr5uAPTt8gZ+h+eRFnk
-   h7mbsSd3PUtLHqJa/8C/fcQbEl6gmQt8FhkzzBRuOJA3kcyDnUFFmY1dZ
-   QdUlZHoZD4UId+5hX2Zcyjqud2Yw3O5UHpopmXo3A+gx1kg4cu9yyj/PL
-   uYX/NeUoDMa7+eIRpDAzvUy34X1FFJcFqwmf0R2PX1xItA4pyzqp13Ti3
-   WSb/iDfKSigS0jftLWx2pRas9OGcgQzWUr1Ir3wfKsXX3/xKg4tuPj19C
-   7VlfGq9aneekgURtwMLAobGbxPkPt83jsRKe6Nn4DXA9FK33FnOPlvpe2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="271574477"
+  t=1656754490; x=1688290490;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yMmA2W1SvyNpAttWj/B6jRcNsRBOC+CcZJ9+GyTMevI=;
+  b=ndV+BvkyWrMGixoVNcWsTOwdEpw3ny8CJnf1YTVQ2lQ4DOnDvLZr3XMK
+   V/PsAumLSz5gG/mG69wlOGuAWh6fzCwQevBTOPM+KxjLTwxbD0fa98+e0
+   wo/J6y2pD/22VrgK2yVqk0wcm1YY05qXA3Lkf2tYInFnpjPnckIonfNDT
+   Q5OlStf1hwj0jSdb+g2GkyK+FQZXBwZAhrKAfQedfdvBkiWQa1jleRBDx
+   2CwYs0il7jju8unqPbbzJQt2CP0AgCpyeH3r1QGoaCQte01ZWq3WyaccP
+   sYatblj8VAQTVbT4qz5jAmFX7/KE96dYUyOzrzbS9ZPtzXvHznVAXDMqD
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="280369432"
 X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="271574477"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 00:52:43 -0700
+   d="scan'208";a="280369432"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 02:34:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,239,1650956400"; 
-   d="scan'208";a="596520471"
+   d="scan'208";a="718877221"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2022 00:52:41 -0700
+  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2022 02:34:47 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o7Xvl-000EyM-22;
-	Sat, 02 Jul 2022 07:52:41 +0000
-Date: Sat, 2 Jul 2022 15:52:19 +0800
+	id 1o7ZWY-000F6B-Dv;
+	Sat, 02 Jul 2022 09:34:46 +0000
+Date: Sat, 2 Jul 2022 17:34:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: [andersson:ci-next 143/256]
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:13:10: fatal error:
- 'sc8280xp-pmics.dtsi' file not found
-Message-ID: <202207021501.l6NTMDfZ-lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/10] ata: ahci: Use `pm_suspend_preferred_s2idle`
+Message-ID: <202207021730.qxUxPlRq-lkp@intel.com>
+References: <20220701023328.2783-4-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,42 +47,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220701023328.2783-4-mario.limonciello@amd.com>
 
-tree:   https://github.com/andersson/kernel ci-next
-head:   9b3ce87d4ca378dcc682c816050abac245606df2
-commit: c3b2a4e5b808e4bafe248834ade5a00d94984c1c [143/256] arm64: dts: qcom: sc8280xp: Add reference device
-config: arm64-buildonly-randconfig-r001-20220629 (https://download.01.org/0day-ci/archive/20220702/202207021501.l6NTMDfZ-lkp@intel.com/config)
+Hi Mario,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on drm-misc/drm-misc-next hid/for-next linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220702/202207021730.qxUxPlRq-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/andersson/kernel/commit/c3b2a4e5b808e4bafe248834ade5a00d94984c1c
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson ci-next
-        git checkout c3b2a4e5b808e4bafe248834ade5a00d94984c1c
+        # https://github.com/intel-lab-lkp/linux/commit/ceb90ecfef1f252424a29b31a547cfc80c8f5135
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/PM-suspend-Introduce-pm_suspend_preferred_s2idle/20220701-103534
+        git checkout ceb90ecfef1f252424a29b31a547cfc80c8f5135
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> arch/arm64/boot/dts/qcom/sc8280xp-crd.dts:13:10: fatal error: 'sc8280xp-pmics.dtsi' file not found
-   #include "sc8280xp-pmics.dtsi"
-            ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/ata/ahci.c:1614:6: error: call to undeclared function 'pm_suspend_preferred_s2idle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+               pm_suspend_preferred_s2idle()) {
+               ^
+   drivers/ata/ahci.c:1614:6: note: did you mean 'pm_suspend_default_s2idle'?
+   include/linux/suspend.h:343:20: note: 'pm_suspend_default_s2idle' declared here
+   static inline bool pm_suspend_default_s2idle(void) { return false; }
+                      ^
    1 error generated.
 
 
-vim +13 arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+vim +/pm_suspend_preferred_s2idle +1614 drivers/ata/ahci.c
 
-    11	
-    12	#include "sc8280xp.dtsi"
-  > 13	#include "sc8280xp-pmics.dtsi"
-    14	
+  1595	
+  1596	static void ahci_update_initial_lpm_policy(struct ata_port *ap,
+  1597						   struct ahci_host_priv *hpriv)
+  1598	{
+  1599		int policy = CONFIG_SATA_MOBILE_LPM_POLICY;
+  1600	
+  1601	
+  1602		/* Ignore processing for chipsets that don't use policy */
+  1603		if (!(hpriv->flags & AHCI_HFLAG_USE_LPM_POLICY))
+  1604			return;
+  1605	
+  1606		/* user modified policy via module param */
+  1607		if (mobile_lpm_policy != -1) {
+  1608			policy = mobile_lpm_policy;
+  1609			goto update_policy;
+  1610		}
+  1611	
+  1612	#ifdef CONFIG_ACPI
+  1613		if (policy > ATA_LPM_MED_POWER &&
+> 1614		    pm_suspend_preferred_s2idle()) {
+  1615			if (hpriv->cap & HOST_CAP_PART)
+  1616				policy = ATA_LPM_MIN_POWER_WITH_PARTIAL;
+  1617			else if (hpriv->cap & HOST_CAP_SSC)
+  1618				policy = ATA_LPM_MIN_POWER;
+  1619		}
+  1620	#endif
+  1621	
+  1622	update_policy:
+  1623		if (policy >= ATA_LPM_UNKNOWN && policy <= ATA_LPM_MIN_POWER)
+  1624			ap->target_lpm_policy = policy;
+  1625	}
+  1626	
 
 -- 
 0-DAY CI Kernel Test Service
