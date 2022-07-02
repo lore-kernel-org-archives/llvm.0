@@ -1,170 +1,307 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E6C3D9C
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 15:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656776524; x=1688312524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RJFVLls1EjQPmPr7lVOwXw4XeaewzMH8z3gqTFR/nI4=;
-  b=I6R0MrrGBH+aqiJZdi2wVeGIZhFF0QE7M1bvbotTz2vJMeO2LP96EDF+
-   WoU1E9AFwkIc5QW+72ktt0hwp8MaVu3oV6eiUfRPa0+y4GwLo51vJ/GgF
-   gpwnjsG6vP2ovpgkq1+5GXPf7nLQn2ZeuPSxvWmETmhIPdtPjqA9s/yHm
-   ph8sPJlEJd36CuJU4413O1/Ll4a1YfXvsjAF2bz6omvOpm611Tr0xGSJy
-   FsMOkgxDE++09fc4cBW3hK66auh+djBY+RSva0maTMEk9u4ddA/WmWbsv
-   7TxKvYL4Wzc7P9qApPvVYddlnSAgT7xZ4EaXkA3Kr0WZRkVGop3m9LMMf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262640649"
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="262640649"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 08:42:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
-   d="scan'208";a="624590982"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2022 08:41:59 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-	(envelope-from <lkp@intel.com>)
-	id 1o7fFu-000FN5-H6;
-	Sat, 02 Jul 2022 15:41:58 +0000
-Date: Sat, 2 Jul 2022 23:41:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Michael Walle <michael@walle.cc>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Till Harbaum <till@harbaum.org>
-Subject: Re: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-Message-ID: <202207022332.6xTWZbw8-lkp@intel.com>
-References: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA1829B0
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 16:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1656779434;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ilpFKzXXvwApbSsiiiS9C6N83vRGwQL+pGGLwaDjHN0=;
+	b=c/f19m3UGFUICucee85e8uCMO+KxuQm2yXMBWPq9G6YHCqFGGCPtiwqfeUv3CFySaDmynA
+	uwk+6yG39KJB3Vg8yyZ10i8KNp0joyHnycuFBZp9gtphB/WuntTgPkhbKZWXOGNu5fEbap
+	iBS/2s7pW40OKp7dqYbMY+99iPcNHiU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-dCe0sQvVPTGUhDWza5lZgA-1; Sat, 02 Jul 2022 12:30:33 -0400
+X-MC-Unique: dCe0sQvVPTGUhDWza5lZgA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD6A31C06EC8
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 16:30:32 +0000 (UTC)
+Received: from [172.64.0.111] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 995012026D64;
+	Sat,  2 Jul 2022 16:30:32 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for 8300d380
+ (mainline.kernel.org-clang)
+Date: Sat, 02 Jul 2022 16:30:32 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Message-Id: <88606.122070212303300131@us-mta-59.us.mimecast.lan>
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: mips-buildonly-randconfig-r002-20220702 (https://download.01.org/0day-ci/archive/20220702/202207022332.6xTWZbw8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
-        git checkout c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/i2c/busses/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-exynos5.c:747:4: error: unterminated function-like macro invocation
-                           dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-                           ^
-   include/linux/dev_printk.h:145:9: note: macro 'dev_warn' defined here
-   #define dev_warn(dev, fmt, ...) \
-           ^
->> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected expression
-   MODULE_LICENSE("GPL v2");
-                            ^
->> drivers/i2c/busses/i2c-exynos5.c:960:26: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-   drivers/i2c/busses/i2c-exynos5.c:746:3: note: previous statement is here
-                   if (ret == -ETIMEDOUT)
-                   ^
->> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
-   MODULE_LICENSE("GPL v2");
-                            ^
-   drivers/i2c/busses/i2c-exynos5.c:744:15: note: to match this '{'
-           if (ret < 0) {
-                        ^
->> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
-   MODULE_LICENSE("GPL v2");
-                            ^
-   drivers/i2c/busses/i2c-exynos5.c:718:1: note: to match this '{'
-   {
-   ^
-   1 warning and 4 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +747 drivers/i2c/busses/i2c-exynos5.c
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/46813
 
-   715	
-   716	static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
-   717				      struct i2c_msg *msgs, int stop)
-   718	{
-   719		unsigned long timeout;
-   720		int ret;
-   721	
-   722		i2c->msg = msgs;
-   723		i2c->msg_ptr = 0;
-   724		i2c->trans_done = 0;
-   725	
-   726		reinit_completion(&i2c->msg_complete);
-   727	
-   728		exynos5_i2c_message_start(i2c, stop);
-   729	
-   730		timeout = wait_for_completion_timeout(&i2c->msg_complete,
-   731						      EXYNOS5_I2C_TIMEOUT);
-   732		if (timeout == 0)
-   733			ret = -ETIMEDOUT;
-   734		else
-   735			ret = i2c->state;
-   736	
-   737		/*
-   738		 * If this is the last message to be transfered (stop == 1)
-   739		 * Then check if the bus can be brought back to idle.
-   740		 */
-   741		if (ret == 0 && stop)
-   742			ret = exynos5_i2c_wait_bus_idle(i2c);
-   743	
-   744		if (ret < 0) {
-   745			exynos5_i2c_reset(i2c);
-   746			if (ret == -ETIMEDOUT)
- > 747				dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
-   748		}
-   749	
-   750		/* Return the state as in interrupt routine */
-   751		return ret;
-   752	}
-   753	
+One or more kernel tests failed:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Unrecognized or new issues:
+          x86_64 - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+4183710
+
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - Boot test
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+                   Issue: [aarch64] [ampere] sysfs: cannot create duplicate=
+ filename '/devices/mc0'
+                          http://lists.infradead.org/pipermail/linux-arm-ke=
+rnel/2022-June/750380.html
+         aarch64 - Storage - blktests - nvme-tcp
+                   Issue: Storage blktests - nvme-tcp: lr : check_flush_dep=
+endency+0x138/0x140
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1183
+         aarch64 - Networking cki netfilter test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - ALSA PCM loopback test
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - SCSI VPD
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - software RAID testing
+                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
+m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
+_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
+ tclass=3Dcapability permissive=3D0
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
+3062
+         aarch64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+         aarch64 - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+         aarch64 - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+         aarch64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+         aarch64 - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+         aarch64 - Reboot test
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+         aarch64 - xfstests - btrfs
+                   Issue: xfstests - _check_xfs_filesystem: filesystem on /=
+dev/nvme0n1p4 is inconsistent (r)
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+9409
+         ppc64le - LTP - syscalls
+                   Issue: LTP - syscalls: fanotify10.c:538: TFAIL: group 0 =
+(4) with FAN_MARK_FILESYSTEM did not get event
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1239
+         ppc64le - selinux-policy: serge-testsuite
+                   Issue: selinux-policy: serge-testsuite: Failed test at p=
+erf_event/test line 88, 104, 109, 115
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/814
+           s390x - stress: stress-ng - memory
+                   Issue: stress: stress-ng - memory: ERROR: Aborting curre=
+nt task: Aborting due to system crash and reboot
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1236
+           s390x - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+           s390x - Podman system test - as root
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+           s390x - Podman system test - as user
+                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
+CreatedAt from image history should =3D=3D image list
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1160
+           s390x - Storage - swraid simple_reshape
+                   Issue: storage: software RAID testing: SELinux prevents =
+mdadm
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1213
+           s390x - kdump - sysrq-c
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+           s390x - kdump - file-load
+                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+1983
+          x86_64 - kselftest build - net
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - kselftest build - bpf
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - Memory function: kaslr
+                   Issue: SELinux prevents sendmail.service while running M=
+emory function: kaslr
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1169
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+          x86_64 - Storage - blktests - blk
+                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
+si_debug failed
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
+7550
+                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
+ CPUs/tasks
+                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
+63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
+          x86_64 - Storage - targetcli basic
+                   Issue: targetcli - module 'inspect' has no attribute 'ge=
+targspec'
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
+2058
+          x86_64 - Podman system test - as root
+                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
+aked into user namespace
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1166
+                   Issue: Podman: Error: netavark: failed to configure brid=
+ge and veth interface
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1186
+          x86_64 - Podman system test - as user
+                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
+tch container ID
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1167
+          x86_64 - Firmware test suite
+                   Issue: gcc: error: unrecognized command-line option =E2=
+=80=98-Qunused-arguments=E2=80=99
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/513
+                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
+untime not found
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1235
+          x86_64 - xfstests - nfsv4.2
+                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
+m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
+t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
+=3D1
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+3604#c3
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
