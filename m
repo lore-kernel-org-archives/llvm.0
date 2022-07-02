@@ -1,112 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67C723AA
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 15:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656776362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=W8c1SlBUxYM10s99ei02CiGdLvmIh2XzeBEOuTV4Qx0=;
-	b=DguW85NjAy2G9pBYQLphd9AtI2PiVZQsm7Z7H8gSNbU3gQ4WTwj7LXKWn1ZOlTRQXLpvjg
-	3Lj5DMu8leLFu1CriYhY9kwkX9Xt+k6x47KLCBosd0CAPtUsmjFZgJlENyZHWC/E9C8Rko
-	hpJZrntri6/8BXjIIWTOh2+lZAcYWL4=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-373-1slIqS4PNcKPfvh92ySc8Q-1; Sat, 02 Jul 2022 11:39:14 -0400
-X-MC-Unique: 1slIqS4PNcKPfvh92ySc8Q-1
-Received: by mail-qt1-f200.google.com with SMTP id f28-20020ac8015c000000b003183eca483bso2821989qtg.2
-        for <llvm@lists.linux.dev>; Sat, 02 Jul 2022 08:39:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W8c1SlBUxYM10s99ei02CiGdLvmIh2XzeBEOuTV4Qx0=;
-        b=TuJedFk1gbL/lUsCqw6IhAhIuUdYAypc3zFk8b2RPCgq+GiCPrSOqfwLmw1FCA5eeE
-         N8a5nMUdLyuYZtecCboUBCj3EjNNiATJdtYzRLUsvsi3uG9ZVdIWhqpKpwnb1vLejqWp
-         TmPr3AwKmC3CT0QTlfqN5xmm0RR+DICzVJJbvwXdPuxhjT4NyNolGYhhuYut22D6A0kA
-         YPkM5LsEIuK5ARXS7w5uYKR6T2B0sKmM41zbHv7Gq1eZ1g6/7BJ9k/YVXkckaSEPmYxo
-         zeHyrPMhUcOMpInlDshI7HbNgKhJzShoUT8rM3MgmdTTVFPq68eSNQauHwlbLvL8BOk8
-         mDVQ==
-X-Gm-Message-State: AJIora99Y9uHqMsne3hpAvfRrMTZavpP0akljztkey5a7so1otIxqxWU
-	Vd5eX4VbOPbcaEzabCj6pcmC0Y41OvIX/OoFS+Aa8/XHrSqN6ZJIVhZucbSlzTE+ReAE78wEQIS
-	2bJDLnvuIgYmVOA==
-X-Received: by 2002:a37:4549:0:b0:69f:556c:4e38 with SMTP id s70-20020a374549000000b0069f556c4e38mr13936447qka.202.1656776353549;
-        Sat, 02 Jul 2022 08:39:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s4kMDCJkO3l6rc/tzkcDONaBzbN/O5Ul2p3pH701RTsQYUDroNVnzGAdCYv5GPNqp46q1+Vw==
-X-Received: by 2002:a37:4549:0:b0:69f:556c:4e38 with SMTP id s70-20020a374549000000b0069f556c4e38mr13936437qka.202.1656776353290;
-        Sat, 02 Jul 2022 08:39:13 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05620a448900b006a708baa069sm14569688qkp.101.2022.07.02.08.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jul 2022 08:39:12 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: bskeggs@redhat.com,
-	kherbst@redhat.com,
-	lyude@redhat.com,
-	airlied@linux.ie,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: dri-devel@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/nouveau/bios: set info only when the return is not 0
-Date: Sat,  2 Jul 2022 11:39:04 -0400
-Message-Id: <20220702153904.1696595-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E6C3D9C
+	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 15:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656776524; x=1688312524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RJFVLls1EjQPmPr7lVOwXw4XeaewzMH8z3gqTFR/nI4=;
+  b=I6R0MrrGBH+aqiJZdi2wVeGIZhFF0QE7M1bvbotTz2vJMeO2LP96EDF+
+   WoU1E9AFwkIc5QW+72ktt0hwp8MaVu3oV6eiUfRPa0+y4GwLo51vJ/GgF
+   gpwnjsG6vP2ovpgkq1+5GXPf7nLQn2ZeuPSxvWmETmhIPdtPjqA9s/yHm
+   ph8sPJlEJd36CuJU4413O1/Ll4a1YfXvsjAF2bz6omvOpm611Tr0xGSJy
+   FsMOkgxDE++09fc4cBW3hK66auh+djBY+RSva0maTMEk9u4ddA/WmWbsv
+   7TxKvYL4Wzc7P9qApPvVYddlnSAgT7xZ4EaXkA3Kr0WZRkVGop3m9LMMf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="262640649"
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="262640649"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 08:42:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,240,1650956400"; 
+   d="scan'208";a="624590982"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jul 2022 08:41:59 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o7fFu-000FN5-H6;
+	Sat, 02 Jul 2022 15:41:58 +0000
+Date: Sat, 2 Jul 2022 23:41:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Michael Walle <michael@walle.cc>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Till Harbaum <till@harbaum.org>
+Subject: Re: [PATCH v1 2/2] i2c: Introduce i2c_str_read_write() and make use
+ of it
+Message-ID: <202207022332.6xTWZbw8-lkp@intel.com>
+References: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702135925.73406-2-andriy.shevchenko@linux.intel.com>
 
-clang static analysis reports
-drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c:68:17: warning: The right operand of '*' is a garbage value [core.UndefinedBinaryOperatorResult]
-        switch (!!data * *ver) {
-                       ^ ~~~~
-A switch statement with only a default should be reduced to an if.
+Hi Andy,
 
-If nvbios_pmuEp() returns 0, via the data variable, the output info parameter
-is not used.  So set info only when data is not 0.
+I love your patch! Yet something to improve:
 
-The struct nvbios_pmuE only has the type and data elements.  Since both of these
-are explicitly set, memset is not needed.  So remove it.
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: mips-buildonly-randconfig-r002-20220702 (https://download.01.org/0day-ci/archive/20220702/202207022332.6xTWZbw8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bcd153485ebf07fe79e2b843ed5f1cb74997df1b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/lib-string_helpers-Add-str_read_write-helper/20220702-215944
+        git checkout c9ef15ef6b2b2b51d33d68a8b92beb05771cc8c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/i2c/busses/
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
-index b4a308f3cf7b..49e2664a734c 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/pmu.c
-@@ -64,12 +64,9 @@ nvbios_pmuEp(struct nvkm_bios *bios, int idx, u8 *ver, u8 *hdr,
- 	     struct nvbios_pmuE *info)
- {
- 	u32 data = nvbios_pmuEe(bios, idx, ver, hdr);
--	memset(info, 0x00, sizeof(*info));
--	switch (!!data * *ver) {
--	default:
-+	if (data) {
- 		info->type = nvbios_rd08(bios, data + 0x00);
- 		info->data = nvbios_rd32(bios, data + 0x02);
--		break;
- 	}
- 	return data;
- }
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-exynos5.c:747:4: error: unterminated function-like macro invocation
+                           dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
+                           ^
+   include/linux/dev_printk.h:145:9: note: macro 'dev_warn' defined here
+   #define dev_warn(dev, fmt, ...) \
+           ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected expression
+   MODULE_LICENSE("GPL v2");
+                            ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/i2c/busses/i2c-exynos5.c:746:3: note: previous statement is here
+                   if (ret == -ETIMEDOUT)
+                   ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
+   MODULE_LICENSE("GPL v2");
+                            ^
+   drivers/i2c/busses/i2c-exynos5.c:744:15: note: to match this '{'
+           if (ret < 0) {
+                        ^
+>> drivers/i2c/busses/i2c-exynos5.c:960:26: error: expected '}'
+   MODULE_LICENSE("GPL v2");
+                            ^
+   drivers/i2c/busses/i2c-exynos5.c:718:1: note: to match this '{'
+   {
+   ^
+   1 warning and 4 errors generated.
+
+
+vim +747 drivers/i2c/busses/i2c-exynos5.c
+
+   715	
+   716	static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
+   717				      struct i2c_msg *msgs, int stop)
+   718	{
+   719		unsigned long timeout;
+   720		int ret;
+   721	
+   722		i2c->msg = msgs;
+   723		i2c->msg_ptr = 0;
+   724		i2c->trans_done = 0;
+   725	
+   726		reinit_completion(&i2c->msg_complete);
+   727	
+   728		exynos5_i2c_message_start(i2c, stop);
+   729	
+   730		timeout = wait_for_completion_timeout(&i2c->msg_complete,
+   731						      EXYNOS5_I2C_TIMEOUT);
+   732		if (timeout == 0)
+   733			ret = -ETIMEDOUT;
+   734		else
+   735			ret = i2c->state;
+   736	
+   737		/*
+   738		 * If this is the last message to be transfered (stop == 1)
+   739		 * Then check if the bus can be brought back to idle.
+   740		 */
+   741		if (ret == 0 && stop)
+   742			ret = exynos5_i2c_wait_bus_idle(i2c);
+   743	
+   744		if (ret < 0) {
+   745			exynos5_i2c_reset(i2c);
+   746			if (ret == -ETIMEDOUT)
+ > 747				dev_warn(i2c->dev, "%s timeout\n", i2c_str_read_write(msgs);
+   748		}
+   749	
+   750		/* Return the state as in interrupt routine */
+   751		return ret;
+   752	}
+   753	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
