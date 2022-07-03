@@ -1,287 +1,292 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7E96D24
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 17:52:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656784319;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rbAV6lFkk1LHDHBCu+1fHoxhyFc1QdzhpvOT7eYLkzc=;
-	b=RJY68nIW7lGZPaTz3GtBqx2DtWxZkjFfgl2wib0F94opKspLoBprQT/pTQJkGJAriQKXWG
-	qz4gJt9YJ8HcZ3Qz/eUlssAR2GDwcu2r3RSIS3Jv0Vh2OHQx3h6a5X56bXmDCDKdI3+00n
-	8ib7Vdn8aIwTwrCwElK39gu95OKnh/Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-NXHCqStqM223wsW9OhMQFQ-1; Sat, 02 Jul 2022 13:51:57 -0400
-X-MC-Unique: NXHCqStqM223wsW9OhMQFQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9D2D2999B31
-	for <llvm@lists.linux.dev>; Sat,  2 Jul 2022 17:51:57 +0000 (UTC)
-Received: from [172.64.0.111] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 97D812026D64;
-	Sat,  2 Jul 2022 17:51:57 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (59/492 SKIPPED): Test report for 1ce8c443
- (mainline.kernel.org-clang)
-Date: Sat, 02 Jul 2022 17:51:57 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF94441A
+	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 00:01:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656806483; x=1688342483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hpjHhvhq73GuDmTdo45BViQT/U+1yBagJoORAR5IZg8=;
+  b=nJGVagoFySx3AzmsKYonkiKgTZkrvbmQ1zRi0em053PjyeUNBR70XMlL
+   YkQJuSIGV4UsJQo2vW/clqoMnccu383ig6ZNU1qHiIA34U2Hbvq42rKM4
+   cllRht6NbLrlPfRZFyFyIMX5qoo10LbCWO4vqh1y0MxIKLaeJbyW+ugqY
+   go26QVEjHfZkyXos2Eq7BX8Dv61MRJFOTNcQ/dngrAmNukAP6vKhlwaTW
+   Y/W2Ji6j7GH/WGJE8YOPRchwlJp1bUIvOTqhicCNYOWNqE46H1/jYPDdg
+   O6ty3lbKEFyDaROfxDVWLTPn8Sn0rSNVjp5oZylCajXBn638WKYtTTW1x
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="271652918"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="271652918"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 17:01:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="719007139"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2022 17:01:21 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o7n3A-000Frd-JC;
+	Sun, 03 Jul 2022 00:01:20 +0000
+Date: Sun, 3 Jul 2022 08:01:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: drivers/gpio/gpio-virtio.c:23:8: warning: Excessive padding in
+ 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal
+ fields order: res, rxlen, lock, completion, req, consider reordering the
+ fields or adding explicit padding members [c...
+Message-ID: <202207030712.4FJHaNfk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-Message-Id: <51810.122070213515700211@us-mta-10.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69cb6c6556ad89620547318439d6be8bb1629a5a
+commit: 3a29355a22c0275fe864100794fee58a73175d93 gpio: Add virtio-gpio driver
+date:   10 months ago
+config: arm-randconfig-c002-20220629 (https://download.01.org/0day-ci/archive/20220703/202207030712.4FJHaNfk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3a29355a22c0275fe864100794fee58a73175d93
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3a29355a22c0275fe864100794fee58a73175d93
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/46822
-
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - Storage - blktests - nvme-tcp
-                   Issue: Storage blktests - nvme-tcp: lr : check_flush_dep=
-endency+0x138/0x140
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1183
-                   Issue: Bug 1895913 - nvme-tcp: IO timeout and reconnecti=
-ng never established after max reconnecting reached
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D189=
-5913
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         aarch64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-         ppc64le - selinux-policy: serge-testsuite
-                   Issue: selinux-policy: serge-testsuite: Failed test at p=
-erf_event/test line 88, 104, 109, 115
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/814
-           s390x - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - kselftest build - net
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - kselftest build - bpf
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Memory function: kaslr
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
-tch container ID
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1167
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+clang-analyzer warnings: (new ones prefixed by >>)
+                   ^
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^
+   crypto/skcipher.c:354:10: note: Assuming '__UNIQUE_ID___x333' is >= '__UNIQUE_ID___y334'
+           bsize = min(walk->stride, max(n, walk->blocksize));
+                   ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^~~~~~~~~~
+   crypto/skcipher.c:354:10: note: '?' condition is false
+           bsize = min(walk->stride, max(n, walk->blocksize));
+                   ^
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^
+   include/linux/minmax.h:28:26: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                            ^
+   crypto/skcipher.c:358:15: note: Assuming 'n' is < 'bsize'
+           if (unlikely(n < bsize)) {
+                        ^
+   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                               ^
+   crypto/skcipher.c:358:2: note: Taking true branch
+           if (unlikely(n < bsize)) {
+           ^
+   crypto/skcipher.c:359:22: note: Field 'total' is < field 'blocksize'
+                   if (unlikely(walk->total < walk->blocksize))
+                                      ^
+   crypto/skcipher.c:359:3: note: Taking true branch
+                   if (unlikely(walk->total < walk->blocksize))
+                   ^
+   crypto/skcipher.c:360:11: note: Calling 'skcipher_walk_done'
+                           return skcipher_walk_done(walk, -EINVAL);
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:110:6: note: Assuming 'n' is not equal to 0
+           if (!n)
+               ^~
+   crypto/skcipher.c:110:2: note: Taking false branch
+           if (!n)
+           ^
+   crypto/skcipher.c:113:2: note: Taking false branch
+           if (likely(err >= 0)) {
+           ^
+   crypto/skcipher.c:118:13: note: Assuming the condition is false
+           if (likely(!(walk->flags & (SKCIPHER_WALK_PHYS |
+                      ^
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   crypto/skcipher.c:118:2: note: Taking false branch
+           if (likely(!(walk->flags & (SKCIPHER_WALK_PHYS |
+           ^
+   crypto/skcipher.c:124:13: note: Assuming the condition is false
+           } else if (walk->flags & SKCIPHER_WALK_DIFF) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:124:9: note: Taking false branch
+           } else if (walk->flags & SKCIPHER_WALK_DIFF) {
+                  ^
+   crypto/skcipher.c:127:13: note: Assuming the condition is true
+           } else if (walk->flags & SKCIPHER_WALK_COPY) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:127:9: note: Taking true branch
+           } else if (walk->flags & SKCIPHER_WALK_COPY) {
+                  ^
+   crypto/skcipher.c:128:3: note: Calling 'skcipher_map_dst'
+                   skcipher_map_dst(walk);
+                   ^~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:67:1: note: Returning without writing to 'walk->page'
+   }
+   ^
+   crypto/skcipher.c:128:3: note: Returning from 'skcipher_map_dst'
+                   skcipher_map_dst(walk);
+                   ^~~~~~~~~~~~~~~~~~~~~~
+   crypto/skcipher.c:129:3: note: Null pointer passed as 2nd argument to memory copy function
+                   memcpy(walk->dst.virt.addr, walk->page, n);
+                   ^                           ~~~~~~~~~~
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+   Suppressed 1 warnings (1 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   1 warning generated.
+>> drivers/gpio/gpio-virtio.c:23:8: warning: Excessive padding in 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal fields order: res, rxlen, lock, completion, req, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:23:8: note: Excessive padding in 'struct virtio_gpio_line' (58 padding bytes, where 26 is optimal). Optimal fields order: res, rxlen, lock, completion, req, consider reordering the fields or adding explicit padding members
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   1 warning generated.
+   drivers/pwm/core.c:818:13: warning: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'np') [clang-analyzer-core.NullDereference]
+                           con_id = np->name;
+                                    ^
+   drivers/pwm/core.c:1150:6: note: Assuming the condition is true
+           if (is_of_node(fwnode))
+               ^~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1150:2: note: Taking true branch
+           if (is_of_node(fwnode))
+           ^
+   drivers/pwm/core.c:1151:25: note: Assuming the condition is false
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:164:3: note: expanded from macro 'to_of_node'
+                   is_of_node(__to_of_node_fwnode) ?                       \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1151:25: note: '?' condition is false
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:164:3: note: expanded from macro 'to_of_node'
+                   is_of_node(__to_of_node_fwnode) ?                       \
+                   ^
+   drivers/pwm/core.c:1151:25: note: Passing null pointer value via 2nd parameter 'np'
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                                         ^
+   include/linux/of.h:161:2: note: expanded from macro 'to_of_node'
+           ({                                                              \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:1151:9: note: Calling 'of_pwm_get'
+                   pwm = of_pwm_get(dev, to_of_node(fwnode), con_id);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:775:6: note: Assuming 'con_id' is null
+           if (con_id) {
+               ^~~~~~
+   drivers/pwm/core.c:775:2: note: Taking false branch
+           if (con_id) {
+           ^
+   drivers/pwm/core.c:783:6: note: Assuming 'err' is 0
+           if (err) {
+               ^~~
+   drivers/pwm/core.c:783:2: note: Taking false branch
+           if (err) {
+           ^
+   drivers/pwm/core.c:788:25: note: Assuming '__of_fwnode_handle_node' is null
+           pc = fwnode_to_pwmchip(of_fwnode_handle(args.np));
+                                  ^
+   include/linux/of.h:174:3: note: expanded from macro 'of_fwnode_handle'
+                   __of_fwnode_handle_node ?                               \
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pwm/core.c:788:25: note: '?' condition is false
+           pc = fwnode_to_pwmchip(of_fwnode_handle(args.np));
+                                  ^
+   include/linux/of.h:174:3: note: expanded from macro 'of_fwnode_handle'
+                   __of_fwnode_handle_node ?                               \
+                   ^
+   drivers/pwm/core.c:789:2: note: Taking false branch
+           if (IS_ERR(pc)) {
+           ^
+   drivers/pwm/core.c:798:2: note: Taking false branch
+           if (IS_ERR(pwm))
+           ^
+   drivers/pwm/core.c:802:2: note: Taking false branch
+           if (IS_ERR(dl)) {
+           ^
+   drivers/pwm/core.c:814:7: note: 'con_id' is null
+           if (!con_id) {
+                ^~~~~~
+   drivers/pwm/core.c:814:2: note: Taking true branch
+           if (!con_id) {
+           ^
+   drivers/pwm/core.c:817:7: note: 'err' is < 0
+                   if (err < 0)
+                       ^~~
+   drivers/pwm/core.c:817:3: note: Taking true branch
+                   if (err < 0)
+                   ^
+   drivers/pwm/core.c:818:13: note: Access to field 'name' results in a dereference of a null pointer (loaded from variable 'np')
+                           con_id = np->name;
+                                    ^~
+   1 warning generated.
+   lib/crypto/chacha20poly1305-selftest.c:9027:7: warning: Value stored to 'total_len' is never read [clang-analyzer-deadcode.DeadStores]
+           for (total_len = POLY1305_DIGEST_SIZE; IS_ENABLED(DEBUG_CHACHA20POLY1305_SLOW_CHUNK_TEST)
+                ^
+   lib/crypto/chacha20poly1305-selftest.c:9027:7: note: Value stored to 'total_len' is never read
+   6 warnings generated.
+   drivers/video/fbdev/udlfb.c:370:6: warning: Value stored to 'identical' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           int identical = width;
+               ^~~~~~~~~   ~~~~~
+   drivers/video/fbdev/udlfb.c:370:6: note: Value stored to 'identical' during its initialization is never read
+           int identical = width;
+               ^~~~~~~~~   ~~~~~
+   drivers/video/fbdev/udlfb.c:564:3: warning: Value stored to 'back_start' is never read [clang-analyzer-deadcode.DeadStores]
+                   back_start += offset;
+                   ^             ~~~~~~
+   drivers/video/fbdev/udlfb.c:564:3: note: Value stored to 'back_start' is never read
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+vim +23 drivers/gpio/gpio-virtio.c
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+    22	
+  > 23	struct virtio_gpio_line {
+    24		struct mutex lock; /* Protects line operation */
+    25		struct completion completion;
+    26		struct virtio_gpio_request req ____cacheline_aligned;
+    27		struct virtio_gpio_response res ____cacheline_aligned;
+    28		unsigned int rxlen;
+    29	};
+    30	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
