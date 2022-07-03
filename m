@@ -1,45 +1,42 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E59423A6
-	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 08:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90FA23A4
+	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 10:53:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656837101; x=1688373101;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EXOAGAag4EuDsuK3ii+/8wi3GH4aNtp9grYpzrauxNU=;
-  b=A8Y89JZEoCglXcMpOjmA0ikdAIBqWNqy4YapoMLXglIPy4ODuCtZ6aoQ
-   2ygZglgEnzib6Iy7MExCVwylFD5p0NB5XqA9UHlvI3T576/qPam3ayygR
-   51XzbCFEvaXN7t6pLaMahx3j24QEI6nv1hZp3gKKAlD3INSo6nwwrPUAg
-   abSaP47VoHoPzHI1tJANL7tNrZvafxi9m92whA5a2aQ2aajX+O8LM/C4J
-   WHhB3qAdbEcB7EpeOpgA9AKU32OAiV6Zgr0R5I/hKHRuF4essCbyV+HNM
-   2d0Z92UdvA+r7TsWGDCtDLF+Hz/VKRGnKiNfPqqMcaargbkAXtTaoPTQz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="369250419"
+  t=1656845625; x=1688381625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y/Vt3d7l5Ij3MoJHbWc5HYIuGyzHq0belxXhsMztFoo=;
+  b=cgN0fefRThh+HjhoMWr7H7RlJjESzIwN9yRXiqvCLCnfWbCu5p7wLDs8
+   ClXWMEEfvyabydLxSA5Stn4mSYf4AlDvrU213cUvF9MMSTN621w1PqCXE
+   Pr6ky9Nfvx3nwZw4oZjAADaCfui5KgeYMwaGpSAUo3rdgZQg9pJConfnF
+   FpmcncZFqSVi/bOyNdpZQnXNpHEBpr9WpeAyyoCxjqm95wrWF/YkYmoFA
+   a9JIKbrZlwAH4RzgeqhFUWx6eECCp9NQhgpR9jeEykZO77B5WQ3bIwm98
+   jWohkps6aybgSOPRPZe2jmnJccreTjoLpnYJ1mbdf5RFfU8wowynbnzAR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="308465460"
 X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="369250419"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 01:31:40 -0700
+   d="scan'208";a="308465460"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 03:53:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="618893345"
+   d="scan'208";a="734527743"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jul 2022 01:31:38 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 03 Jul 2022 03:53:44 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
 	(envelope-from <lkp@intel.com>)
-	id 1o7v10-000GG7-5P;
-	Sun, 03 Jul 2022 08:31:38 +0000
-Date: Sun, 3 Jul 2022 16:31:17 +0800
+	id 1o7xEV-000GMf-G2;
+	Sun, 03 Jul 2022 10:53:43 +0000
+Date: Sun, 3 Jul 2022 18:53:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@google.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Subject: crypto/testmgr.c:297:8: warning: Excessive padding in 'struct
- testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order:
- name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type,
- src_divs, dst_divs, iv_offset_relative_to_a...
-Message-ID: <202207031600.5xQNJyk8-lkp@intel.com>
+To: Jianmin Lv <lvjianmin@loongson.cn>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH V14 07/15] irqchip/loongson-pch-pic: Add ACPI init support
+Message-ID: <202207031820.EptpeQ5R-lkp@intel.com>
+References: <1656837932-18257-8-git-send-email-lvjianmin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,277 +45,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1656837932-18257-8-git-send-email-lvjianmin@loongson.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69cb6c6556ad89620547318439d6be8bb1629a5a
-commit: f17f9e9069f20f4400ae0bb3ee830d34104ff8f7 crypto: testmgr - test in-place en/decryption with two sglists
-date:   3 months ago
-config: arm-randconfig-c002-20220629 (https://download.01.org/0day-ci/archive/20220703/202207031600.5xQNJyk8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+Hi Jianmin,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on rafael-pm/linux-next linus/master v5.19-rc4 next-20220701]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianmin-Lv/irqchip-Add-LoongArch-related-irqchip-drivers/20220703-164922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ac165aab469895de059a4a191a2e04ddb5421d0e
+config: hexagon-buildonly-randconfig-r005-20220703 (https://download.01.org/0day-ci/archive/20220703/202207031820.EptpeQ5R-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5d787689b14574fe58ba9798563f4a6df6059fbf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f17f9e9069f20f4400ae0bb3ee830d34104ff8f7
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f17f9e9069f20f4400ae0bb3ee830d34104ff8f7
+        # https://github.com/intel-lab-lkp/linux/commit/3889e0bcc694bb0465b7cf65e2a722f3f74dd0b2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianmin-Lv/irqchip-Add-LoongArch-related-irqchip-drivers/20220703-164922
+        git checkout 3889e0bcc694bb0465b7cf65e2a722f3f74dd0b2
         # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All error/warnings (new ones prefixed by >>):
 
-clang-analyzer warnings: (new ones prefixed by >>)
-           ^      ~~~
-   Suppressed 41 warnings (41 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   45 warnings generated.
-   drivers/gpu/drm/drm_file.c:587:30: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
-                           file_priv->event_space += e->event->length;
-                                                     ^~~~~~~~
-   drivers/gpu/drm/drm_file.c:577:6: note: Assuming 'ret' is 0
-           if (ret)
-               ^~~
-   drivers/gpu/drm/drm_file.c:577:2: note: Taking false branch
-           if (ret)
-           ^
-   drivers/gpu/drm/drm_file.c:580:2: note: Loop condition is true.  Entering loop body
-           for (;;) {
-           ^
-   drivers/gpu/drm/drm_file.c:584:7: note: Assuming the condition is true
-                   if (!list_empty(&file_priv->event_list)) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_file.c:584:3: note: Taking true branch
-                   if (!list_empty(&file_priv->event_list)) {
-                   ^
-   drivers/gpu/drm/drm_file.c:592:7: note: 'e' is not equal to NULL
-                   if (e == NULL) {
-                       ^
-   drivers/gpu/drm/drm_file.c:592:3: note: Taking false branch
-                   if (e == NULL) {
-                   ^
-   drivers/gpu/drm/drm_file.c:611:8: note: Assuming the condition is false
-                           if (length > count - ret) {
-                               ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_file.c:611:4: note: Taking false branch
-                           if (length > count - ret) {
+>> drivers/irqchip/irq-loongson-pch-pic.c:47:37: error: use of undeclared identifier 'MAX_IO_PICS'
+   static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
+                                       ^
+   drivers/irqchip/irq-loongson-pch-pic.c:49:38: error: use of undeclared identifier 'MAX_IO_PICS'
+   struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+                                        ^
+   drivers/irqchip/irq-loongson-pch-pic.c:56:18: error: use of undeclared identifier 'MAX_IO_PICS'
+           for (i = 0; i < MAX_IO_PICS; i++) {
                            ^
-   drivers/gpu/drm/drm_file.c:622:8: note: Assuming the condition is false
-                           if (copy_to_user(buffer + ret, e->event, length)) {
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_file.c:622:4: note: Taking false branch
-                           if (copy_to_user(buffer + ret, e->event, length)) {
-                           ^
-   drivers/gpu/drm/drm_file.c:629:4: note: Memory is released
-                           kfree(e);
-                           ^~~~~~~~
-   drivers/gpu/drm/drm_file.c:580:2: note: Loop condition is true.  Entering loop body
-           for (;;) {
-           ^
-   drivers/gpu/drm/drm_file.c:584:7: note: Assuming the condition is true
-                   if (!list_empty(&file_priv->event_list)) {
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/drm_file.c:584:3: note: Taking true branch
-                   if (!list_empty(&file_priv->event_list)) {
-                   ^
-   drivers/gpu/drm/drm_file.c:587:30: note: Use of memory after it is freed
-                           file_priv->event_space += e->event->length;
-                                                     ^~~~~~~~
-   Suppressed 44 warnings (44 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   45 warnings generated.
-   Suppressed 45 warnings (45 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   59 warnings generated.
-   Suppressed 59 warnings (59 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   59 warnings generated.
-   Suppressed 59 warnings (59 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   64 warnings generated.
-   crypto/algboss.c:96:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           memcpy(param->template, name, len);
-           ^~~~~~
-   crypto/algboss.c:96:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
-           memcpy(param->template, name, len);
-           ^~~~~~
-   crypto/algboss.c:126:3: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-                   memcpy(param->attrs[i].data.name, name, len);
-                   ^~~~~~
-   crypto/algboss.c:126:3: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
-                   memcpy(param->attrs[i].data.name, name, len);
-                   ^~~~~~
-   crypto/algboss.c:209:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           memcpy(param->driver, alg->cra_driver_name, sizeof(param->driver));
-           ^~~~~~
-   crypto/algboss.c:209:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
-           memcpy(param->driver, alg->cra_driver_name, sizeof(param->driver));
-           ^~~~~~
-   crypto/algboss.c:210:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           memcpy(param->alg, alg->cra_name, sizeof(param->alg));
-           ^~~~~~
-   crypto/algboss.c:210:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
-           memcpy(param->alg, alg->cra_name, sizeof(param->alg));
-           ^~~~~~
-   Suppressed 60 warnings (60 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   78 warnings generated.
-   crypto/testmgr.c:207:2: warning: Call to function 'memset' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memset_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
-           memset(addr, TESTMGR_POISON_BYTE, len);
-           ^~~~~~
-   crypto/testmgr.c:207:2: note: Call to function 'memset' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memset_s' in case of C11
-           memset(addr, TESTMGR_POISON_BYTE, len);
-           ^~~~~~
->> crypto/testmgr.c:297:8: warning: Excessive padding in 'struct testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order: name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type, src_divs, dst_divs, iv_offset_relative_to_alignmask, key_offset_relative_to_alignmask, nosimd, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct testvec_config {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   crypto/testmgr.c:297:8: note: Excessive padding in 'struct testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order: name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type, src_divs, dst_divs, iv_offset_relative_to_alignmask, key_offset_relative_to_alignmask, nosimd, consider reordering the fields or adding explicit padding members
-   struct testvec_config {
-   ~~~~~~~^~~~~~~~~~~~~~~~
-   crypto/testmgr.c:617:25: warning: Access to field 'offset' results in a dereference of an undefined pointer value (loaded from field 'div') [clang-analyzer-core.NullDereference]
-                   unsigned int offset = partitions[i].div->offset;
-                                         ^
-   crypto/testmgr.c:2748:19: note: Assuming 'enc' is 0
-           const char *op = enc ? "encryption" : "decryption";
-                            ^~~
-   crypto/testmgr.c:2748:19: note: '?' condition is false
-   crypto/testmgr.c:2753:5: note: Assuming field 'iv_offset_relative_to_alignmask' is false
-                    (cfg->iv_offset_relative_to_alignmask ? alignmask : 0);
-                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   crypto/testmgr.c:2753:5: note: '?' condition is false
-   crypto/testmgr.c:2758:6: note: Assuming field 'wk' is 0
-           if (vec->wk)
-               ^~~~~~~
-   crypto/testmgr.c:2758:2: note: Taking false branch
-           if (vec->wk)
-           ^
-   crypto/testmgr.c:2763:8: note: 'err' is equal to 0
-           err = do_setkey(crypto_skcipher_setkey, tfm, vec->key, vec->klen,
-                 ^
-   crypto/testmgr.c:846:6: note: expanded from macro 'do_setkey'
-           if (err == 0) {                                                 \
-               ^~~
-   crypto/testmgr.c:2763:8: note: Taking true branch
-           err = do_setkey(crypto_skcipher_setkey, tfm, vec->key, vec->klen,
-                 ^
-   crypto/testmgr.c:846:2: note: expanded from macro 'do_setkey'
-           if (err == 0) {                                                 \
-           ^
-   crypto/testmgr.c:2765:6: note: Assuming 'err' is 0
-           if (err) {
-               ^~~
-   crypto/testmgr.c:2765:2: note: Taking false branch
-           if (err) {
-           ^
-   crypto/testmgr.c:2773:6: note: Assuming field 'setkey_error' is 0
-           if (vec->setkey_error) {
-               ^~~~~~~~~~~~~~~~~
-   crypto/testmgr.c:2773:2: note: Taking false branch
-           if (vec->setkey_error) {
-           ^
-   crypto/testmgr.c:2780:6: note: Assuming 'ivsize' is not equal to 0
-           if (ivsize) {
-               ^~~~~~
-   crypto/testmgr.c:2780:2: note: Taking true branch
-           if (ivsize) {
-           ^
-   crypto/testmgr.c:2781:15: note: Assuming 'ivsize' is <= 32
-                   if (WARN_ON(ivsize > MAX_IVLEN))
+>> drivers/irqchip/irq-loongson-pch-pic.c:51:5: warning: no previous prototype for function 'find_pch_pic' [-Wmissing-prototypes]
+   int find_pch_pic(u32 gsi)
+       ^
+   drivers/irqchip/irq-loongson-pch-pic.c:51:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int find_pch_pic(u32 gsi)
+   ^
+   static 
+>> drivers/irqchip/irq-loongson-pch-pic.c:266:22: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
                                ^
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   crypto/testmgr.c:2781:7: note: Taking false branch
-                   if (WARN_ON(ivsize > MAX_IVLEN))
-                       ^
-   include/asm-generic/bug.h:122:2: note: expanded from macro 'WARN_ON'
-           if (unlikely(__ret_warn_on))                                    \
-           ^
-   crypto/testmgr.c:2781:3: note: Taking false branch
-                   if (WARN_ON(ivsize > MAX_IVLEN))
-                   ^
-   crypto/testmgr.c:2783:7: note: Assuming field 'generates_iv' is true
-                   if (vec->generates_iv && !enc)
-                       ^~~~~~~~~~~~~~~~~
-   crypto/testmgr.c:2783:7: note: Left side of '&&' is true
-   crypto/testmgr.c:2783:29: note: 'enc' is 0
-                   if (vec->generates_iv && !enc)
-                                             ^~~
-   crypto/testmgr.c:2783:3: note: Taking true branch
-                   if (vec->generates_iv && !enc)
-                   ^
-   crypto/testmgr.c:2799:19: note: 'enc' is 0
-           input.iov_base = enc ? (void *)vec->ptext : (void *)vec->ctext;
-                            ^~~
-   crypto/testmgr.c:2799:19: note: '?' condition is false
-   crypto/testmgr.c:2801:8: note: Calling 'build_cipher_test_sglists'
-           err = build_cipher_test_sglists(tsgls, cfg, alignmask,
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   crypto/testmgr.c:771:5: note: Assuming field 'inplace_mode' is not equal to OUT_OF_PLACE
-                                   cfg->inplace_mode != OUT_OF_PLACE ?
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   crypto/testmgr.c:771:5: note: '?' condition is true
-   crypto/testmgr.c:772:6: note: '__UNIQUE_ID___x215' is <= '__UNIQUE_ID___y216'
-                                           max(dst_total_len, src_total_len) :
-                                           ^
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
-                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
-                   __cmp(unique_x, unique_y, op); })
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/irqchip/irq-loongson-pch-pic.c:266:40: warning: shift count >= width of type [-Wshift-count-overflow]
+           priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
+                                                 ^  ~~
+   2 warnings and 4 errors generated.
 
-vim +297 crypto/testmgr.c
 
-3f47a03df6e811 Eric Biggers 2019-01-31  274  
-3f47a03df6e811 Eric Biggers 2019-01-31  275  /**
-3f47a03df6e811 Eric Biggers 2019-01-31  276   * struct testvec_config - configuration for testing a crypto test vector
-3f47a03df6e811 Eric Biggers 2019-01-31  277   *
-3f47a03df6e811 Eric Biggers 2019-01-31  278   * This struct describes the data layout and other parameters with which each
-3f47a03df6e811 Eric Biggers 2019-01-31  279   * crypto test vector can be tested.
-3f47a03df6e811 Eric Biggers 2019-01-31  280   *
-3f47a03df6e811 Eric Biggers 2019-01-31  281   * @name: name of this config, logged for debugging purposes if a test fails
-f17f9e9069f20f Eric Biggers 2022-03-26  282   * @inplace_mode: whether and how to operate on the data in-place, if applicable
-3f47a03df6e811 Eric Biggers 2019-01-31  283   * @req_flags: extra request_flags, e.g. CRYPTO_TFM_REQ_MAY_SLEEP
-3f47a03df6e811 Eric Biggers 2019-01-31  284   * @src_divs: description of how to arrange the source scatterlist
-3f47a03df6e811 Eric Biggers 2019-01-31  285   * @dst_divs: description of how to arrange the dst scatterlist, if applicable
-3f47a03df6e811 Eric Biggers 2019-01-31  286   *	      for the algorithm type.  Defaults to @src_divs if unset.
-3f47a03df6e811 Eric Biggers 2019-01-31  287   * @iv_offset: misalignment of the IV in the range [0..MAX_ALGAPI_ALIGNMASK+1],
-3f47a03df6e811 Eric Biggers 2019-01-31  288   *	       where 0 is aligned to a 2*(MAX_ALGAPI_ALIGNMASK+1) byte boundary
-3f47a03df6e811 Eric Biggers 2019-01-31  289   * @iv_offset_relative_to_alignmask: if true, add the algorithm's alignmask to
-3f47a03df6e811 Eric Biggers 2019-01-31  290   *				     the @iv_offset
-fd8c37c72d60c7 Eric Biggers 2019-12-01  291   * @key_offset: misalignment of the key, where 0 is default alignment
-fd8c37c72d60c7 Eric Biggers 2019-12-01  292   * @key_offset_relative_to_alignmask: if true, add the algorithm's alignmask to
-fd8c37c72d60c7 Eric Biggers 2019-12-01  293   *				      the @key_offset
-3f47a03df6e811 Eric Biggers 2019-01-31  294   * @finalization_type: what finalization function to use for hashes
-6570737c7fa047 Eric Biggers 2019-03-12  295   * @nosimd: execute with SIMD disabled?  Requires !CRYPTO_TFM_REQ_MAY_SLEEP.
-3f47a03df6e811 Eric Biggers 2019-01-31  296   */
-3f47a03df6e811 Eric Biggers 2019-01-31 @297  struct testvec_config {
-3f47a03df6e811 Eric Biggers 2019-01-31  298  	const char *name;
-f17f9e9069f20f Eric Biggers 2022-03-26  299  	enum inplace_mode inplace_mode;
-3f47a03df6e811 Eric Biggers 2019-01-31  300  	u32 req_flags;
-3f47a03df6e811 Eric Biggers 2019-01-31  301  	struct test_sg_division src_divs[XBUFSIZE];
-3f47a03df6e811 Eric Biggers 2019-01-31  302  	struct test_sg_division dst_divs[XBUFSIZE];
-3f47a03df6e811 Eric Biggers 2019-01-31  303  	unsigned int iv_offset;
-fd8c37c72d60c7 Eric Biggers 2019-12-01  304  	unsigned int key_offset;
-3f47a03df6e811 Eric Biggers 2019-01-31  305  	bool iv_offset_relative_to_alignmask;
-fd8c37c72d60c7 Eric Biggers 2019-12-01  306  	bool key_offset_relative_to_alignmask;
-3f47a03df6e811 Eric Biggers 2019-01-31  307  	enum finalization_type finalization_type;
-6570737c7fa047 Eric Biggers 2019-03-12  308  	bool nosimd;
-3f47a03df6e811 Eric Biggers 2019-01-31  309  };
-3f47a03df6e811 Eric Biggers 2019-01-31  310  
+vim +/MAX_IO_PICS +47 drivers/irqchip/irq-loongson-pch-pic.c
 
-:::::: The code at line 297 was first introduced by commit
-:::::: 3f47a03df6e81174558f4604828851cb600e1db6 crypto: testmgr - add testvec_config struct and helper functions
-
-:::::: TO: Eric Biggers <ebiggers@google.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+    46	
+  > 47	static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
+    48	
+    49	struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+    50	
+  > 51	int find_pch_pic(u32 gsi)
+    52	{
+    53		int i;
+    54	
+    55		/* Find the PCH_PIC that manages this GSI. */
+    56		for (i = 0; i < MAX_IO_PICS; i++) {
+    57			struct pch_pic *priv = pch_pic_priv[i];
+    58	
+    59			if (!priv)
+    60				return -1;
+    61	
+    62			if (gsi >= priv->gsi_base && gsi < (priv->gsi_base + priv->vec_count))
+    63				return i;
+    64		}
+    65	
+    66		pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
+    67		return -1;
+    68	}
+    69	
 
 -- 
 0-DAY CI Kernel Test Service
