@@ -1,324 +1,325 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E2F1FBA
-	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 05:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656825091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=E/7MNfh2wsp2a1UXbpCgy0oh4+mfYjSdo3H9JlDmyAg=;
-	b=ZIHUj8uPk/tjSd/1SMMC1kes3IHYG1xs2dDt/oWpVzw8K6KyRj/1RfCpytL9uBGf/XRMn2
-	LvxnPgQ098Ro68ThRm+jMxq5yQ71uVb0r+3hJDq2BIWnsTfiAobJQGUvq610SK641gLkJW
-	FwemgUXzibpfcbqJZdveuEr7FhhzgAI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-1qa6VwbyMEWrCwlFQjbezg-1; Sun, 03 Jul 2022 01:11:30 -0400
-X-MC-Unique: 1qa6VwbyMEWrCwlFQjbezg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E25843804500
-	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 05:11:29 +0000 (UTC)
-Received: from [172.64.0.111] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CFA6618EB8;
-	Sun,  3 Jul 2022 05:11:29 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for 69cb6c65
- (mainline.kernel.org-clang)
-Date: Sun, 03 Jul 2022 05:11:29 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E59423A6
+	for <llvm@lists.linux.dev>; Sun,  3 Jul 2022 08:31:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656837101; x=1688373101;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EXOAGAag4EuDsuK3ii+/8wi3GH4aNtp9grYpzrauxNU=;
+  b=A8Y89JZEoCglXcMpOjmA0ikdAIBqWNqy4YapoMLXglIPy4ODuCtZ6aoQ
+   2ygZglgEnzib6Iy7MExCVwylFD5p0NB5XqA9UHlvI3T576/qPam3ayygR
+   51XzbCFEvaXN7t6pLaMahx3j24QEI6nv1hZp3gKKAlD3INSo6nwwrPUAg
+   abSaP47VoHoPzHI1tJANL7tNrZvafxi9m92whA5a2aQ2aajX+O8LM/C4J
+   WHhB3qAdbEcB7EpeOpgA9AKU32OAiV6Zgr0R5I/hKHRuF4essCbyV+HNM
+   2d0Z92UdvA+r7TsWGDCtDLF+Hz/VKRGnKiNfPqqMcaargbkAXtTaoPTQz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="369250419"
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="369250419"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2022 01:31:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
+   d="scan'208";a="618893345"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 03 Jul 2022 01:31:38 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o7v10-000GG7-5P;
+	Sun, 03 Jul 2022 08:31:38 +0000
+Date: Sun, 3 Jul 2022 16:31:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@google.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Subject: crypto/testmgr.c:297:8: warning: Excessive padding in 'struct
+ testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order:
+ name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type,
+ src_divs, dst_divs, iv_offset_relative_to_a...
+Message-ID: <202207031600.5xQNJyk8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-Message-Id: <84037.122070301113000399@us-mta-612.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69cb6c6556ad89620547318439d6be8bb1629a5a
+commit: f17f9e9069f20f4400ae0bb3ee830d34104ff8f7 crypto: testmgr - test in-place en/decryption with two sglists
+date:   3 months ago
+config: arm-randconfig-c002-20220629 (https://download.01.org/0day-ci/archive/20220703/202207031600.5xQNJyk8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f17f9e9069f20f4400ae0bb3ee830d34104ff8f7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f17f9e9069f20f4400ae0bb3ee830d34104ff8f7
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/46854
-
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         ppc64le - LTP - cve
-                   Issue: LTP - cve: cve-2020-29373 tst_test.c:1345: TINFO:=
- Timeout per run is 0h 05m 00s
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/723
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4196037
-           s390x - LTP - syscalls
-                   Issue: LTP: ioctl_loop05 - TBROK: Cannot find block devi=
-ce for /mnt/testarea/ltp-w7JfbOmzJY/iocfULVTn/test.img
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/674
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4196129
-
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - Boot test
-                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
-ht-etm4x: probe of ARMHC500:20 failed with error -17
-                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
-BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-         aarch64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         ppc64le - AMTU (Abstract Machine Test Utility)
-                   Issue: AMTU (Abstract Machine Test Utility): misc/amtu F=
-AIL
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1162
-         ppc64le - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         ppc64le - trace: ftrace/tracer
-                   Issue: trace/ftrace/tracer/include: line 4: echo: write =
-error: No such device
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/803
-         ppc64le - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         ppc64le - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         ppc64le - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         ppc64le - selinux-policy: serge-testsuite
-                   Issue: selinux-policy: serge-testsuite: Failed test at p=
-erf_event/test line 88, 104, 109, 115
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/814
-           s390x - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-           s390x - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: ERROR: Aborting curre=
-nt task: Aborting due to system crash and reboot
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1236
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - kselftest build - net
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - kselftest build - bpf
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
-tch container ID
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1167
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+clang-analyzer warnings: (new ones prefixed by >>)
+           ^      ~~~
+   Suppressed 41 warnings (41 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   45 warnings generated.
+   drivers/gpu/drm/drm_file.c:587:30: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
+                           file_priv->event_space += e->event->length;
+                                                     ^~~~~~~~
+   drivers/gpu/drm/drm_file.c:577:6: note: Assuming 'ret' is 0
+           if (ret)
+               ^~~
+   drivers/gpu/drm/drm_file.c:577:2: note: Taking false branch
+           if (ret)
+           ^
+   drivers/gpu/drm/drm_file.c:580:2: note: Loop condition is true.  Entering loop body
+           for (;;) {
+           ^
+   drivers/gpu/drm/drm_file.c:584:7: note: Assuming the condition is true
+                   if (!list_empty(&file_priv->event_list)) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/drm_file.c:584:3: note: Taking true branch
+                   if (!list_empty(&file_priv->event_list)) {
+                   ^
+   drivers/gpu/drm/drm_file.c:592:7: note: 'e' is not equal to NULL
+                   if (e == NULL) {
+                       ^
+   drivers/gpu/drm/drm_file.c:592:3: note: Taking false branch
+                   if (e == NULL) {
+                   ^
+   drivers/gpu/drm/drm_file.c:611:8: note: Assuming the condition is false
+                           if (length > count - ret) {
+                               ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/drm_file.c:611:4: note: Taking false branch
+                           if (length > count - ret) {
+                           ^
+   drivers/gpu/drm/drm_file.c:622:8: note: Assuming the condition is false
+                           if (copy_to_user(buffer + ret, e->event, length)) {
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/drm_file.c:622:4: note: Taking false branch
+                           if (copy_to_user(buffer + ret, e->event, length)) {
+                           ^
+   drivers/gpu/drm/drm_file.c:629:4: note: Memory is released
+                           kfree(e);
+                           ^~~~~~~~
+   drivers/gpu/drm/drm_file.c:580:2: note: Loop condition is true.  Entering loop body
+           for (;;) {
+           ^
+   drivers/gpu/drm/drm_file.c:584:7: note: Assuming the condition is true
+                   if (!list_empty(&file_priv->event_list)) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/drm_file.c:584:3: note: Taking true branch
+                   if (!list_empty(&file_priv->event_list)) {
+                   ^
+   drivers/gpu/drm/drm_file.c:587:30: note: Use of memory after it is freed
+                           file_priv->event_space += e->event->length;
+                                                     ^~~~~~~~
+   Suppressed 44 warnings (44 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   45 warnings generated.
+   Suppressed 45 warnings (45 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   59 warnings generated.
+   Suppressed 59 warnings (59 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   59 warnings generated.
+   Suppressed 59 warnings (59 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   64 warnings generated.
+   crypto/algboss.c:96:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+           memcpy(param->template, name, len);
+           ^~~~~~
+   crypto/algboss.c:96:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
+           memcpy(param->template, name, len);
+           ^~~~~~
+   crypto/algboss.c:126:3: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+                   memcpy(param->attrs[i].data.name, name, len);
+                   ^~~~~~
+   crypto/algboss.c:126:3: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
+                   memcpy(param->attrs[i].data.name, name, len);
+                   ^~~~~~
+   crypto/algboss.c:209:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+           memcpy(param->driver, alg->cra_driver_name, sizeof(param->driver));
+           ^~~~~~
+   crypto/algboss.c:209:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
+           memcpy(param->driver, alg->cra_driver_name, sizeof(param->driver));
+           ^~~~~~
+   crypto/algboss.c:210:2: warning: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+           memcpy(param->alg, alg->cra_name, sizeof(param->alg));
+           ^~~~~~
+   crypto/algboss.c:210:2: note: Call to function 'memcpy' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memcpy_s' in case of C11
+           memcpy(param->alg, alg->cra_name, sizeof(param->alg));
+           ^~~~~~
+   Suppressed 60 warnings (60 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   78 warnings generated.
+   crypto/testmgr.c:207:2: warning: Call to function 'memset' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memset_s' in case of C11 [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+           memset(addr, TESTMGR_POISON_BYTE, len);
+           ^~~~~~
+   crypto/testmgr.c:207:2: note: Call to function 'memset' is insecure as it does not provide security checks introduced in the C11 standard. Replace with analogous functions that support length arguments or provides boundary checks such as 'memset_s' in case of C11
+           memset(addr, TESTMGR_POISON_BYTE, len);
+           ^~~~~~
+>> crypto/testmgr.c:297:8: warning: Excessive padding in 'struct testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order: name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type, src_divs, dst_divs, iv_offset_relative_to_alignmask, key_offset_relative_to_alignmask, nosimd, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct testvec_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   crypto/testmgr.c:297:8: note: Excessive padding in 'struct testvec_config' (5 padding bytes, where 1 is optimal). Optimal fields order: name, inplace_mode, req_flags, iv_offset, key_offset, finalization_type, src_divs, dst_divs, iv_offset_relative_to_alignmask, key_offset_relative_to_alignmask, nosimd, consider reordering the fields or adding explicit padding members
+   struct testvec_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   crypto/testmgr.c:617:25: warning: Access to field 'offset' results in a dereference of an undefined pointer value (loaded from field 'div') [clang-analyzer-core.NullDereference]
+                   unsigned int offset = partitions[i].div->offset;
+                                         ^
+   crypto/testmgr.c:2748:19: note: Assuming 'enc' is 0
+           const char *op = enc ? "encryption" : "decryption";
+                            ^~~
+   crypto/testmgr.c:2748:19: note: '?' condition is false
+   crypto/testmgr.c:2753:5: note: Assuming field 'iv_offset_relative_to_alignmask' is false
+                    (cfg->iv_offset_relative_to_alignmask ? alignmask : 0);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/testmgr.c:2753:5: note: '?' condition is false
+   crypto/testmgr.c:2758:6: note: Assuming field 'wk' is 0
+           if (vec->wk)
+               ^~~~~~~
+   crypto/testmgr.c:2758:2: note: Taking false branch
+           if (vec->wk)
+           ^
+   crypto/testmgr.c:2763:8: note: 'err' is equal to 0
+           err = do_setkey(crypto_skcipher_setkey, tfm, vec->key, vec->klen,
+                 ^
+   crypto/testmgr.c:846:6: note: expanded from macro 'do_setkey'
+           if (err == 0) {                                                 \
+               ^~~
+   crypto/testmgr.c:2763:8: note: Taking true branch
+           err = do_setkey(crypto_skcipher_setkey, tfm, vec->key, vec->klen,
+                 ^
+   crypto/testmgr.c:846:2: note: expanded from macro 'do_setkey'
+           if (err == 0) {                                                 \
+           ^
+   crypto/testmgr.c:2765:6: note: Assuming 'err' is 0
+           if (err) {
+               ^~~
+   crypto/testmgr.c:2765:2: note: Taking false branch
+           if (err) {
+           ^
+   crypto/testmgr.c:2773:6: note: Assuming field 'setkey_error' is 0
+           if (vec->setkey_error) {
+               ^~~~~~~~~~~~~~~~~
+   crypto/testmgr.c:2773:2: note: Taking false branch
+           if (vec->setkey_error) {
+           ^
+   crypto/testmgr.c:2780:6: note: Assuming 'ivsize' is not equal to 0
+           if (ivsize) {
+               ^~~~~~
+   crypto/testmgr.c:2780:2: note: Taking true branch
+           if (ivsize) {
+           ^
+   crypto/testmgr.c:2781:15: note: Assuming 'ivsize' is <= 32
+                   if (WARN_ON(ivsize > MAX_IVLEN))
+                               ^
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   crypto/testmgr.c:2781:7: note: Taking false branch
+                   if (WARN_ON(ivsize > MAX_IVLEN))
+                       ^
+   include/asm-generic/bug.h:122:2: note: expanded from macro 'WARN_ON'
+           if (unlikely(__ret_warn_on))                                    \
+           ^
+   crypto/testmgr.c:2781:3: note: Taking false branch
+                   if (WARN_ON(ivsize > MAX_IVLEN))
+                   ^
+   crypto/testmgr.c:2783:7: note: Assuming field 'generates_iv' is true
+                   if (vec->generates_iv && !enc)
+                       ^~~~~~~~~~~~~~~~~
+   crypto/testmgr.c:2783:7: note: Left side of '&&' is true
+   crypto/testmgr.c:2783:29: note: 'enc' is 0
+                   if (vec->generates_iv && !enc)
+                                             ^~~
+   crypto/testmgr.c:2783:3: note: Taking true branch
+                   if (vec->generates_iv && !enc)
+                   ^
+   crypto/testmgr.c:2799:19: note: 'enc' is 0
+           input.iov_base = enc ? (void *)vec->ptext : (void *)vec->ctext;
+                            ^~~
+   crypto/testmgr.c:2799:19: note: '?' condition is false
+   crypto/testmgr.c:2801:8: note: Calling 'build_cipher_test_sglists'
+           err = build_cipher_test_sglists(tsgls, cfg, alignmask,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/testmgr.c:771:5: note: Assuming field 'inplace_mode' is not equal to OUT_OF_PLACE
+                                   cfg->inplace_mode != OUT_OF_PLACE ?
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/testmgr.c:771:5: note: '?' condition is true
+   crypto/testmgr.c:772:6: note: '__UNIQUE_ID___x215' is <= '__UNIQUE_ID___y216'
+                                           max(dst_total_len, src_total_len) :
+                                           ^
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:38:3: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:33:3: note: expanded from macro '__cmp_once'
+                   __cmp(unique_x, unique_y, op); })
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+vim +297 crypto/testmgr.c
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+3f47a03df6e811 Eric Biggers 2019-01-31  274  
+3f47a03df6e811 Eric Biggers 2019-01-31  275  /**
+3f47a03df6e811 Eric Biggers 2019-01-31  276   * struct testvec_config - configuration for testing a crypto test vector
+3f47a03df6e811 Eric Biggers 2019-01-31  277   *
+3f47a03df6e811 Eric Biggers 2019-01-31  278   * This struct describes the data layout and other parameters with which each
+3f47a03df6e811 Eric Biggers 2019-01-31  279   * crypto test vector can be tested.
+3f47a03df6e811 Eric Biggers 2019-01-31  280   *
+3f47a03df6e811 Eric Biggers 2019-01-31  281   * @name: name of this config, logged for debugging purposes if a test fails
+f17f9e9069f20f Eric Biggers 2022-03-26  282   * @inplace_mode: whether and how to operate on the data in-place, if applicable
+3f47a03df6e811 Eric Biggers 2019-01-31  283   * @req_flags: extra request_flags, e.g. CRYPTO_TFM_REQ_MAY_SLEEP
+3f47a03df6e811 Eric Biggers 2019-01-31  284   * @src_divs: description of how to arrange the source scatterlist
+3f47a03df6e811 Eric Biggers 2019-01-31  285   * @dst_divs: description of how to arrange the dst scatterlist, if applicable
+3f47a03df6e811 Eric Biggers 2019-01-31  286   *	      for the algorithm type.  Defaults to @src_divs if unset.
+3f47a03df6e811 Eric Biggers 2019-01-31  287   * @iv_offset: misalignment of the IV in the range [0..MAX_ALGAPI_ALIGNMASK+1],
+3f47a03df6e811 Eric Biggers 2019-01-31  288   *	       where 0 is aligned to a 2*(MAX_ALGAPI_ALIGNMASK+1) byte boundary
+3f47a03df6e811 Eric Biggers 2019-01-31  289   * @iv_offset_relative_to_alignmask: if true, add the algorithm's alignmask to
+3f47a03df6e811 Eric Biggers 2019-01-31  290   *				     the @iv_offset
+fd8c37c72d60c7 Eric Biggers 2019-12-01  291   * @key_offset: misalignment of the key, where 0 is default alignment
+fd8c37c72d60c7 Eric Biggers 2019-12-01  292   * @key_offset_relative_to_alignmask: if true, add the algorithm's alignmask to
+fd8c37c72d60c7 Eric Biggers 2019-12-01  293   *				      the @key_offset
+3f47a03df6e811 Eric Biggers 2019-01-31  294   * @finalization_type: what finalization function to use for hashes
+6570737c7fa047 Eric Biggers 2019-03-12  295   * @nosimd: execute with SIMD disabled?  Requires !CRYPTO_TFM_REQ_MAY_SLEEP.
+3f47a03df6e811 Eric Biggers 2019-01-31  296   */
+3f47a03df6e811 Eric Biggers 2019-01-31 @297  struct testvec_config {
+3f47a03df6e811 Eric Biggers 2019-01-31  298  	const char *name;
+f17f9e9069f20f Eric Biggers 2022-03-26  299  	enum inplace_mode inplace_mode;
+3f47a03df6e811 Eric Biggers 2019-01-31  300  	u32 req_flags;
+3f47a03df6e811 Eric Biggers 2019-01-31  301  	struct test_sg_division src_divs[XBUFSIZE];
+3f47a03df6e811 Eric Biggers 2019-01-31  302  	struct test_sg_division dst_divs[XBUFSIZE];
+3f47a03df6e811 Eric Biggers 2019-01-31  303  	unsigned int iv_offset;
+fd8c37c72d60c7 Eric Biggers 2019-12-01  304  	unsigned int key_offset;
+3f47a03df6e811 Eric Biggers 2019-01-31  305  	bool iv_offset_relative_to_alignmask;
+fd8c37c72d60c7 Eric Biggers 2019-12-01  306  	bool key_offset_relative_to_alignmask;
+3f47a03df6e811 Eric Biggers 2019-01-31  307  	enum finalization_type finalization_type;
+6570737c7fa047 Eric Biggers 2019-03-12  308  	bool nosimd;
+3f47a03df6e811 Eric Biggers 2019-01-31  309  };
+3f47a03df6e811 Eric Biggers 2019-01-31  310  
 
+:::::: The code at line 297 was first introduced by commit
+:::::: 3f47a03df6e81174558f4604828851cb600e1db6 crypto: testmgr - add testvec_config struct and helper functions
+
+:::::: TO: Eric Biggers <ebiggers@google.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
