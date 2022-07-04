@@ -1,319 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D477A15A3
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 07:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1656918694;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/ENO206wwk03Z6CUfkRpQcWla8AhOEVc0NdMm5Fhen0=;
-	b=g/ArhK4Mo25GPI5CnRXF6wS5m/7Tm2rHpjsa/bUBOh50RasHff5HLYbyOTgsXDHFDtUB9Z
-	I+lFdzqopnTxK+ZHrjdtQxt8WrSk4v2AkfA1Uku3YQA9+buwcDYPc3mThdDycwsEC/VBg3
-	rqAL+FJXM/6ELWPzmWIU9uMQPGgjseY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-B7BymWLbMfqdrPGYRqvIAA-1; Mon, 04 Jul 2022 03:11:32 -0400
-X-MC-Unique: B7BymWLbMfqdrPGYRqvIAA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8DDA299E773
-	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 07:11:31 +0000 (UTC)
-Received: from [172.64.0.111] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BA799C28100;
-	Mon,  4 Jul 2022 07:11:31 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for b8d5109f
- (mainline.kernel.org-clang)
-Date: Mon, 04 Jul 2022 07:11:31 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7941A23B5
+	for <llvm@lists.linux.dev>; Mon,  4 Jul 2022 09:27:16 +0000 (UTC)
+Received: by mail-wr1-f49.google.com with SMTP id r14so6774282wrg.1
+        for <llvm@lists.linux.dev>; Mon, 04 Jul 2022 02:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
+        b=FwV11uqFxCK4IkZ4zVZiQ64I4Ggdzep3kIDUZ2+1HDpOAhUlfzAYQJUacB1phfkN2X
+         B2HQRkjXpwoAcuKnts64swRREXrVL4xJrJZ9WYfFyoHRvfGx3SOlMfDHIoShfgM86eoE
+         AD6c8Vs5c95BaGGO/di2Xh5BNHGRZ6t1xKrPqwmbwreDxwQt9H7npJMcxNlxe16qrIxR
+         bSGh6dmLpgE6CclNjxAIPWG2Vn4Kr0YDJAPJw/xemQN/PnikqQrEvbPdL20O9C3DsSfV
+         41Y2ic/yf0dFgLd1K0r+o0E7pB2FuYAm4jbyeIXVo3hBUk4RtoVVAoJQ15c+5E4BZzlQ
+         V8Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8ajViNQRBuqUSn02uQYgcqcIAiyCQZm2aY6tb0Jvxow=;
+        b=HFLZ4sENEiAJNOkPG3XpVRjCFX64Enw8lN421HO9EXaMc5h5Y1s5gkZVIHUaOHn/Zh
+         ev8ojIAD6KR8cPNmf3/j2VPWSN0Pl76YYv8iayH7set4oJO8LgcmSpOByWDXHyoZJY7D
+         oIGsJlorEJvj5XkFwCd36viNMQ8WCXQ9KDi+GKCB/Q6FIvzrArjGvNUa5723mzj+qRPm
+         U4kXugFDxG3KdOaUWKY09UcksMV1O5wuRzxMazIcUZZCEq3r/CfU/VIyz4lseLiQwSSJ
+         Y+rNeowjZRgzSASeLiPoDvMbsXY8un5QOnypkqKTY532iqLcPtqn/eBZtoTFunX/qEgb
+         Njgg==
+X-Gm-Message-State: AJIora8CZNoQ+esuqJNOnczQRwyQwn51CTKedjs3zyYZc1C6gHS2fUuP
+	MnJuPPQL24urh+zGRw6HgME=
+X-Google-Smtp-Source: AGRyM1toxERE0aCr4bhk9/9ushPcgnzqZmqbDSrQk4jk+lQaqJhem9chTZej0sQW5e9RrOi3uvfEsw==
+X-Received: by 2002:a5d:47c7:0:b0:21d:12f8:e0be with SMTP id o7-20020a5d47c7000000b0021d12f8e0bemr26419284wrc.432.1656926834593;
+        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
+Received: from felia.fritz.box (200116b826716b008998943ac77556e4.dip.versatel-1u1.de. [2001:16b8:2671:6b00:8998:943a:c775:56e4])
+        by smtp.gmail.com with ESMTPSA id d10-20020adff2ca000000b0021a38089e99sm29618815wrp.57.2022.07.04.02.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jul 2022 02:27:14 -0700 (PDT)
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To: Mike Rapoport <rppt@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm@kvack.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] secretmem: drop unneeded initialization in secretmem_file_create()
+Date: Mon,  4 Jul 2022 11:26:05 +0200
+Message-Id: <20220704092605.19604-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-Message-Id: <88564.122070403113200298@us-mta-394.us.mimecast.lan>
-Authentication-Results: relay.mimecast.com;
-	auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=cki-project@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Drop the unneeded initialization of the local variable file in function
+secretmem_file_create().
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: OK
+No functional change and no change in the resulting object code.
 
+This unneeded initialization was already introduced with the introduction
+of secretmem in commit 1507f51255c9 ("mm: introduce memfd_secret system
+call to create "secret" memory areas"). This minor code-stylistic issue
+was discovered as a dead store with clang-analyzer.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/46875
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Mike, please ack.
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         aarch64 - LTP - commands
-                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-                          https://datawarehouse.cki-project.org/kcidb/tests=
-/2472230
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4200562
-           s390x - LTP - commands
-                   Issue: LTP - commands: df01 6 TFAIL: 'df -T -P' failed
-                          https://datawarehouse.cki-project.org/kcidb/tests=
-/2472230
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-4200838
+Andrew, please pick this minor stylistic clean-up patch. Thanks.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - Boot test
-                   Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresig=
-ht-etm4x: probe of ARMHC500:20 failed with error -17
-                          https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFq=
-BrMH0z927YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-         aarch64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-         aarch64 - Storage - blktests - nvmeof-mp
-                   Issue: Storage blktests - nvmeof-mp: FAIL: Configured NV=
-Me target driver
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1168
-         aarch64 - Networking cki netfilter test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - ALSA PCM loopback test
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - SCSI VPD
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - software RAID testing
-                   Issue: avc:  denied  { sys_admin } for  pid=3D674004 com=
-m=3D"systemd-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd=
-_gpt_generator_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0=
- tclass=3Dcapability permissive=3D0
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D208=
-3062
-         aarch64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-         aarch64 - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-         aarch64 - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-         aarch64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-         aarch64 - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-         aarch64 - Reboot test
-                   Issue: SELinux prevents sendmail.service while running M=
-emory function: kaslr
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1169
-         aarch64 - xfstests - btrfs
-                   Issue: xfstests - _check_xfs_filesystem: filesystem on /=
-dev/nvme0n1p4 is inconsistent (r)
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-9409
-         ppc64le - LTP - syscalls
-                   Issue: LTP - syscalls: msync04.c:59: TFAIL: Expected dir=
-ty bit to be set after writing to mmap()-ed area
-                          https://lore.kernel.org/lkml/YT8HqsXsHFeMdDxS@yuk=
-i/
-         ppc64le - selinux-policy: serge-testsuite
-                   Issue: selinux-policy: serge-testsuite: Failed test at p=
-erf_event/test line 88, 104, 109, 115
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/814
-           s390x - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: ERROR: Aborting curre=
-nt task: Aborting due to system crash and reboot
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1236
-           s390x - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-           s390x - Podman system test - as root
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-           s390x - Podman system test - as user
-                   Issue: Podman: 110-history.bats: FAIL: CreatedSince and =
-CreatedAt from image history should =3D=3D image list
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1160
-           s390x - Storage - swraid simple_reshape
-                   Issue: storage: software RAID testing: SELinux prevents =
-mdadm
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1213
-           s390x - kdump - sysrq-c
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-           s390x - kdump - file-load
-                   Issue: kdump - sysrq-c: vmcore-dmesg.txt is empty
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-1983
-          x86_64 - kselftest build - net
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - kselftest build - bpf
-                   Issue: kselftest build: /usr/include/gnu/stubs.h:7:11: f=
-atal error: 'gnu/stubs-32.h' file not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1222
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-          x86_64 - Boot test
-                   Issue: IBM System X3250 M4 - kernel: irq 16: nobody care=
-d (try booting with the "irqpoll" option)
-                          https://redhat.service-now.com/surl.do?n=3DRITM12=
-02693
-          x86_64 - LTP - cve
-                   Issue: Bug 210831 - LTP cve-2017-18075 (pcrypt_aead01) t=
-riggers pdecrypt_parallel padata_parallel_worker panic on s390x
-                          https://bugzilla.kernel.org/show_bug.cgi?id=3D210=
-831
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
-          x86_64 - Storage - blktests - blk
-                   Issue: Storage blktests - blk: scsi/007: Reading from sc=
-si_debug failed
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D202=
-7550
-                   Issue: rcu: INFO: rcu_sched detected expedited stalls on=
- CPUs/tasks
-                          https://lore.kernel.org/all/CA+QYu4qTWaDzep2GGxm-=
-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com/T/#u
-          x86_64 - Storage - block - storage fio numa
-                   Issue: Storage block - storage fio numa: Performance com=
-parison: min:40535 * 1.15 < max:81259
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D203=
-2094
-          x86_64 - Storage - targetcli basic
-                   Issue: targetcli - module 'inspect' has no attribute 'ge=
-targspec'
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D210=
-2058
-          x86_64 - Podman system test - as root
-                   Issue: Podman: 170-run-userns.bats: FAIL: Check group le=
-aked into user namespace
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1166
-                   Issue: Podman: Error: netavark: failed to configure brid=
-ge and veth interface
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1186
-          x86_64 - Podman system test - as user
-                   Issue: Podman: 500-networking.bats: FAIL: Output does ma=
-tch container ID
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1167
-          x86_64 - Firmware test suite
-                   Issue: gcc: error: unrecognized command-line option =E2=
-=80=98-Qunused-arguments=E2=80=99
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/513
-                   Issue: Firmware test suite: modinfo: ERROR: Module efi_r=
-untime not found
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1235
-          x86_64 - xfstests - nfsv4.2
-                   Issue: avc:  denied  { name_bind } for  pid=3D897864 com=
-m=3D"rpcbind" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontex=
-t=3Dsystem_u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=
-=3D1
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
-3604#c3
+ mm/secretmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/mm/secretmem.c b/mm/secretmem.c
+index 7584aab54d20..46b431d62761 100644
+--- a/mm/secretmem.c
++++ b/mm/secretmem.c
+@@ -171,7 +171,7 @@ static struct vfsmount *secretmem_mnt;
+ 
+ static struct file *secretmem_file_create(unsigned long flags)
+ {
+-	struct file *file = ERR_PTR(-ENOMEM);
++	struct file *file;
+ 	struct inode *inode;
+ 	const char *anon_name = "[secretmem]";
+ 	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
+-- 
+2.17.1
 
